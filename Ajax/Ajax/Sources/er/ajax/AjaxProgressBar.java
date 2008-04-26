@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 
 /**
  * @binding id the id of the update container
@@ -150,7 +150,7 @@ public class AjaxProgressBar extends WOComponent {
 		if (id == null) {
 			id = (String) valueForBinding("id");
 			if (id == null) {
-				id = ERXStringUtilities.safeIdentifierName(context().elementID());
+				id = ERXWOContext.safeIdentifierName(context(), true);
 			}
 			_id = id;
 		}

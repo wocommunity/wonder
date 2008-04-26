@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation.ValidationException;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 
 public class AjaxInPlaceEditor extends AjaxDynamicElement {
   private WOAssociation _idAssociation;
@@ -83,7 +83,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     WOComponent component = context.component();
     String id;
     if (_idAssociation == null) {
-      id = ERXStringUtilities.safeIdentifierName(context.elementID());
+      id = ERXWOContext.safeIdentifierName(context, false);
     }
     else {
       id = (String) _idAssociation.valueInComponent(component);

@@ -8,7 +8,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
 import er.extensions.ERXProperties;
-import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 
 /**
  * Instantiates a Google Map (an object of GMap2 javascript class) at the given location (specified by lat&lng or address) with given properties. IMPORTANT: your GMaps api key must be specified in your properties file as <code>ajax.google.maps.apiKey</code>.
@@ -47,7 +47,7 @@ public class AjaxGMap extends AjaxComponent {
 		if (_id == null) {
 			_id = (String) valueForBinding("id");
 			if (_id == null) {
-				_id = ERXStringUtilities.safeIdentifierName(context().elementID());
+				_id = ERXWOContext.safeIdentifierName(context(), true);
 			}
 		}
 		return _id;

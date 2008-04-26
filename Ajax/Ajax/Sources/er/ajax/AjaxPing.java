@@ -3,7 +3,7 @@ package er.ajax;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 
 /**
  * <p>
@@ -53,7 +53,7 @@ public class AjaxPing extends WOComponent {
 	 */
 	public String id() {
 		if (_id == null) {
-			_id = ERXStringUtilities.safeIdentifierName(context().elementID());
+			_id = ERXWOContext.safeIdentifierName(context(), true);
 		}
 		return _id;
 	}

@@ -13,6 +13,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 /**
  * Shows a link and wraps an area that is later presented as a modal window.
  * @binding label label for the link
@@ -44,7 +45,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
-        String divID=ERXStringUtilities.safeIdentifierName(context.elementID());
+        String divID=ERXWOContext.safeIdentifierName(context, false);
         response.appendContentString("<a");
         String href = (String) valueForBinding("href", component);
         if(href == null) {

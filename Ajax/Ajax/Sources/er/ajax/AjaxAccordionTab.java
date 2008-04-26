@@ -5,7 +5,7 @@ package er.ajax;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 
 public class AjaxAccordionTab extends WOComponent {
 
@@ -24,16 +24,16 @@ public class AjaxAccordionTab extends WOComponent {
   public String tabID() {
     String id = (String) valueForBinding("id");
     if (id == null) {
-      id = ERXStringUtilities.safeIdentifierName(context().elementID()) + "Panel";
+      id = ERXWOContext.safeIdentifierName(context(), false) + "Tab";
     }
     return id;
   }
 
   public String headerID() {
-    return ERXStringUtilities.safeIdentifierName(context().elementID()) + "Header";
+    return ERXWOContext.safeIdentifierName(context(), false) + "Header";
   }
 
   public String contentID() {
-    return ERXStringUtilities.safeIdentifierName(context().elementID()) + "Content";
+    return ERXWOContext.safeIdentifierName(context(), false) + "Content";
   }
 }

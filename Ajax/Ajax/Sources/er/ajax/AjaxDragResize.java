@@ -12,7 +12,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 
 public class AjaxDragResize extends AjaxComponent {
   private static final String COMPONENT_RESIZABLES_MAP_KEY = "AjaxComponentResizablesMap";
@@ -20,7 +20,7 @@ public class AjaxDragResize extends AjaxComponent {
 
   public AjaxDragResize(WOContext context) {
     super(context);
-    _dragResizeID = (String) valueForBinding("id", ERXStringUtilities.safeIdentifierName(context().elementID()) + "_DragResize");
+    _dragResizeID = (String) valueForBinding("id", ERXWOContext.safeIdentifierName(context(), true) + "_DragResize");
   }
 
   public boolean synchronizesVariablesWithBindings() {
