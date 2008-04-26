@@ -115,8 +115,8 @@ AjaxSelectionList.prototype = {
 		else if (item.nodeName != this.itemType) {
 			item = item.up(this.itemType);
 		}
-		this.focus();
 		this.setSelection(item, true);
+		this.focus();
 
 		var thisClick = new Date().getTime();
 		if (lastSelection == this.selection && thisClick - this.lastClick < 300) {
@@ -137,6 +137,9 @@ AjaxSelectionList.prototype = {
 
 	containerFocused: function(e) {
 		this.list.addClassName('focused');
+		if (this.selectionIndex == null) {
+			this.selectNext();
+		}
 	},
 
 	selectNext: function() {
