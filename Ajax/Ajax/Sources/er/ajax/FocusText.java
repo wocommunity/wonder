@@ -7,7 +7,7 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 import er.extensions.ERXWOText;
 
 /**
@@ -41,7 +41,7 @@ public class FocusText extends ERXWOText {
       id = (String) _id.valueInComponent(component);
     }
     if (id == null) {
-      id = ERXStringUtilities.safeIdentifierName(context.elementID());
+      id = ERXWOContext.safeIdentifierName(context, false);
     }
     return id;
   }

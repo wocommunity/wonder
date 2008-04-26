@@ -15,7 +15,6 @@ import com.webobjects.foundation.NSData;
 import er.extensions.ERXComponentUtilities;
 import er.extensions.ERXFileUtilities;
 import er.extensions.ERXRequest;
-import er.extensions.ERXStringUtilities;
 import er.extensions.ERXUnitAwareDecimalFormat;
 import er.extensions.ERXWOContext;
 
@@ -139,7 +138,7 @@ public class AjaxFileUpload extends WOComponent {
 		if (id == null) {
 			id = (String) valueForBinding("id");
 			if (id == null) {
-				id = ERXStringUtilities.safeIdentifierName(context().elementID());
+				id = ERXWOContext.safeIdentifierName(context(), true);
 			}
 			_id = id;
 		}

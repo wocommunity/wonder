@@ -574,7 +574,6 @@ public class AjaxGrid extends WOComponent {
 	 * @return a value suitable for use as part of an HTML ID attribute that uniquely identifies this row
 	 */
 	public String rowID() {
-		
 		if (rowIdentifier() != null) {
 			return ERXStringUtilities.safeIdentifierName(row().valueForKeyPath(rowIdentifier()).toString());
 		} 

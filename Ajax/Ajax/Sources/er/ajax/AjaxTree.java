@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 
 /**
  * AjaxTree provides an Ajax-refreshing tree view. AjaxTree acts like a WOComponentContent where the content you provide
@@ -202,7 +202,7 @@ public class AjaxTree extends WOComponent {
 				_id = (String) valueForBinding("id");
 			}
 			else {
-				_id = ERXStringUtilities.safeIdentifierName(context().elementID());
+				_id = ERXWOContext.safeIdentifierName(context(), true);
 			}
 		}
 		return _id;
