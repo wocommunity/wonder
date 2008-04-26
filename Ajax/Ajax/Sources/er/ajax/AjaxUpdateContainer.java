@@ -12,7 +12,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXStringUtilities;
 import er.extensions.ERXValueUtilities;
 import er.extensions.ERXWOContext;
 
@@ -240,7 +239,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	protected String _containerID(WOContext context) {
 		String id = (String) valueForBinding("id", context.component());
 		if (id == null) {
-			id = ERXStringUtilities.safeIdentifierName(context.elementID());
+			id = ERXWOContext.safeIdentifierName(context, false);
 		}
 		return id;
 	}

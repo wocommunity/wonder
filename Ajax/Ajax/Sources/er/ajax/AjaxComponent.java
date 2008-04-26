@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
 
 /**
  * This abstract (by design) superclass component isolate general utility methods.
@@ -91,7 +91,7 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     public String safeElementID() {
     	String id = (String)valueForBinding("id");
     	if(id == null) {
-    		return ERXStringUtilities.safeIdentifierName(context().elementID());
+    		return ERXWOContext.safeIdentifierName(context(), false);
     	}
     	return id;
     }
