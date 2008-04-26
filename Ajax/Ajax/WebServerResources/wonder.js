@@ -798,3 +798,32 @@ Form.Element.RadioButtonObserver = Class.create(Form.Element.EventObserver, {
   	this.lastValue = value;
   }
 });
+
+var AjaxBusy = {
+	register: function(busyClass, element) {
+		Ajax.Responders.register({
+		   onCreate: function(request, transport) {
+			   if (busyClass) {
+					 if (request && request.container && request.container.success) {
+					   var updateContainer = $(request.container.success);
+					   if (updateContainer) { updateContainer.addClassName(busyClass); }
+			     }
+			   }
+		     if (element && $(element)) {
+		       Effect.Appear(element, {duration:0.0, queue:'front'});
+		     }
+		   },
+		   onComplete: function(request, transport) {
+		     if (busyClass) {
+					 if (request && request.container && request.container.success) {
+					   var updateContainer = $(request.container.success);
+					   if (updateContainer) { updateContainer.removeClassName(busyClass); }
+			     }
+			   }
+		     if (element && $(element)) {
+		       Effect.Fade(element, {duration:0.5, queue:'end'});
+		     }
+		   }
+		});
+	}
+}; 
