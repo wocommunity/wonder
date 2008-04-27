@@ -81,7 +81,31 @@ TagField.prototype = {
 	
 	processTyping: function() {
 		var value = this.textElement.value;
-		var typingTags = value.split(' ');
+		var typingTagsSpaces = value.split(' ');
+		var typingTags = [];
+		var inQuotes = false;
+		var quotedTag;
+		for (var tagNum = 0; tagNum < typingTagsSpaces.length; tagNum ++) {
+			if (inQuotes) {
+				quotedTag += ' ' + typingTagsSpaces[tagNum]; 
+				if (typingTagsSpaces[tagNum].endsWith('"')) {
+					typingTags.push(quotedTag);
+					inQuotes = false;
+					quotedTag = null;
+				}
+			}
+			else if (typingTagsSpaces[tagNum].startsWith('"')) {
+				inQuotes = true;
+				quotedTag = typingTagsSpaces[tagNum];
+			}
+			else {
+				typingTags.push(typingTagsSpaces[tagNum]);
+			}
+		}
+		if (inQuotes) {
+			typingTags.push(quotedTag);
+		}
+		
 		var typingTagNum = -1;
 
 		for (var tagNum = 0; tagNum < typingTags.length && tagNum < this.typedTags.length; tagNum ++) {
@@ -196,14 +220,14 @@ TagField.prototype = {
 	},
 	
 	add: function(tag) {
-		this.availableTags.push(tag);
+		this.availableTags.push(tag.replace(/&quot;/g, '"'));
 		this.tagElements = this.displayTagsInElement(this.availableTags, this.tagsElement);
 		this.updateHighlights();
 	}, 
 	
 	addAll: function(tags) {
 		for (var tagNum = 0; tagNum < tags.length; tagNum ++) {
-			this.availableTags.push(tags[tagNum]);
+			this.availableTags.push(tags[tagNum].replace(/&quot;/g, '"'));
 		}
 		this.tagElements = this.displayTagsInElement(this.availableTags, this.tagsElement);
 		this.updateHighlights();

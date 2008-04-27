@@ -1,5 +1,7 @@
 package er.taggable;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -22,6 +24,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.ERXCommandLineTokenizer;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOAttribute;
@@ -51,6 +54,8 @@ import er.taggable.model.ERTag;
  * @param <T> the java class of the entity that this ERTaggableEntity is associated with 
  */
 public class ERTaggableEntity<T extends ERXGenericRecord> {
+  private static final String DEFAULT_SEPARATOR = "[\\s,]+";
+
   /**
    * The key stored in entity userInfo that flags an entity as taggable.
    */
@@ -78,7 +83,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   private EOEntity _entity;
   private EORelationship _tagsRelationship;
 
-  private String _separator = "[\\s,]+";
+  private String _separator = ERTaggableEntity.DEFAULT_SEPARATOR;
   private ERTagNormalizer _normalizer = new ERDefaultTagNormalizer();
 
   /**
@@ -102,15 +107,15 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     String tagsRelationshipName = (String) entity.userInfo().objectForKey(ERTaggableEntity.ERTAGGABLE_TAG_RELATIONSHIP_KEY);
     _tagsRelationship = _entity.relationshipNamed(tagsRelationshipName);
   }
-  
+
   @Override
   public int hashCode() {
-    return _entity.hashCode(); 
+    return _entity.hashCode();
   }
-  
+
   @Override
   public boolean equals(Object obj) {
-    return (obj instanceof ERTaggableEntity && ((ERTaggableEntity)obj)._entity.equals(_entity)); 
+    return (obj instanceof ERTaggableEntity && ((ERTaggableEntity) obj)._entity.equals(_entity));
   }
 
   /**
@@ -558,6 +563,15 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   public EORelationship tagsRelationship() {
     return _tagsRelationship;
   }
+  
+  /**
+   * Returns whether or not the given separator contains whitespace (and should be escaped).
+   * 
+   * @returns true if the given separator contains whitespace
+   */
+  public static boolean isWhitespaceSeparator(String separator) {
+    return separator != null && (separator.contains("\\s") || separator.contains(" "));
+  }
 
   /**
    * Splits the given "tags" object (String, array of Strings, etc) into an array of normalized tag strings.
@@ -570,7 +584,19 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     NSMutableSet<String> tagNames = new NSMutableSet<String>();
     if (tags != null) {
       if (tags instanceof String) {
-        String[] strTags = ((String) tags).split(_separator);
+        String[] strTags;
+        if (ERTaggableEntity.isWhitespaceSeparator(_separator)) {
+          List<String> strTagsList = new LinkedList<String>();
+          ERXCommandLineTokenizer tagTokenizer = new ERXCommandLineTokenizer((String) tags);
+          while (tagTokenizer.hasMoreTokens()) {
+            String tag = tagTokenizer.nextElement();
+            strTagsList.add(tag);
+          }
+          strTags = strTagsList.toArray(new String[strTagsList.size()]);
+        }
+        else {
+          strTags = ((String) tags).split(_separator);
+        }
         addNormalizedTags(tagNames, strTags);
       }
       else if (tags instanceof ERTag) {
