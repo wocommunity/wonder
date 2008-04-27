@@ -66,4 +66,21 @@ public class ERTag extends _ERTag {
       tag.delete();
     }
   }
+
+  /**
+   * Escapes the quotes inside the given tag name and defensively surrounds this tag with quotes.
+   * 
+   * @param tagName the tag name to escape
+   * @return an escaped tag name
+   */
+  public static String escapeTagNamed(String tagName) {
+    String escapedTagName = tagName;
+    if (escapedTagName != null) {
+      escapedTagName = escapedTagName.replaceAll("\"", "\\\\\"");
+      if (escapedTagName.indexOf(' ') != -1) {
+        escapedTagName = "\"" + escapedTagName + "\"";
+      }
+    }
+    return escapedTagName;
+  }
 }

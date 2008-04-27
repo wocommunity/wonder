@@ -6,12 +6,15 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXQ;
 import er.extensions.ERXResponseRewriter;
 import er.extensions.ERXStringUtilities;
 import er.taggable.ERTaggable;
+import er.taggable.ERTaggableEntity;
+import er.taggable.model.ERTag;
 
 /**
  * ERTagField implements a fancy del.icio.us-style javascript-enabled
@@ -83,8 +86,15 @@ public class ERTagField extends er.extensions.ERXComponent {
   public String javascriptAvailableTags() {
     StringBuffer sb = new StringBuffer();
     sb.append("[");
-    NSArray<String> availableTags = availableTags();
-    if (availableTags.count() > 0) {
+    NSMutableArray<String> availableTags = availableTags().mutableClone();
+    int availableTagsCount = availableTags.count();
+    if (availableTagsCount > 0) {
+      for (int tagNum = 0; tagNum < availableTagsCount; tagNum ++) {
+        String availableTag = availableTags.objectAtIndex(tagNum);
+        availableTag = availableTag.replaceAll("'", "\\\\'");
+        availableTag = ERTag.escapeTagNamed(availableTag);
+        availableTags.replaceObjectAtIndex(availableTag, tagNum);
+      }
       sb.append("'");
       sb.append(availableTags.componentsJoinedByString("','"));
       sb.append("'");
@@ -96,9 +106,18 @@ public class ERTagField extends er.extensions.ERXComponent {
   public String tags() {
     clearCacheIfNecessary();
     if (_tags == null) {
-      _tags = taggable().tagNames().componentsJoinedByString(" ");
+      String separator = " ";
+      NSMutableArray<String> tagNames = taggable().tagNames().mutableClone();
+      if (ERTaggableEntity.isWhitespaceSeparator(separator)) {
+        int tagsCount = tagNames.count();
+        for (int tagNum = 0; tagNum < tagsCount; tagNum ++) {
+          String tagName = tagNames.objectAtIndex(tagNum);
+          tagNames.replaceObjectAtIndex(ERTag.escapeTagNamed(tagName), tagNum);
+        }
+      }
+      _tags = tagNames.componentsJoinedByString(separator);
       if (_tags.length() > 0) {
-        _tags += " ";
+        _tags += separator;
       }
     }
     return _tags;

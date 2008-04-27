@@ -118,6 +118,36 @@ public class ERTaggable<T extends ERXGenericRecord> {
   }
 
   /**
+   * This method removes tags from the target object, by looking up the corresponding 
+   * Tag object instances and removing them from the tag collection of the object if they exist.
+   *
+   * @param tags the tags to remove (String to tokenize, NSArray<String>, etc)
+   */
+  @SuppressWarnings("unchecked")
+  public void removeTagNamed(String tagName) {
+    NSArray<ERTag> erTags = tags();
+    NSArray<ERTag> matchingTags = ERXQ.filtered(erTags, ERTag.NAME.is(tagName));
+    for (ERTag tag : matchingTags) {
+      removeTag(tag);
+    }
+  }
+  
+  /**
+   * This method applies tags to the target object, by looking up the corresponding
+   * Tag object instances and adding it to the tag collection of the object.
+   * If the tag name already exists in the tags table, it just adds a relationship
+   * to the existing tag record. If it doesn't exist, it then creates a new
+   * Tag record for it.
+   * 
+   * This is equivalent to addTags(false, tags). 
+   *
+   * @param tagName the tag name to add
+   */
+  public void addTagNamed(String tagName) {
+    addTags(false, ERTag.escapeTagNamed(tagName));
+  }
+
+  /**
    * This method applies tags to the target object, by parsing the tags parameter
    * into Tag object instances and adding them to the tag collection of the object.
    * If the tag name already exists in the tags table, it just adds a relationship
