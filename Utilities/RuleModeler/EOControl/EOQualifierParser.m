@@ -355,7 +355,7 @@ static NSString *_parseOp(const char *_buf, unsigned _bufLen,
   unsigned    length = 0;
   const char  *buf;
   unsigned    bufLen;
-
+  id exception = nil;
   _setupLiterals();
   qDebug = [EOQualifier isEvaluationDebuggingEnabled];
   if (StringClass == Nil) StringClass = [NSString class];
@@ -363,17 +363,15 @@ static NSString *_parseOp(const char *_buf, unsigned _bufLen,
   buf = [_qualifierFormat UTF8String];
   bufLen = strlen(buf);
   
-  va_start(va, _qualifierFormat);
   NS_DURING
+    va_start(va, _qualifierFormat);
     qualifier =
       _parseQualifiers([EOQualifierVAParserContext contextWithVaList:&va],
                        buf, bufLen, &length);
+    va_end(va);
   NS_HANDLER
-      va_end(va);
       [localException raise];
   NS_ENDHANDLER
-  
-  va_end(va);
   
   if (qualifier != nil) { /* check whether the rest of the string is OK */
     if (length < bufLen)
