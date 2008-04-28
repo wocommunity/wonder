@@ -141,7 +141,7 @@ public class AjaxInPlace extends WOComponent {
 				_id = (String) valueForBinding("id");
 			}
 			else {
-				_id = ERXWOContext.safeIdentifierName(context(), true);
+				_id = ERXWOContext.safeIdentifierName(context(), false);
 			}
 		}
 		return _id;
