@@ -289,6 +289,16 @@ public class ERXDictionaryUtilities extends Object {
 	 * @return
 	 */
 	public static String queryStringForDictionary(NSDictionary<Object, Object> dict, String separator) {
+		return queryStringForDictionary(dict, separator,  WOMessage.defaultURLEncoding());
+	}
+    
+    /**
+	 * Encodes a dictionary into a string that can be used in a request uri.
+	 * @param dict dictionary with form values
+	 * @param separator optional value separator
+	 * @return
+	 */
+	public static String queryStringForDictionary(NSDictionary<Object, Object> dict, String separator, String encoding) {
 		if (separator == null) {
 			separator = "&";
 		}
@@ -296,9 +306,9 @@ public class ERXDictionaryUtilities extends Object {
 		for (Enumeration e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
 			Object key = (Object) e.nextElement();
 			try {
-				sb.append(URLEncoder.encode(key.toString(), WOMessage.defaultURLEncoding()));
+				sb.append(URLEncoder.encode(key.toString(), encoding));
 				sb.append("=");
-				sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), WOMessage.defaultURLEncoding()));
+				sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), encoding));
 				if (e.hasMoreElements()) {
 					sb.append(separator);
 				}
