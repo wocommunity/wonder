@@ -9,6 +9,18 @@ import com.webobjects.eoaccess.EOEntity;
  */
 public interface IERXRestDelegate {
 	/**
+	 * Inserts or updates the objects defined by the XML document.
+	 * 
+	 * @param restRequest the incoming inserts or updates
+	 * @param context the rest context
+	 * @return the inserted or updates objects as an ERXRestResult
+	 * @throws ERXRestException if there is a general failure
+	 * @throws ERXRestSecurityException if the user attempts to insert or updates objects that he/she is not permitted to
+	 * @throws ERXRestNotFoundException if one of the requested objects does not exist
+	 */
+	public ERXRestKey process(ERXRestRequest restRequest, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
+
+	/**
 	 * Creates the objects defined by the XML document (which can contain a single object or an array inserts).
 	 * 
 	 * @param insertRequest the incoming inserts

@@ -214,6 +214,8 @@ import er.extensions.ERXEC;
 public class ERXRestRequestHandler extends WORequestHandler {
 	public static final Logger log = Logger.getLogger(ERXRestRequestHandler.class);
 
+	public static final String Key = "rest";
+
 	private IERXRestAuthenticationDelegate _authenticationDelegate;
 	private IERXRestDelegate _delegate;
 	private IERXRestResponseWriter _defaultResponseWriter;
@@ -252,6 +254,10 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		_requestParsers = new NSMutableDictionary();
 		_defaultResponseWriter = defaultResponseWriter;
 		_defaultRequestParser = defaultRequestParser;
+	}
+
+	public IERXRestDelegate delegate() {
+		return _delegate;
 	}
 
 	/**
@@ -393,8 +399,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			}
 
 			EOEditingContext editingContext = newEditingContext();
-			ERXRestContext restContext = new ERXRestContext(woContext, editingContext);
-			restContext.setDelegate(_delegate);
+			ERXRestContext restContext = new ERXRestContext(woContext, editingContext, _delegate);
 			editingContext.lock();
 			try {
 				if (!_authenticationDelegate.authenticate(restContext)) {
@@ -503,7 +508,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 *            the rest request handler to register
 	 */
 	public static void register(ERXRestRequestHandler requestHandler) {
-		WOApplication.application().registerRequestHandler(requestHandler, "rest");
+		WOApplication.application().registerRequestHandler(requestHandler, ERXRestRequestHandler.Key);
 	}
 
 	/**

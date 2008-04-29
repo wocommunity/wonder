@@ -199,7 +199,41 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		}
 		return id;
 	}
-	
+
+	protected String idForNode(ERXRestRequestNode attributeNode) {
+		String id = attributeNode.attributeForKey("id");
+		if (id == null) {
+			ERXRestRequestNode idNode = attributeNode.childNamed("id");
+			if (idNode != null) {
+				id = idNode.value();
+			}
+			else {
+				id = attributeNode.value();
+			}
+		}
+		return id;
+	}
+
+	public EOEnterpriseObject objectForNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		String idForNode = idForNode(node);
+		EOEnterpriseObject eo;
+		if (node.isNull()) {
+			eo = null;
+		}
+		else if (idForNode == null) {
+			if (node.children().count() == 0) {
+				eo = null;
+			}
+			else {
+				eo = null;
+			}
+		}
+		else {
+			eo = objectWithKey(entity, idForNode, context);
+		}
+		return eo;
+	}
+
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		EOEnterpriseObject obj;
 		String idAttributeName = idAttributeName(entity);
@@ -388,6 +422,19 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return eo;
 	}
 
+	public EOEnterpriseObject processObjectFromDocument(EOEntity entity, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+		IERXRestEntityDelegate delegate = context.delegate().entityDelegate(entity);
+		EOEnterpriseObject eo;
+		try {
+			eo = delegate.objectForNode(entity, eoNode, context);
+			updateObjectFromDocument(entity, eo, eoNode, context);
+		}
+		catch (ERXRestNotFoundException e) {
+			eo = insertObjectFromDocument(entity, eoNode, null, null, null, context);
+		}
+		return eo;
+	}
+	
 	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		if (!canUpdateObject(entity, eo, context)) {
 			throw new ERXRestSecurityException("You are not allowed to update this object.");
@@ -429,7 +476,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			NSArray newNodes = relationshipNode.children();
 			// MS: ignore nil="true" to-many?
 			if (!relationshipNode.isNull()) {
-				updateArrayFromDocument(entity, eo, relationshipName, destinationEntity, originalObjects, newNodes, context);
+				_updateArrayFromDocument(entity, eo, relationshipName, destinationEntity, originalObjects, newNodes, context);
 			}
 			else {
 				// MS: ???
@@ -461,43 +508,10 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				else if (!inserting && !canUpdateProperty(entity, eo, attributeName, context)) {
 					throw new ERXRestSecurityException("You are not allowed to update the property '" + attributeName + "' on " + entityAlias + ".");
 				}
-
+				
 				EORelationship relationship = entity.relationshipNamed(attributeName);
 				if (relationship != null) {
-					EOEntity destinationEntity = relationship.destinationEntity();
-					if (!relationship.isToMany()) {
-						EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, attributeName, context);
-						String id = idForNode(attributeNode);
-						// MS: ignore nil="true" to-one?
-						if (attributeNode.isNull()) {
-							if (!relationship.isMandatory()) {
-								eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
-							}
-							else {
-								// MS: Throw?
-							}
-						}
-						else {
-							EOEnterpriseObject newObject = context.delegate().entityDelegate(destinationEntity).objectWithKey(destinationEntity, id, context);
-							if (originalObject == null && newObject != null) {
-								eo.addObjectToBothSidesOfRelationshipWithKey(newObject, attributeName);
-							}
-							else if (originalObject != null && !originalObject.equals(newObject)) {
-								eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
-								if (newObject != null) {
-									eo.addObjectToBothSidesOfRelationshipWithKey(newObject, attributeName);
-								}
-							}
-						}
-					}
-					else {
-						NSArray currentObjects = (NSArray) valueForKey(entity, eo, attributeName, context);
-						NSArray toManyNodes = attributeNode.children();
-						// MS: ignore nil="true" to-many?
-						if (!attributeNode.isNull()) {
-							updateArrayFromDocument(entity, eo, attributeName, destinationEntity, currentObjects, toManyNodes, context);
-						}
-					}
+					_updateRelationshipFromDocument(entity, eo, relationship, attributeNode, context);
 				}
 				else {
 					String attributeValue = attributeNode.value();
@@ -514,66 +528,6 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		updated(entity, eo, context);
 	}
 
-	protected String idForNode(ERXRestRequestNode attributeNode) {
-		String id = attributeNode.attributeForKey("id");
-		if (id == null) {
-			ERXRestRequestNode idNode = attributeNode.childNamed("id");
-			if (idNode != null) {
-				id = idNode.value();
-			}
-			else {
-				id = attributeNode.value();
-			}
-		}
-		return id;
-	}
-
-	public EOEnterpriseObject objectForNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		EOEnterpriseObject eo;
-		if (context.localObjects()) {
-			eo = objectForLocalNode(entity, node, context);
-		}
-		else {
-			eo = objectForRemoteNode(entity, node, context);
-		}
-		return eo;
-	}
-
-	protected EOEnterpriseObject objectForLocalNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		String idForNode = idForNode(node);
-		EOEnterpriseObject eo;
-		if (node.isNull()) {
-			eo = null;
-		}
-		else if (idForNode == null) {
-			if (node.children().count() == 0) {
-				eo = null;
-			}
-			else {
-				eo = null;
-			}
-		}
-		else {
-			eo = objectWithKey(entity, idForNode, context);
-		}
-		return eo;
-	}
-
-	protected EOEnterpriseObject objectForRemoteNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		String idForNode = idForNode(node);
-		EOEnterpriseObject eo;
-		if (node.isNull()) {
-			eo = null;
-		}
-		else if (node.children().count() == 0) {
-			throw new ERXRestException(node + " specified a remote object that did not provide enough information to resolve it locally.");
-		}
-		else {
-			eo = objectWithKey(entity, idForNode, context);
-		}
-		return eo;
-	}
-
 	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		IERXRestEntityDelegate parentEntityDelegate = context.delegate().entityDelegate(entity);
 		if (parentObject != null && !parentEntityDelegate.canUpdateObject(parentEntity, parentObject, context)) {
@@ -582,7 +536,10 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		if (parentObject != null && attributeName != null && !parentEntityDelegate.canUpdateProperty(parentEntity, parentObject, attributeName, context)) {
 			throw new ERXRestSecurityException("You are not allowed to update this object.");
 		}
+		_updateArrayFromDocument(parentEntity, parentObject, attributeName, entity, currentObjects, toManyNodes, context);
+	}
 
+	protected void _updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		NSMutableArray keepObjects = new NSMutableArray();
 		NSMutableArray addObjects = new NSMutableArray();
 		NSMutableArray removeObjects = new NSMutableArray();

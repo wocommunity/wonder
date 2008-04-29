@@ -41,6 +41,10 @@ public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 	public String stringIDForEO(EOEntity entity, EOEnterpriseObject eo) {
 		return null;
 	}
+	
+	public EOEnterpriseObject processObjectFromDocument(EOEntity entity, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+		return null;
+	}
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to access the " + entity.name() + " with the id '" + key + "'.");
