@@ -24,24 +24,52 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	private IERXRestEntityDelegate _defaultDelegate;
 
 	/**
-	 * Constructs an ERXDefaultRestDelegate with an ERXDenyRestEntityDelegate
-	 * as the default entity delegate. 
+	 * Constructs an ERXDefaultRestDelegate with an ERXDenyRestEntityDelegate as the default entity delegate.
 	 */
 	public ERXDefaultRestDelegate() {
 		this(new ERXDenyRestEntityDelegate());
 	}
 
 	/**
-	 * Constructs an ERXDefaultRestDelegate with the given default entity delegate.  If no
-	 * entity delegate is specified for a particular entity name, the default delegate
-	 * will be returned.
+	 * Constructs an ERXDefaultRestDelegate with the given default entity delegate. If no entity delegate is specified
+	 * for a particular entity name, the default delegate will be returned.
 	 * 
-	 * @param defaultDelegate the default entity delegate to use
+	 * @param defaultDelegate
+	 *            the default entity delegate to use
 	 */
 	public ERXDefaultRestDelegate(IERXRestEntityDelegate defaultDelegate) {
 		_entityAliases = new NSMutableDictionary();
 		_entityDelegates = new NSMutableDictionary();
 		_defaultDelegate = defaultDelegate;
+	}
+
+	public ERXRestKey process(ERXRestRequest restRequest, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+		ERXRestKey restResult;
+
+		ERXRestKey lastKey = restRequest.key();
+		EOEntity entity = lastKey.entity();
+		IERXRestEntityDelegate entityDelegate = entityDelegate(entity);
+		if (lastKey.isKeyGID()) {
+			EOEnterpriseObject eo = entityDelegate.processObjectFromDocument(entity, restRequest.rootNode(), context);
+			restResult = new ERXRestKey(context, entity, "processed", eo);
+		}
+		else if (lastKey.isKeyAll()) {
+			NSMutableArray eos = new NSMutableArray();
+			Enumeration childrenNodesEnum = restRequest.rootNode().children().objectEnumerator();
+			while (childrenNodesEnum.hasMoreElements()) {
+				ERXRestRequestNode node = (ERXRestRequestNode) childrenNodesEnum.nextElement();
+				EOEnterpriseObject eo = entityDelegate.processObjectFromDocument(entity, node, context);
+				if (eo != null) {
+					eos.addObject(eo);
+				}
+			}
+			restResult = new ERXRestKey(context, entity, "processed", eos);
+		}
+		else {
+			throw new IllegalArgumentException("Unable to process " + lastKey);
+		}
+		
+		return restResult;
 	}
 
 	public ERXRestKey insert(ERXRestRequest insertRequest, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
@@ -210,7 +238,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			else {
 				entityDelegate = _defaultDelegate;
 			}
-			_entityDelegates.setObjectForKey(entity, entityDelegate);
+			_entityDelegates.setObjectForKey(entityDelegate, entity.name());
 		}
 		entityDelegate.initializeEntityNamed(entity.name());
 		return entityDelegate;
