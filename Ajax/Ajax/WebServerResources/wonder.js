@@ -800,30 +800,49 @@ Form.Element.RadioButtonObserver = Class.create(Form.Element.EventObserver, {
 });
 
 var AjaxBusy = {
-	register: function(busyClass, element) {
+	requestContainer: function(request) {
+		var updateContainer;
+		if (request && request.container && request.container.success) {
+			updateContainer = $(request.container.success);
+		}
+		return updateContainer;
+	},
+	
+	register: function(busyClass, busyAnimationElement, watchContainerID, onCreateCallback, onCompleteCallback) {
 		Ajax.Responders.register({
-		   onCreate: function(request, transport) {
-			   if (busyClass) {
-					 if (request && request.container && request.container.success) {
-					   var updateContainer = $(request.container.success);
-					   if (updateContainer) { updateContainer.addClassName(busyClass); }
-			     }
-			   }
-		     if (element && $(element)) {
-		       Effect.Appear(element, {duration:0.0, queue:'front'});
-		     }
-		   },
-		   onComplete: function(request, transport) {
-		     if (busyClass) {
-					 if (request && request.container && request.container.success) {
-					   var updateContainer = $(request.container.success);
-					   if (updateContainer) { updateContainer.removeClassName(busyClass); }
-			     }
-			   }
-		     if (element && $(element)) {
-		       Effect.Fade(element, {duration:0.5, queue:'end'});
-		     }
-		   }
-		});
+			onCreate: function(request, transport) {
+	     	var updateContainer = AjaxBusy.requestContainer(request);
+	     	if (!watchContainerID || (updateContainer && updateContainer.id == watchContainerID)) {
+			  	if (busyClass && updateContainer) {
+						updateContainer.addClassName(busyClass);
+			   	}
+			   	
+			   	if (busyAnimationElement && $(busyAnimationElement)) {
+			   		Effect.Appear(busyAnimationElement, {duration:0.0, queue:'front'});
+			   	}
+			   	
+			   	if (onCreateCallback) {
+			   		onCreateCallback(request, transport);
+			   	}
+	     	}
+		  },
+		  
+		  onComplete: function(request, transport) {
+	     	var updateContainer = AjaxBusy.requestContainer(request);
+	     	if (!watchContainerID || (updateContainer && updateContainer.id == watchContainerID)) {
+			  	if (busyClass && updateContainer) {
+						updateContainer.removeClassName(busyClass);
+					}
+					
+					if (busyAnimationElement && $(busyAnimationElement)) {
+						Effect.Fade(busyAnimationElement, {duration:0.5, queue:'end'});
+					}
+	
+			   	if (onCompleteCallback) {
+			   		onCompleteCallback(request, transport);
+			   	}
+			  }
+			}
+	  });
 	}
-}; 
+};
