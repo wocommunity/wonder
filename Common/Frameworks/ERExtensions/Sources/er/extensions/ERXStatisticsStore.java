@@ -1,6 +1,8 @@
 package er.extensions;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,7 +16,9 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOStatisticsStore;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Enhances the normal stats store with a bunch of useful things which get
@@ -22,6 +26,7 @@ import com.webobjects.foundation.NSMutableArray;
  * <ul>
  * <li>warn and error messages when a request took too long, complete with stack traces of all threads in the state they were in at half-time.
  * <li>logs fatal messages before the request finished.
+ * <li>fixes an incompatibility with 5.4.
  * </ul>
  * 
  * @author ak
@@ -182,7 +187,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				}
 			}
 		}
-
+		
 		private void checkThreads() {
 			Map<Thread, Long> requestThreads = new HashMap<Thread, Long>();
 			synchronized (_requestThreads) {
@@ -212,6 +217,21 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			}
 		}
 
+	}
+
+	public NSDictionary statistics() {
+		NSDictionary stats = super.statistics();
+		if (ERXApplication.isWO54()) {
+			NSMutableDictionary fixed = stats.mutableClone();
+			for (Enumeration enumerator = stats.keyEnumerator(); enumerator.hasMoreElements();) {
+				Object key = enumerator.nextElement();
+				Object value = stats.objectForKey(key);
+				fixed.setObjectForKey(value, fix(key));
+			}
+			stats = fixed;
+		}
+		return stats;
+		
 	}
 
 	protected NSMutableArray sessions = new NSMutableArray<WOSession>();
@@ -272,4 +292,21 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		super.applicationDidHandleWebServiceRequestWithActionNamed(aString);
 	}
 
+	private Object fix(Object value) {
+		if (value instanceof ArrayList) {
+			ArrayList converted = (ArrayList) value;
+			return new NSArray(converted, false);
+		}
+		else if (value instanceof HashMap) {
+			HashMap converted = (HashMap) value;
+			return new NSDictionary(converted, false);
+		}
+		return value;
+	}
+	
+	@Override
+	public Object valueForKey(String s) {
+		Object result = super.valueForKey(s);
+		return fix(result);
+	}
 }
