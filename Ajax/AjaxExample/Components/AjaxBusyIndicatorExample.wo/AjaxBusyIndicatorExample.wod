@@ -46,3 +46,23 @@ WaitBig : WOImage {
   framework = "Ajax";
   filename = "wait30.gif";
 }
+
+Now : WOString {
+  value = now;
+}
+
+UpdateWatchContainer : AjaxUpdateLink {
+	updateContainerID = "ExampleWatchContainer";
+	action = longRunningAction;
+}
+
+ExampleWatchContainer : AjaxUpdateContainer {
+  id = "ExampleWatchContainer";
+  style = "border: 1px solid rgb(180, 0, 0); background-color: rgb(230, 90, 90); padding: 10px";
+}
+
+WatchIndicator : AjaxBusyIndicator {
+  watchContainerID = "ExampleWatchContainer";
+  onCreate = "function() { $('WatchContainerLoading').show(); $('WatchContainerLoading').highlight()  }";
+  onComplete = "function() { $('WatchContainerLoading').hide(); }";
+}
