@@ -185,6 +185,25 @@ public interface IERXRestEntityDelegate {
 	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 	/**
+	 * Inserts or updates an object of the given type.
+	 * 
+	 * @param entity
+	 *            the entity of the object to insert or update
+	 * @param eoNode
+	 *            the node that describes the insert or update
+	 * @param context
+	 *            the rest context
+	 * @return the inserted or updated object
+	 * @throws ERXRestSecurityException
+	 *             if a security failure occurs
+	 * @throws ERXRestException
+	 *             if a general failure occurs
+	 * @throws ERXRestNotFoundException
+	 *             if a related object cannot be found
+	 */
+	public EOEnterpriseObject processObjectFromDocument(EOEntity entity, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
+
+	/**
 	 * Insert a new object of the given type into a parent object's keypath from an XML document.
 	 * 
 	 * @param entity

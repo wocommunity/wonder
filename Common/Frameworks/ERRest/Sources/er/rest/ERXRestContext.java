@@ -19,7 +19,6 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 	private EOEditingContext _editingContext;
 	private IERXRestDelegate _delegate;
 	private NSMutableDictionary _attributes;
-	private boolean _localObjects;
 
 	/**
 	 * Constructs a rest context.
@@ -29,11 +28,11 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 	 * @param editingContext
 	 *            the EOEditingContext
 	 */
-	public ERXRestContext(WOContext context, EOEditingContext editingContext) {
+	public ERXRestContext(WOContext context, EOEditingContext editingContext, IERXRestDelegate delegate) {
 		_context = context;
 		_editingContext = editingContext;
 		_attributes = new NSMutableDictionary();
-		_localObjects = true;
+		_delegate = delegate;
 	}
 
 	/**
@@ -91,25 +90,5 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 
 	public Object valueForKey(String key) {
 		return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
-	}
-	
-	/**
-	 * Specifies if the objects in an update represent local objects that can be looked up with their ids or remote
-	 * objects that need to be synced (and have different PK's).
-	 * 
-	 * @param localObjects true if the objects are local
-	 */
-	public void setLocalObjects(boolean localObjects) {
-		_localObjects = localObjects;
-	}
-
-	/**
-	 * Returns true if the objects in an update represent local objects that can be looked up with their ids or remote
-	 * objects that need to be synced (and have different PK's).
-	 * 
-	 * @return true if the objects are local
-	 */
-	public boolean localObjects() {
-		return _localObjects;
 	}
 }

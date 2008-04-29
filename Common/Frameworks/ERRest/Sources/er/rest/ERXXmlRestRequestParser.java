@@ -65,11 +65,14 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 	}
 
 	public ERXRestRequest parseRestRequest(ERXRestContext context, WORequest request, String requestPath) throws ERXRestException, ERXRestNotFoundException {
+		return parseRestRequest(context, request.contentString(), requestPath);
+	}
+	
+	public ERXRestRequest parseRestRequest(ERXRestContext context, String contentStr, String requestPath) throws ERXRestException, ERXRestNotFoundException {
 		ERXRestKey requestKey = ERXRestKey.parse(context, requestPath);
 
 		ERXRestRequestNode rootRequestNode = null;
 
-		String contentStr = request.contentString();
 		if (contentStr != null && contentStr.length() > 0) {
 			// MS: Support direct updating of primitive type keys -- so if you don't want to
 			// wrap your request in XML, this will allow it

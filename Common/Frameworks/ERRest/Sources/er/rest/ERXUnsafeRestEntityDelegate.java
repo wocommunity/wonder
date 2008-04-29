@@ -26,10 +26,23 @@ import er.extensions.ERXApplication;
 public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	private NSMutableSet _initializedEntityNames;
 
+	/**
+	 * Constructs an ERXUnsafeRestEntityDelegate.
+	 */
 	public ERXUnsafeRestEntityDelegate() {
+		this(false);
+	}
+
+	/**
+	 * Constructs an ERXUnsafeRestEntityDelegate.
+	 * 
+	 * @param allowProductionUse
+	 *            if true, this can be used in production without throwing an exception. BE VERY CAREFUL.
+	 */
+	public ERXUnsafeRestEntityDelegate(boolean allowProductionUse) {
 		_initializedEntityNames = new NSMutableSet();
 
-		if (!ERXApplication.isDevelopmentModeSafe()) {
+		if (!allowProductionUse && !ERXApplication.isDevelopmentModeSafe()) {
 			throw new SecurityException("You are attempting to use ERXUnsafeRestEntityDelegate outside of development mode!.");
 		}
 	}
