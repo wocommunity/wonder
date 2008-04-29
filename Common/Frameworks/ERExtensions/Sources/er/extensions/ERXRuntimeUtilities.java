@@ -302,7 +302,7 @@ public class ERXRuntimeUtilities {
      *            indicating this method call waits until the process exits or
      *            any <code>long</code> number larger than <code>0</code>
      *            which means if the process does not exit after
-     *            <code>timeout</code> seconds then this method throws an
+     *            <code>timeout</code> milliseconds then this method throws an
      *            ERXTimeoutException
      * 
      * 
