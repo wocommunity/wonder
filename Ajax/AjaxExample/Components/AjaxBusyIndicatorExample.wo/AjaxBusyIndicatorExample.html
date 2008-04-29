@@ -12,9 +12,21 @@
 			Won't make too much sense to add more than one to a page.
 		</td></tr></table>
 	</div>
+	
 	<hr />
+	
 	<webobject name="Container">
 		<p>	You have made <webobject name = "NumRequestsString"></webobject> requests. </p>
 	</webobject>
 	<webobject name="Busy"></webobject>
+	
+	<webobject name = "ExampleWatchContainer">
+		<webobject name = "Now"/>
+		<br/>
+		<webobject name = "UpdateWatchContainer">Update with a Watch Function</webobject>
+	</webobject>
+	<div id = "WatchContainerLoading" style = "display: none; border: 1px solid black; background-color: white; padding: 5px;">
+		This is loading ...
+	</div>
+	<webobject name = "WatchIndicator"/>
 </webobject>

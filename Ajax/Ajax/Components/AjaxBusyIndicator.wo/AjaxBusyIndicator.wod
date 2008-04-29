@@ -1,13 +1,9 @@
 BusyClass : WOString {
-	value = busyClass;
-}
-
-HasBusyClass : WOConditional {
-	condition = busyClass;
+	value = ^busyClass;
 }
 
 BusyImageConditional : WOConditional {
-	condition = busyImage;
+	condition = ^busyImage;
 }
 
 BusyDiv : WOGenericContainer {
@@ -17,10 +13,22 @@ BusyDiv : WOGenericContainer {
 }
 
 BusyImage : WOImage {
-	filename = busyImage;
-	framework = busyImageFramework;
+	filename = ^busyImage;
+	framework = ^busyImageFramework;
 }
 
 DivID : WOString {
 	value = divID;
+}
+
+WatchContainerID : WOString {
+  value = ^watchContainerID;
+}
+
+OnCreate : WOString {
+  value = onCreate;
+}
+
+OnComplete : WOString {
+  value = onComplete;
 }
