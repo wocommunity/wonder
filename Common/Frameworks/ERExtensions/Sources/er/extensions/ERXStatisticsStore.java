@@ -226,7 +226,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			for (Enumeration enumerator = stats.keyEnumerator(); enumerator.hasMoreElements();) {
 				Object key = enumerator.nextElement();
 				Object value = stats.objectForKey(key);
-				fixed.setObjectForKey(value, fix(key));
+				fixed.setObjectForKey(fix(value), key);
 			}
 			stats = fixed;
 		}
