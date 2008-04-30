@@ -7,7 +7,7 @@
             precision = 38; 
             scale = 2; 
             valueClassName = NSDecimalNumber; 
-            valueType = B;
+            valueType = B; 
         }, 
         {columnName = ""; externalType = BLOB; name = blob; valueClassName = NSData; }, 
         {
@@ -45,7 +45,7 @@
             precision = 38; 
             scale = 4; 
             valueClassName = NSDecimalNumber; 
-            valueType = B;
+            valueType = B; 
         }, 
         {
             columnName = ""; 
@@ -94,6 +94,13 @@
             name = intNumber; 
             valueClassName = NSNumber; 
             valueType = i; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = LONG; 
+            name = longNumber; 
+            valueClassName = NSNumber; 
+            valueType = l; 
         }, 
         {
             columnName = ""; 
@@ -215,6 +222,7 @@
         flag, 
         intBoolean, 
         intNumber, 
+        longNumber, 
         longText, 
         mutableArray, 
         mutableDictionary, 
@@ -243,6 +251,7 @@
             flag, 
             intBoolean, 
             intNumber, 
+            longNumber, 
             longText, 
             mutableArray, 
             mutableDictionary, 
