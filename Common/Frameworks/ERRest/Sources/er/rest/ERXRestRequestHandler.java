@@ -209,6 +209,27 @@ import er.extensions.ERXEC;
  * HTTP Status Code: 200
  * </pre>
  * 
+ * <h2>Using it Programmatically</h2>
+ * If you want to process the results of a REST call to a remote server on your local
+ * system (i.e. simple EO syncing), you can execute something like:
+ *  
+ * <pre>
+ * EOEditingContext editingContext = ERXEC.newEditingContext();
+ * 
+ * ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate();
+ * restDelegate.addDelegateForEntityNamed(new ERXUnsafeRestEntityDelegate(true), Manufacturer.ENTITY_NAME);
+ * ERXRestContext restContext = new ERXRestContext(context(), editingContext, restDelegate);
+ * 
+ * String contentStr = ERXFileUtilities.stringFromURL(new URL("http://someserver/rest/Manufacturer.xml"));
+ * ERXRestRequest restRequest = new ERXXmlRestRequestParser().parseRestRequest(restContext, contentStr, "Manufacturer");
+ * ERXRestKey restResponse = restDelegate.process(restRequest, restContext);
+ * 
+ * editingContext.saveChanges();
+ * </pre>
+ * 
+ * This assumes your PK match across systems, which means you should probably be using UUID PK's for syncing
+ * unless it's only one-way and read-only on the client.
+ * 
  * @author mschrag
  */
 public class ERXRestRequestHandler extends WORequestHandler {

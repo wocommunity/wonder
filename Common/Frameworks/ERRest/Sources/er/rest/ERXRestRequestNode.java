@@ -50,6 +50,15 @@ public class ERXRestRequestNode {
 	}
 
 	/**
+	 * Returns the type of this node.
+	 * 
+	 * @return the type of this node
+	 */
+	public String type() {
+		return attributeForKey("type");
+	}
+	
+	/**
 	 * Returns true if the attribute "nil" is "true".
 	 * 
 	 * @return true if this is a nil attribute
