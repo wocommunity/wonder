@@ -16,7 +16,9 @@ HasTargetContainerID : WOConditional {
 PingUpdate : AjaxPingUpdate {
 	cacheKey = ^cacheKey;
 	targetContainerID = ^targetContainerID;
+	onBeforeUpdate = ^onBeforeUpdate;
 }
+
 Frequency : WOString {
 	value = frequency;
 }
