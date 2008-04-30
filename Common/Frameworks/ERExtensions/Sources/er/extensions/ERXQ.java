@@ -262,6 +262,58 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXRegExQualifier(key, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier matches(String key, String value) {
+		return new ERXRegExQualifier(key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXInQualifier(key, values);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param values
+	 *            the values
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier hasValues(String key, NSArray values) {
+		return new ERXInQualifier(key, values);
+	}
+
+	/**
+	 * Equivalent to new ERXToManyQualifier(key, values);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param values
+	 *            the values
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier has(String key, NSArray values) {
+		return hasAtLeast(key, values, 0);
+	}
+
+	/**
+	 * Equivalent to new ERXToManyQualifier(key, values);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param values
+	 *            the values
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier hasAtLeast(String key, NSArray values, int min) {
+		return new ERXToManyQualifier(key, values, min);
+	}
+
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorEqual, value);
 	 * 
