@@ -101,6 +101,13 @@
         }, 
         {
             columnName = ""; 
+            externalType = int8; 
+            name = longNumber; 
+            valueClassName = NSNumber; 
+            valueType = l; 
+        }, 
+        {
+            columnName = ""; 
             externalType = text; 
             name = longText; 
             valueClassName = NSString; 
@@ -218,6 +225,7 @@
         flag, 
         intBoolean, 
         intNumber, 
+        longNumber, 
         longText, 
         mutableArray, 
         mutableDictionary, 
@@ -246,6 +254,7 @@
             flag, 
             intBoolean, 
             intNumber, 
+            longNumber, 
             longText, 
             mutableArray, 
             mutableDictionary, 

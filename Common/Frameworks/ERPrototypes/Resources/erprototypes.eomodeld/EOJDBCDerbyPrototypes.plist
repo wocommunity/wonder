@@ -97,6 +97,13 @@
         }, 
         {
             columnName = ""; 
+            externalType = LONG; 
+            name = longNumber; 
+            valueClassName = NSNumber; 
+            valueType = l; 
+        }, 
+        {
+            columnName = ""; 
             externalType = CLOB; 
             name = longText; 
             valueClassName = NSString; 
@@ -213,6 +220,7 @@
         flag, 
         intBoolean, 
         intNumber, 
+        longNumber, 
         longText, 
         mutableArray, 
         mutableDictionary, 
@@ -241,6 +249,7 @@
             flag, 
             intBoolean, 
             intNumber, 
+            longNumber, 
             longText, 
             mutableArray, 
             mutableDictionary, 
