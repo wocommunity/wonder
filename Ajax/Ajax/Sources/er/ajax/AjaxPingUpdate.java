@@ -14,10 +14,13 @@ import com.webobjects.appserver.WOContext;
  * 
  * @binding targetContainerID the ID of the update container to refresh when a change is detected
  * @binding cacheKey some hash value that represents the state of the target container
+ * @binding onBeforeUpdate (optional) the javascript function to call before updating (should return true if the update
+ *          should happen, false if not)
  *  
  * @author mschrag
  */
 public class AjaxPingUpdate extends WOComponent {
+  private Boolean _refreshTarget;
 	private Object _lastCacheKey;
 
 	public AjaxPingUpdate(WOContext context) {
@@ -34,16 +37,24 @@ public class AjaxPingUpdate extends WOComponent {
 	 * @return whether or not the target should be refreshed
 	 */
 	public boolean refreshTarget() {
-		boolean refreshTarget = false;
-		Object cacheKey = valueForBinding("cacheKey");
-		if (_lastCacheKey == null) {
-			_lastCacheKey = cacheKey;
-		}
-		else if (!cacheKey.equals(_lastCacheKey)) {
-			refreshTarget = true;
-			_lastCacheKey = cacheKey;
-		}
-		return refreshTarget;
+    boolean refreshTarget = false;
+	  if (_refreshTarget == null) {
+  		Object cacheKey = valueForBinding("cacheKey");
+  		if (_lastCacheKey == null) {
+  			_lastCacheKey = cacheKey;
+  		}
+  		else if (!cacheKey.equals(_lastCacheKey)) {
+  			refreshTarget = true;
+  			_lastCacheKey = cacheKey;
+  		}
+  		_refreshTarget = Boolean.valueOf(refreshTarget);
+	  }
+		return _refreshTarget.booleanValue();
+	}
+	
+	public void sleep() {
+		super.sleep();
+		_refreshTarget = null;
 	}
 
 	/**

@@ -7,25 +7,25 @@ import er.extensions.ERXWOContext;
 
 /**
  * <p>
- * AjaxPing provides support for refreshing a large content area based on a series
- * of periodic refreshes of a very small area.  You provide a cache key that upon
- * changing, triggers the update of another target AjaxUpdateContainer.
+ * AjaxPing provides support for refreshing a large content area based on a series of periodic refreshes of a very small
+ * area. You provide a cache key that upon changing, triggers the update of another target AjaxUpdateContainer.
  * </p>
  * <p>
- * For instance, if you have a list of blog entries, you might refresh the blog
- * entries container with a cache key "blogEntries.count".  When the count of the
- * blog entries changes, the entire container will be refreshed.
+ * For instance, if you have a list of blog entries, you might refresh the blog entries container with a cache key
+ * "blogEntries.count". When the count of the blog entries changes, the entire container will be refreshed.
  * </p>
  * 
  * @binding frequency the frequency of refresh (in millis), defaults to 3000
  * @binding targetContainerID the ID of the update container to refresh when a change is detected
  * @binding cacheKey some hash value that represents the state of the target container
- *  
+ * @binding onBeforeUpdate (optional) the javascript function to call before updating (should return true if the update
+ *          should happen, false if not)
+ * 
  * @author mschrag
  */
 public class AjaxPing extends WOComponent {
 	private String _id;
-	
+
 	public AjaxPing(WOContext context) {
 		super(context);
 	}
@@ -46,9 +46,10 @@ public class AjaxPing extends WOComponent {
 		}
 		return frequency;
 	}
-	
+
 	/**
 	 * Returns the ID of the ping container.
+	 * 
 	 * @return the ID of the ping container
 	 */
 	public String id() {
