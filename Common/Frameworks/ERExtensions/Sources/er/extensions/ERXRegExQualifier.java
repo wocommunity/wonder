@@ -9,6 +9,8 @@ import com.webobjects.eocontrol.EOQualifierVariable;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.qualifiers.ERXKeyValueQualifier;
+
 /**
  * Provides regular expression matching of attributes. You can also bind a WODisplayGroup queryOperator to 
  * <code>matches</code> and yoiu should be able to have qualifier strings with "foo matches bar". <br />
@@ -17,7 +19,7 @@ import com.webobjects.foundation.NSSelector;
  * 
  * @author ak
  */
-public class ERXRegExQualifier extends EOKeyValueQualifier {
+public class ERXRegExQualifier extends ERXKeyValueQualifier {
 
 	public static String MatchesSelectorName = "matches";
 	public static NSSelector MatchesSelector = new NSSelector("matches", new Class[] {String.class});

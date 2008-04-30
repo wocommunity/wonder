@@ -30,6 +30,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSet;
 
+import er.extensions.qualifiers.ERXKeyValueQualifier;
+
 /**
  * The ERXInQualifier is useful for creating qualifiers that
  * will generate SQL using the 'IN' key word.<br>
@@ -40,7 +42,7 @@ import com.webobjects.foundation.NSSet;
  * USER_ID IN (&lt;array of numbers or data&gt;)
  */
 // ENHANCEME: Should support restrictive qualifiers, don't need to subclass KeyValueQualifier
-public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
+public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
     private static final int DefaultPadToSize =
             ERXProperties.intForKeyWithDefault("er.extensions.ERXInQualifier.DefaultPadToSize", 8);
 

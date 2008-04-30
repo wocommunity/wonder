@@ -22,6 +22,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
+import er.extensions.qualifiers.ERXKeyValueQualifier;
+
 /**
  * Optimized toMany qualifier, much, much better SQL than the Apple provided qualifier.
  * Really nice when you want to find all the eos that have say five of the
@@ -42,7 +44,7 @@ import com.webobjects.foundation.NSMutableSet;
  * <code> ERXToManyQualifier q = new ERXToManyQualifier("toEmployees", employees, 1);</code>
  */
 
-public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable {
+public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneable {
     /** register SQL generation support for the qualifier */
     static {
         EOQualifierSQLGeneration.Support.setSupportForClass(new ToManyQualifierSQLGenerationSupport(), ERXToManyQualifier.class);
