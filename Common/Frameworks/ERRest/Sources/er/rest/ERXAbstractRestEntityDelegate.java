@@ -464,7 +464,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 					eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, relationshipName);
 				}
 				else {
-					System.out.println("ERXAbstractRestEntityDelegate._updateRelationshipFromDocument: A " + relationshipName);
+					//System.out.println("ERXAbstractRestEntityDelegate._updateRelationshipFromDocument: A " + relationshipName);
 					// MS: Throw?
 				}
 			}
@@ -488,7 +488,6 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				_updateArrayFromDocument(entity, eo, relationshipName, destinationEntity, originalObjects, newNodes, context);
 			}
 			else {
-				System.out.println("ERXAbstractRestEntityDelegate._updateRelationshipFromDocument: C" + relationshipName);
 				// MS: ???
 			}
 		}
@@ -577,7 +576,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				}
 			}
 			catch (ERXRestNotFoundException e) {
-				System.out.println("ERXAbstractRestEntityDelegate._updateArrayFromDocument: inserting " + attributeName + " on " + parentObject);
+				//System.out.println("ERXAbstractRestEntityDelegate._updateArrayFromDocument: inserting " + attributeName + " on " + parentObject);
 				EOEnterpriseObject relatedObject = destinationEntityDelegate.insertObjectFromDocument(entity, toManyNode, parentEntity, parentObject, attributeName, context);
 				addObjects.addObject(relatedObject);
 			}
@@ -587,7 +586,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		while (currentObjectsEnum.hasMoreElements()) {
 			EOEnterpriseObject currentObject = (EOEnterpriseObject) currentObjectsEnum.nextElement();
 			if (!keepObjects.containsObject(currentObject)) {
-				System.out.println("AbstractERXRestDelegate.updateArray: removing " + currentObject + " from " + parentObject + " (" + attributeName + ")");
+				//System.out.println("AbstractERXRestDelegate.updateArray: removing " + currentObject + " from " + parentObject + " (" + attributeName + ")");
 				parentObject.removeObjectFromBothSidesOfRelationshipWithKey(currentObject, attributeName);
 			}
 		}
@@ -595,7 +594,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		Enumeration addObjectsEnum = addObjects.objectEnumerator();
 		while (addObjectsEnum.hasMoreElements()) {
 			EOEnterpriseObject addObject = (EOEnterpriseObject) addObjectsEnum.nextElement();
-			System.out.println("AbstractERXRestDelegate.updateArray: adding " + addObject + " to " + parentObject + " (" + attributeName + ")");
+			//System.out.println("AbstractERXRestDelegate.updateArray: adding " + addObject + " to " + parentObject + " (" + attributeName + ")");
 			parentObject.addObjectToBothSidesOfRelationshipWithKey(addObject, attributeName);
 		}
 
