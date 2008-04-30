@@ -31,6 +31,8 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSStringUtilities;
 
+import er.extensions.qualifiers.ERXKeyValueQualifier;
+
 /**
 * The between qualifier allows qualification on an
 * attribute that is between two values. This qualifier
@@ -42,7 +44,7 @@ import com.webobjects.foundation._NSStringUtilities;
 * Note this qualifier supports qualifing against String, Number 
 * and NSTimestamp values.
 */
-public class ERXBetweenQualifier extends EOKeyValueQualifier implements EOQualifierEvaluation, Cloneable
+public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQualifierEvaluation, Cloneable
 {
 
     /** register SQL generation support for the qualifier */
