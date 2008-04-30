@@ -1,3 +1,8 @@
-Components/**/*.wo/**/*
-Components/**/*.api
-Resources/**/*
+**/Properties
+**/*.eomodeld/
+**/*.d2wmodel
+**/*.wo/
+**/*.api
+**/*.strings
+**/*.plist
+**/*.sql
