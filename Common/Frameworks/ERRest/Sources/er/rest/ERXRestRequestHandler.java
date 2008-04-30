@@ -513,7 +513,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		else {
 			defaultEntityDelegate = new ERXUnsafeRestEntityDelegate();
 		}
-		ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
+		ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate, true);
 		IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
 		// IERXRestResponseWriter responseWriter = new ERXJSONRestResponseWriter(true, displayToMany); // DON'T COMMIT
 		// YET

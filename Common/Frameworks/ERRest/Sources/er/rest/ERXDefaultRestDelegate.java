@@ -22,12 +22,24 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	private NSMutableDictionary _entityAliases;
 	private NSMutableDictionary _entityDelegates;
 	private IERXRestEntityDelegate _defaultDelegate;
+	private boolean _guessDelegateNames;
 
 	/**
 	 * Constructs an ERXDefaultRestDelegate with an ERXDenyRestEntityDelegate as the default entity delegate.
 	 */
 	public ERXDefaultRestDelegate() {
-		this(new ERXDenyRestEntityDelegate());
+		this(new ERXDenyRestEntityDelegate(), true);
+	}
+
+	/**
+	 * Constructs an ERXDefaultRestDelegate with an ERXDenyRestEntityDelegate as the default entity delegate.
+	 * 
+	 * @param guessDelegateNames
+	 *            if true, delegates names will be guessed "<EntityName>RestEntityDelegate" before falling back to the
+	 *            default
+	 */
+	public ERXDefaultRestDelegate(boolean guessDelegateNames) {
+		this(new ERXDenyRestEntityDelegate(), guessDelegateNames);
 	}
 
 	/**
@@ -36,11 +48,15 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	 * 
 	 * @param defaultDelegate
 	 *            the default entity delegate to use
+	 * @param guessDelegateNames
+	 *            if true, delegates names will be guessed "<EntityName>RestEntityDelegate" before falling back to the
+	 *            default
 	 */
-	public ERXDefaultRestDelegate(IERXRestEntityDelegate defaultDelegate) {
+	public ERXDefaultRestDelegate(IERXRestEntityDelegate defaultDelegate, boolean guessDelegateNames) {
 		_entityAliases = new NSMutableDictionary();
 		_entityDelegates = new NSMutableDictionary();
 		_defaultDelegate = defaultDelegate;
+		_guessDelegateNames = guessDelegateNames;
 	}
 
 	public ERXRestKey process(ERXRestRequest restRequest, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
@@ -68,7 +84,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		else {
 			throw new IllegalArgumentException("Unable to process " + lastKey);
 		}
-		
+
 		return restResult;
 	}
 
@@ -217,7 +233,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		if (entityDelegate == null) {
 			String entityDelegateClassName = ERXProperties.stringForKey("ERXRest." + entity.name() + ".delegate");
 			Class<IERXRestEntityDelegate> entityDelegateClass;
-			if (entityDelegateClassName == null) {
+			if (entityDelegateClassName == null && _guessDelegateNames) {
 				entityDelegateClassName = entity.name() + "RestEntityDelegate";
 				entityDelegateClass = _NSUtilities.classWithName(entityDelegateClassName);
 			}
