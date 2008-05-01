@@ -7,9 +7,11 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
@@ -61,7 +63,7 @@ public class ERXPartialInitializer {
 		initializePartialEntities(modelGroup);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "cast" })
 	public void initializePartialEntities(EOModelGroup modelGroup) {
 		NSMutableDictionary<EOEntity, EOEntity> baseForPartial = new NSMutableDictionary<EOEntity, EOEntity>();
 
@@ -133,33 +135,58 @@ public class ERXPartialInitializer {
 			}
 		}
 
+		NSMutableSet<EOEntity> convertedEntities = new NSMutableSet<EOEntity>();
 		modelsEnum = modelGroup.models().objectEnumerator();
 		while (modelsEnum.hasMoreElements()) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
 			Enumeration entitiesEnum = model.entities().objectEnumerator();
 			while (entitiesEnum.hasMoreElements()) {
 				EOEntity entity = (EOEntity) entitiesEnum.nextElement();
-				Enumeration relationships = entity.relationships().immutableClone().objectEnumerator();
-				while (relationships.hasMoreElements()) {
-					EORelationship relationship = (EORelationship) relationships.nextElement();
-					EOEntity destinationEntity = relationship.destinationEntity();
-					EOEntity baseEntity = baseForPartial.objectForKey(destinationEntity);
-					if (baseEntity != null) {
-						NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<String, Object>();
-						relationship.encodeIntoPropertyList(relationshipPropertyList);
-						relationshipPropertyList.setObjectForKey(baseEntity.name(), "destination");
-
-						EORelationship primaryRelationship = new EORelationship(relationshipPropertyList, entity);
-						primaryRelationship.awakeWithPropertyList(relationshipPropertyList);
-						entity.removeRelationship(relationship);
-						entity.addRelationship(primaryRelationship);
-					}
-				}
+				convertEntityPartialReferences(entity, baseForPartial, convertedEntities);
 			}
 		}
 
 		for (EOEntity partialExtensionEntity : baseForPartial.allKeys()) {
 			partialExtensionEntity.model().removeEntity(partialExtensionEntity);
+		}
+	}
+	
+	protected void convertEntityPartialReferences(EOEntity entity, NSMutableDictionary<EOEntity, EOEntity> baseForPartial, NSMutableSet<EOEntity> convertedEntities) {
+		if (!convertedEntities.containsObject(entity)) {
+			convertedEntities.addObject(entity);
+			Enumeration relationships = entity.relationships().immutableClone().objectEnumerator();
+			while (relationships.hasMoreElements()) {
+				EORelationship relationship = (EORelationship) relationships.nextElement();
+				convertRelationshipPartialReferences(entity, relationship, baseForPartial, convertedEntities);
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void convertRelationshipPartialReferences(EOEntity entity, EORelationship relationship, NSMutableDictionary<EOEntity, EOEntity> baseForPartial, NSMutableSet<EOEntity> convertedEntities) {
+		EOEntity destinationEntity = relationship.destinationEntity();
+		EOEntity baseEntity = baseForPartial.objectForKey(destinationEntity);
+		if (baseEntity != null) {
+			if (relationship.isFlattened()) {
+				for (EORelationship componentRelationship : (NSArray<EORelationship>)relationship.componentRelationships()) {
+					EOEntity componentEntity = componentRelationship.destinationEntity();
+					if (componentEntity == entity) {
+						convertRelationshipPartialReferences(entity, componentRelationship, baseForPartial, convertedEntities);
+					}
+					else {
+						convertEntityPartialReferences(componentEntity, baseForPartial, convertedEntities);
+					}
+				}
+			}
+			
+			NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<String, Object>();
+			relationship.encodeIntoPropertyList(relationshipPropertyList);
+			relationshipPropertyList.setObjectForKey(baseEntity.name(), "destination");
+			
+			EORelationship primaryRelationship = new EORelationship(relationshipPropertyList, entity);
+			primaryRelationship.awakeWithPropertyList(relationshipPropertyList);
+			entity.removeRelationship(relationship);
+			entity.addRelationship(primaryRelationship);
 		}
 	}
 }
