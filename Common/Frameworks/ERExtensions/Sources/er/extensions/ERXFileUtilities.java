@@ -165,13 +165,30 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Returns a string from the input stream using the default
+     * Returns a string from the input stream using the default
      * encoding.
      * @param in stream to read
      * @return string representation of the stream.
      */
     public static String stringFromInputStream(InputStream in) throws IOException {
         return new String(bytesFromInputStream(in));
+    }
+    
+    /**
+     * Returns the String from the contents of the given URL.
+     * 
+     * @param url the URL to read from
+     * @return the String contents of the URL
+     * @throws IOException if an error occurs
+     */
+    public static String stringFromURL(URL url) throws IOException {
+    	InputStream is = url.openStream();
+    	try {
+    		return ERXFileUtilities.stringFromInputStream(is);
+    	}
+    	finally {
+    		is.close();
+    	}
     }
 
     /**
