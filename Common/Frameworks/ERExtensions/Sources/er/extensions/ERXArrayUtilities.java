@@ -574,18 +574,19 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Performs multiple key-value coding calls against an array.
-     * @param array object to be acted upon.
+     * Performs multiple key-value coding calls against an array or an object.
+     * @param array collection or object to be acted upon.
      * @param paths array of keypaths.
-     * @return returns an array containing an array of values for
-     *         every keypath.
+     * @return for collections, returns an array containing an array of values for every keypath.
+     * For objects, returns an array containing a value for every keypath.
      */
     public static NSArray valuesForKeyPaths(Object array, NSArray paths) {
         NSMutableArray result = new NSMutableArray();
 
         Enumeration e = paths.objectEnumerator();
         while(e.hasMoreElements()) {
-            result.addObject(NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, (String)e.nextElement()));
+        	Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, (String)e.nextElement());
+            result.addObject(value != null ? value : NSKeyValueCoding.NullValue);
         }
         return result;
     }
