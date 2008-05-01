@@ -19,6 +19,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WModel;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
@@ -835,7 +836,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     // (ak) these actually belong to CompactEdit and PrinterFriendlyInspect
-    // moved them here to avoid to much subclassing
+    // moved them here to avoid too much subclassing
     public boolean isEmbedded() {
         return ERXValueUtilities.booleanValueForBindingOnComponentWithDefault("isEmbedded", this, false);
     }
@@ -968,5 +969,22 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             return new NSDictionary(pc, "parentPageConfiguration");
         }
         return null;
+    }
+
+	/**
+	 * Gets the name of the page wrapper component. Overrides the superclass' implementation which caches the 
+	 * name too aggressively.  This method allows you to drive the page wrapper component via the rules.
+	 * Defaults to <code>PageWrapper</code> if a value is not found from the D2W rules.
+	 *
+	 * @return the name of the page wrapper
+	 */
+	public String pageWrapperName() {
+		String name = (String)d2wContext().valueForKey(D2WModel._PageWrapperNameKey);
+		
+		if (null == name) {
+			name = "PageWrapper";
+		}
+		
+		return name;
     }
 }
