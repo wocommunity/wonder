@@ -1,7 +1,11 @@
 Library/Frameworks/JavaDirectToWeb.framework
 Library/Frameworks/JavaDTWGeneration.framework
 Library/Frameworks/JavaEOAccess.framework
+Library/Frameworks/JavaEOApplication.framework
 Library/Frameworks/JavaEOControl.framework
+Library/Frameworks/JavaEOGeneration.framework
+Library/Frameworks/JavaEOInterface.framework
+Library/Frameworks/JavaEOInterfaceSwing.framework
 Library/Frameworks/JavaEOProject.framework
 Library/Frameworks/JavaEORuleSystem.framework
 Library/Frameworks/JavaFoundation.framework
@@ -9,6 +13,7 @@ Library/Frameworks/JavaJDBCAdaptor.framework
 Library/Frameworks/JavaWebObjects.framework
 Library/Frameworks/JavaXML.framework
 Library/Frameworks/JavaVM.framework
+Library/Java/Extensions/AppleScriptEngine.jar
 Library/Java/Extensions/CoreAudio.jar
 Library/Java/Extensions/dns_sd.jar
 Library/Java/Extensions/j3daudio.jar
