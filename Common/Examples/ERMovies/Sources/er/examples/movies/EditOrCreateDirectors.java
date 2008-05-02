@@ -30,6 +30,7 @@ public class EditOrCreateDirectors extends WOComponent {
         super(context);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
