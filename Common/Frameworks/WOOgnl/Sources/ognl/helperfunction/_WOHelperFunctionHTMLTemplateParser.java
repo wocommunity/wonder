@@ -265,10 +265,13 @@ public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser imple
 					declarationStr.append(key + "=" + ((WOKeyValueAssociation)assoc).keyPath());
 				}
 				else if (assoc instanceof WOConstantValueAssociation) {
-					declarationStr.append(key + "=" + ((WOConstantValueAssociation)assoc).keyPath());
+					declarationStr.append(key + "='" + ((WOConstantValueAssociation)assoc).valueInComponent(null) + "'");
 				}
 				else {
 					declarationStr.append(key + "=" + assoc);
+				}
+				if (keyEnum.hasMoreElements()) {
+					declarationStr.append(", ");
 				}
 			}
 			declarationStr.append(" }");
