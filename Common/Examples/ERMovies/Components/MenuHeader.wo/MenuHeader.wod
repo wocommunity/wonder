@@ -1,17 +1,3 @@
-AppleLogo: WOImage {
-	alt = "Apple lives";
-	border = "0";
-	filename = "WhiteAppleWOBox.gif";
-	framework = "JavaDirectToWeb";
-	height = "57";
-	name = "Apple lives";
-	width = "50";
-}
-
-AssistantActiveConditional: WOConditional {
-	condition = isWebAssistantEnabled;
-}
-
 CustomizeButton: WOImage {
 	alt = "Activates the WebAssistant";
 	border = "0";
@@ -101,11 +87,6 @@ NewButton: WOImageButton {
 	height = "25";
 	name = "Creates a new Object of the selected Entity";
 	width = "102";
-}
-
-NoValidSession: WOConditional {
-	condition = context.hasSession;
-	negate = true;
 }
 
 RemoteControl: D2WRemoteControl {
