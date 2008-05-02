@@ -743,6 +743,15 @@ public class ERXSQLHelper {
 	}
 	
 	/**
+	 * Returns the name of the table to use for database migrations.
+	 * 
+	 * @return the name of the table to use for database migrations
+	 */
+	public String migrationTableName() {
+		return "_dbupdater";
+	}
+	
+	/**
 	 * JDBCAdaptor.externalTypeForJDBCType just returns the first type it 
 	 * finds instead of trying to find a best match. This can still 
 	 * fail, mind you, but it should be much better than the EOF default impl.
@@ -1108,6 +1117,9 @@ public class ERXSQLHelper {
 						else if (databaseProductName.equalsIgnoreCase("openbase")) {
 							sqlHelper = new OpenBaseSQLHelper();
 						}
+						else if (databaseProductName.equalsIgnoreCase("derby")) {
+							sqlHelper = new DerbySQLHelper();
+						}
 						else {
 							try {
 								sqlHelper = (ERXSQLHelper) Class.forName(ERXSQLHelper.class.getName() + "$" + databaseProductName + "SQLHelper").newInstance();
@@ -1123,7 +1135,7 @@ public class ERXSQLHelper {
 					_sqlHelperMap.put(databaseProductName, sqlHelper);
 				}
 				catch (Exception e) {
-					throw new NSForwardException(e, "Failed to create sql helper for '" + databaseProductName + "'.");
+					throw new NSForwardException(e, "Failed to create sql helper for the database with the product name '" + databaseProductName + "'.");
 				}
 			}
 			return sqlHelper;
@@ -1275,6 +1287,11 @@ public class ERXSQLHelper {
 
 		public boolean shouldExecute(String sql) {
 			return sql != null && !sql.startsWith("--");
+		}
+		
+		@Override
+		public String migrationTableName() {
+			return "dbupdater";
 		}
 	}
 
