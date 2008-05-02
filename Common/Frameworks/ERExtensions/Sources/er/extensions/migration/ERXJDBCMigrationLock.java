@@ -42,12 +42,21 @@ import er.extensions.ERXSQLHelper;
 public class ERXJDBCMigrationLock implements IERXMigrationLock {
 	public static final Logger log = Logger.getLogger(ERXJDBCMigrationLock.class);
 
-	private String _dbUpdaterTableName;
 	private EOModel _lastUpdatedModel;
 	private EOModel _dbUpdaterModelCache;
 
-	public ERXJDBCMigrationLock() {
-		_dbUpdaterTableName = ERXProperties.stringForKeyWithDefault("er.migration.JDBC.dbUpdaterTableName", "_dbupdater");
+	/**
+	 * Adds support for overriding the name of the db updater table on a per-database product level.
+	 * 
+	 * @param adaptor the current jdbc adaptor
+	 * @return the name of the dbupdater table
+	 */
+	protected String migrationTableName(JDBCAdaptor adaptor) {
+		String migrationTableName = ERXProperties.stringForKey("er.migration.JDBC.dbUpdaterTableName");
+		if (migrationTableName == null) {
+			migrationTableName = ERXSQLHelper.newSQLHelper(adaptor).migrationTableName();
+		}
+		return migrationTableName;
 	}
 
 	protected boolean createIfMissing() {
@@ -77,11 +86,11 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 				row.setObjectForKey(new Integer(1), "updateLock");
 				row.setObjectForKey(lockOwnerName, "lockOwner");
-				EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
+				EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 				count = channel.updateValuesInRowsDescribedByQualifier(row, EOQualifier.qualifierWithQualifierFormat("modelName = '" + model.name() + "' and (updateLock = 0 or lockOwner = '" + lockOwnerName + "')", null), dbUpdaterEntity);
 				channel.cancelFetch();
 				if (count == 0) {
-					EOFetchSpecification fetchSpec = new EOFetchSpecification(_dbUpdaterTableName, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
+					EOFetchSpecification fetchSpec = new EOFetchSpecification(migrationTableName(adaptor), new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
 					channel.selectAttributes(new NSArray<EOAttribute>(dbUpdaterEntity.attributeNamed("updateLock")), fetchSpec, false, dbUpdaterEntity);
 					NSDictionary nextRow;
 					try {
@@ -132,23 +141,23 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 					throw new ERXMigrationFailedException("Failed to create lock table. Try executing:\n" + createTableStatement + ".", t);
 				}
 			}
-			throw new ERXMigrationFailedException("Failed to lock " + _dbUpdaterTableName + " table.  It might be missing? Try executing:\n" + createTableStatement + ".", e);
+			throw new ERXMigrationFailedException("Failed to lock " + migrationTableName(adaptor) + " table.  It might be missing? Try executing:\n" + createTableStatement + ".", e);
 		}
 	}
 
 	public void unlock(EOAdaptorChannel channel, EOModel model) {
+		JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
 		boolean wasOpen = true;
 		if (!channel.isOpen()) {
 			channel.openChannel();
 			wasOpen = false;
 		}
 		try {
-			JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 			row.setObjectForKey(new Integer(0), "updateLock");
 			row.setObjectForKey(NSKeyValueCoding.NullValue, "lockOwner");
-			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
+			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 			channel.adaptorContext().commitTransaction();
 			channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
 			channel.cancelFetch();
@@ -156,7 +165,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			channel.adaptorContext().beginTransaction();
 		}
 		catch (Exception e) {
-			throw new ERXMigrationFailedException("Failed to unlock " + _dbUpdaterTableName + " table.", e);
+			throw new ERXMigrationFailedException("Failed to unlock " + migrationTableName(adaptor) + " table.", e);
 		}
 		finally {
 			if (!wasOpen) {
@@ -166,6 +175,8 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 	}
 
 	public int versionNumber(EOAdaptorChannel channel, EOModel model) {
+		JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
+
 		boolean wasOpen = true;
 		if (!channel.isOpen()) {
 			channel.openChannel();
@@ -173,10 +184,9 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		int version;
 		try {
-			JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
-			EOFetchSpecification fetchSpec = new EOFetchSpecification(_dbUpdaterTableName, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
+			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
+			EOFetchSpecification fetchSpec = new EOFetchSpecification(migrationTableName(adaptor), new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
 			channel.selectAttributes(new NSArray<EOAttribute>(dbUpdaterEntity.attributeNamed("version")), fetchSpec, false, dbUpdaterEntity);
 			NSDictionary nextRow = channel.fetchRow();
 			if (nextRow == null) {
@@ -189,7 +199,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			channel.cancelFetch();
 		}
 		catch (Exception e) {
-			throw new ERXMigrationFailedException("Failed to get version number from " + _dbUpdaterTableName + " table.", e);
+			throw new ERXMigrationFailedException("Failed to get version number from " + migrationTableName(adaptor) + " table.", e);
 		}
 		finally {
 			if (!wasOpen) {
@@ -200,17 +210,18 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 	}
 
 	public void setVersionNumber(EOAdaptorChannel channel, EOModel model, int versionNumber) {
+		JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
+
 		boolean wasOpen = true;
 		if (!channel.isOpen()) {
 			channel.openChannel();
 			wasOpen = false;
 		}
 		try {
-			JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 			row.setObjectForKey(new Integer(versionNumber), "version");
-			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
+			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 			int count = channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
 			channel.cancelFetch();
 			if (count == 0) {
@@ -218,7 +229,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			}
 		}
 		catch (Exception e) {
-			throw new ERXMigrationFailedException("Failed to set version number of " + _dbUpdaterTableName + ".", e);
+			throw new ERXMigrationFailedException("Failed to set version number of " + migrationTableName(adaptor) + ".", e);
 		}
 		finally {
 			if (!wasOpen) {
@@ -248,8 +259,8 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			dbUpdaterModel.setAdaptorName(model.adaptorName());
 
 			EOEntity dbUpdaterEntity = new EOEntity();
-			dbUpdaterEntity.setExternalName(_dbUpdaterTableName);
-			dbUpdaterEntity.setName(_dbUpdaterTableName);
+			dbUpdaterEntity.setExternalName(migrationTableName(adaptor));
+			dbUpdaterEntity.setName(migrationTableName(adaptor));
 			dbUpdaterModel.addEntity(dbUpdaterEntity);
 
 			EOAttribute modelNameAttribute = new EOAttribute();
@@ -323,7 +334,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		flags.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		String createTableScript = adaptor.synchronizationFactory().schemaCreationScriptForEntities(new NSArray<EOEntity>(dbUpdaterModel.entityNamed(_dbUpdaterTableName)), flags);
+		String createTableScript = adaptor.synchronizationFactory().schemaCreationScriptForEntities(new NSArray<EOEntity>(dbUpdaterModel.entityNamed(migrationTableName(adaptor))), flags);
 		return createTableScript;
 	}
 }
