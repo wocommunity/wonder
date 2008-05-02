@@ -37,6 +37,7 @@ import er.extensions.ERXWOForm;
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
  * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
  * @binding formSerializer the name of the javascript function to call to serialize the form
+ * @binding elementName the element name to use (defaults to "a")
  * 
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
  * @binding effectDuration synonym of afterEffectDuration except it always applies to updateContainerID
@@ -227,22 +228,32 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     	AjaxUtils.appendScriptFooter(response);
     }
     if (showUI) {
+    	boolean disabled = disabledInComponent(component);
+    	String elementName = (String) valueForBinding("elementName", "a", component);
+    	
 	    if (showButton) {
 	      response.appendContentString("<input ");
 	      appendTagAttributeToResponse(response, "type", "button");
 	      String name = nameInContext(context, component);
 	      appendTagAttributeToResponse(response, "name", name);
 	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
+	      
+	      if (disabled) {
+	    	  appendTagAttributeToResponse(response, "disabled", "disabled");
+	      }
 	    }
 	    else {
-	      response.appendContentString("<a href = \"javascript:void(0)\" ");
+			boolean isATag = "a".equalsIgnoreCase(elementName);
+			if (isATag) {
+				response.appendContentString("<a href = \"javascript:void(0)\" ");
+			}
+			else {
+				response.appendContentString("<" + elementName + " ");
+			}
 	    }
 	    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 	    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
 	    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
-	    if (disabledInComponent(component)) {
-	      appendTagAttributeToResponse(response, "disabled", "disabled");
-	    }
     	if (functionName == null) {
     		appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
     	}
@@ -257,7 +268,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	      if (hasChildrenElements()) {
 	        appendChildrenToResponse(response, context);
 	      }
-	      response.appendContentString("</a>");
+	      response.appendContentString("</" + elementName + ">");
 	    }
     }
     super.appendToResponse(response, context);
