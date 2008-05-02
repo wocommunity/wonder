@@ -24,6 +24,7 @@ public class DirectAction extends ERD2WDirectAction {
         super(aRequest);
     }
 
+    @Override
     public WOActionResults defaultAction() {
         return pageWithName("Main");
     }
