@@ -9,9 +9,11 @@ er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEC.defaultCoalesceAutoLocks=true
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 
+dbConnectURLGLOBAL=jdbc:derby:ERMovies;create=true
+
 # Migrations
-#er.migration.migrateAtStartup=true
-#er.migration.createTablesIfNecessary=true
+er.migration.migrateAtStartup=true
+er.migration.createTablesIfNecessary=true
 #er.migration.modelNames=YourModel
 
 # Repetition Fixes
