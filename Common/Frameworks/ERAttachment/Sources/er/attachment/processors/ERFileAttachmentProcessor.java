@@ -75,7 +75,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       File desiredFilesystemPath = new File(filesystemPath);
       File actualFilesystemPath = ERXFileUtilities.reserveUniqueFile(desiredFilesystemPath, overwrite);
 
-      ERXFileUtilities.renameTo(uploadedFile, actualFilesystemPath);
+      ERXFileUtilities.copyFileToFile(uploadedFile, actualFilesystemPath, pendingDelete, true);
 
       String desiredFileName = desiredFilesystemPath.getName();
       String actualFileName = actualFilesystemPath.getName();
@@ -92,11 +92,6 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
     catch (RuntimeException e) {
       attachment.delete();
       throw e;
-    }
-    finally {
-      if (pendingDelete && uploadedFile.exists()) {
-        uploadedFile.delete();
-      }
     }
 
     return attachment;
