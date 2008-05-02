@@ -751,6 +751,17 @@ public class ERXFileUtilities {
     }
 
     /**
+     * Java wrapper for call out to chmod.  Only works if your OS supports the chmod command.
+     *
+     * @param file the File to run chmod on
+     * @param mode see the chmod man page
+     * @throws IOException if things go wrong
+     */
+    public static void chmod(File file, String mode) throws IOException {
+    	Runtime.getRuntime().exec(new String[] {"chmod", mode, file.getAbsolutePath()});
+    }
+    
+    /**
         * Creates a symlink for a given file. Note this only works on
      * civilized OSs which support symbolic linking.
      * @param source to create the link to
