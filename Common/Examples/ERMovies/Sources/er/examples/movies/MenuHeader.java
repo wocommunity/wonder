@@ -27,7 +27,7 @@ public class MenuHeader extends WOComponent {
     public String manipulatedEntityName() {
         if (_manipulatedEntityName == null) {
             WOComponent currentPage = context().page();
-            _manipulatedEntityName = D2W.factory().entityNameFromPage(currentPage);
+            _manipulatedEntityName = D2W.entityNameFromPage(currentPage);
         }
         return _manipulatedEntityName;
     }
