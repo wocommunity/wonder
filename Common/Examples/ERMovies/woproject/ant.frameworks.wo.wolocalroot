@@ -1,9 +1,9 @@
+Library/Frameworks/DerbyPlugIn.framework
 Library/Frameworks/ERDirectToWeb.framework
 Library/Frameworks/ERExtensions.framework
 Library/Frameworks/ERJars.framework
 Library/Frameworks/ERPrototypes.framework
 Library/Frameworks/JavaWOExtensions.framework
 Library/Frameworks/WOOgnl.framework
-Library/Java/Extensions/OpenBaseJDBC.jar
 ERMovies/Libraries/derby.jar
 ERMovies/Libraries/derbytools.jar
