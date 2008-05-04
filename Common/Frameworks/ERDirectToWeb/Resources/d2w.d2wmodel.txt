@@ -400,9 +400,7 @@
     600 : targetOutput = 'xml' => batchSize = 0 [com.webobjects.directtoweb.Assignment],
     600 : targetOutput = 'xml' => defaultBatchSize = 0 [com.webobjects.directtoweb.Assignment],
     600 : (targetOutput = 'xml' and frame != 1) => pageWrapperName = ERDXMLPageWrapper [com.webobjects.directtoweb.Assignment],
-    1000 : isGenerating = 1 => pageWrapperName = D2WGenerationWrapper [com.webobjects.directtoweb.Assignment],
     1000 : smartRelationship.isToMany = 1 => embeddedPageConfiguration = listConfigurationName [er.directtoweb.ERDKeyValueAssignment],
     1000 : smartRelationship.isToMany = 0 => embeddedPageConfiguration = inspectConfigurationName [er.directtoweb.ERDKeyValueAssignment],
-    1001 : frame = 1 => pageWrapperName = D2WEmptyWrapper [com.webobjects.directtoweb.Assignment],
     5000 : forcedSubTask != null => subTask = forcedSubTask [er.directtoweb.ERDKeyValueAssignment]
 )
