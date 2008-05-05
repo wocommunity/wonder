@@ -1,4 +1,4 @@
-// DO NOT EDIT.  Make changes to ERAttachmentData.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERAttachmentData.java instead.
 package er.attachment.model;
 
 import com.webobjects.eoaccess.*;
@@ -7,6 +7,8 @@ import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
+import er.extensions.ERXGenericRecord;
+import er.extensions.ERXKey;
 
 @SuppressWarnings("all")
 public abstract class _ERAttachmentData extends er.extensions.ERXGenericRecord {
@@ -14,6 +16,7 @@ public abstract class _ERAttachmentData extends er.extensions.ERXGenericRecord {
 
 	// Attributes
 	public static final String DATA_KEY = "data";
+	public static final ERXKey DATA = new ERXKey(DATA_KEY);
 
 	// Relationships
 
@@ -38,8 +41,9 @@ public abstract class _ERAttachmentData extends er.extensions.ERXGenericRecord {
     takeStoredValueForKey(value, "data");
   }
 
+
   public static ERAttachmentData createERAttachmentData(EOEditingContext editingContext) {
-    ERAttachmentData eo = (ERAttachmentData)EOUtilities.createAndInsertInstance(editingContext, _ERAttachmentData.ENTITY_NAME);
+    ERAttachmentData eo = (ERAttachmentData) EOUtilities.createAndInsertInstance(editingContext, _ERAttachmentData.ENTITY_NAME);    
     return eo;
   }
 
