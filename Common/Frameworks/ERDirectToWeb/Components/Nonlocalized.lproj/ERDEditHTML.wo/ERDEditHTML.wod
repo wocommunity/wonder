@@ -3,12 +3,3 @@ Text : WOText {
 	cols = ^length;
 	value = objectKeyPathValue;
 }
-
-Src: ERXJavaScript {
-	scriptSource = sourceUrl;
-}
-
-Mode: WOString {
-	value = ^richTextMode;
-	escapeHTML = false;
-}
