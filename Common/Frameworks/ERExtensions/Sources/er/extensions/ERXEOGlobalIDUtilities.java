@@ -219,7 +219,7 @@ public class ERXEOGlobalIDUtilities {
      * @param globalIDs the global ids to fetch
      * @return the fetched EO's
      */
-    public static NSArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
+    public static NSMutableArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
     	return ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, globalIDs, false);
     }
 
@@ -231,7 +231,7 @@ public class ERXEOGlobalIDUtilities {
      * @param refreshesRefetchedObjects whether or not to refresh refetched objects
      * @return the fetched EO's
      */
-    public static NSArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs, boolean refreshesRefetchedObjects) {
+    public static NSMutableArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs, boolean refreshesRefetchedObjects) {
     	NSMutableArray result = new NSMutableArray();
 		ec.lock();
 		try {
