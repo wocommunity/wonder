@@ -436,7 +436,7 @@ delete from TEST_ITEM;
             }
 
             initializeSharedData();
-            ERCoreBusinessLogic.sharedInstance().addPreferenceRelationshipToActorEntity(People.ENTITY_NAME);
+            ERCoreBusinessLogic.sharedInstance().addPreferenceRelationshipToActorEntity(People.ENTITY_NAME, "id");
             ERTaggableEntity.registerTaggable(Bug.ENTITY_NAME);
         } catch(JDBCAdaptorException ex) {
             if(!(ERXApplication.erxApplication() instanceof ERXMainRunner)) {
