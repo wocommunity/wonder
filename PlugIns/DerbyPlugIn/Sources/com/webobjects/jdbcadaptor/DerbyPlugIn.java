@@ -8,6 +8,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
@@ -118,7 +119,7 @@ public class DerbyPlugIn extends JDBCPlugIn {
                 NSLog.debug.appendln("Loading jdbcInfo from JDBCInfo.plist as opposed to using the JDBCPlugIn default implementation.");
             }
 
-            InputStream jdbcInfoStream = getClass().getResourceAsStream("/JDBCInfo.plist");
+            InputStream jdbcInfoStream = NSBundle.bundleForClass(getClass()).inputStreamForResourcePath("JDBCInfo.plist");
             if (jdbcInfoStream == null) {
                 throw new IllegalStateException("Unable to find 'JDBCInfo.plist' in this plugin jar.");
             }
