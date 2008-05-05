@@ -1,7 +1,0 @@
-CREATE TABLE ERAttachment (configurationName VARCHAR(100) , height INT , id INT NOT NULL, mimeType VARCHAR(100) NOT NULL, originalFileName VARCHAR(255) NOT NULL, ownerID VARCHAR(16) , parentID INT , proxied VARCHAR(5) NOT NULL, size INT NOT NULL, storageType VARCHAR(10) , thumbnail VARCHAR(10) , webPath TEXT NOT NULL, width INT , attachmentDataID INT , smallData BLOB , filesystemPath VARCHAR(255) , s3Path TEXT );
-
-CREATE TABLE ERAttachmentData (data BLOB , id INT NOT NULL);
-
-ALTER TABLE ERAttachment ADD PRIMARY KEY (id);
-
-ALTER TABLE ERAttachmentData ADD PRIMARY KEY (id);
