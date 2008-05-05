@@ -270,11 +270,9 @@
             <param name="project.principal.class" value="er.bugtracker.BTBusinessLogic" />
             <param name="project.name" value="BTBusinessLogic" />
             <param name="project.dir" value="Common/Applications/BugTracker/Frameworks/BTBusinessLogic" />
+            <param name="wonder.lib.root.bundles" value="Ajax/BTBusinessLogic/ERCoreBusinessLogic/ERPrototypes/ERJars/ERExtensions/ERDirectToWeb/JavaWOExtensions/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
 
             <param name="use.webobjects.d2w" value="true" />
-            <param name="use.wonder.d2w" value="true" />
-            <param name="use.wonder.mail" value="true" />
-            <param name="use.wonder.logic" value="true" />
         </antcall>
     </target>
 
@@ -286,7 +284,7 @@
             <param name="project.dir" value="Common/Applications/BugTracker" />
 
             <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="Ajax/BTBusinessLogic/ERCoreBusinessLogic/ERPrototypes/ERJars/ERExtensions/ERDirectToWeb/JavaWOExtensions/DRGrouping/WRReporting/ERPlot/ERRest/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
+            <param name="wonder.lib.root.bundles" value="Ajax/BTBusinessLogic/ERCoreBusinessLogic/ERPrototypes/ERJars/ERExtensions/ERDirectToWeb/JavaWOExtensions/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
         </antcall>
     </target>
 
