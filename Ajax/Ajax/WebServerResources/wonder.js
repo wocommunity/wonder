@@ -393,15 +393,15 @@ var AjaxSubmitButton = {
 		new Ajax.Request(finalUrl, finalOptions);
 	},
 	
-	observeDescendentFields: function(updateContainerID, containerID, observeFieldFrequency, partial, options) {
+	observeDescendentFields: function(updateContainerID, containerID, observeFieldFrequency, partial, observeDelay, options) {
     $(containerID).descendants().find(function(element) {
       if (element.type != 'hidden' && ['input', 'select', 'textarea'].include(element.tagName.toLowerCase())) {
-      	AjaxSubmitButton.observeField(updateContainerID, element, observeFieldFrequency, partial, options);
+      	AjaxSubmitButton.observeField(updateContainerID, element, observeFieldFrequency, partial, observeDelay, options);
       }
     });
 	},
 	
-	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, options) {
+	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, observeDelay, options) {
 		var submitFunction;
 		if (partial) {
 			// We need to cheat and make the WOForm that contains the form action appear to have been
@@ -430,6 +430,11 @@ var AjaxSubmitButton = {
 			}
 		}
 
+		if (observeDelay) {
+			var delayer = new AjaxObserveDelayer(observeDelay, submitFunction);
+			submitFunction = delayer.valueChanged.bind(delayer);
+		}
+
 		if (observeFieldFrequency == null) {
 			if ($(formFieldID).type.toLowerCase() == 'radio') {
 	    	new Form.Element.RadioButtonObserver($(formFieldID), submitFunction);
@@ -439,11 +444,55 @@ var AjaxSubmitButton = {
 			}
 		}
 		else {
-	    	new Form.Element.Observer($(formFieldID), observeFieldFrequency, submitFunction);
+    	new Form.Element.Observer($(formFieldID), observeFieldFrequency, submitFunction);
 		}
 	}
 };
 var ASB = AjaxSubmitButton;
+
+var AjaxObserveDelayer = Class.create({
+	delay: null,
+	shouldFireChangeEvent: false,
+	waiting: null,
+	lastValueChange: null,
+	submitFunction: null,
+
+	element: null,
+	value: null,
+	
+	initialize: function(delay, submitFunction) {
+		this.delay = delay * 1000.0;
+		this.submitFunction = submitFunction;
+	},
+	
+	valueChanged: function(element, value) {
+		this.element = element;
+		this.value = value;
+		this.lastValueChange = new Date().getTime();
+		
+		if (this.waiting) {
+			this.shouldFireChangeEvent = false;
+		}
+		else {
+			this.shouldFireChangeEvent = true;
+			this.waiting = true;
+			setTimeout(this.delayFinished.bind(this), this.delay);
+		}
+	},
+	
+	delayFinished: function() {
+		if (this.shouldFireChangeEvent) {
+			this.waiting = false;
+			this.submitFunction(this.element, this.value);
+		}
+		else {
+			this.shouldFireChangeEvent = true;			
+			var now = new Date().getTime();
+			var delayLeft = Math.max(0, this.delay - (now - this.lastValueChange));
+			setTimeout(this.delayFinished.bind(this), delayLeft);
+		}
+	}
+});
 
 var AjaxDraggable = {
 	register: function(draggableContainerID, options) {

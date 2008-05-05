@@ -36,6 +36,8 @@ import er.extensions.ERXWOContext;
  * @binding updateContainerID the ID of the container to update
  * @binding action the action to call when the observer fires
  * @binding onBeforeSubmit called prior to submitting the observed content; return false to deny the submit
+ * @binding observeFieldFrequency the polling observe frequency (in seconds)
+ * @binding observeDelay the minimum time between submits (in seconds)
  */
 public class AjaxObserveField extends AjaxDynamicElement {
 	public AjaxObserveField(String name, NSDictionary associations, WOElement children) {
@@ -53,6 +55,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 	public NSMutableDictionary createAjaxOptions(WOComponent component) {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("observeDelay", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onBeforeSubmit", AjaxOption.SCRIPT));
@@ -115,8 +118,9 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		else {
 			response.appendContentString("ASB.observeField");
 		}
-		
-		response.appendContentString("(" + AjaxUtils.quote(updateContainerID) + ", " + AjaxUtils.quote(observeFieldID) + ", " + observeFieldFrequency + ", " + (!fullSubmit) + ", ");
+
+		Object observeDelay = options.removeObjectForKey("observeDelay");		
+		response.appendContentString("(" + AjaxUtils.quote(updateContainerID) + ", " + AjaxUtils.quote(observeFieldID) + ", " + observeFieldFrequency + ", " + (!fullSubmit) + ", " + observeDelay + ", ");
 		AjaxOptions.appendToResponse(observerOptions, response, context);
 		response.appendContentString(");");
 	}
