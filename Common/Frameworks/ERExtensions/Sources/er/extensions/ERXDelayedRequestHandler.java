@@ -12,6 +12,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
@@ -48,10 +49,10 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	private ERXExpiringCache<String, String> _urls;
 	private ExecutorService _executor;
 	private String _cssUrl;
-	
+
 	private int _refresh;
 	private int _maxRequestTime;
-	
+
 	/**
 	 * Helper to wrap a future and the accompanying request.
 	 * 
@@ -68,7 +69,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 
 		public DelayedRequest(WORequest request) {
 			super();
-			_request = (WORequest) request.clone();
+			_request = WOApplication.application().createRequest(request.method(), request.uri(), request.httpVersion(), request.headers(), request.content(), request.userInfo());
+//			_request = (WORequest) request.clone();
 			_future = _executor.submit(this);
 			_id = ERXRandomGUID.newGid();
 			_start = new NSTimestamp();
@@ -85,7 +87,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 				// Thread.sleep(16000);
 				// log.info("Done: " + this);
 				return response;
-			} finally {
+			}
+			finally {
 				synchronized (this) {
 					ERXRuntimeUtilities.clearThreadInterrupt(_currentThread);
 					_currentThread = null;
@@ -112,22 +115,23 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		public Future<WOResponse> future() {
 			return _future;
 		}
-		
+
 		public boolean isDone() {
 			return _currentThread == null;
 		}
-		
+
 		public boolean cancel() {
 			long start = System.currentTimeMillis();
 			synchronized (this) {
-				if(_currentThread != null) {
+				if (_currentThread != null) {
 					ERXRuntimeUtilities.addThreadInterrupt(_currentThread, "ERXDelayedRequestHandler: stop requested " + this);
 
-					//while(System.currentTimeMillis() - start < 5000 && !isDone()) {
-					if(future().cancel(true)) {
+					// while(System.currentTimeMillis() - start < 5000 &&
+					// !isDone()) {
+					if (future().cancel(true)) {
 						log.info("Cancelled: " + _currentThread + ": " + isDone());
 					}
-					//}
+					// }
 					log.info("Thread done after cancel: " + isDone());
 				}
 			}
@@ -175,16 +179,18 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		};
 		_urls = new ERXExpiringCache(refresh() * 50);
 	}
-	
+
 	/**
-	 * Creates a handler with the supplied values for refresh and maxRequestTime.
+	 * Creates a handler with the supplied values for refresh and
+	 * maxRequestTime.
+	 * 
 	 * @param refresh
 	 * @param maxRequestTime
 	 */
 	public ERXDelayedRequestHandler(int refresh, int maxRequestTime) {
 		this(refresh, maxRequestTime, null);
 	}
-	
+
 	/**
 	 * Creates a handler with the default values of 5 second refresh and 5
 	 * seconds maxRequestTime.
@@ -199,14 +205,14 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	@Override
 	public WOResponse handleRequest(final WORequest request) {
 		ERXApplication app = ERXApplication.erxApplication();
-		String key = request.requestHandlerKey();
 		WOResponse response = null;
-		if (canHandleRequest(key)) {
+		if (canHandleRequest(request)) {
 			String uri = request.uri();
 			DelayedRequest delayedRequest;
 			String id;
 			log.debug("Handling: " + uri);
 
+			String key = request.requestHandlerKey();
 			if (KEY.equals(key)) {
 				id = request.stringFormValueForKey("id");
 				delayedRequest = _futures.objectForKey(id);
@@ -245,8 +251,13 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * @param key
 	 * @return
 	 */
-	protected boolean canHandleRequest(String key) {
+	protected boolean canHandleRequest(WORequest request) {
+		String contentType = request.headerForKey("content-type");
+		if (contentType != null  && contentType.startsWith("multipart/form-data")) {
+			return false;
+		}
 		ERXApplication app = ERXApplication.erxApplication();
+		String key = request.requestHandlerKey();
 		return key == null || KEY.equals(key) || app.componentRequestHandlerKey().equals(key) || app.directActionRequestHandlerKey().equals(key);
 	}
 
@@ -283,7 +294,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 						args += "&__start=" + delayedRequest.start().getTime();
 						args += "&__time=" + System.currentTimeMillis();
 						url = app.createContextForRequest((WORequest) request.clone()).urlWithRequestHandlerKey(KEY, "wait", args);
-					} else {
+					}
+					else {
 						url = url.replaceAll("__time=(.*)", "__time=" + System.currentTimeMillis());
 					}
 					log.debug("Delaying: " + request.uri());
@@ -324,7 +336,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	protected WOResponse createErrorResponse(WORequest request) {
 		final ERXApplication app = ERXApplication.erxApplication();
 		String args = (request.sessionID() != null ? "/" + request.sessionID() : "");
-		// dirty trick: use a non-existing context id to get the page-expired reply.
+		// dirty trick: use a non-existing context id to get the page-expired
+		// reply.
 		String url = request.applicationURLPrefix() + "/wo" + args + "/9999999999.0";
 		WORequest expired = app.createRequest("GET", url, "HTTP/1.0", (Map) request.headers(), null, null);
 		WOResponse result = app.dispatchRequestImmediately(expired);
@@ -333,8 +346,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 
 	/**
 	 * Create a "stopped" page. Note that the session has not been awakened yet
-	 * and you probably shouldn't do it either. The default implementation redirect to 
-	 * the entry.
+	 * and you probably shouldn't do it either. The default implementation
+	 * redirect to the entry.
 	 * 
 	 * @param request
 	 * @param url
@@ -406,13 +419,14 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 
 	/**
 	 * Returns all active delayed requests.
+	 * 
 	 * @return
 	 */
 	public NSArray<DelayedRequest> activeRequests() {
 		NSMutableArray<DelayedRequest> result = new NSMutableArray<DelayedRequest>();
 		for (String id : _futures.allKeys()) {
 			DelayedRequest request = _futures.objectForKey(id);
-			if(request != null) {
+			if (request != null) {
 				result.addObject(request);
 			}
 		}
