@@ -31,7 +31,7 @@ Set page size to 1 and go to the last page
 |submitAndWait|xpath=(//form)[4]||
 
 |type|xpath=(//input[@type='text'])[4]|0|
-|submitAndWait|xpath=(//form)[5]||
+|submitAndWait|xpath=(//input[@type='text'])[4]/..||
 |assertTextPresent|__SeleniumTestFramework||
 |assertText|xpath=id('ListFramework')/table/tbody/tr[2]/td/table/tbody/tr[4]/td/table/tbody/tr[3]/td[2]/font//text()|SeleniumName|
 
