@@ -12,17 +12,16 @@ Create a sample bug
 |clickAndWait|link=CreateBug||
 
 Leave all fields empty
-|select|xpath=id('component')|index=0|
+|select|//tr[contains(string(), 'Component')]//select|index=0|
 |type|xpath=(id('CreateBug')//input[@type='text'])[3]||
 |clickAndWait|//button[@value='Next']||
 |assertTextPresent|Please provide a Subject.||
 |assertTextPresent|A Bug must have a Component.||
 
 Enter correct values
-|select|xpath=id('component')|Component 0|
+|select|//tr[contains(string(), 'Component')]//select|Component 0|
 |type|xpath=(id('CreateBug')//input[@type='text'])[3]|__SeleniumBugSubject|
-|type|xpath=id('textDescription')|__SeleniumBugDescription|
-|storeEval|try { selenium.browserbot.getCurrentWindow().tinyMCE.setContent('__SeleniumBugDescription') } catch (e) {}|_dummy|
+|waitForCondition|selenium.browserbot.getCurrentWindow().tinyMCE.selectedInstance.execCommand("mceInsertContent", false, "__SeleniumBugDescription"); true|10000|
 |clickAndWait|//button[@value='Next']||
 |assertValue|xpath=(//input[@type='text'])[3]|__SeleniumBugSubject|
 |assertTextPresent|No matching Test Item records found.||
@@ -44,8 +43,7 @@ Comment the bug (hitting the cancel first)
 |assertTextPresent|__SeleniumBugSubject||
 
 |clickAndWait|//td[contains(text(), '__SeleniumBugSubject')]/parent::*/preceding-sibling::tr[position() = 1]//a[text() = 'Comment']||
-|type|xpath=id('newText')|__SeleniumTestComment|
-|storeEval|try { selenium.browserbot.getCurrentWindow().tinyMCE.setContent('__SeleniumTestComment') } catch (e) {}|_dummy|
+|waitForCondition|selenium.browserbot.getCurrentWindow().tinyMCE.selectedInstance.execCommand("mceInsertContent", false, "__SeleniumTestComment"); true|10000|
 |clickAndWait|xpath=(//button[@value='Save'])[1]||
 
 Inspecting the bug via search
@@ -62,7 +60,6 @@ Resolving bug
 |assertTextPresent|New Text||
 
 |type|xpath=id('newText')|__SeleniumResolveComment|
-|storeEval|try { selenium.browserbot.getCurrentWindow().tinyMCE.setContent('__SeleniumResolveComment') } catch (e) {}|_dummy|
 |clickAndWait|xpath=(//button[@value='Save'])[1]||
 |assertTextPresent|__SeleniumBugSubject||
 |assertValue|xpath=(//button[@type='submit' and @value='Reopen'])[1]|Reopen|
