@@ -14,3 +14,5 @@ er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","Validation
 er.extensions.ERXJDBCAdaptor.className=er.extensions.ERXJDBCAdaptor
 
 SeleniumTestsEnabled = true
+
+er.directtoweb.ERDEditHTML.tinyMceSourceFileName = tiny_mce/tiny_mce.js
