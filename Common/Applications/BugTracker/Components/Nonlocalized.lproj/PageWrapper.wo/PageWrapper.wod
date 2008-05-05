@@ -36,6 +36,11 @@ LoginPanel : LoginPanel {
 }
 
 ERXStyleSheet: ERXStyleSheet { 
+	framework = "ERExtensions";
+    filename="ERXFlickrBatchNavigation.css";
+}
+
+UserStyleSheet: ERXStyleSheet { 
     styleSheetName="style_sheet.css";
 }
 
