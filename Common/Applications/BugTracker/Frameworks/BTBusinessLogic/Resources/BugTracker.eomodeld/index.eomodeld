@@ -2,7 +2,6 @@
     EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
     entities = (
-        {className = "er.bugtracker.Attachement"; name = Attachement; }, 
         {className = "er.bugtracker.Bug"; name = Bug; }, 
         {className = "er.bugtracker.Comment"; name = Comment; }, 
         {className = "er.bugtracker.Component"; name = Component; }, 
@@ -17,6 +16,7 @@
         {className = "er.bugtracker.TestItem"; name = TestItem; }, 
         {className = "er.bugtracker.TestItemState"; name = TestItemState; }, 
         {className = EOGenericRecord; name = XBugTestItem; }, 
+        {className = EOGenericRecord; name = XCommentAttachment; }, 
         {className = EOGenericRecord; name = XRequirementTestItem; }
     ); 
 }

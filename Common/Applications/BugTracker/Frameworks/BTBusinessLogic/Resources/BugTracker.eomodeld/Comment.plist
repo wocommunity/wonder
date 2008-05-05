@@ -37,21 +37,14 @@
     ); 
     attributesUsedForLocking = (bugID, id, originatorID, parentID, textDescription); 
     className = "er.bugtracker.Comment"; 
-    classProperties = (attachements, bug, dateSubmitted, originator, parent, textDescription); 
+    classProperties = (attachments, bug, dateSubmitted, originator, parent, textDescription); 
     externalName = Comment; 
     fetchSpecificationDictionary = {}; 
     internalInfo = {"_clientClassPropertyNames" = (dateSubmitted, originator, textDescription); }; 
     name = Comment; 
     primaryKeyAttributes = (id); 
     relationships = (
-        {
-            destination = Attachement; 
-            isMandatory = N; 
-            isToMany = Y; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = commentID; sourceAttribute = id; }); 
-            name = attachements; 
-        }, 
+        {definition = "xCommentAttachments.eRAttachment"; name = attachments; }, 
         {
             destination = Bug; 
             isMandatory = Y; 
@@ -74,6 +67,15 @@
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = id; sourceAttribute = parentID; }); 
             name = parent; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = XCommentAttachment; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = commentId; sourceAttribute = id; }); 
+            name = xCommentAttachments; 
+            propagatesPrimaryKey = Y; 
         }
     ); 
 }
