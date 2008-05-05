@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import com.webobjects.foundation.NSKeyValueCoding;
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
@@ -16,6 +17,8 @@ import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
  * @author mschrag
  */
 public class WOHelperFunctionRegistry {
+	public static Logger log = Logger.getLogger(WOHelperFunctionRegistry.class);
+
 	public static final String APP_FRAMEWORK_NAME = "app";
 
 	private static WOHelperFunctionRegistry _instance;
@@ -79,7 +82,7 @@ public class WOHelperFunctionRegistry {
 	}
 
 	protected synchronized Object _cachedHelperInstanceForFrameworkNamed(Class targetClass, String helperFunction, String frameworkName) {
-		return __cachedHelperInstanceForFrameworkNamed(targetClass.getName() + helperFunction, frameworkName);
+		return __cachedHelperInstanceForFrameworkNamed(targetClass.getName() + "." + helperFunction, frameworkName);
 	}
 	
 	protected synchronized Object __cachedHelperInstanceForFrameworkNamed(Object key, String frameworkName)	{
@@ -109,20 +112,14 @@ public class WOHelperFunctionRegistry {
 			helpedClass = helpedObject.getClass();
 		}
 		else {
-			Object penultimateObject;
-			String ultimateKey;
-			int lastKeyPathDotIndex = keyPath.lastIndexOf('.');
-			if (lastKeyPathDotIndex == -1) {
-				penultimateObject = targetObject;
-				ultimateKey = keyPath;
+			_KeyBinding keyBinding = WOHelperFunctionClassKeyValueCoding.DefaultImplementation.keyGetBindingForKeyPath(targetObject.getClass(), keyPath);
+			if (keyBinding != null) {
+				helpedClass = keyBinding.valueType();
 			}
 			else {
-				String penultimateKeyPath = keyPath.substring(0, lastKeyPathDotIndex);
-				ultimateKey = keyPath.substring(lastKeyPathDotIndex + 1);
-				penultimateObject = NSKeyValueCodingAdditions.Utility.valueForKeyPath(targetObject, penultimateKeyPath);
+				WOHelperFunctionRegistry.log.warn("Unable to determine the value class of the keypath '" + keyPath + "' for the object " + targetObject);
+				helpedClass = Object.class;
 			}
-			_KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(penultimateObject, ultimateKey);
-			helpedClass = binding.valueType();
 		}
 
 		Object helperInstance = null;
@@ -144,6 +141,7 @@ public class WOHelperFunctionRegistry {
 				}
 			}
 		}
+		
 		if (helperInstance == null) {
 			Class targetHelperClass = helperClassForClass(helpedClass, helperFunction);
 			if (targetHelperClass == null) {
