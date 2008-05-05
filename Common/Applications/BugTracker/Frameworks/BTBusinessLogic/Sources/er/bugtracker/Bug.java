@@ -22,6 +22,7 @@ import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
+import er.taggable.ERTaggable;
 
 public class Bug extends _Bug implements Markable {
     static final Logger log = Logger.getLogger(Bug.class);
@@ -43,6 +44,10 @@ public class Bug extends _Bug implements Markable {
         Comment comment = (Comment) Comment.clazz.createAndInsertObject(ec);
         comment.setOriginator(originator());
         comment.setBug(this);
+    }
+
+    public ERTaggable<Bug> taggable() {
+        return ERTaggable.taggable(this);
     }
 
     public void markAsRead() {

@@ -32,6 +32,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
+import er.attachment.ERAttachmentPrincipal;
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
@@ -45,10 +46,12 @@ import er.extensions.ERXProperties;
 import er.extensions.ERXSQLHelper;
 import er.extensions.ERXStringUtilities;
 import er.prototypes.ERPrototypes;
+import er.taggable.ERTaggableEntity;
+import er.taggable.migrations.ERTaggableEntity0;
 
 public class BTBusinessLogic extends ERXFrameworkPrincipal {
 
-    public final static Class REQUIRES[] = new Class[] {ERXExtensions.class, ERPrototypes.class, ERCoreBusinessLogic.class};
+    public final static Class REQUIRES[] = new Class[] {ERXExtensions.class, ERPrototypes.class, ERCoreBusinessLogic.class, ERAttachmentPrincipal.class};
     
     private static final Logger log = Logger.getLogger(BTBusinessLogic.class);
     
@@ -158,7 +161,7 @@ delete from TEST_ITEM;
                 int hours = last + randomInt(48);
                 comment.setDateSubmitted(bug.dateSubmitted().timestampByAddingGregorianUnits(0, 0, 0, hours, 0, 0));
                 comment.setOriginator(randomUser());
-                comment.setTextDescription(randomText(5));
+                comment.setTextDescription(randomText(50));
                 last = hours;
                 comment.setBug(bug);
                 bug.addToComments(comment);
@@ -180,7 +183,7 @@ delete from TEST_ITEM;
 
         private void createTables(boolean dropTables) {
             for (Enumeration e = EOModelGroup.defaultGroup().models().objectEnumerator(); e.hasMoreElements();) {
-                EOModel eomodel = (EOModel) e.nextElement();
+                final EOModel eomodel = (EOModel) e.nextElement();
                 EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, eomodel.name());
                 dbc.lock();
                 try {
@@ -198,6 +201,7 @@ delete from TEST_ITEM;
                     log.info("Creating tables: " + eomodel.name());
                     ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sqlScript);
                     if(eomodel.name().equals("BugTracker")) {
+                        ERTaggableEntity0.upgrade(ec, channel, eomodel, Bug.ENTITY_NAME);
                         InputStream is = ERXFileUtilities.inputStreamForResourceNamed("populate.sql", "BTBusinessLogic", null);
                         String sql = ERXFileUtilities.stringFromInputStream(is);
                         log.info("Populating: " + eomodel.name());
@@ -205,7 +209,7 @@ delete from TEST_ITEM;
                         // re-read shared data, the first time around it probably wasn't there
                         // strictly speaking, we'd also need to do this for ERC too
                         BTBusinessLogic.sharedInstance().initializeSharedData();
-                    }
+                   }
                 } catch (SQLException ex) {
                     log.error("Can't update: " + ex, ex);
                 } catch (IOException ex) {
@@ -432,7 +436,8 @@ delete from TEST_ITEM;
             }
 
             initializeSharedData();
-            ERCoreBusinessLogic.sharedInstance().addPreferenceRelationshipToActorEntity("People", "id");
+            ERCoreBusinessLogic.sharedInstance().addPreferenceRelationshipToActorEntity(People.ENTITY_NAME);
+            ERTaggableEntity.registerTaggable(Bug.ENTITY_NAME);
         } catch(JDBCAdaptorException ex) {
             if(!(ERXApplication.erxApplication() instanceof ERXMainRunner)) {
                 throw ex;
@@ -447,5 +452,6 @@ delete from TEST_ITEM;
         State.clazz.initializeSharedData();
         Priority.clazz.initializeSharedData();
         TestItemState.clazz.initializeSharedData();
-    }
+        ERTaggableEntity.registerTaggable(Bug.ENTITY_NAME);
+     }
 }
