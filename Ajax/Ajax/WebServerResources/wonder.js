@@ -302,7 +302,11 @@ var AjaxUpdateLink = {
 	},
 	
 	update: function(id, options, elementID, queryParams) {
-		var actionUrl = $(id).getAttribute('updateUrl').sub('[^/]+$', elementID);
+		var updateElement = $(id);
+		if (updateElement == null) {
+			alert('There is no element on this page with the id "' + id + '".');
+		}
+		var actionUrl = updateElement.getAttribute('updateUrl').sub('[^/]+$', elementID);
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
 		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
@@ -382,6 +386,10 @@ var AjaxSubmitButton = {
 	},
 	
 	update: function(id, form, queryParams, options) {
+		var updateElement = $(id);
+		if (updateElement == null) {
+			alert('There is no element on this page with the id "' + id + '".');
+		}
 		var finalUrl = AjaxSubmitButton.generateActionUrl(id, form, queryParams);
 		var finalOptions = AjaxSubmitButton.processOptions(form, options);
 		new Ajax.Updater(id, finalUrl, finalOptions);
