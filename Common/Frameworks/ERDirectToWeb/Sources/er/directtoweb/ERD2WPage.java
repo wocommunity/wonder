@@ -1006,4 +1006,21 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 		
 		return name;
 	}
+
+    /**
+     * This variant of pageWithName provides a Java5 genericized version of the
+     * original pageWithName. You would call it with:
+     * 
+     * MyNextPage nextPage = pageWithName(MyNextPage.class);
+     * 
+     * @param <T>
+     *            the type of component to create
+     * @param componentClass
+     *            the Class of the component to load
+     * @return an instance of the requested component class
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
+        return (T) super.pageWithName(componentClass.getName());
+    }
 }
