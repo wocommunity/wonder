@@ -543,7 +543,7 @@ public class ERXSQLHelper {
 	}
 
 	protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
-		throw new UnsupportedOperationException("There is no database-specific implementation for generating limit expressions.");
+		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating limit expressions.");
 	}
 	
 	/**
@@ -710,7 +710,7 @@ public class ERXSQLHelper {
 	 * @param value
 	 */
 	public String sqlForRegularExpressionQuery(String key, String value) {
-		throw new UnsupportedOperationException("There is no database-specific implementation for generating regex expressions.");
+		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating regex expressions.");
 	}
 
 	/**
@@ -723,7 +723,7 @@ public class ERXSQLHelper {
 	 * @return a SQL expression
 	 */
 	public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
-		throw new UnsupportedOperationException("There is no database-specific implementation for generating full text expressions.");
+		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating full text expressions.");
 	}
 
 	/**
@@ -739,7 +739,7 @@ public class ERXSQLHelper {
 	 * @return a SQL expression
 	 */
 	public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
-		throw new UnsupportedOperationException("There is no database-specific implementation for generating unique index expressions.");
+		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating unique index expressions.");
 	}
 	
 	/**
@@ -1284,11 +1284,16 @@ public class ERXSQLHelper {
 	}
 
 	public static class DerbySQLHelper extends ERXSQLHelper {
-
+		@Override
 		public boolean shouldExecute(String sql) {
 			return sql != null && !sql.startsWith("--");
 		}
-		
+
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + new NSArray<String>(columnNames).componentsJoinedByString(",") + ")";
+		}
+
 		@Override
 		public String migrationTableName() {
 			return "dbupdater";
