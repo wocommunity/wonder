@@ -53,10 +53,10 @@ Provide correct login and password
 Go to the list page and set page size to 1
 |clickAndWait|link=ListPeoples||
 |type|xpath=(id('ListPeople')//input[@type='text'])[3]|1|
-|submitAndWait|xpath=(id('ListPeople')//form)[4]||
+|submitAndWait|xpath=(id('ListPeople')//input[@type='text'])[3]/../||
 
 |type|xpath=(id('ListPeople')//input[@type='text'])[4]|0|
-|submitAndWait|xpath=(id('ListPeople')//form)[5]||
+|submitAndWait|xpath=(id('ListPeople')//input[@type='text'])[4]/../||
 |assertTextPresent|__seleniumuser||
 |assertTextPresent|__slpw||
 |assertTextPresent|Delete||
