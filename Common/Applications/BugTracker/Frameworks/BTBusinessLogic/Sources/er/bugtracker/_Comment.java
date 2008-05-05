@@ -20,7 +20,7 @@ public abstract class _Comment extends ERXGenericRecord {
 	   public static final String TEXT_DESCRIPTION = "textDescription";
 
 	// Relationships
-	   public static final String ATTACHEMENTS = "attachements";
+	   public static final String ATTACHMENTS = "attachments";
 	   public static final String BUG = "bug";
 	   public static final String ORIGINATOR = "originator";
 	   public static final String PARENT = "parent";
@@ -65,14 +65,14 @@ public abstract class _Comment extends ERXGenericRecord {
     takeStoredValueForKey(value, Key.PARENT);
   }
 
-  public NSArray<er.bugtracker.Attachement> attachements() {
-    return (NSArray<er.bugtracker.Attachement>)storedValueForKey(Key.ATTACHEMENTS);
+  public NSArray<er.attachment.model.ERAttachment> attachments() {
+    return (NSArray<er.attachment.model.ERAttachment>)storedValueForKey(Key.ATTACHMENTS);
   }
-  public void addToAttachements(er.bugtracker.Attachement object) {
-      includeObjectIntoPropertyWithKey(object, Key.ATTACHEMENTS);
+  public void addToAttachments(er.attachment.model.ERAttachment object) {
+      includeObjectIntoPropertyWithKey(object, Key.ATTACHMENTS);
   }
-  public void removeFromAttachements(er.bugtracker.Attachement object) {
-      excludeObjectFromPropertyWithKey(object, Key.ATTACHEMENTS);
+  public void removeFromAttachments(er.attachment.model.ERAttachment object) {
+      excludeObjectFromPropertyWithKey(object, Key.ATTACHMENTS);
   }
 
 }
