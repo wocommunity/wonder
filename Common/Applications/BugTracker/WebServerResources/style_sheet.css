@@ -7,6 +7,11 @@
 #EditSimpleBug .PropertyTable {
 	
 }
+
+.paginatorBatchSizes {
+	float: left;
+}
+
 #EditSimpleBug .PropertyTable .PropertyNameCell {
 	height: 20px;
 	vertical-align: bottom;
