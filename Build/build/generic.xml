@@ -483,7 +483,11 @@ There are many ways to use this script:
         </woframework>
         
         <jar destfile="${build.root}/${project.name}-${project.version}.jar">
-            <fileset dir="${build.classes}"/>
+            <fileset dir="${build.classes}">
+                    <exclude name="${classes.exclude.0}" />
+                    <exclude name="${classes.exclude.1}" />
+                    <exclude name="${classes.exclude.2}" />
+            </fileset>
             <fileset dir="${build.root}/${project.name}.framework/" includes="Resources/**/*" excludes="**/*.jar"/>
             <fileset dir="${build.root}/${project.name}.framework/" includes="WebServerResources/**/*"/>
         </jar>
