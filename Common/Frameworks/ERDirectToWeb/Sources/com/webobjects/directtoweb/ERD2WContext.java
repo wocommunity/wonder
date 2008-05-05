@@ -101,7 +101,7 @@ public class ERD2WContext extends D2WContext {
             return null;
         } 
         EOAttribute eoattribute = (EOAttribute)o;
-        if (eoattribute == null) {
+        if (eoattribute == null && s != null) {
             Class class1 = D2WUtils.dataTypeForCustomKeyAndEntity(s, eoentity);
             if (class1 != null) {
                 eoattribute = new EOAttribute();
