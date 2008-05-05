@@ -47,6 +47,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     public final static Class[] WOComponentClassArray = new Class[] { WOComponent.class };
     
     public static final String BRANCH_CHOICES = "branchChoices";
+    public static final String BRANCH_BUTTON_ID = "branchButtonID";
     public static final String BRANCH_NAME = "branchName";
     public static final String BRANCH_LABEL = "branchButtonLabel";
     public static final String BRANCH_PREFIX = "Button";
@@ -94,7 +95,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     	if(label == null) {
     		label = ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(BRANCH_PREFIX, method);
     	}
-    	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, BRANCH_NAME, label, BRANCH_LABEL});
+    	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, BRANCH_NAME, label, BRANCH_LABEL, method +  "Action", BRANCH_BUTTON_ID});
     }
     
     /**
@@ -139,6 +140,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         			label = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(label);
         		}
         		entry.setObjectForKey(label, BRANCH_LABEL);
+        		entry.setObjectForKey(method +  "Action", BRANCH_BUTTON_ID);
         		translatedChoices.addObject(entry);
         	}
         	choices = translatedChoices;
