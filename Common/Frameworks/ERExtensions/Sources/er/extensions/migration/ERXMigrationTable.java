@@ -471,6 +471,18 @@ public class ERXMigrationTable {
 	 * Returns a new Blob column.  See newColumn(..) for the full docs.
 	 * 
 	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newBlobColumn(String name, boolean allowsNull) throws SQLException {
+		return newColumn(name, Types.BLOB, 0, 0, 0, allowsNull, null);
+	}
+
+	/**
+	 * Returns a new Blob column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
 	 * @param width the width of the blob
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
