@@ -709,7 +709,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the add fails
 	 */
 	public void addForeignKey(String sourceColumnName, String destinationTableName, String destinationColumnName) throws SQLException {
-		addForeignKey(existingColumnNamed(sourceColumnName), database().existingColumnNamed(destinationTableName, sourceColumnName));
+		addForeignKey(existingColumnNamed(sourceColumnName), database().existingColumnNamed(destinationTableName, destinationColumnName));
 	}
 
 	/**
