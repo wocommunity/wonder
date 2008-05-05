@@ -4,18 +4,19 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation._NSDelegate;
-
-import er.extensions.ERXRecursiveBatchFetching;
 
 /**
  * Extends {@link WODisplayGroup} in order to provide real batching. This is
@@ -40,6 +41,8 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 
 	/** cache batching flag */
 	protected Boolean _isBatching;
+	
+	protected NSArray<String> _prefetchingRelationshipKeyPaths;
 
 	/**
 	 * If we're batching and the displayed objects have not been fetched,
@@ -64,6 +67,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * Overridden to set the isBatching flag to true if we have an
 	 * EODatabaseDataSource.
 	 */
+	@Override
 	public void setDataSource(EODataSource eodatasource) {
 		_isBatching = (eodatasource instanceof EODatabaseDataSource) ? Boolean.TRUE : Boolean.FALSE;
 		super.setDataSource(eodatasource);
@@ -72,6 +76,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	/**
 	 * Overridden to return the pre-calculated number of batches
 	 */
+	@Override
 	public int batchCount() {
 		if (isBatching()) {
 			if (_displayedObjects == null) {
@@ -85,6 +90,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	/**
 	 * Overriden to clear out our array of fetched objects.
 	 */
+	@Override
 	public void setCurrentBatchIndex(int index) {
 		int previousBatchIndex = currentBatchIndex();
 		super.setCurrentBatchIndex(index);
@@ -96,6 +102,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	/**
 	 * Overriden to clear out our array of fetched objects.
 	 */
+	@Override
 	public void setNumberOfObjectsPerBatch(int count) {
 		boolean didFetch = _displayedObjects != null;
 		if (isBatching() && numberOfObjectsPerBatch() != count) {
@@ -118,6 +125,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * 
 	 * @return the objects that should be diplayed.
 	 */
+	@Override
 	public NSArray displayedObjects() {
 		if (isBatching()) {
 			refetchIfNecessary();
@@ -129,6 +137,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	/**
 	 * Overridden to return allObjects() when batching, as we can't qualify in memory.
 	 */
+	@Override
 	public NSArray filteredObjects() {
 		if (isBatching()) {
 			return allObjects();
@@ -139,6 +148,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	/**
 	 * Overridden to trigger a refetch.
 	 */
+	@Override
 	public void setQualifier(EOQualifier aEoqualifier) {
 		super.setQualifier(aEoqualifier);
 		_displayedObjects = null;
@@ -147,6 +157,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	/**
 	 * Overridden to preserve the selected objects.
 	 */
+	@Override
 	public void setSortOrderings(NSArray nsarray) {
 		NSArray selectedObjects = selectedObjects();
 		super.setSortOrderings(nsarray);
@@ -154,6 +165,23 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		if (isBatching()) {
 			_displayedObjects = null;
 		}
+	}
+	
+	/**
+	 * Sets the prefetching key paths for the underlying fetch spec.
+	 * 
+	 * @param prefetchingRelationshipKeyPaths the prefetching key paths for the underlying fetch spec
+	 */
+	public void setPrefetchingRelationshipKeyPaths(NSArray<String> prefetchingRelationshipKeyPaths) {
+		_prefetchingRelationshipKeyPaths = prefetchingRelationshipKeyPaths;
+	}
+	
+	/**
+	 * Returns the prefetching key paths for the underlying fetch spec.
+	 * @return the prefetching key paths for the underlying fetch spec
+	 */
+	public NSArray<String> getPrefetchingRelationshipKeyPaths() {
+		return _prefetchingRelationshipKeyPaths;
 	}
 
 	/**
@@ -169,12 +197,15 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		EOQualifier qualifier = spec.qualifier();
 		if (dgQualifier != null) {
 			if (qualifier != null) {
-				qualifier = new EOAndQualifier(new NSArray(new Object[] { dgQualifier, qualifier }));
+				qualifier = new EOAndQualifier(new NSArray<EOQualifier>(new EOQualifier[] { dgQualifier, qualifier }));
 			}
 			else {
 				qualifier = dgQualifier;
 			}
 			spec.setQualifier(qualifier);
+		}
+		if (_prefetchingRelationshipKeyPaths != null) {
+			spec.setPrefetchingRelationshipKeyPaths(_prefetchingRelationshipKeyPaths);
 		}
 		return spec;
 	}
@@ -195,15 +226,32 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * @param start
 	 * @param end
 	 */
+	@SuppressWarnings("unchecked")
 	protected NSArray objectsInRange(int start, int end) {
 		EOEditingContext ec = dataSource().editingContext();
 		EOFetchSpecification spec = fetchSpecification();
 
+		// This used to turn the EO's into faults and then fetch the faults.  The problem
+		// with that is that for abstract entities, this would fetch the objects one-by-one
+		// to determine what the correct EOGlobalID is for each subentity.  Instead, I've
+		// changed this to created a global ID for each row (which supports being a guess)
+		// and then fetch the objects with the global IDs.
+		NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
+		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+		for (Object obj : primKeys) {
+			NSDictionary pkDict = (NSDictionary)obj;
+			EOGlobalID gid = entity.globalIDForRow(pkDict);
+			gids.addObject(gid);
+		}
+		NSMutableArray objects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, gids);
+		ERXS.sort(objects, sortOrderings());
+		
 		// fetch the primary keys, turn them into faults, then batch-fetch all
 		// the non-resident objects
-		NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
-		NSArray faults = ERXEOControlUtilities.faultsForRawRowsFromEntity(ec, primKeys, spec.entityName());
-		NSArray objects = ERXEOControlUtilities.objectsForFaultWithSortOrderings(ec, faults, sortOrderings());
+		//NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
+		//NSArray faults = ERXEOControlUtilities.faultsForRawRowsFromEntity(ec, primKeys, spec.entityName());
+		//NSArray objects = ERXEOControlUtilities.objectsForFaultWithSortOrderings(ec, faults, sortOrderings());
 		return objects;
 	}
 
@@ -265,6 +313,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	/**
 	 * Overridden to update the batch count.
 	 */
+	@Override
 	public void setObjectArray(NSArray objects) {
 		super.setObjectArray(objects);
 		updateBatchCount();
@@ -273,6 +322,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	/**
 	 * Overridden to fetch only within displayed limits.
 	 */
+	@Override
 	public Object fetch() {
 		if (isBatching()) {
 			_NSDelegate delegate = null;
@@ -299,6 +349,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		return super.fetch();
 	}
 
+	@Override
 	public void updateDisplayedObjects() {
 		if (isBatching()) {
 			// refetch();
@@ -327,6 +378,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * 
 	 */
 
+	@Override
 	public Object selectFilteredObjects() {
 		if (isBatching()) {
 			setSelectedObjects(objectsInRange(0, rowCount()));
@@ -341,6 +393,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * should display.
 	 */
 	protected class FakeArray extends NSMutableArray {
+		@SuppressWarnings("unchecked")
 		public FakeArray(int count) {
 			super(count);
 			Object fakeObject = new NSKeyValueCoding.ErrorHandling() {
