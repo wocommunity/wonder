@@ -1606,6 +1606,8 @@ public class ERXEOAccessUtilities {
  				objectsToBatchFetch = objectsWithUnfaultedRelationships;
  			}
  			else {
+ 		 		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+ 		 		
  				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
  				EOEntity destinationEntity = relationship.destinationEntity();
  				String relationshipName = relationship.name();
@@ -1621,17 +1623,25 @@ public class ERXEOAccessUtilities {
  						EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
  						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
  						if (destinationSnapshot == null) {
- 							objectsWithUnfaultedRelationships.addObject(object);
+ 							gids.addObject(destinationGID);
+ 							//objectsWithUnfaultedRelationships.addObject(object);
  						}
  					}
  				}
  				objectsToBatchFetch = objectsWithUnfaultedRelationships;
+ 				
+ 				// MS: This is split out into a separate fetch because EOF does not handle batch
+ 				// fetching of abstract entities very effectively.  We instead want to create
+ 				// our own GID and batch fetch the GIDs ourselves.
+ 				if (gids.count() > 0) {
+ 					ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids);
+ 				}
  			}
  		}
  		else {
  			objectsToBatchFetch = objects;
  		}
- 		if (objects.count() > 0) {
+ 		if (objectsToBatchFetch.count() > 0) {
  			databaseContext.batchFetchRelationship(relationship, objectsToBatchFetch, editingContext);
  		}
  	}
