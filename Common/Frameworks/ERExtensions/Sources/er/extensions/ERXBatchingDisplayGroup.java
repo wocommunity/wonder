@@ -204,9 +204,6 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 			}
 			spec.setQualifier(qualifier);
 		}
-		if (_prefetchingRelationshipKeyPaths != null) {
-			spec.setPrefetchingRelationshipKeyPaths(_prefetchingRelationshipKeyPaths);
-		}
 		return spec;
 	}
 
@@ -245,6 +242,15 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 			gids.addObject(gid);
 		}
 		NSMutableArray objects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, gids);
+		
+    	NSArray prefetchingRelationshipKeyPaths = _prefetchingRelationshipKeyPaths;
+    	if (prefetchingRelationshipKeyPaths == null || prefetchingRelationshipKeyPaths.count() == 0) {
+    		prefetchingRelationshipKeyPaths = spec.prefetchingRelationshipKeyPaths();
+    	}
+    	if (prefetchingRelationshipKeyPaths != null && prefetchingRelationshipKeyPaths.count() > 0) {
+			ERXRecursiveBatchFetching.batchFetch(objects, prefetchingRelationshipKeyPaths, true);
+    	}
+
 		ERXS.sort(objects, sortOrderings());
 		
 		// fetch the primary keys, turn them into faults, then batch-fetch all
@@ -281,21 +287,6 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		}
 		
 		_displayedObjects = objectsInRange(start, end);
-		
-		batchFetchPrefetchingRelationshipKeyPaths();
-	}
-	
-	protected void batchFetchPrefetchingRelationshipKeyPaths() {
-		EOFetchSpecification fetchSpec = fetchSpecification();
-	    if (fetchSpec != null) {
-	    	NSArray prefetchingRelationshipKeyPaths = fetchSpec.prefetchingRelationshipKeyPaths();
-	    	if (prefetchingRelationshipKeyPaths != null && prefetchingRelationshipKeyPaths.count() > 0) {
-	    		NSArray displayedObject = displayedObjects();
-	    		if (displayedObject != null && displayedObject.count() > 0) {
-	    			ERXRecursiveBatchFetching.batchFetch(displayedObject, prefetchingRelationshipKeyPaths);
-	    		}
-	    	}
-	    }
 	}
 	
 	protected void updateBatchCount() {
