@@ -1352,7 +1352,7 @@ public class ERXSQLHelper {
 			if (terms.count() > 0) {
 				sb.setLength(sb.length() - 1);
 			}
-			sb.append("');");
+			sb.append("')");
 			return sb.toString();
 		}
 
