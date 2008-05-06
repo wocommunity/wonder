@@ -184,6 +184,9 @@ public class ERXArrayUtilities extends Object {
     /**
      * Groups an array of objects by a given to-many key path, where every
      * single item in the to-many will put the object in the corresponding group. 
+     * A typical example is an array of users with a roles relationship. The result to
+     * calling <code>arrayGroupedByToManyKeyPath(users, "roles.name")</code> would be 
+     * <code>"admin" = (user1, user2); "editor" = (user3);...</code>.
      * The dictionary that is returned contains keys that correspond to the grouped
      * keys values. This means that the object pointed to by the key
      * path must be a cloneable object. For instance using the key path
@@ -243,6 +246,7 @@ public class ERXArrayUtilities extends Object {
                         existingGroup=new NSMutableArray();
                         result.setObjectForKey(existingGroup,key);
                     }
+                    existingGroup.addObject(eo);
                 }
             }
         }
