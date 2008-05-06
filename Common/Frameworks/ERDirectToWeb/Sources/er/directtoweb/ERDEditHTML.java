@@ -25,7 +25,12 @@ import er.extensions.ERXResponseRewriter;
  */
 public class ERDEditHTML extends ERDCustomEditComponent {
 
-    public ERDEditHTML(WOContext context) {
+	public static final String DEFAULT_URL = "http://tinymce.moxiecode.com/tinymce/jscripts/tiny_mce/tiny_mce.js";
+	public static final String SOURCE_URL_PROPERTY = "er.directtoweb.ERDEditHTML.tinyMceSourceUrl";
+	public static final String FRAMEWORK_NAME_PROPERTY = "er.directtoweb.ERDEditHTML.tinyMceSourceFrameworkName";
+	public static final String FILE_NAME_PROPERTY = "er.directtoweb.ERDEditHTML.tinyMceSourceFileName";
+
+	public ERDEditHTML(WOContext context) {
         super(context);
     }
     
@@ -40,10 +45,10 @@ public class ERDEditHTML extends ERDCustomEditComponent {
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
-    	String url = ERXProperties.stringForKeyWithDefault("er.directtoweb.ERDEditHTML.tinyMceSourceUrl", "http://tinymce.moxiecode.com/tinymce/jscripts/tiny_mce/tiny_mce.js");
-    	String fileName = ERXProperties.stringForKeyWithDefault("er.directtoweb.ERDEditHTML.tinyMceSourceFileName", url);
-		String framework = ERXProperties.stringForKeyWithDefault("er.directtoweb.ERDEditHTML.tinyMceSourceFrameworkName", "app");
-		ERXResponseRewriter.addScriptResourceInHead(response, context, framework, fileName);
+    	String url = ERXProperties.stringForKeyWithDefault(SOURCE_URL_PROPERTY, DEFAULT_URL);
+    	String fileName = ERXProperties.stringForKeyWithDefault(FILE_NAME_PROPERTY, url);
+    	String framework = ERXProperties.stringForKeyWithDefault(FRAMEWORK_NAME_PROPERTY, "app");
+    	ERXResponseRewriter.addScriptResourceInHead(response, context, framework, fileName);
     	ERXResponseRewriter.addScriptCodeInHead(response, context, String.format("tinyMCE.init({%s});", richTextMode()), "tinyMCEInit");
     }
     
