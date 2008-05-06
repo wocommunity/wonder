@@ -103,10 +103,8 @@ public abstract class ERXComponent extends WOComponent {
 		
 		postAppendToResponse(response, context);
 
-		if (!ERXAjaxApplication.isAjaxRequest(context.request())) {
-			_includeCSSResources(response, context);
-			_includeJavascriptResources(response, context);
-		}
+		_includeCSSResources(response, context);
+		_includeJavascriptResources(response, context);
 	}
 	
 	/**
