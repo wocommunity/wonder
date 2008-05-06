@@ -16,8 +16,10 @@ import com.webobjects.foundation.NSTimestamp;
 import er.bugtracker.Framework;
 import er.bugtracker.People;
 import er.bugtracker.Session;
+import er.directtoweb.ERDEditHTML;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXProperties;
 import er.extensions.ERXUtilities;
 import er.selenium.SeleniumAction;
 
@@ -116,5 +118,14 @@ public class Selenium extends SeleniumAction  {
     	deleteTestPeople();
     	return success();
     }
-	
+    
+    public WOActionResults disableTinyMCEAction() {
+    	ERXProperties.setStringForKey("nonexisting.js", ERDEditHTML.FILE_NAME_PROPERTY);
+    	return success();
+    }
+    
+    public WOActionResults enableTinyMCEAction() {
+    	System.clearProperty(ERDEditHTML.FILE_NAME_PROPERTY);
+    	return success();
+    }
 }
