@@ -260,11 +260,13 @@ public class ERXEOGlobalIDUtilities {
 	    				qualifiers.addObject(qualifier);
 	    			}
 	    		}
-	    		EOQualifier qualifier = new EOOrQualifier(qualifiers);
-	    		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
-	    		fetchSpec.setRefreshesRefetchedObjects(refreshesRefetchedObjects);
-	    		NSArray details = ec.objectsWithFetchSpecification(fetchSpec);
-	    		result.addObjectsFromArray(details);
+	    		if (qualifiers.count() > 0) {
+		    		EOQualifier qualifier = new EOOrQualifier(qualifiers);
+		    		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
+		    		fetchSpec.setRefreshesRefetchedObjects(refreshesRefetchedObjects);
+		    		NSArray details = ec.objectsWithFetchSpecification(fetchSpec);
+		    		result.addObjectsFromArray(details);
+	    		}
 	    	}
 		}
 		finally {
