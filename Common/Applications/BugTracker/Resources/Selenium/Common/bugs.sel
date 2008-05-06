@@ -4,6 +4,9 @@
 |open|/wa/Selenium/ensureTestAdmin||
 |assertTextPresent|Action command succeeded.||
 
+|open|/wa/Selenium/disableTinyMCE||
+|assertTextPresent|Action command succeeded.||
+
 Create a sample bug
 |openAndWait|/||
 |clickAndWait|link=Bugs||
@@ -21,7 +24,7 @@ Leave all fields empty
 Enter correct values
 |select|//tr[contains(string(), 'Component')]//select|Component 0|
 |type|xpath=(id('CreateBug')//input[@type='text'])[3]|__SeleniumBugSubject|
-|waitForCondition|selenium.browserbot.getCurrentWindow().tinyMCE.selectedInstance.execCommand("mceInsertContent", false, "__SeleniumBugDescription"); true|10000|
+|type|xpath=id('textDescription')|__SeleniumBugDescription|
 |clickAndWait|//button[@value='Next']||
 |assertValue|xpath=(//input[@type='text'])[3]|__SeleniumBugSubject|
 |assertTextPresent|No matching Test Item records found.||
@@ -43,7 +46,7 @@ Comment the bug (hitting the cancel first)
 |assertTextPresent|__SeleniumBugSubject||
 
 |clickAndWait|//td[contains(text(), '__SeleniumBugSubject')]/parent::*/preceding-sibling::tr[position() = 1]//a[text() = 'Comment']||
-|waitForCondition|selenium.browserbot.getCurrentWindow().tinyMCE.selectedInstance.execCommand("mceInsertContent", false, "__SeleniumTestComment"); true|10000|
+|type|xpath=id('newText')|__SeleniumTestComment|
 |clickAndWait|xpath=(//button[@value='Save'])[1]||
 
 Inspecting the bug via search
@@ -65,4 +68,11 @@ Resolving bug
 |assertValue|xpath=(//button[@type='submit' and @value='Reopen'])[1]|Reopen|
 
 Cleanup
+|open|/wa/Selenium/resetSession||
+|assertTextPresent|Action command succeeded.||
+
 |open|/wa/Selenium/deleteTestPeople||
+|assertTextPresent|Action command succeeded.||
+
+|open|/wa/Selenium/enableTinyMCE||
+|assertTextPresent|Action command succeeded.||
