@@ -488,6 +488,18 @@ public class ERXKey<T> {
 	public <U> ERXKey<U> append(String key) {
 		return new ERXKey<U>(_key + "." + key);
 	}
+	
+	/**
+	 * Calls append(key)
+	 * 
+	 * @param <U> the key type
+	 * @param key
+	 *            the key to append to this keypath
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> dot(String key) {
+		return append(key);
+	}
 
 	/**
 	 * Returns a new ERXKey that appends the given key to this keypath. For
@@ -511,6 +523,18 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Calls append(key)
+	 * 
+	 * @param <U> the key type
+	 * @param key
+	 *            the key to append to this keypath
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> dot(ERXKey<U> key) {
+		return append(key);
+	}
+
+	/**
 	 * Returns a new ERXKey that appends the given key to this keypath. For
 	 * instance, if this key is "person" and you add "firstName" to it, this
 	 * will return a new ERXKey "person.firstName".
@@ -530,6 +554,17 @@ public class ERXKey<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <U> ERXKey<NSArray<U>> appendAsArray(ERXKey<U> key) {
+		return append(key.key());
+	}
+
+	/**
+	 * Calls appendAsArray(key).
+	 * 
+	 * @param <U> the type
+	 * @param key the key to append to this keypath
+	 * @return the new append to this keypath
+	 */
+	public <U> ERXKey<NSArray<U>> dotArray(ERXKey<U> key) {
 		return append(key.key());
 	}
 
