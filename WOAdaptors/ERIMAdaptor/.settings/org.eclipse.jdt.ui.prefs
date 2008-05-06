@@ -1,8 +1,7 @@
-#Thu Feb 15 15:26:25 EST 2007
+#Thu Mar 13 10:35:51 EDT 2008
 eclipse.preferences.version=1
 formatter_profile=_Project Wonder
-formatter_settings_version=10
-internal.default.compliance=default
+formatter_settings_version=11
 org.eclipse.jdt.ui.exception.name=e
 org.eclipse.jdt.ui.gettersetter.use.is=true
 org.eclipse.jdt.ui.javadoc=false
