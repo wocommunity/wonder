@@ -638,6 +638,16 @@ public class ERXMigrationTable {
 		NSArray<EOSQLExpression> supportExpressions = schemaGeneration.primaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
 		return expressions.arrayByAddingObjectsFromArray(supportExpressions);
 	}
+	
+	/**
+	 * Executes the SQL operations to add this unique index.
+	 * 
+	 * @param columnName the name of the column to add a unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addUniqueIndex(String columnName) throws SQLException {
+		addUniqueIndex(null, columnName);
+	}
 
 	/**
 	 * Executes the SQL operations to add this unique index.
@@ -649,7 +659,7 @@ public class ERXMigrationTable {
 	public void addUniqueIndex(String indexName, String columnName) throws SQLException {
 		addUniqueIndex(indexName, existingColumnNamed(columnName));
 	}
-
+	
 	/**
 	 * Executes the SQL operations to add this unique index.
 	 * 
@@ -660,7 +670,7 @@ public class ERXMigrationTable {
 	public void addUniqueIndex(String indexName, String columnName, int width) throws SQLException {
 		addUniqueIndex(indexName, new ERXSQLHelper.ColumnIndex(columnName, width));
 	}
-
+	
 	/**
 	 * Executes the SQL operations to add a unique index.
 	 * 
@@ -669,14 +679,10 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the constraint fails
 	 */
 	public void addUniqueIndex(String indexName, ERXMigrationColumn... columns) throws SQLException {
-		ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
-		ERXSQLHelper.ColumnIndex[] columnIndexes = new ERXSQLHelper.ColumnIndex[columns.length];
-		for (int columnNum = 0; columnNum < columns.length; columnNum ++) {
-			columnIndexes[columnNum] = new ERXSQLHelper.ColumnIndex(columns[columnNum].name(), columns[columnNum].width());
-		}
+		ERXSQLHelper.ColumnIndex[] columnIndexes = _columnIndexesForMigrationColumns(columns);
 		addUniqueIndex(indexName, columnIndexes);
 	}
-
+	
 	/**
 	 * Executes the SQL operations to add a unique index.
 	 * 
@@ -686,10 +692,88 @@ public class ERXMigrationTable {
 	 */
 	public void addUniqueIndex(String indexName, ERXSQLHelper.ColumnIndex... columnIndexes) throws SQLException {
 		ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
+		if(indexName==null) 
+			indexName=_defaultIndexName(true, _name, helper.columnNamesFromColumnIndexes(columnIndexes).toArray(new String[] {}));
 		String sql = helper.sqlForCreateUniqueIndex(indexName, _name, columnIndexes);
 		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), sql);
 	}
+
+	/**
+	 * Executes the SQL operations to add this index.
+	 * 
+	 * @param columnName the name of the column to add a unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addIndex(String columnName) throws SQLException {
+		addIndex(null, columnName);
+	}
 	
+	/**
+	 * Executes the SQL operations to add this index.
+	 * 
+	 * @param indexName the name of the index
+	 * @param columnName the name of the column to add a unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addIndex(String indexName, String columnName) throws SQLException {
+		addIndex(indexName, existingColumnNamed(columnName));
+	}
+
+	/**
+	 * Executes the SQL operations to add this index.
+	 * 
+	 * @param indexName the name of the index
+	 * @param columnName the name of the column to add a unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addIndex(String indexName, String columnName, int width) throws SQLException {
+		addIndex(indexName, new ERXSQLHelper.ColumnIndex(columnName, width));
+	}
+
+	/**
+	 * Executes the SQL operations to add an index.
+	 * 
+	 * @param indexName the name of the index
+	 * @param columns the columns to add a unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addIndex(String indexName, ERXMigrationColumn... columns) throws SQLException {
+		ERXSQLHelper.ColumnIndex[] columnIndexes = _columnIndexesForMigrationColumns(columns);
+		addIndex(indexName, columnIndexes);
+	}
+
+	/**
+	 * Executes the SQL operations to add an index.
+	 * 
+	 * @param indexName the name of the index
+	 * @param columnIndexes the column indexes to unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addIndex(String indexName, ERXSQLHelper.ColumnIndex... columnIndexes) throws SQLException {
+		ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
+		if (indexName == null)
+			indexName = _defaultIndexName(false, _name, helper.columnNamesFromColumnIndexes(columnIndexes).toArray(new String[] {}));
+		String sql = helper.sqlForCreateIndex(indexName, _name, columnIndexes);
+		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), sql);
+	}
+	
+	private ERXSQLHelper.ColumnIndex[] _columnIndexesForMigrationColumns(ERXMigrationColumn... columns) {
+		ERXSQLHelper.ColumnIndex[] columnIndexes = new ERXSQLHelper.ColumnIndex[columns.length];
+		for (int columnNum = 0; columnNum < columns.length; columnNum ++) {
+			columnIndexes[columnNum] = new ERXSQLHelper.ColumnIndex(columns[columnNum].name(), columns[columnNum].width());
+		}
+		return columnIndexes;
+	}
+	
+	private String _defaultIndexName(boolean unique, String tableName, String... columnNames) {
+		String indexName = unique ? "UNIQUE_" : "INDEX_";
+		indexName += tableName;
+		indexName += "__";
+		indexName += new NSArray<String>(columnNames).componentsJoinedByString("_");
+		return indexName;
+	}
+
+
 	/**
 	 * Executes the SQL operations to add this primary key constraint.
 	 * 

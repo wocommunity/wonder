@@ -746,13 +746,9 @@ public class ERXSQLHelper {
 	 * @return a SQL expression
 	 */
 	public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
-		NSMutableArray<ColumnIndex> columnIndexes = new NSMutableArray<ColumnIndex>();
-		for (String columnName : columnNames) {
-			columnIndexes.addObject(new ColumnIndex(columnName));
-		}
-		return sqlForCreateUniqueIndex(indexName, tableName, columnIndexes.toArray(new ColumnIndex[columnIndexes.count()]));
+		return sqlForCreateUniqueIndex(indexName, tableName, columnIndexesFromColumnNames(columnNames));
 	}
-
+	
 	/**
 	 * Returns the SQL expression for creating a unique index on the given set
 	 * of columns
@@ -766,6 +762,46 @@ public class ERXSQLHelper {
 	 * @return a SQL expression
 	 */
 	public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating unique index expressions.");
+	}
+
+	/**
+	 * Returns the SQL expression for creating an index on the given set
+	 * of columns
+	 * 
+	 * @param indexName
+	 *            the name of the index to create
+	 * @param expression
+	 *            the EOSQLExpression context
+	 * @param columnNames
+	 *            the list of column names to index on
+	 * @return a SQL expression
+	 */
+	public String sqlForCreateIndex(String indexName, String tableName, String... columnNames) {
+		return sqlForCreateIndex(indexName, tableName, columnIndexesFromColumnNames(columnNames));
+	}
+
+	protected ColumnIndex[] columnIndexesFromColumnNames(String... columnNames) {
+		NSMutableArray<ColumnIndex> columnIndexes = new NSMutableArray<ColumnIndex>();
+		for (String columnName : columnNames) {
+			columnIndexes.addObject(new ColumnIndex(columnName));
+		}
+		return columnIndexes.toArray(new ColumnIndex[columnIndexes.count()]);
+	}
+
+	/**
+	 * Returns the SQL expression for creating an index on the given set
+	 * of columns
+	 * 
+	 * @param indexName
+	 *            the name of the index to create
+	 * @param expression
+	 *            the EOSQLExpression context
+	 * @param columnIndexes
+	 *            the list of columns to index on
+	 * @return a SQL expression
+	 */
+	public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating unique index expressions.");
 	}
 
@@ -1135,6 +1171,14 @@ public class ERXSQLHelper {
 		return ";" + lineSeparator;
 	}
 
+	public NSMutableArray<String> columnNamesFromColumnIndexes(ColumnIndex... columnIndexes) {
+		NSMutableArray<String> columnNames = new NSMutableArray<String>();
+		for (ColumnIndex columnIndex : columnIndexes) {
+			columnNames.addObject(columnIndex.columnName());
+		}
+		return columnNames;
+	}
+
 	public static ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
 		// This is REALLY hacky.
 		String className = expression.getClass().getName();
@@ -1463,11 +1507,13 @@ public class ERXSQLHelper {
 
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
-			NSMutableArray<String> columnNames = new NSMutableArray<String>();
-			for (ColumnIndex columnIndex : columnIndexes) {
-				columnNames.addObject(columnIndex.columnName());
-			}
+			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
 			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") INITIALLY IMMEDIATE NOT DEFERRABLE";
+		}
+
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			return "CREATE INDEX \""+indexName+"\" ON \""+tableName+"\" (\""+new NSArray<String>(columnNames).componentsJoinedByString("\", \"")+"\")";
 		}
 
 		@Override
@@ -1538,6 +1584,21 @@ public class ERXSQLHelper {
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			StringBuffer sql = new StringBuffer();
 			sql.append("ALTER TABLE `" + tableName + "` ADD UNIQUE `" + indexName + "` (");
+			_appendIndexColNames(sql, columnIndexes);
+			sql.append(")");
+			return sql.toString();
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			StringBuffer sql = new StringBuffer();
+			sql.append("CREATE INDEX `"+ indexName + "` ON `"+tableName+"` (");
+			_appendIndexColNames(sql, columnIndexes);
+			sql.append(")");
+			return sql.toString();
+		}
+
+		private void _appendIndexColNames(StringBuffer sql, ColumnIndex... columnIndexes) {
 			for (int columnIndexNum = 0; columnIndexNum < columnIndexes.length; columnIndexNum++) {
 				ColumnIndex columnIndex = columnIndexes[columnIndexNum];
 				sql.append("`" + columnIndex.columnName() + "`");
@@ -1551,8 +1612,6 @@ public class ERXSQLHelper {
 					sql.append(", ");
 				}
 			}
-			sql.append(")");
-			return sql.toString();
 		}
 	}
 
