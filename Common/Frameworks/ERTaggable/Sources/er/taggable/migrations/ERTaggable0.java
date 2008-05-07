@@ -25,6 +25,6 @@ public class ERTaggable0 extends Migration {
     tagTable.newStringColumn("name", 255, false);
     tagTable.create();
     tagTable.setPrimaryKey("id");
-    tagTable.addUniqueIndex("uniqueTagName", "name");
+    tagTable.addUniqueIndex("uniqueTagName", "name", 255);
   }
 }
