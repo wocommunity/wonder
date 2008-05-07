@@ -754,7 +754,10 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the add fails
 	 */
 	public void addForeignKey(ERXMigrationColumn sourceColumn, ERXMigrationColumn destinationColumn) throws SQLException {
-		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_addForeignKeyExpressions(sourceColumn, destinationColumn)));
+		NSArray<EOSQLExpression> expressions = _addForeignKeyExpressions(sourceColumn, destinationColumn);
+		if (expressions != null) {
+			ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(expressions));
+		}
 	}
 
 	/**
