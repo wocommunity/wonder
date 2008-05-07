@@ -651,6 +651,17 @@ public class ERXMigrationTable {
 	}
 
 	/**
+	 * Executes the SQL operations to add this unique index.
+	 * 
+	 * @param indexName the name of the index
+	 * @param columnName the name of the column to add a unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addUniqueIndex(String indexName, String columnName, int width) throws SQLException {
+		addUniqueIndex(indexName, new ERXSQLHelper.ColumnIndex(columnName, width));
+	}
+
+	/**
 	 * Executes the SQL operations to add a unique index.
 	 * 
 	 * @param indexName the name of the index
@@ -659,14 +670,26 @@ public class ERXMigrationTable {
 	 */
 	public void addUniqueIndex(String indexName, ERXMigrationColumn... columns) throws SQLException {
 		ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
-		String[] columnNames = new String[columns.length];
+		ERXSQLHelper.ColumnIndex[] columnIndexes = new ERXSQLHelper.ColumnIndex[columns.length];
 		for (int columnNum = 0; columnNum < columns.length; columnNum ++) {
-			columnNames[columnNum] = columns[columnNum].name();
+			columnIndexes[columnNum] = new ERXSQLHelper.ColumnIndex(columns[columnNum].name(), columns[columnNum].width());
 		}
-		String sql = helper.sqlForCreateUniqueIndex(indexName, _name, columnNames);
-		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), sql);
+		addUniqueIndex(indexName, columnIndexes);
 	}
 
+	/**
+	 * Executes the SQL operations to add a unique index.
+	 * 
+	 * @param indexName the name of the index
+	 * @param columnIndexes the column indexes to unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addUniqueIndex(String indexName, ERXSQLHelper.ColumnIndex... columnIndexes) throws SQLException {
+		ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
+		String sql = helper.sqlForCreateUniqueIndex(indexName, _name, columnIndexes);
+		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), sql);
+	}
+	
 	/**
 	 * Executes the SQL operations to add this primary key constraint.
 	 * 

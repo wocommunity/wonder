@@ -545,30 +545,37 @@ public class ERXSQLHelper {
 	protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating limit expressions.");
 	}
-	
+
 	/**
 	 * Removes an attribute from the select list.
 	 * 
-	 * @param attribute the attribute to remove from the select list
-	 * @param sqlExpression the expression to remove from
+	 * @param attribute
+	 *            the attribute to remove from the select list
+	 * @param sqlExpression
+	 *            the expression to remove from
 	 */
 	public void removeSelectFromExpression(EOAttribute attribute, EOSQLExpression sqlExpression) {
-		// MS: This is a bit brute force, but there's not really a nicer way to do this, unfortunately
-	    String sql = sqlExpression.statement();
-	    String attributeSql = sqlExpression.sqlStringForAttribute(attribute);
-	    String replaceSql = sql.replaceFirst(", " + attributeSql, "");
-	    if (replaceSql.length() == sql.length()) {
-	    	replaceSql = sql.replaceFirst(attributeSql + ", ", "");
-	    }
-	    sqlExpression.setStatement(replaceSql);
+		// MS: This is a bit brute force, but there's not really a nicer way to
+		// do this, unfortunately
+		String sql = sqlExpression.statement();
+		String attributeSql = sqlExpression.sqlStringForAttribute(attribute);
+		String replaceSql = sql.replaceFirst(", " + attributeSql, "");
+		if (replaceSql.length() == sql.length()) {
+			replaceSql = sql.replaceFirst(attributeSql + ", ", "");
+		}
+		sqlExpression.setStatement(replaceSql);
 	}
-	
+
 	/**
-	 * Returns the attribute read format for an aggregate function for a particular column with a name.
-	 *  
-	 * @param functionName the aggregate function to generate
-	 * @param columnName the column name to aggregate on
-	 * @param aggregateName the name to assign to the aggregate result
+	 * Returns the attribute read format for an aggregate function for a
+	 * particular column with a name.
+	 * 
+	 * @param functionName
+	 *            the aggregate function to generate
+	 * @param columnName
+	 *            the column name to aggregate on
+	 * @param aggregateName
+	 *            the name to assign to the aggregate result
 	 * @return the generated read format
 	 */
 	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName) {
@@ -581,7 +588,7 @@ public class ERXSQLHelper {
 			sb.append(" ");
 			sb.append(aggregateName);
 		}
-        return sb.toString();
+		return sb.toString();
 	}
 
 	/**
@@ -619,8 +626,8 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Returns the index in the expression's statement where order by 
-	 * clauses should be inserted.
+	 * Returns the index in the expression's statement where order by clauses
+	 * should be inserted.
 	 * 
 	 * @param expression
 	 *            the expression to look into
@@ -634,7 +641,7 @@ public class ERXSQLHelper {
 		}
 		return orderByInsertIndex;
 	}
-	
+
 	/**
 	 * Returns the index in the expression's statement where group by and having
 	 * clauses should be inserted.
@@ -739,9 +746,66 @@ public class ERXSQLHelper {
 	 * @return a SQL expression
 	 */
 	public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
+		NSMutableArray<ColumnIndex> columnIndexes = new NSMutableArray<ColumnIndex>();
+		for (String columnName : columnNames) {
+			columnIndexes.addObject(new ColumnIndex(columnName));
+		}
+		return sqlForCreateUniqueIndex(indexName, tableName, columnIndexes.toArray(new ColumnIndex[columnIndexes.count()]));
+	}
+
+	/**
+	 * Returns the SQL expression for creating a unique index on the given set
+	 * of columns
+	 * 
+	 * @param indexName
+	 *            the name of the index to create
+	 * @param expression
+	 *            the EOSQLExpression context
+	 * @param columnIndexes
+	 *            the list of columns to index on
+	 * @return a SQL expression
+	 */
+	public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating unique index expressions.");
 	}
-	
+
+	/**
+	 * IndexLimit represents the reference to a column for use in an index
+	 * definition along with an optional limit.
+	 * 
+	 * @author mschrag
+	 */
+	public static class ColumnIndex {
+		private String _columnName;
+		private int _length;
+
+		public ColumnIndex(String columnName) {
+			this(columnName, 0);
+		}
+
+		public ColumnIndex(String columnName, int length) {
+			_columnName = columnName;
+			_length = length;
+		}
+
+		public String columnName() {
+			return _columnName;
+		}
+
+		public int length() {
+			return _length;
+		}
+
+		public boolean hasLength() {
+			return _length > 0;
+		}
+
+		@Override
+		public String toString() {
+			return "[ColumnIndex: columnName = " + _columnName + "; length = " + _length + "]";
+		}
+	}
+
 	/**
 	 * Returns the name of the table to use for database migrations.
 	 * 
@@ -750,14 +814,16 @@ public class ERXSQLHelper {
 	public String migrationTableName() {
 		return "_dbupdater";
 	}
-	
+
 	/**
-	 * JDBCAdaptor.externalTypeForJDBCType just returns the first type it 
-	 * finds instead of trying to find a best match. This can still 
-	 * fail, mind you, but it should be much better than the EOF default impl.
+	 * JDBCAdaptor.externalTypeForJDBCType just returns the first type it finds
+	 * instead of trying to find a best match. This can still fail, mind you,
+	 * but it should be much better than the EOF default impl.
 	 * 
-	 * @param adaptor the adaptor to retrieve an external type for
-	 * @param jdbcType the JDBC type number
+	 * @param adaptor
+	 *            the adaptor to retrieve an external type for
+	 * @param jdbcType
+	 *            the JDBC type number
 	 * @return a guess at the external type name to use
 	 */
 	@SuppressWarnings("unchecked")
@@ -765,7 +831,7 @@ public class ERXSQLHelper {
 		String externalType = null;
 		try {
 			// MS: This is super dirty, but we can deadlock if we end up trying
-			// to request jdbc2Info during a migration.  We have to be able to
+			// to request jdbc2Info during a migration. We have to be able to
 			// use the adaptor's cached version of this method and so we just
 			// have to go in through the backdoor here ...
 			Method typeInfoMethod = adaptor.getClass().getDeclaredMethod("typeInfo");
@@ -773,27 +839,31 @@ public class ERXSQLHelper {
 			typeInfoMethod.setAccessible(true);
 			try {
 				NSDictionary typeInfo = (NSDictionary) typeInfoMethod.invoke(adaptor);
-				
+
 				if (typeInfo != null) {
 					String jdbcStringRep = JDBCAdaptor.stringRepresentationForJDBCType(jdbcType);
-					
+
 					String typeInfoStringRep = jdbcStringRep;
-					
-					// MS: We need to do a case-insensitive lookup of the type info string representation,
-					// because some databases say "VARCHAR" and some "varchar".  Awesome.
-					for (String possibleTypeInfoStringRep : (NSArray<String>)typeInfo.allKeys()) {
+
+					// MS: We need to do a case-insensitive lookup of the type
+					// info string representation,
+					// because some databases say "VARCHAR" and some "varchar".
+					// Awesome.
+					for (String possibleTypeInfoStringRep : (NSArray<String>) typeInfo.allKeys()) {
 						if (typeInfoStringRep.equalsIgnoreCase(possibleTypeInfoStringRep)) {
 							typeInfoStringRep = possibleTypeInfoStringRep;
 							break;
 						}
 					}
-					
-					// We're going to guess that the jdbc string rep is a valid type in this
-					// adaptor.  If it is, then we can use that and it will probably be a better
+
+					// We're going to guess that the jdbc string rep is a valid
+					// type in this
+					// adaptor. If it is, then we can use that and it will
+					// probably be a better
 					// guess than just the first type we run across.
 					NSDictionary typeDescription = (NSDictionary) typeInfo.objectForKey(typeInfoStringRep);
 					if (typeDescription != null) {
-						NSArray defaultJDBCType = (NSArray)typeDescription.objectForKey("defaultJDBCType");
+						NSArray defaultJDBCType = (NSArray) typeDescription.objectForKey("defaultJDBCType");
 						if (defaultJDBCType != null && defaultJDBCType.containsObject(jdbcStringRep)) {
 							externalType = typeInfoStringRep;
 						}
@@ -807,7 +877,7 @@ public class ERXSQLHelper {
 		catch (Exception e) {
 			ERXSQLHelper.log.error("Failed to sneakily execute adaptor.typeInfo().", e);
 		}
-		
+
 		if (externalType == null) {
 			externalType = adaptor.externalTypeForJDBCType(jdbcType);
 		}
@@ -1290,8 +1360,12 @@ public class ERXSQLHelper {
 		}
 
 		@Override
-		public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + new NSArray<String>(columnNames).componentsJoinedByString(",") + ")";
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
@@ -1357,7 +1431,11 @@ public class ERXSQLHelper {
 		}
 
 		@Override
-		public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
 			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") INITIALLY IMMEDIATE NOT DEFERRABLE";
 		}
 
@@ -1424,10 +1502,25 @@ public class ERXSQLHelper {
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return key + " REGEXP " + value + "";
 		}
-		
+
 		@Override
-		public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
-			return "ALTER TABLE `" + tableName + "` ADD UNIQUE `" + indexName + "` (`" + new NSArray<String>(columnNames).componentsJoinedByString("`, `") + "`)";
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			StringBuffer sql = new StringBuffer();
+			sql.append("ALTER TABLE `" + tableName + "` ADD UNIQUE `" + indexName + "` (");
+			for (int columnIndexNum = 0; columnIndexNum < columnIndexes.length; columnIndexNum++) {
+				ColumnIndex columnIndex = columnIndexes[columnIndexNum];
+				sql.append("`" + columnIndex.columnName() + "`");
+				if (columnIndex.hasLength()) {
+					// index limit of 767 for InnoDB, 999 for MyISAM
+					int length = Math.max(columnIndex.length(), 767);
+					sql.append("(" + length + ")");
+				}
+				if (columnIndexNum < columnIndexes.length - 1) {
+					sql.append(", ");
+				}
+			}
+			sql.append(")");
+			return sql.toString();
 		}
 	}
 
@@ -1455,19 +1548,22 @@ public class ERXSQLHelper {
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return key + " ~* " + value + "";
 		}
-		
+
 		/**
-		 * For most types, finding the type in jdbc2Info's typeInfo will provide us
-		 * with a correct type mapping.  For Postgresql, it has the honor of not 
-		 * actually having a type named "integer," so EOF goes on a hunt for a type
-		 * that MIGHT match (which is just bad, btw) and comes up with "serial".
+		 * For most types, finding the type in jdbc2Info's typeInfo will provide
+		 * us with a correct type mapping. For Postgresql, it has the honor of
+		 * not actually having a type named "integer," so EOF goes on a hunt for
+		 * a type that MIGHT match (which is just bad, btw) and comes up with
+		 * "serial".
 		 * 
 		 * We know better than EOF.
 		 * 
 		 * For any other case, we pass it up to the default impl.
 		 * 
-		 * @param adaptor the adaptor to retrieve an external type for
-		 * @param jdbcType the JDBC type number
+		 * @param adaptor
+		 *            the adaptor to retrieve an external type for
+		 * @param jdbcType
+		 *            the JDBC type number
 		 * @return a guess at the external type name to use
 		 */
 		@Override
