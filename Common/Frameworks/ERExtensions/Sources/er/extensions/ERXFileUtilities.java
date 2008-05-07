@@ -708,27 +708,28 @@ public class ERXFileUtilities {
      * @param recurseIntoDirectories determines if the delete is recursive
      */
     public static void deleteFilesInDirectory(File directory, boolean recurseIntoDirectories) {
-    	deleteFilesInDirectory(directory, recurseIntoDirectories, true);
+    	deleteFilesInDirectory(directory, null, recurseIntoDirectories, true);
     }
     
     /**
      * Deletes all of the files in a given directory with the option to
      * recursively delete all of the files in the given directory.
      * @param directory to delete all of the files from
+     * @param filter optional FileFilter to restrict what gets deleted, null to delete everything
      * @param recurseIntoDirectories determines if the delete is recursive
      * @param removeDirectories true if directories should be removed as well as files, false to only remove files
      */
-    public static void deleteFilesInDirectory(File directory, boolean recurseIntoDirectories, boolean removeDirectories) {
+    public static void deleteFilesInDirectory(File directory, FileFilter filter, boolean recurseIntoDirectories, boolean removeDirectories) {
         if (!directory.exists())
             throw new RuntimeException("Attempting to delete files from a non-existant directory: " + directory);
         if (!directory.isDirectory())
             throw new RuntimeException("Attmepting to delete files from a file that is not a directory: " + directory);
-        File files[] = directory.listFiles();
+        File files[] = filter != null ? directory.listFiles(filter) : directory.listFiles() ;
         if (files != null && files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 File aFile = files[i];
                 if (aFile.isDirectory() && recurseIntoDirectories) {
-                    deleteFilesInDirectory(aFile, recurseIntoDirectories);
+                    deleteFilesInDirectory(aFile, filter, recurseIntoDirectories, removeDirectories);
                 }
                 if (aFile.isFile() || (aFile.isDirectory() && removeDirectories
                                        && (aFile.listFiles() == null || aFile.listFiles().length == 0))) {
