@@ -802,7 +802,7 @@ public class ERXSQLHelper {
 	 * @return a SQL expression
 	 */
 	public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
-		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating unique index expressions.");
+		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating index expressions.");
 	}
 
 	/**
