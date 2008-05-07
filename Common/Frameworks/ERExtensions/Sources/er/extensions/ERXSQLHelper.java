@@ -829,6 +829,7 @@ public class ERXSQLHelper {
 	@SuppressWarnings("unchecked")
 	public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
 		String externalType = null;
+		NSArray<String> defaultJDBCTypes = null;
 		try {
 			// MS: This is super dirty, but we can deadlock if we end up trying
 			// to request jdbc2Info during a migration. We have to be able to
@@ -846,8 +847,8 @@ public class ERXSQLHelper {
 					String typeInfoStringRep = jdbcStringRep;
 
 					// MS: We need to do a case-insensitive lookup of the type
-					// info string representation,
-					// because some databases say "VARCHAR" and some "varchar".
+					// info string representation, because some databases say
+					// "VARCHAR" and some "varchar".
 					// Awesome.
 					for (String possibleTypeInfoStringRep : (NSArray<String>) typeInfo.allKeys()) {
 						if (typeInfoStringRep.equalsIgnoreCase(possibleTypeInfoStringRep)) {
@@ -857,17 +858,25 @@ public class ERXSQLHelper {
 					}
 
 					// We're going to guess that the jdbc string rep is a valid
-					// type in this
-					// adaptor. If it is, then we can use that and it will
-					// probably be a better
-					// guess than just the first type we run across.
+					// type in this adaptor. If it is, then we can use that and
+					// it will probably be a better guess than just the first
+					// type we run across.
 					NSDictionary typeDescription = (NSDictionary) typeInfo.objectForKey(typeInfoStringRep);
 					if (typeDescription != null) {
-						NSArray defaultJDBCType = (NSArray) typeDescription.objectForKey("defaultJDBCType");
-						if (defaultJDBCType != null && defaultJDBCType.containsObject(jdbcStringRep)) {
+						defaultJDBCTypes = (NSArray<String>) typeDescription.objectForKey("defaultJDBCType");
+						if (defaultJDBCTypes != null && defaultJDBCTypes.containsObject(jdbcStringRep)) {
 							externalType = typeInfoStringRep;
 						}
 					}
+
+					if (externalType == null) {
+						externalType = adaptor.externalTypeForJDBCType(jdbcType);
+					}
+
+					if (externalType == null) {
+
+					}
+
 				}
 			}
 			finally {
@@ -881,6 +890,28 @@ public class ERXSQLHelper {
 		if (externalType == null) {
 			externalType = adaptor.externalTypeForJDBCType(jdbcType);
 		}
+
+		// OK .. So we didn't find an exact match, and the superclass
+		// basically gave up. So we're going to take what should be a
+		// decent guess. If we found a type info that matched the name,
+		// but we didn't find a JDBC type name that matched, let's just
+		// guess that it's PROBABLY one of the entries from the
+		// JDBC type names list.  We're really not any worse off than
+		// the complete failure we were 2 lines ago.
+		if (externalType == null && defaultJDBCTypes != null) {
+			int defaultJDBCTypesCount = defaultJDBCTypes.count();
+			if (defaultJDBCTypesCount == 1) {
+				externalType = defaultJDBCTypes.objectAtIndex(0);
+			}
+			else if (defaultJDBCTypesCount == 0) {
+				throw new IllegalArgumentException("There is no type that could be found in your database that maps to JDBC Type #" + jdbcType + ".");
+			}
+			else {
+				externalType = defaultJDBCTypes.objectAtIndex(0);
+				ERXSQLHelper.log.warn("There was more than one type that in your database that maps to JDBC Type #" + jdbcType + ": " + defaultJDBCTypes + ". We guessed '" + externalType + "'. Cross your fingers.");
+			}
+		}
+
 		return externalType;
 	}
 
