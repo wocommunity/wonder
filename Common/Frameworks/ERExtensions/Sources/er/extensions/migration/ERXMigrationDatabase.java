@@ -303,9 +303,12 @@ public class ERXMigrationDatabase {
 	 * @param expressions
 	 *            the expressions to check
 	 */
-	public static void _ensureNotEmpty(NSArray<EOSQLExpression> expressions) {
+	public static void _ensureNotEmpty(NSArray<EOSQLExpression> expressions, String operationName, boolean required) {
 		if (expressions == null || expressions.count() == 0) {
-			throw new ERXMigrationFailedException("Your EOSynchronizationFactory does not support this operation.");
+			if (required) {
+				throw new ERXMigrationFailedException("Your EOSynchronizationFactory does not support the required '" + operationName + "' operation.");
+			}
+			ERXMigrationDatabase.log.error("Your EOSynchronizationFactory does not support the '" + operationName + "' operation, so this migration will be skipped.");
 		}
 	}
 
