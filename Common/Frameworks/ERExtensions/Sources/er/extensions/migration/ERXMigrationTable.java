@@ -550,7 +550,7 @@ public class ERXMigrationTable {
 	public NSArray<EOSQLExpression> _createExpressions() {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
 		NSArray<EOSQLExpression> expressions = schemaGeneration.createTableStatementsForEntityGroup(new NSArray<EOEntity>(_newEntity()));
-		ERXMigrationDatabase._ensureNotEmpty(expressions);
+		ERXMigrationDatabase._ensureNotEmpty(expressions, "create table", true);
 		return expressions;
 	}
 
@@ -581,7 +581,7 @@ public class ERXMigrationTable {
 	public NSArray<EOSQLExpression> _dropExpressions() {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
 		NSArray<EOSQLExpression> expressions = schemaGeneration.dropTableStatementsForEntityGroup(new NSArray<EOEntity>(_blankEntity()));
-		ERXMigrationDatabase._ensureNotEmpty(expressions);
+		ERXMigrationDatabase._ensureNotEmpty(expressions, "drop table", true);
 		return expressions;
 	}
 
@@ -604,7 +604,7 @@ public class ERXMigrationTable {
 	public NSArray<EOSQLExpression> _renameToExpressions(String newName) {
 		EOSchemaSynchronization schemaSynchronization = _database.synchronizationFactory();
 		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToRenameTableNamed(name(), newName, NSDictionary.EmptyDictionary);
-		ERXMigrationDatabase._ensureNotEmpty(expressions);
+		ERXMigrationDatabase._ensureNotEmpty(expressions, "rename table", true);
 		return expressions;
 	}
 
@@ -634,7 +634,7 @@ public class ERXMigrationTable {
 		}
 		entity.setPrimaryKeyAttributes(attributes);
 		NSArray<EOSQLExpression> expressions = schemaGeneration.primaryKeyConstraintStatementsForEntityGroup(new NSArray<EOEntity>(entity));
-		ERXMigrationDatabase._ensureNotEmpty(expressions);
+		ERXMigrationDatabase._ensureNotEmpty(expressions, "add primary key", true);
 		NSArray<EOSQLExpression> supportExpressions = schemaGeneration.primaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
 		return expressions.arrayByAddingObjectsFromArray(supportExpressions);
 	}
@@ -719,7 +719,7 @@ public class ERXMigrationTable {
 	public NSArray<EOSQLExpression> _addForeignKeyExpressions(ERXMigrationColumn sourceColumn, ERXMigrationColumn destinationColumn) {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
 		NSArray<EOSQLExpression> expressions = schemaGeneration.foreignKeyConstraintStatementsForRelationship(_newRelationship(sourceColumn, destinationColumn));
-		ERXMigrationDatabase._ensureNotEmpty(expressions);
+		ERXMigrationDatabase._ensureNotEmpty(expressions, "add foreign key", false);
 		return expressions;
 	}
 
@@ -769,7 +769,7 @@ public class ERXMigrationTable {
 		EOEntity entity = attribute.entity();
 		entity.setPrimaryKeyAttributes(new NSArray<EOAttribute>(attribute));
 		NSArray<EOSQLExpression> expressions = schemaGeneration.dropPrimaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
-		ERXMigrationDatabase._ensureNotEmpty(expressions);
+		ERXMigrationDatabase._ensureNotEmpty(expressions, "drop primary key", true);
 		return expressions;
 	}
 
