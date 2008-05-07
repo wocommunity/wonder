@@ -6,5 +6,6 @@
         <binding name="href"/>
         <binding name="key"/>
         <binding name="media"/>
+    	<binding defaults="Boolean" name="inline"/>
     </wo>
 </wodefinitions>
