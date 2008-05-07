@@ -1542,8 +1542,9 @@ public class ERXSQLHelper {
 				ColumnIndex columnIndex = columnIndexes[columnIndexNum];
 				sql.append("`" + columnIndex.columnName() + "`");
 				if (columnIndex.hasLength()) {
-					// index limit of 767 for InnoDB, 999 for MyISAM
-					int length = Math.max(columnIndex.length(), 767);
+					// index limit of 767 bytes for InnoDB, 999 bytes for MyISAM
+					// which maps to up to 255 and 333 utf8 characters
+					int length = Math.min(columnIndex.length(), 255);
 					sql.append("(" + length + ")");
 				}
 				if (columnIndexNum < columnIndexes.length - 1) {
