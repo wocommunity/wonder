@@ -708,6 +708,17 @@ public class ERXFileUtilities {
      * @param recurseIntoDirectories determines if the delete is recursive
      */
     public static void deleteFilesInDirectory(File directory, boolean recurseIntoDirectories) {
+    	deleteFilesInDirectory(directory, recurseIntoDirectories, true);
+    }
+    
+    /**
+     * Deletes all of the files in a given directory with the option to
+     * recursively delete all of the files in the given directory.
+     * @param directory to delete all of the files from
+     * @param recurseIntoDirectories determines if the delete is recursive
+     * @param removeDirectories true if directories should be removed as well as files, false to only remove files
+     */
+    public static void deleteFilesInDirectory(File directory, boolean recurseIntoDirectories, boolean removeDirectories) {
         if (!directory.exists())
             throw new RuntimeException("Attempting to delete files from a non-existant directory: " + directory);
         if (!directory.isDirectory())
@@ -719,7 +730,7 @@ public class ERXFileUtilities {
                 if (aFile.isDirectory() && recurseIntoDirectories) {
                     deleteFilesInDirectory(aFile, recurseIntoDirectories);
                 }
-                if (aFile.isFile() || (aFile.isDirectory()
+                if (aFile.isFile() || (aFile.isDirectory() && removeDirectories
                                        && (aFile.listFiles() == null || aFile.listFiles().length == 0))) {
                     aFile.delete();
                 }
