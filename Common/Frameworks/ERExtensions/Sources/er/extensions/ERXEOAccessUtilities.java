@@ -490,26 +490,58 @@ public class ERXEOAccessUtilities {
         return wasHandled;
     }
 
-    /** Given an array of EOs, returns snapshot dictionaries for the given related objects. */
-    //CHECKME ak is this description correct?
-    public static NSArray snapshotsForObjectsFromRelationshipNamed(NSArray eos,String relKey) {
-        NSMutableArray result=new NSMutableArray();
-        if (eos.count()>0) {
-            String entityName=((EOEnterpriseObject)eos.objectAtIndex(0)).entityName();
-            EOEditingContext ec = ((EOEnterpriseObject)eos.objectAtIndex(0)).editingContext();
-            EOEntity entity=EOUtilities.entityNamed(ec,entityName);
-            EORelationship relationship = entity.relationshipNamed(relKey);
-            EOAttribute attribute = (EOAttribute)relationship.sourceAttributes().objectAtIndex(0);
-            EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, entity.model().name());
-            String name=attribute.name();
-            for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject target=(EOEnterpriseObject)e.nextElement();
-                Object value = (context.snapshotForGlobalID(ec.globalIDForObject(target))).valueForKey(name);
-                result.addObject(value);
+    /**
+     * Returns true if the exception is an optimistic locking exception.
+     * 
+     * @param e
+     *            the exception as recieved from saveChanges()
+     * @return true if the error could be handled.
+     */
+    public static boolean isOptimisticLockingFailure(EOGeneralAdaptorException e) {
+        boolean wasHandled = false;
+        NSDictionary userInfo = e.userInfo();
+        if(userInfo != null) {
+            String eType = (String)userInfo.objectForKey(EOAdaptorChannel.AdaptorFailureKey);
+            if (EOAdaptorChannel.AdaptorOptimisticLockingFailure.equals(eType)) {
+                EOAdaptorOperation adaptorOp = (EOAdaptorOperation) userInfo.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+                EODatabaseOperation databaseOp = (EODatabaseOperation) userInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+                wasHandled = (adaptorOp != null && databaseOp != null);
+            } else {
+                log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey in " + e + ": " + userInfo);
             }
         }
-        return result;
+        return wasHandled;
     }
+
+    /**
+     * Given an array of EOs, returns snapshot dictionaries for the given
+     * related objects.
+     */
+    //CHECKME ak is this description correct?
+    public static NSArray snapshotsForObjectsFromRelationshipNamed(NSArray eos, String relKey) {
+    	NSMutableArray result = new NSMutableArray();
+    	if (eos.count() > 0) {
+    		EOEnterpriseObject eo = (EOEnterpriseObject)eos.lastObject();
+    		String entityName = eo.entityName();
+    		EOEditingContext ec = eo.editingContext();
+    		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+    		EORelationship relationship = entity.relationshipNamed(relKey);
+    		if(relationship.sourceAttributes().count() == 1) {
+    			EOAttribute attribute = (EOAttribute) relationship.sourceAttributes().lastObject();
+    			EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, entity.model().name());
+    			String name = attribute.name();
+    			for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
+    				EOEnterpriseObject target = (EOEnterpriseObject) e.nextElement();
+    				Object value = (context.snapshotForGlobalID(ec.globalIDForObject(target))).valueForKey(name);
+    				result.addObject(value);
+    			}
+    		} else {
+    			throw new IllegalArgumentException("Has more than one relationship attribute: " + relKey);
+    		}
+    	}
+    	return result;
+    }
+
     /**
      * Utility method to generate a new primary key dictionary using
      * the adaptor for a given entity. This is can be handy if you
@@ -565,6 +597,56 @@ public class ERXEOAccessUtilities {
     }
 
     /**
+     * Crude hack to get at the end of a relationship path.
+     * @param relationship
+     */
+    public static EORelationship lastRelationship(EORelationship relationship) {
+        return (EORelationship) NSKeyValueCoding.Utility.valueForKey(relationship, "lastRelationship");
+    }
+
+    /**
+     * Creates an array of relationships and attributes from the given keypath to give to the
+     * EOSQLExpression method <code>sqlStringForAttributePath</code>. If the last element is a
+     * relationship, then the relationship's source attribute will get chosen. As such, this can only 
+     * work for single-value relationships in the last element.
+     * @param entity
+     * @param keyPath
+     */
+    public static NSArray attributePathForKeyPath(EOEntity entity, String keyPath) {
+        NSMutableArray result = new NSMutableArray();
+        String[] parts = keyPath.split("\\.");
+        String part;
+        for (int i = 0; i < parts.length - 1; i++) {
+            part = parts[i];
+            EORelationship relationship = entity.anyRelationshipNamed(part);
+            if(relationship == null) {
+            	// CHECKME AK:  it would probably be better to return null 
+            	// to indocate that this is not a valid path?
+            	return NSArray.EmptyArray;
+            }
+            entity = relationship.destinationEntity();
+            result.addObject(relationship);
+        }
+        part = parts[parts.length-1];
+        EOAttribute attribute = entity.anyAttributeNamed(part);
+        if(attribute == null) {
+            EORelationship relationship = entity.anyRelationshipNamed(part);
+            if(relationship == null) {
+                throw new IllegalArgumentException("Last element is not an attribute nor a relationship: " + keyPath);
+            }
+            if (relationship.isFlattened()) {
+            	NSArray path = attributePathForKeyPath(entity, relationship.definition());
+            	result.addObjectsFromArray(path);
+            	return result;
+            } else {
+                attribute = ((EOJoin) relationship.joins().lastObject()).sourceAttribute();
+            }
+         }
+        result.addObject(attribute);
+        return result;
+    }
+
+    /**
      * Creates a where clause string " someKey IN ( someValue1,...)".
      */
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
@@ -598,10 +680,9 @@ public class ERXEOAccessUtilities {
      * Returns the last entity for the given key path. If the path is empty or null, returns the given entity.
      * @param entity
      * @param keyPath
-     * @return
      */
     private static Set _keysWithWarning = Collections.synchronizedSet(new HashSet());
-
+    
     public static EOEntity destinationEntityForKeyPath(EOEntity entity, String keyPath) {
         if(keyPath == null || keyPath.length() == 0) {
             return entity;
@@ -612,12 +693,12 @@ public class ERXEOAccessUtilities {
             EORelationship rel = entity.anyRelationshipNamed(key);
             if(rel == null) {
                 if(entity.anyAttributeNamed(key) == null) {
-                    if(key.indexOf("@") != 0) {
-                        if(!_keysWithWarning.contains(key + "-" + entity)) {
-                            _keysWithWarning.add(key + "-" + entity);
-                            log.warn("No relationship or attribute <" + key + "> in entity: " + entity);
-                        }
-                    }
+                	if(key.indexOf("@") != 0) {
+                		if(!_keysWithWarning.contains(key + "-" + entity)) {
+                			_keysWithWarning.add(key + "-" + entity);
+                			log.warn("No relationship or attribute <" + key + "> in entity: " + entity);
+                		}
+                	}
                 }
                 return null;
             }
@@ -627,18 +708,18 @@ public class ERXEOAccessUtilities {
     }
 
     /** Returns the EOEntity for the provided EOEnterpriseObject if one exists
-     *
+     * 
      * @param eo the EOEnterpriseObject
      * @return the EOEntity from the EOEnterpriseObject
      */
     public static EOEntity entityForEo(EOEnterpriseObject eo) {
         EOClassDescription classDesc = eo.classDescription();
-
+        
         if (classDesc instanceof EOEntityClassDescription)
             return ((EOEntityClassDescription)classDesc).entity();
         return null;
     }
-    
+
     public static NSArray classPropertiesNotInParent(EOEntity entity, boolean includeAttributes, boolean includeToOneRelationships, boolean includeToManyRelationships) {
         Object parent = entity.parentEntity();
         if (parent == null) { return NSArray.EmptyArray; }
@@ -648,18 +729,18 @@ public class ERXEOAccessUtilities {
         NSArray cpNames = entity.classPropertyNames();
 
         if (includeAttributes) {
-            for (int i = attributes.count(); i-- > 0;) {
-                EOAttribute att = (EOAttribute) attributes.objectAtIndex(i);
-                String name = att.name();
-                if (cpNames.containsObject(name) && !parentAttributeNames.containsObject(name)) {
-                    ret.addObject(att);
-                }
-            }
+	        for (int i = attributes.count(); i-- > 0;) {
+	            EOAttribute att = (EOAttribute) attributes.objectAtIndex(i);
+	            String name = att.name();
+	            if (cpNames.containsObject(name) && !parentAttributeNames.containsObject(name)) {
+	                ret.addObject(att);
+	            }
+	        }
         }
-
+        
         NSArray parentRelationships = (NSArray) entity.parentEntity().relationships().valueForKey("name");
         NSArray relationships = entity.relationships();
-
+        
         for (int i = relationships.count(); i-- > 0;) {
             EORelationship element = (EORelationship) relationships.objectAtIndex(i);
             if ((element.isToMany() && includeToManyRelationships)
@@ -671,7 +752,161 @@ public class ERXEOAccessUtilities {
             }
         }
         return ret;
-    }    
+    }
+
+    public static NSArray externalNamesForEntity(EOEntity entity, boolean includeParentEntities) {
+        if (includeParentEntities) { 
+            entity = rootEntityForEntity(entity);
+        }
+        NSMutableArray entityNames = new NSMutableArray();
+        if (entity.subEntities().count() > 0) {
+            for (Enumeration it = entity.subEntities().objectEnumerator(); it.hasMoreElements();) {
+                EOEntity entity1 = (EOEntity) it.nextElement();
+                NSArray names = externalNamesForEntity(entity1, includeParentEntities);
+                entityNames.addObjectsFromArray(names);
+            }
+        }
+        entityNames.addObject(entity.externalName()); 
+        return ERXArrayUtilities.arrayWithoutDuplicates(entityNames);
+    }
+
+    public static NSArray externalNamesForEntityNamed(String entityName, boolean includeParentEntities) {
+        return externalNamesForEntity(EOModelGroup.defaultGroup().entityNamed(entityName), includeParentEntities);
+    }
+
+    public static EOEntity rootEntityForEntity(EOEntity entity) {
+        while (entity.parentEntity() != null) {
+            entity = entity.parentEntity();
+        }
+        return entity;
+    }
+
+    public static EOEntity rootEntityForEntityNamed(String entityName) {
+        return rootEntityForEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
+    }
+
+    /**
+     * Creates an AND qualifier of EOKeyValueQualifiers for every keypath in the given array of attributes.
+     *
+     * @author ak
+     */
+    public static EOQualifier qualifierFromAttributes(NSArray attributes, NSDictionary values) {
+        NSMutableArray qualifiers = new NSMutableArray();
+        EOQualifier result = null;
+        if(attributes.count() > 0) {
+            for (Enumeration i = attributes.objectEnumerator(); i.hasMoreElements();) {
+                EOAttribute key = (EOAttribute) i.nextElement();
+                Object value = values.objectForKey(key.name());
+                qualifiers.addObject(new EOKeyValueQualifier(key.name(), EOQualifier.QualifierOperatorEqual, value));
+            }
+            result = new EOAndQualifier(qualifiers);
+        }
+        return result;
+    }
+
+    /**
+     * Filters a list of relationships for only the ones that
+     * have a given EOAttribute as a source attribute. 
+     * @param attrib EOAttribute to filter source attributes of
+     *      relationships.
+     * @return filtered array of EORelationship objects that have
+     *      the given attribute as the source attribute.
+     */
+    public static NSArray relationshipsForAttribute(EOEntity entity, EOAttribute attrib) {
+        NSMutableArray arr = new NSMutableArray();
+        int cnt = entity.relationships().count();
+        for(int i=0; i<cnt; i++){
+            EORelationship rel = (EORelationship)entity.relationships().objectAtIndex(i);
+            NSArray attribs = rel.sourceAttributes();
+            if(attribs.containsObject(attrib)){
+                arr.addObject(rel);
+            }
+        }
+        return arr;
+    }
+
+
+    public static EOEnterpriseObject refetchFailedObject(EOEditingContext ec, EOGeneralAdaptorException e) {
+        EOAdaptorOperation adaptorOp = (EOAdaptorOperation) e.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+        EODatabaseOperation databaseOp = (EODatabaseOperation) e.userInfo().objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+        NSDictionary dbSnapshot = databaseOp.dbSnapshot();
+        EOEntity entity = adaptorOp.entity();
+        String entityName = entity.name();
+        EOGlobalID gid = entity.globalIDForRow(dbSnapshot);
+        EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
+        // EOUtilities.databaseContextForModelNamed(ec, eo.entityName()).forgetSnapshotForGlobalID(gid);
+        ec.refaultObject(eo);
+        // NOTE AK: I think we can just return the object here,
+        // as the next time it is accessed the fault will get
+        NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
+        EOQualifier qualifier = ERXEOAccessUtilities.qualifierFromAttributes(primaryKeyAttributes, dbSnapshot);
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, null);
+        fs.setRefreshesRefetchedObjects(true);
+        NSArray objs = ec.objectsWithFetchSpecification(fs);
+        eo = null;
+        if (objs.count() == 1) {
+            eo = (EOEnterpriseObject) objs.objectAtIndex(0);
+            if (log.isDebugEnabled()) {
+                log.debug("failedEO: "+ eo);
+            }
+        } else if(objs.count() == 0) {
+            throw new EOObjectNotAvailableException("Can't recover: Object was deleted: " + fs);
+        } else {
+            throw new EOUtilities.MoreThanOneException("Can't recover: More than one object found: " + objs);
+        }
+        return eo;
+    }
+
+    /**
+     * Method used to apply a set of changes to a re-fetched eo.
+     * This method is used to re-apply changes to a given eo after
+     * it has been refetched.
+     *
+     * @param eo enterprise object to have the changes re-applied to.
+     */
+    public static void reapplyChanges(EOEnterpriseObject eo, EOGeneralAdaptorException e) {
+        EOAdaptorOperation adaptorOp = (EOAdaptorOperation) e.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+        NSDictionary changedValues = adaptorOp.changedValues();
+        EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
+        EOEditingContext ec = eo.editingContext();
+        NSArray keys = changedValues.allKeys();
+        NSMutableSet relationships = new NSMutableSet();
+        
+        for (int i=0; i<keys.count(); i++) {
+            String key = (String)keys.objectAtIndex(i);
+            EOAttribute attrib = entity.attributeNamed(key);
+            if (attrib != null) {
+                Object val = changedValues.objectForKey(key);
+                if (entity.classProperties().containsObject(attrib)) {
+                    eo.takeValueForKey(val, key);
+                }
+                NSArray relsUsingAttrib = ERXEOAccessUtilities.relationshipsForAttribute(entity, attrib);
+                relationships.addObjectsFromArray(relsUsingAttrib);
+            } else {
+                log.error("Changed value found that isn't an attribute: " + key + "->" + changedValues.objectForKey(key));
+            }
+        }
+
+        for (Enumeration enumerator = relationships.objectEnumerator(); enumerator.hasMoreElements();) {
+            EORelationship relationship = (EORelationship) enumerator.nextElement();
+            NSMutableDictionary pk = EOUtilities.destinationKeyForSourceObject(ec, eo, relationship.name()).mutableClone();
+            for (int i=0; i<keys.count(); i++) {
+                String key = (String)keys.objectAtIndex(i);
+                if(pk.objectForKey(key) != null) {
+                    Object val = changedValues.objectForKey(key);
+                    pk.setObjectForKey(val, key);
+                }
+            }
+            EOEntity destEnt = relationship.destinationEntity();
+            EOGlobalID gid = destEnt.globalIDForRow(pk);
+            if(gid != null) {
+                EOEnterpriseObject destEO = ec.faultForGlobalID(gid, ec);
+                eo.takeValueForKey(destEO, relationship.name());
+            } else {
+                throw new NullPointerException("Gid is null: " + pk);
+            }
+        }
+    }
 
     /**
      * Utility method to make a shared entity editable. This

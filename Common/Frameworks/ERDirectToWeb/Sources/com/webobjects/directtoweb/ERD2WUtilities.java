@@ -6,28 +6,29 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package com.webobjects.directtoweb;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import org.apache.log4j.Logger;
 
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+
+import er.directtoweb.ERDPickPageInterface;
 
 // This is needed because pageFinalized is a protected method.
 public class ERD2WUtilities {
 
-    private static ERXLogger log = ERXLogger.getERXLogger(ERD2WUtilities.class);
+    private static Logger log = Logger.getLogger(ERD2WUtilities.class);
 
     public static void finalizeContext(D2WContext context) {
         if (context != null)
             context.pageFinalized();
     }
 
-    /*
     public static void resetContextCache(D2WContext context) {
         if (context != null)
             context._localValues.clear();
     }
-     */
+    
     public static boolean assignmentsAreEqual(Assignment a1, Assignment a2) {
         boolean areEqual = false;
         if (a1.getClass().equals(a2.getClass()) && a1.keyPath() != null && a2.keyPath() != null && a1.value() != null && a2.value() != null) {
@@ -70,58 +71,77 @@ public class ERD2WUtilities {
         }
         return result;
     }
-
-    /** This method faults the provied <code>EOEnterpriseObject</code> into a new <code>EOEditingContext</code>
-    * based on the current state:<br>
-    * 1. the <code>EOEnterpriseObject</code> is new: simply returns the <code>EOEnterpriseObject</code>,
-    * a new <code>EOEnterpriseObject</code> cannot be faulted into another <code>EOEditingContext</code><br>
-    *
-    * 2. if the d2wContext's task is 'edit' it creates a new -nested- <code>EOEditingContext</code> and
-    * faults the <code>EOEnterpriseObject</code> into it. Calls <code>setSharedEditingContext(false)</code> on
-    * the ec to ensure that this also works if one uses EOSharedEditingContexts.
-    * 
-    * 3. otherwise it creates a new PeerEditingContext and faults the <code>EOEnterpriseObject</code> into it.
-    * Calls <code>setSharedEditingContext(false)</code> on the ec to ensure that this also works if
-    * one uses EOSharedEditingContexts.
-    *
-    * This method should be called whenever on returns a new Page for a D2W action. It should simply behave like
-    * one assumes and not like the WO implementation: no nested EC's, no SharedEditingContext support.
-    *
-    * @param eo The <code>EOEnterpriseObject</code> that should be faulted. If the current page is
-    * a List page then it would mostly be current list object. If the current page is a Edit page then
-    * it would be object() and NOT the relationship object or whatever. object() because its the main object
-    * that needs to be faulted, then one must not care about relationships and so on.
-    * 
-    * @param d2wContext the current d2wContext
-    *
-    * @return
-    */
-    public static EOEnterpriseObject localInstanceFromObjectWithD2WContext(EOEnterpriseObject eo,
-                                                                           D2WContext d2wContext) {
-        EOEditingContext ec = eo.editingContext();
-        if(ec == null) throw new IllegalStateException("EC can't be null in localinstance");
-        EOEnterpriseObject localObject = eo;
-        if(ERXProperties.webObjectsVersionAsDouble() < 5.21d && ERXExtensions.isNewObject(localObject)) {
-            // do nothing as we can't localInstance anything here
-        } else {
-            boolean nest = d2wContext != null && ERXValueUtilities.booleanValue(d2wContext.valueForKey("useNestedEditingContext"));
-            EOEditingContext newEc = ERXEC.newEditingContext(nest ? ec : ec.parentObjectStore());
-            if(ec instanceof EOSharedEditingContext || ec.sharedEditingContext() == null) {
-                newEc.setSharedEditingContext(null);
+    
+    /** Utility to return the next page in the enclosing page. */
+    public static WOComponent nextPageInPage(D2WPage parent) {
+        WOComponent result = parent.context().page();
+        WOComponent old = parent.context().component();
+        try {
+            parent.context()._setCurrentComponent(parent);
+            if(parent.nextPageDelegate() != null) {
+                NextPageDelegate delegate = parent.nextPageDelegate();
+                result = delegate.nextPage(parent);
+            } else {
+                result = parent.nextPage();
             }
-            ec.lock();
-            newEc.lock();
-            try {
-                localObject = EOUtilities.localInstanceOfObject(newEc, eo);
-                localObject.willRead();
-            } finally {
-                ec.unlock();
-                newEc.unlock();
-            }
+        } finally {
+            parent.context()._setCurrentComponent(old);
         }
-
-        return localObject;
+        return result;
     }
 
+    /** Utility to return the first enclosing component that matches the given class, if there is one. */
+    public static WOComponent enclosingPageOfClass(WOComponent sender, Class c) {
+        WOComponent p = sender.parent();
+        while(p != null) {
+            if(c.isAssignableFrom(p.getClass()))
+                return p;
+            p = p.parent();
+        }
+        return null;
+    }
+
+    /** Utility to return the outermost page that is a D2W page. This is needed because this component might be embedded inside a plain page. */
+    public static D2WPage topLevelD2WPage(WOComponent sender) {
+        WOComponent p = sender.parent();
+        WOComponent last = null;
+        while(p != null) {
+            if(p instanceof D2WPage) {
+                last = p;
+            }
+            p = p.parent();
+        }
+        return (D2WPage)last;
+    }
+
+    /** Utility to return the enclosing list page, if there is one. */
+    public static ListPageInterface parentListPage(WOComponent sender) {
+        return (ListPageInterface)enclosingPageOfClass(sender, ListPageInterface.class);
+    }
+    
+    /** Utility to return the enclosing edit page, if there is one. */
+    public static EditPageInterface parentEditPage(WOComponent sender) {
+        return (EditPageInterface)enclosingPageOfClass(sender, EditPageInterface.class);
+    }
+    
+    /** Utility to return the enclosing select page, if there is one. */
+    public static SelectPageInterface parentSelectPage(WOComponent sender) {
+        return (SelectPageInterface)enclosingPageOfClass(sender, SelectPageInterface.class);
+    }
+    
+    /** Utility to return the enclosing query page, if there is one. */
+    public static QueryPageInterface parentQueryPage(WOComponent sender) {
+        return (QueryPageInterface)enclosingPageOfClass(sender, QueryPageInterface.class);
+    }
+
+    /** Utility to return the enclosing pick page, if there is one. */
+    public static ERDPickPageInterface parentPickPage(WOComponent sender) {
+        return (ERDPickPageInterface)enclosingPageOfClass(sender, ERDPickPageInterface.class);
+    }
+
+    /** Utility to return the enclosing D2W page, if there is one. */
+    public D2WPage parentD2WPage(WOComponent sender) {
+        return (D2WPage)enclosingPageOfClass(sender, D2WPage.class);
+    }
     
 }

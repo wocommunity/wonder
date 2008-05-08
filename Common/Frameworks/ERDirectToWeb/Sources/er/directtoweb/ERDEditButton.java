@@ -6,12 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXGuardedObjectInterface;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Nice edit button for editing a toMany relationship in another page.<br />
@@ -20,12 +25,14 @@ import er.extensions.*;
 
 public class ERDEditButton extends ERDActionButton {
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDEditButton.class,"components,actions");
+    private static final Logger log = Logger.getLogger(ERDEditButton.class);
 
     public ERDEditButton(WOContext context) {super(context);}
     
     protected EOEnterpriseObject localInstanceOfObject() {
-        return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
+    	Object value = d2wContext().valueForKey("useNestedEditingContext");
+    	boolean createNestedContext = ERXValueUtilities.booleanValue(value);
+    	return ERXEOControlUtilities.editableInstanceOfObject(object(), createNestedContext);
     }
 
     public boolean isEditable() {

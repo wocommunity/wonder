@@ -6,13 +6,30 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
 import java.util.Enumeration;
-import er.extensions.*;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXComponentActionRedirector;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXWOForm;
 
 /**
  * Superclass for all inspecting/editing ERD2W templates.<br />
@@ -28,11 +45,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public ERD2WInspectPage(WOContext context) { super(context); }
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WInspectPage.class);
-    public static final ERXLogger validationCat = ERXLogger.getERXLogger(ERD2WInspectPage.class, "validation");
+    public static final Logger log = Logger.getLogger(ERD2WInspectPage.class);
+    public static final Logger validationCat = Logger.getLogger(ERD2WInspectPage.class+".validation");
 
-    protected static String firstResponderContainerName = "FirstResponderContainer";
-    
+	protected static String firstResponderContainerName = "FirstResponderContainer";
 
     public String urlForCurrentState() {
     	NSDictionary dict = null;
@@ -75,10 +91,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     	}
         return result;
     }
-	
-	public boolean isEntityReadOnly() {
-        return !ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !super.isEntityReadOnly());
-    }
     
     public WOComponent editAction() {
         WOComponent returnPage = null;
@@ -90,7 +102,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             } else {
                 editPage = D2W.factory().editPageForEntityNamed(object().entityName(),session());
             }
-            editPage.setObject(ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext()));
+	    	Object value = d2wContext().valueForKey("useNestedEditingContext");
+	    	boolean createNestedContext = ERXValueUtilities.booleanValue(value);
+	    	EOEnterpriseObject object = ERXEOControlUtilities.editableInstanceOfObject(object(), createNestedContext);
+	    	editPage.setObject(object);
             editPage.setNextPage(nextPage());
             returnPage = (WOComponent)editPage;
         }
@@ -121,18 +136,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean doesNotHaveForm() { return !ERXValueUtilities.booleanValue(d2wContext().valueForKey("hasForm")); }
 
     public void setObject(EOEnterpriseObject eoenterpriseobject) {
-        EOEditingContext eoeditingcontext = eoenterpriseobject == null ? null : eoenterpriseobject.editingContext();
-
-        //BUGFIX dt 12 dec. 2003
-        //using a shared editingcontext with concurrent request handling may leed to a deadlock!
-        if (eoeditingcontext != null && WOApplication.application().allowsConcurrentRequestHandling()) {
-            try {
-                eoeditingcontext.lock();
-                eoeditingcontext.setSharedEditingContext(null);
-            } finally {
-                eoeditingcontext.unlock();
-            }
-        }
         super.setObject(eoenterpriseobject);
     }
     
@@ -178,55 +181,54 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldRevertUponSaveFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRevertUponSaveFailure"), false); }
 
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {
-        validationLog.debug("tryToSaveChanges calling validateForSave");
-        boolean saved = false;
-        if (object() != null) {
-            EOEditingContext ec = object().editingContext();
-            boolean shouldRevert = false;
-            try {
-                if (object() != null && validateObject && shouldValidateBeforeSave()) {
-                    if (ec.insertedObjects().containsObject(object()))
-                        object().validateForInsert();
-                    else
-                        object().validateForUpdate();
-                }
-                if (object() != null && shouldSaveChanges() && ec.hasChanges()) {
-                    try {
-                        ec.saveChanges();
-                    } catch (RuntimeException e) {
-                        if (shouldRevertUponSaveFailure()) {
-                            shouldRevert = true;
-                        }
-                        throw e;
+    	validationLog.debug("tryToSaveChanges calling validateForSave");
+    	boolean saved = false;
+    	if(object()!=null) {
+    		EOEditingContext ec = object().editingContext();
+    		boolean shouldRevert = false;
+    		try {
+    			if (object()!=null && validateObject && shouldValidateBeforeSave()) {
+    				if (ec.insertedObjects().containsObject(object()))
+    					object().validateForInsert();
+    				else
+    					object().validateForUpdate();
+    			}
+            if (object()!=null && shouldSaveChanges() && ec.hasChanges()) {
+                try {
+                    ec.saveChanges();
+                } catch (RuntimeException e) {
+                    if( shouldRevertUponSaveFailure() ) {
+                        shouldRevert = true;
                     }
+                    throw e;
                 }
-                saved = true;
-            } catch (NSValidation.ValidationException ex) {
-                setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex));
-                validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
-            } catch (EOGeneralAdaptorException ex) {
-
-                if (shouldRecoverFromOptimisticLockingFailure() && ERXEOAccessUtilities.recoverFromAdaptorException(object().editingContext(), ex)) {
-                    errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext());
-                } else {
-                    throw ex;
-                }
-            } finally {
-                if (shouldRevert) {
-                    EOEditingContext context = object().editingContext();
-                    context.lock();
-                    try {
-                        context.revert();
-                    } finally {
-                        context.unlock();
-                    }
-                }
-            }
-
-        } else {
-            saved = true;
-        }
-        return saved;
+    		}
+    			saved = true;
+    		} catch (NSValidation.ValidationException ex) {
+    			setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex));
+    			validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
+    		} catch(EOGeneralAdaptorException ex) {
+    			if(ERXEOAccessUtilities.isOptimisticLockingFailure(ex) && shouldRecoverFromOptimisticLockingFailure()) {
+    				EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(ec, ex);
+    				setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext()));
+    				validationFailedWithException(ex, eo, "CouldNotSavePleaseReapply");
+    			} else {
+    				throw ex;
+    			}
+			} finally {
+				if( shouldRevert ) {
+					ec.lock();
+					try {
+						ec.revert();
+					} finally {
+						ec.unlock();
+					}
+				}
+			}
+    	} else {
+    		saved = true;
+    	}
+    	return saved;
     }
     
     public WOComponent submitAction() throws Throwable {
@@ -267,7 +269,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     /**
      * Generates other strings to be included in the WOGenericContainer tag for the propertyKey component cell.  This is
      * used in conjunction with the <code>firstResponderKey</code> to mark the cell where the propertyKey is that named 
-     * by the <code>firstResponderKey</code> so that the "focusing" JavaScript {@see #tabScriptString tabScriptString}
+     * by the <code>firstResponderKey</code> so that the "focusing" JavaScript {@link #tabScriptString tabScriptString}
      * can identify it.
      * @return a String to be included in the <code>td<td> tag for the propertyKey component cell.
      */
@@ -279,7 +281,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         return null;
     }
 
-    /**
+	/**
      * <p>Constructs a JavaScript string that will give a particular field focus when the page is loaded.  If the key
      * <code>firstResponderKey</code> from the d2wContext resolves, the script will attempt to focus on the form field
      * belonging to the property key named by the <code>firstResponderKey</code>.  Otherwise, the script will just focus
@@ -290,21 +292,21 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
      * @return a JavaScript string.
      */
     public String tabScriptString() {
-        if (d2wContext().valueForKey(Keys.firstResponderKey) != null) {
-            return scriptForFirstResponderActivation();
-        } else {
-            String result="";
-    		String formName = ERXWOForm.formName(context(), "EditForm");
+		if (d2wContext().valueForKey(Keys.firstResponderKey) != null) {
+			return scriptForFirstResponderActivation();
+		} else {
+			String result="";
+			String formName = ERXWOForm.formName(context(), "EditForm");
 			if (formName!=null) {
 				result="var elem = document."+formName+".elements[0];"+
 				"if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
 			}
 			return result;
-        }
+		}
     }
 
-    /**
-     * <p>Constructs a JavaScript string to include in the WOComponent that will give a particular field focus when the
+	/**
+	     * <p>Constructs a JavaScript string to include in the WOComponent that will give a particular field focus when the
      * page is loaded, if the key <code>firstResponderKey</code> from the d2wContext resolves.  The script will attempt
      * to focus on the form field belonging to the property key named by the <code>firstResponderKey</code>.
      * @return a JavaScript string to bring focus to a specific form element.
@@ -361,6 +363,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 
         return sb.toString();
     }
+
 }
 
 
