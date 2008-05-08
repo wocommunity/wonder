@@ -63,7 +63,7 @@ import com.webobjects.foundation.NSMutableArray;
  * Another more complex case is that you are introducing an entirely new table
  * that has a foreign key to some existing table:
  * </p>
- * <code>
+ * <code><pre>
  * ERXMigrationDatabase database = ERXMigrationDatabase.database(channel);
  * ERXMigrationTable table = ERXMigrationDatabase.database(channel).newTableNamed("TestPerson");
  * table.newStringColumn("FirstName", 100, false);
@@ -79,7 +79,7 @@ import com.webobjects.foundation.NSMutableArray;
  * table.newIntegerColumn("CompanyID", false);
  * table.create();
  * table.addForeignKey(table.existingColumnNamed("CompanyID"), database.existingTableNamed("Company").existingColumnNamed("companyID"));
- * </code>
+ * </pre></code>
  * 
  * <p>
  * In the above examples, database.existingTableNamed and
