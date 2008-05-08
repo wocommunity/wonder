@@ -87,6 +87,10 @@ public class ERXS {
 		return EOSortOrdering.sortedArrayUsingKeyOrderArray(array, orderings);
 	}
 
+	public static NSArray<EOSortOrdering> chain(EOSortOrdering... sortOrderings) {
+		return new NSArray<EOSortOrdering>(sortOrderings);
+	}
+
 	public static NSArray<EOSortOrdering> chain(NSArray<EOSortOrdering>... arr) {
 		NSMutableArray<EOSortOrdering> result = new NSMutableArray<EOSortOrdering>();
 		for (NSArray<EOSortOrdering> value : arr) {
