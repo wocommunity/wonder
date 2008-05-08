@@ -460,7 +460,6 @@ var ASB = AjaxSubmitButton;
 
 var AjaxObserveDelayer = Class.create({
 	delay: null,
-	shouldFireChangeEvent: false,
 	waiting: null,
 	lastValueChange: null,
 	submitFunction: null,
@@ -478,26 +477,23 @@ var AjaxObserveDelayer = Class.create({
 		this.value = value;
 		this.lastValueChange = new Date().getTime();
 		
-		if (this.waiting) {
-			this.shouldFireChangeEvent = false;
-		}
-		else {
-			this.shouldFireChangeEvent = true;
+		if (!this.waiting) {
 			this.waiting = true;
-			setTimeout(this.delayFinished.bind(this), this.delay);
+			var lastValueChange = this.lastValueChange;
+			setTimeout(this.delayFinished.bind(this, lastValueChange), this.delay);
 		}
 	},
 	
-	delayFinished: function() {
-		if (this.shouldFireChangeEvent) {
+	delayFinished: function(lastValueChange) {
+		if (lastValueChange == this.lastValueChange) {
 			this.waiting = false;
 			this.submitFunction(this.element, this.value);
 		}
 		else {
-			this.shouldFireChangeEvent = true;			
+			var newLastValueChange = this.lastValueChange;
 			var now = new Date().getTime();
-			var delayLeft = Math.max(0, this.delay - (now - this.lastValueChange));
-			setTimeout(this.delayFinished.bind(this), delayLeft);
+			var delayLeft = Math.max(250, this.delay - (now - newLastValueChange));
+			setTimeout(this.delayFinished.bind(this, newLastValueChange), delayLeft);
 		}
 	}
 });
