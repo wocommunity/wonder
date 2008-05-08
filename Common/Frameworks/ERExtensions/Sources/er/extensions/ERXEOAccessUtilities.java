@@ -1621,10 +1621,12 @@ public class ERXEOAccessUtilities {
  					else {
  						NSDictionary destinationPK = relationship._foreignKeyForSourceRow(sourceSnapshot);
  						EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
- 						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
- 						if (destinationSnapshot == null) {
- 							gids.addObject(destinationGID);
- 							//objectsWithUnfaultedRelationships.addObject(object);
+ 						if (destinationGID != null) {
+	 						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
+	 						if (destinationSnapshot == null) {
+	 							gids.addObject(destinationGID);
+	 							//objectsWithUnfaultedRelationships.addObject(object);
+	 						}
  						}
  					}
  				}
