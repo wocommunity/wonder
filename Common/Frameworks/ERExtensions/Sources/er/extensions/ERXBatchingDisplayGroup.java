@@ -43,6 +43,8 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	protected Boolean _isBatching;
 	
 	protected NSArray<String> _prefetchingRelationshipKeyPaths;
+	
+	protected int _rowCount = -1;
 
 	/**
 	 * If we're batching and the displayed objects have not been fetched,
@@ -72,7 +74,19 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		_isBatching = (eodatasource instanceof EODatabaseDataSource) ? Boolean.TRUE : Boolean.FALSE;
 		super.setDataSource(eodatasource);
 	}
-
+	
+	/**
+	 * Override the number of rows of results (if you can
+	 * provide a better estimate than the default behavior).  If you
+	 * guess too low, you will never get more than what you set, but
+	 * if you guess too high, it will adjust.
+	 *  
+	 * @param rowCount the number of rows of results 
+	 */
+	public void setRowCount(int rowCount) {
+		_rowCount = rowCount;
+	}
+	
 	/**
 	 * Overridden to return the pre-calculated number of batches
 	 */
@@ -214,7 +228,10 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		EOEditingContext ec = dataSource().editingContext();
 		EOFetchSpecification spec = fetchSpecification();
 
-		int rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, spec);
+		int rowCount = _rowCount;
+		if (rowCount == -1) {
+			rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, spec);
+		}
 		return rowCount;
 	}
 
@@ -287,6 +304,15 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		}
 		
 		_displayedObjects = objectsInRange(start, end);
+		
+		// MS: Adjust our guess of the row count if it was
+		// too high.
+		if (_rowCount != -1) {
+			int displayedObjectsCount = _displayedObjects.count();
+			if (displayedObjectsCount < numberOfObjectsPerBatch()) {
+				_rowCount = start + _displayedObjects.count();
+			}
+		}
 	}
 	
 	protected void updateBatchCount() {
