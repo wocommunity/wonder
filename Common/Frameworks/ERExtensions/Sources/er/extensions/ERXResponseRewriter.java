@@ -409,7 +409,7 @@ public class ERXResponseRewriter {
 	 */
 	public static void resourceAddedToHead(WOContext context, String frameworkName, String resourceName) {
 		NSMutableSet<String> addedResources = ERXResponseRewriter.resourcesAddedToHead(context);
-		addedResources.add(frameworkName + "." + resourceName);
+		addedResources.addObject(frameworkName + "." + resourceName);
 	}
 
 	/**
