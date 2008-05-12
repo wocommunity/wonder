@@ -49,6 +49,7 @@ import com.webobjects.foundation.NSValidation;
  * <li> At the moment it is required that those wishing to take advantage of
  * templatized and localized validation exceptions need to subclass this class.
  * Hopefully in the future we can get rid of this requirement. <br />
+ * </ul>
  * Also, this class supports auto-updating of inverse relationships. You can
  * simply call <code>eo.setFoo(other), eo.takeValueForKey(other),
  * eo.addObjectToBothSidesOfRelationshipWithKey(other, "foo")</code>
