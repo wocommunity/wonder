@@ -1091,7 +1091,7 @@ public class ERXSQLHelper {
 	protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
 		return expression.sqlStringForValue(value, key);
 	}
-
+	
 	/**
 	 * Splits semicolon-separate sql statements into an array of strings
 	 * 
@@ -1119,7 +1119,12 @@ public class ERXSQLHelper {
 					statementBuffer.setLength(0);
 				}
 				else {
-					if (ch == '\'') {
+					// Support for escaping apostrophes, e.g. 'Mike\'s Code' 
+					if (inQuotes && ch == '\\') {
+						statementBuffer.append(ch);
+						ch = sql.charAt(++ i);
+					}
+					else if (ch == '\'') {
 						inQuotes = !inQuotes;
 					}
 					statementBuffer.append(ch);
@@ -1131,6 +1136,11 @@ public class ERXSQLHelper {
 			}
 		}
 		return statements;
+	}
+	
+	public static void main(String[] args) {
+		String str = "insert into values ('hi Mike\\'s thing'); insert into ('this');";
+		System.out.println("ERXSQLHelper.main: " + ERXSQLHelper.newSQLHelper("FrontBase").splitSQLStatements(str));
 	}
 
 	/**
