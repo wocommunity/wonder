@@ -1234,7 +1234,57 @@ public class ERXEOAccessUtilities {
         }
         return arr;
     }
+    
+    /**
+     * Returns the source attribute for the relationship named relationshipName on entity.  Assumes there is only one join.
+     *
+     * @param entity EOEntity to find relationship on
+     * @param relationshipName name of relationship on entity
+     * @return source attribute for the relationship
+     */
+    public static EOAttribute sourceAttributeForRelationship(EOEntity entity, String relationshipName)
+    {
+        EORelationship relationship = entity.relationshipNamed(relationshipName);
+        return sourceAttributeForRelationship(relationship);
+    }
 
+    /**
+     * Returns the source attribute for the relationship.  Assumes there is only one join.
+     *
+     * @param relationship relationship on entity to return source attribute for
+     * @return source attribute for the relationship
+     */
+    public static EOAttribute sourceAttributeForRelationship(EORelationship relationship)
+    {
+        EOJoin join = (EOJoin)relationship.joins().objectAtIndex(0);
+        return join.sourceAttribute();
+    }
+
+    /**
+     * Returns the external column name for the source attribute for the relationship named relationshipName on entity.  Assumes there is only one join.
+     * This is intend to support the *RowsDescribedByQualifier methods when used with relationships.
+     *
+     * @param entity EOEntity to find relationship on
+     * @param relationshipName name of relationship on entity
+     * @return the external column name for the source attribute for the relationship
+     */
+    public static String sourceColumnForRelationship(EOEntity entity, String relationshipName)
+    {
+        EORelationship relationship = entity.relationshipNamed(relationshipName);
+        return sourceColumnForRelationship(relationship);
+    }
+
+    /**
+     * Returns the external column name for the source attribute for the relationship named relationshipName on entity.  Assumes there is only one join.
+     * This is intend to support the *RowsDescribedByQualifier methods when used with relationships.
+     *
+     * @param relationship relationship on entity to return the external column name for the source attribute for
+     * @return the external column name for the source attribute for the relationship
+     */
+    public static String sourceColumnForRelationship(EORelationship relationship)
+    {
+        return sourceAttributeForRelationship(relationship).columnName();
+    }
 
     public static EOEnterpriseObject refetchFailedObject(EOEditingContext ec, EOGeneralAdaptorException e) {
         EOAdaptorOperation adaptorOp = (EOAdaptorOperation) e.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
