@@ -30,8 +30,8 @@ import com.webobjects.foundation.NSTimestamp;
  * <li>the users don't get the adaptor timeout and won't get redirected to an
  * instance that doesn't know anything about the session.</li>
  * <li>the users get immediate feedback with no code changes on your part.</li>
- * <li>the handler tries to cancels active requests that are over
- * maxRequestTime*5, which should mean no more session deadlocks.</li>
+ * <li>the handler tries to cancels active requests that take too long (default
+ * is maxRequestTimeSeconds*5), which should mean no more session deadlocks.</li>
  * <li>you can subclass this handler to provide for better responses.</li>
  * <li>you can provide a simple style sheet for the default refresh page.</li>
  * </ul>
@@ -50,8 +50,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	private ExecutorService _executor;
 	private String _cssUrl;
 
-	private int _refresh;
-	private int _maxRequestTime;
+	private int _refreshTimeSeconds;
+	private int _maxRequestTimeMillis;
 
 	/**
 	 * Helper to wrap a future and the accompanying request.
@@ -147,20 +147,22 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	/**
 	 * Creates a request handler instance.
 	 * 
-	 * @param refresh
-	 *            time for the refresh of the page
-	 * @param maxRequestTime
-	 *            time that a request can take at most before the delayed page
-	 *            is returned.
+	 * @param refreshTimeSeconds
+	 *            time in seconds for the refresh of the page
+	 * @param maxRequestTimeSeconds
+	 *            time in seconds that a request can take at most before the delayed page
+	 *            is returned
+	 * @param cancelRequestAfterSeconds
+	 *            time in seconds that a request can take at most before it is cancelled
 	 * @param cssUrl
 	 *            url for a style sheet for the message page
 	 */
-	public ERXDelayedRequestHandler(int refresh, int maxRequestTime, String cssUrl) {
+	public ERXDelayedRequestHandler(int refreshTimeSeconds, int maxRequestTimeSeconds, int cancelRequestAfterSeconds, String cssUrl) {
 		_cssUrl = cssUrl;
-		_refresh = refresh;
-		_maxRequestTime = maxRequestTime;
+		_refreshTimeSeconds = refreshTimeSeconds;
+		_maxRequestTimeMillis = maxRequestTimeSeconds*1000;
 		_executor = Executors.newCachedThreadPool();
-		_futures = new ERXExpiringCache<String, DelayedRequest>(refresh() * 5) {
+		_futures = new ERXExpiringCache<String, DelayedRequest>(cancelRequestAfterSeconds) {
 			@Override
 			protected synchronized void removeEntryForKey(Entry<DelayedRequest> entry, String key) {
 				DelayedRequest request = entry.object();
@@ -177,26 +179,39 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 				super.removeEntryForKey(entry, key);
 			}
 		};
-		_urls = new ERXExpiringCache(refresh() * 50);
+		_urls = new ERXExpiringCache<String, String>(refresh() * 50);
 	}
 
 	/**
-	 * Creates a handler with the supplied values for refresh and
-	 * maxRequestTime.
+	 * Creates a handler with the supplied values for refreshTimeSeconds, maxRequestTimeSeconds and
+	 * maxRequestTimeSeconds.
 	 * 
-	 * @param refresh
-	 * @param maxRequestTime
+	 * @param refreshTimeSeconds
+	 * @param maxRequestTimeSeconds
+	 * @param cancelRequestAfterSeconds
 	 */
-	public ERXDelayedRequestHandler(int refresh, int maxRequestTime) {
-		this(refresh, maxRequestTime, null);
+	public ERXDelayedRequestHandler(int refreshTimeSeconds, int maxRequestTimeSeconds, int cancelRequestAfterSeconds) {
+		this(refreshTimeSeconds, maxRequestTimeSeconds, cancelRequestAfterSeconds, null);
+	}
+	
+	
+	/**
+	 * Creates a handler with the supplied values for refreshTimeSeconds and
+	 * maxRequestTimeSeconds. cancelRequestAfterSeconds is set o 5*maxRequestTimeSeconds.
+	 * 
+	 * @param refreshTimeSeconds
+	 * @param maxRequestTimeSeconds
+	 */
+	public ERXDelayedRequestHandler(int refreshTimeSeconds, int maxRequestTimeSeconds) {
+		this(refreshTimeSeconds, maxRequestTimeSeconds, maxRequestTimeSeconds*5, null);
 	}
 
 	/**
 	 * Creates a handler with the default values of 5 second refresh and 5
-	 * seconds maxRequestTime.
+	 * seconds maxRequestTime. Requests taking longer than 25 seconds are cancelled.
 	 */
 	public ERXDelayedRequestHandler() {
-		this(5, 5000, null);
+		this(5, 5);
 	}
 
 	/**
@@ -305,7 +320,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 			// AK: this double assignment is not an error. The future will try
 			// to get the value. When we time out, the old value from above will
 			// be returned. If we don't, then the real response is used.
-			response = delayedRequest.response(maxRequestTime());
+			response = delayedRequest.response(maxRequestTimeMillis());
 			_futures.removeObjectForKey(id);
 			_urls.setObjectForKey(delayedRequest.request().uri(), id);
 		}
@@ -333,6 +348,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * @param request
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	protected WOResponse createErrorResponse(WORequest request) {
 		final ERXApplication app = ERXApplication.erxApplication();
 		String args = (request.sessionID() != null ? "/" + request.sessionID() : "");
@@ -389,7 +405,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		}
 		result.appendContentString("</head>\n<body id=\"ERXDelayedRefreshPage\">");
 		result.appendContentString("<h1>Please stand by...</h1>\n");
-		result.appendContentString("<p class=\"busyMessage\">The action you selected is taking longer than " + (maxRequestTime() / 1000) + " seconds. The result will be shown as soon as it is ready.</p>\n");
+		result.appendContentString("<p class=\"busyMessage\">The action you selected is taking longer than " + (maxRequestTimeMillis() / 1000) + " seconds. The result will be shown as soon as it is ready.</p>\n");
 		result.appendContentString("<p class=\"refreshMessage\">This page will refresh automatically in " + refresh() + " seconds.</p>\n");
 		result.appendContentString("<p class=\"actions\">");
 		result.appendContentString("<a href=\"" + url + "\" class=\"refreshLink\">Refresh now</a> ");
@@ -404,7 +420,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * @return
 	 */
 	protected int refresh() {
-		return _refresh;
+		return _refreshTimeSeconds;
 	}
 
 	/**
@@ -413,8 +429,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * 
 	 * @return
 	 */
-	protected int maxRequestTime() {
-		return _maxRequestTime;
+	protected int maxRequestTimeMillis() {
+		return _maxRequestTimeMillis;
 	}
 
 	/**
