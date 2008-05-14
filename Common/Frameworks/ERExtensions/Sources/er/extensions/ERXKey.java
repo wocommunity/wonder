@@ -1,7 +1,6 @@
 package er.extensions;
 
 import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSTimestamp;
@@ -50,7 +49,7 @@ public class ERXKey<T> {
 	 * Equivalent to ERXS.asc(key())
 	 * @return asc sort ordering for key
 	 */
-	public EOSortOrdering asc() {
+	public ERXSortOrdering asc() {
 		return ERXS.asc(key());
 	}
 
@@ -58,7 +57,7 @@ public class ERXKey<T> {
 	 * Equivalent to ERXS.ascs(key())
 	 * @return asc sort ordering for key
 	 */
-	public NSArray<EOSortOrdering> ascs() {
+	public ERXSortOrdering.ERXSortOrderings ascs() {
 		return ERXS.ascs(key());
 	}
 
@@ -66,7 +65,7 @@ public class ERXKey<T> {
 	 * Equivalent to ERXS.desc(key())
 	 * @return desc sort ordering for key
 	 */
-	public EOSortOrdering desc() {
+	public ERXSortOrdering desc() {
 		return ERXS.desc(key());
 	}
 
@@ -74,7 +73,7 @@ public class ERXKey<T> {
 	 * Equivalent to ERXS.descs(key())
 	 * @return desc sort ordering for key
 	 */
-	public NSArray<EOSortOrdering> descs() {
+	public ERXSortOrdering.ERXSortOrderings descs() {
 		return ERXS.descs(key());
 	}
 
@@ -82,7 +81,7 @@ public class ERXKey<T> {
 	 * Equivalent to ERXS.ascInsensitive(key())
 	 * @return ascInsensitive sort ordering for key
 	 */
-	public EOSortOrdering ascInsensitive() {
+	public ERXSortOrdering ascInsensitive() {
 		return ERXS.ascInsensitive(key());
 	}
 
@@ -90,7 +89,7 @@ public class ERXKey<T> {
 	 * Equivalent to ERXS.ascInsensitives(key())
 	 * @return ascInsensitive sort ordering for key
 	 */
-	public NSArray<EOSortOrdering> ascInsensitives() {
+	public ERXSortOrdering.ERXSortOrderings ascInsensitives() {
 		return ERXS.ascInsensitives(key());
 	}
 
@@ -98,7 +97,7 @@ public class ERXKey<T> {
 	 * Equivalent to ERXS.descInsensitive(key())
 	 * @return descInsensitive sort ordering for key
 	 */
-	public EOSortOrdering descInsensitive() {
+	public ERXSortOrdering descInsensitive() {
 		return ERXS.descInsensitive(key());
 	}
 
@@ -106,7 +105,7 @@ public class ERXKey<T> {
 	 * Equivalent to ERXS.descInsensitives(key())
 	 * @return descInsensitive sort ordering for key
 	 */
-	public NSArray<EOSortOrdering> descInsensitives() {
+	public ERXSortOrdering.ERXSortOrderings descInsensitives() {
 		return ERXS.descInsensitives(key());
 	}
 	
