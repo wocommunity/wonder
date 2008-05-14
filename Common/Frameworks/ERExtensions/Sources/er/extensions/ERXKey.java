@@ -55,11 +55,27 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Equivalent to ERXS.ascs(key())
+	 * @return asc sort ordering for key
+	 */
+	public NSArray<EOSortOrdering> ascs() {
+		return ERXS.ascs(key());
+	}
+
+	/**
 	 * Equivalent to ERXS.desc(key())
 	 * @return desc sort ordering for key
 	 */
 	public EOSortOrdering desc() {
 		return ERXS.desc(key());
+	}
+
+	/**
+	 * Equivalent to ERXS.descs(key())
+	 * @return desc sort ordering for key
+	 */
+	public NSArray<EOSortOrdering> descs() {
+		return ERXS.descs(key());
 	}
 
 	/**
@@ -71,11 +87,27 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Equivalent to ERXS.ascInsensitives(key())
+	 * @return ascInsensitive sort ordering for key
+	 */
+	public NSArray<EOSortOrdering> ascInsensitives() {
+		return ERXS.ascInsensitives(key());
+	}
+
+	/**
 	 * Equivalent to ERXS.descInsensitive(key())
 	 * @return descInsensitive sort ordering for key
 	 */
 	public EOSortOrdering descInsensitive() {
 		return ERXS.descInsensitive(key());
+	}
+
+	/**
+	 * Equivalent to ERXS.descInsensitives(key())
+	 * @return descInsensitive sort ordering for key
+	 */
+	public NSArray<EOSortOrdering> descInsensitives() {
+		return ERXS.descInsensitives(key());
 	}
 	
 	/**
