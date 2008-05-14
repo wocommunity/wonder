@@ -319,7 +319,8 @@ public class ERXRuntimeUtilities {
         Process p = null;
         StreamReader isr = null;
         StreamReader esr = null;
-        try {
+        Result result;
+		try {
             if (log.isDebugEnabled()) {
                 log.debug("Will execute command " +  new NSArray<String>(command).componentsJoinedByString(" "));
             }
@@ -365,7 +366,14 @@ public class ERXRuntimeUtilities {
                 } catch (InterruptedException ex) {
                 }
             }
-            if (isr.getException() != null) {
+        } finally {
+        	// Getting stream results before freeing process resources to prevent a case
+        	// when fast process is destroyed before stream readers read from buffers.
+        	result = new Result(exitValue, isr.getResult(), esr.getResult());
+
+        	// Checking exceptions after getting results to ensure that stream readers
+        	// had already read their buffers by the time of check.
+        	if (isr.getException() != null) {
                 log.error("input stream reader got exception,\n      "+
                         "command = "+ERXStringUtilities.toString(command, " ")+
                         "result = "+isr.getResultAsString(), isr.getException());
@@ -376,13 +384,12 @@ public class ERXRuntimeUtilities {
                         "result = "+esr.getResultAsString(), esr.getException());
             }
 
-        } finally {
             freeProcessResources(p);
 
             if (outputFile != null)
                 outputFile.delete();
         }
-        return new Result(exitValue, isr.getResult(), esr.getResult());
+        return result;
 
     }
 
