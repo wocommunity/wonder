@@ -1137,11 +1137,6 @@ public class ERXSQLHelper {
 		}
 		return statements;
 	}
-	
-	public static void main(String[] args) {
-		String str = "insert into values ('hi Mike\\'s thing'); insert into ('this');";
-		System.out.println("ERXSQLHelper.main: " + ERXSQLHelper.newSQLHelper("FrontBase").splitSQLStatements(str));
-	}
 
 	/**
 	 * Splits the SQL statements from the given input stream
