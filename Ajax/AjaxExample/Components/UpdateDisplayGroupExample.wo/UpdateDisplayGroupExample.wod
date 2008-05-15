@@ -13,6 +13,7 @@ Editor : AjaxUpdateContainer {
 
 Form1: WOForm {
 	class = "editor";
+	onsubmit = "saveChanges(); return false;";
 }
 
 Millis: WOString {
@@ -37,6 +38,14 @@ SaveButton: AjaxSubmitButton {
 	value = "Save";
 	onClick = "$('editor').hide();";
 	updateContainerID = "tableBody";
+}
+
+SaveFunction: AjaxSubmitButton {
+	action = save;
+	value = "Save";
+	onClick = "$('editor').hide();";
+	updateContainerID = "tableBody";
+	functionName = "saveChanges";
 }
 
 SelectObject : AjaxUpdateLink {
