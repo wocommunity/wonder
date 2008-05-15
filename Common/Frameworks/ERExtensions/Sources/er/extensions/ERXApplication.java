@@ -725,9 +725,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		registerRequestHandler(new ERXDirectActionRequestHandler(), directActionRequestHandlerKey());
 		if (isDirectConnectEnabled()) {
 			registerRequestHandler(new ERXStaticResourceRequestHandler(), "_wr_");
-			if (ERXApplication.isWO54()) {
-				registerRequestHandler(new ERXStaticResourceRequestHandler(), "wr");
-			}
 		}
 		registerRequestHandler(new ERXDirectActionRequestHandler(ERXDirectAction.class.getName(), "stats", false), "erxadm");
 		// AK: remove comment to get delayed request handling
