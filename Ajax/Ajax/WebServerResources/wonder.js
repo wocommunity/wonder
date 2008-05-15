@@ -382,7 +382,12 @@ var AjaxSubmitButton = {
 		queryParams[AjaxSubmitButton.PartialFormSenderIDKey] = formField.name;
 		optionsCopy['parameters'] = Hash.toQueryString(queryParams);
 		
-		AjaxSubmitButton.update(updateContainerID, form, null, optionsCopy);
+		if (updateContainerID == null) {
+			AjaxSubmitButton.request(form, null, optionsCopy);
+		}
+		else {
+			AjaxSubmitButton.update(updateContainerID, form, null, optionsCopy);
+		}
 	},
 	
 	update: function(id, form, queryParams, options) {
