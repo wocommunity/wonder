@@ -13,4 +13,9 @@
 		<binding name="class"/>
 	<binding defaults="Boolean" name="ajax"/>
     </wo>
+    
+    <validation message = "If 'ajax' is bound, 'id' must also be bound.">
+    	<bound name = "ajax"/>
+    	<unbound name = "id"/>
+    </validation>
 </wodefinitions>
