@@ -12,3 +12,8 @@ wonder.js
 
 prototype.js
 * descendantOf: Applied http://dev.rubyonrails.org/ticket/10413
+
+ibox.js:
+* added _pub.init function to support reinitializing iBox
+* added X-Requested-With header so iBox requests are recognized as Ajax requests
+ 
