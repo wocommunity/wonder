@@ -458,6 +458,10 @@ var iBox = function()
           _pub.plugins.list.push(func);
         }
       }
+    },
+    
+    init: function() {
+    	initialize();
     }
   };
   
@@ -798,6 +802,7 @@ var iBox = function()
           }
         }
         _pub.http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        _pub.http.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         _pub.http.send(null);
       }
     };
