@@ -3,7 +3,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXLoremIpsumGenerator;
+import er.ajax.example.ExampleDataFactory;
+import er.ajax.example.Product;
 
 public class AjaxSelectionListExample extends com.webobjects.appserver.WOComponent {
 	private NSMutableArray<Product> _products;
@@ -13,13 +14,7 @@ public class AjaxSelectionListExample extends com.webobjects.appserver.WOCompone
 
 	public AjaxSelectionListExample(WOContext context) {
 		super(context);
-		_products = new NSMutableArray<Product>();
-		for (int i = 0; i < 30; i++) {
-			String title = ERXLoremIpsumGenerator.words(1, 5);
-			String summary = ERXLoremIpsumGenerator.paragraph();
-			Product product = new Product(title, summary);
-			_products.addObject(product);
-		}
+		_products = ExampleDataFactory.products(30);
 	}
 
 	public NSArray<Product> products() {
@@ -64,33 +59,5 @@ public class AjaxSelectionListExample extends com.webobjects.appserver.WOCompone
 	public WOActionResults toggleAjax() {
 		_ajax = !_ajax;
 		return null;
-	}
-
-	public static final class Product {
-		private String _title;
-		private String _summary;
-
-		public Product(String title, String summary) {
-			_title = title;
-			_summary = summary;
-		}
-
-		public String title() {
-			return _title;
-		}
-
-		public String summary() {
-			return _summary;
-		}
-
-		public String partialSummary() {
-			int length = Math.min(30, _summary.length());
-			return _summary.substring(0, 30) + " ...";
-		}
-
-		@Override
-		public String toString() {
-			return "[Product: " + _title + "]";
-		}
 	}
 }

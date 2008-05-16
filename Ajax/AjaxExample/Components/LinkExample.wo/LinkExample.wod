@@ -50,7 +50,7 @@ Now : WOString {
 }
 
 Word : WOString {
-	value = repetitionWord;
+	value = repetitionWord.name;
 }
 
 WordAction : AjaxUpdateLink {

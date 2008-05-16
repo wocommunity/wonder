@@ -5,6 +5,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.ajax.example.ComplexPerson;
+
 public class ExampleService {
 	public void printThisString(String string) {
 		System.out.println("ExampleService.printThisString: " + string);
