@@ -1,3 +1,4 @@
+package er.ajax.example;
 
 public class SimplePerson {
 	private String _name;

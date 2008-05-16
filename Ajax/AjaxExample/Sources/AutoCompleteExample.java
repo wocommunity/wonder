@@ -9,19 +9,22 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.ajax.example.ExampleDataFactory;
+import er.ajax.example.Word;
+
 
 public class AutoCompleteExample extends WOComponent {
     
 	static Logger log = Logger.getLogger(AutoCompleteExample.class);
 
 	public String value;
-    public ExampleData currentValue;
+    public Word currentValue;
     
     public NSArray allValues;
 
     public AutoCompleteExample(WOContext context) {
     	super(context);
-    	allValues = ExampleData.exampleValues();
+    	allValues = ExampleDataFactory.allWords();
     }
 
     /**
@@ -31,7 +34,7 @@ public class AutoCompleteExample extends WOComponent {
     public NSArray currentValues() {
         NSMutableArray result = new NSMutableArray();
         for(Enumeration e = allValues.objectEnumerator(); e.hasMoreElements() && result.count() < 10;) {
-        	ExampleData c = (ExampleData) e.nextElement();
+        	Word c = (Word) e.nextElement();
             if(value == null || c.name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 result.addObject(c);
             }

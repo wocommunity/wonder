@@ -5,22 +5,20 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.ajax.AjaxUpdateTrigger;
 import er.ajax.AjaxUtils;
+import er.ajax.example.ExampleDataFactory;
+import er.ajax.example.Word;
 
 public class LinkExample extends WOComponent {
   private boolean _showingSubComponent1;
   public NSMutableArray _words;
-  public String _repetitionWord;
-  public String _selectedWord; 
+  public Word _repetitionWord;
+  public Word _selectedWord; 
 
   public LinkExample(WOContext context) {
     super(context);
     _showingSubComponent1 = true;
-    _words = new NSMutableArray();
-    for (int i = 0; i < 10; i ++) {
-      _words.addObject("Word #" + i);
-    }
+    _words = ExampleDataFactory.randomWords(10);
   }
 
   public WOActionResults wordSelected() {

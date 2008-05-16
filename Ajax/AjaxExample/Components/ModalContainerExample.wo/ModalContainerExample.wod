@@ -10,6 +10,16 @@ ContentBox: AjaxModalContainer {
 	title = "Super cool title";
 }
 
+RepetitionBox: AjaxModalContainer {
+	label = "edit";
+	width = 300;
+	height = 400;
+	closeLabel = "Close me";
+	title = "Repetition Box";
+	ajax = true;
+	id = wordID;
+}
+
 ActionBox: AjaxModalContainer {
 	label = "Click me to show";
 	width = 300;
@@ -38,5 +48,28 @@ HrefBox: AjaxModalContainer {
 }
 
 Form: WOForm {
-	
+	multipleSubmit = true;
+}
+
+WordsRepetition : WORepetition {
+  list = words;
+  item = repetitionWord;
+}
+
+WordsContainer : AjaxUpdateContainer {
+  id = "repetitionContainer";
+}
+
+RepetitionWordName : WOString {
+  value = repetitionWord.name;
+}
+
+WordNameField : WOTextField {
+  value = repetitionWord.name;
+}
+
+WordSubmitButton : AjaxSubmitButton {
+  updateContainerID = "repetitionContainer";
+  value = "Save";
+  onClick = "parent.iBox.hide()";
 }

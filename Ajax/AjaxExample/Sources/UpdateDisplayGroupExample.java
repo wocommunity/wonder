@@ -9,37 +9,39 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 
+import er.ajax.example.Word;
+import er.ajax.example.ExampleDataFactory;
+
 public class UpdateDisplayGroupExample extends WOComponent {
 	private static final Logger log = Logger.getLogger(UpdateDisplayGroupExample.class);
-	
+
 	public WODisplayGroup dg;
-	public ExampleData current;
-	
+	public Word current;
+
 	public UpdateDisplayGroupExample(WOContext context) {
 		super(context);
 		dg = new WODisplayGroup();
-		dg.setObjectArray(ExampleData.exampleValues());
+		dg.setObjectArray(ExampleDataFactory.allWords());
 		dg.setNumberOfObjectsPerBatch(20);
 	}
-	
+
 	private void setSortOrder(String name) {
 		NSArray oldArray = dg.sortOrderings();
 		EOSortOrdering oldOrdering = null;
 		EOSortOrdering newOrdering = null;
-		if(oldArray != null) {
-			oldOrdering = (EOSortOrdering)oldArray.lastObject();
+		if (oldArray != null) {
+			oldOrdering = (EOSortOrdering) oldArray.lastObject();
 		}
-		if(oldOrdering != null && oldOrdering.key().equals(name)) {
-			newOrdering = EOSortOrdering.sortOrderingWithKey(name, 
-					oldOrdering.selector() == EOSortOrdering.CompareDescending ?
-							EOSortOrdering.CompareAscending :EOSortOrdering.CompareDescending);
-		} else {
+		if (oldOrdering != null && oldOrdering.key().equals(name)) {
+			newOrdering = EOSortOrdering.sortOrderingWithKey(name, oldOrdering.selector() == EOSortOrdering.CompareDescending ? EOSortOrdering.CompareAscending : EOSortOrdering.CompareDescending);
+		}
+		else {
 			newOrdering = EOSortOrdering.sortOrderingWithKey(name, EOSortOrdering.CompareAscending);
 		}
 		dg.setSortOrderings(new NSArray(newOrdering));
 		dg.qualifyDisplayGroup();
 	}
-	
+
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		super.takeValuesFromRequest(worequest, wocontext);
 	}
@@ -51,25 +53,25 @@ public class UpdateDisplayGroupExample extends WOComponent {
 	public void sortByName() {
 		setSortOrder("name");
 	}
-	
+
 	public void sortByValue() {
 		setSortOrder("value");
 	}
-	
+
 	public void nextBatch() {
 		dg.displayNextBatch();
 		dg.setSelectedObject(null);
 	}
-	
+
 	public void previousBatch() {
 		dg.displayPreviousBatch();
 		dg.setSelectedObject(null);
 	}
-	
+
 	public void selectObject() {
 		dg.setSelectedObject(current);
 	}
-	
+
 	public void save() {
 		// do nothing
 		log.info(dg.selectedObject());
