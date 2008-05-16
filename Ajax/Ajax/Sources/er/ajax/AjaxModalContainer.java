@@ -62,6 +62,9 @@ public class AjaxModalContainer extends AjaxDynamicElement {
                 href = context.componentActionURL();
             }
             else if (booleanValueForBinding("ajax", false, component)) {
+            	if (valueForBinding("id", component) == null) {
+    				throw new IllegalArgumentException("If ajax = 'true', you must also bind 'id'.");
+            	}
             	href = AjaxUtils.ajaxComponentActionUrl(context);
             }
             if(href == null) {
@@ -118,11 +121,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         WOComponent component = context.component();
     	if (booleanValueForBinding("ajax", false, component) && hasChildrenElements()) {
 			response = AjaxUtils.createResponse(request, context);
-			String id = _containerID(context);
-			if (id == null) {
-				throw new IllegalArgumentException("If ajax = 'true', you must also bind 'id'.");
-			}
-			AjaxUtils.setPageReplacementCacheKey(context, id);
+			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
 			appendChildrenToResponse(response, context);
     	}
         return response;
