@@ -4,8 +4,9 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
+
+import er.ajax.example.ExampleDataFactory;
 
 public class ToggleExample extends WOComponent {
 	public boolean _toggleAreaVisible;
@@ -20,7 +21,7 @@ public class ToggleExample extends WOComponent {
 	public ToggleExample(WOContext context) {
 		super(context);
 		_text = "This text should not change!";
-		_names = new NSMutableArray<String>(new String[] { "Name 1", "Name 2", "Name 3", "Name 4" });
+		_names = ExampleDataFactory.values("Name ", 4);
 		_selectedNames = new NSMutableSet<String>();
 	}
 

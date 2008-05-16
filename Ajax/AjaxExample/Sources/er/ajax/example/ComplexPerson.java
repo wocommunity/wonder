@@ -1,3 +1,5 @@
+package er.ajax.example;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
