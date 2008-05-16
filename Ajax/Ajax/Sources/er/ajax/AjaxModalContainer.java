@@ -25,6 +25,7 @@ import er.extensions.ERXWOContext;
  * @binding title title string for the link label and the window
  * @binding href when it is bound, the content of the url will be fetched into an iframe.
  * @binding action when it is bound, the content of the url will be fetched into a div
+ * @binding ajax (optional) when true, the contents are only rendered on during the Ajax request
  * 
  * @author timo
  * @author ak
@@ -35,6 +36,10 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         super(name, associations, children);
     }
 
+    public boolean shouldHandle(WOContext context) {
+    	return context.elementID().equals(context.senderID());
+    }
+    
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         WOAssociation action = (WOAssociation) associations().objectForKey("action");
         if(action != null && wocontext.elementID().equals(wocontext.senderID())) {
@@ -45,13 +50,19 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
-        String divID=ERXWOContext.safeIdentifierName(context, false);
+        String divID = (String)valueForBinding("id", component);
+        if (divID == null) {
+        	divID=ERXWOContext.safeIdentifierName(context, false);
+        }
         response.appendContentString("<a");
         String href = (String) valueForBinding("href", component);
         if(href == null) {
             if(associations().objectForKey("action") != null) {
             	// don't use ajax request handler here
                 href = context.componentActionURL();
+            }
+            else if (booleanValueForBinding("ajax", false, component)) {
+            	href = AjaxUtils.ajaxComponentActionUrl(context);
             }
             if(href == null) {
                 href = "#" + divID;
@@ -97,7 +108,23 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         addStylesheetResourceInHead(context, response, "ibox.css");
     }
 
+	protected String _containerID(WOContext context) {
+		String id = (String) valueForBinding("id", context.component());
+		return id;
+	}
+
     public WOActionResults handleRequest(WORequest request, WOContext context) {
-        return null;
+    	WOResponse response = null;
+        WOComponent component = context.component();
+    	if (booleanValueForBinding("ajax", false, component) && hasChildrenElements()) {
+			response = AjaxUtils.createResponse(request, context);
+			String id = _containerID(context);
+			if (id == null) {
+				throw new IllegalArgumentException("If ajax = 'true', you must also bind 'id'.");
+			}
+			AjaxUtils.setPageReplacementCacheKey(context, id);
+			appendChildrenToResponse(response, context);
+    	}
+        return response;
     }
 }
