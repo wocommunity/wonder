@@ -113,9 +113,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	private static int lowMemBufferSize = 0;
 
-	/** Holds the framework names during startup */
-	private static Set<String> allFrameworks;
-
 	/**
 	 * Notification to post when all bundles were loaded but before their
 	 * principal was called
@@ -135,8 +132,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * of this check.
 	 */
 	private static ThreadLocal<Boolean> isInRequest = new ThreadLocal<Boolean>();
-
-	private static Properties allBundleProps;
 
 	private static NSDictionary propertiesFromArgv;
 
@@ -193,96 +188,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 	}
 
-	/**
-	 * Will be called after each bundle load. We use it to know when the last
-	 * bundle loaded so we can post a notification for it. Note that the bundles
-	 * will get loaded in the order of the classpath but the main bundle will
-	 * get loaded last. So in order to set the properties correctly, we first
-	 * add all the props that are not already set, then we add the main bundle
-	 * and the WebObjects.properties and finally the command line props.
-	 * 
-	 * @param n
-	 */
-
-	public static void bundleDidLoad(NSNotification n) {
-		NSBundle bundle = (NSBundle) n.object();
-		// System.out.println(bundle.name() + ": " + allFrameworks);
-		allFrameworks.remove(bundle.name());
-		if (allBundleProps == null) {
-			allBundleProps = new Properties();
-		}
-
-		Properties bundleProps = bundle.properties();
-		if (bundleProps != null) {
-			for (Iterator iter = bundleProps.entrySet().iterator(); iter.hasNext();) {
-				Map.Entry entry = (Map.Entry) iter.next();
-				if (!allBundleProps.containsKey(entry.getKey())) {
-					allBundleProps.setProperty((String) entry.getKey(), (String) entry.getValue());
-				}
-			}
-		}
-
-		if (allFrameworks.size() == 0) {
-			Properties mainProps = null;
-			NSBundle mainBundle = null;
-			String mainBundleName = NSProperties._mainBundleName();
-			if (mainBundleName != null) {
-				mainBundle = NSBundle.bundleForName(mainBundleName);
-			}
-			if (mainBundle == null) {
-				mainBundle = NSBundle.mainBundle();
-			}
-			if (mainBundle == null) {
-				// AK: when we get here, the main bundle wasn't inited yet
-				// so we do it ourself...
-				try {
-					Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
-					ClassPath.setAccessible(true);
-					if (ClassPath.get(NSBundle.class) != null) {
-						Method init = NSBundle.class.getDeclaredMethod("InitMainBundle");
-						init.setAccessible(true);
-						init.invoke(NSBundle.class);
-					}
-				}
-				catch (Exception e) {
-					System.err.println(e);
-					e.printStackTrace();
-					System.exit(1);
-				}
-				mainBundle = NSBundle.mainBundle();
-			}
-			if (mainBundle != null) {
-				mainProps = NSBundle.mainBundle().properties();
-			}
-			if (mainProps == null) {
-				String woUserDir = NSProperties.getProperty("webobjects.user.dir");
-				if (woUserDir == null) {
-					woUserDir = System.getProperty("user.dir");
-				}
-				mainProps = readProperties(new File(woUserDir, "Contents" + File.separator + "Resources" + File.separator + "Properties"));
-			}
-
-			if (mainProps == null) {
-				throw new IllegalStateException("Main bundle 'Properties' file can't be read.\nPlease post your deployment configuration in the Wonder mailing list.");
-			}
-			allBundleProps.putAll(mainProps);
-
-			String userhome = System.getProperty("user.home");
-			if (userhome != null && userhome.length() > 0) {
-				Properties userProps = readProperties(new File(userhome, "WebObjects.properties"));
-				if (userProps != null) {
-					allBundleProps.putAll(userProps);
-				}
-			}
-
-			Properties props = NSProperties._getProperties();
-			props.putAll(allBundleProps);
-			NSProperties._setProperties(props);
-			insertCommandLineArguments();
-			NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
-		}
-	}
-
 	static class AppClassLoader extends URLClassLoader {
 
 		public static ClassLoader getAppClassLoader() {
@@ -329,7 +234,212 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 	}
 
-	private static boolean isSystemJar(String jar) {
+	private static Loader _loader;
+
+	/**
+	 * Responsible for classpath munging.
+	 * 
+	 *
+	 * @author ak
+	 */
+	public static class Loader {
+
+		private JarChecker _checker;
+
+		/** Holds the framework names during startup */
+		private Set<String> allFrameworks;
+
+		private Properties allBundleProps;
+
+		/**
+		 * Called prior to actually initializing the app. Defines framework load
+		 * order, class path order, checks patches etc.
+		 */
+		public Loader(String[] argv) {
+			wasERXApplicationMainInvoked = true;
+			String cps[] = new String[] { "java.class.path", "com.webobjects.classpath" };
+			propertiesFromArgv = NSProperties.valuesFromArgv(argv);
+			allFrameworks = new HashSet<String>();
+			_checker = new JarChecker();
+
+			for (int var = 0; var < cps.length; var++) {
+				String cpName = cps[var];
+				String cp = System.getProperty(cpName);
+				if (cp != null) {
+					String parts[] = cp.split(File.pathSeparator);
+					String normalLibs = "";
+					String systemLibs = "";
+					String jarLibs = "";
+					String frameworkPattern = ".*?/(\\w+)\\.framework/Resources/Java/\\1.jar".toLowerCase();
+					String appPattern = ".*?/(\\w+)\\.woa/Contents/Resources/Java/\\1.jar".toLowerCase();
+					String folderPattern = ".*?/Resources/Java/?$".toLowerCase();
+					for (int i = 0; i < parts.length; i++) {
+						String jar = parts[i];
+						// Windows has \, we need to normalize
+						String fixedJar = jar.replace(File.separatorChar, '/').toLowerCase();
+						// System.out.println("Checking: " + jar);
+						// all patched frameworks here
+						if (isSystemJar(jar)) {
+							systemLibs += jar + File.pathSeparator;
+						}
+						else if (fixedJar.matches(frameworkPattern) || fixedJar.matches(appPattern) || fixedJar.matches(folderPattern)) {
+							normalLibs += jar + File.pathSeparator;
+						}
+						else {
+							jarLibs += jar + File.pathSeparator;
+						}
+						String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
+						String excludes = "(JavaVM)";
+						if (isWO54()) {
+							excludes = "(JavaVM|JavaWebServicesSupport|JavaEODistribution|JavaWebServicesGeneration|JavaWebServicesClient)";
+						}
+						if (bundle.matches("^\\w+$") && !bundle.matches(excludes)) {
+							String info = jar.replaceAll("(.*?[/\\\\]\\w+\\.framework/Resources/).*", "$1Info.plist");
+							if (new File(info).exists()) {
+								allFrameworks.add(bundle);
+							}
+							else {
+								// System.out.println("Omitted: " + info);
+							}
+						}
+						else if (jar.endsWith(".jar")) {
+							String info = stringFromJar(jar, "Resources/Info.plist");
+							if (info != null) {
+								NSDictionary dict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(info);
+								bundle = (String) dict.objectForKey("CFBundleExecutable");
+								allFrameworks.add(bundle);
+								// System.out.println("Jar bundle: " + bundle);
+							}
+						}
+					}
+					String newCP = "";
+					if (normalLibs.length() > 1) {
+						normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
+						newCP += normalLibs;
+					}
+					if (systemLibs.length() > 1) {
+						systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
+						newCP += (newCP.length() > 0 ? File.pathSeparator : "") + systemLibs;
+					}
+					if (jarLibs.length() > 1) {
+						jarLibs = jarLibs.substring(0, jarLibs.length() - 1);
+						newCP += (newCP.length() > 0 ? File.pathSeparator : "") + jarLibs;
+					}
+					String jars[] = newCP.split(File.pathSeparator);
+					for (int i = 0; i < jars.length; i++) {
+						String jar = jars[i];
+						_checker.processJar(jar);
+					}
+					// AK: this is pretty experimental for now. The classpath
+					// reordering
+					// should actually be done in a WOLips bootstrap because as this
+					// time all
+					// the static inits of WO app have already happened (which
+					// include NSMutableArray and _NSThreadSaveSet)
+					if (System.getProperty("_DisableClasspathReorder") == null) {
+						System.setProperty(cpName, newCP);
+					}
+				}
+			}
+			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
+		}
+		
+		public boolean didLoad() {
+			return (allFrameworks != null && allFrameworks.size() == 0);
+		}
+
+		
+		/**
+		 * Will be called after each bundle load. We use it to know when the last
+		 * bundle loaded so we can post a notification for it. Note that the bundles
+		 * will get loaded in the order of the classpath but the main bundle will
+		 * get loaded last. So in order to set the properties correctly, we first
+		 * add all the props that are not already set, then we add the main bundle
+		 * and the WebObjects.properties and finally the command line props.
+		 * 
+		 * @param n
+		 */
+
+		public void bundleDidLoad(NSNotification n) {
+			NSBundle bundle = (NSBundle) n.object();
+			// System.out.println(bundle.name() + ": " + allFrameworks);
+			allFrameworks.remove(bundle.name());
+			if (allBundleProps == null) {
+				allBundleProps = new Properties();
+			}
+
+			Properties bundleProps = bundle.properties();
+			if (bundleProps != null) {
+				for (Iterator iter = bundleProps.entrySet().iterator(); iter.hasNext();) {
+					Map.Entry entry = (Map.Entry) iter.next();
+					if (!allBundleProps.containsKey(entry.getKey())) {
+						allBundleProps.setProperty((String) entry.getKey(), (String) entry.getValue());
+					}
+				}
+			}
+
+			if (allFrameworks.size() == 0) {
+				Properties mainProps = null;
+				NSBundle mainBundle = null;
+				String mainBundleName = NSProperties._mainBundleName();
+				if (mainBundleName != null) {
+					mainBundle = NSBundle.bundleForName(mainBundleName);
+				}
+				if (mainBundle == null) {
+					mainBundle = NSBundle.mainBundle();
+				}
+				if (mainBundle == null) {
+					// AK: when we get here, the main bundle wasn't inited yet
+					// so we do it ourself...
+					try {
+						Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
+						ClassPath.setAccessible(true);
+						if (ClassPath.get(NSBundle.class) != null) {
+							Method init = NSBundle.class.getDeclaredMethod("InitMainBundle");
+							init.setAccessible(true);
+							init.invoke(NSBundle.class);
+						}
+					}
+					catch (Exception e) {
+						System.err.println(e);
+						e.printStackTrace();
+						System.exit(1);
+					}
+					mainBundle = NSBundle.mainBundle();
+				}
+				if (mainBundle != null) {
+					mainProps = NSBundle.mainBundle().properties();
+				}
+				if (mainProps == null) {
+					String woUserDir = NSProperties.getProperty("webobjects.user.dir");
+					if (woUserDir == null) {
+						woUserDir = System.getProperty("user.dir");
+					}
+					mainProps = readProperties(new File(woUserDir, "Contents" + File.separator + "Resources" + File.separator + "Properties"));
+				}
+
+				if (mainProps == null) {
+					throw new IllegalStateException("Main bundle 'Properties' file can't be read.\nPlease post your deployment configuration in the Wonder mailing list.");
+				}
+				allBundleProps.putAll(mainProps);
+
+				String userhome = System.getProperty("user.home");
+				if (userhome != null && userhome.length() > 0) {
+					Properties userProps = readProperties(new File(userhome, "WebObjects.properties"));
+					if (userProps != null) {
+						allBundleProps.putAll(userProps);
+					}
+				}
+
+				Properties props = NSProperties._getProperties();
+				props.putAll(allBundleProps);
+				NSProperties._setProperties(props);
+				insertCommandLineArguments();
+				NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
+			}
+		}
+
+	private boolean isSystemJar(String jar) {
 		// check system path
 		String systemRoot = System.getProperty("WORootDirectory");
 		if (systemRoot != null) {
@@ -356,7 +466,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return false;
 	}
 
-	private static String stringFromJar(String jar, String path) {
+	private String stringFromJar(String jar, String path) {
 		JarFile f;
 		try {
 			if (!new File(jar).exists()) {
@@ -386,6 +496,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			throw NSForwardException._runtimeExceptionForThrowable(e1);
 		}
 	}
+	}
 
 	/**
 	 * Called when the application starts up and saves the command line
@@ -397,8 +508,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		setup(argv);
 		WOApplication.main(argv, applicationClass);
 	}
-
-	private static JarChecker _checker;
 
 	/**
 	 * Utility class to track down duplicate items in the class path. Reports
@@ -521,91 +630,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * order, class path order, checks patches etc.
 	 */
 	public static void setup(String[] argv) {
-		wasERXApplicationMainInvoked = true;
-		String cps[] = new String[] { "java.class.path", "com.webobjects.classpath" };
-		propertiesFromArgv = NSProperties.valuesFromArgv(argv);
-		allFrameworks = new HashSet<String>();
-		_checker = new JarChecker();
-
-		for (int var = 0; var < cps.length; var++) {
-			String cpName = cps[var];
-			String cp = System.getProperty(cpName);
-			if (cp != null) {
-				String parts[] = cp.split(File.pathSeparator);
-				String normalLibs = "";
-				String systemLibs = "";
-				String jarLibs = "";
-				String frameworkPattern = ".*?/(\\w+)\\.framework/Resources/Java/\\1.jar".toLowerCase();
-				String appPattern = ".*?/(\\w+)\\.woa/Contents/Resources/Java/\\1.jar".toLowerCase();
-				String folderPattern = ".*?/Resources/Java/?$".toLowerCase();
-				for (int i = 0; i < parts.length; i++) {
-					String jar = parts[i];
-					// Windows has \, we need to normalize
-					String fixedJar = jar.replace(File.separatorChar, '/').toLowerCase();
-					// System.out.println("Checking: " + jar);
-					// all patched frameworks here
-					if (isSystemJar(jar)) {
-						systemLibs += jar + File.pathSeparator;
-					}
-					else if (fixedJar.matches(frameworkPattern) || fixedJar.matches(appPattern) || fixedJar.matches(folderPattern)) {
-						normalLibs += jar + File.pathSeparator;
-					}
-					else {
-						jarLibs += jar + File.pathSeparator;
-					}
-					String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
-					String excludes = "(JavaVM)";
-					if (isWO54()) {
-						excludes = "(JavaVM|JavaWebServicesSupport|JavaEODistribution|JavaWebServicesGeneration|JavaWebServicesClient)";
-					}
-					if (bundle.matches("^\\w+$") && !bundle.matches(excludes)) {
-						String info = jar.replaceAll("(.*?[/\\\\]\\w+\\.framework/Resources/).*", "$1Info.plist");
-						if (new File(info).exists()) {
-							allFrameworks.add(bundle);
-						}
-						else {
-							// System.out.println("Omitted: " + info);
-						}
-					}
-					else if (jar.endsWith(".jar")) {
-						String info = stringFromJar(jar, "Resources/Info.plist");
-						if (info != null) {
-							NSDictionary dict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(info);
-							bundle = (String) dict.objectForKey("CFBundleExecutable");
-							allFrameworks.add(bundle);
-							// System.out.println("Jar bundle: " + bundle);
-						}
-					}
-				}
-				String newCP = "";
-				if (normalLibs.length() > 1) {
-					normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
-					newCP += normalLibs;
-				}
-				if (systemLibs.length() > 1) {
-					systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
-					newCP += (newCP.length() > 0 ? File.pathSeparator : "") + systemLibs;
-				}
-				if (jarLibs.length() > 1) {
-					jarLibs = jarLibs.substring(0, jarLibs.length() - 1);
-					newCP += (newCP.length() > 0 ? File.pathSeparator : "") + jarLibs;
-				}
-				String jars[] = newCP.split(File.pathSeparator);
-				for (int i = 0; i < jars.length; i++) {
-					String jar = jars[i];
-					_checker.processJar(jar);
-				}
-				// AK: this is pretty experimental for now. The classpath
-				// reordering
-				// should actually be done in a WOLips bootstrap because as this
-				// time all
-				// the static inits of WO app have already happened (which
-				// include NSMutableArray and _NSThreadSaveSet)
-				if (System.getProperty("_DisableClasspathReorder") == null) {
-					System.setProperty(cpName, newCP);
-				}
-			}
-		}
+		_loader = new Loader(argv);
 		if (System.getProperty("_DisableClasspathReorder") == null) {
 			ClassLoader loader = AppClassLoader.getAppClassLoader();
 			Thread.currentThread().setContextClassLoader(loader);
@@ -623,7 +648,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				e.printStackTrace();
 			}
 		}
-		NSNotificationCenter.defaultCenter().addObserver(ERXApplication.class, new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
 		ERXStats.initStatisticsIfNecessary();
@@ -696,11 +720,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public ERXApplication() {
 		super();
 
-		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || allFrameworks == null)) {
+		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || _loader == null)) {
 			_displayMainMethodWarning();
 		}
-		if (allFrameworks == null || allFrameworks.size() > 0) {
-			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + allFrameworks + "\nClasspath: " + System.getProperty("java.class.path"));
+		if (_loader == null || !_loader.didLoad()) {
+			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + _loader.allFrameworks + "\nClasspath: " + System.getProperty("java.class.path"));
 		}
 		if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
 			throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");
@@ -714,7 +738,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				app.activateOptions();
 			}
 		}
-		_checker.reportErrors();
+		_loader._checker.reportErrors();
 
 		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ApplicationDidCreateNotification, this));
 		installPatches();
@@ -1908,7 +1932,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
-		return (T) super.pageWithName(componentClass.getName(), ERXWOContext.currentContext());
+		return (T)pageWithName(componentClass.getName(), ERXWOContext.currentContext());
 	}
 
 	public NSKeyValueCodingAdditions constants() {
