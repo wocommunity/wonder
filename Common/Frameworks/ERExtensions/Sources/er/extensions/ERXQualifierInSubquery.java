@@ -269,6 +269,10 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	public boolean evaluateWithObject(Object object) {
 		Object destinationValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, relationshipName);
 		if(destinationValue != null) {
+			if (destinationValue instanceof NSArray) {
+				NSArray arr = (NSArray) destinationValue;
+				return EOQualifier.filteredArrayWithQualifier(arr, qualifier).count() > 0;
+			}
 			return qualifier.evaluateWithObject(destinationValue);
 		}
 		return false;
