@@ -24,31 +24,30 @@ import er.extensions.ERXPrimaryKeyListQualifier;
 
 /**
  * Very useful when you want to restrict the things a user can see during searches or in list pages.<br />
- * set it up via a rule like:
- *
+ * set it up via a rule like:<code><pre>
  *  entity.name = "Movie" and session.user.role <> "admin"
- *  =>
+ *   =>
  *  extraRestrictingQualifier = {
  *      "studio" = "session.user.studios";
  *  } [er.directtoweb.ERDDelayedExtraQualifierAssignment]
- *
- * then in your query page use sth like:
- public EODataSource queryDataSource() {
-     EODataSource ds = super.queryDataSource();
-     if (ds != null && (ds instanceof EODatabaseDataSource)) {
-         EOFetchSpecification fs = ((EODatabaseDataSource)ds).fetchSpecification();
-         EOQualifier q = fs.qualifier();
-         EOQualifier extraQualifier = (EOQualifier)d2wContext().valueForKey("extraRestrictingQualifier");
-
-         if(q != null && extraQualifier != null) {
-             q = new EOAndQualifier(new NSArray(new Object[] {q, extraQualifier}));
-         } else if(extraQualifier != null) {
-             q = extraQualifier;
-         }
-         fs.setQualifier(q);
-     }
-     return ds;
- }
+ *</pre></code>
+ * then in your query page use sth like:<code><pre>
+ * public EODataSource queryDataSource() {
+ *    EODataSource ds = super.queryDataSource();
+ *    if (ds != null && (ds instanceof EODatabaseDataSource)) {
+ *        EOFetchSpecification fs = ((EODatabaseDataSource)ds).fetchSpecification();
+ *        EOQualifier q = fs.qualifier();
+ *        EOQualifier extraQualifier = (EOQualifier)d2wContext().valueForKey("extraRestrictingQualifier");
+ *        if(q != null && extraQualifier != null) {
+ *            q = new EOAndQualifier(new NSArray(new Object[] {q, extraQualifier}));
+ *        } else if(extraQualifier != null) {
+ *            q = extraQualifier;
+ *        }
+ *        fs.setQualifier(q);
+ *    }
+ *    return ds;
+ * }</pre></code>
+ * 
  * This should guarantee that the user can only see the Movies that
  * are made by studios contained in his studio relationship.
  * If the value is null, then this qualifier will not be added. To search for NULL,
