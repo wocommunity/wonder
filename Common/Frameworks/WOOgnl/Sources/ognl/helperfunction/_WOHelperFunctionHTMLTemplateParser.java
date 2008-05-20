@@ -63,6 +63,8 @@ public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser imple
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOForm", "form");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOSubmitButton", "submit");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("ERXLocalizedString", "localized");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOImage", "img");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOImage", "image");
 		
 		WOHelperFunctionHTMLTemplateParser.registerTagProcessorForElementType(new NotTagProcessor(), "not");
 	}
