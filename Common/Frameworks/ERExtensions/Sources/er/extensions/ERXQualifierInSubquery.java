@@ -14,14 +14,17 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableSet;
 
 /**
@@ -29,7 +32,7 @@ import com.webobjects.foundation.NSMutableSet;
  * 
  * <pre><code>
  * EOQualifier q = EOQualifier.qualifierWithQualifierFormat(&quot;firstName = 'Max'&quot;, null);
- * ERXQualifierInSubquery qq = new ERXQualifierInSubquery(q, &quot;User&quot;, &quot;groupId&quot;);
+ * ERXQualifierInSubquery qq = new ERXQualifierInSubquery(q, &quot;User&quot;, &quot;group&quot;);
  * EOFetchSpecification fs = new EOFetchSpecification(&quot;Group&quot;, qq, null);
  * </code></pre>
  * 
@@ -47,7 +50,7 @@ import com.webobjects.foundation.NSMutableSet;
  * with the 3 arg constructor
  */
 
-public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQLGeneration, Cloneable {
+public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQLGeneration, Cloneable, EOQualifierEvaluation {
 
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXQualifierInSubquery.class);
@@ -58,9 +61,13 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	/** holds the entity name */
 	protected String entityName;
 
+	/** holds the relationship name */
+	protected String relationshipName;
+
 	/** holds the attribute name */
 	protected String attributeName;
 
+	/** holds the attribute name */
 	protected String destinationAttName;
 
 	/**
@@ -79,11 +86,18 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	 *            sub qualifier
 	 * @param entityName
 	 *            of the sub qualification
-	 * @param attributeName
-	 *            foreign key attribute name
+	 * @param relationshipName
+	 *            relationship name
 	 */
-	public ERXQualifierInSubquery(EOQualifier qualifier, String entityName, String attributeName) {
-		this(qualifier, entityName, attributeName, null);
+	public ERXQualifierInSubquery(EOQualifier qualifier, String entityName, String relationshipName) {
+		this.qualifier = qualifier;
+		this.entityName = entityName;
+		if(relationshipName != null) {
+			this.relationshipName = relationshipName;
+			EORelationship rel = ERXEOAccessUtilities.entityNamed(null, entityName).relationshipNamed(relationshipName);
+			this.attributeName = (String) rel.sourceAttributes().lastObject();
+			this.destinationAttName = (String) rel.destinationAttributes().lastObject();
+		}
 	}
 
 	/**
@@ -245,6 +259,19 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	 * @return cloned qualifier.
 	 */
 	public Object clone() {
+		if(relationshipName != null) {
+			return new ERXQualifierInSubquery(qualifier, entityName, relationshipName);
+		}
 		return new ERXQualifierInSubquery(qualifier, entityName, attributeName, destinationAttName);
 	}
+	
+	@Override
+	public boolean evaluateWithObject(Object object) {
+		Object destinationValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, relationshipName);
+		if(destinationValue != null) {
+			return qualifier.evaluateWithObject(destinationValue);
+		}
+		return false;
+	}
+	
 }
