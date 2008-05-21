@@ -773,7 +773,6 @@ public class ERXMigrationTable {
 		return indexName;
 	}
 
-
 	/**
 	 * Executes the SQL operations to add this primary key constraint.
 	 * 
@@ -782,6 +781,20 @@ public class ERXMigrationTable {
 	 */
 	public void setPrimaryKey(String columnName) throws SQLException {
 		setPrimaryKey(existingColumnNamed(columnName));
+	}
+
+	/**
+	 * Executes the SQL operations to add this primary key constraint.
+	 * 
+	 * @param columnNames the names of the columns to set as the primary key
+	 * @throws SQLException if the constraint fails
+	 */
+	public void setPrimaryKey(String... columnNames) throws SQLException {
+		ERXMigrationColumn[] columns = new ERXMigrationColumn[columnNames.length];
+		for (int i = 0; i < columnNames.length; i ++) {
+			columns[i] = existingColumnNamed(columnNames[i]);
+		}
+		setPrimaryKey(columns);
 	}
 
 	/**
