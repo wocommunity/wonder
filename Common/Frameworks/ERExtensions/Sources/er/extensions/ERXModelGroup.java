@@ -194,10 +194,121 @@ public class ERXModelGroup extends EOModelGroup {
 			}
 		}
 
-		adjustLocalizedAttributes();
 		NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, this);
 		if (!patchModelsOnLoad) {
 			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
+		}
+	}
+	
+	static {
+		NSNotificationCenter.defaultCenter().addObserver(LocalizedAttributeProcessor.class, new NSSelector("modelGroupAdded", ERXConstant.NotificationClassArray), ModelGroupAddedNotification, null);
+	}
+	
+	/**
+	 * Processes ERXLanguages attributes.
+	 * @author ak
+	 *
+	 */
+	public static class LocalizedAttributeProcessor {
+
+		/**
+		 * Copies an attribute to a new name.
+		 * @param entity
+		 * @param attribute
+		 * @param newName
+		 */
+		protected EOAttribute cloneAttribute(EOEntity entity, EOAttribute attribute, String newName) {
+			// NOTE: order is important here. To add the prototype,
+			// we need it in the entity and we need a name to add it there
+			EOAttribute copy = new EOAttribute();
+			copy.setName(newName);
+			entity.addAttribute(copy);
+			copy.setPrototype(attribute.prototype());
+			copy.setColumnName(attribute.columnName());
+			copy.setExternalType(attribute.externalType());
+			copy.setValueType(attribute.valueType());
+			copy.setPrecision(attribute.precision());
+			copy.setAllowsNull(attribute.allowsNull());
+			copy.setClassName(attribute.className());
+			copy.setWidth(attribute.width());
+			copy.setScale(attribute.scale());
+			copy.setExternalType(attribute.externalType());
+			return copy;
+		}
+
+		protected void adjustLocalizedAttributes(EOModelGroup group ) {
+			for (Enumeration enumerator = group.models().objectEnumerator(); enumerator.hasMoreElements();) {
+				EOModel model = (EOModel) enumerator.nextElement();
+				for (Enumeration e1 = model.entities().objectEnumerator(); e1.hasMoreElements();) {
+					EOEntity entity = (EOEntity) e1.nextElement();
+					adjustLocalizedAttributes(entity);
+				}
+			}
+		}
+
+		protected void adjustLocalizedAttributes(EOEntity entity) {
+			NSArray attributes = entity.attributes().immutableClone();
+			NSArray classProperties = entity.classProperties().immutableClone();
+			NSArray attributesUsedForLocking = entity.attributesUsedForLocking().immutableClone();
+			if (attributes == null)
+				attributes = NSArray.EmptyArray;
+			if (classProperties == null)
+				classProperties = NSArray.EmptyArray;
+			if (attributesUsedForLocking == null)
+				attributesUsedForLocking = NSArray.EmptyArray;
+			NSMutableArray mutableClassProperties = classProperties.mutableClone();
+			NSMutableArray mutableAttributesUsedForLocking = attributesUsedForLocking.mutableClone();
+			if (attributes != null) {
+				for (Enumeration e = attributes.objectEnumerator(); e.hasMoreElements();) {
+					EOAttribute attribute = (EOAttribute) e.nextElement();
+					boolean isClassProperty = classProperties.containsObject(attribute);
+					boolean isUsedForLocking = attributesUsedForLocking.containsObject(attribute);
+					Object languagesObject = attribute.userInfo() != null ? attribute.userInfo().objectForKey("ERXLanguages") : null;
+					if (languagesObject != null && !(languagesObject instanceof NSArray)) {
+						languagesObject = entity.model().userInfo() != null ? entity.model().userInfo().objectForKey("ERXLanguages") : null;
+						if(languagesObject == null) {
+							languagesObject = ERXProperties.arrayForKey("ERXLanguages");
+						}
+					}
+					NSArray languages = (languagesObject != null ? (NSArray) languagesObject : NSArray.EmptyArray);
+					if (languages.count() > 0) {
+						String name = attribute.name();
+						String columnName = attribute.columnName();
+						NSMutableDictionary attributeUserInfo = new NSMutableDictionary();
+						if(attribute.userInfo() != null) {
+							attributeUserInfo.addEntriesFromDictionary(attribute.userInfo());
+						}
+						attributeUserInfo.setObjectForKey(languages, "ERXLanguages");
+						for (int i = 0; i < languages.count(); i++) {
+							String language = (String) languages.objectAtIndex(i);
+							String newName = name + "_" + language;
+							// columnName = columnName.replaceAll("_(\\w)$", "_" + language);
+							EOAttribute copy = cloneAttribute(entity, attribute, newName);
+
+							String newColumnName = columnName + "_" + language;
+							copy.setColumnName(newColumnName);
+
+							if (isClassProperty) {
+								mutableClassProperties.addObject(copy);
+							}
+							if (isUsedForLocking) {
+								mutableAttributesUsedForLocking.addObject(copy);
+							}
+							copy.setUserInfo(attributeUserInfo.mutableClone());
+						}
+						entity.removeAttribute(attribute);
+						mutableClassProperties.removeObject(attribute);
+						mutableAttributesUsedForLocking.removeObject(attribute);
+					}
+				}
+				entity.setAttributesUsedForLocking(mutableAttributesUsedForLocking);
+				entity.setClassProperties(mutableClassProperties);
+			}
+		}
+
+		public static void modelGroupAdded(NSNotification n) {
+			EOModelGroup group = (EOModelGroup) n.object();
+			new LocalizedAttributeProcessor().adjustLocalizedAttributes(group);
 		}
 	}
 
@@ -509,101 +620,6 @@ public class ERXModelGroup extends EOModelGroup {
 	public void modelAddedHandler(NSNotification n) {
 		EOModel model = (EOModel) n.object();
 		resetConnectionDictionaryInModel(model);
-	}
-
-	/**
-	 * Copies an attribute to a new name.
-	 * @param entity
-	 * @param attribute
-	 * @param newName
-	 */
-	protected EOAttribute cloneAttribute(EOEntity entity, EOAttribute attribute, String newName) {
-		// NOTE: order is important here. To add the prototype,
-		// we need it in the entity and we need a name to add it there
-		EOAttribute copy = new EOAttribute();
-		copy.setName(newName);
-		entity.addAttribute(copy);
-		copy.setPrototype(attribute.prototype());
-		copy.setColumnName(attribute.columnName());
-		copy.setExternalType(attribute.externalType());
-		copy.setValueType(attribute.valueType());
-		copy.setPrecision(attribute.precision());
-		copy.setAllowsNull(attribute.allowsNull());
-		copy.setClassName(attribute.className());
-		copy.setWidth(attribute.width());
-		copy.setScale(attribute.scale());
-		copy.setExternalType(attribute.externalType());
-		return copy;
-	}
-
-	protected void adjustLocalizedAttributes() {
-		for (Enumeration enumerator = models().objectEnumerator(); enumerator.hasMoreElements();) {
-			EOModel model = (EOModel) enumerator.nextElement();
-			for (Enumeration e1 = model.entities().objectEnumerator(); e1.hasMoreElements();) {
-				EOEntity entity = (EOEntity) e1.nextElement();
-				adjustLocalizedAttributes(entity);
-			}
-		}
-	}
-
-	protected void adjustLocalizedAttributes(EOEntity entity) {
-		NSArray attributes = entity.attributes().immutableClone();
-		NSArray classProperties = entity.classProperties().immutableClone();
-		NSArray attributesUsedForLocking = entity.attributesUsedForLocking().immutableClone();
-		if (attributes == null)
-			attributes = NSArray.EmptyArray;
-		if (classProperties == null)
-			classProperties = NSArray.EmptyArray;
-		if (attributesUsedForLocking == null)
-			attributesUsedForLocking = NSArray.EmptyArray;
-		NSMutableArray mutableClassProperties = classProperties.mutableClone();
-		NSMutableArray mutableAttributesUsedForLocking = attributesUsedForLocking.mutableClone();
-		if (attributes != null) {
-			for (Enumeration e = attributes.objectEnumerator(); e.hasMoreElements();) {
-				EOAttribute attribute = (EOAttribute) e.nextElement();
-				boolean isClassProperty = classProperties.containsObject(attribute);
-				boolean isUsedForLocking = attributesUsedForLocking.containsObject(attribute);
-				Object languagesObject = attribute.userInfo() != null ? attribute.userInfo().objectForKey("ERXLanguages") : null;
-				if (languagesObject != null && !(languagesObject instanceof NSArray)) {
-					languagesObject = entity.model().userInfo() != null ? entity.model().userInfo().objectForKey("ERXLanguages") : null;
-					if(languagesObject == null) {
-						languagesObject = ERXProperties.arrayForKey("ERXLanguages");
-					}
-				}
-				NSArray languages = (languagesObject != null ? (NSArray) languagesObject : NSArray.EmptyArray);
-				if (languages.count() > 0) {
-					String name = attribute.name();
-					String columnName = attribute.columnName();
-					NSMutableDictionary attributeUserInfo = new NSMutableDictionary();
-					if(attribute.userInfo() != null) {
-						attributeUserInfo.addEntriesFromDictionary(attribute.userInfo());
-					}
-					attributeUserInfo.setObjectForKey(languages, "ERXLanguages");
-					for (int i = 0; i < languages.count(); i++) {
-						String language = (String) languages.objectAtIndex(i);
-						String newName = name + "_" + language;
-						// columnName = columnName.replaceAll("_(\\w)$", "_" + language);
-						EOAttribute copy = cloneAttribute(entity, attribute, newName);
-
-						String newColumnName = columnName + "_" + language;
-						copy.setColumnName(newColumnName);
-
-						if (isClassProperty) {
-							mutableClassProperties.addObject(copy);
-						}
-						if (isUsedForLocking) {
-							mutableAttributesUsedForLocking.addObject(copy);
-						}
-						copy.setUserInfo(attributeUserInfo.mutableClone());
-					}
-					entity.removeAttribute(attribute);
-					mutableClassProperties.removeObject(attribute);
-					mutableAttributesUsedForLocking.removeObject(attribute);
-				}
-			}
-			entity.setAttributesUsedForLocking(mutableAttributesUsedForLocking);
-			entity.setClassProperties(mutableClassProperties);
-		}
 	}
 
 	private String getProperty(String key, String alternateKey, String defaultValue) {
