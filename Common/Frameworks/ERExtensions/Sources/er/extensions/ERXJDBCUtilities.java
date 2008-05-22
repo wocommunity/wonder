@@ -15,8 +15,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Enumeration;
 
+import javax.sql.rowset.CachedRowSet;
+
 import org.apache.log4j.Logger;
 
+import com.sun.rowset.CachedRowSetImpl;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -48,14 +51,14 @@ public class ERXJDBCUtilities {
 	public static NSTimestampFormatter TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
 
 	public static class CopyTask {
-		protected NSDictionary sourceDictionary;
-		protected NSDictionary destDictionary;
-		protected Connection source;
-		protected Connection dest;
+		protected NSDictionary _sourceDictionary;
+		protected NSDictionary _destDictionary;
+		protected Connection _source;
+		protected Connection _dest;
 		protected boolean _quoteSource;
 		protected boolean _quoteDestination;
 
-		protected NSMutableArray entities = new NSMutableArray();
+		protected NSMutableArray<EOEntity> _entities = new NSMutableArray<EOEntity>();
 
 		public CopyTask(EOModelGroup aModelGroup) {
 			addEntitiesFromModelGroup(aModelGroup);
@@ -73,18 +76,18 @@ public class ERXJDBCUtilities {
 		}
 
 		public void connect(NSDictionary aSourceConnectionDict, NSDictionary aDestConnectionDict) throws SQLException {
-			sourceDictionary = aSourceConnectionDict;
-			destDictionary = aDestConnectionDict;
-			source = connectionWithDictionary(aSourceConnectionDict);
-			dest = connectionWithDictionary(aDestConnectionDict);
+			_sourceDictionary = aSourceConnectionDict;
+			_destDictionary = aDestConnectionDict;
+			_source = connectionWithDictionary(aSourceConnectionDict);
+			_dest = connectionWithDictionary(aDestConnectionDict);
 			_quoteSource = Boolean.valueOf((String) aSourceConnectionDict.objectForKey("quote")).booleanValue();
 			_quoteDestination = Boolean.valueOf((String) aDestConnectionDict.objectForKey("quote")).booleanValue();
 		}
 
 		public void connect(String sourcePrefix, String destPrefix) throws SQLException {
-			sourceDictionary = dictionaryFromPrefix(sourcePrefix);
-			destDictionary = dictionaryFromPrefix(destPrefix);
-			connect(sourceDictionary, destDictionary);
+			_sourceDictionary = dictionaryFromPrefix(sourcePrefix);
+			_destDictionary = dictionaryFromPrefix(destPrefix);
+			connect(_sourceDictionary, _destDictionary);
 		}
 
 		private NSDictionary dictionaryFromPrefix(String prefix) {
@@ -104,12 +107,12 @@ public class ERXJDBCUtilities {
 		protected void addEntitiesFromModel(EOModel model) {
 			for (Enumeration enumeration = model.entities().objectEnumerator(); enumeration.hasMoreElements();) {
 				EOEntity entity = (EOEntity) enumeration.nextElement();
-				entities.addObject(entity);
+				_entities.addObject(entity);
 			}
 		}
 
 		public void addEntity(EOEntity entity) {
-			entities.addObject(entity);
+			_entities.addObject(entity);
 		}
 
 		public void run() throws SQLException {
@@ -117,7 +120,7 @@ public class ERXJDBCUtilities {
 		}
 
 		public void run(boolean commitAtEnd) throws SQLException {
-			for (Enumeration models = entities.objectEnumerator(); models.hasMoreElements();) {
+			for (Enumeration models = _entities.objectEnumerator(); models.hasMoreElements();) {
 				EOEntity entity = (EOEntity) models.nextElement();
 				if (!entity.isAbstractEntity()) {
 					copyEntity(entity);
@@ -129,7 +132,7 @@ public class ERXJDBCUtilities {
 		}
 
 		public void commit() throws SQLException {
-			dest.commit();
+			_dest.commit();
 		}
 
 		protected Connection connectionWithDictionary(NSDictionary dict) throws SQLException {
@@ -182,7 +185,7 @@ public class ERXJDBCUtilities {
 				throw new NullPointerException("attributes cannot be null!");
 			}
 
-			NSMutableArray columns = new NSMutableArray();
+			NSMutableArray<String> columns = new NSMutableArray<String>();
 			for (int i = attributes.length; i-- > 0;) {
 				EOAttribute att = attributes[i];
 				String column = att.columnName();
@@ -202,17 +205,17 @@ public class ERXJDBCUtilities {
 		}
 
 		protected EOAttribute[] attributesArray(NSArray array) {
-			NSMutableArray a = new NSMutableArray();
+			NSMutableArray<EOAttribute> attributes = new NSMutableArray<EOAttribute>();
 			for (int i = 0; i < array.count(); i++) {
 				EOAttribute att = (EOAttribute) array.objectAtIndex(i);
 				if (!ERXStringUtilities.stringIsNullOrEmpty(att.columnName())) {
-					a.addObject(att);
+					attributes.addObject(att);
 				}
 			}
 
-			EOAttribute[] result = new EOAttribute[a.count()];
-			for (int i = 0; i < a.count(); i++) {
-				result[i] = (EOAttribute) a.objectAtIndex(i);
+			EOAttribute[] result = new EOAttribute[attributes.count()];
+			for (int i = 0; i < attributes.count(); i++) {
+				result[i] = attributes.objectAtIndex(i);
 			}
 			return result;
 		}
@@ -236,7 +239,7 @@ public class ERXJDBCUtilities {
 			EOQualifier qualifier = entity.restrictingQualifier();
 			if (qualifier != null) {
 				EOAdaptor adaptor = EOAdaptor.adaptorWithName("JDBC");
-				adaptor.setConnectionDictionary(sourceDictionary);
+				adaptor.setConnectionDictionary(_sourceDictionary);
 				EOSQLExpressionFactory factory = adaptor.expressionFactory();
 				EOSQLExpression sqlExpression = factory.createExpression(entity);
 				String sqlString = EOQualifierSQLGeneration.Support._sqlStringForSQLExpression(qualifier, sqlExpression);
@@ -244,7 +247,7 @@ public class ERXJDBCUtilities {
 			}
 			selectBuf.append(";");
 			String sql = selectBuf.toString();
-			Statement stmt = source.createStatement();
+			Statement stmt = _source.createStatement();
 
 			StringBuffer insertBuf = new StringBuffer();
 			insertBuf.append("insert into ");
@@ -265,7 +268,7 @@ public class ERXJDBCUtilities {
 
 			String insertSql = insertBuf.toString();
 			System.out.println("CopyTask.copyEntity: " + insertSql);
-			PreparedStatement upps = dest.prepareStatement(insertSql);
+			PreparedStatement upps = _dest.prepareStatement(insertSql);
 
 			ResultSet rows = stmt.executeQuery(sql);
 			// transfer each row by first setting the values
@@ -277,7 +280,7 @@ public class ERXJDBCUtilities {
 					log.info("table " + tableName + ", inserted " + rows.getRow() + " rows");
 				}
 
-				NSMutableSet tempfilesToDelete = new NSMutableSet();
+				NSMutableSet<File> tempfilesToDelete = new NSMutableSet<File>();
 				// call upps.setInt, upps.setBinaryStream, ...
 				for (int i = 0; i < columnNamesWithoutQuotes.length; i++) {
 					// first we need to get the type
@@ -656,7 +659,7 @@ public class ERXJDBCUtilities {
 	 *             if something fails
 	 */
 	public static void createTablesForEntities(EOAdaptorChannel channel, NSArray entities) throws SQLException {
-		NSMutableDictionary options = new NSMutableDictionary();
+		NSMutableDictionary<String, String> options = new NSMutableDictionary<String, String>();
 		options.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
 		options.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
 		options.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
@@ -707,7 +710,93 @@ public class ERXJDBCUtilities {
 
 	/**
 	 * Using the backing connection from the adaptor context, executes the given
-	 * query and calls processor.process(rs) for each row of the ResultSet. This
+	 * query and calls delegate.processConnection(conn) for the Connection. This 
+	 * handles properly closing all the underlying JDBC resources.
+	 * 
+	 * @param adaptorChannel
+	 *            the adaptor channel
+	 * @param delegate
+	 *            the connection delegate
+	 * @throws Exception
+	 *             if something goes wrong
+	 */
+	public static void processConnection(EOAdaptorChannel adaptorChannel, IConnectionDelegate delegate) throws Exception {
+		boolean wasOpen = adaptorChannel.isOpen();
+		if (!wasOpen) {
+			adaptorChannel.openChannel();
+		}
+		try {
+			Connection conn = ((JDBCContext) adaptorChannel.adaptorContext()).connection();
+			delegate.processConnection(adaptorChannel, conn);
+		}
+		finally {
+			if (!wasOpen) {
+				adaptorChannel.closeChannel();
+			}
+		}
+	}
+
+	/**
+	 * Using the backing connection from the adaptor context, executes the given
+	 * query and calls delegate.processResultSet(rs) once for the ResultSet. This 
+	 * handles properly closing all the underlying JDBC resources.
+	 * 
+	 * @param adaptorChannel
+	 *            the adaptor channel
+	 * @param query
+	 *            the query to execute
+	 * @param delegate
+	 *            the processor delegate
+	 * @throws Exception
+	 *             if something goes wrong
+	 */
+	public static void executeQuery(EOAdaptorChannel adaptorChannel, final String query, final IResultSetDelegate delegate) throws Exception {
+		ERXJDBCUtilities.processConnection(adaptorChannel, new IConnectionDelegate() {
+			public void processConnection(EOAdaptorChannel innerAdaptorChannel, Connection conn) throws Exception {
+				Statement stmt = conn.createStatement();
+				try {
+					ResultSet rs = stmt.executeQuery(query);
+					try {
+						delegate.processResultSet(innerAdaptorChannel, rs);
+					}
+					finally {
+						rs.close();
+					}
+				}
+				finally {
+					stmt.close();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Using the backing connection from the adaptor context, executes the given
+	 * query and calls processor.process(rs) for each row of the ResultSet. This 
+	 * handles properly closing all the underlying JDBC resources.
+	 * 
+	 * @param adaptorChannel
+	 *            the adaptor channel
+	 * @param query
+	 *            the query to execute
+	 * @param delegate
+	 *            the processor delegate
+	 * @throws Exception
+	 *             if something goes wrong
+	 */
+	public static void processResultSetRows(EOAdaptorChannel adaptorChannel, String query, final IResultSetDelegate delegate) throws Exception {
+		ERXJDBCUtilities.executeQuery(adaptorChannel, query, new IResultSetDelegate() {
+			public void processResultSet(EOAdaptorChannel innerAdaptorChannel, ResultSet rs) throws Exception {
+				while (rs.next()) {
+					delegate.processResultSet(innerAdaptorChannel, rs);
+				}
+			}
+		});
+	}
+
+	/**
+	 * Using the backing connection from the adaptor context, executes the given
+	 * query and returns a CachedRowSet of the results. This
 	 * can be useful for more complicated migrations. This handles properly
 	 * closing all the underlying JDBC resources.
 	 * 
@@ -715,60 +804,56 @@ public class ERXJDBCUtilities {
 	 *            the adaptor channel
 	 * @param query
 	 *            the query to execute
-	 * @param processor
-	 *            the processor delegate
+	 * @return a CachedRowSet of the results
 	 * @throws Exception
 	 *             if something goes wrong
 	 */
-	public static void processResultSet(EOAdaptorChannel adaptorChannel, String query, IResultSetDelegate processor) throws Exception {
-		boolean wasOpen = adaptorChannel.isOpen();
-		if (!wasOpen) {
-			adaptorChannel.openChannel();
-		}
-		try {
-			Connection conn = ((JDBCContext) adaptorChannel.adaptorContext()).connection();
-			Statement stmt = conn.createStatement();
-			try {
-				ResultSet rs = stmt.executeQuery(query);
-				try {
-					while (rs.next()) {
-						processor.processRow(adaptorChannel, rs);
-					}
-				}
-				finally {
-					rs.close();
-				}
+	public static CachedRowSet fetchRowSet(EOAdaptorChannel adaptorChannel, String query) throws Exception {
+		final CachedRowSetImpl rowSet = new CachedRowSetImpl();
+		ERXJDBCUtilities.executeQuery(adaptorChannel, query, new IResultSetDelegate() {
+			public void processResultSet(EOAdaptorChannel innerAdaptorChannel, ResultSet rs) throws Exception {
+				rowSet.populate(rs);
 			}
-			finally {
-				stmt.close();
-			}
-		}
-		finally {
-			if (!wasOpen) {
-				adaptorChannel.closeChannel();
-			}
-		}
-
+		});
+		return rowSet;
 	}
 
 	/**
-	 * IResultSetDelegate is used by ERXJDBCUtilities.processResultSet for
-	 * callbacks.
+	 * IConnectionDelegate is like a closure for connection operations.
+	 * 
+	 * @author mschrag
+	 */
+	public static interface IConnectionDelegate {
+		/**
+		 * This method is called to give you the opportunity to process a Connection.
+		 * 
+		 * @param adaptorChannel
+		 *            the original adaptor channel
+		 * @param conn
+		 *            the JDBC Connection
+		 * @throws Exception
+		 *             if something goes wrong
+		 */
+		public void processConnection(EOAdaptorChannel adaptorChannel, Connection conn) throws Exception;
+	}
+
+	/**
+	 * IResultSetDelegate is like a closure for ResultSet operations.
 	 * 
 	 * @author mschrag
 	 */
 	public static interface IResultSetDelegate {
 		/**
-		 * For each row in the ResultSet, this method is called to give you the
-		 * opportunity to process the row.
+		 * This method is called to give you the opportunity to process a ResultSet or a
+		 * row of a ResultSet (depending on the context).
 		 * 
 		 * @param adaptorChannel
 		 *            the original adaptor channel
 		 * @param rs
-		 *            the ResultSet (pointing to the current row)
+		 *            the ResultSet
 		 * @throws Exception
 		 *             if something goes wrong
 		 */
-		public void processRow(EOAdaptorChannel adaptorChannel, ResultSet rs) throws Exception;
+		public void processResultSet(EOAdaptorChannel adaptorChannel, ResultSet rs) throws Exception;
 	}
 }
