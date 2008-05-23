@@ -20,6 +20,10 @@ public class ERXKeyGlobalID extends EOKeyGlobalID {
 		_gid = EOKeyGlobalID.globalIDWithEntityName(entityName, values);
 	}
 
+	public EOKeyGlobalID globalID() {
+		return _gid;
+	}
+	
 	public String asString() {
 		return entityName() + "." + ERXEOControlUtilities.primaryKeyStringForGlobalID(this);
 	}
