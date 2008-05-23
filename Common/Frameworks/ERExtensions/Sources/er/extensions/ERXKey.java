@@ -15,14 +15,18 @@ import er.extensions.qualifiers.ERXOrQualifier;
  * qualifiers, ERXKey provides a starting point for the qualifier chain. As an
  * example:
  * </p>
- * <code>
- * on Person: public static final ERXKey<Country> country = new ERXKey<Country>(Person.COUNTRY_KEY);
- * on Person: public static final ERXKey<NSTimestamp> birthDate = new ERXKey<NSTimestamp>(Person.BIRTH_DATE_KEY);
- *
- * Country germany = ...;
- * NSTimestamp someRandomDate = ...;
- * EOQualifier qualifier = Person.country.is(germany).and(Person.birthDate.after(someRandomDate));
- * </code>
+ * <pre><code>
+ * public class Person extends ERXGenericRecord {
+ *   ...
+ *   public static final ERXKey&lt;Country&gt; country = new ERXKey&lt;Country&gt;(Person.COUNTRY_KEY);
+ *   public static final ERXKey&lt;NSTimestamp&gt; birthDate = new ERXKey&lt;NSTimestamp&gt;(Person.BIRTH_DATE_KEY);
+ *   ...
+ * }
+ * 
+ *   Country germany = ...;
+ *   NSTimestamp someRandomDate = ...;
+ *   EOQualifier qualifier = Person.country.is(germany).and(Person.birthDate.after(someRandomDate));
+ * </code></pre>
  * 
  * @author mschrag
  */
@@ -401,7 +405,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Equivalent to key > lowerBound and key < upperBound (exclusive). Not that
+	 * Equivalent to key > lowerBound and key < upperBound (exclusive). Note that
 	 * this does not return an ERXBetweenQualifier.
 	 * 
 	 * @param lowerBound
@@ -415,7 +419,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Equivalent to key >= lowerBound and key <­ upperBound (inclusive). Not
+	 * Equivalent to key >= lowerBound and key <= upperBound (inclusive). Note
 	 * that this does not return an ERXBetweenQualifier.
 	 * 
 	 * @param lowerBound
@@ -507,8 +511,8 @@ public class ERXKey<T> {
 	 * 
 	 * Note: ERXKey has a limitation that it will not return the proper generic
 	 * type if you attempt to build a keypath extension of an NSArray. For
-	 * instance, ERXKey<NSArray<Person>>.append(ERXKey<String>) will return
-	 * ERXKey<String> when, in fact, it should be ERXKey<NSArray<String>>.
+	 * instance, ERXKey&lt;NSArray&lt;Person&gt;&gt;.append(ERXKey&lt;String&gt;) will return
+	 * ERXKey&lt;String&gt; when, in fact, it should be ERXKey&lt;NSArray&lt;String&gt;&gt;.
 	 * This is a limitation due to type erasure with generics that we cannot
 	 * currently resolve this problem.
 	 * 
@@ -539,8 +543,8 @@ public class ERXKey<T> {
 	 * 
 	 * Note: ERXKey has a limitation that it will not return the proper generic
 	 * type if you attempt to build a keypath extension of an NSArray. For
-	 * instance, ERXKey<NSArray<Person>>.append(ERXKey<String>) will return
-	 * ERXKey<String> when, in fact, it should be ERXKey<NSArray<String>>.
+	 * instance, ERXKey&lt;NSArray&lt;Person&gt;&gt;.append(ERXKey&lt;String&gt;) will return
+	 * ERXKey&lt;String&gt; when, in fact, it should be ERXKey&lt;NSArray&lt;String&gt;&gt;.
 	 * This is a limitation due to type erasure with generics that we cannot
 	 * currently resolve this problem.
 	 * 
@@ -568,9 +572,9 @@ public class ERXKey<T> {
 	/**
 	 * Returns a new ERXKey that appends the given key to this keypath. For
 	 * instance, if this key is "person" and you add "firstName" to it, this
-	 * will return a new ERXKey "person.firstName".
-		ERXKey<String> k = new ERXKey<String>("foo");
-		ERXKey<NSArray<String>> a = new ERXKey<NSArray<String>>("foos");
+	 * will return a new ERXKey "person.firstName".<pre><code>
+		ERXKey&lt;String&gt; k = new ERXKey&lt;String&gt;("foo");
+		ERXKey&lt;NSArray&lt;String&gt;&gt; a = new ERXKey&lt;NSArray&lt;String&gt;&gt;("foos");
 		k = k.append(k);
 		a = a.append(k);
 		a = k.appendAsArray(k);
@@ -578,7 +582,7 @@ public class ERXKey<T> {
 		a = k.appendAsArray(a);
 		a = a.appendAsArray(k);
 		a = a.appendAsArray(a);
-	 * 
+	 * </code></pre>
 	 * @param key
 	 *            the key to append to this keypath
 	 * @return the new appended key
