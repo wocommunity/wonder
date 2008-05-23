@@ -77,6 +77,17 @@
             valueType = c; 
         }, 
         {
+            adaptorValueConversionMethodName = asString; 
+            columnName = ""; 
+            externalType = varchar; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = globalID; 
+            valueClassName = "er.extensions.ERXKeyGlobalID"; 
+            valueFactoryMethodName = fromString; 
+            valueType = c; 
+            width = 255; 
+        }, 
+        {
             columnName = id; 
             externalType = int4; 
             internalInfo = {"_nameInObjectStore" = id; }; 
@@ -223,6 +234,7 @@
         dateTime, 
         doubleNumber, 
         flag, 
+        globalID, 
         intBoolean, 
         intNumber, 
         longNumber, 
