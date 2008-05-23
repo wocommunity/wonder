@@ -143,19 +143,57 @@ public class ERCAuditTrail extends _ERCAuditTrail {
             }
         }
 
-        protected void handleChange(EOEditingContext ec, EOEnterpriseObject eo, String keyPath, Object oldValue, Object newValue) {
+        protected void handleInsert(EOEditingContext ec, EOEnterpriseObject eo, Object newValue) {
+            ERXGenericRecord rec = (ERXGenericRecord)eo;
+            log.info("Insert: " + rec.permanentGlobalID() + " new state " + newValue);
+        }
+
+        protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject eo) {
+            NSArray keys = configuration.objectForKey(eo.entityName()).keys;
+            NSDictionary committedSnapshotForObject = ec.committedSnapshotForObject(eo);
+            NSDictionary changes = eo.changesFromSnapshot(committedSnapshotForObject);
+            for (Enumeration e1 = changes.keyEnumerator(); e1.hasMoreElements();) {
+                String key = (String) e1.nextElement();
+                if(keys.containsObject(key)) {
+                    handleUpdate(ec, eo, key, committedSnapshotForObject.objectForKey(key), changes.objectForKey(key));
+                }
+            }
+        }
+
+        protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject eo, String keyPath, Object oldValue, Object newValue) {
             ERXGenericRecord rec = (ERXGenericRecord)eo;
             log.info("Update: " + rec.permanentGlobalID() + " " + keyPath + " from " + oldValue + " to " + newValue);
         }
 
-        protected void handleInsert(EOEditingContext ec, EOEnterpriseObject eo, String keyPath, Object oldValue, Object newValue) {
+        protected void handleDelete(EOEditingContext ec, EOEnterpriseObject eo, Object oldValue) {
             ERXGenericRecord rec = (ERXGenericRecord)eo;
-            log.info("Insert: " + rec.permanentGlobalID() + " " + keyPath + " from " + oldValue + " to " + newValue);
+            log.info("Delete: " + rec.permanentGlobalID() + " last state is " + oldValue);
         }
 
-        protected void handleDelete(EOEditingContext ec, EOEnterpriseObject eo, String keyPath, Object oldValue, Object newValue) {
-            ERXGenericRecord rec = (ERXGenericRecord)eo;
-            log.info("Delete: " + rec.permanentGlobalID() + " " + keyPath + " from " + oldValue + " to " + newValue);
+        protected void handleRemove(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
+            ERXGenericRecord rec = (ERXGenericRecord)target;
+            log.info("Remove: " + rec.permanentGlobalID() + " " + keyPath + " eo " + eo);
+        }
+
+        protected void handleAdd(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
+            ERXGenericRecord rec = (ERXGenericRecord)target;
+            log.info("Add: " + rec.permanentGlobalID() + " " + keyPath + " eo " + eo);
+        }
+
+        protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
+            ERXGenericRecord rec = (ERXGenericRecord)target;
+            EOEnterpriseObject oldValue = (EOEnterpriseObject) rec.valueForKeyPath(keyPath);
+            log.info("Update: " + rec.permanentGlobalID() + " " + keyPath + " from " + oldValue + " to " + eo);
+        }
+
+        private void handleChange(EOEditingContext ec, String typeKey, EOEnterpriseObject eo) {
+            if(typeKey.equals(EOEditingContext.UpdatedKey)) {
+                handleUpdate(ec, eo);
+            } else if (typeKey.equals(EOEditingContext.InsertedKey)) {
+                handleInsert(ec, eo, eo.snapshot());
+            } else if (typeKey.equals(EOEditingContext.DeletedKey)) {
+                handleDelete(ec, eo, eo.snapshot());
+            }
         }
 
         protected void handleChanges(EOEditingContext ec, String typeKey, NSArray objects) {
@@ -166,25 +204,21 @@ public class ERCAuditTrail extends _ERCAuditTrail {
 
                 if(config != null) {
                     if(config.isAudited) {
-                        NSDictionary committedSnapshotForObject = ec.committedSnapshotForObject(eo);
-                        NSDictionary changes = eo.changesFromSnapshot(committedSnapshotForObject);
-                        if(typeKey.equals(EOEditingContext.UpdatedKey)) {
-                            for (Enumeration e1 = config.keys.objectEnumerator(); e1.hasMoreElements();) {
-                                String key = (String) e1.nextElement();
-                                handleChange(ec, eo, key, committedSnapshotForObject.objectForKey(key), changes.objectForKey(key));
-                            }
-                        } else if (typeKey.equals(EOEditingContext.InsertedKey)) {
-                            handleInsert(ec, eo, null, null, changes);
-                        } else if (typeKey.equals(EOEditingContext.DeletedKey)) {
-                            handleDelete(ec, eo, null, null, changes);
-                        }
+                        handleChange(ec, typeKey, eo);
                     } else {
                         for (Enumeration e1 = config.notificationKeys.objectEnumerator(); e1.hasMoreElements();) {
-                            NSDictionary committedSnapshotForObject = ec.committedSnapshotForObject(eo);
-                            NSDictionary changes = eo.changesFromSnapshot(committedSnapshotForObject);
                             String key = (String) e1.nextElement();
                             EOEnterpriseObject target = (EOEnterpriseObject) eo.valueForKey(key);
-                            handleChange(ec,eo, key, committedSnapshotForObject.objectForKey(key), changes.objectForKey(key));
+                            EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
+                            String inverse = entity.relationshipNamed(key).anyInverseRelationship().name();
+                            if(typeKey.equals(EOEditingContext.UpdatedKey)) {
+                                handleUpdate(ec, target, inverse, eo);
+                            } else if (typeKey.equals(EOEditingContext.InsertedKey)) {
+                                handleAdd(ec, target, inverse, eo);
+                            } else if (typeKey.equals(EOEditingContext.DeletedKey)) {
+                                target = (EOEnterpriseObject) ec.committedSnapshotForObject(eo).valueForKey(key);
+                                handleRemove(ec, target, inverse, eo);
+                            }
                         }
                     }
                 }
