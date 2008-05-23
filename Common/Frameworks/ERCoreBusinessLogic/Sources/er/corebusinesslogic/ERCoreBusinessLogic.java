@@ -29,6 +29,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
 
+import er.corebusinesslogic.audittrail.ERCAuditTrail;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.ERXApplication;
 import er.extensions.ERXConfigurationManager;
@@ -196,6 +197,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * initialization of the framework.
      */
     public void finishInitialization() {
+        ERCAuditTrail.initialize();
         ERCStampedEnterpriseObject.initialize();
         // Initialized shared data
         initializeSharedData();
@@ -214,6 +216,15 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 
     public boolean shouldMailReportedExceptions() {
         return ERXProperties.booleanForKey("er.corebusinesslogic.ERCoreBusinessLogic.ShouldMailExceptions");
+    }
+    
+    public void addPreferenceRelationshipToActorEntity(String entityName) {
+        EOEntity entity  = EOModelGroup.defaultGroup().entityNamed(entityName);
+        if(entity != null && entity.primaryKeyAttributeNames().count() == 1) {
+            addPreferenceRelationshipToActorEntity(entityName, (String) entity.primaryKeyAttributeNames().lastObject());
+        } else {
+            throw new IllegalArgumentException("Entity is not suitable: " + entityName);
+        }
     }
     
     /**

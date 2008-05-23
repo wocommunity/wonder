@@ -1,0 +1,112 @@
+{
+    attributes = (
+        {columnName = CREATED; name = created; prototypeName = dateTime; }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = Y; 
+            columnName = "KEY_PATH"; 
+            name = keyPath; 
+            prototypeName = varchar100; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "NEW_BLOB_VALUE_ID"; 
+            name = newBlobValueId; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "NEW_VALUES"; 
+            name = newValues; 
+            prototypeName = varchar1000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "OLD_BLOB_VALUE_ID"; 
+            name = oldBlobValueId; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "OLD_VALUES"; 
+            name = oldValues; 
+            prototypeName = varchar1000; 
+        }, 
+        {allowsNull = N; columnName = "TRAIL_ID"; name = trailId; prototypeName = id; }, 
+        {
+            adaptorValueConversionMethodName = value; 
+            allowsNull = N; 
+            columnName = TYPE; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = type; 
+            prototypeName = osType; 
+            valueClassName = "er.corebusinesslogic.audittrail.ERCAuditTrailType"; 
+            valueFactoryMethodName = trailType; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "USER_GLOBAL_ID"; 
+            name = userGlobalID; 
+            prototypeName = globalID; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "USER_INFO"; 
+            name = userInfo; 
+            prototypeName = mutableDictionary; 
+        }
+    ); 
+    attributesUsedForLocking = (
+        id, 
+        keyPath, 
+        newBlobValueId, 
+        newValues, 
+        oldBlobValueId, 
+        oldValues, 
+        trailId, 
+        type, 
+        userGlobalID, 
+        userInfo
+    ); 
+    className = "er.corebusinesslogic.audittrail.ERCAuditTrailEntry"; 
+    classProperties = (
+        created, 
+        keyPath, 
+        newBlobValue, 
+        newValues, 
+        oldBlobValue, 
+        oldValues, 
+        trail, 
+        type, 
+        userGlobalID, 
+        userInfo
+    ); 
+    externalName = ERCAuditTrailEntry; 
+    fetchSpecificationDictionary = {}; 
+    name = ERCAuditTrailEntry; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ERCAuditBlob; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = newBlobValueId; }); 
+            name = newBlobValue; 
+        }, 
+        {
+            destination = ERCAuditBlob; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = oldBlobValueId; }); 
+            name = oldBlobValue; 
+        }, 
+        {
+            destination = ERCAuditTrail; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = trailId; }); 
+            name = trail; 
+        }
+    ); 
+}
