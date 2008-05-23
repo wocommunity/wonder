@@ -1935,6 +1935,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return (T)pageWithName(componentClass.getName(), ERXWOContext.currentContext());
 	}
 
+	/**
+	 * Makes ERXConstants available for binding in the UI. Bind to <code>application.constants.MyConstantClass</code>.
+	 * @return
+	 */
 	public NSKeyValueCodingAdditions constants() {
 		return new NSKeyValueCodingAdditions() {
 
