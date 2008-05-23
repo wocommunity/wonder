@@ -30,6 +30,7 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
 
 import er.corebusinesslogic.audittrail.ERCAuditTrail;
+import er.corebusinesslogic.audittrail.ERCAuditTrailHandler;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.ERXApplication;
 import er.extensions.ERXConfigurationManager;
@@ -197,7 +198,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * initialization of the framework.
      */
     public void finishInitialization() {
-        ERCAuditTrail.initialize();
+        ERCAuditTrailHandler.initialize();
         ERCStampedEnterpriseObject.initialize();
         // Initialized shared data
         initializeSharedData();
