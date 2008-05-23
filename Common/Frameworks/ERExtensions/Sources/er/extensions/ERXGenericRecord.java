@@ -922,6 +922,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 					_permanentGlobalID = EOKeyGlobalID.globalIDWithEntityName(entityName(), values);
 				}
+			} else if(__globalID() != null && !__globalID().isTemporary()) {
+				_permanentGlobalID = (EOKeyGlobalID) __globalID();
 			}
 		}
 
