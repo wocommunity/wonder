@@ -1,0 +1,18 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "BLOB_VALUE"; 
+            name = blobValue; 
+            prototypeName = blob; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }
+    ); 
+    attributesUsedForLocking = (blobValue, id); 
+    className = "er.corebusinesslogic.audittrail.ERCAuditBlob"; 
+    classProperties = (blobValue); 
+    externalName = ERCAuditBlob; 
+    fetchSpecificationDictionary = {}; 
+    name = ERCAuditBlob; 
+    primaryKeyAttributes = (id); 
+}
