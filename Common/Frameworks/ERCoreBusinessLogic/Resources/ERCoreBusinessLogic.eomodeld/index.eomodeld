@@ -1,53 +1,22 @@
-
 {
-    EOModelVersion = 2.1;
-    adaptorName = JDBC;
-    connectionDictionary = 
-    {
-        URL = jdbc:mysql://localhost/bug;
-        username = root;
-    };
-    entities = 
-    (
-       
-       {
-           className = er.corebusinesslogic.ERCHelpText;
-           name = ERCHelpText;
-       }, 
-       
-       {
-           className = er.corebusinesslogic.ERCLogEntry;
-           name = ERCLogEntry;
-       }, 
-       
-       {
-           className = er.corebusinesslogic.ERCPreference;
-           name = ERCPreference;
-       }, 
-       
-       {
-           className = er.corebusinesslogic.ERCStatic;
-           name = ERCStatic;
-       }
-    );
-    userInfo = 
-    {
-        _EntityModeler = 
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    entities = (
         {
-            activeDatabaseConfigName = NewDatabaseConfig;
-            databaseConfigs = 
-            {
-                NewDatabaseConfig = 
-                {
-                    adaptorName = JDBC;
-                    connectionDictionary = 
-                    {
-                        URL = jdbc:mysql://localhost/bug;
-                        username = root;
-                    };
-                    prototypeEntityName = EOJDBCMySQLPrototypes;
-                };
-            };
-        };
-    };
+            className = "er.corebusinesslogic.audittrail.ERCAuditBlob"; 
+            name = ERCAuditBlob; 
+        }, 
+        {
+            className = "er.corebusinesslogic.audittrail.ERCAuditTrail"; 
+            name = ERCAuditTrail; 
+        }, 
+        {
+            className = "er.corebusinesslogic.audittrail.ERCAuditTrailEntry"; 
+            name = ERCAuditTrailEntry; 
+        }, 
+        {className = "er.corebusinesslogic.ERCHelpText"; name = ERCHelpText; }, 
+        {className = "er.corebusinesslogic.ERCLogEntry"; name = ERCLogEntry; }, 
+        {className = "er.corebusinesslogic.ERCPreference"; name = ERCPreference; }, 
+        {className = "er.corebusinesslogic.ERCStatic"; name = ERCStatic; }
+    ); 
 }
