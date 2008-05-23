@@ -981,6 +981,19 @@ public class ERXEOControlUtilities {
     }
 
     /**
+     * Returns the propertylist-encoded string representation of the global ID.
+     * @param eo object to get the primary key for.
+     * @return string representation of the primary key of the
+     *		object.
+     */
+    public static String primaryKeyStringForGlobalID(EOKeyGlobalID gid) {
+    	if(gid.keyValuesArray().count() > 1) {
+    		_stringForPrimaryKey(gid.keyValuesArray());
+    	}
+        return _stringForPrimaryKey(gid.keyValuesArray().lastObject());
+    }
+
+    /**
      * Returns the propertylist-encoded string representation of the primary key for
      * a given object. Made public only for ERXGenericRecord.
      * @param pk the primary key
