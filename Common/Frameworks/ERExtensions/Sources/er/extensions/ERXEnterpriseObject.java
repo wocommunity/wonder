@@ -430,7 +430,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
 
     /**
      * Calling this method will return the primary key of the
-     * given enterprise object or if one has not been asigned
+     * given enterprise object or if one has not been assigned
      * to it yet, then it will have the adaptor channel generate
      * one for it, cache it and then use that primary key when it
      * is saved to the database. If you just want the
@@ -476,7 +476,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     public abstract Object foreignKeyForRelationshipWithKey(String rel);
 
     /**
-     * Returns the names of all primary key attibutes. 
+     * Returns the names of all primary key attributes. 
      */
     public abstract NSArray primaryKeyAttributeNames();
 
@@ -573,7 +573,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * passing in this object as the current parameter. Note
      * that an object that has been successfully deleted will
      * also look as if it is a new object because it will have
-     * a null editingcontext.
+     * a null editing context.
      * @return if the object is a new enterprise object.
      */
 
@@ -583,7 +583,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * Debugging method that will be called on an object before it is
      * saved to the database if the property key: <b>ERDebuggingEnabled</b>
      * is enabled. This allows for adding in a bunch of expensive validation
-     * checks that should only be enabled in developement and testing
+     * checks that should only be enabled in development and testing
      * environments.
      * @throws NSValidation.ValidationException if the object is not consistent
      */
@@ -592,7 +592,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
             throws NSValidation.ValidationException;
 
     /**
-     * This method is very similiar to the <code>checkConsistency</code> method
+     * This method is very similar to the <code>checkConsistency</code> method
      * except that this method is only called from an outside process, usually
      * a batch process, to verify that the data this object holds is consistent.
      * JUnit tests are great for testing that all of the methods of a single
@@ -600,7 +600,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * of checking that all of the data in a given database is consistent. Hopefully
      * in the future we will add a batch check consistency application to demonstrate
      * the use of this method.
-     * @throws NSValidation.ValidationException if the object fails consisntency
+     * @throws NSValidation.ValidationException if the object fails consistency
      */
     public abstract void batchCheckConsistency()
             throws NSValidation.ValidationException;
