@@ -94,5 +94,8 @@ public class ERCAuditTrail extends _ERCAuditTrail {
         entry.setType(type);
         entry.setOldValue(oldValue);
         entry.setNewValue(newValue);
+        if(type == ERCAuditTrailType.DELETED) {
+            setIsDeleted(true);
+        }
     }
 }

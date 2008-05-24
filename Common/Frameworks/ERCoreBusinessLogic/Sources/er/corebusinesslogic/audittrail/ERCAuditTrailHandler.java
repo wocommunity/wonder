@@ -11,15 +11,18 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.ERXConstant;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXGenericRecord;
+import er.extensions.ERXKeyGlobalID;
 import er.extensions.ERXModelGroup;
 import er.extensions.ERXSelectorUtilities;
 import er.extensions.ERXValueUtilities;
@@ -152,10 +155,37 @@ public class ERCAuditTrailHandler {
         if (typeKey.equals(EOEditingContext.UpdatedKey)) {
             handleUpdate(ec, eo);
         } else if (typeKey.equals(EOEditingContext.InsertedKey)) {
-            handleInsert(ec, eo, eo.snapshot());
+            handleInsert(ec, eo, serializeObject(eo));
         } else if (typeKey.equals(EOEditingContext.DeletedKey)) {
-            handleDelete(ec, eo, eo.snapshot());
+            handleDelete(ec, eo, serializeObject(eo));
         }
+    }
+    
+    protected NSDictionary serializeObject(EOEnterpriseObject eo) {
+        NSMutableDictionary<String, Object> result = new NSMutableDictionary<String, Object>();
+        result.addEntriesFromDictionary(eo.snapshot());
+        for (Enumeration e = eo.snapshot().keyEnumerator(); e.hasMoreElements();) {
+            String key = (String) e.nextElement();
+            Object value = result.objectForKey(key);
+            if (value instanceof ERXConstant.Constant) {
+                ERXConstant.Constant constant = (ERXConstant.Constant) value;
+                result.setObjectForKey(constant.value(), key);
+            } else if (value == NSKeyValueCoding.NullValue) {
+                result.removeObjectForKey(key);
+            } else if (value instanceof ERXGenericRecord) {
+                ERXGenericRecord rec = (ERXGenericRecord)value;
+                result.setObjectForKey(ERXKeyGlobalID.globalIDForGID(rec.permanentGlobalID()).asString(), key);
+            } else if (value instanceof NSArray) {
+                NSArray oldValue = (NSArray)value;
+                NSMutableArray newValue = new NSMutableArray(oldValue.count());
+                for (Enumeration e1 = newValue.objectEnumerator(); e1.hasMoreElements();) {
+                    ERXGenericRecord rec = (ERXGenericRecord) e1.nextElement();
+                    newValue.addObject(ERXKeyGlobalID.globalIDForGID(rec.permanentGlobalID()).asString());
+                }
+                result.setObjectForKey(newValue, key);
+            }
+        }
+        return result;
     }
 
     protected void handleSave(EOEditingContext ec, String typeKey, NSArray objects) {
@@ -193,7 +223,7 @@ public class ERCAuditTrailHandler {
     }
 
     protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject eo, String keyPath, Object oldValue, Object newValue) {
-        handleChange(ec, eo, ERCAuditTrailType.UPDATED, keyPath, oldValue, newValue);
+         handleChange(ec, eo, ERCAuditTrailType.UPDATED, keyPath, oldValue, newValue);
     }
 
     protected void handleDelete(EOEditingContext ec, EOEnterpriseObject eo, Object oldValue) {
@@ -202,12 +232,12 @@ public class ERCAuditTrailHandler {
 
     protected void handleRemove(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
         ERXGenericRecord rec = (ERXGenericRecord) target;
-        handleChange(ec, target, ERCAuditTrailType.REMOVED, keyPath, null, eo);
+        handleChange(ec, target, ERCAuditTrailType.REMOVED, keyPath, null, serializeObject(eo));
     }
 
     protected void handleAdd(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
         ERXGenericRecord rec = (ERXGenericRecord) target;
-        handleChange(ec, target, ERCAuditTrailType.ADDED, keyPath, eo, null);
+        handleChange(ec, target, ERCAuditTrailType.ADDED, keyPath, serializeObject(eo), null);
     }
 
     protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
@@ -223,6 +253,14 @@ public class ERCAuditTrailHandler {
             trail = ERCAuditTrail.clazz.createAuditTrailForObject(ec, eo);
         }
         log.info(trail + " " + type + ": " + rec.permanentGlobalID() + " " + keyPath + " from " + oldValue + " to " + newValue);
+        if (oldValue instanceof ERXGenericRecord) {
+            ERXGenericRecord rec1 = (ERXGenericRecord) oldValue;
+            oldValue = ERXKeyGlobalID.globalIDForGID(rec1.permanentGlobalID()).asString();
+        }
+        if (newValue instanceof ERXGenericRecord) {
+            ERXGenericRecord rec1 = (ERXGenericRecord) newValue;
+            newValue = ERXKeyGlobalID.globalIDForGID(rec1.permanentGlobalID()).asString();
+        }
         trail.createEntry(type, keyPath, oldValue, newValue);
     }
 }
