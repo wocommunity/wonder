@@ -1,7 +1,9 @@
 package er.extensions;
 
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOKeyGlobalID;
-import com.webobjects.eocontrol._EOVectorKeyGlobalID;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
@@ -38,8 +40,8 @@ public class ERXKeyGlobalID extends EOKeyGlobalID {
 		}
 		String entityName = ERXStringUtilities.firstPropertyKeyInKeyPath(value);
 		String valueString = ERXStringUtilities.keyPathWithoutFirstProperty(value);
-		Object pkValue = NSPropertyListSerialization.propertyListFromString(valueString);
-		return null;
+		EOKeyGlobalID gid = (EOKeyGlobalID) ERXEOControlUtilities.globalIDForString(null, entityName, valueString);
+		return globalIDForGID(gid);
 	}
 
 	public static ERXKeyGlobalID fromData(NSData value) {
