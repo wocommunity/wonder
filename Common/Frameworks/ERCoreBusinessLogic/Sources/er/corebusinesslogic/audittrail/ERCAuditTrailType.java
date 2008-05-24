@@ -4,14 +4,17 @@ import er.extensions.ERXConstant.StringConstant;
 
 public class ERCAuditTrailType extends StringConstant {
 
-    public ERCAuditTrailType INSERTED = new ERCAuditTrailType("insert", "Inserted");
-    public ERCAuditTrailType UPDATED = new ERCAuditTrailType("update", "Changed");
-    public ERCAuditTrailType DELETED = new ERCAuditTrailType("delete", "Deleted");
-    public ERCAuditTrailType ADDED = new ERCAuditTrailType("add", "Added");
-    public ERCAuditTrailType REMOVED = new ERCAuditTrailType("removed", "Removed");
+    public final static ERCAuditTrailType INSERTED = new ERCAuditTrailType("inserted", "Inserted");
+    public final static ERCAuditTrailType UPDATED = new ERCAuditTrailType("updated", "Changed");
+    public final static ERCAuditTrailType DELETED = new ERCAuditTrailType("deleted", "Deleted");
+    public final static ERCAuditTrailType ADDED = new ERCAuditTrailType("added", "Added");
+    public final static ERCAuditTrailType REMOVED = new ERCAuditTrailType("removed", "Removed");
     
     public ERCAuditTrailType(String value, String name) {
         super(value, name);
     }
 
+    public static ERCAuditTrailType trailType(String key) {
+        return (ERCAuditTrailType) constantForClassNamed(key, ERCAuditTrailType.class.getName());
+    }
 }

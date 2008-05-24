@@ -1,6 +1,3 @@
-/**
- * 
- */
 package er.corebusinesslogic.audittrail;
 
 import java.util.Enumeration;
@@ -28,18 +25,25 @@ import er.extensions.ERXSelectorUtilities;
 import er.extensions.ERXValueUtilities;
 
 public class ERCAuditTrailHandler {
+    static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCAuditTrail.class);
 
-    static final String ERXAUDIT_KEYS = "ERXAuditKeys";
+    private static final String ERXAUDIT_KEYS = "ERXAuditKeys";
 
-    static ERCAuditTrailHandler _handler;
+    private static ERCAuditTrailHandler _handler;
+
+    public interface Delegate {
+        
+    }
 
     public static void initialize() {
+        if(1 == 0) return;
         _handler = new ERCAuditTrailHandler();
         NSSelector sel = ERXSelectorUtilities.notificationSelector("modelGroupDidLoad");
         NSNotificationCenter.defaultCenter().addObserver(_handler, sel, ERXModelGroup.ModelGroupAddedNotification, null);
     }
 
     public class Configuration {
+        
         public boolean isAudited = false;
 
         public NSMutableArray keys = new NSMutableArray();
@@ -66,9 +70,9 @@ public class ERCAuditTrailHandler {
                 }
             }
         }
-        ERCAuditTrail.log.info("Configuration : " + configuration);
+        log.info("Configuration : " + configuration);
         NSNotificationCenter.defaultCenter().removeObserver(_handler, ERXModelGroup.ModelGroupAddedNotification, null);
-        NSSelector sel = ERXSelectorUtilities.notificationSelector("handleChanges");
+        NSSelector sel = ERXSelectorUtilities.notificationSelector("handleSave");
         NSNotificationCenter.defaultCenter().addObserver(_handler, sel, ERXEC.EditingContextWillSaveChangesNotification, null);
     }
 
@@ -119,22 +123,17 @@ public class ERCAuditTrailHandler {
         return config;
     }
 
-    public void handleChanges(NSNotification n) {
+    public void handleSave(NSNotification n) {
         EOEditingContext ec = (EOEditingContext) n.object();
         if (ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
             ec.processRecentChanges();
             NSArray insertedObjects = (NSArray) ec.insertedObjects();
             NSArray updatedObjects = (NSArray) ec.updatedObjects();
             NSArray deletedObjects = (NSArray) ec.deletedObjects();
-            handleChanges(ec, EOEditingContext.InsertedKey, insertedObjects);
-            handleChanges(ec, EOEditingContext.UpdatedKey, updatedObjects);
-            handleChanges(ec, EOEditingContext.DeletedKey, deletedObjects);
+            handleSave(ec, EOEditingContext.InsertedKey, insertedObjects);
+            handleSave(ec, EOEditingContext.UpdatedKey, updatedObjects);
+            handleSave(ec, EOEditingContext.DeletedKey, deletedObjects);
         }
-    }
-
-    protected void handleInsert(EOEditingContext ec, EOEnterpriseObject eo, Object newValue) {
-        ERXGenericRecord rec = (ERXGenericRecord) eo;
-        ERCAuditTrail.log.info("Insert: " + rec.permanentGlobalID() + " new state " + newValue);
     }
 
     protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject eo) {
@@ -149,33 +148,7 @@ public class ERCAuditTrailHandler {
         }
     }
 
-    protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject eo, String keyPath, Object oldValue, Object newValue) {
-        ERXGenericRecord rec = (ERXGenericRecord) eo;
-        ERCAuditTrail.log.info("Update: " + rec.permanentGlobalID() + " " + keyPath + " from " + oldValue + " to " + newValue);
-    }
-
-    protected void handleDelete(EOEditingContext ec, EOEnterpriseObject eo, Object oldValue) {
-        ERXGenericRecord rec = (ERXGenericRecord) eo;
-        ERCAuditTrail.log.info("Delete: " + rec.permanentGlobalID() + " last state is " + oldValue);
-    }
-
-    protected void handleRemove(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
-        ERXGenericRecord rec = (ERXGenericRecord) target;
-        ERCAuditTrail.log.info("Remove: " + rec.permanentGlobalID() + " " + keyPath + " eo " + eo);
-    }
-
-    protected void handleAdd(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
-        ERXGenericRecord rec = (ERXGenericRecord) target;
-        ERCAuditTrail.log.info("Add: " + rec.permanentGlobalID() + " " + keyPath + " eo " + eo);
-    }
-
-    protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
-        ERXGenericRecord rec = (ERXGenericRecord) target;
-        EOEnterpriseObject oldValue = (EOEnterpriseObject) rec.valueForKeyPath(keyPath);
-        ERCAuditTrail.log.info("Update: " + rec.permanentGlobalID() + " " + keyPath + " from " + oldValue + " to " + eo);
-    }
-
-    private void handleChange(EOEditingContext ec, String typeKey, EOEnterpriseObject eo) {
+    private void handleSave(EOEditingContext ec, String typeKey, EOEnterpriseObject eo) {
         if (typeKey.equals(EOEditingContext.UpdatedKey)) {
             handleUpdate(ec, eo);
         } else if (typeKey.equals(EOEditingContext.InsertedKey)) {
@@ -185,7 +158,7 @@ public class ERCAuditTrailHandler {
         }
     }
 
-    protected void handleChanges(EOEditingContext ec, String typeKey, NSArray objects) {
+    protected void handleSave(EOEditingContext ec, String typeKey, NSArray objects) {
         if (objects == null)
             return;
         for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
@@ -194,7 +167,7 @@ public class ERCAuditTrailHandler {
 
             if (config != null) {
                 if (config.isAudited) {
-                    handleChange(ec, typeKey, eo);
+                    handleSave(ec, typeKey, eo);
                 } else {
                     for (Enumeration e1 = config.notificationKeys.objectEnumerator(); e1.hasMoreElements();) {
                         String key = (String) e1.nextElement();
@@ -215,4 +188,41 @@ public class ERCAuditTrailHandler {
         }
     }
 
+    protected void handleInsert(EOEditingContext ec, EOEnterpriseObject eo, Object newValue) {
+        handleChange(ec, eo, ERCAuditTrailType.INSERTED, null, newValue, null);
+    }
+
+    protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject eo, String keyPath, Object oldValue, Object newValue) {
+        handleChange(ec, eo, ERCAuditTrailType.UPDATED, keyPath, oldValue, newValue);
+    }
+
+    protected void handleDelete(EOEditingContext ec, EOEnterpriseObject eo, Object oldValue) {
+        handleChange(ec, eo, ERCAuditTrailType.DELETED, null, null, oldValue);
+    }
+
+    protected void handleRemove(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
+        ERXGenericRecord rec = (ERXGenericRecord) target;
+        handleChange(ec, target, ERCAuditTrailType.REMOVED, keyPath, null, eo);
+    }
+
+    protected void handleAdd(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
+        ERXGenericRecord rec = (ERXGenericRecord) target;
+        handleChange(ec, target, ERCAuditTrailType.ADDED, keyPath, eo, null);
+    }
+
+    protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
+        ERXGenericRecord rec = (ERXGenericRecord) target;
+        EOEnterpriseObject oldValue = (EOEnterpriseObject) rec.valueForKeyPath(keyPath);
+        handleChange(ec, target, ERCAuditTrailType.UPDATED, keyPath, oldValue, oldValue);
+    }
+    
+    protected void handleChange(EOEditingContext ec, EOEnterpriseObject eo, ERCAuditTrailType type, String keyPath, Object oldValue, Object newValue) {
+        ERXGenericRecord rec = (ERXGenericRecord) eo;
+        ERCAuditTrail trail = ERCAuditTrail.clazz.auditTrailForObject(ec, eo);
+        if(trail == null) {
+            trail = ERCAuditTrail.clazz.createAuditTrailForObject(ec, eo);
+        }
+        log.info(trail + " " + type + ": " + rec.permanentGlobalID() + " " + keyPath + " from " + oldValue + " to " + newValue);
+        trail.createEntry(type, keyPath, oldValue, newValue);
+    }
 }
