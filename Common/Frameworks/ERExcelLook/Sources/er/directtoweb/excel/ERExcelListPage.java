@@ -12,8 +12,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.directtoweb.*;
 import er.extensions.*;
+import org.apache.log4j.Logger;
 
 public class ERExcelListPage extends ERD2WListPage {
+	
+	public static final Logger log = Logger.getLogger(ERExcelListPage.class);
 
     public int index;
 
