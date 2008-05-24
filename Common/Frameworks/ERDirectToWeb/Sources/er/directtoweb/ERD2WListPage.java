@@ -372,6 +372,12 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	public WOActionResults invokeAction(WORequest r, WOContext c) {
 		setupPhase();
+		if (_hasToUpdate) {
+			willUpdate();
+			displayGroup().fetch();
+			_hasToUpdate = false;
+			didUpdate();
+		}
 		return super.invokeAction(r, c);
 	}
 
