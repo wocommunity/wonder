@@ -39,7 +39,7 @@
             columnName = TYPE; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = type; 
-            prototypeName = osType; 
+            prototypeName = shortString; 
             valueClassName = "er.corebusinesslogic.audittrail.ERCAuditTrailType"; 
             valueFactoryMethodName = trailType; 
         }, 
