@@ -398,6 +398,7 @@ w3m2
 wallpaper
 wanderer
 wapspider
+webalta
 webbandit
 webbase
 webcatcher
