@@ -1,28 +1,9 @@
 {
-    rules = (
-        {
-            author = 15; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = pageConfiguration; 
-                selectorName = "isLike"; 
-                value = "*MailMessage*"; 
-            }; 
-            rhs = {
-                class = com.webobjects.directtoweb.EntityAssignment; 
-                keyPath = entity; 
-                value = ERCMailMessage; 
-            }; 
-        }, 
-        {
-            author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
-            rhs = {
-                class = er.corebusinesslogic.ERCUserPreferencesAssignment; 
-                keyPath = userPreferences; 
-                value = "<computed>"; 
-            }; 
-        }
-    ); 
+  "rules" = (
+    {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "er.corebusinesslogic.ERCUserPreferencesAssignment"; "keyPath" = "userPreferences"; "value" = "<computed>"; }; }, 
+    {"author" = "15"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "pageConfiguration"; "selectorName" = "isLike"; "value" = "*MailMessage*"; }; "rhs" = {"class" = "com.webobjects.directtoweb.EntityAssignment"; "keyPath" = "entity"; "value" = "ERCMailMessage"; }; }, 
+    {"author" = "50"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "com.webobjects.eocontrol.EOAndQualifier"; "qualifiers" = ({"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "entity.name"; "selectorName" = "isEqualTo"; "value" = "ERCAuditTrail"; }, {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "propertyKey"; "selectorName" = "isEqualTo"; "value" = "entries"; }, {"class" = "com.webobjects.eocontrol.EOOrQualifier"; "qualifiers" = ({"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "task"; "selectorName" = "isEqualTo"; "value" = "edit"; }, {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "task"; "selectorName" = "isEqualTo"; "value" = "inspect"; }); }); }; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "componentName"; "value" = "ERDList"; }; }, 
+    {"author" = "50"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "com.webobjects.eocontrol.EOAndQualifier"; "qualifiers" = ({"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "entity.name"; "selectorName" = "isEqualTo"; "value" = "ERCAuditTrail"; }, {"class" = "com.webobjects.eocontrol.EOOrQualifier"; "qualifiers" = ({"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "task"; "selectorName" = "isEqualTo"; "value" = "edit"; }, {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "task"; "selectorName" = "isEqualTo"; "value" = "inspect"; }); }); }; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "displayPropertyKeys"; "value" = ("gid.entityName", "isDeleted", "entries"); }; }, 
+    {"author" = "50"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "com.webobjects.eocontrol.EOAndQualifier"; "qualifiers" = ({"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "entity.name"; "selectorName" = "isEqualTo"; "value" = "ERCAuditTrailEntry"; }, {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "task"; "selectorName" = "isEqualTo"; "value" = "list"; }); }; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "displayPropertyKeys"; "value" = ("created", "user.name", "type.name", "keyPath", "oldValues", "newValues"); }; }
+  ); 
 }
