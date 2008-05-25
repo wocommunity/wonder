@@ -34,6 +34,7 @@ import er.extensions.ERXSQLHelper;
 public class ERXMigrationTable {
 	private ERXMigrationDatabase _database;
 	private NSMutableArray<ERXMigrationColumn> _columns;
+	private NSMutableArray<ERXMigrationIndex> _indexes;
 	private String _name;
 	private boolean _new;
 
@@ -46,6 +47,7 @@ public class ERXMigrationTable {
 	protected ERXMigrationTable(ERXMigrationDatabase database, String name) {
 		_database = database;
 		_columns = new NSMutableArray<ERXMigrationColumn>();
+		_indexes = new NSMutableArray<ERXMigrationIndex>();
 		_name = name;
 		_new = true;
 	}
@@ -120,9 +122,14 @@ public class ERXMigrationTable {
 	 */
 	public EOEntity _newEntity() {
 		EOEntity entity = _blankEntity();
+		NSMutableArray<EOAttribute> primaryKeyAttributes = new NSMutableArray<EOAttribute>();
 		for (ERXMigrationColumn column : _columns) {
-			column._newAttribute(entity);
+			EOAttribute attribute = column._newAttribute(entity);
+			if (column.isPrimaryKey()) {
+				primaryKeyAttributes.addObject(attribute);
+			}
 		}
+		entity.setPrimaryKeyAttributes(primaryKeyAttributes);
 		return entity;
 	}
 
@@ -562,8 +569,24 @@ public class ERXMigrationTable {
 	public void create() throws SQLException {
 		if (_new) {
 			ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_createExpressions()));
+			NSMutableArray<ERXMigrationColumn> primaryKeys = new NSMutableArray<ERXMigrationColumn>();
 			for (ERXMigrationColumn column : _columns) {
+				if (column.isPrimaryKey()) {
+					primaryKeys.addObject(column);
+				}
 				column._setNew(false);
+			}
+			if (primaryKeys.count() > 0) {
+				setPrimaryKey(true, primaryKeys.toArray(new ERXMigrationColumn[primaryKeys.count()]));
+			}
+			for (ERXMigrationColumn column : _columns) {
+				ERXMigrationColumn foreignKeyDestination = column.foreignKeyDestination();
+				if (foreignKeyDestination != null) {
+					addForeignKey(true, column, foreignKeyDestination);
+				}
+			}
+			for (ERXMigrationIndex index : _indexes) {
+				addIndex(true, index);
 			}
 			_new = false;
 		}
@@ -691,11 +714,29 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the constraint fails
 	 */
 	public void addUniqueIndex(String indexName, ERXSQLHelper.ColumnIndex... columnIndexes) throws SQLException {
-		ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
-		if(indexName==null) 
-			indexName=_defaultIndexName(true, _name, helper.columnNamesFromColumnIndexes(columnIndexes).toArray(new String[] {}));
-		String sql = helper.sqlForCreateUniqueIndex(indexName, _name, columnIndexes);
-		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), sql);
+		addUniqueIndex(!_new, indexName, columnIndexes);
+	}
+	
+	/**
+	 * Executes the SQL operations to add a unique index.
+	 * 
+	 * @param create if true, the index is created immediately
+	 * @param indexName the name of the index
+	 * @param columnIndexes the column indexes to unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addUniqueIndex(boolean create, String indexName, ERXSQLHelper.ColumnIndex... columnIndexes) throws SQLException {
+		if (create) {
+			ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
+			if(indexName == null) { 
+				indexName = _defaultIndexName(true, _name, helper.columnNamesFromColumnIndexes(columnIndexes).toArray(new String[] {}));
+			}
+			String sql = helper.sqlForCreateUniqueIndex(indexName, _name, columnIndexes);
+			ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), sql);
+		}
+		else {
+			_indexes.addObject(new ERXMigrationIndex(indexName, true, columnIndexes));
+		}
 	}
 
 	/**
@@ -750,11 +791,55 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the constraint fails
 	 */
 	public void addIndex(String indexName, ERXSQLHelper.ColumnIndex... columnIndexes) throws SQLException {
-		ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
-		if (indexName == null)
-			indexName = _defaultIndexName(false, _name, helper.columnNamesFromColumnIndexes(columnIndexes).toArray(new String[] {}));
-		String sql = helper.sqlForCreateIndex(indexName, _name, columnIndexes);
-		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), sql);
+		addIndex(!_new, indexName, columnIndexes);
+	}
+	
+	/**
+	 * Executes the SQL operations to add an index.
+	 * 
+	 * @param create if true, the index is created immediately
+	 * @param indexName the name of the index
+	 * @param columnIndexes the column indexes to unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addIndex(boolean create, String indexName, ERXSQLHelper.ColumnIndex... columnIndexes) throws SQLException {
+		if (create) {
+			ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
+			if (indexName == null) {
+				indexName = _defaultIndexName(false, _name, helper.columnNamesFromColumnIndexes(columnIndexes).toArray(new String[] {}));
+			}
+			String sql = helper.sqlForCreateIndex(indexName, _name, columnIndexes);
+			ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), sql);
+		}
+		else {
+			_indexes.addObject(new ERXMigrationIndex(indexName, false, columnIndexes));
+		}
+	}
+	
+	/**
+	 * Executes the SQL operations to add an index.
+	 * 
+	 * @param index the index to add
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addIndex(ERXMigrationIndex index) throws SQLException {
+		addIndex(!_new, index);
+	}
+	
+	/**
+	 * Executes the SQL operations to add an index.
+	 * 
+	 * @param create if true, the index is created immediately
+	 * @param index the index to add
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addIndex(boolean create, ERXMigrationIndex index) throws SQLException {
+		if (index.isUnique()) {
+			addUniqueIndex(create, index.name(), index.columns());
+		}
+		else {
+			addIndex(create, index.name(), index.columns());
+		}
 	}
 	
 	private ERXSQLHelper.ColumnIndex[] _columnIndexesForMigrationColumns(ERXMigrationColumn... columns) {
@@ -804,7 +889,26 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the constraint fails
 	 */
 	public void setPrimaryKey(ERXMigrationColumn... columns) throws SQLException {
-		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_setPrimaryKeyExpressions(columns)));
+		setPrimaryKey(!_new, columns);
+	}
+	
+	/**
+	 * Executes the SQL operations to add this primary key constraint.
+	 * 
+	 * @param create if create is true, execute this now (vs just flag the ERXMigrationColumn)
+	 * @param columns the primary key columns to designate as primary keys
+	 * @throws SQLException if the constraint fails
+	 */
+	public void setPrimaryKey(boolean create, ERXMigrationColumn... columns) throws SQLException {
+		for (ERXMigrationColumn column : _columns) {
+			column._setPrimaryKey(false);
+		}
+		for (ERXMigrationColumn column : columns) {
+			column._setPrimaryKey(true);
+		}
+		if (create) {
+			ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_setPrimaryKeyExpressions(columns)));
+		}
 	}
 
 	/**
@@ -851,9 +955,23 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the add fails
 	 */
 	public void addForeignKey(ERXMigrationColumn sourceColumn, ERXMigrationColumn destinationColumn) throws SQLException {
-		NSArray<EOSQLExpression> expressions = _addForeignKeyExpressions(sourceColumn, destinationColumn);
-		if (expressions != null) {
-			ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(expressions));
+		addForeignKey(!_new, sourceColumn, destinationColumn);
+	}
+
+	/**
+	 * Executes the SQL operations to add this foreign key constraint (only supports single attribute FK's right now).
+	 * 
+	 * @param sourceColumn the source column of the relationship
+	 * @param destinationColumn the destination column of the relationship (should be the PK of the destination table)
+	 * @throws SQLException if the add fails
+	 */
+	public void addForeignKey(boolean create, ERXMigrationColumn sourceColumn, ERXMigrationColumn destinationColumn) throws SQLException {
+		sourceColumn._setForeignKeyDestination(destinationColumn);
+		if (create) {
+			NSArray<EOSQLExpression> expressions = _addForeignKeyExpressions(sourceColumn, destinationColumn);
+			if (expressions != null) {
+				ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(expressions));
+			}
 		}
 	}
 
@@ -881,5 +999,36 @@ public class ERXMigrationTable {
 	 */
 	public void dropPrimaryKey(ERXMigrationColumn column) throws SQLException {
 		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_dropPrimaryKeyExpressions(column)));
+		column._setPrimaryKey(false);
+	}
+
+	/**
+	 * Returns a dictionary that represents the primary key for
+	 * an entity described by this table.  Note that you must have specified
+	 * the primary key columns for this table prior to calling this method via
+	 * the setPrimaryKeys method (or calling _setPrimaryKey on the individual
+	 * columns).
+	 * 
+	 * @return a dictionary of a primary key
+	 */
+	public NSDictionary<String, Object> newPrimaryKey() {
+		return newPrimaryKeys(1).lastObject();
+	}
+	
+	/**
+	 * Returns an array of dictionaries that represent the primary keys for
+	 * an entity described by this table.  Note that you must have specified
+	 * the primary key columns for this table prior to calling this method via
+	 * the setPrimaryKeys method (or calling _setPrimaryKey on the individual
+	 * columns).
+	 * 
+	 * @param count the number of primary keys desired
+	 * @return an array of dictionaries of primary keys
+	 */
+	@SuppressWarnings("unchecked")
+	public NSArray<NSDictionary<String, Object>> newPrimaryKeys(int count) {
+		NSArray<NSDictionary<String, Object>> primaryKeys = database().adaptorChannel().primaryKeysForNewRowsWithEntity(count, _newEntity());
+		//NSMutableArray<NSMutableDictionary<String, Object>>
+		return primaryKeys;
 	}
 }

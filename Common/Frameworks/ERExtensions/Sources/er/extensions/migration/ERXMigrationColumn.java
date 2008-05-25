@@ -35,6 +35,9 @@ public class ERXMigrationColumn {
 	private boolean _new;
 	private String _overrideValueType;
 	private String _overrideExternalType;
+	
+	private boolean _primaryKey;
+	private ERXMigrationColumn _foreignKeyDestination;
 
 	/**
 	 * Constructs a new ERXMigrationColumn.
@@ -236,6 +239,45 @@ public class ERXMigrationColumn {
 	 */
 	public Object defaultValue() {
 		return _defaultValue;
+	}
+	
+	/**
+	 * Sets whether or not this column is a primary key.
+	 * 
+	 * @param primaryKey whether or not this column is a primary key
+	 */
+	public void _setPrimaryKey(boolean primaryKey) {
+		_primaryKey = primaryKey;
+	}
+	
+	/**
+	 * Returns whether or not this column is a primary key (note this
+	 * is only valid if you told migrations that this column is a
+	 * primary key).
+	 * 
+	 * @return whether or not this column is a primary key
+	 */
+	public boolean isPrimaryKey() {
+		return _primaryKey;
+	}
+	
+	/**
+	 * Sets the destination column for this foreign key.
+	 * 
+	 * @param foreignKeyDestination the destination column for this foreign key
+	 */
+	public void _setForeignKeyDestination(ERXMigrationColumn foreignKeyDestination) {
+		_foreignKeyDestination = foreignKeyDestination;
+	}
+	
+	/**
+	 * Returns the destination column for this foreign key (note this
+	 * is only valid if you told migrations the foreign key).
+	 * 
+	 * @return the destination column for this foreign key
+	 */
+	public ERXMigrationColumn foreignKeyDestination() {
+		return _foreignKeyDestination;
 	}
 
 	/**
