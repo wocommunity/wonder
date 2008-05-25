@@ -17,6 +17,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.ERXConstant;
 import er.extensions.ERXEC;
@@ -24,6 +25,8 @@ import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXGenericRecord;
 import er.extensions.ERXKeyGlobalID;
 import er.extensions.ERXModelGroup;
+import er.extensions.ERXPatcher;
+import er.extensions.ERXProperties;
 import er.extensions.ERXSelectorUtilities;
 import er.extensions.ERXValueUtilities;
 
@@ -39,9 +42,9 @@ public class ERCAuditTrailHandler {
     }
 
     public static void initialize() {
-        if (1 == 0)
-            return;
-        _handler = new ERCAuditTrailHandler();
+        String className = ERXProperties.stringForKeyWithDefault("er.corebusinesslogic.ERCAuditTrailClassName", ERCAuditTrailHandler.class.getName());
+        Class c = ERXPatcher.classForName(className);
+        _handler = (ERCAuditTrailHandler) _NSUtilities.instantiateObject(c, new Class[]{}, new Object[]{}, true, false);
         NSSelector sel = ERXSelectorUtilities.notificationSelector("modelGroupDidLoad");
         NSNotificationCenter.defaultCenter().addObserver(_handler, sel, ERXModelGroup.ModelGroupAddedNotification, null);
     }
