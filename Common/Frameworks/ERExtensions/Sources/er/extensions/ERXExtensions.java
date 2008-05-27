@@ -17,6 +17,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -1190,6 +1191,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     public static void initApp(String mainBundleName, URL mainBundleURL, String nameOfApplicationSubclass, String[] args) {
         ERXApplication.setup(args);
         ERXApplication.primeApplication(mainBundleName, mainBundleURL, nameOfApplicationSubclass);
+        NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidCreateNotification, WOApplication.application()));
     }
     
     /**
