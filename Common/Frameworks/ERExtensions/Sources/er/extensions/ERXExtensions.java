@@ -9,6 +9,7 @@ package er.extensions;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,6 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
@@ -1135,5 +1135,98 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
             }
         }
         return implementsMethod;
+    }
+    
+    /**
+     * Initializes your WOApplication programmatically (for use in test cases and main methods) with
+     * the assumption that the current directory is your main bundle URL and your Application class
+     * is named "Application".
+     * 
+     * @param args the commandline arguments for your application
+     */
+    public static void initApp(String[] args) {
+    	ERXExtensions.initApp("Application", args);
+    }
+    
+    /**
+     * Initializes your WOApplication programmatically (for use in test cases and main methods) with
+     * the assumption that the current directory is your main bundle URL.
+     * 
+     * @param nameOfApplicationSubclass the name of your Application subclass
+     * @param args the commandline arguments for your application
+     */
+    public static void initApp(String nameOfApplicationSubclass, String[] args) {
+		try {
+	    	File currentFolder = new File(".").getCanonicalFile();
+	    	if (!currentFolder.getName().endsWith(".woa")) {
+	    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
+	    	}
+	    	ERXExtensions.initApp(null, currentFolder.toURL(), nameOfApplicationSubclass, args);
+		}
+		catch (IOException e) {
+			throw new NSForwardException(e);
+		}
+    }
+    
+    /**
+     * Initializes your WOApplication programmatically (for use in test cases and main methods).
+     * 
+     * @param mainBundleName the name of your main bundle
+     * @param nameOfApplicationSubclass the name of your Application subclass
+     * @param args the commandline arguments for your application
+     */
+    public static void initApp(String mainBundleName, String nameOfApplicationSubclass, String[] args) {
+    	ERXExtensions.initApp(mainBundleName, null, nameOfApplicationSubclass, args);
+    }
+    
+    /**
+     * Initializes your WOApplication programmatically (for use in test cases and main methods).
+     * 
+     * @param mainBundleName the name of your main bundle (or null to use mainBundleURL)
+     * @param mainBundleURL the URL to your main bundle (ignored if mainBundleName is set)
+     * @param nameOfApplicationSubclass the name of your Application subclass
+     * @param args the commandline arguments for your application
+     */
+    public static void initApp(String mainBundleName, URL mainBundleURL, String nameOfApplicationSubclass, String[] args) {
+        ERXApplication.setup(args);
+        ERXApplication.primeApplication(mainBundleName, mainBundleURL, nameOfApplicationSubclass);
+    }
+    
+    /**
+     * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
+     * not need to call this method if you already called initApp.  This is lighter-weight than 
+     * initApp, and tries to just get enough configured to make EOF work properly.  This method
+     * assumes you are running your app from a .woa folder.
+     * 
+     * @param args the commandline arguments for your application
+     */
+    public static void initEOF(String[] args) {
+    	ERXExtensions.initEOF(new File("."), args);
+    }
+    
+    /**
+     * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
+     * not need to call this method if you already called initApp.  This is lighter-weight than 
+     * initApp, and tries to just get enough configured to make EOF work properly.
+     * 
+     * @param mainBundleFile the folder of your main bundle
+     * @param args the commandline arguments for your application
+     */
+    public static void initEOF(File mainBundleFolder, String[] args) {
+    	try {
+	    	File currentFolder = new File(".").getCanonicalFile();
+	    	if (!currentFolder.getName().endsWith(".woa")) {
+	    		currentFolder = mainBundleFolder;
+		    	if (!currentFolder.getName().endsWith(".woa")) {
+		    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
+		    	}
+		        System.setProperty("webobjects.user.dir", mainBundleFolder.getCanonicalPath());
+	    	}
+	        ERXApplication.setup(args);
+	        ((ERXExtensions) ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class)).bundleDidLoad(null);
+		}
+		catch (IOException e) {
+			throw new NSForwardException(e);
+		}
     }
 }
