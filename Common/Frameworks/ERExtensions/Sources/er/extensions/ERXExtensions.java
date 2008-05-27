@@ -17,7 +17,6 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -1140,29 +1139,18 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     
     /**
      * Initializes your WOApplication programmatically (for use in test cases and main methods) with
-     * the assumption that the current directory is your main bundle URL and your Application class
-     * is named "Application".
-     * 
-     * @param args the commandline arguments for your application
-     */
-    public static void initApp(String[] args) {
-    	ERXExtensions.initApp("Application", args);
-    }
-    
-    /**
-     * Initializes your WOApplication programmatically (for use in test cases and main methods) with
      * the assumption that the current directory is your main bundle URL.
      * 
-     * @param nameOfApplicationSubclass the name of your Application subclass
+     * @param applicationSubclass your Application subclass
      * @param args the commandline arguments for your application
      */
-    public static void initApp(String nameOfApplicationSubclass, String[] args) {
+    public static void initApp(Class applicationSubclass, String[] args) {
 		try {
 	    	File currentFolder = new File(".").getCanonicalFile();
 	    	if (!currentFolder.getName().endsWith(".woa")) {
 	    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
 	    	}
-	    	ERXExtensions.initApp(null, currentFolder.toURL(), nameOfApplicationSubclass, args);
+	    	ERXExtensions.initApp(null, currentFolder.toURL(), applicationSubclass, args);
 		}
 		catch (IOException e) {
 			throw new NSForwardException(e);
@@ -1173,11 +1161,11 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Initializes your WOApplication programmatically (for use in test cases and main methods).
      * 
      * @param mainBundleName the name of your main bundle
-     * @param nameOfApplicationSubclass the name of your Application subclass
+     * @param applicationSubclass your Application subclass
      * @param args the commandline arguments for your application
      */
-    public static void initApp(String mainBundleName, String nameOfApplicationSubclass, String[] args) {
-    	ERXExtensions.initApp(mainBundleName, null, nameOfApplicationSubclass, args);
+    public static void initApp(String mainBundleName, Class applicationSubclass, String[] args) {
+    	ERXExtensions.initApp(mainBundleName, null, applicationSubclass, args);
     }
     
     /**
@@ -1185,13 +1173,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * 
      * @param mainBundleName the name of your main bundle (or null to use mainBundleURL)
      * @param mainBundleURL the URL to your main bundle (ignored if mainBundleName is set)
-     * @param nameOfApplicationSubclass the name of your Application subclass
+     * @param applicationSubclass your Application subclass
      * @param args the commandline arguments for your application
      */
-    public static void initApp(String mainBundleName, URL mainBundleURL, String nameOfApplicationSubclass, String[] args) {
+    public static void initApp(String mainBundleName, URL mainBundleURL, Class applicationSubclass, String[] args) {
         ERXApplication.setup(args);
-        ERXApplication.primeApplication(mainBundleName, mainBundleURL, nameOfApplicationSubclass);
-        NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidCreateNotification, WOApplication.application()));
+        ERXApplication.primeApplication(mainBundleName, mainBundleURL, applicationSubclass.getName());
+        //NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidCreateNotification, WOApplication.application()));
     }
     
     /**
