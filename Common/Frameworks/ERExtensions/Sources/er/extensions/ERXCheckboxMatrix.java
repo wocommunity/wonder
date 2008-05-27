@@ -130,7 +130,7 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
             // ** This is where we accept the formValues.  Kind of weird.
             NSMutableArray aSelectionsArray = new NSMutableArray();
             Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
-            NSArray anItemList = (NSArray)valueForBinding("list");
+            NSArray anItemList = maybeSortedList();
             int anItemCount = anItemList.count();
             while (anIndexEnumerator.hasMoreElements()) {
                 int anIndex = Integer.parseInt((String)anIndexEnumerator.nextElement());
