@@ -778,8 +778,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("didFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
 
-		ERXEC.setUseUnlocker(useEditingContextUnlocker());
-		ERXEC.setTraceOpenEditingContextLocks(traceOpenEditingContextLocks());
+		Boolean useUnlocker = useEditingContextUnlocker();
+		if (useUnlocker != null) {
+			ERXEC.setUseUnlocker(useUnlocker);
+		}
+		Boolean traceOpenLocks = traceOpenEditingContextLocks();
+		if (traceOpenLocks != null) {
+			ERXEC.setTraceOpenLocks(traceOpenLocks);
+		}
 
 		// Signal handling support
 		if (ERXGracefulShutdown.isEnabled()) {
@@ -804,18 +810,28 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Decides whether to use editing context unlocking.
 	 * 
 	 * @return true if ECs should be unlocked after each RR-loop
+	 * @deprecated use er.extensions.ERXEC.useUnlocker property instead
 	 */
-	public boolean useEditingContextUnlocker() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.useEditingContextUnlocker", false);
+	public Boolean useEditingContextUnlocker() {
+		Boolean useUnlocker = null;
+		if (ERXProperties.stringForKey("er.extensions.ERXApplication.useEditingContextUnlocker") != null) {
+			useUnlocker = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.useEditingContextUnlocker", false));
+		}
+		return useUnlocker;
 	}
 
 	/**
 	 * Decides whether or not to keep track of open editing context locks.
 	 * 
 	 * @return true if editing context locks should be tracked
+	 * @deprecated use er.extensions.ERXEC.traceOpenLocks property instead
 	 */
-	public boolean traceOpenEditingContextLocks() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.traceOpenEditingContextLocks", false);
+	public Boolean traceOpenEditingContextLocks() {
+		Boolean traceOpenLocks = null;
+		if (ERXProperties.stringForKey("er.extensions.ERXApplication.traceOpenEditingContextLocks") != null) {
+			traceOpenLocks = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.traceOpenEditingContextLocks", false));
+		}
+		return traceOpenLocks;
 	}
 
 	/**

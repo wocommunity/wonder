@@ -110,10 +110,10 @@ public class ERXEC extends EOEditingContext {
 	 * holds a flag if locked ECs should be unlocked after the request-response
 	 * loop.
 	 */
-	private static boolean useUnlocker;
+	private static Boolean useUnlocker;
 
 	/** holds a flag if editing context locks should be traced */
-	private static boolean traceOpenEditingContextLocks;
+	private static Boolean traceOpenLocks;
 
 	/** key for the thread storage used by the unlocker. */
 	private static final String LockedContextsForCurrentThreadKey = "ERXEC.lockedContextsForCurrentThread";
@@ -122,18 +122,43 @@ public class ERXEC extends EOEditingContext {
 	private static final NSSelector EditingContextDidRevertObjectsDelegateSelector = new NSSelector("editingContextDidRevertObjects", new Class[] { EOEditingContext.class, NSArray.class, NSArray.class, NSArray.class });
 	private static final NSSelector EditingContextDidFailSaveChangesDelegateSelector = new NSSelector("editingContextDidFailSaveChanges", new Class[] { EOEditingContext.class, EOGeneralAdaptorException.class });
 
+	/**
+	 * Returns the value of the er.extensions.ERXEC.safeLocking property, which is the
+	 * new catch-all setting that turns on all of the recommended locking settings.
+	 */
+	public static boolean safeLocking() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.safeLocking", false);
+	}
+	
+	public static boolean useUnlocker() {
+		if (useUnlocker == null) {
+			useUnlocker = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.useUnlocker", ERXEC.safeLocking()));
+			log.debug("setting useUnlocker to " + useUnlocker);
+		}
+		return useUnlocker.booleanValue();
+	}
+	
 	public static void setUseUnlocker(boolean value) {
 		useUnlocker = value;
 	}
 
+	public static boolean traceOpenLocks() {
+		if (traceOpenLocks == null) {
+			traceOpenLocks = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.traceOpenLocks", false));
+			log.debug("setting traceOpenLocks to " + traceOpenLocks);
+		}
+		return traceOpenLocks.booleanValue();
+	}
+	
 	/**
 	 * Sets whether or not open editing context lock tracing is enabled.
 	 */
-	public static void setTraceOpenEditingContextLocks(boolean value) {
-		traceOpenEditingContextLocks = value;
+	public static void setTraceOpenLocks(boolean value) {
+		traceOpenLocks = value;
 	}
 
 	private static ThreadLocal locks = new ThreadLocal() {
+		@Override
 		protected Object initialValue() {
 			return new Vector();
 		}
@@ -147,7 +172,7 @@ public class ERXEC extends EOEditingContext {
 	 *            locked EOEditingContext
 	 */
 	public static void pushLockedContextForCurrentThread(EOEditingContext ec) {
-		if (useUnlocker && ec != null) {
+		if (useUnlocker() && ec != null) {
 			List ecs = (List) locks.get();
 			ecs.add(ec);
 			if (log.isDebugEnabled()) {
@@ -164,7 +189,7 @@ public class ERXEC extends EOEditingContext {
 	 *            unlocked EOEditingContext
 	 */
 	public static void popLockedContextForCurrentThread(EOEditingContext ec) {
-		if (useUnlocker && ec != null) {
+		if (useUnlocker() && ec != null) {
 			List ecs = (List) locks.get();
 			if (ecs != null) {
 				int index = ecs.lastIndexOf(ec);
@@ -187,7 +212,7 @@ public class ERXEC extends EOEditingContext {
 	 */
 	public static void unlockAllContextsForCurrentThread() {
 		List ecs = (List) locks.get();
-		if (useUnlocker && ecs != null && ecs.size() > 0) {
+		if (useUnlocker() && ecs != null && ecs.size() > 0) {
 			if (log.isDebugEnabled()) {
 				log.debug("Unlock remaining: " + ecs);
 			}
@@ -305,18 +330,18 @@ public class ERXEC extends EOEditingContext {
 	public ERXEC(EOObjectStore os) {
 		super(os);
 		ERXEnterpriseObject.Observer.install();
-		if (traceOpenEditingContextLocks) {
+		if (traceOpenLocks()) {
 			creationTrace = new Exception("Creation");
 			creationTrace.fillInStackTrace();
 		}
 	}
 
 	public static boolean defaultAutomaticLockUnlock() {
-		return "true".equals(System.getProperty("er.extensions.ERXEC.defaultAutomaticLockUnlock"));
+		return "true".equals(System.getProperty("er.extensions.ERXEC.defaultAutomaticLockUnlock")) || ERXEC.safeLocking();
 	}
 
 	public static boolean defaultCoalesceAutoLocks() {
-		return "true".equals(System.getProperty("er.extensions.ERXEC.defaultCoalesceAutoLocks"));
+		return "true".equals(System.getProperty("er.extensions.ERXEC.defaultCoalesceAutoLocks")) || ERXEC.safeLocking();
 	}
 
 	/** Utility to delete a bunch of objects. */
@@ -356,7 +381,7 @@ public class ERXEC extends EOEditingContext {
 	public boolean coalesceAutoLocks() {
 		if (coalesceAutoLocks == null) {
 			coalesceAutoLocks = Boolean.valueOf(defaultCoalesceAutoLocks());
-			if (coalesceAutoLocks.booleanValue() && !useUnlocker) {
+			if (coalesceAutoLocks.booleanValue() && !useUnlocker()) {
 				throw new IllegalStateException("You must enable the EC unlocker if you want to coalesce autolocks.");
 			}
 		}
@@ -396,7 +421,7 @@ public class ERXEC extends EOEditingContext {
 	 * editing contexts in this thread.
 	 */
 	public void lock() {
-		if (traceOpenEditingContextLocks) {
+		if (traceOpenLocks()) {
 			synchronized (this) {
 				if (openLockTraces == null) {
 					openLockTraces = new NSMutableArray();
@@ -469,7 +494,7 @@ public class ERXEC extends EOEditingContext {
 		if (lockCount == 0 && autoLocked) {
 			autoLocked = false;
 		}
-		if (traceOpenEditingContextLocks) {
+		if (traceOpenLocks()) {
 			synchronized (this) {
 				if (openLockTraces != null) {
 					// FIXME AK: as long as we only remove the last object,
@@ -561,7 +586,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	public void dispose() {
-		if (traceOpenEditingContextLocks) {
+		if (traceOpenLocks()) {
 			_checkOpenLockTraces();
 		}
 		super.dispose();
@@ -570,7 +595,7 @@ public class ERXEC extends EOEditingContext {
 	/** Overriden to support automatic autoLocking. */
 	public void finalize() throws Throwable {
 		isFinalizing = true;
-		if (traceOpenEditingContextLocks) {
+		if (traceOpenLocks()) {
 			_checkOpenLockTraces();
 		}
 		super.finalize();
@@ -1412,7 +1437,7 @@ public class ERXEC extends EOEditingContext {
 				ec.setSharedEditingContext(null);
 				ec.unlock();
 			}
-			if (traceOpenEditingContextLocks) {
+			if (ERXEC.traceOpenLocks()) {
 				activeEditingContexts.put(ec, Thread.currentThread().getName());
 			}
 			NSNotificationCenter.defaultCenter().postNotification(EditingContextDidCreateNotification, ec);
