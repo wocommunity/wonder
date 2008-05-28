@@ -37,7 +37,81 @@ public class ERXResponseRewriter {
 	private static Map<WOComponent, NSMutableDictionary<String, Object>> _ajaxPageUserInfos;
 
 	private static Map<WOComponent, NSMutableDictionary<String, Object>> _pageUserInfos;
-	
+
+	private static Delegate _delagate;
+
+	/**
+	 * Represents a resource in a framework, or a fully-qualified URL if
+	 * fileName starts with a / or contains :// .
+	 * 
+	 * @author mschrag
+	 */
+	public static class Resource {
+		private String _framework;
+		private String _fileName;
+
+		public Resource(String url) {
+			_framework = null;
+			_fileName = url;
+		}
+
+		public Resource(String framework, String fileName) {
+			_framework = framework;
+			_fileName = fileName;
+		}
+
+		public String framework() {
+			return _framework;
+		}
+
+		public String fileName() {
+			return _fileName;
+		}
+
+		@Override
+		public String toString() {
+			return "[Resource: framework = " + _framework + "; name = " + _fileName + "]";
+		}
+	}
+
+	/**
+	 * The delegate that is called prior to adding resources into the page,
+	 * which gives you a chance to deny the addition, or rewrite the addition to
+	 * a custom resource.
+	 * 
+	 * @author mschrag
+	 */
+	public static interface Delegate {
+		/**
+		 * Called prior to adding resources at all. Returning false will skip
+		 * the addition completely.
+		 * 
+		 * @param framework
+		 *            the requested framework of the addition (can be null)
+		 * @param fileName
+		 *            the requested fileName of the addition (can be a URL,
+		 *            absolute path, or relative resource path)
+		 * @return true if the resource should be added
+		 */
+		public boolean responseRewriterShouldAddResource(String framework, String fileName);
+
+		/**
+		 * Provides the ability to override the requested framework and fileName
+		 * with a custom alternative. For example, if you want to replace all
+		 * "Ajax" "prototype.js" imports, you can provide your own alternative
+		 * "app" "prototype.js".
+		 * 
+		 * @param framework
+		 *            the requested framework of the addition (can be null)
+		 * @param fileName
+		 *            the requested fileName of the addition (can be a URL,
+		 *            absolute path, or relative resource path)
+		 * @return an alternative Resource, or null to use the requested
+		 *         resource
+		 */
+		public ERXResponseRewriter.Resource responseRewriterWillAddResource(String framework, String fileName);
+	}
+
 	/**
 	 * TagMissingBehavior specifies several ways the response rewriter should
 	 * handle the case of having a missing tag that you attempted to insert in
@@ -79,6 +153,17 @@ public class ERXResponseRewriter {
 	}
 
 	/**
+	 * Sets the response rewriter delegate to be used by this Application.
+	 * 
+	 * @param delegate
+	 *            the response rewriter delegate to be used by this Application,
+	 *            or null to use the default
+	 */
+	public static void setDelegate(ERXResponseRewriter.Delegate delegate) {
+		ERXResponseRewriter._delagate = delegate;
+	}
+
+	/**
 	 * Returns the page userInfo for the page component of the given context. If
 	 * this is the first request for the page user info for a non-ajax request,
 	 * the user info will be cleared (so that reloading a page doesn't make the
@@ -109,9 +194,9 @@ public class ERXResponseRewriter {
 	}
 
 	/**
-	 * Returns the page userInfo for the page component of the given context.  Unlike
-	 * ajaxPageUserInfo, information put into pageUserInfo will stay associated with
-	 * the page as long as the page exists.
+	 * Returns the page userInfo for the page component of the given context.
+	 * Unlike ajaxPageUserInfo, information put into pageUserInfo will stay
+	 * associated with the page as long as the page exists.
 	 * 
 	 * @param context
 	 *            the context to lookup
@@ -283,7 +368,6 @@ public class ERXResponseRewriter {
 			cssStartTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"";
 		}
 		else {
-
 			cssStartTag = "<link rel=\"stylesheet\" type=\"text/css\" media=\"" + media + "\" href=\"";
 		}
 		String cssEndTag;
@@ -308,7 +392,7 @@ public class ERXResponseRewriter {
 		// ERXResponseRewriter.addResourceInHead(response, context, framework,
 		// fileName, cssStartTag, cssEndTag, fallbackStartTag, fallbackEndTag,
 		// TagMissingBehavior.SkipAndWarn);
-		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, TagMissingBehavior.Top);
+		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, null, null, TagMissingBehavior.Top);
 	}
 
 	/**
@@ -372,8 +456,9 @@ public class ERXResponseRewriter {
 
 	/**
 	 * Returns the resources that have been added to the head of this page.
-	 *  
-	 * @param context the WOContext
+	 * 
+	 * @param context
+	 *            the WOContext
 	 * @return the resources that have been added to the head of this page.
 	 */
 	@SuppressWarnings("unchecked")
@@ -401,11 +486,15 @@ public class ERXResponseRewriter {
 	}
 
 	/**
-	 * Records that the given resource (within the given framework) has been added to the head of this page.
+	 * Records that the given resource (within the given framework) has been
+	 * added to the head of this page.
 	 * 
-	 * @param context the WOContext
-	 * @param frameworkName the framework name of the resource
-	 * @param resourceName the name of the resource
+	 * @param context
+	 *            the WOContext
+	 * @param frameworkName
+	 *            the framework name of the resource
+	 * @param resourceName
+	 *            the name of the resource
 	 */
 	public static void resourceAddedToHead(WOContext context, String frameworkName, String resourceName) {
 		NSMutableSet<String> addedResources = ERXResponseRewriter.resourcesAddedToHead(context);
@@ -446,38 +535,55 @@ public class ERXResponseRewriter {
 	@SuppressWarnings("unchecked")
 	public static boolean addResourceInHead(WOResponse response, WOContext context, String framework, String fileName, String startTag, String endTag, String fallbackStartTag, String fallbackEndTag, TagMissingBehavior tagMissingBehavior) {
 		boolean inserted = true;
-		if (!ERXResponseRewriter.isResourceAddedToHead(context, framework, fileName)) {
-			String url;
-			if (fileName.indexOf("://") != -1 || fileName.startsWith("/")) {
-				url = fileName;
-			}
-			else {
-				WOResourceManager rm = WOApplication.application().resourceManager();
-				NSArray languages = null;
-				if (context.hasSession()) {
-					languages = context.session().languages();
-				}
-				url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
-				if (ERXProperties.stringForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY) != null) {
-					StringBuffer urlBuffer = new StringBuffer();
-					context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY), 0);
-					urlBuffer.append(url);
-					url = urlBuffer.toString();
+		if (!ERXResponseRewriter.isResourceAddedToHead(context, framework, fileName) && (_delagate == null || _delagate.responseRewriterShouldAddResource(framework, fileName))) {
+			boolean insert = true;
+			
+			if (_delagate != null) {
+				Resource replacementResource = _delagate.responseRewriterWillAddResource(framework, fileName);
+				if (replacementResource != null) {
+					framework = replacementResource.framework();
+					fileName = replacementResource.fileName();
+					
+					// double-check that the replacement hasn't already been added
+					if (ERXResponseRewriter.isResourceAddedToHead(context, framework, fileName)) {
+						insert = false;
+					}
 				}
 			}
-			String html = startTag + url + endTag + "\n";
-			if (fallbackStartTag == null && fallbackEndTag == null) {
-				inserted = ERXResponseRewriter.insertInResponseBeforeHead(response, context, html, tagMissingBehavior);
-			}
-			else {
-				inserted = ERXResponseRewriter.insertInResponseBeforeHead(response, context, html, TagMissingBehavior.Skip);
-				if (!inserted) {
-					String fallbackHtml = fallbackStartTag + url + fallbackEndTag + "\n";
-					inserted = ERXResponseRewriter.insertInResponseBeforeTag(response, context, fallbackHtml, null, TagMissingBehavior.Top);
+
+			if (insert) {
+				String url;
+				if (fileName.indexOf("://") != -1 || fileName.startsWith("/")) {
+					url = fileName;
 				}
-			}
-			if (inserted) {
-				ERXResponseRewriter.resourceAddedToHead(context, framework, fileName);
+				else {
+					WOResourceManager rm = WOApplication.application().resourceManager();
+					NSArray languages = null;
+					if (context.hasSession()) {
+						languages = context.session().languages();
+					}
+					url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
+					if (ERXProperties.stringForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY) != null) {
+						StringBuffer urlBuffer = new StringBuffer();
+						context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY), 0);
+						urlBuffer.append(url);
+						url = urlBuffer.toString();
+					}
+				}
+				String html = startTag + url + endTag + "\n";
+				if (fallbackStartTag == null && fallbackEndTag == null) {
+					inserted = ERXResponseRewriter.insertInResponseBeforeHead(response, context, html, tagMissingBehavior);
+				}
+				else {
+					inserted = ERXResponseRewriter.insertInResponseBeforeHead(response, context, html, TagMissingBehavior.Skip);
+					if (!inserted) {
+						String fallbackHtml = fallbackStartTag + url + fallbackEndTag + "\n";
+						inserted = ERXResponseRewriter.insertInResponseBeforeTag(response, context, fallbackHtml, null, TagMissingBehavior.Top);
+					}
+				}
+				if (inserted) {
+					ERXResponseRewriter.resourceAddedToHead(context, framework, fileName);
+				}
 			}
 		}
 		return inserted;
