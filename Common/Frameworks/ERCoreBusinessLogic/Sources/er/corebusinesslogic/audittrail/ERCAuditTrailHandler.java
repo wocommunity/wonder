@@ -136,7 +136,15 @@ public class ERCAuditTrailHandler {
         EOEditingContext ec = (EOEditingContext) n.object();
         if (ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
             ec.processRecentChanges();
-            NSArray insertedObjects = (NSArray) ec.insertedObjects();
+            NSArray<EOEnterpriseObject> insertedObjects = (NSArray) ec.insertedObjects().immutableClone();
+            for (EOEnterpriseObject eo : insertedObjects) {
+                if(ERCAuditTrailEntry.clazz.entityName().equals(eo.entityName())) {
+                    ec.deleteObject(eo);
+                }
+                if(ERCAuditTrail.clazz.entityName().equals(eo.entityName())) {
+                    ec.deleteObject(eo);
+                }
+            }
             NSArray updatedObjects = (NSArray) ec.updatedObjects();
             NSArray deletedObjects = (NSArray) ec.deletedObjects();
             handleSave(ec, EOEditingContext.InsertedKey, insertedObjects);
@@ -225,7 +233,7 @@ public class ERCAuditTrailHandler {
     }
 
     protected void handleInsert(EOEditingContext ec, EOEnterpriseObject eo, Object newValue) {
-        handleChange(ec, eo, ERCAuditTrailType.INSERTED, null, newValue, null);
+        handleChange(ec, eo, ERCAuditTrailType.INSERTED, null, null, newValue);
     }
 
     protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject eo, String keyPath, Object oldValue, Object newValue) {
@@ -233,17 +241,17 @@ public class ERCAuditTrailHandler {
     }
 
     protected void handleDelete(EOEditingContext ec, EOEnterpriseObject eo, Object oldValue) {
-        handleChange(ec, eo, ERCAuditTrailType.DELETED, null, null, oldValue);
+        handleChange(ec, eo, ERCAuditTrailType.DELETED, null, oldValue, null);
     }
 
     protected void handleRemove(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
         ERXGenericRecord rec = (ERXGenericRecord) target;
-        handleChange(ec, target, ERCAuditTrailType.REMOVED, keyPath, null, serializeObject(eo));
+        handleChange(ec, target, ERCAuditTrailType.REMOVED, keyPath, serializeObject(eo), null);
     }
 
     protected void handleAdd(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
         ERXGenericRecord rec = (ERXGenericRecord) target;
-        handleChange(ec, target, ERCAuditTrailType.ADDED, keyPath, serializeObject(eo), null);
+        handleChange(ec, target, ERCAuditTrailType.ADDED, keyPath, null, serializeObject(eo));
     }
 
     protected void handleUpdate(EOEditingContext ec, EOEnterpriseObject target, String keyPath, EOEnterpriseObject eo) {
