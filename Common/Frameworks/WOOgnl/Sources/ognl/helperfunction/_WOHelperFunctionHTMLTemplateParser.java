@@ -140,10 +140,20 @@ public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser imple
 				if (index == length) {
 					throw new WOMiddleManHTMLFormatException("'" + tag + "' has a '\\' as the last character.");
 				}
-				if (tag.charAt(index) == '$') {
-					currentBuffer.append("\\$");
+				if (tag.charAt(index) == '\"') {
+					currentBuffer.append("\"");
+				}
+				else if (tag.charAt(index) == 'n') {
+					currentBuffer.append("\n");
+				}
+				else if (tag.charAt(index) == 'r') {
+					currentBuffer.append("\r");
+				}
+				else if (tag.charAt(index) == 't') {
+					currentBuffer.append("\t");
 				}
 				else {
+					currentBuffer.append('\\');
 					currentBuffer.append(tag.charAt(index));
 				}
 			}
@@ -171,6 +181,7 @@ public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser imple
 		if (inQuote) {
 			throw new WOMiddleManHTMLFormatException("'" + tag + "' has a quote left open.");
 		}
+		
 		if (keyBuffer.length() > 0) {
 			if (valueBuffer.length() > 0) {
 				parseInlineAssociation(keyBuffer, valueBuffer, associations);
