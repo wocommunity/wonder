@@ -32,7 +32,7 @@ public class Ajax extends ERXFrameworkPrincipal {
 		if ( ! AjaxRequestHandler.useAjaxRequestHandler())
 		{
 			WOApplication.application().registerRequestHandler(new AjaxRequestHandler(), AjaxRequestHandler.AjaxRequestHandlerKey);
-			log.info("AjaxRequestHandler installed");
+			log.debug("AjaxRequestHandler installed");
 		}
 		
 		// Register the AjaxResponseDelegate if you're using an ERXAjaxApplication ... This allows us
