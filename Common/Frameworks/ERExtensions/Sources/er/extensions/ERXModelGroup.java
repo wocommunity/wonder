@@ -791,7 +791,6 @@ public class ERXModelGroup extends EOModelGroup {
 		NSDictionary connectionDictionary = model.connectionDictionary();
 		if (connectionDictionary == null) {
 			connectionDictionary = new NSMutableDictionary();
-			ERXModelGroup.log.warn("The EOModel '" + model.name() + "' does not have a connection dictionary, providing an empty one");
 			model.setConnectionDictionary(connectionDictionary);
 		}
 
@@ -824,6 +823,10 @@ public class ERXModelGroup extends EOModelGroup {
 		// set the information for ERXJDBCConnectionBroker
 		newConnectionDictionary.addEntriesFromDictionary(poolingDictionary);
 
+		if (newConnectionDictionary.count() == 0) {
+			ERXModelGroup.log.warn("The EOModel '" + model.name() + "' has an empty connection dictionary.");
+		}
+		
 		String removeJdbc2Info = getProperty(aModelName + ".removeJdbc2Info", "dbRemoveJdbc2InfoGLOBAL", "true");
 		if (ERXValueUtilities.booleanValue(removeJdbc2Info)) {
 			newConnectionDictionary.removeObjectForKey("jdbc2Info");
