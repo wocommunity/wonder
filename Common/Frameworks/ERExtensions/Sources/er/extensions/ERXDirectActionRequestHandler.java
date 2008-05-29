@@ -8,11 +8,13 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver._private.WODirectActionRequestHandler;
+import com.webobjects.appserver._private.WOServerSessionStore;
 
 /**
  * Improved direct action request handler. Will automatically handle
@@ -79,9 +81,21 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
             } 
         }
         if (response == null) {
-            response = super.handleRequest(request);
+        	// ak: fixes the app creating new sessions when addressed with a DA link with an instance ID
+        	// even though if refuses new sessions. Search engines are a nuisance in that regard
+    		WOApplication app = WOApplication.application();
+        	if(request.sessionID() != null && app.isRefusingNewSessions()) {
+        		if (app.sessionStore().getClass() == WOServerSessionStore.class) {
+            		if(app.sessionStore().restoreSessionWithID(request.sessionID(), request) == null) {
+                        response = generateRequestRefusal(request);
+            		}
+				}
+        	} 
+        	if(response == null) {
+        		response = super.handleRequest(request);
+        	}
         } else {
-            registerWillHandleActionRequest();
+        	registerWillHandleActionRequest();
             registerDidHandleActionRequestWithActionNamed(actionName);
         }
         if (shouldCacheResult && response != null) {
