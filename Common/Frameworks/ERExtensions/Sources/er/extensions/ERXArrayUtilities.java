@@ -97,70 +97,86 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Groups an array of objects by a given key path. The dictionary
-     * that is returned contains keys that correspond to the grouped
-     * keys values. 
+     * Groups objects by the value returned by evaluating keyPath 
+     * on the objects.  The dictionary that is returned contains keys 
+     * that correspond to the values returned by the keyPath.  The 
+     * objects in the dictionary are NSArrays of the objects having 
+     * the key value at keyPath.
      * 
      * @param objects array of objects to be grouped
-     * @param keyPath path used to group the objects.
+     * @param keyPath path into objects used to group the objects
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have the grouped
-     *		characteristic. Note that if the key path returns null
-     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     * 		objects are arrays of the objects that have that value.
+     *		Note that if the key path returns null then one of the 
+     *      keys will be NULL_GROUPING_KEY
      */
     public static NSDictionary arrayGroupedByKeyPath(NSArray objects, String keyPath) {
         return arrayGroupedByKeyPath(objects,keyPath,true,null);
     }
 
     /**
-     * Groups an array of objects by a given key path. The dictionary
-     * that is returned contains keys that correspond to the grouped
-     * keys values. 
+     * Groups objects by the value returned by evaluating keyPath 
+     * on the objects.  The dictionary that is returned contains keys 
+     * that correspond to the values returned by the keyPath.  If 
+     * valueKeyPath is null, the objects in the dictionary are NSArrays 
+     * of the objects having the key value at keyPath. If valueKeyPath
+     * is not null, the objects in the dictionary are NSArrays of the 
+     * result of calling valueKeyPath on the objects having the key 
+     * value at keyPath.  If valueKeyPath is not null, the objects in 
+     * the dictionary will not be from objects.
      * 
-     * @param eos array of objects to be grouped
-     * @param keyPath path used to group the objects.
+     * @param objects array of objects to be grouped
+     * @param keyPath path into objects used to group the objects
      * @param includeNulls determines if keyPaths that resolve to null
      *		should be allowed into the group.
-     * @param extraKeyPathForValues allows a selected object to include
-     *		more objects in the group. This is going away in the
-     *		future.
+     * @param valueKeyPath allows the grouped objects in the result to be
+     *        derived from objects (by evaluating valueKeyPath), instead
+     *        of being members of the objects collection.  Objects that 
+     *        evaluate valueKeyPath to null have no value included in the
+     *        result.
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have the grouped
-     *		characteristic. Note that if the key path returns null
-     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     * 		objects are arrays of the objects that have that value.
+     *		Note that if the key path returns null then one of the 
+     *      keys will be NULL_GROUPING_KEY
      */
-    // FIXME: Get rid of extraKeyPathForValues, it doesn't make sense.
-    public static NSDictionary arrayGroupedByKeyPath(NSArray eos,
+    public static NSDictionary arrayGroupedByKeyPath(NSArray objects,
                                                      String keyPath,
                                                      boolean includeNulls,
-                                                     String extraKeyPathForValues) {
-    	return ERXArrayUtilities.arrayGroupedByKeyPath(eos, keyPath, ERXArrayUtilities.NULL_GROUPING_KEY, extraKeyPathForValues);
+                                                     String valueKeyPath) {
+    	return ERXArrayUtilities.arrayGroupedByKeyPath(objects, keyPath, ERXArrayUtilities.NULL_GROUPING_KEY, valueKeyPath);
     }
     
     /**
-     * Groups an array of objects by a given key path. The dictionary
-     * that is returned contains keys that correspond to the grouped
-     * keys values. 
+     * Groups objects by the value returned by evaluating keyPath 
+     * on the objects.  The dictionary that is returned contains keys 
+     * that correspond to the values returned by the keyPath.  If 
+     * valueKeyPath is null, the objects in the dictionary are NSArrays 
+     * of the objects having the key value at keyPath. If valueKeyPath
+     * is not null, the objects in the dictionary are NSArrays of the 
+     * result of calling valueKeyPath on the objects having the key 
+     * value at keyPath.  If valueKeyPath is not null, the objects in 
+     * the dictionary will not be from objects.
      * 
-     * @param eos array of objects to be grouped
-     * @param keyPath path used to group the objects.
+     * @param objects array of objects to be grouped
+     * @param keyPath path into objects used to group the objects
      * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
      *      should be allowed into the group; if so, this key is used for them
-     * @param extraKeyPathForValues allows a selected object to include
-     *		more objects in the group. This is going away in the
-     *		future.
+     * @param valueKeyPath allows the grouped objects in the result to be
+     *        derived from objects (by evaluating valueKeyPath), instead
+     *        of being members of the objects collection.  Objects that 
+     *        evaluate valueKeyPath to null have no value included in the
+     *        result
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have the grouped
-     *		characteristic. Note that if the key path returns null
-     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     * 		objects are arrays of the objects that have that value.
+     *		Note that if the key path returns null then one of the 
+     *      keys will be NULL_GROUPING_KEY
      */
-    // FIXME: Get rid of extraKeyPathForValues, it doesn't make sense.
-    public static NSDictionary arrayGroupedByKeyPath(NSArray eos,
+    public static NSDictionary arrayGroupedByKeyPath(NSArray objects,
                                                      String keyPath,
                                                      Object nullGroupingKey,
-                                                     String extraKeyPathForValues) {
+                                                     String valueKeyPath) {
         NSMutableDictionary result=new NSMutableDictionary();
-        for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
+        for (Enumeration e=objects.objectEnumerator(); e.hasMoreElements();) {
             Object eo = e.nextElement();
             Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
             boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
@@ -171,8 +187,8 @@ public class ERXArrayUtilities extends Object {
                     existingGroup=new NSMutableArray();
                     result.setObjectForKey(existingGroup,key);
                 }
-                if (extraKeyPathForValues!=null) {
-                    Object value=NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,extraKeyPathForValues);
+                if (valueKeyPath!=null) {
+                    Object value=NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,valueKeyPath);
                     if (value!=null) existingGroup.addObject(value);
                 } else
                     existingGroup.addObject(eo);
