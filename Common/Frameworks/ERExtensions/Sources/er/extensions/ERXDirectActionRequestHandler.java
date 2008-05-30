@@ -60,7 +60,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
      * @return
      */
     protected boolean isSystemRequest(WORequest request) {
-    	return request.requestHandlerPath() == null || request.requestHandlerPath().toLowerCase().indexOf("stats") >= 0;
+    	return request.requestHandlerPath() != null && request.requestHandlerPath().toLowerCase().indexOf("stats") >= 0;
     }
     
     public WOResponse handleRequest(WORequest request) {
@@ -106,6 +106,9 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
 					if (app.sessionStore().getClass() == WOServerSessionStore.class) {
 						if (app.sessionStore().restoreSessionWithID(request.sessionID(), request) == null) {
         					response = generateRequestRefusal(request);
+        					// permanent redirect, as the session is gone for good. It
+        					// shouldn't matter which instance we go to now.
+        					response.setStatus(301);
         				}
         			}
         		} else {
@@ -114,11 +117,6 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
 					// we are refusing new sessions.
 					response = generateRequestRefusal(request);
         		}
-        		if (response != null) {
-					// permanent redirect, as the session is gone for good. It
-					// shouldn't matter which instance we go to now.
-					response.setStatus(301);
-				}
         	}
         	if(response == null) {
         		response = super.handleRequest(request);
