@@ -12,6 +12,7 @@ import er.extensions.ERXProperties;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import er.extensions.*;
+import er.directtoweb.ERD2WQueryPage;
 
 import java.util.Enumeration;
 
@@ -53,6 +54,7 @@ public class ERNEUSavedQueriesComponent extends ERDSavedQueriesComponent {
     public ERDSavedQueriesComponent.SavedQuery selectedSavedQuery=null;
     public String newQueryName=null;
     public final String DEFAULT_QUERY_NONE="";
+    public boolean needsAutoSubmit = false;
 
     public String userPreferenceNameForPageConfiguration(String pageConfiguration) {
         return "SavedQueryFor:"+pageConfiguration;
@@ -60,6 +62,10 @@ public class ERNEUSavedQueriesComponent extends ERDSavedQueriesComponent {
 
     public String userPreferenceNameForDefaultQueryWithPageConfiguration(String pageConfiguration) {
         return "DefaultQueryNameFor:"+pageConfiguration;
+    }
+
+    public String userPreferenceNameForAutoSubmitWithPageConfiguration(String pageConfiguration) {
+        return "AutoSubmitQueryFor:"+pageConfiguration;
     }
 
     public NSMutableArray loadSavedQueriesForPageConfigurationNamed(String pageConfigurationName) {
@@ -101,6 +107,11 @@ public class ERNEUSavedQueriesComponent extends ERDSavedQueriesComponent {
     /** component is not stateless */
     public boolean isStateless() {
         return false;
+    }
+
+    public void sleep() {
+        needsAutoSubmit=false;
+        super.sleep();
     }
 
     public D2WContext d2wContext() {
@@ -155,12 +166,26 @@ public class ERNEUSavedQueriesComponent extends ERDSavedQueriesComponent {
         if (selectedSavedQuery != null) {
             selectedSavedQuery.sendValuesToDisplayGroup(displayGroup(), true);
             newQueryName=selectedSavedQuery.name();
+
+            needsAutoSubmit=autoSubmitEnabled();
         }
         else  {
             clearForm();
         }
 
         return null;
+    }
+
+    public WOComponent refresh() {
+        return context().page();
+    }
+
+    public boolean autoSubmitEnabled() {
+        return ERXValueUtilities.booleanValue(userPreferences().valueForKey(userPreferenceNameForAutoSubmitWithPageConfiguration(pageConfiguration())));
+    }
+
+    public void setAutoSubmitEnabled(boolean b) {
+        userPreferences().takeValueForKey((b?"1":"0"), userPreferenceNameForAutoSubmitWithPageConfiguration(pageConfiguration()));
     }
 
     public WOComponent addNewQuery() {

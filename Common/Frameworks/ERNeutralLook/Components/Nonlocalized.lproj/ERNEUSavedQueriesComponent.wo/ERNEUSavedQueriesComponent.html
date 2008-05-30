@@ -1,7 +1,28 @@
+<webobject name="AutoSubmitIsEnabled">
+<script type="text/javascript">
+function autoSubmitQueryForm()
+{
+  return document.getElementsByName("QueryForm")[0].submit();
+}
+
+function addEvent(obj, evType, fn, useCapture) {
+  if (obj.addEventListener) {
+     obj.addEventListener(evType, fn, useCapture);
+     return true;
+   } else if (obj.attachEvent) {
+     var r = obj.attachEvent('on'+evType, fn);
+     return r;  
+   } else {
+    alert('Handler could not be attached');  
+  }
+}
+</script>
+<webobject name="JavaScript1"></webobject>
+</webobject>
 <table cellspacing="2" cellpadding="2" border="0">
 	<tr>
 		<td><b>Saved Queries</b></td>
-		<td><webobject name="SavedQueryPopup"></webobject><webobject name="HiddenPopupChangedButton"></webobject></td>
+		<td><webobject name="SavedQueryPopup"></webobject>&nbsp;<input type="submit" value="Go"><webobject name="HiddenPopupChangedButton"></webobject></td>
 		<webobject name="HasSelectedQuery"><td width="55"><webobject name="DeleteCurrentQuery"></webobject></td></webobject>
 		<webobject name="HasSavedQueries"><td width="55"><webobject name="DeleteAllSavedQueries"></webobject></td></webobject>
 		<webobject name="HasSavedQueries"><td width="55"><webobject name="MakeDefaultSavedQuery"></webobject></td></webobject>
@@ -12,5 +33,5 @@
 		<td width="55"><webobject name="AddNewQuery"></webobject></td>
 		<webobject name="HasSelectedQuery"><td width="55"><webobject name="UpdateQuery"></webobject></td></webobject>
 		<td width="55"><webobject name="ClearFormButton"></webobject></td>
-	</tr>
+	</tr><tr><td colspan="2">&nbsp;</td><td colspan="3"><webobject name="AutosubmitCB"></webobject>Auto submit&nbsp;<webobject name="HiddenAutoSubmitChangedButton"></webobject></td></tr>
 </table>

@@ -3,6 +3,15 @@ AddNewQuery: WOSubmitButton {
 	value = "Add New";
 }
 
+AutoSubmitIsEnabled: WOConditional {
+	condition = needsAutoSubmit;
+}
+
+AutosubmitCB: WOCheckBox {
+	checked = autoSubmitEnabled;
+	onChange = "return document.getElementById('SavedQueryHiddenRefreshButton').click();";
+}
+
 ClearForm: WOSubmitButton {
 	action = clearForm;
 	value = "Clear Form";
@@ -36,6 +45,15 @@ HasSelectedQuery: WOConditional {
 	condition = true;
 }
 
+HiddenAutoSubmitChangedButton: WOImageButton {
+	action = refresh;
+	ID = "SavedQueryHiddenRefreshButton";
+	width=1;
+	height=1;
+	filename = "s.gif";
+	framework = "ERExtensions";
+}
+
 HiddenPopupChangedButton: WOImageButton {
 	action = popupChangedSelection;
 	ID = "SavedQueryHiddenButton";
@@ -43,6 +61,11 @@ HiddenPopupChangedButton: WOImageButton {
 	height=1;
 	filename = "s.gif";
 	framework = "ERExtensions";
+}
+
+JavaScript1: WOJavaScript {
+	hideInComment = true;
+	scriptString = "addEvent(window, 'load', autoSubmitQueryForm, false);";
 }
 
 MakeDefaultSavedQuery: WOSubmitButton {
