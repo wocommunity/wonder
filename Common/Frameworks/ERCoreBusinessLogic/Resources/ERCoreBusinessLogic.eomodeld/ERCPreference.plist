@@ -2,6 +2,8 @@
     attributes = (
         {columnName = ID; name = id; prototypeName = id; }, 
         {columnName = "KEY_"; name = key; prototypeName = varchar100; }, 
+        {allowsNull = Y; columnName = "CREATED"; name = created; prototypeName = dateTime; }, 
+        {allowsNull = Y; columnName = "LAST_MODIFIED"; name = lastModified; prototypeName = dateTime; }, 
         {allowsNull = Y; columnName = "USER_ID"; name = userID; prototypeName = id; }, 
         {
             allowsNull = Y; 
@@ -12,7 +14,7 @@
     ); 
     attributesUsedForLocking = (id, key, userID); 
     className = "er.corebusinesslogic.ERCPreference"; 
-    classProperties = (key, value, userID); 
+    classProperties = (key, value, userID, created, lastModified); 
     externalName = ERCPREFER; 
     name = ERCPreference; 
     primaryKeyAttributes = (id); 

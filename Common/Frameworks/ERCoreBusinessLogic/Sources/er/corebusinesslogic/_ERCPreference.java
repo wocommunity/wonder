@@ -10,7 +10,7 @@ import er.extensions.*;
 import java.util.*;
 import java.math.BigDecimal;
 
-public abstract class _ERCPreference extends ERXGenericRecord {
+public abstract class _ERCPreference extends ERCStampedEnterpriseObject {
 
     public _ERCPreference() {
         super();
