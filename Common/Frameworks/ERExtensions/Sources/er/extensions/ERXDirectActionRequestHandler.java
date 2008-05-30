@@ -80,17 +80,36 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
                 log.error("Caught exception checking for cache. Leaving it up to the regular exception handler to cache. Request: " + request, e);
             } 
         }
-        if (response == null) {
-        	// ak: fixes the app creating new sessions when addressed with a DA link with an instance ID
-        	// even though if refuses new sessions. Search engines are a nuisance in that regard
-    		WOApplication app = WOApplication.application();
-        	if(request.sessionID() != null && app.isRefusingNewSessions()) {
-        		if (app.sessionStore().getClass() == WOServerSessionStore.class) {
-            		if(app.sessionStore().restoreSessionWithID(request.sessionID(), request) == null) {
-                        response = generateRequestRefusal(request);
-            		}
+		if (response == null) {
+			// ak: when addressed with a DA link with this instance's ID (and
+			// an expired session) and the app is refusing new sessions, the
+			// default implementation will create a session anyway, which will
+			// wreak havoc if the app is memory starved.
+			// Search engines are a nuisance in that regard
+			WOApplication app = WOApplication.application();
+			if (app.isRefusingNewSessions() && request.isUsingWebServer()) {
+        		if (isSessionIDInRequest(request)) {
+					// we know the imp of the server session store simply
+					// looks up the ID in the registered sessions,
+					// so we don't need to do the check-out/check-in
+					// yadda-yadda.
+					if (app.sessionStore().getClass() == WOServerSessionStore.class) {
+						if (app.sessionStore().restoreSessionWithID(request.sessionID(), request) == null) {
+        					response = generateRequestRefusal(request);
+        				}
+        			}
+        		} else {
+        			// if no session was supplied, what are we doing here in the
+					// first place? The adaptor shouldn't have linked to us as
+					// we are refusing new sessions.
+					response = generateRequestRefusal(request);
+        		}
+        		if (response != null) {
+					// permanent redirect, as the session is gone for good. It
+					// shouldn't matter which instance we go to now.
+					response.setStatus(301);
 				}
-        	} 
+        	}
         	if(response == null) {
         		response = super.handleRequest(request);
         	}
