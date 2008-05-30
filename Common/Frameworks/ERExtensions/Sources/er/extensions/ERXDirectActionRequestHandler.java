@@ -53,6 +53,16 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
         super(actionClassName, defaultActionName, shouldAddToStatistics);
     }
 
+    /**
+     * Return true if you want to handle the request even though the app is refusing new sessions.
+     * Currently, this includes all urls with "stats" in them
+     * @param request
+     * @return
+     */
+    protected boolean isSystemRequest(WORequest request) {
+    	return request.requestHandlerPath() == null || request.requestHandlerPath().toLowerCase().indexOf("stats") >= 0;
+    }
+    
     public WOResponse handleRequest(WORequest request) {
         WOResponse response = null;
         
@@ -87,7 +97,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
 			// wreak havoc if the app is memory starved.
 			// Search engines are a nuisance in that regard
 			WOApplication app = WOApplication.application();
-			if (app.isRefusingNewSessions() && request.isUsingWebServer()) {
+			if (app.isRefusingNewSessions() && request.isUsingWebServer() && !isSystemRequest(request)) {
         		if (isSessionIDInRequest(request)) {
 					// we know the imp of the server session store simply
 					// looks up the ID in the registered sessions,
