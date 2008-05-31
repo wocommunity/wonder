@@ -1,6 +1,6 @@
 Welcome to Project WONDER!
 ==========================
- 
+
 For those unfamiliar with Project WONDER in a nutshell it is the largest WebObjects open 
 source project on the net. The goal of Project Wonder is to be an umbrella for open-source 
 WebObjects related projects and frameworks.
