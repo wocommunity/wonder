@@ -83,11 +83,6 @@ public class ERXDatabaseContextDelegate {
     public static ERXDatabaseContextDelegate defaultDelegate() {
         return _defaultDelegate;
     }
-
-    
-    ERXDatabaseContextDelegate() {
-    	//_fetchResultCache = new ERXFetchResultCache();
-    }
     
     public ERXArrayFaultCache arrayFaultCache() {
         return _arrayFaultCache;
