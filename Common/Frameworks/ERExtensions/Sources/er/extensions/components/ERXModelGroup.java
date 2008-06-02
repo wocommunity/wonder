@@ -46,6 +46,7 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEntityClassDescription;
+import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
