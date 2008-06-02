@@ -1,8 +1,0 @@
-List1: D2WList { 	pageConfiguration = "ListMovies2";
-	list = session.movies;
-	entityName = "Movie";
-}
-
-PageWrapper1: PageWrapper {
-}
-
