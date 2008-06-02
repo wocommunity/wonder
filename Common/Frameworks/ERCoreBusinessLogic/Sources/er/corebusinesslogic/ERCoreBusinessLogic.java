@@ -29,15 +29,14 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
 
-import er.corebusinesslogic.audittrail.ERCAuditTrail;
 import er.corebusinesslogic.audittrail.ERCAuditTrailHandler;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ERXApplication;
-import er.extensions.components.ERXConfigurationManager;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
