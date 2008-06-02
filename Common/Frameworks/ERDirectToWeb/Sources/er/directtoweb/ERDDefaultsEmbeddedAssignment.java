@@ -17,8 +17,8 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * This assignment calculates default values for

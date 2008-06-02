@@ -3,8 +3,8 @@ package er.openid;
 import java.util.List;
 
 import org.openid4java.discovery.Identifier;
-import org.openid4java.message.ax.FetchResponse;
 import org.openid4java.message.MessageExtension;
+import org.openid4java.message.ax.FetchResponse;
 
 import com.webobjects.foundation.NSKeyValueCoding;
 

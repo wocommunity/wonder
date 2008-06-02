@@ -23,10 +23,10 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXDisplayGroup;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXValueUtilities;
+import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Allows the selection of one or more objects from a set of EOs. Can also be used directly as a 

@@ -12,7 +12,7 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Simple search for that can be dropped on a page wrapper and pops up a list page.

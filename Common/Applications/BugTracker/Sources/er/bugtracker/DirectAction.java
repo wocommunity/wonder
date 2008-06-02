@@ -27,9 +27,9 @@ import com.webobjects.foundation.NSTimestamp;
 import er.calendar.ERPublishCalendarPage;
 import er.calendar.ERSimpleEvent;
 import er.directtoweb.ERD2WDirectAction;
-import er.extensions.ERXCrypto;
-import er.extensions.ERXEC;
-import er.extensions.ERXUtilities;
+import er.extensions.crypting.ERXCrypto;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXUtilities;
 
 public class DirectAction extends ERD2WDirectAction {
 

@@ -1,8 +1,9 @@
 package er.excel;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Class for Excel Component SampleTable.

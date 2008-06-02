@@ -10,8 +10,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXStringUtilities;
 
 public class AjaxAccordion extends AjaxComponent {
   private String _accordionID;

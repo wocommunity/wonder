@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.attachment.model.ERAttachmentData;
 import er.attachment.model.ERDatabaseAttachment;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERDatabaseAttachmentProcessor implements storing attachment data as an attribute of an EO.  

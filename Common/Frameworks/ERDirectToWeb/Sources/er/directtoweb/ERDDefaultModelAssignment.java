@@ -20,9 +20,9 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXDictionaryUtilities;
-import er.extensions.ERXEOAccessUtilities;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
  * A bunch of methods used for pulling default values from EOModels.<br />

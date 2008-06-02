@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXSubmitButton;
+import er.extensions.components._private.ERXSubmitButton;
 /**
  * Action button that looks for the inner-most page with a pageController (which must be
  * a ERDBranchDelegateInterface), collects all the actions from there 

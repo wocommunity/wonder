@@ -9,9 +9,9 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXSimpleTemplateParser;
+import er.extensions.components.ERXSimpleTemplateParser;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * This assignment runs it's value through the localizer and evaluates

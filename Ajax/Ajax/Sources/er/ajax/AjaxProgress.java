@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import er.extensions.ERXUnitAwareDecimalFormat;
+import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 
 /**
  * AjaxProgress is the model for an AjaxProgressBar.  By holding

@@ -6,10 +6,10 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOQualifier;
 
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXKeyGlobalID;
-import er.extensions.ERXQ;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXKeyGlobalID;
+import er.extensions.eof.ERXQ;
 
 /**
  * Bracket for all single audit trail actions. It serves as a "shadow" of the

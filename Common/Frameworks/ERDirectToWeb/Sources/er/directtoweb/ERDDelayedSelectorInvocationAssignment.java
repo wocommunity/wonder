@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXSelectorUtilities;
+import er.extensions.foundation.ERXSelectorUtilities;
 
 /**
  * Similar in nature to a key-value assignment, but allows you to construct arbitrary method invocations to

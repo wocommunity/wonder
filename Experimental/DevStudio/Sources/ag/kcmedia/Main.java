@@ -1,7 +1,7 @@
 package ag.kcmedia;
 
-import com.webobjects.appserver.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class Main extends WOComponent {
 

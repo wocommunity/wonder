@@ -11,8 +11,8 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXApplication;
-import er.extensions.ERXEC;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.eof.ERXEC;
 
 /**
  * <p>

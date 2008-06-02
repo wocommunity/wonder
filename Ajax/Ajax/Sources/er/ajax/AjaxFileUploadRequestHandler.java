@@ -15,8 +15,8 @@ import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 
-import er.extensions.ERXProperties;
-import er.extensions.ERXUnitAwareDecimalFormat;
+import er.extensions.formatters.ERXUnitAwareDecimalFormat;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Provides the backend for Ajax uploads. This has to be implemented differently than a normal file upload because we

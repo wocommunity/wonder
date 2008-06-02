@@ -19,10 +19,10 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.ERXEOGlobalIDUtilities;
-import er.extensions.ERXGuardedObjectInterface;
-import er.extensions.ERXQ;
-import er.extensions.ERXStringUtilities;
+import er.extensions.eof.ERXEOGlobalIDUtilities;
+import er.extensions.eof.ERXGuardedObjectInterface;
+import er.extensions.eof.ERXQ;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Provides default implementations of many of the common entity delegate behaviors.

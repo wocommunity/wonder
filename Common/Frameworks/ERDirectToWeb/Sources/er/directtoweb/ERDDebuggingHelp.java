@@ -18,8 +18,8 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXDebugMarker;
-import er.extensions.ERXValueUtilities;
+import er.extensions.components.ERXDebugMarker;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Little help component useful for debugging.<br />

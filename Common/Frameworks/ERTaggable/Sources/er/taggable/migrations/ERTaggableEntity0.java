@@ -11,7 +11,7 @@ import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXJDBCUtilities;
+import er.extensions.jdbc.ERXJDBCUtilities;
 import er.extensions.migration.ERXMigrationDatabase;
 import er.extensions.migration.ERXModelVersion;
 import er.taggable.ERTaggableEntity;

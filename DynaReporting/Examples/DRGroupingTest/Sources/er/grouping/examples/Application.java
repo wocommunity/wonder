@@ -6,11 +6,7 @@
 //
 package er.grouping.examples;
 
-import er.extensions.*;
-import er.grouping.*;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import er.extensions.appserver.ERXApplication;
 
 public class Application extends ERXApplication {
     

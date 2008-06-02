@@ -14,7 +14,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOAccessUtilities;
 
 /**
  * @deprecated use a ERDKeyValueAssignment to a ERDDefaultModelAssigmentwith key entityForPageConfiguration instead

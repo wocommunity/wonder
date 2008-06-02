@@ -8,6 +8,8 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
+import er.extensions.components.ERXComponentUtilities;
+import er.extensions.components.ERXNonSynchronizingComponent;
 
 /**
  * Class for Excel Component EGWrapper.

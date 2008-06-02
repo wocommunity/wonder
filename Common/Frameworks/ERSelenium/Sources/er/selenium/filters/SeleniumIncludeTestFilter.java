@@ -6,7 +6,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSRange;
 
-import er.extensions.ERXFileUtilities;
+import er.extensions.foundation.ERXFileUtilities;
 
 import er.selenium.SeleniumTest;
 import er.selenium.io.SeleniumImporterExporterFactory;

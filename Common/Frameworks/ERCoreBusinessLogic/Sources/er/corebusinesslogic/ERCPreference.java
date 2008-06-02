@@ -10,8 +10,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-import er.extensions.EOEnterpriseObjectClazz;
-import er.extensions.ERXQ;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXQ;
 
 public class ERCPreference extends _ERCPreference {
     static final Logger log = Logger.getLogger(ERCPreference.class);

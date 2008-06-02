@@ -28,13 +28,13 @@ import er.directtoweb.ERD2WFactory;
 import er.directtoweb.ERD2WInspectPage;
 import er.directtoweb.ERD2WQueryPage;
 import er.directtoweb.ERDQueryPageInterface;
-import er.extensions.EOEnterpriseObjectClazz;
-import er.extensions.ERXEC;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXNavigationManager;
-import er.extensions.ERXPrimaryKeyListQualifier;
-import er.extensions.ERXSession;
-import er.extensions.ERXStringUtilities;
+import er.extensions.appserver.ERXSession;
+import er.extensions.appserver.navigation.ERXNavigationManager;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Central page creation class. All workflow things should go here or in the super classes. The session

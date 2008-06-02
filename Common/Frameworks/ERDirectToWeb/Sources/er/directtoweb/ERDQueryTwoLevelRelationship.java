@@ -8,7 +8,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXPrimaryKeyListQualifier;
+import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
 
 /**
  * Create queries that consist of a drilldown.

@@ -3,9 +3,9 @@ package er.erxtest.tests;
 import java.io.IOException;
 
 import junit.framework.TestCase;
-import er.extensions.ERXRuntimeUtilities;
-import er.extensions.ERXRuntimeUtilities.Result;
-import er.extensions.ERXRuntimeUtilities.TimeoutException;
+import er.extensions.foundation.ERXRuntimeUtilities;
+import er.extensions.foundation.ERXRuntimeUtilities.Result;
+import er.extensions.foundation.ERXRuntimeUtilities.TimeoutException;
 
 public class ERXRuntimeUtilitiesTest extends TestCase {
 

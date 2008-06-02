@@ -7,10 +7,10 @@ import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXComponent;
-import er.extensions.ERXEC;
-import er.extensions.ERXQ;
+import er.extensions.components.ERXComponent;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXQ;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.taggable.ERTaggableEntity;
 
 /**

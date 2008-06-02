@@ -12,8 +12,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Nextpage delegate that handles creating or deleting an intermediate object when you finished with a pick page.

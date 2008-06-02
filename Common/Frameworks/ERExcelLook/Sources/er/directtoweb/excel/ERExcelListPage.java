@@ -12,6 +12,7 @@ import com.webobjects.foundation.*;
 
 import er.directtoweb.*;
 import er.extensions.*;
+import er.extensions.foundation.ERXFileUtilities;
 
 public class ERExcelListPage extends ERD2WListPage {
 

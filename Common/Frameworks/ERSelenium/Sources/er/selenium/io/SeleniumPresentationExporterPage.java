@@ -25,7 +25,7 @@ package er.selenium.io;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXLocalizer;
+import er.extensions.localization.ERXLocalizer;
 
 public class SeleniumPresentationExporterPage extends SeleniumComponentExporterPage {
 

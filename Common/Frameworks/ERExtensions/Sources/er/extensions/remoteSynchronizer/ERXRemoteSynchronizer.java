@@ -20,10 +20,10 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXDatabase;
-import er.extensions.ERXProperties;
-import er.extensions.ERXObjectStoreCoordinatorSynchronizer.IChangeListener;
-import er.extensions.ERXObjectStoreCoordinatorSynchronizer.RemoteChange;
+import er.extensions.eof.ERXDatabase;
+import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.IChangeListener;
+import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.RemoteChange;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * The superclass of all remote EOF synchronizers.

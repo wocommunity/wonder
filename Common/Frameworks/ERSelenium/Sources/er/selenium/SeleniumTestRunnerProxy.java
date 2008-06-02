@@ -38,7 +38,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.ERXFileUtilities;
+import er.extensions.foundation.ERXFileUtilities;
 
 /**
  * Request hanlder for selenium tests. Returns the files to get parsed by the runner.

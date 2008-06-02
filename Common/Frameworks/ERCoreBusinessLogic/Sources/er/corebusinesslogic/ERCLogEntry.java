@@ -8,8 +8,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.EOEnterpriseObjectClazz;
-import er.extensions.ERXGenericRecord;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXGenericRecord;
 
 public class ERCLogEntry extends _ERCLogEntry {
     static final Logger log = Logger.getLogger(ERCLogEntry.class);

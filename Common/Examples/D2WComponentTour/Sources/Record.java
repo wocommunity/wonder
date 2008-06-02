@@ -1,4 +1,4 @@
-import er.extensions.ERXGenericRecord;
+import er.extensions.eof.ERXGenericRecord;
 
 
 public class Record extends ERXGenericRecord {

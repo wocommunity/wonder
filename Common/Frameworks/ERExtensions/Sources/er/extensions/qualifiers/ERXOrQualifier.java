@@ -5,7 +5,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXQ;
+import er.extensions.eof.ERXQ;
 
 /**
  * ERXOrQualifier is a chainable extension of EOOrQualifier.

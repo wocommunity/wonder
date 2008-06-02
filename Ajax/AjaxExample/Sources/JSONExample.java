@@ -9,8 +9,8 @@ import er.ajax.example.Company;
 import er.ajax.example.ComplexPerson;
 import er.ajax.example.ExampleDataFactory;
 import er.ajax.example.SimplePerson;
-import er.extensions.ERXConstant;
-import er.extensions.ERXEC;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEC;
 
 public class JSONExample extends com.webobjects.appserver.WOComponent {
 	private JSONProxy _proxy;

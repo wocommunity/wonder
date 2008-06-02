@@ -31,12 +31,12 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXGuardedObjectInterface;
-import er.extensions.ERXSession;
-import er.extensions.ERXValueUtilities;
+import er.extensions.appserver.ERXSession;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXGuardedObjectInterface;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRelationshipPageInterface {
 

@@ -13,9 +13,9 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXValueUtilities;
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // Important D2W Keys:

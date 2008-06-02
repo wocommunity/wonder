@@ -8,8 +8,8 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXValidationFactory;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * Provides a "confirm password" service. Can

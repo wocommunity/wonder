@@ -3,9 +3,7 @@ package er.examples.movies;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-
 import com.webobjects.directtoweb.D2W;
-
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class Main extends WOComponent {

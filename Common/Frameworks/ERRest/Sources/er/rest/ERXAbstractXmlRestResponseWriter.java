@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Provides the common output methods for generating XML responses to a REST request.

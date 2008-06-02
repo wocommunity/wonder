@@ -7,8 +7,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 
 import er.erxtest.model.Company;
 import er.erxtest.model.Employee;
-import er.extensions.ERXEC;
-import er.extensions.ERXGenericRecord;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXGenericRecord;
 
 public class ERXGenericRecordUpdateInverseRelationshipsTest extends TestCase {
   @Override

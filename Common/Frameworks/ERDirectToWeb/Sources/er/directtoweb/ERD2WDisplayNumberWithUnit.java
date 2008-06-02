@@ -11,7 +11,7 @@ import java.text.Format;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayNumber;
 
-import er.extensions.ERXNumberFormatter;
+import er.extensions.formatters.ERXNumberFormatter;
 
 /**
  * Same as ERDDisplayNumberWithUnit only subclass is different.  This should be cleaned up.<br />

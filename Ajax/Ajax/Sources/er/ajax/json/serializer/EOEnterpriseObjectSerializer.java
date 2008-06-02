@@ -28,12 +28,12 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXProperties;
-import er.extensions.ERXRandomGUID;
-import er.extensions.ERXSession;
-import er.extensions.ERXStringUtilities;
+import er.extensions.appserver.ERXSession;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXRandomGUID;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * La classe EOEnterpriseObjectSerializer s'occupe de la conversion des objets paramêtres de type

@@ -13,14 +13,14 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXEditingContextDelegate;
-import er.extensions.ERXMailAppender;
+import er.extensions.eof.ERXEditingContextDelegate;
+import er.extensions.logging.ERXMailAppender;
 
 /**
  * Basic log4j Mail Message Appender<br>
  *	Used for logging log events to a database that will eventually be emailed
  *	out. Logs events using {@link ERCMailDelivery ERCMailDelivery}.
- *  @see er.extensions.ERXMailAppender for more info.
+ *  @see er.extensions.logging.ERXMailAppender for more info.
  */
 public class ERCMailMessageAppender extends ERXMailAppender {
 

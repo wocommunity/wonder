@@ -19,7 +19,7 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 

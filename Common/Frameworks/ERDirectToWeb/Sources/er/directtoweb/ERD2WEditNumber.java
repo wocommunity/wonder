@@ -17,9 +17,9 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXNumberFormatter;
-import er.extensions.ERXValidationFactory;
+import er.extensions.eof.ERXConstant;
+import er.extensions.formatters.ERXNumberFormatter;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * Common superclass of all ER's edit number components.<br />

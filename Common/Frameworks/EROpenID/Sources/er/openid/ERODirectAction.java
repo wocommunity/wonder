@@ -9,8 +9,8 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WORequest;
 
-import er.extensions.ERXDirectAction;
-import er.extensions.ERXProperties;
+import er.extensions.appserver.ERXDirectAction;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERODirectAction contains OpenID direct actions.

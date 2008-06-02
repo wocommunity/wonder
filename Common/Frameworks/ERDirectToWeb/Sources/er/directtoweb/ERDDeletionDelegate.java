@@ -26,10 +26,10 @@ import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXValidationException;
-import er.extensions.ERXValidationFactory;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.validation.ERXValidationException;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * Delete used after confirming a delete action. <br />

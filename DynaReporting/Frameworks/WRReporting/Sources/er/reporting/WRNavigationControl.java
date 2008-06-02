@@ -4,6 +4,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
+import er.extensions.components.ERXStatelessComponent;
 import er.grouping.*;
 
 public class WRNavigationControl extends ERXStatelessComponent {

@@ -19,10 +19,10 @@ import org.jgroups.View;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXDatabase;
-import er.extensions.ERXProperties;
-import er.extensions.ERXObjectStoreCoordinatorSynchronizer.IChangeListener;
-import er.extensions.ERXObjectStoreCoordinatorSynchronizer.RemoteChange;
+import er.extensions.eof.ERXDatabase;
+import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.IChangeListener;
+import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.RemoteChange;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 
 /**

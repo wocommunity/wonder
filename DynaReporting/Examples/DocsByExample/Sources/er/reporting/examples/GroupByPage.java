@@ -2,12 +2,11 @@
 
 package er.reporting.examples;
 
-import er.reporting.*;
-import er.grouping.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import er.grouping.DRReportModel;
 
 public class GroupByPage extends WOComponent {
 

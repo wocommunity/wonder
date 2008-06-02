@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 
-import er.extensions.EOEnterpriseObjectClazz;
+import er.extensions.eof.EOEnterpriseObjectClazz;
 
 public class ERCMessageAttachment extends _ERCMessageAttachment {
     static final Logger log = Logger.getLogger(ERCMessageAttachment.class);

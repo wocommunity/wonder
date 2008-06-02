@@ -23,7 +23,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-import er.extensions.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
  * Converts given entries of a D2WContext with a specified page configuration to a dictionary and to rules again.<br />

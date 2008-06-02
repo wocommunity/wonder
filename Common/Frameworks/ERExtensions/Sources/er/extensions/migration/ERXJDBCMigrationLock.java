@@ -18,10 +18,10 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
-import er.extensions.ERXJDBCUtilities;
-import er.extensions.ERXModelGroup;
-import er.extensions.ERXProperties;
-import er.extensions.ERXSQLHelper;
+import er.extensions.components.ERXModelGroup;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.jdbc.ERXJDBCUtilities;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * JDBC implementation of the migration lock.

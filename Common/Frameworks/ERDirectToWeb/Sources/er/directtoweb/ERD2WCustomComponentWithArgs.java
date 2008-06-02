@@ -13,7 +13,7 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WCustomComponent;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-import er.extensions.ERXExceptionHolder;
+import er.extensions.validation.ERXExceptionHolder;
 
 // Useful component and important bug fix
 // Fixes validation failures being propogated

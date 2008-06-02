@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.*;
 
 import er.extensions.*;
+import er.extensions.components.ERXStatelessComponent;
 
 /**
  * Class for Excel Component EGComponent.

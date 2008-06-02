@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.ContainerInitializer/10/1/DerbyPlugIn/1/nil/1/nil/1/0/1/false/10/1/ERDirectToWeb/1/nil/1/nil/1/0/1/false/10/1/ERExtensions/1/nil/1/nil/1/0/1/false/10/1/ERJars/1/nil/1/nil/1/0/1/false/10/1/ERPrototypes/1/nil/1/nil/1/0/1/false/10/1/JavaWOExtensions/1/nil/1/nil/1/0/1/false/10/1/WOOgnl/1/nil/1/nil/1/0/1/false/10/1/JavaDirectToWeb/1/nil/1/nil/1/0/1/false/10/1/JavaDTWGeneration/1/nil/1/nil/1/0/1/false/10/1/JavaEOAccess/1/nil/1/nil/1/0/1/false/10/1/JavaEOApplication/1/nil/1/nil/1/0/1/false/10/1/JavaEOControl/1/nil/1/nil/1/0/1/false/10/1/JavaEOGeneration/1/nil/1/nil/1/0/1/false/9/1/JavaEOInterface/1/nil/1/nil/0/1/false/10/1/JavaEOInterfaceSwing/1/nil/1/nil/1/0/1/false/10/1/JavaEOProject/1/nil/1/nil/1/0/1/false/10/1/JavaEORuleSystem/1/nil/1/nil/1/0/1/false/10/1/JavaFoundation/1/nil/1/nil/1/0/1/false/10/1/JavaJDBCAdaptor/1/nil/1/nil/1/0/1/false/10/1/JavaWebObjects/1/nil/1/nil/1/0/1/false/10/1/JavaXML/1/nil/1/nil/1/0/1/false"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.ContainerInitializer/10/1/WOOgnl/1/nil/1/nil/1/0/1/false/10/1/JavaDirectToWeb/1/nil/1/nil/1/0/1/false/10/1/JavaDTWGeneration/1/nil/1/nil/1/0/1/false/10/1/JavaEOAccess/1/nil/1/nil/1/0/1/false/10/1/JavaEOControl/1/nil/1/nil/1/0/1/false/10/1/JavaEOProject/1/nil/1/nil/1/0/1/false/10/1/JavaFoundation/1/nil/1/nil/1/0/1/false/10/1/JavaJDBCAdaptor/1/nil/1/nil/1/0/1/false/10/1/JavaWebObjects/1/nil/1/nil/1/0/1/false/10/1/JavaXML/1/nil/1/nil/1/0/1/false"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="Libraries/derby.jar"/>
 	<classpathentry kind="lib" path="Libraries/derbytools.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DerbyPlugIn"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERDirectToWeb"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERExtensions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

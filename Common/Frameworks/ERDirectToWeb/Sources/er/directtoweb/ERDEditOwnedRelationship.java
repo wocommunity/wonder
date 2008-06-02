@@ -31,10 +31,10 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXEnterpriseObject;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXEnterpriseObject;
 
 /////////////////////////////////////////////////////////////////////////////////
 // Important D2W Keys:

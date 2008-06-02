@@ -3,7 +3,7 @@
 import org.apache.log4j.Logger;
 
 import er.ajax.json.JSONRequestHandler;
-import er.extensions.ERXApplication;
+import er.extensions.appserver.ERXApplication;
 
 public class Application extends ERXApplication {
 	static Logger log = Logger.getLogger(Application.class);

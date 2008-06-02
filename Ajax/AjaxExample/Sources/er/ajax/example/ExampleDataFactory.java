@@ -9,8 +9,8 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXLoremIpsumGenerator;
+import er.extensions.components.ERXLoremIpsumGenerator;
+import er.extensions.foundation.ERXFileUtilities;
 
 public class ExampleDataFactory {
 

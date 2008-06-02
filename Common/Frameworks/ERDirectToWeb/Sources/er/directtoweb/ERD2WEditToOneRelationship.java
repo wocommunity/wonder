@@ -12,7 +12,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.extensions.ERXUtilities;
+import er.extensions.foundation.ERXUtilities;
 
 /**
  * Improves superclass by adding restrictions on the choices and uses ERXToOneRelationship, thus can handle localization

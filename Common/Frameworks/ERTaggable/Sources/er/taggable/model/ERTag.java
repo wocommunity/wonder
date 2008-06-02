@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 
-import er.extensions.ERXEC;
+import er.extensions.eof.ERXEC;
 import er.taggable.ERTaggableEntity;
 
 /**

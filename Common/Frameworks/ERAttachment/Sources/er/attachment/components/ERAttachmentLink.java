@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
-import er.extensions.ERXComponentUtilities;
+import er.extensions.components.ERXComponentUtilities;
 
 /**
  * ERAttachmentLink is like a WOHyperlink that points to an attachment's contents.

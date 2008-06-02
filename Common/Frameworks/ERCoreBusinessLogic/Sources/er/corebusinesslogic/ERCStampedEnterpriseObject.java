@@ -16,11 +16,11 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXConstant;
 import er.extensions.ERXExtensions;
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXRetainer;
-import er.extensions.ERXSelectorUtilities;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.foundation.ERXRetainer;
+import er.extensions.foundation.ERXSelectorUtilities;
 
 /**
  * EO subclass that has a timestamp with its creation date, the most recent modification, 

@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 import er.imadaptor.InstantMessengerAdaptor;
 
 public class IMPickListAction extends WOComponent {

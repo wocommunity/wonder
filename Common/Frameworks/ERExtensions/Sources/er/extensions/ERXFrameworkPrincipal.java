@@ -19,6 +19,10 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.appserver.ERXApplication;
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
+
 /** 
  * Designated starter class for frameworks, adds support for dependency management.<br />
  * Allows you to disregard your framework order in the class path (at least where 

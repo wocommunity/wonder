@@ -7,11 +7,12 @@ import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXKey;
+
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXKey;
 
 @SuppressWarnings("all")
-public abstract class _Employee extends er.extensions.ERXGenericRecord {
+public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
 	public static final String ENTITY_NAME = "Employee";
 
 	// Attributes

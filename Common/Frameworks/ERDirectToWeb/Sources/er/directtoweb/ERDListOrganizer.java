@@ -18,9 +18,9 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXKeyValuePair;
-import er.extensions.ERXSession;
+import er.extensions.appserver.ERXSession;
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXKeyValuePair;
 
 /**
  * Crazy cool component that allows one to select strings (using arrow buttons), and organize them.<br />

@@ -20,8 +20,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXJDBCUtilities;
-import er.extensions.ERXSQLHelper;
+import er.extensions.jdbc.ERXJDBCUtilities;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * ERXMigrationTable provides table-level migration API's.  To obtain a table, you

@@ -32,18 +32,18 @@ import com.webobjects.foundation.NSLog;
 import er.corebusinesslogic.audittrail.ERCAuditTrail;
 import er.corebusinesslogic.audittrail.ERCAuditTrailHandler;
 import er.directtoweb.ERDirectToWeb;
-import er.extensions.ERXApplication;
-import er.extensions.ERXConfigurationManager;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.ERXJDBCUtilities;
-import er.extensions.ERXProperties;
-import er.extensions.ERXSQLHelper;
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXThreadStorage;
-import er.extensions.ERXUtilities;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.components.ERXConfigurationManager;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXThreadStorage;
+import er.extensions.foundation.ERXUtilities;
+import er.extensions.jdbc.ERXJDBCUtilities;
+import er.extensions.jdbc.ERXSQLHelper;
 import er.javamail.ERJavaMail;
 
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {

@@ -12,8 +12,8 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXKeyValuePair;
-import er.extensions.ERXLocalizer;
+import er.extensions.foundation.ERXKeyValuePair;
+import er.extensions.localization.ERXLocalizer;
 
 public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
     public ERXKeyValuePair currentElement;

@@ -34,16 +34,16 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXClickToOpenSupport;
-import er.extensions.ERXComponentActionRedirector;
-import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXExceptionHolder;
 import er.extensions.ERXExtensions;
-import er.extensions.ERXGuardedObjectInterface;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXValidation;
-import er.extensions.ERXValidationException;
-import er.extensions.ERXValueUtilities;
+import er.extensions.appserver.ERXComponentActionRedirector;
+import er.extensions.components.ERXClickToOpenSupport;
+import er.extensions.components.ERXComponentUtilities;
+import er.extensions.eof.ERXGuardedObjectInterface;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.validation.ERXExceptionHolder;
+import er.extensions.validation.ERXValidation;
+import er.extensions.validation.ERXValidationException;
 
 /**
  * Common superclass for all ERD2W templates (except ERD2WEditRelationshipPage).

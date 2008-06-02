@@ -12,7 +12,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 public class DirectAction extends WODirectAction {
   private static NSMutableArray<String> _sessionIDs = new NSMutableArray<String>();

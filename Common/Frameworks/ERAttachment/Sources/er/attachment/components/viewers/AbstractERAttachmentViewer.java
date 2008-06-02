@@ -4,7 +4,7 @@ import com.webobjects.appserver.WOContext;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
-import er.extensions.ERXStatelessComponent;
+import er.extensions.components.ERXStatelessComponent;
 
 /**
  * AbstractERAttachmentViewer is the superclass of all viewer plugins.

@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.directtoweb.ERD2WContextDictionary.Configuration;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * Given a configured D2WContext ((entity+task or pageconfig) and propertyKey) and

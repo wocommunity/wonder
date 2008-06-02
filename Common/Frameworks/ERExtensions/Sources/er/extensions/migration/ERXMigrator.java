@@ -19,11 +19,11 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXJDBCUtilities;
-import er.extensions.ERXProperties;
-import er.extensions.ERXSQLHelper;
-import er.extensions.ERXEOAccessUtilities.ChannelAction;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities.ChannelAction;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.jdbc.ERXJDBCUtilities;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * ERXMigrator provides a simple mechanism for performing database migrations

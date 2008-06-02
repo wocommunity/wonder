@@ -59,13 +59,13 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXExtensions;
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXMultiKey;
-import er.extensions.ERXProperties;
-import er.extensions.ERXSelectorUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXMultiKey;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXSelectorUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Overhaul of the caching system.

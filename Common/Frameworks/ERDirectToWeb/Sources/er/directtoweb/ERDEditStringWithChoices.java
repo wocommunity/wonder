@@ -17,9 +17,9 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXKeyValuePair;
-import er.extensions.ERXLocalizer;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXKeyValuePair;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Provides a toOne relationship-like component except the value is pushed in as a string.<br />

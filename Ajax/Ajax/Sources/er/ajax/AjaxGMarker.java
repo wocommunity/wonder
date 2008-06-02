@@ -5,7 +5,7 @@ package er.ajax;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * Adds a GMarker instance to a Google Map.

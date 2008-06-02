@@ -18,8 +18,8 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.directtoweb.ERD2WModel;
 import er.directtoweb.ERD2WPage;
-import er.extensions.ERXConstant;
 import er.extensions.ERXExtensions;
+import er.extensions.eof.ERXConstant;
 
 public class Main extends ERD2WPage {
 

@@ -5,12 +5,13 @@
  * Window - Preferences - Java - Code Style - Code Templates
  */
 package er.jdbcadaptor;
-import java.sql.*;
+import java.sql.Connection;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.jdbcadaptor.*;
+import com.webobjects.eoaccess.EOAdaptorContext;
+import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
-import er.extensions.*;
+import er.extensions.jdbc.ERXJDBCConnectionBroker;
+import er.extensions.logging.ERXLogger;
 
 
 /**

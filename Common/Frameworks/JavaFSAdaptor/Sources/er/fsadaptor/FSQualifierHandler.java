@@ -6,8 +6,13 @@ package er.fsadaptor;
 
 import java.io.File;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EONotQualifier;
+import com.webobjects.eocontrol.EOOrQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableSet;
 
 public abstract class FSQualifierHandler {
     public static boolean debug = "YES".equals(System.getProperty("FSAdaptorDebuggingEnabled"));
