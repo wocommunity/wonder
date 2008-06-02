@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo class="AjaxBusyIndicator" wocomponentcontent="false">
+	<wo class="AjaxBusyIndicator" wocomponentcontent="true">
 		<binding name="divID"/>
 		<binding name="busyImage"/>
 		<binding name="busyImageFramework"/>
@@ -8,5 +8,8 @@
 	<binding name="onCreate"/>
         <binding name="onComplete"/>
         <binding name="watchContainerID"/>
+    <binding name="id"/>
+        <binding name="class"/>
+        <binding name="style"/>
     </wo>
 </wodefinitions>
