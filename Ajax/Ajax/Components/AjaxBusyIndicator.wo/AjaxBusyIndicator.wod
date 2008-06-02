@@ -6,6 +6,22 @@ BusyImageConditional : WOConditional {
 	condition = ^busyImage;
 }
 
+CustomStyleConditional : WOConditional {
+  condition = customStyle;
+}
+
+DefaultStyleConditional : WOConditional {
+  condition = customStyle;
+  negate = true;
+}
+
+CustomBusyDiv : WOGenericContainer {
+  elementName = "div";
+  id = divID;
+  class = ^class;
+  style = style;
+}
+
 BusyDiv : WOGenericContainer {
 	elementName = "div";
 	id = divID;
