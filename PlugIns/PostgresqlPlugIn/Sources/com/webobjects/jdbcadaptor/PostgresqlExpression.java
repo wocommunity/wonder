@@ -376,8 +376,9 @@ public class PostgresqlExpression extends JDBCExpression {
      * @return  the PostgreSQL specific type string for <code>attribute</code>
      */
     public String columnTypeStringForAttribute( EOAttribute attribute ) {
-        if( attribute.externalType().endsWith( "[]" ) ) {
-            return attribute.externalType();
+      String externalType = attribute.externalType();
+        if (externalType != null && externalType.endsWith( "[]" ) ) {
+            return externalType;
         }
         return super.columnTypeStringForAttribute( attribute );
     }
