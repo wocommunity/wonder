@@ -20,7 +20,7 @@ import org.apache.log4j.PropertyConfigurator;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.components.ERXConfigurationManager;
+import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSystem;
 

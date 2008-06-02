@@ -34,8 +34,8 @@ import com.webobjects.foundation.NSSelector;
 
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.components.ERXConfigurationManager;
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXKeyValuePair;
 import er.extensions.foundation.ERXProperties;

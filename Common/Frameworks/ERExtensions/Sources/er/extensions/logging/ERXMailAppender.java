@@ -26,7 +26,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXWOContext;
-import er.extensions.components.ERXConfigurationManager;
+import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
