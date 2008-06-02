@@ -42,7 +42,6 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.components.ERXModelGroup;
 import er.extensions.foundation.ERXFileNotificationCenter;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXMutableDictionary;

@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
-import er.extensions.components.ERXModelGroup;
+import er.extensions.eof.ERXModelGroup;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXJDBCUtilities;
 import er.extensions.jdbc.ERXSQLHelper;

@@ -19,12 +19,12 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.components.ERXModelGroup;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.eof.ERXKeyGlobalID;
+import er.extensions.eof.ERXModelGroup;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
