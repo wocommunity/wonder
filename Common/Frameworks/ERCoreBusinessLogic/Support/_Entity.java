@@ -1,9 +1,9 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ${entity.classNameWithOptionalPackage}.java instead.
+// $LastChangedRevision$ DO NOT EDIT.  Make changes to ${entity.classNameWithOptionalPackage}.java instead.
 #if ($entity.superclassPackageName)
 package $entity.superclassPackageName;
 
 #end
-import er.extensions.ERXGenericRecord;
+import er.extensions.eof.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
