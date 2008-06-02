@@ -43,14 +43,14 @@ public class ERMailSender implements Runnable {
 
 	private static ERMailSender _sharedMailSender;
 
-	private Stats stats;
+	private Stats _stats;
 
 	// Holds sending messages. The queue size can be set by
 	// er.javamail.senderQueue.size property
-	private ERQueue messages;
+	private ERQueue<ERMessage> _messages;
 	// For thread management
 
-	private int milliSecondsWaitRunLoop = 30000;
+	private int _milliSecondsWaitRunLoop = 30000;
 	
 	private Thread _senderThread;
 
@@ -64,11 +64,11 @@ public class ERMailSender implements Runnable {
 	}
 
 	private ERMailSender() {
-		stats = new Stats();
-		messages = new ERQueue(ERJavaMail.sharedInstance().senderQueueSize());
+		_stats = new Stats();
+		_messages = new ERQueue<ERMessage>(ERJavaMail.sharedInstance().senderQueueSize());
 
 		if (log.isDebugEnabled()) {
-			log.debug("ERMailSender initialized (JVM heap size: " + stats.formattedUsedMemory() + ")");
+			log.debug("ERMailSender initialized (JVM heap size: " + _stats.formattedUsedMemory() + ")");
 		}
 	}
 
@@ -82,7 +82,7 @@ public class ERMailSender implements Runnable {
 
 	/** @return the stats associated with this ERMailSender object */
 	public Stats stats() {
-		return stats;
+		return _stats;
 	}
 
 	/**
@@ -102,17 +102,17 @@ public class ERMailSender implements Runnable {
 				// log.debug ("Adding a message in the queue: \n" + allRecipientsString);
 			}
 
-			messages.push(message);
-			stats.updateMemoryUsage();
+			_messages.push(message);
+			_stats.updateMemoryUsage();
 
 			if (log.isDebugEnabled())
-				log.debug("(" + stats.formattedUsedMemory() + ") Added the message in the queue: " + allRecipientsString);
+				log.debug("(" + _stats.formattedUsedMemory() + ") Added the message in the queue: " + allRecipientsString);
 		}
 		catch (ERQueue.SizeOverflowException e) {
 			throw new ERMailSender.SizeOverflowException(e);
 		}
 
-		synchronized (messages) {
+		synchronized (_messages) {
 			// If we have not started to send mails, start the thread
 			if (_senderThread == null) {
 				_senderThread = new Thread(this, "ERMailSender");
@@ -120,7 +120,7 @@ public class ERMailSender implements Runnable {
 				_senderThread.start();
 			}
 			else {
-				messages.notifyAll();
+				_messages.notifyAll();
 			}
 		}
 	}
@@ -189,7 +189,7 @@ public class ERMailSender implements Runnable {
 				message._deliverySucceeded();
 				if (debug)
 					log.debug("Done.");
-				stats.updateMemoryUsage();
+				_stats.updateMemoryUsage();
 
 				if (debug) {
 					String allRecipientsString = null;
@@ -199,13 +199,13 @@ public class ERMailSender implements Runnable {
 					catch (MessagingException ex) {
 						allRecipientsString = "(not available)";
 					}
-					log.debug("(" + stats.formattedUsedMemory() + ") Message sent: " + allRecipientsString);
+					log.debug("(" + _stats.formattedUsedMemory() + ") Message sent: " + allRecipientsString);
 				}
 			}
 			catch (SendFailedException e) {
 				if (debug)
 					log.debug("Failed to send message: \n" + message.allRecipientsAsString() + e.getMessage());
-				stats.incrementErrorCount();
+				_stats.incrementErrorCount();
 
 				NSArray invalidEmails = ERMailUtils.convertInternetAddressesToNSArray(e.getInvalidAddresses());
 				this.notifyInvalidEmails(invalidEmails);
@@ -223,7 +223,7 @@ public class ERMailSender implements Runnable {
 				throw NSForwardException._runtimeExceptionForThrowable(t);
 			}
 			finally {
-				stats.incrementMailCount();
+				_stats.incrementMailCount();
 				if (exception != null) {
 					message._deliveryFailed(exception);
 					throw exception;
@@ -271,14 +271,14 @@ public class ERMailSender implements Runnable {
 	public void run() {
 		try {
 			while (true) {
-				synchronized (messages) {
-					while (messages.empty()) {
-						messages.wait(milliSecondsWaitRunLoop);
+				synchronized (_messages) {
+					while (_messages.empty()) {
+						_messages.wait(_milliSecondsWaitRunLoop);
 					}
 				}
 
 				// If there are still messages pending ...
-				if (!messages.empty()) {
+				if (!_messages.empty()) {
 					Session session = ERJavaMail.sharedInstance().newSession();
 					String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocol();
 					try {
@@ -287,8 +287,8 @@ public class ERMailSender implements Runnable {
 							transport.connect();
 						}
 
-						while (!messages.empty()) {
-							ERMessage message = (ERMessage) messages.pop();
+						while (!_messages.empty()) {
+							ERMessage message = _messages.pop();
 							try {
 								this._sendMessageNow(message, transport);
 							} catch(SendFailedException ex) {
@@ -384,7 +384,7 @@ public class ERMailSender implements Runnable {
 		 *         supposed to send mails
 		 */
 		public synchronized int currentQueueSize() {
-			return messages.size();
+			return _messages.size();
 		}
 
 		private void incrementErrorCount() {
@@ -426,6 +426,7 @@ public class ERMailSender implements Runnable {
 		}
 
 		/** @return a string representation of the Stats object. */
+		@Override
 		public String toString() {
 			return "<" + this.getClass().getName() + " lastResetTime: " + lastResetTime() + ", mailCount: " + mailCount() + ", errorCount: " + errorCount() + ", currentQueueSize: " + currentQueueSize() + ", peakMemoryUsage: " + formattedPeakMemoryUsage() + ">";
 		}

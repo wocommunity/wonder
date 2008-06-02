@@ -152,6 +152,7 @@ public class ERWOMailDelivery {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return "<ERWOMailDelivery smtpHost=" + WOApplication.application().SMTPHost() + ">";
 	}
@@ -225,6 +226,7 @@ public class ERWOMailDelivery {
 			setMimeMessage(msg);
 		}
 
+		@Override
 		protected DataHandler prepareMail() {
 			MimeMessage msg = mimeMessage();
 			String contentType = "text/plain";

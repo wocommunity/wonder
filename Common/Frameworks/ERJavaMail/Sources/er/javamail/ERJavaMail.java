@@ -2,12 +2,10 @@ package er.javamail;
 
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.log4j.Logger;
-import org.apache.oro.text.regex.MalformedPatternException;
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
 
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOOrQualifier;
@@ -74,11 +72,6 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	private static final String EMAIL_VALIDATION_PATTERN = "^" + localPart + "@" + domain + "$";
 
 	/**
-	 * The Jakarta ORO regexp matcher.
-	 */
-	protected Perl5Matcher _matcher;
-
-	/**
 	 * The compiled form of the <code>EMAIL_VALIDATION_PATTERN</code> pattern.
 	 */
 	protected Pattern _pattern = null;
@@ -86,19 +79,18 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	/**
 	 * Specialized implementation of the method from ERXPrincipalClass.
 	 */
+	@Override
 	public void finishInitialization() {
 		String patternString = ERXProperties.stringForKey("er.javamail.emailPattern");
 		if(patternString == null || patternString.trim().length() == 0) {
 			patternString = EMAIL_VALIDATION_PATTERN;
 		}
-		Perl5Compiler compiler = new Perl5Compiler();
-		_matcher = new Perl5Matcher();
 
 		try {
-			_pattern = compiler.compile(patternString);
+			_pattern = Pattern.compile(patternString);
 		}
-		catch (MalformedPatternException e) {
-			throw new RuntimeException("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
+		catch (PatternSyntaxException e) {
+			throw new RuntimeException("The compilation of the email pattern '" + patternString + "' failed.", e);
 		}
 		initializeFrameworkFromSystemProperties();
 	}
@@ -451,7 +443,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 */
 	public synchronized boolean isValidEmail(String email) {
 		if (email != null)
-			return _matcher.matches(email, _pattern);
+			return _pattern.matcher(email).matches();
 		return false;
 	}
 
@@ -460,10 +452,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	// ---------------------------------------------------------------------------
 
 	/** holds the array of white list email addresses */
-	protected NSArray whiteListEmailAddressPatterns;
+	protected NSArray<String> whiteListEmailAddressPatterns;
 
 	/** holds the array of black list email addresses */
-	protected NSArray blakListEmailAddressPatterns;
+	protected NSArray<String> blakListEmailAddressPatterns;
 
 	/** holds the white list qualifier */
 	protected EOOrQualifier whiteListQualifier;
@@ -494,7 +486,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @return array of white list email address patterns
 	 */
-	public NSArray whiteListEmailAddressPatterns() {
+	@SuppressWarnings("unchecked")
+	public NSArray<String> whiteListEmailAddressPatterns() {
 		if (whiteListEmailAddressPatterns == null) {
 			whiteListEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.WhiteListEmailAddressPatterns", NSArray.EmptyArray);
 		}
@@ -506,7 +499,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @return array of black list email address patterns
 	 */
-	public NSArray blackListEmailAddressPatterns() {
+	@SuppressWarnings("unchecked")
+	public NSArray<String> blackListEmailAddressPatterns() {
 		if (blakListEmailAddressPatterns == null) {
 			blakListEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.BlackListEmailAddressPatterns", NSArray.EmptyArray);
 		}
@@ -545,8 +539,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 *            array of email patterns
 	 * @return or qualifier to match any of the given patterns
 	 */
-	protected EOOrQualifier qualifierArrayForEmailPatterns(NSArray emailPatterns) {
-		NSMutableArray patternQualifiers = new NSMutableArray();
+	protected EOOrQualifier qualifierArrayForEmailPatterns(NSArray<String> emailPatterns) {
+		NSMutableArray<EOQualifier> patternQualifiers = new NSMutableArray<EOQualifier>();
 		for (Enumeration patternEnumerator = emailPatterns.objectEnumerator(); patternEnumerator.hasMoreElements();) {
 			String pattern = (String) patternEnumerator.nextElement();
 			patternQualifiers.addObject(EOQualifier.qualifierWithQualifierFormat("toString caseInsensitiveLike '" + pattern + "'", null));
@@ -561,10 +555,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 *            array of email addresses to be filtered
 	 * @return array of filtered email addresses
 	 */
-	public NSArray filterEmailAddresses(NSArray emailAddresses) {
-		NSMutableArray filteredAddresses = null;
+	public NSArray<String> filterEmailAddresses(NSArray<String> emailAddresses) {
+		NSMutableArray<String> filteredAddresses = null;
 		if ((emailAddresses != null) && (emailAddresses.count() > 0) && (this.hasWhiteList() || this.hasBlackList())) {
-			filteredAddresses = new NSMutableArray(emailAddresses);
+			filteredAddresses = new NSMutableArray<String>(emailAddresses);
 
 			if (log.isDebugEnabled()) {
 				log.debug("Filtering email addresses: " + filteredAddresses);

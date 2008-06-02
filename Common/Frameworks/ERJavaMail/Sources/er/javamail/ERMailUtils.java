@@ -226,10 +226,11 @@ public class ERMailUtils extends Object {
 	 * @exception AddressException
 	 *                if an error occurs
 	 */
-	public static NSArray convertInternetAddressesToNSArray(Address[] addressesArray) {
+	@SuppressWarnings("unchecked")
+	public static NSArray<String> convertInternetAddressesToNSArray(Address[] addressesArray) {
 		if (addressesArray == null)
 			return NSArray.EmptyArray;
-		NSMutableArray addresses = new NSMutableArray(addressesArray.length);
+		NSMutableArray<String> addresses = new NSMutableArray<String>(addressesArray.length);
 
 		for (int i = 0; i < addressesArray.length; i++) {
 			Address anAddress = addressesArray[i];
