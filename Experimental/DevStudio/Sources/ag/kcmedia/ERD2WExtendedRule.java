@@ -6,11 +6,17 @@
 //
 package ag.kcmedia;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.Rule;
+import com.webobjects.eocontrol.EOKeyValueArchiver;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.foundation.ERXMutableUserInfoHolderInterface;
+import er.extensions.logging.ERXLogger;
 
 public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderInterface {
     private static ERXLogger log = ERXLogger.getERXLogger(DirectAction.class);

@@ -15,7 +15,7 @@ import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.ERD2WTabInspectPage;
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class ERNEUTabInspectPage extends ERD2WTabInspectPage {
 

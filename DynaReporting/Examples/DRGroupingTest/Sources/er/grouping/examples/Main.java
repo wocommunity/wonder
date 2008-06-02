@@ -6,12 +6,8 @@
 //
 package er.grouping.examples;
 
-import er.extensions.*;
-import er.grouping.*;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class Main extends WOComponent {
 

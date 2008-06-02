@@ -46,8 +46,40 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
+import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXSession;
+import er.extensions.components.ERXConfigurationManager;
+import er.extensions.components.ERXModelGroup;
+import er.extensions.eof.ERXAdaptorChannelDelegate;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXDatabaseContext;
+import er.extensions.eof.ERXDatabaseContextDelegate;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEntityClassDescription;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXObjectStoreCoordinatorPool;
+import er.extensions.eof.ERXSharedEOLoader;
+import er.extensions.eof.qualifiers.ERXFullTextQualifier;
+import er.extensions.eof.qualifiers.ERXFullTextQualifierSupport;
+import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
+import er.extensions.eof.qualifiers.ERXRegExQualifier;
+import er.extensions.eof.qualifiers.ERXToManyQualifier;
+import er.extensions.formatters.ERXSimpleHTMLFormatter;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXPatcher;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXSystem;
+import er.extensions.foundation.ERXUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.jdbc.ERXJDBCAdaptor;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.logging.ERXLogger;
 import er.extensions.partials.ERXPartialInitializer;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * Principal class of the ERExtensions framework. This class

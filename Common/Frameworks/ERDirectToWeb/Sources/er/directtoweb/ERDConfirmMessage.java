@@ -17,7 +17,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Confirming an action template.<br />

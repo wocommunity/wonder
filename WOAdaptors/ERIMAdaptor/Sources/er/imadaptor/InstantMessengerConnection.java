@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import er.extensions.ERXAsyncQueue;
+import er.extensions.concurrency.ERXAsyncQueue;
 
 public class InstantMessengerConnection {
 	private InstantMessageQueue _messageQueue;

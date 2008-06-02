@@ -19,10 +19,10 @@ import er.attachment.model.ERPendingAttachment;
 import er.attachment.model.ERS3Attachment;
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
-import er.extensions.ERXCrypto;
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXProperties;
-import er.extensions.ERXValidationException;
+import er.extensions.crypting.ERXCrypto;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.validation.ERXValidationException;
 
 /**
  * <p>

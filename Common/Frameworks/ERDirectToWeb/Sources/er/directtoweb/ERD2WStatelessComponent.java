@@ -4,7 +4,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2WStatelessComponent;
 
-import er.extensions.ERXClickToOpenSupport;
+import er.extensions.components.ERXClickToOpenSupport;
 
 public class ERD2WStatelessComponent extends D2WStatelessComponent {
 

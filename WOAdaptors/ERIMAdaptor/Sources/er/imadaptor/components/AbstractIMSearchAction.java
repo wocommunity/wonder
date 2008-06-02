@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 import er.imadaptor.InstantMessengerAdaptor;
 
 abstract class AbstractIMSearchAction extends IMAction {

@@ -13,8 +13,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXConfigurationManager;
-import er.extensions.ERXUtilities;
+import er.extensions.components.ERXConfigurationManager;
+import er.extensions.foundation.ERXUtilities;
 
 public class ERCMailableExceptionPage extends WOComponent {
 

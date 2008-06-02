@@ -46,12 +46,12 @@ import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.ERXDirectAction;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXValueUtilities;
+import er.extensions.appserver.ERXDirectAction;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Automatically creates page configurations from URLs.<br />

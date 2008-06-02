@@ -19,8 +19,8 @@ import com.webobjects.foundation.NSLog;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
-import er.extensions.ERXDynamicURL;
-import er.extensions.ERXEC;
+import er.extensions.components.ERXDynamicURL;
+import er.extensions.eof.ERXEC;
 
 /**
  * ERAttachmentRequestHandler is the request handler that is used for loading 

@@ -25,10 +25,10 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXDictionaryUtilities;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * The branch delegate is used in conjunction with the

@@ -6,10 +6,7 @@
 //
 package ag.kcmedia;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import er.extensions.appserver.ERXSession;
 
 public class Session extends ERXSession {
 

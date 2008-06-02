@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayBoolean;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Allows the display of strings instead of Yes/No/Unset or checkboxes for boolean values.<br />

@@ -41,16 +41,16 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXBatchingDisplayGroup;
-import er.extensions.ERXComponentActionRedirector;
-import er.extensions.ERXConstant;
-import er.extensions.ERXDisplayGroup;
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXExtensions;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXValueUtilities;
+import er.extensions.appserver.ERXComponentActionRedirector;
+import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.batching.ERXBatchingDisplayGroup;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Reimplementation of the D2WListPage. Descendes from ERD2WPage instead of

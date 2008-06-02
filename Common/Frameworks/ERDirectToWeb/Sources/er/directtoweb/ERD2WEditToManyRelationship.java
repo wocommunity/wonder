@@ -12,8 +12,8 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.extensions.ERXUtilities;
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Improves superclass by adding restrictions on the choices and uses ERXToManyRelationship, thus can handle localization

@@ -4,7 +4,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.QueryOperatorComponent;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXLocalizer;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Localized replacement for D2WQueryOperator.

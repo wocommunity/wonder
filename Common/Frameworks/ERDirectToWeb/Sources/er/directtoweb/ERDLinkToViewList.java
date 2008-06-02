@@ -15,7 +15,7 @@ import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Generic link component used to view a list.<br />

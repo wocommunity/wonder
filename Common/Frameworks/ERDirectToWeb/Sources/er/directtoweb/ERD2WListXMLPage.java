@@ -8,7 +8,7 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXConstant;
+import er.extensions.eof.ERXConstant;
 
 public class ERD2WListXMLPage extends ERD2WListPage {
 

@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
-import er.extensions.ERXApplication;
+import er.extensions.appserver.ERXApplication;
 
 /**
  * ERXUnsafeRestEntityDelegate should NEVER be used in production. This is an entity delegate implementation designed to

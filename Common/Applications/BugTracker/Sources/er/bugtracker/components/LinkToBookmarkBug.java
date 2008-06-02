@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.bugtracker.Bug;
 import er.directtoweb.ERDCustomEditComponent;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 
 public class LinkToBookmarkBug extends ERDCustomEditComponent {
 

@@ -6,8 +6,8 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * ERXRestKey represents the keypath that was embodied in the request URL. This differs from a normal keypath in that it

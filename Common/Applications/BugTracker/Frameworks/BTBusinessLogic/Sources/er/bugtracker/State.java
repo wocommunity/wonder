@@ -8,7 +8,7 @@ import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 
 import er.corebusinesslogic.ERCMailState;
-import er.extensions.ERXConstant;
+import er.extensions.eof.ERXConstant;
 
 /**
  * State is an example of a POJO. As it is a string in the DB, you need to provide a factory method.

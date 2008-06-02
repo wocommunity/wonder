@@ -14,7 +14,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 // MOVEME: This should move into the defaults assignment, only reason
 //		it is here is because we used to not have the dependent

@@ -21,7 +21,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXApplication;
+import er.extensions.appserver.ERXApplication;
 
 /**
  * <code>ERMailUtils</code> contains various utility method related to mail sending.

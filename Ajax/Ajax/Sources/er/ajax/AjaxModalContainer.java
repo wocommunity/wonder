@@ -12,8 +12,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXStringUtilities;
 /**
  * Shows a link and wraps an area that is later presented as a modal window.
  * @binding label label for the link

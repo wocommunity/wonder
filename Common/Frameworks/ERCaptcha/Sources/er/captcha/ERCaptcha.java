@@ -19,7 +19,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
 
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERCaptcha presents a captcha image to the use along with a text field for the user to identify the image.

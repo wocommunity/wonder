@@ -6,11 +6,13 @@
 //
 package er.excel;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.*;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.foundation.ERXDictionaryUtilities;
 
 public class Application extends ERXApplication {
 

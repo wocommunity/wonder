@@ -37,11 +37,11 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXAsyncQueue;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXFetchSpecificationBatchIterator;
-import er.extensions.ERXSelectorUtilities;
+import er.extensions.concurrency.ERXAsyncQueue;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXFetchSpecificationBatchIterator;
+import er.extensions.foundation.ERXSelectorUtilities;
 import er.indexing.ERIndexJob.Command;
 
 /**

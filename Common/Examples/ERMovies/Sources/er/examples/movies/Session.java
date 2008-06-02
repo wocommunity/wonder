@@ -7,21 +7,20 @@
 package er.examples.movies;
 
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import com.webobjects.directtoweb.D2W;
-import com.webobjects.directtoweb.EditPageInterface;
-import com.webobjects.directtoweb.ListPageInterface;
-import com.webobjects.directtoweb.QueryPageInterface;
-
-import er.extensions.ERXEC;
-import er.extensions.ERXNavigationManager;
-import er.extensions.ERXSession;
-import er.extensions.ERXUtilities;
+import er.extensions.appserver.ERXSession;
+import er.extensions.appserver.navigation.ERXNavigationManager;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXUtilities;
 
 public class Session extends ERXSession {
 

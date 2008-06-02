@@ -19,9 +19,9 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.taggable.ERTaggable;
 
 public class Bug extends _Bug implements Markable {

@@ -1,7 +1,8 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERCStatic.java instead.
+// $LastChangedRevision$ DO NOT EDIT.  Make changes to ERCStatic.java instead.
 package er.corebusinesslogic;
 
-import er.extensions.ERXGenericRecord;
+import er.extensions.eof.ERXGenericRecord;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;

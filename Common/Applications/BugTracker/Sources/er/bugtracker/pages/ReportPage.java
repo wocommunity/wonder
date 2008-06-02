@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
 import er.directtoweb.ERD2WPage;
-import er.extensions.ERXFileUtilities;
+import er.extensions.foundation.ERXFileUtilities;
 import er.grouping.DRReportModel;
 
 // this doesn't need to be a D2W page, but it's more practical this way.

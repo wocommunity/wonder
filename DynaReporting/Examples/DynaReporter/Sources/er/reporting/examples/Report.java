@@ -1,15 +1,11 @@
 
 package er.reporting.examples;
 
-import er.grouping.*;
-import er.reporting.*;
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
+import java.util.Date;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 public class Report extends WOComponent  {
 

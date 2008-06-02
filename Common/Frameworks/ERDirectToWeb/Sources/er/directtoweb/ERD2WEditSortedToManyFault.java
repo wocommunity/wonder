@@ -15,8 +15,8 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
 

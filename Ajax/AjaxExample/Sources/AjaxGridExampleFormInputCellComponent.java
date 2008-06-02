@@ -5,7 +5,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
 import er.ajax.AjaxGrid;
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 public class AjaxGridExampleFormInputCellComponent extends WOComponent {
 

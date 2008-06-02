@@ -6,8 +6,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXProperties;
-import er.extensions.ERXResponseRewriter;
+import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.foundation.ERXProperties;
 import er.wolips.WOLipsUtilities;
 
 /**

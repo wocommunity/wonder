@@ -9,7 +9,7 @@ import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 /**
  * Generic link component used to view or edit an object.<br />
  * @binding object object to get list from

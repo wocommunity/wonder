@@ -6,7 +6,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.ajax.AjaxUtils;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 public class YUIUtils {
     

@@ -6,11 +6,12 @@
 //
 package er.excel;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WORequest;
 
-import er.extensions.*;
+import er.extensions.appserver.ERXDirectAction;
 
 public class DirectAction extends ERXDirectAction {
     static Logger log = Logger.getLogger(DirectAction.class);

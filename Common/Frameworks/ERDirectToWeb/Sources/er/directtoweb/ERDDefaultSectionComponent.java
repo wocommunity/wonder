@@ -10,8 +10,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXStatelessComponent;
+import er.extensions.components.ERXStatelessComponent;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Displays section name as a string.<br />

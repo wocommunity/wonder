@@ -15,7 +15,7 @@ import junit.runner.TestSuiteLoader;
 
 import org.apache.log4j.Logger;
 
-import er.extensions.ERXPatcher;
+import er.extensions.foundation.ERXPatcher;
 
 /**
  * runs tests with ERTestListeners.<br />

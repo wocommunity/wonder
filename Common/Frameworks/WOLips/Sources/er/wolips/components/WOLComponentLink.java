@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXResponseRewriter;
+import er.extensions.appserver.ERXResponseRewriter;
 import er.wolips.WOLipsUtilities;
 
 /**

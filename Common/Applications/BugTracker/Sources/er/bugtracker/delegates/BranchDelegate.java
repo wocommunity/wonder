@@ -11,7 +11,7 @@ import er.bugtracker.Session;
 import er.directtoweb.ERD2WMessagePage;
 import er.directtoweb.ERDBranchDelegate;
 import er.directtoweb.ERDDeletionDelegate;
-import er.extensions.ERXLocalizer;
+import er.extensions.localization.ERXLocalizer;
 
 public class BranchDelegate extends ERDBranchDelegate {
 

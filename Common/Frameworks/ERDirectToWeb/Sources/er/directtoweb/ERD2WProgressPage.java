@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXLongResponseTask;
+import er.extensions.concurrency.ERXLongResponseTask;
 
 /**
  * Displays progress by using a ERXLongResponse.Task. Very useful for sending mail and the like.

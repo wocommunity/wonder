@@ -35,8 +35,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Direct action that returns the test results. This class is not used by users.

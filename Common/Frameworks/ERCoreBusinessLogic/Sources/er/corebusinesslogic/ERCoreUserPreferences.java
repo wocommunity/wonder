@@ -22,14 +22,14 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXBatchNavigationBar;
-import er.extensions.ERXConstant;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXExtensions;
-import er.extensions.ERXRetainer;
-import er.extensions.ERXSortOrder;
-import er.extensions.ERXValueUtilities;
+import er.extensions.batching.ERXBatchNavigationBar;
+import er.extensions.components.ERXSortOrder;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXRetainer;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class ERCoreUserPreferences implements NSKeyValueCoding {
 

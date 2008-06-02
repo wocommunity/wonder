@@ -7,8 +7,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
-import er.extensions.ERXProperties;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Instantiates a Google Map (an object of GMap2 javascript class) at the given location (specified by lat&lng or address) with given properties. IMPORTANT: your GMaps api key must be specified in your properties file as <code>ajax.google.maps.apiKey</code>.

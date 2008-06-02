@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXPrimaryKeyListQualifier;
+import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
 
 /**
  * Very useful when you want to restrict the things a user can see during searches or in list pages.<br />

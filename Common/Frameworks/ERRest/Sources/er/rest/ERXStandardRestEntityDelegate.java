@@ -5,7 +5,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * <p>

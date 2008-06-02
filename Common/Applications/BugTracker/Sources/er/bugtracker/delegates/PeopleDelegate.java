@@ -4,7 +4,7 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.foundation.NSArray;
 
 import er.bugtracker.People;
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 public class PeopleDelegate extends BranchDelegate {
 

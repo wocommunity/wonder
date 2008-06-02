@@ -11,7 +11,7 @@ import com.webobjects.directtoweb.QueryComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.extensions.ERXLocalizer;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Query component for null or non-null.<br />

@@ -18,9 +18,9 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXValidationException;
-import er.extensions.ERXValueUtilities;
-import er.extensions.ERXWOForm;
+import er.extensions.components._private.ERXWOForm;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.validation.ERXValidationException;
 
 /**
  * Superclass for all tab and wizard pages.<br />

@@ -7,7 +7,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * Class for DirectToWeb Component ERDAttributeRepetition.

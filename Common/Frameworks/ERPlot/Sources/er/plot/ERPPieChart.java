@@ -12,7 +12,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
-import er.extensions.ERXAssert;
+import er.extensions.foundation.ERXAssert;
 
 /**
  * Displays a Pie chart with an optional map. The most important binding is <code>items</code> which

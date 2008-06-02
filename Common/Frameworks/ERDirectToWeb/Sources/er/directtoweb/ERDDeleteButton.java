@@ -8,8 +8,8 @@ import com.webobjects.directtoweb.ConfirmPageInterface;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WPage;
 
-import er.extensions.ERXGuardedObjectInterface;
-import er.extensions.ERXLocalizer;
+import er.extensions.eof.ERXGuardedObjectInterface;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Delete button for repetitions. 

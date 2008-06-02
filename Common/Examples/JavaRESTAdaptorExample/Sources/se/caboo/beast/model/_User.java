@@ -1,15 +1,26 @@
 // $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to User.java instead.
 package se.caboo.beast.model;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import java.math.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
+
 import org.apache.log4j.Logger;
 
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXKey;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSTimestamp;
+
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXKey;
 
 @SuppressWarnings("all")
 public abstract class _User extends  ERXGenericRecord {
@@ -219,7 +230,7 @@ public abstract class _User extends  ERXGenericRecord {
     if (_User.LOG.isDebugEnabled()) {
       _User.LOG.debug("adding " + object + " to posts relationship");
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	addToPosts(object);
     }
     else {
@@ -231,7 +242,7 @@ public abstract class _User extends  ERXGenericRecord {
     if (_User.LOG.isDebugEnabled()) {
       _User.LOG.debug("removing " + object + " from posts relationship");
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	removeFromPosts(object);
     }
     else {
@@ -313,7 +324,7 @@ public abstract class _User extends  ERXGenericRecord {
     if (_User.LOG.isDebugEnabled()) {
       _User.LOG.debug("adding " + object + " to repliedToTopics relationship");
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	addToRepliedToTopics(object);
     }
     else {
@@ -325,7 +336,7 @@ public abstract class _User extends  ERXGenericRecord {
     if (_User.LOG.isDebugEnabled()) {
       _User.LOG.debug("removing " + object + " from repliedToTopics relationship");
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	removeFromRepliedToTopics(object);
     }
     else {
@@ -407,7 +418,7 @@ public abstract class _User extends  ERXGenericRecord {
     if (_User.LOG.isDebugEnabled()) {
       _User.LOG.debug("adding " + object + " to topics relationship");
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	addToTopics(object);
     }
     else {
@@ -419,7 +430,7 @@ public abstract class _User extends  ERXGenericRecord {
     if (_User.LOG.isDebugEnabled()) {
       _User.LOG.debug("removing " + object + " from topics relationship");
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	removeFromTopics(object);
     }
     else {

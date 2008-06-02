@@ -7,10 +7,10 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXDisplayGroup;
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXRegExQualifier;
+import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.qualifiers.ERXRegExQualifier;
 
 /**
  * Allows you to query a set of keys - supplied by queryAttributes - with a regular expression query.

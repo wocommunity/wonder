@@ -32,15 +32,15 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXConfigurationManager;
-import er.extensions.ERXConstant;
 import er.extensions.ERXExtensions;
-import er.extensions.ERXFileUtilities;
 import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.ERXKeyValuePair;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXProperties;
-import er.extensions.ERXValueUtilities;
+import er.extensions.components.ERXConfigurationManager;
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXKeyValuePair;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Principle class of the ERDirectToWeb framework.

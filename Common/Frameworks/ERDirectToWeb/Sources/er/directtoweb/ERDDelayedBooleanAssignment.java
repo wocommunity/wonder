@@ -13,7 +13,7 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Stepchild of DelayedConditionalAssignment

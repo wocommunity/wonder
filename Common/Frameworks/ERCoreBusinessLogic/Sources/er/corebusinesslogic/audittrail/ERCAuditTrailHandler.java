@@ -19,16 +19,16 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXKeyGlobalID;
-import er.extensions.ERXModelGroup;
-import er.extensions.ERXPatcher;
-import er.extensions.ERXProperties;
-import er.extensions.ERXSelectorUtilities;
-import er.extensions.ERXValueUtilities;
+import er.extensions.components.ERXModelGroup;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXKeyGlobalID;
+import er.extensions.foundation.ERXPatcher;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXSelectorUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class ERCAuditTrailHandler {
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCAuditTrail.class);

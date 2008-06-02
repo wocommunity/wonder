@@ -9,9 +9,9 @@ import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXStringUtilities;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Action button that lets you pick the setup of a non-flattened to-many relationship and creates 

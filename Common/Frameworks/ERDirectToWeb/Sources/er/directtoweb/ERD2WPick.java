@@ -16,7 +16,7 @@ import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Used to select multiple items from a list.<br />

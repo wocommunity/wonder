@@ -7,8 +7,8 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXWOContext;
-import er.extensions.ERXWOText;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.components._private.ERXWOText;
 
 /**
  * Focus text is a convenience version of ERXWOText that provides support for grabbing default focus via javascript.

@@ -27,13 +27,13 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSDictionaryUtilities;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXExceptionHolder;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXValidation;
-import er.extensions.ERXValueUtilities;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.validation.ERXExceptionHolder;
+import er.extensions.validation.ERXValidation;
 
 /**
  * List page for editing all items in the list.

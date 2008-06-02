@@ -6,9 +6,6 @@ package er.fsadaptor;
 
 import java.io.File;
 
-import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAdaptorContext;
-import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOClassDescription;

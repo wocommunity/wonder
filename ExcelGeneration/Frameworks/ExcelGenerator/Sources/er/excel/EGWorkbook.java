@@ -8,6 +8,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
+import er.extensions.foundation.ERXFileUtilities;
 
 /**
  * EGWorkbook is the "page" for the excel generation. It instantiates the 

@@ -13,7 +13,7 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXDateGrouper;
+import er.extensions.components.ERXDateGrouper;
 
 /**
  * Superclass of all calendar list pages.<br />

@@ -2,7 +2,7 @@ package er.ajax;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXStatelessComponent;
+import er.extensions.components.ERXStatelessComponent;
 
 /**
  * Simple Ajax long response handler that stays on the same page. The parent

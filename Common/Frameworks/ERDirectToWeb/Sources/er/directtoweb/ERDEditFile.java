@@ -26,11 +26,11 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXSimpleTemplateParser;
-import er.extensions.ERXValidationException;
-import er.extensions.ERXValidationFactory;
-import er.extensions.ERXValueUtilities;
+import er.extensions.components.ERXSimpleTemplateParser;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.validation.ERXValidationException;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * Allows you to handle a file name on the server as a property.

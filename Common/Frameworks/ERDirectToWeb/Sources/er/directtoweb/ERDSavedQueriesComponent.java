@@ -17,6 +17,13 @@ import com.webobjects.eoaccess.EOObjectNotAvailableException;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import er.extensions.*;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXSelectorUtilities;
+import er.extensions.logging.ERXLogger;
 
 import java.text.ParseException;
 import java.util.Enumeration;

@@ -6,7 +6,7 @@ import er.attachment.components.viewers.AbstractERAttachmentViewer;
 import er.attachment.components.viewers.ERAttachmentDefaultViewer;
 import er.attachment.model.ERAttachment;
 import er.attachment.utils.ERMimeType;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * <p>

@@ -8,7 +8,7 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXStatelessComponent;
+import er.extensions.components.ERXStatelessComponent;
 
 /**
  * Empty page wrapper component.<br />

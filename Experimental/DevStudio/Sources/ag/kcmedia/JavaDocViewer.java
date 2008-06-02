@@ -1,12 +1,20 @@
 package ag.kcmedia;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
-import ag.kcmedia.Jode.*;
-import org.w3c.tidy.*;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.w3c.tidy.Node;
+import org.w3c.tidy.TagTable;
+import org.w3c.tidy.Tidy;
+
+import ag.kcmedia.Jode.ClassProxy;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.logging.ERXLogger;
 
 /**
  * Class for Component JavaDocViewer.

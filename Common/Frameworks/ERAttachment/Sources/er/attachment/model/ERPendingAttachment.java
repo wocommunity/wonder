@@ -2,7 +2,7 @@ package er.attachment.model;
 
 import java.io.File;
 
-import er.extensions.ERXFileUtilities;
+import er.extensions.foundation.ERXFileUtilities;
 
 /**
  * ERPendingAttachment is just a convenience wrapper for tracking 

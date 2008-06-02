@@ -1,16 +1,14 @@
 package er.reporting.examples;
 
-import er.grouping.*;
-import er.reporting.*;
+import java.util.Date;
 
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.woextensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.woextensions.WOLongResponsePage;
+
+import er.grouping.DRReportModel;
 
 public class RefreshPage0 extends WOLongResponsePage  {
 

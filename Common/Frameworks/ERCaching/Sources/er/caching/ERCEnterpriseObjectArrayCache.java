@@ -4,7 +4,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEnterpriseObjectArrayCache;
+import er.extensions.eof.ERXEnterpriseObjectArrayCache;
 
 /**
  * Usage example:

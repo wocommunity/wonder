@@ -10,14 +10,14 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXAjaxApplication;
-import er.extensions.ERXAjaxSession;
-import er.extensions.ERXApplication;
-import er.extensions.ERXProperties;
-import er.extensions.ERXResourceManager;
-import er.extensions.ERXResponseRewriter;
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXResourceManager;
+import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
+import er.extensions.appserver.ajax.ERXAjaxSession;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 
 public class AjaxUtils {
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";

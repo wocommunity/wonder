@@ -7,6 +7,7 @@ import com.webobjects.eocontrol.*;
 
 import er.directtoweb.*;
 import er.extensions.*;
+import er.extensions.eof.ERXEOControlUtilities;
 
 public class ERExcelButton extends ERDActionButton {
 

@@ -19,8 +19,8 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
-import er.extensions.ERXSession;
-import er.extensions.ERXStringUtilities;
+import er.extensions.appserver.ERXSession;
+import er.extensions.foundation.ERXStringUtilities;
 
 public class Session extends ERXSession {
 

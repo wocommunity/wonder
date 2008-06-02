@@ -11,10 +11,10 @@ import com.webobjects.foundation.NSArray;
 
 import er.erxtest.model.Company;
 import er.erxtest.model.Employee;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXObjectStoreCoordinatorPool;
-import er.extensions.ERXRandomGUID;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXObjectStoreCoordinatorPool;
+import er.extensions.foundation.ERXRandomGUID;
 
 /**
  * Run this with ERXMainRunner.

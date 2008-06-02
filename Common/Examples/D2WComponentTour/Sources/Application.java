@@ -8,8 +8,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXApplication;
-import er.extensions.ERXEC;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.eof.ERXEC;
 
 public class Application extends ERXApplication {
 	

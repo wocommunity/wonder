@@ -8,8 +8,8 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXKeyGlobalID;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXKeyGlobalID;
 
 public class ERCAuditTrailEntry extends _ERCAuditTrailEntry {
 

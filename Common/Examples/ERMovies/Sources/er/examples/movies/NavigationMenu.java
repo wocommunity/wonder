@@ -8,9 +8,7 @@ package er.examples.movies;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-
 import com.webobjects.directtoweb.D2WPage;
-
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSTimestamp;
 

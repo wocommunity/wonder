@@ -7,11 +7,11 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WModel;
 import com.webobjects.foundation.NSMutableArray;
 import er.directtoweb.ERDSavedQueriesComponent;
-import er.extensions.ERXLogger;
-import er.extensions.ERXProperties;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import er.extensions.*;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.logging.ERXLogger;
 
 import java.util.Enumeration;
 

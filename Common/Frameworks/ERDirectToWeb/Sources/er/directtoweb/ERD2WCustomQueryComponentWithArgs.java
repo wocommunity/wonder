@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXExceptionHolder;
+import er.extensions.validation.ERXExceptionHolder;
 
 // Useful component and important bug fix
 // Fixes validation failures being propogated

@@ -25,7 +25,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListener {
 	static {

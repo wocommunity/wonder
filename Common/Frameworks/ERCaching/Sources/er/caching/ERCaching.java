@@ -3,7 +3,7 @@ package er.caching;
 import com.danga.memcached.SockIOPool;
 
 import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 public class ERCaching extends ERXFrameworkPrincipal {
 

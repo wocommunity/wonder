@@ -17,10 +17,10 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXSession;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXSession;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Runs through an array of given page configurations and renders them. 

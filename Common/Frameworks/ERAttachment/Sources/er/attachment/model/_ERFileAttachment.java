@@ -7,8 +7,9 @@ import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXKey;
+
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXKey;
 
 @SuppressWarnings("all")
 public abstract class _ERFileAttachment extends er.attachment.model.ERAttachment {

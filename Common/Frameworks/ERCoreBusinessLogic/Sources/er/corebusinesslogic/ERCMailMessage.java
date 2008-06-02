@@ -11,12 +11,12 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.EOEnterpriseObjectClazz;
-import er.extensions.ERXCompressionUtilities;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXFetchSpecificationBatchIterator;
-import er.extensions.ERXProperties;
-import er.extensions.ERXValidationFactory;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXFetchSpecificationBatchIterator;
+import er.extensions.foundation.ERXCompressionUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.validation.ERXValidationFactory;
 
 public class ERCMailMessage extends _ERCMailMessage {
 

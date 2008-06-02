@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * AjaxTree provides an Ajax-refreshing tree view. AjaxTree acts like a WOComponentContent where the content you provide

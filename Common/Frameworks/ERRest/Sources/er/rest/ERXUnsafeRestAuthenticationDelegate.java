@@ -1,6 +1,6 @@
 package er.rest;
 
-import er.extensions.ERXApplication;
+import er.extensions.appserver.ERXApplication;
 
 /**
  * ERXUnsafeRestAuthenticationDelegate should NEVER be used in production.  This is an auth delegate

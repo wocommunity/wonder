@@ -6,7 +6,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WQueryBoolean;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXLocalizer;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Better D2WQueryBoolean, which allows you to sprecify the choices names via a context key, 

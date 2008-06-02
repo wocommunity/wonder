@@ -13,9 +13,9 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXExceptionHolder;
-import er.extensions.ERXLocalizer;
+import er.extensions.eof.ERXConstant;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.validation.ERXExceptionHolder;
 
 
 /**

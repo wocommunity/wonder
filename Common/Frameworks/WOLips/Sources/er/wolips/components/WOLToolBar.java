@@ -3,7 +3,7 @@ package er.wolips.components;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXComponentUtilities;
+import er.extensions.components.ERXComponentUtilities;
 
 /**
  * WOLToolBar renders a collapsing toolbar at the bottom of your 
