@@ -1,1 +1,1 @@
- -destination Sources -java -javaTemplate _WonderEntity.java -model Resources/Beast.eomodeld -packagedirs -refmodel ../ERPrototypes/Resources/erprototypes.eomodeld -subclassDestination Sources -subclassJavaTemplate WonderEntity.java -verbose
+ -destination Sources -java -javaTemplate _WonderEntity.java -model Resources/Beast.eomodeld -packagedirs -refmodel ../../Frameworks/ERPrototypes/Resources/erprototypes.eomodeld -subclassDestination Sources -subclassJavaTemplate WonderEntity.java -verbose
