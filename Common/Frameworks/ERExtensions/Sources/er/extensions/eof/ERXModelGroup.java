@@ -4,7 +4,7 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-package er.extensions.components;
+package er.extensions.eof;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -43,9 +43,6 @@ import com.webobjects.foundation._NSArrayUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.eof.ERXConstant;
-import er.extensions.eof.ERXEOAccessUtilities;
-import er.extensions.eof.ERXEntityClassDescription;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXPatcher;
