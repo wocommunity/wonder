@@ -1,7 +1,6 @@
-import er.extensions.eof.ERXGenericRecord;
 
 
-public class Record extends ERXGenericRecord {
+public class Record extends _Record {
 	
 	public String toString() {
 		return entityName() + ": " + System.identityHashCode(this);
