@@ -78,6 +78,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	}
 
 	/** Creates a new mail instance within ERMailDelivery. Sets hasHiddenPlainTextContent to false. */
+	@Override
 	public void newMail() {
 		super.newMail();
 		_hiddenPlainTextContent = null;
@@ -100,6 +101,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	 * 
 	 * @see ERMailDelivery#prepareMail
 	 */
+	@Override
 	protected DataHandler prepareMail() throws MessagingException {
 		MimeMultipart multipart = null;
 		MimeBodyPart textPart = null;

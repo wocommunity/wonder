@@ -28,6 +28,7 @@ public class ERMailDeliveryPlainText extends ERMailDelivery {
 	 * 
 	 * @see ERMailDelivery#prepareMail
 	 */
+	@Override
 	protected DataHandler prepareMail() {
 		return new DataHandler(textContent, "text/plain; charset=\"" + charset() + "\"");
 	}

@@ -69,6 +69,7 @@ public class ERMailDataAttachment extends ERMailAttachment {
 		_contentID = id;
 	}
 
+	@Override
 	protected BodyPart getBodyPart() throws MessagingException {
 		MimeBodyPart bp = new MimeBodyPart();
 		if (getDataHandler() == null) {

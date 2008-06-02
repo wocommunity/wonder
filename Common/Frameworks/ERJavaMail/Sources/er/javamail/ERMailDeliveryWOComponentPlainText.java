@@ -20,6 +20,7 @@ public class ERMailDeliveryWOComponentPlainText extends ERMailDeliveryComponentB
 	 * 
 	 * @see ERMailDelivery#prepareMail
 	 */
+	@Override
 	protected DataHandler prepareMail() {
 		String messageContent = this.componentContentString();
 		return new DataHandler(messageContent, "text/plain; charset=\"" + charset() + "\"");

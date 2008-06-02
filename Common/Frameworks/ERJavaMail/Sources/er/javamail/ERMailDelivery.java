@@ -68,10 +68,10 @@ public abstract class ERMailDelivery {
 	protected MimeMessage _mimeMessage;
 
 	/** NSArray of ERMailAttachment that must be binded to the message as ATTACHEMENT. */
-	protected NSMutableArray _attachments;
+	protected NSMutableArray<ERMailAttachment> _attachments;
 
 	/** NSArray of ERMailAttachment that must be binded to the message as INLINE. */
-	protected NSMutableArray _inlineAttachments;
+	protected NSMutableArray<ERMailAttachment> _inlineAttachments;
 
 	private ERMessage.Delegate _delegate;
 	private NSDictionary _userInfo;
@@ -161,23 +161,23 @@ public abstract class ERMailDelivery {
 		this._inlineAttachments().addObject(attachment);
 	}
 
-	protected NSMutableArray _inlineAttachments() {
+	protected NSMutableArray<ERMailAttachment> _inlineAttachments() {
 		if (_inlineAttachments == null)
-			_inlineAttachments = new NSMutableArray();
+			_inlineAttachments = new NSMutableArray<ERMailAttachment>();
 		return _inlineAttachments;
 	}
 
-	public NSArray inlineAttachments() {
+	public NSArray<ERMailAttachment> inlineAttachments() {
 		return this._inlineAttachments();
 	}
 
-	protected NSMutableArray _attachments() {
+	protected NSMutableArray<ERMailAttachment> _attachments() {
 		if (_attachments == null)
-			_attachments = new NSMutableArray();
+			_attachments = new NSMutableArray<ERMailAttachment>();
 		return _attachments;
 	}
 
-	public NSArray attachments() {
+	public NSArray<ERMailAttachment> attachments() {
 		return this._attachments();
 	}
 
@@ -231,11 +231,11 @@ public abstract class ERMailDelivery {
 	/** Sets the to address for the current message instance using an email and the personal name. */
 	public void setToAddress(String toAddress, String personalName) throws MessagingException, AddressException {
 		InternetAddress address = this.internetAddressWithEmailAndPersonal(toAddress, personalName);
-		setInternetAddresses(new NSArray(address), Message.RecipientType.TO);
+		setInternetAddresses(new NSArray<InternetAddress>(address), Message.RecipientType.TO);
 	}
 
 	/** Sets the to-addresses array for the current message instance */
-	public void setToAddresses(NSArray toAddresses) throws MessagingException, AddressException {
+	public void setToAddresses(NSArray<String> toAddresses) throws MessagingException, AddressException {
 		setAddresses(toAddresses, Message.RecipientType.TO, true);
 	}
 
@@ -251,12 +251,12 @@ public abstract class ERMailDelivery {
 	}
 
 	/** Sets the cc-addresses array for the current message instance */
-	public void setCCAddresses(NSArray ccAddresses) throws MessagingException, AddressException {
+	public void setCCAddresses(NSArray<String> ccAddresses) throws MessagingException, AddressException {
 		setAddresses(ccAddresses, Message.RecipientType.CC, true);
 	}
 
 	/** Sets the bcc-addresses array for the current message instance */
-	public void setBCCAddresses(NSArray bccAddresses) throws MessagingException, AddressException {
+	public void setBCCAddresses(NSArray<String> bccAddresses) throws MessagingException, AddressException {
 		setAddresses(bccAddresses, Message.RecipientType.BCC, true);
 	}
 
@@ -447,7 +447,7 @@ public abstract class ERMailDelivery {
 	 * Sets addresses regarding their recipient type in the current message. Has the option to filter the address list
 	 * based on the white and black lists.
 	 */
-	private void setAddresses(NSArray addressesArray, Message.RecipientType type, boolean filterAddresses) throws MessagingException, AddressException {
+	private void setAddresses(NSArray<String> addressesArray, Message.RecipientType type, boolean filterAddresses) throws MessagingException, AddressException {
 		if (filterAddresses) {
 			addressesArray = ERJavaMail.sharedInstance().filterEmailAddresses(addressesArray);
 		}
