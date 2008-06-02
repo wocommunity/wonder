@@ -18,8 +18,8 @@ import com.webobjects.eocontrol.EODetailDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXValueUtilities;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
     

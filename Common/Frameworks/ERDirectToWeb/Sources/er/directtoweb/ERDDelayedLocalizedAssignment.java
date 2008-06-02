@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
-import er.extensions.ERXLocalizer;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Same as {@link ERDLocalizedAssignment}, except that firing is delayed.

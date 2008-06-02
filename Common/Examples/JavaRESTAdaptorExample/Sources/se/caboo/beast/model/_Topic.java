@@ -1,15 +1,24 @@
 // $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Topic.java instead.
 package se.caboo.beast.model;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import java.math.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
+
 import org.apache.log4j.Logger;
 
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXKey;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
+
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXKey;
 
 @SuppressWarnings("all")
 public abstract class _Topic extends  ERXGenericRecord {
@@ -153,7 +162,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("updating forum from " + forum() + " to " + value);
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setForum(value);
     }
     else if (value == null) {
@@ -178,7 +187,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("updating repliedBy from " + repliedBy() + " to " + value);
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setRepliedBy(value);
     }
     else if (value == null) {
@@ -203,7 +212,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("updating user from " + user() + " to " + value);
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setUser(value);
     }
     else if (value == null) {
@@ -248,7 +257,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("adding " + object + " to posts relationship");
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	addToPosts(object);
     }
     else {
@@ -260,7 +269,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("removing " + object + " from posts relationship");
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	removeFromPosts(object);
     }
     else {

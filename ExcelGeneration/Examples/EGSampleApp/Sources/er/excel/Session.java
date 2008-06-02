@@ -6,7 +6,7 @@
 //
 package er.excel;
 
-import er.extensions.*;
+import er.extensions.appserver.ERXSession;
 
 public class Session extends ERXSession {
 

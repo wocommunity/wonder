@@ -33,10 +33,10 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXProperties;
-import er.extensions.ERXStatelessComponent;
-import er.extensions.ERXUtilities;
+import er.extensions.components.ERXStatelessComponent;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXUtilities;
 import er.selenium.filters.SeleniumCompositeTestFilter;
 import er.selenium.filters.SeleniumIncludeTestFilter;
 import er.selenium.filters.SeleniumOverrideOpenTestFilter;

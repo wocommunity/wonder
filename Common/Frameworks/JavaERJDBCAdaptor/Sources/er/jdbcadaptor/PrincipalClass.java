@@ -6,7 +6,7 @@
  */
 package er.jdbcadaptor;
 
-import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EOAdaptorContext;
 
 
 /**

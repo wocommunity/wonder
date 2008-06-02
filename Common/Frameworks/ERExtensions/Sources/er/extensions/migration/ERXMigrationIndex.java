@@ -1,6 +1,6 @@
 package er.extensions.migration;
 
-import er.extensions.ERXSQLHelper;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * ERXMigrationIndex provides a wrapper around the

@@ -9,7 +9,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXKeyValueCodingUtilities;
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 
 /**

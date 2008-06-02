@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXArrayUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
 
 public class Component extends _Component {
 

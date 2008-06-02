@@ -4,7 +4,7 @@ package er.corebusinesslogic;
 
 import org.apache.log4j.Logger;
 
-import er.extensions.ERXConstant;
+import er.extensions.eof.ERXConstant;
 
 /**
  * Mail state.

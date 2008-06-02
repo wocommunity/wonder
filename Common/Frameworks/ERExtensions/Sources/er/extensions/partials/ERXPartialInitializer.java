@@ -17,10 +17,10 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXEntityClassDescription;
-import er.extensions.ERXModelGroup;
-import er.extensions.ERXProperties;
+import er.extensions.components.ERXModelGroup;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEntityClassDescription;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERXPartialInitializer is registered at startup and is responsible for merging

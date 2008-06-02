@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOContext;
 
 import er.bugtracker.Bug;
 import er.directtoweb.ERDCustomEditComponent;
-import er.extensions.ERXLocalizer;
+import er.extensions.localization.ERXLocalizer;
 
 public class PriorityComponent extends ERDCustomEditComponent {
 

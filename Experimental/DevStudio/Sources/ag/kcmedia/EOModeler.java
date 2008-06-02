@@ -1,9 +1,18 @@
 package ag.kcmedia;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSchemaGeneration;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.logging.ERXLogger;
 /**
 * Class for Component EOModeler.
  *

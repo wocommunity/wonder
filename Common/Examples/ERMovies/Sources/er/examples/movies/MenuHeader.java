@@ -4,17 +4,16 @@ package er.examples.movies;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORedirect;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.foundation.NSArray;
-
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.ErrorPageInterface;
 import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXUtilities;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXUtilities;
 
 public class MenuHeader extends WOComponent {
     public String entityNameInList;

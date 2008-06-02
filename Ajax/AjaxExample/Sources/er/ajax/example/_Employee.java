@@ -8,8 +8,8 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXKey;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXKey;
 
 @SuppressWarnings("all")
 public abstract class _Employee extends  ERXGenericRecord {
@@ -69,7 +69,7 @@ public abstract class _Employee extends  ERXGenericRecord {
     if (_Employee.LOG.isDebugEnabled()) {
       _Employee.LOG.debug("updating company from " + company() + " to " + value);
     }
-    if (er.extensions.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setCompany(value);
     }
     else if (value == null) {

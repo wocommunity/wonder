@@ -14,9 +14,9 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXExceptionHolder;
-import er.extensions.ERXNonSynchronizingComponent;
+import er.extensions.components.ERXNonSynchronizingComponent;
+import er.extensions.eof.ERXConstant;
+import er.extensions.validation.ERXExceptionHolder;
 
 /**
  * Base class of many custom components.<br />

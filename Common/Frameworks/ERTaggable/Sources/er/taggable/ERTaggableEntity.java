@@ -24,14 +24,14 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXCommandLineTokenizer;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXEOAttribute;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXKey;
-import er.extensions.ERXSQLHelper;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOAttribute;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXKey;
+import er.extensions.foundation.ERXCommandLineTokenizer;
+import er.extensions.jdbc.ERXSQLHelper;
 import er.taggable.model.ERTag;
 
 /**

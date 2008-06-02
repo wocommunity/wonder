@@ -15,7 +15,7 @@ import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 
-import er.extensions.ERXMutableURL;
+import er.extensions.foundation.ERXMutableURL;
 
 public class JSONRequestHandler extends WORequestHandler {
 	public static final String RequestHandlerKey = "json";

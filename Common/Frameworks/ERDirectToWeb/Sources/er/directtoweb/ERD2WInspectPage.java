@@ -24,12 +24,12 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXComponentActionRedirector;
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXValueUtilities;
-import er.extensions.ERXWOForm;
+import er.extensions.appserver.ERXComponentActionRedirector;
+import er.extensions.components._private.ERXWOForm;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Superclass for all inspecting/editing ERD2W templates.<br />

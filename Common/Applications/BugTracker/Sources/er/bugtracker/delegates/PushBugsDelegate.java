@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSArray;
 import er.bugtracker.Bug;
 import er.bugtracker.Session;
 import er.directtoweb.ERDListPageInterface;
-import er.extensions.ERXEC;
+import er.extensions.eof.ERXEC;
 
 public class PushBugsDelegate extends BranchDelegate {
 

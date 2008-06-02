@@ -33,8 +33,8 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXMutableURL;
+import er.extensions.foundation.ERXMutableURL;
+import er.extensions.localization.ERXLocalizer;
 
 public class ERRESTAdaptorChannel extends EOAdaptorChannel {
   private static final NSTimestampFormatter restDateFormat = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ");

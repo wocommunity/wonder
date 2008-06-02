@@ -6,13 +6,14 @@
 //
 package er.grouping.examples;
 
-import er.extensions.*;
-import er.grouping.*;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.grouping.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+
+import er.grouping.DRGroup;
+import er.grouping.DRRecordGroup;
+import er.grouping.DRReportModel;
 
 public class GroupingOnly extends WOComponent {
 

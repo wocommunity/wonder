@@ -12,7 +12,7 @@ import com.webobjects.directtoweb.D2WEditBoolean;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Allows editing boolean values based on radio buttons and localizable strings.<br />

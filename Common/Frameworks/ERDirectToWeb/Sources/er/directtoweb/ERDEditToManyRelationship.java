@@ -12,8 +12,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXStringUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Convenient way to add, edit, remove or delete objects from a to-many relationship. 

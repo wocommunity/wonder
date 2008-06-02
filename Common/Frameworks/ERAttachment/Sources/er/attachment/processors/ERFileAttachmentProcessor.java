@@ -11,8 +11,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.attachment.model.ERFileAttachment;
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERFileAttachmentProcessor implements storing attachments as files on the system that are either served

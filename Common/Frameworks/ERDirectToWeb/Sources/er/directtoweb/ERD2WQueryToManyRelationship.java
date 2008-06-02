@@ -11,10 +11,10 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXPrimaryKeyListQualifier;
-import er.extensions.ERXToManyQualifier;
-import er.extensions.ERXValueUtilities;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
+import er.extensions.eof.qualifiers.ERXToManyQualifier;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Enhanced relationship query component to to-many relationships.

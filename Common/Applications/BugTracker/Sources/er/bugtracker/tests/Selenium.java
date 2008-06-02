@@ -17,10 +17,10 @@ import er.bugtracker.Framework;
 import er.bugtracker.People;
 import er.bugtracker.Session;
 import er.directtoweb.ERDEditHTML;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXProperties;
-import er.extensions.ERXUtilities;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXUtilities;
 import er.selenium.SeleniumAction;
 
 public class Selenium extends SeleniumAction  {

@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXStatelessComponent;
+import er.extensions.components.ERXStatelessComponent;
 import er.selenium.SeleniumTest;
 
 public class SeleniumComponentExporterPage extends ERXStatelessComponent {

@@ -10,8 +10,8 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.bugtracker.People;
 import er.bugtracker.Session;
-import er.extensions.ERXCrypto;
-import er.extensions.ERXUtilities;
+import er.extensions.crypting.ERXCrypto;
+import er.extensions.foundation.ERXUtilities;
 
 public class LoginPanel extends WOComponent {
 

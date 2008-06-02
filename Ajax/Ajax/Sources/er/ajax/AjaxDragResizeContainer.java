@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNumberFormatter;
 
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 
 public class AjaxDragResizeContainer extends AjaxComponent {
 

@@ -12,8 +12,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXStringUtilities;
+import er.extensions.components.ERXComponentUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Updates a region on the screen by creating a request to an action, then returning a script that in turn creates an

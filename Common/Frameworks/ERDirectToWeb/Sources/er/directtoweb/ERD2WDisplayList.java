@@ -9,7 +9,7 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXArrayUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
 
 /**
  * Used to display a an NSArray of the form "A, B and C", useful for toMany relationships  or propertyKeys that return arrays.<br />

@@ -3,8 +3,8 @@ package er.taggable;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXGenericRecord;
-import er.extensions.ERXQ;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXQ;
 import er.taggable.model.ERTag;
 
 /**

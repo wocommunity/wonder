@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation._NSStringUtilities;
 
-import er.extensions.ERXJDBCUtilities;
+import er.extensions.jdbc.ERXJDBCUtilities;
 
 /**
  * <p>Convenience superclass for Migration classes. Checks for corresponding sql files name

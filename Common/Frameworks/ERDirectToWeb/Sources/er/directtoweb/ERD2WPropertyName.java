@@ -13,8 +13,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXValueUtilities;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Used for displaying the propertyName in a template.<br />

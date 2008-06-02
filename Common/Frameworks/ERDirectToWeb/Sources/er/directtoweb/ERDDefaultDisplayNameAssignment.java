@@ -10,9 +10,9 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXDictionaryUtilities;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Beautify the display names for the various keys in D2W a better way.<br />

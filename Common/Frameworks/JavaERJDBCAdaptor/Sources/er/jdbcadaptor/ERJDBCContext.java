@@ -6,9 +6,9 @@
  */
 package er.jdbcadaptor;
 
-import com.webobjects.jdbcadaptor.*;
+import com.webobjects.jdbcadaptor.JDBCContext;
 
-import er.extensions.*;
+import er.extensions.logging.ERXLogger;
 
 /**
  * @author david

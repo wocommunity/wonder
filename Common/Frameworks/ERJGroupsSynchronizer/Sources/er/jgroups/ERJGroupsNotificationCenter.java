@@ -22,8 +22,8 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.ERXProperties;
-import er.extensions.ERXObjectStoreCoordinatorSynchronizer.RemoteChange;
+import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.RemoteChange;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer.RefByteArrayOutputStream;
 
 /**

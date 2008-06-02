@@ -14,8 +14,8 @@ import com.webobjects.foundation.NSForwardException;
 import er.attachment.model.ERAttachment;
 import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
-import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXProperties;
+import er.extensions.components.ERXComponentUtilities;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * <p>

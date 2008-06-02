@@ -9,8 +9,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * ERXDefaultRestDelegate is the default implementation of the IERXRestDelegate interface. It provides support for

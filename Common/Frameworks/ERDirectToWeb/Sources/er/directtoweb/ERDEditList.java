@@ -21,8 +21,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Description forthcoming.<br />

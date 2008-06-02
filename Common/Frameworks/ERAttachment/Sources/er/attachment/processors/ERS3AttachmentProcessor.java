@@ -22,9 +22,9 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.attachment.model.ERS3Attachment;
-import er.extensions.ERXAsyncQueue;
-import er.extensions.ERXEC;
-import er.extensions.ERXProperties;
+import er.extensions.concurrency.ERXAsyncQueue;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERS3AttachmentProcessor implements storing attachments in Amazon's S3 service.  For more 

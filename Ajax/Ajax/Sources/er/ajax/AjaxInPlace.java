@@ -10,9 +10,9 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
-import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXWOContext;
-import er.extensions.ERXWOForm;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.components.ERXComponentUtilities;
+import er.extensions.components._private.ERXWOForm;
 
 /**
  * AjaxInPlace is a generalization of the AjaxInPlaceEditor. To use this component, you must wrap an ERXWOTemplate named

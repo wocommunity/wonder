@@ -18,8 +18,8 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXValueUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship.<br />

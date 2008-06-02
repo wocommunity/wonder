@@ -10,12 +10,12 @@ import com.webobjects.directtoweb.D2W;
 import com.webobjects.foundation.NSLog;
 
 import er.bugtracker.mail.MailReader;
-import er.extensions.ERXApplication;
-import er.extensions.ERXDelayedRequestHandler;
-import er.extensions.ERXNavigationManager;
-import er.extensions.ERXPatcher;
-import er.extensions.ERXProperties;
-import er.extensions.ERXSubmitButton;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXDelayedRequestHandler;
+import er.extensions.appserver.navigation.ERXNavigationManager;
+import er.extensions.components._private.ERXSubmitButton;
+import er.extensions.foundation.ERXPatcher;
+import er.extensions.foundation.ERXProperties;
 import er.rest.ERXRestRequestHandler;
 
 public class Application extends ERXApplication {

@@ -21,7 +21,7 @@ import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
-import er.extensions.ERXPatcher;
+import er.extensions.foundation.ERXPatcher;
 
 /**
  * component for interactively running tests.<br />

@@ -13,7 +13,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.woextensions.WOStatsPage;
 
 import er.extensions.ERXExtensions;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // This component can be used in the wrapper of a D2W app to provide convenient development time 

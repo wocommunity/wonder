@@ -6,12 +6,12 @@
 //
 package er.grouping.examples;
 
-import er.extensions.*;
-import er.grouping.*;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.foundation.NSArray;
+
+import er.extensions.appserver.ERXSession;
+import er.grouping.DRReportModel;
 
 public class Session extends ERXSession {
 

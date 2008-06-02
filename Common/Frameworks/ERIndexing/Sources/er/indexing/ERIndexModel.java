@@ -25,14 +25,14 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.ERXApplication;
-import er.extensions.ERXEC;
-import er.extensions.ERXFetchSpecificationBatchIterator;
-import er.extensions.ERXFileNotificationCenter;
-import er.extensions.ERXMutableDictionary;
-import er.extensions.ERXPatcher;
-import er.extensions.ERXProperties;
-import er.extensions.ERXSelectorUtilities;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXFetchSpecificationBatchIterator;
+import er.extensions.foundation.ERXFileNotificationCenter;
+import er.extensions.foundation.ERXMutableDictionary;
+import er.extensions.foundation.ERXPatcher;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXSelectorUtilities;
 
 public class ERIndexModel {
 	

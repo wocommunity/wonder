@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation.ValidationException;
 
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 
 public class AjaxInPlaceEditor extends AjaxDynamicElement {
   private WOAssociation _idAssociation;

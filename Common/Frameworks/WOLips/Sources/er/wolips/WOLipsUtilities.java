@@ -7,8 +7,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXProperties;
-import er.extensions.ERXResponseRewriter;
+import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * WOLipsUtilities provide handy-dandy WOLips communication methods.

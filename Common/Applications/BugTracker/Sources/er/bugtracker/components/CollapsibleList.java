@@ -8,7 +8,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.bugtracker.Session;
-import er.extensions.ERXLocalizer;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Holds a D2W list in a collapsible component.

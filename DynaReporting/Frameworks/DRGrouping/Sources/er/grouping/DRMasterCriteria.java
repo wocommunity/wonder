@@ -5,6 +5,7 @@ import java.util.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class DRMasterCriteria extends Object  {
 

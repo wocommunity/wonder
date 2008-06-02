@@ -6,15 +6,26 @@
 //
 package ag.kcmedia;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.ERD2WRuleEditorModel;
-import com.webobjects.directtoweb.*;
 import java.io.File;
-import er.extensions.*;
-import java.util.*;
+import java.util.Enumeration;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.ERD2WRuleEditorModel;
+import com.webobjects.directtoweb.Rule;
+import com.webobjects.eocontrol.EOKeyValueArchiver;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSet;
+
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.logging.ERXLogger;
 
 public class RuleEditor extends WOComponent {
     static final ERXLogger log = ERXLogger.getERXLogger(RuleEditor.class,"components");

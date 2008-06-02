@@ -6,7 +6,7 @@ import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXWOTemplate;
+import er.extensions.components.ERXWOTemplate;
 
 public class AjaxInPlaceViewTemplate extends ERXWOTemplate{
 

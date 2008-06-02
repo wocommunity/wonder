@@ -1,6 +1,6 @@
 package er.erxtest.tests;
 import junit.framework.TestCase;
-import er.extensions.ERXExpiringCache;
+import er.extensions.foundation.ERXExpiringCache;
 
 public class ERXExpiringCacheTestCase extends TestCase {
   public void testThatItWorksAtAll() {

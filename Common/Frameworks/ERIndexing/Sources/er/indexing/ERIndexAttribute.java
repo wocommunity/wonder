@@ -21,7 +21,7 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.ERXKeyValueCodingUtilities;
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 class ERIndexAttribute {
 	String _name;

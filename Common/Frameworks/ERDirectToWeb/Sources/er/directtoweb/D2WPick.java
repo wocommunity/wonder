@@ -15,7 +15,7 @@ import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 public class D2WPick extends D2WEmbeddedComponent {
     

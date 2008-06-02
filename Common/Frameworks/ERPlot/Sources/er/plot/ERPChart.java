@@ -19,8 +19,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
-import er.extensions.ERXAssert;
-import er.extensions.ERXStatelessComponent;
+import er.extensions.components.ERXStatelessComponent;
+import er.extensions.foundation.ERXAssert;
 
 /**
  * Abstract superclass of the charts. The most important binding is <code>items</code> which

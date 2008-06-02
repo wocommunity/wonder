@@ -15,9 +15,9 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXTimestampFormatter;
-import er.extensions.ERXValidationException;
-import er.extensions.ERXValidationFactory;
+import er.extensions.formatters.ERXTimestampFormatter;
+import er.extensions.validation.ERXValidationException;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * Crazy cool little date picker that uses javascript to pick the date from a little calendar. <br />

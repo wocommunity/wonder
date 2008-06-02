@@ -9,7 +9,7 @@ import com.webobjects.eocontrol.EORelationshipManipulation;
 import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation.NSValidation.ValidationException;
 
-import er.extensions.ERXGenericRecord;
+import er.extensions.eof.ERXGenericRecord;
 
 /**
  * <p>

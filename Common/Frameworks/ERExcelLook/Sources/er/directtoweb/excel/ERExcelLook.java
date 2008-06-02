@@ -9,6 +9,7 @@ package er.directtoweb.excel;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
+import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
  * Principal class of the framework. Not registered yet because it doesn't do anything yet.

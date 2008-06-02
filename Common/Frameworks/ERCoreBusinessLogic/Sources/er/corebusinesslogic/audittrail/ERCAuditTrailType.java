@@ -1,6 +1,6 @@
 package er.corebusinesslogic.audittrail;
 
-import er.extensions.ERXConstant.StringConstant;
+import er.extensions.eof.ERXConstant.StringConstant;
 
 public class ERCAuditTrailType extends StringConstant {
 

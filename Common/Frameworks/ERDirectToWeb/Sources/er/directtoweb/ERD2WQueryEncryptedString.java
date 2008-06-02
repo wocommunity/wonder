@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WQueryStringComponent;
 
-import er.extensions.ERXCrypterInterface;
+import er.extensions.crypting.ERXCrypterInterface;
 
 public class ERD2WQueryEncryptedString extends D2WQueryStringComponent {
 

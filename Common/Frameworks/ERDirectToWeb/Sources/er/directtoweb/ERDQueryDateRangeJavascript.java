@@ -12,11 +12,11 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXEditDateJavascript;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXTimestampFormatter;
-import er.extensions.ERXValidationFactory;
-import er.extensions.ERXWOForm;
+import er.extensions.components._private.ERXWOForm;
+import er.extensions.components.javascript.ERXEditDateJavascript;
+import er.extensions.formatters.ERXTimestampFormatter;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * Used for building date queries with javascript.<br />

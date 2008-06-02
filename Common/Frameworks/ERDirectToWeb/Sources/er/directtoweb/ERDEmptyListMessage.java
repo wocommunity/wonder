@@ -13,7 +13,7 @@ import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.ErrorPageInterface;
 import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Default component shown when a D2W list is empty.<br />

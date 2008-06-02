@@ -18,8 +18,8 @@ import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXApplication;
-import er.extensions.ERXProperties;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.foundation.ERXProperties;
 
 /**
 * Utility class used for sending mails via the

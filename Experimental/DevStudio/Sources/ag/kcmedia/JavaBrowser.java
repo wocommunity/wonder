@@ -6,11 +6,17 @@
 //
 package ag.kcmedia;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
-import ag.kcmedia.Jode.*;
+import ag.kcmedia.Jode.ClassProxy;
+import ag.kcmedia.Jode.PackageProxy;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.logging.ERXLogger;
 public class JavaBrowser extends WOComponent {
     static final ERXLogger log = ERXLogger.getERXLogger(JavaBrowser.class,"components");
 

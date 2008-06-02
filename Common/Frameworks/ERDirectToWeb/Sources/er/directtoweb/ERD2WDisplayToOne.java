@@ -9,8 +9,8 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayToOne;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Same as original except allows display of noSelectionString if relationship is null.<br />

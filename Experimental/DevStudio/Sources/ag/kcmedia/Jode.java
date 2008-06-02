@@ -6,16 +6,29 @@
 //
 package ag.kcmedia;
 
-import com.webobjects.foundation.*;
-import er.extensions.*;
-
-import java.util.*;
-import java.io.*;
 import java.io.File;
-import jode.bytecode.*;
-import jode.decompiler.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Modifier;
+import java.util.Enumeration;
+
+import jode.bytecode.ClassInfo;
+import jode.bytecode.FieldInfo;
+import jode.bytecode.MethodInfo;
+import jode.bytecode.TypeSignature;
+import jode.decompiler.Decompiler;
 import jode.type.Type;
-import java.lang.reflect.*;
+
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
+
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.logging.ERXLogger;
 
 public class Jode extends Object {
     static final ERXLogger log = ERXLogger.getERXLogger(JavaBrowser.class,"components");

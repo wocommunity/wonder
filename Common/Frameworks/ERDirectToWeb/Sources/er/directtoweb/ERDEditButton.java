@@ -14,9 +14,9 @@ import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXGuardedObjectInterface;
-import er.extensions.ERXValueUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXGuardedObjectInterface;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Nice edit button for editing a toMany relationship in another page.<br />

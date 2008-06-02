@@ -25,8 +25,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXDisplayGroup;
-import er.extensions.ERXValueUtilities;
+import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Superclass for all query pages.<br />

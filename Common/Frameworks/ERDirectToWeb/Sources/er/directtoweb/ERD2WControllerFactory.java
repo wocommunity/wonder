@@ -21,8 +21,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXPatcher;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXPatcher;
 
 /**
  * ERD2WControllerFactory a an enhancement of the D2W factory class with the notion of "Processes". <br />

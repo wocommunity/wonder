@@ -8,10 +8,10 @@ import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXQ;
-import er.extensions.ERXResponseRewriter;
-import er.extensions.ERXStringUtilities;
+import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.eof.ERXQ;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 import er.taggable.ERTaggable;
 import er.taggable.ERTaggableEntity;
 import er.taggable.model.ERTag;
@@ -27,7 +27,7 @@ import er.taggable.model.ERTag;
  * @binding limit the maximum number of tags to show
  * @binding minimum the minimum tag count required for a tag to be shown
  */
-public class ERTagField extends er.extensions.ERXComponent {
+public class ERTagField extends er.extensions.components.ERXComponent {
   private String _id;
   private NSArray<String> _availableTags;
   private String _tags;

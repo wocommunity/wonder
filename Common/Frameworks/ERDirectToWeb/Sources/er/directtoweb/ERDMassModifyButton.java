@@ -23,8 +23,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Button used to apply one modification to a bunch of objects.<br />

@@ -1,3 +1,9 @@
+Library/WebObjects/5.3/System/Library/Frameworks/JavaEOAccess.framework
+Library/WebObjects/5.3/System/Library/Frameworks/JavaEOControl.framework
+Library/WebObjects/5.3/System/Library/Frameworks/JavaFoundation.framework
+Library/WebObjects/5.3/System/Library/Frameworks/JavaJDBCAdaptor.framework
+Library/WebObjects/5.3/System/Library/Frameworks/JavaWebObjects.framework
+Library/WebObjects/5.3/System/Library/Frameworks/JavaXML.framework
 Library/Java/Extensions/iaikPkcs11Wrapper.jar
 Library/Java/Extensions/mysql-connector-java-3.1.14-bin.jar
 Library/Java/Extensions/postgresql-8.1-404.jdbc3.jar

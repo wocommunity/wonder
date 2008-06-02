@@ -7,8 +7,8 @@ import com.webobjects.foundation.NSArray;
 
 import er.bugtracker.Framework;
 import er.bugtracker.People;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
 
 public class FrameworkDelegate extends BranchDelegate {
 

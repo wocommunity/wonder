@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXDictionaryUtilities;
 import er.grouping.DRCriteria;
 import er.grouping.DRGroup;
 import er.grouping.DRRecordGroup;

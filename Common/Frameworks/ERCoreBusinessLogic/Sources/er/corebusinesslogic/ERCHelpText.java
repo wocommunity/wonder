@@ -4,8 +4,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXEnterpriseObjectCache;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEnterpriseObjectCache;
 
 public class ERCHelpText extends _ERCHelpText {
 

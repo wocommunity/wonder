@@ -15,9 +15,9 @@ import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXUtilities;
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Abstact super class of most assignments found in 

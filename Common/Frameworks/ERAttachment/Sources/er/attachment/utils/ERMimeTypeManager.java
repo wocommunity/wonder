@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERMimeTypeManager provides an interface to looking up mime type metadata.

@@ -8,9 +8,9 @@ import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXApplication;
-import er.extensions.ERXEC;
-import er.extensions.ERXStatelessComponent;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.components.ERXStatelessComponent;
+import er.extensions.eof.ERXEC;
 
 public class ERCListHelpText extends ERXStatelessComponent {
 

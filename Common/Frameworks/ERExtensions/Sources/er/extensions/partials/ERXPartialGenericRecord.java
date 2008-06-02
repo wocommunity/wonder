@@ -9,8 +9,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.ERXEntityClassDescription;
-import er.extensions.ERXGenericRecord;
+import er.extensions.eof.ERXEntityClassDescription;
+import er.extensions.eof.ERXGenericRecord;
 
 /**
  * <p>

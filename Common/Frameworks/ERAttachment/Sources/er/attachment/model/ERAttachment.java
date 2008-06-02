@@ -10,7 +10,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
-import er.extensions.ERXFileUtilities;
+import er.extensions.foundation.ERXFileUtilities;
 
 /**
  * ERAttachment is the superclass of all attachment types.  An attachment object

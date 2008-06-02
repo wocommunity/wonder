@@ -1,10 +1,7 @@
 package er.reporting.examples;
 
-import er.reporting.*;
-import er.grouping.*;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class Target extends WOComponent {
 

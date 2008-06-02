@@ -15,10 +15,10 @@ import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXNavigationManager;
-import er.extensions.ERXNavigationState;
-import er.extensions.ERXPatcher;
-import er.extensions.ERXSubmitButton;
+import er.extensions.appserver.navigation.ERXNavigationManager;
+import er.extensions.appserver.navigation.ERXNavigationState;
+import er.extensions.components._private.ERXSubmitButton;
+import er.extensions.foundation.ERXPatcher;
 
 public class PageWrapper extends WOComponent {
     static final Logger log = Logger.getLogger(PageWrapper.class);

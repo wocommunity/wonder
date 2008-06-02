@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEC;
+import er.extensions.eof.ERXEC;
 
 public class Main extends WOComponent {
   private static final long serialVersionUID = 1L;

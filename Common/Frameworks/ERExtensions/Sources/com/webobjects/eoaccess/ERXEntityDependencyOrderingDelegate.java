@@ -8,8 +8,8 @@ import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSComparator.ComparisonException;
 
-import er.extensions.eoaccess.entityordering.ERXEntityFKConstraintOrder;
-import er.extensions.eoaccess.entityordering.ERXEntityOrder;
+import er.extensions.eof.ERXEntityFKConstraintOrder;
+import er.extensions.eof.ERXEntityOrder;
 
 
 

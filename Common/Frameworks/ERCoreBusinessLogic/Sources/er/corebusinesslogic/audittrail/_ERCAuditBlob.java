@@ -1,7 +1,8 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERCAuditBlob.java instead.
+// $LastChangedRevision$ DO NOT EDIT.  Make changes to ERCAuditBlob.java instead.
 package er.corebusinesslogic.audittrail;
 
-import er.extensions.ERXGenericRecord;
+import er.extensions.eof.ERXGenericRecord;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;

@@ -1,7 +1,8 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERCAuditTrailEntry.java instead.
+// $LastChangedRevision$ DO NOT EDIT.  Make changes to ERCAuditTrailEntry.java instead.
 package er.corebusinesslogic.audittrail;
 
-import er.extensions.ERXGenericRecord;
+import er.extensions.eof.ERXGenericRecord;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -69,17 +70,17 @@ public abstract class _ERCAuditTrailEntry extends ERXGenericRecord {
     takeStoredValueForKey(value, Key.TYPE);
   }
 
-  public er.extensions.ERXKeyGlobalID userGlobalID() {
-    return (er.extensions.ERXKeyGlobalID) storedValueForKey(Key.USER_GLOBAL_ID);
+  public er.extensions.eof.ERXKeyGlobalID userGlobalID() {
+    return (er.extensions.eof.ERXKeyGlobalID) storedValueForKey(Key.USER_GLOBAL_ID);
   }
-  public void setUserGlobalID(er.extensions.ERXKeyGlobalID value) {
+  public void setUserGlobalID(er.extensions.eof.ERXKeyGlobalID value) {
     takeStoredValueForKey(value, Key.USER_GLOBAL_ID);
   }
 
-  public er.extensions.ERXMutableDictionary userInfo() {
-    return (er.extensions.ERXMutableDictionary) storedValueForKey(Key.USER_INFO);
+  public er.extensions.foundation.ERXMutableDictionary userInfo() {
+    return (er.extensions.foundation.ERXMutableDictionary) storedValueForKey(Key.USER_INFO);
   }
-  public void setUserInfo(er.extensions.ERXMutableDictionary value) {
+  public void setUserInfo(er.extensions.foundation.ERXMutableDictionary value) {
     takeStoredValueForKey(value, Key.USER_INFO);
   }
 

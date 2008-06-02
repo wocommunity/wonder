@@ -35,10 +35,10 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXUtilities;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXUtilities;
 
 /**
  * Not used at the moment, but shows how it might be used in the future. <br />

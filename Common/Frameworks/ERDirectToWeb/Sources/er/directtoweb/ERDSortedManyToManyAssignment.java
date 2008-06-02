@@ -17,7 +17,7 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class ERDSortedManyToManyAssignment extends ERDAssignment {
 

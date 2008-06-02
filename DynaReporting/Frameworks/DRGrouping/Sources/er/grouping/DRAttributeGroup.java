@@ -5,6 +5,7 @@ import java.util.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Group of attributes which is also an attribute by itself.

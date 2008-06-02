@@ -10,8 +10,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * ERXAbstractRestResponseWriter provides the output-method-agnostic methods for processing a rest response.

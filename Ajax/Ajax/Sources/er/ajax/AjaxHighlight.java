@@ -10,8 +10,8 @@ import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * AjaxHighlight provides a convenient way to queue up an object as highlighted so that it gets a highlight effect when

@@ -13,10 +13,10 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.EOEnterpriseObjectClazz;
-import er.extensions.ERXEC;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXProperties;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXProperties;
 
 public class ERCStatic extends _ERCStatic {
 

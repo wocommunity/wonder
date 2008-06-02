@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXConstant;
+import er.extensions.eof.ERXConstant;
 
 /**
  * Used to edit a number as if it where a number of years and a number of months.<br />

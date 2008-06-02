@@ -1,8 +1,8 @@
 package er.openid;
 
 import java.lang.reflect.Method;
-import java.util.Enumeration;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -35,9 +35,9 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXApplication;
-import er.extensions.ERXProperties;
-import er.extensions.ERXRequest;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXRequest;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * EROpenIDManager is the primary interface to managing an OpenID connection.

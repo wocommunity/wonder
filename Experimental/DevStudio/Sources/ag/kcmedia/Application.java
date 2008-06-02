@@ -6,10 +6,15 @@
 //
 package ag.kcmedia;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.eocontrol.EOEventCenter;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
+
+import er.extensions.appserver.ERXApplication;
+import er.extensions.eof.ERXConstant;
+import er.extensions.logging.ERXLogger;
 
 public class Application extends ERXApplication {
 

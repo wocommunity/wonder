@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXConstant;
+import er.extensions.eof.ERXConstant;
 
 /**
  * Popup used for picking a number or some other value by 

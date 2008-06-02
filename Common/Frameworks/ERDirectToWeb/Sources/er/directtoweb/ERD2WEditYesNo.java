@@ -13,7 +13,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WEditBoolean;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Edits a boolean with radio buttons and Yes/No<br />

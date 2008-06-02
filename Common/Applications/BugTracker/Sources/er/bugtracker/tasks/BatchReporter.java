@@ -11,8 +11,8 @@ import com.webobjects.foundation.NSLog;
 
 import er.bugtracker.People;
 import er.bugtracker.pages.BugReportEmail;
-import er.extensions.ERXEC;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.eof.ERXEC;
 /**
  * Sends email reminders. 
  * Call up with <code>ERXMainRunner -mainClass er.bugtracker.tasks.BatchReporter -mainMethod runBatchReport</code>

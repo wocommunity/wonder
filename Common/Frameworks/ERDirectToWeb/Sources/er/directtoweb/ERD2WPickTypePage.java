@@ -16,8 +16,8 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXValueUtilities;
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXValueUtilities;
 
 // The pick interface is nice in that it doesn't require passing back an EO as
 // the SelectPageInterface requires.

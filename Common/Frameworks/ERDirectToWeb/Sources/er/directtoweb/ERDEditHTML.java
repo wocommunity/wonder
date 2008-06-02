@@ -4,8 +4,8 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
-import er.extensions.ERXProperties;
-import er.extensions.ERXResponseRewriter;
+import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Very, very basic version of a TinyMCE integration. As it doesn't make much sense to load the the JS files

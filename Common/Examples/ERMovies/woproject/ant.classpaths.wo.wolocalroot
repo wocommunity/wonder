@@ -1,3 +1,14 @@
-Library/Java/Extensions/OpenBaseJDBC.jar
+Library/Java/Extensions/jmf.jar
+System/Library/Java/Extensions/CoreAudio.jar
+System/Library/Java/Extensions/dns_sd.jar
+System/Library/Java/Extensions/j3daudio.jar
+System/Library/Java/Extensions/j3dcore.jar
+System/Library/Java/Extensions/j3dutils.jar
+System/Library/Java/Extensions/jai_codec.jar
+System/Library/Java/Extensions/jai_core.jar
+System/Library/Java/Extensions/mlibwrapper_jai.jar
+System/Library/Java/Extensions/MRJToolkit.jar
+System/Library/Java/Extensions/QTJava.zip
+System/Library/Java/Extensions/vecmath.jar
 ERMovies/Libraries/derby.jar
 ERMovies/Libraries/derbytools.jar

@@ -9,9 +9,9 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.directtoweb.ERDCustomComponent;
-import er.extensions.ERXApplication;
-import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXThreadStorage;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXThreadStorage;
 
 public class ERCDisplayHelpText extends ERDCustomComponent {
 

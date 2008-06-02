@@ -26,8 +26,8 @@ package er.selenium;
 import com.webobjects.appserver.WOApplication;
 
 import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.ERXPatcher;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXPatcher;
+import er.extensions.foundation.ERXProperties;
 import er.selenium.io.SeleniumComponentExporter;
 import er.selenium.io.SeleniumImporterExporterFactory;
 import er.selenium.io.SeleniumPresentationExporterPage;

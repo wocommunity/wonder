@@ -9,7 +9,7 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-import er.extensions.ERXExceptionHolder;
+import er.extensions.validation.ERXExceptionHolder;
 
 // Stateless version of D2WCustomComponentWithArgs
 /**

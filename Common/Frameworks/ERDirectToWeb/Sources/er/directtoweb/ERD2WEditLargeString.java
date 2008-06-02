@@ -9,7 +9,7 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditLargeString;
 
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Same as D2WEditLargeString except that it allows you to

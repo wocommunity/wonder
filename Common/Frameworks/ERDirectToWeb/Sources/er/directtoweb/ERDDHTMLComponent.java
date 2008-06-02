@@ -12,7 +12,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Rich text edit component.<br />
