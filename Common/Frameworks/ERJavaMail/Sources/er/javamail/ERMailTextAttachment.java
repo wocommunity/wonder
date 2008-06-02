@@ -17,6 +17,7 @@ public class ERMailTextAttachment extends ERMailFileAttachment {
 		this.setFileName(fileName);
 	}
 
+	@Override
 	protected BodyPart getBodyPart() throws MessagingException {
 		MimeBodyPart bp = new MimeBodyPart();
 

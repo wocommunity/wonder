@@ -48,6 +48,7 @@ public class ERMailFileAttachment extends ERMailAttachment {
 		_contentID = id;
 	}
 
+	@Override
 	protected BodyPart getBodyPart() throws MessagingException {
 		MimeBodyPart bp = new MimeBodyPart();
 		DataSource ds = new FileDataSource((File) this.content());

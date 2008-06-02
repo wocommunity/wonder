@@ -8,7 +8,7 @@ package er.javamail;
 
 import java.util.Vector;
 
-public class ERQueue extends Vector {
+public class ERQueue<T> extends Vector<T> {
 
 	protected int _maxSize = 0;
 
@@ -35,7 +35,7 @@ public class ERQueue extends Vector {
 		this.setMaxSize(maxSize);
 	}
 
-	public Object push(Object item) throws SizeOverflowException {
+	public T push(T item) throws SizeOverflowException {
 		if ((_maxSize == 0) || (this.size() < _maxSize))
 			this.addElement(item);
 		else
@@ -44,13 +44,13 @@ public class ERQueue extends Vector {
 		return item;
 	}
 
-	public synchronized Object pop() {
-		Object element = this.elementAt(0);
+	public synchronized T pop() {
+		T element = this.elementAt(0);
 		this.removeElementAt(0);
 		return element;
 	}
 
-	public synchronized Object peek() {
+	public synchronized T peek() {
 		return this.elementAt(0);
 	}
 

@@ -149,6 +149,7 @@ public class ERMessage extends Object {
 		return recipients.toString();
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
 		sbuf.append("<").append(getClass().getName()).append(" ");
