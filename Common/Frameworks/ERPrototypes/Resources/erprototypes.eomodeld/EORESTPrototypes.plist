@@ -34,7 +34,7 @@
             externalType = VARCHAR; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = cryptoString; 
-            valueClassName = "er.extensions.ERXCryptoString"; 
+            valueClassName = "ERXCryptoString"; 
             valueFactoryMethodName = createInstanceFromCryptoString; 
             width = 100; 
         }, 
@@ -79,7 +79,7 @@
             externalType = VARCHAR; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = globalID; 
-            valueClassName = "er.extensions.ERXKeyGlobalID"; 
+            valueClassName = "ERXKeyGlobalID"; 
             valueFactoryMethodName = fromString; 
             valueType = c; 
             width = 255; 
@@ -118,7 +118,7 @@
             columnName = ""; 
             externalType = BLOB; 
             name = mutableArray; 
-            valueClassName = "er.extensions.ERXMutableArray"; 
+            valueClassName = "ERXMutableArray"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
@@ -126,7 +126,7 @@
             columnName = ""; 
             externalType = BLOB; 
             name = mutableDictionary; 
-            valueClassName = "er.extensions.ERXMutableDictionary"; 
+            valueClassName = "ERXMutableDictionary"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
