@@ -75,7 +75,7 @@ public class ERXSequence {
 
 	protected long increment() {
 		return ERXProperties.longForKeyWithDefault(name() + ".Increment", 
-				ERXProperties.longForKeyWithDefault(getClass().getName() + ".Increment", 10L));
+				ERXProperties.longForKeyWithDefault("er.extensions.ERXSequence.Increment", 10L));
 	}
 	
 	/**
