@@ -3,6 +3,7 @@
 package $entity.superclassPackageName;
 
 #end
+import er.extensions.foundation.*;
 import er.extensions.eof.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
