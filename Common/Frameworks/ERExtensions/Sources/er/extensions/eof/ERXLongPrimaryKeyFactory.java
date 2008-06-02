@@ -21,7 +21,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.components.ERXModelGroup;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXValueUtilities;

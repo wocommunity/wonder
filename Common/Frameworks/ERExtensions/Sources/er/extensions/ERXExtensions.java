@@ -48,7 +48,6 @@ import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXSession;
-import er.extensions.components.ERXModelGroup;
 import er.extensions.eof.ERXAdaptorChannelDelegate;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXDatabaseContext;
@@ -57,6 +56,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEntityClassDescription;
 import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXModelGroup;
 import er.extensions.eof.ERXObjectStoreCoordinatorPool;
 import er.extensions.eof.ERXSharedEOLoader;
 import er.extensions.eof.qualifiers.ERXFullTextQualifier;
