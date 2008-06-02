@@ -42,7 +42,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
     	if(factoryClassName == null) {
     		factoryClassName = ERXLogger.Factory.class.getName();
     	}
-    	if(factoryClassName.equals(ERXLogger.Factory.class.getName())) {
+    	if(factoryClassName.indexOf("ERXLogger$Factory") >= 0) {
     		System.getProperties().remove("log4j.loggerFactory");
     		factoryClassName = null;
     	}

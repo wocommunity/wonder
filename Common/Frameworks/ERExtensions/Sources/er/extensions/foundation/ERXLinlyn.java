@@ -114,7 +114,7 @@
 //    Those using the code do so at their own risk and the authors 
 //    are not responsible for any costs, loss, or damage which may
 //    thereby be incurred.
-package er.extensions;
+package er.extensions.foundation;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

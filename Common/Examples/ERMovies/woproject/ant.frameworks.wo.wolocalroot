@@ -14,7 +14,3 @@ System/Library/Java/Extensions/QTJava.zip
 System/Library/Java/Extensions/vecmath.jar
 ERMovies/Libraries/derby.jar
 ERMovies/Libraries/derbytools.jar
-Library/Frameworks/DerbyPlugIn.framework
-Library/Frameworks/ERDirectToWeb.framework
-Library/Frameworks/ERExtensions.framework
-Library/Frameworks/ERJars.framework
