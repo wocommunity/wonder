@@ -119,7 +119,7 @@ public class HostsPage extends MonitorComponent {
         }
         newHostName = null;
 
-        return pageWithName("HostsPage");
+        return HostsPage.create(context());
     }
 
     public WOComponent removeHostClicked() {
@@ -129,7 +129,7 @@ public class HostsPage extends MonitorComponent {
 
     public WOComponent configureHostClicked() {
         mySession().mHost = currentHost;
-        return pageWithName("HostConfigurePage");
+        return HostConfigurePage.create(context());
     }
 
     public WOComponent displayWotaskdInfoClicked() {
@@ -207,5 +207,9 @@ public class HostsPage extends MonitorComponent {
 
         return true;
     }
+
+	public static HostsPage create(WOContext context) {
+		return (HostsPage) WOApplication.application().pageWithName(HostsPage.class.getName(), context);
+	}
 
 }
