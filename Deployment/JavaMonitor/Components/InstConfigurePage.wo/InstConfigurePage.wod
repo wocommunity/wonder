@@ -1,7 +1,7 @@
 AdaptorSettingsForm : WOForm {}
 
 AdditionalArguments: WOText {
-    value = mySession.mInstance.additionalArgs;
+    value = myInstance.additionalArgs;
     cols = "50";
     rows = "3";
     wrap = "virtual";
@@ -14,25 +14,25 @@ AppConfigureLink: WOHyperlink {
 ArgumentsForm: WOForm {}
 
 Caching: WOCheckBox {
-    checked = mySession.mInstance.cachingEnabled;
+    checked = myInstance.cachingEnabled;
 }
 
 CheckBox2: WOCheckBox {
-	checked = mySession.mInstance.autoOpenInBrowser;
+	checked = myInstance.autoOpenInBrowser;
 }
 
 CommandLineString: WOString {
-    value = mySession.mInstance.commandLineArguments;
+    value = myInstance.commandLineArguments;
 }
 
 ConnectTimeoutField : WOTextField {
-    value = mySession.mInstance.cnctTimeout;
+    value = myInstance.cnctTimeout;
     size = "4";
     numberformat = "0";
 }
 
 DebuggingEnabled: WOCheckBox {
-    checked = mySession.mInstance.debuggingEnabled;
+    checked = myInstance.debuggingEnabled;
 }
 
 DetailViewButton: WOImage {
@@ -44,16 +44,16 @@ DetailViewButton: WOImage {
 }
 
 InstName: WOString {
-    value = mySession.mInstance.displayName;
+    value = myInstance.displayName;
 }
 
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
-	title = mySession.mInstance.displayName;
+	title = myInstance.displayName;
 }
 
 Path: WOTextField {
-    value = mySession.mInstance.path;
+    value = myInstance.path;
     size = "50";
 }
 
@@ -82,20 +82,20 @@ PathWizardImage2 : WOImage {
 }
 
 PoolsizeField : WOTextField {
-    value = mySession.mInstance.sendBufSize;
+    value = myInstance.sendBufSize;
     size = "4";
     numberformat = "0";
 }
 
 Port: WOTextField {
-//    value = mySession.mInstance.port;
+//    value = myInstance.port;
     value = port;
     size = "8";
     numberformat = "0";
 }
 
 ReceiveTimeoutField : WOTextField {
-    value = mySession.mInstance.recvTimeout;
+    value = myInstance.recvTimeout;
     size = "4";
     numberformat = "0";
 }
@@ -105,13 +105,13 @@ ReturnLink: WOHyperlink {
 }
 
 SendTimeoutField : WOTextField {
-    value = mySession.mInstance.sendTimeout;
+    value = myInstance.sendTimeout;
     size = "4";
     numberformat = "0";
 }
 
 String1: WOString {
-	value = mySession.mInstance.hostName;
+	value = myInstance.hostName;
 }
 
 InstanceSettingsSubmit: WOSubmitButton {
@@ -126,17 +126,17 @@ TextField1: WOTextField {
 
 TextField2: WOTextField {
 	numberformat = "0";
-	value = mySession.mInstance.minimumActiveSessionsCount;
+	value = myInstance.minimumActiveSessionsCount;
 }
 
 TextField3: WOTextField {
-	value = mySession.mInstance.lifebeatInterval;
+	value = myInstance.lifebeatInterval;
 	numberformat = "0";
 }
 
 TextField4: WOTextField {
 	size = "4";
-	value = mySession.mInstance.recvBufSize;
+	value = myInstance.recvBufSize;
 	numberformat = "0";
 }
 
@@ -150,7 +150,7 @@ WarningMessage: WOString {
 }
 
 OutputPath: WOTextField {
-    value = mySession.mInstance.outputPath;
+    value = myInstance.outputPath;
     size = "50";
 }
 

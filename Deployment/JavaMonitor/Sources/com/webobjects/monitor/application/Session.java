@@ -21,9 +21,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSThreadsafeMutableArray;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
-import com.webobjects.monitor._private.MApplication;
-import com.webobjects.monitor._private.MHost;
-import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MSiteConfig;
 import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
@@ -31,12 +28,6 @@ public class Session extends WOSession implements ErrorCollector {
     private static final long serialVersionUID = 8067267944038698356L;
 
     public boolean _isLoggedIn;
-
-    public MApplication mApplication;
-
-    public MInstance mInstance;
-
-    public MHost mHost;
 
     public Session() {
         super();

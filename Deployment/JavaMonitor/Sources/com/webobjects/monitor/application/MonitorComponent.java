@@ -21,6 +21,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
+import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.MSiteConfig;
 
@@ -43,6 +44,10 @@ public class MonitorComponent extends WOComponent {
     public Application theApplication = (Application) WOApplication.application();
 
     private WOTaskdHandler _handler;
+    
+    private MApplication myApplication;
+    private MInstance myInstance;
+    private MHost myHost;
 
     public MonitorComponent(WOContext aWocontext) {
         super(aWocontext);
@@ -79,7 +84,7 @@ public class MonitorComponent extends WOComponent {
     // responses, to avoid waiting, then doing it in serial! (not that it's
     // _that_ slow)
     private void _cacheState(String aName) {
-        MApplication appForDetailPage = mySession().mApplication;
+        MApplication appForDetailPage = myApplication();
 
         if (siteConfig().hostArray().count() != 0) {
             if (aName.equals("ApplicationsPage") && (siteConfig().applicationArray().count() != 0)) {
@@ -101,4 +106,33 @@ public class MonitorComponent extends WOComponent {
             }
         }
     }
+
+	public final MApplication myApplication() {
+		return myApplication;
+	}
+
+	public void setMyApplication(MApplication application) {
+		assert application != null;
+		myApplication = application;
+		myInstance = null;
+	}
+
+	public final MInstance myInstance() {
+		return myInstance;
+	}
+
+	public void setMyInstance(MInstance instance) {
+		assert instance != null;
+		myInstance = instance;
+		myApplication = instance.application();
+	}
+	
+	public final MHost myHost() {
+		return myHost;
+	}
+
+	public void setMyHost(MHost host) {
+		myHost = host;
+	}
+
 }

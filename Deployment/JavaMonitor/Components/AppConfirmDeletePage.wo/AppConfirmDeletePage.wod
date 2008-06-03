@@ -1,5 +1,5 @@
 AppName: WOString {
-    value = mySession.mApplication.name;
+    value = myApplication.name;
 }
 
 CancelClicked: WOHyperlink {

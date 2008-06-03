@@ -40,18 +40,14 @@ public class AppConfigurePage extends MonitorComponent {
 
     public boolean isAdaptorSettingsSectionVisible = false;
 
-    public MApplication appDefaults = new MApplication(myApplication().values(), _sc, null);
+    public MApplication appDefaults;
 
     public AppConfigurePage(WOContext aWocontext) {
         super(aWocontext);
     }
 
-    private MApplication myApplication() {
-        return mySession().mApplication;
-    }
-
     public WOComponent detailPageClicked() {
-        return AppDetailPage.create(context());
+        return AppDetailPage.create(context(), myApplication());
     }
 
     public WOComponent configurePageClicked() {
@@ -69,7 +65,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
@@ -117,7 +113,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
         aPage.isAppConfigureSectionVisible = true;
         return aPage;
     }
@@ -129,7 +125,7 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     private WOComponent _defaultPage() {
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
@@ -366,7 +362,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
         aPage.isEmailSectionVisible = true;
         return aPage;
     }
@@ -432,7 +428,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
         aPage.isSchedulingSectionVisible = true;
         return aPage;
     }
@@ -500,14 +496,18 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
         aPage.isAdaptorSettingsSectionVisible = true;
         return aPage;
     }
-    /** ******* */
+    /**
+     * @param application TODO ******* */
 
-	public static AppConfigurePage create(WOContext context) {
-		return (AppConfigurePage) WOApplication.application().pageWithName(AppConfigurePage.class.getName(), context);
+	public static AppConfigurePage create(WOContext context, MApplication application) {
+		AppConfigurePage page = (AppConfigurePage) WOApplication.application().pageWithName(AppConfigurePage.class.getName(), context);
+		page.setMyApplication(application);
+		page.appDefaults = new MApplication(application.values(), _sc, null);
+		return page;
 	}
 
 }

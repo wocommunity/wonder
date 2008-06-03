@@ -37,19 +37,6 @@ public class AppDetailPage extends MonitorComponent {
         super(aWocontext);
         displayGroup = new WODisplayGroup();
         displayGroup.setFetchesOnLoad(false);
-        NSArray instancesArray = currentApplication().instanceArray();
-        if (instancesArray == null) {
-            instancesArray = NSArray.EmptyArray;
-        }
-        // AK: the MInstances don't really support equals()...
-        if (!displayGroup.allObjects().equals(instancesArray)) {
-            displayGroup.setObjectArray(instancesArray);
-        }
-        displayGroup.setSelectedObjects(displayGroup.allObjects());
-    }
-
-    private MApplication currentApplication() {
-        return mySession().mApplication;
     }
 
     private static final long serialVersionUID = 438829612215550387L;
@@ -269,7 +256,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public Bouncer currentBouncer() {
-        return (Bouncer) session().objectForKey("Bouncer." + currentApplication().name());
+        return (Bouncer) session().objectForKey("Bouncer." + myApplication().name());
     }
 
     public WOComponent bounceClicked() {
@@ -277,8 +264,8 @@ public class AppDetailPage extends MonitorComponent {
         if (old != null) {
             old.interrupt();
         }
-        Bouncer bouncer = new Bouncer(currentApplication());
-        session().setObjectForKey(bouncer, "Bouncer." + currentApplication().name());
+        Bouncer bouncer = new Bouncer(myApplication());
+        session().setObjectForKey(bouncer, "Bouncer." + myApplication().name());
         bouncer.start();
         return newDetailPage();
     }
@@ -343,34 +330,32 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public boolean hasInstances() {
-        NSArray instancesArray = currentApplication().instanceArray();
+        NSArray instancesArray = myApplication().instanceArray();
         if (instancesArray == null || instancesArray.count() == 0)
             return false;
         return true;
     }
 
     public boolean isRefreshEnabled() {
-        NSArray instancesArray = currentApplication().instanceArray();
+        NSArray instancesArray = myApplication().instanceArray();
         if (instancesArray == null || instancesArray.count() == 0)
             return false;
         return siteConfig().viewRefreshEnabled().booleanValue();
     }
 
     public WOComponent configureApplicationClicked() {
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
 
     public WOComponent configureInstanceClicked() {
-        mySession().mInstance = currentInstance;
-        InstConfigurePage aPage = (InstConfigurePage) InstConfigurePage.create(context());
+        InstConfigurePage aPage = (InstConfigurePage) InstConfigurePage.create(context(), currentInstance);
         return aPage;
     }
 
     public WOComponent deleteInstanceClicked() {
-        mySession().mInstance = currentInstance;
-        InstConfirmDeletePage aPage = (InstConfirmDeletePage) InstConfirmDeletePage.create(context());
+        InstConfirmDeletePage aPage = (InstConfirmDeletePage) InstConfirmDeletePage.create(context(), currentInstance);
         return aPage;
     }
 
@@ -384,7 +369,7 @@ public class AppDetailPage extends MonitorComponent {
             // direct connect
             aURL = new StringBuffer(hrefToInstDirect());
             aURL = aURL.append("/cgi-bin/WebObjects/");
-            aURL = aURL.append(currentApplication().name());
+            aURL = aURL.append(myApplication().name());
             aURL = aURL.append(".woa");
         }
         aURL = aURL.append("/wa/ERXDirectAction/stats?pw=" + WOProperties.TheStatisticsStorePassword);
@@ -400,9 +385,9 @@ public class AppDetailPage extends MonitorComponent {
                 adaptorURL = WOApplication.application().cgiAdaptorURL();
             }
             if (adaptorURL.charAt(adaptorURL.length() - 1) == '/') {
-                _hrefToApp = adaptorURL + currentApplication().name();
+                _hrefToApp = adaptorURL + myApplication().name();
             } else {
-                _hrefToApp = adaptorURL + "/" + currentApplication().name();
+                _hrefToApp = adaptorURL + "/" + myApplication().name();
             }
         }
         return _hrefToApp;
@@ -425,17 +410,16 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent instanceDeathDetailClicked() {
-        mySession().mInstance = currentInstance;
-        AppDeathPage aPage = (AppDeathPage) AppDeathPage.create(context());
+        AppDeathPage aPage = (AppDeathPage) AppDeathPage.create(context(), currentInstance);
         return aPage;
     }
 
     public WOComponent clearAllDeathsClicked() {
         handler().startReading();
         try {
-            if (currentApplication().hostArray().count() != 0) {
-                handler().sendClearDeathsToWotaskds(currentApplication().instanceArray(),
-                        currentApplication().hostArray());
+            if (myApplication().hostArray().count() != 0) {
+                handler().sendClearDeathsToWotaskds(myApplication().instanceArray(),
+                        myApplication().hostArray());
             }
         } finally {
             handler().endReading();
@@ -537,7 +521,7 @@ public class AppDetailPage extends MonitorComponent {
             }
         }
         if (instances.count() != 0) {
-            handler().sendStartInstancesToWotaskds(instances, currentApplication().hostArray());
+            handler().sendStartInstancesToWotaskds(instances, myApplication().hostArray());
             for (MInstance currentInstance : instances) {
                 if (currentInstance.state != MObject.ALIVE) {
                     currentInstance.state = MObject.STARTING;
@@ -547,7 +531,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent stopAllClicked() {
-        return StopAllConfirmPage.create(context());
+        return StopAllConfirmPage.create(context(), myApplication());
     }
 
     public WOComponent autoRecoverEnableAllClicked() {
@@ -585,7 +569,7 @@ public class AppDetailPage extends MonitorComponent {
     public WOComponent acceptNewSessionsAllClicked() {
         handler().startReading();
         try {
-            handler().sendRefuseSessionToWotaskds(selectedInstances(), currentApplication().hostArray(), false);
+            handler().sendRefuseSessionToWotaskds(selectedInstances(), myApplication().hostArray(), false);
         } finally {
             handler().endReading();
         }
@@ -595,7 +579,7 @@ public class AppDetailPage extends MonitorComponent {
     public WOComponent refuseNewSessionsAllClicked() {
         handler().startReading();
         try {
-            handler().sendRefuseSessionToWotaskds(selectedInstances(), currentApplication().hostArray(), true);
+            handler().sendRefuseSessionToWotaskds(selectedInstances(), myApplication().hostArray(), true);
             NSArray instancesArray = selectedInstances();
         } finally {
             handler().endReading();
@@ -622,7 +606,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     private WOComponent newDetailPage() {
-        AppDetailPage nextPage = (AppDetailPage) AppDetailPage.create(context());
+        AppDetailPage nextPage = (AppDetailPage) AppDetailPage.create(context(), myApplication());
         nextPage.displayGroup.setSelectedObjects(displayGroup.selectedObjects());
         return nextPage;
     }
@@ -744,27 +728,27 @@ public class AppDetailPage extends MonitorComponent {
 
     /** ******** Statistics Display ********* */
     public Integer totalTransactions() {
-        return StatsUtilities.totalTransactionsForApplication(currentApplication());
+        return StatsUtilities.totalTransactionsForApplication(myApplication());
     }
 
     public Integer totalActiveSessions() {
-        return StatsUtilities.totalActiveSessionsForApplication(currentApplication());
+        return StatsUtilities.totalActiveSessionsForApplication(myApplication());
     }
 
     public Float totalAverageTransaction() {
-        return StatsUtilities.totalAverageTransactionForApplication(currentApplication());
+        return StatsUtilities.totalAverageTransactionForApplication(myApplication());
     }
 
     public Float totalAverageIdleTime() {
-        return StatsUtilities.totalAverageIdleTimeForApplication(currentApplication());
+        return StatsUtilities.totalAverageIdleTimeForApplication(myApplication());
     }
 
     public Float actualRatePerSecond() {
-        return StatsUtilities.actualTransactionsPerSecondForApplication(currentApplication());
+        return StatsUtilities.actualTransactionsPerSecondForApplication(myApplication());
     }
 
     public Float actualRatePerMinute() {
-        Float aNumber = StatsUtilities.actualTransactionsPerSecondForApplication(currentApplication());
+        Float aNumber = StatsUtilities.actualTransactionsPerSecondForApplication(myApplication());
         return new Float((aNumber.floatValue() * 60));
     }
 
@@ -790,8 +774,8 @@ public class AppDetailPage extends MonitorComponent {
             NSMutableArray newInstanceArray = new NSMutableArray(numberToAdd);
 
             for (int i = 0; i < numberToAdd; i++) {
-                Integer aUniqueID = currentApplication().nextID();
-                MInstance newInstance = new MInstance(selectedHost, currentApplication(), aUniqueID, siteConfig());
+                Integer aUniqueID = myApplication().nextID();
+                MInstance newInstance = new MInstance(selectedHost, myApplication(), aUniqueID, siteConfig());
                 siteConfig().addInstance_M(newInstance);
                 newInstanceArray.addObject(newInstance);
             }
@@ -816,8 +800,19 @@ public class AppDetailPage extends MonitorComponent {
         }
     }
 
-	public static AppDetailPage create(WOContext context) {
-		return (AppDetailPage) WOApplication.application().pageWithName(AppDetailPage.class.getName(), context);
+	public static AppDetailPage create(WOContext context, MApplication currentApplication) {
+		AppDetailPage page = (AppDetailPage) WOApplication.application().pageWithName(AppDetailPage.class.getName(), context);
+		page.setMyApplication(currentApplication);
+        NSArray instancesArray = currentApplication.instanceArray();
+        if (instancesArray == null) {
+            instancesArray = NSArray.EmptyArray;
+        }
+        // AK: the MInstances don't really support equals()...
+        if (!page.displayGroup.allObjects().equals(instancesArray)) {
+        	page.displayGroup.setObjectArray(instancesArray);
+        }
+        page.displayGroup.setSelectedObjects(page.displayGroup.allObjects());
+		return page;
 	}
 
 }

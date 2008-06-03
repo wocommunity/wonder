@@ -37,11 +37,11 @@ public class InstConfigurePage extends MonitorComponent {
     }
 
     public WOComponent returnClicked() {
-        return AppDetailPage.create(context());
+        return AppDetailPage.create(context(), myInstance().application());
     }
 
     public WOComponent appConfigLinkClicked() {
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
@@ -107,10 +107,6 @@ public class InstConfigurePage extends MonitorComponent {
             handler().endReading();
         }
         return null;
-    }
-
-    private MInstance myInstance() {
-        return mySession().mInstance;
     }
 
     /** ******* */
@@ -254,10 +250,13 @@ public class InstConfigurePage extends MonitorComponent {
     public String instanceLifebeatInterval() {
         return myInstance().lifebeatInterval().toString();
     }
-    /** ******* */
+    /**
+     * @param instance TODO ******* */
 
-	public static InstConfigurePage create(WOContext context) {
-		return (InstConfigurePage) WOApplication.application().pageWithName(InstConfigurePage.class.getName(), context);
+	public static InstConfigurePage create(WOContext context, MInstance instance) {
+		InstConfigurePage page = (InstConfigurePage) WOApplication.application().pageWithName(InstConfigurePage.class.getName(), context);
+		page.setMyInstance(instance);
+		return page;
 	}
 
 }
