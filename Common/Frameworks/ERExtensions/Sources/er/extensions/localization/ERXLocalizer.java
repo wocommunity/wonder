@@ -397,10 +397,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		ERXLocalizer localizer = null;
 		String className = null;
 		if (pluralForm) {
-			className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.pluralFormClassName", "er.extensions.ERXLocalizer");
+			className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.pluralFormClassName", ERXLocalizer.class.getName());
 		}
 		else {
-			className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.nonPluralFormClassName", "er.extensions.ERXNonPluralFormLocalizer");
+			className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.nonPluralFormClassName", ERXNonPluralFormLocalizer.class.getName());
 		}
 		try {
 			Class localizerClass = Class.forName(className);
