@@ -1,7 +1,0 @@
-# these files are local transient copies
-# they should never go to CVS
-# this file will ensure that CVS doesn't complain about this fact
-
-dist
-*.pbxuser
-.DS_Store
