@@ -106,7 +106,7 @@ public class ERXBrowserFactory {
     public static final Logger log = Logger.getLogger(ERXBrowserFactory.class);
 
     /** holds the default browser class name */
-    private static final String _DEFAULT_BROWSER_CLASS_NAME = "er.extensions.ERXBasicBrowser";
+    private static final String _DEFAULT_BROWSER_CLASS_NAME = ERXBasicBrowser.class.getName();
 
     /** Caches a reference to the browser factory */
     private static ERXBrowserFactory _factory;
@@ -124,7 +124,7 @@ public class ERXBrowserFactory {
     public static ERXBrowserFactory factory() {
         if (_factory == null) {
             String browserFactoryClass = System.getProperty("er.extensions.ERXBrowserFactory.FactoryClassName");
-            if (browserFactoryClass != null && !browserFactoryClass.equals("er.extensions.ERXBrowserFactory")) {
+            if (browserFactoryClass != null && !browserFactoryClass.equals(ERXBrowserFactory.class.getName())) {
                 log.debug("Creating browser factory for class name: " + browserFactoryClass);
                 try {
                     Class browserClass = Class.forName(browserFactoryClass);
@@ -152,10 +152,10 @@ public class ERXBrowserFactory {
 
     /**
      * Returns the name of the {@link ERXBrowser} subclass. 
-     * The default value is <code>"er.extensions.ERXBasicBrowser"</code>.
+     * The default value is <code>"er.extensions.appserver.ERXBasicBrowser"</code>.
      * 
      * @return	the name of the ERXBrowser subclass; default to 
-     *          <code>"er.extensions.ERXBasicBrowser"</code>
+     *          <code>"er.extensions.appserver.ERXBasicBrowser"</code>
      * @see	#setBrowserClassName
      */
     public String browserClassName() { return _browserClassName; }
