@@ -236,7 +236,7 @@
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.corebusinesslogic.ERCoreBusinessLogic" />
             <param name="project.name" value="ERCoreBusinessLogic" />
-            <param name="project.dir" value="Frameworks/Core/ERCoreBusinessLogic" />
+            <param name="project.dir" value="Frameworks/BusinessLogic/ERCoreBusinessLogic" />
 
             <param name="use.webobjects.d2w" value="true" />
             <param name="use.wonder.mail" value="true" />
