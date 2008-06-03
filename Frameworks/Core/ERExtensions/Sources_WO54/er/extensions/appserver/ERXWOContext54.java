@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.appserver;
 
 import com.webobjects.appserver.WORequest;
 
