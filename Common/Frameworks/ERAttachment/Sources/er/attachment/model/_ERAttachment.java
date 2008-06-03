@@ -8,8 +8,8 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
-import er.extensions.eof.ERXGenericRecord;
-import er.extensions.eof.ERXKey;
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
@@ -17,37 +17,37 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
 
 	// Attributes
 	public static final String AVAILABLE_KEY = "available";
-	public static final ERXKey AVAILABLE = new ERXKey(AVAILABLE_KEY);
+	public static final ERXKey<Boolean> AVAILABLE = new ERXKey<Boolean>(AVAILABLE_KEY);
 	public static final String CONFIGURATION_NAME_KEY = "configurationName";
-	public static final ERXKey CONFIGURATION_NAME = new ERXKey(CONFIGURATION_NAME_KEY);
+	public static final ERXKey<String> CONFIGURATION_NAME = new ERXKey<String>(CONFIGURATION_NAME_KEY);
 	public static final String CREATION_DATE_KEY = "creationDate";
-	public static final ERXKey CREATION_DATE = new ERXKey(CREATION_DATE_KEY);
+	public static final ERXKey<NSTimestamp> CREATION_DATE = new ERXKey<NSTimestamp>(CREATION_DATE_KEY);
 	public static final String HEIGHT_KEY = "height";
-	public static final ERXKey HEIGHT = new ERXKey(HEIGHT_KEY);
+	public static final ERXKey<Integer> HEIGHT = new ERXKey<Integer>(HEIGHT_KEY);
 	public static final String MIME_TYPE_KEY = "mimeType";
-	public static final ERXKey MIME_TYPE = new ERXKey(MIME_TYPE_KEY);
+	public static final ERXKey<String> MIME_TYPE = new ERXKey<String>(MIME_TYPE_KEY);
 	public static final String ORIGINAL_FILE_NAME_KEY = "originalFileName";
-	public static final ERXKey ORIGINAL_FILE_NAME = new ERXKey(ORIGINAL_FILE_NAME_KEY);
+	public static final ERXKey<String> ORIGINAL_FILE_NAME = new ERXKey<String>(ORIGINAL_FILE_NAME_KEY);
 	public static final String OWNER_ID_KEY = "ownerID";
-	public static final ERXKey OWNER_ID = new ERXKey(OWNER_ID_KEY);
+	public static final ERXKey<String> OWNER_ID = new ERXKey<String>(OWNER_ID_KEY);
 	public static final String PROXIED_KEY = "proxied";
-	public static final ERXKey PROXIED = new ERXKey(PROXIED_KEY);
+	public static final ERXKey<Boolean> PROXIED = new ERXKey<Boolean>(PROXIED_KEY);
 	public static final String SIZE_KEY = "size";
-	public static final ERXKey SIZE = new ERXKey(SIZE_KEY);
+	public static final ERXKey<Integer> SIZE = new ERXKey<Integer>(SIZE_KEY);
 	public static final String STORAGE_TYPE_KEY = "storageType";
-	public static final ERXKey STORAGE_TYPE = new ERXKey(STORAGE_TYPE_KEY);
+	public static final ERXKey<String> STORAGE_TYPE = new ERXKey<String>(STORAGE_TYPE_KEY);
 	public static final String THUMBNAIL_KEY = "thumbnail";
-	public static final ERXKey THUMBNAIL = new ERXKey(THUMBNAIL_KEY);
+	public static final ERXKey<String> THUMBNAIL = new ERXKey<String>(THUMBNAIL_KEY);
 	public static final String WEB_PATH_KEY = "webPath";
-	public static final ERXKey WEB_PATH = new ERXKey(WEB_PATH_KEY);
+	public static final ERXKey<String> WEB_PATH = new ERXKey<String>(WEB_PATH_KEY);
 	public static final String WIDTH_KEY = "width";
-	public static final ERXKey WIDTH = new ERXKey(WIDTH_KEY);
+	public static final ERXKey<Integer> WIDTH = new ERXKey<Integer>(WIDTH_KEY);
 
 	// Relationships
 	public static final String CHILDREN_ATTACHMENTS_KEY = "childrenAttachments";
-	public static final ERXKey CHILDREN_ATTACHMENTS = new ERXKey(CHILDREN_ATTACHMENTS_KEY);
+	public static final ERXKey<er.attachment.model.ERAttachment> CHILDREN_ATTACHMENTS = new ERXKey<er.attachment.model.ERAttachment>(CHILDREN_ATTACHMENTS_KEY);
 	public static final String PARENT_ATTACHMENT_KEY = "parentAttachment";
-	public static final ERXKey PARENT_ATTACHMENT = new ERXKey(PARENT_ATTACHMENT_KEY);
+	public static final ERXKey<er.attachment.model.ERAttachment> PARENT_ATTACHMENT = new ERXKey<er.attachment.model.ERAttachment>(PARENT_ATTACHMENT_KEY);
 
   private static Logger LOG = Logger.getLogger(_ERAttachment.class);
 
@@ -59,11 +59,11 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
     return localInstance;
   }
 
-  public java.lang.Boolean available() {
-    return (java.lang.Boolean) storedValueForKey("available");
+  public Boolean available() {
+    return (Boolean) storedValueForKey("available");
   }
 
-  public void setAvailable(java.lang.Boolean value) {
+  public void setAvailable(Boolean value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating available from " + available() + " to " + value);
     }
@@ -136,11 +136,11 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
     takeStoredValueForKey(value, "ownerID");
   }
 
-  public java.lang.Boolean proxied() {
-    return (java.lang.Boolean) storedValueForKey("proxied");
+  public Boolean proxied() {
+    return (Boolean) storedValueForKey("proxied");
   }
 
-  public void setProxied(java.lang.Boolean value) {
+  public void setProxied(Boolean value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating proxied from " + proxied() + " to " + value);
     }
@@ -205,12 +205,19 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
   public er.attachment.model.ERAttachment parentAttachment() {
     return (er.attachment.model.ERAttachment)storedValueForKey("parentAttachment");
   }
+  
+  public void setParentAttachment(er.attachment.model.ERAttachment value) {
+    takeStoredValueForKey(value, "parentAttachment");
+  }
 
   public void setParentAttachmentRelationship(er.attachment.model.ERAttachment value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
       _ERAttachment.LOG.debug("updating parentAttachment from " + parentAttachment() + " to " + value);
     }
-    if (value == null) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	setParentAttachment(value);
+    }
+    else if (value == null) {
     	er.attachment.model.ERAttachment oldValue = parentAttachment();
     	if (oldValue != null) {
     		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "parentAttachment");
@@ -262,18 +269,36 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
     return results;
   }
   
+  public void addToChildrenAttachments(er.attachment.model.ERAttachment object) {
+    includeObjectIntoPropertyWithKey(object, "childrenAttachments");
+  }
+
+  public void removeFromChildrenAttachments(er.attachment.model.ERAttachment object) {
+    excludeObjectFromPropertyWithKey(object, "childrenAttachments");
+  }
+
   public void addToChildrenAttachmentsRelationship(er.attachment.model.ERAttachment object) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
       _ERAttachment.LOG.debug("adding " + object + " to childrenAttachments relationship");
     }
-    addObjectToBothSidesOfRelationshipWithKey(object, "childrenAttachments");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	addToChildrenAttachments(object);
+    }
+    else {
+    	addObjectToBothSidesOfRelationshipWithKey(object, "childrenAttachments");
+    }
   }
 
   public void removeFromChildrenAttachmentsRelationship(er.attachment.model.ERAttachment object) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
       _ERAttachment.LOG.debug("removing " + object + " from childrenAttachments relationship");
     }
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "childrenAttachments");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	removeFromChildrenAttachments(object);
+    }
+    else {
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, "childrenAttachments");
+    }
   }
 
   public er.attachment.model.ERAttachment createChildrenAttachmentsRelationship() {
@@ -297,11 +322,11 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
   }
 
 
-  public static ERAttachment createERAttachment(EOEditingContext editingContext, java.lang.Boolean available
+  public static ERAttachment createERAttachment(EOEditingContext editingContext, Boolean available
 , NSTimestamp creationDate
 , String mimeType
 , String originalFileName
-, java.lang.Boolean proxied
+, Boolean proxied
 , Integer size
 , String webPath
 ) {

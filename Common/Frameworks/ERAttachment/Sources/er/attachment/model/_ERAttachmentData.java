@@ -8,8 +8,8 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
-import er.extensions.eof.ERXGenericRecord;
-import er.extensions.eof.ERXKey;
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _ERAttachmentData extends er.extensions.eof.ERXGenericRecord {
@@ -17,7 +17,7 @@ public abstract class _ERAttachmentData extends er.extensions.eof.ERXGenericReco
 
 	// Attributes
 	public static final String DATA_KEY = "data";
-	public static final ERXKey DATA = new ERXKey(DATA_KEY);
+	public static final ERXKey<NSData> DATA = new ERXKey<NSData>(DATA_KEY);
 
 	// Relationships
 
