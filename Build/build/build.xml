@@ -269,7 +269,7 @@
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.bugtracker.BTBusinessLogic" />
             <param name="project.name" value="BTBusinessLogic" />
-            <param name="project.dir" value="Applications/BugTracker/Frameworks/BTBusinessLogic" />
+            <param name="project.dir" value="Frameworks/BusinessLogic/BTBusinessLogic" />
             <param name="wonder.lib.root.bundles" value="Ajax/BTBusinessLogic/ERCoreBusinessLogic/ERPrototypes/ERJars/ERExtensions/ERDirectToWeb/JavaWOExtensions/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
 
             <param name="use.webobjects.d2w" value="true" />
