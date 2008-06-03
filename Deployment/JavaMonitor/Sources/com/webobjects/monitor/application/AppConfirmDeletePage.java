@@ -34,11 +34,11 @@ public class AppConfirmDeletePage extends MonitorComponent {
             handler().endWriting();
         }
 
-        return pageWithName("ApplicationsPage");
+        return ApplicationsPage.create(context());
     }
 
     public WOComponent cancelClicked() {
-        return pageWithName("ApplicationsPage");
+        return ApplicationsPage.create(context());
     }
 
 }

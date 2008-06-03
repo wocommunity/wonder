@@ -12,6 +12,7 @@ package com.webobjects.monitor.application;
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
  SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.monitor._private.MApplication;
@@ -42,7 +43,7 @@ public class ApplicationsPage extends MonitorComponent {
 
     public WOComponent appDetailsClicked() {
         mySession().mApplication = currentApplication;
-        return pageWithName("AppDetailPage");
+        return AppDetailPage.create(context());
     }
 
     public WOComponent addApplicationClicked() {
@@ -58,7 +59,7 @@ public class ApplicationsPage extends MonitorComponent {
                     }
 
                     mySession().mApplication = newApplication;
-                    AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+                    AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
                     aPage.isNewInstanceSectionVisible = true;
 
                     // endReading in the finally block below
@@ -69,17 +70,21 @@ public class ApplicationsPage extends MonitorComponent {
             }
         }
         newApplicationName = null;
-        return pageWithName("ApplicationsPage");
+        return ApplicationsPage.create(context());
     }
 
-    public WOComponent deleteClicked() {
+    public static WOComponent create(WOContext context) {
+		return (ApplicationsPage) WOApplication.application().pageWithName(ApplicationsPage.class.getName(), context);
+	}
+
+	public WOComponent deleteClicked() {
         mySession().mApplication = currentApplication;
         return pageWithName("AppConfirmDeletePage");
     }
 
     public WOComponent configureClicked() {
         mySession().mApplication = currentApplication;
-        AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }

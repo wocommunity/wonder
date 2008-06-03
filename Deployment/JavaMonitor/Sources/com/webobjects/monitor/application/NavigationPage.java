@@ -108,19 +108,19 @@ public class NavigationPage extends MonitorComponent {
     }
 
     public WOComponent ApplicationsPageClicked() {
-        return pageWithName("ApplicationsPage");
+        return ApplicationsPage.create(context());
     }
 
     public WOComponent HostsPageClicked() {
-        return pageWithName("HostsPage");
+        return HostsPage.create(context());
     }
 
     public WOComponent ConfigurePageClicked() {
-        return pageWithName("ConfigurePage");
+        return ConfigurePage.create(context());
     }
 
     public WOComponent PrefsPageClicked() {
-        return pageWithName("PrefsPage");
+        return PrefsPage.create(context());
     }
 
     public WOComponent HelpPageClicked() {

@@ -12,6 +12,7 @@ package com.webobjects.monitor.application;
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
  SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -48,11 +49,15 @@ public class StopAllConfirmPage extends MonitorComponent {
             handler().endReading();
         }
 
-        return pageWithName("AppDetailPage");
+        return AppDetailPage.create(context());
     }
 
     public WOComponent cancelClicked() {
-        return pageWithName("AppDetailPage");
+        return AppDetailPage.create(context());
     }
+
+	public static StopAllConfirmPage create(WOContext context) {
+		return (StopAllConfirmPage) WOApplication.application().pageWithName(StopAllConfirmPage.class.getName(), context);
+	}
 
 }
