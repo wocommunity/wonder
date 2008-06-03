@@ -331,6 +331,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			trimSpaces();
 	}
 
+	protected boolean _updateInverseRelationships() {
+		return _updateInverseRelationships && !(editingContext() instanceof EOSharedEditingContext);
+	}
+	
 	public boolean _setUpdateInverseRelationships(boolean newValue) {
 		boolean old = _updateInverseRelationships;
 		_updateInverseRelationships = newValue;
@@ -1174,7 +1178,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public void includeObjectIntoPropertyWithKey(Object o, String key) {
-		if (_updateInverseRelationships) {
+		if (_updateInverseRelationships()) {
 			InverseRelationshipUpdater.includeObjectIntoPropertyWithKey(this, o, key);
 		}
 		super.includeObjectIntoPropertyWithKey(o, key);
@@ -1185,7 +1189,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public void excludeObjectFromPropertyWithKey(Object o, String key) {
-		if (_updateInverseRelationships) {
+		if (_updateInverseRelationships()) {
 			InverseRelationshipUpdater.excludeObjectFromPropertyWithKey(this, o, key);
 		}
 		super.excludeObjectFromPropertyWithKey(o, key);
@@ -1201,7 +1205,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	
 	@Override
 	public void takeStoredValueForKey(Object value, String key) {
-		if (_updateInverseRelationships) {
+		if (_updateInverseRelationships()) {
 			InverseRelationshipUpdater.takeStoredValueForKey(this, value, key);
 		}
 		super.takeStoredValueForKey(value, key);
