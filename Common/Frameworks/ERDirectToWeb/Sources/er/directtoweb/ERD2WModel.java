@@ -62,6 +62,7 @@ import com.webobjects.foundation.NSSet;
 import er.extensions.ERXExtensions;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXMappingObjectStream;
 import er.extensions.foundation.ERXMultiKey;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
@@ -1023,7 +1024,7 @@ public class ERD2WModel extends D2WModel {
     protected Hashtable cacheFromBytes(byte[] bytes) {
         try {
             ByteArrayInputStream istream = new ByteArrayInputStream(bytes);
-            ObjectInputStream in = new ObjectInputStream(istream);
+			ObjectInputStream in = new ERXMappingObjectStream(istream);
             Hashtable newCache = new Hashtable(10000);
             try {
                 //FIXME ak how do I do without the EOFException?

@@ -1,11 +1,7 @@
 package er.extensions.eof;
 
-import com.webobjects.eoaccess.EOAttribute;
-import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOKeyGlobalID;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
-import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.foundation.ERXStringUtilities;
 
