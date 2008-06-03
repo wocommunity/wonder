@@ -24,10 +24,6 @@ import com.webobjects.foundation.NSSelector;
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXConstant;
-import er.extensions.foundation.ERXDictionaryUtilities;
-import er.extensions.foundation.ERXFileNotificationCenter;
-import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXSystem;
 import er.extensions.logging.ERXLogger;
 
 /** 

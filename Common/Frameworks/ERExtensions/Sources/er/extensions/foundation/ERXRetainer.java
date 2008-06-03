@@ -7,7 +7,6 @@
 package er.extensions.foundation;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableSet;
 
 /**
