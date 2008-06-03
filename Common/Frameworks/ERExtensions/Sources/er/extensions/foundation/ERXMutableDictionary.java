@@ -51,7 +51,7 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 	public static NSDictionary fromBlob(NSData d) {
 		try {
 			ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
-			ObjectInputStream ois = new ObjectInputStream(bis);
+			ObjectInputStream ois = new ERXMappingObjectStream(bis);
 			NSDictionary dd = (NSDictionary) ois.readObject();
 			ois.close();
 			return dd;
