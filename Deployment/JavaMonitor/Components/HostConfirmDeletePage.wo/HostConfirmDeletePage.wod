@@ -7,7 +7,7 @@ DeleteClicked: WOHyperlink {
 }
 
 HostName: WOString {
-    value = mySession.mHost.name;
+    value = myHost.name;
 }
 NavPage: NavigationPage {
 	currentPage = HOST_PAGE;

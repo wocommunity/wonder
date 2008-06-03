@@ -42,8 +42,7 @@ public class ApplicationsPage extends MonitorComponent {
     }
 
     public WOComponent appDetailsClicked() {
-        mySession().mApplication = currentApplication;
-        return AppDetailPage.create(context());
+        return AppDetailPage.create(context(), currentApplication);
     }
 
     public WOComponent addApplicationClicked() {
@@ -58,8 +57,7 @@ public class ApplicationsPage extends MonitorComponent {
                         handler().sendAddApplicationToWotaskds(newApplication, siteConfig().hostArray());
                     }
 
-                    mySession().mApplication = newApplication;
-                    AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+                    AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), newApplication);
                     aPage.isNewInstanceSectionVisible = true;
 
                     // endReading in the finally block below
@@ -78,13 +76,11 @@ public class ApplicationsPage extends MonitorComponent {
 	}
 
 	public WOComponent deleteClicked() {
-        mySession().mApplication = currentApplication;
-        return pageWithName("AppConfirmDeletePage");
+        return AppConfirmDeletePage.create(context(), currentApplication);
     }
 
     public WOComponent configureClicked() {
-        mySession().mApplication = currentApplication;
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), currentApplication);
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }

@@ -31,21 +31,23 @@ public class AppDeathPage extends MonitorComponent {
     }
 
     public WOComponent clearDeathsClicked() {
-        handler().sendClearDeathsToWotaskds(new NSArray<MInstance>(mySession().mInstance),
-                new NSArray<MHost>(mySession().mInstance.host()));
+        handler().sendClearDeathsToWotaskds(new NSArray<MInstance>(myInstance()),
+                new NSArray<MHost>(myInstance().host()));
 
-        return AppDetailPage.create(context());
+        return AppDetailPage.create(context(), myApplication());
     }
 
     public WOComponent returnClicked() {
-        return AppDetailPage.create(context());
+        return AppDetailPage.create(context(), myApplication());
     }
 
     public int anIndexPlusOne() {
         return (anIndex + 1);
     }
 
-	public static AppDeathPage create(WOContext context) {
-		return (AppDeathPage) WOApplication.application().pageWithName(AppDeathPage.class.getName(), context);
+	public static AppDeathPage create(WOContext context, MInstance instance ) {
+		AppDeathPage page = (AppDeathPage) WOApplication.application().pageWithName(AppDeathPage.class.getName(), context);
+		page.setMyInstance(instance);
+		return page;
 	}
 }
