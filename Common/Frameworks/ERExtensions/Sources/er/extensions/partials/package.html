@@ -121,7 +121,7 @@ imply that the CalendarPerson entity will be in the Person table).
 <p>
 Currently, only the Velocity EOGenerator in WOLips is able to generate code for partial entities.  In the 
 Defines section of your model's EOGenerator configuration, you should specify that your EOGenericRecord class
-should be er.extensions.partials.ERXPartialGenericRecord (rather than er.extensions.ERXGenericRecord like you
+should be er.extensions.partials.ERXPartialGenericRecord (rather than er.extensions.eof.ERXGenericRecord like you
 normally would).  The Velocity templates will automatically make the superclass of partial classes 
 er.extensions.partials.ERXPartial, but the "ERXPartial partialForClass(Class)" method is only on 
 ERXPartialGenericRecord.
