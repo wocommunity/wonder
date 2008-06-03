@@ -516,7 +516,7 @@
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="ag.kcmedia.Application" />
             <param name="project.name" value="DevStudio" />
-            <param name="project.dir" value="Experimental/DevStudio" />
+            <param name="project.dir" value="Examples/Misc/DevStudio" />
 
             <param name="use.webobjects.d2w" value="true" />
             <param name="use.wonder.d2w" value="true" />
