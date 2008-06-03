@@ -1,6 +1,6 @@
 AdaptorField: WOTextField {
 	size = "25";
-	value = mySession.mApplication.adaptor;
+	value = myApplication.adaptor;
 }
 
 AdaptorSettingsForm: WOForm {
@@ -68,7 +68,7 @@ CheckBox2: WOCheckBox {
 }
 
 CheckBox3: WOCheckBox {
-	checked = mySession.mApplication.notificationEmailEnabled;
+	checked = myApplication.notificationEmailEnabled;
 }
 
 CheckBox6: WOCheckBox {
@@ -95,19 +95,19 @@ ConfigurePageLink: WOHyperlink {
 ConnectTimeoutField: WOTextField {
 	numberformat = "0";
 	size = "4";
-	value = mySession.mApplication.cnctTimeout;
+	value = myApplication.cnctTimeout;
 }
 
 ConnectTimeoutField2: WOTextField {
 	numberformat = "0";
 	size = 4;
-	value = mySession.mApplication.sendBufSize;
+	value = myApplication.sendBufSize;
 }
 
 ConnectTimeoutField3: WOTextField {
 	numberformat = "0";
 	size = 4;
-	value = mySession.mApplication.recvBufSize;
+	value = myApplication.recvBufSize;
 }
 
 DebuggingLogsCheckbox: WOCheckBox {
@@ -124,7 +124,7 @@ DetailViewButton: WOImage {
 
 EmailAddressesField: WOTextField {
 	size = "60";
-	value = mySession.mApplication.notificationEmailAddr;
+	value = myApplication.notificationEmailAddr;
 }
 
 EmailConditional: WOCollapsibleComponentContent {
@@ -225,7 +225,7 @@ PathWizardImage: WOImage {
 PoolsizeField: WOTextField {
 	numberformat = "0";
 	size = "4";
-	value = mySession.mApplication.poolsize;
+	value = myApplication.poolsize;
 }
 
 PopUpButton1: WOPopUpButton {
@@ -295,21 +295,21 @@ RealNameField: WOTextField {
 ReceiveTimeoutField: WOTextField {
 	numberformat = "0";
 	size = "4";
-	value = mySession.mApplication.recvTimeout;
+	value = myApplication.recvTimeout;
 }
 
 RedirectionURLField: WOTextField {
 	size = "60";
-	value = mySession.mApplication.redir;
+	value = myApplication.redir;
 }
 
 Repetition1: WORepetition {
 	item = currentScheduledInstance;
-	list = mySession.mApplication.instanceArray;
+	list = myApplication.instanceArray;
 }
 
 RetriesField : WOTextField {
-    value = mySession.mApplication.retries;
+    value = myApplication.retries;
     size = "4";
     numberformat = "0";
 }
@@ -332,7 +332,7 @@ SchedulingConditional: WOCollapsibleComponentContent {
 SendTimeoutField: WOTextField {
 	numberformat = "0";
 	size = "4";
-	value = mySession.mApplication.sendTimeout;
+	value = myApplication.sendTimeout;
 }
 
 SessionTimeOutField: WOTextField {
@@ -415,7 +415,7 @@ TextField8: WOTextField {
 TimeoutField: WOTextField {
 	numberformat = "0";
 	size = "4";
-	value = mySession.mApplication.dormant;
+	value = myApplication.dormant;
 }
 
 UpdateAdaptorButton: WOSubmitButton {

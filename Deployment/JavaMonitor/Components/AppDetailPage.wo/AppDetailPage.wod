@@ -26,16 +26,16 @@ AppLink: WOHyperlink {
 }
 
 AppName: WOString {
-	value = mySession.mApplication.name;
+	value = myApplication.name;
 }
 
 AppIsNOTRunning: WOConditional {
-	condition = mySession.mApplication.isRunning_M;
+	condition = myApplication.isRunning_M;
 	negate = true;
 }
 
 AppIsRunning: WOConditional {
-	condition = mySession.mApplication.isRunning_M;
+	condition = myApplication.isRunning_M;
 }
 
 AutoRecoverImage: WOImage {
@@ -207,7 +207,7 @@ MessageString: WOString {
 
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
-	title = mySession.mApplication.name;
+	title = myApplication.name;
 }
 
 NextShutdown: WOString {

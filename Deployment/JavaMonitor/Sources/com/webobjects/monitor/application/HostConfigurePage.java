@@ -35,7 +35,7 @@ public class HostConfigurePage extends MonitorComponent {
     public NSArray hostTypeList = MObject.hostTypeArray;
 
     public String hostTypeSelection() {
-        String type = mySession().mHost.type();
+        String type = myHost().type();
         for (int i = hostTypeList.count() - 1; i >= 0; i--) {
             String _hostTypeSelection = (String) hostTypeList.objectAtIndex(i);
             if (type.equalsIgnoreCase(_hostTypeSelection)) {
@@ -52,7 +52,7 @@ public class HostConfigurePage extends MonitorComponent {
     public WOComponent configureHostClicked() {
         handler().startWriting();
         try {
-            MHost host = mySession().mHost;
+            MHost host = myHost();
 
             if ((_hostTypeSelection != null) && (!(_hostTypeSelection.toUpperCase().equals(host.type())))) {
                 host.setType(_hostTypeSelection.toUpperCase());
@@ -62,19 +62,21 @@ public class HostConfigurePage extends MonitorComponent {
             handler().endWriting();
         }
 
-        return HostConfigurePage.create(context());
+        return HostConfigurePage.create(context(), myHost());
     }
 
     public WOComponent syncHostClicked() {
-        MHost host = mySession().mHost;
+        MHost host = myHost();
         siteConfig().hostErrorArray.addObjectIfAbsent(host);
         handler().sendUpdateHostToWotaskds(host, new NSArray(host));
 
-        return HostConfigurePage.create(context());
+        return HostConfigurePage.create(context(), myHost());
     }
 
-	public static HostConfigurePage create(WOContext context) {
-		return (HostConfigurePage) WOApplication.application().pageWithName(HostConfigurePage.class.getName(), context);
+	public static HostConfigurePage create(WOContext context, MHost host) {
+		HostConfigurePage page = (HostConfigurePage) WOApplication.application().pageWithName(HostConfigurePage.class.getName(), context);
+		page.setMyHost(host);
+		return page;
 	}
 
 }

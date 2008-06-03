@@ -123,13 +123,11 @@ public class HostsPage extends MonitorComponent {
     }
 
     public WOComponent removeHostClicked() {
-        mySession().mHost = currentHost;
-        return pageWithName("HostConfirmDeletePage");
+        return HostConfirmDeletePage.create(context(), currentHost);
     }
 
     public WOComponent configureHostClicked() {
-        mySession().mHost = currentHost;
-        return HostConfigurePage.create(context());
+        return HostConfigurePage.create(context(), currentHost);
     }
 
     public WOComponent displayWotaskdInfoClicked() {

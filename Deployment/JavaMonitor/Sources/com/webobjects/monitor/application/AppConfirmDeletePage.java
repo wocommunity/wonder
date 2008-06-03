@@ -12,8 +12,10 @@ package com.webobjects.monitor.application;
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
  SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.monitor._private.MApplication;
 
 public class AppConfirmDeletePage extends MonitorComponent {
     private static final long serialVersionUID = -755026353794418667L;
@@ -25,10 +27,10 @@ public class AppConfirmDeletePage extends MonitorComponent {
     public WOComponent deleteClicked() {
         handler().startWriting();
         try {
-            siteConfig().removeApplication_M(mySession().mApplication);
+            siteConfig().removeApplication_M(myApplication());
 
             if (siteConfig().hostArray().count() != 0) {
-                handler().sendRemoveApplicationToWotaskds(mySession().mApplication, siteConfig().hostArray());
+                handler().sendRemoveApplicationToWotaskds(myApplication(), siteConfig().hostArray());
             }
         } finally {
             handler().endWriting();
@@ -40,5 +42,9 @@ public class AppConfirmDeletePage extends MonitorComponent {
     public WOComponent cancelClicked() {
         return ApplicationsPage.create(context());
     }
+
+	public static AppConfirmDeletePage create(WOContext context, MApplication currentApplication) {
+		return (AppConfirmDeletePage) WOApplication.application().pageWithName(AppConfirmDeletePage.class.getName(), context);
+	}
 
 }

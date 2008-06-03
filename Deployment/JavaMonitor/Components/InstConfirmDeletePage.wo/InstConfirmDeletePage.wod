@@ -7,11 +7,11 @@ DeleteClicked: WOHyperlink {
 }
 
 InstHost: WOString {
-    value = mySession.mInstance.hostName;
+    value = myInstance.hostName;
 }
 
 InstName: WOString {
-    value = mySession.mInstance.displayName;
+    value = myInstance.displayName;
 }
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;

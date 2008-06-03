@@ -12,9 +12,11 @@ package com.webobjects.monitor.application;
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
  SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.monitor._private.MHost;
 
 public class HostConfirmDeletePage extends MonitorComponent {
 
@@ -30,13 +32,13 @@ public class HostConfirmDeletePage extends MonitorComponent {
     public WOComponent deleteClicked() {
         handler().startWriting();
         try {
-            siteConfig().removeHost_M(mySession().mHost);
+            siteConfig().removeHost_M(myHost());
 
             // This is so we can still talk to it!
             NSMutableArray tempHostArray = new NSMutableArray(siteConfig().hostArray());
-            tempHostArray.addObject(mySession().mHost);
+            tempHostArray.addObject(myHost());
 
-            handler().sendRemoveHostToWotaskds(mySession().mHost, tempHostArray);
+            handler().sendRemoveHostToWotaskds(myHost(), tempHostArray);
         } finally {
             handler().endWriting();
         }
@@ -47,5 +49,11 @@ public class HostConfirmDeletePage extends MonitorComponent {
     public WOComponent cancelClicked() {
         return HostsPage.create(context());
     }
+
+	public static HostConfirmDeletePage create(WOContext context, MHost host) {
+		HostConfirmDeletePage page = (HostConfirmDeletePage) WOApplication.application().pageWithName(HostConfirmDeletePage.class.getName(), context);
+		page.setMyHost(host);
+		return page;
+	}
 
 }

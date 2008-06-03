@@ -16,6 +16,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MObject;
 
@@ -33,12 +34,12 @@ public class StopAllConfirmPage extends MonitorComponent {
     public WOComponent stopAllClicked() {
         handler().startReading();
         try {
-            if (mySession().mApplication.hostArray().count() != 0) {
-                handler().sendStopInstancesToWotaskds(mySession().mApplication.instanceArray(),
-                        mySession().mApplication.hostArray());
+            if (myApplication().hostArray().count() != 0) {
+                handler().sendStopInstancesToWotaskds(myApplication().instanceArray(),
+                        myApplication().hostArray());
             }
 
-            NSArray instancesArray = mySession().mApplication.instanceArray();
+            NSArray instancesArray = myApplication().instanceArray();
             for (int i = 0; i < instancesArray.count(); i++) {
                 MInstance anInst = (MInstance) instancesArray.objectAtIndex(i);
                 if (anInst.state != MObject.DEAD) {
@@ -49,15 +50,17 @@ public class StopAllConfirmPage extends MonitorComponent {
             handler().endReading();
         }
 
-        return AppDetailPage.create(context());
+        return AppDetailPage.create(context(), myApplication());
     }
 
     public WOComponent cancelClicked() {
-        return AppDetailPage.create(context());
+        return AppDetailPage.create(context(), myApplication());
     }
 
-	public static StopAllConfirmPage create(WOContext context) {
-		return (StopAllConfirmPage) WOApplication.application().pageWithName(StopAllConfirmPage.class.getName(), context);
+	public static StopAllConfirmPage create(WOContext context, MApplication application) {
+		StopAllConfirmPage page = (StopAllConfirmPage) WOApplication.application().pageWithName(StopAllConfirmPage.class.getName(), context);
+		page.setMyApplication(application);
+		return page;
 	}
 
 }

@@ -16,6 +16,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.monitor._private.MInstance;
 
 public class InstConfirmDeletePage extends MonitorComponent {
 
@@ -31,23 +32,25 @@ public class InstConfirmDeletePage extends MonitorComponent {
     public WOComponent deleteClicked() {
         handler().startWriting();
         try {
-            siteConfig().removeInstance_M(mySession().mInstance);
+            siteConfig().removeInstance_M(myInstance());
 
             if (siteConfig().hostArray().count() != 0) {
-                handler().sendRemoveInstancesToWotaskds(new NSArray(mySession().mInstance), siteConfig().hostArray());
+                handler().sendRemoveInstancesToWotaskds(new NSArray(myInstance()), siteConfig().hostArray());
             }
         } finally {
             handler().endWriting();
         }
-        return AppDetailPage.create(context());
+        return AppDetailPage.create(context(), myInstance().application());
     }
 
     public WOComponent cancelClicked() {
-        return AppDetailPage.create(context());
+        return AppDetailPage.create(context(), myInstance().application());
     }
 
-	public static InstConfirmDeletePage create(WOContext context) {
-		return (InstConfirmDeletePage) WOApplication.application().pageWithName(InstConfirmDeletePage.class.getName(), context);
+	public static InstConfirmDeletePage create(WOContext context, MInstance instance) {
+		InstConfirmDeletePage page = (InstConfirmDeletePage) WOApplication.application().pageWithName(InstConfirmDeletePage.class.getName(), context);
+		page.setMyInstance(instance);
+		return page;
 	}
 
 }

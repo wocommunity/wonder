@@ -9,7 +9,7 @@ HostSyncButton: WOSubmitButton {
 }
 
 HostName: WOString {
-	value = mySession.mHost.name;
+	value = myHost.name;
 }
 HostSettingsForm: WOForm {}
 HostSyncForm: WOForm {}
@@ -27,7 +27,7 @@ ErrorMsg: WOString {
 
 NavPage: NavigationPage {
 	currentPage = HOST_PAGE;
-	title = mySession.mHost.name;
+	title = myHost.name;
 
 }
 
