@@ -40,7 +40,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXWOContext;
-import er.extensions.components.ERXNonPluralFormLocalizer;
 import er.extensions.components.ERXSimpleTemplateParser;
 import er.extensions.eof.ERXConstant;
 import er.extensions.formatters.ERXNumberFormatter;

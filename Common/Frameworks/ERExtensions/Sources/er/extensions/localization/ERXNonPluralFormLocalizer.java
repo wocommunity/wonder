@@ -4,11 +4,10 @@
 //
 // Created by tatsuya on Wed May 01 2002
 //
-package er.extensions.components;
+package er.extensions.localization;
 
 import org.apache.log4j.Logger;
 
-import er.extensions.localization.ERXLocalizer;
 
 
 /**
