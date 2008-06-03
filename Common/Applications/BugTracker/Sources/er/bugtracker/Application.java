@@ -30,7 +30,7 @@ public class Application extends ERXApplication {
 
     public Application() {
         ERXNavigationManager.manager().configureNavigation();
-        setContextClassName("er.extensions.ERXWOContext");
+        setContextClassName("er.extensions.appserver.ERXWOContext");
         registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(false, false), "rest");
         registerRequestHandler(new ERXDelayedRequestHandler(), ERXDelayedRequestHandler.KEY);
         setPageRefreshOnBacktrackEnabled(true);
