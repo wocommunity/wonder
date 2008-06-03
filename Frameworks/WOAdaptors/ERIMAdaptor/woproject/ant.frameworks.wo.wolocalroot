@@ -18,3 +18,6 @@ ERIMAdaptor/Libraries/joscar-common.jar
 ERIMAdaptor/Libraries/joscar-client.jar
 ERIMAdaptor/Libraries/jsocks-klea.jar
 ERIMAdaptor/Libraries/annotations.jar
+Library/Frameworks/ERExtensions.framework
+Library/Frameworks/ERJars.framework
+Library/Frameworks/JavaWOExtensions.framework
