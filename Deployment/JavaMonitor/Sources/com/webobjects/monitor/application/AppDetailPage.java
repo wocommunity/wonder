@@ -357,20 +357,20 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent configureApplicationClicked() {
-        AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
 
     public WOComponent configureInstanceClicked() {
         mySession().mInstance = currentInstance;
-        InstConfigurePage aPage = (InstConfigurePage) pageWithName("InstConfigurePage");
+        InstConfigurePage aPage = (InstConfigurePage) InstConfigurePage.create(context());
         return aPage;
     }
 
     public WOComponent deleteInstanceClicked() {
         mySession().mInstance = currentInstance;
-        InstConfirmDeletePage aPage = (InstConfirmDeletePage) pageWithName("InstConfirmDeletePage");
+        InstConfirmDeletePage aPage = (InstConfirmDeletePage) InstConfirmDeletePage.create(context());
         return aPage;
     }
 
@@ -426,7 +426,7 @@ public class AppDetailPage extends MonitorComponent {
 
     public WOComponent instanceDeathDetailClicked() {
         mySession().mInstance = currentInstance;
-        AppDeathPage aPage = (AppDeathPage) pageWithName("AppDeathPage");
+        AppDeathPage aPage = (AppDeathPage) AppDeathPage.create(context());
         return aPage;
     }
 
@@ -547,7 +547,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent stopAllClicked() {
-        return pageWithName("StopAllConfirmPage");
+        return StopAllConfirmPage.create(context());
     }
 
     public WOComponent autoRecoverEnableAllClicked() {
@@ -622,7 +622,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     private WOComponent newDetailPage() {
-        AppDetailPage nextPage = (AppDetailPage) pageWithName("AppDetailPage");
+        AppDetailPage nextPage = (AppDetailPage) AppDetailPage.create(context());
         nextPage.displayGroup.setSelectedObjects(displayGroup.selectedObjects());
         return nextPage;
     }
@@ -778,7 +778,7 @@ public class AppDetailPage extends MonitorComponent {
     public int numberToAdd = 1;
 
     public WOComponent hostsPageClicked() {
-        return pageWithName("HostsPage");
+        return HostsPage.create(context());
     }
 
     public WOComponent addInstanceClicked() {
@@ -815,5 +815,9 @@ public class AppDetailPage extends MonitorComponent {
             handler().endReading();
         }
     }
+
+	public static AppDetailPage create(WOContext context) {
+		return (AppDetailPage) WOApplication.application().pageWithName(AppDetailPage.class.getName(), context);
+	}
 
 }

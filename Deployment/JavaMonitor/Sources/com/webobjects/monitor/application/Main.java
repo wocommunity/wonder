@@ -21,7 +21,7 @@ public class Main extends MonitorComponent {
     public String _password;
 
     public WOComponent appPageClicked() {
-        return pageWithName("ApplicationsPage");
+        return ApplicationsPage.create(context());
     }
 
     public Main(WOContext aWocontext) {
@@ -52,6 +52,6 @@ public class Main extends MonitorComponent {
             return pageWithName("Main");
         }
 
-        return pageWithName("ApplicationsPage");
+        return ApplicationsPage.create(context());
     }
 }

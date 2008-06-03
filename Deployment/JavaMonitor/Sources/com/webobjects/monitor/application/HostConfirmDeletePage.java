@@ -41,11 +41,11 @@ public class HostConfirmDeletePage extends MonitorComponent {
             handler().endWriting();
         }
 
-        return pageWithName("HostsPage");
+        return HostsPage.create(context());
     }
 
     public WOComponent cancelClicked() {
-        return pageWithName("HostsPage");
+        return HostsPage.create(context());
     }
 
 }

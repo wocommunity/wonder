@@ -12,6 +12,7 @@ package com.webobjects.monitor.application;
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
  SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -59,7 +60,7 @@ public class PathWizardPage1 extends MonitorComponent {
     }
 
     public WOComponent hostClicked() {
-        PathWizardPage2 aPage = (PathWizardPage2) pageWithName("PathWizardPage2");
+        PathWizardPage2 aPage = (PathWizardPage2) PathWizardPage2.create(context());
         aPage.setHost(aCurrentHost);
         aPage.setCallbackKeypath(callbackKeypath);
         aPage.setCallbackExpand(callbackExpand);
@@ -96,7 +97,7 @@ public class PathWizardPage1 extends MonitorComponent {
     }
 
     public WOComponent onlyHostClicked() {
-        PathWizardPage2 aPage = (PathWizardPage2) pageWithName("PathWizardPage2");
+        PathWizardPage2 aPage = (PathWizardPage2) PathWizardPage2.create(context());
         aPage.setHost((MHost) hostList().objectAtIndex(0));
         aPage.setCallbackKeypath(callbackKeypath);
         aPage.setCallbackExpand(callbackExpand);
@@ -104,5 +105,9 @@ public class PathWizardPage1 extends MonitorComponent {
         aPage.setShowFiles(showFiles);
         return aPage;
     }
+
+	public static PathWizardPage1 create(WOContext context) {
+		return (PathWizardPage1) WOApplication.application().pageWithName(PathWizardPage1.class.getName(), context);
+	}
 
 }

@@ -12,6 +12,7 @@ package com.webobjects.monitor.application;
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
  SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -36,18 +37,18 @@ public class InstConfigurePage extends MonitorComponent {
     }
 
     public WOComponent returnClicked() {
-        return pageWithName("AppDetailPage");
+        return AppDetailPage.create(context());
     }
 
     public WOComponent appConfigLinkClicked() {
-        AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
 
     /** ******** Startup Section ********* */
     private WOComponent _pathPickerWizardClicked(String callbackKeyPath) {
-        PathWizardPage1 aPage = (PathWizardPage1) pageWithName("PathWizardPage1");
+        PathWizardPage1 aPage = (PathWizardPage1) PathWizardPage1.create(context());
         aPage.setCallbackKeypath(callbackKeyPath);
         aPage.setCallbackPage(this);
         aPage.setShowFiles(true);
@@ -254,5 +255,9 @@ public class InstConfigurePage extends MonitorComponent {
         return myInstance().lifebeatInterval().toString();
     }
     /** ******* */
+
+	public static InstConfigurePage create(WOContext context) {
+		return (InstConfigurePage) WOApplication.application().pageWithName(InstConfigurePage.class.getName(), context);
+	}
 
 }

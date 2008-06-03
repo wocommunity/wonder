@@ -12,6 +12,7 @@ package com.webobjects.monitor.application;
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
  SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -50,11 +51,11 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     public WOComponent detailPageClicked() {
-        return pageWithName("AppDetailPage");
+        return AppDetailPage.create(context());
     }
 
     public WOComponent configurePageClicked() {
-        ConfigurePage aPage = (ConfigurePage) pageWithName("ConfigurePage");
+        ConfigurePage aPage = (ConfigurePage) ConfigurePage.create(context());
         return aPage;
     }
 
@@ -68,7 +69,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
@@ -116,7 +117,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
         aPage.isAppConfigureSectionVisible = true;
         return aPage;
     }
@@ -128,7 +129,7 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     private WOComponent _defaultPage() {
-        AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
@@ -313,7 +314,7 @@ public class AppConfigurePage extends MonitorComponent {
 
     /** ******** Path Wizard ******** */
     private WOComponent _pathPickerWizardClicked(String callbackKeyPath, boolean showFiles) {
-        PathWizardPage1 aPage = (PathWizardPage1) pageWithName("PathWizardPage1");
+        PathWizardPage1 aPage = (PathWizardPage1) PathWizardPage1.create(context());
         aPage.setCallbackKeypath(callbackKeyPath);
         aPage.setCallbackExpand("isNewInstanceSectionVisible");
         aPage.setCallbackPage(this);
@@ -365,7 +366,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
         aPage.isEmailSectionVisible = true;
         return aPage;
     }
@@ -431,7 +432,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
         aPage.isSchedulingSectionVisible = true;
         return aPage;
     }
@@ -499,10 +500,14 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
+        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context());
         aPage.isAdaptorSettingsSectionVisible = true;
         return aPage;
     }
     /** ******* */
+
+	public static AppConfigurePage create(WOContext context) {
+		return (AppConfigurePage) WOApplication.application().pageWithName(AppConfigurePage.class.getName(), context);
+	}
 
 }
