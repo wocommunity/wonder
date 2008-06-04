@@ -36,7 +36,7 @@ ApplicationNameTextField: WOTextField {
 }
 
 ApplicationsRepetition: WORepetition {
-    list = theApplication.siteConfig.applicationArray;
+    list = applications;
     item = currentApplication;
 }
 
