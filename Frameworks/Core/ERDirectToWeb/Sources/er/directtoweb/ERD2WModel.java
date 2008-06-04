@@ -25,7 +25,6 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver._private.WODeployedBundle;
 import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WFastModel;
@@ -690,8 +689,7 @@ public class ERD2WModel extends D2WModel {
         }
     }
 
-    private boolean _hasAddedExtraModelFile=false;
-    
+    //AK: this is probably never called in WO > 5.2
     public Vector modelFilesInBundles () {
     	Vector modelFiles = super.modelFilesInBundles();
     	if (!_hasAddedExtraModelFiles) {
