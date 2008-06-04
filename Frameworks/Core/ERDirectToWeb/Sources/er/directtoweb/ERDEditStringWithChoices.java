@@ -69,8 +69,11 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
                 String keyForAvailableObjects = key()+"Available";
                 entityForReportName = (String)valueForBinding("entityNameForReport");
                 _availableElements =
-                    ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(keyForAvailableObjects),
-                                                                  entityForReportName);
+                	ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(keyForAvailableObjects),
+                			entityForReportName);
+            }
+            if(_availableElements==null){
+            	_availableElements = NSArray.EmptyArray;
             }
             if(log.isDebugEnabled()) log.debug("availableElements = "+_availableElements);
         }
