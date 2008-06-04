@@ -437,11 +437,14 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     public static NSArray displayableArrayForKeyPathArray(NSArray array, String entityForReportName){
-        NSMutableArray result = new NSMutableArray();
-        for(Enumeration e = array.objectEnumerator(); e.hasMoreElements(); ){
-            String key = (String)e.nextElement();
-            result.addObject(new ERXKeyValuePair(key, ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName)));
-        }
-        return (NSArray)result;
+    	if(array == null) {
+    		return null;
+    	}
+    	NSMutableArray result = new NSMutableArray();
+    	for(Enumeration e = array.objectEnumerator(); e.hasMoreElements(); ){
+    		String key = (String)e.nextElement();
+    		result.addObject(new ERXKeyValuePair(key, ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName)));
+    	}
+    	return (NSArray)result;
     }
 }
