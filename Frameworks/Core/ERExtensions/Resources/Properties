@@ -42,8 +42,8 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 
 ## These should go away. It's special handling for Japanese, but would be
 ## better refactored into a general pluralizing strategy
-# er.extensions.ERXLocalizer.pluralFormClassName = er.extensions.ERXLocalizer
-# er.extensions.ERXLocalizer.nonPluralFormClassName = er.extensions.ERXNonPluralFormLocalizer
+# er.extensions.ERXLocalizer.pluralFormClassName = er.extensions.localization.ERXLocalizer
+# er.extensions.ERXLocalizer.nonPluralFormClassName = er.extensions.localization.ERXNonPluralFormLocalizer
 
 ## Components that use ERXToOne/ManyRelationship can have localized display keys
 ## This can be specified on a per-component basis in the bindings, 
@@ -129,7 +129,7 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 # er.extensions.ERXEntityClassDescription.isRapidTurnaroundEnabled
 
 ## Default class to use when "EOGenericRecord" is used in the model. 
-# er.extensions.ERXEntityClassDescription.defaultClassName = er.extensions.ERXGenericRecord
+# er.extensions.ERXEntityClassDescription.defaultClassName = er.extensions.eof.ERXGenericRecord
 ## AK: Beats me if I know why this is useful...
 # er.extensions.ERXEntityClassDescription.SomeEntityName.ClassName = Foo
 
@@ -181,8 +181,8 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 # Browser
 #########################################################################
 ## User-agent sniffing stuff
-# er.extensions.ERXBrowserFactory.FactoryClassName=er.extensions.ERXBrowserFactory
-# er.extensions.ERXBrowserFactory.BrowserClassName=er.extensions.ERXBasicBrowser
+# er.extensions.ERXBrowserFactory.FactoryClassName=er.extensions.appserver.ERXBrowserFactory
+# er.extensions.ERXBrowserFactory.BrowserClassName=er.extensions.appserver.ERXBasicBrowser
 
 #########################################################################
 # Direct Action 
@@ -195,11 +195,6 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 # er.extensions.ERXRemoteShellPassword = pw
 # er.extensions.ERXDatabaseConsolePassword = pw
 # er.extensions.ERXOpenEditingContextLockTracesPassword = pw
-#########################################################################
-# Log4j Configuration
-#########################################################################
-# Don't change this
-log4j.loggerFactory = er.extensions.ERXLogger$Factory
 
 #########################################################################
 # Signal Handling
@@ -238,7 +233,7 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 #########################################################################
 ## Class name to use instead of the JDBCAdaptor, the ERXJDBCAdaptor supports
 ## connection pooling
-# er.extensions.ERXJDBCAdaptor.className=er.extensions.ERXJDBCAdaptor
+# er.extensions.ERXJDBCAdaptor.className=er.extensions.jdbc.ERXJDBCAdaptor
 
 ## Makes the JDBCAdaptor use the connection broker, so that many
 ## OSCs use only a few DB channels.
@@ -279,7 +274,7 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 # ERXDatabaseContext
 #########################################################################
 ## Defines the DBC class
-# er.extensions.ERXDatabaseContext.className = er.extensions.ERXDatabaseContext
+# er.extensions.ERXDatabaseContext.className = er.extensions.eof.ERXDatabaseContext
 
 ## but only if it is activated or remote syncing is on
 # er.extensions.ERXDatabaseContext.activate = true

@@ -31,7 +31,6 @@ er.javamail.smtpUser=
 er.javamail.smtpPassword=
 
 # Log4j Configuration
-log4j.loggerFactory=er.extensions.ERXLogger$Factory
 
 # Set root category priority to DEBUG and its only appender to A1.
 log4j.rootCategory=DEBUG, A1
@@ -40,7 +39,7 @@ log4j.rootCategory=DEBUG, A1
 log4j.appender.A1=org.apache.log4j.ConsoleAppender
 
 # A1 uses PatternLayout.
-log4j.appender.A1.layout=er.extensions.ERXPatternLayout
+log4j.appender.A1.layout=er.extensions.logging.ERXPatternLayout
 log4j.appender.A1.layout.ConversionPattern=%d{MMM dd HH:mm:ss} %$[%#] (%F:%L) %-5p %c %x - %m%n
 # Note that (%F:%L) is fairly slow and shouldn't be used in performance intensive logging
 # The above pattern will produce logs that look like:

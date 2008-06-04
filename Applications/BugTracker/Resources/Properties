@@ -11,6 +11,6 @@ er.extensions.ERXLocalizer.availableLanguages=(English)
 er.extensions.ERXLocalizer.frameworkSearchPath=("app", "BTBusinessLogic", "ERExtras", "ERDirectToWeb", "ERExtensions")
 er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","ValidationTemplate.strings")
 
-er.extensions.ERXJDBCAdaptor.className=er.extensions.ERXJDBCAdaptor
+er.extensions.ERXJDBCAdaptor.className=er.extensions.jdbc.ERXJDBCAdaptor
 
 SeleniumTestsEnabled = true
