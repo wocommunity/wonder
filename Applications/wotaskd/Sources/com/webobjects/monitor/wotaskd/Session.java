@@ -12,9 +12,9 @@ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSE
 SUCH DAMAGE.
  */
 
-import com.webobjects.appserver.WOSession;
+import er.extensions.appserver.ERXSession;
 
-public class Session extends WOSession  {
+public class Session extends ERXSession  {
     /**
 	 * serialVersionUID
 	 */

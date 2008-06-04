@@ -16,3 +16,5 @@ WOLifebeatDestinationPort=1085
 WOLifebeatEnabled=true
 WOAllowsConcurrentRequestHandling=true
 WOAllowRapidTurnaround=false
+
+WODeploymentBackups=true

@@ -33,7 +33,7 @@ import com.webobjects.monitor._private.StatsUtilities;
 import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
 public class AppDetailPage extends MonitorComponent {
-
+	
     public AppDetailPage(WOContext aWocontext) {
         super(aWocontext);
         displayGroup = new WODisplayGroup();
@@ -772,14 +772,7 @@ public class AppDetailPage extends MonitorComponent {
 
         handler().startWriting();
         try {
-            NSMutableArray newInstanceArray = new NSMutableArray(numberToAdd);
-
-            for (int i = 0; i < numberToAdd; i++) {
-                Integer aUniqueID = myApplication().nextID();
-                MInstance newInstance = new MInstance(selectedHost, myApplication(), aUniqueID, siteConfig());
-                siteConfig().addInstance_M(newInstance);
-                newInstanceArray.addObject(newInstance);
-            }
+            NSMutableArray newInstanceArray = siteConfig().addInstances_M(selectedHost,  myApplication(), numberToAdd);
 
             if (allHosts().count() != 0) {
                 handler().sendAddInstancesToWotaskds(newInstanceArray, allHosts());
