@@ -19,6 +19,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver._private.WOProperties;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
@@ -805,12 +806,17 @@ public class AppDetailPage extends MonitorComponent {
 		page.setMyApplication(currentApplication);
         NSArray instancesArray = currentApplication.instanceArray();
         if (instancesArray == null) {
-            instancesArray = NSArray.EmptyArray;
+        	instancesArray = NSArray.EmptyArray;
         }
+        NSMutableArray<MInstance> result = new NSMutableArray<MInstance>();
+        result.addObjectsFromArray(currentApplication.instanceArray());
+        EOSortOrdering order= new EOSortOrdering("displayName", EOSortOrdering.CompareAscending);
+        EOSortOrdering.sortArrayUsingKeyOrderArray(result, new NSArray(order));
+        instancesArray = result;
         // AK: the MInstances don't really support equals()...
         if (!page.displayGroup.allObjects().equals(instancesArray)) {
         	page.displayGroup.setObjectArray(instancesArray);
-        }
+        } 
         page.displayGroup.setSelectedObjects(page.displayGroup.allObjects());
 		return page;
 	}
