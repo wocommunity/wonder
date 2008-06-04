@@ -13,7 +13,9 @@ package com.webobjects.monitor.application;
  SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.monitor._private.MSiteConfig;
 
 import er.extensions.appserver.ERXApplication;
@@ -37,6 +39,12 @@ public class Application extends ERXApplication {
         WOTaskdHandler.createSiteConfig();
     }
 
+    @Override
+    public NSMutableDictionary handleMalformedCookieString(RuntimeException arg0, String arg1, NSMutableDictionary arg2) {
+        NSLog.err.appendln("Malformed cookies: " + arg1);
+        return arg2 == null ? new NSMutableDictionary() : arg2;
+    }
+    
     public MSiteConfig _siteConfig() {
         return WOTaskdHandler.siteConfig();
     }
