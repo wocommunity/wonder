@@ -42,7 +42,9 @@ import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.MSiteConfig;
 import com.webobjects.monitor._private.String_Extensions;
 
-public class Application extends WOApplication  {
+import er.extensions.appserver.ERXApplication;
+
+public class Application extends ERXApplication  {
     private LocalMonitor _localMonitor;
     private MSiteConfig _siteConfig;
     private ListenThread listenThread;
@@ -65,7 +67,7 @@ public class Application extends WOApplication  {
 
 	
     static public void main(String argv[]) {
-        WOApplication.main(argv, Application.class);
+    	ERXApplication.main(argv, Application.class);
     }
 
     public String defaultRequestHandlerClassName() {
