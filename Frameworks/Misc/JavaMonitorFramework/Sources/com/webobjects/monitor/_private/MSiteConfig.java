@@ -17,6 +17,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Random;
 
@@ -169,6 +171,7 @@ public class MSiteConfig extends MObject {
         dataHasChanged();
     }
     public void addHost_M(MHost newHost) {
+    	backup("addHost-" + newHost.name());
         _addHost(newHost);
     }
     public void addHost_W(MHost newHost) {
@@ -183,6 +186,7 @@ public class MSiteConfig extends MObject {
         dataHasChanged();
     }
     public void removeHost_M(MHost aHost) {
+    	backup("removeHost-" + aHost.name());
         NSArray tempArray = new NSArray(aHost._instanceArray);
         for (int i=0; i<tempArray.count(); i++) {
             removeInstance_M( (MInstance) tempArray.objectAtIndex(i) );
@@ -202,6 +206,7 @@ public class MSiteConfig extends MObject {
         dataHasChanged();
     }
     public void addApplication_M(MApplication newApplication) {
+    	backup("addApplication-" + newApplication.name());
         _addApplication(newApplication);
     }
     public void addApplication_W(MApplication newApplication) {
@@ -213,6 +218,7 @@ public class MSiteConfig extends MObject {
         dataHasChanged();
     }
     public void removeApplication_M(MApplication anApplication) {
+    	backup("removeApplication-" + anApplication.name());
         NSArray tempArray = new NSArray(anApplication._instanceArray);
         for (int i=0; i<tempArray.count(); i++) {
             removeInstance_M( (MInstance) tempArray.objectAtIndex(i) );
@@ -234,6 +240,7 @@ public class MSiteConfig extends MObject {
         dataHasChanged();
     }
     public void addInstance_M(MInstance newInstance) {
+    	backup("addInstance-" + newInstance.displayName());
         _addInstance(newInstance);
     }
     public void addInstance_W(MInstance newInstance) {
@@ -246,6 +253,7 @@ public class MSiteConfig extends MObject {
         dataHasChanged();
     }
     public void removeInstance_M(MInstance anInstance) {
+    	backup("removeInstance-" + anInstance.displayName());
         _removeInstance(anInstance);
     }
     public void removeInstance_W(MInstance anInstance) {
@@ -517,6 +525,7 @@ public class MSiteConfig extends MObject {
                 NSLog._conditionallyLogPrivateException(e);
             }
         }
+        _lastConfig = generateSiteConfigXML();
     }
     
     public void  _initHostsWithArray(NSArray anArray) {
@@ -706,20 +715,23 @@ public class MSiteConfig extends MObject {
     }
 
     public void archiveSiteConfig() {
+        saveSiteConfig(fileForSiteConfig(), generateSiteConfigXML());
+    }
+
+    public void saveSiteConfig(File sc, String value) {
         try {
-            File sc = fileForSiteConfig();
             if ( sc.exists() && !sc.canWrite() ) {
-                NSLog.err.appendln("Don't have permission to write to file " + pathForSiteConfig() + " as this user, please change the permissions.");
+                NSLog.err.appendln("Don't have permission to write to file " + sc.getAbsolutePath() + " as this user, please change the permissions.");
                 String pre = WOApplication.application().name() + " - " + localHostName;
-                globalErrorDictionary.takeValueForKey(pre + " Don't have permission to write to file " + pathForSiteConfig() + " as this user, please change the permissions.", "archiveSiteConfig");
+                globalErrorDictionary.takeValueForKey(pre + " Don't have permission to write to file " + sc.getAbsolutePath() + " as this user, please change the permissions.", "archiveSiteConfig");
                 return;
             }
-            _NSStringUtilities.writeToFile(fileForSiteConfig(), generateSiteConfigXML());
+            _NSStringUtilities.writeToFile(sc, value);
             globalErrorDictionary.takeValueForKey(null, "archiveSiteConfig");
         } catch (NSForwardException ne) {
-            NSLog.err.appendln("Cannot write to file " + pathForSiteConfig() + ". Possible Permissions Problem.");
+            NSLog.err.appendln("Cannot write to file " + sc.getAbsolutePath() + ". Possible Permissions Problem.");
             String pre = WOApplication.application().name() + " - " + localHostName;
-            globalErrorDictionary.takeValueForKey(pre + " Cannot write to file " + pathForSiteConfig() + ". Possible Permissions Problem.", "archiveSiteConfig");
+            globalErrorDictionary.takeValueForKey(pre + " Cannot write to file " + sc.getAbsolutePath() + ". Possible Permissions Problem.", "archiveSiteConfig");
         }
     }
 
@@ -987,7 +999,19 @@ public class MSiteConfig extends MObject {
     public String generateSiteConfigXML() {
         return (new _JavaMonitorCoder()).encodeRootObjectForKey(dictionaryForArchive(), "SiteConfig");
     }
-    
+
+    private String _lastConfig;
+    public void backup(String action) {
+    	if(Boolean.getBoolean("WODeploymentBackups")) {
+    		String currentSiteConfig = generateSiteConfigXML();
+    		if(!_lastConfig.equals(generateSiteConfigXML())) {
+    			String date = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(new Date());
+    			saveSiteConfig(new File(fileForSiteConfig().getParentFile(), "SiteConfigBackup.xml." + date + "." + action), _lastConfig);
+    			_lastConfig = currentSiteConfig;
+    		}
+    	}
+    } 
+
     public NSDictionary dictionaryForArchive() {
         int hostArrayCount = _hostArray.count();
         int applicationArrayCount = _applicationArray.count();

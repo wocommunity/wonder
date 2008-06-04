@@ -58,6 +58,7 @@ public class StopAllConfirmPage extends MonitorComponent {
     }
 
 	public static StopAllConfirmPage create(WOContext context, MApplication application) {
+		assert application != null;
 		StopAllConfirmPage page = (StopAllConfirmPage) WOApplication.application().pageWithName(StopAllConfirmPage.class.getName(), context);
 		page.setMyApplication(application);
 		return page;
