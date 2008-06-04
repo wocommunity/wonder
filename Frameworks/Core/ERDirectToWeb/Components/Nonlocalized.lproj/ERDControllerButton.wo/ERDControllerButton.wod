@@ -47,7 +47,7 @@ FlyOverLabel: ERXWOTemplate {
 }
 
 ControllerImage: WOImage {
-	filename = "controller.gif";
+	filename = imageName;
 	framework = "ERDirectToWeb";
 }
 

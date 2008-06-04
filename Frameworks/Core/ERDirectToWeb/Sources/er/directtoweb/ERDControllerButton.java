@@ -134,12 +134,16 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
      * @return if the current delegate supports branch choices.
      */
     public boolean hasBranchChoices() {
-        return branchDelegate() != null;
+        return branchDelegate() != null && branchChoices().count() > 0;
     }
 
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         parent().validationFailedWithException(theException, theValue, theKeyPath);
         log.info("" + theException + theValue + theKeyPath);
+    }
+
+    public String imageName() {
+        return hasBranchChoices() ?  "controller.gif" : "controller_disabled.gif";
     }
 
 }
