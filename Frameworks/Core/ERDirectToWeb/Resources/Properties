@@ -12,7 +12,7 @@
 #########################################################################
 
 # ERD2WModel class
-# ERExtraD2WModelFile = 
+er.directtoweb.ERD2WModel.additionalModelNames = (d2wClient.d2wModel)
 # patch rules to allow for better formatting and correct evaluation
-# er.directoweb.ERXD2WModel.patchRules=true
+er.directoweb.ERXD2WModel.patchRules=true
 

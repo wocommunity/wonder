@@ -691,26 +691,21 @@ public class ERD2WModel extends D2WModel {
     }
 
     private boolean _hasAddedExtraModelFile=false;
-    public Vector modelFilesInBundles () {
-        Vector modelFiles = super.modelFilesInBundles();
-        if (!_hasAddedExtraModelFile) {
-            String extraModelFilePath = System.getProperty("ERExtraD2WModelFile");
-            // it appears super cache's the Vector, so only add the extraModelFile if we haven't already done it
-            if (extraModelFilePath != null) {
-                if (log.isDebugEnabled()) log.debug("ERExtraD2WModelFile = \"" + extraModelFilePath + "\"");
-                File extraModelFile = new java.io.File(extraModelFilePath);
-                if (extraModelFile.exists() && extraModelFile.isFile() && extraModelFile.canRead()) {
-                    extraModelFilePath = extraModelFile.getAbsolutePath();
-                    if (log.isDebugEnabled()) log.debug("ERExtraD2WModelFile (absolute) = \"" + extraModelFilePath + "\"");
-                    modelFiles.addElement(extraModelFile);
-                    _hasAddedExtraModelFile = true;
-                } else
-                    log.warn("Can't read the ERExtraD2WModelFile file.");
-            }
-        }
-        return modelFiles;
-    }
     
+    public Vector modelFilesInBundles () {
+    	Vector modelFiles = super.modelFilesInBundles();
+    	if (!_hasAddedExtraModelFiles) {
+    		NSArray<URL> additionalModelURLs = additionalModelURLs();
+    		for (URL url : additionalModelURLs) {
+    			modelFiles.add(url.getFile());
+    		}
+    		_hasAddedExtraModelFiles = true;
+    	}
+    	return modelFiles;
+    }
+
+    private boolean _hasAddedExtraModelFiles=false;
+
     /**
      * Overridden to support additional d2wmodel files. 
      * Provide an array of filenames (including extension) in the property 
@@ -721,29 +716,47 @@ public class ERD2WModel extends D2WModel {
 	public Vector modelFilesPathURLsInBundles() {
 		Vector modelFilePaths = super.modelFilesPathURLsInBundles();
 		if (!_hasAddedExtraModelFiles) {
-			if (log.isDebugEnabled()) log.debug("Adding addtitional rule files");
-			NSArray<String> modelNames = ERXProperties.arrayForKeyWithDefault("er.directtoweb.ERD2WModel.additionalModelNames", null);
-			NSMutableArray<NSBundle> bundles = NSBundle.frameworkBundles().mutableClone();
-			bundles.addObject(NSBundle.mainBundle());
-			if (modelFilePaths != null && modelNames != null && modelNames.count() > 0 && bundles != null && bundles.count() > 0) {
-				for (NSBundle bundle : bundles) {
-					String name = bundle.name();
-					if (name != null) {
-						for (String modelName : modelNames) {
-							URL path = WOApplication.application().resourceManager().pathURLForResourceNamed(modelName, name, null);
-							if (path != null) {
-								if (log.isDebugEnabled()) log.debug("Adding file '" + path + "' from framework '" + name + "'");
-								modelFilePaths.add(path);
-							}
-						}
-					}
-				}
-			}
+			NSArray additionalModelURLs = additionalModelURLs();
+			modelFilePaths.addAll(additionalModelURLs);
 			_hasAddedExtraModelFiles = true;
 		}
 		return modelFilePaths;
 	}
-	private boolean _hasAddedExtraModelFiles=false;
+
+	private NSArray<URL> additionalModelURLs() {
+		NSMutableArray<URL> result = new NSMutableArray();
+		if (log.isDebugEnabled()) log.debug("Adding additional rule files");
+		NSArray<String> modelNames = additionalModelNames();
+		NSMutableArray<NSBundle> bundles = NSBundle.frameworkBundles().mutableClone();
+		bundles.addObject(NSBundle.mainBundle());
+		if (modelNames.count() > 0 && bundles.count() > 0) {
+			for (NSBundle bundle : bundles) {
+				String name = bundle.name();
+				if (name != null) {
+					for (String modelName : modelNames) {
+						URL path = bundle.pathURLForResourcePath(modelName);
+						if (path != null) {
+							if (log.isDebugEnabled()) log.debug("Adding file '" + path + "' from framework '" + name + "'");
+							result.addObject(path);
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	private NSArray<String> additionalModelNames() {
+		NSArray<String> modelNames = ERXProperties.arrayForKeyWithDefault("er.directtoweb.ERD2WModel.additionalModelNames", NSArray.EmptyArray);
+		NSMutableArray<String> result = new NSMutableArray<String>();
+		result.addObjectsFromArray(modelNames);
+		String extraModelFilePath = System.getProperty("ERExtraD2WModelFile");
+		// it appears super cache's the Vector, so only add the extraModelFile if we haven't already done it
+		if (extraModelFilePath != null) {
+			result.addObject(extraModelFilePath);
+		}
+		return result;
+	}
     
     protected EOQualifier qualifierContainedInEnumeration(EOQualifierEvaluation q1, Enumeration e) {
         EOQualifier containedQualifier = null;
