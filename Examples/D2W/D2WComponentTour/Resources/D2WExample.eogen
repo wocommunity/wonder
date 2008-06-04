@@ -1,1 +1,0 @@
- -destination Sources -java -javaTemplate _WonderEntity.java -model Resources/D2WExample.eomodeld -packagedirs -subclassDestination Sources -subclassJavaTemplate WonderEntity.java -verbose
