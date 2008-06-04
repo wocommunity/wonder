@@ -1,5 +1,6 @@
 package er.extensions.crypting;
 
+import java.io.ByteArrayOutputStream;
 import java.security.Key;
 
 import javax.crypto.Cipher;
@@ -128,7 +129,7 @@ public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface 
 		if (length % 16 != 0) {
 			return null;
 		}
-		StringBuffer result = new StringBuffer();
+		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		byte[] clearText = null;
 		byte[] encryptedBytes = new byte[_blockSize];
 
@@ -150,7 +151,7 @@ public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface 
 				}
 				for (int k = 0; k < _blockSize; k++) {
 					if (clearText[k] != 0) {
-						result.append((char) clearText[k]);
+						result.write(clearText[k]);
 					}
 				}
 				i = 0;
@@ -168,10 +169,10 @@ public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface 
 				throw new NSForwardException(e);
 			}
 			for (int k = 0; k < _blockSize; k++) {
-				result.append((char) clearText[k]);
+				result.write(clearText[k]);
 			}
 		}
-		return result.toString();
+		return ERXStringUtilities.fromUTF8Bytes(result.toByteArray());
 	}
 
 	/**
@@ -189,17 +190,17 @@ public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface 
 	 */
 	public String encrypt(String clearText) {
 		if (clearText == null) {
-			return clearText;
+			return null;
 		}
+		byte clearTextBytes[] = ERXStringUtilities.toUTF8Bytes(clearText);
 		StringBuffer result = new StringBuffer();
-		int pos = 0, length = clearText.length();
+		int pos = 0, length = clearTextBytes.length;
 		byte[] bytesToEncrypt = new byte[_blockSize];
 		byte[] encryptedBytes = null;
 		while (pos < length) {
 			int k = 0;
 			for (int j = pos; j < length && j < pos + _blockSize; k++, j++) {
-				char c = clearText.charAt(j);
-				bytesToEncrypt[k] = (byte) c;
+				bytesToEncrypt[k] = clearTextBytes[j];
 			}
 			if (k < _blockSize) {
 				for (int l = k; l < _blockSize; l++) {
