@@ -1,5 +1,6 @@
 System/Library/Frameworks/JavaVM.framework
-Library/Java/Extensions/jmf.jar
+Library/Java/Extensions/postgresql-8.2-506.jdbc3.jar
+System/Library/Java/Extensions/AppleScriptEngine.jar
 System/Library/Java/Extensions/CoreAudio.jar
 System/Library/Java/Extensions/dns_sd.jar
 System/Library/Java/Extensions/j3daudio.jar
