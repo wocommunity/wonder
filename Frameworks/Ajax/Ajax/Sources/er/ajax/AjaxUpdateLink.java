@@ -235,7 +235,10 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	public static String fullEffectName(String effectName) {
 		String fullEffectName;
-		if (effectName.indexOf('.') == -1) {
+		if (effectName == null) {
+			fullEffectName = null;
+		}
+		else if (effectName.indexOf('.') == -1) {
 			fullEffectName = "Effect." + ERXStringUtilities.capitalize(effectName);
 		}
 		else {
