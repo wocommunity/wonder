@@ -44,6 +44,8 @@ import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSThreadsafeMutableArray;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 
+import er.extensions.foundation.ERXCompressionUtilities;
+
 
 public class MSiteConfig extends MObject {
     /*
@@ -189,7 +191,7 @@ public class MSiteConfig extends MObject {
     	backup("removeHost-" + aHost.name());
         NSArray tempArray = new NSArray(aHost._instanceArray);
         for (int i=0; i<tempArray.count(); i++) {
-            removeInstance_M( (MInstance) tempArray.objectAtIndex(i) );
+            removeInstance_M( (MInstance) tempArray.objectAtIndex(i), false);
         }
         _removeHost(aHost);
     }
@@ -221,7 +223,7 @@ public class MSiteConfig extends MObject {
     	backup("removeApplication-" + anApplication.name());
         NSArray tempArray = new NSArray(anApplication._instanceArray);
         for (int i=0; i<tempArray.count(); i++) {
-            removeInstance_M( (MInstance) tempArray.objectAtIndex(i) );
+            removeInstance_M( (MInstance) tempArray.objectAtIndex(i), false);
         }
         _removeApplication(anApplication);
     }
@@ -239,9 +241,20 @@ public class MSiteConfig extends MObject {
         newInstance._application._addInstancePrimitive(newInstance);
         dataHasChanged();
     }
+    public NSMutableArray<MInstance> addInstances_M(MHost selectedHost, MApplication myApplication, int numberToAdd) {
+		backup("addInstances-" + myApplication.name() + "-" + selectedHost.name() + "-" + numberToAdd);
+    	NSMutableArray newInstanceArray = new NSMutableArray(numberToAdd);
+
+        for (int i = 0; i < numberToAdd; i++) {
+            Integer aUniqueID = myApplication.nextID();
+            MInstance newInstance = new MInstance(selectedHost, myApplication, aUniqueID, this);
+			addInstance_M(newInstance);
+            newInstanceArray.addObject(newInstance);
+        }
+        return newInstanceArray;
+    }
     public void addInstance_M(MInstance newInstance) {
-    	backup("addInstance-" + newInstance.displayName());
-        _addInstance(newInstance);
+    	_addInstance(newInstance);
     }
     public void addInstance_W(MInstance newInstance) {
         _addInstance(newInstance);
@@ -253,7 +266,12 @@ public class MSiteConfig extends MObject {
         dataHasChanged();
     }
     public void removeInstance_M(MInstance anInstance) {
-    	backup("removeInstance-" + anInstance.displayName());
+    	removeInstance_M(anInstance, true);
+    }
+    private void removeInstance_M(MInstance anInstance, boolean doBackup) {
+    	if(doBackup) {
+    		backup("removeInstance-" + anInstance.displayName());
+    	}
         _removeInstance(anInstance);
     }
     public void removeInstance_W(MInstance anInstance) {
@@ -715,16 +733,20 @@ public class MSiteConfig extends MObject {
     }
 
     public void archiveSiteConfig() {
-        saveSiteConfig(fileForSiteConfig(), generateSiteConfigXML());
+        saveSiteConfig(fileForSiteConfig(), generateSiteConfigXML(), false);
     }
 
-    public void saveSiteConfig(File sc, String value) {
+    public void saveSiteConfig(File sc, String value, boolean compress) {
         try {
             if ( sc.exists() && !sc.canWrite() ) {
                 NSLog.err.appendln("Don't have permission to write to file " + sc.getAbsolutePath() + " as this user, please change the permissions.");
                 String pre = WOApplication.application().name() + " - " + localHostName;
                 globalErrorDictionary.takeValueForKey(pre + " Don't have permission to write to file " + sc.getAbsolutePath() + " as this user, please change the permissions.", "archiveSiteConfig");
                 return;
+            }
+            if(compress) {
+            	value = ERXCompressionUtilities.gzipString(value);
+            	sc = new File(sc.getParentFile(), sc.getName() + ".gz");
             }
             _NSStringUtilities.writeToFile(sc, value);
             globalErrorDictionary.takeValueForKey(null, "archiveSiteConfig");
@@ -1006,7 +1028,7 @@ public class MSiteConfig extends MObject {
     		String currentSiteConfig = generateSiteConfigXML();
     		if(!_lastConfig.equals(generateSiteConfigXML())) {
     			String date = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(new Date());
-    			saveSiteConfig(new File(fileForSiteConfig().getParentFile(), "SiteConfigBackup.xml." + date + "." + action), _lastConfig);
+    			saveSiteConfig(new File(fileForSiteConfig().getParentFile(), "SiteConfigBackup.xml." + date + "." + action), _lastConfig, true);
     			_lastConfig = currentSiteConfig;
     		}
     	}

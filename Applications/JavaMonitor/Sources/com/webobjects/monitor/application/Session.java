@@ -14,7 +14,6 @@ package com.webobjects.monitor.application;
  */
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
@@ -24,7 +23,9 @@ import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 import com.webobjects.monitor._private.MSiteConfig;
 import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
-public class Session extends WOSession implements ErrorCollector {
+import er.extensions.appserver.ERXSession;
+
+public class Session extends ERXSession implements ErrorCollector {
     private static final long serialVersionUID = 8067267944038698356L;
 
     public boolean _isLoggedIn;

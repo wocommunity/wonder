@@ -13,10 +13,22 @@ SUCH DAMAGE.
  */
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
+import javax.management.remote.JMXConnectorServer;
+import javax.management.remote.JMXConnectorServerFactory;
+import javax.management.remote.JMXServiceURL;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
@@ -29,12 +41,6 @@ import com.webobjects.foundation._NSCollectionReaderWriterLock;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.MSiteConfig;
 import com.webobjects.monitor._private.String_Extensions;
-
-//JMX Support
-import java.lang.management.ManagementFactory;
-import javax.management.*;
-import javax.management.remote.*;
-import java.util.HashMap;
 
 public class Application extends WOApplication  {
     private LocalMonitor _localMonitor;
