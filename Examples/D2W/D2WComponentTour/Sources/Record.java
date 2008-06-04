@@ -1,6 +1,12 @@
+import er.extensions.eof.ERXGenericRecord;
 
 
-public class Record extends _Record {
+/**
+ * This class in intentionally not generated.
+ * @author ak
+ *
+ */
+public class Record extends ERXGenericRecord {
 	
 	public String toString() {
 		return entityName() + ": " + System.identityHashCode(this);
