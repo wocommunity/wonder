@@ -36,11 +36,15 @@ import er.extensions.eof.ERXEOControlUtilities;
  * @binding style the CSS style of the generated container
  * @binding onMouseOver string with javascript to execute 
  * @binding onMouseOut string with javascript to execute
- * @binding duration passed through to Effect.Xxx in the options map
+ * @binding duration the duration of the highlight effect (in seconds)
  * @binding hidden if true, when the value is highlighted, the element will be display: none
  * @binding newHidden if true, when the value is highlighted, the element will be display: none for new objects
  * @binding updateHidden if true, when the value is highlighted, the element will be display: none for updated objects
  * @binding delay if set, the delay that is applied before the effect is executed
+ * @binding showEffect if set, the highlighed elemented with have this effect applied prior to the highlight (i.e. "Appear")
+ * @binding showDuration the duration of the show effect (in seconds)
+ * @binding hideEffect if set, the highlighed elemented with have this effect applied after the highlight (i.e. "Fade")
+ * @binding hideDuration the duration of the hide effect (in seconds)
  * 
  * @author mschrag
  */
@@ -60,6 +64,11 @@ public class AjaxHighlight extends WODynamicGroup {
 	private WOAssociation _newHidden;
 	private WOAssociation _updateHidden;
 	private WOAssociation _delay;
+	private WOAssociation _showEffect;
+	private WOAssociation _showDuration;
+	private WOAssociation _hideDelay;
+	private WOAssociation _hideEffect;
+	private WOAssociation _hideDuration;
 
 	public AjaxHighlight(String name, NSDictionary associations, WOElement template) {
 		super(name, associations, template);
@@ -80,11 +89,17 @@ public class AjaxHighlight extends WODynamicGroup {
 		_newHidden = (WOAssociation) associations.valueForKey("newHidden");
 		_updateHidden = (WOAssociation) associations.valueForKey("updateHidden");
 		_delay = (WOAssociation) associations.valueForKey("delay");
+		_showEffect = (WOAssociation) associations.valueForKey("showEffect");
+		_showDuration = (WOAssociation) associations.valueForKey("showDuration");
+		_hideDelay = (WOAssociation) associations.valueForKey("hideDelay");
+		_hideDuration = (WOAssociation) associations.valueForKey("hideDuration");
+		_hideEffect = (WOAssociation) associations.valueForKey("hideEffect");
 	}
-
+	
 	public void appendToResponse(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
 		AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
+		AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
 		WOComponent component = context.component();
 		boolean generateContainer = (_id == null || _elementName != null);
 		String elementName;
@@ -161,32 +176,26 @@ public class AjaxHighlight extends WODynamicGroup {
 			}
 			if (!"none".equalsIgnoreCase(effect)) {
 				AjaxUtils.appendScriptHeader(response);
-				response.appendContentString("new ");
-				response.appendContentString(AjaxUpdateLink.fullEffectName(effect));
-				response.appendContentString("('");
-				response.appendContentString(id);
-				response.appendContentString("',");
-	
-				response.appendContentString("{ queue: 'end'");
 				
+				Object duration = null;
 				if (metadata.isNew() && _newDuration != null) {
-					response.appendContentString(", duration: ");
-					response.appendContentString((String)_newDuration.valueInComponent(component));
+					duration = _newDuration.valueInComponent(component);
 				}
 				else if (!metadata.isNew() && _updateDuration != null) {
-					response.appendContentString(", duration: ");
-					response.appendContentString((String)_updateDuration.valueInComponent(component));
+					duration = _updateDuration.valueInComponent(component);
 				}
 				else if (_duration != null) {
-					response.appendContentString(", duration: ");
-					response.appendContentString((String)_duration.valueInComponent(component));
-					
+					duration = _duration.valueInComponent(component);
 				}
-				if (_delay != null) {
-					response.appendContentString(", delay: ");
-					response.appendContentString((String) _delay.valueInComponent(component));
-				}
-				response.appendContentString("});");
+				
+				Object delay = _delay == null ? null : _delay.valueInComponent(component);
+				String effectName = AjaxUpdateLink.fullEffectName(effect);
+				Object showDuration = _showDuration == null ? null : _showDuration.valueInComponent(component);
+				String showEffectName = _showEffect == null ? null : AjaxUpdateLink.fullEffectName((String)_showEffect.valueInComponent(component));
+				Object hideDelay = (_hideDelay == null) ? null : _hideDelay.valueInComponent(component);
+				Object hideDuration = _hideDuration == null ? null : _hideDuration.valueInComponent(component);
+				String hideEffectName = _hideEffect == null ? null : AjaxUpdateLink.fullEffectName((String)_hideEffect.valueInComponent(component));
+				response.appendContentString("AH.highlight(" + AjaxUtils.quote(id) + "," + delay + "," + AjaxUtils.quote(showEffectName) + "," + showDuration + "," + AjaxUtils.quote(effectName) + "," + duration + "," + hideDelay + "," + AjaxUtils.quote(hideEffectName) + "," + hideDuration + ");");
 	
 				AjaxUtils.appendScriptFooter(response);
 			}
