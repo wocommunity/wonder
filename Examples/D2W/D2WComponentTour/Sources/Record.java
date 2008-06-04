@@ -15,4 +15,10 @@ public class Record extends ERXGenericRecord {
 	public String userPresentableDescription() {
 		return toString();
 	}
+	
+	@Override
+	public Object handleQueryWithUnboundKey(String key) {
+		 log.info("unbound: " + key);
+		 return null;
+	}
 }
