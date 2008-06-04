@@ -4,13 +4,13 @@
 <stringAttribute key="WOJavaLocalApplicationLaunchConfigurationDelegate.OpenInBrowser" value="false"/>
 <stringAttribute key="WOJavaLocalApplicationLaunchConfigurationDelegate.WebServerConnect" value="false"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/ERExtensions/Sources/er/extensions/ERXMainRunner.java"/>
+<listEntry value="/ERExtensions/Sources/er/extensions/appserver/ERXMainRunner.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.objectstyle.wolips.launching.WORuntimeClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="er.extensions.ERXMainRunner"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="er.extensions.appserver.ERXMainRunner"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-WOPort -1&#13; -mainClass BTBusinessLogic$DataCreator&#13;-Duser.name=Derby"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="BugTracker"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx768m"/>
