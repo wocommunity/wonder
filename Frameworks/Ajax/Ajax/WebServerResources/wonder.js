@@ -592,6 +592,52 @@ Object.extend(AjaxDroppable, {
 });
 var ADP = AjaxDroppable;
 
+var AjaxHighlight = {
+	highlight: function(id, delay, showEffectName, showDuration, effectName, duration, hideDelay, hideEffectName, hideDuration) {
+		if (showEffectName) {
+			var showOptions = {};
+			showOptions.queue = 'end';
+			if (showDuration) {
+				showOptions.duration = showDuration;
+			}
+			if (delay) {
+				showOptions.delay = delay; 
+			}
+
+			// MS: gotta be a better way		
+			eval('new ' + showEffectName + '(id, showOptions)');
+		}
+		
+		var options = {};
+		options.queue = 'end';
+		if (duration) {
+			options.duration = duration;
+		}
+		if (delay && !showEffectName) {
+			options.delay = delay;
+		}
+
+		// MS: gotta be a better way		
+		eval('new ' + effectName + '(id, options)');
+
+		if (hideEffectName) {
+			var hideOptions = {};
+			hideOptions.queue = 'end';
+			if (hideDuration) {
+				hideOptions.duration = hideDuration;
+			}
+			if (hideDelay) {
+				hideOptions.delay = hideDelay;
+			}
+
+			// MS: gotta be a better way		
+			eval('new ' + hideEffectName + '(id, hideOptions)');
+		}
+		
+	}
+};
+var AH = AjaxHighlight;
+
 var AjaxPeriodicUpdater = Class.create();
 AjaxPeriodicUpdater.prototype = {
 	initialize: function(id) {
