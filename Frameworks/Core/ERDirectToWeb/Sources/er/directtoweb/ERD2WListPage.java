@@ -477,7 +477,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 			// the current index if out of range
 			log.debug("dg.currentBatchIndex() " + dg.currentBatchIndex());
 			dg.setCurrentBatchIndex(dg.currentBatchIndex());
-			if (listSize() > 0) {
+			if (listSize() > 0 && displayGroup().selectsFirstObjectAfterFetch()) {
 				d2wContext().takeValueForKey(dg.allObjects().objectAtIndex(0), "object");
 			}
 		}
