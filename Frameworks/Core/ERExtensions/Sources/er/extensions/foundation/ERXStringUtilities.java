@@ -1087,15 +1087,7 @@ public class ERXStringUtilities {
         }
         
         if ( inputString != null ) {
-            final byte[] bytes;
-            
-            try {
-                bytes = inputString.getBytes(encoding);
-            }
-            catch ( UnsupportedEncodingException e ) {
-                // this is bad, throw a runtime exception
-                throw new RuntimeException("Caught " + e.getClass() + " exception.  Encoding: '" + encoding + "'.  Reason: " + e.getMessage(), e);
-            }
+            final byte[] bytes = toBytes(inputString, encoding);
             
             if ( bytes != null ) {
                 if ( bytes.length > byteLength ) {
@@ -1778,7 +1770,64 @@ public class ERXStringUtilities {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
     }
-    
+
+    /**
+     * Utility to convert to UTF-8 bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
+     * @param string string to convert
+     * @param encoding
+     * @return
+     */
+    public static byte[] toUTF8Bytes(String string) {
+    	return toBytes(string, "UTF-8");
+    }
+
+    /**
+     * Utility to convert to bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
+     * @param string string to convert
+     * @param encoding
+     * @return
+     */
+    public static byte[] toBytes(String string, String encoding) {
+    	if(string == null) {
+    		return null;
+    	}
+    	try {
+			return string.getBytes(encoding);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+    }
+
+
+    /**
+     * Utility to convert from UTF-8 bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
+     * @param string string to convert
+     * @param encoding
+     * @return
+     */
+    public static String fromUTF8Bytes(byte bytes[]) {
+    	return fromBytes(bytes, "UTF-8");
+    }
+
+    /**
+     * Utility to convert from bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
+     * @param string string to convert
+     * @param encoding
+     * @return
+     */
+    public static String fromBytes(byte bytes[], String encoding) {
+    	if(bytes == null) {
+    		return null;
+    	}
+    	try {
+			return new String(bytes, encoding);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+    }
+
     /**
      * Pads a string to the specified number of chars by adding the the given pad char on the right side.  If the
      * string is longer than paddedLength, it is returned unchanged.
