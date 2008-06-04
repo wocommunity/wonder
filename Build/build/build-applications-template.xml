@@ -1,4 +1,6 @@
 <project name="FrameworkBuild" default="all" basedir=".">
+    <xmlproperty file=".project"/>
+    <property name="project.name" value="${projectDescription.name}" />
     <property file="build.properties" />
 
     <target name="clean">
