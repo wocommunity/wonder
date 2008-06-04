@@ -16,10 +16,12 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.monitor._private.MSiteConfig;
 
-public class Application extends WOApplication {
+import er.extensions.appserver.ERXApplication;
+
+public class Application extends ERXApplication {
 
     static public void main(String argv[]) {
-        WOApplication.main(argv, Application.class);
+    	ERXApplication.main(argv, Application.class);
     }
 
     public Application() {

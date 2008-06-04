@@ -14,6 +14,8 @@ package com.webobjects.monitor.application;
  */
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -27,6 +29,8 @@ import com.webobjects.monitor._private.MSiteConfig;
 
 public class MonitorComponent extends WOComponent {
 
+	protected Logger log = Logger.getLogger(getClass());
+	
     private static final long serialVersionUID = -1880897151494772932L;
 
     public final int APP_PAGE = 0;

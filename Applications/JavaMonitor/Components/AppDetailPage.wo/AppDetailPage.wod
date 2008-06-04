@@ -393,7 +393,6 @@ SelectOneForm : WOForm {
 
 IsSelected : WOCheckBox {
 	checked = isSelectedInstance;
-	onchange = "this.form.submit()";
 }
 
 SelectNotRunning : WOHyperlink {
@@ -420,4 +419,8 @@ BounceLink : WOHyperlink {
 }
 Bouncer : WOString {
   value = currentBouncer;
+}
+
+Observer : AjaxObserveField {
+	action = selectOne;
 }
