@@ -42,12 +42,14 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
-		if (isTolerant(context.component())) {
+		WOComponent component = context.component();
+		if (isTolerant(component)) {
 			try {
 				super.appendToResponse(response, context);
 			}
 			catch (Throwable ex) {
 				response.appendContentString(ex.toString());
+				context._setCurrentComponent(component);
 				log.error(ex, ex);
 			}
 		}
@@ -57,11 +59,13 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 	}
 
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		if (isTolerant(context.component())) {
+		WOComponent component = context.component();
+		if (isTolerant(component)) {
 			try {
 				return super.invokeAction(request, context);
 			}
 			catch (Throwable ex) {
+				context._setCurrentComponent(component);
 				log.error(ex, ex);
 			}
 			return null;
@@ -70,11 +74,13 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 	}
 
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		if (isTolerant(context.component())) {
+		WOComponent component = context.component();
+		if (isTolerant(component)) {
 			try {
 				super.takeValuesFromRequest(request, context);
 			}
 			catch (Throwable ex) {
+				context._setCurrentComponent(component);
 				log.error(ex, ex);
 			}
 		}
