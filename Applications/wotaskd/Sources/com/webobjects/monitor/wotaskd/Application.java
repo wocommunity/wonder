@@ -357,7 +357,7 @@ public class Application extends ERXApplication  {
             anHTTPVersion = MObject._HTTP1;
             aURL = aURL.substring(0, (aURL.length() - MObject._HTTP1.length() - 1) );
         }
-        return super.createRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
+        return super._createRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
     }
 
     // overridden dispatch of requests, for faster lifebeat checking
