@@ -44,7 +44,7 @@ public class ERXRuntimeUtilities {
      * Hack to create a bundle after the app is loaded. Useful for the insistence of EOF on JavaXXXAdaptor bundles. 
      * @param name
      */
-    public static NSBundle createBundleOfNeeded(String name) {
+    public static NSBundle createBundleIfNeeded(String name) {
     	String path = "/tmp/" + name + ".framework/Resources/Java";
     	new File(path).mkdirs();
     	try {
