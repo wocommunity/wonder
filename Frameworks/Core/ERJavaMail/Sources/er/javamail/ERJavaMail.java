@@ -81,17 +81,6 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 */
 	@Override
 	public void finishInitialization() {
-		String patternString = ERXProperties.stringForKey("er.javamail.emailPattern");
-		if(patternString == null || patternString.trim().length() == 0) {
-			patternString = EMAIL_VALIDATION_PATTERN;
-		}
-
-		try {
-			_pattern = Pattern.compile(patternString);
-		}
-		catch (PatternSyntaxException e) {
-			throw new RuntimeException("The compilation of the email pattern '" + patternString + "' failed.", e);
-		}
 		initializeFrameworkFromSystemProperties();
 	}
 
@@ -442,8 +431,22 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * @return a <code>boolean</code> value
 	 */
 	public synchronized boolean isValidEmail(String email) {
-		if (email != null)
+		if (_pattern == null) {
+			String patternString = ERXProperties.stringForKey("er.javamail.emailPattern");
+			if(patternString == null || patternString.trim().length() == 0) {
+				patternString = EMAIL_VALIDATION_PATTERN;
+			}
+
+			try {
+				_pattern = Pattern.compile(patternString);
+			}
+			catch (PatternSyntaxException e) {
+				throw new RuntimeException("The compilation of the email pattern '" + patternString + "' failed.", e);
+			}
+		}
+		if (email != null) {
 			return _pattern.matcher(email).matches();
+		}
 		return false;
 	}
 
