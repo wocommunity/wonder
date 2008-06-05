@@ -54,7 +54,10 @@ public class AjaxPing extends WOComponent {
 	 */
 	public String id() {
 		if (_id == null) {
-			_id = ERXWOContext.safeIdentifierName(context(), true);
+			_id = (String)valueForBinding("id");
+			if (_id == null) {
+				_id = ERXWOContext.safeIdentifierName(context(), true);
+			}
 		}
 		return _id;
 	}
