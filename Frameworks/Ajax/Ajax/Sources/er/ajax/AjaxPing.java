@@ -20,6 +20,7 @@ import er.extensions.appserver.ERXWOContext;
  * @binding cacheKey some hash value that represents the state of the target container
  * @binding onBeforeUpdate (optional) the javascript function to call before updating (should return true if the update
  *          should happen, false if not)
+ * @binding id (optional) the id of the ping update container (set this if you want to attach an AjaxBusyIndicator)
  * 
  * @author mschrag
  */
