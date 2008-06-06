@@ -6,6 +6,8 @@ import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 
 import er.directtoweb.*;
+import er.directtoweb.components.buttons.ERDActionButton;
+import er.directtoweb.interfaces.ERDListPageInterface;
 import er.extensions.*;
 import er.extensions.eof.ERXEOControlUtilities;
 

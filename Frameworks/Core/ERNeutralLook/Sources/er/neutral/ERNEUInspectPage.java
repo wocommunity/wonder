@@ -10,7 +10,7 @@ package er.neutral;
 
 import com.webobjects.appserver.WOContext;
 
-import er.directtoweb.ERD2WInspectPage;
+import er.directtoweb.pages.ERD2WInspectPage;
 
 public class ERNEUInspectPage extends ERD2WInspectPage {
 

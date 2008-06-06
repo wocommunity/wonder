@@ -35,6 +35,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
+import er.directtoweb.interfaces.ERDErrorPageInterface;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXStringUtilities;

@@ -12,7 +12,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.directtoweb.ERDPickPageInterface;
+import er.directtoweb.interfaces.ERDPickPageInterface;
 
 // This is needed because pageFinalized is a protected method.
 public class ERD2WUtilities {

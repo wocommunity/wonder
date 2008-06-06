@@ -5,7 +5,7 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.foundation.NSArray;
 
 import er.bugtracker.Session;
-import er.directtoweb.ERDBranchDelegate;
+import er.directtoweb.delegates.ERDBranchDelegate;
 
 public class ListPageDelegate extends ERDBranchDelegate {
 

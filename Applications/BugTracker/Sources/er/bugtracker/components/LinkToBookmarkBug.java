@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSDictionary;
 
 import er.bugtracker.Bug;
-import er.directtoweb.ERDCustomEditComponent;
+import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.appserver.ERXWOContext;
 
 public class LinkToBookmarkBug extends ERDCustomEditComponent {

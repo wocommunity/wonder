@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.directtoweb.ERD2WPage;
+import er.directtoweb.pages.ERD2WPage;
 import er.extensions.foundation.ERXFileUtilities;
 import er.grouping.DRReportModel;
 

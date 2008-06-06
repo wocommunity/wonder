@@ -5,9 +5,9 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eocontrol.EODataSource;
 
-import er.directtoweb.ERD2WListPage;
-import er.directtoweb.ERD2WPage;
-import er.directtoweb.ERDCustomComponent;
+import er.directtoweb.components.ERDCustomComponent;
+import er.directtoweb.pages.ERD2WListPage;
+import er.directtoweb.pages.ERD2WPage;
 
 /**
  * Simple display of some info on the top of the page.

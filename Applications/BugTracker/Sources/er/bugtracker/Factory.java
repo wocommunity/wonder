@@ -25,9 +25,9 @@ import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.bugtracker.pages.ReportPage;
 import er.directtoweb.ERD2WFactory;
-import er.directtoweb.ERD2WInspectPage;
-import er.directtoweb.ERD2WQueryPage;
-import er.directtoweb.ERDQueryPageInterface;
+import er.directtoweb.interfaces.ERDQueryPageInterface;
+import er.directtoweb.pages.ERD2WInspectPage;
+import er.directtoweb.pages.ERD2WQueryPage;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.navigation.ERXNavigationManager;
 import er.extensions.eof.EOEnterpriseObjectClazz;

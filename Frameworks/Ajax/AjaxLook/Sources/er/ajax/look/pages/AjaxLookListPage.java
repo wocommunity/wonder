@@ -4,7 +4,7 @@ package er.ajax.look.pages;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
-import er.directtoweb.ERD2WListPage;
+import er.directtoweb.pages.ERD2WListPage;
 import er.yui.YUIUtils;
 
 public class AjaxLookListPage extends ERD2WListPage {

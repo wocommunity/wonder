@@ -142,7 +142,9 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
             EOEnterpriseObject pref = preferenceRecordForKey(key, ec);
             if (pref != null) {
                 String encodedValue = (String)pref.valueForKey("value");
-                result = decodedValue(encodedValue);
+                if(encodedValue !=null) {
+                    result = decodedValue(encodedValue);
+                }
             }
         } catch(RuntimeException ex) {
         	log.error("Error while getting preference " + key +  ": " + ex);

@@ -8,7 +8,7 @@ import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.directtoweb.ERDCustomComponent;
+import er.directtoweb.components.ERDCustomComponent;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXThreadStorage;
