@@ -46,6 +46,9 @@ import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestampFormatter;
 
+import er.directtoweb.interfaces.ERDErrorPageInterface;
+import er.directtoweb.pages.ERD2WEditableListPage;
+import er.directtoweb.pages.ERD2WQueryPage;
 import er.extensions.appserver.ERXDirectAction;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;

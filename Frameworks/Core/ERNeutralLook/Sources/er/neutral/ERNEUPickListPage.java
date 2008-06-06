@@ -8,7 +8,7 @@ package er.neutral;
 
 import com.webobjects.appserver.WOContext;
 
-import er.directtoweb.ERD2WPickListPage;
+import er.directtoweb.pages.ERD2WPickListPage;
 
 public class ERNEUPickListPage extends ERD2WPickListPage {
 

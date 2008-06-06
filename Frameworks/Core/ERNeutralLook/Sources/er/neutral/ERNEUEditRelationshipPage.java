@@ -8,7 +8,7 @@ package er.neutral;
 
 import com.webobjects.appserver.WOContext;
 
-import er.directtoweb.ERD2WEditRelationshipPage;
+import er.directtoweb.pages.ERD2WEditRelationshipPage;
 
 public class ERNEUEditRelationshipPage extends ERD2WEditRelationshipPage {
 

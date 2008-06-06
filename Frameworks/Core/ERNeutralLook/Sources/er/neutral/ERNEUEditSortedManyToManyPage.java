@@ -9,7 +9,7 @@ package er.neutral;
 
 import com.webobjects.appserver.WOContext;
 
-import er.directtoweb.ERD2WEditSortedManyToManyPage;
+import er.directtoweb.pages.ERD2WEditSortedManyToManyPage;
 
 public class ERNEUEditSortedManyToManyPage extends ERD2WEditSortedManyToManyPage {
 

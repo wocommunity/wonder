@@ -24,6 +24,7 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
@@ -38,6 +39,7 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXKeyValuePair;
+import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
@@ -71,6 +73,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     public void finishInitialization() {
+        fixClasses();
         ERD2WModel model=ERD2WModel.erDefaultModel();        // force initialization
     	// NOTE: doing Class.ERD2WModel doesn't seem enough
     	// to guarantee fire of ERD2WModel's static initializer
@@ -93,6 +96,25 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     					null);
     }
 
+    
+    private void fixClasses(String oldName, String newName) {
+        NSArray<String> names =  NSBundle.bundleForClass(getClass()).bundleClassNames();
+        for (String name : names) {
+            if(name.startsWith(newName)) {
+                Class clazz = ERXPatcher.classForName(name);
+                name = name.replaceFirst(newName + "(\\.[a-z]+)?", oldName);
+                ERXPatcher.setClassForName(clazz, name);
+            }
+        }
+    } 
+
+
+    private void fixClasses() {
+        fixClasses("er.directtoweb", "er.directtoweb.assignments");
+        fixClasses("er.directtoweb", "er.directtoweb.assignments.delayed");
+        fixClasses("er.directtoweb", "er.directtoweb.assignments.defaults");
+    } 
+    
     public void resetModel(NSNotification n) {
     	ERD2WModel.erDefaultModel().resetModel();
     }

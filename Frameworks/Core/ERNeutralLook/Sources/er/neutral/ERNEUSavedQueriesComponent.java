@@ -6,11 +6,11 @@ import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WModel;
 import com.webobjects.foundation.NSMutableArray;
-import er.directtoweb.ERDSavedQueriesComponent;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import er.extensions.foundation.*;
-import er.directtoweb.ERD2WQueryPage;
+import er.directtoweb.components.misc.ERDSavedQueriesComponent;
+import er.directtoweb.pages.ERD2WQueryPage;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.logging.ERXLogger;
 

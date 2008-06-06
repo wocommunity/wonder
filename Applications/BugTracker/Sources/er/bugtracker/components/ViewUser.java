@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 
 import er.bugtracker.People;
 import er.bugtracker.Session;
-import er.directtoweb.ERDCustomEditComponent;
+import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.eof.ERXEOControlUtilities;
 
 public class ViewUser extends ERDCustomEditComponent {

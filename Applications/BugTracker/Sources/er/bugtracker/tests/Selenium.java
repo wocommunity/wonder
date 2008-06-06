@@ -16,7 +16,7 @@ import com.webobjects.foundation.NSTimestamp;
 import er.bugtracker.Framework;
 import er.bugtracker.People;
 import er.bugtracker.Session;
-import er.directtoweb.ERDEditHTML;
+import er.directtoweb.components.strings.ERDEditHTML;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXProperties;
