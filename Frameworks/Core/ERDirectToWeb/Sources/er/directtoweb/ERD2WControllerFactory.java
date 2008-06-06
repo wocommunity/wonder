@@ -21,6 +21,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSForwardException;
 
+import er.directtoweb.delegates.ERDBranchDelegate;
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXPatcher;
 

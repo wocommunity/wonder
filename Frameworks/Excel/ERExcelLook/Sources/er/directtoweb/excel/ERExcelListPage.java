@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 import er.directtoweb.*;
+import er.directtoweb.pages.ERD2WListPage;
 import er.extensions.*;
 import er.extensions.foundation.ERXFileUtilities;
 

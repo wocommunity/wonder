@@ -58,6 +58,11 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSet;
 
+import er.directtoweb.assignments.ERDComputingAssignmentInterface;
+import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
+import er.directtoweb.assignments.delayed.ERDDelayedAssignment;
+import er.directtoweb.qualifiers.ERDQualifierTraversal;
+import er.directtoweb.qualifiers.ERDQualifierTraversalCallback;
 import er.extensions.ERXExtensions;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXFileUtilities;
