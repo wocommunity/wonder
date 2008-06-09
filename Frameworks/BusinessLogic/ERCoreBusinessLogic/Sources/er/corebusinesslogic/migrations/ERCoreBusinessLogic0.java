@@ -28,30 +28,30 @@ public class ERCoreBusinessLogic0 extends ERXMigrationDatabase.Migration {
     public void upgrade(EOEditingContext editingContext, ERXMigrationDatabase database) throws Throwable {
         
         ERXMigrationTable eRCAuditBlobTable = database.newTableNamed("ERCAuditBlob");
-        eRCAuditBlobTable.newBlobColumn("BLOB_VALUE", false);
-        eRCAuditBlobTable.newIntegerColumn("ID", false);
+        eRCAuditBlobTable.newBlobColumn("BLOB_VALUE", NOT_NULL);
+        eRCAuditBlobTable.newIntegerColumn("ID", NOT_NULL);
         eRCAuditBlobTable.create();
         eRCAuditBlobTable.setPrimaryKey("ID");
 
         ERXMigrationTable eRCAuditTrailTable = database.newTableNamed("ERCAuditTrail");
-        eRCAuditTrailTable.newStringColumn("GID", 255, true);
-        eRCAuditTrailTable.newIntegerColumn("ID", false);
-        eRCAuditTrailTable.newIntBooleanColumn("IS_DELETED", false);
+        eRCAuditTrailTable.newStringColumn("GID", 255, ALLOWS_NULL);
+        eRCAuditTrailTable.newIntegerColumn("ID", NOT_NULL);
+        eRCAuditTrailTable.newIntBooleanColumn("IS_DELETED", NOT_NULL);
         eRCAuditTrailTable.create();
         eRCAuditTrailTable.setPrimaryKey("ID");
 
         ERXMigrationTable eRCAuditTrailEntryTable = database.newTableNamed("ERCAuditTrailEntry");
-        eRCAuditTrailEntryTable.newTimestampColumn("CREATED", false);
-        eRCAuditTrailEntryTable.newIntegerColumn("ID", false);
-        eRCAuditTrailEntryTable.newStringColumn("KEY_PATH", 100, true);
-        eRCAuditTrailEntryTable.newIntegerColumn("NEW_BLOB_VALUE_ID", true);
-        eRCAuditTrailEntryTable.newStringColumn("NEW_VALUES", 1000, true);
-        eRCAuditTrailEntryTable.newIntegerColumn("OLD_BLOB_VALUE_ID", true);
-        eRCAuditTrailEntryTable.newStringColumn("OLD_VALUES", 1000, true);
-        eRCAuditTrailEntryTable.newIntegerColumn("TRAIL_ID", false);
-        eRCAuditTrailEntryTable.newIntegerColumn("TYPE", true);
-        eRCAuditTrailEntryTable.newStringColumn("USER_GLOBAL_ID", 255, true);
-        eRCAuditTrailEntryTable.newBlobColumn("USER_INFO", true);
+        eRCAuditTrailEntryTable.newTimestampColumn("CREATED", NOT_NULL);
+        eRCAuditTrailEntryTable.newIntegerColumn("ID", NOT_NULL);
+        eRCAuditTrailEntryTable.newStringColumn("KEY_PATH", 100, ALLOWS_NULL);
+        eRCAuditTrailEntryTable.newIntegerColumn("NEW_BLOB_VALUE_ID", ALLOWS_NULL);
+        eRCAuditTrailEntryTable.newStringColumn("NEW_VALUES", 1000, ALLOWS_NULL);
+        eRCAuditTrailEntryTable.newIntegerColumn("OLD_BLOB_VALUE_ID", ALLOWS_NULL);
+        eRCAuditTrailEntryTable.newStringColumn("OLD_VALUES", 1000, ALLOWS_NULL);
+        eRCAuditTrailEntryTable.newIntegerColumn("TRAIL_ID", NOT_NULL);
+        eRCAuditTrailEntryTable.newIntegerColumn("TYPE", ALLOWS_NULL);
+        eRCAuditTrailEntryTable.newStringColumn("USER_GLOBAL_ID", 255, ALLOWS_NULL);
+        eRCAuditTrailEntryTable.newBlobColumn("USER_INFO", ALLOWS_NULL);
         eRCAuditTrailEntryTable.create();
         eRCAuditTrailEntryTable.setPrimaryKey("ID");
         eRCAuditTrailEntryTable.addForeignKey("NEW_BLOB_VALUE_ID", "ERCAuditBlob", "id");
@@ -59,32 +59,32 @@ public class ERCoreBusinessLogic0 extends ERXMigrationDatabase.Migration {
         eRCAuditTrailEntryTable.addForeignKey("TRAIL_ID", "ERCAuditTrail", "id");
 
         ERXMigrationTable eRCHelpTextTable = database.newTableNamed("ERCHELP_TEXT");
-        eRCHelpTextTable.newIntegerColumn("ID", false);
-        eRCHelpTextTable.newStringColumn("KEY_", 100, false);
-        eRCHelpTextTable.newLocalizedClobColumns("VALUE_", true);
+        eRCHelpTextTable.newIntegerColumn("ID", NOT_NULL);
+        eRCHelpTextTable.newStringColumn("KEY_", 100, NOT_NULL);
+        eRCHelpTextTable.newLocalizedClobColumns("VALUE_", ALLOWS_NULL);
         eRCHelpTextTable.create();
         eRCHelpTextTable.setPrimaryKey("ID");
 
         ERXMigrationTable eRCLogEntryTable = database.newTableNamed("ERCLOG_ENTRY");
-        eRCLogEntryTable.newTimestampColumn("CREATED", false);
-        eRCLogEntryTable.newIntegerColumn("ID", false);
-        eRCLogEntryTable.newStringColumn("TEXT_", 10000000, false);
-        eRCLogEntryTable.newIntegerColumn("USER_ID", false);
+        eRCLogEntryTable.newTimestampColumn("CREATED", NOT_NULL);
+        eRCLogEntryTable.newIntegerColumn("ID", NOT_NULL);
+        eRCLogEntryTable.newClobColumn("TEXT_", NOT_NULL);
+        eRCLogEntryTable.newIntegerColumn("USER_ID", NOT_NULL);
         eRCLogEntryTable.create();
         eRCLogEntryTable.setPrimaryKey("ID");
 
         ERXMigrationTable eRCPreferenceTable = database.newTableNamed("ERCPREFER");
-        eRCPreferenceTable.newIntegerColumn("ID", false);
-        eRCPreferenceTable.newStringColumn("KEY_", 100, false);
-        eRCPreferenceTable.newIntegerColumn("USER_ID", true);
-        eRCPreferenceTable.newStringColumn("VALUE_", 10000000, true);
+        eRCPreferenceTable.newIntegerColumn("ID", NOT_NULL);
+        eRCPreferenceTable.newStringColumn("KEY_", 100, NOT_NULL);
+        eRCPreferenceTable.newIntegerColumn("USER_ID", ALLOWS_NULL);
+        eRCPreferenceTable.newClobColumn("VALUE_", ALLOWS_NULL);
         eRCPreferenceTable.create();
         eRCPreferenceTable.setPrimaryKey("ID");
 
         ERXMigrationTable eRCStaticTable = database.newTableNamed("ERCSTATIC");
-        eRCStaticTable.newIntegerColumn("ID", false);
-        eRCStaticTable.newStringColumn("KEY_", 100, false);
-        eRCStaticTable.newStringColumn("VALUE_", 1000, true);
+        eRCStaticTable.newIntegerColumn("ID", NOT_NULL);
+        eRCStaticTable.newStringColumn("KEY_", 100, NOT_NULL);
+        eRCStaticTable.newStringColumn("VALUE_", 1000, ALLOWS_NULL);
         eRCStaticTable.create();
         eRCStaticTable.setPrimaryKey("ID");
     }
