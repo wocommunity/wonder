@@ -6,7 +6,7 @@
             allowsNull = Y; 
             columnName = "VALUE_"; 
             name = value; 
-            prototypeName = varchar1000; 
+            prototypeName = varcharLarge; 
             userInfo = {ERXLanguages = ""; }; 
         }
     ); 
