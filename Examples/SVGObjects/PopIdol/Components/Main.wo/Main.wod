@@ -1,9 +1,0 @@
-SVG: WOSVG {
-	pageName = "PopIdol";
-	width = 600;
-	height = 600;
-}
-
-popidol: WOImage {
-	filename = "popidol.gif";
-}
