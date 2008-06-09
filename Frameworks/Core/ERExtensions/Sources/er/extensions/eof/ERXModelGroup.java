@@ -68,6 +68,11 @@ public class ERXModelGroup extends EOModelGroup {
 	private Hashtable cache;
 
 	/**
+	 * Key for languages, can be either in properties or in the model object's user info.
+	 */
+	public static final String LANGUAGES_KEY = "ERXLanguages";
+
+	/**
 	 * <code>er.extensions.ERXModelGroup.patchModelsOnLoad</code> is a boolean that defines is the created should be a {@link Model} not a EOModel. 
 	 * Default is false.
 	 */
@@ -274,11 +279,11 @@ public class ERXModelGroup extends EOModelGroup {
 					EOAttribute attribute = (EOAttribute) e.nextElement();
 					boolean isClassProperty = classProperties.containsObject(attribute);
 					boolean isUsedForLocking = attributesUsedForLocking.containsObject(attribute);
-					Object languagesObject = attribute.userInfo() != null ? attribute.userInfo().objectForKey("ERXLanguages") : null;
+					Object languagesObject = attribute.userInfo() != null ? attribute.userInfo().objectForKey(LANGUAGES_KEY) : null;
 					if (languagesObject != null && !(languagesObject instanceof NSArray)) {
-						languagesObject = entity.model().userInfo() != null ? entity.model().userInfo().objectForKey("ERXLanguages") : null;
+						languagesObject = entity.model().userInfo() != null ? entity.model().userInfo().objectForKey(LANGUAGES_KEY) : null;
 						if(languagesObject == null) {
-							languagesObject = ERXProperties.arrayForKey("ERXLanguages");
+							languagesObject = ERXProperties.arrayForKey(LANGUAGES_KEY);
 						}
 					}
 					NSArray languages = (languagesObject != null ? (NSArray) languagesObject : NSArray.EmptyArray);
@@ -289,7 +294,7 @@ public class ERXModelGroup extends EOModelGroup {
 						if(attribute.userInfo() != null) {
 							attributeUserInfo.addEntriesFromDictionary(attribute.userInfo());
 						}
-						attributeUserInfo.setObjectForKey(languages, "ERXLanguages");
+						attributeUserInfo.setObjectForKey(languages, LANGUAGES_KEY);
 						for (int i = 0; i < languages.count(); i++) {
 							String language = (String) languages.objectAtIndex(i);
 							String newName = name + "_" + language;
