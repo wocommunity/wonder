@@ -383,11 +383,19 @@ public class EGSimpleTableParser {
     					
     					String cellWidthString = nodeValueForKey(cellNode, "width", null);
     					if(cellWidthString != null && cellWidthString.indexOf("%") < 0) {
-    						try {
-    							short width = Integer.valueOf(cellWidthString).shortValue();
-    							sheet.setColumnWidth(row.getLastCellNum(),(short) (width * 256));
-    						} catch (Exception ex) {
-    							log.warn(ex);
+    						if ("auto".equalsIgnoreCase(cellWidthString)) {
+	      						try {
+	      							sheet.autoSizeColumn(row.getLastCellNum());
+	      						} catch (Exception ex) {
+	      							log.warn(ex);
+	      						}
+    						} else {
+        						try {
+        							short width = Integer.valueOf(cellWidthString).shortValue();
+        							sheet.setColumnWidth(row.getLastCellNum(),(short) (width * 256));
+        						} catch (Exception ex) {
+        							log.warn(ex);
+        						}
     						}
     					}
     					
@@ -459,7 +467,7 @@ public class EGSimpleTableParser {
     		"font","hidden","locked","wrapText",
 			"leftBorderColor","rightBorderColor","topBorderColor","bottomBorderColor",
 			"borderLeft","borderRight","borderTop","borderBottom",
-			"fillBackgroundColor","fillPattern",
+			"fillForegroundColor","fillBackgroundColor","fillPattern",
 			"rotation","indention", "wrapText",
 			"alignment","verticalAlignment","format"
 	});
@@ -515,6 +523,7 @@ public class EGSimpleTableParser {
     		takeNumberValueForKey(dict, "bottomBorderColor", cellStyle, null);
     		
     		takeNumberValueForKey(dict, "fillBackgroundColor", cellStyle, null);
+    		takeNumberValueForKey(dict, "fillForegroundColor", cellStyle, null);
     		takeNumberValueForKey(dict, "indention", cellStyle, null);
     		takeNumberValueForKey(dict, "rotation", cellStyle, null);
     		
