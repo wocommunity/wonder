@@ -19,5 +19,4 @@
         {className = "er.corebusinesslogic.ERCPreference"; name = ERCPreference; }, 
         {className = "er.corebusinesslogic.ERCStatic"; name = ERCStatic; }
     ); 
-    internalInfo = {"_deletedEntityNamesInObjectStore" = (ERCAuditTrail); }; 
 }

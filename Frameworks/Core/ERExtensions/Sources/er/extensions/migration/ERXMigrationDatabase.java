@@ -14,6 +14,9 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.eof.ERXModelGroup;
+import er.extensions.foundation.ERXProperties;
+
 /**
  * <p>
  * ERXMigrationDatabase, ERXMigrationTable, and ERXMigrationColumn exist to make
@@ -115,7 +118,8 @@ public class ERXMigrationDatabase {
 	private EOModel _model;
 	private EOAdaptorChannel _adaptorChannel;
 	private NSMutableArray<ERXMigrationTable> _tables;
-
+	private NSArray<String> _languages;
+	
 	/**
 	 * Constructs an ERXMigrationDatabase
 	 * 
@@ -123,9 +127,23 @@ public class ERXMigrationDatabase {
 	 *            the adaptor channel to connect to
 	 */
 	private ERXMigrationDatabase(EOAdaptorChannel adaptorChannel, EOModel model) {
+		this(adaptorChannel, model, ERXProperties.arrayForKey(ERXModelGroup.LANGUAGES_KEY));
+	}
+
+	/**
+	 * Constructs an ERXMigrationDatabase
+	 * 
+	 * @param adaptorChannel
+	 *            the adaptor channel to connect to
+	 */
+	private ERXMigrationDatabase(EOAdaptorChannel adaptorChannel, EOModel model, NSArray<String> languages) {
 		_adaptorChannel = adaptorChannel;
 		_model = model;
 		_tables = new NSMutableArray<ERXMigrationTable>();
+		_languages = (NSArray) model.userInfo().objectForKey(ERXModelGroup.LANGUAGES_KEY);
+		if(model.userInfo().objectForKey(ERXModelGroup.LANGUAGES_KEY) != null) {
+			_languages = ERXProperties.arrayForKey(ERXModelGroup.LANGUAGES_KEY);
+		}
 	}
 
 	/**
@@ -154,7 +172,14 @@ public class ERXMigrationDatabase {
 	public EOModel model() {
 		return _model;
 	}
-
+	
+	/**
+	 * Returns the configured default languages for this migration.
+	 */
+	public NSArray<String> languages() {
+		return _languages == null ? NSArray.EmptyArray : _languages;
+	}
+	
 	/**
 	 * Returns the adaptor channel.
 	 * 
@@ -291,6 +316,23 @@ public class ERXMigrationDatabase {
 	 *            the model that corresponds to this table
 	 * @return an ERXMigrationDatabase
 	 */
+	public static ERXMigrationDatabase database(EOAdaptorChannel adaptorChannel, EOModel model, NSArray<String> languages) {
+		return new ERXMigrationDatabase(adaptorChannel, model, languages);
+	}
+
+	/**
+	 * Returns an ERXMigrationDatabase for the given EOAdaptorChannel. This will
+	 * return a new ERXMigrationDatabase for every call, so if you need to
+	 * perform multiple operations within a single database instance (for
+	 * instance, adding foreign keys that talk to two tables), you should
+	 * operate within a single ERXMigrationDatabase instance.
+	 * 
+	 * @param adaptorChannel
+	 *            the adaptor channel to operate within
+	 * @param model
+	 *            the model that corresponds to this table
+	 * @return an ERXMigrationDatabase
+	 */
 	public static ERXMigrationDatabase database(EOAdaptorChannel adaptorChannel, EOModel model) {
 		return new ERXMigrationDatabase(adaptorChannel, model);
 	}
@@ -332,8 +374,22 @@ public class ERXMigrationDatabase {
 	 * @author mschrag
 	 */
 	public static abstract class Migration implements IERXMigration {
+		private NSArray<String> _languages;
+		
+		protected Migration() {
+			this(null);
+		}
+		
+		protected Migration(NSArray languages) {
+			_languages = languages;
+		}
+		
+		public NSArray<String> languages() {
+			return _languages;
+		}
+		
 		public void downgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model) throws Throwable {
-			downgrade(editingContext, ERXMigrationDatabase.database(channel, model));
+			downgrade(editingContext, ERXMigrationDatabase.database(channel, model, _languages));
 		}
 
 		/**
@@ -355,7 +411,7 @@ public class ERXMigrationDatabase {
 		}
 
 		public void upgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model) throws Throwable {
-			upgrade(editingContext, ERXMigrationDatabase.database(channel, model));
+			upgrade(editingContext, ERXMigrationDatabase.database(channel, model, _languages));
 		}
 
 		/**
