@@ -15,8 +15,8 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.directtoweb.ERDEditPageInterface;
-import er.directtoweb.ERDObjectSaverInterface;
+import er.directtoweb.interfaces.ERDEditPageInterface;
+import er.directtoweb.interfaces.ERDObjectSaverInterface;
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.logging.ERXLogger;
