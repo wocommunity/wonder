@@ -20,18 +20,10 @@ There are many ways to use this script:
 		-Dproject.principal.class=com.company.Application \
 		-Dproject.dir=/path/to/my/SomeProject \
 		-Duse.webobjects.d2w=true \
-		-Duse.wonder.core=true \
-		-Duse.wonder.d2w=true \
-		-Duse.wonder.logic=true \
-		-Duse.wonder.mail=true \
-		-Duse.wonder.changenotification=true \
-		-Duse.svgobjects=true \
-		-Duse.validity=true \
-		-Duse.woognl=true \
-		-Duse.grouping=true \
-		-Duse.reporting=true \
-		-Duse.mysql=true \
-		-Duse.additional.framework.[1-9]=SomePattern[1-9]\* \
+		-Dwonder.lib.root.bundles=Some/Root/Framework/Or/Other \
+		-Dwonder.lib.root.bundles.embed=true \
+		-Dwo.frameworks.bundles=Some/Library/Framework/Or/Other \
+		-Dwo.frameworks.bundles.embed=true \
 		generic.MODE
 
     or shorter:
@@ -307,121 +299,7 @@ There are many ways to use this script:
             </classpath>
            <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}" embed="${wonder.lib.root.bundles.embed}"/>
            <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}" embed="${wo.frameworks.bundles.embed}" />
-           
-            <!-- this should be an exact copy of the frameworks in the woapplication task --> 
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.jars"> 
-                <include name="ERJars.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.core"> 
-                <include name="ERJars.framework" />
-                <include name="ERExtensions.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.d2w"> 
-                <include name="ERJars.framework" />
-                <include name="ERExtensions.framework" />
-                <include name="ERDirectToWeb.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.testing"> 
-                <include name="ERSelenium.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.mail"> 
-                <include name="ERJavaMail.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.indexing"> 
-                <include name="ERIndexing.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.logic"> 
-                <include name="ERPrototypes.framework" />
-                <include name="ERCoreBusinessLogic.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.changenotification"> 
-                <include name="ERChangeNotificationJMS.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.svgobjects"> 
-                <include name="SVGObjects.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.validity"> 
-                <include name="Validity.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.woognl"> 
-                <include name="WOOgnl.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.plot"> 
-                <include name="ERPlot.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.excel"> 
-                <include name="ExcelGenerator.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.grouping"> 
-                <include name="DRGrouping.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.reporting"> 
-                <include name="DRGrouping.framework" />
-                <include name="WRReporting.framework" />
-                <include name="WOOgnl.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.openid"> 
-                <include name="EROpenID.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.ajax"> 
-                <include name="Ajax.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.yui">
-                <include name="YUI.framework" />
-            </frameworks> 
-           <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.reporting">
-                <include name="WOComponentElements.framework"/>
-           </frameworks>
-
-           <frameworks dir="${wonder.lib.root}" if="use.postgres">
-                <include name="*PostgresqlPlugIn.framework"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.1">
-                <include name="${use.additional.framework.1}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.2">
-                <include name="${use.additional.framework.2}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.3">
-                <include name="${use.additional.framework.3}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.4">
-                <include name="${use.additional.framework.4}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.5">
-                <include name="${use.additional.framework.5}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.6">
-                <include name="${use.additional.framework.6}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.7">
-                <include name="${use.additional.framework.7}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.8">
-                <include name="${use.additional.framework.8}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.9">
-                <include name="${use.additional.framework.9}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.10">
-                <include name="${use.additional.framework.10}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.11">
-                <include name="${use.additional.framework.11}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.12">
-                <include name="${use.additional.framework.12}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.13">
-                <include name="${use.additional.framework.13}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.14">
-                <include name="${use.additional.framework.14}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.15">
-                <include name="${use.additional.framework.15}"/>
-           </frameworks>
-            <frameworks dir="${wo.frameworks}"> 
+           <frameworks dir="${wo.frameworks}"> 
                 <include name="JavaFoundation.framework" />
                 <include name="JavaEOAccess.framework" />
                 <include name="JavaEOControl.framework" />
@@ -430,9 +308,6 @@ There are many ways to use this script:
                 <include name="JavaPlot.framework" />
                 <include name="JavaJDBCAdaptor.framework" />
                 <include name="JavaXML.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}"> 
-                <include name="JavaWOExtensions.framework" />
             </frameworks>
             <frameworks dir="${wo.frameworks}" if="use.webobjects.d2w"> 
                 <include name="JavaDirectToWeb.framework" />
@@ -538,116 +413,11 @@ There are many ways to use this script:
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
            <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}" embed="${wonder.lib.root.bundles.embed}"/>
            <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}" embed="${wo.frameworks.bundles.embed}" />
-           
-           <frameworks dir="${wonder.lib.root}" if="use.wonder.jars"> 
-                <include name="ERJars.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.core"> 
-                <include name="ERJars.framework" />
-                <include name="ERExtensions.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.d2w"> 
-                <include name="ERJars.framework" />
-                <include name="ERExtensions.framework" />
-                <include name="ERDirectToWeb.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.testing"> 
-                <include name="ERSelenium.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.logic"> 
-                <include name="ERPrototypes.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.logic"> 
-                <include name="ERCoreBusinessLogic.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.mail"> 
-                <include name="ERJavaMail.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.indexing"> 
-                <include name="ERIndexing.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.ajax"> 
-                <include name="Ajax.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.changenotification"> 
-                <include name="ERChangeNotificationJMS.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.svgobjects"> 
-                <include name="SVGObjects.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.validity"> 
-                <include name="Validity.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.woognl"> 
-                <include name="WOOgnl.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.plot"> 
-                <include name="ERPlot.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.excel"> 
-                <include name="ExcelGenerator.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.grouping"> 
-                <include name="DRGrouping.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.reporting"> 
-                <include name="DRGrouping.framework" />
-                <include name="WRReporting.framework" />
-                <include name="WOOgnl.framework" />
-            </frameworks>
-           <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.reporting">
-                <include name="WOComponentElements.framework"/>
-           </frameworks>
            <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.movies">
                 <include name="JavaBusinessLogic.framework"/>
            </frameworks>
             <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.mysql">
                 <include name="*PlugIn.framework"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.1">
-                <include name="${use.additional.framework.1}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.2">
-                <include name="${use.additional.framework.2}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.3">
-                <include name="${use.additional.framework.3}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.4">
-                <include name="${use.additional.framework.4}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.5">
-                <include name="${use.additional.framework.5}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.6">
-                <include name="${use.additional.framework.6}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.7">
-                <include name="${use.additional.framework.7}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.8">
-                <include name="${use.additional.framework.8}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.9">
-                <include name="${use.additional.framework.9}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.10">
-                <include name="${use.additional.framework.10}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.11">
-                <include name="${use.additional.framework.11}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.12">
-                <include name="${use.additional.framework.12}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.13">
-                <include name="${use.additional.framework.13}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.14">
-                <include name="${use.additional.framework.14}"/>
-           </frameworks>
-           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.15">
-                <include name="${use.additional.framework.15}"/>
            </frameworks>
            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.system.bundles"> 
                 <include name="JavaFoundation.framework" />
@@ -658,9 +428,6 @@ There are many ways to use this script:
                 <include name="JavaPlot.framework" />
                 <include name="JavaJDBCAdaptor.framework" />
                 <include name="JavaXML.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}" if="use.system.bundles"> 
-                <include name="JavaWOExtensions.framework" />
             </frameworks>
             <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.webservices.server"> 
                 <include name="JavaWebServices*.framework" />
