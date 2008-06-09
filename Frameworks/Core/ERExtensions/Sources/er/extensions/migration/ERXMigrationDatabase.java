@@ -374,6 +374,9 @@ public class ERXMigrationDatabase {
 	 * @author mschrag
 	 */
 	public static abstract class Migration implements IERXMigration {
+		public static final boolean ALLOWS_NULL = true;
+		public static final boolean NOT_NULL = false;
+		
 		private NSArray<String> _languages;
 		
 		protected Migration() {
