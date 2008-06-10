@@ -13,6 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.foundation.ERXMutableDictionary;
+import er.extensions.foundation.ERXSimpleTemplateParser;
 
 /**
  * ERXInlineTemplate allows to specify a component's template dynamically. <br />

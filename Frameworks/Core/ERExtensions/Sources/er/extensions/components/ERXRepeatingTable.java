@@ -12,7 +12,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
- * Useful when given a list of n items and you want to display m keys. This will construct a table nxm and push the current indexes up though the bindings.<br />
+ * Useful when given a list of n items and you want to display m keys. This will
+ * construct a table nxm and push the current indexes up though the bindings.<br />
  * 
  * @binding list
  * @binding item
@@ -26,25 +27,33 @@ import com.webobjects.foundation.NSMutableArray;
 
 public class ERXRepeatingTable extends WOComponent {
 
-    public ERXRepeatingTable(WOContext aContext) {
-        super(aContext);
-    }
+	public ERXRepeatingTable(WOContext aContext) {
+		super(aContext);
+	}
 
-    public boolean isStateless() { return true; }
+	public boolean isStateless() {
+		return true;
+	}
 
-    public void reset() { _repeatingList = null; }
-    
-    private NSMutableArray _repeatingList;
-    public NSArray repeatingList() {
-        if (_repeatingList == null) {
-            _repeatingList = new NSMutableArray();
-            NSArray list = (NSArray)valueForBinding("list");
-            Integer numberOfRepetetions = (Integer)valueForBinding("repetetions");
-            for (int i = 0; i < numberOfRepetetions.intValue(); i++) {
-                    _repeatingList.addObjectsFromArray(list);
-            }
-        }
-        return _repeatingList;
-    }
+	public void reset() {
+		_repeatingList = null;
+	}
+
+	private NSMutableArray _repeatingList;
+
+	public NSArray repeatingList() {
+		if (_repeatingList == null) {
+			_repeatingList = new NSMutableArray();
+			NSArray list = (NSArray) valueForBinding("list");
+			Integer numberOfRepetetions = (Integer) valueForBinding("repetitions");
+			if (numberOfRepetetions == null) {
+				numberOfRepetetions = (Integer) valueForBinding("repetetions");
+			}
+			for (int i = 0; i < numberOfRepetetions.intValue(); i++) {
+				_repeatingList.addObjectsFromArray(list);
+			}
+		}
+		return _repeatingList;
+	}
 
 }

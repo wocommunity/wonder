@@ -14,7 +14,6 @@ import com.webobjects.appserver._private.WOHTMLBareString;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.components.ERXWOCase;
 
 /**
  * Adds a "multiple if" element to the WO templates. You'd use them to wrap "ERXWOCase" elements with

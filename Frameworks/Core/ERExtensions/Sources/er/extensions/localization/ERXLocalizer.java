@@ -40,7 +40,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXWOContext;
-import er.extensions.components.ERXSimpleTemplateParser;
 import er.extensions.eof.ERXConstant;
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
@@ -48,6 +47,7 @@ import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXFileNotificationCenter;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXSimpleTemplateParser;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.validation.ERXValidationFactory;
