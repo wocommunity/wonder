@@ -1,6 +1,13 @@
 package er.caching;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+
 import com.danga.memcached.SockIOPool;
+import com.thimbleware.jmemcached.Cache;
+import com.thimbleware.jmemcached.LRUCacheStorageDelegate;
+import com.thimbleware.jmemcached.MemCacheDaemon;
+import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.foundation.ERXProperties;
@@ -13,14 +20,19 @@ public class ERCaching extends ERXFrameworkPrincipal {
 
     public void finishInitialization() {
         // finally setup the server
-        /*
-         * ServiceRegistry registry = new SimpleServiceRegistry();
-         * InetSocketAddress addr = new InetSocketAddress("localhost", 1624);
-         * try { registry.bind(new Service("Memcached", TransportType.SOCKET,
-         * addr), new ServerSessionHandler(1000, "0.1", true, 0, 32 * 1024000)); }
-         * catch (IOException e) { throw
-         * NSForwardException._runtimeExceptionForThrowable(e); }
-         */
+        try {
+            MemCacheDaemon daemon = new MemCacheDaemon();
+            LRUCacheStorageDelegate cacheStorage = new LRUCacheStorageDelegate(50000, 2 ^ 23, 1024000);
+            daemon.setCache(new Cache(cacheStorage));
+            daemon.setAddr(InetSocketAddress.createUnresolved("localhost", 1624));
+            daemon.setIdleTime(50);
+            daemon.setPort(1624);
+            daemon.setVerbose(true);
+            daemon.start();
+        } catch (IOException e) {
+            throw NSForwardException._runtimeExceptionForThrowable(e);
+        }
+
         String servers = ERXProperties.stringForKey("er.caching.servers");
         if (servers == null || servers.length() == 0) {
             log.error("No Servers found, set er.caching.servers=server1:port1,server2:port2...");
