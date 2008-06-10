@@ -1,20 +1,21 @@
 package er.caching;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.danga.memcached.MemCachedClient;
+import com.meetup.memcached.MemcachedClient;
 
 @SuppressWarnings("hiding")
 public class ERCachingMap<String, V extends Object> implements Map<String, V> {
 
-    private MemCachedClient _client;
+    private MemcachedClient _client;
 
-    private synchronized MemCachedClient client() {
+    private synchronized MemcachedClient client() {
         if (_client == null) {
-            _client = new MemCachedClient();
+            _client = new MemcachedClient();
             _client.setCompressEnable(false);
             _client.setCompressThreshold(0);
         }
@@ -39,7 +40,7 @@ public class ERCachingMap<String, V extends Object> implements Map<String, V> {
 
     public V put(String key, V value, long timeout) {
         V old = null; // get(arg0);
-        client().set(key.toString(), value, timeout);
+        client().set(key.toString(), new Date(System.currentTimeMillis() + timeout));
         return old;
     }
 
