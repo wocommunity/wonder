@@ -1,9 +1,10 @@
 package er.caching;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-import com.danga.memcached.SockIOPool;
+import com.meetup.memcached.SockIOPool;
 import com.thimbleware.jmemcached.Cache;
 import com.thimbleware.jmemcached.LRUCacheStorageDelegate;
 import com.thimbleware.jmemcached.MemCacheDaemon;
@@ -24,9 +25,9 @@ public class ERCaching extends ERXFrameworkPrincipal {
             MemCacheDaemon daemon = new MemCacheDaemon();
             LRUCacheStorageDelegate cacheStorage = new LRUCacheStorageDelegate(50000, 2 ^ 23, 1024000);
             daemon.setCache(new Cache(cacheStorage));
-            daemon.setAddr(InetSocketAddress.createUnresolved("localhost", 1624));
+            daemon.setAddr(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), 12345));
             daemon.setIdleTime(50);
-            daemon.setPort(1624);
+            daemon.setPort(12345);
             daemon.setVerbose(true);
             daemon.start();
         } catch (IOException e) {

@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="Libraries/commons-cli-1.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/mina-core-1.1.7.jar"/>
+	<classpathentry kind="lib" path="Libraries/spy-2.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
