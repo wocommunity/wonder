@@ -5,7 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERExtensions"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
-	<classpathentry kind="lib" path="Libraries/lucene-core-2.0.0.jar"/>
 	<classpathentry kind="lib" path="Libraries/lucene-analyzers-2.0.0.jar"/>
+	<classpathentry kind="lib" path="Libraries/lucene-core-2.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
