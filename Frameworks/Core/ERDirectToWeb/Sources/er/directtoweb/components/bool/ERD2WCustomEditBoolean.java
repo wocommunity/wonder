@@ -25,52 +25,31 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
         super(context);
     }
 
-    public interface BooleanProxy {
-    	public String name();
-    	public Boolean value();
+    public static class BooleanProxy {
+        private String _name;
+        private Boolean _value;
+       
+        BooleanProxy(String name, Boolean value) {
+            _name = name;
+            _value = value;
+        }
+        
+    	public String name() {
+            return _name;
+    	}
+    	
+    	public Boolean value() {
+            return _value;
+    	}
+    	
+    	public boolean equals(Object other) {
+            return other == _value || (other != null && _value != null && ERXValueUtilities.booleanValue(other) == _value);
+    	}
     }
     
-    public BooleanProxy trueValue = new BooleanProxy() {
-    	public boolean equals(Object other) {
-    		return other == trueValue || (other != null && ERXValueUtilities.booleanValue(other));
-    	}
-    	
-    	public String name() {
-    		return (String) choicesNames().objectAtIndex(0);
-    	}
-    	
-    	public Boolean value() {
-    		return Boolean.TRUE;
-    	}
-    };
-    
-    public BooleanProxy falseValue = new BooleanProxy() {
-    	public boolean equals(Object other) {
-    		return other == falseValue || (other != null && !ERXValueUtilities.booleanValue(other));
-    	}
-    	
-    	public String name() {
-    		return (String) choicesNames().objectAtIndex(1);
-    	}
-    	
-    	public Boolean value() {
-    		return Boolean.FALSE;
-    	}
-    };
-    
-    public BooleanProxy nullValue = new BooleanProxy() {
-    	public boolean equals(Object other) {
-    		return other == nullValue || other == null;
-    	}
-    	
-    	public String name() {
-    		return (String) choicesNames().objectAtIndex(2);
-    	}
-    	
-    	public Boolean value() {
-    		return null;
-    	}
-   };
+    public BooleanProxy trueValue;
+    public BooleanProxy falseValue;
+    public BooleanProxy nullValue;
     
     protected NSArray _choicesNames;
     protected String _radioBoxGroupName;
@@ -100,8 +79,14 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
     }
 
     public NSArray choicesNames(){
-        if(_choicesNames == null)
+        if(_choicesNames == null) {
             _choicesNames = (NSArray)d2wContext().valueForKey("choicesNames");
+            trueValue = new BooleanProxy((String) choicesNames().objectAtIndex(0), Boolean.TRUE);
+            falseValue = new BooleanProxy((String) choicesNames().objectAtIndex(1), Boolean.FALSE);
+            if(choicesNames().count() > 2) {
+                nullValue = new BooleanProxy((String) choicesNames().objectAtIndex(2), null);
+            }
+        }
         return _choicesNames;
     }
 
