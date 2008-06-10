@@ -22,9 +22,9 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.components.ERXSimpleTemplateParser;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXSimpleTemplateParser;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXUtilities;
 

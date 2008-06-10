@@ -40,6 +40,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXSimpleTemplateParser;
 
 /**
  * Wrapper that translates its content via XSLT. The content must be valid XML for this to work. 

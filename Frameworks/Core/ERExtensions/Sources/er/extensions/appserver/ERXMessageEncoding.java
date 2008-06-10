@@ -16,8 +16,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.components.ERXSimpleTemplateParser;
 import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXSimpleTemplateParser;
 
 /**
  * Holds encoding related settings and methods for {@link WOMessage} 

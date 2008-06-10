@@ -24,10 +24,10 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.components.ERXSimpleTemplateParser;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEntityClassDescription;
 import er.extensions.foundation.ERXMultiKey;
+import er.extensions.foundation.ERXSimpleTemplateParser;
 import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;

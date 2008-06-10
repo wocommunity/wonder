@@ -1,9 +1,10 @@
-package er.extensions.components;
+package er.extensions.statistics;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 
 import er.extensions.appserver.ERXComponentActionRedirector;
+import er.extensions.components.ERXStatelessComponent;
 
 
 /**

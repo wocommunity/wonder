@@ -27,7 +27,7 @@ import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSValidation;
 
 import er.directtoweb.components.ERDCustomEditComponent;
-import er.extensions.components.ERXSimpleTemplateParser;
+import er.extensions.foundation.ERXSimpleTemplateParser;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.validation.ERXValidationException;

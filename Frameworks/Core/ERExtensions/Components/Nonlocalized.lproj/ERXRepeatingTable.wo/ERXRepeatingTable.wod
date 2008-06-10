@@ -9,7 +9,7 @@ ERTable1: ERXTable {
 	cellspacing = 0;
 	cellpadding = 2;
 	cellBackgroundColor = ^backgroundColor;
-        row=^row;
-        col=^col;
+    row=^row;
+    col=^col;
 }
 

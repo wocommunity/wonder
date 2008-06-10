@@ -5,7 +5,7 @@ import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.components.ERXWOTemplate;
+import er.extensions.components.conditionals.ERXWOTemplate;
 
 public class AjaxInPlaceEditTemplate extends ERXWOTemplate{
 

@@ -1,4 +1,4 @@
-package er.extensions.components;
+package er.extensions.crypting;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,6 @@ import java.security.cert.CertificateException;
 
 import javax.crypto.spec.SecretKeySpec;
 
-import er.extensions.crypting.ERXAbstractBlowfishCrypter;
 import er.extensions.foundation.ERXProperties;
 
 /**

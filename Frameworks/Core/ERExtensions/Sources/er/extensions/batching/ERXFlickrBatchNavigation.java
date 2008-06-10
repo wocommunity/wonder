@@ -1,4 +1,4 @@
-package er.extensions.components;
+package er.extensions.batching;
 
 
 
@@ -9,6 +9,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.components.ERXComponent;
+import er.extensions.components.ERXComponentUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
