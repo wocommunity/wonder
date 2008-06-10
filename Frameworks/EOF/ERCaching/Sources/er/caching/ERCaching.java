@@ -5,6 +5,9 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import com.meetup.memcached.SockIOPool;
+import com.meetup.memcached.test.MemcachedTest;
+import com.meetup.memcached.test.TestMemcached;
+import com.meetup.memcached.test.UnitTests;
 import com.thimbleware.jmemcached.Cache;
 import com.thimbleware.jmemcached.LRUCacheStorageDelegate;
 import com.thimbleware.jmemcached.MemCacheDaemon;
@@ -55,4 +58,11 @@ public class ERCaching extends ERXFrameworkPrincipal {
 
     }
 
+    public void runTests() {
+        MemcachedTest.main(new String[]{"4", "5", "5"});
+        TestMemcached.main(new String[]{"4", "5", "5"});
+        UnitTests.main(new String[]{});
+    }
+    
+    
 }
