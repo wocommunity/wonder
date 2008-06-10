@@ -9,8 +9,8 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.components.ERXSimpleTemplateParser;
 import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXSimpleTemplateParser;
 import er.extensions.localization.ERXLocalizer;
 
 /**

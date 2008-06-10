@@ -43,7 +43,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.appserver.ERXMessageEncoding;
-import er.extensions.components.ERXSimpleTemplateParser;
 import er.extensions.eof.ERXConstant;
 
 /**

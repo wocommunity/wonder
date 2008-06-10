@@ -14,7 +14,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSProperties;
 
-import er.extensions.components.ERXSimpleTemplateParser;
 
 /**
  * ERXSystem provides support for variable replacement in Properties with

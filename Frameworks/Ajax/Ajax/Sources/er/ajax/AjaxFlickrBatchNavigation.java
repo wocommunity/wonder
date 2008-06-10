@@ -2,7 +2,7 @@ package er.ajax;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.components.ERXFlickrBatchNavigation;
+import er.extensions.batching.ERXFlickrBatchNavigation;
 
 /**
  * <p>AjaxFlickrBatchNavigation is a batch navigation component that provides pagination that behaves like the paginator on

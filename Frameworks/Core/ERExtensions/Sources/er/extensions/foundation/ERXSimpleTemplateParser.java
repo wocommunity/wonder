@@ -4,7 +4,7 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-package er.extensions.components;
+package er.extensions.foundation;
 
 import java.util.Enumeration;
 
@@ -16,7 +16,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableSet;
 
-import er.extensions.foundation.ERXProperties;
 import er.extensions.logging.ERXPatternLayout;
 
 /**
