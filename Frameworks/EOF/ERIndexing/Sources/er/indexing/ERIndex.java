@@ -11,8 +11,8 @@ import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexModifier;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.queryParser.ParseException;
@@ -61,7 +61,7 @@ import er.indexing.ERIndexJob.Command;
  *     // properties to index, these are key paths off the objects
  *     // and are also used for the names of the index fields.
  *     // these don't need to be attributes or relationships
- *     // but can also be simple methods. In fact, if you have mutliple
+ *     // but can also be simple methods. In fact, if you have multiple
  *     // entities in your index, you will need to support a common set of 
  *     // these properties
  *     properties = {
@@ -204,7 +204,7 @@ public class ERIndex {
 			synchronized (indexDirectory()) {
 				log.info("Indexing: "  + job.command() + ": " + job.objects().count());
 				boolean create = job.command() == Command.CLEAR;
-				IndexModifier modifier = new IndexModifier(indexDirectory(), analyzer(), create);
+				IndexWriter modifier = new IndexWriter(indexDirectory(), analyzer(), create);
 				if(job.command() == Command.DELETE) {
 					for (Enumeration iter = job.objects().objectEnumerator(); iter.hasMoreElements();) {
 						Term term = (Term) iter.nextElement();
