@@ -18,13 +18,16 @@
  */
 package com.meetup.memcached.test;
 
-import com.meetup.memcached.*;
-import java.util.*;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Map;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
+
+import com.meetup.memcached.MemcachedClient;
+import com.meetup.memcached.SockIOPool;
 
 public class UnitTests {
     
@@ -167,7 +170,6 @@ public class UnitTests {
     }
     
     public static void test18() {
-        long i = 0;
         mc.addOrIncr( "foo" ); // foo now == 0
         mc.incr( "foo" ); // foo now == 1
         mc.incr( "foo", (long)5 ); // foo now == 6
@@ -197,8 +199,8 @@ public class UnitTests {
     }
     
     public static void test20( int max, int skip, int start ) {
-        log.debug( String.format( "test 20 starting with start=%5d skip=%5d max=%7d", start, skip, max ) );
         int numEntries = max/skip+1;
+        log.debug( String.format( "test 20 starting with start=%5d skip=%5d max=%7d num=%d", start, skip, max, numEntries,  numEntries*start ) );
         String[] keys = new String[ numEntries ];
         byte[][] vals = new byte[ numEntries ][];
         
@@ -215,12 +217,13 @@ public class UnitTests {
         
         Map<String,Object> results = mc.getMulti( keys );
         for ( int i=0; i<numEntries; i++ ) {
-            byte res[] =  (byte[])results.get( keys[i]);
+            byte res[] =  (byte[])results.get(keys[i]);
             byte except[] =  vals[i];
+            // mc.stats();
             assertTrue(Arrays.equals(res, except));
         }
         
-        log.debug( String.format( "test 20 finished with start=%5d skip=%5d max=%7d", start, skip, max ) );
+        log.info(String.format( "test 20 finished with start=%5d skip=%5d max=%7d num=%d bytes=%d", start, skip, max, numEntries, numEntries * size ) );
     }
 
     public static void test21() {
@@ -335,8 +338,8 @@ public class UnitTests {
      */
     public static void main(String[] args) {
 
-        BasicConfigurator.configure();
-        org.apache.log4j.Logger.getRootLogger().setLevel( Level.WARN );
+        //BasicConfigurator.configure();
+        Logger.getLogger("com").setLevel( Level.WARN );
         try {
             //assertTrue(false);
             //System.err.println( "WARNING: assertions are disabled!" );
@@ -357,21 +360,21 @@ public class UnitTests {
 
         // initialize the pool for memcache servers
         SockIOPool pool = SockIOPool.getInstance( "test" );
-        pool.setServers( serverlist );
-        pool.setWeights( weights );
-        pool.setMaxConn( 250 );
-        pool.setNagle( false );
-        pool.setHashingAlg( SockIOPool.CONSISTENT_HASH );
-        pool.initialize();
-
-        mc = new MemcachedClient( "test" );
-        mc.flushAll();
         try {
-            runAlTests( mc );
+        	pool.setServers( serverlist );
+        	pool.setWeights( weights );
+        	pool.setMaxConn( 250 );
+        	pool.setNagle( false );
+        	pool.setHashingAlg( SockIOPool.CONSISTENT_HASH );
+        	pool.initialize();
+
+        	mc = new MemcachedClient( "test" );
+        	mc.flushAll();
+        	runAlTests( mc );
         } finally {
-            pool.shutDown();
+        	pool.shutDown();
         }
-        log.info("Finished");
+        log.warn("Finished");
     }
 
     /** 
