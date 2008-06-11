@@ -64,7 +64,7 @@ public final class LRUCache<ID_TYPE, ITEM_TYPE> {
          */
         items = new LinkedHashMap<ID_TYPE, CacheEntry<ITEM_TYPE>>(INITIAL_TABLE_SIZE) {
             protected boolean removeEldestEntry(Map.Entry<ID_TYPE, CacheEntry<ITEM_TYPE>> eldest) {
-                if (size + ceilingSize > maximumSize || size() > maximumItems) {
+            	if ((maximumSize > 0 && (size + ceilingSize > maximumSize)) || (maximumItems > 0 && size() > maximumItems)) {
                     size -= eldest.getValue().size;
                     return true;
                 } else return false;
