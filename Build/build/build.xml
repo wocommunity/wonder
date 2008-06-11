@@ -211,7 +211,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERIndexing" />
             <param name="project.dir" value="Frameworks/EOF/ERIndexing" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/ERPrototypes" />
        </antcall>
     </target>
     
