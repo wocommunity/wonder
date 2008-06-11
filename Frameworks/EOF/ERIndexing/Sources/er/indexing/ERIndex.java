@@ -22,6 +22,8 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -99,7 +101,7 @@ public class ERIndex {
 	private static final String KEY = "ERIndexing";
 
 	private static ERXAsyncQueue _queue;
-	private File _indexDirectory;
+	private FSDirectory _indexDirectory;
 	private Analyzer _analyzer;
 	private NSDictionary _attributes;
 	private ERIndexModel _model;
@@ -155,8 +157,12 @@ public class ERIndex {
 	}
 	
 	protected void initFromDictionary(NSDictionary indexDef) {
-		File indexDirectory = new File((String) indexDef.objectForKey("store"));
-		_indexDirectory = indexDirectory;
+		try {
+	        File indexDirectory = new File((String) indexDef.objectForKey("store"));
+            _indexDirectory = FSDirectory.getDirectory(indexDirectory);
+        } catch (IOException e) {
+            throw NSForwardException._runtimeExceptionForThrowable(e);
+        }
 		_analyzer = createAnalyzer(indexDef);
 		NSArray entities = (NSArray) indexDef.objectForKey("entities");
 		_entities = new NSMutableSet(entities);
@@ -191,7 +197,7 @@ public class ERIndex {
 		return _analyzer;
 	}
 
-	protected File indexDirectory() {
+	protected Directory indexDirectory() {
 		return _indexDirectory;
 	}
 	

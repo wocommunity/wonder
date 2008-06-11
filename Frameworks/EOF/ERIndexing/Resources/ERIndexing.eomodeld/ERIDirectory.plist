@@ -1,0 +1,22 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
+    ); 
+    attributesUsedForLocking = (id, name); 
+    className = "er.indexing.eof.ERIDirectory"; 
+    classProperties = (files, name); 
+    externalName = ERIDirectory; 
+    fetchSpecificationDictionary = {}; 
+    name = ERIDirectory; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ERIFile; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = directoryID; sourceAttribute = id; }); 
+            name = files; 
+        }
+    ); 
+}

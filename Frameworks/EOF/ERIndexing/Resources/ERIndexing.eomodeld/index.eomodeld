@@ -5,8 +5,11 @@
     entities = (
         {className = "er.indexing.eof.ERIAttribute"; name = ERIAttribute; }, 
         {className = "er.indexing.eof.ERIAttributeType"; name = ERIAttributeType; }, 
-        {className = "er.indexing.eof.ERIEntity"; name = ERIEntity; }
+        {className = "er.indexing.eof.ERIDirectory"; name = ERIDirectory; }, 
+        {className = "er.indexing.eof.ERIEntity"; name = ERIEntity; }, 
+        {className = "er.indexing.eof.ERIFile"; name = ERIFile; }
     ); 
+    internalInfo = {"_deletedEntityNamesInObjectStore" = (NewEntity); }; 
     userInfo = {
         "_EntityModeler" = {
             activeDatabaseConfigName = Default; 
