@@ -35,6 +35,8 @@ public class Cache {
     private int setCmds;
     private int getHits;
     private int getMisses;
+    private long bytesRead;
+    private long bytesWritten;
 
     private  long casCounter;
 
@@ -528,4 +530,12 @@ public class Cache {
         return getMisses;
     }
 
+
+    public long getBytesRead() {
+        return bytesRead;
+    }
+
+    public long getBytesWritten() {
+        return bytesWritten;
+    }
 }
