@@ -101,6 +101,7 @@ public class MemCacheDaemon {
 
     public void setAddr(InetSocketAddress addr) {
         this.addr = addr;
+        this.port = addr.getPort();
     }
 
     public void setPort(int port) {
