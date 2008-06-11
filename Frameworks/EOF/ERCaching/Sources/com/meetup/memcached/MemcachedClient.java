@@ -692,7 +692,7 @@ public class MemcachedClient {
 		}
 
 		if ( value == null ) {
-			log.error( "trying to store a null value to cache" );
+			log.warn( "trying to store a null value to cache: " + key );
 			return false;
 		}
 
