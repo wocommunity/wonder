@@ -1,0 +1,62 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = indexedAttributeTypeID; 
+            name = indexedAttributeTypeID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = indexedEntityId; 
+            name = indexedEntityId; 
+            prototypeName = id; 
+        }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }, 
+        {
+            allowsNull = Y; 
+            columnName = possibleValues; 
+            name = possibleValues; 
+            prototypeName = mutableArray; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = storageType; 
+            name = storageType; 
+            prototypeName = intNumber; 
+        }
+    ); 
+    attributesUsedForLocking = (
+        id, 
+        indexedAttributeTypeID, 
+        indexedEntityId, 
+        name, 
+        possibleValues, 
+        storageType
+    ); 
+    className = "er.indexing.eof.ERIAttribute"; 
+    classProperties = (indexedAttributeType, indexedEntity, name, possibleValues, storageType); 
+    externalName = ERIAttribute; 
+    fetchSpecificationDictionary = {}; 
+    name = ERIAttribute; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ERIAttributeType; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = indexedAttributeTypeID; }); 
+            name = indexedAttributeType; 
+        }, 
+        {
+            destination = ERIEntity; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = indexedEntityId; }); 
+            name = indexedEntity; 
+        }
+    ); 
+}
