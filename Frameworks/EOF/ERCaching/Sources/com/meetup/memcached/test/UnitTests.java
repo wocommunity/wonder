@@ -337,9 +337,10 @@ public class UnitTests {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
         //BasicConfigurator.configure();
         Logger.getLogger("com").setLevel( Level.WARN );
+    	log.warn("starting tests");
+    	long time = System.currentTimeMillis();
         try {
             //assertTrue(false);
             //System.err.println( "WARNING: assertions are disabled!" );
@@ -374,7 +375,7 @@ public class UnitTests {
         } finally {
         	pool.shutDown();
         }
-        log.warn("Finished");
+        log.warn("Finished: " + ((System.currentTimeMillis() - time)/1000) + "s");
     }
 
     /** 
