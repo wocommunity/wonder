@@ -37,7 +37,7 @@ public class MemcachedBench {
 		int runs = Integer.parseInt(args[0]);
 		int start = Integer.parseInt(args[1]);
 
-		String[] serverlist = { "192.168.1.50:1624" };
+		String[] serverlist = { "127.0.0.1:12346" };
 
 		// initialize the pool for memcache servers
 		SockIOPool pool = SockIOPool.getInstance( "test" );
@@ -66,13 +66,21 @@ public class MemcachedBench {
 		long time = end - begin;
 		System.out.println(runs + " sets: " + time + "ms");
 
-		begin = System.currentTimeMillis();
-		for (int i = start; i < start+runs; i++) {
-			String str = (String) mc.get(keyBase + i);
-		}
-		end = System.currentTimeMillis();
-		time = end - begin;
-		System.out.println(runs + " gets: " + time + "ms");
+        begin = System.currentTimeMillis();
+        for (int i = start; i < start+runs; i++) {
+            String str = (String) mc.get(keyBase + i);
+        }
+        end = System.currentTimeMillis();
+        time = end - begin;
+        System.out.println(runs + " gets: " + time + "ms");
+
+        begin = System.currentTimeMillis();
+        for (int i = start; i < start+runs; i++) {
+            String str = (String) mc.get(keyBase + i);
+        }
+        end = System.currentTimeMillis();
+        time = end - begin;
+        System.out.println(runs + " gets again: " + time + "ms");
 
 		String[] keys = new String[ runs ];
 		int j = 0;
@@ -92,8 +100,9 @@ public class MemcachedBench {
 		}
 		end = System.currentTimeMillis();
 		time = end - begin;
-		System.out.println(runs + " deletes: " + time + "ms");
-
+        System.out.println(runs + " deletes: " + time + "ms");
+        System.out.println(mc.stats());
+		
 		SockIOPool.getInstance( "test" ).shutDown();
 	}
 }

@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import com.meetup.memcached.SockIOPool;
+import com.meetup.memcached.test.MemcachedBench;
 import com.meetup.memcached.test.MemcachedTest;
 import com.meetup.memcached.test.TestMemcached;
 import com.meetup.memcached.test.UnitTests;
@@ -50,7 +51,7 @@ public class ERCaching extends ERXFrameworkPrincipal {
 
         pool.setInitConn(ERXProperties.intForKeyWithDefault("er.caching.initialConnections", 5));
         pool.setMinConn(ERXProperties.intForKeyWithDefault("er.caching.minConnections", 5));
-        pool.setMaxConn(ERXProperties.intForKeyWithDefault("er.caching.initialConnections", 50));
+        pool.setMaxConn(ERXProperties.intForKeyWithDefault("er.caching.maxConnections", 50));
         pool.setMaintSleep(ERXProperties.intForKeyWithDefault("er.caching.sleepTime", 30));
 
         pool.setNagle(ERXProperties.booleanForKeyWithDefault("er.caching.useNagle", false));
@@ -58,9 +59,10 @@ public class ERCaching extends ERXFrameworkPrincipal {
 
     }
 
-    public void runTests() {
-        MemcachedTest.main(new String[]{"4", "5", "5"});
-        TestMemcached.main(new String[]{"4", "5", "5"});
+    public static void runTests() {
+        MemcachedBench.main(new String[]{"1000", "0"});
+        /*MemcachedTest.main(new String[]{"4", "5", "5"});
+        TestMemcached.main(new String[]{"4", "5", "5"});*/
         UnitTests.main(new String[]{});
     }
     

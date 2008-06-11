@@ -88,7 +88,7 @@ public class MemcachedTest {
 			}
 		}
 
-		pool.shutDown();
+		//pool.shutDown();
 		//System.exit(1);
 	}
 
