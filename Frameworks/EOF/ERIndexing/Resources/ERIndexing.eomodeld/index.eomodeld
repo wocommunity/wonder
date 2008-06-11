@@ -1,0 +1,16 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {}; 
+    entities = (
+        {className = "er.indexing.eof.ERIAttribute"; name = ERIAttribute; }, 
+        {className = "er.indexing.eof.ERIAttributeType"; name = ERIAttributeType; }, 
+        {className = "er.indexing.eof.ERIEntity"; name = ERIEntity; }
+    ); 
+    userInfo = {
+        "_EntityModeler" = {
+            activeDatabaseConfigName = Default; 
+            databaseConfigs = {Default = {adaptorName = JDBC; }; }; 
+        }; 
+    }; 
+}
