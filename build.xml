@@ -85,6 +85,5 @@
     </target>
 
     <target name="all" depends="clean, frameworks, frameworks.install, applications, applications.install, examples, examples.install">
-        <ant antFile="Build/build/build.xml" target="all" />
     </target>
 </project>
