@@ -1,6 +1,6 @@
 {
     EOModelVersion = "2.1"; 
-    adaptorName = JDBC; 
+    adaptorName = Memory; 
     connectionDictionary = {}; 
     entities = (
         {className = "er.indexing.example.eof.Asset"; name = Asset; }, 
@@ -12,7 +12,7 @@
         "_EntityModeler" = {
             activeDatabaseConfigName = Default; 
             databaseConfigs = {
-                Default = {adaptorName = JDBC; prototypeEntityName = EOJDBCPostgresqlPrototypes; }; 
+                Default = {adaptorName = Memory; prototypeEntityName = EOMemoryPrototypes; }; 
             }; 
         }; 
     }; 

@@ -44,6 +44,7 @@ import er.extensions.concurrency.ERXAsyncQueue;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXSelectorUtilities;
 import er.indexing.ERIndexJob.Command;
 import er.indexing.storage.ERIDirectory;
@@ -216,7 +217,7 @@ public class ERIndex {
 	private void index(ERIndexJob job) {
 		try {
 			synchronized (indexDirectory()) {
-				log.info("Indexing: "  + job.command() + ": " + job.objects().count());
+				log.info("Indexing: "  + job.command() + " " + job.objects().count());
 				boolean create = job.command() == Command.CLEAR;
 				if(!create && !indexDirectory().fileExists("segments.gen")) {
 					log.error("segments did not exist but create wasn't called");
@@ -237,7 +238,7 @@ public class ERIndex {
 				}
 				modifier.flush();
 				modifier.close();
-				log.info("Indexing done: "  + job.command() + ": " + job.objects().count());
+				log.info("Done: "  + job.command() + " " + job.objects().count());
 			}
 		} catch (IOException e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -249,6 +250,7 @@ public class ERIndex {
 		if(ec.parentObjectStore() == ec.rootObjectStore()) {
 			NSArray inserted = (NSArray) n.userInfo().objectForKey("inserted");
 			NSArray updated = (NSArray) n.userInfo().objectForKey("updated");
+			updated = ERXArrayUtilities.arrayMinusArray(updated, inserted);
 			NSArray deleted = (NSArray) n.userInfo().objectForKey("deleted");
 
 			deleteObjectsFromIndex(indexableObjectsForObjects(deleted));
