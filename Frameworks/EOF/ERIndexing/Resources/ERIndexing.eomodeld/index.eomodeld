@@ -7,7 +7,8 @@
         {className = "er.indexing.eof.ERIAttributeType"; name = ERIAttributeType; }, 
         {className = "er.indexing.eof.ERIDirectory"; name = ERIDirectory; }, 
         {className = "er.indexing.eof.ERIEntity"; name = ERIEntity; }, 
-        {className = "er.indexing.eof.ERIFile"; name = ERIFile; }
+        {className = "er.indexing.eof.ERIFile"; name = ERIFile; }, 
+        {className = "er.indexing.eof.ERIFileContent"; name = ERIFileContent; }
     ); 
     internalInfo = {"_deletedEntityNamesInObjectStore" = (NewEntity); }; 
     userInfo = {

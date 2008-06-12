@@ -17,10 +17,12 @@ public abstract class _ERIFile extends ERXGenericRecord {
 
     public interface Key {
 	// Attributes
-	   public static final String CONTENT = "content";
+	   public static final String LAST_MODIFIED = "lastModified";
+	   public static final String LENGTH = "length";
 	   public static final String NAME = "name";
 
 	// Relationships
+	   public static final String CONTENT = "content";
 	   public static final String DIRECTORY = "directory";
     }
 
@@ -28,11 +30,18 @@ public abstract class _ERIFile extends ERXGenericRecord {
         /* more clazz methods here */
     }
 
-  public NSData content() {
-    return (NSData) storedValueForKey(Key.CONTENT);
+  public NSTimestamp lastModified() {
+    return (NSTimestamp) storedValueForKey(Key.LAST_MODIFIED);
   }
-  public void setContent(NSData value) {
-    takeStoredValueForKey(value, Key.CONTENT);
+  public void setLastModified(NSTimestamp value) {
+    takeStoredValueForKey(value, Key.LAST_MODIFIED);
+  }
+
+  public Long length() {
+    return (Long) storedValueForKey(Key.LENGTH);
+  }
+  public void setLength(Long value) {
+    takeStoredValueForKey(value, Key.LENGTH);
   }
 
   public String name() {
@@ -40,6 +49,13 @@ public abstract class _ERIFile extends ERXGenericRecord {
   }
   public void setName(String value) {
     takeStoredValueForKey(value, Key.NAME);
+  }
+
+  public er.indexing.eof.ERIFileContent content() {
+    return (er.indexing.eof.ERIFileContent)storedValueForKey(Key.CONTENT);
+  }
+  public void setContent(er.indexing.eof.ERIFileContent value) {
+    takeStoredValueForKey(value, Key.CONTENT);
   }
 
   public er.indexing.eof.ERIDirectory directory() {
