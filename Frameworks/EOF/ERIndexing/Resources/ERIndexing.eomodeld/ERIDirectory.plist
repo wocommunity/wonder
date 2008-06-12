@@ -12,6 +12,7 @@
     primaryKeyAttributes = (id); 
     relationships = (
         {
+            deleteRule = EODeleteRuleCascade; 
             destination = ERIFile; 
             isToMany = Y; 
             joinSemantic = EOInnerJoin; 
