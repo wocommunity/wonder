@@ -71,23 +71,25 @@ public class DataCreator {
 			EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, eomodel.name());
 			dbc.lock();
 			try {
-				EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
-				EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
-				ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(channel);
-				NSDictionary options = helper.defaultOptionDictionary(true, dropTables);
+			    EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
+			    if(eomodel.adaptorName().contains("JDBC")) {
+			        EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
+			        ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(channel);
+			        NSDictionary options = helper.defaultOptionDictionary(true, dropTables);
 
-				// Primary key support creation throws an unwanted exception if
-				// EO_PK_TABLE already
-				// exists (e.g. in case of MySQL), so we add pk support in a
-				// stand-alone step
-				options = optionsWithPrimaryKeySupportDisabled(options);
-				createPrimaryKeySupportForModel(eomodel, channel, syncFactory);
+			        // Primary key support creation throws an unwanted exception if
+			        // EO_PK_TABLE already
+			        // exists (e.g. in case of MySQL), so we add pk support in a
+			        // stand-alone step
+			        options = optionsWithPrimaryKeySupportDisabled(options);
+			        createPrimaryKeySupportForModel(eomodel, channel, syncFactory);
 
-				String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
-				log.info("Creating tables: " + eomodel.name());
-				ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sqlScript);
+			        String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
+			        log.info("Creating tables: " + eomodel.name());
+			        ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sqlScript);
+			    }
 			} catch (SQLException ex) {
-				log.error("Can't update: " + ex, ex);
+			    log.error("Can't update: " + ex, ex);
 			} finally {
 				dbc.unlock();
 			}
