@@ -4,7 +4,7 @@
         {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
     ); 
     attributesUsedForLocking = (id, name); 
-    className = "er.indexing.eof.ERIEntity"; 
+    className = "er.indexing.attributes.ERIEntity"; 
     classProperties = (indexedAttributes, name); 
     externalName = ERIEntity; 
     fetchSpecificationDictionary = {}; 

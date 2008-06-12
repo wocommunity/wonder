@@ -28,7 +28,7 @@
         {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
     ); 
     attributesUsedForLocking = (contentID, directoryID, id, lastModified, length, name); 
-    className = "er.indexing.eof.ERIFile"; 
+    className = "er.indexing.storage.ERIFile"; 
     classProperties = (content, directory, lastModified, length, name); 
     externalName = ERIFile; 
     fetchSpecificationDictionary = {}; 
@@ -43,7 +43,6 @@
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = id; sourceAttribute = contentID; }); 
             name = content; 
-            ownsDestination = Y; 
         }, 
         {
             destination = ERIDirectory; 

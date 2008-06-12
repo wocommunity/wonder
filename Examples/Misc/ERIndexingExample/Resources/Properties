@@ -1,0 +1,6 @@
+log4j.rootCategory=DEBUG, A1
+log4j.appender.A1=org.apache.log4j.ConsoleAppender
+log4j.appender.A1.layout=er.extensions.logging.ERXPatternLayout
+log4j.appender.A1.layout.ConversionPattern=%d{MMM dd HH:mm:ss} %$[%#] (%F:%L) %-5p %c %x - %m%n
+log4j.logger.er=INFO
+

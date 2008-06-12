@@ -18,6 +18,7 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
@@ -99,11 +100,17 @@ public class ERIndexModel {
 			className = ERIndex.class.getName();
 		}
 		NSMutableDictionary dict = indexDef.mutableClone();
-		dict.setObjectForKey(new File(indexRoot(), key).getAbsolutePath(), "store");
+		if(!dict.containsKey("store")) {
+			try {
+				dict.setObjectForKey(new File(indexRoot(), key).toURL(), "store");
+			} catch (MalformedURLException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		}
 		Class c = ERXPatcher.classForName(className);
 		ERIndex index = (ERIndex) _NSUtilities.instantiateObject(c, 
-				new Class[] {ERIndexModel.class, NSDictionary.class}, 
-				new Object[] {this, dict}, true, false);
+				new Class[] {ERIndexModel.class, String.class, NSDictionary.class}, 
+				new Object[] {this, key, dict}, true, false);
 		indices.setObjectForKey(index, key);
 	}
 
