@@ -215,6 +215,16 @@
        </antcall>
     </target>
     
+    <target name="ERIndexingExample.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERIndexingExample" />
+            <param name="project.dir" value="Examples/Misc/ERIndexing" />
+            <param name="use.webobjects.d2w" value="true" />
+            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}/ERPrototypes/ERIndexing" />
+       </antcall>
+    </target>
+
     <target name="ERPlot.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.plot.ERPlot" />
@@ -437,69 +447,6 @@
         </antcall>
     </target>
 	
-    <target name="SVGObjects.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="SVGObjects" />
-            <param name="project.dir" value="Frameworks/Misc/SVGObjects" />
-        </antcall>
-    </target>
-
-    <target name="SVGObjects.ComponentTour.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="org.svgobjects.examples.componenttour.Application" />
-            <param name="project.name" value="SVGObjectsComponentTour" />
-            <param name="project.dir" value="Examples/SVGObjects/ComponentTour" />
-
-            <param name="wonder.lib.root.bundles" value="SVGObjects" />
-        </antcall>
-    </target>
-	
-    <target name="SVGObjects.eCards.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="org.svgobjects.examples.ecard.Application" />
-            <param name="project.name" value="SVGObjectsECards" />
-            <param name="project.dir" value="Examples/SVGObjects/eCards" />
-
-            <param name="wonder.lib.root.bundles" value="SVGObjects" />
-        </antcall>
-    </target>
-	
-    <target name="SVGObjects.EZForms.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="org.svgobjects.examples.ezforms.Application" />
-            <param name="project.name" value="SVGObjectsEZForms" />
-            <param name="project.dir" value="Examples/SVGObjects/EZForms" />
-
-            <param name="wonder.lib.root.bundles" value="SVGObjects" />
-        </antcall>
-    </target>
-	
-    <target name="SVGObjects.Hello.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="org.svgobjects.examples.hello.Application" />
-            <param name="project.name" value="SVGObjectsHello" />
-            <param name="project.dir" value="Examples/SVGObjects/Hello" />
-
-            <param name="wonder.lib.root.bundles" value="SVGObjects" />
-        </antcall>
-    </target>
-	
-    <target name="SVGObjects.PopIdol.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="org.svgobjects.examples.popidol.Application" />
-            <param name="project.name" value="SVGObjectsPopIdol" />
-            <param name="project.dir" value="Examples/SVGObjects/PopIdol" />
-
-            <param name="wonder.lib.root.bundles" value="SVGObjects" />
-        </antcall>
-    </target>
-	
     <target name="DevStudio.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
@@ -530,12 +477,12 @@
         </antcall>
     </target>
 
-    <target name="EGSampleApp.all">
+    <target name="ExcelGeneratorExample.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.excel.Application" />
-            <param name="project.name" value="EGSampleApp" />
-            <param name="project.dir" value="Examples/Misc/EGSampleApp" />
+            <param name="project.name" value="ExcelGeneratorExample" />
+            <param name="project.dir" value="Examples/Misc/ExcelGeneratorExample" />
 
             <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/ExcelGenerator" />
         </antcall>
@@ -736,15 +683,13 @@
     
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all" />
     
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
-    
-    <target name="deployment.all" depends="JavaMonitorFramework.all, JavaMonitor.all, wotaskd.all" />
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
-    <target name="excelgeneration.examples.all" depends="EGSampleApp.all" />
+    <target name="excelgeneration.examples.all" depends="ExcelGeneratorExample.all" />
     
     <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, YUIExample.all, AjaxLookExample.all" />
@@ -755,14 +700,11 @@
     <target name="validity.applications.all" depends="ValidityModeler.all" />
     <target name="validity.examples.all" depends="ValidityExample.all" />
 
-    <target name="svgobjects.frameworks.all" depends="SVGObjects.all" />
-    <target name="svgobjects.examples.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
-
     <target name="paypal.frameworks.all" depends="WOPayPal.all" />
     <target name="woadaptors.all" depends="ERIMAdaptor.all" />
     <target name="experimental.all" depends="DevStudio.all" />
 
-    <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, svgobjects.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
+    <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
      </target>
      
      <target name="frameworks.patch54.all">
@@ -785,7 +727,7 @@
     <target name="examples.all" depends="common.examples.all, excelgeneration.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
 
 
-    <target name="all.run" depends="frameworks.all, applications.all, examples.all, deployment.all"/>
+    <target name="all.run" depends="frameworks.all, applications.all, examples.all"/>
     
     <target name="dist">
         <!-- do dist target on known frameworks -->
