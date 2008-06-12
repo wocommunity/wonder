@@ -68,17 +68,23 @@ public class ERXEC extends EOEditingContext {
 	 */
 	public static final Logger lockLoggerTrace = Logger.getLogger("er.extensions.ERXEC.LockLoggerTrace");
 
-	/** logs a message when set to DEBUG and an EC is locked/unlocked. */
+	/** Logs a message when set to DEBUG and an EC is locked/unlocked. */
 	public static final Logger lockTrace = Logger.getLogger("er.extensions.ERXEC.LockTrace");
 
-	/** name of the notification that is posted after editing context is created. */
+	/** Name of the notification that is posted after editing context is created. */
 	public static final String EditingContextDidCreateNotification = "EOEditingContextDidCreate";
 
 	/**
-	 * name of the notiification that is posted before an editing context is
+	 * Name of the notification that is posted before an editing context is
 	 * saved.
 	 */
 	public static final String EditingContextWillSaveChangesNotification = "EOEditingContextWillSaveChanges";
+
+	/**
+	 * Name of the notification that is posted when an editing context is
+	 * reverted.
+	 */
+	public static final String EditingContextDidRevertChanges = "EOEditingContextDidRevertChanges";
 
 	/**
 	 * if traceOpenEditingContextLocks is true, this contains the stack trace
@@ -1184,6 +1190,9 @@ public class ERXEC extends EOEditingContext {
 			ERXEnterpriseObject.DidRevertProcessor.perform(this, insertedObjects);
 			ERXEnterpriseObject.DidRevertProcessor.perform(this, updatedObjects);
 			ERXEnterpriseObject.DidRevertProcessor.perform(this, deletedObjects);
+
+			NSNotificationCenter.defaultCenter().postNotification(EditingContextDidRevertChanges, this);
+
 		}
 		finally {
 			autoUnlock(wasAutoLocked);

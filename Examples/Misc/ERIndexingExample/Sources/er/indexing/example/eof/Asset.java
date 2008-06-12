@@ -1,6 +1,7 @@
 package er.indexing.example.eof;
 
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.foundation.ERXMutableDictionary;
@@ -24,7 +25,18 @@ public class Asset extends _Asset {
     public void init(EOEditingContext ec) {
         super.init(ec);
     }
+
+    private static int key = 10000;
     
+    private NSDictionary pk = new NSDictionary(new Integer(key++), "id"); 
+    
+    public NSDictionary primaryKeyDictionary(boolean inTransaction) {
+        if(isNewObject()) {
+            return pk;
+        }
+        return super.primaryKeyDictionary(inTransaction);
+    }
+
     // global storage of custom attributes
     private NSMutableDictionary<String, String> _genericInfos = ERXMutableDictionary.synchronizedDictionary();
     
@@ -33,6 +45,6 @@ public class Asset extends _Asset {
     }
     
     public void setGenericInfo(String value) {
-    	//_genericInfos.setObjectForKey(value, primaryKeyInTransaction());
+    	_genericInfos.setObjectForKey(value, primaryKeyInTransaction());
     }
 }
