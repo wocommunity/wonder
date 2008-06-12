@@ -1,0 +1,13 @@
+{
+    attributes = (
+        {allowsNull = N; columnName = content; name = content; prototypeName = blob; }, 
+        {allowsNull = N; name = id; prototypeName = id; }
+    ); 
+    attributesUsedForLocking = (content, id); 
+    className = "er.indexing.eof.ERIFileContent"; 
+    classProperties = (content); 
+    externalName = ERIFileContent; 
+    fetchSpecificationDictionary = {}; 
+    name = ERIFileContent; 
+    primaryKeyAttributes = (id); 
+}

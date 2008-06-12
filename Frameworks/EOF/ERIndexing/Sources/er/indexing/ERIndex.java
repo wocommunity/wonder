@@ -45,6 +45,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
 import er.extensions.foundation.ERXSelectorUtilities;
 import er.indexing.ERIndexJob.Command;
+import er.indexing.eof.ERIDirectory;
 
 /**
  * 
@@ -52,10 +53,8 @@ import er.indexing.ERIndexJob.Command;
  *   Document = {
  *     // index class to use, default is er.indexing.ERIndex
  *     index = com.foo.SomeIndexClass;
- *     // url for the index files (currently unused)
+ *     // url for the index files
  *     store = "file://tmp/Document";
- *     // type of the index (currently unused)
- *     type = "filed|db";
  *     // if the index should be double-buffered (currently unused)
  *     buffered = false|true;
  *     // entities in this index
@@ -101,7 +100,7 @@ public class ERIndex {
 	private static final String KEY = "ERIndexing";
 
 	private static ERXAsyncQueue _queue;
-	private FSDirectory _indexDirectory;
+	private Directory _indexDirectory;
 	private Analyzer _analyzer;
 	private NSDictionary _attributes;
 	private ERIndexModel _model;
@@ -158,9 +157,14 @@ public class ERIndex {
 	
 	protected void initFromDictionary(NSDictionary indexDef) {
 		try {
-	        File indexDirectory = new File((String) indexDef.objectForKey("store"));
-            _indexDirectory = FSDirectory.getDirectory(indexDirectory);
-        } catch (IOException e) {
+		    String store = (String) indexDef.objectForKey("store");
+		    if(store.startsWith("file://")) {
+		        File indexDirectory = new File(store);
+		        _indexDirectory = FSDirectory.getDirectory(indexDirectory);
+		    } else {
+		        _indexDirectory = ERIDirectory.clazz.directoryForName(store);
+		    }
+		} catch (IOException e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);
         }
 		_analyzer = createAnalyzer(indexDef);
