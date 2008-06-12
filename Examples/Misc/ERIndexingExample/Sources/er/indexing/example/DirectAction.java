@@ -3,8 +3,12 @@ package er.indexing.example;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.eocontrol.EOEditingContext;
 
 import er.directtoweb.ERD2WDirectAction;
+import er.indexing.ERIndex;
+import er.indexing.example.eof.AssetGroup;
+import er.indexing.example.eof.Tag;
 
 public class DirectAction extends ERD2WDirectAction {
 
@@ -20,10 +24,19 @@ public class DirectAction extends ERD2WDirectAction {
      * @return
      */
     protected boolean allowPageConfiguration(String pageConfiguration) {
-        return false;
+        return true;
     }
 
     public WOActionResults defaultAction() {
+        EOEditingContext ec = session().defaultEditingContext();
+        Tag tag = Tag.clazz.allObjects(ec).lastObject();
+        AssetGroup assetGroup = AssetGroup.clazz.allObjects(ec).lastObject();
+        ERIndex eofStore = Application.model.indexNamed("AssetInEOFStore");
+        ERIndex fileStore = Application.model.indexNamed("AssetInFileStore");
+        log.info("fileStore: " + fileStore.find(ec, "tags.name", tag.name()).count());
+        log.info("eofStore: " + eofStore.find(ec, "tags.name", tag.name()).count());
+        log.info("fileStore: " + fileStore.find(ec, "assetGroup.name", assetGroup.name()).count());
+        log.info("eofStore: " + eofStore.find(ec, "assetGroup.name", assetGroup.name()).count());
         return pageWithName(Main.class.getName());
     }
 }

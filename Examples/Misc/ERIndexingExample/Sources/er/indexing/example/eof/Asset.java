@@ -33,6 +33,6 @@ public class Asset extends _Asset {
     }
     
     public void setGenericInfo(String value) {
-    	_genericInfos.setObjectForKey(value, primaryKeyInTransaction());
+    	//_genericInfos.setObjectForKey(value, primaryKeyInTransaction());
     }
 }

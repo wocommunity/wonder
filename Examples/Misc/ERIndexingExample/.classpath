@@ -10,5 +10,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PostgresqlPlugIn"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERIndexing"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JavaMemoryAdaptor"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

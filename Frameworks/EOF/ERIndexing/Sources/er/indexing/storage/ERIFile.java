@@ -26,11 +26,13 @@ public class ERIFile extends _ERIFile {
     private class EOFIndexOutput extends IndexOutput {
 
         long filePointer = 0;
+        long fileLength = 0;
         NSMutableData data;
         boolean dirty = false;
         
         public EOFIndexOutput(NSData contentData) {
             data = new NSMutableData(contentData);
+            fileLength = data.length();
         }
 
         private NSMutableData data() {
@@ -45,6 +47,9 @@ public class ERIFile extends _ERIFile {
         @Override
         public void flush() throws IOException {
             if(dirty) {
+                if(length() < data().length()) {
+                    data().setLength((int) length());
+                }
                 setContentData(data());
                 editingContext().saveChanges();
             }
@@ -58,7 +63,7 @@ public class ERIFile extends _ERIFile {
 
         @Override
         public long length() {
-            return data().length();
+            return fileLength;
         }
 
         @Override
@@ -66,26 +71,33 @@ public class ERIFile extends _ERIFile {
             assureLength(l);
             filePointer = l;
         }
-        
-        private void assureLength(long l) {
-            if(length() < l) {
-                data().setLength((int) l);
+
+        private void assureLength(long len) {
+            if(length() < len) {
+                if(data().length() < len) {
+                    data().setLength((int) len + 128000);
+                }
+                fileLength = len;
                 dirty = true;
             }
         }
         
         @Override
         public void writeByte(byte byte0) throws IOException {
-            assureLength(getFilePointer()+1);
-            data().bytesNoCopy(new NSMutableRange((int)filePointer++, 1))[0] = byte0;
+            assureLength(filePointer+1);
+            NSMutableRange range = new NSMutableRange((int)filePointer, 1);
+            byte[] bytes = data().bytesNoCopy(range);
+            bytes[(int) filePointer] = byte0;
+            filePointer += 1;
             dirty = true;
         }
 
         @Override
         public void writeBytes(byte[] abyte0, int offset, int len) throws IOException {
-            assureLength(getFilePointer()+len);
-            byte[] buf = data().bytesNoCopy(new NSMutableRange((int)filePointer, len));
-            System.arraycopy(abyte0, offset, buf, 0, len);
+            assureLength(filePointer+len);
+            NSMutableRange range = new NSMutableRange((int)filePointer, len);
+            byte[] bytes = data().bytesNoCopy(range);
+            System.arraycopy(abyte0, offset, bytes, (int)filePointer, len);
             filePointer += len;
             dirty = true;
         }
@@ -134,7 +146,7 @@ public class ERIFile extends _ERIFile {
         @Override
         public void readBytes(byte[] abyte0, int offset, int len) throws IOException {
             assureLength(filePointer+len);
-            System.arraycopy(data().bytesNoCopy(new NSMutableRange((int)filePointer, len)), 0, abyte0, offset, len);
+            System.arraycopy(data().bytesNoCopy(new NSMutableRange((int)filePointer, len)), (int)filePointer, abyte0, offset, len);
             filePointer += len;
         }
 
@@ -143,6 +155,22 @@ public class ERIFile extends _ERIFile {
             assureLength(l);
             filePointer = l;
         }
+    }
+    
+    @Override
+    public void didInsert() {
+        super.didInsert();
+        log.debug("Did create: " + name());
+    }
+    @Override
+    public void didUpdate() {
+        super.didUpdate();
+        log.debug("Did update: " + name() + "->" + length());
+    }
+    @Override
+    public void didDelete(EOEditingContext ec) {
+        super.didUpdate();
+        log.debug("Did delete: " + name() + "->" + length());
     }
     
     public void init(EOEditingContext ec) {
