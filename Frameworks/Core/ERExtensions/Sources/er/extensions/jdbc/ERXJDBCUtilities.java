@@ -491,6 +491,51 @@ public class ERXJDBCUtilities {
 				channel.closeChannel();
 			}
 		}
+		return executeUpdate(channel, sql, false);
+	}
+
+	/**
+	 * Shortcut to java.sql.Statement.executeUpdate(..) that operates on an
+	 * EOAdaptorChannel. and optionally commits.
+	 * 
+	 * @param channel
+	 *            the JDBCChannel to work with
+	 * @param sql
+	 *            the sql to execute
+	 * @return the number of rows updated
+	 * @throws SQLException
+	 *             if there is a problem
+	 */
+	public static int executeUpdate(EOAdaptorChannel channel, String sql, boolean autoCommit) throws SQLException {
+		int rowsUpdated;
+		boolean wasOpen = channel.isOpen();
+		if (!wasOpen) {
+			channel.openChannel();
+		}
+		Connection conn = ((JDBCContext) channel.adaptorContext()).connection();
+		try {
+			Statement stmt = conn.createStatement();
+			try {
+				rowsUpdated = stmt.executeUpdate(sql);
+				if(autoCommit) {
+					conn.commit();
+				}
+			}
+			catch(SQLException ex) {
+				if(autoCommit) {
+					conn.rollback();
+				}
+				throw ex;
+			}
+			finally {
+				stmt.close();
+			}
+		}
+		finally {
+			if (!wasOpen) {
+				channel.closeChannel();
+			}
+		}
 		return rowsUpdated;
 	}
 
@@ -590,7 +635,7 @@ public class ERXJDBCUtilities {
 					ERXJDBCUtilities.log.info("Executing " + sql);
 				}
 				try {
-					rowsUpdated += executeUpdate(channel, sql);
+					rowsUpdated += executeUpdate(channel, sql, true);
 				} catch(SQLException ex) {
 					ERXJDBCUtilities.log.warn("Ignoring Error: " + sql + " " + ex);
 				}
