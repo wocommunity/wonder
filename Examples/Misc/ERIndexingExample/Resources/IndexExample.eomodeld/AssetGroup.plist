@@ -4,20 +4,19 @@
         {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
     ); 
     attributesUsedForLocking = (id, name); 
-    className = "er.indexing.storage.ERIDirectory"; 
-    classProperties = (files, name); 
-    externalName = ERIDirectory; 
+    className = "er.indexing.example.eof.AssetGroup"; 
+    classProperties = (assets, name); 
+    externalName = AssetGroup; 
     fetchSpecificationDictionary = {}; 
-    name = ERIDirectory; 
+    name = AssetGroup; 
     primaryKeyAttributes = (id); 
     relationships = (
         {
-            deleteRule = EODeleteRuleCascade; 
-            destination = ERIFile; 
+            destination = Asset; 
             isToMany = Y; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = directoryID; sourceAttribute = id; }); 
-            name = files; 
+            joins = ({destinationAttribute = assetGroupID; sourceAttribute = id; }); 
+            name = assets; 
         }
     ); 
 }

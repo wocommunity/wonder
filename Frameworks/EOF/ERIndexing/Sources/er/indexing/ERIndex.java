@@ -2,6 +2,7 @@ package er.indexing;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Iterator;
 
@@ -45,7 +46,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
 import er.extensions.foundation.ERXSelectorUtilities;
 import er.indexing.ERIndexJob.Command;
-import er.indexing.eof.ERIDirectory;
+import er.indexing.storage.ERIDirectory;
 
 /**
  * 
@@ -94,7 +95,7 @@ import er.indexing.eof.ERIDirectory;
  */
 public class ERIndex {
 
-	private Logger log = Logger.getLogger(ERIndex.class);
+	private Logger log;
 
 	private static final String GID = "EOGlobalID";
 	private static final String KEY = "ERIndexing";
@@ -105,8 +106,10 @@ public class ERIndex {
 	private NSDictionary _attributes;
 	private ERIndexModel _model;
 	private NSSet _entities;
+	private String _name;
 	
-	public ERIndex(ERIndexModel model, NSDictionary indexDef) {
+	public ERIndex(ERIndexModel model, String name, NSDictionary indexDef) {
+		log = Logger.getLogger(ERIndex.class.getName() + "." + name);
 		synchronized (ERIndex.class) {
 			if(_queue == null) {
 				_queue = new ERXAsyncQueue() {
@@ -121,6 +124,7 @@ public class ERIndex {
 			}
 		}
 		_model = model;
+		_name = name;
 		initFromDictionary(indexDef);
 		registerNotifications();
 	}
@@ -159,7 +163,7 @@ public class ERIndex {
 		try {
 		    String store = (String) indexDef.objectForKey("store");
 		    if(store.startsWith("file://")) {
-		        File indexDirectory = new File(store);
+		        File indexDirectory = new File(new URL(store).getFile());
 		        _indexDirectory = FSDirectory.getDirectory(indexDirectory);
 		    } else {
 		        _indexDirectory = ERIDirectory.clazz.directoryForName(store);
@@ -214,6 +218,9 @@ public class ERIndex {
 			synchronized (indexDirectory()) {
 				log.info("Indexing: "  + job.command() + ": " + job.objects().count());
 				boolean create = job.command() == Command.CLEAR;
+				if(!create && !indexDirectory().fileExists("segments.gen")) {
+					log.error("segments did not exist but create wasn't called");
+				}
 				IndexWriter modifier = new IndexWriter(indexDirectory(), analyzer(), create);
 				if(job.command() == Command.DELETE) {
 					for (Enumeration iter = job.objects().objectEnumerator(); iter.hasMoreElements();) {
@@ -230,6 +237,7 @@ public class ERIndex {
 				}
 				modifier.flush();
 				modifier.close();
+				log.info("Indexing done: "  + job.command() + ": " + job.objects().count());
 			}
 		} catch (IOException e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -262,6 +270,10 @@ public class ERIndex {
 		return _attributes.allValues();
 	}
 
+	public String name() {
+		return _name;
+	}
+	
 	public NSArray attributeNames() {
 		return _attributes.allKeys();
 	}

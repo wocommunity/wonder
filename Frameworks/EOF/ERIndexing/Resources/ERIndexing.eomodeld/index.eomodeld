@@ -3,18 +3,22 @@
     adaptorName = JDBC; 
     connectionDictionary = {}; 
     entities = (
-        {className = "er.indexing.eof.ERIAttribute"; name = ERIAttribute; }, 
-        {className = "er.indexing.eof.ERIAttributeType"; name = ERIAttributeType; }, 
-        {className = "er.indexing.eof.ERIDirectory"; name = ERIDirectory; }, 
-        {className = "er.indexing.eof.ERIEntity"; name = ERIEntity; }, 
-        {className = "er.indexing.eof.ERIFile"; name = ERIFile; }, 
-        {className = "er.indexing.eof.ERIFileContent"; name = ERIFileContent; }
+        {className = "er.indexing.attributes.ERIAttribute"; name = ERIAttribute; }, 
+        {
+            className = "er.indexing.attributes.ERIAttributeType"; 
+            name = ERIAttributeType; 
+        }, 
+        {className = "er.indexing.storage.ERIDirectory"; name = ERIDirectory; }, 
+        {className = "er.indexing.attributes.ERIEntity"; name = ERIEntity; }, 
+        {className = "er.indexing.storage.ERIFile"; name = ERIFile; }, 
+        {className = "er.indexing.storage.ERIFileContent"; name = ERIFileContent; }
     ); 
-    internalInfo = {"_deletedEntityNamesInObjectStore" = (NewEntity); }; 
     userInfo = {
         "_EntityModeler" = {
             activeDatabaseConfigName = Default; 
-            databaseConfigs = {Default = {adaptorName = JDBC; }; }; 
+            databaseConfigs = {
+                Default = {adaptorName = JDBC; prototypeEntityName = EOJDBCPostgresqlPrototypes; }; 
+            }; 
         }; 
     }; 
 }

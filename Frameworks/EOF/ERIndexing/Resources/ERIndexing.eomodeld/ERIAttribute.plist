@@ -35,7 +35,7 @@
         possibleValues, 
         storageType
     ); 
-    className = "er.indexing.eof.ERIAttribute"; 
+    className = "er.indexing.attributes.ERIAttribute"; 
     classProperties = (indexedAttributeType, indexedEntity, name, possibleValues, storageType); 
     externalName = ERIAttribute; 
     fetchSpecificationDictionary = {}; 
