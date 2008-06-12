@@ -14,3 +14,6 @@ er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","Validation
 er.extensions.ERXJDBCAdaptor.className=er.extensions.jdbc.ERXJDBCAdaptor
 
 SeleniumTestsEnabled = true
+
+er.caching.server.host=127.0.0.1
+er.caching.server.port=12345
