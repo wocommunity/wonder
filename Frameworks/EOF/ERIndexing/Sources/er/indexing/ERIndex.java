@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
@@ -44,6 +46,7 @@ import er.extensions.concurrency.ERXAsyncQueue;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
+import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXSelectorUtilities;
 import er.indexing.ERIndexJob.Command;
@@ -193,9 +196,15 @@ public class ERIndex {
 	}
 
 	protected void registerNotifications() {
-		NSNotificationCenter.defaultCenter().addObserver(this, 
-				ERXSelectorUtilities.notificationSelector("_editingContextDidSaveChanges"), 
-				EOEditingContext.EditingContextDidSaveChangesNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, 
+                ERXSelectorUtilities.notificationSelector("_editingContextDidRevertChanges"), 
+                ERXEC.EditingContextDidRevertChanges, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, 
+                ERXSelectorUtilities.notificationSelector("_editingContextWillSaveChanges"), 
+                ERXEC.EditingContextWillSaveChangesNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, 
+                ERXSelectorUtilities.notificationSelector("_editingContextDidSaveChanges"), 
+                EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 	
 	public ERIndexModel model() {
@@ -244,21 +253,163 @@ public class ERIndex {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
 	}
+	
+	private Map<EOEditingContext, NSArray<ERIndexJob>> activeChanges = new WeakHashMap<EOEditingContext, NSArray<ERIndexJob>>();
 
-	public void _editingContextDidSaveChanges(NSNotification n) {
+	public void _editingContextWillSaveChanges(NSNotification n) {
 		EOEditingContext ec = (EOEditingContext) n.object();
 		if(ec.parentObjectStore() == ec.rootObjectStore()) {
-			NSArray inserted = (NSArray) n.userInfo().objectForKey("inserted");
-			NSArray updated = (NSArray) n.userInfo().objectForKey("updated");
+		    ec.processRecentChanges();
+			NSArray inserted = (NSArray) ec.insertedObjects();
+			NSArray updated = (NSArray) ec.updatedObjects();
 			updated = ERXArrayUtilities.arrayMinusArray(updated, inserted);
-			NSArray deleted = (NSArray) n.userInfo().objectForKey("deleted");
+			NSArray deleted = (NSArray) ec.deletedObjects();
 
-			deleteObjectsFromIndex(indexableObjectsForObjects(deleted));
-			updateObjectsInIndex(indexableObjectsForObjects(updated));
-			addObjectsToIndex(indexableObjectsForObjects(inserted));
-		}
-	}
+            NSMutableArray<ERIndexJob> jobs = new NSMutableArray<ERIndexJob>();
+            deleteObjectsFromIndex(jobs, indexableObjectsForObjects(deleted));
+            updateObjectsInIndex(jobs, indexableObjectsForObjects(updated));
+            addObjectsToIndex(jobs, indexableObjectsForObjects(inserted));
+            activeChanges.put(ec, jobs);
+        }
+    }
 
+    public void _editingContextDidRevertChanges(NSNotification n) {
+        EOEditingContext ec = (EOEditingContext) n.object();
+        if(ec.parentObjectStore() == ec.rootObjectStore()) {
+            activeChanges.remove(ec);
+        }
+    }
+
+    public void _editingContextDidSaveChanges(NSNotification n) {
+        EOEditingContext ec = (EOEditingContext) n.object();
+        if(ec.parentObjectStore() == ec.rootObjectStore()) {
+
+            NSArray<ERIndexJob> jobs = activeChanges.get(ec);
+            if(jobs != null) {
+                activeChanges.remove(ec);
+            }
+            for (ERIndexJob indexJob : jobs) {
+                if(indexJob.objects().count() > 0) {
+                    _queue.enqueue(indexJob);
+                }
+            }
+        }
+    }
+/*
+    public class Configuration {
+
+        public boolean isAudited = false;
+
+        public NSMutableArray keys = new NSMutableArray();
+
+        public NSMutableArray notificationKeys = new NSMutableArray();
+
+        @Override
+        public String toString() {
+            return "{ isAudited =" + isAudited + "; keys = " + keys + "; notificationKeys = " + notificationKeys + ";}";
+        }
+    }
+    
+    protected Configuration configureEntity(EOEntity entity) {
+        Configuration config = configuration.objectForKey(entity.name());
+        if (config == null) {
+            config = new Configuration();
+            configuration.setObjectForKey(config, entity.name());
+        }
+        if (entity.userInfo() != null) {
+            Object object = entity.userInfo().objectForKey(ERXAUDIT_KEYS);
+            String val = object != null ? object.toString() : null;
+            if (val != null) {
+                NSArray keys = null;
+
+                if (val.length() == 0) {
+                    keys = entity.classDescriptionForInstances().attributeKeys();
+                } else {
+                    keys = ERXValueUtilities.arrayValue(val);
+                }
+                config.isAudited = true;
+                config.keys.addObjectsFromArray(keys);
+                for (Enumeration e = config.keys.objectEnumerator(); e.hasMoreElements();) {
+                    String key = (String) e.nextElement();
+                    EOEntity source = entity;
+                    // AK: for now this only handles non-flattened rels
+                    for (Enumeration e1 = NSArray.componentsSeparatedByString(key, ".").objectEnumerator(); e1.hasMoreElements();) {
+                        String part = (String) e1.nextElement();
+                        EORelationship rel = source._relationshipForPath(key);
+                        if (rel != null) {
+                            if (rel.isFlattened()) {
+                                throw new IllegalStateException("Can't handle flattened relations, use the definition: " + rel);
+                            }
+                            if (rel.isToMany()) {
+                                EOEntity destinationEntity = rel.destinationEntity();
+                                Configuration destinationConfiguration = configureEntity(destinationEntity);
+                                String inverseName = rel.anyInverseRelationship().name();
+                                destinationConfiguration.notificationKeys.addObject(inverseName);
+                                source = rel.destinationEntity();
+                            } else {
+                                config.keys.addObject(rel.name());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return config;
+    }
+
+    protected void handleSave(EOEditingContext ec, String typeKey, NSArray objects) {
+        if (objects == null)
+            return;
+        for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
+            EOEnterpriseObject eo = (EOEnterpriseObject) e.nextElement();
+            Configuration config = configuration.objectForKey(eo.entityName());
+
+            if (config != null) {
+                if (config.isAudited) {
+                    handleSave(ec, typeKey, eo);
+                } else {
+                    for (Enumeration e1 = config.notificationKeys.objectEnumerator(); e1.hasMoreElements();) {
+                        String key = (String) e1.nextElement();
+                        EOEnterpriseObject target = (EOEnterpriseObject) eo.valueForKey(key);
+                        EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
+                        String inverse = entity.relationshipNamed(key).anyInverseRelationship().name();
+                        if (typeKey.equals(EOEditingContext.UpdatedKey)) {
+                            handleUpdate(ec, target, inverse, eo);
+                        } else if (typeKey.equals(EOEditingContext.InsertedKey)) {
+                            handleAdd(ec, target, inverse, eo);
+                        } else if (typeKey.equals(EOEditingContext.DeletedKey)) {
+                            target = (EOEnterpriseObject) ec.committedSnapshotForObject(eo).valueForKey(key);
+                            handleRemove(ec, target, inverse, eo);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void handleSave(NSNotification n) {
+        if (configuration.count() == 0)
+            return;
+        EOEditingContext ec = (EOEditingContext) n.object();
+        if (ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
+            ec.processRecentChanges();
+            NSArray<EOEnterpriseObject> insertedObjects = (NSArray) ec.insertedObjects().immutableClone();
+            for (EOEnterpriseObject eo : insertedObjects) {
+                if(ERCAuditTrailEntry.clazz.entityName().equals(eo.entityName())) {
+                    ec.deleteObject(eo);
+                }
+                if(ERCAuditTrail.clazz.entityName().equals(eo.entityName())) {
+                    ec.deleteObject(eo);
+                }
+            }
+            NSArray updatedObjects = (NSArray) ec.updatedObjects();
+            NSArray deletedObjects = (NSArray) ec.deletedObjects();
+            handleSave(ec, EOEditingContext.InsertedKey, insertedObjects);
+            handleSave(ec, EOEditingContext.UpdatedKey, updatedObjects);
+            handleSave(ec, EOEditingContext.DeletedKey, deletedObjects);
+        }
+    }
+*/
 	/**
 	 * Override this to respond to the editingContextDidSaveChanges notification.
 	 * You would want to re-index documents for which a related tag name changed, for example.
@@ -350,7 +501,7 @@ public class ERIndex {
 	}
 
 	protected String gidStringForObject(EOEnterpriseObject eo) {
-		String pk = ERXEOControlUtilities.primaryKeyStringForObject(eo);
+		String pk = ((ERXGenericRecord)eo).primaryKeyInTransaction();
 		return eo.entityName() + ":" + pk;
 	}
 
@@ -360,20 +511,26 @@ public class ERIndex {
 		return ec.faultForGlobalID(gid, ec);
 	}
 
-	protected void addObjectsToIndex(NSArray objects) {
-		NSArray added = addedDocumentsForObjects(objects);
-		addJob(added, NSArray.EmptyArray);
-	}
+    protected void addObjectsToIndex(NSMutableArray<ERIndexJob> jobs, NSArray objects) {
+        NSArray added = addedDocumentsForObjects(objects);
+        jobs.addObject(new ERIndexJob(this, Command.ADD, added));
+    }
 
-	protected void updateObjectsInIndex(NSArray objects) {
+    protected void addObjectsToIndex(NSArray objects) {
+        NSArray added = addedDocumentsForObjects(objects);
+        addJob(added, NSArray.EmptyArray);
+    }
+
+	protected void updateObjectsInIndex(NSMutableArray<ERIndexJob> jobs, NSArray objects) {
 		NSArray deleted = deletedTermsForObjects(objects);
 		NSArray added = addedDocumentsForObjects(objects);
-		addJob(added, deleted);
+        jobs.addObject(new ERIndexJob(this, Command.DELETE, deleted));
+        jobs.addObject(new ERIndexJob(this, Command.ADD, added));
 	}
 
-	protected void deleteObjectsFromIndex(NSArray objects) {
+	protected void deleteObjectsFromIndex(NSMutableArray<ERIndexJob> jobs, NSArray objects) {
 		NSArray deleted = deletedTermsForObjects(objects);
-		addJob(NSArray.EmptyArray, deleted);
+        jobs.addObject(new ERIndexJob(this, Command.DELETE, deleted));
 	}
 
 	protected void addJob(NSArray added, NSArray deleted) {
