@@ -1,0 +1,1 @@
+ -destination Sources -extension java -java -model Resources/IndexExample.eomodeld -packagedirs -subclassDestination Sources -templatedir ../../../Frameworks/BusinessLogic/ERCoreBusinessLogic/Support -verbose -loadModelGroup

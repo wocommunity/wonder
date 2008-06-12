@@ -11,7 +11,7 @@
         {allowsNull = N; columnName = type; name = type; prototypeName = intNumber; }
     ); 
     attributesUsedForLocking = (format, id, name, type); 
-    className = "er.indexing.eof.ERIAttributeType"; 
+    className = "er.indexing.attributes.ERIAttributeType"; 
     classProperties = (format, indexedAttributes, name, type); 
     externalName = ERIAttributeType; 
     fetchSpecificationDictionary = {}; 
