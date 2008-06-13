@@ -87,6 +87,12 @@ public class ERXEC extends EOEditingContext {
 	public static final String EditingContextDidRevertChanges = "EOEditingContextDidRevertChanges";
 
 	/**
+	 * Name of the notification that is posted when an editing context has
+	 * failed to save changes.
+	 */
+	public static final String EditingContextFailedToSaveChanges = "EOEditingContextFailedToSaveChanges";
+
+	/**
 	 * if traceOpenEditingContextLocks is true, this contains the stack trace
 	 * from this EC's call to lock
 	 */
@@ -899,6 +905,7 @@ public class ERXEC extends EOEditingContext {
 			didSaveChanges(insertedObjects, updatedObjects, deletedObjects);
 		}
 		catch (com.webobjects.eoaccess.EOGeneralAdaptorException e) {
+			NSNotificationCenter.defaultCenter().postNotification(EditingContextFailedToSaveChanges, this);
 			Object delegate = delegate();
 			boolean delegateImplementsDidSaveFailed = delegate != null && EditingContextDidFailSaveChangesDelegateSelector.implementedByObject(delegate);
 			if (delegateImplementsDidSaveFailed) {
