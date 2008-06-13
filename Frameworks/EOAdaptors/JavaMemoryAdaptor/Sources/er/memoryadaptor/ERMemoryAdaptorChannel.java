@@ -29,6 +29,10 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
     super(context);
     _fetchIndex = -1;
   }
+  
+  public NSDictionary primaryKeyForNewRowWithEntity(EOEntity entity) {
+	return context()._newPrimaryKey(null, entity);
+  }
 
   public ERMemoryAdaptorContext context() {
     return (ERMemoryAdaptorContext) _context;
