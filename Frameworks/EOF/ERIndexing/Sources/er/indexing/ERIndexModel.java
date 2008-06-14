@@ -138,7 +138,8 @@ public class ERIndexModel {
 	} 
 
 	public void indexAllObjects(EOEntity entity) {
-		if(indicesForEntity(entity.name()).count() > 0) {
+		NSArray<ERIndex> incides = indicesForEntity(entity.name());
+		if(incides.count() > 0) {
 			long start = System.currentTimeMillis();
 			int treshhold = 10;
 			EOEditingContext ec = ERXEC.newEditingContext();
@@ -156,7 +157,10 @@ public class ERIndexModel {
 						ec.lock();
 						iterator.setEditingContext(ec);
 					}
-					indexObjects(entity, objects);
+					for(Enumeration i = incides.objectEnumerator(); i.hasMoreElements(); ) {
+						ERIndex index = (ERIndex) i.nextElement();
+						index.addObjectsToIndex(ec, objects);
+					}
 				}
 			} finally {
 				ec.unlock();
@@ -178,14 +182,4 @@ public class ERIndexModel {
 			indexAllObjects(model);
 		}
 	}
-
-	public void indexObjects(EOEntity entity, NSArray objects) {
-		for(Enumeration i = indicesForEntity(entity.name()).objectEnumerator(); i.hasMoreElements(); ) {
-			ERIndex index = (ERIndex) i.nextElement();
-			if(index.handlesEntity(entity.name())) {
-				index.addObjectsToIndex(objects);
-			}
-		}
-	}
-
 }

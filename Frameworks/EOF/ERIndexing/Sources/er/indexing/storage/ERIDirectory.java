@@ -2,7 +2,6 @@ package er.indexing.storage;
 
 import java.io.IOException;
 
-import org.apache.log4j.varia.ExternallyRolledFileAppender;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
@@ -11,11 +10,9 @@ import org.apache.lucene.store.LockFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSLock;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.eof.ERXEC;
-import er.extensions.foundation.ERXMutableDictionary;
+import er.extensions.eof.ERXEOControlUtilities;
 
 public class ERIDirectory extends _ERIDirectory {
 
@@ -24,50 +21,174 @@ public class ERIDirectory extends _ERIDirectory {
 
 	public static final ERIDirectoryClazz clazz = new ERIDirectoryClazz();
 
-	private class EOFLock extends Lock {
+	private class LockingDirectory extends Directory {
 
-		private NSLock lock = new NSLock();
+		private Directory _wrapped;
 
-		@Override
-		public boolean isLocked() {
-			return lock._isLocked();
+		LockingDirectory(Directory wrapped) {
+			_wrapped = wrapped;
+			setLockFactory(_wrapped.getLockFactory());
 		}
 
 		@Override
-		public boolean obtain() throws IOException {
-			return lock.tryLock();
-		}
-
-		@Override
-		public void release() throws IOException {
-			lock.unlock();
-		}
-
-	}
-
-	private class EOFLockFactory extends LockFactory {
-		
-		private NSMutableDictionary<String, EOFLock> locks = new NSMutableDictionary();
-
-		@Override
-		public void clearLock(String s) throws IOException {
-			synchronized (locks) {
-				locks.removeObjectForKey(s);
+		public void close() throws IOException {
+			editingContext().lock();
+			try {
+				_wrapped.close();
+			} finally {
+				editingContext().unlock();
 			}
 		}
 
 		@Override
-		public Lock makeLock(String s) {
-			synchronized (locks) {
-				EOFLock lock = new EOFLock();
-				locks.setObjectForKey(lock, s);
-
-				return lock;
+		public IndexOutput createOutput(String name) throws IOException {
+			editingContext().lock();
+			try {
+				return _wrapped.createOutput(name);
+			} finally {
+				editingContext().unlock();
 			}
 		}
+
+		@Override
+		public void deleteFile(String name) throws IOException {
+			editingContext().lock();
+			try {
+				_wrapped.deleteFile(name);
+			} finally {
+				editingContext().unlock();
+			}
+		}
+
+		@Override
+		public boolean fileExists(String name) throws IOException {
+			editingContext().lock();
+			try {
+				return _wrapped.fileExists(name);
+			} finally {
+				editingContext().unlock();
+			}
+		}
+
+		@Override
+		public long fileLength(String name) throws IOException {
+			editingContext().lock();
+			try {
+				return _wrapped.fileLength(name);
+			} finally {
+				editingContext().unlock();
+			}
+		}
+
+		@Override
+		public long fileModified(String name) throws IOException {
+			editingContext().lock();
+			try {
+				return _wrapped.fileModified(name);
+			} finally {
+				editingContext().unlock();
+			}
+		}
+
+		@Override
+		public String[] list() throws IOException {
+			editingContext().lock();
+			try {
+				return _wrapped.list();
+			} finally {
+				editingContext().unlock();
+			}
+		}
+
+		@Override
+		public IndexInput openInput(String name) throws IOException {
+			editingContext().lock();
+			try {
+				return _wrapped.openInput(name);
+			} finally {
+				editingContext().unlock();
+			}
+		}
+
+		@Override
+		public void renameFile(String from, String to) throws IOException {
+			editingContext().lock();
+			try {
+				_wrapped.renameFile(from, to);
+			} finally {
+				editingContext().unlock();
+			}
+		}
+
+		@Override
+		public void touchFile(String name) throws IOException {
+			editingContext().lock();
+			try {
+				_wrapped.touchFile(name);
+			} finally {
+				editingContext().unlock();
+			}
+		}
+
 	}
 
 	private class EOFDirectory extends Directory {
+
+		private class EOFLockFactory extends LockFactory {
+
+			private class EOFLock extends Lock {
+
+				private String _name;
+
+				private EOFLock(String name) {
+					_name = name;
+				}
+
+				@Override
+				public boolean isLocked() {
+					editingContext().lock();
+					try {
+						return fileForName(name()) != null;
+					} finally {
+						editingContext().unlock();
+					}
+				}
+
+				@Override
+				public boolean obtain() throws IOException {
+					return createFile(name()) != null;
+				}
+
+				@Override
+				public void release() throws IOException {
+					deleteFile(name());
+				}
+
+				public String name() {
+					return _name;
+				}
+			}
+
+			private NSMutableDictionary<String, EOFLock> locks = new NSMutableDictionary();
+
+			@Override
+			public void clearLock(String s) throws IOException {
+				synchronized (locks) {
+					locks.removeObjectForKey(s);
+				}
+			}
+
+			@Override
+			public Lock makeLock(String s) {
+				synchronized (locks) {
+					EOFLock lock = new EOFLock(s);
+					locks.setObjectForKey(lock, s);
+
+					return lock;
+				}
+			}
+
+		}
 
 		public EOFDirectory() {
 			setLockFactory(new EOFLockFactory());
@@ -80,19 +201,27 @@ public class ERIDirectory extends _ERIDirectory {
 
 		@Override
 		public IndexOutput createOutput(String s) throws IOException {
+			log.debug("createOutput: " + s);
 			ERIFile file = fileForName(s);
 			if (file == null) {
-				file = ERIFile.clazz.createAndInsertObject(editingContext());
-				file.setName(s);
-				file.setDirectory(ERIDirectory.this);
-				ERIDirectory.this.addToFiles(file);
-				editingContext().saveChanges();
+				file = createFile(s);
 			}
 			return fileForName(s).createOutput();
 		}
 
+		public ERIFile createFile(String s) {
+			ERIFile file;
+			file = ERIFile.clazz.createAndInsertObject(editingContext());
+			file.setName(s);
+			file.setDirectory(ERIDirectory.this);
+			ERIDirectory.this.addToFiles(file);
+			editingContext().saveChanges();
+			return file;
+		}
+
 		@Override
 		public void deleteFile(String s) throws IOException {
+			log.debug("deleteFile: " + s);
 			ERIFile file = fileForName(s);
 			if (file != null) {
 				file.delete();
@@ -123,10 +252,16 @@ public class ERIDirectory extends _ERIDirectory {
 		@Override
 		public IndexInput openInput(String s) throws IOException {
 			ERIFile file = fileForName(s);
-			if(file == null) {
+			if (file == null) {
 				throw new IOException("File not found: " + s);
 			}
-			return file.openInput();
+			try {
+				return file.openInput();
+			} catch (Exception ex) {
+				ERXEOControlUtilities.refaultObject(ERIDirectory.this);
+				ERXEOControlUtilities.clearSnapshotForRelationshipNamed(ERIDirectory.this, Key.FILES);
+				throw new IOException("File not found: " + s);
+			}
 		}
 
 		@Override
@@ -137,31 +272,25 @@ public class ERIDirectory extends _ERIDirectory {
 
 		@Override
 		public void touchFile(String s) throws IOException {
-			fileForName(s).touch();
+			ERIFile file = fileForName(s);
+			if (file == null) {
+				file = createFile(s);
+			}
+			file.touch();
 			editingContext().saveChanges();
 		}
 	}
 
 	public static class ERIDirectoryClazz extends _ERIDirectory._ERIDirectoryClazz {
 
-		private NSMutableDictionary<String, ERIDirectory> directories = ERXMutableDictionary.synchronizedDictionary();
-
-		public Directory directoryForName(String store) {
-			ERIDirectory result = directories.objectForKey(store);
-			if (result == null) {
-				ERXEC ec = (ERXEC) ERXEC.newEditingContext();
-
-				ec.setUseAutoLock(true);
-				ERIDirectory directory = objectMatchingKeyAndValue(ec, Key.NAME, store);
-				if (directory == null) {
-					directory = createAndInsertObject(ec);
-					directory.setName(store);
-					ec.saveChanges();
-				}
-				result = directory;
-				directories.setObjectForKey(directory, store);
+		public Directory directoryForName(EOEditingContext ec, String store) {
+			ERIDirectory directory = objectMatchingKeyAndValue(ec, Key.NAME, store);
+			if (directory == null) {
+				directory = createAndInsertObject(ec);
+				directory.setName(store);
+				ec.saveChanges();
 			}
-			return result.directory();
+			return directory.directory();
 		}
 
 	}
@@ -187,7 +316,7 @@ public class ERIDirectory extends _ERIDirectory {
 	public Directory directory() {
 
 		if (_directory == null) {
-			_directory = new EOFDirectory();
+			_directory = new LockingDirectory(new EOFDirectory());
 		}
 		return _directory;
 	}

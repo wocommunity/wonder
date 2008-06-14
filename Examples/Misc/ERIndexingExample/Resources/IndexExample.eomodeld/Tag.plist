@@ -10,4 +10,13 @@
     fetchSpecificationDictionary = {}; 
     name = Tag; 
     primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = AssetTag; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = tagId; sourceAttribute = id; }); 
+            name = assetTags; 
+        }
+    ); 
 }

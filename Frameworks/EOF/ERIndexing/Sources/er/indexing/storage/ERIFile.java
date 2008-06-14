@@ -2,6 +2,7 @@ package er.indexing.storage;
 
 import java.io.IOException;
 
+import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
 
@@ -17,12 +18,13 @@ public class ERIFile extends _ERIFile {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERIFile.class);
 
     public static final ERIFileClazz clazz = new ERIFileClazz();
+    
     public static class ERIFileClazz extends _ERIFile._ERIFileClazz {
         /* more clazz methods here */
     }
 
     public interface Key extends _ERIFile.Key {}
-
+    
     private class EOFIndexOutput extends IndexOutput {
 
         long filePointer = 0;
@@ -46,13 +48,18 @@ public class ERIFile extends _ERIFile {
 
         @Override
         public void flush() throws IOException {
-            if(dirty) {
-                if(length() < data().length()) {
-                    data().setLength((int) length());
-                }
-                setContentData(data());
-                editingContext().saveChanges();
-            }
+            if (dirty) {
+				if (length() < data().length()) {
+					data().setLength((int) length());
+				}
+				editingContext().lock();
+				try {
+					setContentData(data());
+					editingContext().saveChanges();
+				} finally {
+					editingContext().unlock();
+				}
+			}
             dirty = false;
         }
 
