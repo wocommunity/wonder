@@ -109,8 +109,8 @@ public abstract class ERXFrameworkPrincipal {
      * @param c principal class for a given framework
      * @return framework principal initializer
      */
-    public static ERXFrameworkPrincipal sharedInstance(Class c) {
-        return (ERXFrameworkPrincipal)initializedFrameworks.objectForKey(c.getName());
+    public static<T extends ERXFrameworkPrincipal> T sharedInstance(Class<T> c) {
+        return (T)initializedFrameworks.objectForKey(c.getName());
     }
     
     /**
