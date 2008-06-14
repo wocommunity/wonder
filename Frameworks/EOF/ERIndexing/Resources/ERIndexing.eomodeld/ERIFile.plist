@@ -2,14 +2,14 @@
     attributes = (
         {
             allowsNull = N; 
-            columnName = contentID; 
-            name = contentID; 
+            columnName = contentId; 
+            name = contentId; 
             prototypeName = id; 
         }, 
         {
             allowsNull = N; 
-            columnName = directoryID; 
-            name = directoryID; 
+            columnName = directoryId; 
+            name = directoryId; 
             prototypeName = id; 
         }, 
         {allowsNull = N; name = id; prototypeName = id; }, 
@@ -27,7 +27,7 @@
         }, 
         {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
     ); 
-    attributesUsedForLocking = (contentID, directoryID, id, lastModified, length, name); 
+    attributesUsedForLocking = (contentId, directoryId, id, lastModified, length, name); 
     className = "er.indexing.storage.ERIFile"; 
     classProperties = (content, directory, lastModified, length, name); 
     externalName = ERIFile; 
@@ -41,7 +41,7 @@
             isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = contentID; }); 
+            joins = ({destinationAttribute = id; sourceAttribute = contentId; }); 
             name = content; 
         }, 
         {
@@ -49,7 +49,7 @@
             isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = directoryID; }); 
+            joins = ({destinationAttribute = id; sourceAttribute = directoryId; }); 
             name = directory; 
         }
     ); 

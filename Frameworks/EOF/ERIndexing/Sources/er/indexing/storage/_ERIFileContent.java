@@ -1,4 +1,4 @@
-// $LastChangedRevision: 7683 $ DO NOT EDIT.  Make changes to ERIFileContent.java instead.
+// $LastChangedRevision: 7719 $ DO NOT EDIT.  Make changes to ERIFileContent.java instead.
 package er.indexing.storage;
 
 import er.extensions.foundation.*;
