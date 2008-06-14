@@ -4,10 +4,10 @@
 package er.indexing.attributes;
 
 import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.indexing.ERIndex;
-import er.indexing.ERIndexModel;
 import er.indexing.ERIndex.IndexDocument;
 
 public class ERIDocument implements NSKeyValueCoding {
@@ -16,13 +16,21 @@ public class ERIDocument implements NSKeyValueCoding {
     private IndexDocument _document;
     private EOKeyGlobalID _globalID;
 
+    private NSArray<ERIAttribute> _attributes;
+
     public ERIDocument(ERIAttributeGroup attributeGroup, EOKeyGlobalID globalID) {
         _attributeGroup = attributeGroup;
+        _attributes = attributeGroup.allAttributes();
         _globalID = globalID;
     }
 
     private ERIAttribute attributeForName(String key) {
-        return _attributeGroup.attributeForName(key);
+        for (ERIAttribute attribute : _attributes) {
+            if(key.equals(attribute.name())) {
+                return attribute;
+            }
+        }
+        return null;
     }
 
     public void takeValueForKey(Object value, String key) {
@@ -33,8 +41,11 @@ public class ERIDocument implements NSKeyValueCoding {
 
     public Object valueForKey(String key) {
         willRead();
-        Object value = document().valueForKey(key);
-        return attributeForName(key).parseValue((String)value);
+        if(isRead()) {
+            Object value = document().valueForKey(key);
+            return attributeForName(key).parseValue((String)value);
+        }
+        return null;
     }
 
     public void willRead() {
@@ -47,7 +58,11 @@ public class ERIDocument implements NSKeyValueCoding {
     }
 
     private ERIndex index() {
-        return ERIndexModel.indexModel().indexNamed(_attributeGroup.name());
+        return _attributeGroup.index();
+    }
+
+    public boolean isRead() {
+        return _document != null;
     }
 
     private EOKeyGlobalID globalID() {

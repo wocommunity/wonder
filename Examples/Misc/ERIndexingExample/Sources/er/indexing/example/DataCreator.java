@@ -30,7 +30,7 @@ import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXJDBCUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
-import er.indexing.ERIndexModel;
+import er.indexing.ERIndexing;
 import er.indexing.example.eof.Asset;
 import er.indexing.example.eof.AssetGroup;
 import er.indexing.example.eof.Tag;
@@ -111,8 +111,7 @@ public class DataCreator {
 	}
 
 	public void clearIndex() {
-		Application.model = ERIndexModel.indexModel();
-		Application.model.clear();
+	    ERIndexing.indexing().clear();
 	}
 
 	public void createTables() {
