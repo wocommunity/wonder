@@ -1,0 +1,31 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = definition; 
+            name = definition; 
+            prototypeName = varchar1000; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
+    ); 
+    attributesUsedForLocking = (definition, id, name); 
+    className = "er.indexing.attributes.ERIValidationRule"; 
+    classProperties = (attributes, definition, name); 
+    externalName = ERIValidationRule; 
+    fetchSpecificationDictionary = {}; 
+    name = ERIValidationRule; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {definition = "attributeValidationRules.attribute"; name = attributes; }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = ERIAttributeValidationRule; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = validationRuleId; sourceAttribute = id; }); 
+            name = attributeValidationRules; 
+            propagatesPrimaryKey = Y; 
+        }
+    ); 
+}

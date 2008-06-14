@@ -1,4 +1,4 @@
-// $LastChangedRevision: 7683 $ DO NOT EDIT.  Make changes to ERIAttribute.java instead.
+// $LastChangedRevision: 7719 $ DO NOT EDIT.  Make changes to ERIAttribute.java instead.
 package er.indexing.attributes;
 
 import er.extensions.foundation.*;
@@ -22,8 +22,9 @@ public abstract class _ERIAttribute extends ERXGenericRecord {
 	   public static final String STORAGE_TYPE = "storageType";
 
 	// Relationships
-	   public static final String INDEXED_ATTRIBUTE_TYPE = "indexedAttributeType";
-	   public static final String INDEXED_ENTITY = "indexedEntity";
+	   public static final String ATTRIBUTE_GROUP = "attributeGroup";
+	   public static final String ATTRIBUTE_TYPE = "attributeType";
+	   public static final String VALIDATION_RULES = "validationRules";
     }
 
     public static class _ERIAttributeClazz extends ERXGenericRecord.ERXGenericRecordClazz<ERIAttribute> {
@@ -44,25 +45,36 @@ public abstract class _ERIAttribute extends ERXGenericRecord {
     takeStoredValueForKey(value, Key.POSSIBLE_VALUES);
   }
 
-  public Integer storageType() {
-    return (Integer) storedValueForKey(Key.STORAGE_TYPE);
+  public ERIStorageType storageType() {
+    Number value = (Number)storedValueForKey(Key.STORAGE_TYPE);
+    return (ERIStorageType)value;
   }
-  public void setStorageType(Integer value) {
+  public void setStorageType(ERIStorageType value) {
     takeStoredValueForKey(value, Key.STORAGE_TYPE);
   }
 
-  public er.indexing.attributes.ERIAttributeType indexedAttributeType() {
-    return (er.indexing.attributes.ERIAttributeType)storedValueForKey(Key.INDEXED_ATTRIBUTE_TYPE);
+  public er.indexing.attributes.ERIAttributeGroup attributeGroup() {
+    return (er.indexing.attributes.ERIAttributeGroup)storedValueForKey(Key.ATTRIBUTE_GROUP);
   }
-  public void setIndexedAttributeType(er.indexing.attributes.ERIAttributeType value) {
-    takeStoredValueForKey(value, Key.INDEXED_ATTRIBUTE_TYPE);
+  public void setAttributeGroup(er.indexing.attributes.ERIAttributeGroup value) {
+    takeStoredValueForKey(value, Key.ATTRIBUTE_GROUP);
   }
 
-  public er.indexing.attributes.ERIEntity indexedEntity() {
-    return (er.indexing.attributes.ERIEntity)storedValueForKey(Key.INDEXED_ENTITY);
+  public er.indexing.attributes.ERIAttributeType attributeType() {
+    return (er.indexing.attributes.ERIAttributeType)storedValueForKey(Key.ATTRIBUTE_TYPE);
   }
-  public void setIndexedEntity(er.indexing.attributes.ERIEntity value) {
-    takeStoredValueForKey(value, Key.INDEXED_ENTITY);
+  public void setAttributeType(er.indexing.attributes.ERIAttributeType value) {
+    takeStoredValueForKey(value, Key.ATTRIBUTE_TYPE);
+  }
+
+  public NSArray<er.indexing.attributes.ERIValidationRule> validationRules() {
+    return (NSArray<er.indexing.attributes.ERIValidationRule>)storedValueForKey(Key.VALIDATION_RULES);
+  }
+  public void addToValidationRules(er.indexing.attributes.ERIValidationRule object) {
+      includeObjectIntoPropertyWithKey(object, Key.VALIDATION_RULES);
+  }
+  public void removeFromValidationRules(er.indexing.attributes.ERIValidationRule object) {
+      excludeObjectFromPropertyWithKey(object, Key.VALIDATION_RULES);
   }
 
 }
