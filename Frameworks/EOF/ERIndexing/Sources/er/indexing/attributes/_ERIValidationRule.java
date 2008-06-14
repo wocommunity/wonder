@@ -1,4 +1,4 @@
-// $LastChangedRevision: 7719 $ DO NOT EDIT.  Make changes to ERIAttributeType.java instead.
+// $LastChangedRevision: 7719 $ DO NOT EDIT.  Make changes to ERIValidationRule.java instead.
 package er.indexing.attributes;
 
 import er.extensions.foundation.*;
@@ -11,29 +11,28 @@ import java.util.*;
 
 
 @SuppressWarnings("all")
-public abstract class _ERIAttributeType extends ERXGenericRecord {
+public abstract class _ERIValidationRule extends ERXGenericRecord {
 
-	public static final String ENTITY_NAME = "ERIAttributeType";
+	public static final String ENTITY_NAME = "ERIValidationRule";
 
     public interface Key {
 	// Attributes
-	   public static final String FORMAT = "format";
+	   public static final String DEFINITION = "definition";
 	   public static final String NAME = "name";
-	   public static final String VALUE_TYPE = "valueType";
 
 	// Relationships
 	   public static final String ATTRIBUTES = "attributes";
     }
 
-    public static class _ERIAttributeTypeClazz extends ERXGenericRecord.ERXGenericRecordClazz<ERIAttributeType> {
+    public static class _ERIValidationRuleClazz extends ERXGenericRecord.ERXGenericRecordClazz<ERIValidationRule> {
         /* more clazz methods here */
     }
 
-  public String format() {
-    return (String) storedValueForKey(Key.FORMAT);
+  public String definition() {
+    return (String) storedValueForKey(Key.DEFINITION);
   }
-  public void setFormat(String value) {
-    takeStoredValueForKey(value, Key.FORMAT);
+  public void setDefinition(String value) {
+    takeStoredValueForKey(value, Key.DEFINITION);
   }
 
   public String name() {
@@ -41,14 +40,6 @@ public abstract class _ERIAttributeType extends ERXGenericRecord {
   }
   public void setName(String value) {
     takeStoredValueForKey(value, Key.NAME);
-  }
-
-  public ERIValueType valueType() {
-    Number value = (Number)storedValueForKey(Key.VALUE_TYPE);
-    return (ERIValueType)value;
-  }
-  public void setValueType(ERIValueType value) {
-    takeStoredValueForKey(value, Key.VALUE_TYPE);
   }
 
   public NSArray<er.indexing.attributes.ERIAttribute> attributes() {

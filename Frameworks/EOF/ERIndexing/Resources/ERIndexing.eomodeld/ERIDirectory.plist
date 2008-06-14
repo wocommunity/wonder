@@ -16,7 +16,7 @@
             destination = ERIFile; 
             isToMany = Y; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = directoryID; sourceAttribute = id; }); 
+            joins = ({destinationAttribute = directoryId; sourceAttribute = id; }); 
             name = files; 
         }
     ); 

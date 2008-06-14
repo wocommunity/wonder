@@ -8,11 +8,17 @@
         }, 
         {allowsNull = N; name = id; prototypeName = id; }, 
         {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }, 
-        {allowsNull = N; columnName = type; name = type; prototypeName = intNumber; }
+        {
+            allowsNull = N; 
+            columnName = valueType; 
+            name = valueType; 
+            prototypeName = intNumber; 
+            userInfo = {ERXConstantClassName = "er.indexing.attributes.ERIValueType"; }; 
+        }
     ); 
-    attributesUsedForLocking = (format, id, name, type); 
+    attributesUsedForLocking = (format, id, name, valueType); 
     className = "er.indexing.attributes.ERIAttributeType"; 
-    classProperties = (format, indexedAttributes, name, type); 
+    classProperties = (attributes, format, name, valueType); 
     externalName = ERIAttributeType; 
     fetchSpecificationDictionary = {}; 
     name = ERIAttributeType; 
@@ -22,8 +28,8 @@
             destination = ERIAttribute; 
             isToMany = Y; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = indexedAttributeTypeID; sourceAttribute = id; }); 
-            name = indexedAttributes; 
+            joins = ({destinationAttribute = attributeTypeId; sourceAttribute = id; }); 
+            name = attributes; 
         }
     ); 
 }

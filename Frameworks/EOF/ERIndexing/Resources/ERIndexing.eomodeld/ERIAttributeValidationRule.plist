@@ -1,0 +1,40 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = attributeId; 
+            name = attributeId; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = validationRuleId; 
+            name = validationRuleId; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (attributeId, validationRuleId); 
+    className = ERXGenericRecord; 
+    externalName = ERIAttributeValidationRule; 
+    fetchSpecificationDictionary = {}; 
+    name = ERIAttributeValidationRule; 
+    primaryKeyAttributes = (attributeId, validationRuleId); 
+    relationships = (
+        {
+            destination = ERIAttribute; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = attributeId; }); 
+            name = attribute; 
+        }, 
+        {
+            destination = ERIValidationRule; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = validationRuleId; }); 
+            name = validationRule; 
+        }
+    ); 
+}

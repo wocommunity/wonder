@@ -5,13 +5,21 @@
     entities = (
         {className = "er.indexing.attributes.ERIAttribute"; name = ERIAttribute; }, 
         {
+            className = "er.indexing.attributes.ERIAttributeGroup"; 
+            name = ERIAttributeGroup; 
+        }, 
+        {
             className = "er.indexing.attributes.ERIAttributeType"; 
             name = ERIAttributeType; 
         }, 
+        {className = ERXGenericRecord; name = ERIAttributeValidationRule; }, 
         {className = "er.indexing.storage.ERIDirectory"; name = ERIDirectory; }, 
-        {className = "er.indexing.attributes.ERIEntity"; name = ERIEntity; }, 
         {className = "er.indexing.storage.ERIFile"; name = ERIFile; }, 
-        {className = "er.indexing.storage.ERIFileContent"; name = ERIFileContent; }
+        {className = "er.indexing.storage.ERIFileContent"; name = ERIFileContent; }, 
+        {
+            className = "er.indexing.attributes.ERIValidationRule"; 
+            name = ERIValidationRule; 
+        }
     ); 
     userInfo = {
         "_EntityModeler" = {
