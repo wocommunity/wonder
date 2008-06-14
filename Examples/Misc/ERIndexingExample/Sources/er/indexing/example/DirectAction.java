@@ -39,8 +39,8 @@ public class DirectAction extends ERD2WDirectAction {
             Asset asset = Asset.clazz.allObjects(ec).lastObject();
             AssetGroup assetGroup = AssetGroup.clazz.allObjects(ec).lastObject();
             // new DataCreator().createDummyData();
-            ERIndex eofStore = Application.model.indexNamed("AssetInEOFStore");
-            ERIndex fileStore = Application.model.indexNamed("AssetInFileStore");
+            ERIndex eofStore = ERIndex.indexNamed("AssetInEOFStore");
+            ERIndex fileStore = ERIndex.indexNamed("AssetInFileStore");
             EOQualifier tagQualifier = new EOKeyValueQualifier("tags.name", EOQualifier.QualifierOperatorEqual, tag.name());
             EOQualifier groupQualifier = new EOKeyValueQualifier("assetGroup.name", EOQualifier.QualifierOperatorEqual, tag.name());
             log.info("fileStore: " + fileStore.findGlobalIDs(tagQualifier).count());

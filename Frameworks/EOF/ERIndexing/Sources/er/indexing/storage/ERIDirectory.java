@@ -156,12 +156,22 @@ public class ERIDirectory extends _ERIDirectory {
 
 				@Override
 				public boolean obtain() throws IOException {
-					return createFile(name()) != null;
+				    editingContext().lock();
+				    try {
+				        return createFile(name()) != null;
+				    } finally {
+				        editingContext().unlock();
+				    }
 				}
 
 				@Override
 				public void release() throws IOException {
-					deleteFile(name());
+                    editingContext().lock();
+                    try {
+                        deleteFile(name());
+                    } finally {
+                        editingContext().unlock();
+                    }
 				}
 
 				public String name() {

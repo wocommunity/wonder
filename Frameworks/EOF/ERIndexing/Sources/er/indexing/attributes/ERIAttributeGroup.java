@@ -1,15 +1,12 @@
 package er.indexing.attributes;
 
-import org.apache.lucene.document.Document;
-
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.indexing.ERAttributeIndex;
 import er.indexing.ERIndex;
-import er.indexing.ERIndexModel;
 
 public class ERIAttributeGroup extends _ERIAttributeGroup {
 
@@ -22,9 +19,10 @@ public class ERIAttributeGroup extends _ERIAttributeGroup {
         public ERIAttributeGroup attributeGroupForName(EOEditingContext ec, String name) {
             return objectMatchingKeyAndValue(ec, Key.NAME, name);
         }
-     }
-    
-    public interface Key extends _ERIAttributeGroup.Key {}
+    }
+
+    public interface Key extends _ERIAttributeGroup.Key {
+    }
 
     public void init(EOEditingContext ec) {
         super.init(ec);
@@ -33,9 +31,9 @@ public class ERIAttributeGroup extends _ERIAttributeGroup {
     public NSArray<ERIAttributeGroup> groups() {
         NSMutableArray<ERIAttributeGroup> result = new NSMutableArray<ERIAttributeGroup>();
         ERIAttributeGroup current = this;
-        
+
         result.addObject(current);
-        while(current.parent() != null) {
+        while (current.parent() != null) {
             result.insertObjectAtIndex(current, 0);
             current = current.parent();
         }
@@ -51,8 +49,8 @@ public class ERIAttributeGroup extends _ERIAttributeGroup {
     }
 
     public ERIAttribute attributeForName(String name) {
-        for (ERIAttribute attribute: allAttributes()) {
-            if(attribute.name().equals(name)) {
+        for (ERIAttribute attribute : allAttributes()) {
+            if (attribute.name().equals(name)) {
                 return attribute;
             }
         }
@@ -62,5 +60,10 @@ public class ERIAttributeGroup extends _ERIAttributeGroup {
     public ERIDocument documentForGlobalID(EOEditingContext editingContext, EOKeyGlobalID permanentGlobalID) {
         ERIDocument document = new ERIDocument(this, permanentGlobalID);
         return document;
+    }
+
+    public synchronized ERIndex index() {
+        ERAttributeIndex index = ERAttributeIndex.indexNamed(name());
+        return index;
     }
 }
