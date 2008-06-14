@@ -6,6 +6,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOEditingContext;
 
 import er.directtoweb.ERD2WDirectAction;
+import er.extensions.eof.ERXEC;
 import er.indexing.ERIndex;
 import er.indexing.example.eof.Asset;
 import er.indexing.example.eof.AssetGroup;
@@ -29,29 +30,42 @@ public class DirectAction extends ERD2WDirectAction {
     }
 
     public WOActionResults defaultAction() {
-        EOEditingContext ec = session().defaultEditingContext();
-        Tag tag = Tag.clazz.allObjects(ec).lastObject();
-        Asset asset = Asset.clazz.allObjects(ec).lastObject();
-        AssetGroup assetGroup = AssetGroup.clazz.allObjects(ec).lastObject();
-        ERIndex eofStore = Application.model.indexNamed("AssetInEOFStore");
-        ERIndex fileStore = Application.model.indexNamed("AssetInFileStore");
-        log.info("fileStore: " + fileStore.find(ec, "tags.name", tag.name()).count());
-        log.info("eofStore: " + eofStore.find(ec, "tags.name", tag.name()).count());
-        log.info("fileStore: " + fileStore.find(ec, "assetGroup.name", assetGroup.name()).count());
-        log.info("eofStore: " + eofStore.find(ec, "assetGroup.name", assetGroup.name()).count());
-        tag.setName("cooltest");
-        asset.addToTags(tag);
-        ec.saveChanges();
-        log.info("fileStore 1: " + fileStore.find(ec, "tags.name", tag.name()).count());
-        log.info("eofStore 1: " + eofStore.find(ec, "tags.name", tag.name()).count());
-        try {
-            Thread.sleep(20000);
-            log.info("fileStore 2: " + fileStore.find(ec, "tags.name", tag.name()).count());
-            log.info("eofStore 2: " + eofStore.find(ec, "tags.name", tag.name()).count());
-            } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    	EOEditingContext ec = ERXEC.newEditingContext();
+    	ec.lock();
+    	try {
+    		Tag tag = Tag.clazz.allObjects(ec).lastObject();
+    		Asset asset = Asset.clazz.allObjects(ec).lastObject();
+    		AssetGroup assetGroup = AssetGroup.clazz.allObjects(ec).lastObject();
+    		// new DataCreator().createDummyData();
+    		ERIndex eofStore = Application.model.indexNamed("AssetInEOFStore");
+    		ERIndex fileStore = Application.model.indexNamed("AssetInFileStore");
+    		log.info("fileStore: " + fileStore.find(ec, "tags.name", tag.name()).count());
+    		log.info("eofStore: " + eofStore.find(ec, "tags.name", tag.name()).count());
+    		log.info("fileStore: " + fileStore.find(ec, "assetGroup.name", assetGroup.name()).count());
+    		log.info("eofStore: " + eofStore.find(ec, "assetGroup.name", assetGroup.name()).count());
+    		
+    		String newName = "cooltest";
+    		
+    		tag.setName(newName + " " + System.currentTimeMillis());
+    		ec.saveChanges();
+    		
+    		assetGroup.setName(newName + "  " + System.currentTimeMillis());
+    		ec.saveChanges();
+    		log.info("fileStore 1: " + fileStore.find(ec, "tags.name", newName).count());
+    		log.info("eofStore 1: " + eofStore.find(ec, "tags.name", newName).count());
+    		try {
+    			if(true) {
+    				Thread.sleep(2000);
+    			}
+    			log.info("fileStore 2: " + fileStore.find(ec, "tags.name", newName).count());
+    			log.info("eofStore 2: " + eofStore.find(ec, "tags.name", newName).count());
+    		} catch (InterruptedException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    	} finally {
+    		ec.unlock();
+    	}
         return pageWithName(Main.class.getName());
     }
 }

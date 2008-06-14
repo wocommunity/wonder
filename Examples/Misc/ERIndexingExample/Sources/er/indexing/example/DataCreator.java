@@ -36,12 +36,13 @@ import er.indexing.example.eof.AssetGroup;
 import er.indexing.example.eof.Tag;
 
 public class DataCreator {
+	
 	private EOEditingContext ec;
 
 	private static final Logger log = Logger.getLogger(DataCreator.class);
 
 	public static void main(String[] args) {
-		new DataCreator().create(args);
+		new DataCreator().createAll();
 	}
 
 	private NSDictionary optionsWithPrimaryKeySupportDisabled(NSDictionary options) {
@@ -71,70 +72,87 @@ public class DataCreator {
 			EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, eomodel.name());
 			dbc.lock();
 			try {
-			    EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
-			    if(eomodel.adaptorName().contains("JDBC")) {
-			        EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
-			        ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(channel);
-			        NSDictionary options = helper.defaultOptionDictionary(true, dropTables);
+				EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
+				if (eomodel.adaptorName().contains("JDBC")) {
+					EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
+					ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(channel);
+					NSDictionary options = helper.defaultOptionDictionary(true, dropTables);
 
-			        // Primary key support creation throws an unwanted exception if
-			        // EO_PK_TABLE already
-			        // exists (e.g. in case of MySQL), so we add pk support in a
-			        // stand-alone step
-			        options = optionsWithPrimaryKeySupportDisabled(options);
-			        createPrimaryKeySupportForModel(eomodel, channel, syncFactory);
+					// Primary key support creation throws an unwanted exception
+					// if
+					// EO_PK_TABLE already
+					// exists (e.g. in case of MySQL), so we add pk support in a
+					// stand-alone step
+					options = optionsWithPrimaryKeySupportDisabled(options);
+					createPrimaryKeySupportForModel(eomodel, channel, syncFactory);
 
-			        String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
-			        log.info("Creating tables: " + eomodel.name());
-			        ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sqlScript);
-			    }
+					String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
+					log.info("Creating tables: " + eomodel.name());
+					ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sqlScript);
+				}
 			} catch (SQLException ex) {
-			    log.error("Can't update: " + ex, ex);
+				log.error("Can't update: " + ex, ex);
 			} finally {
 				dbc.unlock();
 			}
 		}
 
 	}
-	
-    NSMutableArray<Asset> assets = new NSMutableArray();
-    NSMutableArray<AssetGroup> groups = new NSMutableArray();
-    NSMutableArray<Tag> tags = new NSMutableArray();
-    NSArray<Tag> words = new NSArray();
 
-	public void create(String[] args) {
+	NSMutableArray<Asset> assets = new NSMutableArray();
+	NSMutableArray<AssetGroup> groups = new NSMutableArray();
+	NSMutableArray<Tag> tags = new NSMutableArray();
+	NSArray<Tag> words = new NSArray();
+
+	public void createAll() {
+		createTables();
+		clearIndex();
+		createDummyData();
+	}
+
+	public void clearIndex() {
+		Application.model = ERIndexModel.indexModel();
+		Application.model.clear();
+	}
+
+	public void createTables() {
 		ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {
 			boolean dropTables = ERXProperties.booleanForKeyWithDefault("dropTables", true);
 			createTables(dropTables);
-			Application.model = ERIndexModel.indexModel();
-			Application.model.clear();
-			createDummyData();
 		} finally {
 			ec.unlock();
 		}
-		// can't quit... index is still running. System.exit(0);
-		
 	}
 
-    private int randomInt(int max) {
-        return new Random().nextInt(max);
-    }
-    
-    private Object randomObject(NSArray array) {
-        return array.objectAtIndex(randomInt(array.count()));
-    }
-    
+	public void createDummyData() {
+		ec = ERXEC.newEditingContext();
+		ec.lock();
+		try {
+			doCreateDummyData();
+		} finally {
+			ec.unlock();
+		}
+	}
+
+	private int randomInt(int max) {
+		return new Random().nextInt(max);
+	}
+
+	private Object randomObject(NSArray array) {
+		return array.objectAtIndex(randomInt(array.count()));
+	}
+
 	private String randomWord() {
 		return (String) randomObject(words);
 	}
 
 	private String randomText(int max) {
 		StringBuilder content = new StringBuilder();
-		while(true) {
+		while (true) {
 			String nextWord = randomWord();
-			if((content.length() + nextWord.length() + 1) < max) {
+			if ((content.length() + nextWord.length() + 1) < max) {
 				content.append(nextWord).append(' ');
 			} else {
 				break;
@@ -146,55 +164,55 @@ public class DataCreator {
 	private Tag randomTag() {
 		return (Tag) randomObject(tags);
 	}
-	   
+
 	private AssetGroup randomAssetGroup() {
 		return (AssetGroup) randomObject(groups);
 	}
 
 	private BigDecimal randomPrice() {
-		return BigDecimal.valueOf((double)randomInt(10000)/(double)100).setScale(2, BigDecimal.ROUND_DOWN);
+		return BigDecimal.valueOf((double) randomInt(10000) / (double) 100).setScale(2, BigDecimal.ROUND_DOWN);
 	}
 
 	private NSTimestamp randomTime() {
-		return new NSTimestamp(randomInt((int)(System.currentTimeMillis())));
+		return new NSTimestamp(randomInt((int) (System.currentTimeMillis() / 1000)) * 1000);
 	}
 
-	private void createDummyData() {
+	private void doCreateDummyData() {
 		try {
 			log.info("load");
-			
+
 			String wordFile = ERXFileUtilities.stringFromFile(new File("/usr/share/dict/words"));
 			words = NSArray.componentsSeparatedByString(wordFile, "\n");
 			log.info("loaded words: " + words.count());
 
 			int MAX = 100;
-			int MAX_ASSETS = MAX * 100;
-			
+			int MAX_ASSETS = MAX * 10;
+
 			for (int i = 0; i < MAX; i++) {
 				Tag tag = Tag.clazz.createAndInsertObject(ec);
 				tag.setName(randomWord());
 				tags.addObject(tag);
 			}
 			log.info("created tags: " + tags.count());
-			
+
 			for (int i = 0; i < MAX; i++) {
 				AssetGroup group = AssetGroup.clazz.createAndInsertObject(ec);
 				group.setName(randomWord());
 				groups.addObject(group);
 			}
 			log.info("created groups: " + groups.count());
-			
+
 			for (int i = 0; i < MAX_ASSETS; i++) {
 				Asset asset = Asset.clazz.createAndInsertObject(ec);
 				asset.setAssetGroup(randomAssetGroup());
 				asset.setCreationDate(randomTime());
-				asset.setUserCount((long)randomInt(10000));
+				asset.setUserCount((long) randomInt(10000));
 				asset.setPrice(randomPrice());
-				
-				for(int j = 0; j < 10; j++) {
+
+				for (int j = 0; j < 10; j++) {
 					asset.addToTags(randomTag());
 				}
-				
+
 				asset.setContent(randomText(1000));
 
 				asset.setGenericInfo(randomText(1000));
@@ -202,7 +220,7 @@ public class DataCreator {
 				assets.addObject(asset);
 			}
 			log.info("created assets: " + assets.count());
-			
+
 			ec.saveChanges();
 			log.info("fin: " + words.count());
 		} catch (IOException e) {

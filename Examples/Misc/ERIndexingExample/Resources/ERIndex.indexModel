@@ -82,7 +82,7 @@
 	     	termVector = NO;
 		 };
         
-         // related to many attribute
+        // related to many attribute
          tags.name = {
 	     	store = NO;
 	     	index = TOKENIZED;
