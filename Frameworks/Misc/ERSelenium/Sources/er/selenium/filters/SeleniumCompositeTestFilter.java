@@ -23,8 +23,6 @@
 
 package er.selenium.filters;
 
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
@@ -34,26 +32,24 @@ import er.selenium.SeleniumTest;
 
 public class SeleniumCompositeTestFilter extends SeleniumTestFilterHelper implements SeleniumTestFilter {
 	private static final Logger log = Logger.getLogger(SeleniumCompositeTestFilter.class);
-	protected NSMutableArray _testFilters;
+	protected NSMutableArray<SeleniumTestFilter> testFilters;
 	
 	public SeleniumCompositeTestFilter() {
-		_testFilters = new NSMutableArray();
+		testFilters = new NSMutableArray<SeleniumTestFilter>();
 	}
 	
 	public void addTestFilter(SeleniumTestFilter filter) {
 		assert(filter != null);
-		_testFilters.add(filter);
+		testFilters.add(filter);
 	}
 	
-	public NSArray getTestFilters() {
-		return _testFilters;
+	public NSArray<SeleniumTestFilter> getTestFilters() {
+		return testFilters;
 	}
 	
 	public SeleniumTest processTest(SeleniumTest test) {
-		Iterator iter = _testFilters.iterator();
-		log.debug("processing " + _testFilters.count() + " filters in chain");
-		while (iter.hasNext()) {
-			SeleniumTestFilter filter = (SeleniumTestFilter)iter.next();
+		log.debug("processing " + testFilters.count() + " filters in chain");
+		for (SeleniumTestFilter filter : testFilters) {
 			log.debug("applying " + filter.toString());
 			test = filter.processTest(test);
 		}

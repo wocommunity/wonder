@@ -23,8 +23,6 @@
 
 package er.selenium.filters;
 
-import java.util.Iterator;
-
 import com.webobjects.foundation.NSMutableArray;
 
 import er.selenium.SeleniumTest;
@@ -33,15 +31,14 @@ public abstract class SeleniumTestFilterHelper {
 	protected void processSingleTestElement(SeleniumTest.Element element) {
 	}
 	
-	protected void processTestElements(NSMutableArray elements) {
-		Iterator iter = elements.iterator();
-		while (iter.hasNext()) {
-			processSingleTestElement((SeleniumTest.Element)iter.next());
+	protected void processTestElements(NSMutableArray<SeleniumTest.Element> elements) {
+		for (SeleniumTest.Element elem : elements) {
+			processSingleTestElement(elem);
 		}
 	}
 	
 	public SeleniumTest processTest(SeleniumTest test) {
-		NSMutableArray elements = new NSMutableArray(test.elements());
+		NSMutableArray<SeleniumTest.Element> elements = test.elements().mutableClone();
 		processTestElements(elements);
 		test.assignElements(elements);
 		return test;

@@ -29,9 +29,9 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.foundation.ERXArrayUtilities;
 import er.selenium.SeleniumTest;
 import er.selenium.SeleniumTest.Command;
+import er.selenium.SeleniumTest.Element;
 
 public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper implements SeleniumTestFilter {
 	private static final Logger log = Logger.getLogger(SeleniumRepeatExpanderTestFilter.class);
@@ -50,7 +50,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 		}
 	}
 	
-	protected void generateIterations(NSMutableArray elements, int repeatIndex, int doneIndex) {
+	protected void generateIterations(NSMutableArray<SeleniumTest.Element> elements, int repeatIndex, int doneIndex) {
 		NSMutableDictionary<Integer, LoopData> loopData = new NSMutableDictionary<Integer, LoopData>();
 		
 		int repetitionCount = -1;
@@ -107,14 +107,14 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 					
 					elements.insertObjectAtIndex(newCommand, insertIndex++);
 				} else {
-					elements.insertObjectAtIndex(((SeleniumTest.Element)elements.get(i)).clone(), insertIndex++);
+					elements.insertObjectAtIndex(elements.get(i).clone(), insertIndex++);
 				}
 			}
 		}
 	}
 	
 	// @Override
-	protected void processTestElements(NSMutableArray elements) {
+	protected void processTestElements(NSMutableArray<Element> elements) {
 		int repeatIndex = -1;
 		boolean shouldProcess;
 		

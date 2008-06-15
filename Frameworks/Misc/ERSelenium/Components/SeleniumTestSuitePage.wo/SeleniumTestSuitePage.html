@@ -1,4 +1,7 @@
-<webobject name="HasNoTestContents">
+<wo:if condition = "$testContents">
+<wo:string escapeHTML = "$false" value="$testContents" />
+</wo:if>
+<wo:else>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,16 +11,11 @@
 	<table id="suiteTable" cellpadding="1" cellspacing="1" border="1">
 		<tbody>
 		<tr><td>Test Suites</td></tr>
-		<webobject name="TestDirectoriesRepetition">
-			<webobject name="TestsRepetition">
-			<tr><td><webobject name="TestDirectory"/>/<webobject name="TestLink"/></td></tr>
-			</webobject>
-		</webobject>
+		<wo:loop list = "$testFiles" item="$testFile">
+			<tr><td><wo:string value="$testDir.name" />/<wo:link target="testFrame" href="$testLink" string="$testFile.name" /></td></tr>
+		</wo:loop>
 		</tbody>
 	</table>
 </body>
 </html>
-</webobject>
-<webobject name="HasTestContents">
-<webobject name="TestContents"/>
-</webobject>
+</wo:else>
