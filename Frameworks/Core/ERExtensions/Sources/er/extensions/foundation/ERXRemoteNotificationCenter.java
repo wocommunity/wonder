@@ -11,6 +11,7 @@ import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 
@@ -21,21 +22,18 @@ import com.webobjects.foundation.NSNotificationCenter;
 
 /**
  * NSNotificationCenter that can post simple notifications to other apps.
- * Serializes the NSNotification, so be sure not to put EOs or similar stuff
- * into it. Also the <code>object</code> is sent into the stream, so you must
- * override <code>equals()</code> so it also gets the notification on the
- * other side (totally untested).<br >
+ * Currently just posts the name, not object or userInfo.
  * Note: you must specifically register here, not at <code>NSNotificationCenter.defaultCenter()</code>.
  * 
  * @author ak
  */
 
-// TODO subclass of NSNotification that custom-serialize itself
+// TODO subclass of NSNotification that custom-serialize itself to a sparser format
 public class ERXRemoteNotificationCenter extends NSNotificationCenter {
 	public static final int IDENTIFIER_LENGTH = 6;
 	private static final int JOIN = 1;
 	private static final int LEAVE = 2;
-	private static final int POST = 2;
+	private static final int POST = 3;
 
     private static final Logger log = Logger.getLogger(ERXRemoteNotificationCenter.class);
 
@@ -52,6 +50,10 @@ public class ERXRemoteNotificationCenter extends NSNotificationCenter {
     private static ERXRemoteNotificationCenter _sharedInstance;
 
     protected ERXRemoteNotificationCenter() throws IOException  {
+		init();
+   }
+
+    protected void init() throws UnknownHostException, SocketException, IOException {
 		String localBindAddressStr = ERXProperties.stringForKey("er.extensions.ERXRemoteNotificationsCenter.localBindAddress");
 		if (localBindAddressStr == null) {
 			_localBindAddress = WOApplication.application().hostAddress();
@@ -85,7 +87,9 @@ public class ERXRemoteNotificationCenter extends NSNotificationCenter {
 		_multicastSocket.setTimeToLive(4);
 		_multicastSocket.setReuseAddress(true);
 		_multicastSocket.bind(new InetSocketAddress(_multicastPort));
-   }
+		listen();
+		join();
+	}
 
     public static ERXRemoteNotificationCenter defaultCenter() {
 		if (_sharedInstance == null) {
@@ -157,8 +161,11 @@ public class ERXRemoteNotificationCenter extends NSNotificationCenter {
 						_multicastSocket.receive(receivePacket);
 						ByteArrayInputStream bais = new ByteArrayInputStream(receivePacket.getData(), 0, receivePacket.getLength());
 						DataInputStream dis = new DataInputStream(bais);
-						byte code = dis.readByte();
 						
+						byte[] identifier = new byte[IDENTIFIER_LENGTH];
+						dis.readFully(identifier);
+
+						byte code = dis.readByte();
 						if(code == JOIN) {
 							log.info("Received JOIN");
 						}
@@ -166,27 +173,34 @@ public class ERXRemoteNotificationCenter extends NSNotificationCenter {
 							log.info("Received LEAVE");
 						}
 						else if (code == POST) {
-							log.info("Received POST");
+							String self = ERXStringUtilities.byteArrayToHexString(_identifier);
+							String remote = ERXStringUtilities.byteArrayToHexString(identifier);
+							
+							if(self.equals(remote) && false) {
+								if (log.isDebugEnabled()) {
+									log.info("Received POST from self");
+								}
+							} else {
+								if (log.isDebugEnabled()) {
+									log.info("Received POST from " + ERXStringUtilities.byteArrayToHexString(identifier));
+								}
+								short nameLen = dis.readShort();
+								byte[] nameBytes = new byte[nameLen];
+								dis.readFully(nameBytes);
 
-							byte[] identifier = new byte[IDENTIFIER_LENGTH];
-							dis.readFully(identifier);
+								short userInfoLen = dis.readShort();
+								byte[] userInfoBytes = new byte[userInfoLen];
+								dis.readFully(userInfoBytes);
 
-							short nameLen = dis.readShort();
-							byte[] nameBytes = new byte[nameLen];
-							dis.readFully(nameBytes);
-
-							short userInfoLen = dis.readShort();
-							byte[] userInfoBytes = new byte[userInfoLen];
-							dis.readFully(userInfoBytes);
-
-							NSNotification notification = new NSNotification(new String(nameBytes), null, null);
-							if (log.isDebugEnabled()) {
-								log.debug("Received notification: " + notification);
+								NSNotification notification = new NSNotification(new String(nameBytes), null, null);
+								if (log.isDebugEnabled()) {
+									log.debug("Received notification: " + notification);
+								}
+								else if (log.isInfoEnabled()) {
+									log.info("Received " + notification.name() + " notification.");
+								}
+								postLocalNotification(notification);
 							}
-							else if (log.isInfoEnabled()) {
-								log.info("Received " + notification.name() + " notification.");
-							}
-							postLocalNotification(notification);
 						}
 
 					}
