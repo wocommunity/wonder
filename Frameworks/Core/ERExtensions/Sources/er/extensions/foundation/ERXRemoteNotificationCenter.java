@@ -166,17 +166,21 @@ public class ERXRemoteNotificationCenter extends NSNotificationCenter {
 						dis.readFully(identifier);
 
 						byte code = dis.readByte();
-						if(code == JOIN) {
-							log.info("Received JOIN");
+						if (code == JOIN) {
+							if (log.isDebugEnabled()) {
+								log.info("Received JOIN");
+							}
 						}
 						else if (code == LEAVE) {
-							log.info("Received LEAVE");
+							if (log.isDebugEnabled()) {
+								log.info("Received LEAVE");
+							}
 						}
 						else if (code == POST) {
 							String self = ERXStringUtilities.byteArrayToHexString(_identifier);
 							String remote = ERXStringUtilities.byteArrayToHexString(identifier);
 							
-							if(self.equals(remote) && false) {
+							if(self.equals(remote)) {
 								if (log.isDebugEnabled()) {
 									log.info("Received POST from self");
 								}
