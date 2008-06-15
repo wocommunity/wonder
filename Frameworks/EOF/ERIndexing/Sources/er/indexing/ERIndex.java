@@ -58,7 +58,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.concurrency.ERXAsyncQueue;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGenericRecord;
@@ -68,6 +67,7 @@ import er.extensions.foundation.ERXMutableDictionary;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXSelectorUtilities;
 import er.indexing.storage.ERIDirectory;
+
 public class ERIndex {
 
     protected Logger log;
@@ -80,9 +80,7 @@ public class ERIndex {
 
     private static final String GID = "EOGlobalID";
 
-    private static final String KEY = "ERIndexing";
-
-    private static ERXAsyncQueue<Transaction> _queue;
+    protected static final String KEY = "ERIndexing";
 
     private static NSMutableDictionary<String, ERIndex> indices = ERXMutableDictionary.synchronizedDictionary();
 
@@ -300,7 +298,7 @@ public class ERIndex {
             return _clear;
         }
 
-        private TransactionHandler handler() {
+        TransactionHandler handler() {
             return ERIndex.this._handler;
         }
     }
@@ -341,14 +339,10 @@ public class ERIndex {
         }
 
         public void submit(Transaction transaction) {
-            if(false) {
-                _queue.enqueue(transaction);
-            } else {
-                index(transaction);
-            }
+            index(transaction);
         }
 
-        private void index(Transaction transaction) {
+        void index(Transaction transaction) {
             try {
                 NSNotificationCenter.defaultCenter().postNotification(IndexingStartedNotification, transaction);
                 boolean create = transaction.hasClear();
@@ -364,24 +358,24 @@ public class ERIndex {
                     log.error("segments did not exist but create wasn't called");
                     create = true;
                 }
-                IndexWriter modifier = new IndexWriter(indexDirectory(), analyzer(), create);
+                IndexWriter writer = new IndexWriter(indexDirectory(), analyzer(), create);
                 for (Job job : transaction.jobs()) {
                     log.info("Indexing: " + job.command() + " " + job.objects().count());
                     if (job.command() == Command.DELETE) {
                         for (Enumeration iter = job.objects().objectEnumerator(); iter.hasMoreElements();) {
                             Term term = (Term) iter.nextElement();
-                            modifier.deleteDocuments(term);
+                            writer.deleteDocuments(term);
                         }
                     } else if (job.command() == Command.ADD) {
                         for (Enumeration iter = job.objects().objectEnumerator(); iter.hasMoreElements();) {
                             Document document = (Document) iter.nextElement();
-                            modifier.addDocument(document, analyzer());
+                            writer.addDocument(document, analyzer());
                         }
                     }
                     log.info("Done: " + job.command() + " " + job.objects().count());
                 }
-                modifier.flush();
-                modifier.close();
+                writer.flush();
+                writer.close();
                 NSNotificationCenter.defaultCenter().postNotification(IndexingEndedNotification, transaction);
                 log.info("Finished in " + (System.currentTimeMillis() - start) / 1000 + "s: " + transaction);
             } catch (IOException e) {
@@ -405,19 +399,7 @@ public class ERIndex {
     
     protected ERIndex(String name) {
         log = Logger.getLogger(ERIndex.class.getName() + "." + name);
-        synchronized (ERIndex.class) {
-            if (_queue == null) {
-                _queue = new ERXAsyncQueue<Transaction>() {
-
-                    public void process(Transaction transaction) {
-                        transaction.handler().index(transaction);
-                    }
-                };
-                _queue.setName(KEY);
-                _queue.start();
-            }
-        }
-        _name = name;
+       _name = name;
         indices.setObjectForKey(this, name);
     }
    
@@ -490,17 +472,25 @@ public class ERIndex {
     }
 
     private IndexReader _reader;
-
+    private IndexSearcher _searcher;
+    
     private IndexReader indexReader() throws CorruptIndexException, IOException {
         if (_reader == null) {
             _reader = IndexReader.open(indexDirectory());
+            _searcher = new IndexSearcher(_reader);
         }
         if (!_reader.isCurrent()) {
             _reader = _reader.reopen();
+            _searcher = new IndexSearcher(_reader);
         }
         return _reader;
     }
-  
+    
+    private IndexSearcher indexSearcher() throws CorruptIndexException, IOException {
+        IndexReader indexReader = indexReader();
+        return _searcher;
+    }
+
     private NSArray<IndexAttribute> attributes() {
         return _attributes.allValues();
     }
@@ -616,8 +606,7 @@ public class ERIndex {
         NSMutableArray<EOKeyGlobalID> result = new NSMutableArray();
         long start = System.currentTimeMillis();
         try {
-            IndexReader reader = indexReader();
-            Searcher searcher = new IndexSearcher(reader);
+            Searcher searcher = indexSearcher();
             Hits hits = searcher.search(query);
             log.info("Searched for: " + query + " in  " + (System.currentTimeMillis() - start) + " ms");
             for (Iterator iter = hits.iterator(); iter.hasNext();) {
@@ -659,8 +648,7 @@ public class ERIndex {
         NSMutableArray<Document> result = new NSMutableArray();
         long start = System.currentTimeMillis();
         try {
-            IndexReader reader = indexReader();
-            Searcher searcher = new IndexSearcher(reader);
+            Searcher searcher = indexSearcher();
             String pk = ERXKeyGlobalID.globalIDForGID(globalID).asString();
             BooleanQuery query = new BooleanQuery();
             query.add(new TermQuery(new Term(GID, pk)), Occur.MUST);
