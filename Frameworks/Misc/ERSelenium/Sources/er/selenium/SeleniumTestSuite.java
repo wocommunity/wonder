@@ -28,6 +28,8 @@ import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
+import er.extensions.foundation.ERXStringUtilities;
+
 /**
  * Starts testing of a suite of tests (a directory)
  */
@@ -50,20 +52,9 @@ public class SeleniumTestSuite extends WODirectAction {
 	    if (anActionName.equals("default")) {
 	        return defaultAction();
 	    }
-	    String testDirectory = null;
-	    String test = null;
-
-	    int splitterPos = anActionName.indexOf(ERSelenium.SUITE_SEPERATOR);
-	    if (splitterPos == -1) {
-	        testDirectory = anActionName;
-	    } else {
-	        testDirectory = anActionName.substring(0, splitterPos);
-	        test = anActionName.substring(splitterPos + 1, anActionName.length());
-	    }
 
 	    SeleniumTestSuitePage page = (SeleniumTestSuitePage)pageWithName(SeleniumTestSuitePage.class.getName());
-	    page.setTestDirectory(testDirectory);
-	    page.setTestName(test);
+	    page.setTestPath(ERXStringUtilities.replaceStringByStringInString(ERSelenium.SUITE_SEPERATOR, "/", anActionName));
 	    return page;
 	}
 }

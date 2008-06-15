@@ -26,7 +26,6 @@ package er.selenium;
 import com.webobjects.appserver.WOApplication;
 
 import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.selenium.io.SeleniumComponentExporter;
 import er.selenium.io.SeleniumImporterExporterFactory;
@@ -53,6 +52,14 @@ public class ERSelenium extends ERXFrameworkPrincipal {
     static {
         setUpFrameworkPrincipalClass(ERSelenium.class);
     }
+    
+    public static void registerImportersExporters() {
+        SeleniumImporterExporterFactory.instance().registerImporter(".html", new SeleniumXHTMLImporter());
+        SeleniumImporterExporterFactory.instance().registerExporter(new SeleniumComponentExporter("xhtml", SeleniumXHTMLExporterPage.class.getName()));
+        SeleniumImporterExporterFactory.instance().registerImporter(".sel", new SeleniumSeleneseImporter());
+        SeleniumImporterExporterFactory.instance().registerExporter(new SeleniumSeleneseExporter());
+        SeleniumImporterExporterFactory.instance().registerExporter(new SeleniumComponentExporter("presentation", SeleniumPresentationExporterPage.class.getName()));    	
+    }
 
     ERSelenium sharedInstance;
 
@@ -71,11 +78,7 @@ public class ERSelenium extends ERXFrameworkPrincipal {
     public void finishInitialization() {
         // TODO: check for multithreading/synchronization issued with factory
         // instance() method
-        SeleniumImporterExporterFactory.instance().registerImporter(".html", new SeleniumXHTMLImporter());
-        SeleniumImporterExporterFactory.instance().registerExporter(new SeleniumComponentExporter("xhtml", SeleniumXHTMLExporterPage.class.getName()));
-        SeleniumImporterExporterFactory.instance().registerImporter(".sel", new SeleniumSeleneseImporter());
-        SeleniumImporterExporterFactory.instance().registerExporter(new SeleniumSeleneseExporter());
-        SeleniumImporterExporterFactory.instance().registerExporter(new SeleniumComponentExporter("presentation", SeleniumPresentationExporterPage.class.getName()));
+    	registerImportersExporters();
 
         WOApplication.application().registerRequestHandler(new SeleniumTestRunnerProxy(), "_sl_");
     }

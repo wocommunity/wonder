@@ -36,38 +36,38 @@ import com.webobjects.foundation.NSMutableArray;
 public class SeleniumTest implements Cloneable {	
     
 	public static abstract class Element implements Cloneable {
-		public abstract Object clone();
+		public abstract Element clone();
 	}
 	
 	public static class Comment extends Element {
-		protected String _value;
+		protected String value;
 		
 		public Comment(String value) {
 			assert(value != null);
-			_value = value;
+			this.value = value;
 		}
 		
 		public void setValue(String value) {
 			assert(value != null);
-			_value = value;
+			this.value = value;
 		}
 		
 		public String getValue() {
-			return _value;
+			return value;
 		}
 		
-		public Object clone() {
-			return new Comment(_value);
+		public Comment clone() {
+			return new Comment(value);
 		}
 		
 		public String toString() {
-			return getClass().getCanonicalName() + ": " + _value;
+			return getClass().getCanonicalName() + ": " + value;
 		}
 	}
 	
 	public static class MetaCommand extends Element {
-		protected String _name;
-		protected NSMutableArray _arguments;
+		protected String name;
+		protected NSMutableArray<String> arguments;
 		
 		public static MetaCommand metaCommandFromString(String str) {
 			String[] args = str.split(" ");
@@ -81,47 +81,47 @@ public class SeleniumTest implements Cloneable {
 		public MetaCommand(String name) {
 			assert(name != null);
 			
-			_name = name;
-			_arguments = new NSMutableArray();
+			this.name = name;
+			this.arguments = new NSMutableArray<String>();
 		}
 		
-		public MetaCommand(String name, NSArray arguments) {
+		public MetaCommand(String name, NSArray<String> arguments) {
 			assert(name != null);
 			assert(arguments != null);
 			
-			_name = name;
-			_arguments = new NSMutableArray(_arguments);
+			this.name = name;
+			this.arguments = new NSMutableArray<String>(arguments);
 		}
 		
-		public MetaCommand(String name, Object[] arguments) {
+		public MetaCommand(String name, String[] arguments) {
 			assert(name != null);
 			assert(arguments != null);
 			
-			_name = name;
-			_arguments = new NSMutableArray(arguments);
+			this.name = name;
+			this.arguments = new NSMutableArray<String>(arguments);
 		}
 		
 		public void setName(String name) {
 			assert(name != null);
-			_name = name;
+			this.name = name;
 		}
 		
 		public String getName() {
-			return _name;
+			return name;
 		}
 		
 		public void addArgument(String argument) {
 			assert(argument != null);
-			_arguments.add(argument);
+			arguments.add(argument);
 		}
 		
-		public NSArray arguments() {
-			return _arguments;
+		public NSArray<String> arguments() {
+			return arguments;
 		}
 		
 		public String argumentsString() {
 			StringBuilder result = new StringBuilder();
-			Iterator iter = _arguments.iterator();
+			Iterator<String> iter = arguments.iterator();
 			while (iter.hasNext()) {
 				result.append(iter.next());
 				if (iter.hasNext())
@@ -130,14 +130,14 @@ public class SeleniumTest implements Cloneable {
 			return result.toString();
 		}
 		
-		public Object clone() {
-			return new MetaCommand(_name, _arguments);
+		public MetaCommand clone() {
+			return new MetaCommand(name, arguments);
 		}
 		
 		public String toString() {
 			StringBuilder builder = new StringBuilder(getClass().getCanonicalName() + ": ");
-			builder.append("@" + _name + " ");
-			Iterator iter = _arguments.iterator();
+			builder.append("@" + name + " ");
+			Iterator<String> iter = arguments.iterator();
 			while (iter.hasNext()) {
 				builder.append(iter.next().toString() + " ");
 			}
@@ -146,100 +146,100 @@ public class SeleniumTest implements Cloneable {
 	}
 	
 	public static class Command extends Element {
-		protected String _name;
-		protected String _target;
-		protected String _value;
+		protected String name;
+		protected String target;
+		protected String value;
 		
 		public Command(String name, String target, String value) {
 			assert(name != null);
 			assert(target != null);
 			assert(value != null);
 			
-			_name = name;
-			_target = target;
-			_value = value;
+			this.name = name;
+			this.target = target;
+			this.value = value;
 		}
 		
 		public void setName(String name) {
 			assert(name != null);
-			_name = name;
+			this.name = name;
 		}
 		
 		public String getName() {
-			return _name;
+			return name;
 		}
 		
 		public void setTarget(String target) {
 			assert(target != null);
-			_target = target;
+			this.target = target;
 		}
 		
 		public String getTarget() {
-			return _target;
+			return target;
 		}
 		
 		public void setValue(String value) {
 			assert(value != null);
-			_value = value;
+			this.value = value;
 		}
 		
 		public String getValue() {
-			return _value;
+			return value;
 		}
 		
-		public Object clone() {
-			return new Command(_name, _target, _value);
+		public Command clone() {
+			return new Command(name, target, value);
 		}
 		
 		public String toString() {
-			return getClass().getCanonicalName() + ": name='" + _name + "', target='" + _target + "', value='" + _value + "'";
+			return getClass().getCanonicalName() + ": name='" + name + "', target='" + target + "', value='" + value + "'";
 		}
 	}
 	
 	private static final Logger log = Logger.getLogger(SeleniumTest.class);
-	protected NSMutableArray _elements;
-	protected String _name;
+	protected NSMutableArray<SeleniumTest.Element> elements;
+	protected String name;
 	
 	public SeleniumTest(String name) {
-		_name = name;
-		_elements = new NSMutableArray();
+		this.name = name;
+		this.elements = new NSMutableArray<Element>();
 	}
 	
-	public SeleniumTest(String name, NSArray elements) {
-		_name = name;
-		_elements = new NSMutableArray(elements);
+	public SeleniumTest(String name, NSArray<Element> elements) {
+		this.name = name;
+		this.elements = new NSMutableArray<Element>(elements);
 	}
 	
-	public SeleniumTest(String name, Object[] elements) {
-		_name = name;
-		_elements = new NSMutableArray(elements);
+	public SeleniumTest(String name, SeleniumTest.Element[] elements) {
+		this.name = name;
+		this.elements = new NSMutableArray<Element>(elements);
 	}
 	
-	public NSArray elements() {
-		return _elements;
+	public NSArray<Element> elements() {
+		return elements;
 	}
 	
-	public void assignElements(NSArray elements) {
-		assert(_elements != null);
-		_elements = new NSMutableArray(elements);
+	public void assignElements(NSArray<Element> elements) {
+		assert(elements != null);
+		this.elements = new NSMutableArray<Element>(elements);
 	}
 	
 	public String name() {
-		return _name;
+		return name;
 	}
 	
 	public void setName(String name) {
 		assert(name != null);
-		_name = name;
+		this.name = name;
 	}
 	
 	public Object clone() {
-		return new SeleniumTest(_name, _elements);
+		return new SeleniumTest(name, elements);
 	}
 	
 	public void dump() {
-		log.debug("Test name: " + _name);
-		Iterator iter = _elements.iterator();
+		log.debug("Test name: " + name);
+		Iterator iter = elements.iterator();
 		while (iter.hasNext()) {
 			log.debug(iter.next().toString());
 		}
