@@ -16,14 +16,18 @@ import java.net.UnknownHostException;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 
 /**
- * NSNotificationCenter that can post simple notifications to other apps.
- * Currently just posts the name, not object or userInfo.
- * Note: you must specifically register here, not at <code>NSNotificationCenter.defaultCenter()</code>.
+ * NSNotificationCenter that can post simple notifications to other applications.
+ * Currently just posts the name, no object and the userInfo as a dictionary of
+ * strings (which all together can't be more than 1k) Note: you must
+ * specifically register here, not at
+ * <code>NSNotificationCenter.defaultCenter()</code>.
  * 
  * @author ak
  */
@@ -159,57 +163,76 @@ public class ERXRemoteNotificationCenter extends NSNotificationCenter {
 					DatagramPacket receivePacket = new DatagramPacket(buffer, 0, buffer.length);
 					try {
 						_multicastSocket.receive(receivePacket);
-						ByteArrayInputStream bais = new ByteArrayInputStream(receivePacket.getData(), 0, receivePacket.getLength());
-						DataInputStream dis = new DataInputStream(bais);
-						
-						byte[] identifier = new byte[IDENTIFIER_LENGTH];
-						dis.readFully(identifier);
-
-						byte code = dis.readByte();
-						if (code == JOIN) {
-							if (log.isDebugEnabled()) {
-								log.info("Received JOIN");
-							}
-						}
-						else if (code == LEAVE) {
-							if (log.isDebugEnabled()) {
-								log.info("Received LEAVE");
-							}
-						}
-						else if (code == POST) {
-							String self = ERXStringUtilities.byteArrayToHexString(_identifier);
-							String remote = ERXStringUtilities.byteArrayToHexString(identifier);
-							
-							if(self.equals(remote)) {
-								if (log.isDebugEnabled()) {
-									log.info("Received POST from self");
-								}
-							} else {
-								if (log.isDebugEnabled()) {
-									log.info("Received POST from " + ERXStringUtilities.byteArrayToHexString(identifier));
-								}
-								short nameLen = dis.readShort();
-								byte[] nameBytes = new byte[nameLen];
-								dis.readFully(nameBytes);
-
-								short userInfoLen = dis.readShort();
-								byte[] userInfoBytes = new byte[userInfoLen];
-								dis.readFully(userInfoBytes);
-
-								NSNotification notification = new NSNotification(new String(nameBytes), null, null);
-								if (log.isDebugEnabled()) {
-									log.debug("Received notification: " + notification);
-								}
-								else if (log.isInfoEnabled()) {
-									log.info("Received " + notification.name() + " notification.");
-								}
-								postLocalNotification(notification);
-							}
-						}
+						handlePacket(receivePacket);
 
 					}
 					catch (Throwable t) {
 						log.error("Failed to read multicast notification.", t);
+					}
+				}
+			}
+
+			private void handlePacket(DatagramPacket receivePacket) throws IOException {
+				ByteArrayInputStream bais = new ByteArrayInputStream(receivePacket.getData(), 0, receivePacket.getLength());
+				DataInputStream dis = new DataInputStream(bais);
+				
+				byte[] identifier = new byte[IDENTIFIER_LENGTH];
+				dis.readFully(identifier);
+
+				byte code = dis.readByte();
+				if (code == JOIN) {
+					if (log.isDebugEnabled()) {
+						log.info("Received JOIN");
+					}
+				}
+				else if (code == LEAVE) {
+					if (log.isDebugEnabled()) {
+						log.info("Received LEAVE");
+					}
+				}
+				else if (code == POST) {
+					String self = ERXStringUtilities.byteArrayToHexString(_identifier);
+					String remote = ERXStringUtilities.byteArrayToHexString(identifier);
+					
+					if(self.equals(remote)) {
+						if (log.isDebugEnabled()) {
+							log.info("Received POST from self");
+						}
+					} else {
+						if (log.isDebugEnabled()) {
+							log.info("Received POST from " + ERXStringUtilities.byteArrayToHexString(identifier));
+						}
+						short nameLen = dis.readShort();
+						byte[] nameBytes = new byte[nameLen];
+						dis.readFully(nameBytes);
+
+						short objectLen = dis.readShort();
+						byte[] objectBytes = new byte[objectLen];
+						dis.readFully(objectBytes);
+
+						short userInfoLen = dis.readShort();
+						NSMutableDictionary userInfo = new NSMutableDictionary();
+						for(int i = 0; i < userInfoLen; i++) {
+							short keyLen = dis.readShort();
+							byte[] keyBytes = new byte[keyLen];
+							dis.readFully(keyBytes);
+							
+							short valueLen = dis.readShort();
+							byte[] valueBytes = new byte[valueLen];
+							dis.readFully(valueBytes);
+							
+							userInfo.setObjectForKey(new String(valueBytes), new String(keyBytes));
+							
+						}
+
+						NSNotification notification = new NSNotification(new String(nameBytes), null, userInfo);
+						if (log.isDebugEnabled()) {
+							log.debug("Received notification: " + notification);
+						}
+						else if (log.isInfoEnabled()) {
+							log.info("Received " + notification.name() + " notification from " + remote);
+						}
+						postLocalNotification(notification);
 					}
 				}
 			}
@@ -243,11 +266,25 @@ public class ERXRemoteNotificationCenter extends NSNotificationCenter {
 		dos.writeShort(object.length);
 		dos.write(object);
 		
-		byte[] userInfo = new byte[0];
-		dos.writeShort(userInfo.length);
-		dos.write(userInfo);
+		NSDictionary userInfo = notification.userInfo();
+		if(userInfo == null) {
+			userInfo = NSDictionary.EmptyDictionary;
+		}
+		
+		dos.writeShort(userInfo.count());
+		for (Object key : userInfo.allKeys()) {
+			byte[] keyBytes = key.toString().getBytes();
+			byte[] valueBytes = userInfo.objectForKey(key).toString().getBytes();
+			dos.writeShort(keyBytes.length);
+			dos.write(keyBytes);
+			dos.writeShort(valueBytes.length);
+			dos.write(valueBytes);
+		}
 
 		dos.flush();
+		if(dos.size() > _maxReceivePacketSize) {
+			throw new IllegalArgumentException("More than " + _maxReceivePacketSize + " bytes");
+		}
 		_multicastSocket.send(baos.createDatagramPacket());
 		if (log.isDebugEnabled()) {
 			log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + notification);
