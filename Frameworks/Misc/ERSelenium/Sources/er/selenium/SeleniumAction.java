@@ -32,7 +32,6 @@ import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
@@ -68,10 +67,10 @@ public class SeleniumAction extends WODirectAction {
     }
 
     
-    protected WOResponse dictionaryResponse(NSDictionary dict) {
+    protected WOResponse dictionaryResponse(NSDictionary<?,?> dict) {
         WOResponse response = new WOResponse();
         response.appendContentString("<html><body>");
-        for (Enumeration e = dict.keyEnumerator(); e.hasMoreElements();) {
+        for (Enumeration<?> e = dict.keyEnumerator(); e.hasMoreElements();) {
             Object key = e.nextElement();
             Object value = dict.objectForKey(key);
             response.appendContentString("<span id='" + key + "'>" + value + "</span>\n");

@@ -24,28 +24,24 @@
 package er.selenium;
 
 import java.io.File;
-import java.util.Iterator;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.components.ERXStatelessComponent;
-import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXUtilities;
 import er.selenium.filters.SeleniumCompositeTestFilter;
 import er.selenium.filters.SeleniumIncludeTestFilter;
 import er.selenium.filters.SeleniumOverrideOpenTestFilter;
-import er.selenium.filters.SeleniumPresentationFilter;
 import er.selenium.filters.SeleniumRepeatExpanderTestFilter;
 import er.selenium.filters.SeleniumTestFilter;
 import er.selenium.io.SeleniumImporterExporterFactory;
 import er.selenium.io.SeleniumTestExporter;
-import er.selenium.io.SeleniumTestImporter;
 
 public class SeleniumTestSuitePage extends ERXStatelessComponent {	
 	private static final Logger log = Logger.getLogger(SeleniumTestSuitePage.class);
@@ -53,180 +49,76 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 	private static final String DEFAULT_SELENIUM_TESTS_ROOT = "./Contents/Resources/Selenium";
 	private static final String DEFAULT_EXPORTER_NAME = "xhtml";
 
-	public static class TestDirectory {
-		public File directory;
-		public NSArray testFiles;
-		
-		public TestDirectory(File aDirectory, NSArray aTestFiles) {
-			directory = aDirectory;
-			testFiles = aTestFiles;
+	private SeleniumCompositeTestFilter testFilter;
+	
+	private NSArray<File> testFiles;
+	public File testFile;
+	private String testPath;
+	
+	public NSArray<File> testFiles() {
+		if (testFiles == null) {
+			testFiles = new SeleniumTestFilesFinder(testsRoot()).findTests();
 		}
-        
-        public String getName() {
-            return directory.getName();
-        }
+		return testFiles;
+	}
+
+	public void setTestPath(String testPath) {
+		this.testPath = testPath;
+		testFile = new File(testsRoot().getAbsolutePath() + "/" + testPath);
 	}
 	
-	protected String getFileExtension(String filename) {
-		assert(filename != null);
-		int index = filename.lastIndexOf(".");
-		if (index > 0) {
-			return filename.substring(index);
-		} else {
-			return null;
-		}
+	public String testPath() {
+		return testPath;
 	}
 	
-	protected NSArray buildTestsListForDirectory(File directory) {
-		NSMutableArray result = new NSMutableArray();
-		
-		log.debug("Inspecting contents of directory '" + directory.getName());
-		NSArray filesList = (NSArray)ERXFileUtilities.arrayByAddingFilesInDirectory(directory, false).valueForKey("@sortAsc.name");
-		assert(filesList != null);
-		
-		Iterator i = filesList.iterator();
-		while (i.hasNext()) {
-			File file = (File)i.next();
-			String fname = file.getName();
-			if (fname.startsWith("_")) {
-				log.debug("Ignoring " + fname + " because of the starting _");
-				continue;
+	protected File testsRoot() {
+		return new File(ERXProperties.stringForKeyWithDefault("SeleniumTestsRoot", DEFAULT_SELENIUM_TESTS_ROOT));		
+	}
+	
+	public File testDir() {
+		return testFile.getParentFile();
+	}
+	
+	protected void checkTestPath() {
+		try {
+			String cnTestPath = testFile.getCanonicalPath();
+			String cnTestsRoot = testsRoot().getCanonicalPath();
+			if (!cnTestPath.startsWith(cnTestsRoot)) {
+				throw new RuntimeException("Trying to reach file (" + cnTestPath + ") ouside of the tests root (" + cnTestsRoot + ")");
 			}
-			String extension = getFileExtension(file.getName());
-
-			if (extension != null) {
-				SeleniumTestImporter importer = SeleniumImporterExporterFactory.instance().findImporterByExtension(extension);
-				if (importer != null) {
-					result.add(file);
-					log.debug("Test file '" + file.getName() + "' of type '" + importer.name() + "'");
-				} else {
-					log.debug("Can't find importer for extension '" + extension + "' for file '" + file.getName() + "'");
-				}
-			} else {
-				log.debug("File type cannot be determined due to the lack of extension for file '" + file.getName() + "'");
-			}
-		}
-
-		return result;
-	}
-	
-	protected NSMutableDictionary buildTestDirectoriesList() {
-		NSMutableDictionary result = new NSMutableDictionary();
-		
-		String testsRoot = ERXProperties.stringForKeyWithDefault("SeleniumTestsRoot", DEFAULT_SELENIUM_TESTS_ROOT);
-		File rootDir = new File(testsRoot);
-		
-		NSArray files = new NSArray(rootDir.listFiles());
-		Iterator iter = files.iterator();
-		while (iter.hasNext()) {
-		    File directory = (File)iter.next();
-		    NSArray testFilesList = buildTestsListForDirectory(directory);
-		    if (testFilesList.count() > 0) {
-		        if(getTestDirectory() == null || (getTestDirectory() != null && directory.getName().equals(getTestDirectory()))) {
-		            TestDirectory testDirectory = new TestDirectory(directory, testFilesList);
-		            result.setObjectForKey(testDirectory, directory.getName());
-		        }
-            }
-		}
-
-		return result;
-	}
-	
-	protected SeleniumTest buildTest(String directory, String testName) {
-		assert(directory != null);
-		assert(testName != null);
-		
-		String extension = getFileExtension(testName);
-		if (extension == null) {
-			throw new RuntimeException("Invalid testname '" + testName + "'");
-		}
-		
-		SeleniumTestImporter importer = SeleniumImporterExporterFactory.instance().findImporterByExtension(extension);
-		if (importer == null) {
-			throw new RuntimeException("Unsupported file type ('" + extension + "')");
-		}
-		
-		
-    	File testFile = new File(ERXProperties.stringForKeyWithDefault("SeleniumTestsRoot", DEFAULT_SELENIUM_TESTS_ROOT) + "/" + directory + "/" + testName);
-    	try {
-    		String fileContents = ERXFileUtilities.stringFromFile(testFile, "UTF-8");
-    		return importer.process(fileContents);
-    	} catch (Exception e) {
-    		log.debug(ERXUtilities.stackTrace(e));
-    		throw new RuntimeException("Test import for '" + testName + "' failed.", e);
-    	}
-	}
-	
-	protected SeleniumCompositeTestFilter _testFilter;
-	protected SeleniumCompositeTestFilter _testPresentationFilter;
-	protected String _testDirectory;
-	protected String _testName;
-	
-	protected NSMutableDictionary _testDirectories;
-	public TestDirectory repDirectory;
-	public File repTestFile;
-	
-	public void setTestDirectory(String name) {
-		_testDirectory = name;
-	}
-	
-	public String getTestDirectory() {
-		return _testDirectory;
-	}
-	
-	public void setTestName(String name) {
-		_testName = name;
-	}
-	
-	public String getTestName() {
-		return _testName;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}		
 	}
 	
 	public SeleniumTestFilter testFilter() {
-		if (_testFilter == null) {
-			_testFilter = new SeleniumCompositeTestFilter();
-			String testsRoot = ERXProperties.stringForKeyWithDefault("SeleniumTestsRoot", DEFAULT_SELENIUM_TESTS_ROOT);
-			String[] searchPaths = {testsRoot + '/' + _testDirectory, testsRoot}; 
-			_testFilter.addTestFilter(new SeleniumIncludeTestFilter(new NSArray(searchPaths)));
+		if (testFilter == null) {
+			testFilter = new SeleniumCompositeTestFilter();
+			
+			File[] searchPaths = {testDir().getAbsoluteFile(), testsRoot().getAbsoluteFile()}; 
+			testFilter.addTestFilter(new SeleniumIncludeTestFilter(new NSArray<File>(searchPaths)));
 
-			_testFilter.addTestFilter(new SeleniumRepeatExpanderTestFilter());
-			_testFilter.addTestFilter(new SeleniumOverrideOpenTestFilter(context().urlWithRequestHandlerKey(null, null, null)));
+			testFilter.addTestFilter(new SeleniumRepeatExpanderTestFilter());
+			testFilter.addTestFilter(new SeleniumOverrideOpenTestFilter(context().urlWithRequestHandlerKey(null, null, null)));
 		}
 		
-		return _testFilter;
-	}
-	
-	public SeleniumTestFilter testPresentationFilter() {
-		if (_testPresentationFilter == null) {
-			_testPresentationFilter = new SeleniumCompositeTestFilter();
-			_testPresentationFilter.addTestFilter(new SeleniumPresentationFilter());
-		}
-		
-		return _testPresentationFilter;
+		return testFilter;
 	}
 	
     public SeleniumTestSuitePage(WOContext context) {
         super(context);
     }
     
-    public NSArray testDirectories() {
-    	if (_testDirectories == null) {
-    		_testDirectories = buildTestDirectoriesList();
-    	}
-    	
-    	return (NSArray) _testDirectories.allValues().valueForKey("@sortAsc.name");
-    }
-    
     public String testLink() {
-    	NSMutableDictionary queryArgs = new NSMutableDictionary();
+    	NSMutableDictionary<String, String> queryArgs = new NSMutableDictionary<String, String>();
     	String format = context().request().stringFormValueForKey("format");
     	if (format != null)
     		queryArgs.setObjectForKey(format, "format");
-    	return context().directActionURLForActionNamed("SeleniumTestSuite/" + repDirectory.directory.getName() +ERSelenium.SUITE_SEPERATOR + repTestFile.getName(), queryArgs);
+    	return context().directActionURLForActionNamed("SeleniumTestSuite/" + testDir().getName() +ERSelenium.SUITE_SEPERATOR + testFile.getName(), queryArgs);
     }
     
     public String testContents() {
-    	if (_testDirectory != null && _testName != null) {
+    	if (testPath != null) {
     		SeleniumTestExporter exporter = null;
     		String format = context().request().stringFormValueForKey("format");
     		if (format != null) {
@@ -240,13 +132,8 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     		}
     		
     		try {
-    			SeleniumTest test = buildTest(_testDirectory, _testName);
-    			if (context().request().formValueForKey("noFilters") == null) {
-    				test = ("presentation".equals(format) ? testPresentationFilter() : testFilter()).processTest(test);
-    				assert(test != null);
-    			}
-    			String result = exporter.process(test);
-    			return result;
+    			SeleniumTest test = new SeleniumTestFileProcessor(testFile, context().request().formValueForKey("noFilters") == null ? testFilter() : null).process();
+    			return exporter.process(test);
     		} catch (Exception e) {
     			log.debug(ERXUtilities.stackTrace(e));
     			throw new RuntimeException("Test export failed", e);
@@ -256,9 +143,10 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     	}
     }
     
-    // @Override
+    @Override
     public void reset() {
     	super.reset();
-    	_testDirectories = null;
+    	testPath = null;
     }
+    
 }
