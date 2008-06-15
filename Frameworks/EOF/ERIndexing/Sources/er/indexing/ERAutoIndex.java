@@ -23,6 +23,7 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSSet;
 
+import er.extensions.concurrency.ERXAsyncQueue;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
@@ -181,6 +182,14 @@ public class ERAutoIndex extends ERIndex {
 
     protected class AutoTransactionHandler extends TransactionHandler {
 
+        public void submit(Transaction transaction) {
+            if(false) {
+                _queue.enqueue(transaction);
+            } else {
+                index(transaction);
+            }
+        }
+
         public void _handleChanges(NSNotification n) {
             EOEditingContext ec = (EOEditingContext) n.object();
             if (ec.parentObjectStore() == ec.rootObjectStore()) {
@@ -334,13 +343,27 @@ public class ERAutoIndex extends ERIndex {
 
     }
 
+    private static ERXAsyncQueue<Transaction> _queue;
+
     private NSSet<String> _entities = NSSet.EmptySet;
 
     private Configuration _configuration = new Configuration();
 
     public ERAutoIndex(String name, NSDictionary indexDef) {
         super(name);
-        _configuration.initFromDictionary(indexDef);
+        synchronized (ERIndex.class) {
+            if (_queue == null) {
+                _queue = new ERXAsyncQueue<Transaction>() {
+
+                    public void process(Transaction transaction) {
+                        transaction.handler().index(transaction);
+                    }
+                };
+                _queue.setName(KEY);
+                _queue.start();
+            }
+        }
+         _configuration.initFromDictionary(indexDef);
         setTransactionHandler(new AutoTransactionHandler());
     }
 
