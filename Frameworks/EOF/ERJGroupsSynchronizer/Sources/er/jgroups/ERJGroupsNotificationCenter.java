@@ -24,6 +24,7 @@ import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.RemoteChange;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXRemoteNotificationCenter;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer.RefByteArrayOutputStream;
 
 /**
@@ -37,9 +38,7 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer.RefByteArrayOutput
  * @author ak
  */
 
-// TODO subclass of NSNotification that custom-serialize itself
-// TODO make ERXRemoteNotificationCenter and make this a subclass
-public class ERJGroupsNotificationCenter extends NSNotificationCenter {
+public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
 
     private static final Logger log = Logger.getLogger(ERJGroupsNotificationCenter.class);
 
@@ -48,8 +47,6 @@ public class ERJGroupsNotificationCenter extends NSNotificationCenter {
     private boolean _postLocal;
 
     private JChannel _channel;
-
-    private JChannel _backchannel;
 
     private static ERJGroupsNotificationCenter _sharedInstance;
 
@@ -105,26 +102,22 @@ public class ERJGroupsNotificationCenter extends NSNotificationCenter {
         });
     }
 
-    public static ERJGroupsNotificationCenter defaultCenter() {
+    public static void install() {
         if (_sharedInstance == null) {
             synchronized (ERJGroupsNotificationCenter.class) {
                 if (_sharedInstance == null) {
                     try {
                         _sharedInstance = new ERJGroupsNotificationCenter();
+                        setDefaultCenter(_sharedInstance);
                     } catch (ChannelException e) {
                         throw NSForwardException._runtimeExceptionForThrowable(e);
                     }
                 }
             }
         }
-        return _sharedInstance;
     }
 
-    public void postLocalNotification(NSNotification notification) {
-        super.postNotification(notification);
-    }
-
-    public void postNotification(NSNotification notification) {
+    public void postRemoteNotification(NSNotification notification) {
         try {
             writeNotification(notification);
             if (_postLocal) {
