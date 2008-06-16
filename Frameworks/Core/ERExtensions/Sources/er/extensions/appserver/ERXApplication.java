@@ -1569,7 +1569,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public WOResponse dispatchRequestImmediately(WORequest request) {
 		WOResponse response;
 		if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
-			ERXApplication.requestHandlingLog.debug(request.uri());
+			ERXApplication.requestHandlingLog.debug(request);
 		}
 
 		try {
@@ -1599,7 +1599,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			ERXApplication._endRequest();
 		}
 		if (requestHandlingLog.isDebugEnabled()) {
-			requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response.contentString().length());
+			requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response);
 		}
 
 		if (responseCompressionEnabled()) {
