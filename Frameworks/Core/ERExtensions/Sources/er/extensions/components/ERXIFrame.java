@@ -6,9 +6,9 @@
 //
 package er.extensions.components;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.sun.tools.example.debug.bdi.SessionListener;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
@@ -19,8 +19,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOHTMLDynamicElement;
 import com.webobjects.foundation.NSDictionary;
-
-import er.extensions.appserver.ERXApplication;
 
 /**
  * IFRAME that can use its own contents to render when none of the other
@@ -64,20 +62,15 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 				else if (_action != null) {
 					return (WOActionResults) _pageName.valueInComponent(component);
 				} else {
-					WOResponse response = new WOResponse() {
-						@Override
-						public void disableClientCaching() {
-							// nothing to do here, in case we backtracked, we got a new url anyway...
-						}
-						
-					};
+					WOResponse response = new WOResponse();
 					//AK: we might want to be able to set this...
 					response.appendContentString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 					response.appendContentString("<html><body style='border:0; margin: 0; padding: 0; width:100%; height: 100%'>");
 					doAppendChildrenToResponse(response, context);
 					response.appendContentString("</body></html>");
-
-					return response;
+					ERXResponseComponent comp = (ERXResponseComponent) WOApplication.application().pageWithName("ERXResponseComponent", context);
+					comp.setResponse(response);
+					return comp;
 				}
 			} else {
 				return invokeChildrenAction(request, context);
