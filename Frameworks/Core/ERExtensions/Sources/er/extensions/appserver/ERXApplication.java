@@ -46,6 +46,7 @@ import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
+import com.webobjects.appserver._private.WOComponentDefinition;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
@@ -1061,7 +1062,32 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	protected WOTimer _killTimer;
-
+	
+	/**
+	 * Bugfix for WO component loading. It fixes:
+	 * <ul>
+	 * <li> when isCachingEnabled is ON, and you have a new browser language
+	 * that hasn't been seen so far, the component gets re-read from the disk,
+	 * which can wreak havoc if you overwrite your html/wod with a new version.
+	 * <li> when caching enabled is OFF, and you make a change, you only see the
+	 * change in the first browser that touches the page. You need to re-save if
+	 * you want it seen in the second one.
+	 * </ul>
+	 * You need to set
+	 * <code>er.extensions.ERXApplication.fixCachingEnabled=false</code> is
+	 * you don't want it to load.
+	 * 
+	 * @author ak
+	 */
+	public WOComponentDefinition _componentDefinition(String s, NSArray nsarray) {
+		if(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.fixCachingEnabled", true)) {
+			// _expectedLanguages already contains all the languages in all projects, so
+			// there is no need to check for the ones that come in...
+			return super._componentDefinition(s, _expectedLanguages());
+		}
+		return super._componentDefinition(s, nsarray);
+	}
+	
 	/**
 	 * Checks if the free memory is less than the threshold given in
 	 * <code>er.extensions.ERXApplication.memoryThreshold</code> (should be
@@ -1543,7 +1569,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public WOResponse dispatchRequestImmediately(WORequest request) {
 		WOResponse response;
 		if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
-			ERXApplication.requestHandlingLog.debug(request);
+			ERXApplication.requestHandlingLog.debug(request.uri());
 		}
 
 		try {
@@ -1573,7 +1599,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			ERXApplication._endRequest();
 		}
 		if (requestHandlingLog.isDebugEnabled()) {
-			requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response);
+			requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response.contentString().length());
 		}
 
 		if (responseCompressionEnabled()) {
