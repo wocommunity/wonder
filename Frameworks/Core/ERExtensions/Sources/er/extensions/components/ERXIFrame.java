@@ -56,7 +56,6 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		if(context.senderID().startsWith(context.elementID())) {
-			log.warn("context " + context.contextID() + " invokes: " + context.senderID() + "-" + context.elementID());
 			if(context.senderID().equals(context.elementID())) {
 				if (_pageName != null) {
 					String pageName = (String) _pageName.valueInComponent(component);
@@ -65,8 +64,13 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 				else if (_action != null) {
 					return (WOActionResults) _pageName.valueInComponent(component);
 				} else {
-					WOResponse response = new WOResponse();
-
+					WOResponse response = new WOResponse() {
+						@Override
+						public void disableClientCaching() {
+							// nothing to do here, in case we backtracked, we got a new url anyway...
+						}
+						
+					};
 					//AK: we might want to be able to set this...
 					response.appendContentString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 					response.appendContentString("<html><body style='border:0; margin: 0; padding: 0; width:100%; height: 100%'>");
@@ -94,7 +98,6 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 	
 	@Override
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
-		ERXApplication.requestHandlingLog.setLevel(Level.DEBUG);
     	WOComponent component = context.component();
 		String src = null;
 		if (_src != null) {
