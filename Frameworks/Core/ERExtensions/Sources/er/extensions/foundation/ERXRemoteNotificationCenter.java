@@ -124,6 +124,29 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			_listening = false;
 		}
 
+		protected void postRemoteNotification(NSNotification notification) {
+			try {
+				MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
+				DataOutputStream dos = new DataOutputStream(baos);
+				dos.write(_identifier);
+
+				dos.writeByte(POST);
+
+				writeNotification(notification, dos);
+				_multicastSocket.send(baos.createDatagramPacket());
+				if (log.isDebugEnabled()) {
+					log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + notification);
+				}
+				dos.close();
+				if (_postLocal) {
+					postLocalNotification(notification);
+				}
+			}
+			catch (Exception e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		}
+
 		public void listen() throws IOException {
 			Thread listenThread = new Thread(new Runnable() {
 				public void run() {
@@ -173,30 +196,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 							if (log.isDebugEnabled()) {
 								log.info("Received POST from " + ERXStringUtilities.byteArrayToHexString(identifier));
 							}
-							short nameLen = dis.readShort();
-							byte[] nameBytes = new byte[nameLen];
-							dis.readFully(nameBytes);
-
-							short objectLen = dis.readShort();
-							byte[] objectBytes = new byte[objectLen];
-							dis.readFully(objectBytes);
-
-							short userInfoLen = dis.readShort();
-							NSMutableDictionary userInfo = new NSMutableDictionary();
-							for (int i = 0; i < userInfoLen; i++) {
-								short keyLen = dis.readShort();
-								byte[] keyBytes = new byte[keyLen];
-								dis.readFully(keyBytes);
-
-								short valueLen = dis.readShort();
-								byte[] valueBytes = new byte[valueLen];
-								dis.readFully(valueBytes);
-
-								userInfo.setObjectForKey(new String(valueBytes), new String(keyBytes));
-
-							}
-
-							NSNotification notification = new NSNotification(new String(nameBytes), null, userInfo);
+							NSNotification notification = readNotification(dis);
 							if (log.isDebugEnabled()) {
 								log.debug("Received notification: " + notification);
 							}
@@ -221,13 +221,35 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			}
 		}
 
-		protected void writeNotification(NSNotification notification) throws IOException {
-			MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-			DataOutputStream dos = new DataOutputStream(baos);
-			dos.write(_identifier);
+		private NSNotification readNotification(DataInputStream dis) throws IOException {
+			short nameLen = dis.readShort();
+			byte[] nameBytes = new byte[nameLen];
+			dis.readFully(nameBytes);
 
-			dos.writeByte(POST);
+			short objectLen = dis.readShort();
+			byte[] objectBytes = new byte[objectLen];
+			dis.readFully(objectBytes);
 
+			short userInfoLen = dis.readShort();
+			NSMutableDictionary userInfo = new NSMutableDictionary();
+			for (int i = 0; i < userInfoLen; i++) {
+				short keyLen = dis.readShort();
+				byte[] keyBytes = new byte[keyLen];
+				dis.readFully(keyBytes);
+
+				short valueLen = dis.readShort();
+				byte[] valueBytes = new byte[valueLen];
+				dis.readFully(valueBytes);
+
+				userInfo.setObjectForKey(new String(valueBytes), new String(keyBytes));
+
+			}
+
+			NSNotification notification = new NSNotification(new String(nameBytes), null, userInfo);
+			return notification;
+		}
+
+		private void writeNotification(NSNotification notification, DataOutputStream dos) throws IOException {
 			byte[] name = notification.name().getBytes();
 			dos.writeShort(name.length);
 			dos.write(name);
@@ -255,25 +277,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			if (dos.size() > _maxReceivePacketSize) {
 				throw new IllegalArgumentException("More than " + _maxReceivePacketSize + " bytes");
 			}
-			_multicastSocket.send(baos.createDatagramPacket());
-			if (log.isDebugEnabled()) {
-				log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + notification);
-			}
-			dos.close();
 		}
-
-		protected void postRemoteNotification(NSNotification notification) {
-			try {
-				writeNotification(notification);
-				if (_postLocal) {
-					postLocalNotification(notification);
-				}
-			}
-			catch (Exception e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
-			}
-		}
-
 	}
 
 	public static ERXRemoteNotificationCenter defaultCenter() {
