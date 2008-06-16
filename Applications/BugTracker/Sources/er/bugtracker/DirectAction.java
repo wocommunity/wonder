@@ -24,7 +24,6 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.caching.ERCaching;
 import er.calendar.ERPublishCalendarPage;
 import er.calendar.ERSimpleEvent;
 import er.directtoweb.ERD2WDirectAction;
@@ -36,7 +35,6 @@ public class DirectAction extends ERD2WDirectAction {
 
     public DirectAction(WORequest aRequest) {
         super(aRequest);
-        ERCaching.runTests();
     }
 
     public WOActionResults calendarAction() {
