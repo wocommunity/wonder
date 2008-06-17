@@ -70,6 +70,7 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 					response.appendContentString("</body></html>");
 					ERXResponseComponent comp = (ERXResponseComponent) WOApplication.application().pageWithName("ERXResponseComponent", context);
 					comp.setResponse(response);
+					comp.setComponent(context.page());
 					return comp;
 				}
 			} else {
