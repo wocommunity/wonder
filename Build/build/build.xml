@@ -294,7 +294,7 @@
             <param name="project.dir" value="Applications/BugTracker" />
 
             <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
+            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook/ERCaching" />
         </antcall>
     </target>
 
