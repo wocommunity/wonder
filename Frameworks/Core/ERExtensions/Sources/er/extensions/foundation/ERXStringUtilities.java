@@ -1007,14 +1007,36 @@ public class ERXStringUtilities {
      * @param camelString the StringWithCaps
      * @return the string_with_underscores
      */
-    public static String camelCaseToUnderscore(String camelString) {
+    public static String camelCaseToUnderscore(String camelString, boolean lowercase) {
     	StringBuffer underscore = new StringBuffer();
-    	for (int i = 0; i < camelString.length(); i ++) {
+    	boolean lastCharacterWasWordBreak = false;
+    	boolean lastCharacterWasCapital = false;
+    	int length = camelString.length();
+    	for (int i = 0; i < length; i ++) {
     		char ch = camelString.charAt(i);
-    		if (Character.isUpperCase(ch) && i > 0) {
-    			underscore.append("_");
+    		if (Character.isUpperCase(ch)) {
+    			boolean nextCharacterIsCapital =  (i < length - 1 && Character.isUpperCase(camelString.charAt(i + 1)));
+    			if (i > 0 && ((!lastCharacterWasWordBreak && !lastCharacterWasCapital) || !nextCharacterIsCapital)) {
+    				underscore.append("_");
+    				lastCharacterWasWordBreak = true;
+    			}
+    			else {
+    				lastCharacterWasWordBreak = false;
+    			}
+    			lastCharacterWasCapital = true;
     		}
-    		underscore.append(Character.toLowerCase(ch));
+    		else if (ch == '_') {
+    			lastCharacterWasWordBreak = true;
+    		}
+    		else {
+    			lastCharacterWasWordBreak = false;
+    		}
+    		if (lowercase) {
+    			underscore.append(Character.toLowerCase(ch));
+    		}
+    		else {
+    			underscore.append(ch);
+    		}
     	}
     	return underscore.toString();
     }
