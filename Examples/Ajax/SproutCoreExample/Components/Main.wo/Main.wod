@@ -1,0 +1,21 @@
+TestButton: SCButton {
+	id = "someButton";
+	outlet = true;
+	label = "Click me";
+	action = "Photos.masterController.addAlbum";
+	?selected = "Photos.photoController.pickerIsVisible";
+	?enabled = "SC.Binding.Not(\"Photos.photoController.hasNoContent\")";
+}
+
+OtherButton: SCButton {
+	id = "otherButton";
+	outlet = true;
+	label = "Click me too";
+	action = "Photos.masterController.removeAlbum";
+	?selected = "Photos.photoController.pickerIsVisible";
+	?enabled = "SC.Binding.Not(\"Photos.photoController.hasNoContent\")";
+}
+
+SCRenderTree : WOString {
+	value = renderTree;
+}
