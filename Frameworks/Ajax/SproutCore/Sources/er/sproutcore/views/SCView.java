@@ -33,6 +33,8 @@ public class SCView extends WODynamicGroup {
     public static class Item {
 
         private String _id;
+        
+        private String _className;
 
         private Item _parent;
 
@@ -44,12 +46,25 @@ public class SCView extends WODynamicGroup {
 
         private NSMutableArray<Item> _children = new NSMutableArray<Item>();
 
-        public Item(Item parent, String id) {
-            _id = (id == null ? "id_" + (idx) + "" : id);
+        public Item(Item parent, String className, String id) {
+            _id = (id == null ? "id_" + (nextId()) + "" : id);
             _parent = parent;
+            _className = className;
             if (_parent != null) {
                 _parent.addChild(this);
             }
+        }
+
+        private synchronized int nextId() {
+            return idx++;
+        }
+        
+        public String id() {
+            return _id;
+        }
+        
+        public String outlet() {
+            return "\"." + _id + "\"";
         }
 
         public void addProperty(String key, Object value) {
@@ -67,26 +82,69 @@ public class SCView extends WODynamicGroup {
         public void addChild(Item context) {
             _children.addObject(context);
         }
+        
+        private String bindingsJavaScript() {
+            String result = "";
+            if(_bindings.count() > 0) {
+                for (String key : _bindings.allKeys()) {
+                    Object value = _bindings.objectForKey(key);
+                    result += key + "Binding: " +  value + ",\n";
+                }
+            }
+            return result;
+        }
+        
+        private String outletJavaScript() {
+            String result = "";
+            if(_children.count() > 0) {
+                result += "outlets: [";
+                for (Item item : _children) {
+                    if(item != _children.objectAtIndex(0)) {
+                        result += ",";
+                    }
+                    result += "\"" + item.id() + "\"";
+                }
+                result += "],\n";
+                for (Item item : _children) {
+                    result += "\"" + item.id() + "\": " + item + ",\n";
+                }
+                //result = result.substring(0, result.length() - 2);
+            }
+            return result;
+        }
+        
+        private String propertyJavaScript() {
+            String result = "";
+            if(_properties.count() > 0) {
+                for (String key : _properties.allKeys()) {
+                    Object value = _properties.objectForKey(key);
+                    result += key + ": " +  value + ",\n";
+                }
+            }
+            return result;
+        }
 
         public String toString() {
-            return _id + ": (" + _children.componentsJoinedByString(", ") + ")";
+            boolean isPage = _className.equals("SC.Page");
+            String core = "({\n" + outletJavaScript() + bindingsJavaScript() + propertyJavaScript() + "})";
+            return  _className + "." + (isPage ? "create" : "extend") + core + (isPage ?"": ".outletFor("+ outlet() +")");
         }
     }
 
-    public SCView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
+    public SCView(String name, NSDictionary associations, WOElement parent) {
+        super(name, associations, parent);
         _associations = new NSMutableDictionary<String, WOAssociation>();
         _bindings = new NSMutableDictionary<String, WOAssociation>();
-        for (Enumeration e = arg1.keyEnumerator(); e.hasMoreElements();) {
+        for (Enumeration e = associations.keyEnumerator(); e.hasMoreElements();) {
             String element = (String) e.nextElement();
             if (element.charAt(0) == '?') {
-                _bindings.setObjectForKey((WOAssociation) arg1.objectForKey(element), element.substring(1));
+                _bindings.setObjectForKey((WOAssociation) associations.objectForKey(element), element.substring(1));
             } else {
-                _associations.setObjectForKey((WOAssociation) arg1.objectForKey(element), element);
+                _associations.setObjectForKey((WOAssociation) associations.objectForKey(element), element);
             }
         }
     }
-
+    
     public NSDictionary<String, WOAssociation> associations() {
         return _associations;
     }
@@ -107,16 +165,25 @@ public class SCView extends WODynamicGroup {
         super.appendToResponse(arg0, arg1);
     }
 
+    public String className(WOContext context) {
+        return "SC.View";
+    }
+
     public String id(WOContext context) {
-        synchronized (SCView.class) {
-            // AK: DO NOT CALL TWICE for the same component
-            return (String) valueForBinding("id", "id_" + (idx++) + "", context.component());
-        }
+        return (String) valueForBinding("id", context.component());
     }
 
     @Override
     public final void appendToResponse(WOResponse response, WOContext context) {
-        Item item = pushItem(id(context));
+        Item item = pushItem(id(context), className(context));
+        for (String key : _bindings.allKeys()) {
+            Object value = _bindings.objectForKey(key).valueInComponent(context.component());
+            item.addBinding(key, value == null ? "null" : value);
+        }
+        for (String key : _associations.allKeys()) {
+            Object value = _associations.objectForKey(key).valueInComponent(context.component());
+            item.addProperty(key, value == null ? "null" : value);
+        }
         doAppendToResponse(response, context);
         popItem();
     }
@@ -124,7 +191,7 @@ public class SCView extends WODynamicGroup {
     public static Item pageItem() {
         Item context = (Item) ERXThreadStorage.valueForKey("SCView.PageItem");
         if (context == null) {
-            context = new Item(null, "SCPage");
+            context = new Item(null, "SC.Page", "SCPage");
             ERXThreadStorage.takeValueForKey(context, "SCView.PageItem");
         }
         return context;
@@ -144,10 +211,10 @@ public class SCView extends WODynamicGroup {
         return currentItems().peek();
     }
 
-    protected static Item pushItem(String id) {
+    protected static Item pushItem(String id, String className) {
         Stack<Item> stack = currentItems();
         Item parent = stack.peek();
-        Item current = new Item(parent, id);
+        Item current = new Item(parent, className, id);
         stack.push(current);
         return current;
     }
