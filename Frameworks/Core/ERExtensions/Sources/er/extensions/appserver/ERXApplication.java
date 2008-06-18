@@ -445,7 +445,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				}
 
 				if (mainProps == null) {
-					throw new IllegalStateException("Main bundle 'Properties' file can't be read.\nPlease post your deployment configuration in the Wonder mailing list.");
+					throw new IllegalStateException("Main bundle 'Properties' file can't be read.  Did you run as a Java Application instead of a WOApplication in WOLips?\nPlease post your deployment configuration in the Wonder mailing list.");
 				}
 				allBundleProps.putAll(mainProps);
 
