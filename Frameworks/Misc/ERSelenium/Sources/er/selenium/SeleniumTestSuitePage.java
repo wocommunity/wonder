@@ -110,7 +110,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     }
     
     public String testLink() {
-    	NSMutableDictionary<String, String> queryArgs = new NSMutableDictionary<String, String>();
+    	NSMutableDictionary<String, Object> queryArgs = new NSMutableDictionary<String, Object>();
     	String format = context().request().stringFormValueForKey("format");
     	if (format != null)
     		queryArgs.setObjectForKey(format, "format");
