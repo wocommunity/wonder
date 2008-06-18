@@ -18,4 +18,5 @@ OtherButton: SCButton {
 
 SCRenderTree : WOString {
 	value = renderTree;
+	escapeHTML = false;
 }
