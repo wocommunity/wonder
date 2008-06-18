@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title><wo:str value="$^title"/></title>
+	<wo:ERXPartialMarker key="stylesheets_for_client"/>
+	<wo:ERXPartialMarker key="@content_for_page_styles"/>
+  </head>
+  <body class="<%= @theme || 'sc-theme' %> focus">    
+
+    <!-- Main Page Body -->
+    <wo:ERXPartialMarker key="@content_for_body"/>
+
+    <!-- Resources to be removed from DOM on page load -->
+    <div id="resources" style="display:none; visibility: hidden;">
+	    <wo:ERXPartialMarker key="@content_for_resources"/>
+    </div>
+    <!-- Include Site Javascript -->
+	<wo:ERXPartialMarker key="javascripts_for_client"/>
+	<wo:ERXPartialMarker key="@content_for_page_javascript"/>
+
+	<!-- Render Page Views -->
+	<wo:WOComponentContent />
+
+    <!-- Start SproutCore on Page Load -->
+    <script type="text/javascript">window.onload = SC.didLoad;</script>
+	<wo:ERXPartialMarker key="@content_for_final"/>
+	</body>
+</html>
