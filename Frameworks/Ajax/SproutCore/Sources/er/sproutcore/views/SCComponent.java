@@ -4,11 +4,19 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.foundation.ERXStringUtilities;
-import er.sproutcore.views.SCView.Item;
+import er.sproutcore.SCItem;
 
+/**
+ * Superclass for your own components that are actual views, so you don't have
+ * to write dynamic elements.
+ * 
+ * @author ak
+ * 
+ */
 public class SCComponent extends ERXNonSynchronizingComponent {
 
     public SCComponent(WOContext arg0) {
@@ -17,10 +25,10 @@ public class SCComponent extends ERXNonSynchronizingComponent {
 
     @Override
     public final void appendToResponse(WOResponse response, WOContext context) {
-        Item item = SCView.pushItem(stringValueForBinding("id"), className());
+        SCItem item = SCItem.pushItem(stringValueForBinding("id"), className());
         for (String key : ((NSArray<String>) bindingKeys())) {
             Object value = valueForBinding(key);
-            value = value == null ? "null" : value;
+            value = value == null ? NSKeyValueCoding.NullValue : value;
             if (key.startsWith("?")) {
                 item.addBinding(key.substring(1), value);
             } else {
@@ -28,14 +36,18 @@ public class SCComponent extends ERXNonSynchronizingComponent {
             }
         }
         doAppendToResponse(response, context);
-        SCView.popItem();
+        SCItem.popItem();
     }
 
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.appendToResponse(response, context);
     }
 
+    /**
+     * Returns a nice class name like MyApp.MyView.
+     * @return
+     */
     protected String className() {
-        return NSBundle.bundleForClass(getClass()).name() + "." +  ERXStringUtilities.lastPropertyKeyInKeyPath(name());
+        return NSBundle.bundleForClass(getClass()).name() + "." + ERXStringUtilities.lastPropertyKeyInKeyPath(name());
     }
 }
