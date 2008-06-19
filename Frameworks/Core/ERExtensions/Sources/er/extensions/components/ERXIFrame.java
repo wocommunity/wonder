@@ -8,7 +8,6 @@ package er.extensions.components;
 
 import org.apache.log4j.Logger;
 
-import com.sun.tools.example.debug.bdi.SessionListener;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
