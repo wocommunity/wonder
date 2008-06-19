@@ -10,6 +10,7 @@ import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
+import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 import javax.mail.Session;
@@ -24,7 +25,9 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.concurrency.ERXRunnable;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
+import er.extensions.foundation.ERXRuntimeUtilities;
 
 /**
  * This class is used to send mails in a threaded way.<BR>
@@ -252,8 +255,7 @@ public class ERMailSender implements Runnable {
 					transport.connect();
 				}
 			}
-		}
-		catch (MessagingException e) {
+		} catch (MessagingException e) {
 			log.error("Unable to connect to SMTP Transport. MessagingException: " + e.getMessage(), e);
 			if (_throwExceptionIfConnectionFails) {
 				throw e;
@@ -305,7 +307,12 @@ public class ERMailSender implements Runnable {
 						if (transport != null) {
 							transport.close();
 						}
-					} catch (MessagingException e) {
+					}
+					catch (AuthenticationFailedException e) {
+						log.error("Unable to connect to SMTP Transport. AuthenticationFailedException: " + e.getMessage() + " waiting 20 seconds", e);
+						Thread.sleep(20000);
+					}
+					catch (MessagingException e) {
 						if (e.getNextException() instanceof ConnectException) {
 							log.error("Can't connect to mail server, waiting");
 							Thread.sleep(10000);
