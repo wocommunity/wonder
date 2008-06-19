@@ -49,7 +49,7 @@ public class ERCoreBusinessLogic0 extends ERXMigrationDatabase.Migration {
         eRCAuditTrailEntryTable.newIntegerColumn("OLD_BLOB_VALUE_ID", ALLOWS_NULL);
         eRCAuditTrailEntryTable.newStringColumn("OLD_VALUES", 1000, ALLOWS_NULL);
         eRCAuditTrailEntryTable.newIntegerColumn("TRAIL_ID", NOT_NULL);
-        eRCAuditTrailEntryTable.newIntegerColumn("TYPE", ALLOWS_NULL);
+        eRCAuditTrailEntryTable.newStringColumn("TYPE", 50, NOT_NULL);
         eRCAuditTrailEntryTable.newStringColumn("USER_GLOBAL_ID", 255, ALLOWS_NULL);
         eRCAuditTrailEntryTable.newBlobColumn("USER_INFO", ALLOWS_NULL);
         eRCAuditTrailEntryTable.create();
