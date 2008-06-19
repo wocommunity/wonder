@@ -22,8 +22,6 @@ import er.extensions.foundation.ERXThreadStorage;
 public class SCView extends WODynamicGroup {
     protected Logger log = Logger.getLogger(getClass());
 
-    private WOElement _children;
-
     private NSMutableDictionary<String, WOAssociation> _associations;
 
     private NSMutableDictionary<String, WOAssociation> _bindings;
@@ -219,7 +217,7 @@ public class SCView extends WODynamicGroup {
         return current;
     }
 
-    protected static Item popItem() {
+    public static Item popItem() {
         Stack<Item> stack = currentItems();
         Item current = stack.pop();
         return stack.peek();
