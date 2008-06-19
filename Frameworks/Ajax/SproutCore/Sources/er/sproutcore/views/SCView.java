@@ -17,6 +17,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.AjaxUtils;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 
 public class SCView extends WODynamicGroup {
@@ -31,7 +32,9 @@ public class SCView extends WODynamicGroup {
     public static class Item {
 
         private String _id;
-        
+
+        private String _indent = "    ";
+
         private String _className;
 
         private Item _parent;
@@ -51,6 +54,10 @@ public class SCView extends WODynamicGroup {
             if (_parent != null) {
                 _parent.addChild(this);
             }
+            while(parent != null) {
+                _indent +="    ";
+                parent = parent._parent;
+            }
         }
 
         private synchronized int nextId() {
@@ -62,7 +69,7 @@ public class SCView extends WODynamicGroup {
         }
         
         public String outlet() {
-            return "\"." + _id + "\"";
+            return "\"." + _id + "?\"";
         }
 
         public void addProperty(String key, Object value) {
@@ -86,7 +93,7 @@ public class SCView extends WODynamicGroup {
             if(_bindings.count() > 0) {
                 for (String key : _bindings.allKeys()) {
                     Object value = _bindings.objectForKey(key);
-                    result += key + "Binding: " +  value + ",\n";
+                    result += _indent + key + "Binding: " +  value + ",\n";
                 }
             }
             return result;
@@ -95,7 +102,7 @@ public class SCView extends WODynamicGroup {
         private String outletJavaScript() {
             String result = "";
             if(_children.count() > 0) {
-                result += "outlets: [";
+                result += _indent +  "outlets: [";
                 for (Item item : _children) {
                     if(item != _children.objectAtIndex(0)) {
                         result += ",";
@@ -104,7 +111,7 @@ public class SCView extends WODynamicGroup {
                 }
                 result += "],\n";
                 for (Item item : _children) {
-                    result += "\"" + item.id() + "\": " + item + ",\n";
+                    result += _indent + "\"" + item.id() + "\": " + item + ",\n";
                 }
                 //result = result.substring(0, result.length() - 2);
             }
@@ -116,7 +123,7 @@ public class SCView extends WODynamicGroup {
             if(_properties.count() > 0) {
                 for (String key : _properties.allKeys()) {
                     Object value = _properties.objectForKey(key);
-                    result += key + ": " +  value + ",\n";
+                    result += _indent + key + ": " +  value + ",\n";
                 }
             }
             return result;
@@ -124,8 +131,11 @@ public class SCView extends WODynamicGroup {
 
         public String toString() {
             boolean isPage = _className.equals("SC.Page");
-            String core = "({\n" + outletJavaScript() + bindingsJavaScript() + propertyJavaScript() + "})";
-            return  _className + "." + (isPage ? "create" : "extend") + core + (isPage ?"": ".outletFor("+ outlet() +")");
+            String core = "({\n" + outletJavaScript() + bindingsJavaScript() + propertyJavaScript() + _indent.substring(4) +  "})";
+            if(isPage) {
+                return _className + ".create" + core;
+            }
+            return  _className + ".extend" + core + ".outletFor("+ outlet() +")";
         }
     }
 
@@ -164,7 +174,7 @@ public class SCView extends WODynamicGroup {
     }
 
     public String className(WOContext context) {
-        return "SC.View";
+        return "SC." +  ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName()).replaceAll("^SC", "");
     }
 
     public String id(WOContext context) {
