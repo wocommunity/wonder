@@ -1,0 +1,6 @@
+Button : SCButton {
+	label = ^label;
+}
+
+Content : WOComponentContent {
+}
