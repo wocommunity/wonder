@@ -3,8 +3,10 @@ package er.sproutcore.views;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 
 import er.extensions.components.ERXNonSynchronizingComponent;
+import er.extensions.foundation.ERXStringUtilities;
 import er.sproutcore.views.SCView.Item;
 
 public class SCComponent extends ERXNonSynchronizingComponent {
@@ -34,6 +36,6 @@ public class SCComponent extends ERXNonSynchronizingComponent {
     }
 
     protected String className() {
-        return name();
+        return NSBundle.bundleForClass(getClass()).name() + "." +  ERXStringUtilities.lastPropertyKeyInKeyPath(name());
     }
 }

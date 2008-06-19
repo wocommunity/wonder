@@ -20,3 +20,7 @@ SCRenderTree : WOString {
 	value = renderTree;
 	escapeHTML = false;
 }
+
+BetterButton: BetterButton {
+	label = "More test";
+}
