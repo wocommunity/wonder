@@ -1,6 +1,7 @@
 HelpText : WOString {
 	value = helpText.value;
 	valueWhenEmpty = defaultValue;
+	escapeHTML = ^escapeHTML;
 }
 
 ShowCreate : WOConditional {
