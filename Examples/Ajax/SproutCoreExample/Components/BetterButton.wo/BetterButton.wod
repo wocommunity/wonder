@@ -1,4 +1,4 @@
-Button : SCButton {
+Button : SCButtonView {
 	label = ^label;
 	text = "Hi there";
 	func = "SC.Binding.Not('foo')";
