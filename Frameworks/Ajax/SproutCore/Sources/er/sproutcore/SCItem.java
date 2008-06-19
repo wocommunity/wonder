@@ -37,7 +37,7 @@ public class SCItem {
     private NSMutableArray<SCItem> _children = new NSMutableArray<SCItem>();
 
     public SCItem(SCItem parent, String className, String id) {
-        _id = (id == null ? "id_" + (nextId()) + "" : id);
+        _id = (id == null ? "id" + (nextId()) + "" : id);
         _parent = parent;
         _className = className;
         if (_parent != null) {
@@ -58,6 +58,9 @@ public class SCItem {
     }
     
     public String outlet() {
+        if(_parent != null && _parent._parent == null) {
+            return "\"#" + _id + "\"";
+        }
         return "\"." + _id + "?\"";
     }
 

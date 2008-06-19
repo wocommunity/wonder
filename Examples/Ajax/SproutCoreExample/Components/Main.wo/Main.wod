@@ -1,4 +1,4 @@
-TestButton: SCButton {
+TestButton: SCButtonView {
 	id = "someButton";
 	outlet = true;
 	label = "Click me";
@@ -7,7 +7,7 @@ TestButton: SCButton {
 	?enabled = "SC.Binding.Not(\"Photos.photoController.hasNoContent\")";
 }
 
-OtherButton: SCButton {
+OtherButton: SCButtonView {
 	id = "otherButton";
 	outlet = true;
 	label = "Click me too";
