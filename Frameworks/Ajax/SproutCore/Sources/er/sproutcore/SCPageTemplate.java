@@ -6,6 +6,11 @@ import com.webobjects.appserver.WOResponse;
 
 import er.extensions.components.ERXNonSynchronizingComponent;
 
+/**
+ * Template for a page.
+ * @author ak
+ *
+ */
 public class SCPageTemplate extends ERXNonSynchronizingComponent {
     
     public SCPageTemplate(WOContext context) {

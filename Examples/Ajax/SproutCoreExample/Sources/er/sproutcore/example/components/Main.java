@@ -3,7 +3,7 @@ package er.sproutcore.example.components;
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.components.ERXComponent;
-import er.sproutcore.views.SCView;
+import er.sproutcore.SCItem;
 
 public class Main extends ERXComponent {
 
@@ -12,6 +12,6 @@ public class Main extends ERXComponent {
 	}
 
     public String renderTree() {
-        return SCView.pageItem().toString();
+        return SCItem.pageItem().toString();
     }
 }
