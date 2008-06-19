@@ -15,8 +15,8 @@ public class Application extends ERXApplication {
 	@Override
 	public void finishInitialization() {
 	    super.finishInitialization();
-        DataCreator.main(null);
-        ERIndexing.indexing().loadIndexDefinitions();
+        //DataCreator.main(null);
+        //ERIndexing.indexing().loadIndexDefinitions();
 	}
 	
 	public Application() {

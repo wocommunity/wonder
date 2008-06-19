@@ -6,9 +6,15 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol._EOMutableKnownKeyDictionary;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSNotification;
 
 import er.directtoweb.ERD2WDirectAction;
 import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXRemoteNotificationCenter;
+import er.extensions.foundation.ERXSelectorUtilities;
 import er.indexing.ERIndex;
 import er.indexing.example.eof.Asset;
 import er.indexing.example.eof.AssetGroup;
@@ -32,6 +38,34 @@ public class DirectAction extends ERD2WDirectAction {
     }
 
     public WOActionResults defaultAction() {
+        //testIndexing();
+        NSDictionary dict = new NSDictionary("TestValue", "TestKey");
+        NSArray keys = new NSArray(new String[]{"test1", "test2"});
+        _EOMutableKnownKeyDictionary vals;
+        _EOMutableKnownKeyDictionary.Initializer initializer = new _EOMutableKnownKeyDictionary.Initializer(keys);
+        vals = new _EOMutableKnownKeyDictionary(initializer);
+        log.info(vals);
+        vals.setObjectForKey("t1", "test1");
+        log.info(vals);
+        vals.setObjectForKey("t2", "test2");
+        log.info(vals);
+        vals.setObjectForKey("t3", "test3");
+        log.info(vals);
+        vals = new _EOMutableKnownKeyDictionary(initializer, new Object[]{"1", "2"});
+        log.info(vals);
+//        ERXRemoteNotificationCenter.defaultCenter().postNotification("All", null, dict);
+        return pageWithName(Main.class.getName());
+    }
+
+    static {
+        ERXRemoteNotificationCenter.defaultCenter().addObserver(DirectAction.class, ERXSelectorUtilities.notificationSelector("receiveNotification"), "All", null);
+    }
+    
+    public static void receiveNotification(NSNotification n) {
+        log.info("Received: " + n);
+    }
+    
+    private void testIndexing() {
         EOEditingContext ec = ERXEC.newEditingContext();
         ec.lock();
         try {
@@ -70,6 +104,5 @@ public class DirectAction extends ERD2WDirectAction {
         } finally {
             ec.unlock();
         }
-        return pageWithName(Main.class.getName());
     }
 }
