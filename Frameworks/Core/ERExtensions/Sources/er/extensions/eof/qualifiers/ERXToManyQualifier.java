@@ -201,7 +201,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
                         String keyString = e.formatValueForAttribute(key, pk);
                         //AK: default is is broken
                         if("NULL".equals(keyString)) {
-                        	keyString = "" + pk;
+                        	keyString = "" + key;
                         }
                         result.append(keyString);
                         if(i < pKeys.count()-1) {
