@@ -7,24 +7,28 @@
 	<wo:ERXPartialMarker key="stylesheets_for_client"/>
 	<wo:ERXPartialMarker key="@content_for_page_styles"/>
   </head>
-  <body class="<%= @theme || 'sc-theme' %> focus">    
+  <wo:WOGenericContainer elementName="body" class="$bodyClass">
+
+	<!-- Render Page Views -->
+	<wo:WOComponentContent />
 
     <!-- Main Page Body -->
-    <wo:ERXPartialMarker key="@content_for_body"/>
-
+    <textarea cols=80 rows=40>
+      <wo:ERXPartialMarker key="body"/>
+	</textarea>
     <!-- Resources to be removed from DOM on page load -->
     <div id="resources" style="display:none; visibility: hidden;">
 	    <wo:ERXPartialMarker key="@content_for_resources"/>
     </div>
     <!-- Include Site Javascript -->
 	<wo:ERXPartialMarker key="javascripts_for_client"/>
-	<wo:ERXPartialMarker key="@content_for_page_javascript"/>
-
-	<!-- Render Page Views -->
-	<wo:WOComponentContent />
+	<wo:ERXPartialMarker key="pageJavaScript"/>
 
     <!-- Start SproutCore on Page Load -->
     <script type="text/javascript">window.onload = SC.didLoad;</script>
-	<wo:ERXPartialMarker key="@content_for_final"/>
-	</body>
+	<textarea cols=80 rows=40>
+		<wo:WOString value="$renderTree" />
+	</textarea>
+
+  </wo:WOGenericContainer>
 </html>
