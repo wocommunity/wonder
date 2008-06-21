@@ -6,9 +6,9 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-public class SCSplitDividerView extends SCView {
+public class SCFormView extends SCView {
 
-    public SCSplitDividerView(String arg0, NSDictionary arg1, WOElement arg2) {
+    public SCFormView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
     }
 
