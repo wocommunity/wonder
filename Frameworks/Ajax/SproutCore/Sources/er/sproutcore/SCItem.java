@@ -57,8 +57,12 @@ public class SCItem {
         return _id;
     }
     
+    public boolean isRoot() {
+        return _parent != null && _parent._parent == null;
+    }
+    
     public String outlet() {
-        if(_parent != null && _parent._parent == null) {
+        if(isRoot()) {
             return "\"#" + _id + "\"";
         }
         return "\"." + _id + "?\"";
@@ -83,6 +87,7 @@ public class SCItem {
     private String bindingsJavaScript() {
         String result = "";
         if(_bindings.count() > 0) {
+            result += _indent + "// bindings" + "\n";
             for (String key : _bindings.allKeys()) {
                 Object value = _bindings.objectForKey(key);
                 value = quotedValue(key, value);
@@ -114,6 +119,7 @@ public class SCItem {
     private String propertyJavaScript() {
         String result = "";
         if(_properties.count() > 0) {
+            result += _indent + "// properties" + "\n";
             for (String key : _properties.allKeys()) {
                 Object value = _properties.objectForKey(key);
                 value = quotedValue(key, value);
@@ -131,7 +137,9 @@ public class SCItem {
             if(value instanceof Boolean || value instanceof Number) {
                 return value;
             }
-            
+            if("delegate".equals(key) || "view".equals(key) || "exampleView".equals(key)) {
+                return value;
+            }
             value = "\"" +  value + "\"";
         }
         return value;
@@ -139,7 +147,7 @@ public class SCItem {
 
     public String toString() {
         boolean isPage = _className.equals("SC.Page");
-        String core = "({\n" + outletJavaScript() + bindingsJavaScript() + propertyJavaScript() + _indent.substring(4) +  "})";
+        String core = "({\n" + bindingsJavaScript() + propertyJavaScript() + outletJavaScript() + _indent.substring(4) +  "})";
         if(isPage) {
             return _className + ".create" + core;
         }

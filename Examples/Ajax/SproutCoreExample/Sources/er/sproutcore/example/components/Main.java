@@ -10,8 +10,4 @@ public class Main extends ERXComponent {
     public Main(WOContext context) {
 		super(context);
 	}
-
-    public String renderTree() {
-        return SCItem.pageItem().toString();
-    }
 }
