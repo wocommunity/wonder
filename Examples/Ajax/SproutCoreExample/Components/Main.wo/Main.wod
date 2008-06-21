@@ -1,26 +1,4 @@
-TestButton: SCButtonView {
-	id = "someButton";
-	outlet = true;
-	label = "Click me";
-	action = "Photos.masterController.addAlbum";
-	?selected = "Photos.photoController.pickerIsVisible";
-	?enabled = "SC.Binding.Not(\"Photos.photoController.hasNoContent\")";
-}
-
-OtherButton: SCButtonView {
-	id = "otherButton";
-	outlet = true;
-	label = "Click me too";
-	action = "Photos.masterController.removeAlbum";
-	?selected = "Photos.photoController.pickerIsVisible";
-	?enabled = "SC.Binding.Not(\"Photos.photoController.hasNoContent\")";
-}
-
 SCRenderTree : WOString {
 	value = renderTree;
 	escapeHTML = false;
-}
-
-BetterButton: BetterButton {
-	label = "More test";
 }

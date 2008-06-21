@@ -1,81 +1,9 @@
 <wo:SCPageTemplate>
-
-<% content_for("body") do %>
-
-<wo:SCSplitView 
-	id="workspace" 
-	class="sc-app-workspace footer" 
-	direction="horizontal">  
-  <wo:SCView id="sidebar" 
-  	outlet=true 
-  	maxThickness=400 
-  	minThickness=100 
-  	?isCollapsed="SC.Binding.Not(\"Photos.masterController.albumsVisible\")">
-    <wo:SCScrollView 
-    	id="source_list" outlet=true>
-      <wo:SCSourceListView 
-        outlet=true 
-        group="albumType"
-        delegate="Photos.masterController"
-        dropTarget=true
-        contentValueKey="name"
-        canReorderContent=true
-        groupVisibleKey=true
-        contentIconKey="icon"
-        contentValueEditable=true
-        ?content="Photos.masterController.arrangedObjects"
-        ?selection="Photos.masterController.selection" />
-    </wo:SCScrollView>
-  </wo:SCView>
+<wo:ERXPartialWrapper key="body">
+<wo:SCTabView 
+	id="control_tabs"
+	lazyTabs = true>  
   
-  <wo:SCSplitDividerView outlet=true width=5 />
-  
-  <wo:SCScrollView 
-  	id="grid_view" 
-  	outlet=true>
-    <wo:SCGridView 
-      outlet=true 
-      view="Photos.PhotoGridView"
-      exampleView="Photos.PhotoView"
-      delegate="Photos.detailController"
-      contentValueKey="url"
-      canReorderContent=true
-      rowHeight=120
-      columnWidth=160
-      canDeleteContent=true
-      ?content="Photos.detailController.arrangedObjects"
-      ?selection="Photos.detailController.selection"
-     />
-  </wo:SCScrollView>
-</wo:SCSplitView>
-
-<wo:SCView id="footer" class="sc-footer sc-square-theme">
-  <div class="left">
-    <wo:SCButtonView outlet=true label="+" action="Photos.masterController.addAlbum" />
-    <wo:SCButtonView outlet=true label="-" action="Photos.masterController.deleteAlbum" />
-  </div>
-  <div class="center">
-    <wo:SCLabelView outlet=true ?value="Photos.detailController.countLabel"/>
-  </div>
-  <div class="right">
-    <wo:SCButtonView outlet="edit_button" title="Edit" 
-      action="Photos.photoController.showPicker" 
-      ?selected="Photos.photoController.pickerIsVisible"
-      ?enabled="SC.Binding.Not(\"Photos.photoController.hasNoContent\")" />
-    50
-    <wo:SCSliderView outlet=true
-      minimum=50
-      maximum=320
-      step=10
-      ?value="Photos.detailController.photoSize"
-    />
-    320
-  </div>
-</wo:SCView>
-<webobject name = "TestButton">hi there<webobject name = "OtherButton">hi there, too</webobject></webobject>
-<webobject name = "BetterButton">better button</webobject>
-
-<pre>
-<webobject name = "SCRenderTree"></webobject>
-</pre>
+</wo:SCTabView>
+</wo:ERXPartialWrapper>
 </wo:SCPageTemplate>
