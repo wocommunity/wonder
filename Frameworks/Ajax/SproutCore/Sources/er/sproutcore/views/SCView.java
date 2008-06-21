@@ -1,6 +1,8 @@
 package er.sproutcore.views;
 
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -21,30 +23,54 @@ import er.sproutcore.SCItem;
 
 /**
  * Superclass for a SC view.
+ * 
  * @author ak
- *
+ * 
  */
 public class SCView extends WODynamicGroup {
     protected Logger log = Logger.getLogger(getClass());
 
     private NSMutableDictionary<String, WOAssociation> _associations;
 
+    private NSMutableDictionary<String, WOAssociation> _properties;
+
     private NSMutableDictionary<String, WOAssociation> _bindings;
+
+    private static NSArray BINDABLE_KEYS = new NSArray(new String[] { "isEnabled", "isVisible", });
+
+    private static NSArray PROPERTY_KEYS = new NSArray(new String[] { "isEnabled", "isVisible", "hasCustomPanelWrapper", "localize", "validator", "fieldLabel",
+            "acceptsFirstResponder", "content", "value", "maxThickness", "minThickness", "canCollapse", "isCollapsed", "delegate", "isDropTarget", "paneType", "view", "animate",
+            "visibleAnimation", "style", "class", });
 
     public SCView(String name, NSDictionary associations, WOElement parent) {
         super(name, associations, parent);
         _associations = new NSMutableDictionary<String, WOAssociation>();
         _bindings = new NSMutableDictionary<String, WOAssociation>();
+        _properties = new NSMutableDictionary<String, WOAssociation>();
+
         for (Enumeration e = associations.keyEnumerator(); e.hasMoreElements();) {
-            String element = (String) e.nextElement();
-            if (element.charAt(0) == '?') {
-                _bindings.setObjectForKey((WOAssociation) associations.objectForKey(element), element.substring(1));
+            String key = (String) e.nextElement();
+            WOAssociation association = (WOAssociation) associations.objectForKey(key);
+            if (key.charAt(0) == '?') {
+                _bindings.setObjectForKey(association, key.substring(1));
             } else {
-                _associations.setObjectForKey((WOAssociation) associations.objectForKey(element), element);
+                _properties.setObjectForKey(association, key);
             }
+            log.debug(key + ": " + association);
+            _associations.setObjectForKey(association, key);
         }
+        _properties.removeObjectForKey("id");
+        _properties.removeObjectForKey("className");
+        _properties.removeObjectForKey("elementName");
+        _properties.removeObjectForKey("style");
+        _properties.removeObjectForKey("outlet");
+        _properties.removeObjectForKey("view");
     }
-    
+
+    public NSArray propertyKeys() {
+        return PROPERTY_KEYS;
+    }
+
     public NSDictionary<String, WOAssociation> associations() {
         return _associations;
     }
@@ -66,25 +92,91 @@ public class SCView extends WODynamicGroup {
     }
 
     public String className(WOContext context) {
-        return "SC." +  ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName()).replaceAll("^SC", "");
+       String defaultName = "SC." + ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName()).replaceAll("^SC", "");
+       return (String) valueForBinding("view", defaultName, context.component());
+    }
+
+    public String cssName(WOContext context) {
+        if (getClass() == SCView.class)
+            return "";
+        // this is just the default... it morphs SCFooBar -> sc-foo-bar
+        String className = ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName());
+        Pattern p = Pattern.compile("^([A-Z]+?)([A-Z])");
+        Matcher m = p.matcher(className);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            m.appendReplacement(sb, String.valueOf(m.group(0)).toLowerCase() + "-");
+        }
+        m.appendTail(sb);
+        className = sb.toString();
+
+        p = Pattern.compile("([A-Z][a-z0-9]+)");
+        m = p.matcher(className);
+        sb = new StringBuffer();
+        while (m.find()) {
+            m.appendReplacement(sb, String.valueOf(m.group()).toLowerCase() + "-");
+        }
+        m.appendTail(sb);
+        className = sb.toString();
+        className = className.substring(0, className.length() - 1);
+        return className;
     }
 
     public String id(WOContext context) {
         return (String) valueForBinding("id", context.component());
     }
 
+    public String elementName(WOContext context) {
+        return (String) valueForBinding("elementName", defaultElementName(), context.component());
+    }
+
+    protected Object defaultElementName() {
+        return "div";
+    }
+
+    public String css(WOContext context) {
+        String css = (String) valueForBinding("class", context.component());
+        if (css == null) {
+            css = "";
+        }
+        return css + " " + cssName(context);
+    }
+
+    public String style(WOContext context) {
+        return (String) valueForBinding("style", context.component());
+    }
+
+    public SCItem currentItem() {
+        return SCItem.currentItem();
+    }
+
     @Override
     public final void appendToResponse(WOResponse response, WOContext context) {
         SCItem item = SCItem.pushItem(id(context), className(context));
+        pullBindings(context, item);
+        String elementName = elementName(context);
+        String css = css(context);
+        String itemid = "";
+        if (item.isRoot()) {
+            itemid = " id=\"" + item.id() + "\"";
+        }
+        css += " " + item.id();
+        response.appendContentString("<" + elementName + itemid + " class=\"" + css + "\" >");
+        doAppendToResponse(response, context);
+        response.appendContentString("</" + elementName + ">");
+        SCItem.popItem();
+    }
+
+    protected void pullBindings(WOContext context, SCItem item) {
         for (String key : _bindings.allKeys()) {
             Object value = _bindings.objectForKey(key).valueInComponent(context.component());
+            log.debug("Binding: " + key + ":" + value);
             item.addBinding(key, value == null ? NSKeyValueCoding.NullValue : value);
         }
-        for (String key : _associations.allKeys()) {
-            Object value = _associations.objectForKey(key).valueInComponent(context.component());
+        for (String key : _properties.allKeys()) {
+            Object value = _properties.objectForKey(key).valueInComponent(context.component());
+            log.debug("Prop: " + key + ":" + value);
             item.addProperty(key, value == null ? NSKeyValueCoding.NullValue : value);
         }
-        doAppendToResponse(response, context);
-        SCItem.popItem();
     }
 }
