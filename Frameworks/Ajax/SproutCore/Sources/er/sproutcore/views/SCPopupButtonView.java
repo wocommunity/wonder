@@ -6,6 +6,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
+import er.sproutcore.views.button.SCButtonView;
+
 public class SCPopupButtonView extends SCButtonView {
 
     public SCPopupButtonView(String arg0, NSDictionary arg1, WOElement arg2) {
