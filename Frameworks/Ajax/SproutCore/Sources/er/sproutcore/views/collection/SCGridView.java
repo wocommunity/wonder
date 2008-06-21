@@ -1,4 +1,4 @@
-package er.sproutcore.views;
+package er.sproutcore.views.collection;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -6,9 +6,9 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-public class SCDisclosureView extends SCButtonView {
+public class SCGridView extends SCCollectionView {
 
-    public SCDisclosureView(String arg0, NSDictionary arg1, WOElement arg2) {
+    public SCGridView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
     }
 
