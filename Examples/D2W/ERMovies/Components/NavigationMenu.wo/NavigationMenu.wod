@@ -55,7 +55,7 @@ Image3: WOImage {
 
 LogoutERJavaScriptFlyover: WOHyperlink {
     class="Nav2";
-	actionClass = "er.extensions.ERXDirectAction";
+	actionClass = "ERXDirectAction";
 	directActionName = "logout";
 }
 
