@@ -10,6 +10,7 @@ import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -53,7 +54,48 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	protected NSArray<String> _prefetchingRelationshipKeyPaths;
 	
 	protected int _rowCount = -1;
+	
+	/**
+	 * Creates a new ERXBatchingDisplayGroup.
+	 */
+	public ERXBatchingDisplayGroup() {
+	}
+	
+	/**
+	 * Decodes an ERXBatchingDisplayGroup from the given unarchiver.
+	 * 
+	 * @param unarchiver the unarchiver to construct this display group with
+	 * @return the corresponding batching display group
+	 */
+	public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
+		return new ERXBatchingDisplayGroup(unarchiver);
+	}
 
+	/**
+	 * Creates a new ERXBatchingDisplayGroup from an unarchiver.
+	 * 
+	 * @param unarchiver the unarchiver to construct this display group with
+	 */
+	private ERXBatchingDisplayGroup(EOKeyValueUnarchiver unarchiver) {
+		this();
+		setCurrentBatchIndex(1);
+		setNumberOfObjectsPerBatch(unarchiver.decodeIntForKey("numberOfObjectsPerBatch"));
+		setFetchesOnLoad(unarchiver.decodeBoolForKey("fetchesOnLoad"));
+		setValidatesChangesImmediately(unarchiver.decodeBoolForKey("validatesChangesImmediately"));
+		setSelectsFirstObjectAfterFetch(unarchiver.decodeBoolForKey("selectsFirstObjectAfterFetch"));
+		setLocalKeys((NSArray) unarchiver.decodeObjectForKey("localKeys"));
+		setDataSource((EODataSource) unarchiver.decodeObjectForKey("dataSource"));
+		setSortOrderings((NSArray) unarchiver.decodeObjectForKey("sortOrdering"));
+		setQualifier((EOQualifier) unarchiver.decodeObjectForKey("qualifier"));
+		setDefaultStringMatchFormat((String) unarchiver.decodeObjectForKey("formatForLikeQualifier"));
+		NSDictionary insertedObjectDefaultValues = (NSDictionary) unarchiver.decodeObjectForKey("insertedObjectDefaultValues");
+		if (insertedObjectDefaultValues == null) {
+			insertedObjectDefaultValues = NSDictionary.EmptyDictionary;
+		}
+		setInsertedObjectDefaultValues(insertedObjectDefaultValues);
+		finishInitialization();
+	}
+	
 	/**
 	 * If we're batching and the displayed objects have not been fetched,
 	 * do a refetch() of them.
