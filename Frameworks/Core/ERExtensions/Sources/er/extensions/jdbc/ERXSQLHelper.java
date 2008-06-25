@@ -1660,6 +1660,9 @@ public class ERXSQLHelper {
 		 * a type that MIGHT match (which is just bad, btw) and comes up with
 		 * "serial".
 		 * 
+		 * cug: There seems to be also nothing useful for "BLOB", so we return
+		 * bytea for Type.BLOB  
+		 * 
 		 * We know better than EOF.
 		 * 
 		 * For any other case, we pass it up to the default impl.
@@ -1675,11 +1678,28 @@ public class ERXSQLHelper {
 			String externalType;
 			if (jdbcType == Types.INTEGER) {
 				externalType = "int4";
+			} else if (jdbcType == Types.BLOB) {
+				externalType = "bytea";
 			}
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
 			}
 			return externalType;
+		}
+		
+		/** 
+		 * Creates unique index; stolen from the derby helper
+		 * 
+		 * @author cug - Jun 24, 2008
+		 * @see er.extensions.ERXSQLHelper#sqlForCreateUniqueIndex(java.lang.String, java.lang.String, er.extensions.ERXSQLHelper.ColumnIndex[])
+		 */
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 	}
 }
