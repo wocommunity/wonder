@@ -14,6 +14,14 @@ public class SCSpinnerView extends SCView {
 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
-        super.doAppendToResponse(response, context);
+        String value = null;
+        value = (String) valueForBinding("label", value, context.component());
+        value = (String) valueForBinding("value", value, context.component());
+        value = (String) valueForBinding("title", value, context.component());
+        if (value != null) {
+            response.appendContentString(value);
+        } else {
+            super.doAppendToResponse(response, context);
+        }
     }
 }

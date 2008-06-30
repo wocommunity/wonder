@@ -14,6 +14,7 @@ public class SCProgressView extends SCView {
 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
-        super.doAppendToResponse(response, context);
+       String html = "<div class=\"outer-head\"></div><div class=\"inner\"><div class=\"inner-head\"></div><div class=\"inner-tail\"></div></div><div class=\"outer-tail\"></div>";
+       response.appendContentString(html);
     }
 }
