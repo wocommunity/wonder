@@ -10,4 +10,8 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXThreadStorage;
 
 public class SCUtilities {
+
+    public static String staticUrl(String asset) {
+        return "blank";
+    }
 }

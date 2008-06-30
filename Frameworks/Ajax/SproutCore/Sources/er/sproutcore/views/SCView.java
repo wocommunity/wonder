@@ -161,7 +161,9 @@ public class SCView extends WODynamicGroup {
             itemid = " id=\"" + item.id() + "\"";
         }
         css += " " + item.id();
-        response.appendContentString("<" + elementName + itemid + " class=\"" + css + "\" >");
+        response.appendContentString("<" + elementName + itemid + " class=\"" + css + "\" ");
+        appendAttributesToResponse(response, context);
+        response.appendContentString(">");
         doAppendToResponse(response, context);
         response.appendContentString("</" + elementName + ">");
         SCItem.popItem();
@@ -178,5 +180,9 @@ public class SCView extends WODynamicGroup {
             log.debug("Prop: " + key + ":" + value);
             item.addProperty(key, value == null ? NSKeyValueCoding.NullValue : value);
         }
+    }
+
+    public void appendAttributesToResponse(WOResponse arg0, WOContext arg1) {
+        return;
     }
 }
