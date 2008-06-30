@@ -888,8 +888,8 @@ public class ERXEC extends EOEditingContext {
 	 * 
 	 */
 	public void saveChanges() {
-		_EOAssertSafeMultiThreadedAccess("saveChanges()");
 		boolean wasAutoLocked = autoLock("saveChanges");
+        _EOAssertSafeMultiThreadedAccess("saveChanges()");
 		savingChanges = true;
 		try {
 			NSArray insertedObjects = insertedObjects().immutableClone();
