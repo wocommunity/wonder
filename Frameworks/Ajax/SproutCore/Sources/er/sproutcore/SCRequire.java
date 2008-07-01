@@ -26,13 +26,12 @@ public class SCRequire extends WODynamicElement {
         String[] scripts = SCUtilities.require(framework, name);
         for (int i = 0; i < scripts.length; i++) {
             String script = scripts[i];
-            appendScript(response, context, framework, script);
+            appendScript(response, context, script);
         }
-        appendScript(response, context, framework, name);
     }
 
-    private void appendScript(WOResponse response, WOContext context, String framework, String name) {
-        String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY, framework + "/" + name, null);
+    private void appendScript(WOResponse response, WOContext context, String name) {
+        String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY,name, null);
         response.appendContentString("<script");
         response._appendTagAttributeAndValue("src", url, false);
         response._appendTagAttributeAndValue("type", "text/javascript", false);
