@@ -39,28 +39,32 @@ public class SCUtilities {
         return scBase;
     }
     
-    public static synchronized String[] require(String framework, String name) {
-        framework = (framework != null && !"SproutCore".equals(framework) ? framework : scBase());
-        String fullName =  framework + "/" + name;
+    public static synchronized String[] require(String bundle, String name) {
+        String base = (bundle != null && !"SproutCore".equals(bundle) ? bundle : scBase());
+        String fullName =  bundle + "/" + name;
         Set<String> d = deps.objectForKey(fullName);
-        if(d == null) {
+        if(d == null || true) {
             d = new TreeSet<String>();
             deps.put(fullName, d);
-            File file = new File(framework, name);
+            File file = new File(base, name);
             try {
                 String content = ERXFileUtilities.stringFromFile(file);
                 Pattern pattern = Pattern.compile("\\s*require\\(\\s*\\W+([A-Za-z0-9/]+).?\\s*\\)");
                 Matcher matcher = pattern.matcher(content);
                 while(matcher.find()) {
                     String otherDep = matcher.group(1) + ".js";
-                    d.add(otherDep);
-                    log.info(otherDep);
-                    String others[] = require(framework, otherDep);
+                    String others[] = require(bundle, otherDep);
                     for (int i = 0; i < others.length; i++) {
                         String string = others[i];
                         d.add(string);
+                        log.info("string: " + string);
                     }
+                    otherDep = bundle + "/" + otherDep;
+                    d.add(otherDep);
+                    log.info("otherDep: " + otherDep);
                 }
+                d.add(fullName);
+                log.info("string: " + fullName);
             } catch (IOException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
             }
