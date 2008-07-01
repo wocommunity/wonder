@@ -28,10 +28,10 @@ public class SCRequire extends WODynamicElement {
     public void appendToResponse(WOResponse response, WOContext context) {
         String name = (String) _name.valueInComponent(context.component());
         String framework = (String) (_framework == null ? "SproutCore" : _framework.valueInComponent(context.component()));
-        ERXResponse.pushPartial("javascripts_for_client");
+        ERXResponse scriptResponse = ERXResponse.pushPartial("javascripts_for_client");
         NSArray<String> scripts = SCUtilities.require(framework, name);
         for (String script : scripts) {
-            appendScript(response, context, script);
+            appendScript(scriptResponse, context, script);
         }
         ERXResponse.popPartial();
 
