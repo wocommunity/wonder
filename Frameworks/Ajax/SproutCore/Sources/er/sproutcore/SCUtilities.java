@@ -39,21 +39,23 @@ public class SCUtilities {
         return scBase;
     }
     
-    public static synchronized String[] require(String name) {
-        Set<String> d = deps.objectForKey(name);
+    public static synchronized String[] require(String framework, String name) {
+        framework = (framework != null && !"SproutCore".equals(framework) ? framework : scBase());
+        String fullName =  framework + "/" + name;
+        Set<String> d = deps.objectForKey(fullName);
         if(d == null) {
             d = new TreeSet<String>();
-            deps.put(name, d);
-            File file = new File(scBase());
+            deps.put(fullName, d);
+            File file = new File(framework, name);
             try {
                 String content = ERXFileUtilities.stringFromFile(file);
                 Pattern pattern = Pattern.compile("\\s*require\\(\\s*\\W+([A-Za-z0-9/]+).?\\s*\\)");
                 Matcher matcher = pattern.matcher(content);
                 while(matcher.find()) {
-                    String otherDep = matcher.group(0);
+                    String otherDep = matcher.group(1) + ".js";
                     d.add(otherDep);
                     log.info(otherDep);
-                    String others[] = require(otherDep);
+                    String others[] = require(framework, otherDep);
                     for (int i = 0; i < others.length; i++) {
                         String string = others[i];
                         d.add(string);
@@ -63,7 +65,9 @@ public class SCUtilities {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
             }
         }
-        return (String[]) d.toArray();
+        // debugging
+        deps.remove(name);
+        return (String[]) d.toArray(new String[0]);
     }
     
     public static void include(String name) {
