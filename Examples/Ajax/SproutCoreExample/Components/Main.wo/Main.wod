@@ -1,4 +1,0 @@
-SCRenderTree : WOString {
-	value = renderTree;
-	escapeHTML = false;
-}
