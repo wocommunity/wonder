@@ -8,6 +8,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.appserver.ERXResponse;
+
 public class SCRequire extends WODynamicElement {
 
     WOAssociation _name;
@@ -24,13 +26,16 @@ public class SCRequire extends WODynamicElement {
     public void appendToResponse(WOResponse response, WOContext context) {
         String name = (String) _name.valueInComponent(context.component());
         String framework = (String) (_framework == null ? "SproutCore" : _framework.valueInComponent(context.component()));
+        ERXResponse.pushPartial("javascripts_for_client");
         NSArray<String> scripts = SCUtilities.require(framework, name);
         for (String script : scripts) {
             appendScript(response, context, script);
         }
+        ERXResponse.popPartial();
+
     }
 
-    private void appendScript(WOResponse response, WOContext context, String name) {
+    public static void appendScript(WOResponse response, WOContext context, String name) {
         String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY,name, null);
         response.appendContentString("<script");
         response._appendTagAttributeAndValue("src", url, false);
