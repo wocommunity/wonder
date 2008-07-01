@@ -5,6 +5,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 public class SCRequire extends WODynamicElement {
@@ -23,9 +24,8 @@ public class SCRequire extends WODynamicElement {
     public void appendToResponse(WOResponse response, WOContext context) {
         String name = (String) _name.valueInComponent(context.component());
         String framework = (String) (_framework == null ? "SproutCore" : _framework.valueInComponent(context.component()));
-        String[] scripts = SCUtilities.require(framework, name);
-        for (int i = 0; i < scripts.length; i++) {
-            String script = scripts[i];
+        NSArray<String> scripts = SCUtilities.require(framework, name);
+        for (String script : scripts) {
             appendScript(response, context, script);
         }
     }
