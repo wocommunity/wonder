@@ -18,8 +18,11 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXStringUtilities;
 import er.sproutcore.SCItem;
+import er.sproutcore.SCRequire;
+import er.sproutcore.SCUtilities;
 
 /**
  * Superclass for a SC view.
@@ -150,10 +153,30 @@ public class SCView extends WODynamicGroup {
         return SCItem.currentItem();
     }
 
+    
+    protected String scriptName() {
+        String name = getClass().getName().replaceAll("er.sproutcore", "");
+        name = name.replaceAll("\\.SC", "\\.");
+        name = name.replaceAll("\\.", "/");
+        name = name.replaceAll("View$", "");
+        name = name + ".js";
+        name = ERXStringUtilities.camelCaseToUnderscore(name, true);
+        name = name.replaceAll("/_", "/");
+        return name;
+    }
+    
     @Override
     public final void appendToResponse(WOResponse response, WOContext context) {
         SCItem item = SCItem.pushItem(id(context), className(context));
         pullBindings(context, item);
+        
+        ERXResponse.pushPartial("javascripts_for_client");
+        NSArray<String> scripts = SCUtilities.require("SproutCore", scriptName());
+        for (String script : scripts) {
+            SCRequire.appendScript(response, context, script);
+        }
+        ERXResponse.popPartial();
+
         String elementName = elementName(context);
         String css = css(context);
         String itemid = "";
