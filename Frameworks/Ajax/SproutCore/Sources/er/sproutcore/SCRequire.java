@@ -7,8 +7,10 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXResponse;
+import er.extensions.foundation.ERXThreadStorage;
 
 public class SCRequire extends WODynamicElement {
 
@@ -36,11 +38,19 @@ public class SCRequire extends WODynamicElement {
     }
 
     public static void appendScript(WOResponse response, WOContext context, String name) {
-        String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY,name, null);
-        response.appendContentString("<script");
-        response._appendTagAttributeAndValue("src", url, false);
-        response._appendTagAttributeAndValue("type", "text/javascript", false);
-        response.appendContentString("></script>");
+        NSMutableArray<String> scripts = (NSMutableArray<String>) ERXThreadStorage.valueForKey("SCRequire.Scripts");
+        if(scripts == null) {
+            scripts = new NSMutableArray<String>();
+            ERXThreadStorage.takeValueForKey(scripts, "SCRequire.Scripts");
+        }
+        if(!scripts.contains(name)) {
+            String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY,name, null);
+            response.appendContentString("<script");
+            response._appendTagAttributeAndValue("type", "text/javascript", false);
+            response._appendTagAttributeAndValue("src", url, false);
+            response.appendContentString("></script>\n");
+            scripts.addObject(name);
+        }
     }
     
 }
