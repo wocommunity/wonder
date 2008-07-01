@@ -170,10 +170,10 @@ public class SCView extends WODynamicGroup {
         SCItem item = SCItem.pushItem(id(context), className(context));
         pullBindings(context, item);
         
-        ERXResponse.pushPartial("javascripts_for_client");
+        ERXResponse scriptResponse = ERXResponse.pushPartial("javascripts_for_client");
         NSArray<String> scripts = SCUtilities.require("SproutCore", scriptName());
         for (String script : scripts) {
-            SCRequire.appendScript(response, context, script);
+            SCRequire.appendScript(scriptResponse, context, script);
         }
         ERXResponse.popPartial();
 
