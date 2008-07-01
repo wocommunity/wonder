@@ -593,7 +593,7 @@ public class ERXSQLHelper {
 		sb.append(columnName);
 		sb.append(")");
 		if (aggregateName != null) {
-			sb.append(" ");
+			sb.append(" AS ");
 			sb.append(aggregateName);
 		}
 		return sb.toString();
