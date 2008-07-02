@@ -142,19 +142,29 @@ public class ERXObjectStoreCoordinatorPool {
         if (sessionID != null) {
             os = (EOObjectStore) _oscForSession.get(sessionID);
             if (os == null) {
-                os = nextObjectStore();
+            	os = currentThreadObjectStore();
                 _oscForSession.put(sessionID, os);
             }
         } else {
-        	os = (EOObjectStore) ERXThreadStorage.valueForKey(ERXObjectStoreCoordinatorPool.THREAD_OSC_KEY);
-        	if (os == null) {
-        		os = nextObjectStore();
-        		if (os != null) {
-        			ERXThreadStorage.takeValueForKey(os, ERXObjectStoreCoordinatorPool.THREAD_OSC_KEY);
-        		}
-        	}
+        	os = currentThreadObjectStore();
         }
         return os;
+    }
+
+    /**
+     * Returns the object store for the current thread (or requests one and sets it if there isn't one).
+     * 
+     * @return the object store for the current thread
+     */
+    protected EOObjectStore currentThreadObjectStore() {
+    	EOObjectStore os = (EOObjectStore) ERXThreadStorage.valueForKey(ERXObjectStoreCoordinatorPool.THREAD_OSC_KEY);
+    	if (os == null) {
+    		os = nextObjectStore();
+    		if (os != null) {
+    			ERXThreadStorage.takeValueForKey(os, ERXObjectStoreCoordinatorPool.THREAD_OSC_KEY);
+    		}
+    	}
+    	return os;
     }
     
     /** 
