@@ -1,0 +1,66 @@
+Object : WOGenericContainer {
+	elementName = "object";
+	classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000";
+	codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0";
+	width=^width;
+	height=^height;
+	id=^id;
+	align=^align;
+}
+
+Embed : WOGenericContainer {
+	elementName = "embed";
+	src=movieUrl;
+	quality=^quality;
+	bgcolor=^bgColor;
+	width=^width;
+	height=^height;
+	name=^id;
+	align=^align;
+	allowScriptAccess=^allowScriptAccess;
+	allowFullScreen=^allowFullScreen;
+	type="application/x-shockwave-flash";
+	pluginspage="http://www.macromedia.com/go/getflashplayer";
+	FlashVars=flashVars;
+}
+
+AllowScriptAccess : WOGenericElement {
+	elementName = "param";
+	name = "allowScriptAccess";
+	value = ^allowScriptAccess;
+}
+
+AllowFullScreen : WOGenericElement {
+	elementName = "param";
+	name = "allowFullScreen";
+	value = ^allowFullScreen;
+}
+
+Movie : WOGenericElement {
+	elementName = "param";
+	name = "movie";
+	value = movieUrl;
+}
+
+WMode : WOGenericElement {
+	elementName = "param";
+	name = "wmode";
+	value = ^wmode;
+}
+FlashVars : WOGenericElement {
+	elementName = "param";
+	name = "FlashVars";
+	value = flashVars;
+}
+
+Quality : WOGenericElement {
+	elementName = "param";
+	name = "quality";
+	value = ^quality;
+}
+
+BgColor : WOGenericElement {
+	elementName = "param";
+	name = "bgcolor";
+	value = ^bgcolor;
+}
