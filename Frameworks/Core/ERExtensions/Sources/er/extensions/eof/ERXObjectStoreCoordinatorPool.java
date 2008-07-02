@@ -105,7 +105,7 @@ public class ERXObjectStoreCoordinatorPool {
     public void sessionDidCreate(NSNotification n) {
         WOSession s = (WOSession) n.object();
         if (_oscForSession.get(s.sessionID()) == null) {
-            _oscForSession.put(s.sessionID(), nextObjectStore());
+            _oscForSession.put(s.sessionID(), currentThreadObjectStore());
         }
     }
     
