@@ -2,28 +2,32 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>wonder.frameworks</groupId>
-		<artifactId>core</artifactId>
+		<artifactId>plugins</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
-	<groupId>wonder.core</groupId>
-	<artifactId>ERDirectToWeb</artifactId>
-	<name>ERDirectToWeb Framework</name>
+	<groupId>wonder.plugins</groupId>
+	<artifactId>FrontBasePlugIn</artifactId>
+	<name>FrontBase PlugIn</name>
 	<packaging>woframework</packaging>
-	<build>
-		<sourceDirectory>${basedir}/Sources</sourceDirectory>
-	</build>
 	<dependencies>
 		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaJDBCAdaptor</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<artifactId>JavaEOAccess</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaDirectToWeb</artifactId>
+			<artifactId>JavaEOControl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
 		</dependency>
 	</dependencies>
-</project>
+	<build>
+		<sourceDirectory>Sources</sourceDirectory>
+	</build>
+</project>\ No newline at end of file

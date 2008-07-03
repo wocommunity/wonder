@@ -1,50 +1,53 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<parent>
-		<groupId>wonder.common</groupId>
-		<artifactId>frameworks</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
-	</parent>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.common</groupId>
+	<parent>
+		<groupId>wonder.frameworks</groupId>
+		<artifactId>core</artifactId>
+		<version>5.0.0-SNAPSHOT</version>
+	</parent>
+	<groupId>wonder.core</groupId>
 	<artifactId>ERExtensions</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
-	<name>ERExtensions</name>
+	<name>ERExtensions Framework</name>
 	<packaging>woframework</packaging>
-
+	<build>
+		<sourceDirectory>${basedir}/Sources</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>Sources_WO54</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 	<dependencies>
 		<dependency>
-			<groupId>wonder.common</groupId>
+			<groupId>wonder.core</groupId>
 			<artifactId>JavaWOExtensions</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.apple.webobjects</groupId>
+			<groupId>com.webobjects</groupId>
 			<artifactId>JavaJDBCAdaptor</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>icu4j</groupId>
 			<artifactId>icu4j</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
 	</dependencies>
-	
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>com/webobjects/appserver/_private/WOHttpIO.java</exclude>
-                        <exclude>com/webobjects/foundation/NSMutableArray.java</exclude>
-                    </excludes>
-                </configuration>
-             </plugin>
-         </plugins>
-	</build>
-
 </project>
