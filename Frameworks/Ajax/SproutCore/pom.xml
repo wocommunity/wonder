@@ -6,16 +6,32 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.ajax</groupId>
-	<artifactId>YUI</artifactId>
-	<name>YUI Framework</name>
+	<artifactId>SproutCore</artifactId>
+	<name>SproutCore Framework</name>
 	<packaging>woframework</packaging>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
 	<dependencies>
 		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaXML</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>wonder.ajax</groupId>
 			<artifactId>Ajax</artifactId>
 		</dependency>
 	</dependencies>
-</project>
+</project>\ No newline at end of file
