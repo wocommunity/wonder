@@ -1055,15 +1055,20 @@ public class ERXMigrationTable {
 
 	/**
 	 * Returns an array of EOSQLExpressions for removing the primary key constraint of this table (only supports single attribute PK's right now).
-	 * 
+	 *
+	 * @param columns the primary key columns to drop
 	 * @return an array of EOSQLExpressions for removing the primary key constraint of this table
 	 */
 	@SuppressWarnings("unchecked")
-	public NSArray<EOSQLExpression> _dropPrimaryKeyExpressions(ERXMigrationColumn column) {
+	public NSArray<EOSQLExpression> _dropPrimaryKeyExpressions(ERXMigrationColumn... columns) {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
-		EOAttribute attribute = column._newAttribute();
-		EOEntity entity = attribute.entity();
-		entity.setPrimaryKeyAttributes(new NSArray<EOAttribute>(attribute));
+		EOEntity entity = columns[0].table()._blankEntity();
+		NSMutableArray<EOAttribute> attributes = new NSMutableArray<EOAttribute>();
+		for (ERXMigrationColumn column : columns) {
+			EOAttribute attribute = column._newAttribute(entity);
+			attributes.addObject(attribute);
+		}
+		entity.setPrimaryKeyAttributes(attributes);
 		NSArray<EOSQLExpression> expressions = schemaGeneration.dropPrimaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
 		ERXMigrationDatabase._ensureNotEmpty(expressions, "drop primary key", true);
 		return expressions;
@@ -1072,12 +1077,14 @@ public class ERXMigrationTable {
 	/**
 	 * Executes the SQL operations to drop this primary key constraint (only supports single attribute PK's right now).
 	 * 
-	 * @param column the primary key column
+	 * @param columns the primary key columns
 	 * @throws SQLException if the drop fails
 	 */
-	public void dropPrimaryKey(ERXMigrationColumn column) throws SQLException {
-		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_dropPrimaryKeyExpressions(column)));
-		column._setPrimaryKey(false);
+	public void dropPrimaryKey(ERXMigrationColumn... columns) throws SQLException {
+		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_dropPrimaryKeyExpressions(columns)));
+		for (ERXMigrationColumn column : columns) {
+			column._setPrimaryKey(false);
+		}
 	}
 
 	/**
