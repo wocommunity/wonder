@@ -163,6 +163,7 @@ public class SCView extends WODynamicGroup {
         name = name + ".js";
         name = ERXStringUtilities.camelCaseToUnderscore(name, true);
         name = name.replaceAll("/_", "/");
+        name = name.replaceAll("^/+", "");
         return name;
     }
     
@@ -173,6 +174,7 @@ public class SCView extends WODynamicGroup {
         
         ERXResponse scriptResponse = ERXResponse.pushPartial(SCPageTemplate.CLIENT_JS);
         NSArray<String> scripts = SCUtilities.require("SproutCore", scriptName());
+        log.info("adding: " +scripts);
         for (String script : scripts) {
             SCJavaScript.appendScript(scriptResponse, context, script);
         }
