@@ -17,6 +17,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXThreadStorage;
 
 public class SCUtilities {
 
@@ -50,14 +51,19 @@ public class SCUtilities {
     public static synchronized NSArray require(String bundle, String name) {
         String base = (bundle != null && !"SproutCore".equals(bundle) ? bundle : scBase());
         String fullName = bundle + "/" + name;
+        NSMutableDictionary<String, NSMutableArray<String>> deps = (NSMutableDictionary) ERXThreadStorage.valueForKey("SCUtils.deps");
+        if(deps == null) {
+            deps = new NSMutableDictionary<String, NSMutableArray<String>>();
+            ERXThreadStorage.takeValueForKey(deps, "SCUtils.deps");
+        }
         NSMutableArray<String> dependencies = deps.objectForKey(fullName);
-        if (dependencies == null || true) {
+        if (dependencies == null) {
             dependencies = new NSMutableArray<String>();
             deps.put(fullName, dependencies);
             File file = new File(base, name);
             try {
                 String content = ERXFileUtilities.stringFromFile(file);
-                Pattern pattern = Pattern.compile("\\s*require\\(\\s*\\W+([A-Za-z0-9/]+).?\\s*\\)");
+                Pattern pattern = Pattern.compile("\\s*require\\(\\s*\\W+([A-Za-z0-9/_]+).?\\s*\\)");
                 Matcher matcher = pattern.matcher(content);
                 while (matcher.find()) {
                     String otherDep = matcher.group(1) + ".js";
@@ -77,9 +83,8 @@ public class SCUtilities {
             } catch (IOException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
             }
+            log.info(name +  "->" + dependencies);
         }
-        // debugging
-        deps.remove(name);
         return dependencies.immutableClone();
     }
 

@@ -1,5 +1,7 @@
 package er.sproutcore;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
@@ -13,11 +15,12 @@ import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXThreadStorage;
 
 public class SCJavaScript extends WODynamicElement {
+    
+    protected Logger log = Logger.getLogger(getClass());
 
     WOAssociation _name;
     WOAssociation _framework;
-    
-    
+
     public SCJavaScript(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
         _name = (WOAssociation) arg1.objectForKey("name");
@@ -26,10 +29,17 @@ public class SCJavaScript extends WODynamicElement {
 
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
-        String name = (String) _name.valueInComponent(context.component());
-        String framework = (String) (_framework == null ? "SproutCore" : _framework.valueInComponent(context.component()));
         ERXResponse scriptResponse = ERXResponse.pushPartial(SCPageTemplate.CLIENT_JS);
+        String name = (String) _name.valueInComponent(context.component());
+        String framework;
+        if(_framework == null) {
+            framework = "SproutCore";
+            appendScript(scriptResponse, context, "SproutCore/prototype/prototype.js");
+        } else {
+            framework = (String) _framework.valueInComponent(context.component());
+        }
         NSArray<String> scripts = SCUtilities.require(framework, name);
+        log.info("adding: " +scripts);
         for (String script : scripts) {
             appendScript(scriptResponse, context, script);
         }
