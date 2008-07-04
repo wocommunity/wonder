@@ -28,6 +28,10 @@ public class SCRequestHandler extends WORequestHandler {
         String name = ERXArrayUtilities.arrayByRemovingFirstObject(path).componentsJoinedByString("/");
 
         if ("SproutCore".equals(bundleName)) {
+            name = name.replaceAll("\\.\\.+", "");
+            if("prototype/prototype.js".equals(name)) {
+                name = "../" + name;
+            }
             File file = new File(SCUtilities.scBase(), name);
             byte data[];
             try {
