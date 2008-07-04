@@ -12,13 +12,13 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXThreadStorage;
 
-public class SCRequire extends WODynamicElement {
+public class SCJavaScript extends WODynamicElement {
 
     WOAssociation _name;
     WOAssociation _framework;
     
     
-    public SCRequire(String arg0, NSDictionary arg1, WOElement arg2) {
+    public SCJavaScript(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
         _name = (WOAssociation) arg1.objectForKey("name");
         _framework = (WOAssociation) arg1.objectForKey("framework");
@@ -28,7 +28,7 @@ public class SCRequire extends WODynamicElement {
     public void appendToResponse(WOResponse response, WOContext context) {
         String name = (String) _name.valueInComponent(context.component());
         String framework = (String) (_framework == null ? "SproutCore" : _framework.valueInComponent(context.component()));
-        ERXResponse scriptResponse = ERXResponse.pushPartial("javascripts_for_client");
+        ERXResponse scriptResponse = ERXResponse.pushPartial(SCPageTemplate.CLIENT_JS);
         NSArray<String> scripts = SCUtilities.require(framework, name);
         for (String script : scripts) {
             appendScript(scriptResponse, context, script);

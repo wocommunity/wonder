@@ -14,6 +14,12 @@ import er.extensions.components.ERXNonSynchronizingComponent;
  */
 public class SCPageTemplate extends ERXNonSynchronizingComponent {
 
+    public static final String CLIENT_JS = "javascripts_for_client";
+    public static final String CLIENT_CSS = "stylesheets_for_client";
+    public static final String PAGE_CSS = "@content_for_page_styles";
+    public static final String PAGE_JS = "pageJavaScript";
+    public static final String RESOURCES = "@content_for_resources";
+    
     public SCPageTemplate(WOContext context) {
         super(context);
     }
