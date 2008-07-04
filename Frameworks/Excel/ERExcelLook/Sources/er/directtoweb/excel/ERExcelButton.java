@@ -9,6 +9,7 @@ import er.directtoweb.*;
 import er.directtoweb.components.buttons.ERDActionButton;
 import er.directtoweb.interfaces.ERDListPageInterface;
 import er.extensions.*;
+import er.extensions.batching.ERXBatchingDisplayGroup;
 import er.extensions.eof.ERXEOControlUtilities;
 
 public class ERExcelButton extends ERDActionButton {
@@ -37,7 +38,12 @@ public class ERExcelButton extends ERDActionButton {
         WODisplayGroup displayGroup = displayGroup();
         EODataSource dataSource = dataSource();
         if(dataSource == null) {
-            dataSource = ERXEOControlUtilities.dataSourceForArray(displayGroup.allObjects());
+        	if (displayGroup instanceof ERXBatchingDisplayGroup) {
+				ERXBatchingDisplayGroup dg = (ERXBatchingDisplayGroup) displayGroup;
+	            dataSource = ERXEOControlUtilities.dataSourceForArray(displayGroup.displayedObjects());
+			} else {
+	            dataSource = ERXEOControlUtilities.dataSourceForArray(displayGroup.allObjects());
+			}
         }
         D2WContext newContext = ERD2WContext.newContext(session);
         String newTask = d2wContext.task().equals("edit") ? "inspect" : d2wContext.task();
