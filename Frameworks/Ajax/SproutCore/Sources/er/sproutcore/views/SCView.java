@@ -21,7 +21,8 @@ import er.ajax.AjaxUtils;
 import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXStringUtilities;
 import er.sproutcore.SCItem;
-import er.sproutcore.SCRequire;
+import er.sproutcore.SCJavaScript;
+import er.sproutcore.SCPageTemplate;
 import er.sproutcore.SCUtilities;
 
 /**
@@ -170,10 +171,10 @@ public class SCView extends WODynamicGroup {
         SCItem item = SCItem.pushItem(id(context), className(context));
         pullBindings(context, item);
         
-        ERXResponse scriptResponse = ERXResponse.pushPartial("javascripts_for_client");
+        ERXResponse scriptResponse = ERXResponse.pushPartial(SCPageTemplate.CLIENT_JS);
         NSArray<String> scripts = SCUtilities.require("SproutCore", scriptName());
         for (String script : scripts) {
-            SCRequire.appendScript(scriptResponse, context, script);
+            SCJavaScript.appendScript(scriptResponse, context, script);
         }
         ERXResponse.popPartial();
 

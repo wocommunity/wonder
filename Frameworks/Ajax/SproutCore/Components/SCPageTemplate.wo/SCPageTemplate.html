@@ -13,9 +13,9 @@
 	<wo:WOComponentContent />
 
     <!-- Main Page Body -->
-    <textarea cols=80 rows=40>
+    <wo:WOGenericContainer elementName="textarea" cols="80" rows="40" omitTags="$^isLive">
       <wo:ERXPartialMarker key="body"/>
-	</textarea>
+	</wo:WOGenericContainer>
     <!-- Resources to be removed from DOM on page load -->
     <div id="resources" style="display:none; visibility: hidden;">
 	    <wo:ERXPartialMarker key="@content_for_resources"/>
@@ -26,9 +26,7 @@
 
     <!-- Start SproutCore on Page Load -->
     <script type="text/javascript">window.onload = SC.didLoad;</script>
-	<textarea cols=80 rows=40>
-		<wo:WOString value="$renderTree" />
-	</textarea>
-
+    <wo:WOGenericContainer elementName="textarea" cols="80" rows="40" omitTags="$^isLive"><script type="text/javascript"><wo:WOString value="$renderTree" escapeHTML="false" /></script>
+	</wo:WOGenericContainer>
   </wo:WOGenericContainer>
 </html>
