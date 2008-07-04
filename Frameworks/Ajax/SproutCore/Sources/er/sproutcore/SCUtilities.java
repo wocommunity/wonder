@@ -41,7 +41,7 @@ public class SCUtilities {
      */
     public static String scBase() {
         if (scBase == null) {
-            String version = ERXProperties.stringForKeyWithDefault("er.sproutcore.version", "0.9.10");
+            String version = ERXProperties.stringForKeyWithDefault("er.sproutcore.version", "0.9.13");
             scBase = ERXProperties.stringForKeyWithDefault("er.sproutcore.base", "/Library/Ruby/Gems/1.8/gems/sproutcore-" + version + "/frameworks/sproutcore");
         }
         return scBase;
@@ -68,12 +68,12 @@ public class SCUtilities {
                     if (!dependencies.containsObject(otherDep)) {
                         dependencies.add(otherDep);
                     }
-                    log.info("otherDep: " + otherDep);
+                    log.debug("otherDep: " + otherDep);
                 }
                 if (!dependencies.containsObject(fullName)) {
                     dependencies.add(fullName);
                 }
-                log.info("string: " + fullName);
+                log.debug("string: " + fullName);
             } catch (IOException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
             }
