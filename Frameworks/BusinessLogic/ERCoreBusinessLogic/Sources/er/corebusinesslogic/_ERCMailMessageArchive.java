@@ -1,8 +1,8 @@
 // $LastChangedRevision$ DO NOT EDIT.  Make changes to ERCMailMessageArchive.java instead.
 package er.corebusinesslogic;
 
-import er.extensions.eof.ERXGenericRecord;
-
+import er.extensions.foundation.*;
+import er.extensions.eof.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
