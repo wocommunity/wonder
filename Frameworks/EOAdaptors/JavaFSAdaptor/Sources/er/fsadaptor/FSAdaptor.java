@@ -40,7 +40,6 @@ public final class FSAdaptor extends EOAdaptor {
         throw new UnsupportedOperationException("FSAdaptor.synchronizationFactory");
     }
 
-    @Override
     public EOSynchronizationFactory schemaSynchronizationFactory() {
       throw new UnsupportedOperationException("FSAdaptor.schemaSynchronizationFactory");
     }
