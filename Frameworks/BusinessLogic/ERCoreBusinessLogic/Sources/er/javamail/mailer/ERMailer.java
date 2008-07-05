@@ -6,6 +6,7 @@
 //
 package er.javamail.mailer;
 
+import java.io.File;
 import java.util.Enumeration;
 
 import javax.mail.MessagingException;
@@ -21,6 +22,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.corebusinesslogic.ERCMailMessage;
 import er.corebusinesslogic.ERCMailState;
+import er.corebusinesslogic.ERCMessageAttachment;
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
@@ -29,6 +31,7 @@ import er.extensions.foundation.ERXUtilities;
 import er.javamail.ERMailDelivery;
 import er.javamail.ERMailDeliveryHTML;
 import er.javamail.ERMailDeliveryPlainText;
+import er.javamail.ERMailFileAttachment;
 
 /**
  * Mailer bridge class. Used to pull mail out of the
@@ -185,8 +188,11 @@ public class ERMailer {
                         if (shouldDeleteSentMail()) {
                             if (mailMessage.shouldArchiveSentMailAsBoolean()) {
                                 mailMessage.archive();
-                            } 
-                            mailMessage.editingContext().deleteObject(mailMessage);
+                            }
+                            // FIXME: Nasty stack overflow bug
+                            if (!mailMessage.hasAttachments()) {
+                              mailMessage.editingContext().deleteObject(mailMessage);
+                            }
                         }
                     } else {
                         log.warn("Unable to create mail delivery for mail message: " + mailMessage);
@@ -229,7 +235,7 @@ public class ERMailer {
      * @param message mail message
      * @return a mail delevery object
      */
-    // ENHANCEME: Not handling double byte (Japanese) language or file attachments.
+    // ENHANCEME: Not handling double byte (Japanese) language
     public ERMailDelivery createMailDeliveryForMailMessage(ERCMailMessage message) throws MessagingException {
         ERMailDelivery mail = null;
         if (message.text() != null) {
@@ -261,6 +267,13 @@ public class ERMailer {
 
         // Set the content
         mail.setSubject(messageTitlePrefix() + message.title());
+
+        if (message.hasAttachments()) {
+          for (Enumeration attachmentEnumerator = message.attachments().objectEnumerator(); attachmentEnumerator.hasMoreElements();) {
+            File fileAttachment = ((ERCMessageAttachment)attachmentEnumerator.nextElement()).file();
+            mail.addAttachment(new ERMailFileAttachment(fileAttachment.getName(), null, fileAttachment));
+          }
+        }
         return mail;
     }
 
