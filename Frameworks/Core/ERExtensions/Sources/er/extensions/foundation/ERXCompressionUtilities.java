@@ -36,11 +36,17 @@ public class ERXCompressionUtilities {
 			ERXRefByteArrayOutputStream bos = new ERXRefByteArrayOutputStream(length);
 			if (input != null) {
 				GZIPOutputStream out = new GZIPOutputStream(bos);
-	
-				ERXFileUtilities.writeInputStreamToOutputStream(input, out);
-	
-				out.finish();
-				out.close();
+				try {
+					ERXFileUtilities.writeInputStreamToOutputStream(input, true, out, false);
+				}
+				finally {
+					try {
+						out.finish();
+					}
+					finally {
+						out.close();
+					}
+				}
 			}
 			return bos.toNSData();
 		}
@@ -149,12 +155,18 @@ public class ERXCompressionUtilities {
 	}
 
 	public static byte[] zipByteArray(byte[] input) {
+		return ERXCompressionUtilities.zipByteArray(input, "tmp");
+	}
+
+	public static byte[] zipByteArray(byte[] input, String zipEntryName) {
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
 			ZipOutputStream out = new ZipOutputStream(bos);
 
+			out.putNextEntry(new ZipEntry(zipEntryName));
 			out.write(input, 0, input.length);
-
+			out.closeEntry();
+			
 			out.finish();
 			out.close();
 
@@ -162,6 +174,7 @@ public class ERXCompressionUtilities {
 			return compressedData;
 		}
 		catch (IOException e) {
+			log.error("Caught exception zipping byte array: " + e, e);
 			return null;
 		}
 	}
