@@ -1,8 +1,8 @@
 // $LastChangedRevision$ DO NOT EDIT.  Make changes to ERCAuditTrailEntry.java instead.
 package er.corebusinesslogic.audittrail;
 
-import er.extensions.eof.ERXGenericRecord;
-
+import er.extensions.foundation.*;
+import er.extensions.eof.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -70,17 +70,17 @@ public abstract class _ERCAuditTrailEntry extends ERXGenericRecord {
     takeStoredValueForKey(value, Key.TYPE);
   }
 
-  public er.extensions.eof.ERXKeyGlobalID userGlobalID() {
-    return (er.extensions.eof.ERXKeyGlobalID) storedValueForKey(Key.USER_GLOBAL_ID);
+  public ERXKeyGlobalID userGlobalID() {
+    return (ERXKeyGlobalID) storedValueForKey(Key.USER_GLOBAL_ID);
   }
-  public void setUserGlobalID(er.extensions.eof.ERXKeyGlobalID value) {
+  public void setUserGlobalID(ERXKeyGlobalID value) {
     takeStoredValueForKey(value, Key.USER_GLOBAL_ID);
   }
 
-  public er.extensions.foundation.ERXMutableDictionary userInfo() {
-    return (er.extensions.foundation.ERXMutableDictionary) storedValueForKey(Key.USER_INFO);
+  public ERXMutableDictionary userInfo() {
+    return (ERXMutableDictionary) storedValueForKey(Key.USER_INFO);
   }
-  public void setUserInfo(er.extensions.foundation.ERXMutableDictionary value) {
+  public void setUserInfo(ERXMutableDictionary value) {
     takeStoredValueForKey(value, Key.USER_INFO);
   }
 
