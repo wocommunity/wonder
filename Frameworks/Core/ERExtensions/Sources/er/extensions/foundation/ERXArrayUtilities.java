@@ -493,7 +493,18 @@ public class ERXArrayUtilities extends Object {
         
         return result;
     }
-
+    
+    /**
+ 	 * Adds the object to the mutable array if the object is not null.
+ 	 * @param array mutable array where non-null object will be added
+ 	 * @param object to be added to array
+ 	 */
+ 	public static void safeAddObject(NSMutableArray array, Object object) {
+ 		if (array != null && object != null) {
+ 			array.addObject(object);
+ 		}
+ 	}
+ 	
     /**
      * Adds all of the non-duplicate elements from the second
      * array to the mutable array.
@@ -971,7 +982,7 @@ public class ERXArrayUtilities extends Object {
             int i2 = keypath.indexOf("-");
             String rest = null;
             if ( i1 == -1 || i2 == -1 ) {
-                throw new IllegalArgumentException("subarrayWithRange must be used like @subarrayWithRange.start-length");
+                throw new IllegalArgumentException("subarrayWithRange must be used like '@subarrayWithRange.start-length' current key path: \"" + keypath + "\"");
             }
             String str = keypath.substring(i1, i2);
             int start = str.length() == 0 ? 0 : Integer.parseInt(str);
