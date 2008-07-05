@@ -9,7 +9,7 @@ import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
-import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
+import com.webobjects.eoaccess.EOSynchronizationFactory;
 
 public final class FSAdaptor extends EOAdaptor {
     public FSAdaptor(String aName) {
@@ -41,7 +41,7 @@ public final class FSAdaptor extends EOAdaptor {
     }
 
     @Override
-    public EOSchemaSynchronizationFactory schemaSynchronizationFactory() {
-      throw new UnsupportedOperationException("FSAdaptor.synchronizationFactory");
+    public EOSynchronizationFactory schemaSynchronizationFactory() {
+      throw new UnsupportedOperationException("FSAdaptor.schemaSynchronizationFactory");
     }
 }
