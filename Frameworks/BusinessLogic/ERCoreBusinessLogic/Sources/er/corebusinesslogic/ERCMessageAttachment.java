@@ -2,6 +2,8 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
@@ -17,6 +19,10 @@ public class ERCMessageAttachment extends _ERCMessageAttachment {
 
     public void init(EOEditingContext ec) {
         super.init(ec);
+    }
+    
+    public File file() {
+      return new File(filePath());
     }
     
     
