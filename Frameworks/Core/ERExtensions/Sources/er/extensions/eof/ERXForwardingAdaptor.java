@@ -40,7 +40,6 @@ public abstract class ERXForwardingAdaptor extends EOAdaptor {
 		return _forwardedAdaptor.synchronizationFactory();
 	}
 
-	@Override
 	public EOSynchronizationFactory schemaSynchronizationFactory() {
 		try {
 			Method schemaSynchronizationFactoryMethod = _forwardedAdaptor.getClass().getMethod("schemaSynchronizationFactory");
