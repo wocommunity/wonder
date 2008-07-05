@@ -1,8 +1,8 @@
 // $LastChangedRevision$ DO NOT EDIT.  Make changes to ERCAuditTrail.java instead.
 package er.corebusinesslogic.audittrail;
 
-import er.extensions.eof.ERXGenericRecord;
-
+import er.extensions.foundation.*;
+import er.extensions.eof.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -28,10 +28,10 @@ public abstract class _ERCAuditTrail extends ERXGenericRecord {
         /* more clazz methods here */
     }
 
-  public er.extensions.eof.ERXKeyGlobalID gid() {
-    return (er.extensions.eof.ERXKeyGlobalID) storedValueForKey(Key.GID);
+  public ERXKeyGlobalID gid() {
+    return (ERXKeyGlobalID) storedValueForKey(Key.GID);
   }
-  public void setGid(er.extensions.eof.ERXKeyGlobalID value) {
+  public void setGid(ERXKeyGlobalID value) {
     takeStoredValueForKey(value, Key.GID);
   }
 
