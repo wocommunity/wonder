@@ -281,7 +281,7 @@ public class AjaxFileUpload extends WOComponent {
 			if (hasBinding("outputStream")) {
 				OutputStream outputStream = (OutputStream) valueForBinding("outputStream");
 				if (outputStream != null) {
-					ERXFileUtilities.writeInputStreamToOutputStream(new FileInputStream(progress.tempFile()), outputStream);
+					ERXFileUtilities.writeInputStreamToOutputStream(new FileInputStream(progress.tempFile()), true, outputStream, true);
 				}
 			}
 
