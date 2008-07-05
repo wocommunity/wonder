@@ -16,6 +16,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
 import er.extensions.foundation.ERXCompressionUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.validation.ERXValidationFactory;
 
 public class ERCMailMessage extends _ERCMailMessage {
@@ -125,7 +126,7 @@ public class ERCMailMessage extends _ERCMailMessage {
         setIsRead(read);
     }
     public boolean isReadAsBoolean() {
-        return isRead();
+        return ERXValueUtilities.booleanValue(isRead());
     }
 
     public NSArray toAddressesAsArray() {
@@ -159,7 +160,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     }
 
     public boolean shouldArchiveSentMailAsBoolean() {
-        return shouldArchiveSentMail();
+        return ERXValueUtilities.booleanValue(shouldArchiveSentMail());
     }
     
     /**
@@ -229,6 +230,12 @@ public class ERCMailMessage extends _ERCMailMessage {
         }
         return value;
     }
+    
+    /**
+     * Simple test if an attachment has any attachments.
+     * @return if the the message has any attachments
+     */
+    public boolean hasAttachments() { return attachments().count() > 0; }
 
     // Validation Methods
     public Object validateFromAddress(String newValue) {
