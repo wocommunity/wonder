@@ -154,6 +154,13 @@ public class ERXLinlyn {
         } catch(IOException ioe) {ioe.printStackTrace();}
     }
 
+    /**
+ 	 * Returns a list of files and associated attributes in a given directory.
+ 	 * There is no FTP-server independent way to retrieve only the file name
+ 	 * portion of the result, but calling
+ 	 * substring(lastIndexOf(' ')+1)
+ 	 * on each element in the array will work so long as there are no spaces in filenames.
+ 	 */
     public String[] listFiles(String dir) throws IOException {
         ftpSetTransferType(false);
         dsock = ftpGetDataSock();
@@ -171,7 +178,7 @@ public class ERXLinlyn {
 
     public String download(String dir, String file, boolean asc)
         throws IOException {
-        return download(dir, file, asc, false);
+        return download(dir, file, asc, true);
     }
 
     public String download(String dir, String file, boolean asc, boolean keepAlive)
@@ -209,7 +216,7 @@ public class ERXLinlyn {
     }
 
     public void upload(String dir, String file, byte[] bytes) throws IOException {
-        upload(dir, file, bytes, false);
+        upload(dir, file, bytes, true);
     }
 
     public void upload(String dir, String file, byte[] bytes, boolean keepAlive) throws IOException {
@@ -228,7 +235,7 @@ public class ERXLinlyn {
     }
     
     public void upload(String dir, String file, String what, boolean asc) throws IOException {
-        upload(dir, file, what, asc, false);
+        upload(dir, file, what, asc, true);
     }
 
     public void upload(String dir, String file, String what, boolean asc, boolean keepAlive) throws IOException {
@@ -246,6 +253,27 @@ public class ERXLinlyn {
         }
     }
 
+    /**
+     * Removes a file from a directory on the server.
+     * @return true if the file was deleted (response 250), false otherwise.
+     */
+    public boolean deleteFile(String dir, String file) throws IOException {
+        return deleteFile(dir, file, true);
+    }
+
+    public boolean deleteFile(String dir, String file, boolean keepAlive) throws IOException {
+        ftpSetDir(dir);
+        String response = ftpSendCmd("DELE "+file);
+        if (!keepAlive) {
+            ftpLogout();
+        }
+        if (response.startsWith("250")) {
+            return true;
+        }
+
+        return false;
+    }
+
     ///////////////// private fields ////////////////////
     private boolean pauser = false;  // it's a hack. We're going to 
           // stall (refuse further requests) till we get a reply back 
@@ -253,7 +281,8 @@ public class ERXLinlyn {
 
     private String getAsString(InputStream is) {
         int c=0;
-        char lineBuffer[]=new char[128], buf[]=lineBuffer;
+        int doubler = 65536;
+        char lineBuffer[]=new char[doubler], buf[]=lineBuffer;
         int room= buf.length, offset=0;
         try {
           loop: while (true) {
@@ -262,7 +291,9 @@ public class ERXLinlyn {
                       case -1: break loop;
 
                       default: if (--room < 0) {
-                                   buf = new char[offset + 128];
+                                   if (log.isDebugEnabled()) { log.debug("Growing array by: " + doubler); }
+                                   buf = new char[offset + doubler];
+                                   doubler *= 2; // double the size of the array each time it grows.
                                    room = buf.length - offset - 1;
                                    System.arraycopy(lineBuffer, 0, 
                                             buf, 0, offset);
