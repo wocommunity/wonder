@@ -1021,8 +1021,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// "INCLUDED" as the HTTP version, which causes a request object not to
 		// be
 		// created by an exception.
-		if (anHTTPVersion.startsWith("INCLUDED"))
+		if (anHTTPVersion == null || anHTTPVersion.startsWith("INCLUDED")) {
 			anHTTPVersion = "HTTP/1.0";
+		}
 		
 		// Workaround for Safari on Leopard bug (post followed by redirect to GET incorrectly has content-type header).
 		// The content-type header makes the WO parser only look at the content. Which is empty.
