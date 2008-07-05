@@ -151,31 +151,14 @@ public class ERXUtilities {
     }
 
     /**
-     * Utility method to make a shared entity editable. This
-     * can be useful if you want to have an adminstration
-     * application that can edit shared enterprise objects
-     * and need a way at start up to disable the sharing
-     * constraints.
-     * @param entityName name of the shared entity to make
-     *		shareable.
+     * @deprecated see {@link ERXEOAccessUtilities.makeEditableSharedEntityNamed(String)}
      */
-    // FIXME: Should have to pass in an editing context so that the
-    //		correct model group and shared ec will be used.
-    // FIXME: Should also dump all of the currently shared eos from
-    //		the shared context.
     public static void makeEditableSharedEntityNamed(String entityName) {
-        EOEntity e = ERXEOAccessUtilities.entityNamed(null, entityName);
-        if (e.isReadOnly()) {
-            e.setReadOnly(false);
-            e.setCachesObjects(false);
-            e.removeSharedObjectFetchSpecificationByName("FetchAll");
-        } else {
-            log.warn("MakeSharedEntityEditable: entity already editable: " + entityName);
-        }
+    	ERXEOAccessUtilities.makeEditableSharedEntityNamed(entityName);
     }
 
     /**
-     * deprecated see {@link ERXEOControlUtilities.dataSourceForArray(NSArray)}
+     * @deprecated see {@link ERXEOControlUtilities.dataSourceForArray(NSArray)}
      */
     public static EOArrayDataSource dataSourceForArray(NSArray array) {
         return ERXEOControlUtilities.dataSourceForArray(array);
