@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseChannel;
@@ -201,10 +200,26 @@ public class ERXSQLHelper {
 	 * @return a sql script
 	 */
 	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EODatabaseContext databaseContext, NSDictionary<String, String> optionsCreate) {
-		// get the JDBCAdaptor
-		EOAdaptorContext ac = databaseContext.adaptorContext();
-		EOSynchronizationFactory sf = ((JDBCAdaptor) ac.adaptor()).plugIn().createSynchronizationFactory();
-		return sf.schemaCreationScriptForEntities(entities, optionsCreate);
+		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext.adaptorContext().adaptor(), optionsCreate);
+	}
+
+	/**
+	 * Creates the schema sql for a set of entities.
+	 * 
+	 * @param entities
+	 *            the entities to create sql for
+	 * @param adaptor
+	 *            the adaptor to use
+	 * @param optionsDictionary
+	 *            the options (@see
+	 *            createSchemaSQLForEntitiesInModelWithNameAndOptions)
+	 * @return a sql script
+	 */
+	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EOAdaptor adaptor, NSDictionary<String, String> optionsDictionary) {
+		JDBCPlugIn jdbcPlugIn = ((JDBCAdaptor)adaptor).plugIn();
+		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
+		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsDictionary);  
+		return creationScript;
 	}
 
 	/**
