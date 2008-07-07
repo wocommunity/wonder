@@ -155,6 +155,9 @@ public class ERXMigrationTable {
 		NSArray<ERXMigrationColumn> existingColumns = EOQualifier.filteredArrayWithQualifier(_columns, new EOKeyValueQualifier("name", EOQualifier.QualifierOperatorCaseInsensitiveLike, name));
 		ERXMigrationColumn column;
 		if (existingColumns.count() == 0) {
+			if (_new) {
+				throw new IllegalStateException("You requested the column named '" + name + "' in the table '" + _name + "', but that column hasn't been created yet.");
+			}
 			try {
 				column = _newColumn(name, 0, 0, 0, 0, false, null, null, false);
 			}
@@ -162,7 +165,6 @@ public class ERXMigrationTable {
 				throw new IllegalStateException("This should never have executed a database operation.", e);
 			}
 			column._setNew(false);
-			_columns.addObject(column);
 		}
 		else {
 			column = existingColumns.objectAtIndex(0);
