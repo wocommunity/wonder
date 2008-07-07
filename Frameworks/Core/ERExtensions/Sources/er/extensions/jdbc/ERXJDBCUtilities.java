@@ -31,8 +31,6 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
-import com.webobjects.eoaccess.EOSchemaGeneration;
-import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -224,6 +222,7 @@ public class ERXJDBCUtilities {
 			return result;
 		}
 
+		@SuppressWarnings("unchecked")
 		protected void copyEntity(EOEntity entity) throws SQLException {
 			EOAttribute[] attributes = attributesArray(entity.attributes());
 			String tableName = entity.externalName();
@@ -663,6 +662,7 @@ public class ERXJDBCUtilities {
 	 * @throws IOException
 	 *             if an error occurs reading the script
 	 */
+	@SuppressWarnings("unchecked")
 	public static int executeUpdateScriptFromResourceNamed(EOAdaptorChannel channel, String resourceName, String frameworkName) throws SQLException, IOException {
 		ERXJDBCUtilities.log.info("Executing SQL script '" + resourceName + "' from " + frameworkName + " ...");
 		InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray);
@@ -707,18 +707,9 @@ public class ERXJDBCUtilities {
 	 * @throws SQLException
 	 *             if something fails
 	 */
-	public static void createTablesForEntities(EOAdaptorChannel channel, NSArray entities) throws SQLException {
-		NSMutableDictionary<String, String> options = new NSMutableDictionary<String, String>();
-		options.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
-		options.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
-		options.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
-		options.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-		options.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
-		options.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
-		options.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
-		options.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
-		String sqlScript = syncFactory.schemaCreationScriptForEntities(entities, options);
+	public static void createTablesForEntities(EOAdaptorChannel channel, NSArray<EOEntity> entities) throws SQLException {
+		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(channel);
+		String sqlScript = sqlHelper.createSchemaSQLForEntitiesWithOptions(entities, channel.adaptorContext().adaptor(), sqlHelper.defaultOptionDictionary(true, false));
 		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
 	}
 
