@@ -177,6 +177,8 @@ There are many ways to use this script:
         <property name="build.root" value="${user.home}/Roots" />
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
         <property name="wonder.development" value="true" />
+        <property name="wonder.local.deployment.dir" value="${wo.wolocalroot}/Library/Frameworks" />
+        <property name="wonder.system.deployment.dir" value="${wo.wosystemroot}/Library/Frameworks" />
         
         <!-- if project.type is application and wonder.development is false, use installed frameworks, 
              otherwise use development frameworks. --> 
@@ -380,6 +382,15 @@ There are many ways to use this script:
         <condition property="use.system.bundles">
             <not><isset property="wo.frameworks.bundles"/></not>
         </condition>
+        <echo>
+            global.application.build:
+            use.system.bundles: ${use.system.bundles}
+            wo.localroot: ${wo.localroot}
+            wo.wolocalroot: ${wo.wolocalroot}
+            wo.wosystemroot: ${wo.wosystemroot}
+            wo.frameworks: ${wo.frameworks}
+            wo.frameworks.bundles: ${wo.frameworks.bundles}
+        </echo>
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false" version="${project.version}">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
@@ -411,15 +422,15 @@ There are many ways to use this script:
             </wsresources>
             
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
-           <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}" embed="${wonder.lib.root.bundles.embed}"/>
-           <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}" embed="${wo.frameworks.bundles.embed}" />
-           <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.movies">
+           <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}" embed="${wonder.lib.root.bundles.embed}" deploymentDir="${wonder.local.deployment.dir}"/>
+           <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}" embed="${wo.frameworks.bundles.embed}" deploymentDir="${wonder.local.deployment.dir}" />
+           <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.movies" deploymentDir="${wonder.local.deployment.dir}">
                 <include name="JavaBusinessLogic.framework"/>
            </frameworks>
-            <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.mysql">
+            <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.mysql" deploymentDir="${wonder.local.deployment.dir}">
                 <include name="*PlugIn.framework"/>
            </frameworks>
-           <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.system.bundles"> 
+           <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.system.bundles" deploymentDir="${wonder.system.deployment.dir}"> 
                 <include name="JavaFoundation.framework" />
                 <include name="JavaEOAccess.framework" />
                 <include name="JavaEOControl.framework" />
@@ -429,10 +440,10 @@ There are many ways to use this script:
                 <include name="JavaJDBCAdaptor.framework" />
                 <include name="JavaXML.framework" />
             </frameworks>
-            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.webservices.server"> 
+            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.webservices.server" deploymentDir="${wonder.system.deployment.dir}"> 
                 <include name="JavaWebServices*.framework" />
             </frameworks>
-            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.d2w"> 
+            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.d2w" deploymentDir="${wonder.system.deployment.dir}"> 
                 <include name="JavaDirectToWeb.framework" />
                 <include name="JavaEOProject.framework" />
                 <include name="JavaDTWGeneration.framework" />
