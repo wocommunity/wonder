@@ -382,15 +382,7 @@ There are many ways to use this script:
         <condition property="use.system.bundles">
             <not><isset property="wo.frameworks.bundles"/></not>
         </condition>
-        <echo>
-            global.application.build:
-            use.system.bundles: ${use.system.bundles}
-            wo.localroot: ${wo.localroot}
-            wo.wolocalroot: ${wo.wolocalroot}
-            wo.wosystemroot: ${wo.wosystemroot}
-            wo.frameworks: ${wo.frameworks}
-            wo.frameworks.bundles: ${wo.frameworks.bundles}
-        </echo>
+
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false" version="${project.version}">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
