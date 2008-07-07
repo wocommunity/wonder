@@ -334,7 +334,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		flags.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		String createTableScript = adaptor.synchronizationFactory().schemaCreationScriptForEntities(new NSArray<EOEntity>(dbUpdaterModel.entityNamed(migrationTableName(adaptor))), flags);
+		String createTableScript = ERXSQLHelper.newSQLHelper(adaptor).createSchemaSQLForEntitiesWithOptions(new NSArray<EOEntity>(dbUpdaterModel.entityNamed(migrationTableName(adaptor))), adaptor, flags);
 		return createTableScript;
 	}
 }
