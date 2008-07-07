@@ -46,7 +46,6 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 
 	public static class Observer {
 		public void applicationDidHandleRequest(NSNotification n) {
-			WORequest response = (WORequest) n.object();
 			ERXWOContext.setCurrentContext(null);
 			ERXThreadStorage.removeValueForKey(ERXWOContext.CONTEXT_DICTIONARY_KEY);
 		}
