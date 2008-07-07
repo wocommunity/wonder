@@ -647,7 +647,7 @@
             <param name="project.principal.class" value="com.webobjects.monitor.application.Application" />
             <param name="project.name" value="JavaMonitor" />
             <param name="project.dir" value="Applications/JavaMonitor" />
-      		<param name="wonder.lib.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework" />
+      		<param name="wonder.lib.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework/Ajax" />
       		<param name="wonder.lib.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
         </antcall>
     </target>
