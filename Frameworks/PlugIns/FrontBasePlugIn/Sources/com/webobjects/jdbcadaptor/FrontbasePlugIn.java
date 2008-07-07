@@ -572,8 +572,20 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			else
 				return s1.equals("YES");
 		}
+	    
+	    public String schemaCreationScriptForEntities(NSArray allEntities, NSDictionary options) {
+	/* 741*/        StringBuffer result = new StringBuffer();
+	/* 744*/        if(options == null)
+	/* 745*/            options = NSDictionary.EmptyDictionary;
+	/* 747*/        NSArray statements = schemaCreationStatementsForEntities(allEntities, options);
+	/* 748*/        int i = 0;
+	/* 748*/        for(int count = statements.count(); i < count; i++)
+	/* 749*/            appendExpressionToScript((EOSQLExpression)statements.objectAtIndex(i), result);
 
-		public NSArray schemaCreationStatementsForEntities(NSArray entities, NSDictionary options) {
+	/* 751*/        return new String(result);
+	    }
+
+	    public NSArray schemaCreationStatementsForEntities(NSArray entities, NSDictionary options) {
 			NSMutableArray result = new NSMutableArray();
 
 			if (entities == null || entities.count() == 0)
