@@ -21,6 +21,7 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -99,7 +100,6 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			String parts[] = gidString.split("/");
 			String ecid = parts[0];
 			String entityName = parts[1];
-			EOGlobalID keyGlobalID;
 	
 			EOEditingContext ec = null;
 			if(ecid != null) {
@@ -111,28 +111,47 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			}
 			ec.lock();
 			try {
-				String pk = parts.length > 2 ? parts[2] : null;
+				String type = null;
+				String pk = null;
+				if (parts.length > 2) {
+					type = parts[2];
+					pk = parts[3];
+				}
 				EOEnterpriseObject eo;
+				EOGlobalID gid;
 				if(pk != null && pk.length() > 0) {
-					pk = ERXStringUtilities.urlDecode(pk);
-					keyGlobalID = ERXEOControlUtilities.globalIDForString(ec, entityName, pk);
-					eo = ec.faultForGlobalID(keyGlobalID, ec);
-				} else {
+					if ("T".equals(type)) {
+						byte[] bytes = ERXStringUtilities.hexStringToByteArray(pk);
+						gid = EOTemporaryGlobalID._gidForRawBytes(bytes);
+						eo = ec.objectForGlobalID(gid);
+					}
+					else {
+						pk = ERXStringUtilities.urlDecode(pk);
+						gid = ERXEOControlUtilities.globalIDForString(ec, entityName, pk);
+						eo = ec.faultForGlobalID(gid, ec);
+					}
+				}
+				else if (_canInsert(entityName)) {
 					eo = ERXEOControlUtilities.createAndInsertObject(ec, entityName);
 				}
-				NSArray<String> attributeNames = _writableAttributeNames(eo);
-				NSArray<String> relationshipNames = _includedRelationshipNames(eo);
-				for (Iterator iterator = eoDict.keys(); iterator.hasNext();) {
-					String key = (String) iterator.next();
-					if(!("javaClass".equals(key) || "gid".equals(key))) {
-						if (attributeNames.containsObject(key)) {
-							Object value = eoDict.get(key);
-							Object obj = ser.unmarshall(state, null, value);
-							if (obj == null && !relationshipNames.containsObject(key) && (eo.toOneRelationshipKeys().containsObject(key) || eo.toManyRelationshipKeys().containsObject(key))) { 
-								// ignore nulls for non-included relationships 
-							}
-							else {
-								eo.takeValueForKey(obj, key);
+				else {
+					eo = null;
+				}
+				if (eo != null) {
+					NSArray<String> attributeNames = _writableAttributeNames(eo);
+					NSArray<String> relationshipNames = _includedRelationshipNames(eo);
+					for (Iterator iterator = eoDict.keys(); iterator.hasNext();) {
+						String key = (String) iterator.next();
+						if(!("javaClass".equals(key) || "gid".equals(key))) {
+							if (attributeNames.containsObject(key)) {
+								Object value = eoDict.get(key);
+								Object obj = ser.unmarshall(state, null, value);
+								if (obj == null && !relationshipNames.containsObject(key) && (eo.toOneRelationshipKeys().containsObject(key) || eo.toManyRelationshipKeys().containsObject(key))) { 
+									// ignore nulls for non-included relationships 
+								}
+								else {
+									eo.takeValueForKey(obj, key);
+								}
 							}
 						}
 					}
@@ -157,12 +176,20 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 			EOEditingContext ec = eo.editingContext();
 			String ecid = registerEditingContext(ec);
-			String pkStr = ERXEOControlUtilities.primaryKeyStringForObject(eo);
-			if (pkStr == null) {
-				throw new IllegalArgumentException("Uncommitted EO's are not currently supported for marshalling.");
+			String type;
+			String pkStr;
+			EOGlobalID gid = ec.globalIDForObject(eo);
+			if (gid instanceof EOTemporaryGlobalID) {
+				type = "T";
+				byte[] bytes = ((EOTemporaryGlobalID)gid)._rawBytes();
+				pkStr = ERXStringUtilities.byteArrayToHexString(bytes);
 			}
-			String encodedPKStr = ERXStringUtilities.urlEncode(pkStr);
-			obj.put("gid", ecid + "/" + eo.entityName() +  "/" + encodedPKStr);
+			else {
+				type = "K";
+				pkStr = ERXEOControlUtilities.primaryKeyStringForObject(eo);
+				pkStr = ERXStringUtilities.urlEncode(pkStr);
+			}
+			obj.put("gid", ecid + "/" + eo.entityName() +  "/" + type + "/" + pkStr);
 
 			addAttributes(state, eo, obj);
 			return obj;
@@ -246,6 +273,15 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				state.pop();
 			}
 		}
+	}
+
+	/**
+	 * Override to return whether or not a new entity can be inserted.
+	 * @param eo
+	 * @return
+	 */
+	protected boolean _canInsert(String entityName) {
+		return ERXProperties.booleanForKeyWithDefault("er.ajax.json." + entityName + ".canInsert", false);
 	}
 
 	/**
