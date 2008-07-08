@@ -74,6 +74,10 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		return _JSONClasses;
 	}
 
+	protected boolean _canSerialize(Class clazz, Class jsonClazz) {
+		return super.canSerialize(clazz, jsonClazz);
+	}
+
 	@Override
 	public boolean canSerialize(Class clazz, Class jsonClazz) {
 		return (super.canSerialize(clazz, jsonClazz) || ((jsonClazz == null || jsonClazz == JSONObject.class) && EOEnterpriseObject.class.isAssignableFrom(clazz)));
@@ -264,6 +268,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 					destination.put(key, jsonValue);
 				}
 			}
+			_addCustomAttributes(state, source, destination);
 		}
 		catch (JSONException e) {
 			throw new MarshallException("Failed to marshall EO.", e);
@@ -273,6 +278,10 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				state.pop();
 			}
 		}
+	}
+
+	protected void _addCustomAttributes(SerializerState state, EOEnterpriseObject source, JSONObject destination) throws MarshallException {
+		// DO NOTHING
 	}
 
 	/**
@@ -326,7 +335,11 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		NSArray<String> attributeNames = EOEnterpriseObjectSerializer.readableAttributeNames.objectForKey(entity.name());
 		//AK: should use clientProperties from EM
 		if (attributeNames == null) {
-			attributeNames = (NSArray<String>)ERXProperties.arrayForKey("er.ajax.json." + entity.name() + ".attributes");
+			EOEntity currentEntity = entity;
+			while (attributeNames == null && currentEntity != null) {
+				attributeNames = (NSArray<String>)ERXProperties.arrayForKey("er.ajax.json." + currentEntity.name() + ".attributes");
+				currentEntity = currentEntity.parentEntity();
+			}
 			if (attributeNames == null) {
 				//publicAttributes = source.attributeKeys();
 				//publicAttributeSet.addObjectsFromArray(publicAttributes);
@@ -355,7 +368,11 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		NSArray<String> writableNames = EOEnterpriseObjectSerializer.writableAttributeNames.objectForKey(entity.name());
 		//AK: should use clientProperties from EM
 		if (writableNames == null) {
-			writableNames = (NSArray<String>)ERXProperties.arrayForKey("er.ajax.json." + entity.name() + ".writableAttributes");
+			EOEntity currentEntity = entity;
+			while (writableNames == null && currentEntity != null) {
+				writableNames = (NSArray<String>)ERXProperties.arrayForKey("er.ajax.json." + currentEntity.name() + ".writableAttributes");
+				currentEntity = currentEntity.parentEntity();
+			}
 			if (writableNames == null) {
 				//publicAttributes = source.attributeKeys();
 				//publicAttributeSet.addObjectsFromArray(publicAttributes);
@@ -384,7 +401,11 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
 		NSArray<String> relationshipNames = EOEnterpriseObjectSerializer.includedRelationshipNames.objectForKey(entity.name());
 		if (relationshipNames == null) {
-			relationshipNames = (NSArray<String>)ERXProperties.arrayForKey("er.ajax.json." + entity.name() + ".relationships");
+			EOEntity currentEntity = entity;
+			while (relationshipNames == null && currentEntity != null) {
+				relationshipNames = (NSArray<String>)ERXProperties.arrayForKey("er.ajax.json." + currentEntity.name() + ".relationships");
+				currentEntity = currentEntity.parentEntity();
+			}
 			if (relationshipNames == null) {
 				relationshipNames = entity.classDescriptionForInstances().toOneRelationshipKeys();
 			}
