@@ -950,3 +950,13 @@ var AjaxBusy = {
 	  });
 	}
 };
+
+var WonderJSON = {
+	eoStub: function(eo) {
+		alert(eo.javaClass);
+		var eoStub = new Object();
+		eoStub.javaClass = eo.javaClass;
+		eoStub.gid = eo.gid;
+		return eoStub;
+	} 
+};
