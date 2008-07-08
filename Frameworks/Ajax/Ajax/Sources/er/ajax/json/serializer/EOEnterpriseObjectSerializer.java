@@ -40,7 +40,8 @@ import er.extensions.foundation.ERXStringUtilities;
  * @version $Revision$, $Date$
  */
 public class EOEnterpriseObjectSerializer extends AbstractSerializer {
-	protected static NSMutableDictionary<String, NSArray<String>> publicAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
+	protected static NSMutableDictionary<String, NSArray<String>> readableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
+	protected static NSMutableDictionary<String, NSArray<String>> writableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
 	protected static NSMutableDictionary<String, NSArray<String>> includedRelationshipNames = new NSMutableDictionary<String, NSArray<String>>();
 
 	private static Class[] _serializableClasses = new Class[] { EOEnterpriseObject.class };
@@ -119,11 +120,21 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				} else {
 					eo = ERXEOControlUtilities.createAndInsertObject(ec, entityName);
 				}
+				NSArray<String> attributeNames = _writableAttributeNames(eo);
+				NSArray<String> relationshipNames = _includedRelationshipNames(eo);
 				for (Iterator iterator = eoDict.keys(); iterator.hasNext();) {
 					String key = (String) iterator.next();
 					if(!("javaClass".equals(key) || "gid".equals(key))) {
-						Object value = eoDict.get(key);
-						eo.takeValueForKey(value, key);
+						if (attributeNames.containsObject(key)) {
+							Object value = eoDict.get(key);
+							Object obj = ser.unmarshall(state, null, value);
+							if (obj == null && !relationshipNames.containsObject(key) && (eo.toOneRelationshipKeys().containsObject(key) || eo.toManyRelationshipKeys().containsObject(key))) { 
+								// ignore nulls for non-included relationships 
+							}
+							else {
+								eo.takeValueForKey(obj, key);
+							}
+						}
 					}
 				}
 				state.setSerialized(o, eo);
@@ -146,8 +157,12 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 			EOEditingContext ec = eo.editingContext();
 			String ecid = registerEditingContext(ec);
-			String pk = ERXStringUtilities.urlEncode(ERXEOControlUtilities.primaryKeyStringForObject(eo));
-			obj.put("gid", ecid + "/" + eo.entityName() +  "/" + pk);
+			String pkStr = ERXEOControlUtilities.primaryKeyStringForObject(eo);
+			if (pkStr == null) {
+				throw new IllegalArgumentException("Uncommitted EO's are not currently supported for marshalling.");
+			}
+			String encodedPKStr = ERXStringUtilities.urlEncode(pkStr);
+			obj.put("gid", ecid + "/" + eo.entityName() +  "/" + encodedPKStr);
 
 			addAttributes(state, eo, obj);
 			return obj;
@@ -179,7 +194,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				state.push(source, eoData, "eo");
 			}
 			EOClassDescription cd = source.classDescription();
-			NSArray<String> attributeNames = _publicAttributeNames(source);
+			NSArray<String> attributeNames = _readableAttributeNames(source);
 			NSArray<String> relationshipNames = _includedRelationshipNames(source);
 			
 			for (Enumeration e = attributeNames.objectEnumerator(); e.hasMoreElements();) {
@@ -191,11 +206,12 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 						jsonValue = ser.marshall(state, source, value, key);
 					}
 					else {
-						JSONObject rel = new JSONObject();
-						rel.put("javaClass", "com.webobjects.eocontrol.EOArrayFault");
-						rel.put("sourceGlobalID", destination.get("gid"));
-						rel.put("relationshipName", key);
-						jsonValue = rel;
+//						JSONObject rel = new JSONObject();
+//						rel.put("javaClass", "com.webobjects.eocontrol.EOArrayFault");
+//						rel.put("sourceGlobalID", destination.get("gid"));
+//						rel.put("relationshipName", key);
+//						jsonValue = rel;
+						jsonValue = null;
 					}
 				} else if (cd.toOneRelationshipKeys().containsObject(key)) {
 					if (relationshipNames.containsObject(key)) {
@@ -203,11 +219,12 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 						jsonValue = ser.marshall(state, source, value, key);
 					}
 					else {
-						JSONObject rel = new JSONObject();
-						rel.put("javaClass", "com.webobjects.eocontrol.EOFault");
-						rel.put("sourceGlobalID", destination.get("gid"));
-						rel.put("relationshipName", key);
-						jsonValue = rel;
+//						JSONObject rel = new JSONObject();
+//						rel.put("javaClass", "com.webobjects.eocontrol.EOFault");
+//						rel.put("sourceGlobalID", destination.get("gid"));
+//						rel.put("relationshipName", key);
+//						jsonValue = rel;
+						jsonValue = null;
 					}
 				} else {
 					Object value = source.valueForKey(key);
@@ -236,8 +253,17 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * @param eo
 	 * @return
 	 */
-	protected NSArray<String> _publicAttributeNames(EOEnterpriseObject eo) {
-		return EOEnterpriseObjectSerializer.publicAttributeNames(eo);
+	protected NSArray<String> _readableAttributeNames(EOEnterpriseObject eo) {
+		return EOEnterpriseObjectSerializer.readableAttributeNames(eo);
+	}
+
+	/**
+	 * Override to return the appropriate attribute names.
+	 * @param eo
+	 * @return
+	 */
+	protected NSArray<String> _writableAttributeNames(EOEnterpriseObject eo) {
+		return EOEnterpriseObjectSerializer.writableAttributeNames(eo);
 	}
 
 	/**
@@ -257,11 +283,11 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * @return an array of attribute names from the EOEntity of source that should be marshalled
 	 */
 	@SuppressWarnings({ "unchecked", "cast" })
-	public static NSArray<String> publicAttributeNames(EOEnterpriseObject source) {
+	public static NSArray<String> readableAttributeNames(EOEnterpriseObject source) {
 		// These are cached on EOEntity name as an optimization.
 
 		EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
-		NSArray<String> attributeNames = EOEnterpriseObjectSerializer.publicAttributeNames.objectForKey(entity.name());
+		NSArray<String> attributeNames = EOEnterpriseObjectSerializer.readableAttributeNames.objectForKey(entity.name());
 		//AK: should use clientProperties from EM
 		if (attributeNames == null) {
 			attributeNames = (NSArray<String>)ERXProperties.arrayForKey("er.ajax.json." + entity.name() + ".attributes");
@@ -270,12 +296,41 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				//publicAttributeSet.addObjectsFromArray(publicAttributes);
 				//NSArray classProperties = entity.classPropertyNames();
 				//publicAttributeNames = publicAttributeSet.setByIntersectingSet(new NSSet(classProperties)).allObjects();
-				attributeNames = entity.classPropertyNames();
+				attributeNames = entity.clientClassPropertyNames();
 			}
-			EOEnterpriseObjectSerializer.publicAttributeNames.setObjectForKey(attributeNames, entity.name());
+			EOEnterpriseObjectSerializer.readableAttributeNames.setObjectForKey(attributeNames, entity.name());
 		}
 
 		return attributeNames;
+	}
+	
+	/**
+	 * Returns an array of attribute names from the EOEntity of source that should be marshalled from the client.
+	 * 
+	 * @param source
+	 *            the EOEnterpriseObject
+	 * @return an array of attribute names from the EOEntity of source that should be unmarshalled
+	 */
+	@SuppressWarnings({ "unchecked", "cast" })
+	public static NSArray<String> writableAttributeNames(EOEnterpriseObject source) {
+		// These are cached on EOEntity name as an optimization.
+
+		EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
+		NSArray<String> writableNames = EOEnterpriseObjectSerializer.writableAttributeNames.objectForKey(entity.name());
+		//AK: should use clientProperties from EM
+		if (writableNames == null) {
+			writableNames = (NSArray<String>)ERXProperties.arrayForKey("er.ajax.json." + entity.name() + ".writableAttributes");
+			if (writableNames == null) {
+				//publicAttributes = source.attributeKeys();
+				//publicAttributeSet.addObjectsFromArray(publicAttributes);
+				//NSArray classProperties = entity.classPropertyNames();
+				//publicAttributeNames = publicAttributeSet.setByIntersectingSet(new NSSet(classProperties)).allObjects();
+				writableNames = entity.clientClassPropertyNames();
+			}
+			EOEnterpriseObjectSerializer.writableAttributeNames.setObjectForKey(writableNames, entity.name());
+		}
+
+		return writableNames;
 	}
 	
 	/**
