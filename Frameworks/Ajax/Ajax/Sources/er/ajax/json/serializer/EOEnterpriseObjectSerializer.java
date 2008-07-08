@@ -143,9 +143,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 					for (Iterator iterator = eoDict.keys(); iterator.hasNext();) {
 						String key = (String) iterator.next();
 						if(!("javaClass".equals(key) || "gid".equals(key))) {
+							Object value = eoDict.get(key);
+							Object obj = ser.unmarshall(state, null, value);
 							if (attributeNames.containsObject(key)) {
-								Object value = eoDict.get(key);
-								Object obj = ser.unmarshall(state, null, value);
 								if (obj == null && !relationshipNames.containsObject(key) && (eo.toOneRelationshipKeys().containsObject(key) || eo.toManyRelationshipKeys().containsObject(key))) { 
 									// ignore nulls for non-included relationships 
 								}
