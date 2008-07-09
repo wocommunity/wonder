@@ -208,16 +208,19 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 				NSLog.debug.appendln("Loading jdbcInfo from JDBCInfo.plist as opposed to using the JDBCPlugIn default implementation.");
 			}
 
-			InputStream jdbcInfoStream = getClass().getResourceAsStream("/JDBCInfo.plist");
+			// MS: Note that the name is not just /JDBCInfo.plist like it used to be.  Because we're loading
+			// resources from the classpath instead of the Resources folder (so that it loads properly in EM),
+			// if you have two plugins loaded, their resource names will overlap.
+			InputStream jdbcInfoStream = getClass().getResourceAsStream("/FrontBaseJDBCInfo.plist");
 			if (jdbcInfoStream == null) {
-				throw new IllegalStateException("Unable to find 'JDBCInfo.plist' in this plugin jar.");
+				throw new IllegalStateException("Unable to find 'FrontBaseJDBCInfo.plist' in this plugin jar.");
 			}
 
 			try {
 				jdbcInfo = (NSDictionary) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoStream, 2048), "US-ASCII");
 			}
 			catch (IOException e) {
-				throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar.", e);
+				throw new RuntimeException("Failed to load 'FrontBaseJDBCInfo.plist' from this plugin jar.", e);
 			}
 		}
 		else {
