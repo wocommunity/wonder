@@ -15,3 +15,12 @@ ERXJavaScript : ERXJavaScript {
 
 AjaxJSONClient : AjaxJSONClient {
 }
+
+GlobalJSONComponent : AjaxJSONClient {
+	component = "ExampleJSONComponent";
+	global = true;
+}
+
+InstanceJSONComponent : AjaxJSONClient {
+	component = "ExampleJSONComponent";
+}
