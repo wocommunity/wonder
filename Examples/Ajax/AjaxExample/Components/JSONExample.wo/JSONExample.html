@@ -93,4 +93,28 @@
 	<button onclick = "returnMySessionID()">Alert My Session ID</button>
 	<button onclick = "returnThisApplicationName()">Alert My Application Name</button>
 	<button onclick = "complexObject()">Complex Object (Watch Console)</button>
+	
+	<h1>JSON Component</h1>
+	<p>
+		JSON "Components" act like web-service end points, but provide statefulness similar to
+		WOComponents in the regular WO framework.  You can have components that are shared 
+		for the session or ones that are more transient (maybe it only exists for use on
+		a single page).  You can click the buttons below to see a stateful counter changing
+		as a session global component as well as an instance component.
+	</p>
+	<script>
+		var globalJSONComponent = <webobject name = "GlobalJSONComponent"/>;
+		var instanceJSONComponent = <webobject name = "InstanceJSONComponent"/>;
+		
+		function globalNext() {
+			alert(globalJSONComponent.component.next());
+		}
+		
+		function instanceNext() {
+			alert(instanceJSONComponent.component.next());
+		}
+	</script>
+	<button onclick = "globalNext()">Session Global Next (Leave Page and Come Back)</button>
+	<button onclick = "instanceNext()">Page Next</button>
+	
 </webobject>
