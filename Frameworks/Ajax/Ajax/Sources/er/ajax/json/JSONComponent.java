@@ -13,6 +13,8 @@ import com.webobjects.appserver.WOContext;
  * constructing a URL to a JSON Request Handler.  For instance, 
  * /json/MyComponentName will give you a stateful service endpoint     
  * 
+ * <b>THIS API IS STILL EXPERIMENTAL AND SUBJECT TO CHANGE</b>
+ * 
  * @author mschrag
  */
 public class JSONComponent {
