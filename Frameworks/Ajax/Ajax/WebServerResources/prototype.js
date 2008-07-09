@@ -3503,7 +3503,7 @@ Form.Element.Methods = {
   serialize: function(element) {
     element = $(element);
     if (!element.disabled && element.name) {
-      var value = element.getValue();
+      var value = Form.Element.Methods.getValue(element);
       if (value != undefined) {
         var pair = { };
         pair[element.name] = value;

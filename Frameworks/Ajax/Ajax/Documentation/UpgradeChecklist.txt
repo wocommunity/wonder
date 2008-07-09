@@ -12,6 +12,7 @@ wonder.js
 
 prototype.js
 * descendantOf: Applied http://dev.rubyonrails.org/ticket/10413
+* Form.Element.Methods.serialize, element.getValue() was failing in a crazy case -- switched to Form.Element.Methods.getValue(element);
 
 ibox.js:
 * added _pub.init function to support reinitializing iBox
