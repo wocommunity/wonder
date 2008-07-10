@@ -247,7 +247,7 @@ public class JSONRequestHandler extends WORequestHandler {
 							jsonBridge.registerObject("component", component);
 							componentBridges.put(componentNameAndInstance, jsonBridge);
 						}
-						JSONComponent component = (JSONComponent) jsonBridge.getBridgeState().getObjectMap().get("component");
+						JSONComponent component = (JSONComponent) jsonBridge.lookupObject("component");
 						component.checkAccess();
 						component._setContext(context);
 					}
