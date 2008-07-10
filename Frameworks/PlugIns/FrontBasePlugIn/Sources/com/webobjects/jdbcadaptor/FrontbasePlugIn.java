@@ -17,6 +17,8 @@ import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSchemaSynchronization;
@@ -588,7 +590,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 	/* 751*/        return new String(result);
 	    }
 
-	    public NSArray schemaCreationStatementsForEntities(NSArray entities, NSDictionary options) {
+		public NSArray schemaCreationStatementsForEntities(NSArray entities, NSDictionary options) {
 			NSMutableArray result = new NSMutableArray();
 
 			if (entities == null || entities.count() == 0)
@@ -995,6 +997,11 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		EOQualifier _qualifier;
 		NSMutableArray _lobList;
 
+	    /**
+	     * Holds array of join clauses.
+	     */
+	    private NSMutableArray _alreadyJoined = new NSMutableArray();
+
 		public FrontbaseExpression(EOEntity eoentity) {
 			super(eoentity);
 			_rtrimFunctionName = null;
@@ -1148,32 +1155,248 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			return value;
 		}
 
-		// Adds the labels in an order by clause to the list of columns in the select
-		// clause if not already excisting.
-		public String assembleSelectStatementWithAttributes(NSArray nsarray, boolean flag, EOQualifier eoqualifier, NSArray nsarray1, String clause, String columns, String table, String qualifier, String join, String order, String lock) {
+	    /**
+	     * Overridden to not call the super implementation.
+	     *
+	     * @param leftName  the table name on the left side of the clause
+	     * @param rightName the table name on the right side of the clause
+	     * @param semantic  the join semantic
+	     */
+	    public void addJoinClause(String leftName,
+	                              String rightName,
+	                              int semantic) {
+	        assembleJoinClause(leftName, rightName, semantic);
+	    }
 
-			if (order != null && order.length() > 0) {
-				int i = 0;
-				while (i != -1) {
-					if (order.indexOf(' ', i) == i + 1)
-						i += 2;
+	    /**
+	     * Overridden to construct a valid SQL92 JOIN clause as opposed to
+	     * the Oracle-like SQL the superclass produces.
+	     *
+	     * @param leftName  the table name on the left side of the clause
+	     * @param rightName the table name on the right side of the clause
+	     * @param semantic  the join semantic
+	     * @return  the join clause
+	     */
+	    public String assembleJoinClause(String leftName,
+	                                     String rightName,
+	                                     int semantic) {
+	    	// Can't handle this
+	        if (!useAliases()) {
+	            return super.assembleJoinClause(leftName, rightName, semantic);
+	        }
 
-					int j = order.indexOf(' ', i);
-					int k = order.indexOf(',', i);
-					if (j > k && k != -1)
-						j = k;
-					else if (j == -1 && k == -1)
-						j = order.length();
+	        String leftAlias = leftName.substring(0, leftName.indexOf("."));
+	        String rightAlias = rightName.substring(0, rightName.indexOf("."));
 
-					String orderColumn = order.substring(i, j);
-					if (columns.indexOf(orderColumn) == -1)
-						columns = columns.concat(", " + orderColumn);
+	        NSArray k;
+	        EOEntity rightEntity;
+	        EOEntity leftEntity;
+	        String relationshipKey = null;
+	        EORelationship r;
 
-					i = order.indexOf(',', i);
-				}
-			}
-			return super.assembleSelectStatementWithAttributes(nsarray, flag, eoqualifier, nsarray1, clause, columns, table, qualifier, join, order, lock);
-		}
+
+	        if (leftAlias.equals("t0")) {
+	            leftEntity = entity();
+	        } else {
+	            k = aliasesByRelationshipPath().allKeysForObject(leftAlias);
+	            relationshipKey = k.count()>0? (String)k.lastObject() : "";
+	            leftEntity = entityForKeyPath(relationshipKey);
+	        }
+
+	        if (rightAlias.equals("t0")) {
+	            rightEntity = entity();
+	        } else {
+	            k = aliasesByRelationshipPath().allKeysForObject(rightAlias);
+	            relationshipKey = k.count()>0? (String)k.lastObject() : "";
+	            rightEntity = entityForKeyPath(relationshipKey);
+	        }
+
+	        int dotIndex = relationshipKey.indexOf( "." );
+	        relationshipKey = dotIndex == -1
+	            ? relationshipKey
+	            : relationshipKey.substring( relationshipKey.lastIndexOf( "." ) + 1 );
+	        r = rightEntity.anyRelationshipNamed( relationshipKey );
+
+	        // fix from Michael M�ller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
+	        if( r == null || r.destinationEntity() != leftEntity ) {
+	            r = leftEntity.anyRelationshipNamed( relationshipKey );
+	        }
+
+	        String rightTable = rightEntity.valueForSQLExpression(this);
+	        String leftTable = leftEntity.valueForSQLExpression(this);
+	        JoinClause jc = new JoinClause();
+
+	        jc.table1 = leftTable + " " + leftAlias;
+	        jc.table2 = rightTable + " " + rightAlias;
+
+	        switch (semantic) {
+	            case EORelationship.LeftOuterJoin:
+	                jc.op = " LEFT OUTER JOIN ";
+	                break;
+	            case EORelationship.RightOuterJoin:
+	                jc.op = " RIGHT OUTER JOIN ";
+	                break;
+	            case EORelationship.FullOuterJoin:
+	                jc.op = " FULL OUTER JOIN ";
+	                break;
+	            case EORelationship.InnerJoin:
+	                jc.op = " INNER JOIN ";
+	                break;
+	        }
+
+	        NSArray joins = r.joins();
+	        int joinsCount = joins.count();
+	        NSMutableArray joinStrings = new NSMutableArray( joinsCount );
+	        for( int i = 0; i < joinsCount; i++ ) {
+	            EOJoin currentJoin = (EOJoin)joins.objectAtIndex(i);
+            	String left = leftAlias +"."+ sqlStringForSchemaObjectName(currentJoin.sourceAttribute().columnName());
+            	String right =  rightAlias +"."+ sqlStringForSchemaObjectName(currentJoin.destinationAttribute().columnName());
+	            joinStrings.addObject( left + " = " + right);
+	        }
+	        jc.joinCondition = " ON " + joinStrings.componentsJoinedByString( " AND " );
+	        if( !_alreadyJoined.containsObject( jc ) ) {
+	            _alreadyJoined.insertObjectAtIndex(jc, 0);
+	            return jc.toString();
+	        }
+	        return null;
+	    }
+
+	    /**
+	     * Overridden to handle correct placements of join conditions and
+	     * to handle DISTINCT fetches with compareCaseInsensitiveA(De)scending sort orders.
+	     *
+	     * @param attributes    the attributes to select
+	     * @param lock  flag for locking rows in the database
+	     * @param qualifier the qualifier to restrict the selection
+	     * @param fetchOrder    specifies the fetch order
+	     * @param columnList    the SQL columns to be fetched
+	     * @param tableList the the SQL tables to be fetched
+	     * @param whereClause   the SQL where clause
+	     * @param joinClause    the SQL join clause
+	     * @param orderByClause the SQL sort order clause
+	     * @param lockClause    the SQL lock clause
+	     * @return  the select statement
+	     */
+	    public String assembleSelectStatementWithAttributes(NSArray attributes,
+	                                                        boolean lock,
+	                                                        EOQualifier qualifier,
+	                                                        NSArray fetchOrder,
+	                                                        String selectString,
+	                                                        String columnList,
+	                                                        String tableList,
+	                                                        String whereClause,
+	                                                        String joinClause,
+	                                                        String orderByClause,
+	                                                        String lockClause) {
+
+	        // Adds the labels in an order by clause to the list of columns in the select
+            // clause if not already existing.
+            if (orderByClause != null && orderByClause.length() > 0) {
+                int i = 0;
+                while (i != -1) {
+                    if (orderByClause.indexOf(' ', i) == i + 1)
+                        i += 2;
+
+                    int j = orderByClause.indexOf(' ', i);
+                    int k = orderByClause.indexOf(',', i);
+                    if (j > k && k != -1)
+                        j = k;
+                    else if (j == -1 && k == -1)
+                        j = orderByClause.length();
+
+                    String orderColumn = orderByClause.substring(i, j);
+                    if (columnList.indexOf(orderColumn) == -1)
+                    	columnList = columnList.concat(", " + orderColumn);
+
+                    i = orderByClause.indexOf(',', i);
+                }
+            }
+
+	        StringBuffer sb = new StringBuffer();
+	        sb.append(selectString);
+	        sb.append(columnList);
+	        // AK: using DISTINCT with ORDER BY UPPER(foo) is an error if it is not also present in the columns list...
+	        // This implementation sucks, but should be good enough for the normal case
+	        if(selectString.indexOf(" DISTINCT") != -1) {
+	            String [] columns = orderByClause.split(",");
+	            for(int i = 0; i < columns.length; i++) {
+	                String column = columns[i].replaceFirst("\\s+(ASC|DESC)\\s*", "");
+	                if(columnList.indexOf(column) == -1) {
+	                    sb.append(", ");
+	                    sb.append(column);
+	                }
+	            }
+	        }
+
+	        sb.append(" FROM ");
+	        String fieldString;
+	        if (_alreadyJoined.count() > 0) {
+	            fieldString = joinClauseString();
+	        } else {
+	            fieldString = tableList;
+	        }
+	        sb.append(fieldString);
+
+	        if ((whereClause != null && whereClause.length() > 0) ||
+	            (joinClause != null && joinClause.length() > 0)) {
+	            sb.append(" WHERE ");
+	            if (joinClause != null && joinClause.length() > 0) {
+	                sb.append(joinClause);
+	                if (whereClause != null && whereClause.length() > 0)
+	                    sb.append(" AND ");
+	            }
+
+	            if (whereClause != null && whereClause.length() > 0) {
+	                sb.append(whereClause);
+	            }
+	        }
+
+	        if (orderByClause != null && orderByClause.length() > 0) {
+	            sb.append(" ORDER BY ");
+	            sb.append(orderByClause);
+	        }
+	        if (lockClause != null && lockClause.length() > 0) {
+	            sb.append(" ");
+	            sb.append(lockClause);
+	        }
+	        return sb.toString();
+	    }
+
+
+	    /**
+	     * Overrides the parent implementation to compose the final string
+	     * expression for the join clauses.
+	     */
+	    public String joinClauseString() {
+	        NSMutableDictionary seenIt = new NSMutableDictionary();
+	        StringBuffer sb = new StringBuffer();
+	        JoinClause jc;
+	        EOSortOrdering.sortArrayUsingKeyOrderArray
+	            ( _alreadyJoined, new NSArray( EOSortOrdering.sortOrderingWithKey( "sortKey", EOSortOrdering.CompareCaseInsensitiveAscending ) ) );
+	        if (_alreadyJoined.count() > 0) {
+	            jc = (JoinClause)_alreadyJoined.objectAtIndex(0);
+
+	            sb.append(jc);
+	            seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
+	            seenIt.setObjectForKey(Boolean.TRUE, jc.table2);
+	        }
+
+	        for (int i = 1; i < _alreadyJoined.count(); i++) {
+	            jc = (JoinClause)_alreadyJoined.objectAtIndex(i);
+
+	            sb.append(jc.op);
+	            if (seenIt.objectForKey(jc.table1) == null) {
+	                sb.append(jc.table1);
+	                seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
+	            }
+	            else if (seenIt.objectForKey(jc.table2) == null) {
+	                sb.append(jc.table2);
+	                seenIt.setObjectForKey(Boolean.TRUE, jc.table2);
+	            }
+	            sb.append(jc.joinCondition);
+	        }
+	        return sb.toString();
+	    }
 
 		public void addOrderByAttributeOrdering(EOSortOrdering eosortordering) {
 			NSSelector sortOrdering = eosortordering.selector();
@@ -1314,6 +1537,14 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			if (obj != null && obj != NSKeyValueCoding.NullValue) {
 				if (eoattribute.valueFactoryMethod() != null && eoattribute.valueFactoryMethod().implementedByObject(obj) && eoattribute.adaptorValueConversionMethod().implementedByObject(obj)) {
 					obj = eoattribute.adaptorValueByConvertingAttributeValue(obj);
+				}
+
+				if (eoattribute.externalType() == null)
+				{
+				    throw new EOGeneralAdaptorException("Attribute " + eoattribute.name() +
+				    		" on entity " + eoattribute.entity().name() +
+				    		" with prototype named " + eoattribute.prototypeName() +
+				    		" has no external type defined");
 				}
 
 				switch (internalTypeForExternal(eoattribute.externalType())) {
@@ -1513,5 +1744,65 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 
 			return sign + hourString + ":" + minuteString;
 		}
+
+	    /**
+	     * Utility that traverses a key path to find the last destination entity
+	     *
+	     * @param keyPath   the key path
+	     * @return  the entity at the end of the keypath
+	     */
+	    private EOEntity entityForKeyPath(String keyPath) {
+	        NSArray keys = NSArray.componentsSeparatedByString(keyPath, ".");
+	        EOEntity ent = entity();
+
+	        for (int i = 0; i < keys.count(); i++) {
+	            String k = (String)keys.objectAtIndex(i);
+	            EORelationship rel = ent.anyRelationshipNamed(k);
+	            if (rel == null) {
+	                // it may be an attribute
+	                if (ent.anyAttributeNamed(k) != null) {
+	                    break;
+	                }
+	                throw new IllegalArgumentException("relationship " + keyPath + " generated null");
+	            }
+	            ent = rel.destinationEntity();
+	        }
+	        return ent;
+	    }
+
+	    /**
+	     * Helper class that stores a join definition and
+	     * helps <code>FrontbaseExpression</code> to assemble
+	     * the correct join clause.
+	     */
+	    public class JoinClause {
+	        String table1;
+	        String op;
+	        String table2;
+	        String joinCondition;
+
+	        public String toString() {
+	            return table1 + op + table2 + joinCondition;
+	        }
+
+	        public boolean equals( Object obj ) {
+	            if( obj == null || !(obj instanceof JoinClause) ) {
+	                return false;
+	            }
+	            return toString().equals( obj.toString() );
+	        }
+
+	        /**
+	         * Returns the table alias for the first table (e.g. returns T2 if table 1 is "Students" T2).  This makes this class "sortable"
+	         * which is needed to correctly assemble a join clause.
+	         *
+	         * @return the table alias (e.g. returns T2 if table1 is "Students" T2)
+	         */
+	        public String sortKey() {
+	            return table1.substring( table1.indexOf( " " ) + 1 );
+	        }
+	    }
+
 	}
+
 }
