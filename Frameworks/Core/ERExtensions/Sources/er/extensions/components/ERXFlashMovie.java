@@ -37,7 +37,7 @@ public class ERXFlashMovie extends ERXStatelessComponent {
 		if(movieUrl == null) {
 			String name = stringValueForBinding("movieName");
 			String framework = stringValueForBinding("framework");
-			movieUrl = application().resourceManager().pathURLForResourceNamed(name, framework, context().request().browserLanguages()).toExternalForm();
+			movieUrl = application().resourceManager().urlForResourceNamed(name, framework, context().request().browserLanguages(), context().request());
 		}
 		return movieUrl;
 	}
