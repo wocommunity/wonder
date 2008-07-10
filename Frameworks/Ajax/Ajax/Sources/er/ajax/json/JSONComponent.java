@@ -1,8 +1,10 @@
 package er.ajax.json;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation._NSUtilities;
 
 /**
+ * <p>
  * The base class for JSON "Components".  JSONComponents provide a framework
  * for implementing stateful JSON services.  If you are providing a JSON
  * service that is only used on a page, you can use AjaxProxy to provide
@@ -12,6 +14,13 @@ import com.webobjects.appserver.WOContext;
  * are exposed as RPC calls to your clients that can be accessed by 
  * constructing a URL to a JSON Request Handler.  For instance, 
  * /json/MyComponentName will give you a stateful service endpoint     
+ * </p>
+ * 
+ * <p>
+ * If a method returns another JSONComponent, the client will be
+ * sent a JSONRedirect that contains the URL to communicate
+ * with the instance you returned.
+ * </p>
  * 
  * <b>THIS API IS STILL EXPERIMENTAL AND SUBJECT TO CHANGE</b>
  * 
@@ -37,7 +46,7 @@ public class JSONComponent {
 	protected WOContext context() {
 		return _context;
 	}
-	
+
 	/**
 	 * Sets the current context.
 	 * 
@@ -46,7 +55,7 @@ public class JSONComponent {
 	protected void _setContext(WOContext context) {
 		_context = context;
 	}
-	
+
 	/**
 	 * Called prior to issuing any calls to
 	 * the component.  Throw a SecurityException
@@ -55,5 +64,45 @@ public class JSONComponent {
 	 */
 	protected void checkAccess() {
 		// override to provide an implementation
+	}
+
+	/**
+	 * Returns a JSONComponent of the given type.
+	 * 
+	 * @param <T> the JSONComponent type
+	 * @param componentClass the class to instantiate
+	 * @return an instance of the given JSONComponent
+	 */
+	public <T extends JSONComponent> T componentWithName(Class<T> componentClass) {
+		return JSONComponent.componentWithName(componentClass, context());
+	}
+
+	/**
+	 * Returns a JSONComponent of the given type.
+	 * 
+	 * @param <T> the JSONComponent type
+	 * @param componentClass the class to instantiate
+	 * @param context the WOContext to create within
+	 * @return an instance of the given JSONComponent
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends JSONComponent> T componentWithName(Class<T> componentClass, WOContext context) {
+		T jsonComponent = (T) _NSUtilities.instantiateObject(componentClass, new Class[] { WOContext.class }, new Object[] { context }, true, false);
+		return jsonComponent;
+	}
+
+	/**
+	 * Returns a JSONComponent of the given type.
+	 * 
+	 * @param <T> the JSONComponent type
+	 * @param componentClassName the name of the class to instantiate
+	 * @param context the WOContext to create within
+	 * @return an instance of the given JSONComponent
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends JSONComponent> T componentWithName(String componentClassName, WOContext context) {
+		Class<T> componentClass = _NSUtilities.classWithName(componentClassName);
+		T jsonComponent = (T) _NSUtilities.instantiateObject(componentClass, new Class[] { WOContext.class }, new Object[] { context }, true, false);
+		return jsonComponent;
 	}
 }

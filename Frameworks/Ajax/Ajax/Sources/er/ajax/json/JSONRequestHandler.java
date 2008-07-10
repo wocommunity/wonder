@@ -1,12 +1,15 @@
 package er.ajax.json;
 
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.jabsorb.JSONRPCBridge;
 import org.jabsorb.JSONRPCResult;
+import org.jabsorb.callback.InvocationCallback;
 import org.jabsorb.serializer.Serializer;
+import org.jabsorb.serializer.SerializerState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,6 +24,7 @@ import com.webobjects.foundation._NSUtilities;
 import er.extensions.components.ERXDynamicURL;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXRandomGUID;
 
 /**
  * JSONRequestHandler provides support for JSON RPC services that can be both 
@@ -152,25 +156,33 @@ public class JSONRequestHandler extends WORequestHandler {
 	 * @param context the current WOContext
 	 * @param requestHandlerKey if you registered a custom JSON request handler key
 	 * @param componentName the name of the component to lookup (or null for the shared bridge)
-	 * @param instance the instance identifier (any value) to create a unique instance (or null for a session-global)
+	 * @param componentInstance the instance identifier (any value) to create a unique instance (or null for a session-global)
 	 * @param queryString the query string to append
 	 * @return a JSON request handler URL
 	 */
-	public static String jsonUrl(WOContext context, String requestHandlerKey, String componentName, String instance, String queryString) {
-		String requestHandlerPath;
+	public static String jsonUrl(WOContext context, String requestHandlerKey, String componentName, String componentInstance, String queryString) {
+		String componentNameAndInstance;
 		if (componentName == null) {
-			requestHandlerPath = "";
+			componentNameAndInstance = "";
 		}
 		else {
-			if (instance == null) {
-				requestHandlerPath = componentName;
-			}
-			else {
-				requestHandlerPath = componentName + "/" + instance;
-			}
+			componentNameAndInstance = JSONRequestHandler.componentNameAndInstance(componentName, componentInstance);
 		}
+		return JSONRequestHandler._jsonUrl(context, requestHandlerKey, componentNameAndInstance, queryString);
+	}
 
-		String jsonUrl = context.urlWithRequestHandlerKey(JSONRequestHandler.RequestHandlerKey, requestHandlerPath, queryString);
+	/**
+	 * Returns a URL pointing to the JSON request handler.
+	 * 
+	 * @param context the current WOContext
+	 * @param requestHandlerKey if you registered a custom JSON request handler key
+	 * @param componentName the name of the component to lookup (or null for the shared bridge)
+	 * @param componentInstance the instance identifier (any value) to create a unique instance (or null for a session-global)
+	 * @param queryString the query string to append
+	 * @return a JSON request handler URL
+	 */
+	public static String _jsonUrl(WOContext context, String requestHandlerKey, String componentNameAndInstance, String queryString) {
+		String jsonUrl = context.urlWithRequestHandlerKey(JSONRequestHandler.RequestHandlerKey, componentNameAndInstance, queryString);
 		return jsonUrl;
 	}
 
@@ -205,13 +217,17 @@ public class JSONRequestHandler extends WORequestHandler {
 					session.awake();
 				}
 				try {
+
+					JSONComponentCallback componentCallback = null;
+					Map<String, JSONRPCBridge> componentBridges = null;
+					String componentInstance = null;
+
 					ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());
 					String requestHandlerPath = url.requestHandlerPath();
 					JSONRPCBridge jsonBridge;
 					if (requestHandlerPath != null && requestHandlerPath.length() > 0) {
 						String componentNameAndInstance = requestHandlerPath;
 						String componentName;
-						String componentInstance;
 						int slashIndex = componentNameAndInstance.indexOf('/');
 						if (slashIndex == -1) {
 							componentName = componentNameAndInstance;
@@ -227,7 +243,7 @@ public class JSONRequestHandler extends WORequestHandler {
 						}
 
 						String bridgesKey = (componentInstance == null) ? "_JSONGlobalBridges" : "_JSONInstanceBridges";
-						Map<String, JSONRPCBridge> componentBridges = (Map<String, JSONRPCBridge>) session.objectForKey(bridgesKey);
+						componentBridges = (Map<String, JSONRPCBridge>) session.objectForKey(bridgesKey);
 						if (componentBridges == null) {
 							int limit = ERXProperties.intForKeyWithDefault((componentInstance == null) ? "er.ajax.json.globalBacktrackCacheSize" : "er.ajax.json.backtrackCacheSize", WOApplication.application().pageCacheSize());
 							componentBridges = new LRUMap<String, JSONRPCBridge>(limit);
@@ -243,19 +259,57 @@ public class JSONRequestHandler extends WORequestHandler {
 							else {
 								throw new SecurityException("There is no JSON component named '" + componentName + "'.");
 							}
-							jsonBridge = JSONBridge.createBridge();
-							jsonBridge.registerObject("component", component);
-							componentBridges.put(componentNameAndInstance, jsonBridge);
+							jsonBridge = createBridgeForComponent(component, componentName, componentInstance, componentBridges);
 						}
 						JSONComponent component = (JSONComponent) jsonBridge.lookupObject("component");
 						component.checkAccess();
 						component._setContext(context);
+
+						componentCallback = new JSONComponentCallback();
+						jsonBridge.registerCallback(componentCallback, WOContext.class);
 					}
 					else {
 						jsonBridge = _sharedBridge;
 					}
 
-					output = jsonBridge.call(new Object[] { request, response, context }, input);
+					try {
+						output = jsonBridge.call(new Object[] { request, response, context }, input);
+
+						if (componentCallback != null) {
+							JSONComponent nextComponent = componentCallback.nextComponent();
+							if (nextComponent != null) {
+								if (componentBridges == null) {
+									throw new IllegalStateException("You cannot return a JSONComponent from a non-component request.");
+								}
+
+								String nextComponentNameAndInstance = null;
+								for (Map.Entry<String, JSONRPCBridge> entry : componentBridges.entrySet()) {
+									JSONComponent existingComponent = (JSONComponent) entry.getValue().lookupObject("component");
+									if (existingComponent != null && existingComponent.equals(nextComponent)) {
+										nextComponentNameAndInstance = entry.getKey();
+									}
+								}
+
+								String nextComponentName = nextComponent.getClass().getSimpleName();
+								if (nextComponentNameAndInstance == null) {
+									String nextComponentInstance = ERXRandomGUID.newGid();
+									nextComponentNameAndInstance = JSONRequestHandler.componentNameAndInstance(nextComponentName, nextComponentInstance);
+									createBridgeForComponent(nextComponent, nextComponentName, nextComponentInstance, componentBridges);
+								}
+
+								SerializerState serializerState = new SerializerState();
+								String nextComponentUrl = JSONRequestHandler._jsonUrl(context, request.requestHandlerKey(), nextComponentNameAndInstance, null);
+								Object json = JSONBridge.getSerializer().marshall(serializerState, null, new JSONRedirect(nextComponentName, nextComponentUrl), "r");
+								output = new JSONRPCResult(0, input.opt("id"), json, serializerState.getFixUps());
+							}
+						}
+					}
+					finally {
+						if (componentCallback != null) {
+							jsonBridge.unregisterCallback(componentCallback, WOContext.class);
+						}
+					}
+
 					if (context._session() != null) {
 						WOSession contextSession = context._session();
 						// If this is a new session, then we have to force it to be a cookie session
@@ -315,6 +369,25 @@ public class JSONRequestHandler extends WORequestHandler {
 		}
 	}
 
+	protected static String componentNameAndInstance(String componentName, String componentInstance) {
+		String componentNameAndInstance;
+		if (componentInstance == null) {
+			componentNameAndInstance = componentName;
+		}
+		else {
+			componentNameAndInstance = componentName + "/" + componentInstance;
+		}
+		return componentNameAndInstance;
+	}
+
+	protected JSONRPCBridge createBridgeForComponent(JSONComponent component, String componentName, String componentInstance, Map<String, JSONRPCBridge> componentBridges) {
+		JSONRPCBridge jsonBridge = JSONBridge.createBridge();
+		jsonBridge.registerObject("component", component);
+		String componentNameAndInstance = JSONRequestHandler.componentNameAndInstance(componentName, componentInstance);
+		componentBridges.put(componentNameAndInstance, jsonBridge);
+		return jsonBridge;
+	}
+
 	protected static class LRUMap<U, V> extends LinkedHashMap<U, V> {
 		private int _maxSize;
 
@@ -326,6 +399,24 @@ public class JSONRequestHandler extends WORequestHandler {
 		@Override
 		protected boolean removeEldestEntry(Map.Entry<U, V> eldest) {
 			return size() > _maxSize;
+		}
+	}
+
+	protected static class JSONComponentCallback implements InvocationCallback {
+		private JSONComponent _nextComponent;
+
+		public JSONComponent nextComponent() {
+			return _nextComponent;
+		}
+
+		public void postInvoke(Object context, Object instance, Method method, Object result) throws Exception {
+			if (result instanceof JSONComponent) {
+				_nextComponent = (JSONComponent) result;
+			}
+		}
+
+		public void preInvoke(Object context, Object instance, Method method, Object[] arguments) throws Exception {
+			// DO NOTHING
 		}
 	}
 }
