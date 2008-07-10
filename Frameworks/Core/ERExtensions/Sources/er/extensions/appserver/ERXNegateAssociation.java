@@ -9,7 +9,7 @@ import er.extensions.foundation.ERXStringUtilities;
 /**
  * Negates the value it is bound to. Can handle both <code>not:value=true</code> and
  * <code>not:value=someReturnValue</code> syntax.
- * Install with <br><br><code> WOOgnl.setAssociationClassForPrefix(ERXLocalizerAssociation.class, "not");</code>
+ * Install with <br><br><code> WOOgnl.setAssociationClassForPrefix(ERXNegateAssociation.class, "not");</code>
  * @author ak
  * 
  */

@@ -1,5 +1,7 @@
 package er.sproutcore.views.button;
 
+import java.lang.annotation.Documented;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
@@ -28,12 +30,17 @@ public class SCButtonView extends SCView {
         return "a";
     }
 
-    @Override
-    protected void doAppendToResponse(WOResponse response, WOContext context) {
+    protected String label(WOContext context) {
         String value = null;
         value = (String) valueForBinding("label", value, context.component());
         value = (String) valueForBinding("value", value, context.component());
         value = (String) valueForBinding("title", value, context.component());
+        return value;
+    }
+
+    @Override
+    protected void doAppendToResponse(WOResponse response, WOContext context) {
+        String value = label(context);
         if (value != null) {
             response.appendContentString("<span class=\"button-inner\"><span class=\"label\">" + value);
         }
