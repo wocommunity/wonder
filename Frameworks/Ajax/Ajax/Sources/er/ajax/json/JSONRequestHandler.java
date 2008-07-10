@@ -1,11 +1,13 @@
 package er.ajax.json;
 
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.jabsorb.JSONRPCBridge;
 import org.jabsorb.JSONRPCResult;
+import org.jabsorb.callback.InvocationCallback;
 import org.jabsorb.serializer.Serializer;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -213,6 +215,8 @@ public class JSONRequestHandler extends WORequestHandler {
 					session.awake();
 				}
 				try {
+					JSONComponentCallback componentCallback = null;
+					
 					ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());
 					String requestHandlerPath = url.requestHandlerPath();
 					JSONRPCBridge jsonBridge;
@@ -253,15 +257,22 @@ public class JSONRequestHandler extends WORequestHandler {
 							}
 							jsonBridge = createBridgeForComponent(component, componentName, componentInstance, componentBridges);
 						}
-						JSONComponent component = (JSONComponent) jsonBridge.lookupObject("component");
-						component.checkAccess();
-						component._setContext(context);
+						
+						componentCallback = new JSONComponentCallback(context);
+						jsonBridge.registerCallback(componentCallback, WOContext.class);
 					}
 					else {
 						jsonBridge = _sharedBridge;
 					}
 
-					output = jsonBridge.call(new Object[] { request, response, context }, input);
+					try {
+						output = jsonBridge.call(new Object[] { request, response, context }, input);
+					}
+					finally {
+						if (componentCallback != null) {
+							jsonBridge.unregisterCallback(componentCallback, WOContext.class);
+						}
+					}
 
 					if (context._session() != null) {
 						WOSession contextSession = context._session();
@@ -353,6 +364,26 @@ public class JSONRequestHandler extends WORequestHandler {
 		@Override
 		protected boolean removeEldestEntry(Map.Entry<U, V> eldest) {
 			return size() > _maxSize;
+		}
+	}
+
+	protected static class JSONComponentCallback implements InvocationCallback {
+		private WOContext _context;
+
+		public JSONComponentCallback(WOContext context) {
+			_context = context;
+		}
+
+		public void preInvoke(Object context, Object instance, Method method, Object[] arguments) throws Exception {
+			if (instance instanceof JSONComponent) {
+				JSONComponent component = (JSONComponent) instance;
+				component._setContext(_context);
+				component.checkAccess();
+			}
+		}
+
+		public void postInvoke(Object context, Object instance, Method method, Object result) throws Exception {
+			// DO NOTHING
 		}
 	}
 }
