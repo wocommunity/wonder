@@ -1,15 +1,12 @@
 package er.ajax.json;
 
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.jabsorb.JSONRPCBridge;
 import org.jabsorb.JSONRPCResult;
-import org.jabsorb.callback.InvocationCallback;
 import org.jabsorb.serializer.Serializer;
-import org.jabsorb.serializer.SerializerState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,7 +21,6 @@ import com.webobjects.foundation._NSUtilities;
 import er.extensions.components.ERXDynamicURL;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXRandomGUID;
 
 /**
  * JSONRequestHandler provides support for JSON RPC services that can be both 
@@ -217,16 +213,12 @@ public class JSONRequestHandler extends WORequestHandler {
 					session.awake();
 				}
 				try {
-
-					JSONComponentCallback componentCallback = null;
-					Map<String, JSONRPCBridge> componentBridges = null;
-					String componentInstance = null;
-
 					ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());
 					String requestHandlerPath = url.requestHandlerPath();
 					JSONRPCBridge jsonBridge;
 					if (requestHandlerPath != null && requestHandlerPath.length() > 0) {
 						String componentNameAndInstance = requestHandlerPath;
+						String componentInstance;
 						String componentName;
 						int slashIndex = componentNameAndInstance.indexOf('/');
 						if (slashIndex == -1) {
@@ -243,7 +235,7 @@ public class JSONRequestHandler extends WORequestHandler {
 						}
 
 						String bridgesKey = (componentInstance == null) ? "_JSONGlobalBridges" : "_JSONInstanceBridges";
-						componentBridges = (Map<String, JSONRPCBridge>) session.objectForKey(bridgesKey);
+						Map<String, JSONRPCBridge> componentBridges = (Map<String, JSONRPCBridge>) session.objectForKey(bridgesKey);
 						if (componentBridges == null) {
 							int limit = ERXProperties.intForKeyWithDefault((componentInstance == null) ? "er.ajax.json.globalBacktrackCacheSize" : "er.ajax.json.backtrackCacheSize", WOApplication.application().pageCacheSize());
 							componentBridges = new LRUMap<String, JSONRPCBridge>(limit);
@@ -264,51 +256,12 @@ public class JSONRequestHandler extends WORequestHandler {
 						JSONComponent component = (JSONComponent) jsonBridge.lookupObject("component");
 						component.checkAccess();
 						component._setContext(context);
-
-						componentCallback = new JSONComponentCallback();
-						jsonBridge.registerCallback(componentCallback, WOContext.class);
 					}
 					else {
 						jsonBridge = _sharedBridge;
 					}
 
-					try {
-						output = jsonBridge.call(new Object[] { request, response, context }, input);
-
-						if (componentCallback != null) {
-							JSONComponent nextComponent = componentCallback.nextComponent();
-							if (nextComponent != null) {
-								if (componentBridges == null) {
-									throw new IllegalStateException("You cannot return a JSONComponent from a non-component request.");
-								}
-
-								String nextComponentNameAndInstance = null;
-								for (Map.Entry<String, JSONRPCBridge> entry : componentBridges.entrySet()) {
-									JSONComponent existingComponent = (JSONComponent) entry.getValue().lookupObject("component");
-									if (existingComponent != null && existingComponent.equals(nextComponent)) {
-										nextComponentNameAndInstance = entry.getKey();
-									}
-								}
-
-								String nextComponentName = nextComponent.getClass().getSimpleName();
-								if (nextComponentNameAndInstance == null) {
-									String nextComponentInstance = ERXRandomGUID.newGid();
-									nextComponentNameAndInstance = JSONRequestHandler.componentNameAndInstance(nextComponentName, nextComponentInstance);
-									createBridgeForComponent(nextComponent, nextComponentName, nextComponentInstance, componentBridges);
-								}
-
-								SerializerState serializerState = new SerializerState();
-								String nextComponentUrl = JSONRequestHandler._jsonUrl(context, request.requestHandlerKey(), nextComponentNameAndInstance, null);
-								Object json = JSONBridge.getSerializer().marshall(serializerState, null, new JSONRedirect(nextComponentName, nextComponentUrl), "r");
-								output = new JSONRPCResult(0, input.opt("id"), json, serializerState.getFixUps());
-							}
-						}
-					}
-					finally {
-						if (componentCallback != null) {
-							jsonBridge.unregisterCallback(componentCallback, WOContext.class);
-						}
-					}
+					output = jsonBridge.call(new Object[] { request, response, context }, input);
 
 					if (context._session() != null) {
 						WOSession contextSession = context._session();
@@ -380,8 +333,9 @@ public class JSONRequestHandler extends WORequestHandler {
 		return componentNameAndInstance;
 	}
 
-	protected JSONRPCBridge createBridgeForComponent(JSONComponent component, String componentName, String componentInstance, Map<String, JSONRPCBridge> componentBridges) {
+	protected JSONRPCBridge createBridgeForComponent(JSONComponent component, String componentName, String componentInstance, Map<String, JSONRPCBridge> componentBridges) throws Exception {
 		JSONRPCBridge jsonBridge = JSONBridge.createBridge();
+		jsonBridge.registerCallableReference(JSONComponent.class);
 		jsonBridge.registerObject("component", component);
 		String componentNameAndInstance = JSONRequestHandler.componentNameAndInstance(componentName, componentInstance);
 		componentBridges.put(componentNameAndInstance, jsonBridge);
@@ -399,24 +353,6 @@ public class JSONRequestHandler extends WORequestHandler {
 		@Override
 		protected boolean removeEldestEntry(Map.Entry<U, V> eldest) {
 			return size() > _maxSize;
-		}
-	}
-
-	protected static class JSONComponentCallback implements InvocationCallback {
-		private JSONComponent _nextComponent;
-
-		public JSONComponent nextComponent() {
-			return _nextComponent;
-		}
-
-		public void postInvoke(Object context, Object instance, Method method, Object result) throws Exception {
-			if (result instanceof JSONComponent) {
-				_nextComponent = (JSONComponent) result;
-			}
-		}
-
-		public void preInvoke(Object context, Object instance, Method method, Object[] arguments) throws Exception {
-			// DO NOTHING
 		}
 	}
 }

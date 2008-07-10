@@ -961,9 +961,6 @@ JSONRpcClient.prototype._handleResponse = function (http)
 
 JSONRpcClient.extractCallableReferences = function(self,root)
 {
-	if (root != null && root.javaClass == 'er.ajax.json.JSONRedirect') {
-		root.client = new JSONRpcClient(root.url);
-	}
   var i,tmp,value;
   for (i in root)
   {
