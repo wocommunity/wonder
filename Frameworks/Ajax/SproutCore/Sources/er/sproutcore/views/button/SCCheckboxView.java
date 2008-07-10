@@ -3,8 +3,9 @@ package er.sproutcore.views.button;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+
+import er.sproutcore.SCItem;
 
 public class SCCheckboxView extends SCButtonView {
 
@@ -13,7 +14,26 @@ public class SCCheckboxView extends SCButtonView {
     }
 
     @Override
+    public String css(WOContext context) {
+        return "sc-button-view button checkbox normal " + super.css(context);
+    }
+    
+    protected void pullBindings(WOContext context, SCItem item) {
+        super.pullBindings(context, item);
+        item.addProperty("theme", "checkbox");
+    }
+    
+    @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
+        String value = label(context);
+        if (value != null) {
+            response.appendContentString("<img  class=\"button\"><span class=\"label\">" );
+        }
+        
         super.doAppendToResponse(response, context);
+        
+        if (value != null) {
+            response.appendContentString("</span></span>");
+        }
     }
 }

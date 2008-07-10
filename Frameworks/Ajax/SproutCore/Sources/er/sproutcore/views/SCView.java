@@ -131,7 +131,9 @@ public class SCView extends WODynamicGroup {
     }
 
     public String elementName(WOContext context) {
-        return (String) valueForBinding("elementName", defaultElementName(), context.component());
+        String tag = (String) valueForBinding("elementName", defaultElementName(), context.component());
+        tag = (String) valueForBinding("tag",tag, context.component());
+        return tag;
     }
 
     protected Object defaultElementName() {
@@ -169,7 +171,7 @@ public class SCView extends WODynamicGroup {
     
     @Override
     public final void appendToResponse(WOResponse response, WOContext context) {
-        SCItem item = SCItem.pushItem(id(context), className(context));
+        SCItem item = pushItem(context);
         pullBindings(context, item);
         
         ERXResponse scriptResponse = ERXResponse.pushPartial(SCPageTemplate.CLIENT_JS);
@@ -192,7 +194,15 @@ public class SCView extends WODynamicGroup {
         response.appendContentString(">");
         doAppendToResponse(response, context);
         response.appendContentString("</" + elementName + ">");
-        SCItem.popItem();
+        popItem();
+    }
+
+    protected SCItem pushItem(WOContext context) {
+        return SCItem.pushItem(id(context), className(context));
+    }
+
+    protected SCItem popItem() {
+        return SCItem.popItem();
     }
 
     protected void pullBindings(WOContext context, SCItem item) {
