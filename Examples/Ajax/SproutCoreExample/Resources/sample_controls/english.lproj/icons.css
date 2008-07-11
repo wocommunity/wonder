@@ -1,0 +1,67 @@
+/* @override http://localhost:4020/static/sample_controls/en/_cache/icons-1208151794.css */
+
+/* SampleControls Icons Tab */
+
+/* @group General */
+
+.icons_tab {
+	background-color: white ;
+	padding-top: 1px;
+}
+
+.icons_tab p {
+	padding: 10px;
+	color: #555;
+}
+
+.icons_tab > label {
+	padding: 10px;
+	padding-bottom: 0 ;
+}
+
+.icons_tab .icon-group {
+	padding: 10px ;
+	padding-top: 0;
+}
+
+.icons_tab .icon-group > .icon {
+	display: -moz-inline-box;
+	display: inline-block;
+	text-align: center ;
+	font-size: 11px;
+	padding: 4px;
+	margin: 2px;
+	border: 1px white solid;
+	
+}
+
+.icons_tab .icon-group > .icon:hover {
+	border: 1px #ccc solid;
+}
+
+.icons_tab .icon label {
+	font-weight: normal ;
+	margin: 0;
+	padding: 0;
+	display: block ;
+}
+
+.icons_tab img {
+	display: block ;
+	margin-left: auto;
+	margin-right: auto ;
+}
+
+/* @end */
+
+/* @group Groups */
+
+.icon-group.group-48 > .icon {
+}
+
+.icon-group.group-
+
+/* @end */
+
+
+

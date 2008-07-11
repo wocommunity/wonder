@@ -1,10 +1,10 @@
-#Fri Jul 11 15:19:58 CEST 2008
+#Sat Jul 12 00:21:32 CEST 2008
 eclipse.preferences.version=1
-encoding//Components/BetterButton.api=UTF-8
 encoding//Components/BetterButton.wo=UTF-8
-encoding//Components/BetterButton.wo/BetterButton.html=UTF-8
-encoding//Components/BetterButton.wo/BetterButton.wod=UTF-8
-encoding//Components/BetterButton.wo/BetterButton.woo=UTF-8
+encoding//Components/Buttons.api=UTF-8
+encoding//Components/Buttons.wo/Buttons.html=UTF-8
+encoding//Components/Buttons.wo/Buttons.wod=UTF-8
+encoding//Components/Buttons.wo/Buttons.woo=UTF-8
 encoding//Components/Contacts.wo=UTF-8
 encoding//Components/Contacts.wo/Contacts.html=UTF-8
 encoding//Components/Contacts.wo/Contacts.wod=UTF-8
@@ -18,7 +18,7 @@ encoding//Components/Photos.api=UTF-8
 encoding//Components/Photos.wo/Photos.html=UTF-8
 encoding//Components/Photos.wo/Photos.wod=UTF-8
 encoding//Components/Photos.wo/Photos.woo=UTF-8
-encoding//Sources/er/sproutcore/example/components/BetterButton.java=UTF-8
+encoding//Sources/er/sproutcore/example/components/Buttons.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/Contacts.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/HelloWorld.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/Photos.java=UTF-8

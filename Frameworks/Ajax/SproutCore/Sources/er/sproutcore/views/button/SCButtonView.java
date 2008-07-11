@@ -8,6 +8,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
+import er.sproutcore.SCUtilities;
 import er.sproutcore.views.SCView;
 
 public class SCButtonView extends SCView {
@@ -15,18 +16,11 @@ public class SCButtonView extends SCView {
     public SCButtonView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
         moveProperty("enabled", "isEnabled");
-        moveProperty("selected", "isSelected");
+        moveProperty("selected", "value");
         moveProperty("default", "isDefault");
         moveProperty("cancel", "isCancel");
-    }
-
-    @Override
-    public NSArray propertyKeys() {
-        return super.propertyKeys().arrayByAddingObjectsFromArray(new NSArray(new Object[] { 
-                "action", "target", "isDefault", "isCancel", "value", "theme", "size", "size", 
-                "buttonBehaviour", "toggleOnValue", "toggleOffValue", "image",
-                "isSelected",
-                "label", "isEditable", "escapeHTML" }));
+        removeProperty("width");
+        removeProperty("label");
     }
 
     protected Object defaultElementName() {
@@ -35,11 +29,18 @@ public class SCButtonView extends SCView {
     
     @Override
     public String css(WOContext context) {
-    	return super.css(context) + " " +buttonSyle(context);
+    	String css = super.css(context);
+    	css += " " + buttonSyle(context);
+    	css += (booleanValueForBinding("enabled", true, context.component()) ? "" : " disabled");
+        Object selected = valueForBinding("selected", context.component());
+        css += (selected instanceof String ? " " + selected : "");
+        css += (selected instanceof Boolean && ((Boolean)selected) ? " selected" : "");
+    	return css;
     }
 
     public String buttonSyle(WOContext context) {
-    	return "button regular normal";
+    	String style = "button regular normal";
+    	return style;
     }
 
     protected String label(WOContext context) {
@@ -52,15 +53,22 @@ public class SCButtonView extends SCView {
 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
+        String width = (String) valueForBinding("width", context.component());
+        String style = (width == null ? "" : "style=\"width: " + width +"px\" ");
         String value = label(context);
+        if(value== null) {
+            value = "<img class=\"button\" src=\"" + SCUtilities.staticUrl("blank.gif") + "\" />";
+        }
+        response.appendContentString("<span class=\"button-inner\">");
         if (value != null) {
-            response.appendContentString("<span class=\"button-inner\"><span class=\"label\">" + value);
+            response.appendContentString("<span " + style +"class=\"label\">" + value);
         }
         
         super.doAppendToResponse(response, context);
         
         if (value != null) {
-            response.appendContentString("</span></span>");
+            response.appendContentString("</span>");
         }
+        response.appendContentString("</span>");
     }
 }

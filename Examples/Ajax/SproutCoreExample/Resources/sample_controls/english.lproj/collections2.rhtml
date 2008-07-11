@@ -1,0 +1,29 @@
+<% view :collections2_tab, :style => 'width: 100%; height: 100%; position: absolute;' do %>
+
+<%= label_view :source_list_label, :outlet => true, :inner_html => loc(%(Class)' SC.SourceListView') , :tag => 'label' %>
+
+<% scroll_view :source_list_scroll_view, :outlet => true do %>
+  <%= source_list_view :source_list_view, :outlet => true, 
+    :can_reorder_content => true,
+    :group => :group,
+    :content_value_key => 'name',
+    :content_value_editable => true,
+    :content_unread_count_key => 'unreadCount',
+    :content_icon_key => 'iconClassName',
+    :group_visible_key => true,
+    :bind => { 
+      :content => 'SampleControls.sourceListController.arrangedObjects', 
+      :selection => 'SampleControls.sourceListController.selection' 
+    } %>
+<% end %>
+
+<label class="table-view-label"><%= loc(%(Class)) %> SC.TableView</label>
+<% scroll_view :table_scroll_view, :outlet => true do %>
+  <%= collection_view :table_view, :outlet => true, 
+    :can_order_content => true, 
+    :bind => { 
+      :content => 'SampleControls.contentController.arrangedObjectsXX', :selection => 'SampleControls.contentController.selectionXX' 
+    } %>
+<% end %>
+
+<% end %>

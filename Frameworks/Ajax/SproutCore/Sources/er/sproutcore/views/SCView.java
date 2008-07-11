@@ -63,14 +63,25 @@ public class SCView extends WODynamicGroup {
             log.debug(key + ": " + association);
             _associations.setObjectForKey(association, key);
         }
-        _properties.removeObjectForKey("id");
-        _properties.removeObjectForKey("default");
-        _properties.removeObjectForKey("className");
-        _properties.removeObjectForKey("class");
-        _properties.removeObjectForKey("elementName");
-        _properties.removeObjectForKey("style");
-        _properties.removeObjectForKey("outlet");
-        _properties.removeObjectForKey("view");
+        removeProperty("id");
+        removeProperty("className");
+        removeProperty("class");
+        removeProperty("elementName");
+        removeProperty("style");
+        removeProperty("outlet");
+        removeProperty("view");
+    }
+
+    public boolean hasProperty(String string) {
+        return properties().containsKey(string);
+    }
+
+    public WOAssociation removeProperty(String name) {
+        return _properties.removeObjectForKey(name);
+    }
+    
+    public void setProperty(String name, WOAssociation association) {
+        _properties.setObjectForKey(association, name);
     }
     
     public void moveProperty(String from, String to) {
@@ -84,7 +95,7 @@ public class SCView extends WODynamicGroup {
         }
     }
     
-    protected NSMutableDictionary properties() {
+    protected NSDictionary properties() {
         return _properties;
     }
 
