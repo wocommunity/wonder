@@ -7,9 +7,10 @@
 
 <wo:SCSplitView id="workspace" class = "sc-app-workspace" direction ="horizontal">
   <wo:SCView id="sidebar" outlet="$true">
-    <wo:SCScrollView id="master_list" outlet="$true" acceptsFirstResponder="$true">
+    <wo:SCScrollView id="master_list" outlet="$true">
       <wo:SCListView outlet = "$true"
         contentValueKey = "fullName"
+        example_View = "Contacts.ListItemView"
         ?content = "Contacts.masterController.arrangedObjects"
         ?selection = "Contacts.masterController.selection"
         />

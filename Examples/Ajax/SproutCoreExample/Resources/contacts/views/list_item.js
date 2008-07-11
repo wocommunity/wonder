@@ -12,13 +12,13 @@ require('core');
   @author    AuthorName
   @version 0.1
 */
-Contacts.ListItemView = SC.View.extend(
+Contacts.ListItemView = SC.ListItemView.extend(
 /** @scope Contacts.ListItemView.prototype */ {
 
   emptyElement: '<div class="list-item"></div>',
 
   /** The record we want to display. */
-  content: null,
+  cosntent: null,
 
   /** Selection state. */
   isSelected: false,

@@ -1,0 +1,193 @@
+<wo:ERXPartialWrapper key="body">
+
+<wo:SCJavaScript group="sample_controls" framework="app" key="pageJavaScript" />
+
+<wo:SCStyleSheet group="sample_controls" framework="app" key="@content_for_page_styles" />
+
+<h1>Built-In Buttons & Widgets</h1>
+<p>
+  The widgets below can be created easily using view helpers.  The helper 
+  examples show you the specific options accepted by the view.  Unless the 
+  options is in bold, all options are optional.  Helpers also take the 
+  standard options accepted by all views such as :outlet, :field, :width, 
+  etc.
+</p>
+
+<div class="demo_box">
+<h2>Regular Push Button</h2>
+<p><code>
+  &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :action =&gt; &apos;Appname.someController.methodName&apos;, :default =&gt; true|false, :enabled =&gt; true|false %&gt;
+</code></p>
+  <div class="buttons">
+    <wo:SCButtonView label = "Show Preferences" />
+    <wo:SCButtonView label = "Default" default="$true"/>
+    <wo:SCButtonView label = "Cancel"  enabled="$false" width="80" />
+    <wo:SCButtonView label = "OK"      enabled="$false" selected="$true" width="80" />
+  </div>
+  <br />
+
+  <div class="buttons sc-square-theme">
+    <wo:SCButtonView label = "Show Preferences" />
+    <wo:SCButtonView label = "Default" default="$true"/>
+    <wo:SCButtonView label = "Cancel"  enabled="$false" width="80" />
+    <wo:SCButtonView label = "OK"      enabled="$false" selected="$true" width="80" />
+  </div>
+
+</div>
+
+<div class="demo_box">
+<h2>Segments</h2>
+<p><code>
+  &lt;%= segmented_view :segments =&gt; [:one, :two, :three], :enabled =&gt; true|false %&gt;
+</code></p>
+<br />
+<div class="buttons">
+  <%= segmented_view :outlet => true, :segments => [:one, :two, :three] %><br />
+  <%= segmented_view :disabled_segment, :outlet => true, :segments => [:one, :two, :three], :enabled => false %>
+  
+</div>
+
+<br />
+<div class="buttons sc-square-theme">
+  <%= segmented_view :outlet => true, :segments => [:one, :two, :three] %><br />
+  <%= segmented_view :disabled_square_segment, :outlet => true, :segments => [:one, :two, :three], :enabled => false %>
+  
+</div>
+
+</div>
+
+<div class="demo_box">
+<h2>Checkboxes</h2>
+<p><code>
+  &lt;%= checkbox_view :label =&gt; &apos;Label Name&apos;, :enabled =&gt; true|false, :selected =&gt; true|false|:mixed %&gt;
+</code></p>
+
+  <div class="buttons">
+    <wo:SCCheckboxView label = "Normal Checkbox" />
+    <wo:SCCheckboxView label = "Disabled Checkbox" enabled="$false"/>
+    <wo:SCCheckboxView label = "Selected Checkbox" selected="$true" /><br />
+    No Label:  <wo:SCCheckboxView selected="mixed" />
+    
+  </div>
+</div>
+
+<div class="demo_box">
+<h2>Radio Buttons</h2>
+<p><code>
+  &lt;%= radio_view :label =&gt; &apos;Label Name&apos;, :enabled=&gt; true|false, :selected =&gt; true|false|:mixed %&gt;
+</code></p>
+  <div class="buttons">
+    <wo:SCRadioView label = "Normal Radio Button" outletPath = ".demo_box:1 .buttons:1 a.normal_radio_button:1:1" />
+    <wo:SCRadioView label = "Disabled Radio Button" enabled="$false" />
+    <wo:SCRadioView label = "Selected Radio Button" selected="$true"/><br />
+    No Label: <wo:SCRadioView selected="mixed"/>
+    
+  </div>
+  
+<p><code>
+  &lt;%= radio_group_view :values =&gt; [[:item_1, &apos;First Item&apos;], :item_2, [:item_3, &apos;Last Item&apos;]], :enabled =&gt; true|false, :value =&gt; :item_1, :layout =&gt; :horizontal|:vertical %&gt;
+</code></p>
+
+<div>
+<label>Choose Item:</label> <wo:SCRadioGroupView values = "$values" value = 0 layout ="vertical" />
+</div>
+
+</div>
+
+<div class="demo_box">
+<h2>Slider View</h2>
+<p><code>
+  &lt;%= slider_view :value =&gt; 100, :minimum =&gt; 50, :maximum =&gt; 250, :step =&gt; 10 %&gt;
+</code></p>
+  <div class="buttons">
+    <wo:SCLabelView tag = "label"
+      ?value = "SampleControls.contentController.sliderValue" />
+    <wo:SCSliderView
+      minimum = 50 step = 10
+      maximum = 250
+      ?value = "SampleControls.contentController.sliderValue" 
+     /> 
+  </div>
+    
+  <div class="buttons">
+   <wo:SCLabelView tag = "label"
+      ?value = "SampleControls.contentController.sliderValue" />
+    <wo:SCSliderView
+      minimum = 50 step = 1 width= 200
+      maximum = 250
+      ?value = "SampleControls.contentController.sliderValue" 
+     /> 
+   </div>
+
+</div>
+
+
+<div class="demo_box">
+<h2>Disclosure Triangle</h2>
+<p><code>
+  &lt;%= disclosure_view :label =&gt; &apos;Label Name&apos;, :enabled =&gt; true|false, :value =&gt; true|false %&gt;
+</code></p>
+
+  <div class="buttons">
+    <%= disclosure_view :outlet => true, :value => true, :label => 'Open Disclosure' %> 
+    <%= disclosure_view :outlet => true, :label => 'Closed Disclosure', :value => false %>
+    <%= disclosure_view :outlet => true, :label => 'Disabled Open Disclosure', :value => false, :enabled => false %>
+    <%= disclosure_view :outlet => true, :label => 'Disabled Open Disclosure', :value => true, :enabled => false %>
+    No Label: <%= disclosure_view :outlet => true, :value => true %>
+  </div>
+</div>
+
+<div class="demo_box">
+<h2>Square Buttons</h2>
+<p><code>
+  &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :theme =&gt; :square %&gt;
+</code></p>
+  <div class="buttons">
+    <%= button_view :outlet => true, :label => 'Reg', :theme => :square %>
+    <%= button_view :outlet => true, :label => 'Dis', :theme => :square, :enabled => false %>
+    <%= button_view :outlet => true, :label => 'Sel', :theme => :square, :selected => true %>
+    <%= button_view :outlet => true, :label => 'Sel-Dis', :theme => :square, :enabled => false, :selected => true %>
+  </div>
+</div>
+
+<div class="demo_box">
+<h2>Popup and Drop Down Menus Buttons</h2>
+<p><code>
+  &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :theme =&gt; :popup|:dropdown %&gt;
+</code></p>
+  <div class="buttons">
+    <%= button_view :outlet => true, :label => 'Popup Menu', :theme => :popup %>
+    <%= button_view :outlet => true, :label => 'Dropdown Menu', :theme => :dropdown, :theme => :dropdown, :width => 150 %>
+  </div>
+</div>
+
+
+
+<div class="demo_box">
+<h2>Toggle Buttons</h2>
+<p><code>
+  &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :behavior =&gt; :toggle|:on|:off %&gt;
+</code></p>
+  <div class="buttons">
+    <%= button_view :toggle, :outlet => true, :label => 'Toggle', :behavior => :toggle, :bind => { :value => 'Widgets.preferencesController.toggleState' }  %>
+    <%= button_view :toggle_on, :outlet => true, :label => 'On', :behavior => :on, :bind => { :value => 'Widgets.preferencesController.toggleState' }  %>
+    <%= button_view :toggle_off, :outlet => true, :label => 'Off', :behavior => :off, :bind => { :value => 'Widgets.preferencesController.toggleState' }  %>
+  </div>
+</div>
+
+<h2 style="margin: 25px; margin-top: 0;">Native Widgets</h2>
+<p style="margin-left: 25px; margin-right: 25px;">SproutCore also supports rendering native UI components.  In general these can be bound to SproutCore values, just like the SproutCore widgets above:</p>
+
+<div class="demo_box">
+<h2>Checkbox</h2>
+<p><code>
+  &lt;%= checkbox_field_view :outlet =&gt; true, :label =&gt; &apos;Label Name&apos;, :enabled =&gt; true|false, :selected =&gt; true|false %&gt;
+</code></p>
+  <div class="buttons">
+    <%= checkbox_field_view :outlet => true, :label => 'Regular Checkbox' %>
+    <%= checkbox_field_view :outlet => true, :label => 'Selected Checkbox', :value => true %>
+    <%= checkbox_field_view :outlet => true, :label => 'Disabled Checkbox', :enabled => false %>
+  </div>
+</div>
+
+</wo:ERXPartialWrapper>

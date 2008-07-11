@@ -1,0 +1,144 @@
+/* @override 
+	http://localhost:4020/static/sample_controls/en/_cache/body-1207527892.css
+	http://localhost:4020/static/sample_controls/en/_cache/body-1207528931.css
+*/
+
+/* @group General */
+
+body {
+	 overflow: hidden ;
+}
+
+#control_tabs {
+	position: absolute ;
+	left: 20px;
+	right: 20px;
+	top: 0px;
+	bottom: 20px;
+	border: 1px #aaa solid ;
+}
+
+#control_tabs .root {
+	overflow: auto ;
+	position: absolute ;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	margin: 0;
+}
+
+#control_tabs .segments {
+	z-index: 99;
+}
+
+#control_tabs .root h1 {
+  margin: 25px; 
+  margin-bottom: 10px;
+  margin-top: 50px;
+}
+
+#control_tabs .root p {
+  margin-left: 25px; 
+  margin-right: 25px;
+}
+
+/* @end */
+
+/* @group Welcome */
+
+.welcome_tab {
+	padding: 30px;
+	background-color: white ;
+	position: absolute ;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.welcome_tab h1 {
+	font-size: 48px;
+	line-height: 1;
+	margin-top: 30px;
+	font-weight: normal ;
+	letter-spacing: -2px;
+}
+
+.welcome_tab p {
+	color: #666;
+	font-size: 14px;
+}
+
+/* @end */
+
+/* @group Collections 2 */
+
+/* Note: Ideally these styles will simply position the views on the screen.  The SC-Theme should take care of the rest.  */
+
+.collections2_tab .source_list_label {
+	position: absolute ;
+	left: 14px;
+	top: 20px;
+	width: 200px;
+}
+
+.collections2_tab .table-view-label {
+	position: absolute ;
+	left: 220px;
+	top: 20px;
+	right: 20px;
+}
+
+.collections2_tab .source_list_scroll_view {
+	position: absolute ;
+	left: 12px;
+	top: 40px;
+	bottom: 12px;
+	width: 200px;
+}
+
+.collections2_tab .table_scroll_view {
+	position: absolute ;
+	left: 220px;
+	top: 40px;
+	bottom: 12px;
+	right: 12px;
+}
+
+/* @end */
+
+/* @group Collections */
+
+.collections_tab .list-view-label {
+	position: absolute ;
+	left: 14px;
+	top: 20px;
+	width: 200px;
+}
+
+.collections_tab .grid-view-label {
+	position: absolute ;
+	left: 220px;
+	top: 20px;
+	right: 20px;
+}
+
+.collections_tab .list_scroll_view {
+	position: absolute ;
+	left: 12px;
+	top: 40px;
+	bottom: 12px;
+	width: 200px;
+}
+
+.collections_tab .grid_scroll_view {
+	position: absolute ;
+	left: 220px;
+	top: 40px;
+	bottom: 12px;
+	right: 12px;
+}
+
+/* @end */
+

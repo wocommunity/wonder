@@ -132,6 +132,7 @@ public class SCItem {
                 value = quotedValue(key, value);
                 result += _indent + key + ": " +  value + ",\n";
             }
+            // result = result.substring(0, result.length() - 2) + "\n";
         }
         return result;
     }
@@ -154,7 +155,9 @@ public class SCItem {
 
     public String toString() {
         boolean isPage = _className.equals("SC.Page");
-        String core = "({\n" + bindingsJavaScript() + propertyJavaScript() + outletJavaScript() + _indent.substring(4) +  "})";
+        String script = bindingsJavaScript() + propertyJavaScript() + outletJavaScript();
+        script = script.replaceAll(",\n$", "\n");
+        String core = "({\n" + script + _indent.substring(4) + "})";
         if(isPage) {
             return _className + ".create" + core;
         }
