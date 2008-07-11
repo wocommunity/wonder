@@ -20,7 +20,7 @@ public class SCImageView extends SCView {
 
     @Override
     public void appendAttributesToResponse(WOResponse arg0, WOContext arg1) {
-        String src = (String) valueForBinding("src", SCUtilities.staticUrl("blank"), arg1.component());
+        String src = (String) valueForBinding("src", SCUtilities.staticUrl("blank.gif"), arg1.component());
         arg0.appendContentString("src=\"");
         arg0.appendContentHTMLAttributeValue(src);
         arg0.appendContentString("\"");
