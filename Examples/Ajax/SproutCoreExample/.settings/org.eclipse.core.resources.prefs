@@ -1,21 +1,26 @@
-#Thu Jul 10 20:59:33 CEST 2008
+#Fri Jul 11 15:15:56 CEST 2008
 eclipse.preferences.version=1
 encoding//Components/BetterButton.api=UTF-8
 encoding//Components/BetterButton.wo=UTF-8
 encoding//Components/BetterButton.wo/BetterButton.html=UTF-8
 encoding//Components/BetterButton.wo/BetterButton.wod=UTF-8
 encoding//Components/BetterButton.wo/BetterButton.woo=UTF-8
+encoding//Components/Contacts.wo=UTF-8
+encoding//Components/Contacts.wo/Contacts.html=UTF-8
+encoding//Components/Contacts.wo/Contacts.wod=UTF-8
+encoding//Components/Contacts.wo/Contacts.woo=UTF-8
 encoding//Components/HelloWorld.api=UTF-8
 encoding//Components/HelloWorld.wo=UTF-8
 encoding//Components/HelloWorld.wo/HelloWorld.html=UTF-8
 encoding//Components/HelloWorld.wo/HelloWorld.wod=UTF-8
 encoding//Components/HelloWorld.wo/HelloWorld.woo=UTF-8
-encoding//Components/PhotoPage.api=UTF-8
 encoding//Components/PhotoPage.wo=UTF-8
-encoding//Components/PhotoPage.wo/PhotoPage.html=UTF-8
-encoding//Components/PhotoPage.wo/PhotoPage.wod=UTF-8
-encoding//Components/PhotoPage.wo/PhotoPage.woo=UTF-8
+encoding//Components/Photos.api=UTF-8
+encoding//Components/Photos.wo/Photos.html=UTF-8
+encoding//Components/Photos.wo/Photos.wod=UTF-8
+encoding//Components/Photos.wo/Photos.woo=UTF-8
 encoding//Sources/er/sproutcore/example/components/BetterButton.java=UTF-8
+encoding//Sources/er/sproutcore/example/components/Contacts.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/HelloWorld.java=UTF-8
-encoding//Sources/er/sproutcore/example/components/PhotoPage.java=UTF-8
+encoding//Sources/er/sproutcore/example/components/Photos.java=UTF-8
 encoding/Components=UTF-8
