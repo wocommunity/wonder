@@ -1472,6 +1472,32 @@ public class ERXFileUtilities {
         return files;
     }
 
+    
+    /** Lists all directories in the specified directory, is desired recursive.
+     *  
+     * @param baseDir the dir from which to list the child directories
+     * @param recursive if true this methods works recursively
+     * @return an array of files which are directories
+     */
+    public static File[] listFiles(File baseDir, boolean recursive, FileFilter filter) {
+        File[] files = baseDir.listFiles(filter);
+        if (recursive) {
+        	NSMutableArray<File> a = new NSMutableArray<File>(files);
+            for (int i = files.length; i-- > 0;) {
+                File currentDir = files [i];
+            	a.addObject(currentDir);
+                if(currentDir.isDirectory()) {
+                	File[] currentDirs = listFiles(currentDir, true, filter);
+                	a.addObjects(currentDirs);
+                }
+            }
+            Object[] objects = a.objects();
+            files = new File[objects.length];
+            System.arraycopy(objects, 0, files, 0, objects.length);
+        }
+        return files;
+    }
+
     /** moves a file from one location to another one. This works different
      * than java.io.File.renameTo as renameTo does not work across partitions
      * 
