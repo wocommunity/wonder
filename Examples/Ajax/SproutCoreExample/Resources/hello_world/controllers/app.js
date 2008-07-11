@@ -2,7 +2,7 @@
 // HelloWorld.AppController
 // ==========================================================================
 
-require('core');
+require('hello_world/core');
 
 /** @class
 

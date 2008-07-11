@@ -26,7 +26,6 @@ public class SCRequestHandler extends WORequestHandler {
         NSArray path = request.requestHandlerPathArray();
         String bundleName = (String) path.objectAtIndex(0);
         String name = ERXArrayUtilities.arrayByRemovingFirstObject(path).componentsJoinedByString("/");
-
         if ("SproutCore".equals(bundleName)) {
             name = name.replaceAll("\\.\\.+", "");
             if("prototype/prototype.js".equals(name)) {
@@ -36,14 +35,42 @@ public class SCRequestHandler extends WORequestHandler {
             byte data[];
             try {
                 data = ERXFileUtilities.bytesFromFile(file);
+                if(name.endsWith(".css")) {
+                	String code = new String(data);
+                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1)");
+                	data = code.getBytes();
+                } else if(name.endsWith(".js")) {
+                	String code = new String(data);
+                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/__sc__/SproutCore/english.lproj/$1" + ".gif'");
+                	data = code.getBytes();
+                }
             } catch (IOException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
             }
             result.setContent(new NSData(data));
 
         } else {
-            InputStream is = NSBundle.bundleForName(bundleName).inputStreamForResourcePath(name);
-            result.setContentStream(is, 4000, 4000);
+        	NSBundle bundle = NSBundle.bundleForName(bundleName);
+        	if("app".equals(bundleName)) {
+        		bundle = NSBundle.mainBundle();
+        	}
+            
+        	try {
+        		InputStream is = bundle.pathURLForResourcePath(name).openStream();
+        		byte data[] = ERXFileUtilities.bytesFromInputStream(is);
+        		if(name.endsWith(".css")) {
+        			String code = new String(data);
+        			code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1)");
+        			data = code.getBytes();
+                } else if(name.endsWith(".js")) {
+                	String code = new String(data);
+                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/__sc__/app/english.lproj/$1" + ".gif'");
+                	data = code.getBytes();
+         		}
+        		result.setContent(new NSData(data));
+        	} catch (IOException e) {
+        		throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
         }
         return result;
     }

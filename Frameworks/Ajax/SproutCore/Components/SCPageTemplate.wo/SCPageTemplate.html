@@ -3,11 +3,15 @@
 <html>
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <title><wo:str value="$^title"/></title>
-	<wo:ERXPartialMarker key="stylesheets_for_client"/>
+    <title></title>
+    <wo:SCJavaScript name="english.lproj/detect-browser" key="stylesheets_for_client" />
+    <wo:ERXPartialMarker key="stylesheets_for_client"/>
 	<wo:ERXPartialMarker key="@content_for_page_styles"/>
   </head>
   <wo:WOGenericContainer elementName="body" class="$bodyClass">
+   <script>
+    if (window.SC && SC.setupBodyClassNames) SC.setupBodyClassNames() ;
+   </script>
 
 	<!-- Render Page Views -->
 	<wo:WOComponentContent />
@@ -24,9 +28,10 @@
 	<wo:ERXPartialMarker key="javascripts_for_client"/>
 	<wo:ERXPartialMarker key="pageJavaScript"/>
 
+     <wo:WOGenericContainer elementName="textarea" cols="80" rows="40" omitTags="$^isLive">
+     	<script type="text/javascript">SC.page = <wo:WOString value="$renderTree" escapeHTML="false" /></script>
+	</wo:WOGenericContainer>
     <!-- Start SproutCore on Page Load -->
     <script type="text/javascript">window.onload = SC.didLoad;</script>
-    <wo:WOGenericContainer elementName="textarea" cols="80" rows="40" omitTags="$^isLive"><script type="text/javascript"><wo:WOString value="$renderTree" escapeHTML="false" /></script>
-	</wo:WOGenericContainer>
   </wo:WOGenericContainer>
 </html>

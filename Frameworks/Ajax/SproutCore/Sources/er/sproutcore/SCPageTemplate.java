@@ -24,7 +24,7 @@ public class SCPageTemplate extends ERXNonSynchronizingComponent {
     }
 
     public String bodyClass() {
-        return (String) (valueForBinding("theme") != null ? valueForBinding("theme") : "sc-theme");
+        return (String) (valueForBinding("theme") != null ? valueForBinding("theme") : "sc-theme") + " focus";
     }
 
     public String renderTree() {
