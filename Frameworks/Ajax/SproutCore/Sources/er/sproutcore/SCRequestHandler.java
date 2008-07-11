@@ -3,6 +3,7 @@ package er.sproutcore;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import org.apache.log4j.Logger;
 
@@ -28,9 +29,6 @@ public class SCRequestHandler extends WORequestHandler {
         String name = ERXArrayUtilities.arrayByRemovingFirstObject(path).componentsJoinedByString("/");
         if ("SproutCore".equals(bundleName)) {
             name = name.replaceAll("\\.\\.+", "");
-            if("prototype/prototype.js".equals(name)) {
-                name = "../" + name;
-            }
             File file = new File(SCUtilities.scBase(), name);
             byte data[];
             try {
@@ -41,9 +39,9 @@ public class SCRequestHandler extends WORequestHandler {
                 	data = code.getBytes();
                 } else if(name.endsWith(".js")) {
                 	String code = new String(data);
-                	code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/english.lproj/blank.gif'");
-                	code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/english.lproj/$1'");
-                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/english.lproj/$1" + ".png'");
+                	code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/sproutcore/english.lproj/blank.gif'");
+                	code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/sproutcore/english.lproj/$1'");
+                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/sproutcore/english.lproj/$1" + ".png'");
                 	data = code.getBytes();
                 }
             } catch (IOException e) {
@@ -52,30 +50,34 @@ public class SCRequestHandler extends WORequestHandler {
             result.setContent(new NSData(data));
 
         } else {
-        	NSBundle bundle = NSBundle.bundleForName(bundleName);
-        	if("app".equals(bundleName)) {
-        		bundle = NSBundle.mainBundle();
-        	}
-            
-        	try {
-        		InputStream is = bundle.pathURLForResourcePath(name).openStream();
-        		byte data[] = ERXFileUtilities.bytesFromInputStream(is);
-        		if(name.endsWith(".css")) {
-        			String code = new String(data);
-        			code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "url($1)");
-        			code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1.png)");
-        			data = code.getBytes();
-                } else if(name.endsWith(".js")) {
-                	String code = new String(data);
-                	code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/blank.gif'");
-                	code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1'");
-                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1" + ".png'");
-                	data = code.getBytes();
-         		}
-        		result.setContent(new NSData(data));
-        	} catch (IOException e) {
-        		throw NSForwardException._runtimeExceptionForThrowable(e);
-			}
+            NSBundle bundle = NSBundle.bundleForName(bundleName);
+            if("app".equals(bundleName)) {
+                bundle = NSBundle.mainBundle();
+            }
+            if(bundle != null) {
+                try {
+                    URL url = bundle.pathURLForResourcePath(name);
+                    if(url != null) {
+                        InputStream is = url.openStream();
+                        byte data[] = ERXFileUtilities.bytesFromInputStream(is);
+                        if(name.endsWith(".css")) {
+                            String code = new String(data);
+                            code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "url($1)");
+                            code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1.png)");
+                            data = code.getBytes();
+                        } else if(name.endsWith(".js")) {
+                            String code = new String(data);
+                            code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/blank.gif'");
+                            code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1'");
+                            code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1" + ".png'");
+                            data = code.getBytes();
+                        }
+                        result.setContent(new NSData(data));
+                    }
+                } catch (IOException e) {
+                    throw NSForwardException._runtimeExceptionForThrowable(e);
+                }
+            }
         }
         return result;
     }
