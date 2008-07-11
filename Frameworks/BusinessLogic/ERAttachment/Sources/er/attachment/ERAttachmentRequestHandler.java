@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -15,12 +17,15 @@ import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSLog;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.components.ERXDynamicURL;
 import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOGlobalIDUtilities;
 
 /**
  * ERAttachmentRequestHandler is the request handler that is used for loading 
@@ -82,9 +87,20 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
       }
       try {
         ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());
-        // MS: This is kind of goofy because we lookup by path, your web path needs to 
-        // have a leading slash on it.
-        String webPath = "/" + url.requestHandlerPath();
+        String requestHandlerPath = url.requestHandlerPath();
+        Matcher idMatcher = Pattern.compile("^id/(\\d+)/").matcher(requestHandlerPath);
+        String idStr;
+        String webPath;
+        if (idMatcher.find()) {
+          idStr = idMatcher.group(1);
+          webPath = idMatcher.replaceFirst("/");
+        }
+        else {
+          // MS: This is kind of goofy because we lookup by path, your web path needs to 
+          // have a leading slash on it.
+          webPath = "/" + requestHandlerPath;
+          idStr = null;
+        }
 
         try {
           InputStream attachmentInputStream;
@@ -98,7 +114,18 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
           editingContext.lock();
 
           try {
-            ERAttachment attachment = ERAttachment.fetchRequiredAttachmentWithWebPath(editingContext, webPath);
+            ERAttachment attachment;
+            if (idStr != null) {
+              EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(ERAttachment.ENTITY_NAME, new Object[] { Integer.parseInt(idStr) });
+              attachment = (ERAttachment) ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(editingContext, gid);
+              String actualWebPath = attachment.webPath();
+              if (!actualWebPath.equals(webPath)) {
+                throw new SecurityException("You are not allowed to view the requested attachment."); 
+              }
+            }
+            else {
+              attachment = ERAttachment.fetchRequiredAttachmentWithWebPath(editingContext, webPath);
+            }
             if (_delegate != null && !_delegate.attachmentVisible(attachment, request, context)) {
               throw new SecurityException("You are not allowed to view the requested attachment.");
             }
