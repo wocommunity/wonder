@@ -41,7 +41,9 @@ public class SCRequestHandler extends WORequestHandler {
                 	data = code.getBytes();
                 } else if(name.endsWith(".js")) {
                 	String code = new String(data);
-                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/__sc__/SproutCore/english.lproj/$1" + ".gif'");
+                	code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/english.lproj/blank.gif'");
+                	code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/english.lproj/$1'");
+                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/english.lproj/$1" + ".png'");
                 	data = code.getBytes();
                 }
             } catch (IOException e) {
@@ -60,11 +62,14 @@ public class SCRequestHandler extends WORequestHandler {
         		byte data[] = ERXFileUtilities.bytesFromInputStream(is);
         		if(name.endsWith(".css")) {
         			String code = new String(data);
-        			code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1)");
+        			code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "url($1)");
+        			code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1.png)");
         			data = code.getBytes();
                 } else if(name.endsWith(".js")) {
                 	String code = new String(data);
-                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/__sc__/app/english.lproj/$1" + ".gif'");
+                	code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/blank.gif'");
+                	code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1'");
+                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1" + ".png'");
                 	data = code.getBytes();
          		}
         		result.setContent(new NSData(data));
