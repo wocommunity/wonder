@@ -2,7 +2,7 @@
 // Contacts.DetailController
 // ==========================================================================
 
-require('core');
+require('contacts/core');
 
 /** @class
 

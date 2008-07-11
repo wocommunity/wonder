@@ -2,7 +2,7 @@
 // Contacts.Contact Fixtures
 // ==========================================================================
 
-require('core') ;
+require('contacts/core') ;
 
 Contacts.FIXTURES = Contacts.FIXTURES.concat([
 
