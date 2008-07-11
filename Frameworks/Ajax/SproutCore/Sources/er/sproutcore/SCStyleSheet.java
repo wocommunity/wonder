@@ -55,9 +55,11 @@ public class SCStyleSheet extends WODynamicElement {
                 public boolean accept(File pathname) {
                     return pathname.getName().endsWith(".css");
                 }});
-            for (int i = 0; i < files.length; i++) {
-                File file = files[i];
-                scripts.addObject(file.getName());
+            if(files != null) {
+                for (int i = 0; i < files.length; i++) {
+                    File file = files[i];
+                    scripts.addObject(file.getName());
+                }
             }
         } else {
             String name = (String) _name.valueInComponent(context.component());

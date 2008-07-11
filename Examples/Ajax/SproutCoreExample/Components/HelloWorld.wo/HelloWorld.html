@@ -1,14 +1,11 @@
 <wo:ERXPartialWrapper key="body">
 
-<wo:SCJavaScript name="hello_world/core.js" framework="app" key="pageJavaScript" />
-<wo:SCJavaScript name="hello_world/english.lproj/strings.js" framework="app" key="pageJavaScript" />
-<wo:SCJavaScript name="hello_world/controllers/app.js" framework="app" key="pageJavaScript" />
-<wo:SCJavaScript name="hello_world/main.js" framework="app" key="pageJavaScript" />
+<wo:SCJavaScript group="hello_world" framework="app" key="pageJavaScript" />
 
-<wo:SCStyleSheet name="hello_world/english.lproj/body.css" framework="app" key="@content_for_page_styles" />
+<wo:SCStyleSheet group="hello_world" framework="app" key="@content_for_page_styles" />
 
 <div class="sc-welcome">
-  <img class="logo" src="/cgi-bin/WebObjects/SproutCoreExample.woa/_sc_/SproutCore/english.lproj/images/sproutcore-logo.png" />
+  <img class="logo" src="/cgi-bin/WebObjects/SproutCoreExample.woa/_sc_/SproutCore/sproutcore/english.lproj/images/sproutcore-logo.png" />
   <div class="message">
   <wo:SCCheckboxView id="clock_checkbox" 
   	label="Show Click"
