@@ -29,16 +29,20 @@ public class StandaloneRunner {
         Logger root = Logger.getRootLogger();
         ConsoleAppender appender = new ConsoleAppender(new PatternLayout("%r [%t] %p %c %x - %m%n"));
         appender.setTarget("System.err");
-        appender.setThreshold(Level.DEBUG);
         LevelRangeFilter filter = new LevelRangeFilter();
         filter.setLevelMin(Level.DEBUG);
         filter.setLevelMax(Level.DEBUG);
         appender.addFilter(filter);
+        appender.activateOptions();
         root.addAppender(appender);
         
         appender = new ConsoleAppender(new PatternLayout());
         appender.setTarget("System.out");
-        appender.setThreshold(Level.INFO);
+        filter = new LevelRangeFilter();
+        filter.setLevelMin(Level.INFO);
+        filter.setLevelMax(Level.FATAL);
+        appender.addFilter(filter);
+        appender.activateOptions();
         root.addAppender(appender);
 
 		ERSelenium.registerImportersExporters();
