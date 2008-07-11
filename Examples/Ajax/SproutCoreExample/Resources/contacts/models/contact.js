@@ -2,7 +2,7 @@
 // Contacts.Contact
 // ==========================================================================
 
-require('contacts/core');
+require('core');
 
 /** @class
 
