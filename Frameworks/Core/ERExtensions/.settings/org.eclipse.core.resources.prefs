@@ -1,4 +1,4 @@
-#Fri Apr 25 19:18:26 CEST 2008
+#Wed Jul 02 11:08:41 CEST 2008
 eclipse.preferences.version=1
 encoding//Components/Nonlocalized.lproj/ERXAnyField.wo/ERXAnyField.wod=MacRoman
 encoding//Components/Nonlocalized.lproj/ERXBatchNavigationBar.wo/ERXBatchNavigationBar.wod=MacRoman
@@ -22,6 +22,10 @@ encoding//Components/Nonlocalized.lproj/ERXErrorDictionaryPanel.wo/ERXErrorDicti
 encoding//Components/Nonlocalized.lproj/ERXExternalContent.wo/ERXExternalContent.wod=MacRoman
 encoding//Components/Nonlocalized.lproj/ERXFakeRelationship.wo/ERXFakeRelationship.wod=MacRoman
 encoding//Components/Nonlocalized.lproj/ERXFixedLengthString.wo/ERXFixedLengthString.wod=MacRoman
+encoding//Components/Nonlocalized.lproj/ERXFlashMovie.wo=UTF-8
+encoding//Components/Nonlocalized.lproj/ERXFlashMovie.wo/ERXFlashMovie.html=UTF-8
+encoding//Components/Nonlocalized.lproj/ERXFlashMovie.wo/ERXFlashMovie.wod=UTF-8
+encoding//Components/Nonlocalized.lproj/ERXFlashMovie.wo/ERXFlashMovie.woo=UTF-8
 encoding//Components/Nonlocalized.lproj/ERXFlickrBatchNavigation.wo/ERXFlickrBatchNavigation.wod=MacRoman
 encoding//Components/Nonlocalized.lproj/ERXGroupingRepetition.wo/ERXGroupingRepetition.wod=MacRoman
 encoding//Components/Nonlocalized.lproj/ERXGroupingTable.wo/ERXGroupingTable.wod=MacRoman
@@ -84,3 +88,4 @@ encoding//Components/Nonlocalized.lproj/ERXToOneRelationship.wo/ERXToOneRelation
 encoding//Components/Nonlocalized.lproj/ERXUnreadMarker.wo/ERXUnreadMarker.wod=MacRoman
 encoding//Components/Nonlocalized.lproj/ERXWOTestInterface.wo/ERXWOTestInterface.wod=MacRoman
 encoding//Components/Nonlocalized.lproj/ERXWOTestResult.wo/ERXWOTestResult.wod=MacRoman
+encoding//Sources/er/extensions/components/ERXFlashMovie.java=UTF-8
