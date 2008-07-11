@@ -64,6 +64,7 @@ public class SCView extends WODynamicGroup {
             _associations.setObjectForKey(association, key);
         }
         _properties.removeObjectForKey("id");
+        _properties.removeObjectForKey("default");
         _properties.removeObjectForKey("className");
         _properties.removeObjectForKey("class");
         _properties.removeObjectForKey("elementName");
