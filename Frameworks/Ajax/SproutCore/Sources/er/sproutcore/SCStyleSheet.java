@@ -47,10 +47,11 @@ public class SCStyleSheet extends WODynamicElement {
         }
         if(!scripts.contains(name)) {
             String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY,name, null);
-            response.appendContentString("<style");
+            response.appendContentString("<link");
             response._appendTagAttributeAndValue("type", "text/css", false);
-            response._appendTagAttributeAndValue("src", url, false);
-            response.appendContentString("></style>\n");
+            response._appendTagAttributeAndValue("rel", "stylesheet", false);
+            response._appendTagAttributeAndValue("href", url, false);
+            response.appendContentString("/>\n");
             scripts.addObject(name);
         }
     }
