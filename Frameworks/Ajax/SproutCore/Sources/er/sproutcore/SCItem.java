@@ -105,14 +105,16 @@ public class SCItem {
     private String outletJavaScript() {
         String result = "";
         if(_children.count() > 0) {
-            result += _indent +  "outlets: [";
-            for (SCItem item : _children) {
-                if(item != _children.objectAtIndex(0)) {
-                    result += ",";
+            if(_parent != null) {
+                result += _indent +  "outlets: [";
+                for (SCItem item : _children) {
+                    if(item != _children.objectAtIndex(0)) {
+                        result += ",";
+                    }
+                    result += "\"" + item.itemId() + "\"";
                 }
-                result += "\"" + item.itemId() + "\"";
+                result += "],\n";
             }
-            result += "],\n";
             for (SCItem item : _children) {
                 result += _indent + item.itemId() + ": " + item + ",\n";
             }

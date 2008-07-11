@@ -72,6 +72,21 @@ public class SCView extends WODynamicGroup {
         _properties.removeObjectForKey("outlet");
         _properties.removeObjectForKey("view");
     }
+    
+    public void moveProperty(String from, String to) {
+        WOAssociation association = _properties.removeObjectForKey(from);
+        if(association != null) {
+            _properties.setObjectForKey(association, to);
+        }
+        association = _bindings.removeObjectForKey(from);
+        if(association != null) {
+            _bindings.setObjectForKey(association, to);
+        }
+    }
+    
+    protected NSMutableDictionary properties() {
+        return _properties;
+    }
 
     public NSArray propertyKeys() {
         return PROPERTY_KEYS;
