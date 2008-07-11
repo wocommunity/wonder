@@ -7,7 +7,7 @@
 
 <wo:SCSplitView id="workspace" class = "sc-app-workspace" direction ="horizontal">
   <wo:SCView id="sidebar" outlet="$true">
-    <wo:SCScrollView id="master_list" outlet="$true">
+    <wo:SCScrollView id="master_list" outlet="$true" acceptsFirstResponder="$true">
       <wo:SCListView outlet = "$true"
         contentValueKey = "fullName"
         ?content = "Contacts.masterController.arrangedObjects"
@@ -43,11 +43,11 @@
           <wo:SCButtonView outlet = "$true"
             title = "Cancel"
             action = "Contacts.detailController.discardChanges"
-            ?isEnabled = "Contacts.detailController.hasChanges" />
+            ?enabled = "Contacts.detailController.hasChanges" />
           <wo:SCButtonView outlet = "$true"
             title = "Save Changes" isDefault = "$true"
             action = "Contacts.detailController.commitChanges"
-            ?isEnabled = "Contacts.detailController.hasChanges"
+            ?enabled = "Contacts.detailController.hasChanges"
             />
         </td>
       </tr>
