@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.sproutcore.SCItem;
+import er.sproutcore.SCUtilities;
 
 public class SCCheckboxView extends SCButtonView {
 
@@ -27,7 +28,8 @@ public class SCCheckboxView extends SCButtonView {
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         String value = label(context);
         if (value != null) {
-            response.appendContentString("<img  class=\"button\"><span class=\"label\">" );
+        	String url = SCUtilities.staticUrl("blank.gif");
+            response.appendContentString("<img src='" + url + "' class=\"button\"><span class=\"label\">" );
         }
         
         super.doAppendToResponse(response, context);

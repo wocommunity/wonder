@@ -7,11 +7,14 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
@@ -46,9 +49,9 @@ public class SCUtilities {
         return scBase;
     }
 
-    public static synchronized NSArray require(String bundle, String name) {
-        String base = (bundle != null && !"SproutCore".equals(bundle) ? bundle : scBase());
-        String fullName = bundle + "/" + name;
+    public static synchronized NSArray require(String bundleName, String name) {
+        String base = (bundleName != null && !"SproutCore".equals(bundleName) ? bundleName : scBase());
+        String fullName = bundleName + "/" + name;
         NSMutableDictionary<String, NSMutableArray<String>> deps = (NSMutableDictionary) ERXThreadStorage.valueForKey("SCUtils.deps");
         if(deps == null) {
             deps = new NSMutableDictionary<String, NSMutableArray<String>>();
@@ -59,16 +62,19 @@ public class SCUtilities {
             dependencies = new NSMutableArray<String>();
             deps.put(fullName, dependencies);
             File file = new File(base, name);
+            if("app".equals(base)) {
+            	file = new File(NSBundle.mainBundle().bundlePathURL().getFile(), "Contents" + File.separator + "Resources" + File.separator + name);
+            }
             try {
                 String content = ERXFileUtilities.stringFromFile(file);
                 Pattern pattern = Pattern.compile("\\s*require\\(\\s*\\W+([A-Za-z0-9/_]+).?\\s*\\)");
                 Matcher matcher = pattern.matcher(content);
                 while (matcher.find()) {
                     String otherDep = matcher.group(1) + ".js";
-                    NSArray others = require(bundle, otherDep);
+                    NSArray others = require(bundleName, otherDep);
                     dependencies = ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(dependencies, others).mutableClone();
 
-                    otherDep = bundle + "/" + otherDep;
+                    otherDep = bundleName + "/" + otherDep;
                     if (!dependencies.containsObject(otherDep)) {
                         dependencies.add(otherDep);
                     }
@@ -91,6 +97,8 @@ public class SCUtilities {
     }
 
     public static String staticUrl(String asset) {
-        return "blank";
+    	ERXWOContext context = (ERXWOContext) ERXWOContext.currentContext();
+    	String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY, "SproutCore/english.lproj/" + asset, null);
+        return url;
     }
 }

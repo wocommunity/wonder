@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -20,23 +21,28 @@ public class SCJavaScript extends WODynamicElement {
 
     WOAssociation _name;
     WOAssociation _framework;
+    WOAssociation _key;
 
     public SCJavaScript(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
-        _name = (WOAssociation) arg1.objectForKey("name");
-        _framework = (WOAssociation) arg1.objectForKey("framework");
-    }
+		_name = (WOAssociation) arg1.objectForKey("name");
+		_framework = (WOAssociation) arg1.objectForKey("framework");
+		if (_framework == null) {
+			_framework = new WOConstantValueAssociation("SproutCore");
+		}
+		_key = (WOAssociation) arg1.objectForKey("key");
+		if (_key == null) {
+			_key = new WOConstantValueAssociation(SCPageTemplate.CLIENT_JS);
+		}
+	}
 
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
-        ERXResponse scriptResponse = ERXResponse.pushPartial(SCPageTemplate.CLIENT_JS);
+        ERXResponse scriptResponse = ERXResponse.pushPartial((String) _key.valueInComponent(context.component()));
         String name = (String) _name.valueInComponent(context.component());
-        String framework;
-        if(_framework == null) {
-            framework = "SproutCore";
+        String framework = (String) _framework.valueInComponent(context.component());
+        if(framework.equals("SproutCore")) {
             appendScript(scriptResponse, context, "SproutCore/prototype/prototype.js");
-        } else {
-            framework = (String) _framework.valueInComponent(context.component());
         }
         NSArray<String> scripts = SCUtilities.require(framework, name);
         log.info("adding: " +scripts);
