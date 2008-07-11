@@ -223,7 +223,7 @@ public class ERXEOGlobalIDUtilities {
      * @param globalIDs the global ids to fetch
      * @return the fetched EO's
      */
-    public static NSMutableArray<EOEnterpriseObject> fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
+    public static NSMutableArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
     	return ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, globalIDs, false);
     }
 
@@ -236,7 +236,7 @@ public class ERXEOGlobalIDUtilities {
      * @return the fetched EO's
      */
     @SuppressWarnings("unchecked")
-	public static NSMutableArray<EOEnterpriseObject> fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs, boolean refreshesRefetchedObjects) {
+	public static NSMutableArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs, boolean refreshesRefetchedObjects) {
     	NSMutableArray<EOEnterpriseObject> result = new NSMutableArray<EOEnterpriseObject>();
 		ec.lock();
 		try {
@@ -304,7 +304,7 @@ public class ERXEOGlobalIDUtilities {
      * @param globalIDs
      * @param prefetchingKeypaths
      */
-    public static NSArray<EOEnterpriseObject> fireFaultsForGlobalIDs(EOEditingContext ec, NSArray globalIDs, NSArray prefetchingKeypaths) {
+    public static NSArray fireFaultsForGlobalIDs(EOEditingContext ec, NSArray globalIDs, NSArray prefetchingKeypaths) {
     	NSMutableArray<EOEnterpriseObject> result = new NSMutableArray<EOEnterpriseObject>(globalIDs.count());
     	if(globalIDs.count() > 0) {
     		NSMutableArray<EOGlobalID> faults = new NSMutableArray<EOGlobalID>(globalIDs.count());
