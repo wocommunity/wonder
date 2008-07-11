@@ -50,11 +50,11 @@
           <wo:SCButtonView outlet = "$true"
             title = "Cancel"
             action = "Contacts.detailController.discardChanges"
-            ?enabled = "Contacts.detailController.hasChanges" />
+            ?isEnabled = "Contacts.detailController.hasChanges" />
           <wo:SCButtonView outlet = "$true"
             title = "Save Changes" isDefault = "$true"
             action = "Contacts.detailController.commitChanges"
-            ?enabled = "Contacts.detailController.hasChanges"
+            ?isEnabled = "Contacts.detailController.hasChanges"
             />
         </td>
       </tr>
