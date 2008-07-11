@@ -2,7 +2,7 @@
 // Contacts.ListItemView
 // ==========================================================================
 
-require('core');
+require('contacts/core');
 
 /** @class
 

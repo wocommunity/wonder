@@ -2,7 +2,7 @@
 // Contacts.MasterController
 // ==========================================================================
 
-require('core');
+require('contacts/core');
 
 /** @class
 
