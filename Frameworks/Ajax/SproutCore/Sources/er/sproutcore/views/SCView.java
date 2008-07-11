@@ -65,6 +65,7 @@ public class SCView extends WODynamicGroup {
         }
         _properties.removeObjectForKey("id");
         _properties.removeObjectForKey("className");
+        _properties.removeObjectForKey("class");
         _properties.removeObjectForKey("elementName");
         _properties.removeObjectForKey("style");
         _properties.removeObjectForKey("outlet");
@@ -158,6 +159,9 @@ public class SCView extends WODynamicGroup {
 
     
     protected String scriptName() {
+    	if(getClass() == SCView.class) {
+    		return "views/view.js";
+    	}
         String name = getClass().getName().replaceAll("er.sproutcore", "");
         name = name.replaceAll("\\.SC", "\\.");
         name = name.replaceAll("\\.", "/");
