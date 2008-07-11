@@ -15,8 +15,13 @@ public class SCCheckboxView extends SCButtonView {
     }
 
     @Override
-    public String css(WOContext context) {
-        return "sc-button-view button checkbox normal " + super.css(context);
+    public String cssName(WOContext context) {
+        return "sc-button-view ";
+    }
+
+    @Override
+    public String buttonSyle(WOContext context) {
+    	return "button checkbox normal";
     }
     
     protected void pullBindings(WOContext context, SCItem item) {
