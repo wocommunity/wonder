@@ -13,6 +13,8 @@ public class SCTextFieldView extends SCFieldView {
 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
-        super.doAppendToResponse(response, context);
+    	response.appendContentString("<input type='text' class='");
+    	response.appendContentString(id(context));
+    	response.appendContentString("'/>");
     }
 }

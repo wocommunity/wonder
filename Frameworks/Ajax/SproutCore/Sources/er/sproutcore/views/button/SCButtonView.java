@@ -29,6 +29,11 @@ public class SCButtonView extends SCView {
     protected Object defaultElementName() {
         return "a";
     }
+    
+    @Override
+    public String css(WOContext context) {
+    	return super.css(context) + "button regular normal";
+    }
 
     protected String label(WOContext context) {
         String value = null;
