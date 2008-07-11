@@ -166,6 +166,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     if (webPath.startsWith("/")) {
       webPath = webPath.substring(1);
     }
+    webPath = "id/" + attachment.primaryKey() + "/" + webPath;
     String attachmentUrl = context.urlWithRequestHandlerKey(ERAttachmentRequestHandler.REQUEST_HANDLER_KEY, webPath, null);
     return attachmentUrl;
   }
