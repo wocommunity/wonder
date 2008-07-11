@@ -9,6 +9,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 
 /**
@@ -67,6 +68,10 @@ public class SCItem {
         }
         return "\"." + _id + "?\"";
     }
+    
+    public String itemId() {
+         return ERXStringUtilities.underscoreToCamelCase(id(), false);
+    }
 
     public void addProperty(String key, Object value) {
         _properties.setObjectForKey(value, key);
@@ -105,11 +110,11 @@ public class SCItem {
                 if(item != _children.objectAtIndex(0)) {
                     result += ",";
                 }
-                result += "\"" + item.id() + "\"";
+                result += "\"" + item.itemId() + "\"";
             }
             result += "],\n";
             for (SCItem item : _children) {
-                result += _indent + "\"" + item.id() + "\": " + item + ",\n";
+                result += _indent + item.itemId() + ": " + item + ",\n";
             }
             //result = result.substring(0, result.length() - 2);
         }

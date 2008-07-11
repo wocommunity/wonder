@@ -12,6 +12,16 @@ public class SCListView extends SCCollectionView {
     }
 
     @Override
+    public String cssName(WOContext context) {
+    	return "sc-collection-view sc-list-view";
+    }
+    
+    @Override
+    public String css(WOContext context) {
+    	return super.css(context) + " focus";
+    }
+    
+    @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.doAppendToResponse(response, context);
     }

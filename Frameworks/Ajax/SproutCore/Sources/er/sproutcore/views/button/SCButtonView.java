@@ -32,7 +32,7 @@ public class SCButtonView extends SCView {
     
     @Override
     public String css(WOContext context) {
-    	return super.css(context) + buttonSyle(context);
+    	return super.css(context) + " " +buttonSyle(context);
     }
 
     public String buttonSyle(WOContext context) {
