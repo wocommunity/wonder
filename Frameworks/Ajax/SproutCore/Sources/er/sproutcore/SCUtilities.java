@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSForwardException;

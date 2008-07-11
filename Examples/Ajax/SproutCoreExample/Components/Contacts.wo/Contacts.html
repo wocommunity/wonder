@@ -1,0 +1,27 @@
+<wo:ERXPartialWrapper key="body">
+
+<wo:SCJavaScript name="contacts/core.js" framework="app" key="pageJavaScript" />
+<wo:SCJavaScript name="contacts/english.lproj/strings.js" framework="app" key="pageJavaScript" />
+<wo:SCJavaScript name="contacts/controllers/app.js" framework="app" key="pageJavaScript" />
+<wo:SCJavaScript name="contacts/main.js" framework="app" key="pageJavaScript" />
+
+<wo:SCStyleSheet name="contacts/english.lproj/body.css" framework="app" key="@content_for_page_styles" />
+
+<div class="sc-welcome">
+  <img class="logo" src="/cgi-bin/WebObjects/SproutCoreExample.woa/_sc_/SproutCore/english.lproj/images/sproutcore-logo.png" />
+  <div class="message">
+  <wo:SCCheckboxView id="clock_checkbox" 
+  	label="Show Click"
+  	?value = "HelloWorld.appController.isClockShowing"
+  ></wo:SCCheckboxView>
+ <wo:SCButtonView id="clock_button" 
+  	label="Click me"
+  	?value = "HelloWorld.appController.isClockShowing"
+  ></wo:SCButtonView>
+  <wo:SCLabelView id="my_label"
+  	tag = "h1"
+  	?value = "HelloWorld.appController.greeting"
+  ></wo:SCLabelView>
+ </div>
+</div>
+</wo:ERXPartialWrapper>
