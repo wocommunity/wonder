@@ -1,20 +1,27 @@
 package er.sproutcore;
 
+import java.io.File;
+import java.io.FileFilter;
+
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOConstantValueAssociation;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXResponse;
+import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 
 public class SCStyleSheet extends WODynamicElement {
 
     WOAssociation _name;
     WOAssociation _framework;
+    WOAssociation _group;
     WOAssociation _key;
     
     
@@ -22,20 +29,44 @@ public class SCStyleSheet extends WODynamicElement {
         super(arg0, arg1, arg2);
         _name = (WOAssociation) arg1.objectForKey("name");
         _framework = (WOAssociation) arg1.objectForKey("framework");
+        if (_framework == null) {
+            _framework = new WOConstantValueAssociation("SproutCore");
+        }
         _key = (WOAssociation) arg1.objectForKey("key");
+        if (_key == null) {
+            _key = new WOConstantValueAssociation(SCPageTemplate.CLIENT_CSS);
+        }
+        _group = (WOAssociation) arg1.objectForKey("group");
+        if (_group == null) {
+            _group = new WOConstantValueAssociation("sproutcore");
+        }
     }
 
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
-        String name = (String) _name.valueInComponent(context.component());
-        String framework = (String) (_framework == null ? "SproutCore" : _framework.valueInComponent(context.component()));
-        String key = (String) (_key == null ? SCPageTemplate.CLIENT_CSS : _key.valueInComponent(context.component()));
+        String framework = (String) _framework.valueInComponent(context.component());
+        String group = (String) _group.valueInComponent(context.component());
+        String key = (String) _key.valueInComponent(context.component());
         ERXResponse styleResponse = ERXResponse.pushPartial(key);
-        String fullName = framework + "/" + name;
-        if("SproutCore".equals(framework)) {
-        	fullName = framework +"/english.lproj/"+ name;
+        NSMutableArray<String> scripts = new NSMutableArray<String>();
+        if(_name == null) {
+            File base = new File(SCUtilities.bundleResourcePath(framework));
+            File[] files = ERXFileUtilities.listFiles(new File(base, group + File.separator + "english.lproj"), false, new FileFilter() {
+                public boolean accept(File pathname) {
+                    return pathname.getName().endsWith(".css");
+                }});
+            for (int i = 0; i < files.length; i++) {
+                File file = files[i];
+                scripts.addObject(file.getName());
+            }
+        } else {
+            String name = (String) _name.valueInComponent(context.component());
+            scripts.addObject(name);
         }
-        appendStyle(styleResponse, context, fullName);
+        for (String script : scripts) {
+            String fullName = framework + "/" + group + "/english.lproj/" + script;
+            appendStyle(styleResponse, context, fullName);
+        }
         ERXResponse.popPartial();
     }
 

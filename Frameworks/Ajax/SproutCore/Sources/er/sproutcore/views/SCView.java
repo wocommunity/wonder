@@ -180,8 +180,8 @@ public class SCView extends WODynamicGroup {
         pullBindings(context, item);
         
         ERXResponse scriptResponse = ERXResponse.pushPartial(SCPageTemplate.CLIENT_JS);
-        NSArray<String> scripts = SCUtilities.require("SproutCore", scriptName());
-        log.info("adding: " +scripts);
+        NSArray<String> scripts = SCUtilities.require("SproutCore", "sproutcore", scriptName());
+        log.debug("adding: " +scripts);
         for (String script : scripts) {
             SCJavaScript.appendScript(scriptResponse, context, script);
         }

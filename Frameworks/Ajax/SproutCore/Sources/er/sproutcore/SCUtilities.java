@@ -1,6 +1,7 @@
 package er.sproutcore;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,6 +13,7 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXArrayUtilities;
@@ -43,14 +45,45 @@ public class SCUtilities {
     public static String scBase() {
         if (scBase == null) {
             String version = ERXProperties.stringForKeyWithDefault("er.sproutcore.version", "0.9.13");
-            scBase = ERXProperties.stringForKeyWithDefault("er.sproutcore.base", "/Library/Ruby/Gems/1.8/gems/sproutcore-" + version + "/frameworks/sproutcore");
+            scBase = ERXProperties.stringForKeyWithDefault("er.sproutcore.base", "/Library/Ruby/Gems/1.8/gems/sproutcore-" + version + "/frameworks");
         }
         return scBase;
     }
 
-    public static synchronized NSArray require(String bundleName, String name) {
-        String base = (bundleName != null && !"SproutCore".equals(bundleName) ? bundleName : scBase());
-        String fullName = bundleName + "/" + name;
+    public static String bundleResourcePath(String bundleName) {
+        NSBundle bundle = "app".equals(bundleName) ? NSBundle.mainBundle() : NSBundle.bundleForName(bundleName);
+        String basePath = "SproutCore".equals(bundleName) ? scBase() : bundle.resourcePath();
+        return basePath;
+    }
+
+    public static synchronized NSArray<String> requireAll(String bundleName, String groupName) {
+        String basePath = bundleResourcePath(bundleName);
+        File baseDir = new File(basePath, groupName);
+        File[] files = ERXFileUtilities.listFiles(baseDir, true, new FileFilter() {
+
+            public boolean accept(File f) {
+                return f.getName().endsWith(".js") || f.isDirectory();
+            }
+        });
+        NSMutableArray<String> dependencies = new NSMutableArray<String>(files.length);
+        for (int i = 0; i < files.length; i++) {
+            File file = files[i];
+            String name = file.getAbsolutePath().substring(baseDir.getAbsolutePath().length() + 1);
+            if(!dependencies.containsObject(name) && name.endsWith(".js")) {
+                NSArray<String> fileDependencies = require(bundleName, groupName, name);
+                for (String depencency : fileDependencies) {
+                    if(!dependencies.containsObject(depencency)) {
+                        dependencies.addObject(depencency);
+                    }
+                }
+            }
+        }
+        return dependencies;
+    }
+    
+    public static synchronized NSArray<String> require(String bundleName, String groupName, String name) {
+        String basePath = bundleResourcePath(bundleName);
+        String fullName = bundleName + "/" + groupName + "/" + name;
         NSMutableDictionary<String, NSMutableArray<String>> deps = (NSMutableDictionary) ERXThreadStorage.valueForKey("SCUtils.deps");
         if(deps == null) {
             deps = new NSMutableDictionary<String, NSMutableArray<String>>();
@@ -60,20 +93,17 @@ public class SCUtilities {
         if (dependencies == null) {
             dependencies = new NSMutableArray<String>();
             deps.put(fullName, dependencies);
-            File file = new File(base, name);
-            if("app".equals(base)) {
-            	file = new File(NSBundle.mainBundle().bundlePathURL().getFile(), "Contents" + File.separator + "Resources" + File.separator + name);
-            }
+            File file = new File(basePath, groupName + "/" + name);
             try {
                 String content = ERXFileUtilities.stringFromFile(file);
                 Pattern pattern = Pattern.compile("\\s*require\\(\\s*\\W+([A-Za-z0-9/_]+).?\\s*\\)");
                 Matcher matcher = pattern.matcher(content);
                 while (matcher.find()) {
                     String otherDep = matcher.group(1) + ".js";
-                    NSArray others = require(bundleName, otherDep);
+                    NSArray others = require(bundleName, groupName, otherDep);
                     dependencies = ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(dependencies, others).mutableClone();
 
-                    otherDep = bundleName + "/" + otherDep;
+                    otherDep = bundleName + "/" + groupName + "/" + otherDep;
                     if (!dependencies.containsObject(otherDep)) {
                         dependencies.add(otherDep);
                     }
@@ -86,7 +116,7 @@ public class SCUtilities {
             } catch (IOException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
             }
-            log.info(name +  "->" + dependencies);
+            log.debug(name +  "->" + dependencies);
         }
         return dependencies.immutableClone();
     }
@@ -97,7 +127,7 @@ public class SCUtilities {
 
     public static String staticUrl(String asset) {
     	ERXWOContext context = (ERXWOContext) ERXWOContext.currentContext();
-    	String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY, "SproutCore/english.lproj/" + asset, null);
+    	String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY, "SproutCore/sproutcore/english.lproj/" + asset, null);
         return url;
     }
 }

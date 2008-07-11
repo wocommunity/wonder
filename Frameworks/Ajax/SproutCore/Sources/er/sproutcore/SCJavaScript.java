@@ -22,6 +22,7 @@ public class SCJavaScript extends WODynamicElement {
     WOAssociation _name;
     WOAssociation _framework;
     WOAssociation _key;
+    WOAssociation _group;
 
     public SCJavaScript(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
@@ -30,22 +31,31 @@ public class SCJavaScript extends WODynamicElement {
 		if (_framework == null) {
 			_framework = new WOConstantValueAssociation("SproutCore");
 		}
-		_key = (WOAssociation) arg1.objectForKey("key");
-		if (_key == null) {
-			_key = new WOConstantValueAssociation(SCPageTemplate.CLIENT_JS);
-		}
+        _key = (WOAssociation) arg1.objectForKey("key");
+        if (_key == null) {
+            _key = new WOConstantValueAssociation(SCPageTemplate.CLIENT_JS);
+        }
+        _group = (WOAssociation) arg1.objectForKey("group");
+        if (_group == null) {
+            _group = new WOConstantValueAssociation("sproutcore");
+        }
 	}
 
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         ERXResponse scriptResponse = ERXResponse.pushPartial((String) _key.valueInComponent(context.component()));
-        String name = (String) _name.valueInComponent(context.component());
         String framework = (String) _framework.valueInComponent(context.component());
+        String group = (String) _group.valueInComponent(context.component());
         if(framework.equals("SproutCore")) {
             appendScript(scriptResponse, context, "SproutCore/prototype/prototype.js");
         }
-        NSArray<String> scripts = SCUtilities.require(framework, name);
-        log.info("adding: " +scripts);
+        NSArray<String> scripts;
+        if(_name == null) {
+            scripts = SCUtilities.requireAll(framework, group);
+        } else {
+            scripts = SCUtilities.require(framework, group, (String)_name.valueInComponent(context.component()));
+        }
+        log.debug("adding: " +scripts);
         for (String script : scripts) {
             appendScript(scriptResponse, context, script);
         }
