@@ -84,7 +84,8 @@ public class ERXEOGlobalIDUtilities {
     		return _data[offset + 0];
     	}
 
-    	private short extractShort(int offset) {
+    	@SuppressWarnings("cast")
+		private short extractShort(int offset) {
     		short result = 0;
     		result |= ((int)extractByte(offset + 0)) & 255;
     		result <<= 8;
@@ -138,7 +139,8 @@ public class ERXEOGlobalIDUtilities {
     		return extractLong(_RandomStartIndex);
     	}
     	
-    	public String toString() {
+    	@Override
+		public String toString() {
     		return host().getHostAddress() + ":" + port() + " " + counter() + "@" + timestamp();
     	}
     }
@@ -156,8 +158,8 @@ public class ERXEOGlobalIDUtilities {
      * global IDs are not EOKeyValueGlobalIDs and the primary keys are not single values.
      * @param globalIDs
      */
-    public static NSArray primaryKeyValuesWithGlobalIDs(NSArray globalIDs) {
-    	NSMutableArray result = new NSMutableArray();
+    public static NSArray<Object> primaryKeyValuesWithGlobalIDs(NSArray<EOGlobalID> globalIDs) {
+    	NSMutableArray<Object> result = new NSMutableArray<Object>();
     	if(globalIDs.count() > 0) {
     		NSDictionary gidsByEntity = globalIDsGroupedByEntityName(globalIDs);
     		for(Enumeration e = gidsByEntity.keyEnumerator(); e.hasMoreElements();) {
@@ -182,8 +184,8 @@ public class ERXEOGlobalIDUtilities {
      * @param entityName
      * @param values
      */
-    public static NSArray globalIDsWithPrimaryKeyValues(String entityName, NSArray values) {
-        NSMutableArray result = new NSMutableArray();
+    public static NSArray<EOGlobalID> globalIDsWithPrimaryKeyValues(String entityName, NSArray<Object> values) {
+        NSMutableArray<EOGlobalID> result = new NSMutableArray<EOGlobalID>();
         if(values.count() > 0) {
             for (Enumeration pks = values.objectEnumerator(); pks.hasMoreElements();) {
                 Object value = pks.nextElement();
@@ -202,7 +204,7 @@ public class ERXEOGlobalIDUtilities {
      * @return the fetched EO
      */
     public static EOEnterpriseObject fetchObjectWithGlobalID(EOEditingContext ec, EOGlobalID gid) {
-    	NSArray results = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, new NSArray(gid));
+    	NSArray results = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, new NSArray<EOGlobalID>(gid));
     	EOEnterpriseObject eo;
     	if (results.count() > 0) {
     		eo = (EOEnterpriseObject) results.objectAtIndex(0);
@@ -221,7 +223,7 @@ public class ERXEOGlobalIDUtilities {
      * @param globalIDs the global ids to fetch
      * @return the fetched EO's
      */
-    public static NSMutableArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
+    public static NSMutableArray<EOEnterpriseObject> fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
     	return ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, globalIDs, false);
     }
 
@@ -233,8 +235,9 @@ public class ERXEOGlobalIDUtilities {
      * @param refreshesRefetchedObjects whether or not to refresh refetched objects
      * @return the fetched EO's
      */
-    public static NSMutableArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs, boolean refreshesRefetchedObjects) {
-    	NSMutableArray result = new NSMutableArray();
+    @SuppressWarnings("unchecked")
+	public static NSMutableArray<EOEnterpriseObject> fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs, boolean refreshesRefetchedObjects) {
+    	NSMutableArray<EOEnterpriseObject> result = new NSMutableArray<EOEnterpriseObject>();
 		ec.lock();
 		try {
 	    	NSDictionary gidsByEntity = globalIDsGroupedByEntityName(globalIDs);
@@ -242,7 +245,7 @@ public class ERXEOGlobalIDUtilities {
 	    		String entityName = (String) e.nextElement();
 	    		NSArray gidsForEntity = (NSArray) gidsByEntity.objectForKey(entityName);
 	    		
-	    		NSMutableArray qualifiers = new NSMutableArray();
+	    		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
 	        	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
 	    		for (Enumeration gids = gidsForEntity.objectEnumerator(); gids.hasMoreElements();) {
 	    			EOGlobalID g = (EOGlobalID) gids.nextElement();
@@ -254,7 +257,22 @@ public class ERXEOGlobalIDUtilities {
 	    					result.addObject(eo);
 	    				}
 	    				else {
-	    					fetch = true;
+	    					NSDictionary row;
+	    			        EODatabaseContext databaseContext = (EODatabaseContext) ((EOObjectStoreCoordinator) ec.rootObjectStore()).objectStoreForGlobalID(g);
+	    			        databaseContext.lock();
+	    			        try {
+		    					row = databaseContext.snapshotForGlobalID(g, ec.fetchTimestamp());
+	    			        }
+	    			        finally {
+	    			        	databaseContext.unlock();
+	    			        }
+	    					if (row == null) {
+	    						fetch = true;
+	    					}
+	    					else {
+		    					eo = ec.faultForGlobalID(g, ec);
+		    					result.addObject(eo);
+	    					}
 	    				}
 	    			}
 	    			if (fetch) {
@@ -266,7 +284,7 @@ public class ERXEOGlobalIDUtilities {
 		    		EOQualifier qualifier = new EOOrQualifier(qualifiers);
 		    		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
 		    		fetchSpec.setRefreshesRefetchedObjects(refreshesRefetchedObjects);
-		    		NSArray details = ec.objectsWithFetchSpecification(fetchSpec);
+		    		NSArray<EOEnterpriseObject> details = ec.objectsWithFetchSpecification(fetchSpec);
 		    		result.addObjectsFromArray(details);
 	    		}
 	    	}
@@ -286,11 +304,10 @@ public class ERXEOGlobalIDUtilities {
      * @param globalIDs
      * @param prefetchingKeypaths
      */
-    public static NSArray fireFaultsForGlobalIDs(EOEditingContext ec, 
-    		NSArray globalIDs, NSArray prefetchingKeypaths) {
-    	NSMutableArray result = new NSMutableArray(globalIDs.count());
+    public static NSArray<EOEnterpriseObject> fireFaultsForGlobalIDs(EOEditingContext ec, NSArray globalIDs, NSArray prefetchingKeypaths) {
+    	NSMutableArray<EOEnterpriseObject> result = new NSMutableArray<EOEnterpriseObject>(globalIDs.count());
     	if(globalIDs.count() > 0) {
-    		NSMutableArray faults = new NSMutableArray(globalIDs.count());
+    		NSMutableArray<EOGlobalID> faults = new NSMutableArray<EOGlobalID>(globalIDs.count());
     		for (Enumeration ids = globalIDs.objectEnumerator(); ids.hasMoreElements();) {
     			EOGlobalID gid = (EOGlobalID) ids.nextElement();
     			EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
@@ -300,7 +317,7 @@ public class ERXEOGlobalIDUtilities {
     				result.addObject(eo);
     			}
     		}
-    		NSArray loadedObjects = fetchObjectsWithGlobalIDs(ec, faults);
+    		NSArray<EOEnterpriseObject> loadedObjects = fetchObjectsWithGlobalIDs(ec, faults);
     		result.addObjectsFromArray(loadedObjects);
     		if(prefetchingKeypaths != null && prefetchingKeypaths.count() > 0) {
     			NSDictionary objectsByEntity = ERXArrayUtilities.arrayGroupedByKeyPath(result, "entityName");
