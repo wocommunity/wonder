@@ -11,7 +11,6 @@ import er.extensions.ERXFrameworkPrincipal;
  * @author mschrag
  */
 public class ERAttachmentPrincipal extends ERXFrameworkPrincipal {
-  @SuppressWarnings("unchecked")
   public final static Class[] REQUIRES = new Class[] { ERXExtensions.class };
 
   static {
