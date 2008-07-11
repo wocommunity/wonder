@@ -9,6 +9,7 @@ public class SCSplitDividerView extends SCView {
 
     public SCSplitDividerView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
+        removeProperty("width");
     }
 
     @Override

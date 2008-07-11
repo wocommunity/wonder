@@ -1,0 +1,1 @@
+This directory contains files that would normally be included in a "fixtures" directory.  However, since we want the fixtures to be loaded in this instance, we are storing them in a different directory name so they will not be omitted from a build.
