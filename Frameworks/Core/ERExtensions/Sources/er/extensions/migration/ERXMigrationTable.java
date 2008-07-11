@@ -433,6 +433,31 @@ public class ERXMigrationTable {
 	public ERXMigrationColumn newIntegerColumn(String name, int scale, int precision, boolean allowsNull, Object defaultValue) throws SQLException {
 		return newColumn(name, Types.INTEGER, 0, scale, precision, allowsNull, null, defaultValue);
 	}
+	
+	/**
+	 * Returns a new long column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newBigIntegerColumn(String name, boolean allowsNull) throws SQLException {
+		return newColumn(name, Types.BIGINT, 0, 0, 0, allowsNull, null);
+	}
+
+	/**
+	 * Returns a new long column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newBigIntegerColumn(String name, boolean allowsNull, Long defaultValue) throws SQLException {
+		return newColumn(name, Types.BIGINT, 0, 0, 0, allowsNull, null, defaultValue);
+	}
 
 	/**
 	 * Returns a new float column.  See newColumn(..) for the full docs.
