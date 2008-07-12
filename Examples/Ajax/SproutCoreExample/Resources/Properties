@@ -2,6 +2,8 @@
 ognl.helperFunctions=true
 ognl.inlineBindings=true
 
+er.sproutcore.base=/Volumes/Home/extras/sproutcore-samples/frameworks
+
 # EOF
 er.extensions.ERXApplication.useEditingContextUnlocker=true
 er.extensions.ERXEC.defaultAutomaticLockUnlock=true

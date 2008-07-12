@@ -39,7 +39,7 @@ public class SCButtonView extends SCView {
     }
 
     public String buttonSyle(WOContext context) {
-    	String style = "button regular normal";
+    	String style = "button normal " + valueForBinding("theme", "regular", context.component());
     	return style;
     }
 

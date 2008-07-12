@@ -5,6 +5,8 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
+import er.sproutcore.SCItem;
+
 public class SCTextFieldView extends SCFieldView {
 
     public SCTextFieldView(String arg0, NSDictionary arg1, WOElement arg2) {
@@ -12,9 +14,17 @@ public class SCTextFieldView extends SCFieldView {
     }
 
     @Override
+    public String elementName(WOContext context) {
+        return "input";
+    }
+    
+    @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
-    	response.appendContentString("<input type='text' class='");
-    	response.appendContentString(id(context));
-    	response.appendContentString("'/>");
+    	super.doAppendToResponse(response, context);
+    }
+    
+
+    public void appendAttributesToResponse(WOResponse arg0, WOContext arg1) {
+       arg0._appendTagAttributeAndValue("type", "text", false);
     }
 }

@@ -40,15 +40,10 @@ public class SCView extends WODynamicGroup {
 
     private NSMutableDictionary<String, WOAssociation> _bindings;
 
-    private static NSArray BINDABLE_KEYS = new NSArray(new String[] { "isEnabled", "isVisible", });
-
-    private static NSArray PROPERTY_KEYS = new NSArray(new String[] { "isEnabled", "isVisible", "hasCustomPanelWrapper", "localize", "validator", "fieldLabel",
-            "acceptsFirstResponder", "content", "value", "maxThickness", "minThickness", "canCollapse", "isCollapsed", "delegate", "isDropTarget", "paneType", "view", "animate",
-            "visibleAnimation", "style", "class", });
-
     public SCView(String name, NSDictionary associations, WOElement parent) {
         super(name, associations, parent);
-        _associations = new NSMutableDictionary<String, WOAssociation>();
+        _associations = associations.mutableClone();
+        updateDefaultValues();
         _bindings = new NSMutableDictionary<String, WOAssociation>();
         _properties = new NSMutableDictionary<String, WOAssociation>();
 
@@ -61,8 +56,11 @@ public class SCView extends WODynamicGroup {
                 _properties.setObjectForKey(association, key);
             }
             log.debug(key + ": " + association);
-            _associations.setObjectForKey(association, key);
         }
+        adjustProperties();
+    }
+
+    protected void adjustProperties() {
         removeProperty("id");
         removeProperty("className");
         removeProperty("class");
@@ -70,6 +68,11 @@ public class SCView extends WODynamicGroup {
         removeProperty("style");
         removeProperty("outlet");
         removeProperty("view");
+    }
+
+    protected void updateDefaultValues() {
+        // TODO Auto-generated method stub
+        
     }
 
     public boolean hasProperty(String string) {
@@ -83,7 +86,7 @@ public class SCView extends WODynamicGroup {
     public void setProperty(String name, WOAssociation association) {
         _properties.setObjectForKey(association, name);
     }
-    
+
     public void moveProperty(String from, String to) {
         WOAssociation association = _properties.removeObjectForKey(from);
         if(association != null) {
@@ -97,10 +100,6 @@ public class SCView extends WODynamicGroup {
     
     protected NSDictionary properties() {
         return _properties;
-    }
-
-    public NSArray propertyKeys() {
-        return PROPERTY_KEYS;
     }
 
     public NSDictionary<String, WOAssociation> associations() {
