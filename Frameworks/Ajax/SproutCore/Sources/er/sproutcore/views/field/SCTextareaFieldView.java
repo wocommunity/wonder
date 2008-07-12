@@ -10,7 +10,11 @@ public class SCTextareaFieldView extends SCTextFieldView {
     public SCTextareaFieldView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
     }
-
+    
+    public String elementName(WOContext context) {
+        return "textarea";
+    }
+ 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.doAppendToResponse(response, context);
