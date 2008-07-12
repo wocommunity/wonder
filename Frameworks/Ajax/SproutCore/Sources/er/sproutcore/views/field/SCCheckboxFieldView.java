@@ -11,6 +11,10 @@ public class SCCheckboxFieldView extends SCFieldView {
         super(arg0, arg1, arg2);
     }
 
+    public String type() {
+        return "checkbox";
+    }
+
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.doAppendToResponse(response, context);
