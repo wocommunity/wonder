@@ -11,6 +11,10 @@ public class SCRadioFieldView extends SCFieldView {
         super(arg0, arg1, arg2);
     }
 
+    public String type() {
+        return "radio";
+    }
+
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.doAppendToResponse(response, context);

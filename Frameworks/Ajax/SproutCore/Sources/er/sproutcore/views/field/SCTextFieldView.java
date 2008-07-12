@@ -13,18 +13,13 @@ public class SCTextFieldView extends SCFieldView {
         super(arg0, arg1, arg2);
     }
 
-    @Override
-    public String elementName(WOContext context) {
-        return "input";
+    public String type() {
+        return "text";
     }
-    
+ 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
     	super.doAppendToResponse(response, context);
     }
     
-
-    public void appendAttributesToResponse(WOResponse arg0, WOContext arg1) {
-       arg0._appendTagAttributeAndValue("type", "text", false);
-    }
 }

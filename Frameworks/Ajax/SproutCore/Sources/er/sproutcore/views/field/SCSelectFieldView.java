@@ -12,6 +12,11 @@ public class SCSelectFieldView extends SCFieldView {
     }
 
     @Override
+    public String elementName(WOContext context) {
+        return "select";
+    }
+
+    @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.doAppendToResponse(response, context);
     }
