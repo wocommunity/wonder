@@ -367,6 +367,11 @@ public class Bug extends _Bug implements Markable {
     public Number bugid() {
         return (Number) rawPrimaryKey();
     }
+    
+
+    public Number id() {
+        return (Number) rawPrimaryKey();
+    }
 }
 
 
