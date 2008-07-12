@@ -230,5 +230,15 @@
         }
     ); 
     restrictingQualifier = "(type='b')"; 
-    userInfo = {modificationDate = "2002-05-07 22:38:33 +0200"; }; 
+    userInfo = {modificationDate = "2002-05-07 22:38:33 +0200";
+    ERXAuditKey = (
+   state,
+   subject,
+   comments,
+   component,
+   owner,
+   priority,
+   targetRelease,
+   bugTestItems
+); }; 
 }
