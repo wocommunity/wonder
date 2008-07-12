@@ -21,7 +21,7 @@
   <div class="buttons">
     <wo:SCButtonView label = "Show Preferences" />
     <wo:SCButtonView label = "Default" default="$true"/>
-    <wo:SCButtonView label = "Cancel"  enabled="$false" width="80" />
+    <wo:SCButtonView label = "Cancel"  cancel="$true" width="80" />
     <wo:SCButtonView label = "OK"      enabled="$false" selected="$true" width="80" />
   </div>
   <br />
@@ -143,10 +143,11 @@
   &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :theme =&gt; :square %&gt;
 </code></p>
   <div class="buttons">
-    <%= button_view :outlet => true, :label => 'Reg', :theme => :square %>
-    <%= button_view :outlet => true, :label => 'Dis', :theme => :square, :enabled => false %>
-    <%= button_view :outlet => true, :label => 'Sel', :theme => :square, :selected => true %>
-    <%= button_view :outlet => true, :label => 'Sel-Dis', :theme => :square, :enabled => false, :selected => true %>
+    <wo:SCButtonView theme="square" label = "Regular" />
+    <wo:SCButtonView theme="square" label = "Default"  default="$true"/>
+    <wo:SCButtonView theme="square" label = "Disabled" enabled="$false" />
+    <wo:SCButtonView theme="square" label = "Selected" selected="$true" />
+    <wo:SCButtonView theme="square" label = "Selected/Disabled" selected="$true" enabled="$false"/>
   </div>
 </div>
 
@@ -189,5 +190,4 @@
     <%= checkbox_field_view :outlet => true, :label => 'Disabled Checkbox', :enabled => false %>
   </div>
 </div>
-
 </wo:ERXPartialWrapper>

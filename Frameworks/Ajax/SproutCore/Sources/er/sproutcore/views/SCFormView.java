@@ -12,6 +12,11 @@ public class SCFormView extends SCView {
     }
 
     @Override
+    public String elementName(WOContext context) {
+        return "form";
+    }
+    
+    @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.doAppendToResponse(response, context);
     }
