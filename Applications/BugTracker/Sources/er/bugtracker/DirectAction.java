@@ -26,6 +26,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.calendar.ERPublishCalendarPage;
 import er.calendar.ERSimpleEvent;
+import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.directtoweb.ERD2WDirectAction;
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.eof.ERXEC;
@@ -55,8 +56,37 @@ public class DirectAction extends ERD2WDirectAction {
             ec.unlock();
         }
     }
-
     public WOComponent pingAction() {
+        WOComponent result = null;
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        try {
+            //EOUtilities.rawRowsForSQL(ec, (String) EOModelGroup.defaultGroup().modelNames().lastObject(), "select count(*) from PRIORITY", null);
+            People user = People.clazz.anyUser(ec);
+            ERCoreBusinessLogic.setActor(user);
+            Bug bug = Bug.clazz.createAndInsertObject(ec);
+            bug.setSubject("Test");
+     //       bug.setTextDescription("Test");
+            bug.setComponent(Component.clazz.allObjects(ec).lastObject());
+            ec.saveChanges();
+            bug.setSubject("Test");
+            ec.saveChanges();
+            bug.setSubject("Test1");
+            bug.setOwner(People.clazz.anyUser(ec));
+            ec.saveChanges();
+            ec.deleteObject(bug);
+            ec.saveChanges();
+            result = pageWithName("ERXSuccess");
+        } catch (Exception e) {
+            log.error(e);
+        } finally {
+            ERCoreBusinessLogic.setActor(null);
+            ec.unlock();
+        }
+        return result;
+    }
+
+    public WOComponent pingxAction() {
         WOComponent result = null;
         EOEditingContext ec = ERXEC.newEditingContext();
         ec.lock();
