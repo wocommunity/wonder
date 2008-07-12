@@ -12,6 +12,11 @@ public class SCSplitView extends SCView {
         super(arg0, arg1, arg2);
         moveProperty("direction", "layoutDirection");
     }
+    
+    @Override
+    public String css(WOContext context) {
+        return super.css(context) + " " +  valueForBinding("direction", "horizontal", context.component());
+    }
 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
