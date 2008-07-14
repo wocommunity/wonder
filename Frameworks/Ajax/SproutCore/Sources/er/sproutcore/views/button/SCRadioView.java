@@ -20,7 +20,7 @@ public class SCRadioView extends SCButtonView {
     }
 
     @Override
-    public String buttonSyle(WOContext context) {
+    public String buttonStyle(WOContext context) {
         return "button radio normal";
     }
     

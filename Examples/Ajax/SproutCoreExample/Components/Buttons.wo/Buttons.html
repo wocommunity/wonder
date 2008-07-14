@@ -128,11 +128,11 @@
 </code></p>
 
   <div class="buttons">
-    <%= disclosure_view :outlet => true, :value => true, :label => 'Open Disclosure' %> 
-    <%= disclosure_view :outlet => true, :label => 'Closed Disclosure', :value => false %>
-    <%= disclosure_view :outlet => true, :label => 'Disabled Open Disclosure', :value => false, :enabled => false %>
-    <%= disclosure_view :outlet => true, :label => 'Disabled Open Disclosure', :value => true, :enabled => false %>
-    No Label: <%= disclosure_view :outlet => true, :value => true %>
+    <wo:SCDisclosureView label = "Open Disclosure" value = "$true" /> 
+    <wo:SCDisclosureView label = "Closed Disclosure" value = "$false" /> 
+    <wo:SCDisclosureView label = "Disabled open Disclosure" value = "$true" enabled="$true" /> 
+    <wo:SCDisclosureView label = "Disabled closed Disclosure" value = "$false"  enabled="$true" /> 
+    No Label: <wo:SCDisclosureView value = "$true" /> 
   </div>
 </div>
 
