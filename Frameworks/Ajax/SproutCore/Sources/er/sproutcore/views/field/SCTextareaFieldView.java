@@ -11,6 +11,7 @@ public class SCTextareaFieldView extends SCTextFieldView {
         super(arg0, arg1, arg2);
     }
     
+    @Override
     public String elementName(WOContext context) {
         return "textarea";
     }

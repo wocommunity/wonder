@@ -23,6 +23,7 @@ public class SCComponent extends ERXNonSynchronizingComponent {
         super(arg0);
     }
 
+    @SuppressWarnings("cast")
     @Override
     public final void appendToResponse(WOResponse response, WOContext context) {
         SCItem item = SCItem.pushItem(stringValueForBinding("id"), className());

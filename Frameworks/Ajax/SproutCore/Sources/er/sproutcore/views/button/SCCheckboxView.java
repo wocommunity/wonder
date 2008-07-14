@@ -6,7 +6,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.sproutcore.SCItem;
-import er.sproutcore.SCUtilities;
 
 public class SCCheckboxView extends SCButtonView {
 
@@ -24,6 +23,7 @@ public class SCCheckboxView extends SCButtonView {
     	return "button checkbox normal";
     }
     
+    @Override
     protected void pullBindings(WOContext context, SCItem item) {
         super.pullBindings(context, item);
         item.addProperty("theme", "checkbox");
