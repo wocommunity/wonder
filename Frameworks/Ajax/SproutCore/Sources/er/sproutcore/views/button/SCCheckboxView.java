@@ -40,7 +40,7 @@ public class SCCheckboxView extends SCButtonView {
         super.doAppendToResponse(response, context);
         
         if (value != null) {
-            response.appendContentString("</span></span>");
+            response.appendContentString("</span>");
         }
     }
 }
