@@ -4,6 +4,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.foundation.ERXStringUtilities;
 import er.sproutcore.SCItem;
 
 public class SCSegmentedView extends SCComponent {
@@ -34,6 +35,10 @@ public class SCSegmentedView extends SCComponent {
     
     public String itemIdentifier() {
         return stringValueForBinding("itemIdentifier", null);
+    }
+    
+    public String itemOutlet() {
+    	return item() + "Button";
     }
 
     public String containerID() {
@@ -67,6 +72,8 @@ public class SCSegmentedView extends SCComponent {
     }
 
     public String itemLabel() {
-        return stringValueForBinding("itemLabel", item().toString());
+    	String defaultLabel = item().toString();
+    	defaultLabel = ERXStringUtilities.displayNameForKey(defaultLabel);
+        return stringValueForBinding("itemLabel", defaultLabel);
     }
 }
