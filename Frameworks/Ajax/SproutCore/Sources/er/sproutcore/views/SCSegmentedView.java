@@ -3,7 +3,8 @@ package er.sproutcore.views;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCodingAdditions;
+
+import er.sproutcore.SCItem;
 
 public class SCSegmentedView extends SCComponent {
     
@@ -33,7 +34,26 @@ public class SCSegmentedView extends SCComponent {
         return stringValueForBinding("itemIdentifier", null);
     }
 
+    public String containerID() {
+      SCItem item = SCItem.currentItem();
+      return (item.isRoot()) ? item.id() : null;
+    }
+    
+    public String containerClass() {
+      StringBuffer css = new StringBuffer();
+      if (!booleanValueForBinding("enabled", true)) {
+        css.append("disabled segments disabled_segment");
+      }
+      else {
+        css.append("segments");
+        css.append(" ");
+        css.append(SCItem.currentItem().id());
+      }
+      return css.toString();
+    }
+    
     public String itemClass() {
+      // disabled segments disabled_segment
         int index = list().indexOfObject(item());
         
         String extra = "";
