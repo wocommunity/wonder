@@ -244,6 +244,10 @@ public class SCView extends WODynamicGroup {
     protected SCItem popItem() {
         return SCItem.popItem();
     }
+    
+    protected boolean skipPropertyIfNull(String propertyName) {
+      return false;
+    }
 
     protected void pullBindings(WOContext context, SCItem item) {
         for (String key : _bindings.allKeys()) {
@@ -254,7 +258,12 @@ public class SCView extends WODynamicGroup {
         for (String key : _properties.allKeys()) {
             Object value = _properties.objectForKey(key).valueInComponent(context.component());
             log.debug("Prop: " + key + ":" + value);
-            item.addProperty(key, value == null ? NSKeyValueCoding.NullValue : value);
+            if (value == null && !skipPropertyIfNull(key)) {
+              item.addProperty(key, NSKeyValueCoding.NullValue);
+            }
+            else if (value != null) {
+              item.addProperty(key, value);
+            }
         }
     }
 
