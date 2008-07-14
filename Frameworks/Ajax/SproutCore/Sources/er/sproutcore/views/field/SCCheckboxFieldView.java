@@ -11,6 +11,7 @@ public class SCCheckboxFieldView extends SCFieldView {
         super(arg0, arg1, arg2);
     }
 
+    @Override
     public String type() {
         return "checkbox";
     }

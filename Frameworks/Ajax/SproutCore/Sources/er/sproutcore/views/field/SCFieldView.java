@@ -27,6 +27,7 @@ public class SCFieldView extends SCView {
         super.doAppendToResponse(response, context);
     }
 
+    @Override
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
         if(type() != null) {
             response._appendTagAttributeAndValue("type", type(), false);

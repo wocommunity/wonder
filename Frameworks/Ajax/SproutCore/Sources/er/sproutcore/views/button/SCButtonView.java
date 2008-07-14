@@ -1,14 +1,10 @@
 package er.sproutcore.views.button;
 
-import java.lang.annotation.Documented;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.sproutcore.SCUtilities;
 import er.sproutcore.views.SCView;
 
 public class SCButtonView extends SCView {
@@ -23,6 +19,7 @@ public class SCButtonView extends SCView {
         removeProperty("label");
     }
 
+    @Override
     protected Object defaultElementName() {
         return "a";
     }

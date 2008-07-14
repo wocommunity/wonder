@@ -13,7 +13,6 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXArrayUtilities;
@@ -30,10 +29,6 @@ public class SCUtilities {
      * <code>er.sproutcore.base</code>.
      */
     private static String scBase;
-
-    private static NSMutableDictionary<String, NSMutableArray<String>> deps = new NSMutableDictionary<String, NSMutableArray<String>>();
-
-    private static NSMutableDictionary<String, String> code = new NSMutableDictionary<String, String>();
 
     /**
      * Returns an external URL for the sproutcore libs to prepend via the
@@ -84,6 +79,7 @@ public class SCUtilities {
         return dependencies;
     }
     
+    @SuppressWarnings("unchecked")
     public static synchronized NSArray<String> require(String bundleName, String groupName, String name) {
         String basePath = bundleResourcePath(bundleName);
         String fullName = bundleName + "/" + groupName + "/" + name;
