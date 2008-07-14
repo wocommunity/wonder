@@ -64,9 +64,11 @@ public class SCSegmentedView extends SCComponent {
         
         String extra = "";
         if(list().count() > 1) {
-            extra = " segment " + (index == 0 ? "segment-left" : index == list().count() - 1 ? "segment-right" : "segment-inner");
+        	String theme = stringValueForBinding("theme", "regular");
+            extra = theme + " segment " + (index == 0 ? "segment-left" : index == list().count() - 1 ? "segment-right" : "segment-inner");
         }
             
+
         return stringValueForBinding("itemClass", "") + extra;
     }
 
