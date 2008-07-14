@@ -41,8 +41,15 @@ public class SCButtonView extends SCView {
     }
 
     public String buttonStyle(WOContext context) {
-    	String style = "button normal " + valueForBinding("theme", "regular", context.component());
-    	return style;
+    	String theme = (String)valueForBinding("theme", "regular", context.component());
+    	String size = (String)valueForBinding("size", "normal", context.component());
+    	StringBuffer css = new StringBuffer();
+    	css.append("button");
+    	css.append(" ");
+    	css.append(theme);
+    	css.append(" ");
+    	css.append(size);
+    	return css.toString();
     }
 
     protected String label(WOContext context) {
