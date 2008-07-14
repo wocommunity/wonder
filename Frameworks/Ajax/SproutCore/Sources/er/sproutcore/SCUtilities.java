@@ -59,6 +59,9 @@ public class SCUtilities {
     public static synchronized NSArray<String> requireAll(String bundleName, String groupName) {
         String basePath = bundleResourcePath(bundleName);
         File baseDir = new File(basePath, groupName);
+        if (!baseDir.exists()) {
+          throw new IllegalArgumentException("The folder '" + baseDir + "' does not exist.");
+        }
         File[] files = ERXFileUtilities.listFiles(baseDir, true, new FileFilter() {
 
             public boolean accept(File f) {
@@ -94,6 +97,9 @@ public class SCUtilities {
             dependencies = new NSMutableArray<String>();
             deps.put(fullName, dependencies);
             File file = new File(basePath, groupName + "/" + name);
+            if (!file.exists()) {
+              throw new IllegalArgumentException("The file '" + file + "' does not exist.");
+            }
             try {
                 String content = ERXFileUtilities.stringFromFile(file);
                 Pattern pattern = Pattern.compile("\\s*require\\(\\s*\\W+([A-Za-z0-9/_]+).?\\s*\\)");
