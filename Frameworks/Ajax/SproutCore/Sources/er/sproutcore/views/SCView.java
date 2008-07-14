@@ -167,6 +167,10 @@ public class SCView extends WODynamicGroup {
         return (String) valueForBinding("id", context.component());
     }
 
+    public String outlet(WOContext context) {
+    	return (String) valueForBinding("outlet", id(context), context.component());
+    }
+    
     public String elementName(WOContext context) {
         String tag = (String) valueForBinding("elementName", defaultElementName(), context.component());
         tag = (String) valueForBinding("tag",tag, context.component());
@@ -238,7 +242,7 @@ public class SCView extends WODynamicGroup {
     }
 
     protected SCItem pushItem(WOContext context) {
-        return SCItem.pushItem(id(context), className(context));
+        return SCItem.pushItem(id(context), className(context), outlet(context));
     }
 
     protected SCItem popItem() {
