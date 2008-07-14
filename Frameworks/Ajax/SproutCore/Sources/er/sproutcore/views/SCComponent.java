@@ -4,6 +4,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.sproutcore.SCItem;
@@ -16,22 +18,56 @@ import er.sproutcore.SCItem;
  * 
  */
 public class SCComponent extends ERXNonSynchronizingComponent {
+	private NSMutableDictionary<String, String> _movedProperties;
+	private NSMutableArray<String> _removedProperties;
+	
+    public SCComponent(WOContext context) {
+        super(context);
+    	_movedProperties = new NSMutableDictionary<String, String>();
+    	_removedProperties = new NSMutableArray<String>();
+    }
 
-    public SCComponent(WOContext arg0) {
-        super(arg0);
+    protected void moveProperty(String bindingName, String propertyName) {
+    	_movedProperties.setObjectForKey(propertyName, bindingName);
+    }
+    
+    protected void removeProperty(String propertyName) {
+    	_removedProperties.addObject(propertyName);
+    }
+    
+    protected boolean skipPropertyIfNull(String propertyName) {
+      return false;
     }
 
     @SuppressWarnings("cast")
     @Override
     public final void appendToResponse(WOResponse response, WOContext context) {
         SCItem item = SCItem.pushItem(stringValueForBinding("id"), className());
-        for (String key : ((NSArray<String>) bindingKeys())) {
+        for (String key : (NSArray<String>) bindingKeys()) {
             Object value = valueForBinding(key);
-            value = value == null ? NSKeyValueCoding.NullValue : value;
-            if (key.startsWith("?")) {
-                item.addBinding(key.substring(1), value);
-            } else {
-                item.addProperty(key, value);
+            boolean binding = key.startsWith("?");
+            String itemName;
+            if (binding) {
+            	itemName = key.substring(1);
+            }
+            else {
+            	itemName = key;
+            }
+            
+            String movedPropertyName = _movedProperties.objectForKey(itemName);
+            if (movedPropertyName != null) {
+            	itemName = movedPropertyName;
+            }
+            
+            if (!_removedProperties.containsObject(itemName)) {
+	            if (binding) {
+	                item.addBinding(itemName, value == null ? NSKeyValueCoding.NullValue : value);
+	            } else if (value == null && !skipPropertyIfNull(itemName)) {
+	            	item.addProperty(itemName, NSKeyValueCoding.NullValue);
+	            }
+	            else if (value != null) {
+	            	item.addProperty(itemName, value);
+	            }
             }
         }
         doAppendToResponse(response, context);
