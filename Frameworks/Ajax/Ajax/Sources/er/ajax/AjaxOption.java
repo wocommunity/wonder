@@ -15,6 +15,7 @@ public class AjaxOption {
   public static AjaxOption.Type STRING_ARRAY = new AjaxOption.Type(5);
   public static AjaxOption.Type BOOLEAN = new AjaxOption.Type(6);
   public static AjaxOption.Type STRING_OR_ARRAY = new AjaxOption.Type(7);
+  public static AjaxOption.Type DICTIONARY = new AjaxOption.Type(8);
 
   public static class Type {
     private int _number;
@@ -44,70 +45,8 @@ public class AjaxOption {
     return _type;
   }
 
-  public String processValue(Object value) {
-    String strValue;
-    
-    AjaxOption.Type type = _type;
-    
-    if (type == AjaxOption.STRING_OR_ARRAY) {
-      if (value == null) {
-      }
-      else if (value instanceof NSArray) {
-        type = AjaxOption.ARRAY;
-      }
-      else if (value instanceof String) {
-        strValue = (String)value;
-        if (strValue.startsWith("[")) {
-          type = AjaxOption.ARRAY;
-        }
-        else {
-          type = AjaxOption.STRING;
-        }
-      }
-    }
-
-    if (value == null) {
-      strValue = null;
-    }
-    else if (type == AjaxOption.STRING) {
-      strValue = "'" + value + "'";
-    }
-    else if (type == AjaxOption.ARRAY) {
-      if (value instanceof NSArray) {
-        NSArray arrayValue = (NSArray) value;
-        if (arrayValue.count() == 1) {
-          strValue = arrayValue.objectAtIndex(0).toString();
-        }
-        else {
-          strValue = "[" + arrayValue.componentsJoinedByString(",") + "]";
-        }
-      }
-      else {
-        strValue = value.toString();
-      }
-    }
-    else if (type == AjaxOption.STRING_ARRAY) {
-      if (value instanceof NSArray) {
-        NSArray arrayValue = (NSArray) value;
-        int count = arrayValue.count();
-        if (count == 1) {
-          strValue = "'" + arrayValue.objectAtIndex(0).toString() + "'";
-        }
-        else if (count > 0) {
-          strValue = "['" + arrayValue.componentsJoinedByString("','") + "']";
-        }
-        else {
-          strValue = "[]";
-        }
-      }
-      else {
-        strValue = value.toString();
-      }
-    }
-    else {
-      strValue = value.toString();
-    }
-    return strValue;
+  public AjaxValue valueForObject(Object obj) {
+	  return new AjaxValue(_type, obj);
   }
 
   public void addToDictionary(WOComponent component, NSMutableDictionary dictionary) {
@@ -120,7 +59,7 @@ public class AjaxOption {
       WOAssociation association = (WOAssociation) value;
       value = association.valueInComponent(component);
     }
-    String strValue = processValue(value);
+    String strValue = valueForObject(value).javascriptValue();
     if (strValue != null) {
       dictionary.setObjectForKey(strValue, _name);
     }
@@ -137,7 +76,7 @@ public class AjaxOption {
         WOAssociation association = (WOAssociation) value;
         value = association.valueInComponent(component);
       }
-      String strValue = processValue(value);
+      String strValue = valueForObject(value).javascriptValue();
       if (strValue != null) {
         dictionary.setObjectForKey(strValue, _name);
       }
