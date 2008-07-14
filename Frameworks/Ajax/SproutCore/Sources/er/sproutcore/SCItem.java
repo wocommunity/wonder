@@ -5,10 +5,11 @@ package er.sproutcore;
 
 import java.util.Stack;
 
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.ajax.AjaxOption;
+import er.ajax.AjaxValue;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 
@@ -129,30 +130,29 @@ public class SCItem {
             result += _indent + "// properties" + "\n";
             for (String key : _properties.allKeys()) {
                 Object value = _properties.objectForKey(key);
-                value = quotedValue(key, value);
-                result += _indent + key + ": " +  value + ",\n";
+                Object jsValue = quotedValue(key, value);
+                result += _indent + key + ": " +  jsValue + ",\n";
             }
             // result = result.substring(0, result.length() - 2) + "\n";
         }
         return result;
     }
-
+    
     protected Object quotedValue(String key, Object value) {
         if(value != null && !value.toString().startsWith("SC.Binding")) {
-            if(value == null || value == NSKeyValueCoding.NullValue) {
-                return null;
-            }
-            if(value instanceof Boolean || value instanceof Number) {
-                return value;
-            }
+          AjaxValue jsValue;
             if("delegate".equals(key) || "view".equals(key) || "exampleView".equals(key)) {
-                return value;
+              jsValue = new AjaxValue(AjaxOption.SCRIPT, value);
             }
-            value = "\"" +  value + "\"";
+            else {
+              jsValue = new AjaxValue(value);
+            }
+            value = jsValue.javascriptValue();
         }
         return value;
     }
 
+    @Override
     public String toString() {
         boolean isPage = _className.equals("SC.Page");
         String script = bindingsJavaScript() + propertyJavaScript() + outletJavaScript();
@@ -173,6 +173,7 @@ public class SCItem {
         return context;
     }
 
+    @SuppressWarnings("unchecked")
     protected static Stack<SCItem> currentItems() {
         Stack<SCItem> context = (Stack<SCItem>) ERXThreadStorage.valueForKey("SCView.CurrentItem");
         if (context == null) {
