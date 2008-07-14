@@ -20,7 +20,7 @@ public class SCCheckboxView extends SCButtonView {
     }
 
     @Override
-    public String buttonSyle(WOContext context) {
+    public String buttonStyle(WOContext context) {
     	return "button checkbox normal";
     }
     
@@ -28,12 +28,12 @@ public class SCCheckboxView extends SCButtonView {
         super.pullBindings(context, item);
         item.addProperty("theme", "checkbox");
     }
-    
+     
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         String value = label(context);
         if (value != null) {
-        	String url = SCUtilities.staticUrl("blank.gif");
+        	String url = blankUrl();
             response.appendContentString("<img src='" + url + "' class=\"button\"><span class=\"label\">" );
         }
         
