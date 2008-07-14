@@ -49,13 +49,12 @@ public class SCSegmentedView extends SCComponent {
     public String containerClass() {
       StringBuffer css = new StringBuffer();
       if (!booleanValueForBinding("enabled", true)) {
-        css.append("disabled segments disabled_segment");
+        css.append("disabled");
       }
-      else {
-        css.append("segments");
-        css.append(" ");
-        css.append(SCItem.currentItem().id());
-      }
+      css.append(" ");
+      css.append("segments");
+      css.append(" ");
+      css.append(SCItem.currentItem().id());
       return css.toString();
     }
     
