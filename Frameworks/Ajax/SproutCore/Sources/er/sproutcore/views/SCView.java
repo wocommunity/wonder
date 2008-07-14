@@ -248,6 +248,10 @@ public class SCView extends WODynamicGroup {
         }
     }
 
+    protected String blankUrl() {
+        return SCUtilities.staticUrl("blank.gif");
+    }
+    
     public void appendAttributesToResponse(WOResponse arg0, WOContext arg1) {
         return;
     }

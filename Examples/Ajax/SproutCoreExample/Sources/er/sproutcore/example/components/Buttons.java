@@ -8,10 +8,16 @@ import er.sproutcore.views.SCComponent;
 
 public class Buttons extends ERXComponent {
     
+    public String segment;
+    
     public Buttons(WOContext context) {
         super(context);
     }
     
+    public NSArray segments() {
+        return new NSArray(new Object[]{"one", "two", "three"});
+    }
+
     public NSArray values() {
         return new NSArray(new Object[]{ });
     }
