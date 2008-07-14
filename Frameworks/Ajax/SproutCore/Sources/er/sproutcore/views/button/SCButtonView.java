@@ -18,6 +18,11 @@ public class SCButtonView extends SCView {
         removeProperty("width");
         removeProperty("label");
     }
+    
+    @Override
+    protected boolean skipPropertyIfNull(String propertyName) {
+      return "action".equals(propertyName);
+    }
 
     @Override
     protected Object defaultElementName() {
