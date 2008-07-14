@@ -12,7 +12,7 @@ public class SCButtonView extends SCView {
     public SCButtonView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
         moveProperty("enabled", "isEnabled");
-        moveProperty("selected", "value");
+        moveProperty("selected", "isSelected");
         moveProperty("default", "isDefault");
         moveProperty("cancel", "isCancel");
         removeProperty("width");
