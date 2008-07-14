@@ -1481,7 +1481,7 @@ public class ERXFileUtilities {
      */
     public static File[] listFiles(File baseDir, boolean recursive, FileFilter filter) {
         File[] files = baseDir.listFiles(filter);
-        if (recursive) {
+        if (files != null && recursive) {
         	NSMutableArray<File> a = new NSMutableArray<File>(files);
             for (int i = files.length; i-- > 0;) {
                 File currentDir = files [i];
