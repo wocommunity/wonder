@@ -8,8 +8,10 @@ import er.sproutcore.SCItem;
 
 public class SCSegmentedView extends SCComponent {
     
-    public SCSegmentedView(WOContext arg0) {
-        super(arg0);
+    public SCSegmentedView(WOContext context) {
+        super(context);
+        removeProperty("item");
+        removeProperty("segments");
     }
 
     @Override
