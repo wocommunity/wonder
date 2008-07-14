@@ -27,6 +27,7 @@ public class SCRequestHandler extends WORequestHandler {
         NSArray path = request.requestHandlerPathArray();
         String bundleName = (String) path.objectAtIndex(0);
         String name = ERXArrayUtilities.arrayByRemovingFirstObject(path).componentsJoinedByString("/");
+        String contentType = "text/html";
         if ("SproutCore".equals(bundleName)) {
             name = name.replaceAll("\\.\\.+", "");
             File file = new File(SCUtilities.scBase(), name);
@@ -37,12 +38,14 @@ public class SCRequestHandler extends WORequestHandler {
                 	String code = new String(data);
                 	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1)");
                 	data = code.getBytes();
+                	contentType = "text/css";
                 } else if(name.endsWith(".js")) {
                 	String code = new String(data);
                 	code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/sproutcore/english.lproj/blank.gif'");
                 	code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/sproutcore/english.lproj/$1'");
                 	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/SproutCore/sproutcore/english.lproj/$1" + ".png'");
                 	data = code.getBytes();
+                  contentType = "text/javascript";
                 }
             } catch (IOException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -65,12 +68,14 @@ public class SCRequestHandler extends WORequestHandler {
                             code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "url($1)");
                             code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1.png)");
                             data = code.getBytes();
+                            contentType = "text/css";
                         } else if(name.endsWith(".js")) {
                             String code = new String(data);
                             code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/blank.gif'");
                             code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1'");
                             code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1" + ".png'");
                             data = code.getBytes();
+                            contentType = "text/javascript";
                         }
                         result.setContent(new NSData(data));
                     }
@@ -79,6 +84,7 @@ public class SCRequestHandler extends WORequestHandler {
                 }
             }
         }
+        result.setHeader(contentType, "Content-Type");
         return result;
     }
 
