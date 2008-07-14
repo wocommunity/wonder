@@ -30,7 +30,7 @@ public class SCButtonView extends SCView {
     @Override
     public String css(WOContext context) {
     	String css = super.css(context);
-    	css += " " + buttonSyle(context);
+    	css += " " + buttonStyle(context);
     	css += (booleanValueForBinding("enabled", true, context.component()) ? "" : " disabled");
         Object selected = valueForBinding("selected", context.component());
         css += (selected instanceof String ? " " + selected : "");
@@ -38,7 +38,7 @@ public class SCButtonView extends SCView {
     	return css;
     }
 
-    public String buttonSyle(WOContext context) {
+    public String buttonStyle(WOContext context) {
     	String style = "button normal " + valueForBinding("theme", "regular", context.component());
     	return style;
     }
@@ -46,7 +46,7 @@ public class SCButtonView extends SCView {
     protected String label(WOContext context) {
         String value = null;
         value = (String) valueForBinding("label", value, context.component());
-        value = (String) valueForBinding("value", value, context.component());
+        //value = (String) valueForBinding("value", value, context.component());
         value = (String) valueForBinding("title", value, context.component());
         return value;
     }
@@ -56,8 +56,8 @@ public class SCButtonView extends SCView {
         String width = (String) valueForBinding("width", context.component());
         String style = (width == null ? "" : "style=\"width: " + width +"px\" ");
         String value = label(context);
-        if(value== null) {
-            value = "<img class=\"button\" src=\"" + SCUtilities.staticUrl("blank.gif") + "\" />";
+        if(value == null) {
+            value = "";
         }
         response.appendContentString("<span class=\"button-inner\">");
         if (value != null) {
