@@ -20,7 +20,7 @@ import er.extensions.foundation.ERXThreadStorage;
  */
 public class SCItem {
 
-    private static int idx = 0;
+    private static long idx = (System.currentTimeMillis() / 1000);
 
     private String _id;
     
@@ -54,7 +54,7 @@ public class SCItem {
         }
     }
 
-    private synchronized int nextId() {
+    private synchronized long nextId() {
         return idx++;
     }
     
