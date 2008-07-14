@@ -39,10 +39,18 @@ public class SCComponent extends ERXNonSynchronizingComponent {
       return false;
     }
 
+    public String id() {
+        return stringValueForBinding("id");
+    }
+
+    public String outlet() {
+    	return stringValueForBinding("outlet", id());
+    }
+
     @SuppressWarnings("cast")
     @Override
     public final void appendToResponse(WOResponse response, WOContext context) {
-        SCItem item = SCItem.pushItem(stringValueForBinding("id"), className());
+        SCItem item = SCItem.pushItem(id(), className(), outlet());
         for (String key : (NSArray<String>) bindingKeys()) {
             Object value = valueForBinding(key);
             boolean binding = key.startsWith("?");
@@ -64,8 +72,7 @@ public class SCComponent extends ERXNonSynchronizingComponent {
 	                item.addBinding(itemName, value == null ? NSKeyValueCoding.NullValue : value);
 	            } else if (value == null && !skipPropertyIfNull(itemName)) {
 	            	item.addProperty(itemName, NSKeyValueCoding.NullValue);
-	            }
-	            else if (value != null) {
+	            } else if (value != null) {
 	            	item.addProperty(itemName, value);
 	            }
             }

@@ -23,6 +23,8 @@ public class SCItem {
     private static int idx = 0;
 
     private String _id;
+    
+    private String _outletName;
 
     private String _indent = "    ";
 
@@ -38,8 +40,9 @@ public class SCItem {
 
     private NSMutableArray<SCItem> _children = new NSMutableArray<SCItem>();
 
-    public SCItem(SCItem parent, String className, String id) {
+    public SCItem(SCItem parent, String className, String id, String outletName) {
         _id = (id == null ? "id_" + (nextId()) + "" : id);
+        _outletName = (outletName == null) ? _id : outletName;
         _parent = parent;
         _className = className;
         if (_parent != null) {
@@ -61,6 +64,10 @@ public class SCItem {
     
     public boolean isRoot() {
         return _parent != null && _parent._parent == null;
+    }
+    
+    public String outletName() {
+    	return _outletName;
     }
     
     public String outlet() {
@@ -93,7 +100,7 @@ public class SCItem {
     private String bindingsJavaScript() {
         String result = "";
         if(_bindings.count() > 0) {
-            result += _indent + "// bindings" + "\n";
+            //result += _indent + "// bindings" + "\n";
             for (String key : _bindings.allKeys()) {
                 Object value = _bindings.objectForKey(key);
                 value = quotedValue(key, value);
@@ -112,12 +119,12 @@ public class SCItem {
                     if(item != _children.objectAtIndex(0)) {
                         result += ",";
                     }
-                    result += "\"" + item.itemId() + "\"";
+                    result += "\"" + item.outletName() + "\"";
                 }
                 result += "],\n";
             }
             for (SCItem item : _children) {
-                result += _indent + item.itemId() + ": " + item + ",\n";
+                result += _indent + item.outletName() + ": " + item + ",\n";
             }
             //result = result.substring(0, result.length() - 2);
         }
@@ -127,7 +134,7 @@ public class SCItem {
     private String propertyJavaScript() {
         String result = "";
         if(_properties.count() > 0) {
-            result += _indent + "// properties" + "\n";
+            //result += _indent + "// properties" + "\n";
             for (String key : _properties.allKeys()) {
                 Object value = _properties.objectForKey(key);
                 Object jsValue = quotedValue(key, value);
@@ -154,7 +161,7 @@ public class SCItem {
 
     @Override
     public String toString() {
-        boolean isPage = _className.equals("SC.Page");
+        boolean isPage = (_className != null && _className.equals("SC.Page"));
         String script = bindingsJavaScript() + propertyJavaScript() + outletJavaScript();
         script = script.replaceAll(",\n$", "\n");
         String core = "({\n" + script + _indent.substring(4) + "})";
@@ -167,7 +174,7 @@ public class SCItem {
     public static SCItem pageItem() {
         SCItem context = (SCItem) ERXThreadStorage.valueForKey("SCView.PageItem");
         if (context == null) {
-            context = new SCItem(null, "SC.Page", "SCPage");
+            context = new SCItem(null, "SC.Page", "SCPage", null);
             ERXThreadStorage.takeValueForKey(context, "SCView.PageItem");
         }
         return context;
@@ -188,10 +195,10 @@ public class SCItem {
         return currentItems().peek();
     }
 
-    public static SCItem pushItem(String id, String className) {
+    public static SCItem pushItem(String id, String className, String outletName) {
         Stack<SCItem> stack = currentItems();
         SCItem parent = stack.peek();
-        SCItem current = new SCItem(parent, className, id);
+        SCItem current = new SCItem(parent, className, id, outletName);
         stack.push(current);
         return current;
     }
