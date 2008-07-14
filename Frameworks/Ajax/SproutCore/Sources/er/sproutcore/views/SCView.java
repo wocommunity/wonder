@@ -13,6 +13,7 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -124,8 +125,16 @@ public class SCView extends WODynamicGroup {
     }
 
     public String className(WOContext context) {
-       String defaultName = "SC." + ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName()).replaceAll("^SC", "");
-       return (String) valueForBinding("view", defaultName, context.component());
+       return (String) valueForBinding("view", SCView.defaultClassName(getClass()), context.component());
+    }
+    
+    protected static String defaultClassName(Class clazz) {
+      String bundleName = NSBundle.bundleForClass(clazz).name();
+      if ("SproutCore".equals(bundleName)) {
+        bundleName = "SC";
+      }
+      String defaultName = bundleName + "." + ERXStringUtilities.lastPropertyKeyInKeyPath(clazz.getName()).replaceAll("^SC", "");
+      return defaultName;
     }
 
     public String cssName(WOContext context) {
