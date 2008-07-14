@@ -40,6 +40,7 @@ public class SCView extends WODynamicGroup {
 
     private NSMutableDictionary<String, WOAssociation> _bindings;
 
+    @SuppressWarnings("unchecked")
     public SCView(String name, NSDictionary associations, WOElement parent) {
         super(name, associations, parent);
         _associations = associations.mutableClone();

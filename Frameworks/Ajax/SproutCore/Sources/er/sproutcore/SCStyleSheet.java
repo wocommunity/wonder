@@ -9,7 +9,6 @@ import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -25,6 +24,7 @@ public class SCStyleSheet extends WODynamicElement {
     WOAssociation _key;
     
     
+    @SuppressWarnings("unchecked")
     public SCStyleSheet(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
         _name = (WOAssociation) arg1.objectForKey("name");
@@ -72,6 +72,7 @@ public class SCStyleSheet extends WODynamicElement {
         ERXResponse.popPartial();
     }
 
+    @SuppressWarnings("unchecked")
     public static void appendStyle(WOResponse response, WOContext context, String name) {
         NSMutableArray<String> scripts = (NSMutableArray<String>) ERXThreadStorage.valueForKey("SCRequire.Css");
         if(scripts == null) {

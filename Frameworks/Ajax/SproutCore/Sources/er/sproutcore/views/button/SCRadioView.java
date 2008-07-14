@@ -24,6 +24,7 @@ public class SCRadioView extends SCButtonView {
         return "button radio normal";
     }
     
+    @Override
     protected void pullBindings(WOContext context, SCItem item) {
         super.pullBindings(context, item);
         item.addProperty("theme", "radio");
