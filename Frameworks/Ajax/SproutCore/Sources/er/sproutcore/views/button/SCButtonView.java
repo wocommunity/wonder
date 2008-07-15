@@ -5,6 +5,8 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
+import er.ajax.AjaxOption;
+import er.ajax.AjaxValue;
 import er.sproutcore.views.SCView;
 
 public class SCButtonView extends SCView {
@@ -27,6 +29,17 @@ public class SCButtonView extends SCView {
     @Override
     protected Object defaultElementName() {
         return "a";
+    }
+    
+    @Override
+    protected Object evaluateValueForBinding(WOContext context, String name, Object value) {
+    	Object evaluatedValue = value;
+    	if ("isSelected".equals(name)) {
+    		if ("mixed".equals(value)) {
+    			evaluatedValue = new AjaxValue(AjaxOption.SCRIPT, "SC.MIXED_STATE");
+    		}
+    	}
+    	return evaluatedValue;
     }
     
     @Override
