@@ -42,12 +42,16 @@
 			<artifactId>JavaJDBCAdaptor</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>icu4j</groupId>
+			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 		</dependency>
 	</dependencies>
 </project>
