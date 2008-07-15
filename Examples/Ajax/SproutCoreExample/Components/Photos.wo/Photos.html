@@ -2,13 +2,14 @@
 
 <wo:SCJavaScript group="photos" framework="app" key="pageJavaScript" />
 <wo:SCStyleSheet group="photos" framework="app" key="@content_for_page_styles" />
-<wo:SCView id="photo_picker" pane = "picker"
-  ?visible = "Photos.photoController.pickerIsVisible" />
+<wo:ERXPartialWrapper key="@content_for_resources">
+<wo:Picker id="photo_picker" pane = "picker" ?visible = "Photos.photoController.pickerIsVisible" />
+</wo:ERXPartialWrapper>
 <wo:SCSplitView 
 	id="workspace" 
 	class="sc-app-workspace footer" 
 	direction="horizontal">  
-  <wo:SCView id="sidebar" 
+  <wo:SCView id="sidebar" outletName="sidebar" 
   	outlet=true 
   	maxThickness=400 
   	minThickness=100 
