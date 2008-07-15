@@ -1,349 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder</groupId>
-		<artifactId>wonder</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<groupId>wonder.frameworks</groupId>
-	<artifactId>frameworks</artifactId>
-	<packaging>pom</packaging>
-	<name>Frameworks</name>
-	<modules>
-		<module>Ajax</module>
-		<module>Core</module>
-		<module>PlugIns</module>
-	</modules>
-</project>\ No newline at end of file
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>ajax</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<groupId>wonder.ajax</groupId>
-	<artifactId>AjaxLook</artifactId>
-	<name>Ajax Look Framework</name>
-	<packaging>woframework</packaging>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
-	<dependencies>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERDirectToWeb</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>wonder.ajax</groupId>
-			<artifactId>YUI</artifactId>
-		</dependency>
-	</dependencies>
-</project>\ No newline at end of file
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>ajax</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<groupId>wonder.ajax</groupId>
-	<artifactId>SproutCore</artifactId>
-	<name>SproutCore Framework</name>
-	<packaging>woframework</packaging>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
-	<dependencies>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaXML</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>wonder.ajax</groupId>
-			<artifactId>Ajax</artifactId>
-		</dependency>
-	</dependencies>
-</project>\ No newline at end of file
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>frameworks</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<artifactId>ajax</artifactId>
-	<packaging>pom</packaging>
-	<name>Ajax Frameworks</name>
-	<modules>
-		<module>Ajax</module>
-		<module>AjaxLook</module>
-		<module>SproutCore</module>
-		<module>YUI</module>
-	</modules>
-</project>\ No newline at end of file
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>frameworks</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<artifactId>core</artifactId>
-	<packaging>pom</packaging>
-	<name>Core Frameworks</name>
-	<modules>
-		<module>ERDirectToWeb</module>
-		<module>ERExtensions</module>
-		<module>ERJavaMail</module>
-		<module>ERNeutralLook</module>
-		<module>ERPrototypes</module>
-		<module>JavaWOExtensions</module>
-		<module>WOOgnl</module>
-	</modules>
-</project>\ No newline at end of file
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>plugins</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<groupId>wonder.plugins</groupId>
-	<artifactId>PostgresqlPlugIn</artifactId>
-	<name>Postgresql PlugIn</name>
-	<packaging>woframework</packaging>
-	<dependencies>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaJDBCAdaptor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
-</project>\ No newline at end of file
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>plugins</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<groupId>wonder.plugins</groupId>
-	<artifactId>FrontBasePlugIn</artifactId>
-	<name>FrontBase PlugIn</name>
-	<packaging>woframework</packaging>
-	<dependencies>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaJDBCAdaptor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
-</project>\ No newline at end of file
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>plugins</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<groupId>wonder.plugins</groupId>
-	<artifactId>EROraclePlugIn</artifactId>
-	<name>EROracle PlugIn</name>
-	<packaging>woframework</packaging>
-	<dependencies>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaJDBCAdaptor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
-</project>\ No newline at end of file
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>plugins</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<groupId>wonder.plugins</groupId>
-	<artifactId>DerbyPlugIn</artifactId>
-	<name>Derby PlugIn</name>
-	<packaging>woframework</packaging>
-	<dependencies>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaJDBCAdaptor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
-</project>\ No newline at end of file
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>frameworks</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<artifactId>plugins</artifactId>
-	<packaging>pom</packaging>
-	<name>Plugins Frameworks</name>
-	<modules>
-		<module>DerbyPlugIn</module>
-		<module>EROraclePlugIn</module>
-		<module>FrontBasePlugIn</module>
-		<module>PostgresqlPlugIn</module>
-	</modules>
-</project>\ No newline at end of file
-<?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-	<modelVersion>4.0.0</modelVersion>
-	
-  	<properties>
-  		<woversion>5.4.1</woversion>
-  	</properties>
-
 	<groupId>wonder</groupId>
 	<artifactId>wonder</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>5.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Project Wonder</name>
-
 	<url>http://wonder.sf.net/</url>
-
+	<properties>
+		<woversion>[5.4,)</woversion>
+	</properties>
 	<modules>
-		<module>Common</module>
-		<module>Deployment</module>
-		<module>Ajax</module>
+		<module>Frameworks</module>
+		<module>Examples</module>
 		<module>Applications</module>
-		<module>Validity</module>
 	</modules>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.apple.webobjects</groupId>
-				<artifactId>JavaJDBCAdaptor</artifactId>
-				<version>${woversion}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.apple.webobjects</groupId>
-				<artifactId>JavaWebObjects</artifactId>
-				<version>${woversion}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.apple.webobjects</groupId>
-				<artifactId>JavaWOJSPServlet</artifactId>
-				<version>${woversion}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.apple.webobjects</groupId>
-				<artifactId>JavaDirectToWeb</artifactId>
-				<version>${woversion}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.apple.webobjects</groupId>
-				<artifactId>JavaEOAccess</artifactId>
-				<version>${woversion}</version>
-			</dependency>
-			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>1.2.14</version>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>3.8.2</version>
-			</dependency>
-			<dependency>
-				<groupId>icu4j</groupId>
-				<artifactId>icu4j</artifactId>
-				<version>2.8</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.objectstyle.woproject.maven2</groupId>
 				<artifactId>maven-wolifecycle-plugin</artifactId>
 				<extensions>true</extensions>
-				<version>2.0.10</version>
-        			<configuration>
-           				<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
+				<version>2.0.15</version>
+				<configuration>
+					<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -356,7 +36,321 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.webobjects</groupId>
+				<artifactId>JavaJDBCAdaptor</artifactId>
+				<version>${woversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.webobjects</groupId>
+				<artifactId>JavaFoundation</artifactId>
+				<version>${woversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.webobjects</groupId>
+				<artifactId>JavaWebObjects</artifactId>
+				<version>${woversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.webobjects</groupId>
+				<artifactId>JavaWOJSPServlet</artifactId>
+				<version>${woversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.webobjects</groupId>
+				<artifactId>JavaDirectToWeb</artifactId>
+				<version>${woversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.webobjects</groupId>
+				<artifactId>JavaEOAccess</artifactId>
+				<version>${woversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.webobjects</groupId>
+				<artifactId>JavaEOControl</artifactId>
+				<version>${woversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.webobjects</groupId>
+				<artifactId>JavaXML</artifactId>
+				<version>${woversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.core</groupId>
+				<artifactId>JavaWOExtensions</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.core</groupId>
+				<artifactId>ERExtensions</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.core</groupId>
+				<artifactId>ERDirectToWeb</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.core</groupId>
+				<artifactId>ERPrototypes</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.core</groupId>
+				<artifactId>ERJavaMail</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.core</groupId>
+				<artifactId>WOOgnl</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.businesslogic</groupId>
+				<artifactId>ERCoreBusinessLogic</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.businesslogic</groupId>
+				<artifactId>BTBusinessLogic</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.businesslogic</groupId>
+				<artifactId>ERTaggable</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.businesslogic</groupId>
+				<artifactId>ERAttachment</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.ajax</groupId>
+				<artifactId>Ajax</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.ajax</groupId>
+				<artifactId>YUI</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.reporting</groupId>
+				<artifactId>WRReporting</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.reporting</groupId>
+				<artifactId>DRGrouping</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.reporting</groupId>
+				<artifactId>ERPlot</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.eof</groupId>
+				<artifactId>Validity</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.eof</groupId>
+				<artifactId>ERRest</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.misc</groupId>
+				<artifactId>ERSelenium</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.misc</groupId>
+				<artifactId>ERCalendar</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.misc</groupId>
+				<artifactId>JavaMonitorFramework</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.activation</groupId>
+				<artifactId>activation</artifactId>
+				<version>1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>1.4.1</version>
+			</dependency>
+			<dependency>
+				<groupId>oro</groupId>
+				<artifactId>oro</artifactId>
+				<version>2.0.6</version>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.14</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>3.8.2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.icu</groupId>
+				<artifactId>icu4j</artifactId>
+				<version>3.8</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>ognl</groupId>
+				<artifactId>ognl</artifactId>
+				<version>2.6.7</version>
+			</dependency>
+			<dependency>
+				<groupId>metaparadigm</groupId>
+				<artifactId>jsonrpc</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code</groupId>
+				<artifactId>jabsorb</artifactId>
+				<version>1.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>jfree</groupId>
+				<artifactId>jcommon</artifactId>
+				<version>1.0.12</version>
+			</dependency>
+			<dependency>
+				<groupId>jfree</groupId>
+				<artifactId>jfreechart</artifactId>
+				<version>0.9.21</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.mina</groupId>
+				<artifactId>mina-core</artifactId>
+				<version>1.1.7</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-cli</groupId>
+				<artifactId>commons-cli</artifactId>
+				<version>1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>net.spy.west.bleu.spy</groupId>
+				<artifactId>spy</artifactId>
+				<version>2.3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.jms</groupId>
+				<artifactId>jms</artifactId>
+				<version>1.0.2</version>
+			</dependency>
+			<dependency>
+				<groupId>openjms</groupId>
+				<artifactId>openjms-client</artifactId>
+				<version>0.7.6</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.naming</groupId>
+				<artifactId>jndi</artifactId>
+				<version>1.2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-core</artifactId>
+				<version>2.3.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-analyzers</artifactId>
+				<version>2.3.2</version>
+			</dependency>
+			<dependency>
+				<groupId>jgroups</groupId>
+				<artifactId>jgroups-all</artifactId>
+				<version>2.4.1</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.gammastream</groupId>
+				<artifactId>gamma-core</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>1.4.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.octo.captcha</groupId>
+				<artifactId>jcaptcha-all</artifactId>
+				<version>1.0-RC6</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.3</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-httpclient</groupId>
+				<artifactId>commons-httpclient</artifactId>
+				<version>3.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.htmlparser</groupId>
+				<artifactId>htmlparser</artifactId>
+				<version>1.6</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openxri</groupId>
+				<artifactId>openxri-client</artifactId>
+				<version>1.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openxri</groupId>
+				<artifactId>openxri-syntax</artifactId>
+				<version>1.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>xml-security</groupId>
+				<artifactId>xmlsec</artifactId>
+				<version>1.3.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.safehaus.jug</groupId>
+				<artifactId>jug</artifactId>
+				<version>2.0.0</version>
+				<classifier>asl</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.openqa.selenium.client-drivers</groupId>
+				<artifactId>selenium-java-client-driver</artifactId>
+				<version>1.0-beta-1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<repositories>
 		<repository>
 			<id>webobjects.mdimension.com/releases</id>
@@ -381,7 +375,6 @@
 			</releases>
 		</repository>
 	</repositories>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>webobjects.mdimension.com/plugin/releases</id>
@@ -406,7 +399,6 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
-
 	<distributionManagement>
 		<repository>
 			<id>webobjects.mdimension.com/dist/releases</id>
@@ -419,16 +411,8 @@
 			<url>scp://webobjects.mdimension.com/Library/WebServer/BuildServer/maven2/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
 	<scm>
-		<connection>
-			    scm:cvs:pserver:anonymous@cvs.wonder.sourceforge.net:/cvsroot/wonder:wonder
-       </connection>
-		<developerConnection>
-		    scm:cvs:ext:@cvs.wonder.sourceforge.net:/cvsroot/wonder:wonder
-        </developerConnection>
-		<url>http://assense.com</url>
+		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk</connection>
+		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk</developerConnection>
 	</scm>
-	
 </project>
-
