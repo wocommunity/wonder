@@ -185,9 +185,9 @@
   &lt;%= checkbox_field_view :outlet =&gt; true, :label =&gt; &apos;Label Name&apos;, :enabled =&gt; true|false, :selected =&gt; true|false %&gt;
 </code></p>
   <div class="buttons">
-    <%= checkbox_field_view :outlet => true, :label => 'Regular Checkbox' %>
-    <%= checkbox_field_view :outlet => true, :label => 'Selected Checkbox', :value => true %>
-    <%= checkbox_field_view :outlet => true, :label => 'Disabled Checkbox', :enabled => false %>
+  	<wo:SCCheckboxFieldView label = "Regular Checkbox" />
+  	<wo:SCCheckboxFieldView label = "Selected Checkbox" value = "$true" />
+  	<wo:SCCheckboxFieldView label = "Disabled Checkbox" enabled = "$false" />
   </div>
 </div>
 </wo:SCContainerView>
