@@ -1,4 +1,4 @@
-package er.sproutcore.example.components;
+package er.sproutcore.example.components.sample;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.NSArray;

@@ -1,4 +1,4 @@
-package er.sproutcore.example.components;
+package er.sproutcore.example.components.photos;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
