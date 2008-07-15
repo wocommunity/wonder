@@ -481,6 +481,7 @@ public class ERXJDBCUtilities {
 	 *            the JDBCChannel to work with
 	 * @param sql
 	 *            the sql to execute
+	 * @param autoCommit if true, autocommit the connection after executing
 	 * @return the number of rows updated
 	 * @throws SQLException
 	 *             if there is a problem
