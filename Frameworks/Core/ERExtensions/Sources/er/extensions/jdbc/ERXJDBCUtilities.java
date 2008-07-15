@@ -470,27 +470,7 @@ public class ERXJDBCUtilities {
 	 *             if there is a problem
 	 */
 	public static int executeUpdate(EOAdaptorChannel channel, String sql) throws SQLException {
-		int rowsUpdated;
-		boolean wasOpen = channel.isOpen();
-		if (!wasOpen) {
-			channel.openChannel();
-		}
-		Connection conn = ((JDBCContext) channel.adaptorContext()).connection();
-		try {
-			Statement stmt = conn.createStatement();
-			try {
-				rowsUpdated = stmt.executeUpdate(sql);
-			}
-			finally {
-				stmt.close();
-			}
-		}
-		finally {
-			if (!wasOpen) {
-				channel.closeChannel();
-			}
-		}
-		return executeUpdate(channel, sql, false);
+		return ERXJDBCUtilities.executeUpdate(channel, sql, false);
 	}
 
 	/**
