@@ -7,6 +7,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
@@ -62,6 +63,8 @@ public class SCRequestHandler extends WORequestHandler {
                     URL url = bundle.pathURLForResourcePath(name);
                     if(url != null) {
                         InputStream is = url.openStream();
+                        //FIXME: I always forget how to do this...
+                        String prefix = "/cgi-bin/WebObjects/" + WOApplication.application().name() + ".woa";
                         byte data[] = ERXFileUtilities.bytesFromInputStream(is);
                         if(name.endsWith(".css")) {
                             String code = new String(data);
@@ -71,9 +74,9 @@ public class SCRequestHandler extends WORequestHandler {
                             contentType = "text/css";
                         } else if(name.endsWith(".js")) {
                             String code = new String(data);
-                            code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/blank.gif'");
-                            code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1'");
-                            code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1" + ".png'");
+                            code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'" + prefix + "/_sc_/app/english.lproj/blank.gif'");
+                            code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'" + prefix + "/_sc_/app/english.lproj/$1'");
+                            code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'" + prefix + "/_sc_/app/english.lproj/$1" + ".png'");
                             code = code.replaceAll("sc_super\\((.*?)\\)", "arguments.callee.base.apply($1)");
                             data = code.getBytes();
                             contentType = "text/javascript";
