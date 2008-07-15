@@ -12,6 +12,6 @@ public class SampleControls extends WOComponent {
     }
 
 	public NSArray<String> segments() {
-		return new NSArray(new Object[]{"buttons"});
+		return new NSArray(new Object[]{"welcome", "buttons", "collections"});
 	}
 }

@@ -1,4 +1,4 @@
-package er.sproutcore.example.components;
+package er.sproutcore.example.components.sample;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -11,6 +11,7 @@ public class Buttons extends SCComponent {
 
 	public Buttons(WOContext context) {
 		super(context);
+        setClassName("SC.View");
 	}
 
 	public NSArray<String> segments() {
