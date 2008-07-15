@@ -18,7 +18,7 @@ public class SCDisclosureView extends SCButtonView {
 
 	@Override
 	public String cssName(WOContext context) {
-		return super.cssName(context) + " sc-button-view";
+		return "sc-disclosure-view";
 	}
 
 	@Override
