@@ -1,23 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>wonder.common</groupId>
-		<artifactId>frameworks</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<groupId>wonder.frameworks</groupId>
+		<artifactId>misc</artifactId>
+		<version>5.0.0-SNAPSHOT</version>
 	</parent>
-
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.common</groupId>
+	<groupId>wonder.misc</groupId>
 	<artifactId>EROpenID</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
-	<name>EROpenID</name>
+	<name>EROpenID Framework</name>
 	<packaging>woframework</packaging>
-
 	<dependencies>
 		<dependency>
-			<groupId>wonder.common</groupId>
+			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
@@ -58,8 +52,33 @@
 			<classifier>asl</classifier>
 		</dependency>
 	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<!-- BEGIN: Warning! Snapshot version. We can't make a Wonder release. -->
+			<dependency>
+				<groupId>org.openid4java</groupId>
+				<artifactId>openid4java</artifactId>
+				<version>0.9.5-SNAPSHOT</version>
+			</dependency>
+			<!-- END: Warning! Snapshot version. We can't make a Wonder release. -->
+			<!-- BEGIN: Fix for openxri-client transitive dependency problem  -->
+			<dependency>
+				<groupId>xml-apis</groupId>
+				<artifactId>xml-apis</artifactId>
+				<version>2.0.2</version>
+			</dependency>
+			<!-- END: Fix for openxri-client transitive dependency problem  -->
+		</dependencies>
+	</dependencyManagement>
+	<repositories>
+		<repository>
+			<id>alchim.snapshots</id>
+			<name>Achim Repository Snapshots (for openid4java dependencies)</name>
+			<url>http://alchim.sf.net/download/snapshots</url>
+			<snapshots />
+		</repository>
+	</repositories>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
-
 </project>

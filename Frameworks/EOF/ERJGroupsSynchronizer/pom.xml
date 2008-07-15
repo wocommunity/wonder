@@ -1,27 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>wonder.common</groupId>
-		<artifactId>frameworks</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<groupId>wonder.frameworks</groupId>
+		<artifactId>eof</artifactId>
+		<version>5.0.0-SNAPSHOT</version>
 	</parent>
-
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.common</groupId>
+	<groupId>wonder.eof</groupId>
 	<artifactId>ERJGroupsSynchronizer</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
 	<name>ERJGroupsSynchronizer</name>
 	<packaging>woframework</packaging>
-
 	<dependencies>
 		<dependency>
-			<groupId>wonder.common</groupId>
+			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.apple.webobjects</groupId>
+			<groupId>com.webobjects</groupId>
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
@@ -33,8 +27,18 @@
 			<artifactId>commons-logging</artifactId>
 		</dependency>
 	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<!-- BEGIN: Fix for jgroups-all transitive dependency problem  -->
+			<dependency>
+				<groupId>bsh</groupId>
+				<artifactId>bsh</artifactId>
+				<version>1.2-b3</version>
+			</dependency>
+			<!-- END: Fix for jgroups-all transitive dependency problem  -->
+		</dependencies>
+	</dependencyManagement>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
-
 </project>
