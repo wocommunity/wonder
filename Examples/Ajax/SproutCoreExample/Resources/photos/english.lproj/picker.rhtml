@@ -1,0 +1,33 @@
+<% view :photo_picker, :pane => :picker,
+  :bind => { :visible => 'Photos.photoController.pickerIsVisible' } do %>
+  <div class="property">
+    <label>Title:</label>
+    <span class="value">
+    <%= text_field_view :outlet => true, 
+      :bind => { :value => 'Photos.photoController.name' } %>
+    </span>
+  </div>
+  <div class="property">
+    <label>Opacity:</label>
+    <span class="value">
+      <%= slider_view :outlet => true, :minimum => 0, :maximum => 1.0,
+        :bind => { 
+          :value => 'Photos.photoController.opacity' 
+        } %>
+    </span>
+  </div>
+
+  <div class="property">
+    <label>Rotation:</label>
+    <span class="value">
+      <%= slider_view :outlet => true, :minimum => 0, :maximum => 360,
+        :bind => { 
+          :enabled => 'Photos.photoController.canShowEffects',
+          :value => 'Photos.photoController.rotation' 
+        } %>
+    </span>
+  </div>
+  <div class="buttons">
+    <%= button_view :outlet => true, :default => true, :title => "Close", :action => 'Photos.photoController.hidePicker', :width => 60 %>
+  </div>
+<% end %>
