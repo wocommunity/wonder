@@ -7,11 +7,13 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXComponentUtilities;
+import er.extensions.ERXStringUtilities;
 
 /**
  * Updates a region on the screen by creating a request to an action, then returning a script that in turn creates an
@@ -25,7 +27,6 @@ import er.extensions.ERXComponentUtilities;
  * @binding onFailure JavaScript function to evaluate when the request has failed.
  * @binding onException JavaScript function to evaluate when the request had errors.
  * @binding evalScripts boolean defining if the container update is expected to be a script.
- * @binding insertion JavaScript function to evaluate when the update takes place.
  * @binding ignoreActionResponse boolean defining if the action's response should be thrown away (useful when the same
  *          action has both Ajax and plain links)
  * @binding onClickBefore if the given function returns true, the onClick is executed. This is to support confirm(..)
@@ -44,6 +45,23 @@ import er.extensions.ERXComponentUtilities;
  * @binding function a custom function to call that takes a single parameter that is the action url
  * @binding elementName the element name to use (defaults to "a")
  * @binding functionName if set, the link becomes a javascript function
+ * @binding button if true, this is rendered as a javascript button
+ * 
+ * @binding effect synonym of afterEffect except it always applies to updateContainerID
+ * @binding effectDuration the duration of the effect to apply before
+ * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
+ * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then
+ *          try updateContainerID)
+ * @binding beforeEffectDuration the duration of the effect to apply before
+ * @binding afterEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
+ * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then
+ *          try updateContainerID)
+ * @binding afterEffectDuration the duration of the effect to apply before
+ * 
+ * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
+ * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
+ * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
+ * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion) 
  */
 public class AjaxUpdateLink extends AjaxDynamicElement {
 
@@ -51,68 +69,185 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		super(name, associations, children);
 	}
 
-	public String onClick(WOContext context) {
+	public String onClick(WOContext context, boolean generateFunctionWrapper) {
 		WOComponent component = context.component();
-		NSDictionary options = createAjaxOptions(component);
+		NSMutableDictionary options = createAjaxOptions(component);
 		StringBuffer onClickBuffer = new StringBuffer();
-		String onClickBefore = (String) valueForBinding("onClickBefore", context.component());
-		if (onClickBefore != null) {
-			onClickBuffer.append("if (");
-			onClickBuffer.append(onClickBefore);
-			onClickBuffer.append(") {");
+
+		String onClick = (String) valueForBinding("onClick", component);
+		String onClickBefore = (String) valueForBinding("onClickBefore", component);
+		String updateContainerID = (String) valueForBinding("updateContainerID", component);
+		String functionName = (String) valueForBinding("functionName", component);
+		String function = (String) valueForBinding("function", component);
+		String replaceID = (String) valueForBinding("replaceID", component);
+
+		AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID, (String) valueForBinding("effectDuration", component));
+		String afterEffectID = (String) valueForBinding("afterEffectID", component);
+		if (afterEffectID == null) {
+			afterEffectID = AjaxUpdateContainer.currentUpdateContainerID();
+			if (afterEffectID == null) {
+				afterEffectID = updateContainerID;
+			}
 		}
+		AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID, (String) valueForBinding("afterEffectDuration", component));
+
+		String beforeEffect = (String) valueForBinding("beforeEffect", component);
 
 		WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
-
-		String actionUrl = null;
-		if (directActionNameAssociation != null) {
-			actionUrl = context.directActionURLForActionNamed((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
-		}
-		else {
-			String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
-			actionUrl = AjaxUpdateContainer.updateContainerUrl(AjaxUtils.ajaxComponentActionUrl(context), updateContainerID);
-		}
-
-		if (associations().valueForKey("function") != null) {
-			String function = (String) valueForBinding("function", context.component());
-			onClickBuffer.append("return " + function + "('" + actionUrl + "')");
-		}
-		else {
-			String replaceID = (String) valueForBinding("replaceID", context.component());
-			if (replaceID == null) {
-				String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
-				if (updateContainerID == null) {
-					onClickBuffer.append("new Ajax.Request('" + actionUrl + "', ");
-					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-					onClickBuffer.append(")");
-				}
-				else {
-					onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', '" + actionUrl + "', ");
-					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-					onClickBuffer.append(")");
-				}
+		if (beforeEffect == null && updateContainerID != null && directActionNameAssociation == null && replaceID == null && function == null && onClick == null && onClickBefore == null) {
+			NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
+			onClickBuffer.append("AUL.");
+			if (generateFunctionWrapper) {
+				onClickBuffer.append("updateFunc");
 			}
 			else {
-				onClickBuffer.append("new Ajax.Updater('" + replaceID + "', '" + actionUrl + "', ");
-				AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-				onClickBuffer.append(")");
+				onClickBuffer.append("update");
 			}
-		}
-
-		String onClick = (String) valueForBinding("onClick", context.component());
-		if (onClick != null) {
+			onClickBuffer.append("('");
+			onClickBuffer.append(updateContainerID);
+			onClickBuffer.append("', ");
+			AjaxOptions.appendToBuffer(nonDefaultOptions, onClickBuffer, context);
+			onClickBuffer.append(", '");
+			onClickBuffer.append(context.contextID());
+			onClickBuffer.append('.');
+			onClickBuffer.append(context.elementID());
+			onClickBuffer.append("'");
+			// if (generateFunctionWrapper) {
+			// onClickBuffer.append(", additionalParams");
+			// }
+			onClickBuffer.append(")");
 			onClickBuffer.append(";");
-			onClickBuffer.append(onClick);
 		}
+		else {
+			if (generateFunctionWrapper) {
+				onClickBuffer.append("function(additionalParams) {");
+			}
+			if (onClickBefore != null) {
+				onClickBuffer.append("if (");
+				onClickBuffer.append(onClickBefore);
+				onClickBuffer.append(") {");
+			}
 
-		if (onClickBefore != null) {
-			onClickBuffer.append("}");
+			if (beforeEffect != null) {
+				onClickBuffer.append("new ");
+				onClickBuffer.append(AjaxUpdateLink.fullEffectName(beforeEffect));
+				onClickBuffer.append("('");
+
+				String beforeEffectID = (String) valueForBinding("beforeEffectID", component);
+				if (beforeEffectID == null) {
+					beforeEffectID = AjaxUpdateContainer.currentUpdateContainerID();
+					if (beforeEffectID == null) {
+						beforeEffectID = updateContainerID;
+					}
+				}
+				onClickBuffer.append(beforeEffectID);
+
+				onClickBuffer.append("', { ");
+
+				String beforeEffectDuration = (String) valueForBinding("beforeEffectDuration", component);
+				if (beforeEffectDuration != null) {
+					onClickBuffer.append("duration: ");
+					onClickBuffer.append(beforeEffectDuration);
+					onClickBuffer.append(", ");
+				}
+
+				onClickBuffer.append("queue:'end', afterFinish: function() {");
+			}
+
+			String actionUrl = null;
+			if (directActionNameAssociation != null) {
+				actionUrl = context.directActionURLForActionNamed((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
+			}
+			else {
+				actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
+			}
+
+			actionUrl = "'" + actionUrl + "'";
+			if (functionName != null) {
+				actionUrl = actionUrl + ".addQueryParameters(additionalParams)";
+			}
+
+			if (function != null) {
+				onClickBuffer.append("return " + function + "(" + actionUrl + ")");
+			}
+			else {
+				if (replaceID == null) {
+					if (updateContainerID == null) {
+						onClickBuffer.append("new Ajax.Request(" + actionUrl + ", ");
+						AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+						onClickBuffer.append(")");
+					}
+					else {
+						onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', " + actionUrl + ", ");
+						AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+						onClickBuffer.append(")");
+					}
+				}
+				else {
+					onClickBuffer.append("new Ajax.Updater('" + replaceID + "', " + actionUrl + ", ");
+					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+					onClickBuffer.append(")");
+				}
+			}
+
+			if (onClick != null) {
+				onClickBuffer.append(";");
+				onClickBuffer.append(onClick);
+			}
+
+			if (beforeEffect != null) {
+				onClickBuffer.append("}});");
+			}
+
+			if (onClickBefore != null) {
+				onClickBuffer.append("}");
+			}
+
+			if (generateFunctionWrapper) {
+				onClickBuffer.append("}");
+			}
 		}
 
 		return onClickBuffer.toString();
 	}
 
-	protected NSDictionary createAjaxOptions(WOComponent component) {
+	public static void addEffect(NSMutableDictionary options, String effect, String updateContainerID, String duration) {
+		if (effect != null) {
+			if (options.objectForKey("onSuccess") != null) {
+				throw new WODynamicElementCreationException("You cannot specify both an effect and a custom onSuccess function.");
+			}
+
+			if (updateContainerID == null) {
+				throw new WODynamicElementCreationException("You cannot specify an effect without an updateContainerID.");
+			}
+			
+			StringBuffer effectBuffer = new StringBuffer();
+			effectBuffer.append("function() { new " + AjaxUpdateLink.fullEffectName(effect) + "('" + updateContainerID + "', {  queue:'end'");
+			if (duration != null) {
+				effectBuffer.append(", duration: ");
+				effectBuffer.append(duration);
+			}
+			effectBuffer.append("}) }");
+
+			options.setObjectForKey(effectBuffer.toString(), "onSuccess");
+		}
+	}
+
+	public static String fullEffectName(String effectName) {
+		String fullEffectName;
+		if (effectName == null) {
+			fullEffectName = null;
+		}
+		else if (effectName.indexOf('.') == -1) {
+			fullEffectName = "Effect." + ERXStringUtilities.capitalize(effectName);
+		}
+		else {
+			fullEffectName = effectName;
+		}
+		return fullEffectName;
+	}
+
+	protected NSMutableDictionary createAjaxOptions(WOComponent component) {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
@@ -129,36 +264,56 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			options.setObjectForKey("true", "evalScripts");
 		}
 
+		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 		return options;
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
+		
 		boolean disabled = booleanValueForBinding("disabled", false, component);
 		Object stringValue = valueForBinding("string", component);
 		String functionName = (String) valueForBinding("functionName", component);
 		if (functionName == null) {
-			String elementName = (String) valueForBinding("elementName", "a", component);
+			String elementName;
+			boolean button = booleanValueForBinding("button", false, component);
+			if (button) {
+				elementName = "input";
+			}
+			else {
+				elementName = (String) valueForBinding("elementName", "a", component);
+			}
 			boolean isATag = "a".equalsIgnoreCase(elementName);
 			boolean renderTags = (!disabled || !isATag);
 			if (renderTags) {
 				response.appendContentString("<");
 				response.appendContentString(elementName);
 				response.appendContentString(" ");
+				if (button) {
+					appendTagAttributeToResponse(response, "type", "button");
+				}
 				if (isATag) {
 					appendTagAttributeToResponse(response, "href", "javascript:void(0);");
 				}
-				appendTagAttributeToResponse(response, "onclick", onClick(context));
+				appendTagAttributeToResponse(response, "onclick", onClick(context, false));
 				appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
 				appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
 				appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 				appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
 				appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+				if (button) {
+					if (stringValue != null) {
+						appendTagAttributeToResponse(response, "value", stringValue);
+					}
+					if (disabled) {
+						response.appendContentString(" disabled");
+					}
+				}
 				// appendTagAttributeToResponse(response, "onclick",
 				// onClick(context));
 				response.appendContentString(">");
 			}
-			if (stringValue != null) {
+			if (stringValue != null && !button) {
 				response.appendContentHTMLString(stringValue.toString());
 			}
 			appendChildrenToResponse(response, context);
@@ -170,7 +325,9 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		}
 		else {
 			AjaxUtils.appendScriptHeader(response);
-			response.appendContentString(functionName + " = function() { " + onClick(context) + " }\n");
+			response.appendContentString(functionName);
+			response.appendContentString(" = ");
+			response.appendContentString(onClick(context, true));
 			AjaxUtils.appendScriptFooter(response);
 		}
 		super.appendToResponse(response, context);
@@ -178,11 +335,13 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	protected void addRequiredWebResources(WOResponse res, WOContext context) {
 		addScriptResourceInHead(context, res, "prototype.js");
-		addScriptResourceInHead(context, res, "scriptaculous.js");
+    	addScriptResourceInHead(context, res, "effects.js");
+		addScriptResourceInHead(context, res, "wonder.js");
 	}
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
+		AjaxUpdateContainer.setUpdateContainerID(request, (String) valueForBinding("updateContainerID", component));
 		WOActionResults results = (WOActionResults) valueForBinding("action", component);
 		if (results == null || booleanValueForBinding("ignoreActionResponse", false, component)) {
 			String script = (String) valueForBinding("onClickServer", component);

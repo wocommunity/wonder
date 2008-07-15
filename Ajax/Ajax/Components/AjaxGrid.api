@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "true" class = "AjaxGrid.java">
+    <binding name = "displayGroup"/>
+    <binding name = "configurationData"/>
+    <binding name = "selectedObjects"/>
+    <binding name = "willUpdate"/>
+    <binding name = "afterUpdate"/>
+    <binding name = "reverteffect"/>
+    <binding name = "endeffect"/>
+    <binding name = "zindex"/>
+    <binding name = "keyPress"/>
+    <binding name = "revert" defaults = "Boolean" />
+    <binding name = "snap"/>
+    <binding name = "class"/>
+	</wo>
+</wodefinitions>

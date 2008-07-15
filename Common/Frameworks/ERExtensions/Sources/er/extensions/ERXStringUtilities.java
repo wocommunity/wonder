@@ -1004,14 +1004,39 @@ public class ERXStringUtilities {
      * @param camelString the StringWithCaps
      * @return the string_with_underscores
      */
-    public static String camelCaseToUnderscore(String camelString) {
+    public static String camelCaseToUnderscore(String camelString, boolean lowercase) {
     	StringBuffer underscore = new StringBuffer();
-    	for (int i = 0; i < camelString.length(); i ++) {
+    	boolean lastCharacterWasWordBreak = false;
+    	boolean lastCharacterWasCapital = false;
+    	int length = camelString.length();
+    	for (int i = 0; i < length; i ++) {
     		char ch = camelString.charAt(i);
-    		if (Character.isUpperCase(ch) && i > 0) {
-    			underscore.append("_");
+    		if (Character.isUpperCase(ch)) {
+    			boolean isLastCharacter = (i == length - 1); 
+    			boolean nextCharacterIsCapital =  (!isLastCharacter && Character.isUpperCase(camelString.charAt(i + 1)));
+    			if (i > 0 && ((!lastCharacterWasWordBreak && !lastCharacterWasCapital) || (!nextCharacterIsCapital && !isLastCharacter))) {
+    				underscore.append("_");
+    				lastCharacterWasWordBreak = true;
+    			}
+    			else {
+    				lastCharacterWasWordBreak = false;
+    			}
+    			lastCharacterWasCapital = true;
     		}
-    		underscore.append(Character.toLowerCase(ch));
+    		else if (ch == '_') {
+    			lastCharacterWasWordBreak = true;
+    			lastCharacterWasCapital = false;
+    		}
+    		else {
+    			lastCharacterWasWordBreak = false;
+    			lastCharacterWasCapital = false;
+    		}
+    		if (lowercase) {
+    			underscore.append(Character.toLowerCase(ch));
+    		}
+    		else {
+    			underscore.append(ch);
+    		}
     	}
     	return underscore.toString();
     }
@@ -1083,15 +1108,7 @@ public class ERXStringUtilities {
         }
 
         if ( inputString != null ) {
-            final byte[] bytes;
-
-            try {
-                bytes = inputString.getBytes(encoding);
-            }
-            catch ( UnsupportedEncodingException e ) {
-                // this is bad, throw a runtime exception
-                throw new RuntimeException("Caught " + e.getClass() + " exception.  Encoding: '" + encoding + "'.  Reason: " + e.getMessage(), e);
-            }
+            final byte[] bytes = toBytes(inputString, encoding);
 
             if ( bytes != null ) {
                 if ( bytes.length > byteLength ) {
@@ -1776,6 +1793,63 @@ public class ERXStringUtilities {
     }
     
     /**
+     * Utility to convert to UTF-8 bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
+     * @param string string to convert
+     * @param encoding
+     * @return
+     */
+    public static byte[] toUTF8Bytes(String string) {
+    	return toBytes(string, "UTF-8");
+    }
+
+    /**
+     * Utility to convert to bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
+     * @param string string to convert
+     * @param encoding
+     * @return
+     */
+    public static byte[] toBytes(String string, String encoding) {
+    	if(string == null) {
+    		return null;
+    	}
+    	try {
+			return string.getBytes(encoding);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+    }
+
+
+    /**
+     * Utility to convert from UTF-8 bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
+     * @param string string to convert
+     * @param encoding
+     * @return
+     */
+    public static String fromUTF8Bytes(byte bytes[]) {
+    	return fromBytes(bytes, "UTF-8");
+    }
+
+    /**
+     * Utility to convert from bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
+     * @param string string to convert
+     * @param encoding
+     * @return
+     */
+    public static String fromBytes(byte bytes[], String encoding) {
+    	if(bytes == null) {
+    		return null;
+    	}
+    	try {
+			return new String(bytes, encoding);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+    }
+
+    /**
      * Pads a string to the specified number of chars by adding the the given pad char on the right side.  If the
      * string is longer than paddedLength, it is returned unchanged.
      *
@@ -1819,4 +1893,42 @@ public class ERXStringUtilities {
         return buffer.toString();
     }
     
+    /**
+     * Inserts the a string into a nother string at a particular offset.
+     * 
+     * @param destinationString the string to insert into
+     * @param contentToInsert the string to insert
+     * @param insertOffset the offset in destinationString to insert
+     * @return the resulting string
+     */
+    public static String insertString(String destinationString, String contentToInsert, int insertOffset) {
+    	String result;
+    	if (destinationString == null) {
+    		if (insertOffset > 0) {
+    			throw new IndexOutOfBoundsException("You attempted to insert '" + contentToInsert + "' into an empty string at the offset " + insertOffset + ".");
+    		}
+    		result = contentToInsert;
+    	}
+    	else {
+			StringBuffer sb = new StringBuffer(destinationString.length() + contentToInsert.length());
+			sb.append(destinationString.substring(0, insertOffset));
+			sb.append(contentToInsert);
+			sb.append(destinationString.substring(insertOffset));
+			result = sb.toString();
+    	}
+		return result;
+    }
+    
+    /**
+    * Null-safe wrapper for java.lang.String.trim
+    * @param s string to trim
+    * @return trimmed string or null if s was null
+    */
+    public static String trimString(String s) {
+    	if (s == null) {
+    		return s;
+    	} else {
+    		return s.trim();
+    	}
+    }
 }

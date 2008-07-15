@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxModalContainer" wocomponentcontent="true">
+		<binding name="id"/>
+		<binding name="label"/>
+		<binding name="title"/>
+		<binding name="closeLabel"/>
+		<binding name="width"/>
+		<binding name="heigth"/>
+		<binding name="action"/>
+		<binding name="href"/>
+		<binding name="style"/>
+		<binding name="class"/>
+	<binding defaults="Boolean" name="ajax"/>
+    </wo>
+    
+    <validation message = "If 'ajax' is bound, 'id' must also be bound.">
+    	<bound name = "ajax"/>
+    	<unbound name = "id"/>
+    </validation>
+</wodefinitions>

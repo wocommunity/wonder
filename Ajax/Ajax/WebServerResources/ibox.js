@@ -1,403 +1,813 @@
-/********************************************************
-For more info & download: http://www.ibegin.com/blog/p_ibox.html
-Created for iBegin.com - local search done right
-MIT Licensed Style
-*********************************************************/
-var indicator_img_path = "indicator.gif";
-var indicator_img_html = "<img name=\"ibox_indicator\" src=\""+indicator_img_path+"\" alt=\"Loading...\" style=\"width:128px;height:128px;\"/>"; // don't remove the name
+/**
+ * iBox version 2.17
+ * For more info & download: http://labs.ibegin.com/ibox/
+ * Created as a part of the iBegin iBegin Labs Project - http://labs.ibegin.com/
+ * For licensing please see readme.html (MIT Open Source License)
+*/
+var iBox = function()
+{
+  var _pub = {
+    // label for the close link
+    close_label: 'Close',
 
+    // AK: added message
+    error_message_loading: 'There was an error loading the document.',
 
-function init_ibox() {
-	var elem_wrapper = "ibox";
-	
-	createIbox(document.getElementsByTagName("body")[0]); //create our ibox
+    // AK: added message
+    loading_message: 'Loading...',
 
-	//	elements here start the look up from the start non <a> tags
-	//var docRoot = (document.all) ? document.all : document.getElementsByTagName("*");
-	
-	// Or make sure we only check <a> tags
-	var docRoot = document.getElementsByTagName("a");
-	var ibAttr = "rel"; 	// our attribute identifier for our iBox elements
+    // padding around the box
+    padding: 100,
+    
+    // show framed content in the parent window
+    // this *does not* work with #containers
+    inherit_frames: true,
 
-	var e;
-	for (var i = 0; i < docRoot.length - 1; i++) {
-			e = docRoot[i];
-			if(e.getAttribute(ibAttr)) {
-				var t = e.getAttribute(ibAttr);
-				if ((t.indexOf("ibox") != -1)  ||  t.toLowerCase() == "ibox") { // check if this element is an iBox element
-						e.onclick = function() { // rather assign an onclick event
-							var t = this.getAttribute(ibAttr);
-							var params = parseQuery(t.substr(5,999));
-							var url = this.href;
-							if(this.target != "") {url = this.target} 
-							var title = this.title;
-							showBG();
-							showIbox(url,title,params);	// show ibox
-							window.onscroll = maintPos;
-							window.onresize = maintPos;
-							return false;
-						}; 
-						
-				}
-			}
-     }
-}
+    // how fast to fade in the overlay/ibox (this is each step in ms)
+    fade_in_speed: 0,
 
-showBG = function() {
-	var box_w = getElem('ibox_w');
+    // our attribute identifier for our iBox elements
+    attribute_name: 'rel',
+    
+    // tags to hide when we show our box
+    tags_to_hide: ['select', 'embed', 'object'],
 
-	var opacity_level = 8;
-	box_w.style.opacity = 0;
-	box_w.style.filter = 'alpha(opacity=0)';
+    // default width of the box (when displaying html only)
+    // height is calculated automatically
+    default_width: 450,
 
-	setBGOpacity = setOpacity;
-	for (var i=0;i<=opacity_level;i++) {setTimeout("setIboxOpacity('ibox_w',"+i+")",70*i);} // from quirksmode.org
-		
-	box_w.style.display = "";
-	var pagesize = new getPageSize();
-	var scrollPos = new getScrollPos();
-	var ua = navigator.userAgent;
-	if(ua.indexOf("MSIE ") != -1) {box_w.style.width = pagesize.width+'px';} 
-	else {box_w.style.width = pagesize.width-20+'px';}
-	box_w.style.height = pagesize.height+scrollPos.scrollY+'px';
-	selectVisibility("hidden");
-}
+    // browser checks
+    is_opera: navigator.userAgent.indexOf('Opera/9') != -1,
+    is_ie: navigator.userAgent.indexOf("MSIE ") != -1,
+    is_ie6: false /*@cc_on || @_jscript_version < 5.7 @*/,
+    is_firefox: navigator.appName == "Netscape" && navigator.userAgent.indexOf("Gecko") != -1 && navigator.userAgent.indexOf("Netscape") == -1,
+    is_mac: navigator.userAgent.indexOf('Macintosh') != -1,
+    
+    base_url: '',
+    
+    /**
+     * Updates the base_url variable.
+     * @param {String} path Relative or absolute path to this file.
+     */
+    setPath: function(path)
+    {
+      _pub.base_url = path;
+    },
+    
+    /**
+     * Binds arguments to a callback function
+     */
+    bind: function(fn)
+    {
+        var args = [];
+        for (var n=1; n<arguments.length; n++) args.push(arguments[n]);
+        return function(e) { return fn.apply(this, [e].concat(args)); };
+    },
 
-/* Scrollbar hiding by Heidi http://liquidlead-art.com/ */
-selectVisibility = function(v) {
-	var selectElems = document.getElementsByTagName('select');	
-	for(var i = 0; i < selectElems.length; ++i) {
-		selectElems[i].style.visibility = v;
-	}
-}
+    /**
+     * Sets the content of the ibox
+     * @param {String} content HTML content
+     * @param {Object} params
+     */
+    html: function(content, params)
+    {
+      if (content === undefined) return els.content;
+      if (cancelled) return;
+      _pub.clear();
+      els.wrapper.style.display = "block";
+      els.wrapper.style.visibility = "hidden";
+      els.content.style.height = 'auto';
 
-hideBG = function() {
-	var box_w = getElem('ibox_w');
-	box_w.style.display = "none";
-	selectVisibility("visible");
-}
+      if (typeof(content) == 'string') els.content.innerHTML = content;
+      else els.content.appendChild(content);
 
-var loadCancelled = false;
-showIndicator = function() {
-	var ibox_p = getElem('ibox_progress');
-	ibox_p.style.display = "";
-	posToCenter(ibox_p);
-	ibox_p.onclick = function() {hideIbox();hideIndicator();loadCancelled = true;}
-}
+      var elemSize = _pub.getElementSize(els.content);
+      var pageSize = _pub.getPageSize();
 
+      if (params.can_resize === undefined) params.can_resize = true;
+      if (params.fade_in === undefined) params.use_fade = true;
 
-hideIndicator = function() {
-	var ibox_p = getElem('ibox_progress');
-	ibox_p.style.display = "none";
-	ibox_p.onclick = null;
-}
+      if (params.width) var width = parseInt(params.width);
+      else var width = _pub.default_width;
 
-createIbox = function(elem) {
-	// a trick on just creating an ibox wrapper then doing an innerHTML on our root ibox element
-	var strHTML = "<div id=\"ibox_w\" style=\"display:none;\"></div>";
-	strHTML +=	"<div id=\"ibox_progress\" style=\"display:none;\">";
-	strHTML +=  indicator_img_html;
-	strHTML +=  "</div>";
-	strHTML +=	"<div id=\"ibox_wrapper\" style=\"display:none\">";
-	strHTML +=	"<div id=\"ibox_content\"></div>";
-	strHTML +=	"<div id=\"ibox_footer_wrapper\"><div id=\"ibox_close\" style=\"float:right;\">";
-	strHTML +=	"<a id=\"ibox_close_a\" href=\"javascript:void(null);\" >Click here to close</a></div>";
-	strHTML +=  "<div id=\"ibox_footer\">&nbsp;</div></div></div></div>";
+      if (params.height) var height = parseInt(params.height);
+      else var height = elemSize.height;
 
-	var docBody = document.getElementsByTagName("body")[0];
-	var ibox = document.createElement("div");
-	ibox.setAttribute("id","ibox");
-	ibox.style.display = '';
-	ibox.innerHTML = strHTML;
-	elem.appendChild(ibox);
-}
+      els.wrapper.style.width = width + 'px';
+      els.wrapper.style.height = height + 'px';
 
-var ibox_w_height = 0;
-showIbox = function(url,title,params) {
-var ibox = getElem('ibox_wrapper');
-var ibox_type = 0;
-												
-	// set title here
-	var ibox_footer = getElem('ibox_footer');
-	if(title != "") {ibox_footer.innerHTML = title;} else {ibox_footer.innerHTML = "&nbsp;";}
+      // if we dont do this twice we get a bug on the first display
+      if (!params.height)
+      {
+        var elemSize = _pub.getElementSize(els.content);
+        var height = elemSize.height;
+      }
+      if (params.can_resize) _pub.resizeObjectToScreen(els.content, width, height, params.constrain);
+      else
+      {
+        els.content.style.width = width + 'px';
+        els.content.style.height = height + 'px';
+      }
 
-	// url = url.toLowerCase(); // have to lowercase
-	
-	// file checking code borrowed from thickbox
-	var urlString = /\.jpg|\.jpeg|\.png|\.gif|\.html|\.htm|\.php|\.cfm|\.asp|\.aspx|\.jsp|\.jst|\.rb|\.txt|\/wo\/|\/wa\//g;
-	var urlType = url.match(urlString);
-	
-	if(urlType == '.jpg' || urlType == '.jpeg' || urlType == '.png' || urlType == '.gif'){
-		ibox_type = 0;
+      // now we set the wrapper
+      var elemSize = _pub.getElementSize(els.content);
+      els.wrapper.style.width = elemSize.width + 'px';
+      els.wrapper.style.height = elemSize.height + 'px';
 
-		
-		showIndicator();
-		
-		var imgPreloader = new Image();
-		
-		imgPreloader.onload = function(){
+      _pub.reposition();
+      
+      els.wrapper.style.visibility = "visible";
+      _pub.fadeIn(els.wrapper, 10, params.fade_in ? _pub.fade_in_speed : 0);
+    },
+    
+    /**
+     * Empties the content of the iBox (also hides the loading indicator)
+     */
+    clear: function()
+    {
+      els.loading.style.display = "none";
+      while (els.content.firstChild) els.content.removeChild(els.content.firstChild);
+    },
+    
+    /**
+     * Loads text into the ibox
+     * @param {String} url
+     * @param {String} title
+     * @param {Object} params
+     */
+    show: function(text, title, params)
+    {
+      _pub.hide();
+      showInit(title, params, function(){
+        _pub.html(text, params);
+      });
+    },
+    /**
+     * Loads a url into the ibox
+     * @param {String} url
+     * @param {String} title
+     * @param {Object} params
+     */
+    showURL: function(url, title, params)
+    {
+      showInit(title, params, function(){
+        cancelled = false;
+        for (var i=0; i<_pub.plugins.list.length; i++)
+        {
+          var plugin = _pub.plugins.list[i];
+          if (plugin.match(url))
+          {
+            active_plugin = plugin;
+            plugin.render(url, params);
+            break;
+          }
+        }
+      });
+    },
 
-			imgPreloader = resizeImageToScreen(imgPreloader);
-			hideIndicator();
+    /**
+     * Hides the iBox
+     */
+    hide: function()
+    {
+      if (active_plugin)
+      {
+        // call the plugins unload method
+        if (active_plugin.unload) active_plugin.unload();
+        active_plugin = null;
+      }
+      window.onscroll = null;
+      _pub.clear();
+      // restore elements that were hidden
+      for (var i=0; i<_pub.tags_to_hide.length; i++) showTags(_pub.tags_to_hide[i]);
 
-			getElem('ibox_content').style.overflow = "hidden";
+      els.loading.style.display = 'none';
+      els.overlay.style.display = 'none';
+      els.wrapper.style.display = 'none';
+      _pub.fireEvent('hide');
+    },
 
-			var strHTML = "<a href=\"javascript:void(null);\"><img name=\"ibox_img\" src=\""+url+"\" style=\"width:"+imgPreloader.width+"px;height:"+imgPreloader.height+"px;border:0;\"/></a>";
-			
-			if(loadCancelled == false) {
-				// set width and height
-				ibox.style.height = imgPreloader.height+'px';
-				ibox.style.width = imgPreloader.width+'px';
-				ibox.style.display = "";
-				ibox.style.visibility = "hidden";
-				posToCenter(ibox); 	
-				ibox.style.visibility = "visible";
-				setIBoxContent(strHTML);
-			}
-				
-		}
-		
-		loadCancelled = false;
-		imgPreloader.src = url;
-		
+    /**
+     * Resizes an object to fit on screen
+     * @param {Object} obj
+     * @param {Integer} width
+     * @param {Integer} height
+     * @param {Boolean} constrain
+     */
+    resizeObjectToScreen: function(obj, width, height, constrain)
+    {
 
-		
-	} else if(url.indexOf("#") > 0) {
-			var strHTML = "";
-			ibox_type = 1;
+      var pagesize = _pub.getPageSize();
 
-			if(params['height']) {ibox.style.height = params['height']+'px';} 
-			else {ibox.style.height = '280px';}
-			
-			if(params['width']) {ibox.style.width = params['width']+'px';} 
-			else {ibox.style.width = '450px';}
+      var x = pagesize.width - _pub.padding;
+      var y = pagesize.height - _pub.padding;
+      
+      if (!height) var height = obj.height;
+      if (!width) var width = obj.width;
+      if (width > x)
+      {
+        if (constrain) height = height * (x/width);
+        width = x;
+      }
+      if (height > y)
+      {
+        if (constrain) width = width * (y/height);
+        height = y;
+      }
+      obj.style.width = width + 'px';
+      obj.style.height = height + 'px';
+    },
 
-		
-			ibox.style.display = "";
-			ibox.style.visibility = "hidden";
-			posToCenter(ibox); 	
-			ibox.style.visibility = "visible";
+    /**
+     * Repositions the iBox wrapper (from events)
+     */
+    reposition: function(e)
+    {
+      // verify height doesnt overreach browser's viewpane
+      _pub.center(els.loading);
+      _pub.center(els.wrapper);
+      var pageSize = _pub.getPageSize();
+      var scrollPos = _pub.getScrollPos();
+      
+      if (_pub.is_ie6) els.overlay.style.width = document.documentElement.clientWidth + 'px';
+      var height = Math.max(document.documentElement.clientHeight, document.body.clientHeight);
+      els.overlay.style.height = height + 'px';
+      // AK: added
+      var width = Math.max(document.documentElement.clientWidth, document.body.clientWidth);
+      els.overlay.style.width = width + 'px';
+    },
 
-			var elemSrcId = url.substr(url.indexOf("#") + 1,1000);
-			var elemSrc = getElem(elemSrcId);
-			
-			if(elemSrc) {
-				strHTML = elemSrc.innerHTML;
-			}
+    /**
+     * Centers an object
+     * @param {Object} obj
+     */
+    center: function(obj)
+    {
+      var pageSize = _pub.getPageSize();
+      var scrollPos = _pub.getScrollPos();
+      var emSize = _pub.getElementSize(obj);
+      var x = Math.round((pageSize.width - emSize.width) / 2 + scrollPos.scrollX);
+      var y = Math.round((pageSize.height - emSize.height) / 2 + scrollPos.scrollY);
+      obj.style.left = x + 'px';
+      obj.style.top = y + 'px';
+    },
+    
+    getStyle: function(obj, styleProp)
+    {
+      if (obj.currentStyle)
+        return obj.currentStyle[styleProp];
+      else if (window.getComputedStyle)
+        return document.defaultView.getComputedStyle(obj,null).getPropertyValue(styleProp);
+    },
 
-			setIBoxContent(strHTML);
+    /**
+     * Gets the scroll positions
+     */
+    getScrollPos: function()
+    {
+      var docElem = document.documentElement;
+      return {
+        scrollX: document.body.scrollLeft || window.pageXOffset || (docElem && docElem.scrollLeft),
+        scrollY: document.body.scrollTop || window.pageYOffset || (docElem && docElem.scrollTop)
+      };
+    },
 
-	}else if(urlType=='.htm'||urlType=='.html'||urlType=='.php'||
-			 urlType=='.asp'||urlType=='.aspx'||urlType=='.jsp'||
-			 urlType=='.jst'||urlType=='.rb'||urlType=='.txt'||urlType=='/wo/'||urlType=='/wa/'||
-			 urlType=='.cfm') {
-			
-			ibox_type = 2;
-	
-			showIndicator();
-			http.open('get',url,true);
-	
-			http.onreadystatechange = function() {
-				if(http.readyState == 4){
-					hideIndicator();
-					
-					if(params['height']) {ibox.style.height = params['height']+'px';} 
-					else {ibox.style.height = '280px';}
-					
-					if(params['width']) {ibox.style.width = params['width']+'px';} 
-					else {ibox.style.width = '450px';}
-		
-					ibox.style.display = "";
-					ibox.style.visibility = "hidden";
-					posToCenter(ibox); 	
-					ibox.style.visibility = "visible";
+    /**
+     * Gets the page constraints
+     */
+    getPageSize: function()
+    {
+      return {
+        width: window.innerWidth || (document.documentElement && document.documentElement.clientWidth) || document.body.clientWidth,
+        height: window.innerHeight || (document.documentElement && document.documentElement.clientHeight) || document.body.clientHeight
+      };
+    },
 
-					var response = http.responseText;
-					setIBoxContent(response);
-					
-					
-				}
-			}
-			
-			http.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
-			http.send(null);
+    /**
+     * Gets an objects offsets
+     * @param {Object} obj
+     */
+    getElementSize: function(obj)
+    {
+      return {
+        width: obj.offsetWidth || obj.style.pixelWidth,
+        height: obj.offsetHeight || obj.style.pixelHeight
+      };
+    },
 
-			
-	} 
-	
-	ibox.style.opacity = 0;
-	ibox.style.filter = 'alpha(opacity=0)';	
-	var ibox_op_level = 10;
-	
-	setIboxOpacity = setOpacity;
-	for (var i=0;i<=ibox_op_level;i++) {setTimeout("setIboxOpacity('ibox_wrapper',"+i+")",30*i);}
+    fadeIn: function(obj, level, speed, callback)
+    {
+      if (level === undefined) var level = 100;
+      if (speed === undefined) var speed = 70;
+      if (!speed)
+      {
+        _pub.setOpacity(null, obj, level*10);
+        if (callback) callback();
+        return;
+      }
+    
+      _pub.setOpacity(null, obj, 0);
+      for (var i=0; i<=level; i++)
+      {
+        setTimeout(_pub.bind(_pub.setOpacity, obj, i*10), speed*i);
+      }
+      if (callback) setTimeout(callback, speed*(i+1));
+    },
 
+    /**
+     * Sets the opacity of an element
+     * @param {Object} obj
+     * @param {Integer} value
+     */
+    setOpacity: function(e, obj, value)
+    {
+      obj.style.opacity = value/100;
+      obj.style.filter = 'alpha(opacity=' + value + ')';
+    },
+    
+    /**
+     * Creates a new XMLHttpRequest object based on browser
+     */
+    createXMLHttpRequest: function()
+    {
+      var http;
+      if (window.XMLHttpRequest)
+      { // Mozilla, Safari,...
+        http = new XMLHttpRequest();
+        if (http.overrideMimeType)
+        {
+          // set type accordingly to anticipated content type
+          http.overrideMimeType('text/html');
+        }
+      }
+      else if (window.ActiveXObject)
+      { // IE
+        try {
+          http = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e) {
+          try {
+            http = new ActiveXObject("Microsoft.XMLHTTP");
+          } catch (e) {}
+        }
+      }
+      if (!http)
+      {
+        alert('Cannot create XMLHTTP instance');
+        return false;
+      }
+      return http;
+    },
+    
+    addEvent: function(obj, evType, fn)
+    {
+      if (obj.addEventListener)
+      {
+        obj.addEventListener(evType, fn, false);
+        return true;
+      }
+      else if (obj.attachEvent)
+      {
+        var r = obj.attachEvent("on"+evType, fn);
+        return r;
+      }
+      else
+      {
+        return false;
+      }
+    },
+    
+    addEventListener: function(name, callback)
+    {
+      if (!events[name]) events[name] = new Array();
+      events[name].push(callback);
+    },
+    
+    fireEvent: function(name)
+    {
+        if (events[name] && events[name].length)
+        {
+          for (var i=0; i<events[name].length; i++)
+          {
+            var args = [];
+            for (var n=1; n<arguments.length; n++) args.push(arguments[n]);
+            // Events returning false stop propagation
+            if (events[name][i](args) === false) break;
+          }
+        }
+    },
+    
+    /**
+     * Parses the arguments in the rel attribute
+     * @param {String} query
+     */
+    parseQuery: function(query)
+    {
+       var params = new Object();
+       if (!query) return params; 
+       var pairs = query.split(/[;&]/);
+       var end_token;
+       for (var i=0; i<pairs.length; i++)
+       {
+          var keyval = pairs[i].split('=');
+          if (!keyval || keyval.length != 2) continue;
+          var key = unescape(keyval[0]);
+          var val = unescape(keyval[1]);
+          val = val.replace(/\+/g, ' ');
+          if (val[0] == '"') var token = '"';
+          else if (val[0] == "'") var token = "'";
+          else var token = null;
+          if (token)
+          {
+            if (val[val.length-1] != token)
+            {
+              do
+              {
+                i += 1;
+                val += '&'+pairs[i];
+              }
+              while ((end_token = pairs[i][pairs[i].length-1]) != token)
+            }
+            val = val.substr(1, val.length-2);
+          }
+          params[key] = val;
+       }
+       return params;
+    },
+    handleTag: function(e)
+    {
+      var t = this.getAttribute('rel');
+      var params = parent.iBox.parseQuery(t.substr(5,999));
+      if (params.target) var url = params.target
+      else if (this.target && !params.ignore_target) var url = this.target;
+      else var url = this.href;
+      var title = this.title;
+      parent.iBox.showURL(url, title, params);
+      return false;
+    },
+    
+    plugins: {
+      list: new Array(),
+      register: function(func, last)
+      {
+        if (!last)
+        {
+          _pub.plugins.list = _pub.plugins.list.concat([func],_pub.plugins.list);
+        }
+        else
+        {
+          _pub.plugins.list.push(func);
+        }
+      }
+    },
+    
+    init: function() {
+    	initialize();
+    }
+  };
+  
+  // private methods and variables
+  var cancelled = false;
+  var active_plugin = null;
+  
+  // events
+  var events = {};
 
-	if(ibox_type == 1 || ibox_type == 2) {
-		ibox.onclick = null;getElem("ibox_close_a").onclick = function() {hideIbox();}
-	} else {
-		ibox.onclick = hideIbox;getElem("ibox_close_a").onclick = null;
-	}
+  // some containers
+  // we store these in memory instead of finding them each time
+  var els = {
+    wrapper: null,
+    footer: null,
+    content: null,
+    overlay: null,
+    loading: null
+  };
 
-}
+  /**
+   * Creates the iBox container and appends it to an element
+   * @param {Object} elem Container to attach to
+   * @return {Object} iBox element
+   */
+  var create = function(elem)
+  {
+    // TODO: why isnt this using DOM tools
+    // a trick on just creating an ibox wrapper then doing an innerHTML on our root ibox element
+    var container = document.createElement('div');
+    container.id = 'ibox';
+    container.style.display = 'block';
 
+    els.overlay = document.createElement('div');
+    els.overlay.style.display = 'none';
+    els.overlay.id = 'ibox_overlay';
+    els.overlay.onclick = _pub.hide;
+    container.appendChild(els.overlay);
 
+    els.loading = document.createElement('div');
+    els.loading.id = 'ibox_loading';
+    els.loading.innerHTML = _pub.loading_message;
+    els.loading.style.display = 'none';
+    els.loading.onclick = function() {
+      _pub.hide();
+      cancelled = true;
+    }
+    container.appendChild(els.loading);
 
+    els.wrapper = document.createElement('div')
+    els.wrapper.id = 'ibox_wrapper';
+    els.wrapper.style.display = 'none';
 
-setOpacity = function (elemid,value)	{
-		var e = getElem(elemid);
-		e.style.opacity = value/10;
-		e.style.filter = 'alpha(opacity=' + value*10 + ')';
-}
+    els.content = document.createElement('div');
+    els.content.id = 'ibox_content';
+    els.wrapper.appendChild(els.content);
+  
+    var child = document.createElement('div');
+    child.id = 'ibox_footer_wrapper';
+  
+    var child2 = document.createElement('a');
+    child2.innerHTML = _pub.close_label;
+    child2.href = 'javascript:void(0)';
+    //AK: added id
+    child2.id = 'ibox_close_link';
+    child2.onclick = _pub.hide;
+    child.appendChild(child2);
+  
+    els.footer = document.createElement('div');
+    els.footer.id = 'ibox_footer';
+    els.footer.innerHTML = '&nbsp;';
+    child.appendChild(els.footer);
+    els.wrapper.appendChild(child);
 
-resizeImageToScreen = function(objImg) {
-	
-	
-	var pagesize = new getPageSize();
-	
-	var x = pagesize.width - 100;
-	var y = pagesize.height - 100;
+    container.appendChild(els.wrapper);
 
-	if(objImg.width > x) { 
-		objImg.height = objImg.height * (x/objImg.width); 
-		objImg.width = x; 
-		if(objImg.height > y) { 
-			objImg.width = objImg.width * (y/objImg.height); 
-			objImg.height = y; 
-		}
-	} 
+    elem.appendChild(container);
+    return container;
+  };
+  
+  var hideTags = function(tag)
+  {
+    var list = document.getElementsByTagName(tag);
+    for (var i=0; i<list.length; i++)
+    {
+      if (_pub.getStyle(list[i], 'visibility') != 'hidden' && list[i].style.display != 'none')
+      {
+        list[i].style.visibility = 'hidden';
+        list[i].wasHidden = true;
+      }
+    }
+  };
+  
+  var showTags = function(tag)
+  {
+    var list = document.getElementsByTagName(tag);
+    for (var i=0; i<list.length; i++)
+    {
+      if (list[i].wasHidden)
+      {
+        list[i].style.visibility = 'visible';
+        list[i].wasHidden = null;
+      }
+    }
+  };
+  
+  var showInit = function(title, params, callback)
+  {
+    els.loading.style.display = "block";
+    _pub.center(els.loading);
+    
+    _pub.reposition();
+    if (!_pub.is_firefox) var amount = 8;
+    else var amount = 10;
+    for (var i=0; i<_pub.tags_to_hide.length; i++) hideTags(_pub.tags_to_hide[i]);
 
-	else if(objImg.height > y) { 
-		objImg.width = objImg.width * (y/objImg.height); 
-		objImg.height = y; 
-		if(objImg.width > x) { 
-			objImg.height = objImg.height * (x/objImg.width); 
-			objImg.width = x;
-		}
-	}
-	
-	return objImg;
-}
+    window.onscroll = _pub.reposition;
 
-maintPos = function() {
-	var ibox = getElem('ibox_wrapper');
-	var box_w = getElem('ibox_w');
-	var pagesize = new getPageSize();
-	var ua = navigator.userAgent;
-	
-	if(ua.indexOf("MSIE ") != -1) {box_w.style.width = pagesize.width+'px';} 
-	else {box_w.style.width = pagesize.width-20+'px';}
+    // set title here
+    els.footer.innerHTML = title || "&nbsp;";
 
-	if(ua.indexOf("Opera/9") != -1) {box_w.style.height = document.body.scrollHeight+'px';}
-	else {box_w.style.height = document.body.scrollHeight+50+'px';}
-	posToCenter(ibox);
-	
-}
+    els.overlay.style.display = "block";
+    // AK commented, is already in CSS
+    // els.overlay.style.backgroundImage = "url('" + _pub.base_url + "images/bg.png')";
+	// AK added
+	// alert(document.getElementById('ibox_footer_wrapper').firstChild);
+	params.closeLabel = params.closeLabel ? params.closeLabel : _pub.close_label;
+	document.getElementById('ibox_footer_wrapper').firstChild.innerHTML = params.closeLabel;
+    
+    _pub.fadeIn(els.overlay, amount, _pub.fade_in_speed, callback);
+    _pub.fireEvent('show');
+  };
+  
+  var drawCSS = function()
+  {
+    // Core CSS (positioning/etc)
+    var core_styles = "#ibox {z-index:1000000;} #ibox_overlay {position:absolute;top:0;left:0;right:0;z-index:1000000;} #ibox_loading {position:absolute;z-index:1000001;} #ibox_wrapper {position:absolute;top:0;left:0;z-index:1000001;padding:25px 10px 10px 10px;} #ibox_content {z-index:1000002;overflow:auto;height:100%;position:relative;padding:2px;text-align:left;} #ibox_content object { display:block;} #ibox_content .ibox_image {width:100%;height:100%;margin:0;padding:0;border:0;display:block;} #ibox_footer_wrapper a {float:right;display:block;outline:0;margin:0;padding:0;} #ibox_footer_wrapper {text-align:left;position:absolute;top:5px;right:10px;left:10px;white-space:nowrap;overflow:hidden;}";
+    
+    // Default style/theme/skin/whatever
+    var default_skin = "#ibox_footer_wrapper {font-weight:bold;}#ibox_footer_wrapper a {text-decoration:underline;color:darkblue;text-transform:lowercase;font-weight:normal;font-family:Verdana, Arial, Helvetica, sans-serif;font-size:12px;}#ibox_footer_wrapper {font-size:12px;font-family:Verdana, Arial, Helvetica, sans-serif;}#ibox_wrapper {border:1px solid #ccc;}#ibox_wrapper, #ibox_footer_wrapper a {background-color:#999;}#ibox_content {background-color:#fff;border:1px solid #666;}#ibox_loading {padding:50px; background:#000;color:#fff;font-size:16px;font-weight:bold;}";
 
-hideIbox = function() {
-	hideBG();
-	var ibox = getElem('ibox_wrapper');
-	ibox.style.display = "none";
+    var head = document.getElementsByTagName("head")[0];
+    // tricky hack for IE
+    var htmDiv = document.createElement('div');
 
-	clearIboxContent();
-	window.onscroll = null;
-}
+    htmDiv.innerHTML = '<p>x</p><style type="text/css">'+default_skin+'</style>';
+    head.insertBefore(htmDiv.childNodes[1], head.firstChild);
 
-posToCenter = function(elem) {
-	var scrollPos = new getScrollPos();
-	var pageSize = new getPageSize();
-	var emSize = new getElementSize(elem);
-	var x = Math.round(pageSize.width/2) - (emSize.width /2) + scrollPos.scrollX;
-	var y = Math.round(pageSize.height/2) - (emSize.height /2) + scrollPos.scrollY;	
-	elem.style.left = x+'px';
-	elem.style.top = y+'px';	
-}
+    htmDiv.innerHTML = '<p>x</p><style type="text/css">'+core_styles+'</style>';
+    head.insertBefore(htmDiv.childNodes[1], head.firstChild);
+  }
 
-getScrollPos = function() {
-	var docElem = document.documentElement;
-	this.scrollX = self.pageXOffset || (docElem&&docElem.scrollLeft) || document.body.scrollLeft;
-	this.scrollY = self.pageYOffset || (docElem&&docElem.scrollTop) || document.body.scrollTop;
-}
+  var initialize = function()
+  {
+    // elements here start the look up from the start non <a> tags
+    drawCSS();
+    var els = document.getElementsByTagName("a");
+    for (var i=0; i<els.length; i++)
+    {
+      if (els[i].getAttribute(_pub.attribute_name))
+      {
+        var t = els[i].getAttribute(_pub.attribute_name);
+        if ((t.indexOf("ibox") != -1) || t.toLowerCase() == "ibox")
+        { // check if this element is an iBox element
+          if (_pub.inherit_frames && window.parent) els[i].onclick = window.parent.iBox.handleTag;
+          else
+          els[i].onclick = _pub.handleTag;
+        }
+      }
+    }
+    create(document.body);
+    _pub.http = _pub.createXMLHttpRequest();
+  };
 
-getPageSize = function() {
-	var docElem = document.documentElement
-	this.width = self.innerWidth || (docElem&&docElem.clientWidth) || document.body.clientWidth;
-	this.height = self.innerHeight || (docElem&&docElem.clientHeight) || document.body.clientHeight;
-}
+  //AK : keypress didn't work for some reason
+  _pub.addEvent(window, 'keyup', function(e){if (e.keyCode == (window.event ? 27 : e.DOM_VK_ESCAPE)) { iBox.hide(); }});
+  _pub.addEvent(window, 'resize', _pub.reposition);
+  _pub.addEvent(window, 'load', initialize);
 
-getElementSize = function(elem) {
-	this.width = elem.offsetWidth ||  elem.style.pixelWidth;
-	this.height = elem.offsetHeight || elem.style.pixelHeight;
-}
+  // DEFAULT PLUGINS
 
-setIBoxContent = function(str) {
-	clearIboxContent();
-	var e = getElem('ibox_content');
-	e.innerHTML = str;
-	e.style.overflow = "auto";
-}
-clearIboxContent = function() {
-	var e = getElem('ibox_content');
-	e.innerHTML = "";
-	e.style.overflow = "hidden";
-}
+  /**
+   * Handles embedded containers in the page based on url of #container.
+   * This _ONLY_ works with hidden containers.
+   */
+  var iBoxPlugin_Container = function()
+  {
+    var was_error = false;
+    var original_wrapper = null;
+    return {
+      /**
+       * Matches the url and returns true if it fits this plugin.
+       */
+      match: function(url)
+      {
+        return url.indexOf('#') != -1;
+      },
+      /**
+       * Called when this plugin is unloaded.
+       */
+      unload: function()
+      {
+        if (was_error) return;
+        var elemSrc = _pub.html().firstChild;
+        elemSrc.style.display = 'none';
+        original_wrapper.appendChild(elemSrc);
+      },
+      /**
+       * Handles the output
+       * @param {iBox} ibox
+       * @param {String} url
+       * @return {iBoxContent} an instance or subclass of iBoxContent
+       */
+      render: function(url, params)
+      {
+        was_error = false;
+        var elemSrcId = url.substr(url.indexOf("#") + 1);
+        var elemSrc = document.getElementById(elemSrcId);
+        // If the element doesnt exist, break the switch
+        if (!elemSrc)
+        {
+          was_error = true;
+          _pub.html(document.createTextNode(_pub.error_message_loading), params);
+        }
+        else
+        {
+          original_wrapper = elemSrc.parentNode;
+          elemSrc.style.display = 'block';
+          _pub.html(elemSrc, params);
+        }
+      }
+    }
+  }();
+  _pub.plugins.register(iBoxPlugin_Container, true);
 
+  /**
+   * Handles images
+   */
+  var iBoxPlugin_Image = function()
+  {
+    // Image types (for auto detection of image display)
+    var image_types = /\.jpg|\.jpeg|\.png|\.gif/gi;
 
-getElem = function(elemId) {
-	return document.getElementById(elemId);	
-}
+    return {
+      match: function(url)
+      {
+        return url.match(image_types);
+      },
 
-// parseQuery code borrowed from thickbox, Thanks Cody!
-parseQuery = function(query) {
-   var Params = new Object ();
-   if (!query) return Params; 
-   var Pairs = query.split(/[;&]/);
-   for ( var i = 0; i < Pairs.length; i++ ) {
-      var KeyVal = Pairs[i].split('=');
-      if ( ! KeyVal || KeyVal.length != 2 ) continue;
-      var key = unescape( KeyVal[0] );
-      var val = unescape( KeyVal[1] );
-      val = val.replace(/\+/g, ' ');
-      Params[key] = val;
+      render: function(url, params)
+      {  
+        var img = document.createElement('img');
+        img.onclick = _pub.hide;
+        img.className = 'ibox_image'
+        img.style.cursor = 'pointer';
+        img.onload = function()
+        {
+          _pub.html(img, {height: img.height, width: img.width, constrain: true})
+        }
+        img.onerror = function()
+        {
+          _pub.html(document.createTextNode(_pub.error_message_loading), params);
+        }
+        img.src = url;
+      }
+    }
+  }();
+  _pub.plugins.register(iBoxPlugin_Image);
 
-   }
-   
-   return Params;
-}
+  var iBoxPlugin_YouTube = function()
+  {
+    var youtube_url = /(?:http:\/\/)?(?:www\d*\.)?(youtube\.(?:[a-z]+))\/(?:v\/|(?:watch(?:\.php)?)?\?(?:.+&)?v=)([^&]+).*/;
+    return {
+      match: function(url)
+      {
+        return url.match(youtube_url);
+      },
 
-/********************************************************
- Make this IE7 Compatible ;)
- http://ajaxian.com/archives/ajax-on-ie-7-check-native-first
-*********************************************************/
-createRequestObject = function() {
-	var xmlhttp;
-		/*@cc_on
-	@if (@_jscript_version>= 5)
-			try {xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-			} catch (e) {
-					try {xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");}
-					catch (E) {xmlhttp = false;}
-			}
-	@else
-		xmlhttp = false;
-	@end @*/
-	if (!xmlhttp && typeof XMLHttpRequest != "undefined") {
-			try {xmlhttp = new XMLHttpRequest();} catch (e) {xmlhttp = false;}
-	}
-	return xmlhttp;
-}
+      render: function(url, params)
+      {
+        var _match = url.match(youtube_url);
+        var domain = _match[1];
+        var id = _match[2];
+        params.width = 425;
+        params.height = 355;
+        params.can_resize = false;
+        var html = '<div><object width="425" height="355"><param name="movie" value="http://www.' + domain + '/v/' + id + '"/><param name="wmode" value="transparent"/><embed src="http://www.' + domain + '/v/' + id + '" type="application/x-shockwave-flash" wmode="transparent" width="425" height="355"></embed></object></div>';
+        _pub.html(html, params);
+      }
+    }
+  }();
+  _pub.plugins.register(iBoxPlugin_YouTube);
 
-var http = createRequestObject();
+  //AK added support for iframes/external urls
+  var iBoxPlugin_External = function()
+  {
+    return {
+      match: function(url)
+      {
+      	var server = document.location.href.replace(new RegExp("(http:\/\/[^\/]+)\/.*"), "$1");
+        return url.indexOf(server) == -1;
+      },
 
-function addEvent(obj, evType, fn){ 
- if (obj.addEventListener){ 
-   obj.addEventListener(evType, fn, false); 
-   return true; 
- } else if (obj.attachEvent){ 
-   var r = obj.attachEvent("on"+evType, fn); 
-   return r; 
- } else { 
-   return false; 
- } 
-}
-addEvent(window, 'load', init_ibox);
+      render: function(url, params)
+      {
+       var html = "<iframe style='width: 100%; height: 100%; margin: 0; padding: 0; border: 0' src='" + url + "'></iframe>";
+        _pub.html(html, params);
+      }
+    }
+  }();
+  _pub.plugins.register(iBoxPlugin_External);
+
+  var iBoxPlugin_Document = function()
+  {
+    return {
+      match: function(url)
+      {
+        return true;
+      },
+
+      render: function(url, params)
+      {
+        _pub.http.open('get', url, true);
+
+        _pub.http.onreadystatechange = function()
+        {
+          if (_pub.http.readyState == 4)
+          {
+            // XXX: why does status return 0?
+            if (_pub.http.status == 200 || _pub.http.status == 0)
+            {
+              _pub.html(_pub.http.responseText, params);
+            }
+            else
+            {
+              _pub.html(document.createTextNode(_pub.error_message_loading), params);
+            }
+          }
+        }
+        _pub.http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        _pub.http.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        _pub.http.send(null);
+      }
+    };
+  }();
+  _pub.plugins.register(iBoxPlugin_Document);
+
+  return _pub;
+}();

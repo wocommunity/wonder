@@ -1,0 +1,120 @@
+PageNumberRepetition : WORepetition {
+	list = pageNumbers;
+	item = repetitionPageNumber;
+}
+
+HasMultiplePagesConditional : WOConditional {
+	condition = hasMultiplePages;
+}
+
+HasPreviousPageConditional : WOConditional {
+	condition = hasPreviousPage;
+}
+
+HasNoPreviousPageConditional : WOConditional {
+	condition = hasPreviousPage;
+	negate = true;
+}
+
+PreviousPageAction : WOHyperlink {
+	action = previousPage;
+	class = "paginatorPrev";
+}
+
+PreviousLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.previous";
+}
+
+ShowLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.show";
+}
+
+PerPageLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.page";
+}
+HasNextPageConditional : WOConditional {
+	condition = hasNextPage;
+}
+
+HasNoNextPageConditional : WOConditional {
+	condition = hasNextPage;
+	negate = true;
+}
+
+NextPageAction : WOHyperlink {
+	action = nextPage;
+	class = "paginatorNext";
+}
+
+NextLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.next";
+}
+
+SelectPageAction : WOHyperlink {
+	action = selectPage;
+}
+
+PageNumber : WOString {
+	value = repetitionPageNumber.pageNumber;
+}
+
+IsCurrentPageNumberConditional : WOConditional {
+	condition = currentPageNumber;
+}
+
+IsNotCurrentPageNumberConditional : WOConditional {
+	condition = currentPageNumber;
+	negate = true;
+}
+
+IsPageNumberConditional : WOConditional {
+	condition = repetitionPageNumber.pageNumber;
+}
+
+IsEllipsisConditional : WOConditional {
+	condition = repetitionPageNumber.pageNumber;
+	negate = true;
+}
+
+ShowPageRange : WOConditional {
+	condition = ^showPageRange;
+}
+
+FirstIndex : WOString {
+	value = firstIndex;
+}
+
+LastIndex : WOString {
+	value = lastIndex;
+}
+
+ShowLabels : WOConditional {
+	condition = showLabels;
+}
+
+DisplayName : ERXPluralString {
+	count = displayNameCount;
+	value = displayName;
+}
+
+
+DisplayName2 : ERXPluralString {
+	count = displayNameCount;
+	value = displayName;
+	showNumber = false;
+}
+
+BatchSizes : WORepetition {
+	list = possibleBatchSizes;
+	item = currentBatchSize;
+}
+
+SelectBatchSize : WOHyperlink {
+	action = selectBatchSize;
+	string = currentBatchSizeString;
+	disabled = isCurrentBatchSizeSelected;
+}
+
+ShowBatchSizes : WOConditional {
+  condition = showBatchSizes;
+}

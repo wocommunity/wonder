@@ -1,0 +1,59 @@
+<webobject name = "ProgressUpdateContainer">
+	<webobject name = "FireStartedJavascriptEventsConditional">
+		<script>
+		<webobject name = "StartedFunction"/>
+		</script>
+	</webobject>
+	<webobject name = "ProgressBarVisible">
+		<table class = "progressBarContainer">
+			<tr>
+				<td><table class = "progressBar" width = "100%" cellspacing = "0">
+							<tr>
+								<webobject name = "ProgressStartedConditional">
+									<webobject name = "Finished">&nbsp;</webobject>
+								</webobject>
+								<webobject name = "ProgressNotDoneConditional">
+									<webobject name = "Unfinished">&nbsp;</webobject>
+								</webobject>
+							</tr>
+						</table></td>
+			</tr>
+			
+			<tr>
+				<td class = "progressSummary">
+					<webobject name = "ProcedureStartedConditional">
+						<webobject name = "ProgressNotStartedConditional"><webobject name = "StartingText"/></webobject>
+						<webobject name = "CanceledConditional"><webobject name = "CancelingText"/></webobject>
+					</webobject>
+					<webobject name = "ProgressStartedConditional">
+						<webobject name = "NotCanceledConditional">
+							<webobject name = "Value" /> of <webobject name = "Maximum" /><webobject name = "HasStatusConditional">, <webobject name = "Status"/></webobject>
+							<webobject name = "AllowCancelConditional">
+								( <webobject name = "CancelAction"><webobject name = "CancelText"/></webobject> )
+							</webobject>
+						</webobject>
+					</webobject>
+				</td>
+			</tr>
+		</table>
+	</webobject>
+	<webobject name = "ProcedureStartedConditional">
+		<webobject name = "DoneConditional">
+			<webobject name = "FireFinishedJavascriptEventsConditional">
+				<script>
+					<webobject name = "FinishedFunction"/>
+					<webobject name = "CanceledConditional"><webobject name = "CanceledFunction"/></webobject>
+					<webobject name = "FailedConditional"><webobject name = "FailedFunction"/></webobject>
+					<webobject name = "SucceededConditional"><webobject name = "SucceededFunction"/></webobject>
+					<webobject name = "ID"/>Update();
+				</script>
+			</webobject>
+		</webobject>
+		<webobject name = "NotDoneConditional">
+			<script>
+			setTimeout("<webobject name = "ID"/>Update()", <webobject name = "RefreshTime"/>);
+			</script>
+		</webobject>
+	</webobject>
+	<webobject name = "Contents"/>
+</webobject>

@@ -15,6 +15,7 @@ DroppableContainer : WOGenericContainer {
 	elementName = elementName;
 	class = ^class;
 	id = ^id;
+	style = ^style;
 }
 
 DroppableContainerID : WOString {

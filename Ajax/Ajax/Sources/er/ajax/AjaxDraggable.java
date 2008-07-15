@@ -86,6 +86,7 @@ public class AjaxDraggable extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("ghosting", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("handle", AjaxOption.DEFAULT));
     ajaxOptionsArray.addObject(new AjaxOption("change", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("keyPress", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
   }
@@ -116,11 +117,9 @@ public class AjaxDraggable extends AjaxComponent {
 
   protected void addRequiredWebResources(WOResponse res) {
     addScriptResourceInHead(res, "prototype.js");
-    addScriptResourceInHead(res, "scriptaculous.js");
-    addScriptResourceInHead(res, "effects.js");
-    addScriptResourceInHead(res, "builder.js");
-    addScriptResourceInHead(res, "dragdrop.js");
-    addScriptResourceInHead(res, "controls.js");
+	addScriptResourceInHead(res, "effects.js");
+	addScriptResourceInHead(res, "dragdrop.js");
+	addScriptResourceInHead(res, "wonder.js");
   }
 
   public WOActionResults handleRequest(WORequest request, WOContext context) {

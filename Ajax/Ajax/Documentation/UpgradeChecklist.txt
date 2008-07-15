@@ -1,0 +1,20 @@
+This is the checklist of specific code to review when upgrading prototype.js versions:
+
+wonder_inplace.js
+* overrides features of Ajax.InPlaceEditor
+
+wonder.js
+* Ajax.StoppedPeriodicalUpdater extends Ajax.Base
+* Ajax.ActivePeriodicalUpdater extends Ajax.Base
+* Form.Element.RadioButtonObserver extends Form.Element.EventObserver
+* AjaxSubmitButton.observeField works around a prototype bug with observing radio buttons
+* Prototype.exec brought forward
+
+prototype.js
+* descendantOf: Applied http://dev.rubyonrails.org/ticket/10413
+* Form.Element.Methods.serialize, element.getValue() was failing in a crazy case -- switched to Form.Element.Methods.getValue(element);
+
+ibox.js:
+* added _pub.init function to support reinitializing iBox
+* added X-Requested-With header so iBox requests are recognized as Ajax requests
+ 

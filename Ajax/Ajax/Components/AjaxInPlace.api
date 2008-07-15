@@ -3,12 +3,17 @@
 	<wo wocomponentcontent = "true" class = "AjaxInPlace">
 		<binding name = "id"/>
 		<binding name = "class"/>
+		<binding name = "style"/>
+		<binding name = "button"/>
 		<binding name = "saveLabel"/>
 		<binding name = "cancelLabel"/>
 		<binding name = "editClass"/>
 		<binding name = "editAction"/>
+		<binding name = "formSerializer"/>
 		<binding name = "saveAction"/>
+		<binding name = "saveUpdateContainerID"/>
 		<binding name = "cancelAction"/>
+		<binding name = "cancelUpdateContainerID"/>
 		<binding name = "saveClass"/>
 		<binding name = "onSaveClick"/>
 		<binding name = "onSaveSuccess"/>
@@ -32,5 +37,24 @@
 		<binding name = "submitOnSave"/>
 		<binding name = "canSave"/>
 		<binding name = "canEdit"/>
+		<binding name = "editOnly"/>
+		
+		<binding name = "editInsertion"/>
+		<binding name = "editInsertionDuration"/>
+		<binding name = "editBeforeInsertionDuration"/>
+		<binding name = "editAfterInsertionDuration"/>
+		
+		<binding name = "saveInsertion"/>
+		<binding name = "saveInsertionDuration"/>
+		<binding name = "saveBeforeInsertionDuration"/>
+		<binding name = "saveAfterInsertionDuration"/>
+		
+		<binding name = "cancelInsertion"/>
+		<binding name = "cancelInsertionDuration"/>
+		<binding name = "cancelBeforeInsertionDuration"/>
+		<binding name = "cancelAfterInsertionDuration"/>
+		<binding name = "elementName"/>
+
+		<binding name = "onsubmit"/>
 	</wo>
 </wodefinitions>

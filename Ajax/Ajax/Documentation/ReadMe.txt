@@ -1,4 +1,4 @@
-Some docs about the prototype lib:
+Some docs about the prototype framework:
 
-http://blogs.ebusiness-apps.com/jordan/pages/Prototype%20Library%20Info.htm
+http://www.prototypejs.org/
 

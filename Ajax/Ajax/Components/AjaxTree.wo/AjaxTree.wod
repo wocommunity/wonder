@@ -1,3 +1,23 @@
+CloseULLI : WOString {
+	value = "</ul></li>";
+	escapeHTML = false;
+}
+
+CloseLI : WOString {
+	value = "</li>";
+	escapeHTML = false;
+}
+
+OpenUL : WOString {
+	value = "<ul>";
+	escapeHTML = false;
+}
+
+NodeItem : WOString {
+	value = nodeItem;
+	escapeHTML = false;
+}
+
 ContainerID : WOString {
 	value = id;
 }
@@ -55,12 +75,14 @@ CollapseAction : AjaxUpdateLink {
 	action = collapse;
 	updateContainerID = id;
 	function = toggleFunctionName;
+	class = imageLinkClass;
 }
 
 ExpandAction : AjaxUpdateLink {
 	action = expand;
 	updateContainerID = ^id;
 	function = toggleFunctionName;
+	class = imageLinkClass;	
 }
 
 TreeNodeRenderer : WOComponentContent {
@@ -70,5 +92,5 @@ TreeNodeUpdater : AjaxUpdateContainer {
 	id = ^id;
 	class = ^class;
 	elementName = "ul";
-	skipFunction = true;
+	skipFunction = false;
 }

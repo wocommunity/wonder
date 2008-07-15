@@ -8,6 +8,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
+import er.extensions.ERXWOContext;
+
 /**
  * This abstract (by design) superclass component isolate general utility methods.
  * 
@@ -30,7 +32,6 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
      * supplied.
      * @param name
      * @param defaultValue
-     * @return
      */
     public Object valueForBinding(String name, Object defaultValue) {
         Object value = defaultValue;
@@ -40,8 +41,16 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
         return value;
     }
     
+    public Object valueForBinding(String name, WOComponent component) {
+    	return valueForBinding(name, (Object)null);
+    }
+    
+	public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
+		return valueForBinding(name, (Object)defaultValue);
+	}
+
     protected void addScriptResourceInHead(WOResponse _response, String _fileName) {
-	AjaxUtils.addScriptResourceInHead(context(), _response, _fileName);
+    	AjaxUtils.addScriptResourceInHead(context(), _response, _fileName);
     }
 
     protected void addScriptResourceInHead(WOResponse _response, String _framework, String _fileName) {
@@ -78,13 +87,17 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     protected String _containerID(WOContext context) {
     	return null;
     }
-    
+
     public String safeElementID() {
-      return AjaxUtils.toSafeElementID(context().elementID());
+    	String id = (String)valueForBinding("id");
+    	if(id == null) {
+    		return ERXWOContext.safeIdentifierName(context(), false);
+    	}
+    	return id;
     }
 
     /**
-     * Overridden to call {@see #addRequiredWebResources(WOResponse)}.
+     * Overridden to call {@link #addRequiredWebResources(WOResponse)}.
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
@@ -101,7 +114,6 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
      * Override this method to return the response for an Ajax request.
      * @param request
      * @param context
-     * @return
      */
     public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 

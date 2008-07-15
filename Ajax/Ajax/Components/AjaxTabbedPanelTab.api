@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "true" class = "AjaxTabbedPanelTab.java">
+        <binding name = "name"/>
+        <binding name = "id"/>
+        <binding name = "isSelected" defaults = "Boolean" />
+        <binding name = "refreshOnSelect" defaults = "Boolean" />
+        <binding name = "onLoad" />
+	</wo>
+	
+		
+	<validation message = "&apos;name&apos; is a required binding">
+        <unbound name = "name"/>
+    </validation>
+    
+</wodefinitions>

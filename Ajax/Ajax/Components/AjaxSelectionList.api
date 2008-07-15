@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxSelectionList.java" wocomponentcontent="false">
+		<binding name="elementName"/>	
+		<binding name="list"/>	
+		<binding name="item"/>	
+		<binding name="selection"/>	
+		<binding name="mandatory"/>	
+		<binding name="id"/>	
+		<binding name="class"/>	
+		<binding name="style"/>	
+		<binding name="onchange"/>	
+		<binding name="onselect"/>	
+		<binding name="ondelete"/>	
+	<binding name="name"/>
+    <binding defaults="Boolean" name="focus"/>
+    </wo>
+</wodefinitions>

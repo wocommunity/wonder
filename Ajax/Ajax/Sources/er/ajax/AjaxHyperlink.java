@@ -118,7 +118,7 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 
 	protected void addRequiredWebResources(WOResponse res, WOContext context) {
 		addScriptResourceInHead(context, res, "prototype.js");
-		addScriptResourceInHead(context, res, "scriptaculous.js");
+		addScriptResourceInHead(context, res, "effects.js");
 	}
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {

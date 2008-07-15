@@ -6,12 +6,57 @@
 //
 package er.extensions;
 
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabase;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOObjectNotAvailableException;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.EOUtilities.MoreThanOneException;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EODetailDataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaultHandler;
+import com.webobjects.eocontrol.EOFaulting;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyComparisonQualifier;
+import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EONotQualifier;
+import com.webobjects.eocontrol.EOObjectStore;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOOrQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import java.util.*;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableData;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Collection of EOF utility method centered around
@@ -20,7 +65,7 @@ import java.util.*;
 public class ERXEOControlUtilities {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOControlUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXEOControlUtilities.class);
 
 
     /**
@@ -73,11 +118,7 @@ public class ERXEOControlUtilities {
      * @return array of objects that the data source represents
      */
     public static NSArray arrayFromDataSource(EODataSource dataSource) {
-        // FIXME: Now in WO 5 we can use fetchObjects() off of the dataSource and it should work (unlike 4.5).
-        WODisplayGroup dg = new WODisplayGroup();
-        dg.setDataSource(dataSource);
-        dg.fetch(); // Have to fetch in the array, go figure.
-        return dg.allObjects();
+        return dataSource.fetchObjects();
     }
 
     /**
@@ -832,6 +873,20 @@ public class ERXEOControlUtilities {
         }
         return primaryKey;
     }
+    
+    /**
+     * Returns the decoded global id for an propertylist encoded string representation
+     * of the primary key for a given object.
+     */
+
+    @SuppressWarnings("unchecked")
+	public static EOGlobalID globalIDForString(EOEditingContext ec, String entityName, String string) {
+    	NSDictionary values = primaryKeyDictionaryForString(ec, entityName, string);
+    	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+        NSArray pks = entity.primaryKeyAttributeNames();
+        EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entityName, values.objectsForKeys(pks, null).objects());
+    	return gid;
+    }
 
     /**
      * Returns the propertylist-encoded string representation of the primary key for
@@ -991,82 +1046,228 @@ public class ERXEOControlUtilities {
                                                boolean includeNewObjects) {
         return objectsWithQualifier(ec, entityName, qualifier, prefetchKeyPaths, includeNewObjects, false);
     }
+
+    public static NSArray objectsWithQualifier(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier, NSArray _prefetchKeyPaths, boolean _includeNewObjects, boolean _includeNewObjectsInParentEditingContext) {
+      return ERXEOControlUtilities.objectsWithQualifier(_editingContext, _entityName, _qualifier, _prefetchKeyPaths, _includeNewObjects, _includeNewObjectsInParentEditingContext, false, false);
+    }
     
     /**
      * Utility method used to fetch an array of objects given a qualifier. Also
-     * has support for filtering the newly inserted objects in the passed editing context or
-     * any parent editing contexts as well as specifying prefetching key paths.
-     * @param ec editing context to fetch it into
-     * @param entityName name of the entity
-     * @param qualifier qualifier
-     * @param prefetchKeyPaths prefetching key paths
-     * @param includeNewObjects option to include newly inserted objects in the result set
-     * @param includeNewObjectsInParentEditingContexts option to include newly inserted objects in parent editing
+     * has support for filtering the newly inserted, updateed, and deleted objects in the 
+     * passed editing context or any parent editing contexts as well as specifying prefetching 
+     * key paths.  Note that only NEW objects are supported in parent editing contexts.
+     * 
+     * @param _editingContext editing context to fetch it into
+     * @param _entityName name of the entity
+     * @param _qualifier qualifier
+     * @param _prefetchKeyPaths prefetching key paths
+     * @param _includeNewObjects option to include newly inserted objects in the result set
+     * @param _includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
      *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the
      *        qualifier are collected and faulted down through all parent editing contexts of ec.
+     * @param _filterUpdatedObjects option to include updated objects that now match the qualifier or remove updated
+     *         objects thats no longer match the qualifier
+     * @param _removeDeletedObjects option to remove objects that have been deleted
+     *
      * @return array of objects matching the constructed qualifier
      */
     // ENHANCEME: This should handle entity inheritance for in memory filtering
-    public static NSArray objectsWithQualifier(EOEditingContext ec,
-                                               String entityName,
-                                               EOQualifier qualifier,
-                                               NSArray prefetchKeyPaths,
-                                               boolean includeNewObjects,
-                                               boolean includeNewObjectsInParentEditingContexts) {
-        NSMutableArray result = null;
+    public static NSArray objectsWithQualifier(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier, NSArray _prefetchKeyPaths, boolean _includeNewObjects, boolean _includeNewObjectsInParentEditingContext, boolean _filterUpdatedObjects, boolean _removeDeletedObjects) {
+      EOFetchSpecification fs = new EOFetchSpecification(_entityName, _qualifier, null);
+      fs.setPrefetchingRelationshipKeyPaths(_prefetchKeyPaths);
+      fs.setIsDeep(true);
+      NSMutableArray cloneMatchingObjects = null;
+      NSArray matchingObjects = _editingContext.objectsWithFetchSpecification(fs);
+      // Filter again, because the in-memory versions may have been modified and no longer may match the qualifier
+      if (_filterUpdatedObjects) {
+        // remove any old objects that now no longer match the qualifier (the version we get THIS time is the in-memory one, because
+        // it's already been faulted in if it's updated)
+        matchingObjects = EOQualifier.filteredArrayWithQualifier(matchingObjects, _qualifier);
 
-        if (includeNewObjects) {
-            NSDictionary insertedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(ec.insertedObjects(), "entityName");
-            NSArray insertedObjectsForEntity = (NSArray)insertedObjects.objectForKey(entityName);
-
-            if (insertedObjectsForEntity != null && insertedObjectsForEntity.count() > 0) {
-                NSArray inMemory = EOQualifier.filteredArrayWithQualifier(insertedObjectsForEntity, qualifier);
-                if (inMemory.count() > 0)
-                    result = inMemory.mutableClone();
+        // and then we need to add back in any updated objects that now DO match the qualifier that didn't originally match the qualifier
+        NSArray updatedObjects = ERXEOControlUtilities.updatedObjects(_editingContext, _entityName, _qualifier);
+        if (updatedObjects != null) {
+          Enumeration updatedObjectsEnum = updatedObjects.objectEnumerator();
+          while (updatedObjectsEnum.hasMoreElements()) {
+            Object obj = updatedObjectsEnum.nextElement();
+            if (!matchingObjects.containsObject(obj)) {
+              if (cloneMatchingObjects == null) {
+                cloneMatchingObjects = matchingObjects.mutableClone();
+              }
+              cloneMatchingObjects.addObject(obj);
             }
+          }
+          if (cloneMatchingObjects != null) {
+            matchingObjects = cloneMatchingObjects;
+          }
+        }
+      }
+
+      if (_includeNewObjects) {
+        NSMutableArray insertedObjects = ERXEOControlUtilities.insertedObjects(_editingContext, _entityName, _qualifier);
+        if (insertedObjects != null) {
+          if (cloneMatchingObjects != null) {
+            cloneMatchingObjects.addObjectsFromArray(insertedObjects);
+          }
+          else {
+            insertedObjects.addObjectsFromArray(matchingObjects);
+            matchingObjects = insertedObjects;
+          }
+        }
+      }
+      
+      if (_includeNewObjectsInParentEditingContext && ! (_editingContext.parentObjectStore() instanceof EOObjectStoreCoordinator) ) {
+        final NSMutableArray parentEditingContexts = new NSMutableArray();
+        EOObjectStore objectStore = _editingContext.parentObjectStore();
+        NSArray objects = NSArray.EmptyArray;
+        int i;
+        while (!(objectStore instanceof EOObjectStoreCoordinator)) {
+          final EOEditingContext theEC = (EOEditingContext)objectStore;
+          parentEditingContexts.addObject(theEC);
+          objectStore = theEC.parentObjectStore();
         }
 
-        if ( includeNewObjectsInParentEditingContexts && ! (ec.parentObjectStore() instanceof EOObjectStoreCoordinator) ) {
-            final NSMutableArray parentEditingContexts = new NSMutableArray();
-            EOObjectStore objectStore = ec.parentObjectStore();
-            NSArray objects = NSArray.EmptyArray;
-            int i;
+        i = parentEditingContexts.count();
+        while (i-- > 0) {
+          final EOEditingContext theEC = (EOEditingContext)parentEditingContexts.objectAtIndex(i);
+          final NSArray insertedObjects = ERXArrayUtilities.objectsWithValueForKeyPath(theEC.insertedObjects(), _entityName, "entityName");
+          final NSArray objectsMatchingQualifier = EOQualifier.filteredArrayWithQualifier(insertedObjects, _qualifier);
 
-            while ( ! (objectStore instanceof EOObjectStoreCoordinator) ) {
-                final EOEditingContext theEC = (EOEditingContext)objectStore;
+          // fault the previous batch down
+          objects = EOUtilities.localInstancesOfObjects(theEC, objects);
 
-                parentEditingContexts.addObject(theEC);
-                objectStore = theEC.parentObjectStore();
-            }
-
-            i = parentEditingContexts.count();
-
-            while ( i-- > 0 ) {
-                final EOEditingContext theEC = (EOEditingContext)parentEditingContexts.objectAtIndex(i);
-                final NSArray insertedObjects = ERXArrayUtilities.objectsWithValueForKeyPath(theEC.insertedObjects(), entityName, "entityName");
-                final NSArray objectsMatchingQualifier = EOQualifier.filteredArrayWithQualifier(insertedObjects, qualifier);
-
-                // fault the previous batch down
-                objects = EOUtilities.localInstancesOfObjects(theEC, objects);
-
-                if ( objectsMatchingQualifier.count() > 0 )
-                    objects = objects.arrayByAddingObjectsFromArray(objectsMatchingQualifier);
-            }
-
-            if ( objects.count() > 0 ) {
-                objects = EOUtilities.localInstancesOfObjects(ec, objects);
-                if ( result == null )
-                    result = new NSMutableArray();
-                result.addObjectsFromArray(objects);
-            }
+          if (objectsMatchingQualifier.count() > 0) {
+            objects = objects.arrayByAddingObjectsFromArray(objectsMatchingQualifier);
+          }
         }
 
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, null);
-        fs.setPrefetchingRelationshipKeyPaths(prefetchKeyPaths);
-        NSArray fromDb = ec.objectsWithFetchSpecification(fs);
-        if (result != null)
-            result.addObjectsFromArray(fromDb);
-        return result != null ? result : fromDb;
+        if (objects.count() > 0) {
+          objects = EOUtilities.localInstancesOfObjects(_editingContext, objects);
+          if (cloneMatchingObjects != null) {
+            cloneMatchingObjects.addObjectsFromArray(objects);
+          }
+          else {
+            NSMutableArray newMatchingObjects = matchingObjects.mutableClone();
+            newMatchingObjects.addObjectsFromArray(newMatchingObjects);
+            matchingObjects = newMatchingObjects;
+          }
+        }
+      }
+
+      if (_removeDeletedObjects) {
+        NSArray deletedObjects = ERXEOControlUtilities.deletedObjects(_editingContext, _entityName, _qualifier);
+        if (deletedObjects != null) {
+          if (cloneMatchingObjects == null) {
+            cloneMatchingObjects = matchingObjects.mutableClone();
+            matchingObjects = cloneMatchingObjects;
+          }
+          cloneMatchingObjects.removeObjectsInArray(deletedObjects);
+        }
+      }
+
+      return matchingObjects;
+    }
+    
+    /**
+     * Returns the single object of the given type matching the qualifier.
+     *  
+     * @param _editingContext the editing context to look in
+     * @param _entityName the name of the entity to look for
+     * @param _qualifier the qualifier to restrict by
+     * @return the single object of the given type matching the qualifier or null if no matching object found
+     * @throws MoreThanOneException if more than one object matches the qualifier
+     */
+    public static EOEnterpriseObject objectWithQualifier(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
+        EOFetchSpecification fetchSpec = new EOFetchSpecification(_entityName, _qualifier, null);
+        NSArray results = _editingContext.objectsWithFetchSpecification(fetchSpec);
+        if( results.count() > 1)
+        {
+        	throw new MoreThanOneException("objectMatchingValueForKeyEntityNamed: Matched more than one object with " +_qualifier);
+        }
+        return (results.count() == 0) ? null : (EOEnterpriseObject)results.objectAtIndex(0);
+    }
+
+    /**
+     * Returns the single object of the given type matching the qualifier.
+     *  
+     * @param _editingContext the editing context to look in
+     * @param _entityName the name of the entity to look for
+     * @param _qualifier the qualifier to restrict by
+     * @return he single object of the given type matching the qualifier
+     * @throws EOObjectNotAvailableException if no objects match the qualifier
+     * @throws MoreThanOneException if more than one object matches the qualifier
+     */
+    public static EOEnterpriseObject requiredObjectWithQualifier(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
+        EOEnterpriseObject result = objectWithQualifier(_editingContext, _entityName, _qualifier);
+        if(result == null)
+        {
+        	throw new EOObjectNotAvailableException("objectWithQualifier: No objects match qualifier " + _qualifier);
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the array of objects of the given type that have been inserted into 
+     * the editing context and match the given qualifier.  Yes, it's odd that it
+     * returns NSMutableArray -- it's an optimization specifically for objectsWithQualifier.
+     * 
+     * @param _editingContext the editing context to look in
+     * @param _entityName the name of the entity to look for
+     * @param _qualifier the qualifier to restrict by
+     */
+    public static NSMutableArray insertedObjects(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
+      NSMutableArray result = null;
+      NSDictionary insertedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(_editingContext.insertedObjects(), "entityName");
+      NSArray insertedObjectsForEntity = (NSArray) insertedObjects.objectForKey(_entityName);
+      if (insertedObjectsForEntity != null && insertedObjectsForEntity.count() > 0) {
+        NSArray inMemory = EOQualifier.filteredArrayWithQualifier(insertedObjectsForEntity, _qualifier);
+        if (inMemory.count() > 0) {
+          result = inMemory.mutableClone();
+        }
+      }
+      return result;
+    }
+
+    /**
+     * Returns the array of objects of the given type that have been updated in
+     * the editing context and match the given qualifier.
+     * 
+     * @param _editingContext the editing context to look in
+     * @param _entityName the name of the entity to look for
+     * @param _qualifier the qualifier to restrict by
+     */
+    public static NSArray updatedObjects(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
+      NSArray result = null;
+      NSDictionary updatedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(_editingContext.updatedObjects(), "entityName");
+      NSArray updatedObjectsForEntity = (NSArray) updatedObjects.objectForKey(_entityName);
+      if (updatedObjectsForEntity != null && updatedObjectsForEntity.count() > 0) {
+        NSArray inMemory = EOQualifier.filteredArrayWithQualifier(updatedObjectsForEntity, _qualifier);
+        if (inMemory.count() > 0) {
+          result = inMemory;
+        }
+      }
+      return result;
+    }
+
+    /**
+     * Returns the array of objects of the given type that have been deleted from
+     * the editing context and match the given qualifier.
+     * 
+     * @param _editingContext the editing context to look in
+     * @param _entityName the name of the entity to look for
+     * @param _qualifier the qualifier to restrict by
+     */
+    public static NSArray deletedObjects(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
+      NSArray result = null;
+      NSDictionary deletedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(_editingContext.deletedObjects(), "entityName");
+      NSArray deletedObjectsForEntity = (NSArray) deletedObjects.objectForKey(_entityName);
+      if (deletedObjectsForEntity != null && deletedObjectsForEntity.count() > 0) {
+        NSArray inMemory = EOQualifier.filteredArrayWithQualifier(deletedObjectsForEntity, _qualifier);
+        if (inMemory.count() > 0) {
+          result = inMemory;
+        }
+      }
+      return result;
     }
 
     /** faults every EO in the qualifiers into the specified editingContext. This is important for 
@@ -1254,7 +1455,7 @@ public class ERXEOControlUtilities {
         }
         return entity;
     }
-    
+	
     /**
      * Smarter version of normal <code>saveChanges()</code> method that corrects issues with
      * <code>flushCaches()</code> needing to be called on objects in the parent context when
@@ -1375,6 +1576,401 @@ public class ERXEOControlUtilities {
             }
         }
     }
+    
+    
+     /** Caches the string attribute keys on a per entity name basis */
+     private static NSMutableDictionary _attributeKeysPerEntityName=new NSMutableDictionary();
 
+     /**
+      * Calculates all of the EOAttributes of a given entity that
+      * are mapped to String objects.
+      * @return array of all attribute names that are mapped to
+      *      String objects.
+      */
+     public static synchronized NSArray stringAttributeListForEntityNamed(EOEditingContext ec, String entityName) {
+         NSArray result=(NSArray)_attributeKeysPerEntityName.objectForKey(entityName);
+         if (result==null) {
+             EOEntity entity=ERXEOAccessUtilities.entityNamed(ec, entityName);
+             NSMutableArray attList=new NSMutableArray();
+             _attributeKeysPerEntityName.setObjectForKey(attList,entityName);
+             result=attList;
+             for (Enumeration e=entity.classProperties().objectEnumerator();e.hasMoreElements();) {
+                 Object property=e.nextElement();
+                 if (property instanceof EOAttribute) {
+                     EOAttribute a=(EOAttribute)property;
+                     if (a.className().equals("java.lang.String"))
+                         attList.addObject(a.name());
+                 }
+             }
+         }
+         return result;
+     }
+
+     /**
+      * Trims all values from string attributes from the given EO.
+      * @param object
+      */
+     public static void trimSpaces(EOEnterpriseObject object) {
+         for (Enumeration e=ERXEOControlUtilities.stringAttributeListForEntityNamed(object.editingContext(), object.entityName()).objectEnumerator(); e.hasMoreElements();) {
+             String key=(String)e.nextElement();
+             String value=(String)object.storedValueForKey(key);
+             if (value!=null) {
+                 String trimmedValue=value.trim();
+                 if (trimmedValue.length()!=value.length())
+                     object.takeStoredValueForKey(trimmedValue,key);
+             }
+         }
+     }
+
+     /**
+      * Convenience to get the destination entity name from a key path of an object.
+      * Returns null if no destination found.
+      * @param eo
+      * @param keyPath
+      */
+    public static String destinationEntityNameForKeyPath(EOEnterpriseObject eo, String keyPath) {
+ 	   EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
+ 	   EOEntity destination = ERXEOAccessUtilities.destinationEntityForKeyPath(entity, keyPath);
+ 	   if(destination != null) {
+ 		   return destination.name();
+ 	   }
+ 	   return null;
+    }
+
+    /**
+     * Creates an OR qualifier with the given selector for all the given key paths. If you want
+     * LIKE matches, you need to the add "*" yourself.
+     * @param keyPaths
+     * @param selector
+     * @param value
+     */
+    public static EOQualifier orQualifierForKeyPaths(NSArray keyPaths, NSSelector selector, Object value) {
+ 	   NSMutableArray qualifiers = new NSMutableArray(keyPaths.count());
+ 	   for (Enumeration e=keyPaths.objectEnumerator(); e.hasMoreElements();) {
+ 		  String key = (String)e.nextElement();
+ 		  EOQualifier qualifier = new EOKeyValueQualifier(key, selector, value);
+ 		  qualifiers.addObject(qualifier);
+ 	   }
+ 	   return new EOOrQualifier(qualifiers);
+    }
+
+    /**
+ 	 * Creates an OR qualifier with the given selector for all the given key
+ 	 * paths and all the given serach terms. If you want LIKE matches, you need
+ 	 * to the add "*" yourself.
+ 	 * 
+ 	 * @param keyPaths
+ 	 * @param selector
+ 	 * @param values
+ 	 */
+    public static EOQualifier orQualifierForKeyPaths(NSArray keyPaths, NSSelector selector, NSArray values) {
+ 	   NSMutableArray qualifiers = new NSMutableArray(values.count());
+ 	   for (Enumeration e=values.objectEnumerator(); e.hasMoreElements();) {
+ 		  Object value = e.nextElement();
+ 		  EOQualifier qualifier = orQualifierForKeyPaths(keyPaths, selector, value);
+ 		  qualifiers.addObject(qualifier);
+ 	   }
+ 	   return new EOOrQualifier(qualifiers);
+    }
+
+    /**
+     * Joins the given qualifiers with an AND. One or both arguments may be null,
+     * if both are null, null is returned.
+     * @param q1
+     * @param q2
+     */
+    public static EOQualifier andQualifier(EOQualifier q1, EOQualifier q2) {
+ 	   if(q1 == null) {
+ 		   return q2;
+ 	   }
+ 	   if(q2 == null) {
+ 		   return q1;
+ 	   }
+ 	   return new EOAndQualifier(new NSArray(new Object[]{q1, q2}));
+     }
+
+
+    /**
+     * Joins the given qualifiers with an OR. One or both arguments may be null,
+     * if both are null, null is returned.
+     * @param q1
+     * @param q2
+     */
+    public static EOQualifier orQualifier(EOQualifier q1, EOQualifier q2) {
+ 	   if(q1 == null) {
+ 		   return q2;
+ 	   }
+ 	   if(q2 == null) {
+ 		   return q1;
+ 	   }
+ 	   return new EOOrQualifier(new NSArray(new Object[]{q1, q2}));
+     }
+
+    /**
+     * Given a qualifier of EOAndQualifiers and EOKVQualifiers, make then evaluate to
+     * true on the given object. 
+     * 
+     * @param qualifier the qualifier to apply to the object
+     * @param obj the object to make qualifier evaluate to true for
+     */
+    public static void makeQualifierTrue(EOQualifier qualifier, Object obj) {
+ 	   if (qualifier instanceof EOAndQualifier) {
+ 		   Enumeration qualifiersEnum = ((EOAndQualifier)qualifier).qualifiers().objectEnumerator();
+ 		   while (qualifiersEnum.hasMoreElements()) {
+ 			   EOQualifier nestedQualifier = (EOQualifier)qualifiersEnum.nextElement();
+ 			   makeQualifierTrue(nestedQualifier, obj);
+ 		   }
+ 	   }
+ 	   else if (qualifier instanceof EOKeyValueQualifier) {
+ 		   EOKeyValueQualifier kvQualifier = (EOKeyValueQualifier)qualifier;
+ 		   String keypath = kvQualifier.key();
+ 		   Object value = kvQualifier.value();
+ 		   NSKeyValueCoding.Utility.takeValueForKey(obj, value, keypath);
+ 	   }
+ 	   else if (qualifier instanceof EOKeyComparisonQualifier) {
+ 		   EOKeyComparisonQualifier comparisonQualifier = (EOKeyComparisonQualifier)qualifier;
+ 		   String leftKey = comparisonQualifier.leftKey();
+ 		   String rightKey = comparisonQualifier.rightKey();
+ 		   if ("true".equalsIgnoreCase(rightKey) || "yes".equalsIgnoreCase(rightKey)) {
+ 			   NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(obj, Boolean.TRUE, leftKey);
+ 		   }
+ 		   else if ("false".equalsIgnoreCase(rightKey) || "no".equalsIgnoreCase(rightKey)) {
+ 			   NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(obj, Boolean.FALSE, leftKey);
+ 		   }
+ 		   else {
+ 			   throw new IllegalArgumentException("Unable to make " + qualifier + " true for " + obj + " in a consistent way.");
+ 		   }
+ 	   }
+ 	   else {
+ 		   throw new IllegalArgumentException("Unable to make " + qualifier + " true for " + obj + " in a consistent way.");
+ 	   }
+    }
+    
+
+    /**
+     * Given a dictionary, array, set, EO, etc, this will recursively turn
+     * EO's into GID's.  You should lock the editingContext before calling
+     * this.
+     * 
+     * @param obj the object to recursively turn EO's into GID's for
+     * @return the GIDful object
+     */
+    public static Object convertEOtoGID(Object obj) {
+ 	   Object result;
+ 	   if (obj instanceof EOEnterpriseObject) {
+ 		   EOEnterpriseObject eoful = (EOEnterpriseObject)obj;
+ 		   EOGlobalID gidful = eoful.editingContext().globalIDForObject(eoful);
+ 		   result = gidful;
+ 	   }
+ 	   else if (obj instanceof NSArray) {
+ 		   NSArray eoful = (NSArray)obj;
+ 		   NSMutableArray gidful = new NSMutableArray();
+ 		   Enumeration objEnum = eoful.objectEnumerator();
+ 		   while (objEnum.hasMoreElements()) {
+ 			   gidful.addObject(ERXEOControlUtilities.convertEOtoGID(objEnum.nextElement()));
+ 		   }
+ 		   result = gidful;
+ 	   }
+ 	   else if (obj instanceof NSSet) {
+ 		   NSSet eoful = (NSSet)obj;
+ 		   NSMutableSet gidful = new NSMutableSet();
+ 		   Enumeration objEnum = eoful.objectEnumerator();
+ 		   while (objEnum.hasMoreElements()) {
+ 			   gidful.addObject(ERXEOControlUtilities.convertEOtoGID(objEnum.nextElement()));
+ 		   }
+ 		   result = gidful;
+ 	   }
+ 	   else if (obj instanceof NSDictionary) {
+ 		   NSDictionary eoful = (NSDictionary)obj;
+ 		   NSMutableDictionary gidful = new NSMutableDictionary();
+ 		   Enumeration keyEnum = eoful.keyEnumerator();
+ 		   while (keyEnum.hasMoreElements()) {
+ 			   Object eofulKey = keyEnum.nextElement();
+ 			   Object gidfulKey = ERXEOControlUtilities.convertEOtoGID(eofulKey);
+ 			   Object gidfulValue = ERXEOControlUtilities.convertEOtoGID(eoful.objectForKey(eofulKey));
+ 			   gidful.setObjectForKey(gidfulValue, gidfulKey);
+ 		   }
+ 		   result = gidful;
+ 	   }
+ 	   else {
+ 		   result = obj;
+ 	   }
+ 	   return result;
+    }
+
+    /**
+     * Given a dictionary, array, set, EO, etc, this will recursively turn
+     * GID's into EO's.  You should lock the editingContext before calling
+     * this.
+     *  
+     * @param obj the object to recursively turn GID's into EO's for
+     * @return the EOful object
+     */
+    public static Object convertGIDtoEO(EOEditingContext editingContext, Object obj) {
+ 	   Object result;
+ 	   if (obj instanceof EOGlobalID) {
+ 		   EOGlobalID gidful = (EOGlobalID)obj;
+ 		   EOEnterpriseObject eoful = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(editingContext, gidful);
+ 		   result = eoful;
+ 	   }
+ 	   else if (obj instanceof NSArray) {
+ 		   NSArray gidful = (NSArray)obj;
+ 		   boolean allGIDs = true;
+ 		   Enumeration objEnum = gidful.objectEnumerator();
+ 		   while (allGIDs && objEnum.hasMoreElements()) {
+ 			   allGIDs = (objEnum.nextElement() instanceof EOGlobalID);
+ 		   }
+ 		   if (allGIDs) {
+ 			   result = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gidful);
+ 		   }
+ 		   else {
+ 			   NSMutableArray eoful = new NSMutableArray();
+ 			   objEnum = gidful.objectEnumerator();
+ 			   while (objEnum.hasMoreElements()) {
+ 				   eoful.addObject(ERXEOControlUtilities.convertGIDtoEO(editingContext, objEnum.nextElement()));
+ 			   }
+ 			   result = eoful;
+ 		   }
+ 	   }
+ 	   else if (obj instanceof NSSet) {
+ 		   NSSet gidful = (NSSet)obj;
+ 		   boolean allGIDs = true;
+ 		   Enumeration objEnum = gidful.objectEnumerator();
+ 		   while (allGIDs && objEnum.hasMoreElements()) {
+ 			   allGIDs = (objEnum.nextElement() instanceof EOGlobalID);
+ 		   }
+ 		   if (allGIDs) {
+ 			   result = new NSSet(ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gidful.allObjects()));
+ 		   }
+ 		   else {
+ 			   NSMutableSet eoful = new NSMutableSet();
+ 			   objEnum = gidful.objectEnumerator();
+ 			   while (objEnum.hasMoreElements()) {
+ 				   eoful.addObject(ERXEOControlUtilities.convertGIDtoEO(editingContext, objEnum.nextElement()));
+ 			   }
+ 			   result = eoful;
+ 		   }
+ 	   }
+ 	   else if (obj instanceof NSDictionary) {
+ 		   NSDictionary gidful = (NSDictionary)obj;
+ 		   NSMutableDictionary eoful = new NSMutableDictionary();
+ 		   Enumeration keyEnum = gidful.keyEnumerator();
+ 		   while (keyEnum.hasMoreElements()) {
+ 			   Object gidfulKey = keyEnum.nextElement();
+ 			   Object eofulKey = ERXEOControlUtilities.convertGIDtoEO(editingContext, gidfulKey);
+ 			   Object eofulValue = ERXEOControlUtilities.convertGIDtoEO(editingContext, gidful.objectForKey(gidfulKey));
+ 			   eoful.setObjectForKey(eofulValue, eofulKey);
+ 		   }
+ 		   result = eoful;
+ 	   }
+ 	   else {
+ 		   result = obj;
+ 	   }
+ 	   return result;
+    }
+
+    /**
+ 	 * Validates whether the values of the specified keyPaths are unique for an
+ 	 * Entity. Throws a {@link ERXValidationException} if there is already an EO
+ 	 * with the same values on the given key paths.
+ 	 * 
+ 	 * Should be combined with a constraint on the corresponding database
+ 	 * columns. <br />
+ 	 * <br />
+ 	 * Based on Zak Burke's idea he posted to WOCode a while ago. <br />
+ 	 * <br />
+ 	 * Use in <code>validateForSave</code> like this:
+ 	 * 
+ 	 * <pre>
+ 	 *       ...
+ 	 *       public class WikiPage extends _WikiPage {
+ 	 *       ...
+ 	 *       	public void validateForSave() throws ValidationException {
+ 	 *       		super.validateForSave();
+ 	 *       		ERXEOControlUtilities.validateUniquenessOf(this, ERXQ.equals(&quot;active&quot;, true), &quot;title&quot;, &quot;wiki&quot;);
+ 	 *       	}
+ 	 *       ...
+ 	 *       }
+ 	 * </pre>
+ 	 * 
+ 	 * Combine with entries in <code>ValidationTemplate.strings</code> like:
+ 	 * 
+ 	 * <pre>
+ 	 * &quot;WikiPage.title,space.UniquenessViolationNewObject&quot; = &quot;The page cannot be created. There is already a page named &lt;b&gt;@@value.title@@&lt;/b&gt; in Wiki &lt;b&gt;@@value.wiki.name@@&lt;/b&gt;.&quot;;
+ 	 * &quot;WikiPage.title,space.UniquenessViolationExistingObject&quot; = &quot;The page cannot be changed this way. There is already a page named &lt;b&gt;@@value.title@@&lt;/b&gt; in Wiki &lt;b&gt;@@value.wiki.name@@&lt;/b&gt;.&quot;;
+ 	 * </pre>
+ 	 * 
+ 	 * @param eo
+ 	 *            the {@link EOEnterpriseObject} to validate
+ 	 * 
+ 	 * @param keys
+ 	 *            an arbitrary number of keyPaths to validate.
+ 	 * 
+ 	 * @param restrictingQualifier
+ 	 *            an optional resticting qualifier to exclude certain objects
+ 	 *            from the check
+ 	 * 
+ 	 * @throws ERXValidationException
+ 	 *             if an EO with the same property values already exists. If you
+ 	 *             specify more than one keyPath to validate, the 'key' property
+ 	 *             will be a comma separated string of the provided keyPaths.
+ 	 *             'value' will be a dictionary with the supplied keyPaths as
+ 	 *             keys and the values corresponding to these keys in the
+ 	 *             supplied eo as values.
+ 	 * 
+ 	 * @author th
+ 	 */
+ 	public static void validateUniquenessOf(EOEnterpriseObject eo, EOQualifier restrictingQualifier, String... keys) {
+ 		if (restrictingQualifier != null && !restrictingQualifier.evaluateWithObject(eo))
+ 			return;
+ 		NSArray keyPaths = new NSArray(keys);
+ 		NSDictionary dict = ERXDictionaryUtilities.dictionaryFromObjectWithKeys(eo, keyPaths);
+ 		EOQualifier qualifier = EOKeyValueQualifier.qualifierToMatchAllValues(dict);
+ 		if (restrictingQualifier != null) {
+ 			qualifier = ERXEOControlUtilities.andQualifier(qualifier, restrictingQualifier);
+ 		}
+ 		// take into account unsaved objects and skip deleted objects. The
+ 		// "includeNewObjects" part won't work for inheritance!
+ 		NSArray objects = ERXEOControlUtilities.objectsWithQualifier(eo.editingContext(), eo.entityName(), qualifier, null, true, false, true, true);
+ 		// should we throw if the supplied eo is not included in the results?
+ 		objects = ERXArrayUtilities.arrayMinusObject(objects, eo);
+ 		int count = objects.count();
+ 		if (count == 0) {
+ 			// everything OK
+ 		}
+ 		else {
+ 			String keyPathsString = keyPaths.componentsJoinedByString(",");
+ 			if (count == 1) {
+ 				// if we get here, we found an object matching the values
+ 				if (ERXEOControlUtilities.isNewObject(eo)) {
+ 					throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationNewObject");
+ 				}
+ 				else {
+ 					throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationExistingObject");
+ 				}
+ 			}
+ 			else {
+ 				// DB is already inconsistent!
+ 				throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationDatabaseInconsistent");
+ 			}
+ 		}
+ 	}
+
+ 	/**
+ 	 * Convinience method which calls
+ 	 * <code>validateUniquenessOf(EOEnterpriseObject
+ 	 * eo, EOQualifier restrictingQualifier, String... keys)</code>
+ 	 * with <code>null</code> as <code>restrictingQualifier</code>.
+ 	 * 
+ 	 * @param eo
+ 	 *            the {@link EOEnterpriseObject} to validate
+ 	 * @param keys
+ 	 *            an arbitrary number of keyPaths to validate.
+ 	 * 
+ 	 * @author th
+ 	 */
+ 	public static void validateUniquenessOf(EOEnterpriseObject eo, String... keys) {
+ 		validateUniquenessOf(eo, null, keys);
+ 	}
 
 }

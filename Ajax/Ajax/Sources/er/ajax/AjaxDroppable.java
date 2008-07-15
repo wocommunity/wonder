@@ -9,9 +9,22 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXComponentUtilities;
+import er.extensions.ERXWOForm;
+
+/**
+ * 
+ * @binding onBeforeDrop the function to execute before notifying the server of the drop
+ * @binding onDrop the function to execute after notifying the server of the drop
+ * @binding submit if true, drop will perform a form submit
+ * @binding formName the name of the form to submit (if submit is true)
+ * 
+ * @author mschrag
+ */
 public class AjaxDroppable extends AjaxComponent {
   private String _draggableIDKeyName;
   private String _actionUrl;
+  private String _elementID;
 
   public AjaxDroppable(WOContext _context) {
     super(_context);
@@ -31,8 +44,8 @@ public class AjaxDroppable extends AjaxComponent {
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
-	String updateContainerID = (String) valueForBinding("updateContainerID");
-    _actionUrl = AjaxUpdateContainer.updateContainerUrl(AjaxUtils.ajaxComponentActionUrl(context()), updateContainerID);
+    _actionUrl = AjaxUtils.ajaxComponentActionUrl(context());
+    _elementID = context.elementID();
     super.appendToResponse(response, context);
   }
 
@@ -57,46 +70,51 @@ public class AjaxDroppable extends AjaxComponent {
   }
 
   public String onDrop() {
-    StringBuffer onDropBuffer = new StringBuffer();
-    onDropBuffer.append("function(element, droppableElement) {");
-    String droppableElementID = (String) valueForBinding("id");
-    onDropBuffer.append("if (droppableElement.id == '" + droppableElementID + "') {");
-    onDropBuffer.append("var data = '" + _draggableIDKeyName + "=' + element.getAttribute(\'draggableID\');");
-	String updateContainerID = (String) valueForBinding("updateContainerID");
-	if (updateContainerID == null) {
-		onDropBuffer.append("var ajaxRequest = new Ajax.Request('" + _actionUrl + "', {method: 'get', parameters: data");
-	}
-	else {
-		onDropBuffer.append("var ajaxRequest = new Ajax.Updater('" + updateContainerID + "','" + _actionUrl + "', {method: 'get', parameters: data, evalScripts: true");
-	}
-    if(canGetValueForBinding("onComplete")) {
-        onDropBuffer.append(",onComplete:" ); 
-        onDropBuffer.append(valueForBinding("onComplete"));
-    }
-    onDropBuffer.append("});");
-    
-    if (canGetValueForBinding("onDrop")) {
-      String onDrop = (String) valueForBinding("onDrop");
-      onDropBuffer.append(" var parentOnDrop = ");
-      onDropBuffer.append(onDrop);
-      onDropBuffer.append(";");
-      onDropBuffer.append("parentOnDrop(element, droppableElement);");
-    }
-    onDropBuffer.append("}");
-    onDropBuffer.append("}");
-    return onDropBuffer.toString();
+	  boolean submit = ERXComponentUtilities.booleanValueForBinding(this, "submit", false); 
+	  String contextID = AjaxUtils.quote(context().contextID());
+	  String elementID = AjaxUtils.quote(_elementID);
+	  String droppableElementID = AjaxUtils.quote((String) valueForBinding("id"));
+	  String draggableKeyName = AjaxUtils.quote(_draggableIDKeyName);
+	  String updateContainerID = AjaxUtils.quote((String) valueForBinding("updateContainerID"));
+	  String actionUrl = (submit && updateContainerID == null) ? null : AjaxUtils.quote(_actionUrl);
+	  String form = (String) valueForBinding("formName");
+	  if (submit) {
+		  if (form == null) {
+			  form = ERXWOForm.formName(context(), null);
+			  if (form == null) {
+				  throw new IllegalArgumentException("If submit is true, you must provide either a formName or your containing form must have a name.");
+			  }
+		  }
+		  form = "document." + form;
+	  }
+	  String onbeforedrop = (String) valueForBinding("onBeforeDrop");
+	  String ondrop = (String) valueForBinding("onDrop");
+	  
+	  NSMutableDictionary options = new NSMutableDictionary();
+	  if (canGetValueForBinding("onComplete")) {
+		  options.setObjectForKey(valueForBinding("onComplete"), "onComplete");
+	  }
+	  if (submit) {
+		  AjaxSubmitButton.fillInAjaxOptions(this, this, _elementID, options);
+	  }
+	 
+	  StringBuffer onDropBuffer = new StringBuffer();
+	  onDropBuffer.append("ADP.droppedFunc(" + contextID + "," + elementID + "," + droppableElementID + "," + draggableKeyName + "," + updateContainerID + "," + actionUrl + "," + form + "," + onbeforedrop + "," + ondrop + ",");
+	  AjaxOptions.appendToBuffer(options, onDropBuffer, context());
+	  onDropBuffer.append(")");
+	  
+	  return onDropBuffer.toString();
   }
 
   protected void addRequiredWebResources(WOResponse res) {
     addScriptResourceInHead(res, "prototype.js");
-    addScriptResourceInHead(res, "scriptaculous.js");
-    addScriptResourceInHead(res, "effects.js");
-    addScriptResourceInHead(res, "builder.js");
-    addScriptResourceInHead(res, "dragdrop.js");
-    addScriptResourceInHead(res, "controls.js");
+	addScriptResourceInHead(res, "effects.js");
+	addScriptResourceInHead(res, "dragdrop.js");
+	addScriptResourceInHead(res, "wonder.js");
   }
 
   public WOActionResults handleRequest(WORequest request, WOContext context) {
+	AjaxUpdateContainer.setUpdateContainerID(request, (String) valueForBinding("updateContainerID"));
     String droppedDraggableID = request.stringFormValueForKey(_draggableIDKeyName);
     if (canSetValueForBinding("droppedDraggableID")) {
       setValueForBinding(droppedDraggableID, "droppedDraggableID");

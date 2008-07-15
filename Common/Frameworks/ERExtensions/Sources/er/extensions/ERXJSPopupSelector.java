@@ -45,9 +45,7 @@ public class ERXJSPopupSelector extends WOComponent {
             }
             // by default we assume that there is one more item on top of the list (i.e. - none - or - pick one -)
             // when the relationship is mandatory, this is not the case
-            boolean doNotAddOne=ERXValueUtilities.booleanValueForBindingOnComponentWithDefault("doNotAddOneToComputedIndex",
-                                                                                          this,
-                                                                                          false);
+            boolean doNotAddOne=ERXComponentUtilities.booleanValueForBinding(this, "doNotAddOneToComputedIndex", false);
             if (!doNotAddOne) index++;
             String formName = null;
             if(context() instanceof ERXMutableUserInfoHolderInterface) {

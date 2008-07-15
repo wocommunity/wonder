@@ -1,0 +1,25 @@
+<webobject name = "HasMultiplePagesConditional">
+	<div class = "paginatorContainer">
+		<div class = "paginator">
+			<webobject name = "HasPreviousPageConditional">
+				<webobject name = "PreviousPageAction">&lt;<webobject name="PreviousLabel"/></webobject>
+			</webobject>
+			<webobject name = "HasNoPreviousPageConditional"><webobject name = "ShowLabels"><span class="paginatorAtStart">&lt;<webobject name="PreviousLabel"/></span></webobject></webobject>
+			<webobject name = "PageNumberRepetition">
+				<webobject name = "IsCurrentPageNumberConditional"><span class="paginatorCurrentPage"><webobject name = "PageNumber"/></span></webobject>
+				<webobject name = "IsNotCurrentPageNumberConditional">
+					<webobject name = "IsPageNumberConditional">
+						<webobject name = "SelectPageAction"><webobject name = "PageNumber"/></webobject>
+					</webobject>
+					<webobject name = "IsEllipsisConditional"><span class="paginatorBreak">...</span></webobject>
+				</webobject>
+			</webobject>
+			<webobject name = "HasNextPageConditional">
+				<webobject name = "NextPageAction"><webobject name="NextLabel"/>&gt;</webobject>
+			</webobject>
+			<webobject name = "HasNoNextPageConditional"><webobject name = "ShowLabels"><span class="paginatorAtEnd"><webobject name="NextLabel"/>&gt;</span></webobject></webobject>
+		</div>
+		<div class="paginatorResults">(<webobject name = "ShowPageRange"><webobject name = "FirstIndex"/>&#8211;<webobject name = "LastIndex"/> of </webobject><webobject name = "DisplayName"/>)</div>
+	<webobject name = "ShowBatchSizes"><div class="paginatorBatchSizes"> <webobject name = "ShowLabel"/> <span class="paginatorBatchSizeList"><webobject name = "BatchSizes"><webobject name = "SelectBatchSize"></webobject> </webobject></span> <webobject name = "DisplayName2"/> <webobject name = "PerPageLabel"/></div></webobject>
+	</div>
+</webobject>

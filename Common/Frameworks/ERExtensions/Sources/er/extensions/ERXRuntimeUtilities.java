@@ -25,11 +25,34 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
+/**
+ * Collection of utilities dealing with threads and processes.
+ * 
+ *
+ * @author ak
+ * @author david
+ */
 public class ERXRuntimeUtilities {
 
     /** logging support */
     public static Logger log = Logger
             .getLogger(ERXRuntimeUtilities.class);
+    
+    /**
+     * Hack to create a bundle after the app is loaded. Useful for the insistence of EOF on JavaXXXAdaptor bundles. 
+     * @param name
+     */
+    public static NSBundle createBundleIfNeeded(String name) {
+    	String path = "/tmp/" + name + ".framework/Resources/Java";
+    	new File(path).mkdirs();
+    	try {
+			ERXFileUtilities.stringToFile("{Has_WOComponents=NO;}", new File("/tmp/" + name + ".framework/Resources/Info.plist"));
+		}
+		catch (IOException e) {
+			NSForwardException._runtimeExceptionForThrowable(e);
+		}
+    	return NSBundle._bundleWithPathShouldCreateIsJar(path, true, false);
+    }
     
     /**
      * Returns a dictionary with useful stuff.
@@ -123,7 +146,10 @@ public class ERXRuntimeUtilities {
 					NSMutableDictionary headers = new NSMutableDictionary();
 					for (Enumeration headersEnum = context.request().headerKeys().objectEnumerator(); headersEnum.hasMoreElements(); ) {
 						Object key = headersEnum.nextElement();
-						headers.setObjectForKey(context.request().headerForKey(key), key.toString());
+						String value = context.request().headerForKey(key);
+						if(value != null) {
+							headers.setObjectForKey(value, key.toString());
+						}
 					}
 					extraInfo.setObjectForKey(headers, "Headers");
 				}
@@ -293,7 +319,7 @@ public class ERXRuntimeUtilities {
      *            indicating this method call waits until the process exits or
      *            any <code>long</code> number larger than <code>0</code>
      *            which means if the process does not exit after
-     *            <code>timeout</code> seconds then this method throws an
+     *            <code>timeout</code> milliseconds then this method throws an
      *            ERXTimeoutException
      * 
      * 
@@ -310,7 +336,8 @@ public class ERXRuntimeUtilities {
         Process p = null;
         StreamReader isr = null;
         StreamReader esr = null;
-        try {
+        Result result;
+		try {
             if (log.isDebugEnabled()) {
                 log.debug("Will execute command " +  new NSArray(command).componentsJoinedByString(" "));
             }
@@ -356,7 +383,14 @@ public class ERXRuntimeUtilities {
                 } catch (InterruptedException ex) {
                 }
             }
-            if (isr.getException() != null) {
+        } finally {
+        	// Getting stream results before freeing process resources to prevent a case
+        	// when fast process is destroyed before stream readers read from buffers.
+        	result = new Result(exitValue, isr.getResult(), esr.getResult());
+
+        	// Checking exceptions after getting results to ensure that stream readers
+        	// had already read their buffers by the time of check.
+        	if (isr.getException() != null) {
                 log.error("input stream reader got exception,\n      "+
                         "command = "+ERXStringUtilities.toString(command, " ")+
                         "result = "+isr.getResultAsString(), isr.getException());
@@ -367,13 +401,12 @@ public class ERXRuntimeUtilities {
                         "result = "+esr.getResultAsString(), esr.getException());
             }
 
-        } finally {
             freeProcessResources(p);
 
             if (outputFile != null)
                 outputFile.delete();
         }
-        return new Result(exitValue, isr.getResult(), esr.getResult());
+        return result;
 
     }
 
@@ -520,4 +553,56 @@ public class ERXRuntimeUtilities {
             }
         }
     }
+
+
+    private static NSMutableDictionary flags;
+
+    /**
+	 * When you have an inner loop and you want to be able to bail out on a stop
+	 * request, call this method and you will get interrupted when another thread wants you to.
+	 */
+	public static void checkThreadInterrupt() {
+		if(flags == null) {
+			return;
+		}
+		synchronized (flags) {
+			Thread currentThread = Thread.currentThread();
+			if (flags.allKeys().containsObject(currentThread)) {
+				String message = clearThreadInterrupt(currentThread);
+				throw NSForwardException._runtimeExceptionForThrowable(new InterruptedException(message));
+			}
+		}
+	}
+
+	/**
+	 * Call this to get the thread in question interrupted on the next call to checkThreadInterrupt().
+	 * @param thread
+	 * @param message
+	 */
+	public static synchronized void addThreadInterrupt(Thread thread, String message) {
+		if(flags == null) {
+			flags = new NSMutableDictionary();
+		}
+		synchronized (flags) {
+			if (!flags.allKeys().containsObject(thread)) {
+				log.debug("Adding thread interrupt request: " + message, new RuntimeException());
+				flags.setObjectForKey(message, thread);
+			}
+		}
+	}
+
+	/**
+	 * Clear the interrupt flag for the thread.
+	 * @param thread
+	 * @return
+	 */
+	public static synchronized String clearThreadInterrupt(Thread thread) {
+		if(flags == null) {
+			return null;
+		}
+		synchronized (flags) {
+			return (String)flags.removeObjectForKey(thread);
+		}
+	}
+
 }

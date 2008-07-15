@@ -4,7 +4,11 @@
 		<binding name = "id"/>
 		<binding name = "list"/>
 		<binding name = "item"/>
+		<binding name = "listClass"/>
+		<binding name = "listStyle"/>
 		<binding name = "listElementName"/>
+		<binding name = "listItemClass"/>
+		<binding name = "listItemStyle"/>
 		<binding name = "listItemElementName"/>
 		<binding name = "listItemIDKeyPath"/>
 		<binding name = "startIndex"/>

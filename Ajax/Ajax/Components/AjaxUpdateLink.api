@@ -4,16 +4,29 @@
     <binding name = "updateContainerID"/>
     <binding name = "action"/>
     <binding name = "directActionName"/>
+    <binding name = "disabled"/>
 		
 		<binding name = "onComplete"/>
 		<binding name = "onSuccess"/>
 		<binding name = "onFailure"/>
 		<binding name = "onException"/>
-		<binding name = "insertion"/>
 		<binding name = "evalScripts"/>
 		<binding name = "function"/>
 		<binding name = "functionName"/>
 		<binding name = "elementName"/>
+		<binding name = "button"/>
+
+		<binding name = "insertion"/>
+		<binding name = "insertionDuration"/>
+		<binding name = "beforeInsertionDuration"/>
+		<binding name = "afterInsertionDuration"/>
+
+		<binding name = "effect"/>
+		<binding name = "beforeEffect"/>
+		<binding name = "beforeEffectID"/>
+		<binding name = "beforeEffectDuration"/>
+		<binding name = "afterEffect"/>
+		<binding name = "afterEffectID"/>
 
 		<binding name = "onClickBefore"/>
 		<binding name = "onClick"/>
@@ -25,6 +38,16 @@
     <validation message="&apos;action&apos; and &apos;directActionName&apos; cannot both be bound.">
 	    <bound name = "action"/>
 	    <bound name = "directActionName"/>
+    </validation>
+    
+    <validation message="&apos;effect&apos; and &apos;onSuccess&apos; cannot both be bound.">
+	    <bound name = "effect"/>
+	    <bound name = "onSuccess"/>
+    </validation>
+    
+    <validation message="If &apos;effect&apos; is bound, then &apos;updateContainerID&apos; must also be bound.">
+	    <bound name = "effect"/>
+	    <unbound name = "updateContainerID"/>
     </validation>
     
     <validation message="If &apos;directActionName&apos; is bound, then &apos;replaceID&apos; must also be bound.">

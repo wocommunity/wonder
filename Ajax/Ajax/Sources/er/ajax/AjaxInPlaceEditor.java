@@ -20,6 +20,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation.ValidationException;
 
+import er.extensions.ERXWOContext;
+
 public class AjaxInPlaceEditor extends AjaxDynamicElement {
   private WOAssociation _idAssociation;
   private WOAssociation _elementNameAssociation;
@@ -29,7 +31,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
   private WOAssociation _dateFormat;
   private WOAssociation _numberFormat;
   private WOAssociation _useDecimalNumber;
-
+  
   public AjaxInPlaceEditor(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
     _idAssociation = (WOAssociation) associations.objectForKey("id");
@@ -71,6 +73,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("loadingText", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("callback", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("submitOnBlur", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("valueWhenEmpty", AjaxOption.STRING));
     //ajaxOptionsArray.addObject(new AjaxOption("ajaxOptions", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     return options;
@@ -80,7 +83,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     WOComponent component = context.component();
     String id;
     if (_idAssociation == null) {
-      id = AjaxUtils.toSafeElementID(context.elementID());
+      id = ERXWOContext.safeIdentifierName(context, false);
     }
     else {
       id = (String) _idAssociation.valueInComponent(component);
@@ -120,11 +123,11 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
 
   protected void addRequiredWebResources(WOResponse response, WOContext context) {
     AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-    AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
-    AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
     AjaxUtils.addScriptResourceInHead(context, response, "builder.js");
-    AjaxUtils.addScriptResourceInHead(context, response, "dragdrop.js");
-    AjaxUtils.addScriptResourceInHead(context, response, "controls.js");
+	AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
+	AjaxUtils.addScriptResourceInHead(context, response, "controls.js");
+	AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
+    AjaxUtils.addScriptResourceInHead(context, response, "wonder_inplace.js");
   }
 
   // Formatting/Parsing method "inspired by" WOTextField
@@ -195,6 +198,11 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
       }
       response.appendContentString(strValue);
     }
+	// Workaround for inplace control staying in "Saving..." mode forever
+    // when empty value was supplied
+    String contentString = response.contentString();
+    if (contentString == null || contentString.equals("")) {
+    	response.appendContentString(" ");
+    }
   }
-
 }

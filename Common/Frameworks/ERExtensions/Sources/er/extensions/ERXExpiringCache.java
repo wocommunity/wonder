@@ -1,31 +1,39 @@
 package er.extensions;
 
+import java.lang.ref.WeakReference;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Cache that expires its entries based on time or version changes. Version can
  * be any object that represents the current state of a cached value. When
  * retrieving the value, you can retrieve it with a version key. If the version
- * key used in the retrieval does not match the original version key of the 
+ * key used in the retrieval does not match the original version key of the
  * object in the cache, then the cache will invalidate the value for that key
- * and return null.  An example version key might be the count of an array, if 
+ * and return null. An example version key might be the count of an array, if
  * the count changes, you want to invalidate the cached object.
+ * 
+ * Note that on a time-expiring cache, if you do not use the reaper with
+ * startBackgroundExpiration(), or manually call removeStaleEntries(), unexpired
+ * entries will remain in the cache for the lifetime of the cache.
  * 
  * @author ak
  * @author mschrag
  */
-// FIXME: the last entry stays in the cache if it is not requested.
-// Note that this is an un-genericized version of the file from Wonder trunk. - TC
-public class ERXExpiringCache {
-	private static class Entry {
+public class ERXExpiringCache<K, V> {
+	public static class Entry<V> {
 		private long _expiration;
 		private Object _versionKey;
-		private Object _object;
+		private V _object;
 		private boolean _stale;
 
-		public Entry(Object o, long expiration, Object version) {
+		public Entry(V o, long expiration, Object version) {
 			_expiration = expiration;
 			_versionKey = version;
 			_object = o;
@@ -49,8 +57,13 @@ public class ERXExpiringCache {
 			return _stale;
 		}
 
-		protected Object object() {
+		public V object() {
 			return _object;
+		}
+
+		@Override
+		public String toString() {
+			return super.toString() + " { " + "expiration = " + (_expiration == ERXExpiringCache.NO_TIMEOUT ? "NO_TIMEOUT" : new java.util.Date(_expiration)) + ", version = " + (_versionKey == ERXExpiringCache.NO_VERSION ? "NO_VERSION" : _versionKey) + ", object = " + _object + " }";
 		}
 	}
 
@@ -63,6 +76,11 @@ public class ERXExpiringCache {
 	 * Designates that no explicit version was specified.
 	 */
 	public static final Object NO_VERSION = new Object();
+
+	/**
+	 * The reaper for ERXExpiringCaches.
+	 */
+	private static ERXExpiringCache.GrimReaper _reaper;
 
 	private NSMutableDictionary _backingDictionary;
 	private long _expiryTime;
@@ -104,12 +122,15 @@ public class ERXExpiringCache {
 		_lastCleanupTime = 0L;
 		_backingDictionary = new NSMutableDictionary();
 	}
-	
+
 	/**
 	 * Removes all the objects in this cache.
 	 */
-	public void removeAllObjects() {
-		_backingDictionary.removeAllObjects();
+	public synchronized void removeAllObjects() {
+		for (Enumeration<K> keysEnum = _backingDictionary.allKeys().objectEnumerator(); keysEnum.hasMoreElements();) {
+			K key = keysEnum.nextElement();
+			removeEntryForKey(entryForKey(key), key);
+		}
 	}
 
 	private long expiryTime() {
@@ -125,56 +146,71 @@ public class ERXExpiringCache {
 	 * @param key
 	 *            the lookup key
 	 */
-	public synchronized void setObjectForKey(Object object, String key) {
+	public synchronized void setObjectForKey(V object, K key) {
 		setObjectForKeyWithVersion(object, key, ERXExpiringCache.NO_VERSION);
 	}
 
 	/**
 	 * Sets the object for the specified key and current version key.
 	 * 
-	 * @param object the object to set
-	 * @param key the lookup key
-	 * @param currentVersionKey the version of the object right now
+	 * @param object
+	 *            the object to set
+	 * @param key
+	 *            the lookup key
+	 * @param currentVersionKey
+	 *            the version of the object right now
 	 */
-	public synchronized void setObjectForKeyWithVersion(Object object, String key, Object currentVersionKey) {
+	public synchronized void setObjectForKeyWithVersion(V object, K key, Object currentVersionKey, long expirationTime) {
 		removeStaleEntries();
-		long expirationTime;
-		if (_expiryTime == ERXExpiringCache.NO_TIMEOUT) {
-			expirationTime = ERXExpiringCache.NO_TIMEOUT;
+		if (expirationTime != ERXExpiringCache.NO_TIMEOUT) {
+			expirationTime = System.currentTimeMillis() + expirationTime;
 		}
-		else {
-			expirationTime = System.currentTimeMillis() + _expiryTime;
-		}
-		Entry entry = new Entry(object, expirationTime, currentVersionKey);
-		_backingDictionary.setObjectForKey(entry, key);
+		Entry<V> entry = new Entry<V>(object, expirationTime, currentVersionKey);
+		setEntryForKey(entry, key);
+	}
+
+	/**
+	 * Sets the object for the specified key and current version key.
+	 * 
+	 * @param object
+	 *            the object to set
+	 * @param key
+	 *            the lookup key
+	 * @param currentVersionKey
+	 *            the version of the object right now
+	 */
+	public synchronized void setObjectForKeyWithVersion(V object, K key, Object currentVersionKey) {
+		setObjectForKeyWithVersion(object, key, currentVersionKey, _expiryTime);
 	}
 
 	/**
 	 * Returns the value of the given key with an unspecified version.
 	 * 
-	 * @param key the key to lookup with
+	 * @param key
+	 *            the key to lookup with
 	 * @return the value in the cache or null
 	 */
-	public synchronized Object objectForKey(String key) {
+	public synchronized V objectForKey(K key) {
 		return objectForKeyWithVersion(key, ERXExpiringCache.NO_VERSION);
 	}
 
 	/**
-	 * Returns the value of the given key passing in the current version
-	 * of the cache value.  If the version key passed in does not
-	 * match the version key in the cache, the cache will invalidate
-	 * that key.
+	 * Returns the value of the given key passing in the current version of the
+	 * cache value. If the version key passed in does not match the version key
+	 * in the cache, the cache will invalidate that key.
 	 * 
-	 * @param key the key to lookup with
-	 * @param currentVersionKey the current version of this key
+	 * @param key
+	 *            the key to lookup with
+	 * @param currentVersionKey
+	 *            the current version of this key
 	 * @return the value in the cache or null
 	 */
-	public synchronized Object objectForKeyWithVersion(String key, Object currentVersionKey) {
-		Entry entry = (Entry)_backingDictionary.objectForKey(key);
-		Object value = null;
+	public synchronized V objectForKeyWithVersion(K key, Object currentVersionKey) {
+		Entry<V> entry = entryForKey(key);
+		V value = null;
 		if (entry != null) {
 			if (entry.isStale(System.currentTimeMillis(), currentVersionKey)) {
-				_backingDictionary.removeObjectForKey(key);
+				removeEntryForKey(entry, key);
 			}
 			else {
 				value = entry.object();
@@ -184,26 +220,30 @@ public class ERXExpiringCache {
 	}
 
 	/**
-	 * Returns whether or not the object for the given key is a stale cache entry.
+	 * Returns whether or not the object for the given key is a stale cache
+	 * entry.
 	 * 
-	 * @param key the key to lookup
+	 * @param key
+	 *            the key to lookup
 	 * @return true if the value is stale
 	 */
-	public synchronized boolean isStale(Object key) {
+	public synchronized boolean isStale(K key) {
 		return isStaleWithVersion(key, ERXExpiringCache.NO_VERSION);
 	}
 
 	/**
-	 * Returns whether or not the object for the given key is a stale cache entry
-	 * given the context of the current version of the key.
+	 * Returns whether or not the object for the given key is a stale cache
+	 * entry given the context of the current version of the key.
 	 * 
-	 * @param key the key to lookup
-	 * @param currentVersionKey the current version of this key
+	 * @param key
+	 *            the key to lookup
+	 * @param currentVersionKey
+	 *            the current version of this key
 	 * @return true if the value is stale
 	 */
-	public synchronized boolean isStaleWithVersion(Object key, Object currentVersionKey) {
-		Entry entry = (Entry)_backingDictionary.objectForKey(key);
-		boolean isStale = false;
+	public synchronized boolean isStaleWithVersion(K key, Object currentVersionKey) {
+		Entry<V> entry = entryForKey(key);
+		boolean isStale = true;
 		if (entry != null) {
 			isStale = entry.isStale(System.currentTimeMillis(), currentVersionKey);
 		}
@@ -213,14 +253,16 @@ public class ERXExpiringCache {
 	/**
 	 * Removes the object for the given key.
 	 * 
-	 * @param key the key to remove
+	 * @param key
+	 *            the key to remove
 	 * @return the removed object
 	 */
-	public synchronized Object removeObjectForKey(String key) {
+	public synchronized V removeObjectForKey(K key) {
 		removeStaleEntries();
-		Entry entry = (Entry)_backingDictionary.removeObjectForKey(key);
-		Object value = null;
+		Entry<V> entry = entryForKey(key);
+		V value = null;
 		if (entry != null) {
+			removeEntryForKey(entry, key);
 			value = entry.object();
 		}
 		return value;
@@ -229,20 +271,169 @@ public class ERXExpiringCache {
 	/**
 	 * Removes all stale entries.
 	 */
-	private void removeStaleEntries() {
-		long now = System.currentTimeMillis();
-		if ((_lastCleanupTime + _cleanupPause) < now) {
-			_lastCleanupTime = System.currentTimeMillis();
-			for (Enumeration keyEnum = _backingDictionary.keyEnumerator(); keyEnum.hasMoreElements();) {
-				String key = (String)keyEnum.nextElement();
-				Entry entry = (Entry)_backingDictionary.objectForKey(key);
-				// ak: add 10 seconds as a safety margin
-				// we need this because the entry could be requested
-				// when we just checked and noticed it is ok
-				if (entry.isStale(now + 10L * 1000, ERXExpiringCache.NO_VERSION)) {
-					_backingDictionary.removeObjectForKey(key);
+	public synchronized void removeStaleEntries() {
+		if (_backingDictionary.count() > 0) {
+			long now = System.currentTimeMillis();
+			if ((_lastCleanupTime + _cleanupPause) < now) {
+				_lastCleanupTime = System.currentTimeMillis();
+				for (Enumeration<K> keyEnum = _backingDictionary.keyEnumerator(); keyEnum.hasMoreElements();) {
+					K key = keyEnum.nextElement();
+					Entry<V> entry = entryForKey(key);
+					// ak: add 10 seconds as a safety margin
+					// we need this because the entry could be requested
+					// when we just checked and noticed it is ok
+					if (entry.isStale(now + 10L * 1000, ERXExpiringCache.NO_VERSION)) {
+						removeEntryForKey(entry, key);
+					}
 				}
 			}
 		}
+	}
+	
+	protected synchronized void removeEntryForKey(Entry<V> entry, K key) {
+		_backingDictionary.removeObjectForKey(key);
+	}
+	
+	protected synchronized void setEntryForKey(Entry<V> entry, K key) {
+		_backingDictionary.setObjectForKey(entry, key);
+	}
+
+	protected synchronized Entry<V> entryForKey(K key) {
+		return (Entry<V>)_backingDictionary.objectForKey( key);
+	}
+	@Override
+	public String toString() {
+		return super.toString() + " " + _backingDictionary;
+	}
+
+	/**
+	 * Adds this cache to the background thread that reaps time-expired entries
+	 * from expiring caches. If this cache is not a time-expiration cache, this
+	 * will throw an IllegalArgumentException.
+	 */
+	public void startBackgroundExpiration() {
+		if (_expiryTime == ERXExpiringCache.NO_TIMEOUT) {
+			throw new IllegalArgumentException("This ERXExpiringCache does not have an expiration time.");
+		}
+		ERXExpiringCache.reaper().addCache(this);
+	}
+
+	/**
+	 * Stops the background reaper for this cache.
+	 */
+	public synchronized void stopBackgroundExpiration() {
+		ERXExpiringCache.reaper().stop(this);
+	}
+
+	/**
+	 * Returns the repear for all ERXExpringCaches.
+	 * 
+	 * @return the repear for all ERXExpringCaches
+	 */
+	protected static synchronized ERXExpiringCache.GrimReaper reaper() {
+		if (_reaper == null) {
+			_reaper = new GrimReaper(ERXProperties.intForKeyWithDefault("er.extensions.ERXExpiringCache.reaperFrequency", 5000));
+		}
+		return ERXExpiringCache._reaper;
+	}
+
+	/**
+	 * The reaper runnable for ERXExpiringCache.
+	 * 
+	 * @author mschrag
+	 */
+	protected static class GrimReaper implements Runnable {
+		private List<WeakReference<ERXExpiringCache>> _caches;
+		private long _reapFrequencyInMillis;
+		private boolean _stopped;
+
+		public GrimReaper(long reapFrequencyInMillis) {
+			_caches = new LinkedList<WeakReference<ERXExpiringCache>>();
+			_reapFrequencyInMillis = reapFrequencyInMillis;
+			_stopped = true;
+		}
+
+		public void addCache(ERXExpiringCache cache) {
+			synchronized (_caches) {
+				_caches.add(new WeakReference<ERXExpiringCache>(cache));
+				if (_stopped) {
+					start();
+				}
+			}
+
+		}
+
+		public void start() {
+			synchronized (_caches) {
+				if (_stopped) {
+					_stopped = false;
+					Thread reaperThread = new Thread(this);
+					reaperThread.start();
+				}
+			}
+		}
+
+		public void stop() {
+			synchronized (_caches) {
+				_stopped = true;
+			}
+		}
+
+		public void stop(ERXExpiringCache cache) {
+			synchronized (_caches) {
+				Iterator<WeakReference<ERXExpiringCache>> cacheIter = _caches.iterator();
+				while (cacheIter.hasNext()) {
+					WeakReference<ERXExpiringCache> cacheRef = cacheIter.next();
+					ERXExpiringCache reapingCache = cacheRef.get();
+					if (reapingCache == cache) {
+						cacheIter.remove();
+						break;
+					}
+				}
+			}
+		}
+
+		public void run() {
+			boolean stopped = false;
+			do {
+				try {
+					Thread.sleep(_reapFrequencyInMillis);
+				}
+				catch (InterruptedException e) {
+					// IGNORE
+				}
+				synchronized (_caches) {
+					Iterator<WeakReference<ERXExpiringCache>> cacheIter = _caches.iterator();
+					while (cacheIter.hasNext()) {
+						WeakReference<ERXExpiringCache> cacheRef = cacheIter.next();
+						ERXExpiringCache cache = cacheRef.get();
+						if (cache == null) {
+							cacheIter.remove();
+						}
+						else {
+							cache.removeStaleEntries();
+						}
+					}
+					if (_caches.size() == 0) {
+						_stopped = true;
+						stopped = true;
+					}
+				}
+			}
+			while (!stopped);
+		}
+	}
+
+	/**
+	 * Returns all keys.
+	 * @return
+	 */
+	public synchronized NSArray allKeys() {
+		NSMutableArray result = new NSMutableArray(_backingDictionary.count());
+		for (Enumeration keysEnum = _backingDictionary.allKeys().objectEnumerator(); keysEnum.hasMoreElements();) {
+			Object key = keysEnum.nextElement();
+			result.addObject(key);
+		}
+		return result;
 	}
 }

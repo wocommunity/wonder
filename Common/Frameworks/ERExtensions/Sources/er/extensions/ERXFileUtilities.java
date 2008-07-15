@@ -27,6 +27,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -168,7 +169,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Returns a string from the input stream using the default
+     * Returns a string from the input stream using the default
      * encoding.
      * @param in stream to read
      * @return string representation of the stream.
@@ -178,14 +179,20 @@ public class ERXFileUtilities {
     }
 
     /**
-     * Returns the byte array for a given file.
-     * @param f file to get the bytes from
-     * @throws IOException if things go wrong
-     * @return byte array of the file.
+     * Returns the String from the contents of the given URL.
+     * 
+     * @param url the URL to read from
+     * @return the String contents of the URL
+     * @throws IOException if an error occurs
      */
-    public static byte[] bytesFromFile(File f) throws IOException {
-        if (f == null) throw new IllegalArgumentException("null file");
-        return bytesFromFile(f, (int)f.length());
+    public static String stringFromURL(URL url) throws IOException {
+    	InputStream is = url.openStream();
+    	try {
+    		return ERXFileUtilities.stringFromInputStream(is);
+    	}
+    	finally {
+    		is.close();
+    	}
     }
 
     /**
@@ -205,7 +212,18 @@ public class ERXFileUtilities {
     }
 
     /**
-     * Returns an array of the first n bytes for a given file.
+     * Returns the byte array for a given file.
+     * @param f file to get the bytes from
+     * @throws IOException if things go wrong
+     * @return byte array of the file.
+     */
+    public static byte[] bytesFromFile(File f) throws IOException {
+        if (f == null) throw new IllegalArgumentException("null file");
+        return bytesFromFile(f, (int)f.length());
+    }
+
+    /**
+        * Returns an array of the first n bytes for a given file.
      * @param f file to get the bytes from
      * @param n number of bytes to read from input file
      * @throws IOException if things go wrong
@@ -214,10 +232,15 @@ public class ERXFileUtilities {
     public static byte[] bytesFromFile(File f, int n) throws IOException {
         if (f == null) throw new IllegalArgumentException("null file");
         FileInputStream fis = new FileInputStream(f);
-        byte[] result = bytesFromInputStream(fis,n);
-        fis.close();
-        return result;
+        try {
+        	byte[] result = bytesFromInputStream(fis,n);
+            return result;
+        }
+        finally {
+        	fis.close();
+        }
     }
+
 
     /**
      * Returns an array of the first n bytes for a given input stream
@@ -233,7 +256,6 @@ public class ERXFileUtilities {
             bytesRead += fis.read(data, bytesRead, n - bytesRead);
         return data;
     }
-
 
     /**
         * @deprecated use writeInputStreamToFile(InputStream is, File f) instead
@@ -313,15 +335,13 @@ public class ERXFileUtilities {
     		stream.close();
     		throw e;
     	}
-        writeInputStreamToOutputStream(stream, out);
+        ERXFileUtilities.writeInputStreamToOutputStream(stream, true, out, true);
     }
     
-    
     public static void writeInputStreamToGZippedFile(InputStream stream, File file) throws IOException {
-        if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
-        FileOutputStream out = new FileOutputStream(file);
-        writeInputStreamToOutputStream(stream, new GZIPOutputStream(out));
-        out.close();
+    	if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
+     	FileOutputStream out = new FileOutputStream(file);
+     	ERXFileUtilities.writeInputStreamToOutputStream(stream, false, new GZIPOutputStream(out), true);
     }
 
     /**
@@ -333,6 +353,19 @@ public class ERXFileUtilities {
      * @throws IOException if there is any failure
      */
     public static void writeInputStreamToOutputStream(InputStream in, OutputStream out) throws IOException {
+    	ERXFileUtilities.writeInputStreamToOutputStream(in, true, out, true);
+    }
+     	
+    /**
+     * Copies the contents of the input stream to the given output stream.
+     * 
+     * @param in the input stream to copy from
+     * @param closeInputStream if true, the input stream will be closed
+     * @param out the output stream to copy to
+     * @param closeOutputStream if true, the output stream will be closed
+     * @throws IOException if there is any failure
+     */
+    public static void writeInputStreamToOutputStream(InputStream in, boolean closeInputStream, OutputStream out, boolean closeOutputStream) throws IOException {
     	try {
 	        BufferedInputStream bis = new BufferedInputStream(in);
 	        try {
@@ -343,15 +376,28 @@ public class ERXFileUtilities {
 		        }
 	        }
 	        finally {
-	        	bis.close();
+	        	if (closeInputStream) {
+	        		bis.close();
+	        	}
 	        }
 			out.flush();
     	}
     	finally {
-			out.close();
+    		if (closeOutputStream) {
+    			out.close();
+    		}
     	}
     }
 
+    public static void stringToGZippedFile(String s, File f) throws IOException {
+	    if (s == null) throw new NullPointerException("string argument cannot be null");
+	    if (f == null) throw new NullPointerException("file argument cannot be null");
+	    
+	    byte[] bytes = s.getBytes();
+	    ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+	    writeInputStreamToGZippedFile(bais, f);
+    }
+    
     /**
      * Writes the contents of <code>s</code> to <code>f</code>
      * using the platform's default encoding.
@@ -390,20 +436,10 @@ public class ERXFileUtilities {
         reader.close();
         out.flush();
         out.close();
-        
-    }
-
-    public static void stringToGZippedFile(String s, File f) throws IOException {
-        if (s == null) throw new NullPointerException("string argument cannot be null");
-        if (f == null) throw new NullPointerException("file argument cannot be null");
-
-        byte[] bytes = s.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        writeInputStreamToGZippedFile(bais, f);
     }
 
     /**
-        * Copy a file across hosts using scp.
+     * Copy a file across hosts using scp.
      * @param srcHost host to send from (null if file is local)
      * @param srcPath path on srcHost to read from
      * @param dstHost host to send to (null if file is local)
@@ -434,7 +470,7 @@ public class ERXFileUtilities {
    }
 
     /**
-        * Copy a file across hosts using scp.
+     * Copy a file across hosts using scp.
      * @param srcFile local file to send
      * @param dstHost host to send to (null if file is local)
      * @param dstPath path on srcHost to write to
@@ -444,7 +480,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Copy a file across hosts using scp.
+     * Copy a file across hosts using scp.
      * @param srcHost host to send from (null if file is local)
      * @param srcPath path on srcHost to read from
      * @param dstFile local file to write to
@@ -454,7 +490,17 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Returns a string from the file using the default
+ 	 * Returns a string from the gzipped file using the default
+ 	 * encoding.
+ 	 * @param f file to read
+ 	 * @return string representation of that file.
+ 	 */
+ 	public static String stringFromGZippedFile(File f) throws IOException {
+ 		return new String(bytesFromGZippedFile(f));
+ 	}
+ 	
+    /**
+     * Returns a string from the file using the default
      * encoding.
      * @param f file to read
      * @return string representation of that file.
@@ -464,18 +510,7 @@ public class ERXFileUtilities {
     }
 
     /**
-     * Returns a string from the gzipped file using the default
-     * encoding.
-     * @param f file to read
-     * @return string representation of that file.
-     */
-    public static String stringFromGZippedFile(File f) throws IOException {
-        return new String(bytesFromGZippedFile(f));
-    }
-
-
-    /**
-        * Returns a string from the file using the specified
+     * Returns a string from the file using the specified
      * encoding.
      * @param f file to read
      * @param encoding to be used, null will use the default
@@ -750,18 +785,30 @@ public class ERXFileUtilities {
      * @param recurseIntoDirectories determines if the delete is recursive
      */
     public static void deleteFilesInDirectory(File directory, boolean recurseIntoDirectories) {
+    	deleteFilesInDirectory(directory, null, recurseIntoDirectories, true);
+    }
+    
+    /**
+     * Deletes all of the files in a given directory with the option to
+     * recursively delete all of the files in the given directory.
+     * @param directory to delete all of the files from
+     * @param filter optional FileFilter to restrict what gets deleted, null to delete everything
+     * @param recurseIntoDirectories determines if the delete is recursive
+     * @param removeDirectories true if directories should be removed as well as files, false to only remove files
+     */
+    public static void deleteFilesInDirectory(File directory, FileFilter filter, boolean recurseIntoDirectories, boolean removeDirectories) {
         if (!directory.exists())
             throw new RuntimeException("Attempting to delete files from a non-existant directory: " + directory);
         if (!directory.isDirectory())
             throw new RuntimeException("Attmepting to delete files from a file that is not a directory: " + directory);
-        File files[] = directory.listFiles();
+        File files[] = filter != null ? directory.listFiles(filter) : directory.listFiles() ;
         if (files != null && files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 File aFile = files[i];
                 if (aFile.isDirectory() && recurseIntoDirectories) {
-                    deleteFilesInDirectory(aFile, recurseIntoDirectories);
+                    deleteFilesInDirectory(aFile, filter, recurseIntoDirectories, removeDirectories);
                 }
-                if (aFile.isFile() || (aFile.isDirectory()
+                if (aFile.isFile() || (aFile.isDirectory() && removeDirectories
                                        && (aFile.listFiles() == null || aFile.listFiles().length == 0))) {
                     aFile.delete();
                 }
@@ -792,6 +839,17 @@ public class ERXFileUtilities {
         return deletedAllFiles;
     }
 
+    /**
+     * Java wrapper for call out to chmod.  Only works if your OS supports the chmod command.
+     *
+     * @param file the File to run chmod on
+     * @param mode see the chmod man page
+     * @throws IOException if things go wrong
+     */
+    public static void chmod(File file, String mode) throws IOException {
+    	Runtime.getRuntime().exec(new String[] {"chmod", mode, file.getAbsolutePath()});
+    }
+    
     /**
         * Creates a symlink for a given file. Note this only works on
      * civilized OSs which support symbolic linking.
@@ -901,7 +959,7 @@ public class ERXFileUtilities {
         }
 
     /**
-        * Copys the source file to the destination
+     * Copys the source file to the destination
      *
      * @param srcFile source file
      * @param dstFile destination file
@@ -909,55 +967,92 @@ public class ERXFileUtilities {
      * on the file it is NOT deleted unless force delete is true
      * @param forceDelete if true then missing write rights are ignored and the file is deleted.
      */
-    public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete)
-        throws FileNotFoundException, IOException {
-            if (srcFile.exists() && srcFile.isFile()) {
-            		boolean copied = false;
-                if (deleteOriginals && (!forceDelete || srcFile.canWrite())) {
-                    copied = srcFile.renameTo(dstFile);
-                } 
-                if(!copied) {
-                    Throwable thrownException=null;
-                    File  parent = dstFile.getParentFile();
-                    parent.mkdirs();
-                    FileInputStream in = new FileInputStream(srcFile);
-                    FileOutputStream out = new FileOutputStream(dstFile);
-                    try {
-
-                        //50 KBytes buffer
-                        byte buf[] = new byte[1024 * 50];
-                        int read = -1;
-                        while ((read = in.read(buf)) != -1) {
-                            out.write(buf, 0, read);
+    public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete) throws FileNotFoundException, IOException {
+        if (srcFile.exists() && srcFile.isFile()) {
+        	boolean copied = false;
+            if (deleteOriginals && (!forceDelete || srcFile.canWrite())) {
+                copied = srcFile.renameTo(dstFile);
+            } 
+            if (!copied) {
+                Throwable thrownException = null;
+                File parent = dstFile.getParentFile();
+                if (!parent.exists() && !parent.mkdirs()) {
+                	throw new IOException("Failed to create the directory " + parent + ".");
+                }
+                
+                FileInputStream in = new FileInputStream(srcFile);
+                try {
+                	// Create channel on the source
+                	FileChannel srcChannel = in.getChannel();
+                	try {
+                        FileOutputStream out = new FileOutputStream(dstFile);
+                        try {
+	                    	// Create channel on the destination
+	                    	FileChannel dstChannel = out.getChannel();
+	                    	try {
+		                    	// Copy file contents from source to destination
+		                    	dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
+	                    	}
+	                    	catch (Throwable t) {
+	                    		thrownException = t;
+	                    	}
+	                    	finally {
+	                        	dstChannel.close();
+	                    	}
                         }
-
-                        if (deleteOriginals && (srcFile.canWrite() || forceDelete))
-                            srcFile.delete();
-                    } catch (Throwable t) {
-                        thrownException=t;
-                    } finally {
-                        if (out != null)
-                            try {
-                                out.close();
-                            } catch (IOException io) {
-                                if (thrownException==null) thrownException=io;
-                            }
-                        if (in != null) {
-                            try {
-                                in.close();
-                            } catch (IOException io) {
-                                if (thrownException==null) thrownException=io;
-                            }
+                        catch (Throwable t) {
+                    		if (thrownException == null) {
+                    			thrownException = t;
+                    		}
                         }
+                        finally {
+                        	out.close();
+                        }
+                	}
+                    catch (Throwable t) {
+                		if (thrownException == null) {
+                			thrownException = t;
+                		}
                     }
-                    if (thrownException!=null) {
-                        if (thrownException instanceof IOException) throw (IOException)thrownException;
-                        else if (thrownException instanceof Error) throw (Error)thrownException;
-                        else throw (RuntimeException)thrownException;
+                	finally {
+                    	srcChannel.close();
+                	}
+                } catch (Throwable t) {
+                	if (thrownException == null) {
+                		thrownException = t;
+                	}
+                }
+                finally {
+                	try {
+                		in.close();
+                	}
+                	catch (IOException e) {
+                		if (thrownException == null) {
+                			thrownException = e;
+                		}
+                	}
+                }
+
+                if (deleteOriginals && (srcFile.canWrite() || forceDelete)) {
+                    if (!srcFile.delete()) {
+                    	throw new IOException("Failed to delete " + srcFile + ".");
+                    }
+                }
+
+                if (thrownException != null) {
+                    if (thrownException instanceof IOException) {
+                    	throw (IOException)thrownException;
+                    }
+                    else if (thrownException instanceof Error) {
+                    	throw (Error)thrownException;
+                    }
+                    else {
+                    	throw (RuntimeException)thrownException;
                     }
                 }
             }
         }
+    }
 
     /**
         * Creates a temporary directory.

@@ -6,37 +6,41 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXApplication;
+import er.extensions.ERXResourceManager;
+import er.extensions.ERXResponseRewriter;
+import er.extensions.ERXWOContext;
+import er.extensions.ERXAjaxApplication;
+import er.extensions.ERXAjaxSession;
+import er.extensions.ERXProperties;
+import er.extensions.ERXStringUtilities;
+
 public class AjaxUtils {
-	private static String HTML_CLOSE_HEAD = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
+	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 
 	/**
-	 * Key that tells the session not to store the current page. Checks both the response userInfo and the response
-	 * headers if this key is present. The value doesn't matter, but you need to update the corresponding value in
-	 * ERXSession. This is to keep the dependencies between the two frameworks independent.
+	 * If the value is null, this returns "null", otherwise it returns '[value]'.
+	 * @param value the value to quote
+	 * @return the quoted value or "null"
 	 */
-	public static final String DONT_STORE_PAGE = "ERXSession.DontStorePage";
-
-	/*
-	 * Key that is used to specify that a page should go in the replacement cache instead of the backtrack cache. This
-	 * is used for Ajax components that actually generate component actions in their output. The value doesn't matter,
-	 * but you need to update the corresponding value in ERXSession. This is to keep the dependencies between the two
-	 * frameworks independent.
+	public static String quote(String value) {
+		return value == null ? "null" : "'" + value + "'"; 
+	}
+	
+	/**
+	 * Return whether or not the given request is an Ajax request.
+	 * @param request the request the check
 	 */
-	public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "pageCacheKey";
-
-	/*
-	 * Key that is used during an Ajax form posting so that WOContext gets _wasFormSubmitted set to true. If this value
-	 * is changed, you must also change ERXWOForm.
-	 */
-	public static final String FORCE_FORM_SUBMITTED_KEY = "_forceFormSubmitted";
-
+	public static boolean isAjaxRequest(WORequest request) {
+		return ERXAjaxApplication.isAjaxRequest(request);
+	}
+	
 	public static void setPageReplacementCacheKey(WOContext _context, String _key) {
-		_context.response().setHeader(_key, AjaxUtils.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+		_context.response().setHeader(_key, ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
 	}
 
 	/**
@@ -45,10 +49,8 @@ public class AjaxUtils {
 	 * session to decide if you want to save the request or not.
 	 * 
 	 * @param context
-	 * @return
 	 */
 	public static AjaxResponse createResponse(WORequest request, WOContext context) {
-		WOApplication app = WOApplication.application();
 		AjaxResponse response = null;
 		if (context != null) {
 			WOResponse existingResponse = context.response();
@@ -75,7 +77,7 @@ public class AjaxUtils {
 		// charset set in the response
 		response.setHeader("text/plain; charset=utf-8", "content-type");
 		response.setHeader("Connection", "keep-alive");
-		response.setHeader(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
+		response.setHeader(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
 		return response;
 	}
 
@@ -84,50 +86,9 @@ public class AjaxUtils {
 	 * already one.
 	 * 
 	 * @param message
-	 * @return
 	 */
 	public static NSMutableDictionary mutableUserInfo(WOMessage message) {
-		NSDictionary dict = message.userInfo();
-		NSMutableDictionary result = null;
-		if (dict == null) {
-			result = new NSMutableDictionary();
-			message.setUserInfo(result);
-		}
-		else {
-			if (dict instanceof NSMutableDictionary) {
-				result = (NSMutableDictionary) dict;
-			}
-			else {
-				result = dict.mutableClone();
-				message.setUserInfo(result);
-			}
-		}
-		return result;
-	}
-
-	public static String htmlCloseHead() {
-		String head = AjaxUtils.HTML_CLOSE_HEAD;
-		return (head == null ? "</head>" : head);
-	}
-
-	/**
-	 * Utility to add the given text before the given tag. Used to add stuff in the HEAD.
-	 * 
-	 * @param response
-	 * @param content
-	 * @param tag
-	 */
-	public static void insertInResponseBeforeTag(WOResponse response, String content, String tag) {
-		String stream = response.contentString();
-		int idx = stream.indexOf(tag);
-		if (idx < 0) {
-			idx = stream.toLowerCase().indexOf(tag.toLowerCase());
-		}
-		if (idx >= 0) {
-			String pre = stream.substring(0, idx);
-			String post = stream.substring(idx, stream.length());
-			response.setContent(pre + content + post);
-		}
+		return ERXWOContext.contextDictionary();
 	}
 
 	/**
@@ -137,30 +98,32 @@ public class AjaxUtils {
 	 * @param fileName
 	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		String startTag = "<script type=\"text/javascript\" src=\"";
-		String endTag = "\"></script>";
-		addResourceInHead(context, response, framework, fileName, startTag, endTag);
-	}
-
-	public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
-		addScriptResourceInHead(context, response, "Ajax", fileName);
+		String processedFileName = fileName;
+		if (ERXProperties.booleanForKey("er.ajax.compressed") && ("prototype.js".equals(fileName) || "scriptaculous.js".equals(fileName))) {
+			processedFileName = "sc-17-proto-15-compressed.js";
+		}
+		ERXResponseRewriter.addScriptResourceInHead(response, context, framework, processedFileName);
 	}
 
 	/**
-	 * Adds a stylesheet link tag with a correct resource url in the html head tag if it isn't already present in the
-	 * response.
-	 * 
-	 * @param response
-	 * @param fileName
+	 * Calls ERXWOContext.addScriptResourceInHead with "Ajax" framework
 	 */
-	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		String startTag = "<link rel = \"stylesheet\" type = \"text/css\" href = \"";
-		String endTag = "\"/>";
-		addResourceInHead(context, response, framework, fileName, startTag, endTag);
+	public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
+		AjaxUtils.addScriptResourceInHead(context, response, "Ajax", fileName);
 	}
 
+	/**
+	 * Calls ERXWOContext.addStylesheetResourceInHead
+	 */
+	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
+		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, fileName);
+	}
+
+	/**
+	 * Calls ERXWOContext.addStylesheetResourceInHead with "Ajax" framework
+	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
-		addStylesheetResourceInHead(context, response, "Ajax", fileName);
+		AjaxUtils.addStylesheetResourceInHead(context, response, "Ajax", fileName);
 	}
 
 	/**
@@ -171,31 +134,43 @@ public class AjaxUtils {
 	 * @param fileName
 	 * @param startTag
 	 * @param endTag
+	 * @deprecated this is not called by anything anymore and does not use the new support for loading-on-demand
 	 */
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
-		NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context.response());
-		if (userInfo.objectForKey(fileName) == null) {
-			userInfo.setObjectForKey(fileName, fileName);
-			WOResourceManager rm = WOApplication.application().resourceManager();
-			String url = rm.urlForResourceNamed(fileName, framework, context.session().languages(), context.request());
-			String html = startTag + url + endTag + "\n";
-			AjaxUtils.insertInResponseBeforeTag(response, html, AjaxUtils.htmlCloseHead());
+		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
+		
+		// MS: OK ... Sheesh.  If you're not using Wonder's ERXResourceManager #1, you're a bad person, but #2 in development mode
+		// you have a lame resource URL that does not act like a path (wr/wodata=/path/to/your/resource), rather it acts like a query string
+		// (wr?wodata=/path/to/your/resource).  This means that relative resource references won't work and also only previously cached resources
+		// will load (i.e. ones coming from something that made an explicit WOResourceURL, etc, reference).  This explodes when scriptaculous tries 
+		// to load its required resources dynamically (like builder.js, effects.js, etc).
+		//
+		// So we have to check for this condition -- you asked to load scriptaculous.js from Ajax framework and you don't have ERXResourceManager
+		// and you're in development mode (as far as your lame WOResourceManager is concerned), so we need to do Scriptaculous' job and manually
+		// load the dependent js files on its behalf.  You really should just suck it up and use ERXResourceManager because it really is just
+		// better.  But if you're holding out and scared like a child, then we'll do this for you. 
+		if (!(WOApplication.application().resourceManager() instanceof ERXResourceManager) && "Ajax".equals(framework) && "scriptaculous.js".equals(fileName) && !(context.request() == null || context.request() != null && context.request().isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject())) {
+			boolean enqueueIfTagMissing = !AjaxUtils.isAjaxRequest(context.request());
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "builder.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "effects.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "dragdrop.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "controls.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "slider.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
 		}
 	}
 
 	/**
-	 * Adds javascript code in a script tag in the html head tag.
-	 * 
-	 * @param response
-	 * @param script
+	 * Calls ERXWOContext.addScriptCodeInHead.
 	 */
-	public static void addScriptCodeInHead(WOResponse response, String script) {
-		String js = "<script type=\"text/javascript\">\n" + script + "\n</script>";
-		AjaxUtils.insertInResponseBeforeTag(response, js, AjaxUtils.htmlCloseHead());
+	public static void addScriptCodeInHead(WOResponse response, WOContext context, String script) {
+		ERXResponseRewriter.addScriptCodeInHead(response, context, script);
 	}
 
+	/**
+	 * @deprecated replaced by ERXStringUtilities.safeIdentifierName
+	 */
 	public static String toSafeElementID(String elementID) {
-		return "wo_" + elementID.replace('.', '_');
+		return ERXStringUtilities.safeIdentifierName(elementID);
 	}
 
 	public static boolean shouldHandleRequest(WORequest request, WOContext context, String containerID) {
@@ -203,12 +178,11 @@ public class AjaxUtils {
 		String senderID = context.senderID();
 		String updateContainerID = null;
 		if (containerID != null) {
-			NSDictionary userInfo = request.userInfo();
-			if (userInfo != null && userInfo.valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null) {
+			if (AjaxResponse.isAjaxUpdatePass(request)) {
 				updateContainerID = AjaxUpdateContainer.updateContainerID(request);
 			}
 		}
-		boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (containerID != null && containerID.equals(updateContainerID)));
+		boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (containerID != null && containerID.equals(updateContainerID)) || elementID.equals(ERXAjaxApplication.ajaxSubmitButtonName(request)));
 		return shouldHandleRequest;
 	}
 
@@ -218,7 +192,23 @@ public class AjaxUtils {
 
 	public static void updateMutableUserInfoWithAjaxInfo(WOMessage message) {
 		NSMutableDictionary dict = AjaxUtils.mutableUserInfo(message);
-		dict.takeValueForKey(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
+		dict.takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
+	}
+	
+	/**
+	 * Returns an AjaxResponse with the given javascript as the body of the response.
+	 * 
+	 * @param context the WOContext
+	 * @param javascript the javascript to send
+	 * @return a new response
+	 */
+	public static WOResponse javascriptResponse(String javascript, WOContext context) {
+		WORequest request = context.request();
+		AjaxResponse response = AjaxUtils.createResponse(request, context);
+		AjaxUtils.appendScriptHeaderIfNecessary(request, response);
+		response.appendContentString(javascript);
+		AjaxUtils.appendScriptFooterIfNecessary(request, response);
+		return response;
 	}
 
 	public static void appendScriptHeaderIfNecessary(WORequest request, WOResponse response) {
@@ -231,7 +221,7 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptHeader(WOResponse response) {
-		response.appendContentString("<script type = \"text/javascript\" language = \"javascript\">\n");
+		response.appendContentString("<script>");
 	}
 
 	public static void appendScriptFooterIfNecessary(WORequest request, WOResponse response) {
@@ -241,7 +231,7 @@ public class AjaxUtils {
 	}
 	
 	public static void appendScriptFooter(WOResponse response) {
-		response.appendContentString("\n</script>");
+		response.appendContentString("</script>");
 	}
 
 	public static Object valueForBinding(String name, Object defaultValue, NSDictionary associations, WOComponent component) {
@@ -298,4 +288,38 @@ public class AjaxUtils {
 		}
 		return actionUrl;
 	}
+
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name) {
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, associations, name, null);
+	}
+	
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name, String appendValue) {
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, (WOAssociation)associations.objectForKey(name), appendValue);
+	}
+
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association) {
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, association, null);
+	}
+	
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association, String appendValue) {
+		if (association != null || appendValue != null) {
+			String value = null;
+			if (association != null) {
+				value = (String) association.valueInComponent(component);
+			}
+			if (value == null || value.length() == 0) {
+				value = appendValue;
+			}
+			else if (appendValue != null && appendValue.length() > 0) {
+				if (!value.endsWith(";")) {
+					value += ";";
+				}
+				value += appendValue;
+			}
+			if (value != null) {
+				response._appendTagAttributeAndValue(name, value, true);
+			}
+		}
+	}
+
 }

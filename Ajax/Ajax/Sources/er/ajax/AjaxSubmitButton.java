@@ -12,6 +12,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXWOForm;
+import er.extensions.ERXProperties;
 
 /**
  * AjaxSubmitButton behaves just like a WOSubmitButton except that it submits in the background with an Ajax.Request.
@@ -29,18 +30,38 @@ import er.extensions.ERXWOForm;
  * @binding onSuccess javascript to execute in response to the Ajax onSuccess event
  * @binding onFailure javascript to execute in response to the Ajax onFailure event
  * @binding onLoading javascript to execute when loading
- * @binding insertion JavaScript function to evaluate when the update takes place.
  * @binding evalScripts evaluate scripts on the result
  * @binding button if false, it will display a link
  * @binding formName if button is false, you must specify the name of the form to submit
  * @binding functionName if set, the link becomes a javascript function instead
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
+ * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
+ * @binding formSerializer the name of the javascript function to call to serialize the form
+ * @binding elementName the element name to use (defaults to "a")
+ * 
+ * @binding effect synonym of afterEffect except it always applies to updateContainerID
+ * @binding effectDuration synonym of afterEffectDuration except it always applies to updateContainerID
+ * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
+ * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then try updateContainerID)
+ * @binding beforeEffectDuration the duration of the effect to apply before
+ * @binding afterEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
+ * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then try updateContainerID)
+ * @binding afterEffectDuration the duration of the effect to apply after
+ * 
+ * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
+ * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
+ * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
+ * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion)
+ *  
+ * @property er.ajax.formSerializer the default form serializer to use for all ajax submits
  * 
  * @author anjo
  */
 public class AjaxSubmitButton extends AjaxDynamicElement {
-	// MS: If you change this value, make sure to change it in ERXSession.saveSession
+	// MS: If you change this value, make sure to change it in ERXAjaxApplication
   public static final String KEY_AJAX_SUBMIT_BUTTON_NAME = "AJAX_SUBMIT_BUTTON_NAME";
+	// MS: If you change this value, make sure to change it in ERXAjaxApplication and in wonder.js
+  public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
 
   public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
@@ -58,8 +79,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     return (String) valueForBinding("name", context.elementID(), component);
   }
 
-  public NSDictionary createAjaxOptions(WOComponent component, String formReference) {
-    String name = nameInContext(component.context(), component);
+  public NSMutableDictionary createAjaxOptions(WOComponent component) {
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
     ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
@@ -67,21 +87,35 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
 	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
+	
+    String name = nameInContext(component.context(), component);
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-    StringBuffer parametersBuffer = new StringBuffer();
-    parametersBuffer.append("Form.serializeWithoutSubmits(" + formReference + ")");
-    parametersBuffer.append(" + '");
-    parametersBuffer.append("&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name);
-	String updateContainerID = (String)valueForBinding("updateContainerID", component);
-	if (updateContainerID != null) {
-		parametersBuffer.append("&" + AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY + "=" + updateContainerID);
-	}
-    parametersBuffer.append("'");
-    options.setObjectForKey(parametersBuffer.toString(), "parameters");
-	if (options.objectForKey("evalScripts") == null) {
-		options.setObjectForKey("true", "evalScripts");
-	}
+    AjaxSubmitButton.fillInAjaxOptions(this, component, name, options);
     return options;
+  }
+
+  public static void fillInAjaxOptions(IAjaxElement element, WOComponent component, String submitButtonName, NSMutableDictionary options) {
+    StringBuffer parametersBuffer = new StringBuffer();
+    String systemDefaultFormSerializer = "Form.serializeWithoutSubmits";
+    String defaultFormSerializer = ERXProperties.stringForKeyWithDefault("er.ajax.formSerializer", systemDefaultFormSerializer);
+    String formSerializer = (String) element.valueForBinding("formSerializer", defaultFormSerializer, component);
+    if (!defaultFormSerializer.equals(systemDefaultFormSerializer)) {
+    	// _fs = formSerializer (but short)
+	    options.setObjectForKey(formSerializer, "_fs");
+    }
+	// _asbn = AJAX_SUBMIT_BUTTON_NAME (but short)
+    options.setObjectForKey("'" + submitButtonName + "'", "_asbn");
+
+    // default to true in javascript
+    if ("true".equals(options.objectForKey("asynchronous"))) {
+    	options.removeObjectForKey("asynchronous");
+    }
+
+    // default to true in javascript
+    if ("true".equals(options.objectForKey("evalScripts"))) {
+    	options.removeObjectForKey("evalScripts");
+    }
+	AjaxUpdateContainer.expandInsertionFromOptions(options, element, component);
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
@@ -89,13 +123,13 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 
     String functionName = (String)valueForBinding("functionName", null, component);
     String formName = (String)valueForBinding("formName", component);
-    boolean showUI = (functionName == null);
+    boolean showUI = (functionName == null || booleanValueForBinding("showUI", false, component));
     boolean showButton = showUI && booleanValueForBinding("button", true, component);
     String formReference;
-    if (!showButton) {
+    if ((!showButton || functionName != null) && formName == null) {
       formName = ERXWOForm.formName(context, null);
       if (formName == null) {
-        throw new WODynamicElementCreationException("If button = false, the containing form must have an explicit name.");
+        throw new WODynamicElementCreationException("If button = false or functionName is not null, the containing form must have an explicit name.");
       }
     }
     if (formName == null) {
@@ -104,24 +138,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     else {
       formReference = "document." + formName;
     }
-    if (showUI) {
-	    if (showButton) {
-	      response.appendContentString("<input ");
-	      appendTagAttributeToResponse(response, "type", "button");
-	      String name = nameInContext(context, component);
-	      appendTagAttributeToResponse(response, "name", name);
-	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
-	    }
-	    else {
-	      response.appendContentString("<a href = \"javascript:void(0)\" ");
-	    }
-	    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
-	    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-	    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
-	    if (disabledInComponent(component)) {
-	      appendTagAttributeToResponse(response, "disabled", "disabled");
-	    }
-    }
+    
     StringBuffer onClickBuffer = new StringBuffer();
 
 	String onClickBefore = (String)valueForBinding("onClickBefore", component);
@@ -130,15 +147,64 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 		onClickBuffer.append(onClickBefore);
 		onClickBuffer.append(") {");
 	}
+	
 	String updateContainerID = (String)valueForBinding("updateContainerID", component);
+	
+	String beforeEffect = (String) valueForBinding("beforeEffect", component);
+
+	if (beforeEffect != null) {
+		onClickBuffer.append("new ");
+		onClickBuffer.append(AjaxUpdateLink.fullEffectName(beforeEffect));
+		onClickBuffer.append("('");
+		
+		String beforeEffectID = (String) valueForBinding("beforeEffectID", component);
+		if (beforeEffectID == null) {
+			beforeEffectID = AjaxUpdateContainer.currentUpdateContainerID();
+			if (beforeEffectID == null) {
+				beforeEffectID = updateContainerID;
+			}
+		}
+		onClickBuffer.append(beforeEffectID);
+		
+		onClickBuffer.append("', { ");
+		
+		String beforeEffectDuration = (String) valueForBinding("beforeEffectDuration", component);
+		if (beforeEffectDuration != null) {
+			onClickBuffer.append("duration: ");
+			onClickBuffer.append(beforeEffectDuration);
+			onClickBuffer.append(", ");
+		}
+		
+		onClickBuffer.append("queue:'end', afterFinish: function() {");
+	}
+
 	if (updateContainerID != null) {
-		onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "',");
+		onClickBuffer.append("ASB.update('" + updateContainerID + "',");
 	}
 	else {
-		onClickBuffer.append("new Ajax.Request(");
+		onClickBuffer.append("ASB.request(");
 	}
-	onClickBuffer.append(formReference + ".action,");
-    NSDictionary options = createAjaxOptions(component, formReference);
+	onClickBuffer.append(formReference);
+	if (valueForBinding("functionName", component) != null) {
+		onClickBuffer.append(",additionalParams");
+	}
+	else {
+		onClickBuffer.append(",null");
+	}
+	onClickBuffer.append(",");
+	
+    NSMutableDictionary options = createAjaxOptions(component);
+	
+	AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID, (String) valueForBinding("effectDuration", component));
+	String afterEffectID = (String) valueForBinding("afterEffectID", component);
+	if (afterEffectID == null) {
+		afterEffectID = AjaxUpdateContainer.currentUpdateContainerID();
+		if (afterEffectID == null) {
+			afterEffectID = updateContainerID;
+		}
+	}
+	AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID, (String) valueForBinding("afterEffectDuration", component));
+	
     AjaxOptions.appendToBuffer(options, onClickBuffer, context);
     onClickBuffer.append(")");
     String onClick = (String) valueForBinding("onClick", component);
@@ -146,11 +212,54 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
       onClickBuffer.append(";");
       onClickBuffer.append(onClick);
     }
+	
+	if (beforeEffect != null) {
+		onClickBuffer.append("}});");
+	}
+
     if (onClickBefore != null) {
     	onClickBuffer.append("}");
     }
+
+    
+    if (functionName != null) {
+      	AjaxUtils.appendScriptHeader(response);
+    	response.appendContentString(functionName + " = function(additionalParams) { " + onClickBuffer + " }\n");
+    	AjaxUtils.appendScriptFooter(response);
+    }
     if (showUI) {
-	    appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
+    	boolean disabled = disabledInComponent(component);
+    	String elementName = (String) valueForBinding("elementName", "a", component);
+    	
+	    if (showButton) {
+	      response.appendContentString("<input ");
+	      appendTagAttributeToResponse(response, "type", "button");
+	      String name = nameInContext(context, component);
+	      appendTagAttributeToResponse(response, "name", name);
+	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
+	      
+	      if (disabled) {
+	    	  appendTagAttributeToResponse(response, "disabled", "disabled");
+	      }
+	    }
+	    else {
+			boolean isATag = "a".equalsIgnoreCase(elementName);
+			if (isATag) {
+				response.appendContentString("<a href = \"javascript:void(0)\" ");
+			}
+			else {
+				response.appendContentString("<" + elementName + " ");
+			}
+	    }
+	    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
+	    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
+	    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+    	if (functionName == null) {
+    		appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
+    	}
+    	else {
+    		appendTagAttributeToResponse(response, "onclick", functionName + "()");
+    	}
 	    if (showButton) {
 	      response.appendContentString(" />");
 	    }
@@ -159,24 +268,15 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	      if (hasChildrenElements()) {
 	        appendChildrenToResponse(response, context);
 	      }
-	      response.appendContentString("</a>");
+	      response.appendContentString("</" + elementName + ">");
 	    }
     }
-    if (!showUI) {
-      	AjaxUtils.appendScriptHeader(response);
-    	response.appendContentString(functionName + " = function() { " + onClickBuffer + " }\n");
-    	AjaxUtils.appendScriptFooter(response);
-    }
-
     super.appendToResponse(response, context);
   }
 
   protected void addRequiredWebResources(WOResponse res, WOContext context) {
     addScriptResourceInHead(context, res, "prototype.js");
-    addScriptResourceInHead(context, res, "scriptaculous.js");
-    addScriptResourceInHead(context, res, "effects.js");
-    addScriptResourceInHead(context, res, "builder.js");
-    addScriptResourceInHead(context, res, "controls.js");
+	addScriptResourceInHead(context, res, "effects.js");
     addScriptResourceInHead(context, res, "wonder.js");
   }
 
@@ -187,10 +287,12 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     String nameInContext = nameInContext(wocontext, wocomponent);
     boolean shouldHandleRequest = (!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) && ((wocontext._isMultipleSubmitForm() && nameInContext.equals(worequest.formValueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME))) || !wocontext._isMultipleSubmitForm());
     if (shouldHandleRequest) {
+      AjaxUpdateContainer.setUpdateContainerID(worequest, (String) valueForBinding("updateContainerID", wocomponent));
       wocontext._setActionInvoked(true);
       result = handleRequest(worequest, wocontext);
       AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
     }
+    
     return result;
   }
 

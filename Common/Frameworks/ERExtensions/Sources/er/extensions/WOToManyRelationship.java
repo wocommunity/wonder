@@ -418,7 +418,7 @@ public class WOToManyRelationship extends WOComponent {
     public boolean localizeDisplayKeys() {
         if(!_localizeDisplayKeysRead) {
             _localizeDisplayKeysRead = true;
-            _localizeDisplayKeys = ERXValueUtilities.booleanValueForBindingOnComponentWithDefault("localizeDisplayKeys", this, localizeDisplayKeysDefault);
+            _localizeDisplayKeys = ERXComponentUtilities.booleanValueForBinding(this, "localizeDisplayKeys", localizeDisplayKeysDefault);
         }
         return _localizeDisplayKeys;
     }

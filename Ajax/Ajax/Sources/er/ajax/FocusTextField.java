@@ -5,9 +5,9 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.ERXWOContext;
 import er.extensions.ERXWOTextField;
 
 /**
@@ -31,17 +31,24 @@ public class FocusTextField extends ERXWOTextField {
 	public FocusTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
 
-		_id = (WOAssociation) _associations.valueForKey("id");
-		if (_id == null) {
-			throw new WODynamicElementCreationException("<" + getClass().getName() + "> id is a required binding.");
-		}
-		//_associations.setObjectForKey(_id, ")
+		_id = (WOAssociation) nsdictionary.valueForKey("id");
 		_selectAll = (WOAssociation) _associations.removeObjectForKey("selectAll");
 		_focus = (WOAssociation) _associations.removeObjectForKey("focus");
 		_onEnter = (WOAssociation) _associations.removeObjectForKey("onEnter");
 		_onKeyPress = (WOAssociation) _associations.removeObjectForKey("onkeypress");
 	}
 
+	public String id(WOComponent component, WOContext context) {
+    String id = null;
+    if (_id != null) {
+      id = (String) _id.valueInComponent(component);
+    }
+	  if (id == null) {
+	    id = ERXWOContext.safeIdentifierName(context, false);
+	  }
+	  return id;
+	}
+	
 	public void appendToResponse(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
 
@@ -50,7 +57,7 @@ public class FocusTextField extends ERXWOTextField {
 		WOComponent component = context.component();
 		boolean focus = (_focus == null || _focus.booleanValueInComponent(component));
 		boolean selectAll = (_selectAll != null && _selectAll.booleanValueInComponent(component));
-		String id = (String) _id.valueInComponent(component);
+		String id = id(component, context);
 		String onEnterScript = (_onEnter != null) ? (String)_onEnter.valueInComponent(component) : null;
 		FocusTextField.appendJavascriptToResponse(response, context, id, focus, selectAll, onEnterScript);
 	}
@@ -60,7 +67,10 @@ public class FocusTextField extends ERXWOTextField {
 		WOComponent component = wocontext.component();
 		String onKeyPress = (_onKeyPress != null) ? (String) _onKeyPress.valueInComponent(component) : null;
 		String onEnterScript = (_onEnter != null) ? (String) _onEnter.valueInComponent(component) : null;
-		String id = (String) _id.valueInComponent(component);
+    String id = id(component, wocontext);
+    if (_id == null) {
+      response.appendContentString(" id = \"" + id + "\"");
+    }
 		FocusTextField._appendAttributesFromAssociationsToResponse(response, wocontext, id, onKeyPress, onEnterScript);
 	}
 
@@ -84,14 +94,20 @@ public class FocusTextField extends ERXWOTextField {
 	public static void appendJavascriptToResponse(WOResponse response, WOContext context, String id, boolean focus, boolean selectAll, String onEnterScript) {
 		WOComponent component = context.component();
 		AjaxUtils.appendScriptHeader(response);
-		if (focus) {
-			response.appendContentString("Field.focus('" + id + "');");
+		if (focus || selectAll) {
+			response.appendContentString("setTimeout(function() { ");
 		}
 		if (selectAll) {
 			response.appendContentString("Field.select('" + id + "');");
 		}
+		if (focus) {
+			response.appendContentString("Field.focus('" + id + "');");
+		}
+		if (focus || selectAll) {
+			response.appendContentString(" }, 10);");
+		}
 		if (onEnterScript != null) {
-			response.appendContentString(id + "SubmitOnEnter = function(e) { if (e.which == 13 || e.which == 3) { ");
+			response.appendContentString(id + "SubmitOnEnter = function(e) { var keynum = Event.keyValue(e); if (keynum == 13 || keynum == 3) { ");
 			response.appendContentString(onEnterScript);
 			response.appendContentString("; Event.stop(e); } }");
 		}

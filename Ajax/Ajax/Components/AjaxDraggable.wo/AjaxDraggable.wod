@@ -2,6 +2,7 @@ DraggableContainer : WOGenericContainer {
 	elementName = elementName;
 	id = id;
 	class = ^class;
+	style = ^style;
 	draggableID = draggableID;
 }
 

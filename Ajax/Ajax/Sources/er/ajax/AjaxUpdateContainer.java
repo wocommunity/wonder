@@ -12,15 +12,24 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXWOContext;
+import er.extensions.ERXValueUtilities;
+
 /**
  * observeFieldID requires ERExtensions, specifically ERXWOForm
  * 
  * @binding onRefreshComplete the script to execute at the end of refreshing the container
+ * @binding action the action to call when this updateContainer refreshes
+ * 
+ * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
+ * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
+ * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
+ * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion) 
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
-	// If you change this value, make sure to also change it in ERXApplication.invokeAction
 	public static final String UPDATE_CONTAINER_ID_KEY = "__updateID";
-
+	private static final String CURRENT_UPDATE_CONTAINER_ID_KEY = "er.ajax.AjaxUpdateContainer.currentID";
+	
 	public AjaxUpdateContainer(String name, NSDictionary associations, WOElement children) {
 		super(name, associations, children);
 	}
@@ -30,8 +39,30 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	 */
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		addScriptResourceInHead(context, response, "prototype.js");
-		addScriptResourceInHead(context, response, "scriptaculous.js");
+    	addScriptResourceInHead(context, response, "effects.js");
 		addScriptResourceInHead(context, response, "wonder.js");
+	}
+	
+	public void takeValuesFromRequest(WORequest request, WOContext context) {
+		String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+		try {
+			AjaxUpdateContainer.setCurrentUpdateContainerID(_containerID(context));
+			super.takeValuesFromRequest(request, context);
+		}
+		finally {
+			AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
+		}
+	}
+	
+	public WOActionResults invokeAction(WORequest request, WOContext context) {
+		String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+		try {
+			AjaxUpdateContainer.setCurrentUpdateContainerID(_containerID(context));
+			return super.invokeAction(request, context);
+		}
+		finally {
+			AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
+		}
 	}
 
 	public NSDictionary createAjaxOptions(WOComponent component) {
@@ -50,57 +81,147 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		if (options.objectForKey("evalScripts") == null) {
 			options.setObjectForKey("true", "evalScripts");
 		}
+		
+		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
+
 		return options;
 	}
-
-	public void appendToResponse(WOResponse response, WOContext context) {
-		WOComponent component = context.component();
-		String elementName = (String) valueForBinding("elementName", "div", component);
-		String id = _containerID(context);
-		response.appendContentString("<" + elementName + " ");
-		appendTagAttributeToResponse(response, "id", id);
-		appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
-		appendTagAttributeToResponse(response, "updateUrl", AjaxUtils.ajaxComponentActionUrl(context));
-		// appendTagAttributeToResponse(response, "woElementID", context.elementID());
-		response.appendContentString(">");
-		if (hasChildrenElements()) {
-			appendChildrenToResponse(response, context);
+	
+	public static void expandInsertionFromOptions(NSMutableDictionary options, IAjaxElement element, WOComponent component) {
+		String insertionDuration = (String) element.valueForBinding("insertionDuration", component);
+		String beforeInsertionDuration = (String) element.valueForBinding("beforeInsertionDuration", component);
+		if (beforeInsertionDuration == null) {
+			beforeInsertionDuration = insertionDuration;
 		}
-		response.appendContentString("</" + elementName + ">");
+		String afterInsertionDuration = (String) element.valueForBinding("afterInsertionDuration", component);
+		if (afterInsertionDuration == null) {
+			afterInsertionDuration = insertionDuration;
+		}
+		String insertion = (String) options.objectForKey("insertion");
+		String expandedInsertion = AjaxUpdateContainer.expandInsertion(insertion, beforeInsertionDuration, afterInsertionDuration);
+		if (expandedInsertion != null) {
+			options.setObjectForKey(expandedInsertion, "insertion");
+		}
+	}
 
-		super.appendToResponse(response, context);
+	public static String expandInsertion(String originalInsertion, String beforeDuration, String afterDuration) {
+		String expandedInsertion = originalInsertion;
+		if (originalInsertion != null && originalInsertion.startsWith("Effect.")) {
+			String effectPairName = originalInsertion.substring("Effect.".length());
+			expandedInsertion = "AUC.insertionFunc('" + effectPairName + "', " + beforeDuration + "," + afterDuration + ")";
 
-		NSDictionary options = createAjaxOptions(component);
+		}
+		return expandedInsertion;
+	}
 
-		Object frequency = valueForBinding("frequency", component);
-		String observeFieldID = (String) valueForBinding("observeFieldID", component);
+	public static NSDictionary removeDefaultOptions(NSDictionary options) {
+		NSMutableDictionary mutableOptions = options.mutableClone();
+		if ("'get'".equals(mutableOptions.objectForKey("method"))) {
+			mutableOptions.removeObjectForKey("method");
+		}
+		if ("true".equals(mutableOptions.objectForKey("evalScripts"))) {
+			mutableOptions.removeObjectForKey("evalScripts");
+		}
+		if ("true".equals(mutableOptions.objectForKey("asynchronous"))) {
+			mutableOptions.removeObjectForKey("asynchronous");
+		}
+		return mutableOptions;
+	}
 
-		boolean skipFunction = frequency == null && observeFieldID == null && booleanValueForBinding("skipFunction", false, component);
-		if (!skipFunction) {
-			AjaxUtils.appendScriptHeader(response);
-
-			if (frequency != null) {
-				response.appendContentString("new Ajax.PeriodicalUpdater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
-				AjaxOptions.appendToResponse(options, response, context);
+	public NSMutableDictionary createObserveFieldOptions(WOComponent component) {
+		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
+		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+		return options;
+	}
+	
+	public void appendToResponse(WOResponse response, WOContext context) {
+		String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+		try {
+			AjaxUpdateContainer.setCurrentUpdateContainerID(_containerID(context));
+			WOComponent component = context.component();
+			String elementName = (String) valueForBinding("elementName", "div", component);
+			String id = _containerID(context);
+			response.appendContentString("<" + elementName + " ");
+			appendTagAttributeToResponse(response, "id", id);
+			appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
+			appendTagAttributeToResponse(response, "style", valueForBinding("style", component));		
+			appendTagAttributeToResponse(response, "updateUrl", AjaxUtils.ajaxComponentActionUrl(context));
+			// appendTagAttributeToResponse(response, "woElementID", context.elementID());
+			response.appendContentString(">");
+			if (hasChildrenElements()) {
+				appendChildrenToResponse(response, context);
+			}
+			response.appendContentString("</" + elementName + ">");
+	
+			super.appendToResponse(response, context);
+	
+			NSDictionary options = createAjaxOptions(component);
+	
+			Object frequency = valueForBinding("frequency", component);
+			String observeFieldID = (String) valueForBinding("observeFieldID", component);
+	
+			boolean skipFunction = frequency == null && observeFieldID == null && booleanValueForBinding("skipFunction", false, component);
+			if (!skipFunction) {
+				AjaxUtils.appendScriptHeader(response);
+				
+				if (frequency != null) {
+					// try to convert to a number to check whether it is 0
+					boolean isNotZero = true;
+					try {
+						float numberFrequency = ERXValueUtilities.floatValue(frequency);
+						if (numberFrequency == 0.0) {
+							// set this only to false if it can be converted to 0
+							isNotZero = false;
+						}
+					}
+					catch (RuntimeException e) {
+						throw new IllegalStateException("Error parsing float from value : <" + frequency + ">");
+					}
+					
+					if (isNotZero) {
+						boolean canStop = false;
+						boolean stopped = false;
+						if (associations().objectForKey("stopped") != null) {
+							canStop = true;
+							stopped = booleanValueForBinding("stopped", false, component);
+						}
+						response.appendContentString("AUC.registerPeriodic('" + id + "'," + canStop + "," + stopped + ",");
+						AjaxOptions.appendToResponse(options, response, context);
+						response.appendContentString(");");
+					}
+				}
+	
+				if (observeFieldID != null) {
+					boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
+					AjaxObserveField.appendToResponse(response, context, this, observeFieldID, false, id, fullSubmit, createObserveFieldOptions(component));
+				}
+	
+				response.appendContentString("AUC.register('" + id + "'");
+				NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
+				if (nonDefaultOptions.count()>0) {
+					response.appendContentString(", ");
+					AjaxOptions.appendToResponse(nonDefaultOptions, response, context);
+				}
 				response.appendContentString(");");
+	
+				AjaxUtils.appendScriptFooter(response);
 			}
-
-			if (observeFieldID != null) {
-				boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
-				AjaxObserveField.appendToResponse(response, context, this, observeFieldID, id, fullSubmit, null);
-			}
-
-			response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
-			AjaxOptions.appendToResponse(options, response, context);
-			response.appendContentString("); }");
-
-			AjaxUtils.appendScriptFooter(response);
+		}
+		finally {
+			AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
 		}
 	}
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		String id = _containerID(context);
+    
+		if (associations().objectForKey("action") != null) {
+			WOActionResults results = (WOActionResults) valueForBinding("action", component);
+			// ignore results
+		}
+
 		WOResponse response = AjaxUtils.createResponse(request, context);
 		AjaxUtils.setPageReplacementCacheKey(context, id);
 		if (hasChildrenElements()) {
@@ -118,33 +239,37 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	protected String _containerID(WOContext context) {
 		String id = (String) valueForBinding("id", context.component());
 		if (id == null) {
-			id = AjaxUtils.toSafeElementID(context.elementID());
+			id = ERXWOContext.safeIdentifierName(context, false);
 		}
 		return id;
 	}
 
-	public static String updateContainerUrl(String actionUrl, String updateContainerID) {
-		String updateContainerUrl = actionUrl;
-		if (updateContainerID != null) {
-			StringBuffer updateContainerUrlBuffer = new StringBuffer();
-			updateContainerUrlBuffer.append(actionUrl);
-			if (actionUrl.indexOf('?') == -1) {
-				updateContainerUrlBuffer.append("?");
-			}
-			else {
-				updateContainerUrlBuffer.append("&");
-			}
-			updateContainerUrlBuffer.append(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY + "=" + updateContainerID);
-			updateContainerUrl = updateContainerUrlBuffer.toString();
-		}
-		return updateContainerUrl;
-	}
-
 	public static String updateContainerID(WORequest request) {
-		return request.stringFormValueForKey(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
+		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
+		String updateContainerID = (String)userInfo.objectForKey(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
+		return updateContainerID;
 	}
 
+	public static void setUpdateContainerID(WORequest request, String updateContainerID) {
+		if (updateContainerID != null) {
+			AjaxUtils.mutableUserInfo(request).setObjectForKey(updateContainerID, AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
+		}
+	}
+	
 	public static boolean hasUpdateContainerID(WORequest request) {
 		return AjaxUpdateContainer.updateContainerID(request) != null;
+	}
+	
+	public static String currentUpdateContainerID() {
+		return (String) ERXWOContext.contextDictionary().objectForKey(AjaxUpdateContainer.CURRENT_UPDATE_CONTAINER_ID_KEY);
+	}
+	
+	public static void setCurrentUpdateContainerID(String updateContainerID) {
+		if (updateContainerID == null) {
+			ERXWOContext.contextDictionary().removeObjectForKey(AjaxUpdateContainer.CURRENT_UPDATE_CONTAINER_ID_KEY);
+		}
+		else {
+			ERXWOContext.contextDictionary().setObjectForKey(updateContainerID, AjaxUpdateContainer.CURRENT_UPDATE_CONTAINER_ID_KEY);
+		}
 	}
 }

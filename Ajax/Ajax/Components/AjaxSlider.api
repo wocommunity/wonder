@@ -14,5 +14,6 @@
 		<binding name="increment"/>
 		<binding name="onSlide"/>
 		<binding name="onChange"/>
+		<binding name="snap"/>
 	<binding defaults="Number Format Strings" name="numberformat"/></wo>
 </wodefinitions>

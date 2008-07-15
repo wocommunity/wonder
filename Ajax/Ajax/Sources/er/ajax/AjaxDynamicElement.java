@@ -68,7 +68,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 			WOComponent component = context.component();
 			String elementID = context.elementID();
 			AjaxResponse response = AjaxUtils.createResponse(request, context);
-			NSDictionary userInfo = request.userInfo();
+			NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
 			result = handleRequest(request, context);
 			AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
         	if (result == context.page()) {
@@ -90,7 +90,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	}
 
 	/**
-	 * Overridden to call {@see #addRequiredWebResources(WOResponse)}.
+	 * Overridden to call {@link #addRequiredWebResources(WOResponse)}.
 	 */
 	public void appendToResponse(WOResponse response, WOContext context) {
 		addRequiredWebResources(response, context);
@@ -109,7 +109,6 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	/**
 	 * Override this method to append the needed scripts for this component.
 	 * 
-	 * @param res
 	 */
 	protected abstract void addRequiredWebResources(WOResponse response, WOContext context);
 
@@ -118,7 +117,6 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	 * 
 	 * @param request
 	 * @param context
-	 * @return
 	 */
 	public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 
