@@ -1,44 +1,65 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>wonder.common</groupId>
+		<groupId>wonder.applications</groupId>
 		<artifactId>applications</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<version>5.0.0-SNAPSHOT</version>
 	</parent>
-
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.common</groupId>
+	<groupId>wonder.applications</groupId>
 	<artifactId>BugTracker</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
-	<name>BugTracker</name>
+	<name>BugTracker Application</name>
 	<packaging>woapplication</packaging>
-
 	<dependencies>
 		<dependency>
-			<groupId>wonder.common</groupId>
+			<groupId>wonder.businesslogic</groupId>
 			<artifactId>BTBusinessLogic</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>wonder.common</groupId>
+			<groupId>wonder.misc</groupId>
 			<artifactId>ERSelenium</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>wonder.common</groupId>
+			<groupId>wonder.misc</groupId>
 			<artifactId>ERCalendar</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>wonder.common</groupId>
-			<artifactId>ERCalendar</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
+			<groupId>wonder.businesslogic</groupId>
+			<artifactId>ERCoreBusinessLogic</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.businesslogic</groupId>
+			<artifactId>ERTaggable</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.reporting</groupId>
+			<artifactId>WRReporting</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.reporting</groupId>
+			<artifactId>ERPlot</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.reporting</groupId>
+			<artifactId>DRGrouping</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERDirectToWeb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.eof</groupId>
+			<artifactId>ERRest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
-
 </project>
