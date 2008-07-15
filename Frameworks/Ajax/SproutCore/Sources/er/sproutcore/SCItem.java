@@ -66,6 +66,10 @@ public class SCItem {
         return _parent != null && _parent._parent == null;
     }
     
+    public String itemOutletName() {
+    	return ERXStringUtilities.underscoreToCamelCase(outletName(), false);
+    }
+    
     public String outletName() {
     	return _outletName;
     }
@@ -119,12 +123,12 @@ public class SCItem {
                     if(item != _children.objectAtIndex(0)) {
                         result += ",";
                     }
-                    result += "\"" + item.outletName() + "\"";
+                    result += "\"" + item.itemOutletName() + "\"";
                 }
                 result += "],\n";
             }
             for (SCItem item : _children) {
-                result += _indent + item.outletName() + ": " + item + ",\n";
+                result += _indent + item.itemOutletName() + ": " + item + ",\n";
             }
             //result = result.substring(0, result.length() - 2);
         }
@@ -162,7 +166,7 @@ public class SCItem {
     @Override
     public String toString() {
         boolean isPage = (_className != null && _className.equals("SC.Page"));
-        String script = bindingsJavaScript() + propertyJavaScript() + outletJavaScript();
+        String script = outletJavaScript() + bindingsJavaScript() + propertyJavaScript();
         script = script.replaceAll(",\n$", "\n");
         String core = "({\n" + script + _indent.substring(4) + "})";
         if(isPage) {
