@@ -1,0 +1,30 @@
+<wo:SCView id="photo_picker" pane = "picker"
+  ?visible = "Photos.photoController.pickerIsVisible">
+  <div class="property">
+    <label>Title</label>
+    <span class="value">
+    <wo:SCTextFieldView outlet = true 
+      ?value = "Photos.photoController.name" />
+    </span>
+  </div>
+  <div class="property">
+    <label>Opacity</label>
+    <span class="value">
+      <wo:SCSliderView outlet = true minimum = 0 maximum = 1.0
+        ?value = "Photos.photoController.opacity" />
+    </span>
+  </div>
+
+  <div class="property">
+    <label>Rotation</label>
+    <span class="value">
+      <wo:SCSliderView outlet = true minimum = 0 maximum = 360
+        ?enabled = "Photos.photoController.canShowEffects"
+        ?value = "Photos.photoController.rotation" 
+        />
+    </span>
+  </div>
+  <div class="buttons">
+    <wo:SCButtonView outlet = true default = true title = "Close" action = "Photos.photoController.hidePicker" width = 60 />
+  </div>
+</wo:SCView>
