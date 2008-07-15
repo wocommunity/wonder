@@ -54,7 +54,7 @@ public class SCItem {
         }
     }
 
-    private synchronized long nextId() {
+    public synchronized static long nextId() {
         return idx++;
     }
     
