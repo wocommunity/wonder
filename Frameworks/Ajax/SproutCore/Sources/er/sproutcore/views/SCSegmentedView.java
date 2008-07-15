@@ -11,6 +11,8 @@ public class SCSegmentedView extends SCComponent {
     
     public SCSegmentedView(WOContext context) {
         super(context);
+        moveProperty("enabled", "isEnabled");
+        removeProperty("id");
         removeProperty("item");
         removeProperty("segments");
     }
