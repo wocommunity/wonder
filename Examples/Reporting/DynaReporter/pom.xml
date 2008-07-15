@@ -2,19 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>wonder.examples</groupId>
-		<artifactId>miscexamples</artifactId>
+		<artifactId>reporting</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
-	<groupId>wonder.misc</groupId>
-	<artifactId>ValidityExample</artifactId>
-	<name>ValidityExample Application</name>
+	<groupId>wonder.reporting</groupId>
+	<artifactId>DynaReporter</artifactId>
+	<name>DynaReporter Application</name>
 	<packaging>woapplication</packaging>
-	<dependencies>
-		<dependency>
-			<groupId>wonder.eof</groupId>
-			<artifactId>Validity</artifactId>
-		</dependency>
-	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
