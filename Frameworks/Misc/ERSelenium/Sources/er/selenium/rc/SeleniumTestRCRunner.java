@@ -28,8 +28,18 @@ public class SeleniumTestRCRunner {
 				if (element instanceof SeleniumTest.Command) {
 					SeleniumTest.Command command = (SeleniumTest.Command)element;
 					log.debug("original command: " + command);
-					
-					browser.doCommand(command.getName(), new String[] {command.getTarget(), command.getValue()} );
+					if (!command.getName().equals("pause")) {
+						browser.doCommand(command.getName(), new String[] {command.getTarget(), command.getValue()} );
+					} else {
+						try {
+							Thread.sleep(new Integer(command.getTarget()));
+						} catch (NumberFormatException e) {
+							log.warn("invalid argument for pause command: " + command.getTarget());
+							throw new SeleniumException(e);
+						} catch (InterruptedException e) {
+							log.warn("pause command interrupted");
+						}
+					}
 					++processedCommands;
 				}
 			}
