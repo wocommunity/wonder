@@ -622,6 +622,20 @@ public class ERXQ {
 
 	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorContains, value).
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier containsObject(String key, Object value) {
+		return new ERXKeyValueQualifier(key, ERXQ.CONTAINS, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.OperatorCaseInsensitiveLike, "*" + value + "*").
 	 * 
 	 * @param key
