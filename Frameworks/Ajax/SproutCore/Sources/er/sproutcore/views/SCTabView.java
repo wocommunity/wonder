@@ -15,7 +15,7 @@ public class SCTabView extends SCComponent {
 	}
 
     public String containerClass() {
-		return "tab segmented";
+		return "tab segmented " + containerID();
 	}
 	
 	@Override
