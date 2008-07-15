@@ -1,6 +1,8 @@
 package er.sproutcore.example;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.foundation.ERXPatcher;
+import er.sproutcore.example.components.sample.Collections;
 
 public class Application extends ERXApplication {
     
@@ -10,6 +12,6 @@ public class Application extends ERXApplication {
 	
 	public Application() {
 		ERXApplication.log.info("Welcome to " + name() + " !");
-		/* ** put your initialization code in here ** */
+		ERXPatcher.setClassForName(Collections.class, "Collections");
 	}
 }

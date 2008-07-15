@@ -20,11 +20,13 @@ import er.sproutcore.SCItem;
 public class SCComponent extends ERXNonSynchronizingComponent {
 	private NSMutableDictionary<String, String> _movedProperties;
 	private NSMutableArray<String> _removedProperties;
+	private String _className;
 	
     public SCComponent(WOContext context) {
         super(context);
     	_movedProperties = new NSMutableDictionary<String, String>();
     	_removedProperties = new NSMutableArray<String>();
+    	setClassName(SCView.defaultClassName(getClass()));
     }
 
     protected void moveProperty(String bindingName, String propertyName) {
@@ -101,6 +103,10 @@ public class SCComponent extends ERXNonSynchronizingComponent {
      * @return
      */
     protected String className() {
-        return SCView.defaultClassName(getClass());
+        return _className;
+    }
+    
+    protected void setClassName(String name) {
+    	_className = name;
     }
 }
