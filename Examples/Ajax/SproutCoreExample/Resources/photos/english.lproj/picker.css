@@ -1,0 +1,46 @@
+/* @override 
+	http://localhost:4020/static/photos/en/_cache/picker-1210212824.css
+*/
+
+.photo_picker {
+  width: 300px;
+}
+
+.photo_picker .property {
+	position: relative;
+	height: 24px;
+}
+
+.photo_picker .property label {
+	position: absolute ;
+	width: 70px;
+	top: 0;
+	line-height: 24px ;
+	text-align: right ;
+}
+
+.photo_picker .property .value {
+	position: absolute ;
+	display:  block;
+	left: 78px;
+	right: 0;
+}
+
+.photo_picker .property .value input {
+	position: absolute ;
+	left: 0;
+	width: 185px;
+}
+
+.photo_picker .property .value .sc-slider-view {
+	position: relative;
+	top: 4px;
+}
+
+.photo_picker .buttons {
+  margin-top: 4px;
+}
+
+
+
+

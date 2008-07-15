@@ -1,30 +1,24 @@
-<% view :collections_tab, :style => 'width: 100%; height: 100%; position: absolute;' do %>
+<label class="list-view-label">Class SC.ListView</label>
+<wo:SCScrollView id="list_scroll_view">
+  <wo:SCListView id="list_view" 
+      contentValueKey = "photoName" 
+      contentIconKey = "icon"
+      contentValueEditable = true
+      canReorderContent = true
+      ?content = "SampleControls.contentController.arrangedObjects" 
+      ?selection = "SampleControls.contentController.selection" 
+      />
+</wo:SCScrollView>
 
-<label class="list-view-label"><%= loc(%(Class)) %> SC.ListView</label>
-<% scroll_view :list_scroll_view, :outlet => true do %>
-  <%= list_view :list_view, 
-      :outlet => true, 
-      :content_value_key => 'photoName', 
-      :content_icon_key => 'icon',
-      :content_value_editable => true,
-      :can_reorder_content => true,
-      :bind => { 
-        :content => 'SampleControls.contentController.arrangedObjects', 
-        :selection => 'SampleControls.contentController.selection' 
-      } %>
-<% end %>
-
-<label class="grid-view-label"><%= loc(%(Class)) %> SC.GridView</label>
-<% scroll_view :grid_scroll_view, :outlet => true do %>
-  <%= grid_view :grid_view, :outlet => true, 
-      :example_view => 'SC.ImageCellView', 
-      :content_value_key => 'photoUrl', 
-      :can_reorder_content => true,
-      :row_height => 120, 
-      :column_width => 160,
-      :bind => { 
-        :content => 'SampleControls.contentController.arrangedObjects', 
-        :selection => 'SampleControls.contentController.selection' 
-      } %>
-<% end %>
-<% end %>
+<label class="grid-view-label">Class SC.GridView</label>
+<wo:SCScrollView id="grid_scroll_view" outlet = true>
+  <wo:SCGridView id="grid_view" outlet = true 
+      exampleView = "SC.ImageCellView" 
+      contentValueKey = "photoUrl" 
+      canReorderContent = true
+      rowHeight = 120 
+      columnWidth = 160
+      ?content = "SampleControls.contentController.arrangedObjects" 
+      ?selection = "SampleControls.contentController.selection" 
+      />
+</wo:SCScrollView>

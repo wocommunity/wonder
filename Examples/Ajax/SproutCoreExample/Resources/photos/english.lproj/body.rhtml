@@ -1,0 +1,67 @@
+<% content_for('body') do %>
+
+<% split_view :workspace, :class => 'sc-app-workspace footer', :direction => :horizontal do %>  
+  <% view :sidebar, :outlet => true, :max_thickness => 400, :min_thickness => 100, :bind => { :is_collapsed => 'SC.Binding.Not("Photos.masterController.albumsVisible")' } do %>
+    <% scroll_view :source_list, :outlet => true do %>
+      <%= source_list_view :outlet => true, 
+        :group => :albumType,
+        :delegate => 'Photos.masterController',
+        :drop_target => true,
+        :content_value_key => :name,
+        :can_reorder_content => true,
+        :group_visible_key => true,
+        :content_icon_key => :icon,
+        :content_value_editable => true,
+        :bind => {
+          :content => 'Photos.masterController.arrangedObjects',
+          :selection => 'Photos.masterController.selection'
+        } %>
+    <% end %>
+  <% end %>
+  
+  <%= split_divider_view :outlet => true, :width => 5 %>
+  
+  <% scroll_view :grid_view, :outlet => true do %>
+    <%= grid_view :outlet => true, :view => 'Photos.PhotoGridView',
+      :example_view => 'Photos.PhotoView',
+      :delegate => 'Photos.detailController',
+      :content_value_key => 'url',
+      :can_reorder_content => true,
+      :row_height => 120,
+      :column_width => 160,
+      :can_delete_content => true,
+      :bind => {
+        :content => 'Photos.detailController.arrangedObjects',
+        :selection => 'Photos.detailController.selection'
+      } %>
+  <% end %>
+<% end %>
+
+<% view :footer, :class => 'sc-footer sc-square-theme' do %>
+  <div class="left">
+    <%= button_view :outlet => true, :label => '+', :action => 'Photos.masterController.addAlbum' %>
+    <%= button_view :outlet => true, :label => '-', :action => 'Photos.masterController.deleteAlbum' %>
+  </div>
+  <div class="center">
+    <%= label_view :outlet => true, :bind => { :value => 'Photos.detailController.countLabel' } %>
+  </div>
+  <div class="right">
+    <%= button_view :outlet => :edit_button, :title => "Edit", 
+      :action => 'Photos.photoController.showPicker', 
+      :bind => { 
+        :selected => 'Photos.photoController.pickerIsVisible',
+        :enabled => 'SC.Binding.Not("Photos.photoController.hasNoContent")' 
+      } %>
+    50
+    <%= slider_view :outlet => true,
+      :minimum => 50,
+      :maximum => 320,
+      :step => 10,
+      :bind => { :value => 'Photos.detailController.photoSize' } 
+    %>
+    320
+  </div>
+<% end %>
+
+
+<% end %>
