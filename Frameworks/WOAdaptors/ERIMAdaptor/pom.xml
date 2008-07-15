@@ -1,18 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>wonder.frameworks</groupId>
-		<artifactId>frameworks</artifactId>
+		<artifactId>reporting</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.frameworks</groupId>
-	<artifactId>reporting</artifactId>
-	<packaging>pom</packaging>
-	<name>Frameworks</name>
-	<modules>
-		<module>DRGrouping</module>
-		<module>WRReporting</module>
-		<module>ERPlot</module>
-	</modules>
+	<groupId>wonder.woadaptors</groupId>
+	<artifactId>ERIMAdaptor</artifactId>
+	<name>ERIMAdaptor Framework</name>
+	<packaging>woframework</packaging>
+	<build>
+		<sourceDirectory>Sources</sourceDirectory>
+	</build>
 </project>
