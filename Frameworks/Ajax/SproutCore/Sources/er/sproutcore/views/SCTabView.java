@@ -3,8 +3,6 @@ package er.sproutcore.views;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
-import er.sproutcore.SCItem;
-
 public class SCTabView extends SCComponent {
 	
 	public SCTabView(WOContext context) {
@@ -13,12 +11,8 @@ public class SCTabView extends SCComponent {
 		removeProperty("class");
 		removeProperty("id");
 		removeProperty("segments");
+		removeProperty("item");
 	}
-
-    public String containerID() {
-      SCItem item = SCItem.currentItem();
-      return (item.isRoot()) ? item.id() : null;
-    }
 
     public String containerClass() {
 		return "tab segmented";

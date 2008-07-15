@@ -18,6 +18,7 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 
 public class SCUtilities {
@@ -132,4 +133,29 @@ public class SCUtilities {
     	String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY, "SproutCore/sproutcore/english.lproj/" + asset, null);
         return url;
     }
+
+	public static String defaultCssName(Class clazz) {
+        // this is just the default... it morphs SCFooBar -> sc-foo-bar
+		String className = ERXStringUtilities.lastPropertyKeyInKeyPath(clazz.getName());
+        Pattern p = Pattern.compile("^([A-Z]+?)([A-Z])");
+        Matcher m = p.matcher(className);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            m.appendReplacement(sb, String.valueOf(m.group(0)).toLowerCase() + "-");
+        }
+        m.appendTail(sb);
+        className = sb.toString();
+
+        p = Pattern.compile("([A-Z][a-z0-9]+)");
+        m = p.matcher(className);
+        sb = new StringBuffer();
+        while (m.find()) {
+            m.appendReplacement(sb, String.valueOf(m.group()).toLowerCase() + "-");
+        }
+        m.appendTail(sb);
+        className = sb.toString();
+        className = className.substring(0, className.length() - 1);
+		return className;
+	}
+
 }
