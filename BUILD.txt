@@ -56,35 +56,30 @@ Ant should be found in /Developer/Java/Ant/bin
   ant applications; sudo ant applications.install
   ant examples; sudo ant examples.install
 
-If you have write priviliges in /Library/Frameworks, /Library/WebObjects/JavaApplications, and
+If you have write privileges in /Library/Frameworks, /Library/WebObjects/JavaApplications, and
 /Library/WebServer/Documents/WebObjects/Frameworks, you may do without the "sudo".
 
 Building with Maven: 
 =========================
 
-Steps 1-4 are required only once or when you clean your local Maven repository (rm -Rf ~/.m2)
+Steps 1 and 2 are required only once or when you clean your local Maven repository (rm -Rf ~/.m2)
 
-1. Install Maven http://maven.apache.org
+1. Download and Install Maven (http://maven.apache.org)
+
+2. Import the WebObjects frameworks as jars into the local repository:
+
+  mvn wobootstrap:install
  
-2. Open a terminal and cd into the Wonder root directory.
+3. Open a terminal and cd into the Wonder root directory.
 
-3. Import the webobjects frameworks as jars into the local repository:
+4. Build wonder:
+  
+  mvn clean install
+  
+NOTE: Make sure you have your settings.xml properly configured.
+See the step 2 of Maven Quick Start Tutorial for more information:
 
-  mvn --non-recursive org.objectstyle.woproject.maven2:maven-wobootstrap-plugin::bootstrap
-
-4. Import some jars into the local maven repository:
-
-  mvn install:install-file -DgroupId=icu4j -DartifactId=icu4j -Dversion=2.8 -Dpackaging=jar -Dfile=Common/Frameworks/ERJars/Libraries/icu4j_2_8.jar
-
-  mvn install:install-file -DgroupId=jndi -DartifactId=jndi -Dversion=1.2.1 -Dpackaging=jar -Dfile=Common/Frameworks/ERChangeNotificationJMS/Libraries/jndi_1.2.1.jar
-
-  mvn install:install-file -DgroupId=jms -DartifactId=jms -Dversion=1.0.2 -Dpackaging=jar -Dfile=Common/Frameworks/ERChangeNotificationJMS/Libraries/jms_1.0.2a.jar
-
-  mvn install:install-file -DgroupId=metaparadigm -DartifactId=jsonrpc -Dversion=1.0 -Dpackaging=jar -Dfile=Ajax/Ajax/Libraries/jsonrpc.jar
-
-5. Build wonder
-
-  mvn install
+	http://wiki.objectstyle.org/confluence/display/WOL/Quick+Start
 
 Building with Eclipse:
 =========================
