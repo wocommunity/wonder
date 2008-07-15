@@ -28,12 +28,17 @@ public class SCComponent extends ERXNonSynchronizingComponent {
     	_movedProperties = new NSMutableDictionary<String, String>();
     	_removedProperties = new NSMutableArray<String>();
 		removeProperty("id");
+		removeProperty("outlet");
     	setClassName(SCView.defaultClassName(getClass()));
     }
 
     public String containerID() {
       SCItem item = SCItem.currentItem();
       return (item.isRoot()) ? item.id() : null;
+    }
+
+    public String nextID() {
+      return "id_" +SCItem.nextId();
     }
 
     protected void moveProperty(String bindingName, String propertyName) {
@@ -109,7 +114,12 @@ public class SCComponent extends ERXNonSynchronizingComponent {
 	            }
             }
         }
-        response._appendContentAsciiString("<div id=\"" + containerID() + "\" class=\"" + containerClass() + "\">");
+        String id =  containerID();
+        if(id != null) {
+            response._appendContentAsciiString("<div id=\"" + containerID() + "\" class=\"" + containerClass() + "\">");
+        } else {
+            response._appendContentAsciiString("<div class=\"" + containerClass() + "\">");
+        }
         doAppendToResponse(response, context);
         SCItem.popItem();
         response._appendContentAsciiString("</div>");
