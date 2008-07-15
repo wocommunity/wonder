@@ -1,18 +1,31 @@
 package er.sproutcore.views;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSDictionary;
 
-public class SCTabView extends SCContainerView {
+import er.sproutcore.SCItem;
 
-    public SCTabView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
+public class SCTabView extends SCComponent {
+	
+	public SCTabView(WOContext context) {
+		super(context);
+		moveProperty("enabled", "isEnabled");
+		removeProperty("class");
+		removeProperty("id");
+		removeProperty("segments");
+	}
+
+    public String containerID() {
+      SCItem item = SCItem.currentItem();
+      return (item.isRoot()) ? item.id() : null;
     }
 
-    @Override
-    protected void doAppendToResponse(WOResponse response, WOContext context) {
-        super.doAppendToResponse(response, context);
-    }
+    public String containerClass() {
+		return "tab segmented";
+	}
+	
+	@Override
+	protected void doAppendToResponse(WOResponse response, WOContext context) {
+		super.doAppendToResponse(response, context);
+	}
 }
