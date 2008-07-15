@@ -1,4 +1,4 @@
-#Tue Jul 15 14:29:04 CEST 2008
+#Tue Jul 15 16:27:42 CEST 2008
 eclipse.preferences.version=1
 encoding//Components/Collections.wo=UTF-8
 encoding//Components/Collections.wo/Collections.html=UTF-8
@@ -17,6 +17,10 @@ encoding//Components/PageWrapper.wo=UTF-8
 encoding//Components/PageWrapper.wo/PageWrapper.html=UTF-8
 encoding//Components/PageWrapper.wo/PageWrapper.wod=UTF-8
 encoding//Components/PageWrapper.wo/PageWrapper.woo=UTF-8
+encoding//Components/Panes.wo=UTF-8
+encoding//Components/Panes.wo/Panes.html=UTF-8
+encoding//Components/Panes.wo/Panes.wod=UTF-8
+encoding//Components/Panes.wo/Panes.woo=UTF-8
 encoding//Components/Photos.api=UTF-8
 encoding//Components/Photos.wo/Photos.html=UTF-8
 encoding//Components/Photos.wo/Photos.wod=UTF-8
@@ -35,5 +39,6 @@ encoding//Sources/er/sproutcore/example/components/PageWrapper.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/Photos.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/SampleControls.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/sample/Collections.java=UTF-8
+encoding//Sources/er/sproutcore/example/components/sample/Panes.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/sample/Welcome.java=UTF-8
 encoding/Components=UTF-8

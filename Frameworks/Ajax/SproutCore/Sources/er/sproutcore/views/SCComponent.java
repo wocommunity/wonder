@@ -61,6 +61,10 @@ public class SCComponent extends ERXNonSynchronizingComponent {
     	return stringValueForBinding("outlet", id());
     }
 
+    public boolean root() {
+    	return booleanValueForBinding("root", false);
+    }
+
     protected Object evaluateValueForBinding(String name, Object value) {
     	return value;
     }
@@ -85,7 +89,7 @@ public class SCComponent extends ERXNonSynchronizingComponent {
  
 	@Override
     public final void appendToResponse(WOResponse response, WOContext context) {
-        SCItem item = SCItem.pushItem(id(), className(), outlet());
+        SCItem item = SCItem.pushItem(id(), className(), outlet(), root());
         for (String key : bindingKeys()) {
             Object value = valueForBinding(key);
             value = evaluateValueForBinding(key, value);

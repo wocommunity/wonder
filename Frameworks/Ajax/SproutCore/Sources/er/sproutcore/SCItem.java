@@ -199,9 +199,12 @@ public class SCItem {
         return currentItems().peek();
     }
 
-    public static SCItem pushItem(String id, String className, String outletName) {
+    public static SCItem pushItem(String id, String className, String outletName, boolean toRoot) {
         Stack<SCItem> stack = currentItems();
         SCItem parent = stack.peek();
+        if(toRoot) {
+        	parent = pageItem();
+        }
         SCItem current = new SCItem(parent, className, id, outletName);
         stack.push(current);
         return current;

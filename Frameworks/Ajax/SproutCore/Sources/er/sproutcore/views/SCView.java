@@ -33,6 +33,8 @@ import er.sproutcore.SCUtilities;
 public class SCView extends WODynamicGroup {
     protected Logger log = Logger.getLogger(getClass());
 
+    protected final String[] CSS_PROPERTIES = new String[]{"width", "height", "minHeight", "maxHeight", "minWidth", "maxWidth"};
+    
     private NSMutableDictionary<String, WOAssociation> _associations;
 
     private NSMutableDictionary<String, WOAssociation> _properties;
@@ -67,7 +69,14 @@ public class SCView extends WODynamicGroup {
         removeProperty("elementName");
         removeProperty("style");
         removeProperty("outlet");
-        removeProperty("view");
+        moveProperty("visible", "isVisible");
+        moveProperty("collapsed", "isCollapsed");
+        moveProperty("drop_target", "isDropTarget");
+        moveProperty("pane", "paneType");
+        for (int i = 0; i < CSS_PROPERTIES.length; i++) {
+			String prop = CSS_PROPERTIES[i];
+	        removeProperty(prop);
+		}
     }
 
     protected void updateDefaultValues() {
@@ -177,7 +186,14 @@ public class SCView extends WODynamicGroup {
     }
 
     public String style(WOContext context) {
-        return (String) valueForBinding("style", context.component());
+        String style = (String) valueForBinding("style", context.component());
+        /*boolean isVisible = booleanValueForBinding("visible", true, context.component());
+        if(!isVisible) {
+        	style = (style == null ? "" : style);
+        	style += "display: none;";
+        }
+ */
+        return style;
     }
 
     public SCItem currentItem() {
@@ -216,9 +232,10 @@ public class SCView extends WODynamicGroup {
         String elementName = elementName(context);
         String css = css(context);
         String itemid = "";
-        if (item.isRoot()) {
+        if (item.isRoot() || true) {
             itemid = " id=\"" + item.id() + "\"";
         }
+        
         css += " " + item.id();
         prependToResponse(response, context);
         response.appendContentString("<" + elementName + itemid + " class=\"" + css + "\" ");
@@ -233,8 +250,12 @@ public class SCView extends WODynamicGroup {
     	// DO NOTHING
     }
 
+    public boolean isRoot(WOContext context) {
+    	return booleanValueForBinding("root", false, context.component()) || valueForBinding("pane", null, context.component()) != null;
+    }
+
     protected SCItem pushItem(WOContext context) {
-        return SCItem.pushItem(id(context), className(context), outlet(context));
+        return SCItem.pushItem(id(context), className(context), outlet(context), isRoot(context));
     }
 
     protected SCItem popItem() {
@@ -273,7 +294,23 @@ public class SCView extends WODynamicGroup {
         return SCUtilities.staticUrl("blank.gif");
     }
     
-    public void appendAttributesToResponse(WOResponse arg0, WOContext arg1) {
-        return;
+    public void appendAttributesToResponse(WOResponse response, WOContext context) {
+    	String style = "";
+    	for (int i = 0; i < CSS_PROPERTIES.length; i++) {
+    		String key = CSS_PROPERTIES[i];
+    		Object value = valueForBinding(key, context.component());
+    		if(value != null) {
+    			String cssKey = ERXStringUtilities.camelCaseToUnderscore(key, true).replace('_', '-');
+    			style += (value == null ? "" : "; " + cssKey + ": " + value +"px");
+    		}
+    	}
+    	String bindingStyle = style(context);
+    	if(bindingStyle != null) {
+    		style += bindingStyle;
+    	}
+    	if(style.length() != 0) {
+    		response.appendContentString(" style=\"" + style + "\"");
+    	}
+    	return;
     }
 }
