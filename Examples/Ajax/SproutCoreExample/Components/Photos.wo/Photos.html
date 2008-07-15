@@ -2,7 +2,8 @@
 
 <wo:SCJavaScript group="photos" framework="app" key="pageJavaScript" />
 <wo:SCStyleSheet group="photos" framework="app" key="@content_for_page_styles" />
-
+<wo:SCView id="photo_picker" pane = "picker"
+  ?visible = "Photos.photoController.pickerIsVisible" />
 <wo:SCSplitView 
 	id="workspace" 
 	class="sc-app-workspace footer" 
