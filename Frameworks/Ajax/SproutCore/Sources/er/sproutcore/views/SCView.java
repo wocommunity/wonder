@@ -186,7 +186,11 @@ public class SCView extends WODynamicGroup {
         if (css == null) {
             css = "";
         }
-        return css + " " + cssName(context);
+        String cssName = cssName(context);
+        if (cssName != null) {
+        	css = css + " " + cssName;
+        }
+        return css;
     }
 
     public String style(WOContext context) {
@@ -233,12 +237,17 @@ public class SCView extends WODynamicGroup {
             itemid = " id=\"" + item.id() + "\"";
         }
         css += " " + item.id();
+        prependToResponse(response, context);
         response.appendContentString("<" + elementName + itemid + " class=\"" + css + "\" ");
         appendAttributesToResponse(response, context);
         response.appendContentString(">");
         doAppendToResponse(response, context);
         response.appendContentString("</" + elementName + ">");
         popItem();
+    }
+    
+    protected void prependToResponse(WOResponse response, WOContext context) {
+    	// DO NOTHING
     }
 
     protected SCItem pushItem(WOContext context) {
