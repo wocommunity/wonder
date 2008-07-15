@@ -228,7 +228,12 @@ public class SCView extends WODynamicGroup {
             SCJavaScript.appendScript(scriptResponse, context, script);
         }
         ERXResponse.popPartial();
-
+        boolean isVisible = booleanValueForBinding("visible", true, context.component());
+        ERXResponse contentResponse = (ERXResponse) response;
+        if(!isVisible) {
+        	contentResponse =  ERXResponse.pushPartial(SCPageTemplate.RESOURCES);
+            contentResponse.appendContentString("<div style=\"display: none\">");
+        }
         String elementName = elementName(context);
         String css = css(context);
         String itemid = "";
@@ -237,15 +242,19 @@ public class SCView extends WODynamicGroup {
         }
         
         css += " " + item.id();
-        prependToResponse(response, context);
-        response.appendContentString("<" + elementName + itemid + " class=\"" + css + "\" ");
-        appendAttributesToResponse(response, context);
-        response.appendContentString(">");
-        doAppendToResponse(response, context);
-        response.appendContentString("</" + elementName + ">");
+        prependToResponse(contentResponse, context);
+        contentResponse.appendContentString("<" + elementName + itemid + " class=\"" + css + "\" ");
+        appendAttributesToResponse(contentResponse, context);
+        contentResponse.appendContentString(">");
+        doAppendToResponse(contentResponse, context);
+        contentResponse.appendContentString("</" + elementName + ">");
+        if(!isVisible) {
+            contentResponse.appendContentString("</div>");
+        	ERXResponse.popPartial();
+        }
         popItem();
     }
-    
+
     protected void prependToResponse(WOResponse response, WOContext context) {
     	// DO NOTHING
     }
@@ -303,6 +312,9 @@ public class SCView extends WODynamicGroup {
     			String cssKey = ERXStringUtilities.camelCaseToUnderscore(key, true).replace('_', '-');
     			style += (value == null ? "" : "; " + cssKey + ": " + value +"px");
     		}
+    	}
+    	if(style.length() != 0) {
+    		style = style.substring(2);
     	}
     	String bindingStyle = style(context);
     	if(bindingStyle != null) {

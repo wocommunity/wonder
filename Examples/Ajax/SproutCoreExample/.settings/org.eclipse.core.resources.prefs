@@ -1,6 +1,5 @@
-#Tue Jul 15 21:48:38 CEST 2008
+#Tue Jul 15 21:57:47 CEST 2008
 eclipse.preferences.version=1
-encoding//Components/Collections.wo=UTF-8
 encoding//Components/Contacts.wo=UTF-8
 encoding//Components/Contacts.wo/Contacts.html=UTF-8
 encoding//Components/Contacts.wo/Contacts.wod=UTF-8
@@ -14,7 +13,6 @@ encoding//Components/PageWrapper.wo=UTF-8
 encoding//Components/PageWrapper.wo/PageWrapper.html=UTF-8
 encoding//Components/PageWrapper.wo/PageWrapper.wod=UTF-8
 encoding//Components/PageWrapper.wo/PageWrapper.woo=UTF-8
-encoding//Components/Panes.wo=UTF-8
 encoding//Components/Photos.api=UTF-8
 encoding//Components/Photos.wo/Photos.html=UTF-8
 encoding//Components/Photos.wo/Photos.wod=UTF-8
@@ -24,8 +22,6 @@ encoding//Components/Picker.wo=UTF-8
 encoding//Components/Picker.wo/Picker.html=UTF-8
 encoding//Components/Picker.wo/Picker.wod=UTF-8
 encoding//Components/Picker.wo/Picker.woo=UTF-8
-encoding//Components/SampleControls.wo=UTF-8
-encoding//Components/Welcome.wo=UTF-8
 encoding//Components/sample_controls/Collections.wo/Collections.html=UTF-8
 encoding//Components/sample_controls/Collections.wo/Collections.wod=UTF-8
 encoding//Components/sample_controls/Collections.wo/Collections.woo=UTF-8
