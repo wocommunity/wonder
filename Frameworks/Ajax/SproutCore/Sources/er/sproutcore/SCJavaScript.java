@@ -24,7 +24,6 @@ public class SCJavaScript extends WODynamicElement {
     WOAssociation _key;
     WOAssociation _group;
 
-    @SuppressWarnings("unchecked")
     public SCJavaScript(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
 		_name = (WOAssociation) arg1.objectForKey("name");
