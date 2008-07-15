@@ -1,4 +1,4 @@
-#Tue Jul 15 21:57:47 CEST 2008
+#Tue Jul 15 23:24:49 CEST 2008
 eclipse.preferences.version=1
 encoding//Components/Contacts.wo=UTF-8
 encoding//Components/Contacts.wo/Contacts.html=UTF-8
@@ -25,6 +25,11 @@ encoding//Components/Picker.wo/Picker.woo=UTF-8
 encoding//Components/sample_controls/Collections.wo/Collections.html=UTF-8
 encoding//Components/sample_controls/Collections.wo/Collections.wod=UTF-8
 encoding//Components/sample_controls/Collections.wo/Collections.woo=UTF-8
+encoding//Components/sample_controls/Icons.api=UTF-8
+encoding//Components/sample_controls/Icons.wo=UTF-8
+encoding//Components/sample_controls/Icons.wo/Icons.html=UTF-8
+encoding//Components/sample_controls/Icons.wo/Icons.wod=UTF-8
+encoding//Components/sample_controls/Icons.wo/Icons.woo=UTF-8
 encoding//Components/sample_controls/Panes.wo/Panes.html=UTF-8
 encoding//Components/sample_controls/Panes.wo/Panes.wod=UTF-8
 encoding//Components/sample_controls/Panes.wo/Panes.woo=UTF-8
@@ -40,6 +45,7 @@ encoding//Sources/er/sproutcore/example/components/hello/HelloWorld.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/photos/Photos.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/photos/Picker.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/sample/Collections.java=UTF-8
+encoding//Sources/er/sproutcore/example/components/sample/Icons.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/sample/Panes.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/sample/SampleControls.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/sample/Welcome.java=UTF-8
