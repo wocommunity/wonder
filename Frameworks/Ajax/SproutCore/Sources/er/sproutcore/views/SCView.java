@@ -1,8 +1,6 @@
 package er.sproutcore.views;
 
 import java.util.Enumeration;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -140,26 +138,7 @@ public class SCView extends WODynamicGroup {
     public String cssName(WOContext context) {
         if (getClass() == SCView.class)
             return "";
-        // this is just the default... it morphs SCFooBar -> sc-foo-bar
-        String className = ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName());
-        Pattern p = Pattern.compile("^([A-Z]+?)([A-Z])");
-        Matcher m = p.matcher(className);
-        StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            m.appendReplacement(sb, String.valueOf(m.group(0)).toLowerCase() + "-");
-        }
-        m.appendTail(sb);
-        className = sb.toString();
-
-        p = Pattern.compile("([A-Z][a-z0-9]+)");
-        m = p.matcher(className);
-        sb = new StringBuffer();
-        while (m.find()) {
-            m.appendReplacement(sb, String.valueOf(m.group()).toLowerCase() + "-");
-        }
-        m.appendTail(sb);
-        className = sb.toString();
-        className = className.substring(0, className.length() - 1);
+        String className = SCUtilities.defaultCssName(getClass());
         return className;
     }
 
