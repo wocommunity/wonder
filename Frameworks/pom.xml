@@ -11,8 +11,14 @@
 	<packaging>pom</packaging>
 	<name>Frameworks</name>
 	<modules>
-		<module>Ajax</module>
 		<module>Core</module>
+		<module>Ajax</module>
+		<module>BusinessLogic</module>
+		<module>EOAdaptors</module>
+		<module>EOF</module>
+		<module>Excel</module>
+		<module>Misc</module>
 		<module>PlugIns</module>
+		<module>Reporting</module>
 	</modules>
-</project>\ No newline at end of file
+</project>
