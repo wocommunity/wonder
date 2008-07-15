@@ -74,6 +74,7 @@ public class SCRequestHandler extends WORequestHandler {
                             code = code.replaceAll("static_url\\([\"\']blank[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/blank.gif'");
                             code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1'");
                             code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "'/cgi-bin/WebObjects/Foo.woa/_sc_/app/english.lproj/$1" + ".png'");
+                            code = code.replaceAll("sc_super\\((.*?)\\)", "arguments.callee.base.apply($1)");
                             data = code.getBytes();
                             contentType = "text/javascript";
                         }
