@@ -1412,13 +1412,24 @@ public class ERXStringUtilities {
    * @return the MD5 sum of the bytes
    * @exception IOException
    */
-  public static byte[] md5(String str, String encoding) throws IOException {
+  public static byte[] md5(String str, String encoding) {
 	byte[] bytes;
 	if (str == null) {
 		bytes = new byte[0];
 	}
 	else {
-	  	bytes = ERXFileUtilities.md5(new ByteArrayInputStream(str.getBytes(encoding)));
+	  	try {
+	  		if(encoding == null) {
+	  			encoding = "UTF-8";
+	  		}
+			bytes = ERXFileUtilities.md5(new ByteArrayInputStream(str.getBytes(encoding)));
+		}
+		catch (UnsupportedEncodingException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+		catch (IOException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
 	}
 	return bytes;
   }
@@ -1431,7 +1442,7 @@ public class ERXStringUtilities {
    * @return the MD5 sum of the bytes in a hex string
    * @exception IOException
    */
-  public static String md5Hex(String str, String encoding) throws IOException {
+  public static String md5Hex(String str, String encoding) {
 	  String hexStr;
 	  if (str == null) {
 		  hexStr = null;
