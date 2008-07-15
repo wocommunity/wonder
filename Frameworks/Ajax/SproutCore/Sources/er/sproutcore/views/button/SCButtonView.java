@@ -7,6 +7,7 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.ajax.AjaxOption;
 import er.ajax.AjaxValue;
+import er.sproutcore.SCItem;
 import er.sproutcore.views.SCView;
 
 public class SCButtonView extends SCView {
@@ -52,16 +53,39 @@ public class SCButtonView extends SCView {
         css += (selected instanceof Boolean && ((Boolean)selected) ? " selected" : "");
     	return css;
     }
+    
+    @Override
+    protected void pullBindings(WOContext context, SCItem item) {
+    	super.pullBindings(context, item);
+    	String theme = defaultTheme(context);
+    	if (!"button".equals(theme)) {
+    		item.addProperty("theme", theme);
+    	}
+    }
+    
+    public String theme(WOContext context) {
+    	return (String)valueForBinding("theme", defaultTheme(context), context.component());
+    }
+    
+    public String size(WOContext context) {
+    	return (String)valueForBinding("size", defaultSize(context), context.component());
+    }
 
+    public String defaultTheme(WOContext context) {
+    	return "regular";
+    }
+    
+    public String defaultSize(WOContext context) {
+    	return "normal";
+    }
+    
     public String buttonStyle(WOContext context) {
-    	String theme = (String)valueForBinding("theme", "regular", context.component());
-    	String size = (String)valueForBinding("size", "normal", context.component());
     	StringBuffer css = new StringBuffer();
     	css.append("button");
     	css.append(" ");
-    	css.append(theme);
+    	css.append(theme(context));
     	css.append(" ");
-    	css.append(size);
+    	css.append(size(context));
     	return css.toString();
     }
 
