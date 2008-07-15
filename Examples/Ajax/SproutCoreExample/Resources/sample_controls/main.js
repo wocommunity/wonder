@@ -15,10 +15,11 @@ function main() {
   // The default code here will load the fixtures you have defined.
   // Comment out the preload line and add something to refresh from the server
   // when you are ready to pull data from your server.
+/* 
   SC.Benchmark.start('load fixtures') ;
   SampleControls.server.preload(SampleControls.FIXTURES) ;
   SC.Benchmark.start('end fixtures') ;
-/* 
+
   // Set content controller for display
   SC.Benchmark.start('SampleControls.contentController.content') ;
   SampleControls.contentController.set('content', SampleControls.Photo.findAll());
