@@ -92,7 +92,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
         appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
         response.appendContentString(">");
-        response.appendContentString((String) valueForBinding("label",component));
+        response.appendContentString(valueForBinding("label", "", component).toString());
         response.appendContentString("</a>");
         if(href.startsWith("#")) {
         	response.appendContentString("<div");
