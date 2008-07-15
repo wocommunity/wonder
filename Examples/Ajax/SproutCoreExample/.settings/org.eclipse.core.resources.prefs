@@ -1,9 +1,5 @@
-#Sat Jul 12 01:42:23 CEST 2008
+#Tue Jul 15 13:06:31 CEST 2008
 eclipse.preferences.version=1
-encoding//Components/Buttons.api=UTF-8
-encoding//Components/Buttons.wo/Buttons.html=UTF-8
-encoding//Components/Buttons.wo/Buttons.wod=UTF-8
-encoding//Components/Buttons.wo/Buttons.woo=UTF-8
 encoding//Components/Contacts.wo=UTF-8
 encoding//Components/Contacts.wo/Contacts.html=UTF-8
 encoding//Components/Contacts.wo/Contacts.wod=UTF-8
@@ -13,12 +9,21 @@ encoding//Components/HelloWorld.wo=UTF-8
 encoding//Components/HelloWorld.wo/HelloWorld.html=UTF-8
 encoding//Components/HelloWorld.wo/HelloWorld.wod=UTF-8
 encoding//Components/HelloWorld.wo/HelloWorld.woo=UTF-8
+encoding//Components/PageWrapper.wo=UTF-8
+encoding//Components/PageWrapper.wo/PageWrapper.html=UTF-8
+encoding//Components/PageWrapper.wo/PageWrapper.wod=UTF-8
+encoding//Components/PageWrapper.wo/PageWrapper.woo=UTF-8
 encoding//Components/Photos.api=UTF-8
 encoding//Components/Photos.wo/Photos.html=UTF-8
 encoding//Components/Photos.wo/Photos.wod=UTF-8
 encoding//Components/Photos.wo/Photos.woo=UTF-8
-encoding//Sources/er/sproutcore/example/components/Buttons.java=UTF-8
+encoding//Components/SampleControls.wo=UTF-8
+encoding//Components/SampleControls.wo/SampleControls.html=UTF-8
+encoding//Components/SampleControls.wo/SampleControls.wod=UTF-8
+encoding//Components/SampleControls.wo/SampleControls.woo=UTF-8
 encoding//Sources/er/sproutcore/example/components/Contacts.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/HelloWorld.java=UTF-8
+encoding//Sources/er/sproutcore/example/components/PageWrapper.java=UTF-8
 encoding//Sources/er/sproutcore/example/components/Photos.java=UTF-8
+encoding//Sources/er/sproutcore/example/components/SampleControls.java=UTF-8
 encoding/Components=UTF-8

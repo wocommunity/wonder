@@ -1,3 +1,4 @@
+<wo:PageWrapper>
 <wo:ERXPartialWrapper key="body">
 
 <wo:SCJavaScript group="contacts" framework="app" key="pageJavaScript" />
@@ -6,9 +7,9 @@
 
 
 <wo:SCSplitView id="workspace" class = "sc-app-workspace" direction ="horizontal">
-  <wo:SCView id="sidebar" outlet="$true">
-    <wo:SCScrollView id="master_list" outlet="$true">
-      <wo:SCListView outlet = "$true"
+  <wo:SCView id="sidebar" >
+    <wo:SCScrollView id="master_list" >
+      <wo:SCListView 
         contentValueKey = "fullName"
         example_View = "Contacts.ListItemView"
         ?content = "Contacts.masterController.arrangedObjects"
@@ -17,14 +18,14 @@
     </wo:SCScrollView>
   </wo:SCView>
 
-  <wo:SCSplitDividerView outlet = "$true" width="$5" />
+  <wo:SCSplitDividerView  width="$5" />
 
-  <wo:SCView id="detail_view" outlet = "$true" >
+  <wo:SCView id="detail_view"  >
     <table class="card-detail">
       <tr>
         <td><label>First Name:</label></td>
         <td>
-          <wo:SCTextFieldView  outlet = "$true" hint="First Name"
+          <wo:SCTextFieldView   hint="First Name"
             ?value = "Contacts.detailController.firstName"
            />
         </td>
@@ -33,7 +34,7 @@
       <tr>
         <td><label>Last Name:</label></td>
         <td>
-          <wo:SCTextFieldView  outlet = "$true" hint="Last Name"
+          <wo:SCTextFieldView   hint="Last Name"
             ?value = "Contacts.detailController.lastName"
            />
         </td>
@@ -41,11 +42,11 @@
 
       <tr>
         <td colspan="2" class="buttons">
-          <wo:SCButtonView outlet = "$true"
+          <wo:SCButtonView 
             title = "Cancel"
             action = "Contacts.detailController.discardChanges"
             ?enabled = "Contacts.detailController.hasChanges" />
-          <wo:SCButtonView outlet = "$true"
+          <wo:SCButtonView 
             title = "Save Changes" isDefault = "$true"
             action = "Contacts.detailController.commitChanges"
             ?enabled = "Contacts.detailController.hasChanges"
@@ -56,3 +57,4 @@
  </wo:SCView>
 </wo:SCSplitView>
 </wo:ERXPartialWrapper>
+</wo:PageWrapper>

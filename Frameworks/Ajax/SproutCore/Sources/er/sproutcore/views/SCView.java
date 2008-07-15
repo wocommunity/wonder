@@ -168,7 +168,11 @@ public class SCView extends WODynamicGroup {
     }
 
     public String outlet(WOContext context) {
-    	return (String) valueForBinding("outlet", id(context), context.component());
+    	Object outlet = valueForBinding("outlet", context.component());
+    	if(outlet instanceof Boolean || outlet == null) {
+    		return (String) valueForBinding("id", context.component());
+    	}
+    	return (String)outlet;
     }
     
     public String elementName(WOContext context) {
