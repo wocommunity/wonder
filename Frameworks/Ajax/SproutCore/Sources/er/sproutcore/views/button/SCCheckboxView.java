@@ -5,8 +5,6 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
-import er.sproutcore.SCItem;
-
 public class SCCheckboxView extends SCButtonView {
 
     public SCCheckboxView(String arg0, NSDictionary arg1, WOElement arg2) {
@@ -14,32 +12,28 @@ public class SCCheckboxView extends SCButtonView {
     }
 
     @Override
-    public String cssName(WOContext context) {
-        return "sc-button-view ";
+	public String defaultTheme(WOContext context) {
+    	return "checkbox";
     }
 
     @Override
-    public String buttonStyle(WOContext context) {
-    	return "button checkbox normal";
-    }
-    
-    @Override
-    protected void pullBindings(WOContext context, SCItem item) {
-        super.pullBindings(context, item);
-        item.addProperty("theme", "checkbox");
+    public String cssName(WOContext context) {
+        return "sc-button-view ";
     }
      
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
-        String value = label(context);
-        if (value != null) {
-        	String url = blankUrl();
-            response.appendContentString("<img src='" + url + "' class=\"button\"><span class=\"label\">" );
+    	String url = blankUrl();
+        response.appendContentString("<img class=\"button\" src=\"" + url + "\">" );
+    	
+        String label = label(context);
+        if (label != null) {
+            response.appendContentString("<span class=\"label\">" );
         }
         
         super.doAppendToResponse(response, context);
         
-        if (value != null) {
+        if (label != null) {
             response.appendContentString("</span>");
         }
     }
