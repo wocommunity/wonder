@@ -18,7 +18,7 @@ function main() {
   SC.Benchmark.start('load fixtures') ;
   SampleControls.server.preload(SampleControls.FIXTURES) ;
   SC.Benchmark.start('end fixtures') ;
-
+/* 
   // Set content controller for display
   SC.Benchmark.start('SampleControls.contentController.content') ;
   SampleControls.contentController.set('content', SampleControls.Photo.findAll());
@@ -34,7 +34,8 @@ function main() {
   if(SC.page.get('controlTabs'))  SC.page.get('controlTabs').set('nowShowing', 'welcome') ;
   SC.Benchmark.end('SC.page.controlTabs.nowShowing = collections2') ;
   
-  SC.page.get('pickerPane') ;
+  SC.page.get('pickerPane') ;*/
+  SC.page.awake() ;
 
 } ;
 
