@@ -9,6 +9,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.sproutcore.SCItem;
+import er.sproutcore.SCUtilities;
 
 /**
  * Superclass for your own components that are actual views, so you don't have
@@ -26,7 +27,13 @@ public class SCComponent extends ERXNonSynchronizingComponent {
         super(context);
     	_movedProperties = new NSMutableDictionary<String, String>();
     	_removedProperties = new NSMutableArray<String>();
+		removeProperty("id");
     	setClassName(SCView.defaultClassName(getClass()));
+    }
+
+    public String containerID() {
+      SCItem item = SCItem.currentItem();
+      return (item.isRoot()) ? item.id() : null;
     }
 
     protected void moveProperty(String bindingName, String propertyName) {
@@ -59,6 +66,18 @@ public class SCComponent extends ERXNonSynchronizingComponent {
     	return super.bindingKeys();
     }
 
+    public String containerClass() {
+      StringBuffer css = new StringBuffer();
+      if (!booleanValueForBinding("enabled", true)) {
+        css.append("disabled");
+      }
+      css.append(" ");
+      css.append(SCUtilities.defaultCssName(getClass()));
+      css.append(" ");
+      css.append(containerID());
+      return css.toString();
+    }
+ 
 	@Override
     public final void appendToResponse(WOResponse response, WOContext context) {
         SCItem item = SCItem.pushItem(id(), className(), outlet());
@@ -90,8 +109,10 @@ public class SCComponent extends ERXNonSynchronizingComponent {
 	            }
             }
         }
+        response._appendContentAsciiString("<div id=\"" + containerID() + "\" class=\"" + containerClass() + "\">");
         doAppendToResponse(response, context);
         SCItem.popItem();
+        response._appendContentAsciiString("</div>");
     }
 
     protected void doAppendToResponse(WOResponse response, WOContext context) {
