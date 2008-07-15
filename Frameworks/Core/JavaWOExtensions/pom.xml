@@ -32,9 +32,10 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>icu4j</groupId>
+			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
 		</dependency>
 	</dependencies>

@@ -14,6 +14,22 @@
 	</build>
 	<dependencies>
 		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaXML</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOControl</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
@@ -24,10 +40,6 @@
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>oro</groupId>
-			<artifactId>oro</artifactId>
 		</dependency>
 	</dependencies>
 </project>
