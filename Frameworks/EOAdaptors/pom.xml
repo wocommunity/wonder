@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>wonder.frameworks</groupId>
+		<artifactId>frameworks</artifactId>
+		<version>5.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>eoadaptors</artifactId>
+	<packaging>pom</packaging>
+	<name>EOAdaptors Frameworks</name>
+	<modules>
+		<module>JavaERJDBCAdaptor</module>
+		<module>JavaFSAdaptor</module>
+		<module>JavaMemoryAdaptor</module>
+		<module>JavaRESTAdaptor</module>
+	</modules>
+</project>
