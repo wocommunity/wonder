@@ -99,15 +99,13 @@ public class SCButtonView extends SCView {
 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
-        String width = (String) valueForBinding("width", context.component());
-        String style = (width == null ? "" : "style=\"width: " + width +"px\" ");
         String value = label(context);
         if(value == null) {
             value = "";
         }
         response.appendContentString("<span class=\"button-inner\">");
         if (value != null) {
-            response.appendContentString("<span " + style +"class=\"label\">" + value);
+            response.appendContentString("<span class=\"label\">" + value);
         }
         
         super.doAppendToResponse(response, context);
