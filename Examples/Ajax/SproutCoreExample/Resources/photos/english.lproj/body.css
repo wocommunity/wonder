@@ -1,0 +1,87 @@
+/* @override 
+	http://localhost:4020/static/photos/en/_cache/body-1208305764.css
+	http://localhost:4020/static/photos/en/_cache/body-1208344721.css
+	http://localhost:4020/static/photos/en/_cache/body-1208589498.css
+*/
+
+/* @group Core */
+
+body {
+	position: absolute ;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	padding: 0;
+	margin: 0;
+	overflow: hidden ;
+}
+
+.workspace .sidebar {
+	position: absolute;
+	left:  0;
+	top:  0;
+	width: 200px;
+	bottom: 0;
+}
+
+.workspace .sc-split-divider-view {
+  position: absolute;
+  left: 200px;
+  top: 0;
+  bottom: 0;
+}
+
+.workspace .grid_view {
+	position: absolute;	
+	left: 205px;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	border: none ;
+}
+
+/* @end */
+
+/* @group Sidebar */
+
+.sidebar .source_list {
+	position: absolute ;
+	top: 0;
+	left:  0;
+	right: 0;
+	bottom: 0;
+	border: none ;
+}
+
+/* @end */
+
+/* @group Photos */
+
+.grid_view .sc-grid-view {
+	background-color: #656061;
+	border: none ;
+}
+
+.grid_view .sc-grid-view .sc-collection-item,
+.sc-theme .grid_view .sc-grid-view .sc-collection-item.sel {
+	border: none ;
+}
+
+.grid_view .sc-grid-view .sc-collection-item img {
+	-webkit-box-shadow: black 2px 2px 5px ;
+}
+
+.sc-theme.focus .grid_view .sc-grid-view .sc-collection-item.sel {
+	background: transparent ;
+}
+
+.sc-theme.focus .grid_view .sc-grid-view .sc-collection-item.sel img,
+.sc-theme.blur .grid_view .sc-grid-view .sc-collection-item.sel img {
+	outline: 3px solid yellow;
+	z-index: 10;
+}
+
+
+/* @end */
+
