@@ -1,18 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>wonder.frameworks</groupId>
-		<artifactId>misc</artifactId>
+		<artifactId>excel</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.core</groupId>
-	<artifactId>ERWorkerChannel</artifactId>
-	<name>ERWorkerChannel Framework</name>
+	<groupId>wonder.excel</groupId>
+	<artifactId>ExcelGenerator</artifactId>
+	<name>ExcelGenerator Framework</name>
 	<packaging>woframework</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERDirectToWeb</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

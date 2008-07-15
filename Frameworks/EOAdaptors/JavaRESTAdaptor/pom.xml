@@ -1,22 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>wonder.frameworks</groupId>
-		<artifactId>eof</artifactId>
+		<artifactId>eoadaptors</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.eof</groupId>
-	<artifactId>ERChangeNotificationJMS</artifactId>
-	<name>ERChangeNotificationJMS Framework</name>
+	<groupId>wonder.eoadaptors</groupId>
+	<artifactId>JavaRESTAdaptor</artifactId>
+	<name>JavaRESTAdaptor Framework</name>
 	<packaging>woframework</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
+			<artifactId>JavaEOAccess</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
@@ -24,20 +20,15 @@
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
+			<artifactId>JavaFoundation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>jms</artifactId>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaXML</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.naming</groupId>
-			<artifactId>jndi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>openjms</groupId>
-			<artifactId>openjms-client</artifactId>
-			<scope>runtime</scope>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
