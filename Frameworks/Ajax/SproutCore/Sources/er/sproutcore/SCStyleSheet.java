@@ -23,8 +23,6 @@ public class SCStyleSheet extends WODynamicElement {
     WOAssociation _group;
     WOAssociation _key;
     
-    
-    @SuppressWarnings("unchecked")
     public SCStyleSheet(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
         _name = (WOAssociation) arg1.objectForKey("name");
