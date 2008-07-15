@@ -24,6 +24,11 @@ public class SCCollectionView extends SCView {
     }
 
     @Override
+    public String cssName(WOContext context) {
+    	return "sc-collection-view " + super.cssName(context);
+    }
+
+    @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.doAppendToResponse(response, context);
     }

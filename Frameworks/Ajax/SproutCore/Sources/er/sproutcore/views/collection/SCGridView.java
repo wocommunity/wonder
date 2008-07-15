@@ -10,7 +10,7 @@ public class SCGridView extends SCCollectionView {
     public SCGridView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
     }
-
+    
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.doAppendToResponse(response, context);

@@ -10,11 +10,6 @@ public class SCListView extends SCCollectionView {
     public SCListView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
     }
-
-    @Override
-    public String cssName(WOContext context) {
-    	return "sc-collection-view sc-list-view";
-    }
     
     @Override
     public String css(WOContext context) {
