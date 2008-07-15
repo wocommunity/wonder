@@ -6,30 +6,26 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.businesslogic</groupId>
-	<artifactId>BTBusinessLogic</artifactId>
-	<name>BTBusinessLogic Framework</name>
+	<artifactId>WOPayPal</artifactId>
+	<name>WOPayPal Framework</name>
 	<packaging>woframework</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>wonder.businesslogic</groupId>
-			<artifactId>ERCoreBusinessLogic</artifactId>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>wonder.businesslogic</groupId>
-			<artifactId>ERTaggable</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>wonder.businesslogic</groupId>
-			<artifactId>ERAttachment</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERPrototypes</artifactId>
-		</dependency>
+	<dependency>
+		<groupId>com.webobjects</groupId>
+		<artifactId>JavaEOAccess</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>com.webobjects</groupId>
+		<artifactId>JavaEOControl</artifactId>
+	</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
