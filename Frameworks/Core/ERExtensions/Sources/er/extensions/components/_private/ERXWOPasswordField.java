@@ -68,12 +68,7 @@ public class ERXWOPasswordField extends WOInput {
           if (!value.equals(hiddenValue)) {
         	  boolean hashValue = (_hashValue != null && _hashValue.booleanValueInComponent(component));
         	  if (hashValue) {
-        		  try {
-        			  value = ERXStringUtilities.md5Hex(value, "UTF8");
-        		  }
-        		  catch (IOException e) {
-        			  throw new RuntimeException("Failed to hash password value.", e);
-        		  }
+    			  value = ERXStringUtilities.md5Hex(value, "UTF8");
         	  }
         	  _value.setValue(value, component);
           }
