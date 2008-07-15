@@ -252,15 +252,21 @@ public class SCView extends WODynamicGroup {
     protected boolean skipPropertyIfNull(String propertyName) {
       return false;
     }
+    
+    protected Object evaluateValueForBinding(WOContext context, String name, Object value) {
+    	return value;
+    }
 
     protected void pullBindings(WOContext context, SCItem item) {
         for (String key : _bindings.allKeys()) {
             Object value = _bindings.objectForKey(key).valueInComponent(context.component());
+            value = evaluateValueForBinding(context, key, value);
             log.debug("Binding: " + key + ":" + value);
             item.addBinding(key, value == null ? NSKeyValueCoding.NullValue : value);
         }
         for (String key : _properties.allKeys()) {
             Object value = _properties.objectForKey(key).valueInComponent(context.component());
+            value = evaluateValueForBinding(context, key, value);
             log.debug("Prop: " + key + ":" + value);
             if (value == null && !skipPropertyIfNull(key)) {
               item.addProperty(key, NSKeyValueCoding.NullValue);

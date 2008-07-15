@@ -47,12 +47,23 @@ public class SCComponent extends ERXNonSynchronizingComponent {
     	return stringValueForBinding("outlet", id());
     }
 
-    @SuppressWarnings("cast")
+    protected Object evaluateValueForBinding(String name, Object value) {
+    	return value;
+    }
+
     @Override
+	@SuppressWarnings("unchecked")
+	public NSArray<String> bindingKeys() {
+    	return super.bindingKeys();
+    }
+
+	@Override
     public final void appendToResponse(WOResponse response, WOContext context) {
         SCItem item = SCItem.pushItem(id(), className(), outlet());
-        for (String key : (NSArray<String>) bindingKeys()) {
+        for (String key : bindingKeys()) {
             Object value = valueForBinding(key);
+            value = evaluateValueForBinding(key, value);
+            
             boolean binding = key.startsWith("?");
             String itemName;
             if (binding) {
