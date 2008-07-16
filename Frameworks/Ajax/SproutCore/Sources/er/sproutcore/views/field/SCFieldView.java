@@ -44,7 +44,7 @@ public class SCFieldView extends SCView {
         
         String label = label(context);
         if (label != null) {
-            response.appendContentString("<span class=\"label\">" );
+            response.appendContentString(" <span class=\"label\">" );
             response.appendContentString(label);
             response.appendContentString("</span>");
         	response.appendContentString("</label>");
