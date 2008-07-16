@@ -9,4 +9,9 @@ public class Collections extends SCComponent {
         super(context);
         setClassName("SC.View");
     }
+    
+    @Override
+    protected String style() {
+    	return "width: 100%; height: 100%; position: absolute;";
+    }
 }
