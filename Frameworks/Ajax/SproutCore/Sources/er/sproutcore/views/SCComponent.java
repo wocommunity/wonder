@@ -80,8 +80,8 @@ public class SCComponent extends ERXNonSynchronizingComponent {
       if (!booleanValueForBinding("enabled", true)) {
         css.append("disabled");
       }
-      css.append(" ");
-      css.append(SCUtilities.defaultCssName(getClass()));
+      //css.append(" ");
+      //css.append(SCUtilities.defaultCssName(getClass()));
       css.append(" ");
       css.append(containerID());
       return css.toString();
