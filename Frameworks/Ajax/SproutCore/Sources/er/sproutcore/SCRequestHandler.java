@@ -37,7 +37,8 @@ public class SCRequestHandler extends WORequestHandler {
                 data = ERXFileUtilities.bytesFromFile(file);
                 if(name.endsWith(".css")) {
                 	String code = new String(data);
-                	code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1)");
+                    code = code.replaceAll("static_url\\([\"\'](.*?\\..*?)[\"\']\\)", "url($1)");
+                    code = code.replaceAll("static_url\\([\"\'](.*?)[\"\']\\)", "url($1.png)");
                 	data = code.getBytes();
                 	contentType = "text/css";
                 } else if(name.endsWith(".js")) {
