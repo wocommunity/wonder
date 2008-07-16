@@ -9,6 +9,7 @@ public class SCCheckboxFieldView extends SCFieldView {
 
 	public SCCheckboxFieldView(String arg0, NSDictionary arg1, WOElement arg2) {
 		super(arg0, arg1, arg2);
+		moveProperty("enabled", "isEnabled");
 	}
 	
 	@Override
