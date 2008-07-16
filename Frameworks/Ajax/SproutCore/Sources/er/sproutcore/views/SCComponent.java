@@ -9,7 +9,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.sproutcore.SCItem;
-import er.sproutcore.SCUtilities;
 
 /**
  * Superclass for your own components that are actual views, so you don't have
