@@ -290,6 +290,7 @@ There are many ways to use this script:
          
        <antcall target="${before.compile}" />
        <wocompile srcdir="${project.sources.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}" >
+       <!--compilerarg value="-Xlint:unchecked" /-->
                     <exclude name="${classes.exclude.0}" />
                     <exclude name="${classes.exclude.1}" />
                     <exclude name="${classes.exclude.2}" />
