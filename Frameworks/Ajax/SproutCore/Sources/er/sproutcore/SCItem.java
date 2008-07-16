@@ -110,6 +110,7 @@ public class SCItem {
                 value = quotedValue(key, value);
                 result += _indent + key + "Binding: " +  value + ",\n";
             }
+            result += "\n";
         }
         return result;
     }
@@ -125,7 +126,7 @@ public class SCItem {
                     }
                     result += "\"" + item.itemOutletName() + "\"";
                 }
-                result += "],\n";
+                result += "],\n\n";
             }
             for (SCItem item : _children) {
                 result += _indent + item.itemOutletName() + ": " + item + ",\n";
