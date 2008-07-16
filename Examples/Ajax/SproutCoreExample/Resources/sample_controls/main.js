@@ -15,7 +15,6 @@ function main() {
   // The default code here will load the fixtures you have defined.
   // Comment out the preload line and add something to refresh from the server
   // when you are ready to pull data from your server.
-/* 
   SC.Benchmark.start('load fixtures') ;
   SampleControls.server.preload(SampleControls.FIXTURES) ;
   SC.Benchmark.start('end fixtures') ;
@@ -35,7 +34,7 @@ function main() {
   if(SC.page.get('controlTabs'))  SC.page.get('controlTabs').set('nowShowing', 'welcome') ;
   SC.Benchmark.end('SC.page.controlTabs.nowShowing = collections2') ;
   
-  SC.page.get('pickerPane') ;*/
+  SC.page.get('pickerPane') ;
   SC.page.awake() ;
 
 } ;
