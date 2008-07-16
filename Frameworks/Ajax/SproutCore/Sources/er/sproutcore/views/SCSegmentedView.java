@@ -43,12 +43,14 @@ public class SCSegmentedView extends SCComponent {
     	return item() + "Button";
     }
 
-    public String containerID() {
+    @Override
+	public String containerID() {
       SCItem item = SCItem.currentItem();
       return (item.isRoot()) ? item.id() : null;
     }
     
-    public String containerClass() {
+    @Override
+	public String containerClass() {
       StringBuffer css = new StringBuffer();
       if (!booleanValueForBinding("enabled", true)) {
         css.append("disabled");

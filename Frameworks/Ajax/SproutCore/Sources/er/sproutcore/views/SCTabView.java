@@ -14,7 +14,8 @@ public class SCTabView extends SCComponent {
 		removeProperty("item");
 	}
 
-    public String containerClass() {
+    @Override
+	public String containerClass() {
 		return "tab segmented " + containerID();
 	}
 	
