@@ -18,8 +18,8 @@
   <div class="buttons">
     <wo:SCButtonView id="preferences" label = "Show Preferences" />
     <wo:SCButtonView label = "Default" default="$true"/>
-    <wo:SCButtonView label = "Cancel"  cancel="$true" width="80" />
-    <wo:SCButtonView label = "OK"      enabled="$false" selected="$true" width="80" />
+    <wo:SCButtonView label = "Cancel"  enabled="$false" width="$80" />
+    <wo:SCButtonView label = "OK"      enabled="$false" selected="$true" width="$80" />
   </div>
   <br />
 
@@ -139,11 +139,10 @@
   &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :theme =&gt; :square %&gt;
 </code></p>
   <div class="buttons">
-    <wo:SCButtonView theme="square" label = "Regular" />
-    <wo:SCButtonView theme="square" label = "Default"  default="$true"/>
-    <wo:SCButtonView theme="square" label = "Disabled" enabled="$false" />
-    <wo:SCButtonView theme="square" label = "Selected" selected="$true" />
-    <wo:SCButtonView theme="square" label = "Selected/Disabled" selected="$true" enabled="$false"/>
+    <wo:SCButtonView theme="square" label = "Reg" />
+    <wo:SCButtonView theme="square" label = "Dis" enabled="$false" />
+    <wo:SCButtonView theme="square" label = "Sel" selected="$true" />
+    <wo:SCButtonView theme="square" label = "Sel-Dis" selected="$true" enabled="$false"/>
   </div>
 </div>
 
@@ -154,7 +153,7 @@
 </code></p>
   <div class="buttons">
     <wo:SCButtonView label = "Popup Menu" theme = "popup" />
-    <wo:SCButtonView label = "Dropdown Menu" theme = "dropdown" width = "150" />
+    <wo:SCButtonView label = "Dropdown Menu" theme = "dropdown" width = "$150" />
   </div>
 </div>
 
@@ -166,9 +165,9 @@
   &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :behavior =&gt; :toggle|:on|:off %&gt;
 </code></p>
   <div class="buttons">
-    <wo:SCButtonView label = "Toggle" behaviour = "toggle" ?value="Widgets.preferencesController.toggleState" />
-    <wo:SCButtonView label = "On" behaviour = "on" ?value="Widgets.preferencesController.toggleState" />
-    <wo:SCButtonView label = "Off" behaviour = "off" ?value="Widgets.preferencesController.toggleState" />
+    <wo:SCButtonView id="toggle" label="Toggle" behavior="toggle" ?value="Widgets.preferencesController.toggleState" />
+    <wo:SCButtonView id="toggle_on" label="On" behavior="on" ?value="Widgets.preferencesController.toggleState" />
+    <wo:SCButtonView id="toggle_off" label="Off" behavior="off" ?value="Widgets.preferencesController.toggleState" />
   </div>
 </div>
 
