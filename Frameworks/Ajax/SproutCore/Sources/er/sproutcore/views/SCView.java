@@ -237,7 +237,7 @@ public class SCView extends WODynamicGroup {
         String elementName = elementName(context);
         String css = css(context);
         String itemid = "";
-        if (item.isRoot() || true) {
+        if (item.isRoot()) {
             itemid = " id=\"" + item.id() + "\"";
         }
         
@@ -303,7 +303,7 @@ public class SCView extends WODynamicGroup {
         return SCUtilities.staticUrl("blank.gif");
     }
     
-    public void appendAttributesToResponse(WOResponse response, WOContext context) {
+    protected void appendStyleToResponse(WOResponse response, WOContext context) {
     	String style = "";
     	for (int i = 0; i < CSS_PROPERTIES.length; i++) {
     		String key = CSS_PROPERTIES[i];
@@ -323,6 +323,15 @@ public class SCView extends WODynamicGroup {
     	if(style.length() != 0) {
     		response.appendContentString(" style=\"" + style + "\"");
     	}
-    	return;
+    }
+    
+    protected boolean appendStyleToContainer() {
+    	return true;
+    }
+    
+    public void appendAttributesToResponse(WOResponse response, WOContext context) {
+    	if (appendStyleToContainer()) {
+    		appendStyleToResponse(response, context);
+    	}
     }
 }
