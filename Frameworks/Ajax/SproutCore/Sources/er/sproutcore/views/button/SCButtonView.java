@@ -18,6 +18,7 @@ public class SCButtonView extends SCView {
         moveProperty("selected", "isSelected");
         moveProperty("default", "isDefault");
         moveProperty("cancel", "isCancel");
+        moveProperty("behavior", "buttonBehavior");
         removeProperty("width");
         removeProperty("label");
     }
@@ -96,6 +97,11 @@ public class SCButtonView extends SCView {
         value = (String) valueForBinding("title", value, context.component());
         return value;
     }
+    
+    @Override
+    protected boolean appendStyleToContainer() {
+    	return false;
+    }
 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {
@@ -105,7 +111,9 @@ public class SCButtonView extends SCView {
         }
         response.appendContentString("<span class=\"button-inner\">");
         if (value != null) {
-            response.appendContentString("<span class=\"label\">" + value);
+            response.appendContentString("<span class=\"label\"");
+    		appendStyleToResponse(response, context);
+            response.appendContentString(">" + value);
         }
         
         super.doAppendToResponse(response, context);
