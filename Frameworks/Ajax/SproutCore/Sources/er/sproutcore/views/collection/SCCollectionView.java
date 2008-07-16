@@ -18,8 +18,8 @@ public class SCCollectionView extends SCView {
         moveProperty("toggle", "useToggleSelection");
         moveProperty("group", "groupBy");
         moveProperty("contentValueEditable", "contentValueIsEditable");
-        setProperty("hasContentIcon", new WOConstantValueAssociation(Boolean.valueOf(hasProperty("contentIcon"))));
-        setProperty("hasContentBranch", new WOConstantValueAssociation(Boolean.valueOf(hasProperty("contentIsBranch"))));
+        setProperty("hasContentIcon", new WOConstantValueAssociation(Boolean.valueOf(hasProperty("contentIconKey"))));
+        setProperty("hasContentBranch", new WOConstantValueAssociation(Boolean.valueOf(hasProperty("contentIsBranchKey"))));
         setProperty("acceptsFirstReponder", ERXComponentUtilities.TRUE);
     }
 
