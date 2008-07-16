@@ -118,18 +118,39 @@ public class SCComponent extends ERXNonSynchronizingComponent {
             }
         }
         String id =  containerID();
+        String elementName = elementName(); 
+        response._appendContentAsciiString("<" + elementName);
+        
         if(id != null) {
-            response._appendContentAsciiString("<div id=\"" + containerID() + "\" class=\"" + containerClass() + "\">");
-        } else {
-            response._appendContentAsciiString("<div class=\"" + containerClass() + "\">");
+            response._appendContentAsciiString(" id=\"" + containerID() + "\"");
         }
+        String containerClass = containerClass();
+        if (containerClass != null) {
+        	response._appendContentAsciiString(" class=\"" + containerClass + "\"");
+        }
+        
+        String style = style();
+        if (style != null) {
+        	response._appendContentAsciiString(" style=\"" + style + "\"");
+        }
+        
+        response._appendContentAsciiString(">");
+
         doAppendToResponse(response, context);
         SCItem.popItem();
-        response._appendContentAsciiString("</div>");
+        response._appendContentAsciiString("</" + elementName + ">");
     }
 
     protected void doAppendToResponse(WOResponse response, WOContext context) {
         super.appendToResponse(response, context);
+    }
+    
+    protected String elementName() {
+    	return "div";
+    }
+    
+    protected String style() {
+    	return stringValueForBinding("style");
     }
 
     /**
