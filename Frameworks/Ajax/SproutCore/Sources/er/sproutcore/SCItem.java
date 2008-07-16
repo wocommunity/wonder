@@ -126,10 +126,10 @@ public class SCItem {
                     }
                     result += "\"" + item.itemOutletName() + "\"";
                 }
-                result += "],\n\n";
+                result += "],\n";
             }
             for (SCItem item : _children) {
-                result += _indent + item.itemOutletName() + ": " + item + ",\n";
+                result += "\n" + _indent + item.itemOutletName() + ": " + item + ",\n";
             }
             //result = result.substring(0, result.length() - 2);
         }
