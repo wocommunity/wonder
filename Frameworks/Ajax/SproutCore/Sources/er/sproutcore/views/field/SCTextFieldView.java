@@ -5,6 +5,10 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
+import er.ajax.AjaxOption;
+import er.ajax.AjaxValue;
+import er.sproutcore.views.SCProperty;
+
 public class SCTextFieldView extends SCFieldView {
 
     public SCTextFieldView(String arg0, NSDictionary arg1, WOElement arg2) {
@@ -16,7 +20,7 @@ public class SCTextFieldView extends SCFieldView {
     	super.addProperties();
     	addProperty("field_value");
     	addProperty("value", "field_value");
-    	addProperty("hint");
+    	addProperty("hint", AjaxOption.STRING);
     	addProperty("validate", "validator");
     	addProperty("label", "fieldlabel");
     }
