@@ -6,10 +6,14 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 public class SCDisclosureView extends SCButtonView {
-
-	public SCDisclosureView(String arg0, NSDictionary arg1, WOElement arg2) {
-		super(arg0, arg1, arg2);
+	public SCDisclosureView(String name, NSDictionary associations, WOElement element) {
+		super(name, associations, element);
 	}
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    }
 
 	@Override
 	public String defaultTheme(WOContext context) {

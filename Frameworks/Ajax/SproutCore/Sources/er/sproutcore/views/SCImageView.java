@@ -9,8 +9,15 @@ import er.sproutcore.SCUtilities;
 
 public class SCImageView extends SCView {
 
-    public SCImageView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
+    public SCImageView(String name, NSDictionary associations, WOElement element) {
+        super(name, associations, element);
+    }
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("content");
+    	addProperty("value");
     }
 
     @Override
