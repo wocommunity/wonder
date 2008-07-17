@@ -18,30 +18,38 @@ public class AjaxValue {
 
 	public AjaxValue(Object value) {
 		this(AjaxOption.DEFAULT, value);
-		if (_value instanceof String) {
-			_type = AjaxOption.STRING;
-		}
-		else if (_value instanceof Number) {
-			_type = AjaxOption.NUMBER;
-		}
-		else if (_value instanceof Boolean) {
-			_type = AjaxOption.BOOLEAN;
-		}
-		else if (_value instanceof NSArray) {
-			_type = AjaxOption.ARRAY;
-		}
-		else if (_value instanceof NSDictionary) {
-			_type = AjaxOption.DICTIONARY;
-		}
-		else if (_value instanceof AjaxValue) {
-			_type = ((AjaxValue)_value)._type;
-			_value = ((AjaxValue)_value)._value;
-		}
 	}
 
 	public AjaxValue(AjaxOption.Type type, Object value) {
-		_type = type;
-		_value = value;
+		if (type == AjaxOption.DEFAULT) {
+			if (value instanceof String) {
+				_type = AjaxOption.STRING;
+			}
+			else if (value instanceof Number) {
+				_type = AjaxOption.NUMBER;
+			}
+			else if (value instanceof Boolean) {
+				_type = AjaxOption.BOOLEAN;
+			}
+			else if (value instanceof NSArray) {
+				_type = AjaxOption.ARRAY;
+			}
+			else if (value instanceof NSDictionary) {
+				_type = AjaxOption.DICTIONARY;
+			}
+			else if (value instanceof AjaxValue) {
+				_type = ((AjaxValue)value)._type;
+				_value = ((AjaxValue)value)._value;
+			}
+			else {
+				_type = type;
+			}
+			_value = value;
+		}
+		else {
+			_type = type;
+			_value = value;
+		}
 	}
 
 	public String javascriptValue() {
