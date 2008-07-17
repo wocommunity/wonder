@@ -6,12 +6,17 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 public class SCCheckboxFieldView extends SCFieldView {
-
 	public SCCheckboxFieldView(String arg0, NSDictionary arg1, WOElement arg2) {
 		super(arg0, arg1, arg2);
-		moveProperty("enabled", "isEnabled");
 	}
-	
+
+	@Override
+	protected void addProperties() {
+		super.addProperties();
+		addProperty("value");
+		addProperty("enabled", "isEnabled");
+	}
+
 	@Override
 	public String cssName(WOContext context) {
 		return null;

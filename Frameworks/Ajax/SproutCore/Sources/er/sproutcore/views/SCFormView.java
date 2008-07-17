@@ -6,9 +6,22 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 public class SCFormView extends SCView {
-
-    public SCFormView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
+    public SCFormView(String name, NSDictionary associations, WOElement element) {
+        super(name, associations, element);
+    }
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("content");
+    	addProperty("enabled", "isEnabled");
+    	addProperty("valid", "isValid");
+    	addProperty("commiting", "isCommitting");
+    	addProperty("dirty", "isDirty");
+    	addProperty("errors");
+    	addProperty("error_count", "errorCount");
+    	addProperty("autocommit");
+    	addProperty("prompt", "commitPrompt");
     }
 
     @Override

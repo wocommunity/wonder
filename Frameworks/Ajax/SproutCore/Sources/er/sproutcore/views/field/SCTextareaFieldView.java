@@ -12,6 +12,14 @@ public class SCTextareaFieldView extends SCTextFieldView {
     }
     
     @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("hint");
+    	addProperty("field_value");
+    	addProperty("value");
+    }
+    
+    @Override
     public String elementName(WOContext context) {
         return "textarea";
     }

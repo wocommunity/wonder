@@ -7,8 +7,14 @@ import com.webobjects.foundation.NSDictionary;
 
 public class SCContainerView extends SCView {
 
-    public SCContainerView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
+    public SCContainerView(String name, NSDictionary associations, WOElement element) {
+        super(name, associations, element);
+    }
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("content");
     }
 
     @Override

@@ -9,8 +9,14 @@ import er.sproutcore.views.button.SCButtonView;
 
 public class SCPopupButtonView extends SCButtonView {
 
-    public SCPopupButtonView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
+    public SCPopupButtonView(String name, NSDictionary associations, WOElement element) {
+        super(name, associations, element);
+    }
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("menu", "menuName");
     }
 
     @Override

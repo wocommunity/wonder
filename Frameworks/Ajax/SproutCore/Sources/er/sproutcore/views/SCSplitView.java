@@ -6,10 +6,15 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 public class SCSplitView extends SCView {
-
-    public SCSplitView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
-        moveProperty("direction", "layoutDirection");
+    public SCSplitView(String name, NSDictionary associations, WOElement element) {
+        super(name, associations, element);
+    }
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("direction", "layoutDirection");
+    	addProperty("can_collapse_views");
     }
     
     @Override

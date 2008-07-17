@@ -7,8 +7,18 @@ import com.webobjects.foundation.NSDictionary;
 
 public class SCProgressView extends SCView {
 
-    public SCProgressView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
+    public SCProgressView(String name, NSDictionary associations, WOElement element) {
+        super(name, associations, element);
+    }
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("enabled", "isEnabled");
+    	addProperty("indeterminate", "isIndeterminate");
+    	addProperty("value");
+    	addProperty("maximum");
+    	addProperty("minimum");
     }
 
     @Override
