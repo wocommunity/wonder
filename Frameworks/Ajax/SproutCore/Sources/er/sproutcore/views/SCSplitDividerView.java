@@ -6,14 +6,12 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 public class SCSplitDividerView extends SCView {
+	public SCSplitDividerView(String name, NSDictionary associations, WOElement element) {
+		super(name, associations, element);
+	}
 
-    public SCSplitDividerView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
-        removeProperty("width");
-    }
-
-    @Override
-    protected void doAppendToResponse(WOResponse response, WOContext context) {
-        super.doAppendToResponse(response, context);
-    }
+	@Override
+	protected void doAppendToResponse(WOResponse response, WOContext context) {
+		super.doAppendToResponse(response, context);
+	}
 }

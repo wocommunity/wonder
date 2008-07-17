@@ -12,6 +12,15 @@ public class SCSliderView extends SCView {
     public SCSliderView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
     }
+    
+	@Override
+	protected void addProperties() {
+		super.addProperties();
+
+		addProperty("minimum");
+		addProperty("maximum");
+		addProperty("step");
+	}
 
     @Override
     protected void doAppendToResponse(WOResponse response, WOContext context) {

@@ -10,6 +10,16 @@ public class SCTextFieldView extends SCFieldView {
     public SCTextFieldView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
     }
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("field_value");
+    	addProperty("value", "field_value");
+    	addProperty("hint");
+    	addProperty("validate", "validator");
+    	addProperty("label", "fieldlabel");
+    }
 
     @Override
     public String type() {

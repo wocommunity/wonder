@@ -6,9 +6,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 public class SCSpinnerView extends SCView {
-
-    public SCSpinnerView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
+    public SCSpinnerView(String name, NSDictionary associations, WOElement element) {
+        super(name, associations, element);
     }
 
     @Override

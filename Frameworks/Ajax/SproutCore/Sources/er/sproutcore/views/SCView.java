@@ -13,10 +13,11 @@ import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.ajax.AjaxOption;
 import er.ajax.AjaxUtils;
+import er.ajax.AjaxValue;
 import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXStringUtilities;
 import er.sproutcore.SCItem;
@@ -30,52 +31,101 @@ import er.sproutcore.SCUtilities;
  * @author ak
  * 
  */
-public class SCView extends WODynamicGroup {
+public class SCView extends WODynamicGroup implements ISCView {
     protected Logger log = Logger.getLogger(getClass());
 
     protected final String[] CSS_PROPERTIES = new String[]{"width", "height", "minHeight", "maxHeight", "minWidth", "maxWidth"};
     
     private NSMutableDictionary<String, WOAssociation> _associations;
 
-    private NSMutableDictionary<String, WOAssociation> _properties;
+    private NSMutableDictionary<String, SCProperty> _properties;
 
-    private NSMutableDictionary<String, WOAssociation> _bindings;
+    private NSMutableDictionary<String, SCBinding> _bindings;
 
     @SuppressWarnings("unchecked")
     public SCView(String name, NSDictionary associations, WOElement parent) {
         super(name, associations, parent);
         _associations = associations.mutableClone();
         updateDefaultValues();
-        _bindings = new NSMutableDictionary<String, WOAssociation>();
-        _properties = new NSMutableDictionary<String, WOAssociation>();
+        _bindings = new NSMutableDictionary<String, SCBinding>();
+        _properties = new NSMutableDictionary<String, SCProperty>();
 
         for (Enumeration e = associations.keyEnumerator(); e.hasMoreElements();) {
             String key = (String) e.nextElement();
             WOAssociation association = (WOAssociation) associations.objectForKey(key);
-            if (key.charAt(0) == '?') {
-                _bindings.setObjectForKey(association, key.substring(1));
-            } else {
-                _properties.setObjectForKey(association, key);
+            if (key.startsWith("?")) {
+            	addBinding(new SCBinding(key.substring(1), association));
             }
-            log.debug(key + ": " + association);
         }
-        adjustProperties();
+        addProperties();
     }
+    
+    protected void addProperties() {
+    	SCView.addDefaultProperties(this);
+    }
+    
+    public NSDictionary<Object, Object> animate() {
+    	return null;
+    }
+    
+    public String paneDef() {
+    	return null;
+    }
+    
+    protected static void addDefaultProperties(ISCView view) {
+		view.addProperty("enabled", "isEnabled");
+		view.addProperty("modal", "isModal");
+		view.addProperty("custom_panel", "hasCustomPanelWrapper");
+		view.addProperty("localize");
+		view.addProperty("validator");
+		view.addProperty("field_label");
+		view.addProperty("accepts_first_responder");
+		view.addProperty("content");
+		view.addProperty("value");
+		view.addProperty("content_value_key");
+		
+		// For SC.SplitView support
+		view.addProperty("max_thickness");
+		view.addProperty("min_thickness");
+		view.addProperty("can_collapse");
+		view.addProperty("collapse", "isCollapsed");
 
-    protected void adjustProperties() {
-        removeProperty("id");
-        removeProperty("className");
-        removeProperty("class");
-        removeProperty("elementName");
-        removeProperty("style");
-        removeProperty("outlet");
-        moveProperty("visible", "isVisible");
-        moveProperty("collapsed", "isCollapsed");
-        moveProperty("drop_target", "isDropTarget");
-        moveProperty("pane", "paneType");
-        for (int i = 0; i < CSS_PROPERTIES.length; i++) {
-			String prop = CSS_PROPERTIES[i];
-	        removeProperty(prop);
+		// General delegate support
+		view.addProperty("delegate", AjaxOption.SCRIPT);
+		view.addProperty("drop_target", "isDropTarget");
+		
+		String paneDef = view.paneDef();
+		if (paneDef == null) {
+			view.addProperty("pane", "paneType");
+		}
+		else {
+			view.addPropertyWithDefault("pane", "paneType", paneDef);
+		}
+	
+		final NSDictionary<Object, Object> animate = view.animate();
+		if (animate != null) {
+			view.addProperty(new SCProperty("visible_animation", null, "", AjaxOption.DEFAULT, true) {
+				@Override
+				public String javascriptValue(Object value) {
+					NSMutableDictionary<String, String> keyMap = new NSMutableDictionary<String, String>();
+					keyMap.setObjectForKey("onComplete", "complete");
+					
+					NSMutableDictionary<Object, Object> animationValues = new NSMutableDictionary<Object, Object>();
+					for (Object key : animate.keySet()) {
+						Object animateValue = animate.objectForKey(key);
+						String normalizedKey = key.toString().toLowerCase();
+						if (!"complete".equals(normalizedKey)) {
+							animateValue = new AjaxValue(animateValue).javascriptValue();
+						}
+						if (keyMap.containsKey(normalizedKey)) {
+							key = keyMap.objectForKey(normalizedKey);
+						}
+						animationValues.setObjectForKey(animateValue, key);
+					}
+					
+					return super.javascriptValue(animationValues);
+				}
+			});
 		}
     }
 
@@ -85,32 +135,69 @@ public class SCView extends WODynamicGroup {
     }
 
     public boolean hasProperty(String string) {
-        return properties().containsKey(string);
-    }
-
-    public WOAssociation removeProperty(String name) {
-        return _properties.removeObjectForKey(name);
+        return properties().objectForKey(string).isBound();
     }
     
-    public void setProperty(String name, WOAssociation association) {
-        _properties.setObjectForKey(association, name);
-    }
-
-    public void moveProperty(String from, String to) {
-        WOAssociation association = _properties.removeObjectForKey(from);
-        if(association != null) {
-            _properties.setObjectForKey(association, to);
-        }
-        association = _bindings.removeObjectForKey(from);
-        if(association != null) {
-            _bindings.setObjectForKey(association, to);
-        }
+    protected void addBinding(String bindingName) {
+    	addBinding(bindingName, bindingName);
     }
     
-    protected NSDictionary properties() {
+    protected void addBinding(String associationName, String bindingName) {
+    	addBinding(new SCBinding(bindingName, _associations.objectForKey("?" + associationName)));
+    }
+    
+    protected void addBinding(SCBinding binding) {
+    	_bindings.setObjectForKey(binding, binding.name());
+    }
+    
+    public void addProperty(String propertyName) {
+    	addProperty(propertyName, propertyName, null, AjaxOption.DEFAULT, true);
+    }
+    
+    public void addPropertyWithDefault(String propertyName, Object defaultValue) {
+    	addProperty(propertyName, propertyName, defaultValue, AjaxOption.DEFAULT, true);
+    }
+    
+    public void addPropertyWithDefault(String associationName, String propertyName, Object defaultValue) {
+    	addProperty(associationName, propertyName, defaultValue, AjaxOption.DEFAULT, true);
+    }
+    
+    public void addProperty(String associationName, String propertyName) {
+    	addProperty(associationName, propertyName, null, AjaxOption.DEFAULT, true);
+    }
+    
+    public void addProperty(String associationName, String propertyName, boolean skipIfNull) {
+    	addProperty(associationName, propertyName, null, AjaxOption.DEFAULT, skipIfNull);
+    }
+    
+    public void addProperty(String propertyName, AjaxOption.Type type) {
+    	addProperty(propertyName, propertyName, null, type, true);
+    }
+    
+    public void addProperty(String associationName, String propertyName, AjaxOption.Type type) {
+    	addProperty(associationName, propertyName, null, type, true);
+    }
+    
+    public void addProperty(String associationName, String propertyName, Object defaultValue, AjaxOption.Type type, boolean skipIfNull) {
+    	addProperty(new SCProperty(propertyName, _associations.objectForKey(ERXStringUtilities.underscoreToCamelCase(associationName, false)), defaultValue, type, skipIfNull));
+    }
+    
+    public void addProperty(SCProperty property) {
+    	_properties.setObjectForKey(property, property.name());
+    }
+    
+    public SCProperty propertyNamed(String propertyName) {
+    	return _properties.objectForKey(propertyName);
+    }
+    
+    protected NSDictionary<String, SCProperty> properties() {
         return _properties;
     }
 
+    public WOAssociation associationNamed(String name) {
+    	return _associations.objectForKey(name);
+    }
+    
     public NSDictionary<String, WOAssociation> associations() {
         return _associations;
     }
@@ -270,33 +357,18 @@ public class SCView extends WODynamicGroup {
     protected SCItem popItem() {
         return SCItem.popItem();
     }
-    
-    protected boolean skipPropertyIfNull(String propertyName) {
-      return false;
-    }
-    
-    protected Object evaluateValueForBinding(WOContext context, String name, Object value) {
-    	return value;
-    }
 
     protected void pullBindings(WOContext context, SCItem item) {
-        for (String key : _bindings.allKeys()) {
-            Object value = _bindings.objectForKey(key).valueInComponent(context.component());
-            value = evaluateValueForBinding(context, key, value);
-            log.debug("Binding: " + key + ":" + value);
-            item.addBinding(key, value == null ? NSKeyValueCoding.NullValue : value);
-        }
-        for (String key : _properties.allKeys()) {
-            Object value = _properties.objectForKey(key).valueInComponent(context.component());
-            value = evaluateValueForBinding(context, key, value);
-            log.debug("Prop: " + key + ":" + value);
-            if (value == null && !skipPropertyIfNull(key)) {
-              item.addProperty(key, NSKeyValueCoding.NullValue);
-            }
-            else if (value != null) {
-              item.addProperty(key, value);
-            }
-        }
+    	for (SCBinding binding : _bindings.allValues()) {
+            Object value = binding.association().valueInComponent(context.component());
+            log.debug("Binding: " + binding.name() + ":" + value);
+    		item.addBinding(binding, value);
+    	}
+    	for (SCProperty property : _properties.allValues()) {
+            Object value = property.association().valueInComponent(context.component());
+            log.debug("Prop: " + property.name() + ":" + value);
+    		item.addProperty(property, value);
+    	}
     }
 
     protected String blankUrl() {

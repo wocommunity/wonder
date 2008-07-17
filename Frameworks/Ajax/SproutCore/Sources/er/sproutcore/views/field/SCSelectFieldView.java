@@ -10,6 +10,16 @@ public class SCSelectFieldView extends SCFieldView {
     public SCSelectFieldView(String arg0, NSDictionary arg1, WOElement arg2) {
         super(arg0, arg1, arg2);
     }
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("name_key");
+    	addProperty("sort_key");
+    	addProperty("value_key");
+    	addProperty("empty", "emptyName");
+    	addProperty("enabled", "isEnabled");
+    }
 
     @Override
     public String elementName(WOContext context) {

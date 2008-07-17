@@ -5,10 +5,21 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
-public class SCLabelView extends SCView {
+import er.ajax.AjaxOption;
 
-    public SCLabelView(String arg0, NSDictionary arg1, WOElement arg2) {
-        super(arg0, arg1, arg2);
+public class SCLabelView extends SCView {
+    public SCLabelView(String name, NSDictionary associations, WOElement element) {
+        super(name, associations, element);
+    }
+    
+    @Override
+    protected void addProperties() {
+    	super.addProperties();
+    	addProperty("formatter", AjaxOption.SCRIPT);
+    	addPropertyWithDefault("localize", false);
+    	addProperty("editable", "isEditable");
+    	addPropertyWithDefault("escape_html", "escapeHTML", true);
+    	addProperty("value");
     }
 
     @Override
