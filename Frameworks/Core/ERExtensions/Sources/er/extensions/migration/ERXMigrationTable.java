@@ -568,6 +568,19 @@ public class ERXMigrationTable {
 	}
 
 	/**
+	 * Returns a new flag boolean column.  See newColumn(..) for the full docs.
+	 * This might or might not work with your database, it's only tested with PostgreSQL.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newFlagBooleanColumn(String name, boolean allowsNull) throws SQLException {
+		return newColumn(name, Types.BOOLEAN, 0, 0, 0, allowsNull, null);
+	}
+
+	/**
 	 * Returns a new string blob column.  See newColumn(..) for the full docs.
 	 * 
 	 * @param name the name of the column
