@@ -1693,10 +1693,15 @@ public class ERXSQLHelper {
 			String externalType;
 			if (jdbcType == Types.INTEGER) {
 				externalType = "int4";
-			} else if (jdbcType == Types.BIGINT) {
+			} 
+			else if (jdbcType == Types.BIGINT) {
 				externalType = "int8";
-			} else if (jdbcType == Types.BLOB) {
+			} 
+			else if (jdbcType == Types.BLOB) {
 				externalType = "bytea";
+			}
+			else if (jdbcType == Types.BOOLEAN) {
+				externalType = "bool";
 			}
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
