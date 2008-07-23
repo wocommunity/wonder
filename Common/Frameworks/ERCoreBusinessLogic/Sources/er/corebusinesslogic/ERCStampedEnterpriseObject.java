@@ -6,67 +6,76 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXGenericRecord;
+import er.extensions.ERXRetainer;
+import er.extensions.ERXSelectorUtilities;
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
+import org.apache.log4j.Logger;
 
+/**
+ * EO subclass that has a timestamp with its creation date, the most recent modification, 
+ * and a log entry describing the change.
+ */
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
-    /** logging support */
-    public static ERXLogger log = ERXLogger.getERXLogger(ERCStampedEnterpriseObject.class);
+	public interface Key {
+		public static final String CREATED = "created";
+		public static final String LAST_MODIFIED = "lastModified";
+	}
 
-    public static final NSArray TimestampAttributeKeys = new NSArray(new Object[] { "created", "lastModified"});
+	public static abstract class ERCStampedEnterpriseObjectClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+
+	}
     
-    // FIXME not thread safe..
-    private static NSMutableDictionary _datesPerEcID=new NSMutableDictionary();
+    /** logging support */
+    public static Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
+
+    public static String [] TimestampAttributeKeys = new String[] { Key.CREATED, Key.LAST_MODIFIED};
+    
+    private static final Map<EOEditingContext, NSTimestamp> _datesPerEC = Collections.synchronizedMap(new WeakHashMap<EOEditingContext, NSTimestamp>());
+
     public static class Observer {
         public void updateTimestampForEditingContext(NSNotification n) {
             NSTimestamp now=new NSTimestamp();
-            if (log.isDebugEnabled())  log.debug("Timestamp for "+n.object()+": "+now);
-            _datesPerEcID.setObjectForKey(now, ERXConstant.integerForInt(System.identityHashCode(n.object())));
+            EOEditingContext editingContext = (EOEditingContext)n.object();
+
+            if (log.isDebugEnabled())  log.debug("Timestamp for "+ editingContext + ": "+ now);
+
+            _datesPerEC.put(editingContext, now);
         }
     }
-    
-    static {
+
+    static { initialize(); }
+
+    protected static void initialize() {
         NSNotificationCenter center = NSNotificationCenter.defaultCenter();
+        NSSelector sel = ERXSelectorUtilities.notificationSelector("updateTimestampForEditingContext");
         Observer observer = new Observer();
         ERXRetainer.retain(observer);
-        center.addObserver(observer,
-                new NSSelector("updateTimestampForEditingContext", ERXConstant.NotificationClassArray),
-                ERXExtensions.objectsWillChangeInEditingContext,
-                null);
-    }        
-
-
-    private boolean _propagateWillChange=true;
-    public EOEnterpriseObject insertionLogEntry=null;
-
-    protected Boolean _implementsLogEntryInterface;
-    
-    public boolean implementsLogEntryInterface() {
-        if (_implementsLogEntryInterface == null) {
-            if (this instanceof ERCLogEntryInterface) {
-                _implementsLogEntryInterface = Boolean.TRUE;
-            } else {
-                _implementsLogEntryInterface = Boolean.FALSE;                
-            }
-        }
-        return _implementsLogEntryInterface.booleanValue();
+        center.addObserver(observer, sel, ERXExtensions.objectsWillChangeInEditingContext, null);
     }
+
+
+    public EOEnterpriseObject insertionLogEntry=null;
     
     public void awakeFromInsertion(EOEditingContext ec) {
         super.awakeFromInsertion(ec);
-        if (implementsLogEntryInterface()) {
-            String relationshipName = ((ERCLogEntryInterface)this).relationshipNameForLogEntry();
-            EOEnterpriseObject logType = ((ERCLogEntryInterface)this).logEntryType();
+        if (this instanceof ERCLogEntryInterface) {
+            ERCLogEntryInterface lei = (ERCLogEntryInterface) this;
+            String relationshipName =lei.relationshipNameForLogEntry();
+            EOEnterpriseObject logType = lei.logEntryType();
             if (relationshipName != null && logType != null) {
-                insertionLogEntry=ERCLogEntry.createLogEntryLinkedToEO(logType,
-                                                                               null,
-                                                                               this,
-                                                                               relationshipName);
-            }            
+                insertionLogEntry=ERCLogEntry.createLogEntryLinkedToEO(logType, null, this, relationshipName);
+            }
         }
         // We now set the date created/last modified in willInsert/Update/Delete
         // A side effect of this technique is that for new EOs, created/lastModified is null until the EO actually gets saved
@@ -100,15 +109,19 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
     
     private void touch() {
-        Number n=ERXConstant.integerForInt(System.identityHashCode(editingContext()));
-        if(n==null){
-            log.error("Null number n in touch() for:"+this);
-            log.error("editingContext:"+editingContext());
-            log.error("System.identityHashCode(editingContext()):"+System.identityHashCode(editingContext()));
+        NSTimestamp date;
+        EOEditingContext editingContext = editingContext();
+
+        if (editingContext != null) {
+            date = _datesPerEC.get(editingContext);
+        } else {
+            log.error("Null editingContext in touch() for: " + this);
+            date = null;
         }
-        NSTimestamp date=(NSTimestamp)_datesPerEcID.objectForKey(n);
-        if (date==null) {
+
+        if (date == null) { //either because there was no EC, or because there was no value in the Map
             log.error("Null modification date found in touch() call - EC delegate is probably missing");
+            date = new NSTimestamp();
         }
         setLastModified(date);
     }
@@ -122,9 +135,9 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
             insertionLogEntry.addObjectToBothSidesOfRelationshipWithKey(object,key);
     }
 
-    public NSTimestamp created() { return (NSTimestamp)storedValueForKey("created"); }
-    public void setCreated(NSTimestamp value) { takeStoredValueForKey(value, "created"); }
+    public NSTimestamp created() { return (NSTimestamp)storedValueForKey(Key.CREATED); }
+    public void setCreated(NSTimestamp value) { takeStoredValueForKey(value, Key.CREATED); }
 
-    public NSTimestamp lastModified() { return (NSTimestamp)storedValueForKey("lastModified"); }
-    public void setLastModified(NSTimestamp value) { takeStoredValueForKey(value, "lastModified"); }
+    public NSTimestamp lastModified() { return (NSTimestamp)storedValueForKey(Key.LAST_MODIFIED); }
+    public void setLastModified(NSTimestamp value) { takeStoredValueForKey(value, Key.LAST_MODIFIED); }
 }
