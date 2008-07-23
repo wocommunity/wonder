@@ -10,17 +10,19 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXExtensions;
-import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXRetainer;
 import er.extensions.foundation.ERXSelectorUtilities;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * EO subclass that has a timestamp with its creation date, the most recent modification, 
@@ -40,18 +42,18 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
     /** logging support */
     public static Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
 
-    public static String [] TimestampAttributeKeys = new String[] { "created", "lastModified"};
+    public static String [] TimestampAttributeKeys = new String[] { Key.CREATED, Key.LAST_MODIFIED};
     
-    private static NSMutableDictionary _datesPerEcID=new NSMutableDictionary();
+    private static final Map<EOEditingContext, NSTimestamp> _datesPerEC = Collections.synchronizedMap(new WeakHashMap<EOEditingContext, NSTimestamp>());
 
     public static class Observer {
         public void updateTimestampForEditingContext(NSNotification n) {
             NSTimestamp now=new NSTimestamp();
-            if (log.isDebugEnabled())  log.debug("Timestamp for "+n.object()+": "+now);
-            synchronized (_datesPerEcID) {
-                int num = System.identityHashCode(n.object());
-                _datesPerEcID.setObjectForKey(now, new Integer(num));
-            }
+            EOEditingContext editingContext = (EOEditingContext)n.object();
+
+            if (log.isDebugEnabled())  log.debug("Timestamp for "+ editingContext + ": "+ now);
+
+            _datesPerEC.put(editingContext, now);
         }
     }
 
@@ -109,17 +111,17 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
     
     private void touch() {
-        Number n=ERXConstant.integerForInt(System.identityHashCode(editingContext()));
-        if(n==null){
-            log.error("Null number n in touch() for:"+this);
-            log.error("editingContext:"+editingContext());
-            log.error("System.identityHashCode(editingContext()):"+System.identityHashCode(editingContext()));
-        }
         NSTimestamp date;
-        synchronized (_datesPerEcID) {
-        	date = (NSTimestamp)_datesPerEcID.objectForKey(n);
-		}
-        if (date==null) {
+        EOEditingContext editingContext = editingContext();
+
+        if (editingContext != null) {
+            date = _datesPerEC.get(editingContext);
+        } else {
+            log.error("Null editingContext in touch() for: " + this);
+            date = null;
+        }
+
+        if (date == null) { //either because there was no EC, or because there was no value in the Map
             log.error("Null modification date found in touch() call - EC delegate is probably missing");
             date = new NSTimestamp();
         }
@@ -135,9 +137,9 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
             insertionLogEntry.addObjectToBothSidesOfRelationshipWithKey(object,key);
     }
 
-    public NSTimestamp created() { return (NSTimestamp)storedValueForKey(TimestampAttributeKeys[0]); }
-    public void setCreated(NSTimestamp value) { takeStoredValueForKey(value, TimestampAttributeKeys[0]); }
+    public NSTimestamp created() { return (NSTimestamp)storedValueForKey(Key.CREATED); }
+    public void setCreated(NSTimestamp value) { takeStoredValueForKey(value, Key.CREATED); }
 
-    public NSTimestamp lastModified() { return (NSTimestamp)storedValueForKey(TimestampAttributeKeys[1]); }
-    public void setLastModified(NSTimestamp value) { takeStoredValueForKey(value, TimestampAttributeKeys[1]); }
+    public NSTimestamp lastModified() { return (NSTimestamp)storedValueForKey(Key.LAST_MODIFIED); }
+    public void setLastModified(NSTimestamp value) { takeStoredValueForKey(value, Key.LAST_MODIFIED); }
 }
