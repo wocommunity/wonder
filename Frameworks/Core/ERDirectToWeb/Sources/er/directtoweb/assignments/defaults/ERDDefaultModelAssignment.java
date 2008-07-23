@@ -24,7 +24,10 @@ import er.directtoweb.assignments.ERDAssignment;
 import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXS;
 import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * A bunch of methods used for pulling default values from EOModels.<br />
@@ -312,5 +315,18 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
      */
     public Object sortKeyForList(D2WContext context) {
         return context.valueForKey("propertyKey")+"."+context.valueForKey("keyWhenRelationship");
+    }
+    
+    /**
+     * Called when firing this assignment with the key-path:
+     * <b>defaultSortOrdering</b>.
+     * @return the first value of the display property keys, with ascending comparison.
+     */
+    public Object defaultSortOrderingWithFirstKey(D2WContext context) {
+    	NSArray<String> keys = (NSArray) context.valueForKey("displayPropertyKeys");
+    	if(keys.count() == 0) return NSArray.EmptyArray;
+    	String first = keys.objectAtIndex(0);
+    	
+        return ERXS.ascs(first);
     }
 }
