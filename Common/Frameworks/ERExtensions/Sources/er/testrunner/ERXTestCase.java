@@ -18,18 +18,28 @@ Copyright (c) 2001-2002, CodeFab, Inc.
 
 package er.testrunner;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import junit.framework.*;
-import java.util.*;
-import er.extensions.*;
+import java.util.Enumeration;
 
+import junit.framework.TestCase;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOValidation;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXEC;
+/**
+ * Basic test case class to do unit testing inside of WO. 
+ * Provides an editingContext that is disposed on every setup/tearDown.
+ */
 public class ERXTestCase extends TestCase {
-    static ERXLogger log = ERXLogger.getERXLogger(ERXTestCase.class);
-    protected EOEditingContext editingContext = new EOEditingContext();
-    protected NSMutableArray persistentRootObjects = new NSMutableArray();
+    static Logger log = Logger.getLogger(ERXTestCase.class);
+    private EOEditingContext editingContext;
+    private NSMutableArray persistentRootObjects;
 
     public ERXTestCase(String name){
         super(name);
@@ -37,8 +47,9 @@ public class ERXTestCase extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        ERXExtensions.setDefaultDelegate(editingContext());
-        editingContext.lock();
+        persistentRootObjects = new NSMutableArray();
+        editingContext = ERXEC.newEditingContext();
+        editingContext().lock();
     }
 
     protected void registerPersistentRootObjectForDeletion(EOEnterpriseObject anEnterpriseObject) {
@@ -47,7 +58,8 @@ public class ERXTestCase extends TestCase {
 
     protected void deletePersistentObjects() {
         boolean errorOccured = false;
-        editingContext().saveChanges();
+        if(editingContext().hasChanges())
+            editingContext().saveChanges();
         Enumeration persistentObjectEnum = persistentRootObjects.reverseObjectEnumerator();
         while (persistentObjectEnum.hasMoreElements()) {
             EOEnterpriseObject eo = (EOEnterpriseObject)persistentObjectEnum.nextElement();
@@ -71,12 +83,14 @@ public class ERXTestCase extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        editingContext.revert();
+        editingContext().revert();
         try {
             deletePersistentObjects();
         } finally {
-            editingContext.unlock();
+            editingContext().unlock();
         }
+        editingContext().dispose();
+        editingContext = null;
         super.tearDown();
     }
 

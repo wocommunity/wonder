@@ -6,13 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import java.lang.reflect.*;
-import java.text.NumberFormat;
-import java.util.*;
-import java.io.PrintStream;
-import junit.framework.*;
-import junit.runner.*;
-import er.extensions.*;
+import junit.framework.AssertionFailedError;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import junit.runner.BaseTestRunner;
+import junit.runner.StandardTestSuiteLoader;
+import junit.runner.TestSuiteLoader;
+
+import org.apache.log4j.Logger;
+
+import er.extensions.ERXPatcher;
 
 /**
  * runs tests with ERTestListeners.<br />
@@ -22,7 +25,7 @@ import er.extensions.*;
 public class ERXTestRunner extends BaseTestRunner {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXTestRunner.class);
+    public static final Logger log = Logger.getLogger(ERXTestRunner.class);
 
         public ERXTestListener externalListener = null;
 
@@ -67,7 +70,7 @@ public class ERXTestRunner extends BaseTestRunner {
 
         /** Get the freshest loaded class. Uses the CompilerProxy to get it. */
         public Test getTest(String testClass) {
-            return new TestSuite(ERXCompilerProxy.defaultProxy().classForName(testClass));
+            return new TestSuite(ERXPatcher.classForName(testClass));
         }
 
         /* (non-Javadoc)

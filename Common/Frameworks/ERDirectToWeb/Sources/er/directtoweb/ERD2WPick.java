@@ -41,7 +41,7 @@ public class ERD2WPick extends ERDCustomEditComponent {
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     // This is fine because we only use the D2WPick component if list() > 0;
-    public EODataSource datasource() { return er.extensions.ERXExtensions.dataSourceForArray(list()); }
+    public EODataSource datasource() { return er.extensions.ERXEOControlUtilities.dataSourceForArray(list()); }
 
     public NSArray list() { return (NSArray)objectKeyPathValue(); }
 

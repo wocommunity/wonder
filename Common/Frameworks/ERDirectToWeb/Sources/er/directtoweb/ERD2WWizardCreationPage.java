@@ -87,7 +87,7 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 
     public WOComponent cancelAction() {
         WOComponent result=null;
-        if (_currentStep>1 && ERXExtensions.isNewObject(object())) { // only show this if we've been through more than one page
+        if (_currentStep>1 && ERXEOControlUtilities.isNewObject(object())) { // only show this if we've been through more than one page
             ConfirmPageInterface cpi = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed("ConfirmCancelCreationOf" + entityName(),
                                                                                                      session());
             cpi.setCancelDelegate(new ERDPageDelegate(context().page()));

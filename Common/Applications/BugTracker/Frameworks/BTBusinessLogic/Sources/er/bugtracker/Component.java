@@ -23,7 +23,7 @@ public class Component extends _Component {
     public static NSArray orderedComponents(EOEditingContext ec) {
         NSMutableArray result=new NSMutableArray();
         if (_cachedComponents==null) {
-            _editingContext=ERXExtensions.newEditingContext();
+            _editingContext=ERXEC.newEditingContext();
             _cachedComponents=new NSMutableArray();
             addChildrenOfComponentToArray(null,_cachedComponents,_editingContext);
         }

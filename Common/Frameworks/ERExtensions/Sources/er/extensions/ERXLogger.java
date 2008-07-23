@@ -18,6 +18,8 @@ import com.webobjects.foundation.NSLog;
  * and this should be the only effected class .. in theory.
  */
 public class ERXLogger extends org.apache.log4j.Logger {
+	
+	public static final String CONFIGURE_LOGGING_WITH_SYSTEM_PROPERTIES = "configureLoggingWithSystemProperties";
 
     /** logging supprt */
     public static Logger log;
@@ -64,20 +66,25 @@ public class ERXLogger extends org.apache.log4j.Logger {
     }
 
     /**
-     * Main entry point for getting an ERXLogger for a given name.
+     * Main entry point for getting an Logger for a given name.
      * Calls getLogger to return the instance of Logger from our custom Factory.
      * 
      * Note that if the log4j system has not been setup correctly, meaning
      * the LoggerFactory subclass has not been correctly put in place, then
      * RuntimeException will be thrown.
      * @param name to create the logger for
-     * @return ERXLogger for the given name.
+     * @return Logger for the given name.
      */
      public static ERXLogger getERXLogger(String name) {
-         Logger logger = getLogger(name);
-         if(logger != null && !(logger instanceof ERXLogger))
-            throw new RuntimeException("Can't load Logger for \""+name+"\" because it is not of class ERXLogger but \""+logger.getClass().getName()+"\". Let your Application class inherit from ERXApplication or call ERXLog4j.configureLogging() statically the first thing in your app. \nAlso check if there is a \"log4j.loggerFactory=er.extensions.ERXLogger$Factory\" line in your properties.");
-        return (ERXLogger)logger;
+    	Logger logger = getLogger(name);
+    	if(logger != null && !(logger instanceof ERXLogger)) {
+    		configureLoggingWithSystemProperties();
+    		logger = getLogger(name);
+    	}
+    	if(logger != null && !(logger instanceof ERXLogger)) {
+    		throw new RuntimeException("Can't load Logger for \""+name+"\" because it is not of class ERXLogger but \""+logger.getClass().getName()+"\". Let your Application class inherit from ERXApplication or call ERXLog4j.configureLogging() statically the first thing in your app. \nAlso check if there is a \"log4j.loggerFactory=er.extensions.Logger$Factory\" line in your properties.");
+    	}
+    	return (ERXLogger)logger;
     }
 
     /**
@@ -131,6 +138,10 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     public ERXLogger(String name) {
         super(name);
+    }
+
+    public static synchronized void configureLoggingWithSystemProperties() {
+        configureLogging(ERXSystem.getProperties());
     }
 
     /** 

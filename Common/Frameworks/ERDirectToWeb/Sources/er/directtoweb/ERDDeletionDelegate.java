@@ -50,7 +50,7 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                 if (_dataSource != null)
                     _dataSource.deleteObject(_object);
                 if (editingContext instanceof EOSharedEditingContext) {
-                    if (ERXExtensions.isNewObject(_object)) {
+                    if (ERXEOControlUtilities.isNewObject(_object)) {
                         log.error("found a new object in a shared editing context "+editingContext);
                         editingContext.deleteObject(_object);
                     } else {
@@ -69,7 +69,7 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                     }
                 } else {
                     editingContext.deleteObject(_object);
-                    if (ERXExtensions.isNewObject(_object)) {
+                    if (ERXEOControlUtilities.isNewObject(_object)) {
                         // This is necessary to force state synching, e.g., for display groups, etc.
                         editingContext.processRecentChanges();
                     } else {

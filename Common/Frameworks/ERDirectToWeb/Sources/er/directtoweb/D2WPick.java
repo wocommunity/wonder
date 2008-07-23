@@ -60,7 +60,7 @@ public D2WPick(WOContext context) { super(context); }
         EODataSource ds = null;
         if (hasBinding("list")) {
             NSArray list = (NSArray)valueForBinding("list");
-            ds =  er.extensions.ERXExtensions.dataSourceForArray(list);
+            ds =  er.extensions.ERXEOControlUtilities.dataSourceForArray(list);
         } else if (hasBinding("dataSource")) {
             ds = (EODataSource)valueForBinding("dataSource");
         }
@@ -69,7 +69,7 @@ public D2WPick(WOContext context) { super(context); }
 
     public EODataSource internalDataSource() {
         EODataSource ds = dataSource();
-        ds = (ds == null) ? er.extensions.ERXExtensions.dataSourceForArray(list()) : ds;
+        ds = (ds == null) ? er.extensions.ERXEOControlUtilities.dataSourceForArray(list()) : ds;
         return ds;
     }
     public void setInternalDataSource(Object foo) { /* do nothing you silly D2WPick! */ }

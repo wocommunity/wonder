@@ -102,7 +102,7 @@ public class ERDEditList extends ERDCustomEditComponent {
         }
 
         // we save directly if the object is not new
-        if (subObject.editingContext().hasChanges() && !ERXExtensions.isNewObject(subObject)) {
+        if (subObject.editingContext().hasChanges() && !ERXEOControlUtilities.isNewObject(subObject)) {
             try {
                 if (log.isDebugEnabled())
                     log.debug("saving changes..");
@@ -124,7 +124,7 @@ public class ERDEditList extends ERDCustomEditComponent {
 
     public WOComponent cancel() {
         // only revert if it's not a new EO, since otherwise we wipe out the whole thing!
-    if (!ERXExtensions.isNewObject(object())) object().editingContext().revert();
+    if (!ERXEOControlUtilities.isNewObject(object())) object().editingContext().revert();
         return nextPage();
     }
     

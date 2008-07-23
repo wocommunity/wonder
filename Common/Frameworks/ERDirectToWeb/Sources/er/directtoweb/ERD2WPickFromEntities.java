@@ -6,12 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
 /**
  * Custom query component that let's the user select from a set of shared eos.<br />
@@ -36,10 +32,7 @@ public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
     public String displayString() {
         String result=null;
         if (item!=null) {
-            D2WContext d2wContext = ERDirectToWeb.d2wContext();
-            d2wContext.takeValueForKey(ERXLocalizer.fakeSessionForSession(session()), "session");
-            d2wContext.setEntity(EOModelGroup.defaultGroup().entityNamed((String)item));
-            result=(String)d2wContext.valueForKey("displayNameForEntity");
+            result=(String)ERDirectToWeb.d2wContextValueForKey("displayNameForEntity", (String)item, null);
         }
         return result;
     }

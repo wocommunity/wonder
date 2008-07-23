@@ -6,6 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.sql.*;
 import com.webobjects.foundation.*;
@@ -22,21 +26,39 @@ import java.util.Enumeration;
  * debugging abilities to tracking down when faults are fired.
  */
 public class ERXDatabaseContextDelegate {
-             
+	
+	public static final String DatabaseContextFailedToFetchObject = "DatabaseContextFailedToFetchObject";
+	
+    public static class ObjectNotAvailableException extends EOObjectNotAvailableException {
+    	private EOGlobalID globalID;
+    	
+		public ObjectNotAvailableException(String message) {
+			this(message, null);
+		}
+    	
+		public ObjectNotAvailableException(String message, EOGlobalID gid) {
+			super(message);
+			globalID = gid;
+		}
+		
+		public EOGlobalID globalID() {
+			return globalID;
+		}
+    	
+    }
+	
     /** Basic logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXDatabaseContextDelegate.class);
+    public final static Logger log = Logger.getLogger(ERXDatabaseContextDelegate.class);
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.FaultFiring</b> */
-    public final static ERXLogger dbLog = ERXLogger.getERXLogger("er.transaction.adaptor.FaultFiring");
+    public final static Logger dbLog = Logger.getLogger("er.transaction.adaptor.FaultFiring");
+    /** Faulting logging support, logging category: <b>er.transaction.adaptor.Exceptions</b> */
+    public final static Logger exLog = Logger.getLogger("er.transaction.adaptor.Exceptions");
 
     /** Holds onto the singleton of the default delegate */
-    private static ERXDatabaseContextDelegate _defaultDelegate;
-    
-    /** Returns the singleton of the database context delegate */
+    private static ERXDatabaseContextDelegate _defaultDelegate = new ERXDatabaseContextDelegate();
+
+	/** Returns the singleton of the database context delegate */
     public static ERXDatabaseContextDelegate defaultDelegate() {
-        if (_defaultDelegate == null) {
-            _defaultDelegate = new ERXDatabaseContextDelegate();
-            log.debug("Created default database context delegate");
-        }
         return _defaultDelegate;
     }
     

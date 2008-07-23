@@ -362,50 +362,26 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     // MOVEME: Need to have a central repository of all of these keys and what they mean
     static boolean _raiseOnMissingEditingContextDelegate = 	ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXRaiseOnMissingEditingContextDelegate"), true);
-    /**
-     * By default, and this should change in the future, all editing contexts that
-     * are created and use ERXGenericRecords or subclasses need to have a delegate
-     * set of instance {@link ERXEditingContextDelegate}. These delegates provide
-     * the augmentation to the regular transaction mechanism, all of the will* methods
-     * plus the flushCaching method. To change the default behaviour set the property:
-     * <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b> to false in your
-     * WebObjects.properties file. This method is called when an object is fetched,
-     * updated or inserted.
-     * @param editingContext to check for the correct delegate.
-     * @return if the editing context has the correct delegate set.
-     */
-    public boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
-        Object delegate=editingContext.delegate();
 
-        if (delegate==null) {
-	    EOObjectStore parent = editingContext.parentObjectStore();
-	    if(!_raiseOnMissingEditingContextDelegate && parent != null && parent instanceof EOEditingContext) {
-		Object parentDelegate=((EOEditingContext)parent).delegate();
-		if(parentDelegate != null && (parentDelegate instanceof ERXEditingContextDelegate)) {
-		    editingContext.setDelegate(parentDelegate);
-		    log.info("Found null delegate. Setting to the parent's delegate.");
-		    return true;
-		}
-	    }
-	    if(!_raiseOnMissingEditingContextDelegate) {
-		log.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
-		ERXExtensions.setDefaultDelegate(editingContext);
-		return true;
-	    } else {
-		throw new RuntimeException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
-	    }
+	/**
+	 * By default, and this should change in the future, all editing contexts
+	 * that are created and use ERXEnterpriseObjects or subclasses need to have
+	 * a delegate set of instance {@link ERXEditingContextDelegate}. These
+	 * delegates provide the augmentation to the regular transaction mechanism,
+	 * all of the will* methods plus the flushCaching method. To change the
+	 * default behaviour set the property:
+	 * <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b> to false in
+	 * your WebObjects.properties file. This method is called when an object is
+	 * fetched, updated or inserted.
+	 * 
+	 * @param editingContext
+	 *            to check for the correct delegate.
+	 * @return if the editing context has the correct delegate set.
+	 */
+	private boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
+		return ERXEditingContextDelegate._checkEditingContextDelegate(editingContext);
 	}
-	if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
-	    if(!_raiseOnMissingEditingContextDelegate) {
-		log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
-		return true;
-	    } else {
-		throw new RuntimeException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
-	    }
-	}
-	return false;
 
-    }
     /**
      * Checks the editing context delegate before calling
      * super's implementation. See the method <code>
@@ -822,45 +798,51 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
-    /**
-     * Determines if this object is a deleted object by
-     * checking to see if it is included in the deletedObjects
-     * array of the editing context or if it's editing context
-     * is null.<br/>
-     * <br/>
-     * Note: An object that has just been created will also not
-     * have an editing context and by this method would test
-     * positive for being a deleted object.
-     * @return if the object is a deleted object
-     */
-    // CHECKME: Might be able to tell better by checking EOGlobalIDs
-    public boolean isDeletedEO() {
-        if (log.isDebugEnabled())
-            log.debug("editingContext() = " + editingContext() + " this object: " + this);
-        return editingContext() != null && editingContext().deletedObjects().containsObject(this);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see er.extensions.ERXEnterpriseObject#isDeletedEO()
+	 */
+	public boolean isDeletedEO() {
+		if (log.isDebugEnabled()) {
+			log.debug("editingContext() = " + editingContext() + " this object: " + this);
+		}
+		// HACK AK: using private API here
+		EOGlobalID gid = __globalID();
+		boolean isDeleted = (editingContext() == null && (gid != null && !gid.isTemporary()));
+		return isDeleted || (editingContext() != null && editingContext().deletedObjects().containsObject(this));
+	}
 
-    /**
-        * @deprecated use {@link ERXGenericRecord#isNewObject() ERXGenericRecord#isNewObject}
-     */
-    public boolean isNewEO() {
-        return isNewObject();
-    }
+	/**
+	 * @deprecated use {@link ERXGenericRecord#isNewObject}
+	 */
+	@SuppressWarnings("dep-ann")
+	public boolean isNewEO() {
+		return isNewObject();
+	}
 
-    /**
-        * Determines if this object is a new object and
-     * hasn't been saved to the database yet. This
-     * method just calls the method ERExtensions.isNewObject
-     * passing in this object as the current parameter. Note
-     * that an object that has been successfully deleted will
-     * also look as if it is a new object because it will have
-     * a null editingcontext.
-     * @return if the object is a new enterprise object.
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see er.extensions.ERXEnterpriseObject#isNewObject()
+	 */
 
-    public boolean isNewObject() {
-        return ERXExtensions.isNewObject(this);
-    }
+	public boolean isNewObject() {
+		return ERXEOControlUtilities.isNewObject(this);
+	}
+
+	/**
+	 * Returns true if this EO has been modified in this editing context. In EOF
+	 * terms, this means that the EO's snapshot in this EC is not .equals the
+	 * original database snapshot for the EO.
+	 * 
+	 * @return true if this EO's snapshot does not match the original snapshot
+	 */
+	public boolean isUpdatedObject() {
+		NSDictionary snapshot = snapshot();
+		NSDictionary originalSnapshot = __originalSnapshot();
+		return originalSnapshot != null && !originalSnapshot.equals(snapshot);
+	}
     
     
     /**

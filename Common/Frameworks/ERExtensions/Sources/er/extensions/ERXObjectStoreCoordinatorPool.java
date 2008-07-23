@@ -79,12 +79,12 @@ public void sessionDidCreate(NSNotification n) {
     }
 
     /**
-        *
+     *
      *
      * @return the sessionID from the session stored in ERXThreadStorage.
      */
     protected String sessionID() {
-        WOSession session = ERXExtensions.session();
+        WOSession session = ERXSession.session();
         String sessionID = null;
         if (session != null) {
             sessionID = session.sessionID();

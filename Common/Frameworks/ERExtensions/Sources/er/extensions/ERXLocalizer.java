@@ -74,15 +74,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             ERXLocalizer.resetCache();
             NSNotificationCenter.defaultCenter().postNotification(LocalizationDidResetNotification, null);
         }
-
-        public void compilerProxyDidCompileClasses(NSNotification n) {
-            // ENHANCEME: Should deal with ERXLocalizer subclasses too. 
-            if (! ERXCompilerProxy.isClassContainedBySet("er.extensions.ERXLocalizer", (NSSet)n.object())) {
-                return;
-            }
-            ERXLocalizer.resetCache();
-            NSNotificationCenter.defaultCenter().postNotification(LocalizationDidResetNotification, null);
-        }
     }
 
     public static void initialize() {
@@ -90,14 +81,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             observer = new Observer();
             monitoredFiles = new NSMutableArray();
             isLocalizationEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLocalizer.isLocalizationEnabled", true);
-            if (isLocalizationEnabled) {
-                // To detect ERXLocalizer and its subclasses are recompiled at run-time.
-                NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("compilerProxyDidCompileClasses",
-                                                                                ERXConstant.NotificationClassArray),
-                                                                 ERXCompilerProxy.CompilerProxyDidCompileClassesNotification,
-                                                                 null);
-            }
             isInitialized = true;
         }
     }

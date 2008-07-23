@@ -6,54 +6,156 @@
 //
 package er.extensions;
 
-import java.util.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorContext;
+import com.webobjects.eoaccess.EOAdaptorOperation;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabase;
+import com.webobjects.eoaccess.EODatabaseChannel;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EODatabaseOperation;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOObjectNotAvailableException;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
+import com.webobjects.eoaccess.EOSynchronizationFactory;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaultHandler;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 /**
  * Collection of EOAccess related utilities.
  */
 public class ERXEOAccessUtilities {
-
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOAccessUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXEOAccessUtilities.class);
 
+    /** SQL logger */
+    private static Logger sqlLoggingLogger = null;
 
     /**
-     * Finds an entity that is contained in a string. This is used a lot in DirectToWeb.
-     * Example: "ListAllStudios"=>Studio
-     * @param ec editing context
-     * @param string string to look into
+     * Finds an entity that is contained in a string. This is used a lot in
+     * DirectToWeb. Example: "ListAllStudios"=>Studio
+     * 
+     * @param ec
+     *            editing context
+     * @param string
+     *            string to look into
      * @return found entity or null
      */
-    protected static NSArray entityNames;
     public static EOEntity entityMatchingString(EOEditingContext ec, String string) {
         EOEntity result = null;
-        if(string != null) {
+        if (string != null) {
+            NSArray entityNames = null;
             String lowerCaseName = string.toLowerCase();
             if (entityNames == null) {
                 EOModelGroup group = modelGroup(ec);
-                entityNames = (NSArray)ERXUtilities.entitiesForModelGroup(group).valueForKeyPath("name.toLowerCase");
+                entityNames = (NSArray) ERXUtilities.entitiesForModelGroup(group).valueForKeyPath("name.toLowerCase");
             }
             NSMutableArray possibleEntities = new NSMutableArray();
             for (Enumeration e = entityNames.objectEnumerator(); e.hasMoreElements();) {
-                String lowercaseEntityName = (String)e.nextElement();
-                if (lowerCaseName.indexOf(lowercaseEntityName) != -1)
-                    possibleEntities.addObject(lowercaseEntityName);
+                String lowercaseEntityName = (String) e.nextElement();
+                if (lowerCaseName.indexOf(lowercaseEntityName) != -1) possibleEntities.addObject(lowercaseEntityName);
             }
             if (possibleEntities.count() == 1) {
-                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
+                result = ERXUtilities.caseInsensitiveEntityNamed((String) possibleEntities.lastObject());
             } else if (possibleEntities.count() > 1) {
                 ERXArrayUtilities.sortArrayWithKey(possibleEntities, "length");
-                if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.lastObject()).length())
-                    log.warn("Found multiple entities of the same length for string: " + string
-                             + " possible entities: " + possibleEntities);
-                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
+                if (((String) possibleEntities.objectAtIndex(0)).length() == ((String) possibleEntities.lastObject()).length())
+                        log.warn("Found multiple entities of the same length for string: " + string + " possible entities: "
+                                + possibleEntities);
+                result = ERXUtilities.caseInsensitiveEntityNamed((String) possibleEntities.lastObject());
             }
             if (log.isDebugEnabled())
-                log.debug("Found possible entities: " + possibleEntities + " for string: " + string
-                          + " result: " + result);
+                    log.debug("Found possible entities: " + possibleEntities + " for string: " + string + " result: " + result);
+        }
+        return result;
+    }
+
+    /**
+     * Finds an entity that is associated with the table name. When inheritance is used,
+     * will return the least derived entity using that table.  This can be used to deal 
+     * with database exceptions where you only have the table name to go on. As multiple
+     * entities can map to a single table, the results of this method are inexact.
+     * 
+     * @param ec
+     *            editing context
+     * @param tableName
+     *            table (external) name to find an entity for
+     * @return found entity or null
+     */
+    public static EOEntity entityUsingTable(EOEditingContext ec, String tableName) {
+        EOEntity result = null;
+        NSMutableArray possibleEntities = new NSMutableArray();
+        
+        if (tableName != null) {
+            NSArray entities = ERXUtilities.entitiesForModelGroup(modelGroup(ec));
+            tableName = tableName.toLowerCase();
+
+            for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
+            	EOEntity entity = (EOEntity)e.nextElement();
+            	if (entity.externalName() != null)
+            	{
+                	String lowercaseTableName = entity.externalName().toLowerCase();
+                    if (tableName.equals(lowercaseTableName))
+                	{
+                    	// Prefer the parent entity as long as it is using the same table
+                        EOEntity root = entity;
+                        while (root != null && root.parentEntity() != null && 
+                        	   lowercaseTableName.equals(root.parentEntity().externalName().toLowerCase()))
+                            root = root.parentEntity();
+                        if ( ! possibleEntities.containsObject(entity))
+                        	possibleEntities.addObject(entity);
+                	}
+            	}
+            }
+
+            if (possibleEntities.count() > 0) {
+                result = (EOEntity) possibleEntities.lastObject();
+            }
+            
+            if (log.isEnabledFor(Level.WARN) && possibleEntities.count() > 1) 
+                log.warn("Found multiple entities: " + possibleEntities.valueForKey("name") + " for table name: " + tableName);
+
+            if (log.isDebugEnabled())
+                log.debug("Found possible entities: " + possibleEntities.valueForKey("name") + " for table name: " + tableName + " result: " + result);
         }
         return result;
     }
@@ -281,34 +383,39 @@ public class ERXEOAccessUtilities {
 
     /**
      * Similar to the helper in EUUtilities, but allows for null editingContext.
-     * If ec is null, it will try to get at the session via thread storage and use
-     * its defaultEditingContext. This is here now so we can remove the delgate in
-     * ERXApplication.
-     * @param ec editing context used to locate the model group (can be null)
+     * If ec is null, it will try to get at the session via thread storage and
+     * use its defaultEditingContext. This is here now so we can remove the
+     * delegate in ERXApplication.
+     * 
+     * @param ec
+     *            editing context used to locate the model group (can be null)
      */
     
     public static EOModelGroup modelGroup(EOEditingContext ec) {
-        if(ec == null) {
-            ERXSession s = ERXExtensions.session();
-            if(s != null) {
+        if (ec == null) {
+            ERXSession s = ERXSession.session();
+            if (s != null) {
                 ec = s.defaultEditingContext();
             }
         }
         EOModelGroup group;
-        if(ec == null) {
+        if (ec == null) {
             group = EOModelGroup.defaultGroup();
         } else {
-            group = EOModelGroup.modelGroupForObjectStoreCoordinator((EOObjectStoreCoordinator)ec.rootObjectStore());
+            group = EOModelGroup.modelGroupForObjectStoreCoordinator((EOObjectStoreCoordinator) ec.rootObjectStore());
         }
         return group;
     }
 
     /**
      * Similar to the helper in EUUtilities, but allows for null editingContext.
-     * @param ec editing context used to locate the model group (can be null)
-     * @param entityName entity name
+     * 
+     * @param ec
+     *            editing context used to locate the model group (can be null)
+     * @param entityName
+     *            entity name
      */
-     public static EOEntity entityNamed(EOEditingContext ec, String entityName) {
+    public static EOEntity entityNamed(EOEditingContext ec, String entityName) {
         EOModelGroup modelGroup = modelGroup(ec);
         return modelGroup.entityNamed(entityName);
     }
@@ -488,6 +595,27 @@ public class ERXEOAccessUtilities {
             }
         }
         return wasHandled;
+    }
+
+    public static boolean entityUsesSeparateTable(EOEntity entity) {
+        if (entity.parentEntity() == null) return true;
+        EOEntity parent = entity.parentEntity();
+        while (parent != null) {
+            if (!entity.externalName().equals(parent.externalName())) return true;
+            entity = parent;
+            parent = entity.parentEntity();
+        }
+        return false;
+    }
+
+    public static EOAttribute attributeWithColumnNameFromEntity(String columnName, EOEntity entity) {
+        for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
+            EOAttribute att = (EOAttribute)e.nextElement();
+            if (columnName.equalsIgnoreCase(att.columnName())) {
+                return att;
+            }
+        }
+        return null;
     }
 
     /**
@@ -906,6 +1034,204 @@ public class ERXEOAccessUtilities {
                 throw new NullPointerException("Gid is null: " + pk);
             }
         }
+    }
+
+    /**
+     * Deals with the nitty-gritty of direct row manipulation by
+     * correctly opening, closing, locking and unlocking the 
+     * needed EOF objects for direct row manipulation. Wraps the
+     * actions in a transaction.
+     * The API is not really finalized, if someone has a better idea
+     * he's welcome to change it.
+     * @author ak
+     */
+    public static abstract class ChannelAction {
+ 
+        protected abstract int doPerform(EOAdaptorChannel channel);
+
+        public int perform(EOEditingContext ec, String modelName) {
+            boolean wasOpen = true;
+            EOAdaptorChannel channel = null;
+            int rows = 0;
+            ec.lock();
+            try {
+                EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
+                dbc.lock();
+                try {
+                    channel = dbc.availableChannel().adaptorChannel();
+                    wasOpen = channel.isOpen();
+                    if(!wasOpen) {
+                        channel.openChannel();
+                    }
+                    channel.adaptorContext().beginTransaction();
+                    try {
+                        rows = doPerform(channel);
+                        channel.adaptorContext().commitTransaction();
+                    } catch(RuntimeException ex) {
+                        channel.adaptorContext().rollbackTransaction();
+                        throw ex;
+                    } 
+                } finally {
+                    if(!wasOpen) {
+                        channel.closeChannel();
+                    }
+                    dbc.unlock();
+                }
+            } finally {
+                ec.unlock();
+            }
+            return rows;
+        }
+    }
+
+    /**
+     * Deletes rows described by the qualifier. Note that the values and the qualifier need to be on an attribute 
+     * and not on a relationship level. I.e. you need to give relationshipForeignKey = pk of object instead of 
+     * relatedObject = object
+     * @param ec
+     * @param entityName
+     * @param qualifier
+     */
+    public static int deleteRowsDescribedByQualifier(EOEditingContext ec, String entityName, 
+            final EOQualifier qualifier) {
+        final EOEntity entity = entityNamed(ec, entityName);
+        ChannelAction action = new ChannelAction() {
+            protected int doPerform(EOAdaptorChannel channel) {
+                return channel.deleteRowsDescribedByQualifier(qualifier, entity);
+            }
+        };
+        return action.perform(ec, entity.model().name());
+    }
+
+    /**
+     * Updates rows described by the qualifier. Note that the values and the qualifier need to be on an attribute 
+     * and not on a relationship level. I.e. you need to give relationshipForeignKey = pk of object instead of 
+     * relatedObject = object. The newValues dictionaries also holds foreign keys, not objects.
+     * @param ec
+     * @param entityName
+     * @param qualifier
+     * @param newValues
+     */
+    public static int updateRowsDescribedByQualifier(EOEditingContext ec, String entityName, 
+            final EOQualifier qualifier, final NSDictionary newValues) {
+        final EOEntity entity = entityNamed(ec, entityName);
+        ChannelAction action = new ChannelAction() {
+            protected int doPerform(EOAdaptorChannel channel) {
+                return channel.updateValuesInRowsDescribedByQualifier(newValues, qualifier, entity);
+            }
+        };
+        return action.perform(ec, entity.model().name());
+    }
+
+    /**
+     * Insert row described dictionary. 
+     * @param ec
+     * @param entityName
+     * @param newValues
+     */
+    public static int insertRow(EOEditingContext ec, String entityName, 
+            final NSDictionary newValues) {
+        final EOEntity entity = entityNamed(ec, entityName);
+        ChannelAction action = new ChannelAction() {
+            protected int doPerform(EOAdaptorChannel channel) {
+            	channel.insertRow(newValues, entity);
+                return 1;
+            }
+        };
+        return action.perform(ec, entity.model().name());
+    }
+
+    /**
+     * Insert rows described the array of dictionaries. 
+     * @param ec
+     * @param entityName
+     * @param newValues
+     */
+    public static int insertRows(EOEditingContext ec, String entityName, 
+            final List<NSDictionary> newValues) {
+        final EOEntity entity = entityNamed(ec, entityName);
+        ChannelAction action = new ChannelAction() {
+            protected int doPerform(EOAdaptorChannel channel) {
+            	int insert = 0;
+            	for (NSDictionary dictionary : newValues) {
+                	channel.insertRow(dictionary, entity);
+                	insert++;
+				}
+                return insert;
+            }
+        };
+        return action.perform(ec, entity.model().name());
+    }
+
+    /**
+     * Creates count new primary keys for the entity. 
+     * @param ec
+     * @param entityName
+     * @param count
+     */
+	public static NSArray primaryKeysForNewRows(EOEditingContext ec, String entityName, final int count) {
+		final NSMutableArray result = new NSMutableArray();
+		final EOEntity entity = entityNamed(ec, entityName);
+		ChannelAction action = new ChannelAction() {
+			protected int doPerform(EOAdaptorChannel channel) {
+				NSArray keys = channel.primaryKeysForNewRowsWithEntity(count, entity);
+				result.addObjectsFromArray(keys);
+				return count;
+			}
+		};
+		action.perform(ec, entity.model().name());
+		return result;
+	}
+
+    /**
+	 * Tries to get the plugin name for a JDBC based model.
+	 * 
+	 * @param model
+	 */
+    public static String guessPluginName(EOModel model) {
+        String pluginName = null;
+        // If you don't explicitly set a prototype name, and you don't
+        // declare a preferred databaseConfig,
+        // then attempt to load Wonder-style prototypes with the name
+        // EOJDBC(driverName)Prototypes.
+        if ("JDBC".equals(model.adaptorName())) {
+            NSDictionary connectionDictionary = model.connectionDictionary();
+            if (connectionDictionary != null) {
+            	pluginName = guessPluginNameForConnectionDictionary(connectionDictionary);
+            }
+        }
+        return pluginName;
+    }
+    
+    /**
+     * Tries to get the plugin name for a connection dictionary.
+     * @param connectionDictionary the connectionDictionary to guess a plugin name for
+     * @return the plugin name
+     */
+    public static String guessPluginNameForConnectionDictionary(NSDictionary connectionDictionary) {
+    	String pluginName = null;
+	    String jdbcUrl = (String) connectionDictionary.objectForKey("URL");
+	    if (jdbcUrl != null) {
+	        pluginName = (String) connectionDictionary.objectForKey("plugin");
+	        if (pluginName == null || pluginName.trim().length() == 0) {
+	            pluginName = JDBCPlugIn.plugInNameForURL(jdbcUrl);
+	            if (pluginName == null) {
+	            	// AK: this is a hack that is totally bogus....
+	                int firstColon = jdbcUrl.indexOf(':');
+	                int secondColon = jdbcUrl.indexOf(':', firstColon + 1);
+	                if (firstColon != -1 && secondColon != -1) {
+	                    pluginName = jdbcUrl.substring(firstColon + 1, secondColon);
+	                }
+	            } else {
+	                pluginName = ERXStringUtilities.lastPropertyKeyInKeyPath(pluginName);
+	                pluginName = pluginName.replaceFirst("PlugIn", "");
+	            }
+	        }
+	    }
+        if (pluginName != null && pluginName.trim().length() == 0) {
+          pluginName = null;
+        }
+        return pluginName;
     }
 
     /**

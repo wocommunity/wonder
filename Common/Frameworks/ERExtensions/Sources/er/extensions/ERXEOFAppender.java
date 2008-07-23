@@ -6,12 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import org.apache.log4j.*;
-import org.apache.log4j.spi.*;
+import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.helpers.LogLog;
+import org.apache.log4j.spi.LoggingEvent;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 
 /**
  * Basic log4j EOF Appender<br>
@@ -84,7 +84,7 @@ public class ERXEOFAppender extends AppenderSkeleton {
     protected EOEditingContext editingContext() {
         if (ec == null) {
             if (safeToCreateEditingContext()) {
-                ec = ERXExtensions.newEditingContext();
+                ec = ERXEC.newEditingContext();
             }
         }
         return ec;
@@ -92,7 +92,7 @@ public class ERXEOFAppender extends AppenderSkeleton {
 
     /**
      * Gets the buffer size.
-     * @retrun current buffer size
+     * @return current buffer size
      */
     public int getBufferSize() { return bufferSize; }
 

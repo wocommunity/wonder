@@ -6,18 +6,43 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.Hashtable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 /**
  * <code>ERXThreadStorage</code> provides a way to store objects for
  * a particular thread. This can be especially handy for storing objects
  * like the current actor or the current form name within the scope of
- * a thread handling a particular request.
+ * a thread handling a particular request. <br />
+ * The system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> 
+ * defines if the thread storage can be either inherited by client threads (default)
+ * or get used only by the current thread. 
  */
 public class ERXThreadStorage {
 
     /** Holds the single instance of the thread map. */
-    private static ERXCloneableThreadLocal threadMap = new ERXCloneableThreadLocal();
+    private static ThreadLocal threadMap;
+    
+    static {
+    	if(useInheritableThreadLocal()) {
+    		threadMap = new ERXCloneableThreadLocal();
+    	} else {
+    		threadMap = new ThreadLocal();
+    	}
+    }
+
+    /**
+     * Checks the system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> 
+     * to decide whether to use inheritable thread variables or not.
+     * @return true if set (default)
+     */
+	private static boolean useInheritableThreadLocal() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.useInheritableThreadLocal", true);
+	}
+    
     /** Holds the default initialization value of the hash map. */
     private static int DefaultHashMapSize = 10;
 
@@ -27,8 +52,8 @@ public class ERXThreadStorage {
      * @param key key
      */
     public static void takeValueForKey(Object object, String key) {
-        Map map = storageMap(true);
-        map.put(key, object);
+    	Map map = storageMap(true);
+    	map.put(key, object);
     }
 
     /**
@@ -43,6 +68,27 @@ public class ERXThreadStorage {
     }
 
     /**
+     * Gets the object associated with the keypath in the storage
+     * map off of the current thread.
+     *
+     * @param keyPath key path to be used to retrieve value from map.
+     * @return the value stored in the map for the given key.
+     */
+    public static Object valueForKeyPath(String keyPath) {
+        int dot = keyPath.indexOf(".");
+        Object value = null;
+        if(dot > 1) {
+            value = valueForKey(keyPath.substring(0, dot));
+            if(value != null) {
+                value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, keyPath.substring(dot+1));
+            }
+        } else {
+            value = valueForKey(keyPath);
+        }
+        return value;
+    }
+    
+    /**
      * Gets the object associated with the key in the storage
      * map off of the current thread.
      * @param key key to be used to retrieve value from map.
@@ -50,7 +96,40 @@ public class ERXThreadStorage {
      */
     public static Object valueForKey(String key) {
         Map map = storageMap(false);
-        return map != null ? map.get(key) : null;
+        Object result = null;
+        if(map != null) {
+        	result =  map.get(key);
+        }
+        return result;
+    }
+    
+    
+    /**
+     * Gets the object associated with the key in the storage
+     * map off of the current thread in the given editing context.
+	 * Throws a ClassCastException when the value is not an EO.
+     * @param ec editing context to retrieve the value into
+     * @param key key to be used to retrieve value from map.
+     * @return the value stored in the map for the given key.
+     */
+    public static Object valueForKey(EOEditingContext ec, String key) {
+        Object result = valueForKey(key);
+        if(result != null) {
+            if (result instanceof EOEnterpriseObject) {
+                EOEnterpriseObject eo = (EOEnterpriseObject) result;
+                if(eo.editingContext() != null && eo.editingContext() != ec) {
+                	eo.editingContext().lock();
+                	try {
+                		result = ERXEOControlUtilities.localInstanceOfObject(ec, eo);
+                	} finally {
+                		eo.editingContext().unlock();
+                	}
+                }
+            } else {
+               throw new ClassCastException("Expected EO, got : " + result.getClass().getName() + ", " + result);
+            }
+        }
+        return result;
     }
 
     /**

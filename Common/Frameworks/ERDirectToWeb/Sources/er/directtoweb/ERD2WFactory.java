@@ -107,22 +107,22 @@ public class ERD2WFactory extends D2W {
 
     public EditPageInterface editPageForNewObjectWithEntityNamed(String entityName, WOSession session) {
         EditPageInterface epi = editPageForEntityNamed(entityName, session);
-        EOEditingContext peerContext = ERXExtensions.newEditingContext(session.defaultEditingContext().parentObjectStore());
-	EOEnterpriseObject newObject = _newObjectWithEntity(_entityNamed(entityName, session), peerContext);
-	epi.setObject(newObject);
-	peerContext.hasChanges();
-	return epi;
+        EOEditingContext peerContext = ERXEC.newEditingContext(session.defaultEditingContext().parentObjectStore());
+		EOEnterpriseObject newObject = _newObjectWithEntity(_entityNamed(entityName, session), peerContext);
+		epi.setObject(newObject);
+		peerContext.hasChanges();
+		return epi;
     }
 
     public EditPageInterface editPageForNewObjectWithConfigurationNamed(String configurationName, WOSession session) {
-	EditPageInterface epi = (EditPageInterface) pageForConfigurationNamed(configurationName, session);
-	EOEditingContext peerContext = ERXExtensions.newEditingContext(session.defaultEditingContext()
+		EditPageInterface epi = (EditPageInterface) pageForConfigurationNamed(configurationName, session);
+		EOEditingContext peerContext = ERXEC.newEditingContext(session.defaultEditingContext()
 								       .parentObjectStore());
-	D2WContext d2wcontext = ((D2WPage)epi).d2wContext();
-	EOEnterpriseObject newObject = _newObjectWithEntity(d2wcontext.entity(), peerContext);
-	epi.setObject(newObject);
-	peerContext.hasChanges();
-	return epi;
+								D2WContext d2wcontext = ((D2WPage)epi).d2wContext();
+		EOEnterpriseObject newObject = _newObjectWithEntity(d2wcontext.entity(), peerContext);
+		epi.setObject(newObject);
+		peerContext.hasChanges();
+		return epi;
     }
 
     public WOComponent pageForTaskAndEntityNamed(String task, String entityName, WOSession session) {

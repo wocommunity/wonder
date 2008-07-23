@@ -6,33 +6,41 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
+import java.util.Enumeration;
 
-import java.util.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXSession;
+import er.extensions.ERXConstant;
+import er.extensions.ERXKeyValuePair;
 
 /**
  * Crazy cool component that allows one to select strings (using arrow buttons), and organize them.<br />
  * 
  */
+// CHECKME: this can't ever have worked? Why Strings?
 
 public class ERDListOrganizer extends ERDCustomEditComponent {
 
     public ERDListOrganizer(WOContext context) { super(context); }
     
     /* logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDListOrganizer.class);
+    public static final Logger log = Logger.getLogger(ERDListOrganizer.class);
 
-    protected String availableObject;
-    protected NSMutableArray selectedObjects;   
+    public ERXKeyValuePair availableObject;
+    public NSMutableArray selectedObjects;   
     public NSMutableArray selectedChosenObjects;
     public NSArray chosenObjects;
-    public Object chosenObject;    
-    protected String chosenKeyPaths;
+    public ERXKeyValuePair chosenObject;    
+    public String chosenKeyPaths;
     public String entityForReportName;
 
     private final static String DASH="-";
@@ -58,13 +66,11 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
     public NSArray availableElements() {
         if(log.isDebugEnabled())
             log.debug("availableElements = "
-                      +ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(key()+"Available"),
-                                                                     entityForReportName,
-                                                                     ERXLocalizer.localizerForSession(session()).language()));
+                    +ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(key()+"Available"),
+                            entityForReportName));
         
         return ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(key()+"Available"),
-                                                             entityForReportName,
-                                                             ERXLocalizer.localizerForSession(session()).language());
+                                                             entityForReportName);
     }
 
     
@@ -78,8 +84,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                 if(log.isDebugEnabled()) log.debug("keyPathsArray = "+keyPathsArray);
                 if(keyPathsArray!=null){
                     chosenObjects = ERDirectToWeb.displayableArrayForKeyPathArray(keyPathsArray,
-                                                                                  entityForReportName,
-                                                                                  ERXLocalizer.localizerForSession(session()).language());
+                                                                                  entityForReportName);
                     if(((ERXSession)session()).browser().isNetscape()) {
                         NSMutableArray tmp = new NSMutableArray();
                         tmp.addObject(DEFAULT_PAIR);

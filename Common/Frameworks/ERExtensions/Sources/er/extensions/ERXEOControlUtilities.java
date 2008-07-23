@@ -873,20 +873,6 @@ public class ERXEOControlUtilities {
         }
         return primaryKey;
     }
-    
-    /**
-     * Returns the decoded global id for an propertylist encoded string representation
-     * of the primary key for a given object.
-     */
-
-    @SuppressWarnings("unchecked")
-	public static EOGlobalID globalIDForString(EOEditingContext ec, String entityName, String string) {
-    	NSDictionary values = primaryKeyDictionaryForString(ec, entityName, string);
-    	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-        NSArray pks = entity.primaryKeyAttributeNames();
-        EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entityName, values.objectsForKeys(pks, null).objects());
-    	return gid;
-    }
 
     /**
      * Returns the propertylist-encoded string representation of the primary key for
@@ -897,6 +883,19 @@ public class ERXEOControlUtilities {
      */
     public static String primaryKeyStringForObject(EOEnterpriseObject eo) {
         return _stringForPrimaryKey(primaryKeyObjectForObject(eo));
+    }
+
+    /**
+     * Returns the propertylist-encoded string representation of the global ID.
+     * @param eo object to get the primary key for.
+     * @return string representation of the primary key of the
+     *		object.
+     */
+    public static String primaryKeyStringForGlobalID(EOKeyGlobalID gid) {
+    	if(gid.keyValuesArray().count() > 1) {
+    		_stringForPrimaryKey(gid.keyValuesArray());
+    	}
+        return _stringForPrimaryKey(gid.keyValuesArray().lastObject());
     }
 
     /**
@@ -961,6 +960,20 @@ public class ERXEOControlUtilities {
     }
     
     /**
+     * Returns the decoded global id for an propertylist encoded string representation
+     * of the primary key for a given object.
+     */
+
+    @SuppressWarnings("unchecked")
+	public static EOGlobalID globalIDForString(EOEditingContext ec, String entityName, String string) {
+    	NSDictionary values = primaryKeyDictionaryForString(ec, entityName, string);
+    	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+        NSArray pks = entity.primaryKeyAttributeNames();
+        EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entityName, values.objectsForKeys(pks, null).objects());
+    	return gid;
+    }
+    
+    /**
      * Returns either the single object the PK consist of or the NSArray of its values if the key is compound.
      * @param eo object to get the primary key for.
      * @return single object or NSArray
@@ -972,7 +985,7 @@ public class ERXEOControlUtilities {
     }
 
     /**
-        * Gives the primary key array for a given enterprise
+     * Gives the primary key array for a given enterprise
      * object. This has the advantage of not firing the
      * fault of the object, unlike the method in
      * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}.
@@ -1280,7 +1293,7 @@ public class ERXEOControlUtilities {
             EOKeyValueQualifier q1 = (EOKeyValueQualifier)q;
             if (q1.value() instanceof EOEnterpriseObject) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)q1.value();
-                if (eo.editingContext() != ec && !ERXExtensions.isNewObject(eo)) {
+                if (eo.editingContext() != ec && !ERXEOControlUtilities.isNewObject(eo)) {
                     eo = EOUtilities.localInstanceOfObject(ec, eo);
                     EOKeyValueQualifier qual = new EOKeyValueQualifier(q1.key(), q1.selector(), eo);
                     return qual;
@@ -1972,5 +1985,4 @@ public class ERXEOControlUtilities {
  	public static void validateUniquenessOf(EOEnterpriseObject eo, String... keys) {
  		validateUniquenessOf(eo, null, keys);
  	}
-
 }

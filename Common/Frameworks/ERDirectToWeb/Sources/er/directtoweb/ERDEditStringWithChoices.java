@@ -6,12 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
 import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXKeyValuePair;
+import er.extensions.ERXLocalizer;
 
 /**
  * Provides a toOne relationship-like component except the value is pushed in as a string.<br />
@@ -24,11 +32,10 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     public ERDEditStringWithChoices(WOContext context) {super(context);}
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDEditStringWithChoices.class);
+    public static final Logger log = Logger.getLogger(ERDEditStringWithChoices.class);
     
     public String entityForReportName;
     public ERXKeyValuePair currentElement;
-    public ERXKeyValuePair selectedElement;
 
     public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
@@ -62,8 +69,11 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
                 String keyForAvailableObjects = key()+"Available";
                 entityForReportName = (String)valueForBinding("entityNameForReport");
                 _availableElements =
-                    ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(keyForAvailableObjects),
-                                                                  entityForReportName, ERXLocalizer.localizerForSession(session()).language());
+                	ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(keyForAvailableObjects),
+                			entityForReportName);
+            }
+            if(_availableElements==null){
+            	_availableElements = NSArray.EmptyArray;
             }
             if(log.isDebugEnabled()) log.debug("availableElements = "+_availableElements);
         }
@@ -74,30 +84,41 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
         super.reset();
         _availableElements = null;
         entityForReportName = null;
-        selectedElement = null;
         currentElement = null;
     }
 
-    public void takeValuesFromRequest(WORequest r, WOContext c) {
-        super.takeValuesFromRequest(r, c);
-        if (selectedElement!=null) {
-            object().takeValueForKey(selectedElement.key(), key());
-        } else {
-            object().takeValueForKey(null, key());
-        }
-    }
-
-    public void appendToResponse(WOResponse r, WOContext c) {
-        String chosenKey = (String)objectPropertyValue();
-        if(log.isDebugEnabled()) log.debug("chosenKey = "+chosenKey);
-        if(chosenKey!=null){
-            for(Enumeration e = availableElements().objectEnumerator(); e.hasMoreElements();){
-                ERXKeyValuePair keyValue = (ERXKeyValuePair)e.nextElement();
-                if(keyValue.key().equals(chosenKey))
-                   selectedElement = keyValue;
+    public ERXKeyValuePair selectedElement() {
+        Object value = objectPropertyValue();
+        ERXKeyValuePair selectedElement = null;
+        for(Enumeration e = availableElements().objectEnumerator(); e.hasMoreElements() && selectedElement == null;) {
+            ERXKeyValuePair current = (ERXKeyValuePair) e.nextElement();
+            if(current.key().equals(value)) {
+                selectedElement = current;
             }
-            if(log.isDebugEnabled()) log.debug("selectedElement = "+selectedElement.key()+" , "+selectedElement.value());
         }
-        super.appendToResponse(r,c);
+        return selectedElement;
     }
+    
+    public void setSelectedElement(Object value) {
+        ERXKeyValuePair kvp  = (ERXKeyValuePair)value;
+        if (kvp!=null) {
+            object().validateTakeValueForKeyPath(kvp.key(), key());
+        } else {
+            object().validateTakeValueForKeyPath(null, key());
+        }
+   }
+
+    /** Extends the parent implementation in order to force validation. */
+    public void takeValuesFromRequest(WORequest r, WOContext c) {
+        super.takeValuesFromRequest(r,c);
+        if (c._wasFormSubmitted()) {
+        	try {
+        		object().validateTakeValueForKeyPath(objectPropertyValue(), key());
+        	} catch (NSValidation.ValidationException e) {
+        		validationFailedWithException(e, objectPropertyValue(), key());
+        	}
+		}
+        
+    }
+    
 }

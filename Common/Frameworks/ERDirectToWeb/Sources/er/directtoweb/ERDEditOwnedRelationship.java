@@ -81,8 +81,8 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
         NSArray result = null;
         if (initialArray != null) {
             localContext=((ERXGenericRecord)object()).isNewObject() ?
-            ERXExtensions.newEditingContext(object().editingContext(), false) :
-            ERXExtensions.newEditingContext(object().editingContext().parentObjectStore());
+            ERXEC.newEditingContext(object().editingContext(), false) :
+            ERXEC.newEditingContext(object().editingContext().parentObjectStore());
             result = EOUtilities.localInstancesOfObjects(localContext, initialArray);
         }
         return result != null ? result : ERXConstant.EmptyArray;
@@ -179,10 +179,10 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             String editConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey("editConfigurationName", eo.entityName());
             epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName, session());
             epi.setNextPage(context().page());
-            if (((er.extensions.ERXGenericRecord)eo).isNewObject())
-                localContext = er.extensions.ERXExtensions.newEditingContext(object().editingContext(), false);
+            if (((ERXGenericRecord)eo).isNewObject())
+                localContext = ERXEC.newEditingContext(object().editingContext(), false);
             else
-                localContext = er.extensions.ERXExtensions.newEditingContext(object().editingContext().parentObjectStore());
+                localContext = ERXEC.newEditingContext(object().editingContext().parentObjectStore());
             epi.setObject(EOUtilities.localInstanceOfObject(localContext, eo));
             localContext.hasChanges();
         }
@@ -243,12 +243,12 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             if (object!=null && !(object.editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator)) {
                 log.warn("Newly created object is in an editing context that will not save to the database");
             }
-            localContext = er.extensions.ERXExtensions.newEditingContext(object.editingContext().parentObjectStore());
+            localContext = ERXEC.newEditingContext(object.editingContext().parentObjectStore());
             if (log.isDebugEnabled()) log.debug("Creating "+entityNameForNewInstances);
             EOEnterpriseObject newEO = cd.createInstanceWithEditingContext(localContext, null);
             localContext.insertObject(newEO);
             // If the object already exists, then hookup the relationship, if not do it after the object is saved.
-            if (!((er.extensions.ERXGenericRecord)object).isNewObject()) {
+            if (!((ERXGenericRecord)object).isNewObject()) {
                 EOEnterpriseObject localEO = EOUtilities.localInstanceOfObject(localContext, object);
                 if (localEO != null)
                     localEO.addObjectToBothSidesOfRelationshipWithKey(newEO, key);

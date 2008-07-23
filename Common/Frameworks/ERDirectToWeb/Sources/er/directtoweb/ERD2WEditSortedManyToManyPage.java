@@ -46,7 +46,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     public String sortedObjects;
 
     public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
-    	EOEditingContext ec = ERXExtensions.newEditingContext(eo.editingContext(), false);  // a non-validating context
+    	EOEditingContext ec = ERXEC.newEditingContext(eo.editingContext(), false);  // a non-validating context
         EOEnterpriseObject newObject=(EOEnterpriseObject)EOUtilities.localInstanceOfObject(ec,eo);
         setObject(newObject);
         _relationshipKey = relationshipKey;

@@ -299,7 +299,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                     standardExceptionPage.setActor(actor());
                     standardExceptionPage.setExtraInfo(extraInfo);
 
-                    EOEditingContext ec = ERXExtensions.newEditingContext();
+                    EOEditingContext ec = ERXEC.newEditingContext();
                     try {
                         ec.lock();
                         String shortExceptionName;

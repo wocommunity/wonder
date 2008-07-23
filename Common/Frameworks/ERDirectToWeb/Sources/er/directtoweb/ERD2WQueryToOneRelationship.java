@@ -30,7 +30,7 @@ public class ERD2WQueryToOneRelationship extends D2WQueryToOneRelationship {
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName=(String)d2wContext().valueForKey("restrictingFetchSpecification");
         if(fetchSpecName != null) {
-            EOEditingContext ec = ERXExtensions.newEditingContext();
+            EOEditingContext ec = ERXEC.newEditingContext();
             EOEntity entity = d2wContext().entity();
             EORelationship relationship = entity.relationshipNamed((String)d2wContext().valueForKey("propertyKey"));
             return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, relationship.destinationEntity().name(),fetchSpecName,null);

@@ -6,15 +6,43 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.directtoweb.ERD2WUtilities;
-import com.webobjects.appserver.*;
-import er.extensions.*;
-import java.util.*;
 import java.net.URL;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ERD2WContext;
+import com.webobjects.directtoweb.KeyValuePath;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
+
+import er.extensions.ERXExtensions;
+import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.ERXConstant;
+import er.extensions.ERXConfigurationManager;
+import er.extensions.ERXFileUtilities;
+import er.extensions.ERXKeyValuePair;
+import er.extensions.ERXPatcher;
+import er.extensions.ERXProperties;
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXLocalizer;
 
 /**
  * Principle class of the ERDirectToWeb framework.
@@ -27,72 +55,77 @@ import java.net.URL;
  * This class also has a bunch of utility methods that are
  * used throughout this framework.
  */
-public class ERDirectToWeb {
+public class ERDirectToWeb extends ERXFrameworkPrincipal {
+
+    public final static Class REQUIRES[] = new Class[] {ERXExtensions.class};
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.ERDirectToWeb");
+    public final static Logger log = Logger.getLogger("er.directtoweb.ERDirectToWeb");
     public final static String D2WDEBUGGING_ENABLED_KEY = "ERDirectToWeb_d2wDebuggingEnabled";
     public final static String D2WDISPLAY_COMPONENTNAMES_KEY = "ERDirectToWeb_displayComponentNames";
     public final static String D2WDISPLAY_PROPERTYKEYS_KEY = "ERDirectToWeb_displayPropertyKeys";
-    public final static ERXLogger debugLog = ERXLogger.getERXLogger("er.directtoweb.ERD2WDebugEnabled");
-    public final static ERXLogger componentNameLog = ERXLogger.getERXLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
-    public final static ERXLogger propertyKeyLog = ERXLogger.getERXLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
-    // Notification Observer
-    public static class Observer {
-        public void didFinishedLaunchingApp(NSNotification n) {
-            ERDirectToWeb.warmUpRuleCache();
-            NSNotificationCenter.defaultCenter().addObserver(this,
-                                                             new NSSelector("resetModel",
-                                                                            ERXConstant.NotificationClassArray),
-                                                             ERXCompilerProxy.CompilerProxyDidCompileClassesNotification,
-                                                             null);
-            NSNotificationCenter.defaultCenter().addObserver(this,
-                                                             new NSSelector("resetModel",
-                                                                            ERXConstant.NotificationClassArray),
-                                                             ERXLocalizer.LocalizationDidResetNotification,
-                                                             null);
-            NSNotificationCenter.defaultCenter().addObserver(this,
-                                                             new NSSelector("sortRules",
-                                                                            ERXConstant.NotificationClassArray),
-                                                             ERD2WModel.WillSortRules,
-                                                             null);
+    public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
+    public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
+    public final static Logger propertyKeyLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
+    
+    static {
+    	setUpFrameworkPrincipalClass (ERDirectToWeb.class);
+    }
+
+    public void finishInitialization() {
+        //fixClasses();
+        ERD2WModel model=ERD2WModel.erDefaultModel();        // force initialization
+    	// NOTE: doing Class.ERD2WModel doesn't seem enough
+    	// to guarantee fire of ERD2WModel's static initializer
+//  	Configures the system for trace rule firing.
+        if(!(D2W.factory() instanceof ERD2WFactory)) {
+        	D2W.setFactory(new ERD2WFactory());
         }
-        public void resetModel(NSNotification n) {
-            ERD2WModel.erDefaultModel().resetModel();
-        }
-        public void sortRules(NSNotification n) {
-            ERD2WModel model = (ERD2WModel)n.object();
-            if(ERD2WModel.erDefaultModel() == model) {
-                URL url = WOApplication.application().resourceManager().pathURLForResourceNamed("d2wClient.d2wmodel", "ERDirectToWeb", null);
-                model.mergePathURL(url);
+    	configureTraceRuleFiringRapidTurnAround();
+    	ERDirectToWeb.warmUpRuleCache();
+        model.checkRules();
+    	NSNotificationCenter.defaultCenter().addObserver(this,
+    	        new NSSelector("resetModel",
+    	                ERXConstant.NotificationClassArray),
+    	                ERXLocalizer.LocalizationDidResetNotification,
+    					null);
+    	NSNotificationCenter.defaultCenter().addObserver(this,
+    			new NSSelector("sortRules",
+    					ERXConstant.NotificationClassArray),
+    					ERD2WModel.WillSortRules,
+    					null);
+    }
+
+    /*
+    private void fixClasses(String oldName, String newName) {
+        NSArray<String> names =  NSBundle.bundleForClass(getClass()).bundleClassNames();
+        for (String name : names) {
+            if(name.startsWith(newName)) {
+                Class clazz = ERXPatcher.classForName(name);
+                name = name.replaceFirst(newName + "(\\.[a-z]+)?", oldName);
+                ERXPatcher.setClassForName(clazz, name);
             }
         }
     }
+
+
+    private void fixClasses() {
+        fixClasses("er.directtoweb", "er.directtoweb.assignments");
+        fixClasses("er.directtoweb", "er.directtoweb.assignments.delayed");
+        fixClasses("er.directtoweb", "er.directtoweb.assignments.defaults");
+    } 
+    */
     
-    private static boolean _isInitialized=false;
-    static {
-        // called implicitely because ERDirectToWeb is the principal class of the framework
-        if (!_isInitialized) {
-            if (log.isDebugEnabled()) log.debug("Initializing framework: ERDirectToWeb");
-            Object o=ERD2WModel.erDefaultModel();        // force initialization
-                                                         // NOTE: doing Class.ERD2WModel doesn't seem enough
-                                                         // to guarantee fire of ERD2WModel's static initializer
-                                                         // Configures the system for trace rule firing.
-            D2W.setFactory(new ERD2WFactory());
-            try {
-                ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-            Observer observer=new Observer();
-            ERXRetainer.retain(observer);
-            NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                             new NSSelector("didFinishedLaunchingApp",
-                                                                            ERXConstant.NotificationClassArray),
-                                                             WOApplication.ApplicationDidFinishLaunchingNotification,
-                                                             null);
-            _isInitialized = true;
-        }
+    public void resetModel(NSNotification n) {
+    	ERD2WModel.erDefaultModel().resetModel();
+    }
+    
+    public void sortRules(NSNotification n) {
+    	ERD2WModel model = (ERD2WModel)n.object();
+    	if(ERD2WModel.erDefaultModel() == model) {
+    		URL url = ERXFileUtilities.pathURLForResourceNamed("d2wClient.d2wmodel", "ERDirectToWeb", null);
+    		model.mergePathURL(url);
+    	}
     }
 
     public static void setD2wDebuggingEnabled(WOSession s, boolean enabled) {
@@ -168,6 +201,7 @@ public class ERDirectToWeb {
      * @param keyArray the NSArray to convert
      * @param startChar the start char
      * @param endChar the end char to check for
+     *
      * @return nested NSMutableArray.
      */
     public static NSMutableArray convertedPropertyKeyArray(NSArray keyArray, char startChar, char endChar) {
@@ -216,9 +250,7 @@ public class ERDirectToWeb {
 
     // This defaults to true.
     public static boolean booleanForKey(D2WContext context, String key) {
-        // FIXME: Should use ERXUtilities.booleanValue
-        Integer i=(Integer)context.valueForKey(key);
-        return i==null || i.intValue()!=0;
+    	return ERXValueUtilities.booleanValue(context.valueForKey(key));
     }
 
     // DELETEME: This is duplicated from ERExtensions
@@ -334,27 +366,27 @@ public class ERDirectToWeb {
     /**
      * Checks the system property <code>er.directtoweb.ERDirectToWeb.shouldRaiseExceptions</code>.
      * @param defaultValue
-     * @return
      */
     public static boolean shouldRaiseException(boolean defaultValue) {
         return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", defaultValue);
     }
     
-    public static String displayNameForPropertyKey(String key, String entityName, String language) {
+    public static synchronized String displayNameForPropertyKey(String key, String entityName) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         d2wContext()._localValues().clear();
         //ERD2WUtilities.resetContextCache(d2wContext());
         d2wContext().setEntity(entity);
         d2wContext().setPropertyKey(key);
-        d2wContext().takeValueForKey(ERXLocalizer.fakeSessionForLanguage(language), "session");
-        return d2wContext().displayNameForProperty();
+        String result = d2wContext().displayNameForProperty();
+        d2wContext()._localValues().clear();
+        return result;
     }
 
     // Needs to be a late init because then it will hook itself up to the correct D2WModel
     private static D2WContext _context;
-    public static D2WContext d2wContext() {
+    private static D2WContext d2wContext() {
         if (_context == null)
-            _context = new D2WContext();
+            _context = ERD2WContext.newContext();
         return _context;
     }
 
@@ -362,10 +394,10 @@ public class ERDirectToWeb {
         return d2wContextValueForKey(key, entityName, null);
     }
 
-    public static Object d2wContextValueForKey(String key, String entityName, NSDictionary extraValuesForContext) {
+    public static synchronized Object  d2wContextValueForKey(String key, String entityName, NSDictionary extraValuesForContext) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         d2wContext()._localValues().clear();
-        //ERD2WUtilities.resetContextCache(d2wContext());
+        // ERD2WUtilities.resetContextCache(d2wContext());
         d2wContext().setEntity(entity);
         if (extraValuesForContext!=null) {
             d2wContext().takeValuesFromDictionary(extraValuesForContext);
@@ -375,7 +407,9 @@ public class ERDirectToWeb {
                 d2wContext().takeValueForKey(extraValuesForContext.objectForKey(k),k);
             }*/
         }
-        return d2wContext().valueForKey(key);
+        Object result = d2wContext().valueForKey(key);
+        d2wContext()._localValues().clear();
+        return result;
     }
 
     
@@ -388,59 +422,52 @@ public class ERDirectToWeb {
         ERD2WModel.erDefaultModel().prepareDataStructures();
     }
 
-    public static ERXLogger trace;
+    public static Logger trace;
 
-    // This enables us to turn trace rule firing on or off at will.
-
-
-    public static class _Observer {
-        public void configureTraceRuleFiring(NSNotification n) {
-            ERDirectToWeb.configureTraceRuleFiring();
-        }
+    public void configureTraceRuleFiring(NSNotification n) {
+        ERDirectToWeb.configureTraceRuleFiring();
     }
 
-    private static boolean _initializedTraceRuleFiring = true;
-    public static void configureTraceRuleFiringRapidTurnAround() {
-        if (!_initializedTraceRuleFiring) {
+    private void configureTraceRuleFiringRapidTurnAround() {
+        if (trace == null) {
             // otherwise not properly initialized
-            trace = ERXLogger.getERXLogger("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
+            trace = Logger.getLogger("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
             // Note: If the configuration file says debug, but the command line parameter doesn't we need to turn
             //   rule tracing on.
             // BOOGIE
-            if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
-                NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
-                NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
-                trace.info("Rule tracing on");
-            }
-            Object observer=new _Observer();
-            ERXRetainer.retain(observer); // has to be retained on the objC side!!
-            NSNotificationCenter.defaultCenter().addObserver(observer,
+            configureTraceRuleFiring();
+            NSNotificationCenter.defaultCenter().addObserver(ERXFrameworkPrincipal.sharedInstance(ERDirectToWeb.class),
                                                              new NSSelector("configureTraceRuleFiring",
                                                                             ERXConstant.NotificationClassArray),
                                                              ERXConfigurationManager.ConfigurationDidChangeNotification,
                                                              null);
-            _initializedTraceRuleFiring = true;
         }
     }
     
     // This is the actual method that turns trace rule firing on and off.
     public static void configureTraceRuleFiring() {
+        //AK: we can trace firing much more fine-grained than the default engine
+        // and also enabling the debug level NSLog spews out a ton of ridiculous 
+        // info about images and the like, so we leave the NSLog alone...
         if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
-            NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
-            NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
+            //NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
+            //NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
             trace.info("Rule tracing on");
         } else if (!trace.isDebugEnabled() && NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
-            NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupRules);
+            //NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupRules);
             trace.info("Rule tracing off");
         }
     }
 
-    public static NSArray displayableArrayForKeyPathArray(NSArray array, String entityForReportName, String language){
-        NSMutableArray result = new NSMutableArray();
-        for(Enumeration e = array.objectEnumerator(); e.hasMoreElements(); ){
-            String key = (String)e.nextElement();
-            result.addObject(new ERXKeyValuePair(key, ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName, language)));
-        }
-        return (NSArray)result;
+    public static NSArray displayableArrayForKeyPathArray(NSArray array, String entityForReportName){
+    	if(array == null) {
+    		return null;
+    	}
+    	NSMutableArray result = new NSMutableArray();
+    	for(Enumeration e = array.objectEnumerator(); e.hasMoreElements(); ){
+    		String key = (String)e.nextElement();
+    		result.addObject(new ERXKeyValuePair(key, ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName)));
+    	}
+    	return (NSArray)result;
     }
 }

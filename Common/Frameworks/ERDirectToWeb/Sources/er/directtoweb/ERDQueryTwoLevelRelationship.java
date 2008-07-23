@@ -80,7 +80,7 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName=(String)valueForBinding("restrictingFetchSpecification");
         if(fetchSpecName != null &&  fetchSpecName.length()>0) {
-            EOEditingContext ec = ERXExtensions.newEditingContext();
+            EOEditingContext ec = ERXEC.newEditingContext();
             return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, (String)valueForBinding("destinationEntityName"),fetchSpecName,null);
         }
         return null;

@@ -8,70 +8,193 @@
 # Remove the leading '#' to uncomment a property
 
 #########################################################################
-# Compiler Proxy
+# ERXProperties
 #########################################################################
-er.extensions.ERXCompilerProxyEnabled = false
-CPRaiseOnError = false
+## Retain default value
+# er.extensions.ERXProperties.RetainDefaultsEnabled = true
+
+## Allows you to specify more config files (good luck:)
+# er.extensions.ERXProperties.OptionalConfigurationFiles = (/more/files)
 
 #########################################################################
 # Localizer
 #########################################################################
+
+## Is localization enabled (as a lot of the components are already localized, it's
+## kind of mandatory now to turn it on)
 er.extensions.ERXLocalizer.isLocalizationEnabled = true
 
+## The order in which localized files are searched (first entry wins)
 er.extensions.ERXLocalizer.frameworkSearchPath = (app,ERDirectToWeb,ERExtensions)
 
+## Which files to search
 er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","ValidationTemplate.strings")
 
+## The default language for localization. This gets chosen if the request 
+## languages array results in no match.
 er.extensions.ERXLocalizer.defaultLanguage = English
+
+## Currently supported languages
 er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
-#er.extensions.ERXLocalizer.availableLanguages = (English,German,French,Norwegian,Japanese)
 
-#er.extensions.ERXLocalizer.pluralFormClassName = er.extensions.ERXLocalizer
-#er.extensions.ERXLocalizer.nonPluralFormClassName = er.extensions.ERXNonPluralFormLocalizer
+## We actually support a lot of other languages, but they are probably not maintained
+# er.extensions.ERXLocalizer.availableLanguages = (English,German,French,Norwegian,Japanese,Italian)
 
-#er.extensions.WOToManyRelationship.localizeDisplayKeysDefault = true
-#er.extensions.WOToOneRelationship.localizeDisplayKeysDefault = true
+## These should go away. It's special handling for Japanese, but would be
+## better refactored into a general pluralizing strategy
+# er.extensions.ERXLocalizer.pluralFormClassName = er.extensions.localization.ERXLocalizer
+# er.extensions.ERXLocalizer.nonPluralFormClassName = er.extensions.localization.ERXNonPluralFormLocalizer
+
+## Components that use ERXToOne/ManyRelationship can have localized display keys
+## This can be specified on a per-component basis in the bindings, 
+## but here's the default value
+# er.extensions.ERXArrayChooser.localizeDisplayKeysDefault = false
+
+## This tells ERXWOString/ERXWOText to use localized 
+## formatters. 
+# er.extensions.ERXLocalizer.useLocalizedFormatters = true
+
+## Which characters to ignore when formatting
+# er.extensions.ERXNumberFormatter.ignoredChars=$%
+
+## Allows you to override the locale for a language
+# er.extensions.ERXLocalizer.German.locale = de
+
+## Fallback to localized value in default language when key is not found for current language.
+## Default is false.
+# er.extensions.ERXLocalizer.fallbackToDefaultLanguage = false
+
+## Components that use ERXToOne/ManyRelationship include missing items when using a possibleChoice
+## This can be specified on a per-component basis in the bindings, 
+## but here's the default value
+# er.extensions.ERXArrayChooser.includeUnmatchedValuesDefault = false
+
+## Components that use ERXToOne/ManyRelationship can sort case 
+## sensitive or insensitive
+## This can be specified on a per-component basis in the bindings, 
+## but here's the default value
+# er.extensions.ERXArrayChooser.sortCaseInsensitive = false
+
+## If using EO localization, this will cause ERXGenericRecord to look for data
+## in the attribute for the default language if the data for the current langage is 
+## null or an empty string. Only works for reads from the attribute not writes 
+## (valueForKey vs. takeValueForKey).
+# er.extensions.ERXGenericRecord.localizationShouldFallbackToDefaultLanguage = true
 
 #########################################################################
-# Encoding
+# Request and Encoding
 #########################################################################
-# Can specify the default message encoding. Defaults to ISO Latin 1
-# Accepted encodings: http://java.sun.com/j2se/1.3/docs/guide/intl/encoding.doc.html
-#er.extensions.ERXApplication.DefaultMessageEncoding=ISO8859_1
+## This is the one-stop-shop for setting the default encoding everywhere.
+## When in doubt, set this one.
+# er.extensions.ERXApplication.DefaultEncoding=UTF-8
+
+## Can specify the default message encoding. Defaults to ISO Latin 1
+## Accepted encodings: http://java.sun.com/j2se/1.3/docs/guide/intl/encoding.doc.html
+## This is a subset of er.extensions.ERXApplication.DefaultEncoding.
+# er.extensions.ERXApplication.DefaultMessageEncoding=ISO8859_1
+
 er.extensions.ERXMessageEncoding.Enabled=true
-#er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled=true
+
+## If true, the browser's form value encoding is set, it will override
+## your application encoding for a given request.
+# er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled=true
+
+## If true, all https:// URL generation will be disabled and converted
+## into http:// URLs. If you are running in DirectConnct, this will 
+## allow you to specify secure forms and links without actually having
+## to setup SSL. 
+# er.extensions.ERXRequest.secureDisabled=false
 
 #########################################################################
 # Enterprise Object
-#########################################################################
+##########################################################################
+## Specifies if wrong values can stay in the EO after property-level validation failed
+## This is  save as validateForSave will still fail.
+# er.extensions.ERXValidationShouldPushChangesToObject = true
+
+## ERXGenericRecord and ERXCustomObject's didXXX() rely on a proper EC delegate 
 er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
-#er.extensions.ERXClassDescription.factoryClass = 
-#EOEditingContextDefaultFetchTimestampLag = 3600000
+
+## You can specify a factory class that creates the actual class description 
+## before anyone sees them. Useful for model-munging or checking 
+## (eg. TIMESTAMPS with Mysql)
+# er.extensions.ERXClassDescription.factoryClass = 
+
+## Specifies if not-null fields should result in mandatory relationships
+## As this is probably a model error, you should turn it on but fix your model
+# er.extensions.ERXEntityClassDescription.isFixingRelationshipsEnabled=true
+
+## rather experimental feature that should allow you to change your model at runtime
+## in EOModeler and see the changes immediately
+# er.extensions.ERXEntityClassDescription.isRapidTurnaroundEnabled
+
+## Default class to use when "EOGenericRecord" is used in the model. 
+# er.extensions.ERXEntityClassDescription.defaultClassName = er.extensions.eof.ERXGenericRecord
+## AK: Beats me if I know why this is useful...
+# er.extensions.ERXEntityClassDescription.SomeEntityName.ClassName = Foo
+
+## EOEditingContext.setDefaultFetchTimestampLag() as a property
+# EOEditingContextDefaultFetchTimestampLag = 3600000
+
+## Specifies if inverse relationships are automagically updated
+# er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
+
+## Specifies that you want restricting qualifiers "applied" to your newly
+## inserted objects.  For instance, if you have an entity that is part of
+## single table inheritance and your restricting qualifier only uses 
+## EOAndQualifiers and EOKeyValueQualifiers, ERX can interpret the qualifier
+## and make your EO's automatically match the restricting qualifier.  This
+## allows you to skip the awakeFromInsertion step where you have to remember
+## to make your EO match the restricting qualifier you chose in your model. 
+# er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
+
+## Specifies if the string attributes are trimmed before sending to the DB
+# er.extensions.ERXGenericRecord.shouldTrimSpaces = true
+# er.extensions.ERXCustomObject.shouldTrimSpaces = true
+
+## Whether to use Validity when validating (NOTE: MOVE this to ERXEntityClassDescription)
+# er.extensions.ERXGenericRecord.useValidity = true
+# er.extensions.ERXCustomObject.useValidity = true
+
+## Padding for ERXInQualifier
+# er.extensions.ERXInQualifier.DefaultPadToSize = 8
+
+## Number of OSCs to use.
+# er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators = 0
 
 #########################################################################
-# Cryptgraphy
+# ERXEOEncodingUtilities
 #########################################################################
-ERBlowfishCipherKey = DefaultBlowfishCipherKey
-#er.extensions.ERXBlowfishCipherKey = DefaultBlowfishCipherKey
+# Which separator to use
+# er.extensions.ERXEOEncodingUtilities.EntityNameSeparator = _
+# Allow overrides in URL
+# er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL = true
+
+#########################################################################
+# Cryptography
+#########################################################################
+## If you use ERXCrypto (or ERXGenericRecord.encryptedPrimaryKey)
+## You should set this value to your own password in your app
+# er.extensions.ERXBlowfishCipherKey = DefaultCipherKey
 
 #########################################################################
 # Browser
 #########################################################################
-#er.extensions.ERXBrowserFactory.FactoryClassName=er.extensions.ERXBrowserFactory
-#er.extensions.ERXBrowserFactory.BrowserClassName=er.extensions.ERXBasicBrowser
+## User-agent sniffing stuff
+# er.extensions.ERXBrowserFactory.FactoryClassName=er.extensions.ERXBrowserFactory
+# er.extensions.ERXBrowserFactory.BrowserClassName=er.extensions.ERXBasicBrowser
 
 #########################################################################
 # Direct Action 
 #########################################################################
-# Direct Action Passwords
-#er.extensions.ERXJUnitPassword = pw
-#er.extensions.ERXLog4JPassword = pw
-#er.extensions.ERXDirectAction.ChangeSystemPropertyPassword = pw
-#########################################################################
-# Log4j Configuration
-#########################################################################
-# Don't change this
-log4j.loggerFactory = er.extensions.ERXLogger$Factory
+## Direct Action Passwords. CHANGE THESE IN DEPLOYMENT!!
+# er.extensions.ERXJUnitPassword = pw
+# er.extensions.ERXLog4JPassword = pw
+# er.extensions.ERXGCPassword = pw
+# er.extensions.ERXDirectAction.ChangeSystemPropertyPassword = pw
+# er.extensions.ERXRemoteShellPassword = pw
+# er.extensions.ERXDatabaseConsolePassword = pw
+# er.extensions.ERXOpenEditingContextLockTracesPassword = pw
 
 #########################################################################
 # Signal Handling
@@ -84,6 +207,7 @@ er.extensions.ERXGracefulShutdown.SignalsToHandle=(TERM, INT)
 # Navigation 
 #########################################################################
 er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist
+er.extensions.ERXNavigationManager.localizeDisplayKeys = false
 
 #########################################################################
 # Shared EO loading patching 
@@ -93,38 +217,114 @@ er.extensions.ERXSharedEOLoader.PatchSharedEOLoading=false
 #########################################################################
 # ERXPatcher 
 #########################################################################
+## Set to true if you need XHTML from the dynamic elements. Note that this can
+## slow down your app
 er.extensions.ERXPatcher.cleanupXHTML=false
 
 #########################################################################
 # ERXComponentActionRedirector 
 #########################################################################
-# decides if the component actions should get redirected to a DA automatically
-# this is experimental
+## decides if the component actions should get redirected to a DA automatically,
+## thus making the app bookmarkable. This is rather experimental.
 er.extensions.ERXComponentActionRedirector.enabled=false
+
+#########################################################################
+# ERXJDBCAdaptor 
+#########################################################################
+## Class name to use instead of the JDBCAdaptor, the ERXJDBCAdaptor supports
+## connection pooling
+# er.extensions.ERXJDBCAdaptor.className=er.extensions.jdbc.ERXJDBCAdaptor
+
+## Makes the JDBCAdaptor use the connection broker, so that many
+## OSCs use only a few DB channels.
+# er.extensions.ERXJDBCAdaptor.useConnectionBroker = true
+
+## Enable JDBC connection used by EOF are switched to read only or read write 
+## depending on the database operation. This can speed up database queries because a read only
+## connection produces less overhead in a transaction based database.
+## This is only used when the JDBCAdaptor is used in the first place
+# er.extensions.ERXJDBCAdaptor.switchReadWrite=false
+#
+#########################################################################
+# ERXAdaptorChannelDelegate 
+#########################################################################
+## Enable delegate to emit SQL debugging info. The Logger used is
+## log4j.category.er.extensions.ERXAdaptorChannelDelegate.sqlLogging
+# er.extensions.ERXAdaptorChannelDelegate.enabled=false
+
+## How long a statement must run to cause a log message. Messages with longer than
+## error also emit a stack-trace
+# er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.debug=0
+# er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.info=100
+# er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.warn=1000
+# er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.error=5000
+
+## MaxLength of the message
+# er.extensions.ERXAdaptorChannelDelegate.trace.maxLength = 3000
+
+## What entities to watch
+# er.extensions.ERXAdaptorChannelDelegate.trace.entityMatchPattern = .*
+
+## Collect last x statements to dump them at a later time (if you don't set this, defaults to false and 10)
+# er.extensions.ERXSQLExpressionTracker.collectLastStatements = false
+# er.extensions.ERXSQLExpressionTracker.numberOfStatementsToCollect = 10
+
+
+#########################################################################
+# ERXDatabaseContext
+#########################################################################
+## Defines the DBC class
+# er.extensions.ERXDatabaseContext.className = er.extensions.eof.ERXDatabaseContext
+
+## but only if it is activated or remote syncing is on
+# er.extensions.ERXDatabaseContext.activate = true
 
 #########################################################################
 # ERXDatabaseContextDelegate 
 #########################################################################
-er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties=
-er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties=
+## Instead of throwing an exception, you can define which entities
+## only log an error. Default is unset.
+# er.extensions.ERXDatabaseContextDelegate.tolerantEntityPattern = ^(Entity1|Entity3)$
 
 #########################################################################
 # ERXEC 
 #########################################################################
-# decides if new ECs use the shared editing context
-er.extensions.ERXEC.useSharedEditingContext=true
+## decides if new ECs use the shared editing context
+# er.extensions.ERXEC.useSharedEditingContext=true
+
+## Specifies if new ECs should lock/unlock automatically. Use with care...
+# er.extensions.ERXEC.defaultAutomaticLockUnlock = true
 
 #########################################################################
 # ERXApplication 
 #########################################################################
-# decides if locked editing contexts should be unlocked after the RR-loop.
-er.extensions.ERXApplication.useEditingContextUnlocker=false
+## decides if locked editing contexts should be unlocked after the RR-loop.
+## If you use D2W, it is *strongly* recommended to enable this feature!
+# er.extensions.ERXApplication.useEditingContextUnlocker=false
 
-# decides if the session store deadlock detection (session can't get 
-# checked out because it already was) should be enabled. This is useful 
-# for debugging, experimental and doesn't work when concurrent request
-# handling is enabled
-er.extensions.ERXApplication.useSessionStoreDeadlockDetection=false
+## When true, ERXEC's will generate a stack trace when lock is called that
+## can later be accessed via .openLockTrace() or the showOpenEditingContextLockTraces
+## ERXDirectAction.  Defaults to false.
+# er.extensions.ERXApplication.traceOpenEditingContextLocks = true
+
+## decides if the session store deadlock detection (session can't get 
+## checked out because it already was) should be enabled. This is useful 
+## for debugging, experimental and doesn't work when concurrent request
+## handling is enabled
+# er.extensions.ERXApplication.useSessionStoreDeadlockDetection=false
+
+## Base directory for statistics logging
+# er.extensions.ERXApplication.StatisticsBaseLogPath = 
+## When the logs get rotated [24 hours in ms]
+# er.extensions.ERXApplication.StatisticsLogRotationFrequency = 86400000 
+
+## When set, starts refusing new session once memory is filled up to this 
+## threshold, which results in a more responsive app. If mem comes available again
+## the app again starts to accept new session.
+# er.extensions.ERXApplication.memoryThreshold=0.90
+
+## Enable reponse compression when user agent accepts gzip
+# er.extensions.ERXApplication.responseCompressionEnabled = true
 
 ### run control
 # time in seconds in how long the app should stay alive
@@ -133,3 +333,83 @@ er.extensions.ERXApplication.useSessionStoreDeadlockDetection=false
 # ERTimeToDie=180000
 # time in seconds in which to kill the app after starting to refuse new sessions
 # ERTimeToKill=1800
+
+## Handling of low memory conditions. Reserve X KB to keep as last-ditch reserve
+## and post a notification to release cache memory. Default is 0, meaning no reserve.
+# er.extensions.ERXApplication.lowMemBufferSize=1024
+
+## If you want to rewrite your application URLs from /cgi-bin/WebObjects/YourApp.woa to
+## /yourapp, you can set the following properties and add the apache rewrite rule:
+## Apache 2.2:
+## RewriteRule ^/yourapp(.*)$ /cgi-bin/WebObjects/YourApp.woa$1 [PT,L]
+## Apache 1.3:
+## RewriteRule ^/yourapp(.*)$ /cgi-bin/WebObjects/YourApp.woa$1 [P,L]
+# er.extensions.ERXApplication.replaceApplicationPath.pattern=/cgi-bin/WebObjects/YourApp.woa
+# er.extensions.ERXApplication.replaceApplicationPath.replace=/yourapp
+
+#########################################################################
+# ERXJDBCConnectionBroker 
+#########################################################################
+# the minimum number of JDBC connections to use
+dbMinConnectionsGLOBAL=1
+
+# the maximum number of JDBC connections to use
+# keep in mind that each connection requires an open file
+# this means your UNIX process which is running the JVM from 
+# your application must be able to use a lot of open files. 
+# see ulimit to understand how to change the default settings
+# dbMaxConnectionsGLOBAL=5
+
+# time how long a JDBC connection should be reused
+# value is in days
+# dbConnectionRecycleGLOBAL=1.0
+
+# time in seconds how long a request may use a connection
+# in this case a download may not take longer than 3 days
+# value is in seconds
+# dbMaxCheckoutGLOBAL=86400
+
+# debug level for the Connection Pooling, 0 - 3
+# dbDebugLevelGLOBAL=1
+
+# if enabled all connections used by the broker are used
+# every er.extensions.ERXJDBCConnectionBroker.connectionPingInterval seconds
+# this is very useful if a firewall between the appserver and the database
+# kill sockets after a certain time of inactivity and the app is not used 
+# a lot.
+# er.extensions.ERXJDBCConnectionBroker.connectionPingEnabled=false
+# er.extensions.ERXJDBCConnectionBroker.connectionPingInterval=300
+# er.extensions.ERXJDBCConnectionBroker.connectionPingSQL=select 1+1;
+
+#########################################################################
+# ERXLongPrimaryKeyFactory 
+#########################################################################
+# if set to true the following conventions are mandatory:
+# 1) all entities must have only one PK value whose external type is 
+#    comparable to java.lang.Long, for example int8 with Postgresql
+# er.extensions.ERXLongPrimaryKeyFactory.encodeEntityInPkValue=false
+# if set to true then the next property must have a unique value for each host
+# if you want to use synchronization features
+# er.extensions.ERXLongPrimaryKeyFactory.encodeHostInPkValue=false
+# er.extensions.ERXLongPrimaryKeyFactory.hostCode=a value between 0 and 2<<10
+
+## the amount of keys to cache
+# er.extensions.ERXLongPrimaryKeyFactory.increaseBy = 1000
+
+#########################################################################
+# ERXWOResponseCache 
+#########################################################################
+## Enable response caching
+# er.extensions.ERXWOResponseCache.Enabled = true
+
+#########################################################################
+# ERXThreadStorage 
+#########################################################################
+## Define if child threads inherit the variables of the parent or not
+# er.extensions.ERXThreadStorage.useInheritableThreadLocal = false
+
+#########################################################################
+# ERXModelGroup 
+#########################################################################
+## Name of the prototypes entity to use. Case insensitive. 
+# er.extensions.ERXModelGroup.prototypeModelName=erprototypes

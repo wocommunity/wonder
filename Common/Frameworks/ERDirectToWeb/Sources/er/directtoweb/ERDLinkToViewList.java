@@ -48,7 +48,7 @@ public class ERDLinkToViewList extends ERDCustomEditComponent {
         ListPageInterface ipi = (ListPageInterface)D2W.factory().pageForConfigurationNamed((String)valueForBinding("listPageConfigurationName"),
                                                                                            session());
         ipi.setNextPage(context().page());
-        ipi.setDataSource(ERXExtensions.dataSourceForArray(list()));
+        ipi.setDataSource(ERXEOControlUtilities.dataSourceForArray(list()));
         return (WOComponent)ipi;
     }
 

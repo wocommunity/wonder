@@ -43,7 +43,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * for a client-side class could then be easily switched to use the server-side EOUtilites
  * implementation.
  */
-public class EOEnterpriseObjectClazz {
+public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     /**
      * logging support
      */
@@ -166,7 +166,6 @@ public class EOEnterpriseObjectClazz {
      * that takes an entity name. Also useful when you don't have a special
      * clazz defined for your entity, but would rather take one from a superclass.
      * @param entityName
-     * @return
      */
     public EOEnterpriseObjectClazz init(String entityName) {
     	setEntityName(entityName);
@@ -184,7 +183,6 @@ public class EOEnterpriseObjectClazz {
     /**
      * Utility to return a new array datasource
      * @param ec
-     * @return
      */
     public EOArrayDataSource newArrayDataSource(EOEditingContext ec) {
     	return new EOArrayDataSource(classDescription(), ec);
@@ -193,7 +191,6 @@ public class EOEnterpriseObjectClazz {
     /**
      * Utility to return a new database datasource
      * @param ec
-     * @return
      */
      public EODatabaseDataSource newDatabaseDataSource(EOEditingContext ec) {
     	return new EODatabaseDataSource(ec, entityName());
@@ -230,8 +227,8 @@ public class EOEnterpriseObjectClazz {
      * @param ec an editing context
      * @return newly created and inserted object
      */
-    public EOEnterpriseObject createAndInsertObject(EOEditingContext ec) {
-        EOEnterpriseObject eo = ERXEOControlUtilities.createAndInsertObject(ec,entityName());
+    public T createAndInsertObject(EOEditingContext ec) {
+        T eo = (T) ERXEOControlUtilities.createAndInsertObject(ec,entityName());
         return eo;
     }
 
@@ -272,8 +269,8 @@ public class EOEnterpriseObjectClazz {
      * @param dict raw row dictionary
      * @return enterprise object for the raw row
      */
-    public EOEnterpriseObject objectFromRawRow(EOEditingContext ec, NSDictionary dict) {
-        return EOUtilities.objectFromRawRow(ec, entityNameFromRawRow(ec, dict), dict);
+    public T objectFromRawRow(EOEditingContext ec, NSDictionary dict) {
+        return (T) EOUtilities.objectFromRawRow(ec, entityNameFromRawRow(ec, dict), dict);
     }
 
     /**
@@ -310,18 +307,19 @@ public class EOEnterpriseObjectClazz {
      * @param pk primary key value. Compound primary keys are given as NSDictionaries.
      * @return enterprise object for the specified primary key value.
      */
-    public EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec, Object pk) {
-        return ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk, null);
+    public T objectWithPrimaryKeyValue(EOEditingContext ec, Object pk) {
+        return (T) ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk, null);
     }
 
     /**
-     * Fetches all of the objects matching the given qualifer
+     * Fetches all of the objects matching the given qualifier
      * format corresponding to the clazz's entity using the
      * given editing context.
+     *
      * @param ec editing context
      * @param qualifier qualifier string
      * @param args qualifier format arguments
-     * @param qualifier format string
+     *
      * @return array of objects corresponding to the passed in parameters.
      */
     public NSArray objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {
@@ -443,6 +441,15 @@ public class EOEnterpriseObjectClazz {
     }
 
     /**
+     * Creates a fetch spec for the entity.
+     * @return fetch specification for the given name and the clazz's entity 
+     *     name
+     */
+    /*public ERXFetchSpecification<T> createFetchSpecification(EOQualifier qualifier, NSArray sortings) {
+        return new ERXFetchSpecification(entityName(), qualifier, sortings);
+    }*/
+
+    /**
      * Filters an array with a given fetch spec.
      * @param array
      * @param spec
@@ -481,8 +488,8 @@ public class EOEnterpriseObjectClazz {
      * @param qualifier to find the matching objects
      * @return number of matching objects
      */
-    public Integer objectCountWithQualifier(EOEditingContext ec, EOQualifier qualifier) {
-    	return (Integer) ERXEOControlUtilities._aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName(), qualifier, EOEnterpriseObjectClazz.objectCountAttribute());
+    public Number objectCountWithQualifier(EOEditingContext ec, EOQualifier qualifier) {
+    	return (Number) ERXEOControlUtilities._aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName(), qualifier, EOEnterpriseObjectClazz.objectCountAttribute());
     }
 
     /**
@@ -498,7 +505,7 @@ public class EOEnterpriseObjectClazz {
      * @return number of objects matching the given fetch  specification and
      *     bindings
      */
-    public Integer objectCountWithFetchSpecificationAndBindings(EOEditingContext ec, String fetchSpecName,  NSDictionary bindings) {
+    public Number objectCountWithFetchSpecificationAndBindings(EOEditingContext ec, String fetchSpecName,  NSDictionary bindings) {
         EOFetchSpecification unboundFetchSpec;
         EOFetchSpecification boundFetchSpec;
 

@@ -387,8 +387,10 @@ There are many ways to use this script:
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
                 <include name="**/*.jpg" />
+                <include name="**/*.png" />
                 <include name="**/*.js" />
                 <include name="**/*.css" />
+                <include name="**/*.htc" />
                 <include name="**/*.html" />
             </wsresources>
         </woframework>
@@ -442,8 +444,10 @@ There are many ways to use this script:
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
                 <include name="**/*.jpg" />
+                <include name="**/*.png" />
                 <include name="**/*.js" />
                 <include name="**/*.css" />
+                <include name="**/*.htc" />
                 <include name="**/*.html" />
             </wsresources>
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 

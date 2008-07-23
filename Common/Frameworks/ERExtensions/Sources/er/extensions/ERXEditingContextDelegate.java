@@ -6,6 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStore;
+
 /**
  * This delegate does nothing. It is used to
  * make the environment happy in that some
@@ -16,11 +21,62 @@ package er.extensions;
  * delegate that is used is {@link ERXDefaultEditingContextDelegate}.
  */
 public class ERXEditingContextDelegate extends Object implements java.io.Serializable {
+    /** general logging support */
+    public static final Logger log = Logger
+            .getLogger(ERXEditingContextDelegate.class);
 
     /**
      * No arg constructor for Serializable.
      */
     public ERXEditingContextDelegate() {}
+
+    /**
+     * By default, and this should change in the future, all editing contexts that
+     * are created and use ERXGenericRecords or subclasses need to have a delegate
+     * set of instance {@link ERXEditingContextDelegate}. These delegates provide
+     * the augmentation to the regular transaction mechanism, all of the will* methods
+     * plus the flushCaching method. To change the default behaviour set the property:
+     * <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b> to false in your
+     * WebObjects.properties file. This method is called when an object is fetched,
+     * updated or inserted.
+     * @param editingContext to check for the correct delegate.
+     * @return if the editing context has the correct delegate set.
+     */
+    public static boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
+        if(editingContext instanceof ERXEC) {
+            return true;
+        }
+        Object delegate=editingContext.delegate();
+        boolean _raiseOnMissingEditingContextDelegate = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
+        if (delegate==null) {
+            EOObjectStore parent = editingContext.parentObjectStore();
+            if(!_raiseOnMissingEditingContextDelegate && parent != null && parent instanceof EOEditingContext) {
+                Object parentDelegate=((EOEditingContext)parent).delegate();
+                if(parentDelegate != null && (parentDelegate instanceof ERXEditingContextDelegate)) {
+                    editingContext.setDelegate(parentDelegate);
+                    log.info("Found null delegate. Setting to the parent's delegate.");
+                    return true;
+                }
+            }
+            if(!_raiseOnMissingEditingContextDelegate) {
+                log.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
+                ERXEC.factory().setDefaultDelegateOnEditingContext(editingContext);
+                return true;
+            } else {
+                throw new IllegalStateException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
+            }
+        }
+        if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
+            if(!_raiseOnMissingEditingContextDelegate) {
+                log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
+                return true;
+            } else {
+                throw new IllegalStateException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
+            }
+        }
+        return false;
+        
+    }
     
 }
 

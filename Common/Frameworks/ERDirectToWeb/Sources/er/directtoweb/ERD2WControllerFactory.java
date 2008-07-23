@@ -58,7 +58,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
         try {
             String controllerClassName = (String)d2wContext.valueForKey("controllerClassName");
             if(controllerClassName != null)
-                c = (ERD2WController)ERXCompilerProxy.defaultProxy().classForName(controllerClassName).newInstance();
+                c = (ERD2WController)ERXPatcher.classForName(controllerClassName).newInstance();
         } catch(Exception ex) {
             throw new NSForwardException(ex);
         }

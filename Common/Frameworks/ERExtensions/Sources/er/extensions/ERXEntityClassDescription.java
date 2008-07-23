@@ -180,15 +180,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             _entitiesForClass = new NSMutableDictionary();
         }
 
-        /**
-         * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter} 
-         * when an ERXCompilerProxy did reset.
-         */
-        public void compilerProxyDidCompileClasses(NSNotification n) {
-            log.debug("CompilerProxyDidCompileClasses: " + n);
-            reset();
-        }
-
         private static Boolean _isRapidTurnaroundEnabled;
         public boolean isRapidTurnaroundEnabled() {
             if(_isRapidTurnaroundEnabled == null) {
@@ -555,7 +546,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("applicationDidFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
             NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("classDescriptionNeededForEntityName", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
             NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("classDescriptionNeededForClass", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForClassNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("compilerProxyDidCompileClasses", new Class[] { NSNotification.class } ), ERXCompilerProxy.CompilerProxyDidCompileClassesNotification, null);
             _registered = true;
         }
     }
