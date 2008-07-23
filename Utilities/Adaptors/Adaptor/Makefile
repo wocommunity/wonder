@@ -16,4 +16,6 @@ all:
 
 clean:
 	rm -f make.preamble make.postamble
+	rm -f *.o *.lo *.slo
+	rm -rf .libs
 

@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -27,7 +27,7 @@ and limitations under the License.
 #ifndef _XMLC_8BITCHAR_
 typedef short unsigned int 	XMLCCharacter;
 #else /* _XMLC_8BITCHAR_ */
-typedef unsigned char 	XMLCCharacter;
+typedef char 	XMLCCharacter;
 #endif /* _XMLC_8BITCHAR_ */
 typedef unsigned long 	XMLCUInt;
 typedef unsigned long 	XMLCEncoding;

@@ -9,7 +9,7 @@
                 dormant=NUMBER
                 protocol="http"
                 redir=URL
-                poolSize=NUMBER
+                poolsize=NUMBER
                 urlVersion=["3"|"4"]
                 additionalArgs="unspecified"
         >
@@ -44,7 +44,7 @@ Attributes:
         timeout, in seconds, before reporting a failed recv() from an instance
     cnctTimeout=NUMBER
         timeout, in seconds, before reporting a failed connect() to an instance
-    poolSize=NUMBER
+    poolsize=NUMBER
         number of persistent connections to maintain with an instance
     urlVersion=["3"|"4"]
         the WebObjects version to use for URL parsing and formatting

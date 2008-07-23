@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -126,10 +126,10 @@ void WOLog_init(const char *logfile, const char *level)
    fd = _lopen(logPath, OF_WRITE| OF_SHARE_COMPAT);
    _lclose(fd);
 #else
-   fd = open(logPath, O_WRONLY, 0666);
+   fd = open(logPath, O_WRONLY, 0644);
    close(fd);		/* create the file if needed */
 #endif
-   chmod(logPath, 0666);
+   chmod(logPath, 0644);
 
    if (level) {
       for (i = WO_DBG; i <= WO_USER; i++) {
@@ -186,7 +186,7 @@ void WOLog(int level, const char *format, ...)
       return;
 
    if (! initialized )
-      WOLog_init(NULL, WOLogLevel[baselevel]);
+	   return;
 
    do_it = shouldLog();
    if ( do_it ) {

@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -124,18 +124,18 @@ struct _strdict;
 struct _list;
 
 typedef struct {
-   void *element;				/* pointer to the element in shared memory */
-   WA_recursiveLock lock;			/* lock for this structure */
-   WA_recursiveLock writeLock;			/* write lock for the element */
-   int lockCount;				/* how many read locks */
-   void *lockHandle;				/* handle for the shared mem lock */
-   struct _strdict *localData;				/* dictionary to store local data associated with the element */
+   void *element;								/* pointer to the element in shared memory */
+   WA_recursiveLock lock;						/* lock for this structure */
+   WA_recursiveLock writeLock;					/* write lock for the element */
+   int lockCount;								/* how many read locks */
+   void *lockHandle;							/* handle for the shared mem lock */
+   struct _strdict *localData;					/* dictionary to store local data associated with the element */
    struct _list *localDataCleanupCallbacks;		/* callbacks to clear out local data */
 } ShmemArrayElement;
 
 struct _ShmemArray {
-   const char *name;				/* name of the array, for debugging logs */
-   size_t elementSize;			/* the size of an element */
+   const char *name;					/* name of the array, for debugging logs */
+   size_t elementSize;					/* the size of an element */
    unsigned int elementCount;			/* number of elements */
    ShmemArrayElement elements[1];		/* array of element descriptors */
 };
