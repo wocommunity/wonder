@@ -37,6 +37,21 @@ public class ERXBatchFetchUtilities {
     }
 
 	/**
+	 * Batch key the list of keys from the given source objects. No backwards compatibility 
+	 * here, so skipFaultedSourceObject is true.
+	 * 
+     * @param sourceObjects the array of source object to fault keypaths on.
+     * @param keys the array of ERXKeys to fault
+	 */
+    public static void batchFetch(NSArray<? extends EOEnterpriseObject> sourceObjects, ERXKey<?>... keys) {
+    	NSMutableArray<String> keypaths = new NSMutableArray<String>();
+    	for (ERXKey<?> key : keys) {
+    		keypaths.addObject(key.key());
+    	}
+    	ERXBatchFetchUtilities.batchFetch(sourceObjects, keypaths, true);
+    }
+
+	/**
 	 * Shortcut for batch fetching a single source object
 	 * @see batchFetch(NSArray, NSArray, boolean)
 	 * 
