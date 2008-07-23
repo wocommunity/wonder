@@ -445,6 +445,9 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
         while (resp->content_read < resp->content_length)
         {
             ap_rwrite(resp->content, resp->content_valid, r);
+            if (r->connection->aborted) {
+                break;
+            }
             resp_getResponseContent(resp, 1);
         }
 

@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -468,16 +468,19 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
 
    /* resp->content_valid will be 0 for HEAD requests and empty responses */
    if ( (!r->header_only) && (resp->content_valid) ) {
-       while (resp->content_read < resp->content_length)
-       {
-	   ap_soft_timeout("sending WebObjects response", r);
-	   ap_rwrite(resp->content, resp->content_valid, r);
-	   ap_kill_timeout(r);
-	   resp_getResponseContent(resp, 1);
-       }
-       ap_soft_timeout("sending WebObjects response", r);
-       ap_rwrite(resp->content, resp->content_valid, r);
-       ap_kill_timeout(r);
+      while (resp->content_read < resp->content_length)
+      {
+         ap_soft_timeout("sending WebObjects response", r);
+         ap_rwrite(resp->content, resp->content_valid, r);
+         ap_kill_timeout(r);
+		 if (r->connection->aborted) {
+			 break;
+		 }
+         resp_getResponseContent(resp, 1);
+      }
+      ap_soft_timeout("sending WebObjects response", r);
+      ap_rwrite(resp->content, resp->content_valid, r);
+      ap_kill_timeout(r);
    }
    return;
 }
@@ -627,13 +630,13 @@ static int WebObjects_handler(request_rec *r) {
    resp = tr_handleRequest(req, r->uri, &wc, r->protocol, docroot);
    ap_kill_timeout(r);
    if (resp != NULL) {
-        //Move special header into env, if present
-        char* tmpCustomEnvValue = (char*)st_valueFor(resp->headers,WO_customEnv);
-   	if (tmpCustomEnvValue != NULL) {
-                //Note we need to clone the value, because the app response gets freed before logging
-		ap_table_setn(r->subprocess_env, WO_customEnv, 	ap_pstrdup( r->pool, tmpCustomEnvValue ) );
-		st_removeKey(resp->headers,WO_customEnv);
-        }
+      /* Move special header into env, if present */
+      char* tmpCustomEnvValue = (char*)st_valueFor(resp->headers,WO_customEnv);
+      if (tmpCustomEnvValue != NULL) {
+         /* Note we need to clone the value, because the app response gets freed before logging */
+         ap_table_setn(r->subprocess_env, WO_customEnv, 	ap_pstrdup( r->pool, tmpCustomEnvValue ) );
+         st_removeKey(resp->headers,WO_customEnv);
+      }
       sendResponse(r, resp);
       resp_free(resp);
       retval = OK;

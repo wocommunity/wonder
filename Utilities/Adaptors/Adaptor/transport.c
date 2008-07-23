@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -164,15 +164,77 @@ WOConnection *tr_open(WOInstanceHandle instHandle) {
        *	do we need to create a new connection?
        */
       if (c == NULL) {
-         fd = transport->openinst(inst->host, inst->port, inst->connectTimeout, inst->sendTimeout, inst->recvTimeout, inst->sendSize, inst->recvSize);
+		 /*
+			Do not hold the lock while
+			we make the connection -- it could block
+			for 3 seconds (depends on config) and take
+			the lock with it
+		  
+			read out all the data we need from the instance
+			while we still hold the lock
+		 */
+		 char host[WA_MAX_HOST_NAME_LENGTH];
+		 unsigned int port;
+		 unsigned int connectTimeout, sendTimeout, recvTimeout;
+		 unsigned int sendSize, recvSize;
+		 
+		 /* 
+			keep a copy of this in case it changes out from under
+			us -- this is basically a serial number for the 
+			instance record.  we use this later when we
+			store the connection
+		 */
+		 int generation;
+		 
+		 strncpy(host, inst->host, WA_MAX_HOST_NAME_LENGTH);
+		 port = inst->port;
+		 connectTimeout = inst->connectTimeout;
+		 sendTimeout = inst->sendTimeout;
+		 recvTimeout = inst->recvTimeout;
+		 sendSize = inst->sendSize;
+		 recvSize = inst->recvSize;
+		 
+		 generation = inst->generation;
+
+		 /* release the lock for the connect itself */
+		 ac_unlockInstance(instHandle);
+		 
+		 /* make the call referring to our local items, not the 
+		    ones in inst */
+         fd = transport->openinst(host, port, connectTimeout, sendTimeout, recvTimeout, sendSize, recvSize);
+
+		 /* retake the lock */
+		 inst = ac_lockInstance(instHandle);
+		 
+		 if (!inst) {
+			WOLog(WO_WARN, 
+				"unable to retake lock for instance %d", instHandle);
+				
+			if (fd != NULL_FD) {
+				/* clean up */
+				transport->close_connection(fd);
+			}
+			
+			/* failed */
+			return NULL;
+		 }
+		 
+		 /*
+			reget the connection pool pointer now that we have
+			the lock again
+		 */		 
+	     connectionPool = (list *)ac_localInstanceData(instHandle, connectionPoolKey);
+		 
          if (fd != NULL_FD) {
+			/* copy the params, making sure to use our local
+			   copies, in case inst has changed */
             c = WOMALLOC(sizeof(WOConnection));
             c->fd = fd;
             c->inUse = 1;
-            c->port = inst->port;
+            c->port = port;
             c->isPooled = 0;
-            c->generation = inst->generation;
-            memcpy(c->host, inst->host, WA_MAX_HOST_NAME_LENGTH);
+            c->generation = generation;
+            memcpy(c->host, host, WA_MAX_HOST_NAME_LENGTH);
 #ifdef FORKING_WEBSERVER
             c->pid = my_pid;
 #endif

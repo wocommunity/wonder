@@ -1,3 +1,5 @@
+# NOTE: if you want to recompile the Apache 1.3 module on Mac OS X 10.5, you're
+# going to have to download Apache 1.3 from the foundation and link against those binaries.
 
 include make.config
 
@@ -21,7 +23,7 @@ clean:
 	touch ${COMMON_TARGETS}
 	for adaptor in $(ADAPTORS) Adaptor ; do \
 		echo Cleaning $$adaptor ; \
-		( cd $${adaptor} ; make clean ) ; \
+		( cd $${adaptor} ; ${MAKE} clean ) ; \
 	done
 
 OS_NOT_DEFINED:
@@ -29,22 +31,26 @@ OS_NOT_DEFINED:
 	exit 1
 
 ${COMMON_TARGETS}: Adaptor
-	cd Adaptor ; make
+	cd Adaptor ; ${MAKE}
 
 CGI::
-	cd CGI ; make
+	cd CGI ; ${MAKE}
+
+FastCGI::
+	cd FastCGI ; ${MAKE}
 
 Apache::
-	cd Apache ; make
+	cd Apache ; ${MAKE}
 
 Apache2::
-	cd Apache2 ; make
+	cd Apache2 ; ${MAKE}
 
 Apache2.2::
-	cd Apache2.2 ; make
+	cd Apache2.2 ; ${MAKE}
 
 IIS::
-	cd IIS ; make
+	cd IIS ; ${MAKE}
 
 NSAPI::
-	cd NSAPI ; make
+	cd NSAPI ; ${MAKE}
+	

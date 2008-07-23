@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -32,7 +32,6 @@ and limitations under the License.
  *	- Marek Janukowicz <marek@power.com.pl>
  *
  */
- 
 #include "config.h"
 #include "womalloc.h"
 #include "MoreURLCUtilities.h"
@@ -49,9 +48,8 @@ and limitations under the License.
 #include <sys/types.h>
 #include <errno.h>
 #include <ctype.h>
-#define _GNU_SOURCE
 #include <string.h>
-	      
+
 #if !defined(WIN32)
 #include <sys/param.h>
 #include <signal.h>
@@ -159,7 +157,7 @@ static void sendResponse(HTTPResponse *resp)
    if (resp->content_valid) {
       while (resp->content_read < resp->content_length) {
          //fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
-	      FCGX_PutStr( resp->content, resp->content_valid, out);
+	      FCGX_PutStr(resp->content, resp->content_valid, out);
 		 resp_getResponseContent(resp, 1);
       }
       //fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
@@ -174,8 +172,6 @@ static void sendErrorResponse(HTTPResponse *resp)
 {
    sendResponse(resp);
    resp_free(resp);
-   // TODO: we should be able to recover from this...
-   exit(-1);
 }
 
 static void prepareAndSendErrorResponse(const char *msg, int status)
@@ -189,14 +185,12 @@ static void prepareAndSendErrorResponse(const char *msg, int status)
 /* Returns the number of bytes read, or -1 on error. */
 static int readContentData(HTTPRequest *req, void *buffer, int dataSize, int mustFill)
 {
-		WOLog ( WO_INFO, "data size: %d", dataSize );
+   WOLog (WO_INFO, "data size: %d", dataSize );
    //int n = fread(buffer, 1, dataSize, stdin);
    int n = FCGX_GetStr(buffer, dataSize, in);
-
-
    if (n != dataSize) {
       //int err = ferror(stdin);
-	int err = FCGX_GetError(in);
+	  int err = FCGX_GetError(in);
       if (err)
          WOLog(WO_ERR,"Error getting content data: %s (%d)", strerror(errno), err);
    }
@@ -212,7 +206,7 @@ static void sig_handler(int signum) {
 		       WOLog(WO_INFO,"<FastCGI> Signal %s caught", strsignal(signum));
 		       break;
 	case SIGPIPE : WOLog(WO_WARN,"<FastCGI> Signal %s caught", strsignal(signum));
-		       exit(-1);
+		       break;
 	case SIGTERM : WOLog(WO_ERR,"<FastCGI> Signal %s caught", strsignal(signum));
 		       exit(-1);
 	default:       WOLog( WO_INFO,"<FastCGI> Signal %s caught", strsignal(signum));
@@ -278,7 +272,7 @@ int main() {
 
       if (init_adaptor(options)) {
           WOLog( WO_ERR, "<FastCGI> Adaptor initialization failed.");
-    	    exit( -1 );
+    	    exit(-1);
       }
 
     WOLog( WO_INFO,"<FastCGI> process started" );
@@ -296,9 +290,9 @@ int main() {
       WOURLError urlerr;
       FCGX_ParamArray hdrp_org;
      
-      exit_status = FCGX_Accept( &in, &out, &err, &hdrp );
+      exit_status = FCGX_Accept(&in, &out, &err, &hdrp );
       if ( exit_status < 0 ) {
-	  break;
+	    break;
       }
 
 #ifdef	PROFILE
@@ -318,28 +312,18 @@ int main() {
       WOLog( WO_INFO,"<FastCGI> CGI_SCRIPT_NAME = %s", script_name );
       WOLog( WO_INFO,"<FastCGI> CGI_PATH_INFO = %s", path_info );
 
-      if (script_name == NULL)
+      if (script_name == NULL) {
          prepareAndSendErrorResponse(INV_SCRIPT, HTTP_NOT_FOUND);
-      else if (path_info == NULL) {
+         break;
+      } else if (path_info == NULL) {
          path_info = "/";
       }
 
       /*
        *	extract WebObjects application name from URI
        */
-      qs = FCGX_GetParam("QUERY_STRING", hdrp);
-      if (qs) {
-         qs_len = strlen(qs);
-      } else {
-         qs_len = 0;
-      }
 
-      if (qs_len > 0) {
-         /* Make room for query string and "?" */
-         url = WOMALLOC(strlen(path_info) + strlen(script_name) + 1 + qs_len + 2);
-      } else {
-         url = WOMALLOC(strlen(path_info) + strlen(script_name) + 1);
-      }
+      url = WOMALLOC(strlen(path_info) + strlen(script_name) + 1);
       strcpy(url, script_name);
       strcat(url, path_info);
       WOLog(WO_INFO,"<FastCGI> new request: %s",url);
@@ -357,9 +341,13 @@ int main() {
              } else {
                  prepareAndSendErrorResponse(_urlerr, HTTP_NOT_FOUND);
              }
+             WOFREE(url);
+             break;
          }
 
          prepareAndSendErrorResponse(_urlerr, HTTP_BAD_REQUEST);
+         WOFREE(url);
+         break;
       }
 
 
@@ -375,6 +363,8 @@ int main() {
       reqerr = req_validateMethod(req);
       if (reqerr) {
           prepareAndSendErrorResponse(reqerr, HTTP_BAD_REQUEST);
+          WOFREE(url);
+          break;
       }
 
       /*
@@ -402,13 +392,14 @@ int main() {
          }
          if (strcmp((const char *)key, "SSL_CLIENT_CERT") == 0 || strcmp((const char *)key, "SSL_SERVER_CERT") == 0) {
              value = make_cert_one_line(value);
-//             WOLog(WO_INFO,"<FastCGI> PASSING %s = %s", key, value);
+             //WOLog(WO_INFO,"<FastCGI> PASSING %s = %s", key, value);
          }
          /*  END Support for getting the client's certificate  */
 
-         if (key && *key && value && *value)
+         if (key && *key && value && *value) {
             /* must specify copy key and value because key translation might replace this key, and value lives in the same buffer */
             req_addHeader(req, key, value, STR_COPYKEY|STR_COPYVALUE);
+         }
 
          /*  BEGIN Support for getting the client's certificate  */
          if (freeValueNeeded ) {
@@ -429,55 +420,42 @@ int main() {
 	
       WOLog ( WO_INFO, "Getting request data, length: %d",req->content_length );
       if (req->content_length > 0) {
-//<<<<<<< cgi52
          req_allocateContent(req, req->content_length, 1);
          req->getMoreContent = (req_getMoreContentCallback)readContentData;
-				 WOLog ( WO_INFO, "content_buffer_size: %d",req->content_buffer_size );
-         if (req->content_buffer_size == 0)
+         WOLog ( WO_INFO, "content_buffer_size: %d",req->content_buffer_size );
+         if (req->content_buffer_size == 0) {
             prepareAndSendErrorResponse(ALLOCATION_FAILURE, HTTP_SERVER_ERROR);
+            WOFREE(url);
+            break;
+         }
          if (readContentData(req, req->content, req->content_buffer_size, 1) == -1) {
             prepareAndSendErrorResponse(WOURLstrerror(WOURLInvalidPostData), HTTP_BAD_REQUEST);
-/* =======
-         char *buffer = WOMALLOC(req->content_length);
-	 int n = FCGX_GetStr(buffer, req->content_length, in);
-         if (n != req->content_length) {
-            const char *errmsg;
-            //int err = ferror(stdin);
-            int err = FCGX_GetError(in);
-	    if (err) {
-               WOLog(WO_ERR,"<FastCGI> Error getting FORM data: %s (%d)", strerror(errno), err);
-               errmsg = NO_FORM_DATA;
-            } else {
-               WOLog(WO_ERR,"<FastCGI> Error getting FORM data: incorrect content-length (expected: %d read: %d)%s", req->content_length, n, strerror(errno));
-               errmsg = INV_FORM_DATA;
-            }
-            WOFREE(buffer);
-            die(errmsg, HTTP_BAD_REQUEST);
-         } else {
-            req->content = buffer;
->>>>>>> fcgi51
-*/
+            WOFREE(url);
+            break;
          }
       }
-			
-			WOLog ( WO_INFO, "Content length: %d",req->content_length );
-			WOLog ( WO_INFO, "--------Content: %s---",req->content );
-			if ( req->content ) {
-				content_buffer = (char *)malloc (req->content_length+1);			
-				strncpy (content_buffer,req->content,req->content_length);
-				content_buffer[req->content_length] = '\0';
-				WOLog ( WO_INFO, "---content buffer: %s",content_buffer );
-				strncpy (req->content,content_buffer,req->content_length+1);
-				free (content_buffer);
-			}
-			//WOLog ( WO_INFO, "Content_length: %d, real: %d", req->content_length,strlen (req->content) );
+
+      WOLog(WO_INFO, "Content length: %d",req->content_length);
+      WOLog(WO_INFO, "--------Content: %s---",req->content);
+      if (req->content) {
+         content_buffer = (char *)WOMALLOC(req->content_length+1);
+         strncpy(content_buffer,req->content,req->content_length);
+         content_buffer[req->content_length] = '\0';
+         WOLog(WO_INFO, "---content buffer: %s",content_buffer);
+         strncpy(req->content,content_buffer,req->content_length+1);
+         WOFREE(content_buffer);
+      }
+      //WOLog ( WO_INFO, "Content_length: %d, real: %d", req->content_length,strlen (req->content) );
 
       /* Always get the query string */
-      /* Don't add ? if the query string is empty. */
+      qs = FCGX_GetParam("QUERY_STRING", hdrp);
+      if (qs) {
+         qs_len = strlen(qs);
+      } else {
+         qs_len = 0;
+      }
+
       if (qs_len > 0) {
-         /* Add the query string to the full URL - useful for debugging */
-         strcat(url, "?");
-         strcat(url, qs);
          wc.queryString.start = qs;
          wc.queryString.length = qs_len;
          WOLog(WO_INFO,"<FastCGI> new request with Query String: %s", qs);
@@ -493,10 +471,10 @@ int main() {
          resp_free(resp);		/* dump the response */
       }
 
-#if defined(FINDLEAKS)
-      WOFREE(url);				/* just for neatness */
+      WOFREE(url);
       req_free(req);
 
+#if defined(FINDLEAKS)
       showleaks();
 #endif
     }
@@ -510,7 +488,6 @@ int main() {
     WOLog( WO_INFO,"<FastCGI> process exiting" );
 
     return exit_status;
-
 }
 
 
@@ -522,7 +499,6 @@ int main() {
          WOReadKeyFromConfiguration(CGI_DOCUMENT_ROOT, path, MAXPATHLEN);
 #else
          const char *doc_root;
-
          /* Apache provides this as an environment variable straight */
          if ((doc_root = FCGX_GetParam(CGI_DOCUMENT_ROOT, hdrp)) != NULL) {
             strncpy(path, doc_root, MAXPATHLEN);
@@ -546,5 +522,4 @@ int main() {
          WOLog(WO_ERR,"<FastCGI> Can't find document root in CGI variables");
          return "/usr/local/apache/htdocs";		/* this is bad.... */
       }
-
 }

@@ -1,92 +1,74 @@
-
 include ../make.config
 include ../Adaptor/make.preamble
-# Flags for use when enabling mod_ssl support
-# On OSX, apxs does it, and it's on by default
-APXSAPACHESSLFLAG = -D APACHE_SECURITY_ENABLED
-# On Solaris, cc does it, and it isn't
-#LDAPACHESSLFLAG = -DAPACHE_SECURITY_ENABLED
-# More flags for use when enabling mod_ssl support
-# These should be set to point at the ssl include and lib directories, respectively.
-OPENSSLINCLUDEFLAGS = 
-OPENSSLLIBFLAGS = 
+
+# Common compiler and linker flags
+CFLAGS = -O2 -Wall -I../Adaptor ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT}
 
 # MacOS X
-ifeq "MACOS" "$(OS)"
+ifeq "MACOS" "${OS}"
+# Flags for use when enabling mod_ssl support
+ENABLE_SSL_SUPPORT = -DAPACHE_SECURITY_ENABLED
+# These should be set to point at the ssl include and lib directories, respectively.
+OPENSSL_INCL_FLAGS = -I/usr/local/include/openssl
+OPENSSL_LIB_FLAGS = -L/usr/lib -lcrypto -lssl
+CFLAGS += ${RC_CFLAGS}
+LDARCHS = $(patsubst %, -arch %, ${RC_ARCHS})
+LDFLAGS +=${OPENSSL_LIB_FLAGS} ${LDARCHS}
+STRIP_FLAGS = -S
+endif
 
-# These are the defaults for OSX. You may have to adjust them on Solaris.
-OPENSSLINCLUDEFLAGS = -I/usr/local/include/openssl
-OPENSSLLIBFLAGS = -L/usr/lib -lcrypto -lssl
-CFLAGS = -O2 -Wall -I../Adaptor  $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DFORKING_WEBSERVER -DAPACHE 
+ifeq "SOLARIS" "${OS}"
+# Flags for use when enabling mod_ssl support
+ENABLE_SSL_SUPPORT =
+# These should be set to point at the ssl include and lib directories, respectively.
+OPENSSL_INCL_FLAGS =
+OPENSSL_LIB_FLAGS =
 
-APXSFLAGS = -c -I../Adaptor ${OPENSSLLIBFLAGS} -D SINGLE_THREADED_ADAPTOR ${LDAPACHESSLFLAG} -S CC=$(CC) 
+# If Apache is in a nonstandard location, change this
+APACHE_INCL_FLAGS = -I/usr/apache/include
+
+CFLAGS +=-DEAPI ${APACHE_INCL_FLAGS}
+LDFLAGS +=-G -L/lib -lsocket -lnsl ${OPENSSL_LIB_FLAGS}
+endif
+
+ifeq "LINUX" "${OS}"
+# Flags for use when enabling mod_ssl support
+ENABLE_SSL_SUPPORT = -DAPACHE_SECURITY_ENABLED
+# These should be set to point at the ssl include and lib directories, respectively.
+OPENSSL_INCL_FLAGS =
+OPENSSL_LIB_FLAGS =
+
+# If Apache is in a nonstandard location, change this
+APACHE_INCL_FLAGS = -I/usr/apache/include
+
+CFLAGS +=-DEAPI ${APACHE_INCL_FLAGS}
+LDFLAGS +=-G -L/lib -lc ${OPENSSL_LIB_FLAGS}
+endif
+
+ifeq "FreeBSD" "${OS}"
+#CFLAGS +=-fPIC `${APXS} -q CFLAGS`
+OPENSSL_INCL_FLAGS =
+OPENSSL_LIB_FLAGS =
+ifdef USE_SSL
+ifdef WITH_MODSSL
+  ENABLE_SSL_SUPPORT = -DAPACHE_SECURITY_ENABLED
+  OPENSSL_INC_FLAGS = -I/usr/local/include/openssl
+  OPENSSL_LIB_FLAGS = -L/usr/lib -lcrypto -lssl
+endif
+endif
+endif
+
+CFLAGS += ${OPENSSL_INCL_FLAGS}
+
+APXSFLAGS = -c -S CC=${CC} -Wc,"${CFLAGS}" -Wl,"${LDFLAGS}"
 
 all: mod_WebObjects.so
 
 mod_WebObjects.so : mod_WebObjects.c ${COMMON_OBJFILES}
-	${APXS} ${APXSFLAGS} mod_WebObjects.c ${COMMON_OBJFILES}
+	${APXS1.3} ${APXSFLAGS} mod_WebObjects.c ${COMMON_OBJFILES}
+	strip ${STRIP_FLAGS} mod_WebObjects.so
 
 clean:
 	rm -f mod_WebObjects.so mod_WebObjects.o *.o
 
-endif 
-
-
-ifeq "SOLARIS" "$(OS)"
-
-# If Apache is in a nonstandard location, change this
-APACHEINCLUDEFLAGS = -I/usr/apache/include
-
-
-
-CFLAGS = -O2 -Wall -I../Adaptor ${LDAPACHESSLFLAG} $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DEAPI -DFORKING_WEBSERVER -DAPACHE ${OPENSSLINCLUDEFLAGS} ${APACHEINCLUDEFLAGS} ${OPENSSLLIBFLAGS} -L/lib -lsocket -lnsl
-APXSFLAGS = -i
-LDFLAGS +=  -G -L/lib -lsocket -lnsl -lc ${OPENSSLLIBFLAGS}
-
-all: adaptor 
-
-adaptor: mod_WebObjects.so
-	${APXS} ${APXSFLAGS} mod_WebObjects.so 
-
-mod_WebObjects.so : mod_WebObjects.o ${COMMON_OBJFILES}
-#       ${APXS} ${APXSFLAGS} -c mod_WebObjects.c ${COMMON_OBJFILES}
-#       ${APXS} ${APXSFLAGS} mod_WebObjects.o ${COMMON_OBJFILES}
-	ld ${LDFLAGS} mod_WebObjects.o ${COMMON_OBJFILES} -o mod_WebObjects.so
-
-clean:
-	rm -f mod_WebObjects.so mod_WebObjects.o *.o
-
-#mod_WebObjects.o: mod_WebObjects.c
-#       ${APXS} ${APXSFLAGS} -c mod_WebObjects.c
-
-mod_WebObjects.o: mod_WebObjects.c ${COMMON_OBJFILES}
-	${CC} -c ${CFLAGS} mod_WebObjects.c ${COMMON_OBJFILES}
-endif
-
-ifeq "LINUX" "$(OS)"
-CFLAGS = -O2 -Wall -I../Adaptor ${LDAPACHESSLFLAG} $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DEAPI -DFORKING_WEBSERVER -DAPACHE ${OPENSSLINCLUDEFLAGS} ${APACHEINCLUDEFLAGS} ${OPENSSLLIBFLAGS} -L/lib 
-APXSFLAGS = -i
-LDFLAGS += -G -L/lib -lc ${OPENSSLLIBFLAGS}
-
-all: adaptor
-
-adaptor: mod_WebObjects.so
-	${APXS} ${APXSFLAGS} mod_WebObjects.so 
-
-mod_WebObjects.so : mod_WebObjects.o ${COMMON_OBJFILES}
-# ${APXS} ${APXSFLAGS} -c mod_WebObjects.c ${COMMON_OBJFILES}
-# ${APXS} ${APXSFLAGS} mod_WebObjects.o ${COMMON_OBJFILES}
-	ld ${LDFLAGS} mod_WebObjects.o ${COMMON_OBJFILES} -o mod_WebObjects.so
-
-clean:
-	rm -f mod_WebObjects.so mod_WebObjects.o *.o
-
-#mod_WebObjects.o: mod_WebObjects.c
-# ${APXS} ${APXSFLAGS} -c mod_WebObjects.c
-
-mod_WebObjects.o: mod_WebObjects.c ${COMMON_OBJFILES}
-	${CC} -c ${CFLAGS} mod_WebObjects.c ${COMMON_OBJFILES}
-endif
-
-#################################
 include ../Adaptor/make.postamble

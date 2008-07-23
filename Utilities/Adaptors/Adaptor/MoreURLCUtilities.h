@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -53,6 +53,7 @@ and limitations under the License.
 /*
  *	Cover some functions to support URL versioning
  */
+ 
 unsigned int SizeURL(WOURLComponents *wc);
 void ComposeURL(char *string, WOURLComponents *wc);
 
@@ -72,6 +73,9 @@ const char *WOParseAndCheckURL(WOURLComponents *wc, const char *url, int version
  *	err code to string
  */
 const char *WOURLstrerror(WOURLError err);
+
+
+
 
 /*
  *	for debugging, I guess

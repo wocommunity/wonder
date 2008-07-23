@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -139,14 +139,18 @@ static void sendResponse(HTTPResponse *resp)
    str_free(resphdrs);
 #ifndef PROFILE
    fputs(CRLF,stdout);
-   fflush(stdout);
 #endif
 
 #ifndef PROFILE
-   if (resp->content_length) {
-      fwrite(resp->content,sizeof(char),resp->content_length,stdout);
-      fflush(stdout);
+   /* resp->content_valid will be 0 for HEAD requests and empty responses */
+   if (resp->content_valid) {
+      while (resp->content_read < resp->content_length) {
+         fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
+         resp_getResponseContent(resp, 1);
+      }
+      fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
    }
+   fflush(stdout);
 #endif
    return;		
 }
@@ -163,6 +167,22 @@ static void die(const char *msg, int status)
    HTTPResponse *resp = resp_errorResponse(msg, status);
    die_resp(resp);
 }
+
+
+/* Read up to dataSize bytes into the buffer at dataBuffer. */
+/* Returns the number of bytes read, or -1 on error. */
+static int readContentData(HTTPRequest *req, void *buffer, int dataSize, int mustFill)
+{
+   int n = fread(buffer, 1, dataSize, stdin);
+   if (n != dataSize) {
+      int err = ferror(stdin);
+      if (err)
+         WOLog(WO_ERR,"Error getting content data: %s (%d)", strerror(errno), err);
+   }
+   return n == dataSize ? n : -1;
+}
+
+
 
 #ifdef	PROFILE
 int doit(int argc, char *argv[], char **envp);	/* forward */
@@ -254,19 +274,7 @@ int doit(int argc, char *argv[], char **envp) {
        *	extract WebObjects application name from URI
        */
 
-      qs = getenv("QUERY_STRING");
-      if (qs) {
-         qs_len = strlen(qs);
-      } else {
-         qs_len = 0;
-      }
-
-      if (qs_len > 0) {
-         /* Make room for query string and "?" */
-         url = WOMALLOC(strlen(path_info) + strlen(script_name) + 1 + qs_len + 2);
-      } else {
-         url = WOMALLOC(strlen(path_info) + strlen(script_name) + 1);
-      }
+      url = WOMALLOC(strlen(path_info) + strlen(script_name) + 1);
       strcpy(url, script_name);
       strcat(url, path_info);
       WOLog(WO_INFO,"<CGI> new request: %s",url);
@@ -312,11 +320,11 @@ int doit(int argc, char *argv[], char **envp) {
          /* copy env. line. */
          key = WOSTRDUP(*envp);
 
-         for (value = key; *value && !isspace(*value) && (*value != '='); value++) {}
+         for (value = key; *value && !isspace((int)*value) && (*value != '='); value++) {}
          if (*value) {
             *value++ = '\0';	/* null terminate 'key' */
          }
-         while (*value && (isspace(*value) || (*value == '='))) {
+         while (*value && (isspace((int)*value) || (*value == '='))) {
             value++;
          }
          /* BEGIN Support for getting the client's certificate. */
@@ -351,31 +359,24 @@ int doit(int argc, char *argv[], char **envp) {
        *	assume that POSTs with content length will be reformatted to GETs later
        */
       if (req->content_length > 0) {
-         char *buffer = WOMALLOC(req->content_length);
-         int n = fread(buffer, 1, req->content_length, stdin);
-         if (n != req->content_length) {
-            const char *errmsg;
-            int err = ferror(stdin);
-            if (err) {
-               WOLog(WO_ERR,"Error getting FORM data: %s (%d)", strerror(errno), err);
-               errmsg = NO_FORM_DATA;
-            } else {
-               WOLog(WO_ERR,"Error getting FORM data: incorrect content-length (expected: %d read: %d)%s", req->content_length, n, strerror(errno));
-               errmsg = INV_FORM_DATA;
-            }
-            WOFREE(buffer);
-            die(errmsg, HTTP_BAD_REQUEST);
-         } else {
-            req->content = buffer;
+         req_allocateContent(req, req->content_length, 1);
+         req->getMoreContent = (req_getMoreContentCallback)readContentData;
+         if (req->content_buffer_size == 0)
+            die(ALLOCATION_FAILURE, HTTP_SERVER_ERROR);
+         if (readContentData(req, req->content, req->content_buffer_size, 1) == -1) {
+            die(WOURLstrerror(WOURLInvalidPostData), HTTP_BAD_REQUEST);
          }
       }
 
       /* Always get the query string */
-      /* Don't add ? if the query string is empty. */
+      qs = getenv("QUERY_STRING");
+      if (qs) {
+         qs_len = strlen(qs);
+      } else {
+         qs_len = 0;
+      }
+
       if (qs_len > 0) {
-         /* Add the query string to the full URL - useful for debugging */
-         strcat(url, "?");
-         strcat(url, qs);
          wc.queryString.start = qs;
          wc.queryString.length = qs_len;
          WOLog(WO_INFO,"<CGI> new request with Query String: %s", qs);
@@ -391,11 +392,11 @@ int doit(int argc, char *argv[], char **envp) {
          resp_free(resp);		/* dump the response */
       }
 
-#if defined(FINDLEAKS)
-      WOFREE(url);				/* just for neatness */
+      WOFREE(url);
       st_free(options);
       req_free(req);
-
+      
+#if defined(FINDLEAKS)
       showleaks();
 #endif
       return 0;
