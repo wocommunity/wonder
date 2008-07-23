@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
-	public interface Key {
+	public interface Keys {
 		public static final String CREATED = "created";
 		public static final String LAST_MODIFIED = "lastModified";
 	}
@@ -39,7 +39,7 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
     /** logging support */
     public static Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
 
-    public static String [] TimestampAttributeKeys = new String[] { Key.CREATED, Key.LAST_MODIFIED};
+    public static String [] TimestampAttributeKeys = new String[] { Keys.CREATED, Keys.LAST_MODIFIED};
     
     private static final Map<EOEditingContext, NSTimestamp> _datesPerEC = Collections.synchronizedMap(new WeakHashMap<EOEditingContext, NSTimestamp>());
 
@@ -135,9 +135,9 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
             insertionLogEntry.addObjectToBothSidesOfRelationshipWithKey(object,key);
     }
 
-    public NSTimestamp created() { return (NSTimestamp)storedValueForKey(Key.CREATED); }
-    public void setCreated(NSTimestamp value) { takeStoredValueForKey(value, Key.CREATED); }
+    public NSTimestamp created() { return (NSTimestamp)storedValueForKey(Keys.CREATED); }
+    public void setCreated(NSTimestamp value) { takeStoredValueForKey(value, Keys.CREATED); }
 
-    public NSTimestamp lastModified() { return (NSTimestamp)storedValueForKey(Key.LAST_MODIFIED); }
-    public void setLastModified(NSTimestamp value) { takeStoredValueForKey(value, Key.LAST_MODIFIED); }
+    public NSTimestamp lastModified() { return (NSTimestamp)storedValueForKey(Keys.LAST_MODIFIED); }
+    public void setLastModified(NSTimestamp value) { takeStoredValueForKey(value, Keys.LAST_MODIFIED); }
 }
