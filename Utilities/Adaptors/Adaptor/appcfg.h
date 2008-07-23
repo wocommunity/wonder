@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -137,11 +137,11 @@ typedef struct _WOInstanceStruct {
    char host[WA_MAX_HOST_NAME_LENGTH];		/* the host */
 
    /* Settings for the instance */
-   unsigned int sendSize;			/* tcp send/recv buf sizes */
-   unsigned int recvSize;			/* tcp send/recv buf sizes */
-   unsigned int connectTimeout;			/* timeouts (seconds) */
-   unsigned int sendTimeout;
-   unsigned int recvTimeout;
+   int sendSize;			/* tcp send/recv buf sizes */
+   int recvSize;			/* tcp send/recv buf sizes */
+   int connectTimeout;			/* timeouts (seconds) */
+   int sendTimeout;
+   int recvTimeout;
 
    /* these are copied from the WOApp during config so they can be accessed without locking the app struct */
    int connectionPoolSize;

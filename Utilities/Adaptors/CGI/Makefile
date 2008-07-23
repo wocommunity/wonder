@@ -4,6 +4,11 @@ include ../Adaptor/make.preamble
 
 CFLAGS = -O2 -Wall -I../Adaptor $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DCGI
 
+
+ifeq "MACOS" "$(OS)"
+CFLAGS += ${RC_CFLAGS}
+endif
+
 ifeq "HPUX" "$(OS)"
 CFLAGS += -nopdolib
 endif
@@ -20,8 +25,14 @@ endif
 
 all: WebObjects${EXESUFFIX}
 
+ifeq "MACOS" "$(OS)"
 WebObjects${EXESUFFIX}: WebObjects.o ${COMMON_OBJFILES}
 	${CC} ${CFLAGS} ${LDFLAGS} -o WebObjects${EXESUFFIX} WebObjects.o ${COMMON_OBJFILES}
+	strip -S WebObjects${EXESUFFIX}
+else
+WebObjects${EXESUFFIX}: WebObjects.o ${COMMON_OBJFILES}
+	${CC} ${CFLAGS} ${LDFLAGS} -o WebObjects${EXESUFFIX} WebObjects.o ${COMMON_OBJFILES}
+endif
 
 clean:
 	rm -f WebObjects${EXESUFFIX} *.o

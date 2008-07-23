@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -74,10 +74,10 @@ and limitations under the License.
 typedef	struct _netfd {
    int	s;				/* the socket */
    TR_STATUS status;
-   unsigned char *pos;
+   char *pos;
    int count;
    int send_to, recv_to;
-   unsigned char buf[NETBUFSZ];
+   char buf[NETBUFSZ];
 } netfd;
 #define	net_fd	netfd *
 
@@ -533,7 +533,7 @@ static TR_STATUS sendBuffers(net_fd appfd, struct iovec *buffers, int bufferCoun
 static void fillbuf(net_fd appfd)
 {
    int n;
-   unsigned char *buf = appfd->buf;
+   char *buf = appfd->buf;
 
    n = nonBlockingRecv(appfd, appfd->recv_to, buf, NETBUFSZ);
 

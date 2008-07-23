@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -40,8 +40,6 @@ and limitations under the License.
 #include <unistd.h>
 #include <stddef.h>
 
-
-
 /* Define this to log each lock/unlock */
 /* #define EXTRA_DEBUGGING_LOGS */
 
@@ -50,11 +48,11 @@ and limitations under the License.
  * This structure is the definition of a region.
  */
 typedef struct {
-   off_t offset;			/* The offset of the beginning of the region in the file */
-   size_t elementSize;		/* The size of one element in the region. */
+   off_t offset;					/* The offset of the beginning of the region in the file */
+   size_t elementSize;				/* The size of one element in the region. */
    unsigned int elementCount;		/* The number of elements in the region. */
-   off_t nextRegion;		/* The file offset of the next region definition. nextRegion == 0 for the last region */
-   char name[1];			/* The null terminated region name. */
+   off_t nextRegion;				/* The file offset of the next region definition. nextRegion == 0 for the last region */
+   char name[1];					/* The null terminated region name. */
 } Region;
 
 
@@ -361,7 +359,7 @@ void *WOShmem_alloc(const char *regionName, size_t elementSize, unsigned int *el
  * function when the lock is released. If some error occurrs and
  * a lock could not be obtained, NULL is returned.
  */
-void * WOShmem_lock(const void *addr, size_t size, int exclusive)
+void *WOShmem_lock(const void *addr, size_t size, int exclusive)
 {
    struct flock *lockInfo;
    ptrdiff_t offset;
@@ -390,7 +388,7 @@ void * WOShmem_lock(const void *addr, size_t size, int exclusive)
             if (lock_file_section(WOShmem_fd, offset, size, lockInfo, exclusive))
             {
                /* failed; put the info struct back on the cache */
-	       WA_lock(WOShmem_mutex);
+               WA_lock(WOShmem_mutex);
                info->cache = WOShmem_lockInfoCache;
                WOShmem_lockInfoCache = info;
                WA_unlock(WOShmem_mutex);
