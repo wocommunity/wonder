@@ -24,10 +24,8 @@ import er.directtoweb.assignments.ERDAssignment;
 import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
-import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXS;
 import er.extensions.foundation.ERXDictionaryUtilities;
-import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * A bunch of methods used for pulling default values from EOModels.<br />
