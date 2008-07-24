@@ -28,6 +28,7 @@ import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -1111,11 +1112,16 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * Load the properties from a String in Property file format. Useful when you use them 
      * as custom value types, you would set this as the factory method name.
      * @param string
-     * @throws IOException
      */
-    public static ERXProperties fromExternalForm(String string) throws IOException {
+    public static ERXProperties fromExternalForm(String string) {
         ERXProperties result = new ERXProperties();
-        result.load(new ByteArrayInputStream(string.getBytes()));
+        try {
+			result.load(new ByteArrayInputStream(string.getBytes()));
+		}
+		catch (IOException e) {
+			// AK: shouldn't ever happen...
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
         return result;
     }
 
