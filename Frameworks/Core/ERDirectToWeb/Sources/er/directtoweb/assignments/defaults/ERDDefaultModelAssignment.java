@@ -17,6 +17,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -60,6 +61,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
         new NSArray(new Object[] {"propertyKey", "keyWhenRelationship"}), "sortKeyForList",
         new NSArray(new Object[] {"controllerName"}), "entityForControllerName",
         new NSArray(new Object[] {"pageConfiguration"}), "entityForPageConfiguration",
+        new NSArray(new Object[] {"pageConfiguration"}), "defaultSortOrdering",
         NSArray.EmptyArray, "entity",
         NSArray.EmptyArray, "dummyEntity"
     });
@@ -320,11 +322,11 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
      * <b>defaultSortOrdering</b>.
      * @return the first value of the display property keys, with ascending comparison.
      */
-    public Object defaultSortOrderingWithFirstKey(D2WContext context) {
+    public Object defaultSortOrdering(D2WContext context) {
     	NSArray<String> keys = (NSArray) context.valueForKey("displayPropertyKeys");
     	if(keys.count() == 0) return NSArray.EmptyArray;
     	String first = keys.objectAtIndex(0);
     	
-        return ERXS.ascs(first);
+        return new NSArray(new Object[]{first, EOSortOrdering.CompareAscending.name()});
     }
 }
