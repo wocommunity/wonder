@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
-	public interface Keys {
+	public static interface Keys {
 		public static final String CREATED = "created";
 		public static final String LAST_MODIFIED = "lastModified";
 	}

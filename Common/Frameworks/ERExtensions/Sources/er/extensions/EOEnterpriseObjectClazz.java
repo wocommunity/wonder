@@ -445,9 +445,9 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @return fetch specification for the given name and the clazz's entity 
      *     name
      */
-    /*public ERXFetchSpecification<T> createFetchSpecification(EOQualifier qualifier, NSArray sortings) {
+    public ERXFetchSpecification<T> createFetchSpecification(EOQualifier qualifier, NSArray sortings) {
         return new ERXFetchSpecification(entityName(), qualifier, sortings);
-    }*/
+    }
 
     /**
      * Filters an array with a given fetch spec.

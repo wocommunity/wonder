@@ -97,70 +97,87 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Groups an array of objects by a given key path. The dictionary
-     * that is returned contains keys that correspond to the grouped
-     * keys values. 
+     * Groups objects by the value returned by evaluating keyPath 
+     * on the objects.  The dictionary that is returned contains keys 
+     * that correspond to the values returned by the keyPath.  The 
+     * objects in the dictionary are NSArrays of the objects having 
+     * the key value at keyPath.
      * 
      * @param objects array of objects to be grouped
-     * @param keyPath path used to group the objects.
+     * @param keyPath path into objects used to group the objects
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have the grouped
-     *		characteristic. Note that if the key path returns null
-     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     * 		objects are arrays of the objects that have that value.
+     *		Note that if the key path returns null then one of the 
+     *      keys will be NULL_GROUPING_KEY
      */
     public static NSDictionary arrayGroupedByKeyPath(NSArray objects, String keyPath) {
         return arrayGroupedByKeyPath(objects,keyPath,true,null);
     }
 
     /**
-     * Groups an array of objects by a given key path. The dictionary
-     * that is returned contains keys that correspond to the grouped
-     * keys values. 
+     * Groups objects by the value returned by evaluating keyPath 
+     * on the objects.  The dictionary that is returned contains keys 
+     * that correspond to the values returned by the keyPath.  If 
+     * valueKeyPath is null, the objects in the dictionary are NSArrays 
+     * of the objects having the key value at keyPath. If valueKeyPath
+     * is not null, the objects in the dictionary are NSArrays of the 
+     * result of calling valueKeyPath on the objects having the key 
+     * value at keyPath.  If valueKeyPath is not null, the objects in 
+     * the dictionary will not be from objects.
      * 
-     * @param eos array of objects to be grouped
-     * @param keyPath path used to group the objects.
+     * @param objects array of objects to be grouped
+     * @param keyPath path into objects used to group the objects
      * @param includeNulls determines if keyPaths that resolve to null
      *		should be allowed into the group.
-     * @param extraKeyPathForValues allows a selected object to include
-     *		more objects in the group. This is going away in the
-     *		future.
+     * @param valueKeyPath allows the grouped objects in the result to be
+     *        derived from objects (by evaluating valueKeyPath), instead
+     *        of being members of the objects collection.  Objects that 
+     *        evaluate valueKeyPath to null have no value included in the
+     *        result.
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have the grouped
-     *		characteristic. Note that if the key path returns null
-     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     * 		objects are arrays of the objects that have that value.
+     *		Note that if the key path returns null then one of the 
+     *      keys will be NULL_GROUPING_KEY
      */
-    // FIXME: Get rid of extraKeyPathForValues, it doesn't make sense.
-    public static NSDictionary arrayGroupedByKeyPath(NSArray eos,
+    public static NSDictionary arrayGroupedByKeyPath(NSArray objects,
                                                      String keyPath,
                                                      boolean includeNulls,
-                                                     String extraKeyPathForValues) {
-    	return ERXArrayUtilities.arrayGroupedByKeyPath(eos, keyPath, ERXArrayUtilities.NULL_GROUPING_KEY, extraKeyPathForValues);
+                                                     String valueKeyPath) {
+    	return ERXArrayUtilities.arrayGroupedByKeyPath(objects, keyPath, (includeNulls) ? ERXArrayUtilities.NULL_GROUPING_KEY : null, valueKeyPath);
     }
-    
+
     /**
-     * Groups an array of objects by a given key path. The dictionary
-     * that is returned contains keys that correspond to the grouped
-     * keys values. 
+     * Groups objects by the value returned by evaluating keyPath 
+     * on the objects.  The dictionary that is returned contains keys 
+     * that correspond to the values returned by the keyPath.  If 
+     * valueKeyPath is null, the objects in the dictionary are NSArrays 
+     * of the objects having the key value at keyPath. If valueKeyPath
+     * is not null, the objects in the dictionary are NSArrays of the 
+     * result of calling valueKeyPath on the objects having the key 
+     * value at keyPath.  If valueKeyPath is not null, the objects in 
+     * the dictionary will not be from objects.
      * 
-     * @param eos array of objects to be grouped
-     * @param keyPath path used to group the objects.
+     * @param objects array of objects to be grouped
+     * @param keyPath path into objects used to group the objects
      * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
      *      should be allowed into the group; if so, this key is used for them
-     * @param extraKeyPathForValues allows a selected object to include
-     *		more objects in the group. This is going away in the
-     *		future.
+     * @param valueKeyPath allows the grouped objects in the result to be
+     *        derived from objects (by evaluating valueKeyPath), instead
+     *        of being members of the objects collection.  Objects that 
+     *        evaluate valueKeyPath to null have no value included in the
+     *        result
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have the grouped
-     *		characteristic. Note that if the key path returns null
-     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     * 		objects are arrays of the objects that have that value.
+     *		Note that if the key path returns null then one of the 
+     *      keys will be NULL_GROUPING_KEY
      */
-    // FIXME: Get rid of extraKeyPathForValues, it doesn't make sense.
-    public static NSDictionary arrayGroupedByKeyPath(NSArray eos,
+    @SuppressWarnings("unchecked")
+	public static NSDictionary arrayGroupedByKeyPath(NSArray objects,
                                                      String keyPath,
                                                      Object nullGroupingKey,
-                                                     String extraKeyPathForValues) {
+                                                     String valueKeyPath) {
         NSMutableDictionary result=new NSMutableDictionary();
-        for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
+        for (Enumeration e=objects.objectEnumerator(); e.hasMoreElements();) {
             Object eo = e.nextElement();
             Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
             boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
@@ -171,11 +188,12 @@ public class ERXArrayUtilities extends Object {
                     existingGroup=new NSMutableArray();
                     result.setObjectForKey(existingGroup,key);
                 }
-                if (extraKeyPathForValues!=null) {
-                    Object value=NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,extraKeyPathForValues);
+                if (valueKeyPath!=null) {
+                    Object value=NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,valueKeyPath);
                     if (value!=null) existingGroup.addObject(value);
-                } else
+                } else {
                     existingGroup.addObject(eo);
+                }
             }
         }
         return result;
@@ -184,6 +202,9 @@ public class ERXArrayUtilities extends Object {
     /**
      * Groups an array of objects by a given to-many key path, where every
      * single item in the to-many will put the object in the corresponding group. 
+     * A typical example is an array of users with a roles relationship. The result to
+     * calling <code>arrayGroupedByToManyKeyPath(users, "roles.name")</code> would be 
+     * <code>"admin" = (user1, user2); "editor" = (user3);...</code>.
      * The dictionary that is returned contains keys that correspond to the grouped
      * keys values. This means that the object pointed to by the key
      * path must be a cloneable object. For instance using the key path
@@ -191,7 +212,7 @@ public class ERXArrayUtilities extends Object {
      * cloneable. Instead you might choose to use the key path 'users.name'
      * of 'users.primaryKey', if your enterprise objects support this
      * see {@link ERXGenericRecord} if interested.
-     * @param eos array of objects to be grouped
+     * @param objects array of objects to be grouped
      * @param keyPath path used to group the objects.
      * @param includeNulls determines if keyPaths that resolve to null
      *      should be allowed into the group.
@@ -200,10 +221,10 @@ public class ERXArrayUtilities extends Object {
      *      characteristic. Note that if the key path returns null
      *      then one of the keys will be the static ivar NULL_GROUPING_KEY
      */
-    public static NSDictionary arrayGroupedByToManyKeyPath(NSArray eos,
+    public static NSDictionary arrayGroupedByToManyKeyPath(NSArray objects,
             String keyPath,
             boolean includeNulls) {
-    	return ERXArrayUtilities.arrayGroupedByToManyKeyPath(eos, keyPath, ERXArrayUtilities.NULL_GROUPING_KEY);
+    	return ERXArrayUtilities.arrayGroupedByToManyKeyPath(objects, keyPath,  (includeNulls) ? ERXArrayUtilities.NULL_GROUPING_KEY : null);
     }
 
     /**
@@ -216,7 +237,7 @@ public class ERXArrayUtilities extends Object {
      * cloneable. Instead you might choose to use the key path 'users.name'
      * of 'users.primaryKey', if your enterprise objects support this
      * see {@link ERXGenericRecord} if interested.
-     * @param eos array of objects to be grouped
+     * @param objects array of objects to be grouped
      * @param keyPath path used to group the objects.
      * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
      *      should be allowed into the group; if so, this key is used for them
@@ -225,13 +246,45 @@ public class ERXArrayUtilities extends Object {
      *      characteristic. Note that if the key path returns null
      *      then one of the keys will be the static ivar NULL_GROUPING_KEY
      */
-    public static NSDictionary arrayGroupedByToManyKeyPath(NSArray eos,
+	public static NSDictionary arrayGroupedByToManyKeyPath(NSArray objects,
             String keyPath,
             Object nullGroupingKey) {
+    	return ERXArrayUtilities.arrayGroupedByKeyPath(objects, keyPath, nullGroupingKey, null);
+    }
+
+    /**
+     * Groups an array of objects by a given to-many key path, where every
+     * single item in the to-many will put the object in the corresponding group. 
+     * The dictionary that is returned contains keys that correspond to the grouped
+     * keys values. This means that the object pointed to by the key
+     * path must be a cloneable object. For instance using the key path
+     * 'users' would not work because enterprise objects are not
+     * cloneable. Instead you might choose to use the key path 'users.name'
+     * of 'users.primaryKey', if your enterprise objects support this
+     * see {@link ERXGenericRecord} if interested.
+     * @param objects array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
+     *      should be allowed into the group; if so, this key is used for them
+     * @param valueKeyPath allows the grouped objects in the result to be
+     *        derived from objects (by evaluating valueKeyPath), instead
+     *        of being members of the objects collection.  Objects that 
+     *        evaluate valueKeyPath to null have no value included in the
+     *        result
+     * @return a dictionary where the keys are the grouped values and the
+     *      objects are arrays of the objects that have the grouped
+     *      characteristic. Note that if the key path returns null
+     *      then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    @SuppressWarnings("unchecked")
+	public static NSDictionary arrayGroupedByToManyKeyPath(NSArray objects,
+            String keyPath,
+            Object nullGroupingKey,
+            String valueKeyPath) {
         NSMutableDictionary result=new NSMutableDictionary();
-        for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
-            Object eo = e.nextElement();
-            Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
+        for (Enumeration e=objects.objectEnumerator(); e.hasMoreElements();) {
+            Object object = e.nextElement();
+            Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object,keyPath);
             boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
             if (!isNullKey || nullGroupingKey != null) {
                 if (isNullKey) key=nullGroupingKey;
@@ -242,6 +295,12 @@ public class ERXArrayUtilities extends Object {
                     if (existingGroup==null) {
                         existingGroup=new NSMutableArray();
                         result.setObjectForKey(existingGroup,key);
+                    }
+                    if (valueKeyPath!=null) {
+                        Object value=NSKeyValueCodingAdditions.Utility.valueForKeyPath(object,valueKeyPath);
+                        if (value!=null) existingGroup.addObject(value);
+                    } else {
+                        existingGroup.addObject(object);
                     }
                 }
             }
@@ -585,18 +644,19 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Performs multiple key-value coding calls against an array.
-     * @param array object to be acted upon.
+     * Performs multiple key-value coding calls against an array or an object.
+     * @param array collection or object to be acted upon.
      * @param paths array of keypaths.
-     * @return returns an array containing an array of values for
-     *         every keypath.
+     * @return for collections, returns an array containing an array of values for every keypath.
+     * For objects, returns an array containing a value for every keypath.
      */
     public static NSArray valuesForKeyPaths(Object array, NSArray paths) {
         NSMutableArray result = new NSMutableArray();
 
         Enumeration e = paths.objectEnumerator();
         while(e.hasMoreElements()) {
-            result.addObject(NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, (String)e.nextElement()));
+        	Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, (String)e.nextElement());
+            result.addObject(value != null ? value : NSKeyValueCoding.NullValue);
         }
         return result;
     }
@@ -937,9 +997,11 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKeyPath("@subarrayWithRange.3-20.name");</code><br/>
+     * <code>myArray.valueForKeyPath("@subarrayWithRange.20-3.name");</code><br/>
      * <br/>
-     *
+     * Note that the syntax is slightly misleading, implying that you provide a start and end index.  In fact, the
+     * API matches NSRange and you must provide a start index and a length.  Unfortunately changing this either
+     * syntax or implementation will break backwards compatibility (and subtly), so we have to suck it up for now.
      */
     public static class SubarrayWithRangeOperator extends BaseOperator {
         /** public empty constructor */
@@ -955,7 +1017,7 @@ public class ERXArrayUtilities extends Object {
             int i2 = keypath.indexOf("-");
             String rest = null;
             if ( i1 == -1 || i2 == -1 ) {
-                throw new IllegalArgumentException("subarrayWithRange must be used like @subarrayWithRange.start-length");
+                throw new IllegalArgumentException("subarrayWithRange must be used like '@subarrayWithRange.start-length' current key path: \"" + keypath + "\"");
             }
             String str = keypath.substring(i1, i2);
             int start = str.length() == 0 ? 0 : Integer.parseInt(str);
@@ -972,6 +1034,50 @@ public class ERXArrayUtilities extends Object {
     }
 
     
+    /**
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>limit</b>, which
+     * is similar to subarrayWithRange except that it is always from 0 to the limit value.  If the limit
+     * specified is larger than the size of the array, the entire array will be returned.
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKeyPath("@limit.10.name");</code><br/>
+     * <br/>
+     */
+    public static class LimitOperator extends BaseOperator {
+        /**
+         * Constructs a new LimitOperator
+         **/
+        public LimitOperator() {
+        	// DO NOTHING
+        }
+
+        /**
+         * Computes the subarray of the given array.
+         * 
+         * @param array array to be checked.
+         * @param keypath name of fetch specification.
+         * @return the subarray for the given limit
+         */
+        public Object compute(NSArray array, String keypath) {
+            int dotIndex = keypath.indexOf(".");
+            String limitStr;
+            String rest;
+            if (dotIndex == -1) {
+            	limitStr = keypath;
+            	rest = null;
+            }
+            else {
+            	limitStr = keypath.substring(0, dotIndex);
+            	rest = keypath.substring(dotIndex + 1);
+            }
+            int length = limitStr.length() == 0 ? 0 : Integer.parseInt(limitStr);
+            length = Math.min(length, array.count());
+            NSArray objects = array.subarrayWithRange(new NSRange(0, length));
+            return contents(objects, rest);
+        }
+    }
+
 
     /**
      * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>unique</b>.<br/>
@@ -1160,7 +1266,8 @@ public class ERXArrayUtilities extends Object {
     /** 
      * Will register new NSArray operators
      * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
-     * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b>, <b>reverse</b> and <b>fetchSpec</b> 
+     * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b>, <b>reverse</b>, 
+     * <b>limit</b>, and <b>fetchSpec</b> 
      */
     public static void initialize() {
         if (initialized) {
@@ -1183,6 +1290,7 @@ public class ERXArrayUtilities extends Object {
             NSArray.setOperatorForKey("reverse", new ReverseOperator());
             NSArray.setOperatorForKey("removeNullValues", new RemoveNullValuesOperator());
             NSArray.setOperatorForKey("median", new MedianOperator());
+            NSArray.setOperatorForKey("limit", new LimitOperator());
         }
     }
     
@@ -1849,5 +1957,5 @@ public class ERXArrayUtilities extends Object {
 		}
 		return clonedSet;
     }
+	
 }
-

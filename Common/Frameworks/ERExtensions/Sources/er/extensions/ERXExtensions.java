@@ -6,17 +6,45 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
-import com.webobjects.appserver.*;
-import com.webobjects.jdbcadaptor.JDBCAdaptorException;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
-import java.lang.*;
-import java.util.*;
-import java.io.*;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOSession;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabase;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 /**
  * Principal class of the ERExtensions framework. This class
@@ -31,7 +59,6 @@ import org.apache.log4j.Logger;
  * for creating editing contexts with the default delegates set.
  */
 public class ERXExtensions extends ERXFrameworkPrincipal {
-    public static Observer observer;
     
     /** Notification name, posted before object will change in an editing context */
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
@@ -39,22 +66,32 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /** logging support */
     private static Logger _log;
 
-    /**
-     * creates and caches the logging logger
-     * @return logging logger
-     */
-    public static Logger log() {
-        if (_log == null)
-            _log = Logger.getLogger(ERXExtensions.class);
-        return _log;
+    private static boolean _initialized;
+
+    public ERXExtensions() {
     }
 
-    /** holds references to default editing context delegate */
-    //private static ERXEditingContextDelegate _defaultEditingContextDelegate;
-    /** holds references to default editing context delegate without validation */
-    //private static ERXECNoValidationDelegate _defaultECNoValidationDelegate;
+    /** holds the default model group */
+    protected EOModelGroup defaultModelGroup;
 
     /**
+     * Delegate method for the {@link EOModelGroup} class delegate.
+     * @return a fixed ERXModelGroup
+     */
+    public EOModelGroup defaultModelGroup() {
+        if(defaultModelGroup == null) {
+            //defaultModelGroup = new ERXModelGroup();
+            //defaultModelGroup.loadModelsFromLoadedBundles();
+            defaultModelGroup = ERXModelGroup.modelGroupForLoadedBundles();
+        }
+        return defaultModelGroup;
+    }
+
+   /**
+     * Configures the framework. All the bits and pieces that need
+     * to be configured are configured, those that need to happen
+     * later are delayed by registering an observer for notifications
+     * that are posted when the application is finished launching.
      * This public observer is used to perform basic functions in
      * response to notifications. Specifically it handles
      * configuring the adapator context so that SQL debugging can
@@ -67,147 +104,71 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
      * This delegate is configured when this framework is loaded.
      */
-    public static class Observer {
-        /**
-         * This method is called everytime the configuration file
-         * is changed. This allows for turning SQL debuging on and
-         * off at runtime.
-         * @param n notification posted when the configuration file
-         * 	changes.
-         */
-        public void configureAdaptorContext(NSNotification n) {
-            ERXExtensions.configureAdaptorContext();
-        }
 
-        /**
-         * This method is called everytime an editingcontext is
-         * saved. This allows us to call all of the didInsert,
-         * didUpdate and didSave methods on the enterprise objects
-         * after the transaction is complete.
-         * @param n notification that contains the array of inserted,
-         *		updated and deleted objects.
-         */
-        public void didSave(NSNotification n) {
-            ERXGenericRecord.didSave(n);
-        }
-
-        /**
-         * This method is called when the application has finished
-         * launching. Here is where log4j is configured for rapid
-         * turn around, the compiler proxy is initialized and the
-         * validation template system is configured.
-         * @param n notification posted when the app is done launching
-         */
-        public void finishedLaunchingApp(NSNotification n) {
-			/*
-            ERXProperties.populateSystemProperties();
-            ERXConfigurationManager.defaultManager().configureRapidTurnAround();
-
-            ERXLocalizer.initialize();
-            ERXValidationFactory.defaultFactory().configureFactory();
-            if(!ERXProperties.webObjectsVersionIs522OrHigher()) {
-                NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-                NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
-                
-                ERXNSLogLog4jBridge debugLogger = new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG);
-                debugLogger.setAllowedDebugLevel(NSLog.debug.allowedDebugLevel());
-                NSLog.setDebug(debugLogger);
-            }
-
-            registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName),
-                EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
-            registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAllInArraySelectorName),
-                EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class));
-            registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAnyInArraySelectorName),
-                EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class));
-			*/
-        }
-
-        /**
-         * This method is called every time a session times
-         * out. It allows us to release references to all the
-         * editing contexts that were created when that particular
-         * session was active.
-         * Not used in WO 5.2+
-         * @param n notification that contains the session ID.
-         */
-        public void sessionDidTimeOut(NSNotification n) {
-            String sessionID=(String)n.object();
-            ERXExtensions.sessionDidTimeOut(sessionID);
-        }
-
-        /**
-         * This is needed for WO pre-5.2 when ec's were not
-         * retained by their eos. Not called in 5.2+ systems.
-         * @param n notification posted when an ec is created
-         */
-        public void editingContextDidCreate(NSNotification n) {
-            EOEditingContext ec = (EOEditingContext)n.object();
-            ERXExtensions.retainEditingContextForCurrentSession(ec);
-        }
+    protected void initialize() {
+    	NSNotificationCenter.defaultCenter().addObserver(this,
+    			new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray),
+    			ERXApplication.AllBundlesLoadedNotification,
+    			null);
     }
     
-    /**
-     * Configures the framework. All the bits and pieces that need
-     * to be configured are configured, those that need to happen
-     * later are delayed by registering an observer for notifications
-     * that are posted when the application is finished launching.
-     */
-    static {
-            try {
-                // This will load any optional configuration files, 
-                ERXConfigurationManager.defaultManager().initialize();
-                ERXLogger.configureLogging(System.getProperties());
+    public void bundleDidLoad(NSNotification n) {
+    	if(_initialized) return;
+    	_initialized = true;
+    	
+    	try {
+    		// This will load any optional configuration files, 
+    		ERXConfigurationManager.defaultManager().initialize();
+    		// ensures that WOOutputPath's was processed with this @@
+    		// variable substitution. WOApplication uses WOOutputPath in
+    		// its constructor so we need to modify it before calling
+    		// the constructor.
+        	EOModelGroup.setClassDelegate(this);
+        	ERXSystem.updateProperties();
 
-                log().debug("Initializing framework: ERXExtensions");
-                ERXArrayUtilities.initialize();
-                
-                // False by default
-                if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
-                    ERXSharedEOLoader.patchSharedEOLoading();
-                }            
-            } catch (Exception e) {
-                System.out.println("Caught exception: " + e.getMessage() + " stack: ");
-                e.printStackTrace();
-            }
-
-            observer = new Observer();
-
-            try {
-                ERXExtensions.configureAdaptorContextRapidTurnAround(observer);
-            } catch (RuntimeException e) {
-                System.out.println("Caught exception: " + e.getMessage() + " stack: ");
-                e.printStackTrace();
-            }
+    		// AK: enable this when we're ready
+        	// WOEncodingDetector.sharedInstance().setFallbackEncoding("UTF-8");
+        	
+        	// GN: configure logging with optional custom subclass of ERXLogger
+        	String className = ERXProperties.stringForKey("er.extensions.erxloggerclass"); 
+        	if (className != null) {
+	        	Class loggerClass = Class.forName(className);
+	        	Method method = loggerClass.getDeclaredMethod(ERXLogger.CONFIGURE_LOGGING_WITH_SYSTEM_PROPERTIES, (Class[]) null);
+	        	method.invoke(loggerClass, (Object[]) null);
+        	}
+        	else {
+        		// default behaviour:
+        		ERXLogger.configureLoggingWithSystemProperties();
+        	}
+        	
+            ERXArrayUtilities.initialize();
             
-            try {
-                EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
-                ERXEC.factory().setDefaultDelegateOnEditingContext(EOSharedEditingContext.defaultSharedEditingContext(), true);
+    		// False by default
+    		if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
+    			ERXSharedEOLoader.patchSharedEOLoading();
+    		}            
+    		ERXExtensions.configureAdaptorContextRapidTurnAround(this);
+    		//ERXJDBCAdaptor.registerJDBCAdaptor();
+    		EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+    		//ERXAdaptorChannelDelegate.setupDelegate();
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sharedEditingContextWasInitialized", ERXConstant.NotificationClassArray), EOSharedEditingContext.DefaultSharedEditingContextWasInitializedNotification, null);
 
-                ERXEntityClassDescription.registerDescription();
-                NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("didSave", ERXConstant.NotificationClassArray),
-                                                                 EOEditingContext.EditingContextDidSaveChangesNotification,
-                                                                 null);
-                NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("finishedLaunchingApp", ERXConstant.NotificationClassArray),
-                                                                 WOApplication.ApplicationWillFinishLaunchingNotification,
-                                                                 null);
-                if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
-                    NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
-                                                                 WOSession.SessionDidTimeOutNotification,
-                                                                 null);
-                    NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                     new NSSelector("editingContextDidCreate",
-                                                                                    ERXConstant.NotificationClassArray),
-                                                                     ERXEC.EditingContextDidCreateNotification,
-                                                                     null);                    
-                }
-            } catch (Exception e) {
-                System.out.println("Caught exception: " + e.getMessage() + " stack: ");
-                e.printStackTrace();
-            }
+    		ERXEntityClassDescription.registerDescription();
+    		//ERXPartialInitializer.registerModelGroupListener();
+    		if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
+    			NSNotificationCenter.defaultCenter().addObserver(this,
+    					new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
+    					WOSession.SessionDidTimeOutNotification,
+    					null);
+    			NSNotificationCenter.defaultCenter().addObserver(this,
+    					new NSSelector("editingContextDidCreate",
+    							ERXConstant.NotificationClassArray),
+    							ERXEC.EditingContextDidCreateNotification,
+    							null);                    
+    		}
+    	} catch (Exception e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
     }
 
     /**
@@ -301,6 +262,51 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         }
     }
 
+    /**
+     * This method is called everytime the configuration file
+     * is changed. This allows for turning SQL debuging on and
+     * off at runtime.
+     * @param n notification posted when the configuration file
+     * 	changes.
+     */
+    public void configureAdaptorContext(NSNotification n) {
+        ERXExtensions.configureAdaptorContext();
+    }
+    
+    /**
+     * This method is called every time a session times
+     * out. It allows us to release references to all the
+     * editing contexts that were created when that particular
+     * session was active.
+     * Not used in WO 5.2+
+     * @param n notification that contains the session ID.
+     */
+    public void sessionDidTimeOut(NSNotification n) {
+        String sessionID=(String)n.object();
+        ERXExtensions.sessionDidTimeOut(sessionID);
+    }
+
+    /**
+     * This is needed for WO pre-5.2 when ec's were not
+     * retained by their eos. Not called in 5.2+ systems.
+     * @param n notification posted when an ec is created
+     */
+    public void editingContextDidCreate(NSNotification n) {
+        EOEditingContext ec = (EOEditingContext)n.object();
+        ERXExtensions.retainEditingContextForCurrentSession(ec);
+    }
+    
+    /**
+     * This method is called for the following notification
+     * {@link EOSharedEditingContext#DefaultSharedEditingContextWasInitializedNotification}
+     * 
+     * @param n the notification.
+     */
+    public void sharedEditingContextWasInitialized(NSNotification n) {
+    	EOSharedEditingContext sec = EOSharedEditingContext.defaultSharedEditingContext();
+    	ERXEC.factory().setDefaultDelegateOnEditingContext(sec, true);
+    }
+
     /** logging support for the adaptor channel */
     public static Logger adaptorLogger;
 
@@ -366,21 +372,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
             targetState = Boolean.FALSE;
         }
         if (targetState != null) {
-            // We set the default, so all future adaptor contexts are either enabled or disabled.
-            if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) != targetState.booleanValue())
-                if (targetState.booleanValue()) {
-                    NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
-                    NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelInformational);
-                } else {
-                    NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
-                    NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelCritical);
-                }
-            if (targetState.booleanValue()) {
-                adaptorLogger.info("Adaptor debug on");
-            } else {
-                adaptorLogger.info("Adaptor debug off");
-            }
-            adaptorEnabled = targetState;
+        	setAdaptorLogging(targetState.booleanValue());
         }
     }
 
@@ -431,10 +423,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     public static void sessionDidTimeOut(String sessionID) {
         if (sessionID != null) {
             if (_editingContextsPerSession != null) {
-                if (log().isDebugEnabled()) {
+                if (_log.isDebugEnabled()) {
                     NSArray a=(NSArray)_editingContextsPerSession.objectForKey(sessionID);
-                    log().debug("Session "+sessionID+" is timing out ");
-                    log().debug("Found "+ ((a == null) ? 0 : a.count()) + " editing context(s)");
+                    _log.debug("Session "+sessionID+" is timing out ");
+                    _log.debug("Found "+ ((a == null) ? 0 : a.count()) + " editing context(s)");
                 }
                 NSArray ecs = (NSArray)_editingContextsPerSession.removeObjectForKey(sessionID);
                 // Just helping things along.
@@ -463,14 +455,14 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
              if (a == null) {
                  a = new NSMutableArray();
                  _editingContextsPerSession.setObjectForKey(a, s.sessionID());
-                 if (log().isDebugEnabled())
-                     log().debug("Creating array for "+s.sessionID());
+                 if (_log.isDebugEnabled())
+                	 _log.debug("Creating array for "+s.sessionID());
              }
              a.addObject(ec);
-             if (log().isDebugEnabled())
-                 log().debug("Added new ec to array for "+s.sessionID());
-         } else if (log().isDebugEnabled()) {
-             log().debug("Editing Context created with null session.");
+             if (_log.isDebugEnabled())
+            	 _log.debug("Added new ec to array for "+s.sessionID());
+         } else if (_log.isDebugEnabled()) {
+        	 _log.debug("Editing Context created with null session.");
          }
     }
 
@@ -530,7 +522,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      *		have been collected.
      */
     public static void forceGC(int maxLoop) {
-        if (log().isDebugEnabled()) log().debug("Forcing full Garbage Collection");
+        if (_log.isDebugEnabled()) _log.debug("Forcing full Garbage Collection");
         Runtime runtime = Runtime.getRuntime();
         long isFree = runtime.freeMemory();
         long wasFree;
@@ -914,7 +906,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
                     _sharedEntityDataWasRefreshedSelector.invoke(entityClass);
                 }
             } else {
-                log().warn("Attempting to refresh a non-shared EO: " + entityName);
+                _log.warn("Attempting to refresh a non-shared EO: " + entityName);
             }
         } catch (Exception e) {
             throw new NSForwardException(e, "Exception while refreshing shared objects for entity named " + entityName);
@@ -976,7 +968,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         if (result!=null && s!=null) {
             result += ( result.indexOf("?") == -1 ? "?" : "&" ) + "wosid=" + s.sessionID();
         } else {
-            log().warn("not adding sid: url="+url+" session="+s);
+        	_log.warn("not adding sid: url="+url+" session="+s);
         }
         return result;
     }
@@ -1129,4 +1121,86 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         return implementsMethod;
     }
 
+    /**
+     * Initializes your WOApplication programmatically (for use in test cases and main methods) with
+     * the assumption that the current directory is your main bundle URL.
+     * 
+     * @param applicationSubclass your Application subclass
+     * @param args the commandline arguments for your application
+     */
+    public static void initApp(Class applicationSubclass, String[] args) {
+		try {
+	    	File currentFolder = new File(".").getCanonicalFile();
+	    	if (!currentFolder.getName().endsWith(".woa")) {
+	    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
+	    	}
+	    	ERXExtensions.initApp(null, currentFolder.toURL(), applicationSubclass, args);
+		}
+		catch (IOException e) {
+			throw new NSForwardException(e);
+		}
+    }
+    
+    /**
+     * Initializes your WOApplication programmatically (for use in test cases and main methods).
+     * 
+     * @param mainBundleName the name of your main bundle
+     * @param applicationSubclass your Application subclass
+     * @param args the commandline arguments for your application
+     */
+    public static void initApp(String mainBundleName, Class applicationSubclass, String[] args) {
+    	ERXExtensions.initApp(mainBundleName, null, applicationSubclass, args);
+    }
+    
+    /**
+     * Initializes your WOApplication programmatically (for use in test cases and main methods).
+     * 
+     * @param mainBundleName the name of your main bundle (or null to use mainBundleURL)
+     * @param mainBundleURL the URL to your main bundle (ignored if mainBundleName is set)
+     * @param applicationSubclass your Application subclass
+     * @param args the commandline arguments for your application
+     */
+    public static void initApp(String mainBundleName, URL mainBundleURL, Class applicationSubclass, String[] args) {
+        ERXApplication.setup(args);
+        ERXApplication.primeApplication(mainBundleName, mainBundleURL, applicationSubclass.getName());
+        //NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidCreateNotification, WOApplication.application()));
+    }
+    
+    /**
+     * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
+     * not need to call this method if you already called initApp.  This is lighter-weight than 
+     * initApp, and tries to just get enough configured to make EOF work properly.  This method
+     * assumes you are running your app from a .woa folder.
+     * 
+     * @param args the commandline arguments for your application
+     */
+    public static void initEOF(String[] args) {
+    	ERXExtensions.initEOF(new File("."), args);
+    }
+    
+    /**
+     * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
+     * not need to call this method if you already called initApp.  This is lighter-weight than 
+     * initApp, and tries to just get enough configured to make EOF work properly.
+     * 
+     * @param mainBundleFile the folder of your main bundle
+     * @param args the commandline arguments for your application
+     */
+    public static void initEOF(File mainBundleFolder, String[] args) {
+    	try {
+	    	File currentFolder = new File(".").getCanonicalFile();
+	    	if (!currentFolder.getName().endsWith(".woa")) {
+	    		currentFolder = mainBundleFolder;
+		    	if (!currentFolder.getName().endsWith(".woa")) {
+		    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
+		    	}
+		        System.setProperty("webobjects.user.dir", mainBundleFolder.getCanonicalPath());
+	    	}
+	        ERXApplication.setup(args);
+	        ((ERXExtensions) ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class)).bundleDidLoad(null);
+		}
+		catch (IOException e) {
+			throw new NSForwardException(e);
+		}
+    }
 }
