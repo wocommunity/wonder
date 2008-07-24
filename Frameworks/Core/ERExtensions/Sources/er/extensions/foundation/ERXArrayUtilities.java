@@ -343,7 +343,7 @@ public class ERXArrayUtilities extends Object {
 	public static NSDictionary arrayGroupedByToManyKeyPath(NSArray objects,
             String keyPath,
             Object nullGroupingKey) {
-    	return ERXArrayUtilities.arrayGroupedByKeyPath(objects, keyPath, nullGroupingKey, null);
+    	return ERXArrayUtilities.arrayGroupedByToManyKeyPath(objects, keyPath, nullGroupingKey, null);
     }
     
     /**
