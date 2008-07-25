@@ -67,6 +67,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
     public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
     public final static Logger propertyKeyLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
+    public final static NSSelector D2WCONTEXT_SELECTOR = new NSSelector("d2wContext");
 
     static {
     	setUpFrameworkPrincipalClass (ERDirectToWeb.class);
