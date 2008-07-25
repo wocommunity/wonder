@@ -89,7 +89,7 @@ public class ERDFlowDelegate implements NextPageDelegate {
 	protected <T> T parent(Class<? extends T> clazz) {
 		WOComponent curr = currentComponent();
 		while (curr != null) {
-			if (curr.getClass().isAssignableFrom(clazz)) {
+			if (clazz.isAssignableFrom(curr.getClass())) {
 				T t = (T) curr;
 				return t;
 			}
