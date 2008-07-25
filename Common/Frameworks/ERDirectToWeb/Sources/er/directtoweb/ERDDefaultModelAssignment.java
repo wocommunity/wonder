@@ -271,23 +271,6 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
      */
     public Object destinationEntity(D2WContext c) {
         EOEntity destinationEntity = (EOEntity)c.valueForKeyPath("smartRelationship.destinationEntity");
-        
-        // If the property key is not a relationship, but the destination is an EO, return that EO's entity.
-        if (null == destinationEntity) {
-            Object rawObject = c.valueForKey("object");
-            String propertyKey = c.propertyKey();
-            Object destinationObject = NSKeyValueCodingAdditions.Utility.valueForKeyPath(rawObject, propertyKey);
-            if (destinationObject instanceof NSArray) {
-                NSArray array = (NSArray)destinationObject;
-                if (array.count() > 0) {
-                    destinationObject = array.objectAtIndex(0);
-                }
-            }
-            if (destinationObject instanceof EOEnterpriseObject) {
-                destinationEntity = EOModelGroup.defaultGroup().entityNamed(((EOEnterpriseObject)destinationObject).entityName());
-            }
-        }
-        
         return destinationEntity;
     }
 
