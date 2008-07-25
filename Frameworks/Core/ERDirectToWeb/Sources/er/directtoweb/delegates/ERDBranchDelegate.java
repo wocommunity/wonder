@@ -29,6 +29,7 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.components.ERDCustomComponent;
 import er.directtoweb.interfaces.ERDMessagePageInterface;
 import er.directtoweb.pages.ERD2WPage;
@@ -225,12 +226,9 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
      * @param sender
      */
     protected D2WContext d2wContext(WOComponent sender) {
-        if(sender instanceof D2WComponent) {
-            return ((D2WComponent)sender).d2wContext();
-        }
-        if(sender instanceof ERDCustomComponent) {
-            return ((ERDCustomComponent)sender).d2wContext();
-        }
+    	if(ERDirectToWeb.D2WCONTEXT_SELECTOR.implementedByObject(sender)) {
+            return (D2WContext) sender.valueForKey(ERDirectToWeb.D2WCONTEXT_SELECTOR.name());
+    	}
         throw new IllegalStateException("Can't figure out d2wContext from: " + sender);
     }
     
