@@ -6,6 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.delegates;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -30,7 +34,6 @@ import er.directtoweb.interfaces.ERDMessagePageInterface;
 import er.directtoweb.pages.ERD2WPage;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
-import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -42,6 +45,25 @@ import er.extensions.localization.ERXLocalizer;
  */
 public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 
+	/**
+	 * Runtime flags for the delegate, so you can have one delegate for all tasks.
+	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.METHOD)
+	public @interface D2WDelegate {
+		/**
+		 * Returns the names of the tasks where you can have this method. Example "query,select"
+		 * @return
+		 */
+		public String availableTasks() default "";
+		
+		/**
+		 * Returns the names of the pages where you can have this method. Example "ListWebMaster,QueryWebMaster"
+		 * @return
+		 */
+		public String availablePages() default "";
+	}
+	
     /** logging support */
     public final static Logger log = Logger.getLogger(ERDBranchDelegate.class);
 
@@ -160,6 +182,8 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     protected NSArray defaultBranchChoices(D2WContext context) {
         NSArray choices = NSArray.EmptyArray;
         try {
+        	String task = context.task();
+        	String pageName = context.dynamicPage();
             NSMutableArray methodChoices = new NSMutableArray();
             Method methods[] = getClass().getMethods();
             for (Enumeration e = new NSArray(methods).objectEnumerator(); e.hasMoreElements();) {
@@ -170,8 +194,22 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
                         && method.getName().charAt(0) != '_'
                         && ((method.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC) 
                 ) {
-                    NSDictionary branch = branchChoiceDictionary(method.getName(), null);
-                    methodChoices.addObject(branch);        
+                    boolean isAllowed = true;
+                    if(method.isAnnotationPresent(D2WDelegate.class)) {
+                    	D2WDelegate info = method.getAnnotation(D2WDelegate.class);
+                    	String availableTasks = info.availableTasks();
+                    	String availablePages = info.availablePages();
+						if(availableTasks.length() > 0 && !availableTasks.contains(task)) {
+							isAllowed = false;
+						}
+						if(availablePages.length() > 0 && !availablePages.contains(task)) {
+							isAllowed = false;
+						}
+                    }
+                    if(isAllowed) {
+                    	NSDictionary branch = branchChoiceDictionary(method.getName(), null);
+                    	methodChoices.addObject(branch);      
+                    }
                 }
             }
             choices = ERXArrayUtilities.sortedArraySortedWithKey(methodChoices, BRANCH_LABEL);
