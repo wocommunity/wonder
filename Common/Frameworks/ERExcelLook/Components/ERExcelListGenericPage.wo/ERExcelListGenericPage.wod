@@ -109,3 +109,21 @@ Repetition1: WORepetition {
 ShouldShowProperty: WOConditional {
 	condition = shouldShowProperty;
 }
+
+HasHeader: WOConditional {
+	condition = d2wContext.excelHeaderString;
+}
+
+HeaderCell:  WOGenericContainer {
+	class = d2wContext.excelClassForHeader;
+	elementName = "td";
+	cellType = "CELL_TYPE_STRING";
+    width = d2wContext.excelCellHeaderWidth;
+	alignment = d2wContext.excelCellHeaderAlignment;
+	wrapText = d2wContext.excelCellHeaderWrapText;
+}
+
+HeaderString: WOString {
+	value = d2wContext.excelHeaderString;
+}
+
