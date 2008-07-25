@@ -6,5 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JavaWOExtensions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Ajax"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

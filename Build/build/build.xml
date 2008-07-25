@@ -165,7 +165,7 @@
             <param name="project.dir" value="Frameworks/Core/ERDirectToWeb" />
 
             <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
         </antcall>
     </target>
     
