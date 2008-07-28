@@ -6,6 +6,7 @@ WODebuggingEnabled=false
 WODirectConnectEnabled=true
 WOCachingEnabled=true
 WOPort=1085
+er.extensions.ERXMessageEncoding.Enabled=false
 
 # deployment defaults
 WOMonitorEnabled=false
