@@ -29,7 +29,7 @@ public class Application extends ERXApplication {
     public Application() {
         super();
         String dd = System.getProperties().getProperty("_DeploymentDebugging");
-        if (dd != null || true) {
+        if (dd != null) {
             NSLog.debug.setIsVerbose(true);
             NSLog.out.setIsVerbose(true);
             NSLog.err.setIsVerbose(true);
