@@ -20,7 +20,7 @@ import java.util.Collection;
 //TODO iterator.remove() throws unimplemented
 
 @SuppressWarnings("unchecked")
-public class NSMutableSet<T> extends NSSet<T> {
+public class NSMutableSet<E> extends NSSet<E> {
 
 	public NSMutableSet() {
 	}
@@ -36,23 +36,23 @@ public class NSMutableSet<T> extends NSSet<T> {
 		}
 	}
 
-	public NSMutableSet(T object) {
+	public NSMutableSet(E object) {
 		super(object);
 	}
 
-	public NSMutableSet(T objects[]) {
+	public NSMutableSet(E objects[]) {
 		super(objects);
 	}
 
-	public NSMutableSet(NSArray<? extends T> objects) {
+	public NSMutableSet(NSArray<? extends E> objects) {
 		super(objects);
 	}
 
-	public NSMutableSet(NSSet<? extends T> otherSet) {
+	public NSMutableSet(NSSet<? extends E> otherSet) {
 		super(otherSet);
 	}
 
-	public void addObject(T object) {
+	public void addObject(E object) {
 		if (object == null) {
 			throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
 		}
@@ -67,7 +67,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 		}
 	}
 
-	public T removeObject(Object object) {
+	public E removeObject(Object object) {
 		Object result = null;
 		if (object != null && _count != 0) {
 			result = _NSCollectionPrimitives.removeValueInHashTable(object, _objects, _objects, _flags);
@@ -80,12 +80,12 @@ public class NSMutableSet<T> extends NSSet<T> {
 				_objectsCache = null;
 			}
 		}
-		return (T) result;
+		return (E) result;
 	}
 
 	public void removeAllObjects() {
 		if (_count != 0) {
-			_objects = new Object[_hashtableBuckets];
+			_objects = (E[])new Object[_hashtableBuckets];
 			_flags = new byte[_hashtableBuckets];
 			_count = 0;
 			_objectsCache = null;
@@ -93,11 +93,11 @@ public class NSMutableSet<T> extends NSSet<T> {
 		}
 	}
 
-	public void setSet(NSSet<? extends T> otherSet) {
+	public void setSet(NSSet<? extends E> otherSet) {
 		if (otherSet != this) {
 			removeAllObjects();
 			if (otherSet != null) {
-				T objects[] = otherSet.objectsNoCopy();
+				E objects[] = (E[])otherSet.objectsNoCopy();
 				for (int i = 0; i < objects.length; i++) {
 					addObject(objects[i]);
 				}
@@ -106,9 +106,9 @@ public class NSMutableSet<T> extends NSSet<T> {
 		}
 	}
 
-	public void addObjectsFromArray(NSArray<? extends T> array) {
+	public void addObjectsFromArray(NSArray<? extends E> array) {
 		if (array != null) {
-			T objects[] = array.objectsNoCopy();
+			E objects[] = (E[])array.objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				addObject(objects[i]);
 			}
@@ -122,7 +122,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 				removeAllObjects();
 				return;
 			}
-			T objects[] = objectsNoCopy();
+			E objects[] = (E[])objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				if (otherSet.member(objects[i]) == null) {
 					removeObject(objects[i]);
@@ -149,11 +149,11 @@ public class NSMutableSet<T> extends NSSet<T> {
 
 	}
 
-	public void unionSet(NSSet<? extends T> otherSet) {
+	public void unionSet(NSSet<? extends E> otherSet) {
 		if (otherSet == null || otherSet.count() == 0 || otherSet == this) {
 			return;
 		}
-		T objects[] = otherSet.objectsNoCopy();
+		E objects[] = (E[])otherSet.objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			addObject(objects[i]);
 		}
@@ -161,15 +161,15 @@ public class NSMutableSet<T> extends NSSet<T> {
 	}
 
 	public Object clone() {
-		return new NSMutableSet<T>(this);
+		return new NSMutableSet<E>(this);
 	}
 
-	public NSSet<T> immutableClone() {
-		return new NSSet<T>(this);
+	public NSSet<E> immutableClone() {
+		return new NSSet<E>(this);
 	}
 
-	public NSMutableSet<T> mutableClone() {
-		return (NSMutableSet<T>) clone();
+	public NSMutableSet<E> mutableClone() {
+		return (NSMutableSet<E>) clone();
 	}
 
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
@@ -187,7 +187,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 	 * @throws IllegalArgumentException
 	 *             if o is null
 	 */
-	public boolean add(T o) {
+	public boolean add(E o) {
 		if (contains(o)) {
 			return false;
 		}
@@ -218,9 +218,9 @@ public class NSMutableSet<T> extends NSSet<T> {
 	 * 
 	 * @return true if this set was modified; false otherwise.
 	 */
-	public boolean addAll(Collection<? extends T> c) {
+	public boolean addAll(Collection<? extends E> c) {
 		boolean updated = false;
-		for (T t : c) {
+		for (E t : c) {
 			if (!contains(t)) {
 				add(t);
 				updated = true;
