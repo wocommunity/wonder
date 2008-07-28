@@ -21,10 +21,9 @@ FileUpload1: WOFileUpload {
 	filePath = sshIdentityFilepath;
 }
 
-Form1: WOForm {
-}
 
 Form2: WOForm {
+	enctype="multipart/form-data";
 }
 
 NavPage: NavigationPage {
