@@ -288,7 +288,6 @@ public class WOHelperFunctionHTMLParser {
 			if (log.isDebugEnabled()) {
 				log.debug("Parsed Comment (" + _contentText.length() + ") : " + _contentText);
 			}
-			System.out.println("WOHelperFunctionHTMLParser.didParseComment: " + _contentText);
 			if (_contentText.length() > 0) {
 				_parserDelegate.didParseComment(_NSStringUtilities.stringFromBuffer(_contentText), this);
 				_contentText.setLength(0);
