@@ -53,6 +53,12 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 	@Target(ElementType.METHOD)
 	public @interface D2WDelegate {
 		/**
+		 * Returns the names of the scope where you can have this method. One of "selection,object"
+		 * @return
+		 */
+		public String scope() default "";
+
+		/**
 		 * Returns the names of the tasks where you can have this method. Example "query,select"
 		 * @return
 		 */
@@ -198,8 +204,17 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
                     boolean isAllowed = true;
                     if(method.isAnnotationPresent(D2WDelegate.class)) {
                     	D2WDelegate info = method.getAnnotation(D2WDelegate.class);
+                    	String scope = info.scope();
                     	String availableTasks = info.availableTasks();
                     	String availablePages = info.availablePages();
+						if(scope.length() > 0) {
+							if("object".equals(scope) && context.valueForKey("object") == null) {
+								isAllowed = false;
+							}
+							if(!"object".equals(scope) && context.valueForKey("object") != null) {
+								isAllowed = false;
+							}
+						}
 						if(availableTasks.length() > 0 && !availableTasks.contains(task)) {
 							isAllowed = false;
 						}
