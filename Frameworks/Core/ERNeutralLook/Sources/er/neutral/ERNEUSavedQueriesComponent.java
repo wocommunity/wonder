@@ -1,20 +1,21 @@
 package er.neutral;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WModel;
+import com.webobjects.eocontrol.EOKeyValueArchiving;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import er.extensions.foundation.*;
-import er.directtoweb.components.misc.ERDSavedQueriesComponent;
-import er.directtoweb.pages.ERD2WQueryPage;
-import er.extensions.foundation.ERXProperties;
-import er.extensions.logging.ERXLogger;
+import com.webobjects.foundation.NSTimestamp;
 
-import java.util.Enumeration;
+import er.directtoweb.components.misc.ERDSavedQueriesComponent;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
 
 /**
  * This Component will store the forms values in the displayGroup of a Query Page into user preferences

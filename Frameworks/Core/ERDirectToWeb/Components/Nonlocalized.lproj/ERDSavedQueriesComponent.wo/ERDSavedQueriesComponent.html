@@ -1,0 +1,41 @@
+<webobject name="AutoSubmitIsEnabled">
+<script type="text/javascript">
+var ERDSavedQueries = {
+"autoSubmitQueryForm": function() {
+  return document.getElementsByName("QueryForm")[0].submit();
+},
+"addEvent": function (obj, evType, fn, useCapture) {
+  if (obj.addEventListener) {
+     obj.addEventListener(evType, fn, useCapture);
+     return true;
+   } else if (obj.attachEvent) {
+     var r = obj.attachEvent('on'+evType, fn);
+     return r;  
+   } else {
+    alert('Handler could not be attached');  
+  }
+}
+};
+</script>
+<webobject name="JavaScript1"></webobject>
+</webobject>
+<table cellspacing="2" cellpadding="2" border="0">
+	<tr>
+		<td><b>Saved Queries</b></td>
+		<td><webobject name="SavedQueryPopup"></webobject>&nbsp;<input type="submit" value="Go"><webobject name="HiddenPopupChangedButton"></webobject></td>
+		<td width="55"><webobject name="HasSelectedQuery"><webobject name="DeleteCurrentQuery"></webobject></webobject></td>
+		<td width="55"><webobject name="HasSavedQueries"><webobject name="DeleteAllSavedQueries"></webobject></webobject></td>
+		<td width="55"><webobject name="HasSavedQueries"><webobject name="MakeDefaultSavedQuery"></webobject></webobject></td>
+	</tr>
+	<tr>
+		<td align="right">Name:</td>
+		<td><webobject name="NewQueryNameTextField"></webobject></td>
+		<td width="55"><webobject name="AddNewQuery"></webobject></td>
+		<td width="55"><webobject name="HasSelectedQuery"><webobject name="UpdateQuery"></webobject></webobject></td>
+		<td width="55"><webobject name="ClearFormButton"></webobject></td>
+	</tr>
+	<tr>
+		<td colspan="2">&nbsp;</td>
+		<td colspan="3"><webobject name="AutosubmitCB"></webobject>Auto submit&nbsp;<webobject name="HiddenAutoSubmitChangedButton"></webobject></td>
+	</tr>
+</table>
