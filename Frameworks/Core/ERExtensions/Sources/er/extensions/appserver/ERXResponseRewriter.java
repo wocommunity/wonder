@@ -323,18 +323,24 @@ public class ERXResponseRewriter {
 	 *            the name of the javascript file to add
 	 */
 	public static void addScriptResourceInHead(WOResponse response, WOContext context, String framework, String fileName) {
-		String scriptStartTag = "<script src=\"";
-		String scriptEndTag;
-		if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", true)) {
-			scriptEndTag = "\" type=\"text/javascript\"></script>";
+		boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+		String scriptStartTag;
+		if (appendTypeAttribute) {
+			scriptStartTag = "<script type=\"text/javascript\" src=\"";
 		}
 		else {
-			scriptEndTag = "\"></script>";
+			scriptStartTag = "<script src=\"";
 		}
+		String scriptEndTag = "\"></script>";
 		String fallbackStartTag;
 		String fallbackEndTag;
 		if (ERXAjaxApplication.isAjaxRequest(context.request()) && ERXProperties.booleanForKeyWithDefault("er.extensions.loadOnDemand", true)) {
-			fallbackStartTag = "<script type=\"text/javascript\">AOD.loadScript('";
+			if (appendTypeAttribute) {
+				fallbackStartTag = "<script type=\"text/javascript\">AOD.loadScript('";
+			}
+			else {
+				fallbackStartTag = "<script>AOD.loadScript('";
+			}
 			fallbackEndTag = "')</script>";
 		}
 		else {
