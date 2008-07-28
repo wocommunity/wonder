@@ -211,7 +211,7 @@
 		5579D78E0B5964C600B41627 /* EOKeyValueArchiverTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EOKeyValueArchiverTest.h; path = EOControl/EOKeyValueArchiverTest.h; sourceTree = "<group>"; };
 		5579D78F0B5964C600B41627 /* EOKeyValueArchiverTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EOKeyValueArchiverTest.m; path = EOControl/EOKeyValueArchiverTest.m; sourceTree = "<group>"; };
 		5579D79D0B59691C00B41627 /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5579D79E0B59691C00B41627 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
+		5579D79E0B59691C00B41627 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		559D5AE00AF5284E002E4E8D /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		55A0E2380B93519F0086057D /* ColorPane.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ColorPane.tiff; sourceTree = "<group>"; };
 		55A9B0E60B6B6BBF00A157F4 /* empty.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = empty.gif; sourceTree = "<group>"; };
@@ -587,9 +587,11 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 3CA4EB940A63F86100F9197D /* Build configuration list for PBXProject "RuleModeler" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* RuleModeler */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* RuleModeler */,
 				5579D79C0B59691C00B41627 /* Tests */,
@@ -865,6 +867,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(value)",
+					"$(DEVELOPER_FRAMEWORKS_DIR_QUOTED)",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -892,6 +898,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(value)",
+					"$(DEVELOPER_FRAMEWORKS_DIR_QUOTED)",
+				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
