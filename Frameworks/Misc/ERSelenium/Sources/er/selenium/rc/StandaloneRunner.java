@@ -10,10 +10,10 @@ import org.apache.log4j.varia.LevelRangeFilter;
 
 import com.webobjects.foundation.NSArray;
 
+import er.selenium.DefaultSeleniumTestFilesFinder;
 import er.selenium.ERSelenium;
 import er.selenium.SeleniumTest;
 import er.selenium.SeleniumTestFileProcessor;
-import er.selenium.SeleniumTestFilesFinder;
 import er.selenium.filters.SeleniumCompositeTestFilter;
 import er.selenium.filters.SeleniumIncludeTestFilter;
 import er.selenium.filters.SeleniumOverrideOpenTestFilter;
@@ -48,7 +48,7 @@ public class StandaloneRunner {
 		ERSelenium.registerImportersExporters();
 		
 		File testsRoot = new File(args[0]);
-		NSArray<File> testsFiles = new SeleniumTestFilesFinder(testsRoot).findTests();
+		NSArray<File> testsFiles = new DefaultSeleniumTestFilesFinder().findTests(testsRoot);
 		log.debug(testsFiles);
 		
 		String appHost = args[1];
