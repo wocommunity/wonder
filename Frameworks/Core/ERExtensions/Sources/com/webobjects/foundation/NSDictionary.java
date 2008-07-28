@@ -219,7 +219,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	}
 
 	public NSDictionary(NSArray<? extends V> objects, NSArray<? extends K> keys) {
-		this(objects == null ? null : objects.objectsNoCopy(), keys == null ? null : keys.objectsNoCopy(), false);
+		this(objects == null ? null : (V[])objects.objectsNoCopy(), keys == null ? null : (K[])keys.objectsNoCopy(), false);
 	}
 
 	public NSDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
@@ -293,18 +293,18 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		}
 	}
 
-	protected K[] keysNoCopy() {
+	protected Object[] keysNoCopy() {
 		if (_keysCache == null) {
 			_keysCache = _count != 0 ? _NSCollectionPrimitives.keysInHashTable(_keys, _objects, _flags, _capacity, _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray;
 		}
-		return (K[]) _keysCache;
+		return _keysCache;
 	}
 
-	protected V[] objectsNoCopy() {
+	protected Object[] objectsNoCopy() {
 		if (_objectsCache == null) {
 			_objectsCache = _count != 0 ? _NSCollectionPrimitives.valuesInHashTable(_keys, _objects, _flags, _capacity, _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray;
 		}
-		return (V[]) _objectsCache;
+		return _objectsCache;
 	}
 
 	public int count() {

@@ -164,7 +164,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
     public void removeAllObjects() {
         if (_count > 0) {
-            _objects = new Object[_capacity];
+            _objects = (E[])new Object[_capacity];
             _count = 0;
             clearCache();
         }
@@ -184,7 +184,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
     public void addObjectsFromArray(NSArray<? extends E> otherArray) {
         if (otherArray != null)
-            addObjects(otherArray.objectsNoCopy());
+            addObjects((E[])otherArray.objectsNoCopy());
     }
 
     public void replaceObjectsInRange(NSRange range, NSArray<? extends E> otherArray, NSRange otherRange) {
@@ -321,7 +321,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         if (sourceIndex < 0 || sourceIndex >= _count || destIndex < 0 || destIndex >= _count)
             throw new IllegalArgumentException("Either source(" + sourceIndex + ") or destination(" + destIndex
                     + ") is illegal.");
-        Object temp = _objects[sourceIndex];
+        E temp = _objects[sourceIndex];
         int boundary;
         int index;
         int direction;
@@ -355,11 +355,11 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
      * Clears the objectsNoCopy too. It's wrong not to clear it.
      */
 
-    public Object replaceObjectAtIndex(Object object, int index) {
+    public Object replaceObjectAtIndex(E object, int index) {
         if (object == null)
             throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
         if (index >= 0 && index < _count) {
-            Object result = _objects[index];
+            E result = _objects[index];
             _objects[index] = object;
             clearCache();
             return result;
@@ -388,7 +388,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
                         }
                         int offset = 0;
                         for(int i = 0; i < count; i++) {
-                            Object o = _objects[i];
+                            E o = _objects[i];
                             _objects[i] = null;
                             if (!table.containsObject(o)) {
                                 _objects[offset] = o;

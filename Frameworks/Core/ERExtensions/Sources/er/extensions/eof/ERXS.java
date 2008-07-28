@@ -96,7 +96,7 @@ public class ERXS {
 	public static ERXSortOrdering.ERXSortOrderings chain(NSArray<EOSortOrdering>... arr) {
 	  ERXSortOrdering.ERXSortOrderings result = new ERXSortOrdering.ERXSortOrderings();
 		for (NSArray<EOSortOrdering> value : arr) {
-			result.addObjects(value.objects());
+			result.addObjectsFromArray(value);
 		}
 		return result;
 	}
