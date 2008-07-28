@@ -102,7 +102,7 @@ public class MonitorComponent extends WOComponent {
                 NSArray<MHost> hostArray = siteConfig().hostArray();
                 handler().getApplicationStatusForHosts(hostArray);
             } else if (aName.contains("AppDetailPage")) {
-                NSArray<MHost> hostArray = appForDetailPage.hostArray();
+                NSArray<MHost> hostArray = siteConfig().hostArray();
 
                 handler().getInstanceStatusForHosts(hostArray);
             } else if (aName.equals("HostsPage")) {
