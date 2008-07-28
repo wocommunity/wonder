@@ -45,7 +45,7 @@ public class AppConfirmDeletePage extends MonitorComponent {
 
 	public static AppConfirmDeletePage create(WOContext context, MApplication currentApplication) {
 		assert currentApplication != null;
-		AppConfirmDeletePage page =  (AppConfirmDeletePage) WOApplication.application().pageWithName(AppConfirmDeletePage.class.getName(), context);
+		AppConfirmDeletePage page =  (AppConfirmDeletePage)  context.page().pageWithName(AppConfirmDeletePage.class.getName());
 		page.setMyApplication(currentApplication);
 		return page;
 	}

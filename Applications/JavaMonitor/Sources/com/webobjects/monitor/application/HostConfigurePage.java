@@ -74,7 +74,7 @@ public class HostConfigurePage extends MonitorComponent {
     }
 
 	public static HostConfigurePage create(WOContext context, MHost host) {
-		HostConfigurePage page = (HostConfigurePage) WOApplication.application().pageWithName(HostConfigurePage.class.getName(), context);
+		HostConfigurePage page = (HostConfigurePage) context.page().pageWithName(HostConfigurePage.class.getName());
 		page.setMyHost(host);
 		return page;
 	}

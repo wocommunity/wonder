@@ -46,7 +46,7 @@ public class AppDeathPage extends MonitorComponent {
     }
 
 	public static AppDeathPage create(WOContext context, MInstance instance ) {
-		AppDeathPage page = (AppDeathPage) WOApplication.application().pageWithName(AppDeathPage.class.getName(), context);
+		AppDeathPage page = (AppDeathPage) context.page().pageWithName(AppDeathPage.class.getName());
 		page.setMyInstance(instance);
 		return page;
 	}

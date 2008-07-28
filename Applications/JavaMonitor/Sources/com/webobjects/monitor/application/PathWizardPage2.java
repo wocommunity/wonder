@@ -75,6 +75,6 @@ public class PathWizardPage2 extends MonitorComponent {
     }
 
 	public static PathWizardPage2 create(WOContext context) {
-		return (PathWizardPage2) WOApplication.application().pageWithName(PathWizardPage2.class.getName(), context);
+		return (PathWizardPage2) context.page().pageWithName(PathWizardPage2.class.getName());
 	}
 }

@@ -48,7 +48,7 @@ public class InstConfirmDeletePage extends MonitorComponent {
     }
 
 	public static InstConfirmDeletePage create(WOContext context, MInstance instance) {
-		InstConfirmDeletePage page = (InstConfirmDeletePage) WOApplication.application().pageWithName(InstConfirmDeletePage.class.getName(), context);
+		InstConfirmDeletePage page = (InstConfirmDeletePage) context.page().pageWithName(InstConfirmDeletePage.class.getName());
 		page.setMyInstance(instance);
 		return page;
 	}

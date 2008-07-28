@@ -795,7 +795,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
 	public static AppDetailPage create(WOContext context, MApplication currentApplication) {
-		AppDetailPage page = (AppDetailPage) WOApplication.application().pageWithName(AppDetailPage.class.getName(), context);
+		AppDetailPage page = (AppDetailPage)  context.page().pageWithName(AppDetailPage.class.getName());
 		page.setMyApplication(currentApplication);
         NSArray instancesArray = currentApplication.instanceArray();
         if (instancesArray == null) {

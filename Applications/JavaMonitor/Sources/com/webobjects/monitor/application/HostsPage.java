@@ -207,7 +207,7 @@ public class HostsPage extends MonitorComponent {
     }
 
 	public static HostsPage create(WOContext context) {
-		return (HostsPage) WOApplication.application().pageWithName(HostsPage.class.getName(), context);
+		return (HostsPage) context.page().pageWithName(HostsPage.class.getName());
 	}
 
 }
