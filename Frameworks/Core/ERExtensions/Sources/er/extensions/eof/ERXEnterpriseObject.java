@@ -46,7 +46,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
                     ec.processRecentChanges(); // need to do this to make sure the updated objects list is current
 
             if (ec.hasChanges()) {
-                NSNotificationCenter.defaultCenter().postNotification(ERXExtensions.objectsWillChangeInEditingContext, this);
+                NSNotificationCenter.defaultCenter().postNotification(ERXExtensions.objectsWillChangeInEditingContext, ec);
                 // we don't need to lock ec because we can assume that we're locked
                 // before this method is called, but we do need to lock our parent
 
