@@ -86,6 +86,14 @@ public class InstConfigurePage extends MonitorComponent {
     public Integer id() {
         return myInstance().id();
     }
+    
+    public String displayName() {
+        return myInstance().displayName();
+    }
+    
+    public void setDisplayName(Object foo) {
+    	// ak: should switch to non-sync
+    }
 
     public void setId(Integer value) {
         if (value == null)
