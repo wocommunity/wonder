@@ -262,7 +262,7 @@ public class InstConfigurePage extends MonitorComponent {
      * @param instance TODO ******* */
 
 	public static InstConfigurePage create(WOContext context, MInstance instance) {
-		InstConfigurePage page = (InstConfigurePage) WOApplication.application().pageWithName(InstConfigurePage.class.getName(), context);
+		InstConfigurePage page = (InstConfigurePage) context.page().pageWithName(InstConfigurePage.class.getName());
 		page.setMyInstance(instance);
 		return page;
 	}

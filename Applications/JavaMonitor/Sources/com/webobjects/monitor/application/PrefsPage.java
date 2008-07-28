@@ -74,7 +74,7 @@ public class PrefsPage extends MonitorComponent {
     /** ******* */
 
 	public static PrefsPage create(WOContext context) {
-		return (PrefsPage) WOApplication.application().pageWithName(PrefsPage.class.getName(), context);
+		return (PrefsPage) context.page().pageWithName(PrefsPage.class.getName());
 	}
 
 }

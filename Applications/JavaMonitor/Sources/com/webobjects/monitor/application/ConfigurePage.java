@@ -116,7 +116,7 @@ public class ConfigurePage extends MonitorComponent {
     /** ******* */
 
 	public static ConfigurePage create(WOContext context) {
-		return (ConfigurePage) WOApplication.application().pageWithName(ConfigurePage.class.getName(), context);
+		return (ConfigurePage) context.page().pageWithName(ConfigurePage.class.getName());
 	}
 
 }
