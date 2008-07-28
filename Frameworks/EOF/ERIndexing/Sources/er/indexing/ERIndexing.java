@@ -96,7 +96,7 @@ public class ERIndexing extends ERXFrameworkPrincipal {
 		NSMutableDictionary dict = indexDef.mutableClone();
 		if(!dict.containsKey("store")) {
 			try {
-				dict.setObjectForKey(new File(indexRoot(), key).toURL(), "store");
+				dict.setObjectForKey(new File(indexRoot(), key).toURL().toString(), "store");
 			} catch (MalformedURLException e) {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
