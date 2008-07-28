@@ -279,4 +279,20 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         return result;
     }
 
+    /**
+     * Utility to leave entries based on an array of keys
+     * @param keys
+     * @param choices
+     */
+    protected NSArray choiceByLeavingKeys(NSArray keys, NSArray choices) {
+        NSMutableArray result = new NSMutableArray(choices.count());
+        for (Enumeration e = choices.objectEnumerator(); e.hasMoreElements();) {
+            NSDictionary choice = (NSDictionary) e.nextElement();
+            if(keys.containsObject(choice.objectForKey(BRANCH_NAME))) {
+                result.addObject(choice);
+            }
+        }
+        return result;
+    }
+
 }
