@@ -57,7 +57,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 	
 	public NSArray<File> testFiles() {
 		if (testFiles == null) {
-			testFiles = new SeleniumTestFilesFinder(testsRoot()).findTests();
+			testFiles = ERSelenium.testFilesFinder().findTests(testsRoot());
 		}
 		return testFiles;
 	}

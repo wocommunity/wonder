@@ -49,6 +49,8 @@ public class ERSelenium extends ERXFrameworkPrincipal {
 
     public static final String ACTION_COMMAND_SUCCEEDED_MESSAGE = "Action command succeeded.";
 
+    private static SeleniumTestFilesFinder testFilesFinder;
+    
     static {
         setUpFrameworkPrincipalClass(ERSelenium.class);
     }
@@ -79,7 +81,16 @@ public class ERSelenium extends ERXFrameworkPrincipal {
         // TODO: check for multithreading/synchronization issued with factory
         // instance() method
     	registerImportersExporters();
+    	setTestFilesFinder(new DefaultSeleniumTestFilesFinder());
 
         WOApplication.application().registerRequestHandler(new SeleniumTestRunnerProxy(), "_sl_");
     }
+
+	public static SeleniumTestFilesFinder testFilesFinder() {
+		return testFilesFinder;
+	}
+	
+	public static void setTestFilesFinder(SeleniumTestFilesFinder finder) {
+		testFilesFinder = finder;
+	}
 }
