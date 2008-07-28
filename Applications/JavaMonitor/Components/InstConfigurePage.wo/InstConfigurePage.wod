@@ -44,12 +44,13 @@ DetailViewButton: WOImage {
 }
 
 InstName: WOString {
-    value = myInstance.displayName;
+    value = myInstance.id;
+    numberformat = "0";
 }
 
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
-	title = myInstance.displayName;
+	title = displayName;
 }
 
 Path: WOTextField {

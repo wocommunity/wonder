@@ -13,7 +13,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation._NSCollectionReaderWriterLock;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
