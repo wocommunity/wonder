@@ -504,7 +504,7 @@ public class AppConfigurePage extends MonitorComponent {
      * @param application TODO ******* */
 
 	public static AppConfigurePage create(WOContext context, MApplication application) {
-		AppConfigurePage page = (AppConfigurePage) WOApplication.application().pageWithName(AppConfigurePage.class.getName(), context);
+		AppConfigurePage page = (AppConfigurePage) context.page().pageWithName(AppConfigurePage.class.getName());
 		page.setMyApplication(application);
 		page.appDefaults = new MApplication(application.values(), _sc, null);
 		return page;

@@ -107,7 +107,7 @@ public class PathWizardPage1 extends MonitorComponent {
     }
 
 	public static PathWizardPage1 create(WOContext context) {
-		return (PathWizardPage1) WOApplication.application().pageWithName(PathWizardPage1.class.getName(), context);
+		return (PathWizardPage1) context.page().pageWithName(PathWizardPage1.class.getName());
 	}
 
 }

@@ -51,7 +51,7 @@ public class HostConfirmDeletePage extends MonitorComponent {
     }
 
 	public static HostConfirmDeletePage create(WOContext context, MHost host) {
-		HostConfirmDeletePage page = (HostConfirmDeletePage) WOApplication.application().pageWithName(HostConfirmDeletePage.class.getName(), context);
+		HostConfirmDeletePage page = (HostConfirmDeletePage) context.page().pageWithName(HostConfirmDeletePage.class.getName());
 		page.setMyHost(host);
 		return page;
 	}

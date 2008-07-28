@@ -27,6 +27,8 @@ import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.MSiteConfig;
 
+import er.extensions.foundation.ERXStringUtilities;
+
 public class MonitorComponent extends WOComponent {
 
 	protected Logger log = Logger.getLogger(getClass());
@@ -89,7 +91,7 @@ public class MonitorComponent extends WOComponent {
     // _that_ slow)
     private void _cacheState(String aName) {
         MApplication appForDetailPage = myApplication();
-
+        aName = ERXStringUtilities.lastPropertyKeyInKeyPath(aName);
         if (siteConfig().hostArray().count() != 0) {
             if (aName.equals("ApplicationsPage") && (siteConfig().applicationArray().count() != 0)) {
 
@@ -99,7 +101,7 @@ public class MonitorComponent extends WOComponent {
                 }
                 NSArray<MHost> hostArray = siteConfig().hostArray();
                 handler().getApplicationStatusForHosts(hostArray);
-            } else if (aName.equals("AppDetailPage")) {
+            } else if (aName.contains("AppDetailPage")) {
                 NSArray<MHost> hostArray = appForDetailPage.hostArray();
 
                 handler().getInstanceStatusForHosts(hostArray);

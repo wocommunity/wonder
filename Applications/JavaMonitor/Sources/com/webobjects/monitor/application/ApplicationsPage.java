@@ -85,7 +85,7 @@ public class ApplicationsPage extends MonitorComponent {
     }
 
     public static WOComponent create(WOContext context) {
-		return (ApplicationsPage) WOApplication.application().pageWithName(ApplicationsPage.class.getName(), context);
+		return (ApplicationsPage) context.page().pageWithName(ApplicationsPage.class.getName());
 	}
 
 	public WOComponent deleteClicked() {
