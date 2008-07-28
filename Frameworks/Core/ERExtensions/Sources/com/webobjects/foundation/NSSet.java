@@ -25,7 +25,7 @@ import java.util.Set;
  *            type of set contents
  */
 @SuppressWarnings("unchecked")
-public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundationCollection, Set<T> {
+public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundationCollection, Set<E> {
 
 	public static final Class _CLASS;
 
@@ -59,34 +59,34 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	protected transient int _hashtableBuckets;
 
-	protected Object _objects[];
+	protected E[] _objects;
 
-	protected transient Object _objectsCache[];
+	protected transient E[] _objectsCache;
 
 	public NSSet() {
 		_initializeSet();
 	}
 
-	public NSSet(NSArray<? extends T> objects) {
-		this(objects == null ? null : objects.objectsNoCopy(), false);
+	public NSSet(NSArray<? extends E> objects) {
+		this(objects == null ? null : (E[])objects.objectsNoCopy(), false);
 	}
 
-	public NSSet(NSSet<? extends T> otherSet) {
-		this(otherSet == null ? null : otherSet.objectsNoCopy(), false);
+	public NSSet(NSSet<? extends E> otherSet) {
+		this(otherSet == null ? null : (E[])otherSet.objectsNoCopy(), false);
 	}
 
-	public NSSet(Set<? extends T> set, boolean ignoreNull) {
+	public NSSet(Set<? extends E> set, boolean ignoreNull) {
 		if (set == null) {
 			throw new IllegalArgumentException("Set cannot be null");
 		}
 		else {
-			T aSet[] = (T[]) set.toArray();
+			E aSet[] = (E[]) set.toArray();
 			initFromObjects(aSet, ignoreNull);
 			return;
 		}
 	}
 
-	public NSSet(T object) {
+	public NSSet(E object) {
 		if (object == null) {
 			throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
 		}
@@ -97,21 +97,21 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		}
 	}
 
-	public NSSet(T objects[]) {
+	public NSSet(E objects[]) {
 		this(objects, true);
 	}
 
-	private NSSet(T objects[], boolean checkForNull) {
+	private NSSet(E objects[], boolean checkForNull) {
 		initFromObjects(objects, checkForNull);
 	}
 
-	public T[] _allObjects() {
+	public Object[] _allObjects() {
 		int count = count();
 		Object objects[] = new Object[count];
 		if (count > 0) {
 			System.arraycopy(((objectsNoCopy())), 0, ((objects)), 0, count);
 		}
-		return (T[]) objects;
+		return objects;
 	}
 
 	protected void _clearDeletionsAndCollisions() {
@@ -122,7 +122,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		else {
 			Object oldObjects[] = _objects;
 			byte oldFlags[] = _flags;
-			_objects = new Object[size];
+			_objects = (E[])new Object[size];
 			_flags = new byte[size];
 			for (int i = 0; i < size; i++) {
 				if ((oldFlags[i] & 0xffffffc0) == -128) {
@@ -150,7 +150,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 				else {
 					Object oldObjects[] = _objects;
 					byte oldFlags[] = _flags;
-					_objects = new Object[newSize];
+					_objects = (E[])new Object[newSize];
 					_flags = new byte[newSize];
 					for (int i = 0; i < oldSize; i++) {
 						if ((oldFlags[i] & 0xffffffc0) == -128) {
@@ -169,7 +169,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		if (count != otherSet.count()) {
 			return false;
 		}
-		T objects[] = objectsNoCopy();
+		E objects[] = (E[])objectsNoCopy();
 		for (int i = 0; i < count; i++) {
 			if (otherSet.member(objects[i]) == null) {
 				return false;
@@ -191,20 +191,20 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return _NSSetClassHashCode;
 	}
 
-	public boolean add(T o) {
+	public boolean add(E o) {
 		throw new UnsupportedOperationException("add is not a supported operation in com.webobjects.foundation.NSSet");
 	}
 
-	public boolean addAll(Collection<? extends T> c) {
+	public boolean addAll(Collection<? extends E> c) {
 		throw new UnsupportedOperationException("addAll is not a supported operation in com.webobjects.foundation.NSSet");
 	}
 
-	public NSArray<T> allObjects() {
-		return new NSArray<T>(objectsNoCopy());
+	public NSArray<E> allObjects() {
+		return new NSArray<E>((E[])objectsNoCopy());
 	}
 
-	public T anyObject() {
-		return count() <= 0 ? null : objectsNoCopy()[0];
+	public E anyObject() {
+		return count() <= 0 ? null : (E)objectsNoCopy()[0];
 	}
 
 	public Class classForCoder() {
@@ -227,7 +227,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		if (c == null) {
 			throw new NullPointerException("Collection passed into containsAll() cannot be null");
 		}
-		T objects[] = (T[]) c.toArray();
+		E objects[] = (E[]) c.toArray();
 		if (objects.length > 0) {
 			for (int i = 0; i < objects.length; i++) {
 				if (objects[i] == null) {
@@ -270,9 +270,9 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return _NSSetClassHashCode ^ count();
 	}
 
-	public HashSet<T> hashSet() {
-		T objects[] = objectsNoCopy();
-		HashSet<T> set = new HashSet<T>(objects.length);
+	public HashSet<E> hashSet() {
+		E objects[] = (E[])objectsNoCopy();
+		HashSet<E> set = new HashSet<E>(objects.length);
 		for (int i = 0; i < objects.length; i++) {
 			set.add(objects[i]);
 		}
@@ -280,11 +280,11 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return set;
 	}
 
-	public NSSet<T> immutableClone() {
+	public NSSet<E> immutableClone() {
 		return this;
 	}
 
-	private void initFromObjects(T objects[], boolean checkForNull) {
+	private void initFromObjects(E objects[], boolean checkForNull) {
 		if (checkForNull) {
 			for (int i = 0; i < objects.length; i++) {
 				if (objects[i] == null) {
@@ -305,7 +305,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	public boolean intersectsSet(NSSet<?> otherSet) {
 		if (count() != 0 && otherSet != null && otherSet.count() != 0) {
-			T objects[] = objectsNoCopy();
+			E objects[] = (E[])objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				if (otherSet.member(objects[i]) != null) {
 					return true;
@@ -340,7 +340,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		if (count == 0) {
 			return true;
 		}
-		T objects[] = objectsNoCopy();
+		E objects[] = (E[])objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			if (otherSet.member(objects[i]) == null) {
 				return false;
@@ -350,34 +350,34 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return true;
 	}
 
-	public Iterator<T> iterator() {
+	public Iterator<E> iterator() {
 		return new _NSJavaSetIterator(objectsNoCopy());
 	}
 
-	public T member(Object object) {
-		return _count != 0 && object != null ? (T) _NSCollectionPrimitives.findValueInHashTable(object, _objects, _objects, _flags) : null;
+	public E member(Object object) {
+		return _count != 0 && object != null ? (E) _NSCollectionPrimitives.findValueInHashTable(object, _objects, _objects, _flags) : null;
 	}
 
-	public NSMutableSet<T> mutableClone() {
-		return new NSMutableSet<T>(this);
+	public NSMutableSet<E> mutableClone() {
+		return new NSMutableSet<E>(this);
 	}
 
-	public Enumeration<T> objectEnumerator() {
+	public Enumeration<E> objectEnumerator() {
 		return new _NSCollectionEnumerator(_objects, _flags, _count);
 	}
 
-	protected T[] objectsNoCopy() {
+	protected Object[] objectsNoCopy() {
 		if (_objectsCache == null) {
-			_objectsCache = _count != 0 ? _NSCollectionPrimitives.valuesInHashTable(_objects, _objects, _flags, _capacity, _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray;
+			_objectsCache = _count != 0 ? (E[])_NSCollectionPrimitives.valuesInHashTable(_objects, _objects, _flags, _capacity, _hashtableBuckets) : (E[])_NSCollectionPrimitives.EmptyArray;
 		}
-		return (T[]) _objectsCache;
+		return _objectsCache;
 	}
 	private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
 		java.io.ObjectInputStream.GetField fields = null;
 		fields = s.readFields();
 		Object keys[] = (Object[]) fields.get("objects", ((_NSUtilities._NoObjectArray)));
 		keys = keys != null ? keys : _NSUtilities._NoObjectArray;
-		initFromObjects((T[]) keys, true);
+		initFromObjects((E[]) keys, true);
 	}
 	private Object readResolve() throws ObjectStreamException {
 		if (getClass() == _CLASS && count() == 0) {
@@ -396,28 +396,28 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	public boolean retainAll(Collection<?> c) {
 		throw new UnsupportedOperationException("retainAll is not a supported operation in com.webobjects.foundation.NSSet");
 	}
-	public NSSet<T> setByIntersectingSet(NSSet<?> otherSet) {
-		NSMutableSet<T> set = new NSMutableSet<T>(this);
+	public NSSet<E> setByIntersectingSet(NSSet<?> otherSet) {
+		NSMutableSet<E> set = new NSMutableSet<E>(this);
 		set.intersectSet(otherSet);
 		return set;
 	}
-	public NSSet<T> setBySubtractingSet(NSSet<?> otherSet) {
-		NSMutableSet<T> set = new NSMutableSet<T>(this);
+	public NSSet<E> setBySubtractingSet(NSSet<?> otherSet) {
+		NSMutableSet<E> set = new NSMutableSet<E>(this);
 		set.subtractSet(otherSet);
 		return set;
 	}
-	public NSSet<T> setByUnioningSet(NSSet<? extends T> otherSet) {
-		NSMutableSet<T> set = new NSMutableSet<T>(this);
+	public NSSet<E> setByUnioningSet(NSSet<? extends E> otherSet) {
+		NSMutableSet<E> set = new NSMutableSet<E>(this);
 		set.unionSet(otherSet);
 		return set;
 	}
 	public int size() {
 		return _count;
 	}
-	public T[] toArray() {
+	public Object[] toArray() {
 		return objectsNoCopy();
 	}
-	public Object[] toArray(Object objects[]) {
+	public <T> T[] toArray(T objects[]) {
 		if (objects == null) {
 			throw new NullPointerException("Cannot pass null as parameter");
 		}
