@@ -326,7 +326,7 @@ public class ERXResponseRewriter {
 		String scriptStartTag = "<script src=\"";
 		String scriptEndTag;
 		if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", true)) {
-			scriptEndTag = " type=\"text/javascript\"></script>";
+			scriptEndTag = "\" type=\"text/javascript\"></script>";
 		}
 		else {
 			scriptEndTag = "\"></script>";
