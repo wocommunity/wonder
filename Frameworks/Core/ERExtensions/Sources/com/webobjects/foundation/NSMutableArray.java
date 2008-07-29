@@ -321,7 +321,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         if (sourceIndex < 0 || sourceIndex >= _count || destIndex < 0 || destIndex >= _count)
             throw new IllegalArgumentException("Either source(" + sourceIndex + ") or destination(" + destIndex
                     + ") is illegal.");
-        E temp = _objects[sourceIndex];
+        Object temp = _objects[sourceIndex];
         int boundary;
         int index;
         int direction;
@@ -359,7 +359,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         if (object == null)
             throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
         if (index >= 0 && index < _count) {
-            E result = _objects[index];
+            Object result = _objects[index];
             _objects[index] = object;
             clearCache();
             return result;
@@ -388,7 +388,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
                         }
                         int offset = 0;
                         for(int i = 0; i < count; i++) {
-                            E o = _objects[i];
+                            Object o = _objects[i];
                             _objects[i] = null;
                             if (!table.containsObject(o)) {
                                 _objects[offset] = o;
