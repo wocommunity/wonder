@@ -19,7 +19,6 @@ import java.util.Collection;
 
 //TODO iterator.remove() throws unimplemented
 
-@SuppressWarnings("unchecked")
 public class NSMutableSet<E> extends NSSet<E> {
 
 	public NSMutableSet() {
@@ -85,7 +84,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	public void removeAllObjects() {
 		if (_count != 0) {
-			_objects = (E[])new Object[_hashtableBuckets];
+			_objects = new Object[_hashtableBuckets];
 			_flags = new byte[_hashtableBuckets];
 			_count = 0;
 			_objectsCache = null;

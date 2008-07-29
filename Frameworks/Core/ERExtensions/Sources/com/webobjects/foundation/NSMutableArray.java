@@ -164,7 +164,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
     public void removeAllObjects() {
         if (_count > 0) {
-            _objects = (E[])new Object[_capacity];
+            _objects = new Object[_capacity];
             _count = 0;
             clearCache();
         }
@@ -412,11 +412,11 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     public <T> T[] toArray(T array[]) {
     	int i = size();
     	if (array.length < i) {
-    		array = (T[]) Array.newInstance(((Object) (array)).getClass().getComponentType(), i);
+    		array = (T[]) Array.newInstance(array.getClass().getComponentType(), i);
     	}
-    	T result[] = array;
+    	Object result[] = array;
     	for (int j = 0; j < i; j++) {
-    		result[j] = (T) objectAtIndex(j);
+    		result[j] = objectAtIndex(j);
     	}
 
     	if (array.length > i) {
@@ -452,9 +452,9 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     public boolean addAll(int index, Collection<? extends E> collection) {
         boolean modified = false;
         if(collection == this) {
-        	collection = ((NSMutableArray)collection).immutableClone();
+        	collection = ((NSMutableArray<? extends E>)collection).immutableClone();
         }
-        Iterator<E> e = (Iterator<E>) collection.iterator();
+        Iterator<? extends E> e = collection.iterator();
         while (e.hasNext()) {
             add(index++, e.next());
             modified = true;
