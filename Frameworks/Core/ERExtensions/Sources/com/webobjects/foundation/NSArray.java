@@ -170,8 +170,8 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	protected static int _NSArrayClassHashCode;
 	protected transient int _capacity;
 	protected transient int _count;
-	protected E[] _objects;
-	protected transient E[] _objectsCache;
+	protected Object _objects[];
+	protected transient Object _objectsCache[];
 	protected transient int _hashCache;
 	private transient boolean _recomputeHashCode;
 	private static final ObjectStreamField serialPersistentFields[] = { new ObjectStreamField("objects", ((Object) (new Object[0])).getClass()) };
@@ -215,7 +215,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	protected void _initializeWithCapacity(int capacity) {
 		_capacity = capacity;
 		_count = 0;
-		_objects = capacity <= 0 ? null : (E[])new Object[capacity];
+		_objects = capacity <= 0 ? null : new Object[capacity];
 		_objectsCache = null;
 		_setMustRecomputeHash(true);
 	}
@@ -235,7 +235,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 						capacity = testCapacity;
 					}
 				}
-				_objects = _objects != null ? (E[])_NSCollectionPrimitives.copyArray(_objects, capacity) : (E[])new Object[capacity];
+				_objects = _objects != null ? _NSCollectionPrimitives.copyArray(_objects, capacity) : new Object[capacity];
 			}
 			_capacity = capacity;
 		}
@@ -270,7 +270,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 		_initializeWithCapacity(rangeLength);
 		if (rangeLength > 0) {
-			System.arraycopy(((Object) (objects)), rangeLocation, ((Object) (_objects)), 0, rangeLength);
+			System.arraycopy(objects, rangeLocation, _objects, 0, rangeLength);
 		}
 		_count = rangeLength;
 	}
@@ -315,7 +315,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			int rangeLength = range.length();
 			_initializeWithCapacity(count);
 			for (int i = 0; i < rangeLength; i++) {
-				E object = vector.elementAt(i + rangeLocation);
+				Object object = vector.elementAt(i + rangeLocation);
 				if (object != null) {
 					_objects[_count++] = object;
 					continue;
@@ -354,7 +354,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 /* 476*/            int rangeLength = range.length();
 /* 478*/            _initializeWithCapacity(count);
 /* 479*/            for(int i = 0; i < rangeLength; i++) {
-/* 480*/                E object = list.get(i + rangeLocation);
+/* 480*/                Object object = list.get(i + rangeLocation);
 /* 481*/                if(object != null)
 /* 482*/                    _objects[_count++] = object;
 /* 483*/                else
@@ -368,13 +368,13 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	protected Object[] objectsNoCopy() {
 		if (_objectsCache == null) {
 			if (_count == 0) {
-				_objectsCache = (E[])_NSCollectionPrimitives.EmptyArray;
+				_objectsCache = _NSCollectionPrimitives.EmptyArray;
 			}
 			else if (_count == _capacity) {
 				_objectsCache = _objects;
 			}
 			else {
-				_objectsCache = (E[])_NSCollectionPrimitives.copyArray(_objects, _count);
+				_objectsCache = _NSCollectionPrimitives.copyArray(_objects, _count);
 			}
 		}
 		return _objectsCache;
@@ -420,22 +420,22 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 				return (NSArray<E>) clone();
 			}
 			else {
-				E objects[] = (E[]) new Object[count + otherCount];
-				System.arraycopy(((Object) (objectsNoCopy())), 0, ((Object) (objects)), 0, count);
-				System.arraycopy(((Object) (otherArray.objectsNoCopy())), 0, ((Object) (objects)), count, otherCount);
-				return new NSArray(objects, 0, count + otherCount, false);
+				E objects[] = (E[])new Object[count + otherCount];
+				System.arraycopy(objectsNoCopy(), 0, objects, 0, count);
+				System.arraycopy(otherArray.objectsNoCopy(), 0, objects, count, otherCount);
+				return new NSArray<E>(objects, 0, count + otherCount, false);
 			}
 		}
 		else {
-			return new NSArray(this);
+			return new NSArray<E>(this);
 		}
 	}
 
 	public Object[] objects() {
 		int count = count();
-		E objects[] = (E[]) new Object[count];
+		Object objects[] = new Object[count];
 		if (count > 0) {
-			System.arraycopy(((Object) (objectsNoCopy())), 0, ((Object) (objects)), 0, count);
+			System.arraycopy(objectsNoCopy(), 0, objects, 0, count);
 		}
 		return objects;
 	}
@@ -445,17 +445,16 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			return _NSCollectionPrimitives.EmptyArray;
 		}
 		else {
-			int count = count();
 			int rangeLength = range.length();
-			E[] objects = (E[]) new Object[rangeLength];
-			System.arraycopy(((Object) (objectsNoCopy())), range.location(), ((Object) (objects)), 0, rangeLength);
+			Object objects[] = new Object[rangeLength];
+			System.arraycopy(objectsNoCopy(), range.location(), objects, 0, rangeLength);
 			return objects;
 		}
 	}
 
 	public Vector<E> vector() {
-		Vector vector = new Vector();
-		Object objects[] = objectsNoCopy();
+		Vector<E> vector = new Vector<E>();
+		E objects[] = (E[])objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			vector.addElement(objects[i]);
 		}
@@ -464,8 +463,8 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	public ArrayList<E> arrayList() {
-		Object objects[] = objectsNoCopy();
-		ArrayList list = new ArrayList(objects.length);
+		E objects[] = (E[])objectsNoCopy();
+		ArrayList<E> list = new ArrayList<E>(objects.length);
 		for (int i = 0; i < objects.length; i++) {
 			list.add(objects[i]);
 		}
@@ -488,7 +487,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 		int otherCount = otherArray.count();
 		if (otherCount > 0) {
-			E[] objects = (E[])objectsNoCopy();
+			Object objects[] = objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				if (otherArray.containsObject(objects[i])) {
 					return objects[i];
@@ -1000,13 +999,11 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			return objects;
 		}
 		
-		if(objects.length < _objects.length) {
-			objects = (T[]) java.lang.reflect.Array.newInstance(objects.getClass().getComponentType(), _objects.length);
-		}
-		for (int i = 0; i < _objects.length; i++) {
-			objects[i] = (T) _objects[i];
-		}
-		return objects;
+        if (objects.length < _objects.length) {
+            objects = (T[])java.lang.reflect.Array.newInstance(objects.getClass().getComponentType(), _objects.length);
+        }
+	    System.arraycopy(_objects, 0, objects, 0, _objects.length);
+        return objects;
 	}
 
 	public boolean containsAll(Collection<?> c) {
