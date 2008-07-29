@@ -30,7 +30,6 @@ import java.util.Set;
  * @param &lt;V&gt;
  *            type of value contents
  */
-@SuppressWarnings("unchecked")
 public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NSKeyValueCoding, NSKeyValueCodingAdditions, _NSFoundationCollection, Map<K, V> {
 	public class _JavaNSDictionaryMapEntry<P, Q> implements java.util.Map.Entry<P, Q> {
 
@@ -435,7 +434,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	}
 
 	public Object valueForKey(String key) {
-		Object value = objectForKey((K) key);
+		Object value = objectForKey(key);
 		if (value == null && key != null) {
 			if (key.equals("allValues")) {
 				return allValues();
@@ -455,7 +454,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	}
 
 	public Object valueForKeyPath(String keyPath) {
-		Object flattenedKeyPresent = objectForKey((K) keyPath);
+		Object flattenedKeyPresent = objectForKey(keyPath);
 		if (flattenedKeyPresent != null) {
 			return flattenedKeyPresent;
 		}
@@ -495,7 +494,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 			Object keys[] = keysNoCopy();
 			for (int i = 0; i < keys.length; i++) {
 				coder.encodeObject(keys[i]);
-				coder.encodeObject(objectForKey((K) keys[i]));
+				coder.encodeObject(objectForKey(keys[i]));
 			}
 
 		}
@@ -527,7 +526,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		Object keys[] = keysNoCopy();
 		for (int i = 0; i < keys.length; i++) {
 			Object key = keys[i];
-			Object object = objectForKey((K) key);
+			Object object = objectForKey(key);
 			buffer.append(key.toString());
 			buffer.append(" = ");
 			if (object instanceof String) {

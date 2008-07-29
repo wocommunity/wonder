@@ -167,7 +167,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	static final long serialVersionUID = -3789592578296478260L;
 	private static final String SerializationValuesFieldKey = "objects";
 	private static NSMutableDictionary _operators = new NSMutableDictionary(8);
-	protected static int _NSArrayClassHashCode;
+	protected static final int _NSArrayClassHashCode;
 	protected transient int _capacity;
 	protected transient int _count;
 	protected Object _objects[];
@@ -403,7 +403,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		else {
 			int count = count();
 			Object objects[] = new Object[count + 1];
-			System.arraycopy(((Object) (objectsNoCopy())), 0, ((Object) (objects)), 0, count);
+			System.arraycopy(objectsNoCopy(), 0, objects, 0, count);
 			objects[count] = object;
 			return new NSArray(objects, 0, count + 1, false);
 		}
@@ -507,7 +507,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			throw new IllegalArgumentException("Object buffer cannot be null");
 		}
 		else {
-			System.arraycopy(((Object) (objectsNoCopy())), 0, ((Object) (objects)), 0, count());
+			System.arraycopy(objectsNoCopy(), 0, objects, 0, count());
 			return;
 		}
 	}
@@ -524,7 +524,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			throw new IllegalArgumentException("Range cannot be null");
 		}
 		else {
-			System.arraycopy(((Object) (objectsNoCopy())), range.location(), ((Object) (objects)), 0, range.length());
+			System.arraycopy(objectsNoCopy(), range.location(), objects, 0, range.length());
 			return;
 		}
 	}
