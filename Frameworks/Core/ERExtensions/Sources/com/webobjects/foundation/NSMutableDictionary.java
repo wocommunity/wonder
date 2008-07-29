@@ -173,7 +173,6 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		return (NSMutableDictionary<K, V>) clone();
 	}
 
-	@SuppressWarnings("hiding")
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableDictionary");
 	static final long serialVersionUID = 6690723083816355576L;
 
