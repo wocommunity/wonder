@@ -288,6 +288,7 @@ var AjaxUpdateContainer = {
 	update: function(id, options) {
 		var actionUrl = $(id).getAttribute('updateUrl');
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 	}
 };
@@ -309,6 +310,7 @@ var AjaxUpdateLink = {
 		var actionUrl = updateElement.getAttribute('updateUrl').sub('[^/]+$', elementID);
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 	},
 	
@@ -339,6 +341,7 @@ var AjaxSubmitButton = {
 		actionUrl = actionUrl.sub('/wo/', '/ajax/', 1);
 		if (id != null) {
 			actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
+			actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		}
 		return actionUrl;
 	},
