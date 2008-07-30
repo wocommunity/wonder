@@ -6,11 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.ERXValueUtilities;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Stepchild of DelayedConditionalAssignment
@@ -27,7 +30,7 @@ import er.extensions.*;
 public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.DelayedBooleanAssignment");
+    public static final Logger log = Logger.getLogger("er.directtoweb.rules.DelayedBooleanAssignment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

@@ -1,12 +1,17 @@
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
-import java.util.*;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXSimpleTemplateParser;
+import er.extensions.ERXLocalizer;
 
 /**
  * This assignment runs it's value through the localizer and evaluates
@@ -21,7 +26,7 @@ import java.util.*;
 public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDLocalizedAssignment.class);
+    static final Logger log = Logger.getLogger(ERDLocalizedAssignment.class);
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

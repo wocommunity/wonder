@@ -6,14 +6,22 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+
+/**
+ * Assignment used to create objects on the fly. You use this by
+ * specifing the class name as a string, ie "foo.bar.MyClass". This
+ * will create an instance of the MyClass object.
+ * @deprecated use ERDDelayedObjectCreationAssignment instead.
+ */
 
 public class ERDInstanceCreationAssignment extends ERDDelayedAssignment {
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDDelayedAssignment.class);
+    public final static Logger log = Logger.getLogger(ERDDelayedAssignment.class);
     
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray();
@@ -27,6 +35,7 @@ public class ERDInstanceCreationAssignment extends ERDDelayedAssignment {
      * @return decoded assignment of this class
      */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDInstanceCreationAssignment.class, ERDDelayedObjectCreationAssignment.class);
         return new ERDInstanceCreationAssignment(eokeyvalueunarchiver);
     }
     
@@ -35,7 +44,9 @@ public class ERDInstanceCreationAssignment extends ERDDelayedAssignment {
      * @param u key-value unarchiver used when unarchiving
      *		from rule files. 
      */    
-    public ERDInstanceCreationAssignment (EOKeyValueUnarchiver u) { super(u); }
+    public ERDInstanceCreationAssignment (EOKeyValueUnarchiver u) { 
+        super(u); 
+    }
     
     /** 
      * Public constructor

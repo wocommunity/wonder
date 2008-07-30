@@ -6,12 +6,14 @@
 //
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import java.lang.reflect.Constructor;
 
-import java.lang.reflect.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Assignment used to create objects on the fly. This assignment
@@ -41,7 +43,7 @@ public class ERDDelayedObjectCreationAssignment extends ERDDelayedAssignment {
     //	---------------------------------------------------------------------------
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDDelayedObjectCreationAssignment.class);
+    public static final Logger log = Logger.getLogger(ERDDelayedObjectCreationAssignment.class);
 
     //	===========================================================================
     //	Class method(s)

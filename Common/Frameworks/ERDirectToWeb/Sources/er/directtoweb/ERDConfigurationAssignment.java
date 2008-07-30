@@ -6,8 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
 /**
  * @deprecated use ERDDefaultConfigurationNameAssignment

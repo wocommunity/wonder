@@ -8,13 +8,16 @@
 
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import java.util.*;
-import er.extensions.*;
+import java.util.Enumeration;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.ERXValueUtilities;
 
 public class ERDSortedManyToManyAssignment extends ERDAssignment {
 

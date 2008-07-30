@@ -6,10 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
 /**
  * Piece of crap. This assignment works around the 
@@ -49,7 +48,7 @@ public class ERDKeyValueAssignment extends Assignment {
 
     /** 
      * Public constructor
-     * @param u key-value unarchiver used when unarchiving
+     * @param eokeyvalueunarchiver key-value unarchiver used when unarchiving
      *		from rule files. 
      */
     public ERDKeyValueAssignment(EOKeyValueUnarchiver eokeyvalueunarchiver) {

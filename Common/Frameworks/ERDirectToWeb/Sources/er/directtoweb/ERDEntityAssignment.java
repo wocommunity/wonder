@@ -6,11 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+
+import er.extensions.ERXEOAccessUtilities;
 
 /**
  * @deprecated use a ERDKeyValueAssignment to a ERDDefaultModelAssigmentwith key entityForPageConfiguration instead
@@ -21,7 +25,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new Object[] {"pageConfiguration", "controllerName"});
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDEntityAssignment.class, "assignments,rules");
+    public final static Logger log = Logger.getLogger(ERDEntityAssignment.class);
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

@@ -4,14 +4,16 @@
 
 package er.directtoweb;
 
-import er.extensions.ERXSelectorUtilities;
-import er.extensions.ERXLogger;
-import com.webobjects.directtoweb.D2WContext;
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSArray;
+
+import er.extensions.ERXSelectorUtilities;
 
 /**
  * Similar in nature to a key-value assignment, but allows you to construct arbitrary method invocations to
@@ -64,7 +66,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
 
     public static class DefaultImplementation {
 
-        private static final ERXLogger _log = ERXLogger.getERXLogger(DefaultImplementation.class);
+        private static final Logger _log = Logger.getLogger(ERDDelayedSelectorInvocationAssignment.class);
 
         // we cache 0 - 5 arguments
         private static Class[][] _parameterTypesArrays = new Class[5 + 1][];

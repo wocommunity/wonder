@@ -6,13 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
 // MOVEME: ERDConfigurationAssignment
 /**
- * Generated pageConfigurations that will use the tab inspect tempaltes.<br />
+ * Generated pageConfigurations that will use the tab inspect templates.<br />
  * @deprecated use ERDDefaultConfigurationNameAssignment with key inspectTabConfigurationName
  */
 

@@ -6,12 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.directtoweb.ERD2WUtilities;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+
+import er.extensions.ERXStringUtilities;
 
 // MOVEME: This should move into the defaults assignment, only reason
 //		it is here is because we used to not have the dependent
@@ -24,7 +27,7 @@ import er.extensions.*;
 public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultEntityNameAssignment.class);
+    public static final Logger log = Logger.getLogger(ERDDefaultEntityNameAssignment.class);
     
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray("entity.name");

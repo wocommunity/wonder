@@ -6,10 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.appserver.*;
-import java.text.*;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+
+import org.apache.log4j.Logger;
+
+import er.extensions.ERXStringUtilities;
 
 /**
  * This is a simple class for converting ASCII strings to HTML and vice versa.
@@ -19,7 +21,7 @@ import java.text.*;
 public class ERXSimpleHTMLFormatter extends java.text.Format {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXSimpleHTMLFormatter.class);
+    public final static Logger log = Logger.getLogger(ERXSimpleHTMLFormatter.class);
 
     /** holds the HTML return string */
     private final static String HTMLReturn = "<br />";
@@ -152,7 +154,7 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
      * Accessor method used to convert an ASCII
      * string into an HTML string.
      * @param anObject string to convert
-     * @param HTML-ified string
+     *
      */
     public String stringForObjectValue(Object anObject)
         throws IllegalArgumentException

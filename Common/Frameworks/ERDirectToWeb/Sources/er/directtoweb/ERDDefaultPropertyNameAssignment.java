@@ -6,11 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.NSArray;
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
-import com.webobjects.directtoweb.ERD2WUtilities;
-import er.extensions.*;
+import com.webobjects.foundation.NSArray;
+
+import er.extensions.ERXStringUtilities;
 
 /**
  * Beautify the propertyKey name in a better way.<br />
@@ -20,7 +22,7 @@ import er.extensions.*;
 public class ERDDefaultPropertyNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultPropertyNameAssignment.class);
+    static final Logger log = Logger.getLogger(ERDDefaultPropertyNameAssignment.class);
 
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray("propertyKey");

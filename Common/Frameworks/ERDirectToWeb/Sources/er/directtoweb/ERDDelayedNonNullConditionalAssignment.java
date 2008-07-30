@@ -6,10 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.ERXLogger;
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * The delayed non-null conditional is a way to provide a 
@@ -53,7 +55,7 @@ import er.extensions.ERXLogger;
 public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
+    public final static Logger log = Logger.getLogger("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

@@ -6,11 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import java.util.*;
-import er.extensions.ERXLogger;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.Rule;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.foundation.NSArray;
 
 /**
  * DelayedRuleAssignment expects an array of rules as its value. The rules are
@@ -26,7 +31,7 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
     }
     
     /** Logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDDelayedRuleAssignment.class);
+    public final static Logger log = Logger.getLogger(ERDDelayedRuleAssignment.class);
 
     public ERDDelayedRuleAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDDelayedRuleAssignment(String key, Object value) { super(key,value); }
