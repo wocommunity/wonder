@@ -5,6 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/ERExtensions"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
-	<classpathentry kind="lib" path="Libraries/poi-3.0.1-FINAL-20070705.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/poi-3.0.1-FINAL-20070705.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
