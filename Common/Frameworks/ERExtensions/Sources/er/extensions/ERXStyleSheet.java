@@ -15,6 +15,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Adds a style sheet to a page. You can either supply a complete URL, a file
@@ -71,6 +72,11 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		@Override
 		public WOActionResults performActionNamed(String name) {
 			WOResponse response = ERXStyleSheet.cache(session()).objectForKey(name);
+			String md5 = ERXStringUtilities.md5Hex(response.contentString(), null);
+			String queryMd5 = response.headerForKey("checksum");
+			if(ERXExtensions.safeEquals(md5, queryMd5)) {
+				//TODO check for last-whatever time and return not modified if not changed
+			}
 			return response;
 		}
 	}
@@ -173,18 +179,24 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			if (href == null) {
 				String key = styleSheetKey();
 				ERXExpiringCache<String, WOResponse> cache = cache(session());
+				String md5;
+				WOResponse cachedResponse = cache.objectForKey(key);
 				if (cache.isStale(key) || ERXApplication.isDevelopmentModeSafe()) {
-					WOResponse newresponse = new WOResponse();
-					super.appendToResponse(newresponse, wocontext);
+					cachedResponse = new WOResponse();
+					super.appendToResponse(cachedResponse, wocontext);
 					// appendToResponse above will change the response of
 					// "wocontext" to "newresponse". When this happens during an
 					// Ajax request, it will lead to backtracking errors on
 					// subsequent requests, so restore the original response "r"
 					wocontext._setResponse(originalResponse);  
-					newresponse.setHeader("text/css", "content-type");
-					cache.setObjectForKey(newresponse, key);
+					cachedResponse.setHeader("text/css", "content-type");
+					cache.setObjectForKey(cachedResponse, key);
+					md5 = ERXStringUtilities.md5Hex(cachedResponse.contentString(), null);
+					cachedResponse.setHeader(md5, "checksum");
 				}
-				href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
+				md5 = cachedResponse.headerForKey("checksum");
+				NSDictionary query = new NSDictionary(md5, "checksum");
+				href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, query);
 			}
 			
 			response._appendContentAsciiString("<link ");

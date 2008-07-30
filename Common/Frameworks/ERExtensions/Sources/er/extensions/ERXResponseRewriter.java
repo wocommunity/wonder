@@ -20,6 +20,10 @@ import com.webobjects.foundation.NSMutableSet;
  * after it has already been "drawn" by previous components.
  * 
  * @author mschrag
+ * @property er.extensions.loadOnDemand if true, javascript files included in Ajax responses will be loaded on-demand (defaults to true) 
+ * @property er.ajax.secureResources if true, load all resources with https (default false) 
+ * @property er.ajax.AJComponent.htmlCloseHead the tag to insert in front of (defaults to &lt;/head&gt;)
+ * @property er.extensions.ERXResponseRewriter.javascriptTypeAttribute if true, type="text/javascript" will be added to injected script tags (defaults true)
  */
 public class ERXResponseRewriter {
 	public static final Logger log = Logger.getLogger(ERXResponseRewriter.class);
@@ -256,7 +260,6 @@ public class ERXResponseRewriter {
 	 *            how to handle the case where the tag is missing
 	 * @return whether or not the content was inserted
 	 */
-	@SuppressWarnings("unchecked")
 	public static boolean insertInResponseBeforeTag(WOResponse response, WOContext context, String content, String tag, TagMissingBehavior tagMissingBehavior) {
 		boolean inserted = false;
 		String responseContent = response.contentString();
@@ -315,12 +318,24 @@ public class ERXResponseRewriter {
 	 *            the name of the javascript file to add
 	 */
 	public static void addScriptResourceInHead(WOResponse response, WOContext context, String framework, String fileName) {
-		String scriptStartTag = "<script src=\"";
+		boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+		String scriptStartTag;
+		if (appendTypeAttribute) {
+			scriptStartTag = "<script type=\"text/javascript\" src=\"";
+		}
+		else {
+			scriptStartTag = "<script src=\"";
+		}
 		String scriptEndTag = "\"></script>";
 		String fallbackStartTag;
 		String fallbackEndTag;
 		if (ERXAjaxApplication.isAjaxRequest(context.request()) && ERXProperties.booleanForKeyWithDefault("er.extensions.loadOnDemand", true)) {
-			fallbackStartTag = "<script>AOD.loadScript('";
+			if (appendTypeAttribute) {
+				fallbackStartTag = "<script type=\"text/javascript\">AOD.loadScript('";
+			}
+			else {
+				fallbackStartTag = "<script>AOD.loadScript('";
+			}
 			fallbackEndTag = "')</script>";
 		}
 		else {
@@ -479,7 +494,6 @@ public class ERXResponseRewriter {
 	 *            the name of the resource to check
 	 * @return true if the resource has been added to head
 	 */
-	@SuppressWarnings("unchecked")
 	public static boolean isResourceAddedToHead(WOContext context, String frameworkName, String resourceName) {
 		NSMutableSet addedResources = ERXResponseRewriter.resourcesAddedToHead(context);
 		return addedResources.containsObject(frameworkName + "." + resourceName);
@@ -512,7 +526,6 @@ public class ERXResponseRewriter {
 	 * @param endTag
 	 * @return whether or not the content was added
 	 */
-	@SuppressWarnings("unchecked")
 	public static boolean addResourceInHead(WOResponse response, WOContext context, String framework, String fileName, String startTag, String endTag, TagMissingBehavior tagMissingBehavior) {
 		return ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, null, null, tagMissingBehavior);
 	}
@@ -532,7 +545,6 @@ public class ERXResponseRewriter {
 	 * 
 	 * @return whether or not the content was added
 	 */
-	@SuppressWarnings("unchecked")
 	public static boolean addResourceInHead(WOResponse response, WOContext context, String framework, String fileName, String startTag, String endTag, String fallbackStartTag, String fallbackEndTag, TagMissingBehavior tagMissingBehavior) {
 		boolean inserted = true;
 		if (!ERXResponseRewriter.isResourceAddedToHead(context, framework, fileName) && (_delagate == null || _delagate.responseRewriterShouldAddResource(framework, fileName))) {

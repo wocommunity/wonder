@@ -56,6 +56,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("observeDelay", AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("onCreate", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onBeforeSubmit", AjaxOption.SCRIPT));
