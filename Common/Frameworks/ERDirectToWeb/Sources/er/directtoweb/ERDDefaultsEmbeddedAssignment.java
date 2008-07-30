@@ -5,12 +5,20 @@
 // Created by ak on Tue Apr 23 2002
 //
 package er.directtoweb;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.KeyValuePath;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.ERXStringUtilities;
+import er.extensions.ERXLocalizer;
 
 /**
  * This assignment calculates default values for
@@ -25,7 +33,7 @@ import er.extensions.*;
 public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultsEmbeddedAssignment.class);
+    static final Logger log = Logger.getLogger(ERDDefaultsEmbeddedAssignment.class);
 
     /** holds the array of dependent keys */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"embeddedEntityName", "object.entityName", "propertyKey", "pageConfiguration"});
@@ -79,7 +87,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @return localizer for the session stored in the context.
      */
     public ERXLocalizer localizerForContext(D2WContext c) {
-        return ERXLocalizer.localizerForSession(c.valueForKey("session"));
+        return ERXLocalizer.currentLocalizer();
     }
 
     /**
@@ -90,7 +98,11 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      */
     public String defaultEmbeddedEntityDisplayName(D2WContext c) {
         String value = ERXStringUtilities.displayNameForKey((String)c.valueForKey("embeddedEntityName"));
-        return (String)ERXLocalizer.currentLocalizer().localizedValueForKeyWithDefault(value);
+        String result = (String)ERXLocalizer.currentLocalizer().valueForKey(value);
+        if(result == null) {
+            result = value;
+        }
+        return result;
     }
     
     /**

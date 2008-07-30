@@ -1,9 +1,13 @@
 package er.directtoweb;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+
+import er.directtoweb.ERDLocalizableAssignmentInterface;
+import er.directtoweb.ERDLocalizedAssignment;
+import er.extensions.ERXLocalizer;
 
 /**
  * Same as {@link ERDLocalizedAssignment}, except that firing is delayed.
@@ -11,7 +15,7 @@ import er.extensions.*;
 public class ERDDelayedLocalizedAssignment extends ERDDelayedAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDDelayedLocalizedAssignment.class);
+    static final Logger log = Logger.getLogger(ERDDelayedLocalizedAssignment.class);
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -42,7 +46,7 @@ public class ERDDelayedLocalizedAssignment extends ERDDelayedAssignment implemen
     public Object fireNow(D2WContext c) {
         String key = (String)value();
         if (log.isDebugEnabled()) {
-            String value = ERXLocalizer.currentLocalizer().localizedStringForKey(key);
+            String value = (String)ERXLocalizer.currentLocalizer().valueForKey(key);
             log.debug("Fire for template \"" + key + "\": " + value);
         }
         return ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject(key, c);

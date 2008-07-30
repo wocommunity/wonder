@@ -6,14 +6,18 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import java.lang.reflect.*;
-import java.util.*;
-import er.extensions.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXUtilities;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Abstact super class of most assignments found in 
@@ -27,7 +31,7 @@ import er.extensions.*;
 public abstract class ERDAssignment extends Assignment implements ERDComputingAssignmentInterface {
 
     /** logging supprt */
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.ERDAssignment");
+    public final static Logger log = Logger.getLogger("er.directtoweb.rules.ERDAssignment");
 
     /** Cached context class array */
     // MOVEME: ERDConstants
@@ -66,7 +70,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      *		of the session. 
      */
     public ERXLocalizer localizerForContext(D2WContext c) {
-        return ERXLocalizer.localizerForSession(c.valueForKey("session"));
+        return ERXLocalizer.currentLocalizer();
     }
 
     /**
@@ -76,7 +80,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * localizer for the given context. This method belongs to 
      * {@link ERDLocalizableInterface}.
      * @param key to be looked up on the context
-     * @parant c current context
+     * @param c current context
      * @return localized version of the given key returning the key 
      * 		as the default if a localized version isn't found.
      */
@@ -94,7 +98,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * localizer for the given context. This method belongs to 
      * {@link ERDLocaizableInterface}.
      * @param key to be looked up on the context
-     * @parant c current context
+     * @param c current context
      * @return localized version of the given key if localization .
      */
     public Object localizedValueForKeyInContext(String key, D2WContext c) {
@@ -124,7 +128,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * Using the value of the assignment allows the passing of a 
      * parameter to your assignment method, this gives the flexibility 
      * to have several methods for the same key path.
-     * @param current context
+     * @param c current context
      * @return the name of the method to be called, by default the 
      * 		key path of the assignmnet is returned.
      */

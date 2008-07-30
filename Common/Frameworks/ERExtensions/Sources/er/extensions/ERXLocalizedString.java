@@ -7,10 +7,10 @@
 
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+
 /**
 
 Examples:
@@ -58,7 +58,7 @@ public class ERXLocalizedString extends ERXStatelessComponent {
     }
     
     public String value() {
-        ERXLocalizer localizer = ERXLocalizer.localizerForSession(session());
+        ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
         String stringToLocalize = null, localizedString = null;
         if(!hasBinding("templateString")) {
             if(hasBinding("object") || hasBinding("keyPath")) {
@@ -67,7 +67,10 @@ public class ERXLocalizedString extends ERXStatelessComponent {
                     value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, (String)valueForBinding("keyPath"));
                 stringToLocalize = objectToString(value);
             } else if(hasBinding("value")) {
-                stringToLocalize = (String)valueForBinding("value");
+            	stringToLocalize = (String)valueForBinding("value");
+            	if(booleanValueForBinding("omitWhenEmpty") && localizer.localizedStringForKey(stringToLocalize) == null) {
+            		stringToLocalize = "";
+            	}
             }
             if(stringToLocalize == null && hasBinding("valueWhenEmpty")) {
                 stringToLocalize = (String)valueForBinding("valueWhenEmpty");
@@ -76,7 +79,9 @@ public class ERXLocalizedString extends ERXStatelessComponent {
                 localizedString = localizer.localizedStringForKeyWithDefault(stringToLocalize);
             }
         } else {
-            localizedString = localizer.localizedTemplateStringForKeyWithObjectOtherObject((String)valueForBinding("templateString"), object(),valueForBinding("otherObject"));
+        	String templateString = (String)valueForBinding("templateString");
+            Object otherObject = valueForBinding("otherObject");
+        	localizedString = localizer.localizedTemplateStringForKeyWithObjectOtherObject(templateString, object(), otherObject);
         }
         return localizedString;
     }

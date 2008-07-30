@@ -437,7 +437,7 @@ public class WOToOneRelationship extends WOComponent {
     }
 
     public ERXLocalizer localizer() {
-        return ERXLocalizer.localizerForSession(session());
+        return ERXLocalizer.currentLocalizer();
     }
 
     public Object theCurrentValue() {

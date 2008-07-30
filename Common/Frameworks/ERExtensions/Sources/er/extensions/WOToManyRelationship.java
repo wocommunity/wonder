@@ -424,7 +424,7 @@ public class WOToManyRelationship extends WOComponent {
     }
 
     public ERXLocalizer localizer() {
-        return ERXLocalizer.localizerForSession(session());
+        return ERXLocalizer.currentLocalizer();
     }
 
     public Object theCurrentValue() {
