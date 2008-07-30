@@ -107,7 +107,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 				contentType = rm.contentTypeForResourceNamed(path);
 				log.debug("Reading file '" + file + "' for uri: " + uri);
 			} catch (IOException ex) {
-				if (!uri.equalsIgnoreCase("/favicon.ico")) {
+				if (!uri.toLowerCase().endsWith("/favicon.ico")) {
 					log.info("Unable to get contents of file '" + file + "' for uri: " + uri);
 				}
 			}
