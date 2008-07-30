@@ -154,6 +154,13 @@ public abstract class ERXMulticastingDelegate {
     }
 
 
+
+    protected Object perform(String methodName, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object defaultResult)
+    {
+        return perform(methodName, new Object[] {arg1, arg2, arg3, arg4, arg5}, defaultResult);
+    }
+    
+
     protected boolean booleanPerform(String methodName, boolean defaultResult)
     {
         return booleanPerform(methodName, new Object[0], defaultResult);
