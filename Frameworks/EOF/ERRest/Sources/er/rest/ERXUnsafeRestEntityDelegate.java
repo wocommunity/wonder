@@ -31,7 +31,7 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	 * Constructs an ERXUnsafeRestEntityDelegate.
 	 */
 	public ERXUnsafeRestEntityDelegate() {
-		this(ERXProperties.booleanForKeyWithDefault("er.rest.allowUnsafeDelegates", false));
+		this(ERXProperties.booleanForKeyWithDefault("ERXRest.allowUnsafeDelegates", false));
 	}
 
 	/**
