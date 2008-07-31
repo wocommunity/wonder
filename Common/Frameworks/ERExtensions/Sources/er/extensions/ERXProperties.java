@@ -6,16 +6,37 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.WOApplication;
-import java.util.*;
-import java.math.*;
-import java.io.File;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver._private.WOProjectBundle;
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSProperties;
+import com.webobjects.foundation.NSPropertyListSerialization;
+
+import er.extensions.ERXCrypto;
+import er.extensions.ERXConstant;
 
 /**
  * Collection of simple utility methods used to get and set properties
@@ -25,11 +46,15 @@ import com.webobjects.foundation.*;
  * like <code>getBoolean</code> off of Boolean which would resolve
  * the System property as a Boolean object.
  */
-public class ERXProperties {
+public class ERXProperties extends Properties implements NSKeyValueCoding {
+
+    /** default string */
+    public static final String DefaultString = "Default";
+    
     private static Boolean RetainDefaultsEnabled;
     private static String UndefinedMarker = "-undefined-";
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXProperties.class);
+    public final static Logger log = Logger.getLogger(ERXProperties.class);
     private static final Map AppSpecificPropertyNames = new HashMap(128);
 
     /** WebObjects version number as string */
@@ -43,7 +68,7 @@ public class ERXProperties {
 
     private static boolean retainDefaultsEnabled() {
         if (RetainDefaultsEnabled == null) {
-            final String propertyValue = System.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false");
+            final String propertyValue = ERXSystem.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false");
             final boolean isEnabled = "true".equals(propertyValue);
             RetainDefaultsEnabled = Boolean.valueOf(isEnabled);
         }
@@ -109,7 +134,7 @@ public class ERXProperties {
     /**
      * Returns the version string of the given framework.
      * It checks <code>SourceVersion</code> property
-     * in the <code>info.plist</code> resource and returns
+     * in the <code>version.plist</code> resource and returns
      * a trimmed version of the value.
      *
      * @return version number as string; can be null-string when
@@ -121,7 +146,10 @@ public class ERXProperties {
      * @see #webObjectsVersion
      */
     public static String sourceVersionString() {
-        NSDictionary versionDictionary = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework("version.plist", "JavaWebObjects");
+        NSBundle bundle = NSBundle.bundleForName("JavaWebObjects");
+        if (bundle == null)  return "";
+        String dictString = new String(bundle.bytesForResourcePath("version.plist"));
+        NSDictionary versionDictionary = NSPropertyListSerialization.dictionaryForString(dictString);
 
         String versionString = (String) versionDictionary.objectForKey("SourceVersion");
         return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
@@ -180,7 +208,10 @@ public class ERXProperties {
      * @return if the version of webobjects is 5.2 or better
      */
     public static boolean webObjectsVersionIs52OrHigher() {
-        return webObjectsVersionAsDouble() >= 5.2d;
+        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
+            return webObjectsVersionAsDouble() >= 5.2d;
+        }
+        return true;
     }
 
     /**
@@ -189,20 +220,17 @@ public class ERXProperties {
      * @return if the version of webobjects is 5.22 or better
      */
     public static boolean webObjectsVersionIs522OrHigher() {
-        String webObjectsVersion = webObjectsVersion();
-        if(log.isDebugEnabled()){
-            log.debug("webObjectsVersion:"+webObjectsVersion());
-        }
-        if("5.2".equals(webObjectsVersion)) {
-            String sourceVersion = sourceVersionString();
-            if(log.isDebugEnabled()){
-                log.debug("sourceVersionString:"+sourceVersionString());
+        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
+            String webObjectsVersion = webObjectsVersion();
+            if("5.2".equals(webObjectsVersion)) {
+                String sourceVersion = sourceVersionString();
+                if("9260000".equals(sourceVersion)) {
+                    return true;
+                }
             }
-            if("9260000".equals(sourceVersion)) {
-                return true;
-            }
+            return webObjectsVersionAsDouble() >= 5.22d;
         }
-        return webObjectsVersionAsDouble() >= 5.22d;
+        return true;
     }
 
     
@@ -222,14 +250,13 @@ public class ERXProperties {
      * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
      * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
      * @param propertyName
-     * @return
      */
     private static String getApplicationSpecificPropertyName(final String propertyName) {
         synchronized(AppSpecificPropertyNames) {
+            // only keep 128 of these around
             if (AppSpecificPropertyNames.size() > 128) {
                 AppSpecificPropertyNames.clear();
             }
-            
             String appSpecificPropertyName = (String)AppSpecificPropertyNames.get(propertyName);
             if (appSpecificPropertyName == null) {
                 final WOApplication application = WOApplication.application();
@@ -240,7 +267,7 @@ public class ERXProperties {
                 else {
                     appSpecificPropertyName = propertyName;
                 }
-                final String propertyValue = System.getProperty(appSpecificPropertyName);
+                final String propertyValue = ERXSystem.getProperty(appSpecificPropertyName);
                 if (propertyValue == null) {
                     appSpecificPropertyName = propertyName;
                 }
@@ -269,7 +296,7 @@ public class ERXProperties {
             return (NSArray)value;
         }
         
-        final String propertyValue = System.getProperty(propertyName);
+        final String propertyValue = ERXSystem.getProperty(propertyName);
         final NSArray array = ERXValueUtilities.arrayValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null && array != null) {
             setArrayForKey(array, propertyName);
@@ -312,7 +339,7 @@ public class ERXProperties {
             return ((Boolean)value).booleanValue();
         }
         
-        String propertyValue = System.getProperty(propertyName);
+        String propertyValue = ERXSystem.getProperty(propertyName);
         final boolean booleanValue = ERXValueUtilities.booleanValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Boolean.toString(booleanValue);
@@ -352,7 +379,7 @@ public class ERXProperties {
             return (NSDictionary)value;
         }
         
-        final String propertyValue = System.getProperty(propertyName);
+        final String propertyValue = ERXSystem.getProperty(propertyName);
         final NSDictionary dictionary = ERXValueUtilities.dictionaryValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null && dictionary != null) {
             setDictionaryForKey(dictionary, propertyName);
@@ -415,7 +442,7 @@ public class ERXProperties {
             return (BigDecimal)value;
         }
         
-        String propertyValue = System.getProperty(propertyName);
+        String propertyValue = ERXSystem.getProperty(propertyName);
         final BigDecimal bigDecimal = ERXValueUtilities.bigDecimalValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null && bigDecimal != null) {
             propertyValue = bigDecimal.toString();
@@ -443,7 +470,7 @@ public class ERXProperties {
             return ((Integer)value).intValue();
         }
         
-        String propertyValue = System.getProperty(propertyName);
+        String propertyValue = ERXSystem.getProperty(propertyName);
         final int intValue = ERXValueUtilities.intValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Integer.toString(intValue);
@@ -471,7 +498,7 @@ public class ERXProperties {
             return ((Long)value).longValue();
         }
 
-        String propertyValue = System.getProperty(propertyName);
+        String propertyValue = ERXSystem.getProperty(propertyName);
         final long longValue = ERXValueUtilities.longValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Long.toString(longValue);
@@ -501,7 +528,7 @@ public class ERXProperties {
      */
     public static String stringForKeyWithDefault(final String s, final String defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-        final String propertyValue = System.getProperty(propertyName);
+        final String propertyValue = ERXSystem.getProperty(propertyName);
         final String stringValue = propertyValue == null ? defaultValue : propertyValue;
         if (retainDefaultsEnabled() && propertyValue == null) {
             System.setProperty(propertyName, stringValue == null ? UndefinedMarker : stringValue);
@@ -509,7 +536,48 @@ public class ERXProperties {
         return stringValue == UndefinedMarker ? null : stringValue;
     }
 
-	/**
+    /**
+     * Returns the decrypted value for the given property name using
+     * the default crypter if the property propertyName.encrypted=true.  For
+     * instance, if you are requesting my.password, if my.password.encrypted=true
+     * the value of my.password will be passed to the default crypter's decrypt
+     * method.
+     * 
+     * @param propertyName the property name to retrieve and optionally decrypt
+     * @return the decrypted property value
+     */
+    public static String decryptedStringForKey(String propertyName) {
+    	return ERXProperties.decryptedStringForKeyWithDefault(propertyName, null);
+    }
+    
+    /**
+     * Returns the decrypted value for the given property name using
+     * the default crypter if the property propertyName.encrypted=true.  For
+     * instance, if you are requesting my.password, if my.password.encrypted=true
+     * the value of my.password will be passed to the default crypter's decrypt
+     * method.
+     * 
+     * @param propertyName the property name to retrieve and optionally decrypt
+     * @param defaultValue the default value to return if there is no password
+     * @return the decrypted property value
+     */
+    public static String decryptedStringForKeyWithDefault(String propertyName, String defaultValue) {
+		boolean propertyNameEncrypted = ERXProperties.booleanForKeyWithDefault(propertyName + ".encrypted", false);
+		String decryptedPassword;
+		if (propertyNameEncrypted) {
+			String encryptedPassword = ERXProperties.stringForKey(propertyName);
+			decryptedPassword = ERXCrypto.defaultCrypter().decrypt(encryptedPassword);
+		}
+		else {
+			decryptedPassword = ERXProperties.stringForKey(propertyName);
+		}
+		if (decryptedPassword == null) {
+			decryptedPassword = defaultValue;
+		}
+		return decryptedPassword;
+    }
+
+    /**
      * Returns an array of strings separated with the given separator string.
      * 
      * @param key the key to lookup
@@ -700,7 +768,7 @@ public class ERXProperties {
             if (bundle != null) 
                 projectPath = bundle.projectPath();
             else 
-                projectPath = System.getProperty("projects." + frameworkName);
+                projectPath = ERXSystem.getProperty("projects." + frameworkName);
             
             if (projectPath != null) {
                 aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
@@ -712,11 +780,14 @@ public class ERXProperties {
             
             if (aPropertiesPath == null) {
                 // The framework project is not opened from PBX, use the one in the bundle. 
-                aPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties", frameworkName, null);
-                if (aPropertiesPath != null) {
-                    aPropertiesPath = getActualPath(aPropertiesPath);
-                    projectsInfo.addObject("Framework:   " + frameworkName 
-                            + " (not opened, installed) " + aPropertiesPath); 
+                URL url =  ERXFileUtilities.pathURLForResourceNamed("Properties", frameworkName, null);
+                if(url != null) {
+                    aPropertiesPath = url.getFile();
+                    if (aPropertiesPath != null) {
+                        aPropertiesPath = getActualPath(aPropertiesPath);
+                        projectsInfo.addObject("Framework:   " + frameworkName 
+                                + " (not opened, installed) " + aPropertiesPath); 
+                    }
                 }
             }
             
@@ -732,7 +803,7 @@ public class ERXProperties {
         // horrendous hack to avoid having to set the NSProjectPath manually.
             WOProjectBundle mainBundle = WOProjectBundle.projectBundleForProject(mainBundleName, false);
             if (mainBundle == null) {
-                projectPath = System.getProperty("projects." + mainBundleName);
+                projectPath = ERXSystem.getProperty("projects." + mainBundleName);
                 if (projectPath == null)
                     projectPath = "../..";
             } else {
@@ -762,7 +833,7 @@ public class ERXProperties {
 
 
         /* *** WebObjects.properties in the user home directory *** */
-        String userHome = System.getProperty("user.home");
+        String userHome = ERXSystem.getProperty("user.home");
         if (userHome != null  &&  userHome.length() > 0) { 
             File file = new File(userHome, "WebObjects.properties");
             if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
@@ -771,7 +842,7 @@ public class ERXProperties {
                     projectsInfo.addObject("User:        WebObjects.properties " + aPropertiesPath);  
                     propertiesPaths.addObject(aPropertiesPath);
                 } catch (java.io.IOException ex) {
-                    ;
+                	ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
                 }
             }
         }
@@ -789,10 +860,27 @@ public class ERXProperties {
                         projectsInfo.addObject("Optional Configuration:    " + aPropertiesPath);
                         propertiesPaths.addObject(aPropertiesPath);
                     } catch (java.io.IOException ex) {
-                        ;
+                    	ERXProperties.log.error("Failed to load configuration file '" + file.getAbsolutePath() + "'.", ex);
                     }                    
                 }
+                else {
+                	ERXProperties.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or could not be read.");
+                }
             }
+        }
+        
+        /** /etc/WebObjects/AppName/Properties -- per-Application-per-Machine properties */
+        String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
+        if (applicationMachinePropertiesPath != null) {
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-Machine Properties: " + aPropertiesPath);
+           propertiesPaths.addObject(applicationMachinePropertiesPath);
+        }
+
+        /** Properties.<userName> -- per-Application-per-User properties */
+        String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
+        if (applicationUserPropertiesPath != null) {
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-User Properties: " + aPropertiesPath);
+           propertiesPaths.addObject(applicationUserPropertiesPath);
         }
         
         /* *** Report the result *** */ 
@@ -802,11 +890,33 @@ public class ERXProperties {
                     .append("ERXProperties has found the following Properties files: \n");
             message.append(projectsInfo.componentsJoinedByString("\n"));
             message.append("\n");
+            message.append(NSPropertyListSerialization.stringFromPropertyList(allProperties()));
             log.info(message.toString());
         }
 
         return propertiesPaths.immutableClone();
     }
+
+    public static class Property {
+    	public String key, value;
+    	public Property(String key, String value) {
+    		this.key = key;
+    		this.value = value;
+    	}
+    	public String toString() {
+    		return key + " = " + value;
+    	}
+    }
+
+    public static NSArray allProperties() {
+    	NSMutableArray props = new NSMutableArray();
+    	for (Enumeration e = ERXSystem.getProperties().keys(); e.hasMoreElements();) {
+    		String key = (String) e.nextElement();
+    		String object = "" + ERXSystem.getProperty(key);
+    		props.addObject(new Property(key, object));
+    	}
+    	return (NSArray) props.valueForKey("@sortAsc.key");
+     }
 
     /** 
      * Returns the full path to the Properties file under the 
@@ -837,12 +947,69 @@ public class ERXProperties {
     }
 
     /**
-     * Gets an array of optionally defined configuration
-     * files. 
-     * @return array of configuration file names (absolute paths)
+     * Returns the application-specific user properties.
+     */
+    public static String applicationUserProperties() {
+    	String applicationUserPropertiesPath = null;
+        String userName = ERXSystem.getProperty("user.name");
+        if (userName != null  &&  userName.length() > 0) { 
+        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + userName, "app", null);
+            if (resourceApplicationUserPropertiesPath != null) {
+            	applicationUserPropertiesPath = ERXProperties.getActualPath(resourceApplicationUserPropertiesPath);
+            }
+        }
+        return applicationUserPropertiesPath;
+    }
+    
+    /**
+     * Returns the path to the application-specific system-wide file "fileName".  By default this path is /etc/WebObjects, 
+     * and the application name will be appended.  For instance, if you are asking for the MyApp Properties file for the
+     * system, it would go in /etc/WebObjects/MyApp/Properties.
+     * 
+     * @return the path, or null if the path does not exist
+     */
+    public static String applicationMachinePropertiesPath(String fileName) {
+    	String applicationMachinePropertiesPath = null;
+    	String machinePropertiesPath = ERXSystem.getProperty("er.extensions.ERXProperties.machinePropertiesPath", "/etc/WebObjects");
+    	WOApplication application = WOApplication.application();
+    	if (application != null) {
+    		String applicationName = application.name();
+    		File applicationPropertiesFile = new File(machinePropertiesPath + File.separator + applicationName + File.separator + fileName);
+    		if (applicationPropertiesFile.exists()) {
+    			try {
+    				applicationMachinePropertiesPath = applicationPropertiesFile.getCanonicalPath();
+    			}
+    			catch (IOException e) {
+    				ERXProperties.log.error("Failed to load machine Properties file '" + fileName + "'.", e);
+    			}
+    		}
+    	}
+        return applicationMachinePropertiesPath;
+    }
+
+    /**
+     * Gets an array of optionally defined configuration files.  For each file, if it does not
+     * exist as an absolute path, ERXProperties will attempt to resolve it as an application resource
+     * and use that instead.
+     *  
+     * @return array of configuration file names
      */
     public static NSArray optionalConfigurationFiles() {
-        return arrayForKey("er.extensions.ERXProperties.OptionalConfigurationFiles");
+    	NSArray immutableOptionalConfigurationFiles = arrayForKey("er.extensions.ERXProperties.OptionalConfigurationFiles");
+    	NSMutableArray optionalConfigurationFiles = null;
+    	if (immutableOptionalConfigurationFiles != null) {
+    		optionalConfigurationFiles = immutableOptionalConfigurationFiles.mutableClone();
+	    	for (int i = 0; i < optionalConfigurationFiles.count(); i ++) {
+	    		String optionalConfigurationFile = (String)optionalConfigurationFiles.objectAtIndex(i);
+	    		if (!new File(optionalConfigurationFile).exists()) {
+		        	String resourcePropertiesPath = ERXFileUtilities.pathForResourceNamed(optionalConfigurationFile, "app", null);
+		        	if (resourcePropertiesPath != null) {
+		            	optionalConfigurationFiles.replaceObjectAtIndex(ERXProperties.getActualPath(resourcePropertiesPath), i);
+		        	}
+	    		}
+	    	}
+    	}
+    	return optionalConfigurationFiles;
     }
     
     /**
@@ -874,244 +1041,374 @@ public class ERXProperties {
         _cache.clear();
     }
 
-    /**
-     * Stores the mapping between operator keys and operators
-     */
-    private static final NSMutableDictionary operators = new NSMutableDictionary();
+    //	===========================================================================
+    //	Instance Variable(s)
+    //	---------------------------------------------------------------------------
+
+    /** caches the application name that is appended to the key for lookup */
+    protected String applicationNameForAppending;
+
+    //	===========================================================================
+    //	Instance Method(s)
+    //	---------------------------------------------------------------------------
 
     /**
-     * Registers a property operator for a particular key.
-     * 
-     * @param operator
-     *            the operator to register
-     * @param key
-     *            the key name of the operator
+     * Caches the application name for appending to the key.
+     * Note that for a period when the application is starting up
+     * application() will be null and name() will be null.
+     * @return application name used for appending, for example ".ERMailer"
+     * Note: this is redundant with the scheme checked in on March 21, 2005 by clloyd (ben holt did checkin).
+     * This scheme requires the user to swizzle the existing properties file with a new one of this type.
      */
-    public static void setOperatorForKey(ERXProperties.Operator operator, String key) {
-      ERXProperties.operators.setObjectForKey(operator, key);
-    }
-
-    /**
-     * <p>
-     * Property operators work like array operators. In your properties, you can
-     * define keys like:
-     * </p>
-     * 
-     * <code>
-     * er.extensions.akey.@someOperatorKey.aparameter=somevalue
-     * </code>
-     * 
-     * <p>
-     * Which will be processed by the someOperatorKey operator. Because
-     * properties get handled very early in the startup process, you should
-     * register operators somewhere like a static block in your Application
-     * class. For instance, if you wanted to register the forInstance operator,
-     * you might put the following your Application class:
-     * </p>
-     * 
-     * <code>
-     * static {
-     *   ERXProperties.setOperatorForKey(new ERXProperties.InRangeOperator(100), ERXProperties.InRangeOperator.ForInstanceKey);
-     * }
-     * </code>
-     * 
-     * <p>
-     * It's important to note that property operators evaluate at load time, not
-     * access time, so the compute function should not depend on any runtime
-     * state to execute. Additionally, access to other properties inside the
-     * compute method should be very carefully considered because it's possible
-     * that the operators are evaluated before all of the properties in the
-     * system are loaded.
-     * </p>
-     * 
-     * @author mschrag
-     */
-    public static interface Operator {
-      /**
-       * Performs some computation on the key, value, and parameters and
-       * returns a dictionary of new properties. If this method returns null,
-       * the original key and value will be used. If any other dictionary is
-       * returned, the properties in the dictionary will be copied into the
-       * destination properties.
-       * 
-       * @param key
-       *            the key ("er.extensions.akey" in
-       *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
-       * @param value
-       *            ("somevalue" in
-       *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
-       * @param parameters
-       *            ("aparameter" in
-       *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
-       * @return a dictionary of properties (or null to use the original key
-       *         and value)
-       */
-      public NSDictionary compute(String key, String value, String parameters);
-    }
-
-    /**
-     * <p>
-     * InRangeOperator provides support for defining properties that only
-     * get set if a value falls within a specific range of values.
-     * </p>
-     * 
-     * <p>
-     * An example of this is instance-number-based properties, where you want to 
-     * only set a specific value if the instance number of the application falls
-     * within a certain value. In this example, because instance number is 
-     * something that is associated with a request rather than the application 
-     * itself, it is up to the class registering this operator to specify which 
-     * instance number this application is (via, for instance, a custom system property).
-     * </p>
-     * 
-     * <p>
-     * InRangeOperator supports specifying keys like:
-     * </p>
-     * 
-     * <code>er.extensions.akey.@forInstance.50=avalue</code>
-     * <p>
-     * which would set the value of "er.extensions.akey" to "avalue" if this
-     * instance is 50.
-     * </p>
-     * 
-     * <code>er.extensions.akey.@forInstance.60,70=avalue</code>
-     * <p>
-     * which would set the value of "er.extensions.akey" to "avalue" if this
-     * instance is 60 or 70.
-     * </p>
-     * 
-     * <code>er.extensions.akey.@forInstance.100-300=avalue</code>
-     * <p>
-     * which would set the value of "er.extensions.akey" to "avalue" if this
-     * instance is between 100 and 300 (inclusive).
-     * </p>
-     * 
-     * <code>er.extensions.akey.@forInstance.20-30,500=avalue</code>
-     * <p>
-     * which would set the value of "er.extensions.akey" to "avalue" if this
-     * instance is between 20 and 30 (inclusive), or if the instance is 50.
-     * </p>
-     * 
-     * <p>
-     * If there are multiple inRange operators that match for the same key,
-     * the last property (when sorted alphabetically by key name) will win. As a
-     * result, it's important to not define overlapping ranges, or you
-     * may get unexpected results.
-     * </p>
-     * 
-     * @author mschrag
-     */
-    public static class InRangeOperator implements ERXProperties.Operator {
-      /**
-       * The default key name of the ForInstance variant of the InRange operator.
-       */
-      public static final String ForInstanceKey = "forInstance";
-
-      private int _instanceNumber;
-
-      /**
-       * Constructs a new InRangeOperator.
-       * 
-       * @param value
-       *            the instance number of this application
-       */
-      public InRangeOperator(int value) {
-        _instanceNumber = value;
-      }
-
-      public NSDictionary compute(String key, String value, String parameters) {
-        NSDictionary computedProperties = null;
-        if (parameters != null && parameters.length() > 0) {
-          boolean instanceNumberMatches = false;
-          String[] ranges = parameters.split(",");
-          for (int rangeNum = 0; rangeNum < ranges.length; rangeNum ++) {
-            String range = ranges[rangeNum];
-            range = range.trim();
-            int dashIndex = range.indexOf('-');
-            if (dashIndex == -1) {
-              int singleValue = Integer.parseInt(range);
-              if (_instanceNumber == singleValue) {
-                instanceNumberMatches = true;
-                break;
-              }
+    protected String applicationNameForAppending() {
+        if (applicationNameForAppending == null) {
+            applicationNameForAppending = WOApplication.application() != null ? WOApplication.application().name() : null;
+            if (applicationNameForAppending != null) {
+                applicationNameForAppending = "." + applicationNameForAppending;
             }
-            else {
-              int lowValue = Integer.parseInt(range.substring(0, dashIndex).trim());
-              int highValue = Integer.parseInt(range.substring(dashIndex + 1).trim());
-              if (_instanceNumber >= lowValue && _instanceNumber <= highValue) {
-                instanceNumberMatches = true;
-                break;
-              }
-            }
-          }
-          if (instanceNumberMatches) {
-            computedProperties = new NSDictionary(value, key);
-          }
-          else {
-            computedProperties = NSDictionary.EmptyDictionary;
-          }
         }
-        return computedProperties;
-      }
+        return applicationNameForAppending;
     }
 
     /**
-     * For each property in originalProperties, process the keys and avlues with
-     * the registered property operators and stores the converted value into
-     * destinationProperties.
-     * 
-     * @param originalProperties
-     *            the properties to convert
-     * @param destinationProperties
-     *            the properties to copy into
+     * Overriding the default getProperty method to first check:
+     * key.&lt;ApplicationName> before checking for key. If nothing
+     * is found then key.Default is checked.
+     * @param key to check
+     * @return property value
      */
-    public static void evaluatePropertyOperators(Properties originalProperties, Properties destinationProperties) {
-      NSArray operatorKeys = ERXProperties.operators.allKeys();
-      Set originalKeys = new TreeSet(originalProperties.keySet());
-      Iterator originalKeysIter = originalKeys.iterator();
-      while (originalKeysIter.hasNext()) {
-        String key = (String) originalKeysIter.next();
-        if (key != null && key.length() > 0) {
-          String value = originalProperties.getProperty(key);
-          if (operatorKeys.count() > 0 && key.indexOf(".@") != -1) {
-            ERXProperties.Operator operator = null;
-            NSDictionary computedProperties = null;
-            Enumeration operatorKeyEnum = operatorKeys.objectEnumerator();
-            while (operatorKeyEnum.hasMoreElements()) {
-              String operatorKey = (String)operatorKeyEnum.nextElement();
-              String operatorKeyWithAt = ".@" + operatorKey;
-              if (key.endsWith(operatorKeyWithAt)) {
-                operator = (ERXProperties.Operator) ERXProperties.operators.objectForKey(operatorKey);
-                computedProperties = operator.compute(key.substring(0, key.length() - operatorKeyWithAt.length()), value, null);
-                break;
-              }
-              else {
-                int keyIndex = key.indexOf(operatorKeyWithAt + ".");
-                if (keyIndex != -1) {
-                  operator = (ERXProperties.Operator) ERXProperties.operators.objectForKey(operatorKey);
-                  computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
-                  break;
-                }
-              }
-            }
-
-            if (computedProperties == null) {
-              destinationProperties.put(key, value);
-            }
-            else {
-              originalProperties.remove(key);
-              Enumeration computedPropertyKeysEnum = computedProperties.keyEnumerator();
-              while (computedPropertyKeysEnum.hasMoreElements()) {
-                Object computedKey = computedPropertyKeysEnum.nextElement();
-                destinationProperties.put(computedKey, computedProperties.objectForKey(computedKey));
-              }
-            }
-          }
-          else {
-            destinationProperties.put(key, value);
-          }
+    public String getProperty(String key) {
+        String property = null;
+        String application = applicationNameForAppending();
+        if (application != null) {
+            property = super.getProperty(key + application);
         }
-      }
+        if (property == null) {
+            property = super.getProperty(key);
+            if (property == null) {
+                property = super.getProperty(key + DefaultString);
+            }
+            // We go ahead and set the value to increase the lookup the next time the
+            // property is accessed.
+            if (property != null && application != null) {
+                setProperty(key + application, property);
+            }
+        }
+        return property;
     }
+
+    /**
+     * Returns the properties as a String in Property file format. Useful when you use them 
+     * as custom value types, you would set this as the conversion method name.
+     * @throws IOException
+     */
+    public Object toExternalForm() throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        store(os, null);
+        return new String(os.toByteArray());
+    }
+    
+    /**
+     * Load the properties from a String in Property file format. Useful when you use them 
+     * as custom value types, you would set this as the factory method name.
+     * @param string
+     */
+    public static ERXProperties fromExternalForm(String string) {
+        ERXProperties result = new ERXProperties();
+        try {
+			result.load(new ByteArrayInputStream(string.getBytes()));
+		}
+		catch (IOException e) {
+			// AK: shouldn't ever happen...
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+        return result;
+    }
+
+    /**
+     * KVC implementation.
+     * @param anObject
+     * @param aKey
+     */
+    public void takeValueForKey(Object anObject, String aKey) {
+         setProperty(aKey, (anObject != null ? anObject.toString() : null));
+    }
+
+    /**
+     * KVC implementation.
+     *
+     * @param aKey
+     */
+    public Object valueForKey(String aKey) {
+         return getProperty(aKey);
+    }
+
+	/**
+	 * Stores the mapping between operator keys and operators
+	 */
+	private static final NSMutableDictionary operators = new NSMutableDictionary();
+
+	/**
+	 * Registers a property operator for a particular key.
+	 * 
+	 * @param operator
+	 *            the operator to register
+	 * @param key
+	 *            the key name of the operator
+	 */
+	public static void setOperatorForKey(ERXProperties.Operator operator, String key) {
+		ERXProperties.operators.setObjectForKey(operator, key);
+	}
+
+	/**
+	 * <p>
+	 * Property operators work like array operators. In your properties, you can
+	 * define keys like:
+	 * </p>
+	 * 
+	 * <code>
+	 * er.extensions.akey.@someOperatorKey.aparameter=somevalue
+	 * </code>
+	 * 
+	 * <p>
+	 * Which will be processed by the someOperatorKey operator. Because
+	 * properties get handled very early in the startup process, you should
+	 * register operators somewhere like a static block in your Application
+	 * class. For instance, if you wanted to register the forInstance operator,
+	 * you might put the following your Application class:
+	 * </p>
+	 * 
+	 * <code>
+	 * static {
+	 *   ERXProperties.setOperatorForKey(new ERXProperties.InRangeOperator(100), ERXProperties.InRangeOperator.ForInstanceKey);
+	 * }
+	 * </code>
+	 * 
+	 * <p>
+	 * It's important to note that property operators evaluate at load time, not
+	 * access time, so the compute function should not depend on any runtime
+	 * state to execute. Additionally, access to other properties inside the
+	 * compute method should be very carefully considered because it's possible
+	 * that the operators are evaluated before all of the properties in the
+	 * system are loaded.
+	 * </p>
+	 * 
+	 * @author mschrag
+	 */
+	public static interface Operator {
+		/**
+		 * Performs some computation on the key, value, and parameters and
+		 * returns a dictionary of new properties. If this method returns null,
+		 * the original key and value will be used. If any other dictionary is
+		 * returned, the properties in the dictionary will be copied into the
+		 * destination properties.
+		 * 
+		 * @param key
+		 *            the key ("er.extensions.akey" in
+		 *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
+		 * @param value
+		 *            ("somevalue" in
+		 *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
+		 * @param parameters
+		 *            ("aparameter" in
+		 *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
+		 * @return a dictionary of properties (or null to use the original key
+		 *         and value)
+		 */
+		public NSDictionary compute(String key, String value, String parameters);
+	}
+
+	/**
+	 * <p>
+	 * InRangeOperator provides support for defining properties that only
+	 * get set if a value falls within a specific range of values.
+	 * </p>
+	 * 
+	 * <p>
+	 * An example of this is instance-number-based properties, where you want to 
+	 * only set a specific value if the instance number of the application falls
+	 * within a certain value. In this example, because instance number is 
+	 * something that is associated with a request rather than the application 
+	 * itself, it is up to the class registering this operator to specify which 
+	 * instance number this application is (via, for instance, a custom system property).
+	 * </p>
+	 * 
+	 * <p>
+	 * InRangeOperator supports specifying keys like:
+	 * </p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.50=avalue</code>
+	 * <p>
+	 * which would set the value of "er.extensions.akey" to "avalue" if this
+	 * instance is 50.
+	 * </p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.60,70=avalue</code>
+	 * <p>
+	 * which would set the value of "er.extensions.akey" to "avalue" if this
+	 * instance is 60 or 70.
+	 * </p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.100-300=avalue</code>
+	 * <p>
+	 * which would set the value of "er.extensions.akey" to "avalue" if this
+	 * instance is between 100 and 300 (inclusive).
+	 * </p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.20-30,500=avalue</code>
+	 * <p>
+	 * which would set the value of "er.extensions.akey" to "avalue" if this
+	 * instance is between 20 and 30 (inclusive), or if the instance is 50.
+	 * </p>
+	 * 
+	 * <p>
+	 * If there are multiple inRange operators that match for the same key,
+	 * the last property (when sorted alphabetically by key name) will win. As a
+	 * result, it's important to not define overlapping ranges, or you
+	 * may get unexpected results.
+	 * </p>
+	 * 
+	 * @author mschrag
+	 */
+	public static class InRangeOperator implements ERXProperties.Operator {
+		/**
+		 * The default key name of the ForInstance variant of the InRange operator.
+		 */
+		public static final String ForInstanceKey = "forInstance";
+
+		private int _instanceNumber;
+
+		/**
+		 * Constructs a new InRangeOperator.
+		 * 
+		 * @param value
+		 *            the instance number of this application
+		 */
+		public InRangeOperator(int value) {
+			_instanceNumber = value;
+		}
+
+		public NSDictionary compute(String key, String value, String parameters) {
+			NSDictionary computedProperties = null;
+			if (parameters != null && parameters.length() > 0) {
+				boolean instanceNumberMatches = false;
+				String[] ranges = parameters.split(",");
+				for (String range : ranges) {
+					range = range.trim();
+					int dashIndex = range.indexOf('-');
+					if (dashIndex == -1) {
+						int singleValue = Integer.parseInt(range);
+						if (_instanceNumber == singleValue) {
+							instanceNumberMatches = true;
+							break;
+						}
+					}
+					else {
+						int lowValue = Integer.parseInt(range.substring(0, dashIndex).trim());
+						int highValue = Integer.parseInt(range.substring(dashIndex + 1).trim());
+						if (_instanceNumber >= lowValue && _instanceNumber <= highValue) {
+							instanceNumberMatches = true;
+							break;
+						}
+					}
+				}
+				if (instanceNumberMatches) {
+					computedProperties = new NSDictionary(value, key);
+				}
+				else {
+					computedProperties = new NSDictionary();
+				}
+			}
+			return computedProperties;
+		}
+	}
+
+	/**
+	 * <p>
+	 * Encrypted operator supports decrypting values using the default crypter. To register this
+	 * operator, add the following static block to your Application class:
+	 * </p>
+	 * 
+	 * <code>
+	 * static {
+	 *   ERXProperties.setOperatorForKey(new ERXProperties.EncryptedOperator(), ERXProperties.EncryptedOperator.Key);
+	 * }
+	 * </code>
+	 * 
+	 * Call er.extensions.ERXProperties.EncryptedOperator.register() in an Application static
+	 * block to register this operator.
+	 * </p> 
+	 * 
+	 * @author mschrag
+	 */
+	public static class EncryptedOperator implements ERXProperties.Operator {
+		public static final String Key = "encrypted";
+
+		public static void register() {
+			ERXProperties.setOperatorForKey(new ERXProperties.EncryptedOperator(), ERXProperties.EncryptedOperator.Key);
+		}
+
+		public NSDictionary compute(String key, String value, String parameters) {
+			String decryptedValue = ERXCrypto.defaultCrypter().decrypt(value);
+			return new NSDictionary(decryptedValue, key);
+		}
+	}
+
+	/**
+	 * For each property in originalProperties, process the keys and avlues with
+	 * the registered property operators and stores the converted value into
+	 * destinationProperties.
+	 * 
+	 * @param originalProperties
+	 *            the properties to convert
+	 * @param destinationProperties
+	 *            the properties to copy into
+	 */
+	public static void evaluatePropertyOperators(Properties originalProperties, Properties destinationProperties) {
+		NSArray operatorKeys = ERXProperties.operators.allKeys();
+		for (Object keyObj : new TreeSet<Object>(originalProperties.keySet())) {
+			String key = (String) keyObj;
+			if (key != null && key.length() > 0) {
+				String value = originalProperties.getProperty(key);
+				if (operatorKeys.count() > 0 && key.indexOf(".@") != -1) {
+					ERXProperties.Operator operator = null;
+					NSDictionary computedProperties = null;
+					Enumeration operatorKeyEnum = operatorKeys.objectEnumerator();
+					while (operatorKeyEnum.hasMoreElements()) {
+						String operatorKey = (String)operatorKeyEnum.nextElement();
+						String operatorKeyWithAt = ".@" + operatorKey;
+						if (key.endsWith(operatorKeyWithAt)) {
+							operator = (ERXProperties.Operator) ERXProperties.operators.objectForKey(operatorKey);
+							computedProperties = operator.compute(key.substring(0, key.length() - operatorKeyWithAt.length()), value, null);
+							break;
+						}
+						else {
+							int keyIndex = key.indexOf(operatorKeyWithAt + ".");
+							if (keyIndex != -1) {
+								operator = (ERXProperties.Operator) ERXProperties.operators.objectForKey(operatorKey);
+								computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
+								break;
+							}
+						}
+					}
+
+					if (computedProperties == null) {
+						destinationProperties.put(key, value);
+					}
+					else {
+						originalProperties.remove(key);
+						Enumeration computedPropertyKeysEnum = computedProperties.keyEnumerator();
+						while (computedPropertyKeysEnum.hasMoreElements()) {
+							Object computedKey = computedPropertyKeysEnum.nextElement();
+							destinationProperties.put(computedKey, computedProperties.objectForKey(computedKey));
+						}
+					}
+				}
+				else {
+					destinationProperties.put(key, value);
+				}
+			}
+		}
+	}
 
 }
