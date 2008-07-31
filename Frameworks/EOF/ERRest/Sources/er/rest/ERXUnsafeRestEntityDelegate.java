@@ -13,6 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERXUnsafeRestEntityDelegate should NEVER be used in production. This is an entity delegate implementation designed to
@@ -30,7 +31,7 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	 * Constructs an ERXUnsafeRestEntityDelegate.
 	 */
 	public ERXUnsafeRestEntityDelegate() {
-		this(false);
+		this(ERXProperties.booleanForKeyWithDefault("er.rest.allowUnsafeDelegates", false));
 	}
 
 	/**
