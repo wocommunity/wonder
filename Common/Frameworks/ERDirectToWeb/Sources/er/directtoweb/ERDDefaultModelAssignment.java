@@ -6,12 +6,24 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.KeyValuePath;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.ERXConstant;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXS;
+import er.extensions.ERXDictionaryUtilities;
 
 /**
  * A bunch of methods used for pulling default values from EOModels.<br />
@@ -33,12 +45,13 @@ import er.extensions.*;
 public class ERDDefaultModelAssignment extends ERDAssignment {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDDefaultModelAssignment.class, "assignments");
+    public final static Logger log = Logger.getLogger(ERDDefaultModelAssignment.class);
 
     /** holds the array of keys this assignment depends upon */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name"}), "smartAttribute",
         new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name"}), "smartRelationship",
+        new NSArray(new Object[] {"smartAttribute"}), "attributeConstants",
         new NSArray(new Object[] {"smartAttribute"}), "smartDefaultRows",
         new NSArray(new Object[] {"smartAttribute"}), "smartDefaultAttributeWidth",
         new NSArray(new Object[] {"smartRelationship"}), "destinationEntity",
@@ -135,7 +148,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
         if (rawObject!=null && rawObject instanceof EOEnterpriseObject && propertyKey!=null) {
             EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
             EOEnterpriseObject lastEO=object;
-            if (lastEO!=null && propertyKey.indexOf(".")!=-1 && propertyKey.indexOf("@") == 0) {
+            if (lastEO!=null && propertyKey.indexOf(".")!=-1 && propertyKey.indexOf("@")==-1) {
                 String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
                 Object rawLastEO=object.valueForKeyPath(partialKeyPath);
                 lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
@@ -179,7 +192,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
             if (rawObject!=null && rawObject instanceof EOEnterpriseObject) {
                 EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
                 EOEnterpriseObject lastEO=object;
-                if (propertyKey.indexOf(".")!=-1 && propertyKey.indexOf("@") == 0) {
+                if (propertyKey.indexOf(".")!=-1 && propertyKey.indexOf("@")==-1) {
                     String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
                     Object rawLastEO=object.valueForKeyPath(partialKeyPath);
                     lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
@@ -253,6 +266,23 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
     }
 
 
+
+    /**
+     * Returns the default value for the entity based on the controllerName. 
+     * @param c current D2W context
+     * @return the entity.
+     */
+    public Object attributeConstants(D2WContext c) {
+    	EOAttribute attr = (EOAttribute)c.valueForKey("smartAttribute");
+    	if(attr != null && attr.userInfo() != null) {
+    		String clazzName = (String)attr.userInfo().objectForKey("ERXConstantClassName");
+    		if(clazzName != null) {
+    			return ERXConstant.constantsForClassName(clazzName);
+    		}
+    	}
+        return null;
+    }
+
     /**
      * Returns the default value for the entity based on the pageConfiguration. 
      * @param c current D2W context
@@ -277,9 +307,23 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
     /**
      * Called when firing this assignment with the key-path:
      * <b>sortKeyForList</b>.
-     * @return the current propertyKey + "." + the current value for keyWhenRelationship.
+     * @return the current propertyKey + "." + the current value for
+     *		keyWhenRelationship.
      */
     public Object sortKeyForList(D2WContext context) {
         return context.valueForKey("propertyKey")+"."+context.valueForKey("keyWhenRelationship");
+    }
+    
+    /**
+     * Called when firing this assignment with the key-path:
+     * <b>defaultSortOrdering</b>.
+     * @return the first value of the display property keys, with ascending comparison.
+     */
+    public Object defaultSortOrderingWithFirstKey(D2WContext context) {
+    	NSArray keys = (NSArray) context.valueForKey("displayPropertyKeys");
+    	if(keys.count() == 0) return NSArray.EmptyArray;
+    	String first = (String)keys.objectAtIndex(0);
+    	
+        return ERXS.ascs(first);
     }
 }
