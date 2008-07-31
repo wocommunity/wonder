@@ -1,15 +1,14 @@
 {
-    NullPropertyException = "Specificare un valore per <b>@@displayNameForProperty@@</b>.";
-    MandatoryToOneRelationshipException = "<b>@@displayNameForEntity@@</b> deve avere un/a <b>@@displayNameForProperty@@</b>.";
-    MandatoryToManyRelationshipException = "<b>@@displayNameForEntity@@</b> deve avere almeno un/a <b>@@displayNameForDestinationEntity@@</b>.";
-    ObjectRemovalException = "Non posso eliminare questo/a <b>@@displayNameForEntity@@</b>. Dovresti prima cancellare <b>@@displayNameForProperty@@</b>.";
-    ObjectsRemovalException = "Non posso eliminare questo/a <b>@@displayNameForEntity@@</b>. Dovresti prima cancellare <b>@@displayNameForProperty@@</b>.";
-    
-    IllegalCharacterInNumberException = "Controlla il valore <b>@@value@@</b> fornito per <b>@@displayNameForProperty@@</b>.";
-    NotANumberException = "<b>@@value@@</b> non è interpretabile come numero.";
+    IllegalCharacterInNumberException = "Controlla il valore <strong>@@value@@</strong> fornito per <strong>@@displayNameForProperty@@</strong>.";
+    InvalidDateFormatException = "Controlla la data <strong>@@value@@</strong> fornita per <strong>@@displayNameForProperty@@</strong>.";
     InvalidNumberException = "Numero non valido.";
-    InvalidDateFormatException="Controlla la data <b>@@value@@</b> fornita per <b>@@displayNameForProperty@@</b>.";
-
-    PasswordsFillBothFieldsException = "Completare entrambi i campi delle <b>password</b>.";
-    PasswordsDontMatchException = "Le <b>password</b> non corrispondono.";
+    MandatoryToManyRelationshipException = "<strong>@@displayNameForEntity@@</strong> deve avere almeno un/a <strong>@@displayNameForDestinationEntity@@</strong>.";
+    MandatoryToOneRelationshipException = "<strong>@@displayNameForEntity@@</strong> deve avere un/a <strong>@@displayNameForProperty@@</strong>.";
+    NotANumberException = "<strong>@@value@@</strong> non è interpretabile come numero.";
+    NullPropertyException = "Specificare un valore per <strong>@@displayNameForProperty@@</strong>.";
+    ObjectRemovalException = "Non posso eliminare questo/a <strong>@@displayNameForEntity@@</strong>. Dovresti prima cancellare <strong>@@displayNameForProperty@@</strong>.";
+    ObjectsRemovalException = "Non posso eliminare questo/a <strong>@@displayNameForEntity@@</strong>. Dovresti prima cancellare <strong>@@displayNameForProperty@@</strong>.";
+    PasswordsDontMatchException = "Le <strong>password</strong> non corrispondono.";
+    PasswordsFillBothFieldsException = "Completare entrambi i campi delle <strong>password</strong>.";
+    ObjectCannotBeDeletedException = "Non posso cancellare <strong>@@displayNameForEntity@@</strong> perché esso stesso uno degli oggetti ad esso correlati non possono essere cancellati.";
 }
