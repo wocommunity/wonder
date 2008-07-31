@@ -1,7 +1,10 @@
 package er.extensions;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.ERXPatcher.DynamicElementsPatches.Text;
 
 /**
  * Patch for WOText to not include the <code>value</code> attribute.
@@ -15,7 +18,6 @@ import com.webobjects.eocontrol.*;
 public class ERXWOText extends ERXPatcher.DynamicElementsPatches.Text {
     /**
      * Public constructor
-     * @param context the context
      */
     public ERXWOText(String string, NSDictionary nsdictionary,
                       WOElement woelement) {

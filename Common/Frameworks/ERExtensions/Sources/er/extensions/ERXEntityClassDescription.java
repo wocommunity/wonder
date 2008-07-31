@@ -6,14 +6,41 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import java.lang.*;
-import java.util.*;
 import java.io.File;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOGenericRecord;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * The main purpose of the ERXClassDescription class is
@@ -32,110 +59,113 @@ import java.lang.reflect.*;
  * Additionally, this class allows for model driven validations in a "poor-mans-Validity-way":
  * add a <code>ERXValidation</code> user info entry on your entity.
  * This is an example:<code><pre>
- {
-     // these keys are evaluated on validateForSave, they don't correspond to properties
-     additionalValidationKeys = ("validateEmailPassword");
-
-     // This dictionary holds the keys to use for validating properties
-     validateForKey =
-     {
-
-         // these keys are evaluated on validateForSave, they don't correspond to properties
-         email =
-         (
-          {
-              // this is the message code into ValidationStrings.plist
-              //    User.email.wrongLength = "The mail does not have the right size (5 to 50)";
-              message = "wrongLength";
-              
-              // skip this rule if the value is null
-              ignoreIfNull = true;
-              
-              // if there is a qualifier key, then a dictionary containing "object" and "value" is evaluated and an exception is thrown if the evaluation returns false
-              qualifier = "(value.length >= 5) AND (value.length < 50)";
-          },
-          {
-              // again, this is the message code into ValidationStrings.plist
-              message = "sampleTest";
-
-              // Given this key, an object of the corresponding EOQualifierEvaluation subclass is created and given this dictionary on creation. This object needs to be re-entrant.
-              className = "SampleTest";
-              // an example is:
-              // public class SampleTest implements EOQualifierEvaluation {
-              //	int minLength, maxLength;
-              //	public SampleTest(Object param) {
-              //		NSDictionary dict = (NSDictionary)param;
-              //		minLength = ERXValueUtilities.intValue(dict.objectForKey("minLength"));
-              //		maxLength = ERXValueUtilities.intValue(dict.objectForKey("maxLength"));
-              //	}
-              //	public boolean evaluateObject(Object o) {
-              //		ERXEntityClassDescription.ValidationObjectValue val
-              //		  = (ERXEntityClassDescription.ValidationObjectValue)o;
-              //		EOEnterpriseObject eo = val.object();
-              //		String value = (String)val.value();
-              //		return value.length() >= minLength && value.length() <= maxLength;
-              //	}
-              // }
-
-              minLength = "5";
-              maxLength = "10";
-          }
-          );
-
-         // This key does not correspond to any property, it get's evaluated in D2WApps where you have a multi-step page and need to do validation before validateForSave
-         "validateEmailPassword" =
-             (
-              {
-                  message = "stupidTestWithEmailAndPassword";
-
-                  // means to get D2W to highlight the fields involved instead of only displaying the message
-                  // For this to work, your corresponding localized String should be
-                  //   User.email,password.stupidTestWithEmailAndPassword = "Stupid test failed";
-                  keyPaths = "email,password";
-                  
-                  qualifier = "(object.email.length >= object.password.length)";
-              }
-              );
-     };
-
-     // These get checked when the object gets saved, additionally to "additionalValidations"
-     // The structure of "validateForInsert", "validateForUpdate" and "validateForDelete" is the same.
-     validateForSave =
-         (
-          {
-              message = "cantBeBoth";
-
-              keyPaths = "isEditor,isAdmin";
-
-              qualifier = "(object.isEditor = 'Y' and object.isAdmin = 'Y')";
-          }
-          );
- }</pre></code>
+ * "ERXValidation" = {
+ *     // these keys are evaluated on validateForSave, they don't correspond to properties
+ *     additionalValidationKeys = ("validateEmailPassword");
+ *
+ *     // This dictionary holds the keys to use for validating properties
+ *     validateForKey =
+ *     {
+ *
+ *         // these keys are evaluated on validateForSave, they don't correspond to properties
+ *         email =
+ *         (
+ *          {
+ *              // this is the message code into ValidationStrings.plist
+ *              //    User.email.wrongLength = "The mail does not have the right size (5 to 50)";
+ *              message = "wrongLength";
+ *              
+ *              // skip this rule if the value is null
+ *              ignoreIfNull = true;
+ *              
+ *              // if there is a qualifier key, then a dictionary containing "object" and "value" is evaluated 
+ *              // and an exception is thrown if the evaluation returns false
+ *              qualifier = "(value.length >= 5) AND (value.length < 50)";
+ *          },
+ *          {
+ *              // again, this is the message code into ValidationStrings.plist
+ *              message = "sampleTest";
+ *
+ *              // Given this key, an object of the corresponding EOQualifierEvaluation subclass is created 
+ *              // and given this dictionary on creation. This object needs to be re-entrant.
+ *              className = "SampleTest";
+ *              // an example is:
+ *              // public class SampleTest implements EOQualifierEvaluation {
+ *              //	int minLength, maxLength;
+ *              //	public SampleTest(Object param) {
+ *              //		NSDictionary dict = (NSDictionary)param;
+ *              //		minLength = ERXValueUtilities.intValue(dict.objectForKey("minLength"));
+ *              //		maxLength = ERXValueUtilities.intValue(dict.objectForKey("maxLength"));
+ *              //	}
+ *              //	public boolean evaluateObject(Object o) {
+ *              //		ERXEntityClassDescription.ValidationObjectValue val
+ *              //		  = (ERXEntityClassDescription.ValidationObjectValue)o;
+ *              //		EOEnterpriseObject eo = val.object();
+ *              //		String value = (String)val.value();
+ *              //		return value.length() >= minLength && value.length() <= maxLength;
+ *              //	}
+ *              // }
+ *
+ *              minLength = "5";
+ *              maxLength = "10";
+ *          }
+ *          );
+ *
+ *         // This key does not correspond to any property, it get's evaluated in D2WApps where you have a 
+ *         // multi-step page and need to do validation before validateForSave
+ *         "validateEmailPassword" =
+ *             (
+ *              {
+ *                  message = "stupidTestWithEmailAndPassword";
+ *
+ *                  // means to get D2W to highlight the fields involved instead of only displaying the message
+ *                  // For this to work, your corresponding localized String should be
+ *                  //   User.email,password.stupidTestWithEmailAndPassword = "Stupid test failed";
+ *                  keyPaths = "email,password";
+ *                  
+ *                  qualifier = "(object.email.length >= object.password.length)";
+ *              }
+ *              );
+ *     };
+ *
+ *     // These get checked when the object gets saved, additionally to "additionalValidations"
+ *     // The structure of "validateForInsert", "validateForUpdate" and "validateForDelete" is the same.
+ *     validateForSave =
+ *         (
+ *          {
+ *              message = "cantBeBoth";
+ *
+ *              keyPaths = "isEditor,isAdmin";
+ *
+ *              qualifier = "(object.isEditor = 'Y' and object.isAdmin = 'Y')";
+ *          }
+ *          );
+ * }</pre></code>
  * This code is mainly a quick-and-dirty rewrite from PRValidation by Proteon.
  * <br/>
- Additionally, this class adds a concept of "Default" values that get pushed into the object at creation time.
-Simply add a "ERXDefaultValues" key into the entity's userInfo dictionary that contains key-value-pairs for every default you want to set. Alternately, you can set a "default" key on each of the relationship or attrbute's userInfo<br />
- Example:<pre><code>
- "ERXDefaultValues" = {
-
-     // Example for simple values.
-     isAdmin = N;
-     isEditor = Y;
-
-     // Example for a related object (->Languages(pk,displayName)). You need to enter the primary key value.
-     language = "de";
-
-     // Example for an NSArray of related objects
-     recommendingUser = "@threadStorage.actor";
-
-     // Example for an NSArray
-     articlesToRevisit = "@threadStorage.actor.articles";
-
-     // Example for a NSTimestamp. All static methods from ERXTimestampUtilities are supported.
-     created = "@now";
-     updatePassword = "@tomorrow";
-
- }</pre></code>
+ * Additionally, this class adds a concept of "Default" values that get pushed into the object at creation time.
+ * Simply add a "ERXDefaultValues" key into the entity's userInfo dictionary that contains key-value-pairs for every default you want to set. Alternately, you can set a "default" key on each of the relationship or attrbute's userInfo<br />
+ * Example:<pre><code>
+ * "ERXDefaultValues" = {
+ *
+ *     // Example for simple values.
+ *     isAdmin = N;
+ *     isEditor = Y;
+ *
+ *     // Example for a related object (->Languages(pk,displayName)). You need to enter the primary key value.
+ *     language = "de";
+ *
+ *     // Example for an NSArray of related objects
+ *     recommendingUser = "@threadStorage.actor";
+ *
+ *     // Example for an NSArray
+ *     articlesToRevisit = "@threadStorage.actor.articles";
+ *
+ *     // Example for a NSTimestamp. All static methods from ERXTimestampUtilities are supported.
+ *     created = "@now";
+ *     updatePassword = "@tomorrow";
+ *
+ * }</pre></code>
  * <br/>
  * If you wish to provide your own class description subclass
  * see the documentation associated with the Factory inner class.
@@ -144,13 +174,13 @@ Simply add a "ERXDefaultValues" key into the entity's userInfo dictionary that c
 public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEntityClassDescription.class);
+    public static final Logger log = Logger.getLogger(ERXEntityClassDescription.class);
 
     /** validation logging support */
-    public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.validation.ERXEntityClassDescription");
+    public static final Logger validationLog = Logger.getLogger("er.validation.ERXEntityClassDescription");
 
     /** default logging support */
-    public static final ERXLogger defaultLog = ERXLogger.getERXLogger("er.default.ERXEntityClassDescription");
+    public static final Logger defaultLog = Logger.getLogger("er.default.ERXEntityClassDescription");
 
     /** Holds validation info from the entities user info dictionary */
     protected NSDictionary _validationInfo;
@@ -161,51 +191,90 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     /** Holds default values */
     protected NSMutableDictionary _initialDefaultValues;
 
+    /** Holds the default factory instance */
+    private static Factory _factory;
+    
+    /** holds validity Methods */
+    private static Method[] validityMethods = null;
+
+    /** index of validity save method */ 
+    private static int VALIDITY_SAVE = 0;
+
+    /** index of validity delete method */ 
+    private static int VALIDITY_DELETE = 1;
+
+    /** index of validity insert method */
+    private static int VALIDITY_INSERT = 2;
+
+    /** index of validity update method */
+    private static int VALIDITY_UPDATE = 3;
+
+    /** the shared validity engine instance as Object to eliminate compile errors
+        * if validity is not linked and should not be used
+        */ 
+    private static Object sharedGSVEngineInstance;
+
+    /** Boolean that gets initialized on first use to indicate if validity should
+        * be used or not, remember that the call System.getProperty acts synchronized
+        * so this saves some time in multithreaded apps.
+        */
+    private static Boolean useValidity;
+    
+
     /**
      * This factory inner class is registered as the observer
      * for three notifications: modelWasAdded, classDescriptionNeededForEntity
      * and classDescriptionNeededForClass. If you wish to provide your own
      * subclass of ERXEntityClassDescription then you need to create a
      * subclass of Factory and set that class name in the system properties
-     * under the key: er.extensions.ERXClassDescription.factoryClass
+     * under the key: <code>er.extensions.ERXClassDescription.factoryClass</code>
      * In your Factory subclass override the method: newClassDescriptionForEntity
      * to provide your own ERXEntityClassDescription subclass.
      */
     public static class Factory {
-        /** Public constructor */
-        public Factory() {}
+    	
+    	/** Public constructor */
+    	public Factory() {
+    		// Need to be able to preempt the model registering descriptions.
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelWasAdded", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelGroupWasAdded", ERXConstant.NotificationClassArray), ERXModelGroup.ModelGroupAddedNotification, null);
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("classDescriptionNeededForEntityName", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("classDescriptionNeededForClass", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForClassNotification, null);
+    	}
 
         public void reset() {
             _registeredModelNames = new NSMutableArray();
             _entitiesForClass = new NSMutableDictionary();
+            _classDescriptionForEntity = new NSMutableDictionary();
         }
 
-        private static Boolean _isRapidTurnaroundEnabled;
-        public boolean isRapidTurnaroundEnabled() {
-            if(_isRapidTurnaroundEnabled == null) {
-                _isRapidTurnaroundEnabled = ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isRapidTurnaroundEnabled") ? Boolean.TRUE : Boolean.FALSE;
-            }
-            return _isRapidTurnaroundEnabled.booleanValue();
+        protected boolean isRapidTurnaroundEnabled() {
+            return ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isRapidTurnaroundEnabled");
         }
 
-        private static Boolean _isFixingRelationshipsEnabled;
-        public boolean isFixingRelationshipsEnabled() {
-            if(_isFixingRelationshipsEnabled == null) {
-                _isFixingRelationshipsEnabled = ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isFixingRelationshipsEnabled") ? Boolean.TRUE : Boolean.FALSE;
-            }
-            return _isFixingRelationshipsEnabled.booleanValue();
+        protected boolean isFixingRelationshipsEnabled() {
+            return ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isFixingRelationshipsEnabled");
         }
 
         /**
-         * Method called by the {@link com.webobjects.appserver.WOApplication WOApplication}
-         * has finished launching.
+         * Method called when a model group did load.
          */
-        public void applicationDidFinishLaunching(NSNotification n) {
-            log.debug("ApplicationDidFinishLaunching: " + n);
-            for (Enumeration ge = EOModelGroup.defaultGroup().models().objectEnumerator(); ge.hasMoreElements();) {
+        public final void modelGroupWasAdded(NSNotification n) {
+            log.debug("modelGroupWasAdded: " + n);
+            EOModelGroup group = (EOModelGroup) n.object();
+            processModelGroup(group);
+        }
+
+        /**
+         * Called when a model group finished loading. Checks foreign keys by default. Override to to more...
+         * @param group
+         */
+		protected void processModelGroup(EOModelGroup group) {
+			for (Enumeration ge = group.models().objectEnumerator(); ge.hasMoreElements();) {
                 EOModel model = (EOModel)ge.nextElement();
                 String frameworkName = null;
                 String modelPath = null;
+                log.debug("ApplicationDidFinishLaunching: " + model.name());
                 
                 if(isRapidTurnaroundEnabled()) {
                     for(Enumeration e = NSArray.componentsSeparatedByString(model.pathURL().getFile(), File.separator).reverseObjectEnumerator(); e.hasMoreElements(); ) {
@@ -230,7 +299,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     if(cd instanceof ERXEntityClassDescription) {
                         ((ERXEntityClassDescription)cd).readDefaultValues();
 
-                        if(modelPath != null) {
+                        if(isRapidTurnaroundEnabled() && modelPath != null) {
                             String path = modelPath + File.separator + entity.name() + ".plist";
                             ERXFileNotificationCenter.defaultCenter().addObserver(cd, new NSSelector("modelFileDidChange", ERXConstant.NotificationClassArray), path);
                         }
@@ -239,7 +308,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     }
                 }
             }
-        }
+		}
         
         /**
          * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter}   
@@ -249,12 +318,17 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * 
          * @param n notification that has the EOModel that was loaded.
          */
-        public void modelWasAddedNotification(NSNotification n) {
-            log.debug("ModelWasAddedNotification: " + ((EOModel)n.object()).name());
+        public final void modelWasAdded(NSNotification n) {
+        	EOModel model = ((EOModel)n.object());
+            log.debug("ModelWasAddedNotification: " + model.name());
             // Don't want this guy getting in our way.
-            // FIXME: This is done twice
-            NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
-            registerDescriptionForEntitiesInModel((EOModel)n.object());
+            NSNotificationCenter.defaultCenter().removeObserver(model);
+            try {
+                registerDescriptionForEntitiesInModel(model);
+            } catch (RuntimeException e) {
+                log.error("Error registering model: " + model.name(), e);
+                throw e;
+            }
         }
 
         /**
@@ -304,14 +378,26 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * @param entity to create the class description for
          * @return new class description for the given entity
          */
-        public ERXEntityClassDescription newClassDescriptionForEntity(EOEntity entity) {
-            return new ERXEntityClassDescription(entity);
+        protected ERXEntityClassDescription newClassDescriptionForEntity(EOEntity entity) {
+        	String key = entity.name();
+        	EOModel model = entity.model();
+        	if (model != null) {
+        		key = model.name() + " " + key;
+        	}
+        	ERXEntityClassDescription classDescription = (ERXEntityClassDescription)_classDescriptionForEntity.objectForKey(key);
+        	if (classDescription == null) {
+        		classDescription = new ERXEntityClassDescription(entity);
+        		_classDescriptionForEntity.setObjectForKey(classDescription, key);
+        	}
+        	return classDescription;
         }
 
         /** holds a reference to all of the registered model names */
         private NSMutableArray _registeredModelNames = new NSMutableArray();
         /** holds a mapping of class to entities */
         private NSMutableDictionary _entitiesForClass = new NSMutableDictionary();
+        /** holds a mapping of entity to class descriptions */
+        private NSMutableDictionary _classDescriptionForEntity = new NSMutableDictionary();
 
         /**
          * Allows for entities to be altered
@@ -324,7 +410,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * for custom validation to work at the moment.
          * @param eoentity to be prepared for registration
          */
-        public void prepareEntityForRegistration(EOEntity eoentity) {
+        protected void prepareEntityForRegistration(EOEntity eoentity) {
             String className = eoentity.className();
             String defaultClassName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXEntityClassDescription.defaultClassName", ERXGenericRecord.class.getName());
             String alternateClassName = ERXProperties.stringForKey("er.extensions.ERXEntityClassDescription." + eoentity.name() + ".ClassName");
@@ -409,7 +495,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * which the notifications are recieved.
          * @param model that contains all of the entities to be registerd
          */
-        public void registerDescriptionForEntitiesInModel(EOModel model) {
+        protected void registerDescriptionForEntitiesInModel(EOModel model) {
             if (!_registeredModelNames.containsObject(model.name())) {
                 for (Enumeration e = model.entities().objectEnumerator(); e.hasMoreElements();) {
                     EOEntity eoentity = (EOEntity)e.nextElement();
@@ -465,7 +551,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * different class description subclass.
          * @param entity to register the class description for
          */
-        public void registerDescriptionForEntity(EOEntity entity) {
+        protected void registerDescriptionForEntity(EOEntity entity) {
             Class entityClass = EOGenericRecord.class;
             try {
                 String className = entity.className();
@@ -491,7 +577,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * @param class1 class object to have a custom class
          *		description registered for.
          */
-        public void registerDescriptionForClass(Class class1) {
+        protected void registerDescriptionForClass(Class class1) {
             NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
             if (entities != null) {
                 if (log.isDebugEnabled())
@@ -503,17 +589,18 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     _setClassDescriptionOnEntity(entity, cd);
                 }
             } else {
-                log.error("Unable to register descriptions for class: " + class1.getName(), new RuntimeException("Dummy"));
+            	if(class1.getName().indexOf('$') < 0) {
+            		log.error("Unable to register descriptions for class: " + class1.getName(), new RuntimeException("Dummy"));
+            	}
             }
         }
         
     }
 
-    /** 
-     * flag to know if the <code>registerDescription</code>
-     * method has been called
-     */
-    private static boolean _registered = false;
+    /** getter for the factory */
+    public static Factory factory() {
+        return _factory;
+    }
 
     /**
      * This method is called by the principal class
@@ -527,27 +614,20 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * by creating and registering custom class descriptions.
      */
     public static void registerDescription() {
-        if (!_registered) {
-            Factory observer = null;
-            try {
-                String className = System.getProperty("er.extensions.ERXClassDescription.factoryClass");
-                if (className != null) {
-                    observer = (Factory)Class.forName(className).newInstance();
-                }
-            } catch(Exception ex) {
-                log.warn("Exception while registering factory, using default: " + ex );
-            }
+    	if (_factory == null) {
+    		_factory = null;
+    		try {
+    			String className = System.getProperty("er.extensions.ERXClassDescription.factoryClass");
+    			if (className != null) {
+    				_factory = (Factory)Class.forName(className).newInstance();
+    			}
+    		} catch(Exception ex) {
+    			log.warn("Exception while registering factory, using default: " + ex );
+    		}
             
-            if(observer == null)
-                observer=new Factory();
-            ERXRetainer.retain(observer);
-            // Need to be able to preempt the model registering descriptions.
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("modelWasAddedNotification", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("applicationDidFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("classDescriptionNeededForEntityName", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("classDescriptionNeededForClass", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForClassNotification, null);
-            _registered = true;
-        }
+    		if(_factory == null)
+    			_factory=new Factory();
+    	}
     }
 
     /**
@@ -557,7 +637,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public ERXEntityClassDescription(EOEntity entity) {
         super(entity);
         _validationInfo = ERXValueUtilities.dictionaryValue(entity.userInfo().objectForKey("ERXValidation"));
-        _validationQualiferCache = new NSMutableDictionary();
+        _validationQualiferCache = ERXMutableDictionary.synchronizedDictionary();
     }
 
     public void modelFileDidChange(NSNotification n) {
@@ -569,7 +649,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             entity().setUserInfo((NSDictionary)userInfo.objectForKey("userInfo"));
             
             _validationInfo = ERXValueUtilities.dictionaryValue(entity().userInfo().objectForKey("ERXValidation"));
-            _validationQualiferCache = new NSMutableDictionary();
+            _validationQualiferCache = ERXMutableDictionary.synchronizedDictionary();
             _initialDefaultValues = null;
             readDefaultValues();
         } catch(Exception ex) {
@@ -588,6 +668,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      */
     public void validateObjectForDelete(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
+            if (useValidity()) {
+                invokeValidityMethodWithType(VALIDITY_DELETE, obj);
+            }
             super.validateObjectForDelete(obj);
             validateObjectWithUserInfo(obj, null, "validateForDelete", "validateForDelete");
         } catch (ERXValidationException eov) {
@@ -647,6 +730,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      */
     public void validateObjectForUpdate(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
+            if (useValidity()) {
+                invokeValidityMethodWithType(VALIDITY_UPDATE, obj);
+            }
             validateObjectWithUserInfo(obj, null, "validateForUpdate", "validateForUpdate");
         } catch (ERXValidationException eov) {
             throw eov;
@@ -669,6 +755,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      */
     public void validateObjectForInsert(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
+            if (useValidity()) {
+                invokeValidityMethodWithType(VALIDITY_INSERT, obj);
+            }
             validateObjectWithUserInfo(obj, null, "validateForInsert", "validateForInsert");
         } catch (ERXValidationException eov) {
             throw eov;
@@ -699,7 +788,11 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         if (log.isDebugEnabled())
             log.debug("Validate value: " + obj + " for key: " + s);
         try {
-            validated = super.validateValueForKey(obj, s);
+            if(obj instanceof ERXConstant) {
+                validated = obj;
+            } else {
+                validated = super.validateValueForKey(obj, s);
+            }
         } catch (ERXValidationException eov) {
             throw eov;
         } catch (NSValidation.ValidationException eov) {
@@ -725,6 +818,10 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
+            if (useValidity()) {
+                invokeValidityMethodWithType(VALIDITY_SAVE, obj);
+            }
+            
             if(_validationInfo != null) {
                 NSArray additionalValidationKeys = (NSArray)_validationInfo.objectForKey("additionalValidationKeys");
                 if(additionalValidationKeys != null) {
@@ -854,6 +951,12 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         String key;
         String stringValue;
         int adaptorType;
+        EOAttribute attribute;
+        
+        public AttributeDefault(EOAttribute attribute, String stringValue) {
+            this(attribute.name(), stringValue, attribute.adaptorValueType());
+            this.attribute = attribute;
+        }
 
         public AttributeDefault(String key, String stringValue, int adaptorType) {
             this.key = key;
@@ -869,23 +972,24 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             Object defaultValue = this.stringValue;
             if(stringValue.startsWith("@threadStorage.")) {
                 String keyPath = stringValue.substring("@threadStorage.".length());
-                defaultValue = ERXThreadStorage.valueForKey(keyPath);
-                if(keyPath.indexOf(".") > 0) {
-                    keyPath = stringValue.substring(keyPath.indexOf(".")+1);
-                    defaultValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(defaultValue, keyPath);
-                }
+                defaultValue = ERXThreadStorage.valueForKeyPath(keyPath);
             } else {
-                // nothing for strings so far...
+                if(attribute != null && attribute.valueFactoryMethodName() != null && attribute.factoryMethodArgumentType() == EOAttribute.FactoryMethodArgumentIsString) {
+                    defaultValue = attribute.newValueForString(stringValue);
+                }
             }
             if(defaultValue != null) {
+                String s = defaultValue.toString();
+                s = s.substring(s.indexOf("@")+1);
                 if(adaptorType == AdaptorDateType) {
-                    defaultValue = ERXTimestampUtilities.timestampForString(defaultValue.toString());
+                    defaultValue = ERXTimestampUtilities.timestampForString(s);
                 } else if (adaptorType == AdaptorNumberType) {
-                    NSTimestamp temp = ERXTimestampUtilities.timestampForString(defaultValue.toString());
+                    NSTimestamp temp = ERXTimestampUtilities.timestampForString(s);
                     if(temp != null) {
                         defaultValue = ERXTimestampUtilities.unixTimestamp(temp);
                     } else {
-                        defaultValue = new Integer(Integer.parseInt(defaultValue.toString()));
+                        //the value will be coerced by the eo...
+                        defaultValue = ERXValueUtilities.bigDecimalValue(s);
                     }
                 }
             }
@@ -988,7 +1092,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public void setDefaultAttributeValue(EOAttribute attr, String defaultValue) {
         String name = attr.name();
         defaultLog.debug("Adding: " + name + "-" + defaultValue);
-        AttributeDefault d = new AttributeDefault(name, defaultValue, attr.adaptorValueType());
+        AttributeDefault d = new AttributeDefault(attr, defaultValue);
         _initialDefaultValues.setObjectForKey(d, name);
     }
 
@@ -1021,4 +1125,139 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         super.awakeObjectFromInsertion(eo, ec);
         setDefaultValuesInObject(eo, ec);
     }
+    /*
+    public String localizedKey(String key) {
+    	key = key + "_" + ERXLocalizer.currentLocalizer().languageCode();
+    	if(!allPropertyKeys().containsObject(key)) {
+    		key = null;
+    	}
+    	return key;
+    }
+	*/
+
+    public String inverseForRelationshipKey(String relationshipKey) {
+        String result = null;
+        EORelationship relationship = entity().relationshipNamed(relationshipKey);
+        if(relationship != null && relationship.userInfo() != null) {
+            result = (String) relationship.userInfo().objectForKey("ERXInverseRelationshipName");
+        }
+        if(result == null) {
+            result = super.inverseForRelationshipKey(relationshipKey);
+        }
+        return result;
+    }
+
+    private static boolean useValidity() {
+        if (useValidity == null) {
+            useValidity = "true".equals(System.getProperty("er.extensions.ERXGenericRecord.useValidity")) ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return useValidity.booleanValue();
+    }
+
+
+    private void invokeValidityMethodWithType(int type, EOEnterpriseObject eo) throws NSValidation.ValidationException{
+        try {
+            Object dummy = null;
+            Method m = validityMethods()[type];
+            m.invoke(sharedGSVEngineInstance(), new Object[]{eo});
+        } catch (IllegalAccessException e1) {
+            log.error("an exception occured in validityValidateEOObjectOnSave", e1);
+        } catch (IllegalArgumentException e2) {
+            log.error("an exception occured in validityValidateEOObjectOnSave", e2);
+        } catch (NullPointerException e3) {
+            log.error("an exception occured in validityValidateEOObjectOnSave", e3);
+        } catch (InvocationTargetException e4) {
+            Throwable targetException = e4.getTargetException();
+            if (targetException instanceof NSValidation.ValidationException) {
+                throw (NSValidation.ValidationException)targetException;
+            } else {
+                log.error("an exception occured in validityValidateEOObjectOnSave", e4);
+            }
+        }
+    }
+
+    private Method[] validityMethods() {
+        if (validityMethods == null) {
+            validityMethods = new Method[4];
+            Method m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnSave");
+            validityMethods[0] = m;
+            
+            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnDelete");
+            validityMethods[1] = m;
+            
+            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnInsert");
+            validityMethods[2] = m;
+            
+            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnUpdate");
+            validityMethods[3] = m;
+        }
+        return validityMethods;
+    }
+    
+    private static Method methodInSharedGSVEngineInstanceWithName(String name) {
+        try {
+            return sharedGSVEngineInstance().getClass().getMethod(name, new Class[]{EOEnterpriseObject.class});
+        } catch (IllegalArgumentException e2) {
+            throw new NSForwardException(e2);
+        } catch (NullPointerException e3) {
+            throw new NSForwardException(e3);
+        } catch (NoSuchMethodException e4) {
+            throw new NSForwardException(e4);
+        }
+    }
+    
+    private static Object sharedGSVEngineInstance() {
+        if (sharedGSVEngineInstance == null) {
+            try {
+                Class gsvEngineClass = Class.forName("com.gammastream.validity.GSVEngine");
+                Method m = gsvEngineClass.getMethod("sharedValidationEngine", new Class[]{});
+                Object dummy = null;
+                sharedGSVEngineInstance = m.invoke(dummy, new Object[]{});
+            } catch (ClassNotFoundException e1) {
+                throw new NSForwardException(e1);
+            } catch (NoSuchMethodException e2) {
+                throw new NSForwardException(e2);
+            } catch (IllegalAccessException e3) {
+                throw new NSForwardException(e3);
+            } catch (InvocationTargetException e4) {
+                throw new NSForwardException(e4);
+            }
+        }
+        return sharedGSVEngineInstance;
+    }
+
+	public Class _enforcedKVCNumberClassForKey(String key) {
+		EOAttribute attribute = entity().attributeNamed(key);
+		if(attribute != null && attribute.userInfo() != null) {
+			String className = (String) attribute.userInfo().objectForKey("ERXConstantClassName");
+			if(className != null) {
+                Class c = ERXPatcher.classForName(className);
+				return c;
+			}
+		}
+		return super._enforcedKVCNumberClassForKey(key);
+	}
+/*
+    private NSMutableArray<Class<ERXPartial>> _partialClasses = new NSMutableArray<Class<ERXPartial>>();
+
+    /**
+     * Associates a partial entity class with this entity.
+     * 
+     * @see er.extensions.partials
+     * @param partialClass the partial class to associate
+     * /
+	public void _addPartialClass(Class<ERXPartial> partialClass) {
+		_partialClasses.addObject(partialClass);
+	}
+
+	/**
+	 * Returns the list of partial entity classes for this entity.
+	 * 
+     * @see er.extensions.partials
+	 * @return the list of partial entity classes for this entity
+	 * /
+	public NSArray<Class<ERXPartial>> partialClasses() {
+    	return _partialClasses;
+    }
+*/
 }

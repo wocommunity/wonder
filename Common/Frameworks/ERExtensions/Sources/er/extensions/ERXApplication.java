@@ -48,7 +48,6 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
 import com.webobjects.appserver._private.WOComponentDefinition;
 import com.webobjects.appserver._private.WOProperties;
-import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
@@ -1472,7 +1471,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
-		return (T) super.pageWithName(componentClass.getName(), ERXWOContext.currentContext());
+		return (T)pageWithName(componentClass.getName(), ERXWOContext.currentContext());
 	}
 
 	/**

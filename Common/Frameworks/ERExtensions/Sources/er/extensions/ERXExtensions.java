@@ -72,17 +72,17 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /** holds the default model group */
-    protected EOModelGroup defaultModelGroup;
+    protected ERXModelGroup defaultModelGroup;
 
     /**
      * Delegate method for the {@link EOModelGroup} class delegate.
      * @return a fixed ERXModelGroup
      */
-    public EOModelGroup defaultModelGroup() {
+    public ERXModelGroup defaultModelGroup() {
         if(defaultModelGroup == null) {
-            //defaultModelGroup = new ERXModelGroup();
-            //defaultModelGroup.loadModelsFromLoadedBundles();
-            defaultModelGroup = ERXModelGroup.modelGroupForLoadedBundles();
+            defaultModelGroup = new ERXModelGroup();
+            defaultModelGroup.loadModelsFromLoadedBundles();
+            //defaultModelGroup = ERXModelGroup.modelGroupForLoadedBundles();
         }
         return defaultModelGroup;
     }
@@ -148,7 +148,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     			ERXSharedEOLoader.patchSharedEOLoading();
     		}            
     		ERXExtensions.configureAdaptorContextRapidTurnAround(this);
-    		//ERXJDBCAdaptor.registerJDBCAdaptor();
+    		ERXJDBCAdaptor.registerJDBCAdaptor();
     		EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
     		//ERXAdaptorChannelDelegate.setupDelegate();
     		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sharedEditingContextWasInitialized", ERXConstant.NotificationClassArray), EOSharedEditingContext.DefaultSharedEditingContextWasInitializedNotification, null);
@@ -178,7 +178,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * validation template system is configured.
      */
     public void finishInitialization() {
-    	//ERXJDBCAdaptor.registerJDBCAdaptor();
+    	ERXJDBCAdaptor.registerJDBCAdaptor();
         ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
         ERXProperties.populateSystemProperties();
         
