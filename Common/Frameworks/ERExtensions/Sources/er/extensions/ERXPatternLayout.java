@@ -6,15 +6,27 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.util.Enumeration;
+
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.helpers.FormattingInfo;
 import org.apache.log4j.helpers.PatternConverter;
 import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.spi.LoggingEvent;
-import java.util.Enumeration;
-import com.webobjects.appserver.WOApplication;
+
 import com.webobjects.appserver.WOAdaptor;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.ERXUnitAwareDecimalFormat;
+import er.extensions.ERXDictionaryUtilities;
+import er.extensions.ERXSimpleTemplateParser;
+import er.extensions.ERXThreadStorage;
+import er.extensions.ERXUtilities;
 
 /**
  * The ERXPatternLayout adds some additional (and needed) layout options. The
@@ -55,8 +67,12 @@ public class ERXPatternLayout extends PatternLayout {
      */
     private static ERXPatternLayout _instance;
     public static ERXPatternLayout instance() {
+    	if(_instance == null) {
+    		_instance = new ERXPatternLayout();
+    	}
         return _instance;
     }
+
 
     /**
      * Default constructor. Uses the default conversion
@@ -73,7 +89,7 @@ public class ERXPatternLayout extends PatternLayout {
      */
     public ERXPatternLayout(String pattern) {
         super(pattern);
-        _instance=this; // log4j will create one of these at runtime, and instance() will be used to find it from the log4j config page
+	_instance=this; // log4j will create one of these at runtime, and instance() will be used to find it from the log4j config page
     }
 
     /**
@@ -236,7 +252,11 @@ class ERXPatternParser extends PatternParser {
                     if (j == 0) {
                         value = ERXThreadStorage.valueForKey(part);
                     } else {
-                        value = NSKeyValueCoding.Utility.valueForKey(value, part);
+                    	try {
+                    		value = NSKeyValueCoding.Utility.valueForKey(value, part);
+                    	} catch(Throwable t) {
+                    		value = "ERR: " + part + " ->"+ t.getMessage();
+                    	}
                     }
                     if (value == null)
                         break;
@@ -440,8 +460,10 @@ class ERXPatternParser extends PatternParser {
             // when debug level logging is enabled for the perser. 
             _templateParser.isLoggingDisabled = true;
             _jvmInfo = new NSMutableDictionary();
-            // work in progress; this is the fixed template.
-            _template = "@@usedMemory@@ used/@@freeMemory@@ free";
+            format = format.replaceFirst("(^|\\W)u(\\W|$)", "$1@@usedMemory@@$2");
+            format = format.replaceFirst("(^|\\W)f(\\W|$)", "$1@@freeMemory@@$2");
+            format = format.replaceFirst("(^|\\W)t(\\W|$)", "$1@@totalMemory@@$2");
+            _template = format;
         }
         
         /**

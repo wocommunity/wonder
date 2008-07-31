@@ -6,12 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.*;
+import java.text.FieldPosition;
+import java.text.Format;
 import java.util.Hashtable;
+
+import com.webobjects.foundation.NSNumberFormatter;
 
 /**
  * An extension to the number formatter. It
@@ -31,9 +32,9 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	
 	static {
 		_repository.put(DefaultKey, new ERXNumberFormatter());
-	};
+	}
 	
-	private String _ignoredChars = "%$";
+	private String _ignoredChars = ERXProperties.stringForKeyWithDefault("er.extensions.ERXNumberFormatter.ignoredChars", "%$");
     private Integer _scale;
     private BigDecimal _factor;
 	private String _operator;
@@ -48,7 +49,6 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 
 	/**
 	 * @param object
-	 * @return
 	 */
 	public static Format defaultNumberFormatterForObject(Object object) {
 		Format result = null;
@@ -67,7 +67,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      */
     public static NSNumberFormatter numberFormatterForPattern(String pattern) {
     	NSNumberFormatter formatter;
-    	if(ERXLocalizer.isLocalizationEnabled()) {
+    	if(ERXLocalizer.useLocalizedFormatters()) {
     		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
     		formatter = (NSNumberFormatter)localizer.localizedNumberFormatForKey(pattern);
     	} else {
@@ -82,10 +82,9 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     
     /**
      * Sets a shared instance for the specified pattern.
-     * @return shared instance of formatter
      */
     public static void setNumberFormatterForPattern(NSNumberFormatter formatter, String pattern) {
-    	if(ERXLocalizer.isLocalizationEnabled()) {
+    	if(ERXLocalizer.useLocalizedFormatters()) {
     		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
     		localizer.setLocalizedNumberFormatForKey(formatter, pattern);
     	} else {
@@ -162,7 +161,6 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	/**
 	 * Override this in your subclass to provide for other operations when formatting a value.
 	 * @param value
-	 * @return
 	 */
 	protected BigDecimal performFormat(BigDecimal value) {
 		if("*".equals(_operator)) {
@@ -177,7 +175,6 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	/**
 	 * Override this in your subclass to provide for other operations when parsing a value.
 	 * @param value
-	 * @return
 	 */
 	protected BigDecimal performParse(BigDecimal value) {
 		if("*".equals(_operator)) {

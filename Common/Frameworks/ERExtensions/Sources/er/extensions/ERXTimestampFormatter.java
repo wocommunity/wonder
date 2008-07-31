@@ -46,7 +46,7 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	 */
 	public static NSTimestampFormatter dateFormatterForPattern(String pattern) {
 		NSTimestampFormatter formatter;
-		if(ERXLocalizer.isLocalizationEnabled()) {
+		if(ERXLocalizer.useLocalizedFormatters()) {
 			ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
 			formatter = (NSTimestampFormatter)localizer.localizedDateFormatForKey(pattern);
 		} else {
@@ -65,7 +65,7 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	 * Sets a shared instance for the specified pattern.
 	 */
 	public static void setDateFormatterForPattern(NSTimestampFormatter formatter, String pattern) {
-		if(ERXLocalizer.isLocalizationEnabled()) {
+		if(ERXLocalizer.useLocalizedFormatters()) {
 			ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
 			localizer.setLocalizedDateFormatForKey(formatter, pattern);
 		} else {

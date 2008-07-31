@@ -1,9 +1,10 @@
 package er.extensions;
 
-import java.math.*;
-import java.text.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.FieldPosition;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSNumberFormatter;
 
 /**
  * @author david

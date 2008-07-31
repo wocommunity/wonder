@@ -1,26 +1,41 @@
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
 import java.math.BigDecimal;
 import java.text.Format;
 import java.text.ParseException;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.appserver._private.WOInput;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * Replacement for WOTextField. Provides for localized formatters. 
  * Never use this directly, rather use WOTextField and let the ERXPatcher handle the
  * replacement of WOTextField in all cases.
+ * 
+ * @binding blankIsNull if false, "" will not be converted to null; if true, "" will be converted to null. Default is true.
+ * 
  * @author ak
  */
 public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.TextField*/ {
 	
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXWOTextField.class);
+    public static Logger log = Logger.getLogger(ERXWOTextField.class);
     
 	protected WOAssociation _formatter;
 	protected WOAssociation _dateFormat;
 	protected WOAssociation _numberFormat;
 	protected WOAssociation _useDecimalNumber;
+	protected WOAssociation _blankIsNull;
 
 	public ERXWOTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super("input", nsdictionary, woelement);
@@ -31,6 +46,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		_dateFormat = (WOAssociation)_associations.removeObjectForKey("dateformat");
 		_numberFormat = (WOAssociation)_associations.removeObjectForKey("numberformat");
 		_useDecimalNumber = (WOAssociation)_associations.removeObjectForKey("useDecimalNumber");
+		_blankIsNull = (WOAssociation)_associations.removeObjectForKey("blankIsNull");
 		
 		if(_dateFormat != null && _numberFormat != null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Cannot have 'dateFormat' and 'numberFormat' attributes at the same time.");
@@ -41,12 +57,25 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		return "text";
 	}
 	
+    protected boolean isDisabledInContext(WOContext context) {
+    	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
+    	return disabled != null && disabled.booleanValueInComponent(context.component());
+    }
+
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent component = wocontext.component();
-		if(!disabledInComponent(component) && wocontext._wasFormSubmitted()) {
+		if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted()) {
 			String name = nameInContext(wocontext, component);
 			if(name != null) {
-				String stringValue = worequest.stringFormValueForKey(name);
+				String stringValue;
+				boolean blankIsNull = _blankIsNull == null || _blankIsNull.booleanValueInComponent(component);
+				if (blankIsNull) {
+					stringValue = worequest.stringFormValueForKey(name);
+				}
+				else {
+					Object objValue = worequest.formValueForKey(name);
+					stringValue = (objValue == null) ? null : objValue.toString();
+				}
 				Object result = stringValue;
 				if(stringValue != null) {
 					Format format = null;
@@ -82,7 +111,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 						if(result != null && _useDecimalNumber != null && _useDecimalNumber.booleanValueInComponent(component)) {
 							result = new BigDecimal(result.toString());
 						}
-					} else if(result.toString().length() == 0) {
+					} else if(blankIsNull && result.toString().length() == 0) {
 						result = null;
 					}
 				}
