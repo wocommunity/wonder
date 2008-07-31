@@ -332,6 +332,9 @@ public class AjaxInPlace extends WOComponent {
 	public void setEditing(boolean editing) {
 		if (canSetValueForBinding("editing")) {
 			setValueForBinding(Boolean.valueOf(editing), "editing");
+			if (hasBinding("editing")) {
+				editing = ERXComponentUtilities.booleanValueForBinding(this, "editing");
+			}
 		}
 		if (_editing != editing) {
 			_editing = editing;

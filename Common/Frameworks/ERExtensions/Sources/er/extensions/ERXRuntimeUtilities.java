@@ -386,16 +386,29 @@ public class ERXRuntimeUtilities {
         } finally {
         	// Getting stream results before freeing process resources to prevent a case
         	// when fast process is destroyed before stream readers read from buffers.
-        	result = new Result(exitValue, isr.getResult(), esr.getResult());
+        	if (isr != null) {
+        		if (esr != null) {
+                	result = new Result(exitValue, isr.getResult(), esr.getResult());
+        		}
+        		else {
+                	result = new Result(exitValue, isr.getResult(), null);
+        		}
+        	}
+        	else if (esr != null) {
+            	result = new Result(exitValue, null, esr.getResult());
+        	}
+        	else {
+            	result = new Result(exitValue, null, null);
+        	}
 
         	// Checking exceptions after getting results to ensure that stream readers
         	// had already read their buffers by the time of check.
-        	if (isr.getException() != null) {
+        	if (isr != null && isr.getException() != null) {
                 log.error("input stream reader got exception,\n      "+
                         "command = "+ERXStringUtilities.toString(command, " ")+
                         "result = "+isr.getResultAsString(), isr.getException());
             }
-            if (esr.getException() != null) {
+            if (esr != null && esr.getException() != null) {
                 log.error("error stream reader got exception,\n      "+
                         "command = "+ERXStringUtilities.toString(command, " ")+
                         "result = "+esr.getResultAsString(), esr.getException());
