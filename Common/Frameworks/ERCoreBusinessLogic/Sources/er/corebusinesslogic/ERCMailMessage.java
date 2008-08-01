@@ -5,6 +5,7 @@ package er.corebusinesslogic;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import java.io.File;
 import java.util.*;
 import java.math.BigDecimal;
 import er.extensions.*;
@@ -247,11 +248,63 @@ public class ERCMailMessage extends _ERCMailMessage {
     }
 
     public void attachFileWithMimeType(String filePath, String mimeType) {
+        attachFileWithMimeType(filePath, mimeType, false);
+    }
+
+    public void attachFileWithMimeType(String filePath, String mimeType, boolean deleteOnSent) {
         ERCMessageAttachment attachment = (ERCMessageAttachment)ERXEOControlUtilities.createAndInsertObject(editingContext(),
                                                                                                             "ERCMessageAttachment");
         attachment.setFilePath(filePath);
         if(mimeType != null)
             attachment.setMimeType(mimeType);
+        attachment.setDeleteOnSent(Boolean.valueOf(deleteOnSent));
         addToBothSidesOfAttachments(attachment);
-    }    
+    }
+
+    public void willDelete() {
+        super.willDelete();
+        captureFilesToDelete();
+    }
+
+    public void didDelete(EOEditingContext ec) {
+        super.didDelete(ec);
+        deleteCapturedFiles();
+    }
+
+    public void didUpdate() {
+        super.didUpdate();
+        
+        captureFilesToDelete();
+        deleteCapturedFiles();
+    }
+
+    private NSArray _filesToDelete;
+    private void captureFilesToDelete() {
+        if(!isSentState()) {
+            _filesToDelete = NSArray.EmptyArray;
+            return;
+        }
+        
+        NSArray attachments = attachments();
+        if(attachments.count() == 0) {
+            _filesToDelete = NSArray.EmptyArray;
+            return;
+        }
+        
+        NSMutableArray filesToDelete = new NSMutableArray();
+        for(int i=0; i<attachments.count(); i++) {
+            ERCMessageAttachment attachment = (ERCMessageAttachment) attachments.objectAtIndex(i);
+            if(attachment.deleteOnSent()) {
+                filesToDelete.addObject(attachment.file());
+            }
+        }
+        _filesToDelete = filesToDelete.immutableClone();
+    }
+
+    private void deleteCapturedFiles() {
+        for (int i = 0; i < _filesToDelete.count(); i++) {
+            File file = (File) _filesToDelete.objectAtIndex(i);
+            file.delete();
+        }
+    }
 }

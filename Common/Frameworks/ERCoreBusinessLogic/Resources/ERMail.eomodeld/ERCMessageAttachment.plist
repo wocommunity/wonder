@@ -1,13 +1,14 @@
 {
     attributes = (
+        {columnName = "DELETE_ON_SENT"; name = deleteOnSent; prototypeName = intBoolean; }, 
         {columnName = "FILE_PATH"; name = filePath; prototypeName = varchar1000; }, 
         {columnName = ID; name = id; prototypeName = id; }, 
         {columnName = "MAIL_MESSAG_ID"; name = mailMessageId; prototypeName = id; }, 
         {columnName = "MIME_TYPE"; name = mimeType; prototypeName = varchar255; }
     ); 
-    attributesUsedForLocking = (id, filePath, mailMessageId); 
+    attributesUsedForLocking = (id, deleteOnSent, filePath, mailMessageId); 
     className = "er.corebusinesslogic.ERCMessageAttachment"; 
-    classProperties = (filePath, mimeType, mailMessage); 
+    classProperties = (deleteOnSent, filePath, mimeType, mailMessage); 
     externalName = "ERCMESSAG_ATTACH"; 
     fetchSpecificationDictionary = {}; 
     name = ERCMessageAttachment; 

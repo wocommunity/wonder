@@ -21,6 +21,13 @@ public abstract class _ERCMessageAttachment extends ERXGenericRecord {
     }
 
 
+    public Boolean deleteOnSent() {
+        return (Boolean)storedValueForKey("deleteOnSent");
+    }
+    public void setDeleteOnSent(Boolean aValue) {
+        takeStoredValueForKey(aValue, "deleteOnSent");
+    }
+
     public String filePath() {
         return (String)storedValueForKey("filePath");
     }
