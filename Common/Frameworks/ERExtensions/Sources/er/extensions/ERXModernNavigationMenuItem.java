@@ -64,6 +64,7 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
         _hasActivity = null;
         _isDisabled = null;
         _isSelected = null;
+        aChildItem = null;
         
         super.reset();
     }
