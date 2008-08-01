@@ -1089,6 +1089,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return super._componentDefinition(s, nsarray);
 	}
 	
+	private boolean _isMemoryStarved = false;
+	
 	/**
 	 * Checks if the free memory is less than the threshold given in
 	 * <code>er.extensions.ERXApplication.memoryThreshold</code> (should be
@@ -1122,31 +1124,23 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					used = max - free;
 				}
 
-				boolean shouldRefuse = (used > threshold);
-				if (isRefusingNewSessions() != shouldRefuse) {
-					if(isRefusingNewSessions()) {
-						// not changing anything when refuseNewSessions was called externally.
-						if(!refusingByMonitor) {
-							refuseNewSessions(false);
-							log.warn("Refuse new sessions set to: false");
-						} else {
-							log.debug("Refuse new sessions should be set to false, but we were refusing externally");
-						}
-					}
-					else {
-						// we are currently not refusing sessions, so start refusing, but reset the kill timer
-						refuseNewSessions(true);
-						resetKillTimer(false);
-						refusingByMonitor = false;
-						log.error("Refuse new sessions set to: true");
-					}
+				_isMemoryStarved = (used > threshold);
+				if(!_isMemoryStarved) {
+					log.warn("App is no longer starved, handling new sessions again");
+				} else {
+					log.error("App is starved, starting to refuse new sessions");
 				}
 			}
 		}
 	}
-
-	/** flag to indicate if we are refusing sessions by a call to refuseNewSessions() */
-	private boolean refusingByMonitor = false;
+	
+	/**
+	 * Overridden to return the super value OR true if the app is memory starved.
+	 */
+	@Override
+	public boolean isRefusingNewSessions() {
+		return super.isRefusingNewSessions() || _isMemoryStarved;
+	}
 
 	/**
 	 * Overridden to install/uninstall a timer that will terminate the
@@ -1157,19 +1151,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	@Override
 	public synchronized void refuseNewSessions(boolean value) {
-		boolean old = isRefusingNewSessions();
-		boolean oldDirectConnect = isDirectConnectEnabled();
-		if(oldDirectConnect) {
-			WOProperties.TheDirectConnectEnabledFlag = false;
-		}
 		super.refuseNewSessions(value);
-		if(oldDirectConnect) {
-			WOProperties.TheDirectConnectEnabledFlag = oldDirectConnect;
-		}
-
-		refusingByMonitor = isRefusingNewSessions();
-		log.debug("Refusing new sessions, was: " + old + ", should: " + value +  "  is:" + refusingByMonitor);
-		resetKillTimer(refusingByMonitor);
+		resetKillTimer( isRefusingNewSessions());
 	}
 
 	/**
