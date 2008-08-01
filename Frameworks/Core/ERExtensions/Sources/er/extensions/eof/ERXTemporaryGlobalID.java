@@ -8,38 +8,58 @@ import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSForwardException;
 
 /**
- * Experimental class to have quasi-GUIDs that fit into a long.
+ * Experimental class to have quasi-GUIDs that fit into a long. Use as an
+ * alternative to the ERXLongPrimaryKeyFactory or the ultra-long built-in keys.
+ * 
  * @author ak
- *
+ * 
  */
 public class ERXTemporaryGlobalID extends EOTemporaryGlobalID {
-	
+
 	private static int _cnt;
 	private static int _lastTime;
-	
+
 	private long _value;
 
+	/**
+	 * The delegate returns an identifier for the current app instance.
+	 * 
+	 * @author ak
+	 * 
+	 */
 	public static interface Delegate {
 		public int identifier();
 	}
-	
+
 	private static Delegate _delegate;
-			
+
 	public ERXTemporaryGlobalID() {
-		synchronized(ERXTemporaryGlobalID.class) {
+		synchronized (ERXTemporaryGlobalID.class) {
 			_value = 0L;
 			int current = (int) System.currentTimeMillis();
-			if(_lastTime < current) {
+			if (_lastTime < current) {
 				_cnt = 0;
+				_lastTime = current;
 			}
 			_value |= delegate().identifier() << 40;
-			_value |= (_cnt++) << 32;
-			_value |= current;
+			_value |= _cnt << 32;
+			_value |= _lastTime;
+			if (++_cnt == Short.MAX_VALUE) {
+				_lastTime++;
+				_cnt = 0;
+			}
 		}
 	}
-	
+
+	/**
+	 * The default delegate returns the last two byte of the local host OR the
+	 * port % 0xff.
+	 * 
+	 * @author ak
+	 * 
+	 */
 	public static class DefaultDelegate implements Delegate {
-		
+
 		private int _identifier;
 
 		DefaultDelegate() {
@@ -54,7 +74,8 @@ public class ERXTemporaryGlobalID extends EOTemporaryGlobalID {
 				int result = address[3] << 16;
 				result |= address[4] << 8;
 				return result;
-			} catch (UnknownHostException e) {
+			}
+			catch (UnknownHostException e) {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 		}
@@ -67,14 +88,14 @@ public class ERXTemporaryGlobalID extends EOTemporaryGlobalID {
 			return _identifier;
 		}
 	}
-	
+
 	private Delegate delegate() {
-		if(_delegate == null) {
+		if (_delegate == null) {
 			_delegate = new DefaultDelegate();
 		}
 		return _delegate;
 	}
-	
+
 	public static void setDelegate(Delegate delegate) {
 		_delegate = delegate;
 	}
