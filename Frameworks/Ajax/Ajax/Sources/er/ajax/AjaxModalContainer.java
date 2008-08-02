@@ -41,10 +41,13 @@ public class AjaxModalContainer extends AjaxDynamicElement {
     }
     
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
-        WOAssociation action = (WOAssociation) associations().objectForKey("action");
-        if(action != null && wocontext.elementID().equals(wocontext.senderID())) {
-            return (WOActionResults) action.valueInComponent(wocontext.component());
-        }
+        WOComponent component = wocontext.component();
+    	if (!booleanValueForBinding("ajax", false, component)) {
+	        WOAssociation action = (WOAssociation) associations().objectForKey("action");
+	        if(action != null && wocontext.elementID().equals(wocontext.senderID())) {
+	            return (WOActionResults) action.valueInComponent(component);
+	        }
+    	}
         return super.invokeAction(worequest, wocontext);
     }
 
@@ -57,16 +60,17 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         response.appendContentString("<a");
         String href = (String) valueForBinding("href", component);
         if(href == null) {
-            if(associations().objectForKey("action") != null) {
-            	// don't use ajax request handler here
-                href = context.componentActionURL();
-            }
-            else if (booleanValueForBinding("ajax", false, component)) {
+            if (booleanValueForBinding("ajax", false, component)) {
             	if (valueForBinding("id", component) == null) {
     				throw new IllegalArgumentException("If ajax = 'true', you must also bind 'id'.");
             	}
             	href = AjaxUtils.ajaxComponentActionUrl(context);
             }
+            else if(associations().objectForKey("action") != null) {
+            	// don't use ajax request handler here
+                href = context.componentActionURL();
+            }
+            else 
             if(href == null) {
                 href = "#" + divID;
             }
@@ -117,8 +121,14 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 	}
 
     public WOActionResults handleRequest(WORequest request, WOContext context) {
-    	WOResponse response = null;
         WOComponent component = context.component();
+
+        WOResponse response = null;
+        WOAssociation action = (WOAssociation) associations().objectForKey("action");
+        if(action != null) {
+            action.valueInComponent(component);
+        }
+
     	if (booleanValueForBinding("ajax", false, component) && hasChildrenElements()) {
 			response = AjaxUtils.createResponse(request, context);
 			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
