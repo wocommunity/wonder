@@ -1123,12 +1123,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					free = Runtime.getRuntime().freeMemory() + (max - total);
 					used = max - free;
 				}
-
-				_isMemoryStarved = (used > threshold);
-				if(!_isMemoryStarved) {
-					log.warn("App is no longer starved, handling new sessions again");
-				} else {
-					log.error("App is starved, starting to refuse new sessions");
+				boolean isStarved = (used > threshold);
+				if(isStarved != _isMemoryStarved) {
+					if(!isStarved) {
+						log.warn("App is no longer starved, handling new sessions again");
+					} else {
+						log.error("App is starved, starting to refuse new sessions");
+					}
+					_isMemoryStarved = isStarved;
 				}
 			}
 		}
