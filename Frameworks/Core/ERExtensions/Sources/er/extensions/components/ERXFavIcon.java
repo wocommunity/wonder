@@ -52,7 +52,7 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 			}
 			String filename = (String)_filename.valueInComponent(component);
 			WOResourceManager rs = WOApplication.application().resourceManager();
-			href = rs.urlForResourceNamed(filename, framework, null, null);
+			href = rs.urlForResourceNamed(filename, framework, null, context.request());
 		}
 		response._appendTagAttributeAndValue("href", href, false);
 		response._appendTagAttributeAndValue("rel", "SHORTCUT ICON", false);
