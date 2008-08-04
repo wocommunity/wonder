@@ -1787,6 +1787,9 @@ public class ERXEOControlUtilities {
 		   EOGlobalID gidful = eoful.editingContext().globalIDForObject(eoful);
 		   result = gidful;
 	   }
+	   else if (obj instanceof IERXEOContainer) {
+		   result = ((IERXEOContainer)obj).toGIDContainer();
+	   }
 	   else if (obj instanceof NSArray) {
 		   NSArray eoful = (NSArray)obj;
 		   NSMutableArray gidful = new NSMutableArray();
@@ -1837,6 +1840,9 @@ public class ERXEOControlUtilities {
 		   EOGlobalID gidful = (EOGlobalID)obj;
 		   EOEnterpriseObject eoful = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(editingContext, gidful);
 		   result = eoful;
+	   }
+	   else if (obj instanceof IERXGIDContainer) {
+		   result = ((IERXGIDContainer)obj).toEOContainer(editingContext);
 	   }
 	   else if (obj instanceof NSArray) {
 		   NSArray gidful = (NSArray)obj;
@@ -1997,5 +2003,4 @@ public class ERXEOControlUtilities {
 	public static void validateUniquenessOf(EOEnterpriseObject eo, String... keys) {
 		validateUniquenessOf(eo, null, keys);
 	}
-	
 }
