@@ -238,6 +238,17 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		EOEnterpriseObject obj = _objectWithKey(entity, key, context);
+		if (obj == null) {
+			throw new ERXRestNotFoundException("There is no " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
+		}
+		if (!canViewObject(entity, obj, context)) {
+			throw new ERXRestSecurityException("You are not allowed to view the " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
+		}
+		return obj;
+	}
+
+	protected EOEnterpriseObject _objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		EOEnterpriseObject obj;
 		String idAttributeName = idAttributeName(entity);
 		if (idAttributeName == null) {
@@ -270,12 +281,6 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			else {
 				throw new ERXRestException("There was more than one " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
 			}
-		}
-		if (obj == null) {
-			throw new ERXRestNotFoundException("There is no " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
-		}
-		if (!canViewObject(entity, obj, context)) {
-			throw new ERXRestSecurityException("You are not allowed to view the " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
 		}
 		return obj;
 	}
@@ -566,7 +571,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			}
 
 			try {
-				EOEnterpriseObject relatedObject = objectForNode(entity, toManyNode, context);
+				EOEnterpriseObject relatedObject = destinationEntityDelegate.objectForNode(entity, toManyNode, context);
 				destinationEntityDelegate.updateObjectFromDocument(entity, relatedObject, toManyNode, context);
 				if (currentObjects.containsObject(relatedObject)) {
 					keepObjects.addObject(relatedObject);
