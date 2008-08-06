@@ -133,7 +133,12 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			while (insertNodesEnum.hasMoreElements()) {
 				ERXRestRequestNode insertNode = (ERXRestRequestNode) insertNodesEnum.nextElement();
 				EOEnterpriseObject eo = entityDelegate.insertObjectFromDocument(entity, insertNode, parentEntity, parentObject, parentKey, context);
-				eos.addObject(eo);
+				if (eo != null) {
+					eos.addObject(eo);
+				}
+				else {
+					ERXRestRequestHandler.log.warn("Skipping inserted entry.  This should possibly throw a SecurityException?");
+				}
 			}
 			insertResult = new ERXRestKey(context, entity, "inserted", eos);
 		}
