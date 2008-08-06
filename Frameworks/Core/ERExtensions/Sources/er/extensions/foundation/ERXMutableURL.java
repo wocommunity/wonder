@@ -497,8 +497,17 @@ public class ERXMutableURL {
 			sb.append(_host);
 		}
 		if (_port != null) {
-			sb.append(':');
-			sb.append(_port);
+			boolean includePort = true;
+			if ("http".equalsIgnoreCase(_protocol) && Integer.valueOf(80).equals(_port)) {
+				includePort = false;
+			}
+			else if ("https".equalsIgnoreCase(_protocol) && Integer.valueOf(443).equals(_port)) {
+				includePort = false;
+			}
+			if (includePort) {
+				sb.append(':');
+				sb.append(_port);
+			}
 		}
 		if (_path != null) {
 			sb.append(_path);
