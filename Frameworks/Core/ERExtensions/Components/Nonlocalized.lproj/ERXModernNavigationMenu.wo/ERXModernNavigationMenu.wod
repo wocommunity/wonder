@@ -1,0 +1,9 @@
+ERXModernNavigationMenuItem1: ERXModernNavigationMenuItem {
+	navigationItem = rootNode;
+	navigationContext = navigationContext;
+}
+
+MenuItemsRepetition: WORepetition {
+	list = rootNode.children;
+	item = aNavigationItem;
+}
