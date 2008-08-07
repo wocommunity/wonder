@@ -180,7 +180,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	
 	@Override
 	protected String idAttributeName(EOEntity entity) {
-		return ERXProperties.stringForKey(ERXXmlRestResponseWriter.REST_PREFIX + entity.name() + ".id");
+		return ERXProperties.stringForKey(IERXRestResponseWriter.REST_PREFIX + entity.name() + ".id");
 	}
 
 	/**
@@ -192,7 +192,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 */
 	@Override
 	public String entityAliasForEntityNamed(String entityName) {
-		String entityAlias = ERXProperties.stringForKey(ERXXmlRestResponseWriter.REST_PREFIX + entityName + ".alias");
+		String entityAlias = ERXProperties.stringForKey(IERXRestResponseWriter.REST_PREFIX + entityName + ".alias");
 		if (entityAlias == null) {
 			entityAlias = super.entityAliasForEntityNamed(entityName);
 		}
@@ -243,7 +243,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @param entityName the name of the entity to load properties for
 	 */
 	protected void loadViewPropertiesForEntityNamed(String entityName) {
-		String propertiesKey = ERXXmlRestResponseWriter.REST_PREFIX + entityName + ".viewProperties";
+		String propertiesKey = IERXRestResponseWriter.REST_PREFIX + entityName + ".viewProperties";
 		String propertyNamesStr = ERXProperties.stringForKey(propertiesKey);
 		if (propertyNamesStr != null) {
 			String[] propertyNames = propertyNamesStr.split(",");
@@ -262,7 +262,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @param entityName the name of the entity to load properties for
 	 */
 	protected void loadUpdatePropertiesForEntityNamed(String entityName) {
-		String propertiesKey = ERXXmlRestResponseWriter.REST_PREFIX + entityName + ".updateProperties";
+		String propertiesKey = IERXRestResponseWriter.REST_PREFIX + entityName + ".updateProperties";
 		String propertyNamesStr = ERXProperties.stringForKey(propertiesKey);
 		if (propertyNamesStr != null) {
 			String[] propertyNames = propertyNamesStr.split(",");
@@ -281,7 +281,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @param entityName the name of the entity to load properties for
 	 */
 	protected void loadInsertPropertiesForEntityNamed(String entityName) {
-		String propertiesKey = ERXXmlRestResponseWriter.REST_PREFIX + entityName + ".insertProperties";
+		String propertiesKey = IERXRestResponseWriter.REST_PREFIX + entityName + ".insertProperties";
 		String propertyNamesStr = ERXProperties.stringForKey(propertiesKey);
 		if (propertyNamesStr != null) {
 			String[] propertyNames = propertyNamesStr.split(",");
@@ -300,7 +300,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @param entityName the name of the entity to load properties for
 	 */
 	protected void loadDetailsPropertiesAsViewPropertiesForEntityNamed(String entityName) {
-		String propertiesKey = ERXXmlRestResponseWriter.REST_PREFIX + entityName + ERXXmlRestResponseWriter.DETAILS_PROPERTIES_PREFIX;
+		String propertiesKey = IERXRestResponseWriter.REST_PREFIX + entityName + IERXRestResponseWriter.DETAILS_PROPERTIES_PREFIX;
 		String propertyNamesStr = ERXProperties.stringForKey(propertiesKey);
 		if (propertyNamesStr != null) {
 			String[] propertyNames = propertyNamesStr.split(",");
@@ -324,7 +324,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 	
 	protected void updatePropertyAliasForPropertyNamed(String entityName, String propertyName) {
-		String propertyAliasKey = ERXXmlRestResponseWriter.REST_PREFIX + entityName + "." + propertyName + ".alias";
+		String propertyAliasKey = IERXRestResponseWriter.REST_PREFIX + entityName + "." + propertyName + ".alias";
 		String propertyAlias = ERXProperties.stringForKey(propertyAliasKey);
 		if (propertyAlias != null) {
 			_propertyAliasForPropertyName.setObjectForKey(propertyAlias, entityName + "." + propertyName);
@@ -439,7 +439,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 */
 	public EOEntity nextEntity(EOEntity entity, String key) {
 		EOEntity nextEntity = null;
-		String nextEntityName = ERXProperties.stringForKey(ERXXmlRestResponseWriter.REST_PREFIX + entity.name() + "." + key + ".nextEntity");
+		String nextEntityName = ERXProperties.stringForKey(IERXRestResponseWriter.REST_PREFIX + entity.name() + "." + key + ".nextEntity");
 		if (nextEntityName != null) {
 			nextEntity = entity.model().modelGroup().entityNamed(nextEntityName);
 		}
