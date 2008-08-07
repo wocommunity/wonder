@@ -14,10 +14,20 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.foundation.ERXValueUtilities;
 
-/** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
+/**
+ * A "backing store" for the properties of a single navigation item in the tree of navigation items.  Configured by the
+ * {@link ERXNavigationManager ERXNavigationManager} from a dictionary stored in the navigation menu plist file.
+ * 
+ * Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.
+ * 
+ * @see er.extensions.ERXNavigationManager
+ * @see er.extensions.ERXNavigationMenuItem
+ */
 public class ERXNavigationItem {
 
     private static int counter = 0;
@@ -111,7 +121,6 @@ public class ERXNavigationItem {
      * conditions = (("session.user.canEditThisStuff", "session.user.isEditor"))
      * @param component context to evaluate visibility in
      */
-
     public boolean meetsDisplayConditionsInComponent(WOComponent component) {
     	Boolean meetsDisplayConditions = Boolean.TRUE;
     	if (conditions().count() != 0) {
@@ -154,6 +163,62 @@ public class ERXNavigationItem {
     		}
     	}
     	return meetsDisplayConditions.booleanValue();
+    }
+    
+    public NSArray childItemsInContext(NSKeyValueCodingAdditions context) {
+        NSArray children = null;
+
+        NSArray childrenConditions = this.childrenConditions();
+        boolean hasChildrenConditions = childrenConditions.count() != 0;
+        boolean meetsChildrenConditions = true;
+        if (hasChildrenConditions) {
+            for (Enumeration e = childrenConditions.objectEnumerator(); e.hasMoreElements();) {
+                String aCondition = (String)e.nextElement();
+                meetsChildrenConditions = ERXValueUtilities.booleanValue(context.valueForKeyPath(aCondition));
+                if (!meetsChildrenConditions)
+                    break;
+            }
+        }
+
+        if (meetsChildrenConditions) {// only want to do this if childrenConditions are met, or if there aren't any children conditions
+            if (children() != null) {
+                children = this.children();
+            } else if (childrenBinding() != null) {
+                Object o = context.valueForKeyPath(childrenBinding());
+                if (o != null && o instanceof NSArray) {
+                    children = (NSArray)o;
+                } else if (o != null && o instanceof String) {
+                    children = (NSArray)childrenChoices().objectForKey((String)o);
+                    if (children == null) {
+                        log.warn("For nav core object: " + this + " and child binding: " + childrenBinding()
+                                + " couldn't find children for choice key: " + o);
+                    }
+                } else {
+                    log.warn("For nav core object: " + this + " and child binding: " + childrenBinding()
+                            + " recieved binding object: " + o);
+                }
+            }
+        }
+
+        if (children == null) { children = NSArray.EmptyArray; }
+        if (children.count() > 0) {
+            NSMutableArray childNavItems = new NSMutableArray();
+            for (Enumeration e = children.objectEnumerator(); e.hasMoreElements();) {
+                String childName = (String)e.nextElement();
+                ERXNavigationItem item = ERXNavigationManager.manager().navigationItemForName(childName);
+                if (item != null) {
+                    childNavItems.addObject(item);
+                } else {
+                    log.warn("Unable to find navigation item for name: " + childName);
+                }
+            }
+            children = childNavItems;
+        }
+        return children;
+    }
+
+    public boolean isRootNode() {
+        return this == ERXNavigationManager.manager().rootNavigationItem();
     }
 
 	public NSArray children() {
