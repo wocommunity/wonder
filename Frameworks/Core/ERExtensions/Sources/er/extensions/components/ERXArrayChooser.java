@@ -318,7 +318,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
             	EOEditingContext editingContext = editingContext();
             	if (ERXEOAccessUtilities.entityWithNamedIsShared(editingContext(), destinationEntityName) ) {
             	 	EOArrayDataSource arrayDataSource = new EOArrayDataSource(destinationEntity().classDescriptionForInstances(), editingContext);
-            	 	NSArray sharedEOs = (NSArray)editingContext().sharedEditingContext().objectsByEntityName().objectForKey(destinationEntityName);
+            	 	NSArray sharedEOs = ERXEOControlUtilities.sharedObjectsForEntityNamed(destinationEntityName);
             	 	
             	 	if (sharedEOs == null) {
             	 		sharedEOs = NSArray.EmptyArray;
