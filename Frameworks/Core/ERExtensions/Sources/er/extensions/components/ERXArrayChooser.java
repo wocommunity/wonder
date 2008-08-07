@@ -9,9 +9,11 @@ import com.webobjects.appserver._private.WOKeyValueAssociation;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -253,6 +255,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
                         }
                         destinationEntity = ERXEOAccessUtilities.destinationEntityForKeyPath(anEntity, relationshipKey());
                     } else {
+                    	// MS: This seems bogus -- anEntityName is null here!
                         destinationEntity = ERXEOAccessUtilities.entityNamed(ec, anEntityName);
                     }
                 }
@@ -301,13 +304,42 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         }
         return _destinationDisplayKey;
     }
+    
+    public EOQualifier qualifier() {
+    	return (EOQualifier)valueForBinding("qualifier");
+    }
 
     public EODataSource dataSource() {
         if(_dataSource == null) {
             _dataSource = (EODataSource)valueForBinding("dataSource");
+        	EOQualifier qualifier = qualifier();
             if (_dataSource == null) {
-                _dataSource = new EODatabaseDataSource(editingContext(), destinationEntityName());
+            	String destinationEntityName = destinationEntityName();
+            	EOEditingContext editingContext = editingContext();
+            	if (ERXEOAccessUtilities.entityWithNamedIsShared(editingContext(), destinationEntityName) ) {
+            	 	EOArrayDataSource arrayDataSource = new EOArrayDataSource(destinationEntity().classDescriptionForInstances(), editingContext);
+            	 	NSArray sharedEOs = (NSArray)editingContext().sharedEditingContext().objectsByEntityName().objectForKey(destinationEntityName);
+            	 	
+            	 	if (sharedEOs == null) {
+            	 		sharedEOs = NSArray.EmptyArray;
+            	 	}
+            	 	else if (qualifier != null) {
+            	 		sharedEOs = EOQualifier.filteredArrayWithQualifier(sharedEOs, qualifier);
+            	 	}
+            	 	
+            	 	arrayDataSource.setArray(sharedEOs);
+            	 	_dataSource = arrayDataSource;
+            	}
+            	else {
+            		_dataSource = new EODatabaseDataSource(editingContext, destinationEntityName);
+            		if (qualifier != null) {
+            			((EODatabaseDataSource)_dataSource).setAuxiliaryQualifier(qualifier);
+            		}
+            	}
             }       
+            else if (qualifier != null) {
+            	throw new IllegalArgumentException("You specified a dataSource binding and a qualifier, which is not currently supported.");
+            }
         }
         return _dataSource;
     }

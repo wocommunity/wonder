@@ -9,6 +9,7 @@ package er.extensions.components;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOQualifier;
 
@@ -37,21 +38,10 @@ import er.extensions.woextensions.WOToOneRelationship;
  * @binding sortCaseInsensitive
  */
 //CHECKME AK: does this make sense? Why not set the qualifier in the parent component?
+// MS: OK.
 public class ERXToOneRelationship extends WOToOneRelationship {
 
     public ERXToOneRelationship(WOContext context) {
         super(context);
-    }
-
-    public EODataSource dataSource() {
-        if (_dataSource==null) {
-            _dataSource = super.dataSource();
-            if (_dataSource != null && _dataSource instanceof EODatabaseDataSource) {
-                if (hasBinding("qualifier")) {
-                    ((EODatabaseDataSource)_dataSource).setAuxiliaryQualifier((EOQualifier)valueForBinding("qualifier"));
-                }
-            }
-        }
-        return _dataSource;
     }
 }
