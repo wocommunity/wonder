@@ -55,6 +55,8 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
     protected static String STYLE_CLASS_DISABLED = "disabled";
     protected static String STYLE_CLASS_SUB = "sub";
 
+    public static final String SHOULD_DISPLAY_DISABLED_MENU_ITEMS = "ERXModernNavigationMenuItem.shouldDisplayDisabledMenuItems";
+
 
     public ERXModernNavigationMenuItem(WOContext context) {
         super(context);
@@ -138,7 +140,7 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
 
     /**
      * Determines whether the menu item is selected, or in the path of the current navigation state.
-     * @return
+     * @return true if the menu item is selected
      */
     public WOComponent menuItemSelected() {
         WOComponent anActionResult = null;
@@ -178,8 +180,23 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
     }
 
     /**
+     * Determines if the item should be displayed in the UI, based upon the disabled status.  You may disable display of
+     * items that do not meet their display conditions or are explicitly disabled.
+     * @return true if the item should be displayed
+     */
+    public boolean shouldDisplay() {
+        boolean result = true;
+        if (isDisabled()) {
+            // Must explicitly disable display with a property.
+            result = ERXProperties.booleanForKeyWithDefault(SHOULD_DISPLAY_DISABLED_MENU_ITEMS, true);
+        }
+        
+        return result;
+    }
+
+    /**
      * Gets the {@link ERXNavigationItem} that provides the backing store for the properties of this menu item.
-     * @return
+     * @return the navigation item
      */
     public ERXNavigationItem navigationItem() {
         if (_navigationItem == null) {
