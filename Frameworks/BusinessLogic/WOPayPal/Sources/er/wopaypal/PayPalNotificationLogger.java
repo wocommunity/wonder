@@ -1,3 +1,5 @@
+package er.wopaypal;
+
 //
 // PayPalNotificationLogger.java
 // Project WOPayPal
