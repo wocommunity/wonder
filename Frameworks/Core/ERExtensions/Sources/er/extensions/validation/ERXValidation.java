@@ -127,7 +127,6 @@ public class ERXValidation {
                                                      boolean pushChanges) {
         if (log.isDebugEnabled())
             log.debug("ValidationFailedWithException: " + e.getClass().getName() + " message: " + e.getMessage());
-        boolean addKeyToErrorMessage=false;
         String key = null;
         String newErrorMessage=e.getMessage();
         if (e instanceof NSValidation.ValidationException && ((NSValidation.ValidationException)e).key() != null
@@ -137,8 +136,8 @@ public class ERXValidation {
             Object eo=nve.object();
             // this because exceptions raised by formatters have the failing VALUE in this key..
             // strip the exception name
-            newErrorMessage=newErrorMessage.substring(newErrorMessage.indexOf(":")+1);
-            newErrorMessage=newErrorMessage.substring(newErrorMessage.indexOf(":")+1);
+            //newErrorMessage=newErrorMessage.substring(newErrorMessage.indexOf(":")+1);
+            //newErrorMessage=newErrorMessage.substring(newErrorMessage.indexOf(":")+1);
             if (eo instanceof EOEnterpriseObject) {
                 // the exception is coming from EREnterpriseObject
                 // WE PUSH THE WRONG VALUE INTO THE EO ANYWAY!
