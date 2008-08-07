@@ -13,6 +13,7 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
+import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXProperties;
 
 
@@ -65,10 +66,13 @@ public class ERXJobLoadBalancer {
         /*
          * Indicate to the worke what id space (index mod modulo) they should be attempting to process
          */
-        public int index;
-        public int modulo;
-        public JobSet(int i, int m) { index=i; modulo=m; }  
-        public String toString() { return index+" mod "+modulo; }
+        public int _index;
+        public int _modulo;
+        public JobSet(int i, int m) { _index=i; _modulo=m; }  
+        public String toString() { return index()+" mod "+modulo(); }
+        
+        public int index() { return _index; }
+        public int modulo() { return _modulo; }
     }
     
     private static ERXJobLoadBalancer _instance;
@@ -83,10 +87,12 @@ public class ERXJobLoadBalancer {
      * Identifies a worker to the load balancer
      */
     public static class WorkerIdentification {
-        String type;
-        int id;
-        public WorkerIdentification(String t, int i) { type = t; id=i; } 
-        public String toString() { return type+"-"+id; }
+        String _type;
+        String _id;
+        public WorkerIdentification(String t, String i) { _type = t; _id=i; } 
+        public String toString() { return type()+"-"+id(); }
+        public String id() { return _id; }
+        public String type() { return _type; }
     }
 
     private String _sharedRootLocation;
@@ -136,7 +142,7 @@ public class ERXJobLoadBalancer {
     }
 
     protected String pathForWorkerIdentification(WorkerIdentification workerId) {
-        return sharedRootLocation()+"/"+workerId.type+"-"+workerId.id;
+        return sharedRootLocation()+"/"+workerId.type()+"-"+workerId.id();
     }
     
     /**
@@ -164,7 +170,7 @@ public class ERXJobLoadBalancer {
             // 1. now                                                                                                                                                                                 
             out.writeLong(now);
             // 2. write my Id
-            out.writeInt(workerId.id);
+            out.writeUTF(workerId.id());
             if (log.isDebugEnabled()) {
                 log.debug("Wrote to "+tempFile.getPath());
             }
@@ -190,14 +196,16 @@ public class ERXJobLoadBalancer {
     /**
      * @param workerId
      * @return the JobSet that the worker should attempt to process
+     * Given a worker looks at the shared state and determine the id space (index mod module) they should be processing
      */
     public JobSet idSpace(final WorkerIdentification workerId) {
-        /*
-         * Given a worker looks at the shared state and determine the id space (index mod module) they should be processing
-         */
+    		// heartbeat for ourselves
+    		// this will ensure we don't overcount
+    		ERXJobLoadBalancer.jobLoadBalancer().heartbeat(workerId);
+    	
         FilenameFilter friendsFilter=new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.indexOf(workerId.type)==0;
+                return name.indexOf(workerId.type())==0;
             }
         };
         File[] friends = sharedRoot().listFiles(friendsFilter);
@@ -205,19 +213,24 @@ public class ERXJobLoadBalancer {
         int aliveFriendsCount=0;
         int aliveFriendsWithLowerIdFound=0;
         long now=System.currentTimeMillis();
-        long ttl=ttlForWorkerType(workerId.type);
+        long ttl=ttlForWorkerType(workerId.type());
         for (int i=0; i<friends.length; i++) {
             File friend=friends[i];
             ObjectInputStream in=null;
             try {
                 in = new ObjectInputStream(new FileInputStream(friend));                                                                                                                                                                      
                 long entryCreationTime = in.readLong();
-                int friendId = in.readInt();
+                String friendId = (String)in.readUTF();
                 if ((now-entryCreationTime)<ttl) {
                     aliveFriendsCount++;
-                    if (friendId<workerId.id) {
+                    if (friendId.compareTo(workerId.id())<0) {
                         aliveFriendsWithLowerIdFound++;
                     }
+                } else {
+                	// we found a dead worker - remove his entry to keep the shared directory clean
+                	if (!friend.delete()) {
+                		log.info("Could not delete dead worker entry: "+friend.getAbsolutePath());
+                	}
                 }
             } catch (FileNotFoundException e) {
             } catch (IOException e2) {
@@ -236,6 +249,14 @@ public class ERXJobLoadBalancer {
         return new JobSet(aliveFriendsWithLowerIdFound, aliveFriendsCount);
     }
 
+    /**
+     * @return a String suitable to identify this particular worker instance
+     * !!  this string is not MT safe
+     */
+    public String workerInstanceIdentification() {
+        return ERXConfigurationManager.defaultManager().hostName()+"-"+System.getProperty("com.webobjects.pid");
+    }
+    
 /*
  * -------------------------------------------------------------------------------------------------------------
  */
@@ -275,7 +296,7 @@ public class ERXJobLoadBalancer {
     }
     
     public static void processJobs(String workerType, int workerNumber) {
-        WorkerIdentification wid=new WorkerIdentification(workerType,workerNumber);
+        WorkerIdentification wid=new WorkerIdentification(workerType,""+workerNumber);
         jobLoadBalancer().setTtlForWorkerType(workerType, 20000); // 20s
         while(true) {
             jobLoadBalancer().heartbeat(wid);
