@@ -30,6 +30,7 @@ import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOObjectNotAvailableException;
+import com.webobjects.eoaccess.EOProperty;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
@@ -1860,5 +1861,98 @@ public class ERXEOAccessUtilities {
       } else {
           log.warn("MakeSharedEntityEditable: entity already editable: " + entityName);
       }
-  }    
+  }
+
+	/**
+	 * Programatically adds a toOne or toMany relationship to an entity at runtime.
+	 * 
+	 * @param relationshipName name of the relationship to be created on the source entity
+	 * @param sourceEntityName name of the source entity
+	 * @param sourceAttributeName name of the attribute in the source entity to be used by the join
+	 * @param destinationEntityName name of the destination entity
+	 * @param destinationAttributeName name of the attribute in the destination entity to be used by the join
+	 * @param toMany if true, the relationship will be toMany, otherwise it will be toOne
+	 * @param deleteRule
+	 *            EOClassDescription.DeleteRuleCascade ||
+	 *            EOClassDescription.DeleteRuleDeny ||
+	 *            EOClassDescription.DeleteRuleNoAction ||
+	 *            EOClassDescription.DeleteRuleNullify
+	 * @param isMandatory mandatory or not
+	 * @param isClassProperty class property or not
+	 * @param shouldPropagatePrimaryKey propagate prmary key or not
+	 * @return the newly created relationship
+	 * 
+	 * @author th
+	 */
+	public static EORelationship createRelationship(String relationshipName, String sourceEntityName, String sourceAttributeName, String destinationEntityName, String destinationAttributeName, boolean toMany, int deleteRule, boolean isMandatory, boolean isClassProperty, boolean shouldPropagatePrimaryKey) {
+		EOEntity sourceEntity = EOModelGroup.defaultGroup().entityNamed(sourceEntityName);
+		if(sourceEntity.isAbstractEntity())
+			log.warn("If you programatically add relationships to an abstract entity, make sure you also add it to child entities");
+		EOEntity destinationEntity = EOModelGroup.defaultGroup().entityNamed(destinationEntityName);
+		EOAttribute sourceAttribute = sourceEntity.attributeNamed(sourceAttributeName);
+		EOAttribute destinationAttribute = destinationEntity.attributeNamed(destinationAttributeName);
+		EOJoin join = new EOJoin(sourceAttribute, destinationAttribute);
+		EORelationship relationship = new EORelationship();
+
+		relationship.setName(relationshipName);
+		sourceEntity.addRelationship(relationship);
+		relationship.addJoin(join);
+		relationship.setToMany(toMany);
+		relationship.setJoinSemantic(EORelationship.InnerJoin);
+		relationship.setDeleteRule(deleteRule);
+		relationship.setIsMandatory(isMandatory);
+		relationship.setPropagatesPrimaryKey(shouldPropagatePrimaryKey);
+		if (isClassProperty) {
+			NSMutableArray<EOProperty> classProperties = sourceEntity.classProperties().mutableClone();
+			classProperties.addObject(relationship);
+			sourceEntity.setClassProperties(classProperties);
+		}
+		if(log.isDebugEnabled())
+			log.debug(relationship);
+
+		return relationship;
+	}
+
+	/**
+	 * Programatically adds a flattened relationship to an entity at runtime.
+	 * 
+	 * @param relationshipName name of the relationship to be created on the source entity
+	 * @param sourceEntityName name of the source entity
+	 * @param definition data path of the relationship (e.g. department.facility)
+	 * @param deleteRule
+	 *            EOClassDescription.DeleteRuleCascade ||
+	 *            EOClassDescription.DeleteRuleDeny ||
+	 *            EOClassDescription.DeleteRuleNoAction ||
+	 *            EOClassDescription.DeleteRuleNullify
+	 * @param isMandatory mandatory or not
+	 * @param isClassProperty class property or not
+	 * @return the newly created relationship
+	 * 
+	 * @author th
+	 */
+	public static EORelationship createFlattenedRelationship(String relationshipName, String sourceEntityName, String definition, int deleteRule, boolean isMandatory, boolean isClassProperty) {
+		EOEntity sourceEntity = EOModelGroup.defaultGroup().entityNamed(sourceEntityName);
+		if(sourceEntity.isAbstractEntity())
+			log.warn("If you programatically add relationships to an abstract entity, make sure you also add it to child entities");
+
+		// order is important here!
+		// first create relationship and set name
+		EORelationship relationship = new EORelationship();
+		relationship.setName(relationshipName);
+		// then add to entity (will only work if name is set!)
+		sourceEntity.addRelationship(relationship);
+		relationship.setDeleteRule(deleteRule);
+		relationship.setIsMandatory(isMandatory);
+		// finally set definition (only will work if assigned to entity!)
+		relationship.setDefinition(definition);
+		if (isClassProperty) {
+			NSMutableArray<EOProperty> classProperties = sourceEntity.classProperties().mutableClone();
+			classProperties.addObject(relationship);
+			sourceEntity.setClassProperties(classProperties);
+		}
+		if(log.isDebugEnabled())
+				log.debug(relationship + ", flattened:" + relationship.isFlattened() + ", definition:" + relationship.definition() + ", relationshipPath:" + relationship.relationshipPath());
+		return relationship;
+	}
+
 }

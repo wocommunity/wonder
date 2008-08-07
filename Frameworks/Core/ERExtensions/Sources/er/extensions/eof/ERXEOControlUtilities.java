@@ -2003,4 +2003,31 @@ public class ERXEOControlUtilities {
 	public static void validateUniquenessOf(EOEnterpriseObject eo, String... keys) {
 		validateUniquenessOf(eo, null, keys);
 	}
+	
+	/**
+	 * Returns an NSArray of distinct values available for the given entity and key path. 
+	 * The result can be narrowed by an optional qualifier and optionally sorted with sort orderings
+	 * 
+	 * @param <T> type of values for the key path
+	 * @param editingContext editingContext
+	 * @param entityName entityName
+	 * @param keyPath keyPath
+	 * @param qualifier restricting qualifier (optional)
+	 * @param sortOrderings sortOrderings to be applied (optional)
+	 * @return array of values
+	 * 
+	 * @author th
+	 */
+	public static <T> NSArray<T> distinctValuesForKeyPath(EOEditingContext editingContext, String entityName, String keyPath, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
+		if (editingContext == null || entityName == null || keyPath == null)
+			throw new IllegalArgumentException("The editingContext, entityName and keyPath parameters must not be null");
+		EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, sortOrderings);
+		fs.setUsesDistinct(true);
+		fs.setFetchesRawRows(true);
+		fs.setRawRowKeyPaths(new NSArray<String>(keyPath));
+		NSArray<NSDictionary<String, T>> rawRows = editingContext.objectsWithFetchSpecification(fs);
+		NSArray<T> values = (NSArray<T>) rawRows.valueForKeyPath(keyPath);
+		return values;
+	}
+
 }
