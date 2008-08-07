@@ -17,6 +17,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.foundation.ERXArrayUtilities;
+
 // Only difference between this component and D2WList is that this one uses ERD2WSwitchComponent
 /**
  * Same as D2WList but uses ERD2WSwitchComponent so that its context won't be cached in case the page is reused.<br />
@@ -48,6 +50,7 @@ public class ERXD2WList extends D2WList {
             return (EODataSource) this.valueForBinding("dataSource");
         if (this.hasBinding("list")) {
             NSArray nsarray = (NSArray) this.valueForBinding("list");
+            nsarray = ERXArrayUtilities.removeNullValues(nsarray);
             EOEditingContext eoeditingcontext
                 = (nsarray != null && nsarray.count() > 0
                    ? ((EOEnterpriseObject) nsarray.objectAtIndex(0))
