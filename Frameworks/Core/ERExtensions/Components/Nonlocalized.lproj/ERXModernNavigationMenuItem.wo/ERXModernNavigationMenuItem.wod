@@ -55,7 +55,6 @@ IsRootNodeConditional: WOConditional {
 
 ListItemTag: WOGenericContainer {
 	elementName = "li";
-	otherTagString = additionalTagsForItem;
 	class = itemStyleClass;
 	id = navigationItemID;
 }
