@@ -32,6 +32,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.crypting.ERXCrypto;
@@ -389,6 +390,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		if (tranLogDidInsert.isDebugEnabled())
 			tranLogDidInsert.debug("Object:" + description());
 		_permanentGlobalID = null;
+		
+		//We're goung to blow the primaryKey cache:
+		_primaryKey = null;
 	}
 
 	/*
@@ -606,8 +610,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * 
 	 * @see er.extensions.ERXEnterpriseObject#primaryKey()
 	 */
+	protected String _primaryKey = null;
 	public String primaryKey() {
-		return ERXEOControlUtilities.primaryKeyStringForObject(this);
+	  if (_primaryKey == null) {
+	    _primaryKey = ERXEOControlUtilities.primaryKeyStringForObject(this);
+	  }
+	  return _primaryKey;
 	}
 
 	/*
