@@ -53,14 +53,14 @@ IsRootNodeConditional: WOConditional {
 	condition = navigationItem.isRootNode;
 }
 
+ItemShouldDisplayConditions:WOConditional {
+	condition=shouldDisplay;
+}
+
 ListItemTag: WOGenericContainer {
 	elementName = "li";
 	class = itemStyleClass;
 	id = navigationItemID;
-}
-
-MeetsDisplayConditions:WOConditional {
-	condition=meetsDisplayConditions;
 }
 
 NewMarker: WOImage {
