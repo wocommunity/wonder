@@ -152,7 +152,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 
 	protected boolean _displayDetailsFromProperties(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		boolean displayDetails;
-		String displayDetailsStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PREFIX, null);
+		String displayDetailsStr = cascadingValue(context, result, IERXRestResponseWriter.REST_PREFIX, IERXRestResponseWriter.DETAILS_PREFIX, null);
 		if (displayDetailsStr == null) {
 			displayDetails = result.previousKey() == null;
 		}
@@ -164,7 +164,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 
 	protected String[] _displayPropertiesFromProperties(ERXRestContext context, ERXRestKey result, boolean displayAllProperties, boolean displayAllToMany) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String[] displayPropertyNames;
-		String displayPropertyNamesStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PROPERTIES_PREFIX, null);
+		String displayPropertyNamesStr = cascadingValue(context, result, IERXRestResponseWriter.REST_PREFIX, IERXRestResponseWriter.DETAILS_PROPERTIES_PREFIX, null);
 		if (displayPropertyNamesStr == null) {
 			if (displayAllProperties) {
 				NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(result.nextEntity(), displayAllToMany);
