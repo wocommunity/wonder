@@ -346,11 +346,14 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             log.debug("Of primaryKey count: " + primaryKeys.count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
 
             ERXInQualifier qual = new ERXInQualifier(primaryKeyAttributeName, primaryKeysToFetch);
-            EOFetchSpecification fetchSpec = batchFetchSpecificationForQualifier(qual);
+            EOFetchSpecification batchFS = new EOFetchSpecification(fetchSpecification.entityName(), qual, fetchSpecification.sortOrderings());
+            if (fetchSpecification.prefetchingRelationshipKeyPaths() != null) {
+            	batchFS.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
+            }
+            batchFS.setRawRowKeyPaths(fetchSpecification.rawRowKeyPaths());
+            nextBatch = ec.objectsWithFetchSpecification(batchFS);
 
-            nextBatch = ec.objectsWithFetchSpecification(fetchSpec);
-
-            log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + fetchSpec);
+            log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + batchFS);
 
             if (shouldFilterBatches) {
                 EOQualifier originalQualifier = fetchSpecification.qualifier();
