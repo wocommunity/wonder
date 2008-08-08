@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="Utils" default="all" basedir="../..">
+<project name="Utils" basedir="../..">
     <target name="usage" depends="global.properties">
     
 	<echo>
