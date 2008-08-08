@@ -1,0 +1,7 @@
+<wo:if condition = "$session.hasNotifications">
+	<ul>
+		<wo:WORepetition list = "$session.notifications" item = "$repetitionNotification">
+			<li><wo:str value = "$repetitionNotification"/></li>
+		</wo:WORepetition>
+	</ul>
+</wo:if>

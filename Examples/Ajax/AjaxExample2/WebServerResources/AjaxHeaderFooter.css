@@ -1,0 +1,72 @@
+body {
+	font-family: Helvetica;
+}
+
+div#notifications {
+}
+
+div#notifications ul {
+	border: 1px solid rgb(200, 150, 0);
+	background-color: rgb(250, 200, 0);
+	list-style-type: none;
+	margin: 0em;
+	padding: 0.5em;
+	text-align: center;
+}
+
+ul#objectives {
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+	margin: 0px;
+	padding: 5px 10px;
+	padding-top: 10px;
+	list-style-type: none;
+	
+	-webkit-border-top-left-radius: 5px;
+	background-color: rgba(240, 240, 255, 0.8) !important;
+	background-color: rgb(240, 240, 255);
+	font-size: 8pt;
+	border: 1px solid rgb(200, 200, 215);
+	color: rgb(80, 80, 95);
+	border-bottom: none;
+	border-right: none;
+}
+
+ul#objectives li {
+	margin-bottom: 0.2em;
+}
+
+div#content {
+	position: absolute;
+	left: 20em;
+	right: 2em;
+}
+
+ol#menu {
+	float: left;
+	list-style-type: none;
+	padding-left: 0px;
+	left: 10em;
+	width: 18em;
+	margin-right: 2em;
+	margin-top: 0em;
+}
+
+ol#menu li {
+	border-bottom: 1px solid rgb(200, 200, 200);
+}
+
+ol#menu li a {
+	text-decoration: none;
+	color: rgb(0, 0, 0);
+	display: block;
+	padding: 0.5em;
+	font-weight: bold;
+}
+
+ol#menu li a:hover {
+	color: rgb(188, 37, 45);
+	text-shadow: rgb(203, 212, 75) 0em 0em 0.3em;
+	background-color: rgb(240, 240, 240);
+}

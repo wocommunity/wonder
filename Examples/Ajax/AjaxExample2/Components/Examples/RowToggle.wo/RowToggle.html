@@ -1,0 +1,38 @@
+<ul id = "objectives">
+	<li>AjaxSubmitButton</li>
+	<li>AjaxUpdateContainer</li>
+	<li>Prototype DOM</li>
+	<li>Prototype Events</li>
+</ul>
+
+<wo:AjaxHeaderFooter title = "Row Toggle">
+	<h1>Click to Select Products</h1>
+	
+	<wo:AjaxUpdateContainer elementName = "h2" id = "ProductSelectionSummary">
+		You have selected <wo:ERXPluralString value = "product" count = "$selectedProducts.count"/>.
+	</wo:AjaxUpdateContainer>
+	
+	<wo:form multipleSubmit = "$true">
+		<wo:AjaxSubmitButton functionName = "submitProductSelection" updateContainerID = "ProductSelectionSummary" action = "$productSelected"/>
+		<table>
+			<wo:WORepetition list = "$products" item = "$repetitionProduct">
+				<tr class = "product">
+					<td style = "display: none"><wo:checkbox checked = "$productSelected" /></td>
+					<td><wo:str value = "$repetitionProduct.title"/></td>
+				</tr>
+			</wo:WORepetition>
+		</table>
+	</wo:form>
+	
+<script>
+function productSelectionChanged() {
+	var row = this.up('tr');
+	var checkbox = row.down('input[type=checkbox]');
+	checkbox.checked = !checkbox.checked;
+	checkbox.checked ? row.addClassName('selected') : row.removeClassName('selected');
+	submitProductSelection();
+}
+$$('tr.product td').each(function(el) { el.observe('click', productSelectionChanged); });
+</script>
+
+</wo:AjaxHeaderFooter>

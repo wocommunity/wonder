@@ -1,0 +1,35 @@
+<ul id = "objectives">
+	<li>AjaxUpdateContainer</li>
+	<li>AjaxUpdateLink</li>
+</ul>
+
+<wo:AjaxHeaderFooter title = "Toggle Details">
+	<div id = "personInfo">
+		<h1><wo:WOImage src = "avatar.png"/> Mike Schrag</h1>
+		<wo:AjaxUpdateContainer id = "profile">
+			<wo:if condition = "$optionsVisible">
+				<wo:AjaxUpdateLink action = "$toggleOptions" updateContainerID = "profile"><wo:WOImage filename = "triangleDown.gif"/> profile</wo:AjaxUpdateLink>
+				<dl>
+					<dt>Phone Number</dt>
+					<dd>
+						804.555.1212
+					</dd>
+
+					<dt>Address</dt>
+					<dd>
+						123 Somewhere Rd.<br/>
+						Richmond, VA 23233
+					</dd>
+
+					<dt>URL</dt>
+					<dd>
+						<a href = "http://mschrag.blogspot.com/">http://mschrag.blogspot.com/</a>
+					</dd>
+				</dl>
+			</wo:if>
+			<wo:else>
+				<wo:AjaxUpdateLink action = "$toggleOptions" updateContainerID = "profile"><wo:WOImage filename = "triangleRight.gif"/> profile</wo:AjaxUpdateLink>
+			</wo:else>
+		</wo:AjaxUpdateContainer>
+	</div>
+</wo:AjaxHeaderFooter>

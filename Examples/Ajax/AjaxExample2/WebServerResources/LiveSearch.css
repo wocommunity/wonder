@@ -1,0 +1,8 @@
+div#busy {
+	display: inline;
+	vertical-align: middle;
+}
+
+div#results {
+	margin-top: 3em;
+}

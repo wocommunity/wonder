@@ -1,0 +1,34 @@
+#feedsContainer {
+	margin-bottom: 1em;
+	margin-right: 20px;
+}
+
+#feeds {
+	border: 1px solid rgb(200, 200, 200);
+	overflow: scroll;
+	height: 10em;
+}
+
+#feedEntriesContainer {
+	margin-right: 20px;
+}
+
+#feedEntries {
+	border: 1px solid rgb(200, 200, 200);
+	overflow: scroll;
+	height: 10em;
+	margin-bottom: 1em;
+}
+
+#feedEntry {
+}
+
+#feedEntriesBusy {
+	position: absolute;
+	right: 0px;
+}
+
+#feedEntryBusy {
+	position: absolute;
+	right: 0px;
+}

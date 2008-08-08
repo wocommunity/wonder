@@ -1,0 +1,56 @@
+div#selectedDay {
+	float: left;
+}
+
+div#selectedDay h1 {
+	margin: 0em;
+	font-size: 2em;
+}
+
+div#selectedDay ul.events {
+	list-style-type: none;
+	margin-left: 1em;
+	padding: 0em;
+}
+
+table#calendar {
+	float: right;
+	border: 2px solid rgb(0, 0, 0); 
+	border-spacing: 0em;
+	border-collapse: collapse;
+}
+
+table#calendar td.day {
+	border: 1px solid rgb(150, 150, 150);
+	background-color: rgb(255, 255, 255);
+	border-collapse: collapse;
+	height: 6em;
+	width: 6em;
+	text-align: right;
+	vertical-align: top;
+	padding: 0.5em;
+	font-size: 0.75em;
+	cursor: pointer;
+}
+
+table#calendar td.day.weekend {
+	background-color: rgb(240, 240, 240);
+}
+
+table#calendar td.day.today {
+	background-color: rgb(240, 240, 255);
+	font-weight: bold;
+}
+
+table#calendar td.day:hover {
+	font-weight: bold;
+	background-color: rgb(250, 250, 250);
+}
+
+table#calendar td.day.today:hover {
+	background-color: rgb(235, 235, 250);
+}
+
+table#calendar td.day.weekend:hover {
+	background-color: rgb(235, 235, 235);
+}

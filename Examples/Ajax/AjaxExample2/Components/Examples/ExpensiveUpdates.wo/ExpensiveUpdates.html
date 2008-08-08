@@ -1,0 +1,35 @@
+<ul id = "objectives">
+	<li>AjaxBusyIndicator</li>
+	<li>AjaxPing</li>
+	<li>AjaxSubmitButton</li>
+	<li>AjaxUpdateContainer</li>
+</ul>
+
+<wo:AjaxHeaderFooter title = "Expensive Updates">
+	<h1>Comments</h1>
+	Sometimes you can't use a periodic updater because the content would be too large to
+	send all the time.  Instead you can use AjaxPing, which does a very small check and 
+	only updates the container when a given cache key value changes. 
+	
+	<wo:AjaxPing id = "ping" frequency = "3000" cacheKey = "$cacheKey" targetContainerID = "comments"/>
+
+	<div id = "pingBusyContainer">	
+		<wo:AjaxBusyIndicator watchContainerID = "ping" busyImageFramework = "Ajax" busyImage = "wait16.gif" id = "pingBusy" />
+	</div>
+	
+	<wo:AjaxUpdateContainer id = "comments">
+		<ul>
+			<wo:WORepetition list = "$comments.@reverse" item = "$repetitionComment">
+				<li>
+					<div class = "comment"><wo:str value = "$repetitionComment.text"/></div>
+				</li>
+			</wo:WORepetition>
+		</ul>
+	</wo:AjaxUpdateContainer>
+	
+	<wo:form multipleSubmit = "$true">
+		<wo:WOText id = "newComment" rows = "5" cols = "30" value = "$newComment"/>
+		<br/>
+		<wo:AjaxSubmitButton action = "$addComment" value = "Add as a Remote User" onClickServer = "\$('newComment').value = ''"/>
+	</wo:form>
+</wo:AjaxHeaderFooter>

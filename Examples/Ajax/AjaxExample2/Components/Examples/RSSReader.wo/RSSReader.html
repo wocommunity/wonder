@@ -1,0 +1,30 @@
+<ul id = "objectives">
+	<li>AjaxBusyIndicator</li>
+	<li>AjaxSelectionList</li>
+	<li>AjaxSubmitButton</li>
+	<li>AjaxUpdateContainer</li>
+</ul>
+
+<wo:AjaxHeaderFooter title = "RSS Reader">
+	<wo:form multipleSubmit = "$true">
+		<wo:AjaxUpdateContainer id = "feedsContainer">
+			<wo:AjaxSubmitButton functionName = "feedSelected" updateContainerID = "feedEntriesContainer" action = "$feedSelected" />
+			<wo:AjaxSelectionList id = "feeds" list = "$feeds" item = "$repetitionFeed" selection = "$selectedFeed" onchange = "feedSelected()">
+				<li><wo:str value = "$repetitionFeed.name"/></li>
+			</wo:AjaxSelectionList>
+		</wo:AjaxUpdateContainer>
+		
+		<wo:AjaxBusyIndicator watchContainerID = "feedEntriesContainer" busyImageFramework = "Ajax" busyImage = "wait16.gif" id = "feedEntriesBusy" />
+		<wo:AjaxUpdateContainer id = "feedEntriesContainer">
+			<wo:AjaxSubmitButton functionName = "entrySelected" updateContainerID = "feedEntry" />
+			<wo:AjaxSelectionList id = "feedEntries" list = "$selectedFeed.entries" item = "$repetitionEntry" selection = "$selectedEntry" onchange = "entrySelected()">
+				<li><wo:str value = "$repetitionEntry.title" escapeHTML = "$false"/></li>
+			</wo:AjaxSelectionList>
+	
+			<wo:AjaxBusyIndicator watchContainerID = "feedEntry" busyImageFramework = "Ajax" busyImage = "wait16.gif" id = "feedEntryBusy" />
+			<wo:AjaxUpdateContainer id = "feedEntry">
+				<wo:str value = "$feedEntryContents" escapeHTML = "$false"/>
+			</wo:AjaxUpdateContainer>
+		</wo:AjaxUpdateContainer>
+	</wo:form>
+</wo:AjaxHeaderFooter>
