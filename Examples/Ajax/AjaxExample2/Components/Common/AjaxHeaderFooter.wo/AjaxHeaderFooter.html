@@ -1,0 +1,16 @@
+<html>
+<head>
+	<title><wo:str value = "$^title"/></title>
+</head>
+<body>
+	<wo:Menu/>
+	<div id = "content">
+		<wo:AjaxUpdateContainer id = "notifications" insertion = "Effect.blind" insertionDuration = "0.2">
+			<wo:NotificationsList/>
+		</wo:AjaxUpdateContainer>
+	
+		<wo:WOComponentContent/>
+	</div>
+	<wo:WOLToolBar expanded = "$true"/>
+</body>
+</html>
