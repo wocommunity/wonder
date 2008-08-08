@@ -517,6 +517,16 @@
             <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
         </antcall>
     </target>
+	  <target name="AjaxExample2.all">
+	      <antcall target="global.application.${build.action}" >
+	          <param name="project.type" value="application" />
+	          <param name="project.principal.class" value="er.ajax.example2.Application" />
+	          <param name="project.name" value="AjaxExample2" />
+	          <param name="project.dir" value="Examples/Ajax/AjaxExample2" />
+	
+	          <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+	      </antcall>
+	  </target>
     <target name="Ajax.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.ajax.Ajax" />
@@ -703,7 +713,7 @@
     
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, YUIExample.all, SproutCoreExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, SproutCoreExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all" />
     
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
@@ -712,7 +722,7 @@
     <target name="excelgeneration.examples.all" depends="ExcelGeneratorExample.all" />
     
     <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, SproutCore.all" />
-    <target name="ajax.examples.all" depends="AjaxExample.all, YUIExample.all, AjaxLookExample.all, SproutCoreExample.all" />
+    <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, SproutCoreExample.all" />
     
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all" />
 
