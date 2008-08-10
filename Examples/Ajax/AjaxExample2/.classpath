@@ -12,6 +12,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/WOLips"/>
 	<classpathentry kind="lib" path="Libraries/rome-0.9.jar"/>
 	<classpathentry kind="lib" path="Libraries/jdom.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ERChronic"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

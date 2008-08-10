@@ -12,8 +12,6 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.ajax.example2.helper.NSTimestampHelper;
-import er.chronic.Chronic;
-import er.chronic.utils.Span;
 import er.extensions.eof.ERXQ;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
@@ -387,28 +385,6 @@ public class DateUtils {
     return difference;
   }
 
-  public static NSTimestamp dateFromSpan(Span span, boolean includeTime, boolean actAsEndDate) {
-    NSTimestamp timestamp;
-    if (span == null) {
-      timestamp = null;
-    }
-    else {
-      Calendar cal = span.getBeginCalendar();
-      if (!includeTime) {
-        if (actAsEndDate) {
-          timestamp = Day.day(cal).endDate();
-        }
-        else {
-          timestamp = Day.day(cal).startDate();
-        }
-      }
-      else {
-        timestamp = new NSTimestamp(cal.getTime());
-      }
-    }
-    return timestamp;
-  }
-
   public static String timestampString(NSTimestamp timestamp, boolean includeTime) {
     String timestampString;
     if (includeTime) {
@@ -519,9 +495,5 @@ public class DateUtils {
     cal.setTime(timestamp);
     cal.add(calendarField, value);
     return new NSTimestamp(cal.getTime());
-  }
-
-  public static NSTimestamp parse(String string) {
-    return DateUtils.dateFromSpan(Chronic.parse(string), true, false);
   }
 }
