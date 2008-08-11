@@ -863,7 +863,8 @@ public class ERXModelGroup extends EOModelGroup {
 
 		model.setConnectionDictionary(newConnectionDictionary);
 
-		String[] keysThatMatter = { "URL", "username", "password", "driver", "plugin" };
+		// we want to be a bit more aggressive here
+		String[] keysThatMatter = { "URL", "username" };
 		Enumeration modelsEnum = model.modelGroup().models().objectEnumerator();
 		while (modelsEnum.hasMoreElements()) {
 			EOModel otherModel = (EOModel)modelsEnum.nextElement();
@@ -877,11 +878,27 @@ public class ERXModelGroup extends EOModelGroup {
 						valuesThatMatterMatch = ERXStringUtilities.stringEqualsString(thisValue, otherValue);
 					}
 					if (valuesThatMatterMatch && !newConnectionDictionary.equals(otherConnectionDictionary)) {
-						throw new IllegalArgumentException("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL, username, password, driver, and plugin, but the connection dictionaries are not equal.  This is often caused by jdbc2Info not matching between the two.  One fix for this is to set " + model.name() + ".removeJdbc2Info=true and " + otherModel.name() + ".removeJdbc2Info=true in your Properties file. (" + model.name() + "=" + newConnectionDictionary + "; and " + otherModel.name() + "=" + otherConnectionDictionary + ").");
+						if (!isPrototypeModel(model) && !isPrototypeModel(otherModel)) {
+							throw new IllegalArgumentException("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL and username, but the connection dictionaries are not equal. Check your connection dictionaries carefully! This problem is often caused by jdbc2Info not matching between the two.  One fix for this is to set " + model.name() + ".removeJdbc2Info=true and " + otherModel.name() + ".removeJdbc2Info=true in your Properties file. (" + model.name() + "=" + newConnectionDictionary + "; and " + otherModel.name() + "=" + otherConnectionDictionary + ").");
+						}
+						log.warn("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL and username, but at least one of them is a prototype model, so it shouldn't be a problem.");
 					}
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Returns whether the given model is listed as a prototype model in the properties.
+	 * 
+	 * @param model
+	 * @return
+	 */
+	public boolean isPrototypeModel (EOModel model) {
+		if (_prototypeModelNames != null && model != null && _prototypeModelNames.containsObject(model.name())) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
