@@ -624,41 +624,65 @@ public class ERXEOControlUtilities {
      * @return the number of objects
      */
     public static Object _aggregateFunctionWithQualifierAndAggregateAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute aggregateAttribute) {
-		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-		EOModel model = entity.model();
-		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
-		databaseContext.lock();
-		try {
-			EOSQLExpressionFactory sqlFactory = databaseContext.adaptorContext().adaptor().expressionFactory();
-			EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
-			EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
-			fetchSpec.setFetchesRawRows(true);
-	
-			EOSQLExpression sqlExpr = sqlFactory.expressionForEntity(entity);
-			sqlExpr.prepareSelectExpressionWithAttributes(new NSArray<EOAttribute>(aggregateAttribute), false, fetchSpec);
-	
-			EOAdaptorChannel adaptorChannel = databaseContext.availableChannel().adaptorChannel();
-			if (!adaptorChannel.isOpen()) {
-				adaptorChannel.openChannel();
-			}
-			Object aggregateValue = null; 
-			NSArray<EOAttribute> attributes = new NSArray<EOAttribute>(aggregateAttribute);
-			adaptorChannel.evaluateExpression(sqlExpr);
-			try {
-				adaptorChannel.setAttributesToFetch(attributes);
-				NSDictionary row = adaptorChannel.fetchRow();
-				if (row != null) {
-					aggregateValue = row.objectForKey(aggregateAttribute.name());
-				}
-			}
-			finally {
-				adaptorChannel.cancelFetch();
-			}
-		    return aggregateValue;
-		}
-		finally {
-			databaseContext.unlock();
-		}
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+        EOModel model = entity.model();
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        Object aggregateValue = null;
+        
+        dbc.lock();
+        try {
+            aggregateValue = __aggregateFunctionWithQualifierAndAggregateAttribute(dbc, ec, entityName, qualifier, aggregateAttribute);
+        }
+        catch (Exception localException) {
+            if (dbc._isDroppedConnectionException(localException)) {
+                try {
+                    dbc.database().handleDroppedConnection();
+                    aggregateValue = __aggregateFunctionWithQualifierAndAggregateAttribute(dbc, ec, entityName, qualifier, aggregateAttribute);
+                }
+                catch(Exception ex) {
+                    throw NSForwardException._runtimeExceptionForThrowable(ex);
+                }
+            }
+            else {
+                throw NSForwardException._runtimeExceptionForThrowable(localException);
+            }
+        }
+        finally {
+            dbc.unlock();
+        }
+        return aggregateValue;
+    }
+    
+    private static Object __aggregateFunctionWithQualifierAndAggregateAttribute(EODatabaseContext databaseContext, EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute aggregateAttribute) {
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+        EOModel model = entity.model();
+        
+        EOSQLExpressionFactory sqlFactory = databaseContext.adaptorContext().adaptor().expressionFactory();
+        EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
+        EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
+        fetchSpec.setFetchesRawRows(true);
+
+        EOSQLExpression sqlExpr = sqlFactory.expressionForEntity(entity);
+        sqlExpr.prepareSelectExpressionWithAttributes(new NSArray<EOAttribute>(aggregateAttribute), false, fetchSpec);
+
+        EOAdaptorChannel adaptorChannel = databaseContext.availableChannel().adaptorChannel();
+        if (!adaptorChannel.isOpen()) {
+            adaptorChannel.openChannel();
+        }
+        Object aggregateValue = null; 
+        NSArray<EOAttribute> attributes = new NSArray<EOAttribute>(aggregateAttribute);
+        adaptorChannel.evaluateExpression(sqlExpr);
+        try {
+            adaptorChannel.setAttributesToFetch(attributes);
+            NSDictionary row = adaptorChannel.fetchRow();
+            if (row != null) {
+                aggregateValue = row.objectForKey(aggregateAttribute.name());
+            }
+        }
+        finally {
+            adaptorChannel.cancelFetch();
+        }
+        return aggregateValue;
     }
 
     /**
