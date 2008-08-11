@@ -296,6 +296,33 @@ public class ERXMigrationTable {
 	}
 
 	/**
+	 * Returns a new String column (VARCHAR) that corresponds to the varcharLarge prototype.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newLargeStringColumn(String name, boolean allowsNull) throws SQLException {
+		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
+		return newColumn(name, sqlHelper.varcharLargeJDBCType(), sqlHelper.varcharLargeColumnWidth(), 0, 0, allowsNull, null);
+	}
+
+	/**
+	 * Returns a new String column (VARCHAR) that corresponds to the varcharLarge prototype.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newStringColumn(String name, boolean allowsNull, String defaultValue) throws SQLException {
+		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
+		return newColumn(name, sqlHelper.varcharLargeJDBCType(), sqlHelper.varcharLargeColumnWidth(), 0, 0, allowsNull, null, defaultValue);
+	}
+
+	/**
 	 * Returns a new localized String column (VARCHAR).  See newColumn(..) for the full docs.
 	 * 
 	 * @param name the name of the column
