@@ -864,6 +864,24 @@ public class ERXSQLHelper {
 			return "[ColumnIndex: columnName = " + _columnName + "; length = " + _length + "]";
 		}
 	}
+	
+	/**
+	 * Returns the JDBCType that should be used for a varcharLarge column in migrations.
+	 * 
+	 * @return the JDBCType that should be used for a varcharLarge column in migrations
+	 */
+	public int varcharLargeJDBCType() {
+		return Types.VARCHAR;
+	}
+	
+	/**
+	 * Returns the width that should be used for a varcharLarge column in migrations.
+	 * 
+	 * @return the width that should be used for a varcharLarge column in migrations
+	 */
+	public int varcharLargeColumnWidth() {
+		return 10000000;
+	}
 
 	/**
 	 * Returns the name of the table to use for database migrations.
