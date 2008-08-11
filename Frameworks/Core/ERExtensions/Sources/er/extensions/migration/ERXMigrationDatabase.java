@@ -125,6 +125,7 @@ public class ERXMigrationDatabase {
 	 * 
 	 * @param adaptorChannel
 	 *            the adaptor channel to connect to
+	 * @param model the model being migrated (necessary for more reliable sql generation)
 	 */
 	private ERXMigrationDatabase(EOAdaptorChannel adaptorChannel, EOModel model) {
 		this(adaptorChannel, model, ERXProperties.arrayForKey(ERXModelGroup.LANGUAGES_KEY));
@@ -135,6 +136,8 @@ public class ERXMigrationDatabase {
 	 * 
 	 * @param adaptorChannel
 	 *            the adaptor channel to connect to
+	 * @param model the model being migrated (necessary for more reliable sql generation)
+	 * @param languages the langauges to use for localization
 	 */
 	private ERXMigrationDatabase(EOAdaptorChannel adaptorChannel, EOModel model, NSArray<String> languages) {
 		_adaptorChannel = adaptorChannel;
@@ -175,6 +178,8 @@ public class ERXMigrationDatabase {
 	
 	/**
 	 * Returns the configured default languages for this migration.
+	 * 
+	 * @return the configured default languages for this migration. 
 	 */
 	public NSArray<String> languages() {
 		return _languages == null ? NSArray.EmptyArray : _languages;
@@ -314,6 +319,7 @@ public class ERXMigrationDatabase {
 	 *            the adaptor channel to operate within
 	 * @param model
 	 *            the model that corresponds to this table
+	 * @param languages the langauges to use for localization
 	 * @return an ERXMigrationDatabase
 	 */
 	public static ERXMigrationDatabase database(EOAdaptorChannel adaptorChannel, EOModel model, NSArray<String> languages) {
@@ -344,6 +350,8 @@ public class ERXMigrationDatabase {
 	 * 
 	 * @param expressions
 	 *            the expressions to check
+	 * @param operationName the name of the operation being performed (for better error messages)
+	 * @param required if true, an exception is thrown; if false, an error is logged
 	 */
 	public static void _ensureNotEmpty(NSArray<EOSQLExpression> expressions, String operationName, boolean required) {
 		if (expressions == null || expressions.count() == 0) {

@@ -128,6 +128,8 @@ public class ERXMigrator {
 	/**
 	 * Returns whether or not migration should run at startup. Defaults to
 	 * false.
+	 * 
+	 * @return return true if migrations should run at startup
 	 */
 	public static boolean shouldMigrateAtStartup() {
 		return ERXProperties.booleanForKeyWithDefault("er.migration.migrateAtStartup", false);
@@ -360,7 +362,6 @@ public class ERXMigrator {
 		private IERXMigrationLock _migrationLock;
 		private IERXMigration _migration;
 		private ERXModelVersion _modelVersion;
-		private Map<IERXMigration, ERXModelVersion> _migrations;
 		private String _lockOwnerName;
 		private Map<IERXPostMigration, ERXModelVersion> _postMigrations;
 
