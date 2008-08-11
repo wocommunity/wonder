@@ -221,7 +221,7 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptHeader(WOResponse response) {
-		response.appendContentString("<script>");
+		response.appendContentString("<script type=\"text/javascript\">");
 	}
 
 	public static void appendScriptFooterIfNecessary(WORequest request, WOResponse response) {
