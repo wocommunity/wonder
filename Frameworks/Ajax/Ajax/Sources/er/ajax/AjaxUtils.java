@@ -221,7 +221,13 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptHeader(WOResponse response) {
-		response.appendContentString("<script type=\"text/javascript\">");
+		boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+		if (appendTypeAttribute) {
+			response.appendContentString("<script type=\"text/javascript\">");
+		}
+		else {
+			response.appendContentString("<script>");
+		}
 	}
 
 	public static void appendScriptFooterIfNecessary(WORequest request, WOResponse response) {
