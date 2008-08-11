@@ -11,6 +11,7 @@
 	<name>Ajax Examples</name>
 	<modules>
 		<module>AjaxExample</module>
+		<module>AjaxExample2</module>
 		<module>YUIExample</module>
 	</modules>
 </project>
