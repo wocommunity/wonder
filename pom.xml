@@ -175,7 +175,17 @@
 			</dependency>
 			<dependency>
 				<groupId>wonder.misc</groupId>
+				<artifactId>ERChronic</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.misc</groupId>
 				<artifactId>JavaMonitorFramework</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.misc</groupId>
+				<artifactId>WOLips</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>
@@ -187,6 +197,11 @@
 				<groupId>javax.mail</groupId>
 				<artifactId>mail</artifactId>
 				<version>1.4.1</version>
+			</dependency>
+			<dependency>
+				<groupId>jdom</groupId>
+				<artifactId>jdom</artifactId>
+				<version>1.0</version>
 			</dependency>
 			<dependency>
 				<groupId>oro</groupId>
@@ -332,6 +347,11 @@
 				<groupId>org.openxri</groupId>
 				<artifactId>openxri-syntax</artifactId>
 				<version>1.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>rome</groupId>
+				<artifactId>rome</artifactId>
+				<version>0.9</version>
 			</dependency>
 			<dependency>
 				<groupId>xml-security</groupId>
