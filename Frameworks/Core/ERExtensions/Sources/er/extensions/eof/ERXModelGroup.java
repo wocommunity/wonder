@@ -95,6 +95,8 @@ public class ERXModelGroup extends EOModelGroup {
 	 */
 	protected NSArray<String> _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.EmptyArray);
 	
+	private boolean raiseOnUnmatchingConnectionDictionaries = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries", true);
+	
 	/**
 	 * Nofitication that is sent when the model group was created form the bundle loading.
 	 */
@@ -879,9 +881,16 @@ public class ERXModelGroup extends EOModelGroup {
 					}
 					if (valuesThatMatterMatch && !newConnectionDictionary.equals(otherConnectionDictionary)) {
 						if (!isPrototypeModel(model) && !isPrototypeModel(otherModel)) {
-							throw new IllegalArgumentException("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL and username, but the connection dictionaries are not equal. Check your connection dictionaries carefully! This problem is often caused by jdbc2Info not matching between the two.  One fix for this is to set " + model.name() + ".removeJdbc2Info=true and " + otherModel.name() + ".removeJdbc2Info=true in your Properties file. (" + model.name() + "=" + newConnectionDictionary + "; and " + otherModel.name() + "=" + otherConnectionDictionary + ").");
+							String message = "The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL and username, but the connection dictionaries are not equal. Check your connection dictionaries carefully! This problem is often caused by jdbc2Info not matching between the two.  One fix for this is to set " + model.name() + ".removeJdbc2Info=true and " + otherModel.name() + ".removeJdbc2Info=true in your Properties file. (" + model.name() + "=" + newConnectionDictionary + "; and " + otherModel.name() + "=" + otherConnectionDictionary + ")."; 
+							if (!raiseOnUnmatchingConnectionDictionaries) {
+								// was intentionally switched off, so log only
+								log.warn(message);
+							}
+							else {
+								throw new IllegalArgumentException(message);
+							}
 						}
-						log.warn("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL and username, but at least one of them is a prototype model, so it shouldn't be a problem.");
+						log.info("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL and username, but at least one of them is a prototype model, so it shouldn't be a problem.");
 					}
 				}
 			}

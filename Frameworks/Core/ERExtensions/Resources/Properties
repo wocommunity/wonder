@@ -526,6 +526,10 @@ dbMinConnectionsGLOBAL=1
 ## Name of the prototypes entity to use. Case insensitive. 
 # er.extensions.ERXModelGroup.prototypeModelName=erprototypes
 
+## Set this to false if you don't want to get an exception for non-matching connection dicts
+## that point to the same URL and have the same username
+# er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries=true
+
 #########################################################################
 # ERXMigrator 
 #########################################################################
