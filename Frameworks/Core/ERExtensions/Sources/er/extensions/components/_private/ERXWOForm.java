@@ -87,6 +87,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
 	public static boolean multipleSubmitDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.multipleSubmitDefault", false);
 	public static boolean addDefaultSubmitButtonDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.addDefaultSubmitButtonDefault", false);
+	public static boolean useIdInsteadOfNameTag = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.useIdInsteadOfNameTag", false);
 
 	@SuppressWarnings("unchecked")
 	public ERXWOForm(String s, NSDictionary nsdictionary, WOElement woelement) {
@@ -105,6 +106,10 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		_queryDictionary = (WOAssociation) _associations.removeObjectForKey("queryDictionary");
 		_directActionName = (WOAssociation) _associations.removeObjectForKey("directActionName");
 		_formName = (WOAssociation) _associations.removeObjectForKey("name");
+		if (useIdInsteadOfNameTag && _id != null) {
+			_formName = _id;	// id takes precedence over name - then subsequently written as id
+			_id = null;
+		}
 		_enctype = (WOAssociation) _associations.removeObjectForKey("enctype");
 		_fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
 		_secure = (WOAssociation) _associations.removeObjectForKey("secure");
@@ -341,7 +346,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		String formName = _formName(context);
 		if (formName != null) {
-			response._appendTagAttributeAndValue("name", formName, false);
+			response._appendTagAttributeAndValue(useIdInsteadOfNameTag ? "id" : "name", formName, false);
 		}
 		String enctype = _enctype(context);
 		if (enctype != null) {
