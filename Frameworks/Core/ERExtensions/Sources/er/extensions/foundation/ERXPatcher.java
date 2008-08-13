@@ -30,6 +30,7 @@ import com.webobjects.appserver._private.WOResetButton;
 import com.webobjects.appserver._private.WOSubmitButton;
 import com.webobjects.appserver._private.WOText;
 import com.webobjects.appserver._private.WOTextField;
+import com.webobjects.appserver._private.WOJavaScript;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -113,6 +114,9 @@ public class ERXPatcher {
 		if (!ERXApplication.isWO54() || ERXProperties.booleanForKey("er.extensions.WOConditional.patch")) {
 			ERXPatcher.setClassForName(ERXWOConditional.class, "WOConditional");
 		}
+		
+		// RM XHTML strict compliance
+		ERXPatcher.setClassForName(DynamicElementsPatches.JavaScript.class, "WOJavaScript");
 	}
 
 	/**
@@ -129,6 +133,7 @@ public class ERXPatcher {
 		}
 
 		public static class SubmitButton extends WOSubmitButton {
+			public static boolean useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
 			protected WOAssociation _id;
 
 			public SubmitButton(String aName, NSDictionary associations, WOElement element) {
@@ -140,6 +145,30 @@ public class ERXPatcher {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
+			
+			// RM: the following are overriden for XHTML button behaviour - sadly in IE6 it doesn't work in multiple button forms
+			@Override
+		    protected boolean hasContent() {
+		        return (useButtonTag) ? true : super.hasContent();
+		    }
+			
+			@Override
+			public String elementName() {
+				return (useButtonTag) ? "button" : super.elementName();
+			}
+			
+			@Override
+		    protected String type() {
+		        return (useButtonTag) ? "submit" : super.type();
+		    }
+			
+			@Override
+		    public void appendChildrenToResponse(WOResponse aResponse, WOContext aContext) {
+				super.appendChildrenToResponse(aResponse, aContext);
+		        if(useButtonTag && !hasChildrenElements()) {
+		        	aResponse.appendContentHTMLString(valueStringInContext(aContext));
+		        }
+		    }
 
 			/**
 			 * Appends the attribute "value" to the response. First tries to get a localized version and if that fails,
@@ -578,6 +607,16 @@ public class ERXPatcher {
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
 				woresponse.appendContentString(newResponse.contentString());
 			}
+		}
+		
+		public static class JavaScript extends WOJavaScript {
+			public JavaScript(String aName, NSDictionary associations, WOElement element) {
+				super(aName, associations, element);	
+			}
+			
+		    public void _appendTagAttributeAndValueToResponse(WOResponse response, String tagName, String tagValue, boolean escapeHTML) {
+		    	if (!tagName.equals("language")) super._appendTagAttributeAndValueToResponse(response, tagName, tagValue, escapeHTML);	// RM: Hack to void the language attribute
+		    }
 		}
 
 		/**

@@ -230,9 +230,11 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     if (showUI) {
     	boolean disabled = disabledInComponent(component);
     	String elementName = (String) valueForBinding("elementName", "a", component);
+    	boolean useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
     	
 	    if (showButton) {
-	      response.appendContentString("<input ");
+	      elementName = useButtonTag ? "button" : "input";
+	      response.appendContentString("<" + elementName + " ");
 	      appendTagAttributeToResponse(response, "type", "button");
 	      String name = nameInContext(context, component);
 	      appendTagAttributeToResponse(response, "name", name);
@@ -260,7 +262,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     	else {
     		appendTagAttributeToResponse(response, "onclick", functionName + "()");
     	}
-	    if (showButton) {
+	    if (showButton && !useButtonTag) {
 	      response.appendContentString(" />");
 	    }
 	    else {
