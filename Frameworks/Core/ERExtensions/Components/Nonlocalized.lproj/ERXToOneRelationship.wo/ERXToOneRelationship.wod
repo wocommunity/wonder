@@ -31,7 +31,6 @@ PopupList: WOPopUpButton {
     name=^popupName;
 	onChange = ^onChange;
 	onBlur = ^onBlur;
-	escapeHTML = false;
 	class = ^class;
 	id = ^id;
 	disabled = ^disabled;
