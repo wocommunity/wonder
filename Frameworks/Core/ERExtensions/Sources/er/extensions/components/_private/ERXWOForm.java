@@ -256,10 +256,10 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			for (Enumeration enumeration = hiddenFields.keyEnumerator(); enumeration.hasMoreElements();) {
 				String s = (String) enumeration.nextElement();
 				Object obj = hiddenFields.objectForKey(s);
-				response._appendContentAsciiString("<input type=\"hidden\"");
+				response._appendContentAsciiString("<div><input type=\"hidden\"");
 				response._appendTagAttributeAndValue("name", s, false);
 				response._appendTagAttributeAndValue("value", obj.toString(), false);
-				response._appendContentAsciiString(" />\n");
+				response._appendContentAsciiString(" /></div>\n");
 			}
 
 		}
@@ -411,9 +411,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 					ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
 					boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("522") > 0);
 					if(useDisplayNone) {
-						response._appendContentAsciiString("<input type=\"submit\" style=\"position: absolute; left: -10000px; display: none;\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" />");
+						response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; display: none;\"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
 					} else {
-						response._appendContentAsciiString("<input type=\"submit\" style=\"position: absolute; left: -10000px; \" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" />");
+						response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; \"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
 					}
 				}
 			}
