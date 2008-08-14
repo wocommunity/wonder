@@ -24,7 +24,8 @@ var iBox = function()
     inherit_frames: false,
 
     // how fast to fade in the overlay/ibox (this is each step in ms)
-    fade_in_speed: 0,
+    // MS Fade looks cool :)
+    fade_in_speed: 17,
 
     // our attribute identifier for our iBox elements
     attribute_name: 'rel',
@@ -116,6 +117,9 @@ var iBox = function()
 
       _pub.reposition();
       
+      // MS show tags inside of the ibox that were accidentally hidden earlier
+      for (var i=0; i<_pub.tags_to_hide.length; i++) showTags(els.wrapper, _pub.tags_to_hide[i]);
+      
       els.wrapper.style.visibility = "visible";
       _pub.fadeIn(els.wrapper, 10, params.fade_in ? _pub.fade_in_speed : 0);
     },
@@ -179,7 +183,8 @@ var iBox = function()
       window.onscroll = null;
       _pub.clear();
       // restore elements that were hidden
-      for (var i=0; i<_pub.tags_to_hide.length; i++) showTags(_pub.tags_to_hide[i]);
+      // MS pass in document param
+      for (var i=0; i<_pub.tags_to_hide.length; i++) showTags(document, _pub.tags_to_hide[i]);
 
       els.loading.style.display = 'none';
       els.overlay.style.display = 'none';
@@ -545,9 +550,11 @@ var iBox = function()
     return container;
   };
   
-  var hideTags = function(tag)
+  // MS added "base" param
+  var hideTags = function(base, tag)
   {
-    var list = document.getElementsByTagName(tag);
+  	// MS use "base" instead of "document"
+    var list = base.getElementsByTagName(tag);
     for (var i=0; i<list.length; i++)
     {
       if (_pub.getStyle(list[i], 'visibility') != 'hidden' && list[i].style.display != 'none')
@@ -558,9 +565,11 @@ var iBox = function()
     }
   };
   
-  var showTags = function(tag)
+  // MS added "base" param
+  var showTags = function(base, tag)
   {
-    var list = document.getElementsByTagName(tag);
+  	// MS use "base" instead of "document"
+    var list = base.getElementsByTagName(tag);
     for (var i=0; i<list.length; i++)
     {
       if (list[i].wasHidden)
@@ -579,7 +588,8 @@ var iBox = function()
     _pub.reposition();
     if (!_pub.is_firefox) var amount = 8;
     else var amount = 10;
-    for (var i=0; i<_pub.tags_to_hide.length; i++) hideTags(_pub.tags_to_hide[i]);
+    // MS pass in document param
+    for (var i=0; i<_pub.tags_to_hide.length; i++) hideTags(document, _pub.tags_to_hide[i]);
 
     window.onscroll = _pub.reposition;
 
