@@ -14,18 +14,18 @@ import com.ibm.icu.text.Normalizer;
  * This class fixes some inconsistencies with java.io.File on MacOS X HFS+ filesystem
  * The following code does not work as expected:
  * <code>
- * 	File f = new File("/tmp/FilenameWithSpecialCharacter€…†");
+ * 	File f = new File("/tmp/FilenameWithSpecialCharacterÃ„Ã–Ãœ");
  * 	f.createNewFile();
  * 	File tmp = new File("/tmp");
  * 	File[] contents = tmp.listFiles();
  * 	for (int i = 0; i < contents.length; i++) {
- * 		if (contents[i].getName().equals("FilenameWithSpecialCharacter€…†")) {
+ * 		if (contents[i].getName().equals("FilenameWithSpecialCharacterÃ„Ã–Ãœ")) {
  * 			System.out.println("found it!");
  * 		}
  * 	}
  * </code>
  * One would expect that the comparision 
- * <code>contents[i].getName().equals("FilenameWithSpecialCharacter€…†")</code>
+ * <code>contents[i].getName().equals("FilenameWithSpecialCharacterÃ„Ã–Ãœ")</code>
  * would result to <code>true</code>. This is not the case, at least not on HFS+
  * This subclass fixes this and should be used instead of java.io.File.
  * 
