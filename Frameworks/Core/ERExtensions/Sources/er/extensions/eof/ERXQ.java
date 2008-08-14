@@ -576,7 +576,7 @@ public class ERXQ {
 	}
 
 	/**
-	 * Equivalent to key >= lowerBound and key <­ upperBound (inclusive). Not
+	 * Equivalent to key >= lowerBound and key <= upperBound (inclusive). Not
 	 * that this does not return an ERXBetweenQualifier.
 	 * 
 	 * @param key
