@@ -47,7 +47,7 @@ public class ERXTimestampUtilities extends Object {
      * timestamp. Only used internally.
      */
     static class ERXTimestamp {
-        /** the number of days elapsed from 4713ÊBC to 1 C.E. */
+        /** the number of days elapsed from 4713 BC to 1 C.E. */
         private static final long _YEAR_1 = 1721426;
         /** holds the calendar instance */
         private GregorianCalendar _calendar;
