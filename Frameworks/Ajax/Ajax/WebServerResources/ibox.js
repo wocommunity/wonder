@@ -630,7 +630,11 @@ var iBox = function()
   var initialize = function()
   {
     // elements here start the look up from the start non <a> tags
-    drawCSS();
+    // MS check for an existing ibox
+  	var new_ibox = document.getElementById('ibox') == null;
+    if (new_ibox) {
+	    drawCSS();
+    }
     var els = document.getElementsByTagName("a");
     for (var i=0; i<els.length; i++)
     {
@@ -643,8 +647,11 @@ var iBox = function()
         }
       }
     }
-    create(document.body);
-    _pub.http = _pub.createXMLHttpRequest();
+    // MS check for an existing ibox
+    if (new_ibox) {
+	    create(document.body);
+	    _pub.http = _pub.createXMLHttpRequest();
+	  }
   };
 
   //AK : keypress didn't work for some reason
