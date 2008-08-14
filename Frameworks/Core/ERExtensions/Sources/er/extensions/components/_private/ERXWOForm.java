@@ -75,6 +75,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	WOAssociation _fragmentIdentifier;
 	WOAssociation _secure;
 	WOAssociation _disabled;
+	WOAssociation _id;
 
 	protected WOAssociation _action;
 	protected WOAssociation _href;
@@ -90,8 +91,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	public static boolean useIdInsteadOfNameTag = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.useIdInsteadOfNameTag", false);
 
 	@SuppressWarnings("unchecked")
-	public ERXWOForm(String s, NSDictionary nsdictionary, WOElement woelement) {
-		super("form", nsdictionary, woelement);
+	public ERXWOForm(String name, NSDictionary associations, WOElement element) {
+		super("form", associations, element);
 		_otherQueryAssociations = _NSDictionaryUtilities.extractObjectsForKeysWithPrefix(_associations, "?", true);
 		if (_otherQueryAssociations.count() == 0) {
 			_otherQueryAssociations = null;
@@ -99,14 +100,15 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		_action = (WOAssociation) _associations.removeObjectForKey("action");
 		_href = (WOAssociation) _associations.removeObjectForKey("href");
 		_multipleSubmit = (WOAssociation) _associations.removeObjectForKey("multipleSubmit");
-		if (_multipleSubmit == null && multipleSubmitDefault) {
+		if (_multipleSubmit == null && ERXWOForm.multipleSubmitDefault) {
 			_multipleSubmit = new WOConstantValueAssociation(Boolean.valueOf(multipleSubmitDefault));
 		}
 		_actionClass = (WOAssociation) _associations.removeObjectForKey("actionClass");
 		_queryDictionary = (WOAssociation) _associations.removeObjectForKey("queryDictionary");
 		_directActionName = (WOAssociation) _associations.removeObjectForKey("directActionName");
 		_formName = (WOAssociation) _associations.removeObjectForKey("name");
-		if (useIdInsteadOfNameTag && _id != null) {
+		_id = (WOAssociation) associations.objectForKey("id");
+		if (ERXWOForm.useIdInsteadOfNameTag && _id != null) {
 			_formName = _id;	// id takes precedence over name - then subsequently written as id
 			_id = null;
 		}
@@ -346,7 +348,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		String formName = _formName(context);
 		if (formName != null) {
-			response._appendTagAttributeAndValue(useIdInsteadOfNameTag ? "id" : "name", formName, false);
+			response._appendTagAttributeAndValue(ERXWOForm.useIdInsteadOfNameTag ? "id" : "name", formName, false);
 		}
 		String enctype = _enctype(context);
 		if (enctype != null) {
