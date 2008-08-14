@@ -503,6 +503,7 @@ var iBox = function()
 
     els.loading = document.createElement('div');
     els.loading.id = 'ibox_loading';
+    // AK: Use the loading message from _pub
     els.loading.innerHTML = _pub.loading_message;
     els.loading.style.display = 'none';
     els.loading.onclick = function() {
@@ -684,6 +685,7 @@ var iBox = function()
         if (!elemSrc)
         {
           was_error = true;
+          // AK: Changed to _pub.error_message_loading
           _pub.html(document.createTextNode(_pub.error_message_loading), params);
         }
         else
@@ -723,6 +725,7 @@ var iBox = function()
         }
         img.onerror = function()
         {
+        	// AK: Changed to _pub.error_message_loading
           _pub.html(document.createTextNode(_pub.error_message_loading), params);
         }
         img.src = url;
@@ -797,6 +800,7 @@ var iBox = function()
             }
             else
             {
+            	// AK: Changed to _pub.error_message_loading
               _pub.html(document.createTextNode(_pub.error_message_loading), params);
             }
           }
