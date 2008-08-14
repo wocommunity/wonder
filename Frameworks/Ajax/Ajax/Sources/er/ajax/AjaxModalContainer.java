@@ -11,7 +11,9 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXStringUtilities;
 /**
@@ -98,6 +100,15 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         response.appendContentString(">");
         response.appendContentString(valueForBinding("label", "", component).toString());
         response.appendContentString("</a>");
+        if (AjaxUtils.isAjaxRequest(context.request())) {
+	        NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(response);
+	        if (!userInfo.containsKey("er.ajax.AjaxModalContainer.init")) {
+	            AjaxUtils.appendScriptHeader(response);
+	            response.appendContentString("iBox.init()");
+	            AjaxUtils.appendScriptFooter(response);
+	            userInfo.setObjectForKey(Boolean.TRUE, "er.ajax.AjaxModalContainer.init");
+	        }
+        }
         if(href.startsWith("#")) {
         	response.appendContentString("<div");
 
