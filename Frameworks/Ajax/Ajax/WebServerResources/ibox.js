@@ -1,5 +1,5 @@
 /**
- * iBox version 2.17
+ * iBox version 2.17b
  * For more info & download: http://labs.ibegin.com/ibox/
  * Created as a part of the iBegin iBegin Labs Project - http://labs.ibegin.com/
  * For licensing please see readme.html (MIT Open Source License)
@@ -19,9 +19,9 @@ var iBox = function()
     // padding around the box
     padding: 100,
     
-    // show framed content in the parent window
+    // show iframed content in the parent window
     // this *does not* work with #containers
-    inherit_frames: true,
+    inherit_frames: false,
 
     // how fast to fade in the overlay/ibox (this is each step in ms)
     fade_in_speed: 0,
@@ -436,12 +436,13 @@ var iBox = function()
     handleTag: function(e)
     {
       var t = this.getAttribute('rel');
-      var params = parent.iBox.parseQuery(t.substr(5,999));
+      var params = _pub.parseQuery(t.substr(5,999));
       if (params.target) var url = params.target
       else if (this.target && !params.ignore_target) var url = this.target;
       else var url = this.href;
       var title = this.title;
-      parent.iBox.showURL(url, title, params);
+      if (_pub.inherit_frames && window.parent) window.parent.iBox.showURL(url, title, params);
+      else _pub.showURL(url, title, params);
       return false;
     },
     
@@ -628,8 +629,6 @@ var iBox = function()
         var t = els[i].getAttribute(_pub.attribute_name);
         if ((t.indexOf("ibox") != -1) || t.toLowerCase() == "ibox")
         { // check if this element is an iBox element
-          if (_pub.inherit_frames && window.parent) els[i].onclick = window.parent.iBox.handleTag;
-          else
           els[i].onclick = _pub.handleTag;
         }
       }
@@ -807,7 +806,6 @@ var iBox = function()
           }
         }
         _pub.http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        _pub.http.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         _pub.http.send(null);
       }
     };
