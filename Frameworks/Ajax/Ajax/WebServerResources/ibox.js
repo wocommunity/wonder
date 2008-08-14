@@ -460,6 +460,7 @@ var iBox = function()
       }
     },
     
+    // MS Added public method to allow for re-initialization
     init: function() {
     	initialize();
     }
