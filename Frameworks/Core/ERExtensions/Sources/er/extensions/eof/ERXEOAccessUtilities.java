@@ -420,7 +420,11 @@ public class ERXEOAccessUtilities {
      */
 
     public static EOModelGroup modelGroup(EOEditingContext ec) {
-        if (ec == null) {
+    	if (ec == null) {
+    		// FIXME this can be problematic, if called from a background thread with ERXThreadStorage.useInheritableThreadLocal=true, 
+    		// which is the default. In my case it was called indirectly from ERXEntityClassDescription.Factory.classDescriptionNeededForEntityName 
+    		// resulting in locking problems
+    		
             ERXSession s = ERXSession.session();
             if (s != null) {
                 ec = s.defaultEditingContext();
