@@ -2,6 +2,7 @@ package er.extensions.foundation;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -16,12 +17,14 @@ import com.webobjects.appserver._private.WOActiveImage;
 import com.webobjects.appserver._private.WOBrowser;
 import com.webobjects.appserver._private.WOCheckBox;
 import com.webobjects.appserver._private.WOCheckBoxList;
+import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WOGenericContainer;
 import com.webobjects.appserver._private.WOGenericElement;
 import com.webobjects.appserver._private.WOHiddenField;
 import com.webobjects.appserver._private.WOImage;
 import com.webobjects.appserver._private.WOImageButton;
 import com.webobjects.appserver._private.WOInput;
+import com.webobjects.appserver._private.WOJavaScript;
 import com.webobjects.appserver._private.WOPasswordField;
 import com.webobjects.appserver._private.WOPopUpButton;
 import com.webobjects.appserver._private.WORadioButton;
@@ -30,13 +33,13 @@ import com.webobjects.appserver._private.WOResetButton;
 import com.webobjects.appserver._private.WOSubmitButton;
 import com.webobjects.appserver._private.WOText;
 import com.webobjects.appserver._private.WOTextField;
-import com.webobjects.appserver._private.WOJavaScript;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components._private.ERXHyperlink;
@@ -147,9 +150,10 @@ public class ERXPatcher {
 			}
 			
 			// RM: the following are overriden for XHTML button behaviour - sadly in IE6 it doesn't work in multiple button forms
-			@Override
+			// MS: remove the override for 5.3 compat; can't call super because of 5.3 -- super returns false anyway 
+			// @Override
 		    protected boolean hasContent() {
-		        return (useButtonTag) ? true : super.hasContent();
+		        return (useButtonTag) ? true : false;
 		    }
 			
 			@Override
@@ -166,9 +170,18 @@ public class ERXPatcher {
 		    public void appendChildrenToResponse(WOResponse aResponse, WOContext aContext) {
 				super.appendChildrenToResponse(aResponse, aContext);
 		        if(useButtonTag && !hasChildrenElements()) {
-		        	aResponse.appendContentHTMLString(valueStringInContext(aContext));
+		        	aResponse.appendContentHTMLString(_valueStringInContext(aContext));
 		        }
 		    }
+			
+			protected String _valueStringInContext(WOContext context) {
+				String valueString = null;
+				Object value = _value.valueInComponent(context.component());
+				if (value != null) {
+					valueString = value.toString();
+				}
+				return valueString;
+			}
 
 			/**
 			 * Appends the attribute "value" to the response. First tries to get a localized version and if that fails,
@@ -176,11 +189,10 @@ public class ERXPatcher {
 			 */
 			protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
 				if (_value != null) {
-					Object value = _value.valueInComponent(context.component());
-					if (value != null) {
-						String stringValue = value.toString();
+					String valueString = _valueStringInContext(context);
+					if (valueString != null) {
 						// stringValue = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(stringValue);
-						response._appendTagAttributeAndValue("value", stringValue, true);
+						response._appendTagAttributeAndValue("value", valueString, true);
 					}
 				}
 			}
@@ -610,13 +622,46 @@ public class ERXPatcher {
 		}
 		
 		public static class JavaScript extends WOJavaScript {
+			public static boolean removeLanguageAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.Javascript.removeLanguageAttribute", false);
+			private WOAssociation _language;
+			
 			public JavaScript(String aName, NSDictionary associations, WOElement element) {
-				super(aName, associations, element);	
+				super(aName, associations, element);
+				if (_language == null) {
+					_language = (WOAssociation) associations.objectForKey("language");
+				}
 			}
 			
-		    public void _appendTagAttributeAndValueToResponse(WOResponse response, String tagName, String tagValue, boolean escapeHTML) {
-		    	if (!tagName.equals("language")) super._appendTagAttributeAndValueToResponse(response, tagName, tagValue, escapeHTML);	// RM: Hack to void the language attribute
-		    }
+			@Override
+			protected void setLanguage(String s) {
+				super.setLanguage(s);
+				if (s != null) {
+					_language = new WOConstantValueAssociation(s);
+				}
+			}
+			
+			@Override
+			public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
+				if (woresponse instanceof ERXResponse && JavaScript.removeLanguageAttribute) {
+					// 5.3 + 5.4 hackaround to pop the language attribute off of the script tag 
+					ERXResponse response = (ERXResponse)woresponse;
+					response.pushContent();
+					super.appendAttributesToResponse(woresponse, wocontext);
+					String contentString = response.contentString();
+					String language = (String)_language.valueInComponent(wocontext.component());
+					Pattern pattern = Pattern.compile("\\s*language\\s*=\\s*\"?" + language + "\"?", Pattern.CASE_INSENSITIVE);
+					contentString = pattern.matcher(contentString).replaceFirst("");
+					response.setContent(contentString);
+					response.popContent(true);
+				}
+				else {
+					super.appendAttributesToResponse(woresponse, wocontext);
+				}
+			}
+			
+//		    public void _appendTagAttributeAndValueToResponse(WOResponse response, String tagName, String tagValue, boolean escapeHTML) {
+//		    	if (!tagName.equals("language")) super._appendTagAttributeAndValueToResponse(response, tagName, tagValue, escapeHTML);	// RM: Hack to void the language attribute
+//		    }
 		}
 
 		/**
