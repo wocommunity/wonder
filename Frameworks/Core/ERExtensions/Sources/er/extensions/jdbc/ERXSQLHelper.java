@@ -75,8 +75,6 @@ public class ERXSQLHelper {
 
 	private static Map<String, ERXSQLHelper> _sqlHelperMap = new HashMap<String, ERXSQLHelper>();
 
-	private JDBCPlugIn _plugin;
-
 	public void prepareConnectionForSchemaChange(EOEditingContext ec, EOModel model) {
 		// do nothing by default
 	}
@@ -116,6 +114,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param model
 	 * @param coordinator
+	 * @return the database context for the given model
 	 */
 	private EODatabaseContext databaseContextForModel(EOModel model, EOObjectStoreCoordinator coordinator) {
 		EODatabaseContext dbc = null;
@@ -216,7 +215,6 @@ public class ERXSQLHelper {
 	 * @return a sql script
 	 */
 	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EOAdaptor adaptor, NSDictionary<String, String> optionsDictionary) {
-		JDBCPlugIn jdbcPlugIn = ((JDBCAdaptor)adaptor).plugIn();
 		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
 		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsDictionary);  
 		return creationScript;
@@ -335,8 +333,6 @@ public class ERXSQLHelper {
 		String lineSeparator = System.getProperty("line.separator");
 		StringBuffer buf = new StringBuffer();
 
-		EOEntity ent = entities.objectAtIndex(0);
-		String modelName = ent.model().name();
 		String commandSeparator = commandSeparatorString();
 
 		for (Enumeration entitiesEnum = entities.objectEnumerator(); entitiesEnum.hasMoreElements();) {
@@ -551,8 +547,6 @@ public class ERXSQLHelper {
 			spec.setPromptsAfterFetchLimit(false);
 		}
 		spec = ERXEOAccessUtilities.localizeFetchSpecification(ec, spec);
-		String url = (String) model.connectionDictionary().objectForKey("URL");
-		String lowerCaseURL = (url != null ? url.toLowerCase() : "");
 		if (attributes == null) {
 			attributes = attributesToFetchForEntity(spec, entity);
 		}
@@ -738,6 +732,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param key
 	 * @param value
+	 * @return the regex SQL
 	 */
 	public String sqlForRegularExpressionQuery(String key, String value) {
 		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating regex expressions.");
@@ -764,6 +759,7 @@ public class ERXSQLHelper {
 	 *            the name of the index to create
 	 * @param expression
 	 *            the EOSQLExpression context
+	 * @param tableName the name of the containing table
 	 * @param columnNames
 	 *            the list of column names to index on
 	 * @return a SQL expression
@@ -780,6 +776,7 @@ public class ERXSQLHelper {
 	 *            the name of the index to create
 	 * @param expression
 	 *            the EOSQLExpression context
+	 * @param tableName the name of the containing table
 	 * @param columnIndexes
 	 *            the list of columns to index on
 	 * @return a SQL expression
@@ -796,6 +793,7 @@ public class ERXSQLHelper {
 	 *            the name of the index to create
 	 * @param expression
 	 *            the EOSQLExpression context
+	 * @param tableName the name of the containing table
 	 * @param columnNames
 	 *            the list of column names to index on
 	 * @return a SQL expression
@@ -820,6 +818,7 @@ public class ERXSQLHelper {
 	 *            the name of the index to create
 	 * @param expression
 	 *            the EOSQLExpression context
+	 * @param tableName the name of the containing table
 	 * @param columnIndexes
 	 *            the list of columns to index on
 	 * @return a SQL expression
@@ -1044,6 +1043,17 @@ public class ERXSQLHelper {
 	}
 
 	/**
+	 * Returns the SQL required to select the next value from the given sequence.  This should
+	 * return a single row with a single column.
+	 * 
+	 * @param sequenceName the name of the sequence
+	 * @return the next sequence value
+	 */
+	protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for sequences.");
+	}
+	
+	/**
 	 * Convenience method to get the next unique ID from a sequence.
 	 * 
 	 * @param ec
@@ -1059,8 +1069,7 @@ public class ERXSQLHelper {
 	// around at
 	// the adaptor level and see if we can't find something better.
 	public Number getNextValFromSequenceNamed(EOEditingContext ec, String modelName, String sequenceName) {
-		String sqlString = "select " + sequenceName + ".nextVal from dual";
-		NSArray array = EOUtilities.rawRowsForSQL(ec, modelName, sqlString, null);
+		NSArray array = EOUtilities.rawRowsForSQL(ec, modelName, sqlForGetNextValFromSequencedNamed(sequenceName), null);
 		if (array.count() == 0) {
 			throw new RuntimeException("Unable to generate value from sequence named: " + sequenceName + " in model: " + modelName);
 		}
@@ -1072,6 +1081,11 @@ public class ERXSQLHelper {
 	/**
 	 * Creates a where clause string " someKey IN ( someValue1,...)". Can
 	 * migrate keyPaths.
+	 * 
+	 * @param e the SQL expression
+	 * @param key the name of the key
+	 * @param valueArray an array of values to generate an "in" clause for
+	 * @return the where clause for the given key
 	 */
 	public String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
 		if (valueArray.count() == 0) {
@@ -1337,6 +1351,12 @@ public class ERXSQLHelper {
 	}
 
 	public static class OracleSQLHelper extends ERXSQLHelper {
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			String sqlString = "select " + sequenceName + ".nextVal from dual";
+			return sqlString;
+		}
+
 		/**
 		 * oracle 9 has a maximum length of 30 characters for table names,
 		 * column names and constraint names Foreign key constraint names are
@@ -1500,6 +1520,11 @@ public class ERXSQLHelper {
 		private static final String PREFIX_LOCKING = "locking=";
 
 		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "select from unique from " + sequenceName;
+		}
+		
+		@Override
 		public boolean shouldExecute(String sql) {
 			boolean shouldExecute = true;
 			if (sql.startsWith("SET TRANSACTION ISOLATION LEVEL")) {
@@ -1662,6 +1687,11 @@ public class ERXSQLHelper {
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "select NEXTVAL('" + sequenceName + "') as key"; 
+		}
+		
 		@Override
 		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
 			// The Postgres Expression has a problem using bind variables so we
