@@ -1,0 +1,27 @@
+<wo:ERIUIContainer title = "General">
+	<wo:ERXWOTemplate templateName = "toolbar">
+		<wo:ERIUIBackButton action = "$back">Settings</wo:ERIUIBackButton>
+		<wo:ERIUIDialogButton title = "Search" string = "Search" dialogVisible = "$searchVisible">
+			<wo:form multipleSubmit = "$true" action = "$search">
+				<wo:ERIUIGoButton action = "$search" value = "Search"/>
+				<input type = "search" value = ""/>
+			</wo:form>
+		</wo:ERIUIDialogButton>
+	</wo:ERXWOTemplate>
+	
+	<wo:ERXWOTemplate templateName = "content">
+		<ul>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 1</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 2</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 3</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 4</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 5</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 6</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 7</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 8</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 9</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 10</wo:ERIUINextLink></li>
+			<li><wo:ERIUINextLink action = "$something">Settings Link 11</wo:ERIUINextLink></li>
+		</ul>
+	</wo:ERXWOTemplate>
+</wo:ERIUIContainer>
