@@ -8,8 +8,8 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
-import er.extensions.eof.ERXGenericRecord;
-import er.extensions.eof.ERXKey;
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
@@ -17,27 +17,27 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
 
 	// Attributes
 	public static final String ADDRESS1_KEY = "address1";
-	public static final ERXKey ADDRESS1 = new ERXKey(ADDRESS1_KEY);
+	public static final ERXKey<String> ADDRESS1 = new ERXKey<String>(ADDRESS1_KEY);
 	public static final String ADDRESS2_KEY = "address2";
-	public static final ERXKey ADDRESS2 = new ERXKey(ADDRESS2_KEY);
+	public static final ERXKey<String> ADDRESS2 = new ERXKey<String>(ADDRESS2_KEY);
 	public static final String CITY_KEY = "city";
-	public static final ERXKey CITY = new ERXKey(CITY_KEY);
+	public static final ERXKey<String> CITY = new ERXKey<String>(CITY_KEY);
 	public static final String MANAGER_KEY = "manager";
-	public static final ERXKey MANAGER = new ERXKey(MANAGER_KEY);
+	public static final ERXKey<Boolean> MANAGER = new ERXKey<Boolean>(MANAGER_KEY);
 	public static final String NAME_KEY = "name";
-	public static final ERXKey NAME = new ERXKey(NAME_KEY);
+	public static final ERXKey<String> NAME = new ERXKey<String>(NAME_KEY);
 	public static final String STATE_KEY = "state";
-	public static final ERXKey STATE = new ERXKey(STATE_KEY);
+	public static final ERXKey<String> STATE = new ERXKey<String>(STATE_KEY);
 	public static final String ZIPCODE_KEY = "zipcode";
-	public static final ERXKey ZIPCODE = new ERXKey(ZIPCODE_KEY);
+	public static final ERXKey<String> ZIPCODE = new ERXKey<String>(ZIPCODE_KEY);
 
 	// Relationships
 	public static final String COMPANY_KEY = "company";
-	public static final ERXKey COMPANY = new ERXKey(COMPANY_KEY);
+	public static final ERXKey<er.erxtest.model.Company> COMPANY = new ERXKey<er.erxtest.model.Company>(COMPANY_KEY);
 	public static final String PAYCHECKS_KEY = "paychecks";
-	public static final ERXKey PAYCHECKS = new ERXKey(PAYCHECKS_KEY);
+	public static final ERXKey<er.erxtest.model.Paycheck> PAYCHECKS = new ERXKey<er.erxtest.model.Paycheck>(PAYCHECKS_KEY);
 	public static final String ROLES_KEY = "roles";
-	public static final ERXKey ROLES = new ERXKey(ROLES_KEY);
+	public static final ERXKey<er.erxtest.model.Role> ROLES = new ERXKey<er.erxtest.model.Role>(ROLES_KEY);
 
   private static Logger LOG = Logger.getLogger(_Employee.class);
 
@@ -82,11 +82,11 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     takeStoredValueForKey(value, "city");
   }
 
-  public java.lang.Boolean manager() {
-    return (java.lang.Boolean) storedValueForKey("manager");
+  public Boolean manager() {
+    return (Boolean) storedValueForKey("manager");
   }
 
-  public void setManager(java.lang.Boolean value) {
+  public void setManager(Boolean value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating manager from " + manager() + " to " + value);
     }
@@ -129,12 +129,19 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   public er.erxtest.model.Company company() {
     return (er.erxtest.model.Company)storedValueForKey("company");
   }
+  
+  public void setCompany(er.erxtest.model.Company value) {
+    takeStoredValueForKey(value, "company");
+  }
 
   public void setCompanyRelationship(er.erxtest.model.Company value) {
     if (_Employee.LOG.isDebugEnabled()) {
       _Employee.LOG.debug("updating company from " + company() + " to " + value);
     }
-    if (value == null) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	setCompany(value);
+    }
+    else if (value == null) {
     	er.erxtest.model.Company oldValue = company();
     	if (oldValue != null) {
     		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "company");
@@ -186,18 +193,36 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     return results;
   }
   
+  public void addToPaychecks(er.erxtest.model.Paycheck object) {
+    includeObjectIntoPropertyWithKey(object, "paychecks");
+  }
+
+  public void removeFromPaychecks(er.erxtest.model.Paycheck object) {
+    excludeObjectFromPropertyWithKey(object, "paychecks");
+  }
+
   public void addToPaychecksRelationship(er.erxtest.model.Paycheck object) {
     if (_Employee.LOG.isDebugEnabled()) {
       _Employee.LOG.debug("adding " + object + " to paychecks relationship");
     }
-    addObjectToBothSidesOfRelationshipWithKey(object, "paychecks");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	addToPaychecks(object);
+    }
+    else {
+    	addObjectToBothSidesOfRelationshipWithKey(object, "paychecks");
+    }
   }
 
   public void removeFromPaychecksRelationship(er.erxtest.model.Paycheck object) {
     if (_Employee.LOG.isDebugEnabled()) {
       _Employee.LOG.debug("removing " + object + " from paychecks relationship");
     }
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "paychecks");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	removeFromPaychecks(object);
+    }
+    else {
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, "paychecks");
+    }
   }
 
   public er.erxtest.model.Paycheck createPaychecksRelationship() {
@@ -240,18 +265,36 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     return results;
   }
   
+  public void addToRoles(er.erxtest.model.Role object) {
+    includeObjectIntoPropertyWithKey(object, "roles");
+  }
+
+  public void removeFromRoles(er.erxtest.model.Role object) {
+    excludeObjectFromPropertyWithKey(object, "roles");
+  }
+
   public void addToRolesRelationship(er.erxtest.model.Role object) {
     if (_Employee.LOG.isDebugEnabled()) {
       _Employee.LOG.debug("adding " + object + " to roles relationship");
     }
-    addObjectToBothSidesOfRelationshipWithKey(object, "roles");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	addToRoles(object);
+    }
+    else {
+    	addObjectToBothSidesOfRelationshipWithKey(object, "roles");
+    }
   }
 
   public void removeFromRolesRelationship(er.erxtest.model.Role object) {
     if (_Employee.LOG.isDebugEnabled()) {
       _Employee.LOG.debug("removing " + object + " from roles relationship");
     }
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "roles");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	removeFromRoles(object);
+    }
+    else {
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, "roles");
+    }
   }
 
   public er.erxtest.model.Role createRolesRelationship() {
@@ -275,7 +318,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   }
 
 
-  public static Employee createEmployee(EOEditingContext editingContext, java.lang.Boolean manager
+  public static Employee createEmployee(EOEditingContext editingContext, Boolean manager
 , String name
 , er.erxtest.model.Company company) {
     Employee eo = (Employee) EOUtilities.createAndInsertInstance(editingContext, _Employee.ENTITY_NAME);    

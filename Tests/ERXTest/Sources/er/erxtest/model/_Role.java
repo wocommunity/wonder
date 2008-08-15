@@ -8,8 +8,8 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
-import er.extensions.eof.ERXGenericRecord;
-import er.extensions.eof.ERXKey;
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
@@ -19,7 +19,7 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
 
 	// Relationships
 	public static final String EMPLOYEES_KEY = "employees";
-	public static final ERXKey EMPLOYEES = new ERXKey(EMPLOYEES_KEY);
+	public static final ERXKey<er.erxtest.model.Employee> EMPLOYEES = new ERXKey<er.erxtest.model.Employee>(EMPLOYEES_KEY);
 
   private static Logger LOG = Logger.getLogger(_Role.class);
 
@@ -51,18 +51,36 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
     return results;
   }
   
+  public void addToEmployees(er.erxtest.model.Employee object) {
+    includeObjectIntoPropertyWithKey(object, "employees");
+  }
+
+  public void removeFromEmployees(er.erxtest.model.Employee object) {
+    excludeObjectFromPropertyWithKey(object, "employees");
+  }
+
   public void addToEmployeesRelationship(er.erxtest.model.Employee object) {
     if (_Role.LOG.isDebugEnabled()) {
       _Role.LOG.debug("adding " + object + " to employees relationship");
     }
-    addObjectToBothSidesOfRelationshipWithKey(object, "employees");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	addToEmployees(object);
+    }
+    else {
+    	addObjectToBothSidesOfRelationshipWithKey(object, "employees");
+    }
   }
 
   public void removeFromEmployeesRelationship(er.erxtest.model.Employee object) {
     if (_Role.LOG.isDebugEnabled()) {
       _Role.LOG.debug("removing " + object + " from employees relationship");
     }
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "employees");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	removeFromEmployees(object);
+    }
+    else {
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, "employees");
+    }
   }
 
   public er.erxtest.model.Employee createEmployeesRelationship() {
