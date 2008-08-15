@@ -17,6 +17,7 @@ import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXJDBCConnectionBroker;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * Simple sequence class. MT safe, but not multi instance safe (this is implemented by subclasses)
@@ -76,6 +77,34 @@ public class ERXSequence {
 	protected long increment() {
 		return ERXProperties.longForKeyWithDefault(name() + ".Increment", 
 				ERXProperties.longForKeyWithDefault("er.extensions.ERXSequence.Increment", 10L));
+	}
+
+	/**
+	 * NativeDatabaseSequence uses ERXSQLHelper.getNextValFromSequenceNamed to
+	 * generate a sequence value using your database's native sequence generation scheme.  This
+	 * will fail if ERXSQLHelper.getNextValFromSequenceNamed is not implemented for your database.
+	 * This is also currently limited to only incrementing 1 at a time.
+	 * 
+	 * @author mschrag
+	 */
+	public static class NativeDatabaseSequence extends ERXSequence {
+		private EOEditingContext _editingContext;
+		private String _modelName;
+		
+		public NativeDatabaseSequence(EOEditingContext editingContext, String modelName, String name) {
+			super(name);
+		}
+		
+		public long nextValue(long increment) {
+			if (increment != 1) {
+				throw new IllegalArgumentException("NativeDatabaseSequence only supports incrementing 1 at a time.");
+			}
+			return ERXSQLHelper.newSQLHelper(_editingContext, _modelName).getNextValFromSequenceNamed(_editingContext, _modelName, name()).longValue();
+		}
+		
+		protected long increment() {
+			return 1L;
+		}
 	}
 	
 	/**
