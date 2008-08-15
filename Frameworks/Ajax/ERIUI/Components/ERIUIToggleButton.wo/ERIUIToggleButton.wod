@@ -1,0 +1,23 @@
+ToggleDiv : WOGenericContainer {
+  elementName = "div";
+  class = toggleClass;
+  toggled = ^checked;
+  onclick = onclick;
+  id = divID;
+}
+
+ToggleField : WOHiddenField {
+  id = id;
+  value = value;
+  onchange = ^onchange;
+}
+
+OffString : WOString {
+  value = ^offString;
+  valueWhenEmpty = "OFF";
+}
+
+OnString : WOString {
+  value = ^onString;
+  valueWhenEmpty = "ON";
+}
