@@ -8,8 +8,8 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
-import er.extensions.eof.ERXGenericRecord;
-import er.extensions.eof.ERXKey;
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
@@ -17,15 +17,15 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
 
 	// Attributes
 	public static final String AMOUNT_KEY = "amount";
-	public static final ERXKey AMOUNT = new ERXKey(AMOUNT_KEY);
+	public static final ERXKey<BigDecimal> AMOUNT = new ERXKey<BigDecimal>(AMOUNT_KEY);
 	public static final String CASHED_KEY = "cashed";
-	public static final ERXKey CASHED = new ERXKey(CASHED_KEY);
+	public static final ERXKey<Boolean> CASHED = new ERXKey<Boolean>(CASHED_KEY);
 	public static final String PAYMENT_DATE_KEY = "paymentDate";
-	public static final ERXKey PAYMENT_DATE = new ERXKey(PAYMENT_DATE_KEY);
+	public static final ERXKey<NSTimestamp> PAYMENT_DATE = new ERXKey<NSTimestamp>(PAYMENT_DATE_KEY);
 
 	// Relationships
 	public static final String EMPLOYEE_KEY = "employee";
-	public static final ERXKey EMPLOYEE = new ERXKey(EMPLOYEE_KEY);
+	public static final ERXKey<er.erxtest.model.Employee> EMPLOYEE = new ERXKey<er.erxtest.model.Employee>(EMPLOYEE_KEY);
 
   private static Logger LOG = Logger.getLogger(_Paycheck.class);
 
@@ -48,11 +48,11 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
     takeStoredValueForKey(value, "amount");
   }
 
-  public java.lang.Boolean cashed() {
-    return (java.lang.Boolean) storedValueForKey("cashed");
+  public Boolean cashed() {
+    return (Boolean) storedValueForKey("cashed");
   }
 
-  public void setCashed(java.lang.Boolean value) {
+  public void setCashed(Boolean value) {
     if (_Paycheck.LOG.isDebugEnabled()) {
     	_Paycheck.LOG.debug( "updating cashed from " + cashed() + " to " + value);
     }
@@ -73,12 +73,19 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
   public er.erxtest.model.Employee employee() {
     return (er.erxtest.model.Employee)storedValueForKey("employee");
   }
+  
+  public void setEmployee(er.erxtest.model.Employee value) {
+    takeStoredValueForKey(value, "employee");
+  }
 
   public void setEmployeeRelationship(er.erxtest.model.Employee value) {
     if (_Paycheck.LOG.isDebugEnabled()) {
       _Paycheck.LOG.debug("updating employee from " + employee() + " to " + value);
     }
-    if (value == null) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	setEmployee(value);
+    }
+    else if (value == null) {
     	er.erxtest.model.Employee oldValue = employee();
     	if (oldValue != null) {
     		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "employee");
@@ -90,7 +97,7 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
   
 
   public static Paycheck createPaycheck(EOEditingContext editingContext, BigDecimal amount
-, java.lang.Boolean cashed
+, Boolean cashed
 , NSTimestamp paymentDate
 , er.erxtest.model.Employee employee) {
     Paycheck eo = (Paycheck) EOUtilities.createAndInsertInstance(editingContext, _Paycheck.ENTITY_NAME);    
