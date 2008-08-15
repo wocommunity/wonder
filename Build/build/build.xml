@@ -117,6 +117,15 @@
             <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
+  
+  <target name="ERIUI.all">
+      <antcall target="global.framework.${build.action}" >
+          <param name="project.principal.class" value="er.iui.ERIUI" />
+          <param name="project.name" value="ERIUI" />
+          <param name="project.dir" value="Frameworks/Ajax/ERIUI" />
+          <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+     </antcall>
+  </target>
 
     <target name="EROpenID.all">
         <antcall target="global.framework.${build.action}" >
@@ -527,6 +536,16 @@
 	          <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
 	      </antcall>
 	  </target>
+  <target name="ERIUIExample.all">
+      <antcall target="global.application.${build.action}" >
+          <param name="project.type" value="application" />
+          <param name="project.principal.class" value="er.iui.example.Application" />
+          <param name="project.name" value="ERIUIExample" />
+          <param name="project.dir" value="Examples/Ajax/ERIUIExample" />
+
+          <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+      </antcall>
+  </target>
     <target name="Ajax.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.ajax.Ajax" />
