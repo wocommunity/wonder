@@ -1,0 +1,6 @@
+Label : WOString {
+  value = ^label;
+}
+
+WOComponentContent : WOComponentContent {
+}
