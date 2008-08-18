@@ -78,8 +78,10 @@ var iBox = function()
       els.wrapper.style.display = "block";
       els.wrapper.style.visibility = "hidden";
       els.content.style.height = 'auto';
-
-      if (typeof(content) == 'string') els.content.innerHTML = content;
+      
+      // MS Run HTML updates through prototype's .update() method so evalScripts works as expected 
+      //if (typeof(content) == 'string') els.content.innerHTML = content;
+      if (typeof(content) == 'string') els.content.update(content);
       else els.content.appendChild(content);
 
       var elemSize = _pub.getElementSize(els.content);
