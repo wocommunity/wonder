@@ -13,7 +13,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXStringUtilities;
 /**
@@ -27,7 +26,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding title title string for the link label and the window
  * @binding href when it is bound, the content of the url will be fetched into an iframe.
  * @binding action when it is bound, the content of the url will be fetched into a div
- * @binding ajax (optional) when true, the contents are only rendered on during the Ajax request
+ * @binding ajax (optional) when true, the contents are only rendered during the Ajax request
+ * @binding open if true, the container is rendered already opened (currently only workings, i think, with ajax=true)
+ * @binding locked if true, the container will be "locked" and will not close unless you explicitly close it
  * 
  * @author timo
  * @author ak
@@ -91,6 +92,9 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 		if (closeLabel != null) {
 			relAttributeValue += "&closeLabel=" + ERXStringUtilities.urlEncode(closeLabel.toString());
 		}
+		if (booleanValueForBinding("locked", false, component)) {
+			relAttributeValue += "&locked=true";
+		}
 		response._appendTagAttributeAndValue("rel", relAttributeValue, false); // don't escape the ampersands
         appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
         appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
@@ -108,6 +112,9 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 	            AjaxUtils.appendScriptFooter(response);
 	            userInfo.setObjectForKey(Boolean.TRUE, "er.ajax.AjaxModalContainer.init");
 	        }
+        }
+        if (booleanValueForBinding("open", false, component)) {
+        	response.appendContentString("<script>Event.observe(window, 'load', iBox.handleTag.bind($('" + divID + "')))</script>");
         }
         if(href.startsWith("#")) {
         	response.appendContentString("<div");

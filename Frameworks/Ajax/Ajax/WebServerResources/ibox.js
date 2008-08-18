@@ -141,7 +141,8 @@ var iBox = function()
      */
     show: function(text, title, params)
     {
-      _pub.hide();
+	    // MS: Add 'cancel' flag to hide
+      _pub.hide(false);
       showInit(title, params, function(){
         _pub.html(text, params);
       });
@@ -172,8 +173,14 @@ var iBox = function()
     /**
      * Hides the iBox
      */
-    hide: function()
+    // MS added "cancel" flag
+    hide: function(cancel)
     {
+    	// MS Added "locked" support
+    	if (_pub.params.locked) {
+    		return;
+    	}
+    
       if (active_plugin)
       {
         // call the plugins unload method
@@ -505,7 +512,8 @@ var iBox = function()
     els.overlay = document.createElement('div');
     els.overlay.style.display = 'none';
     els.overlay.id = 'ibox_overlay';
-    els.overlay.onclick = _pub.hide;
+    // MS: Add 'cancel' flag to hide
+    els.overlay.onclick = function() { _pub.hide(true) };
     container.appendChild(els.overlay);
 
     els.loading = document.createElement('div');
@@ -514,7 +522,8 @@ var iBox = function()
     els.loading.innerHTML = _pub.loading_message;
     els.loading.style.display = 'none';
     els.loading.onclick = function() {
-      _pub.hide();
+	    // MS: Add 'cancel' flag to hide
+      _pub.hide(true);
       cancelled = true;
     }
     container.appendChild(els.loading);
@@ -535,7 +544,8 @@ var iBox = function()
     child2.href = 'javascript:void(0)';
     //AK: added id
     child2.id = 'ibox_close_link';
-    child2.onclick = _pub.hide;
+    // MS: Add 'cancel' flag to hide
+    child2.onclick = function() { _pub.hide(false) };
     child.appendChild(child2);
   
     els.footer = document.createElement('div');
@@ -582,6 +592,8 @@ var iBox = function()
   
   var showInit = function(title, params, callback)
   {
+  	// MS added params to _pub
+  	_pub.params = params;
     els.loading.style.display = "block";
     _pub.center(els.loading);
     
@@ -599,10 +611,17 @@ var iBox = function()
     els.overlay.style.display = "block";
     // AK commented, is already in CSS
     // els.overlay.style.backgroundImage = "url('" + _pub.base_url + "images/bg.png')";
-	// AK added
-	// alert(document.getElementById('ibox_footer_wrapper').firstChild);
-	params.closeLabel = params.closeLabel ? params.closeLabel : _pub.close_label;
-	document.getElementById('ibox_footer_wrapper').firstChild.innerHTML = params.closeLabel;
+		// AK added
+		// alert(document.getElementById('ibox_footer_wrapper').firstChild);
+		params.closeLabel = params.closeLabel ? params.closeLabel : _pub.close_label;
+		document.getElementById('ibox_footer_wrapper').firstChild.innerHTML = params.closeLabel;
+		// MS added locked support
+		if (params.locked) {
+			document.getElementById('ibox_wrapper').className = 'locked';
+		}
+		else {
+			document.getElementById('ibox_wrapper').className = '';
+		}
     
     _pub.fadeIn(els.overlay, amount, _pub.fade_in_speed, callback);
     _pub.fireEvent('show');
@@ -655,7 +674,8 @@ var iBox = function()
   };
 
   //AK : keypress didn't work for some reason
-  _pub.addEvent(window, 'keyup', function(e){if (e.keyCode == (window.event ? 27 : e.DOM_VK_ESCAPE)) { iBox.hide(); }});
+  // MS: Add 'cancel' flag to hide
+  _pub.addEvent(window, 'keyup', function(e){if (e.keyCode == (window.event ? 27 : e.DOM_VK_ESCAPE)) { iBox.hide(true); }});
   _pub.addEvent(window, 'resize', _pub.reposition);
   _pub.addEvent(window, 'load', initialize);
 
@@ -733,7 +753,8 @@ var iBox = function()
       render: function(url, params)
       {  
         var img = document.createElement('img');
-        img.onclick = _pub.hide;
+		    // MS: Add 'cancel' flag to hide
+        img.onclick = function() { _pub.hide(true) };
         img.className = 'ibox_image'
         img.style.cursor = 'pointer';
         img.onload = function()

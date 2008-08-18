@@ -12,10 +12,11 @@
 		<binding name="style"/>
 		<binding name="class"/>
 	<binding defaults="Boolean" name="ajax"/>
+    <binding defaults="Boolean" name="open"/>
     </wo>
     
-    <validation message = "If 'ajax' is bound, 'id' must also be bound.">
-    	<bound name = "ajax"/>
-    	<unbound name = "id"/>
+    <validation message="If 'ajax' is bound, 'id' must also be bound.">
+    	<bound name="ajax"/>
+    	<unbound name="id"/>
     </validation>
 </wodefinitions>

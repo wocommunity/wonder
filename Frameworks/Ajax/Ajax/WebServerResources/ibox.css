@@ -1,7 +1,9 @@
 #ibox {z-index:1000000;} 
 #ibox_overlay {position:absolute;top:0;left:0;right:0;z-index:1000000;} 
 #ibox_loading {position:absolute;z-index:1000001;} 
-#ibox_wrapper {position:absolute;top:0;left:0;z-index:1000001;padding:25px 10px 10px 10px;} 
+#ibox_wrapper {position:absolute;top:0;left:0;z-index:1000001;padding:25px 10px 10px 10px;}
+#ibox_wrapper.locked { padding: 10px; }
+#ibox_wrapper.locked #ibox_footer_wrapper {display: none; }
 #ibox_content {z-index:1000002;overflow:auto;height:100%;position:relative;padding:2px;text-align:left;} 
 #ibox_content {background-color:#fff;}
 #ibox_content object { display:block;} 
