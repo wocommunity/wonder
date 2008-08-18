@@ -676,7 +676,20 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 				String externalName = eoentity.externalName();
 
 				if (externalName != null && externalName.length() > 0) {
-					result.addObject(_expressionForString("SET UNIQUE = 1000000 FOR " + quoteTableName(externalName)));
+					String unique = null;
+					if (eoentity.model() != null) {
+						unique = System.getProperty("com.frontbase.unique." + eoentity.model().name() + "." + eoentity.name());
+						if (unique == null) {
+							unique = System.getProperty("com.frontbase.unique." + eoentity.model().name());
+						}
+					}
+					if (unique == null) {
+						unique = System.getProperty("com.frontbase.unique");
+					}
+					if (unique == null) {
+						unique = "1000000";
+					}
+					result.addObject(_expressionForString("SET UNIQUE = " + unique + " FOR " + quoteTableName(externalName)));
 				}
 			}
 			return result;
