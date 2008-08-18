@@ -846,6 +846,8 @@ var iBox = function()
           }
         }
         _pub.http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        // MS add in the XMLHttpRequest header
+        _pub.http.setRequestHeader("x-requested-with", "XMLHttpRequest");
         _pub.http.send(null);
       }
     };
