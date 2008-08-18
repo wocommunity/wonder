@@ -815,6 +815,12 @@ var AjaxHintedText = {
     }
 };
 
+var AjaxModalContainer = {
+	close: function() {
+		iBox.hide();
+	}
+};
+var AMC = AjaxModalContainer;
 
 // our own extensions 
 // MS: This doesn't appear to be used and it causes a failure 
