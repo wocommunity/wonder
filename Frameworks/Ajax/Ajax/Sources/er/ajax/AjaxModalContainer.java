@@ -129,6 +129,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
     }
 
     protected void addRequiredWebResources(WOResponse response, WOContext context) {
+    	addScriptResourceInHead(context, response, "prototype.js");
         addScriptResourceInHead(context, response, "ibox.js");
         addStylesheetResourceInHead(context, response, "ibox.css");
     }
