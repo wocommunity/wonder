@@ -120,10 +120,13 @@ public class ERXResponse extends WOResponse {
 	 * blank values, which would produce html like &lt;div style = ""&gt;. This
 	 * implementation also skips blank values.
 	 */
-	@Override
+	/* @Override
+	 * tcripps: commenting out this method because we need to allow for empty tag 
+	 * attributes.  E.g., specifically the alt attribute.
 	public void _appendTagAttributeAndValue(String name, String value, boolean escape) {
 		if (value != null && value.length() > 0) {
 			super._appendTagAttributeAndValue(name, value, escape);
 		}
 	}
+	*/
 }
