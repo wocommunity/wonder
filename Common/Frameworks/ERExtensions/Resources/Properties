@@ -197,6 +197,12 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 # er.extensions.ERXOpenEditingContextLockTracesPassword = pw
 
 #########################################################################
+# Log4j Configuration
+#########################################################################
+# Don't change this	 
+log4j.loggerFactory = er.extensions.ERXLogger$Factory
+
+#########################################################################
 # Signal Handling
 #########################################################################
 # By default graceful signal handling is disabled
