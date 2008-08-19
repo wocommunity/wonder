@@ -804,7 +804,8 @@ var iBox = function()
     return {
       match: function(url)
       {
-      	var server = document.location.href.replace(new RegExp("(http:\/\/[^\/]+)\/.*"), "$1");
+      	// MS fix for https support
+      	var server = document.location.href.replace(new RegExp("(https?:\/\/[^\/]+)\/.*"), "$1");
         return url.indexOf(server) == -1;
       },
 
