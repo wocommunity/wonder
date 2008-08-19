@@ -1647,10 +1647,10 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					}
 					else if (obj instanceof String) {
 						String str = (String)obj;
-						if ("yes".equalsIgnoreCase(str) || "y".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str)) { 
+						if ("yes".equalsIgnoreCase(str) || "y".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str) || "1".equalsIgnoreCase(str)) { 
 							return "TRUE";
 						}
-						else if ("no".equalsIgnoreCase(str) || "n".equalsIgnoreCase(str) || "false".equalsIgnoreCase(str)) {
+						else if ("no".equalsIgnoreCase(str) || "n".equalsIgnoreCase(str) || "false".equalsIgnoreCase(str) || "0".equalsIgnoreCase(str)) {
 							return "FALSE";
 						}
 						else {
@@ -1726,6 +1726,9 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 						else {
 							throw new IllegalArgumentException("Unknown number value type '" + valueType + "' for attribute " + eoattribute.entity().name() + "." + eoattribute.name() + ".");
 						}
+					}
+					else {
+						throw new IllegalArgumentException("Unknown number value '" + obj + "' for attribute " + eoattribute.entity().name() + "." + eoattribute.name() + ".");
 					}
 				}
 				default:
