@@ -35,6 +35,7 @@ import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -1168,7 +1169,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         }
         return implementsMethod;
     }
-    
+
     /**
      * Initializes your WOApplication programmatically (for use in test cases and main methods) with
      * the assumption that the current directory is your main bundle URL.
@@ -1178,11 +1179,25 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public static void initApp(Class applicationSubclass, String[] args) {
 		try {
-	    	File currentFolder = new File(".").getCanonicalFile();
-	    	if (!currentFolder.getName().endsWith(".woa")) {
-	    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
+	    	File woaFolder = new File(".").getCanonicalFile();
+	    	if (!woaFolder.getName().endsWith(".woa")) {
+	    		if (new File(woaFolder, ".project").exists()) {
+	    			File buildFolder = new File(new File(woaFolder, "build"), woaFolder.getName() + ".woa");
+	    			if (buildFolder.exists()) {
+	    				woaFolder = buildFolder;
+	    			}
+	    			else {
+		    			File distFolder = new File(new File(woaFolder, "dist"), woaFolder.getName() + ".woa");
+	    				if (distFolder.exists()) {
+	    					woaFolder = distFolder;
+	    				}
+	    				else {
+	    		    		throw new IllegalArgumentException("You must run your application from a .woa folder to call this method.");
+	    				}
+	    			}
+	    		}
 	    	}
-	    	ERXExtensions.initApp(null, currentFolder.toURL(), applicationSubclass, args);
+	    	ERXExtensions.initApp(null, woaFolder.toURL(), applicationSubclass, args);
 		}
 		catch (IOException e) {
 			throw new NSForwardException(e);
@@ -1209,9 +1224,17 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param args the commandline arguments for your application
      */
     public static void initApp(String mainBundleName, URL mainBundleURL, Class applicationSubclass, String[] args) {
-        ERXApplication.setup(args);
-        ERXApplication.primeApplication(mainBundleName, mainBundleURL, applicationSubclass.getName());
-        //NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidCreateNotification, WOApplication.application()));
+    	try {
+	        ERXApplication.setup(args);
+	        if (mainBundleURL != null) {
+		        System.setProperty("webobjects.user.dir", new File(mainBundleURL.getFile()).getCanonicalPath());
+	        }
+	        ERXApplication.primeApplication(mainBundleName, mainBundleURL, applicationSubclass.getName());
+	        //NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidCreateNotification, WOApplication.application()));
+		}
+		catch (IOException e) {
+			throw new NSForwardException(e);
+		}
     }
     
     /**
@@ -1242,8 +1265,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		    	if (!currentFolder.getName().endsWith(".woa")) {
 		    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
 		    	}
-		        System.setProperty("webobjects.user.dir", mainBundleFolder.getCanonicalPath());
 	    	}
+	        System.setProperty("webobjects.user.dir", mainBundleFolder.getCanonicalPath());
 	        ERXApplication.setup(args);
 	        ((ERXExtensions) ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class)).bundleDidLoad(null);
 		}
