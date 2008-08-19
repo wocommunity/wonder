@@ -448,12 +448,41 @@ public class PostgresqlExpression extends JDBCExpression {
                 else if ("s".equals(valueType)) {
                   value = String.valueOf(((Number)convertedObj).shortValue());  
                 }
+                else if ("c".equals(valueType)) {
+                  return String.valueOf(((Number)convertedObj).intValue());
+                }
                 else {
-                  value = convertedObj.toString();
+                  throw new IllegalArgumentException("Unknown number value type '" + valueType + "' for attribute " + eoattribute.entity().name() + "." + eoattribute.name() + ".");
+                  //value = convertedObj.toString();
+                }
+              }
+              else if (convertedObj instanceof String) {
+                String str = (String)obj;
+                String valueType = eoattribute.valueType();
+                if (valueType == null || "i".equals(valueType)) {
+                  return String.valueOf(Integer.parseInt(str));
+                }
+                else if ("l".equals(valueType)) {
+                  return String.valueOf(Long.parseLong(str));
+                }
+                else if ("f".equals(valueType)) {
+                  return String.valueOf(Float.parseFloat(str));
+                }
+                else if ("d".equals(valueType)) {
+                  return String.valueOf(Double.parseDouble(str));
+                }
+                else if ("s".equals(valueType)) {
+                  return String.valueOf(Short.parseShort(str));
+                }
+                else if ("c".equals(valueType)) {
+                  return String.valueOf(Integer.parseInt(str));
+                }
+                else {
+                  throw new IllegalArgumentException("Unknown number value type '" + valueType + "' for attribute " + eoattribute.entity().name() + "." + eoattribute.name() + ".");
                 }
               }
               else {
-                value = convertedObj.toString();
+                throw new IllegalArgumentException("Unknown number value '" + obj + "' for attribute " + eoattribute.entity().name() + "." + eoattribute.name() + ".");
               }
             }
         } else if(obj instanceof Boolean) {
@@ -476,13 +505,14 @@ public class PostgresqlExpression extends JDBCExpression {
         				|| adaptorValue instanceof Boolean) {
         			value = formatValueForAttribute(adaptorValue, eoattribute);
         		} else {
-        			NSLog.err.appendln(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass() );
-        			value = obj.toString();
+        			//NSLog.err.appendln(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass() );
+              //value = obj.toString();
+              throw new IllegalArgumentException(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass());
         		}
         	} catch(Exception ex) {
-        		NSLog.err.appendln(this.getClass().getName() +  ": Exception while converting " + obj.getClass().getName());
-        		NSLog.err.appendln(ex);
-        		value = obj.toString();
+        	  throw new IllegalArgumentException(this.getClass().getName() +  ": Exception while converting " + obj.getClass().getName(), ex);
+        		//NSLog.err.appendln(ex);
+        		//value = obj.toString();
         	}
         }
         return value;
