@@ -65,6 +65,15 @@ public  class ERXRequest extends WORequest {
         _secureDisabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRequest.secureDisabled", false);
     }
     
+    /**
+     * Returns true if er.extensions.ERXRequest.secureDisabled is true.
+     * 
+     * @return true if er.extensions.ERXRequest.secureDisabled is true
+     */
+    public boolean isSecureDisabled() {
+    	return _secureDisabled;
+    }
+    
     public boolean isBrowserFormValueEncodingOverrideEnabled() {
         if (isBrowserFormValueEncodingOverrideEnabled == null) {
             isBrowserFormValueEncodingOverrideEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled", false) ? Boolean.TRUE : Boolean.FALSE;
