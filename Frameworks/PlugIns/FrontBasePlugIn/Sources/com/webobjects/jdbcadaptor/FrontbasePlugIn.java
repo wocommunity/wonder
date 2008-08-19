@@ -1563,15 +1563,10 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 				switch (internalTypeForExternal(eoattribute.externalType())) {
 				case FB_Character:
 				case FB_VCharacter: {
-					String value = obj.toString();
-					if (value.indexOf("'") == -1)
-						return "'" + value + "'";
-					else {
-						return "'" + addEscapeChars(value) + "'";
-					}
+					return escapedString(obj);
 				}
 				case FB_DayTime: {
-					return obj.toString();
+					return escapedString(obj);
 				}
 				case FB_BLOB: {
 					if (obj instanceof String)
@@ -1647,14 +1642,30 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					return time.toString();
 				}
 				case FB_Boolean: {
-					if (obj instanceof Boolean || obj instanceof String)
+					if (obj instanceof Boolean) {
 						return obj.toString();
-					if (obj instanceof NSData)
+					}
+					else if (obj instanceof String) {
+						String str = (String)obj;
+						if ("yes".equalsIgnoreCase(str) || "y".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str)) { 
+							return "TRUE";
+						}
+						else if ("no".equalsIgnoreCase(str) || "n".equalsIgnoreCase(str) || "false".equalsIgnoreCase(str)) {
+							return "FALSE";
+						}
+						else {
+							throw new IllegalArgumentException("Unknown boolean value '" + str + "' for the attribute " + eoattribute.entity().name() + "." + eoattribute.name() + ".");
+						}
+					}
+					else if (obj instanceof NSData) {
 						return (((NSData) obj).bytes()[0] == 0) ? "FALSE" : "TRUE";
-					if (((Number) obj).intValue() == 0)
+					}
+					else if (((Number) obj).intValue() == 0) {
 						return "FALSE";
-					else
+					}
+					else {
 						return "TRUE";
+					}
 				}
 				case FB_TinyInteger:
 				case FB_Numeric:
@@ -1683,20 +1694,58 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 						else if ("c".equals(valueType)) {
 							return String.valueOf(((Number) obj).intValue());
 						}
+						else {
+							throw new IllegalArgumentException("Unknown number value type '" + valueType + "' for the attribute " + eoattribute.entity().name() + "." + eoattribute.name() + ".");
+						}
 					}
 					else if (obj instanceof Boolean) {
 						String valueType = eoattribute.valueType();
 						return String.valueOf(((Boolean) obj).booleanValue() ? 1 : 0);
 					}
 					else if (obj instanceof String) {
-						return obj.toString();
+						String str = (String)obj;
+						String valueType = eoattribute.valueType();
+						if (valueType == null || "i".equals(valueType)) {
+							return String.valueOf(Integer.parseInt(str));
+						}
+						else if ("l".equals(valueType)) {
+							return String.valueOf(Long.parseLong(str));
+						}
+						else if ("f".equals(valueType)) {
+							return String.valueOf(Float.parseFloat(str));
+						}
+						else if ("d".equals(valueType)) {
+							return String.valueOf(Double.parseDouble(str));
+						}
+						else if ("s".equals(valueType)) {
+							return String.valueOf(Short.parseShort(str));
+						}
+						else if ("c".equals(valueType)) {
+							return String.valueOf(Integer.parseInt(str));
+						}
+						else {
+							throw new IllegalArgumentException("Unknown number value type '" + valueType + "' for attribute " + eoattribute.entity().name() + "." + eoattribute.name() + ".");
+						}
 					}
 				}
 				default:
-					return obj.toString();
+					// MS: I think we should probably throw IllegalArgumentException here, but I'm a little concerned about breaking people's apps.
+					return escapedString(obj);
 				}
 			}
 			return super.formatValueForAttribute(obj, eoattribute);
+		}
+
+		String escapedString(Object obj) {
+			String escapedStr;
+			String value = obj.toString();
+			if (value.indexOf("'") == -1) {
+				escapedStr = "'" + value + "'";
+			}
+			else {
+				escapedStr = "'" + addEscapeChars(value) + "'";
+			}
+			return escapedStr;
 		}
 
 		String addEscapeChars(String value) {
