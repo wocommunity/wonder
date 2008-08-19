@@ -81,9 +81,9 @@ var iBox = function()
       
       // MS Run HTML updates through prototype's .update() method so evalScripts works as expected 
       //if (typeof(content) == 'string') els.content.innerHTML = content;
-      if (typeof(content) == 'string') els.content.update(content);
+      if (typeof(content) == 'string') $(els.content).update(content);
       else els.content.appendChild(content);
-
+      
       var elemSize = _pub.getElementSize(els.content);
       var pageSize = _pub.getPageSize();
 
