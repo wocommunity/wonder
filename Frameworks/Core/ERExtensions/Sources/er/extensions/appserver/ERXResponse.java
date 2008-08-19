@@ -170,7 +170,7 @@ public class ERXResponse extends WOResponse {
 	 */
 	@Override
 	public void _appendTagAttributeAndValue(String name, String value, boolean escape) {
-		if (value != null && value.length() > 0) {
+		if (value != null) {
 			super._appendTagAttributeAndValue(name, value, escape);
 		}
 	}
