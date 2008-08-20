@@ -135,6 +135,11 @@
 			</dependency>
 			<dependency>
 				<groupId>wonder.ajax</groupId>
+				<artifactId>SproutCore</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.ajax</groupId>
 				<artifactId>YUI</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
