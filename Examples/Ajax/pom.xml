@@ -12,6 +12,7 @@
 	<modules>
 		<module>AjaxExample</module>
 		<module>AjaxExample2</module>
+		<module>SproutCoreExample</module>
 		<module>YUIExample</module>
 	</modules>
 </project>
