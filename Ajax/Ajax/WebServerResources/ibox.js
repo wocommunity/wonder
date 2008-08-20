@@ -1,5 +1,5 @@
 /**
- * iBox version 2.17
+ * iBox version 2.17b
  * For more info & download: http://labs.ibegin.com/ibox/
  * Created as a part of the iBegin iBegin Labs Project - http://labs.ibegin.com/
  * For licensing please see readme.html (MIT Open Source License)
@@ -19,12 +19,13 @@ var iBox = function()
     // padding around the box
     padding: 100,
     
-    // show framed content in the parent window
+    // show iframed content in the parent window
     // this *does not* work with #containers
-    inherit_frames: true,
+    inherit_frames: false,
 
     // how fast to fade in the overlay/ibox (this is each step in ms)
-    fade_in_speed: 0,
+    // MS Fade looks cool :)
+    fade_in_speed: 17,
 
     // our attribute identifier for our iBox elements
     attribute_name: 'rel',
@@ -78,7 +79,9 @@ var iBox = function()
       els.wrapper.style.visibility = "hidden";
       els.content.style.height = 'auto';
 
-      if (typeof(content) == 'string') els.content.innerHTML = content;
+      // MS Run HTML updates through prototype's .update() method so evalScripts works as expected 
+      //if (typeof(content) == 'string') els.content.innerHTML = content;
+      if (typeof(content) == 'string') $(els.content).update(content);
       else els.content.appendChild(content);
 
       var elemSize = _pub.getElementSize(els.content);
@@ -116,6 +119,9 @@ var iBox = function()
 
       _pub.reposition();
       
+      // MS show tags inside of the ibox that were accidentally hidden earlier
+      for (var i=0; i<_pub.tags_to_hide.length; i++) showTags(els.wrapper, _pub.tags_to_hide[i]);
+      
       els.wrapper.style.visibility = "visible";
       _pub.fadeIn(els.wrapper, 10, params.fade_in ? _pub.fade_in_speed : 0);
     },
@@ -137,7 +143,8 @@ var iBox = function()
      */
     show: function(text, title, params)
     {
-      _pub.hide();
+	    // MS: Add 'cancel' flag to hide
+      _pub.hide(false);
       showInit(title, params, function(){
         _pub.html(text, params);
       });
@@ -168,8 +175,14 @@ var iBox = function()
     /**
      * Hides the iBox
      */
-    hide: function()
+    // MS added "cancel" flag
+    hide: function(cancel)
     {
+    	// MS Added "locked" support
+    	if (_pub.params.locked) {
+    		return;
+    	}
+    
       if (active_plugin)
       {
         // call the plugins unload method
@@ -179,7 +192,8 @@ var iBox = function()
       window.onscroll = null;
       _pub.clear();
       // restore elements that were hidden
-      for (var i=0; i<_pub.tags_to_hide.length; i++) showTags(_pub.tags_to_hide[i]);
+      // MS pass in document param
+      for (var i=0; i<_pub.tags_to_hide.length; i++) showTags(document, _pub.tags_to_hide[i]);
 
       els.loading.style.display = 'none';
       els.overlay.style.display = 'none';
@@ -436,12 +450,13 @@ var iBox = function()
     handleTag: function(e)
     {
       var t = this.getAttribute('rel');
-      var params = parent.iBox.parseQuery(t.substr(5,999));
+      var params = _pub.parseQuery(t.substr(5,999));
       if (params.target) var url = params.target
       else if (this.target && !params.ignore_target) var url = this.target;
       else var url = this.href;
       var title = this.title;
-      parent.iBox.showURL(url, title, params);
+      if (_pub.inherit_frames && window.parent) window.parent.iBox.showURL(url, title, params);
+      else _pub.showURL(url, title, params);
       return false;
     },
     
@@ -460,6 +475,7 @@ var iBox = function()
       }
     },
     
+    // MS Added public method to allow for re-initialization
     init: function() {
     	initialize();
     }
@@ -498,15 +514,18 @@ var iBox = function()
     els.overlay = document.createElement('div');
     els.overlay.style.display = 'none';
     els.overlay.id = 'ibox_overlay';
-    els.overlay.onclick = _pub.hide;
+    // MS: Add 'cancel' flag to hide
+    els.overlay.onclick = function() { _pub.hide(true) };
     container.appendChild(els.overlay);
 
     els.loading = document.createElement('div');
     els.loading.id = 'ibox_loading';
+    // AK: Use the loading message from _pub
     els.loading.innerHTML = _pub.loading_message;
     els.loading.style.display = 'none';
     els.loading.onclick = function() {
-      _pub.hide();
+	    // MS: Add 'cancel' flag to hide
+      _pub.hide(true);
       cancelled = true;
     }
     container.appendChild(els.loading);
@@ -527,7 +546,8 @@ var iBox = function()
     child2.href = 'javascript:void(0)';
     //AK: added id
     child2.id = 'ibox_close_link';
-    child2.onclick = _pub.hide;
+    // MS: Add 'cancel' flag to hide
+    child2.onclick = function() { _pub.hide(false) };
     child.appendChild(child2);
   
     els.footer = document.createElement('div');
@@ -542,9 +562,11 @@ var iBox = function()
     return container;
   };
   
-  var hideTags = function(tag)
+  // MS added "base" param
+  var hideTags = function(base, tag)
   {
-    var list = document.getElementsByTagName(tag);
+  	// MS use "base" instead of "document"
+    var list = base.getElementsByTagName(tag);
     for (var i=0; i<list.length; i++)
     {
       if (_pub.getStyle(list[i], 'visibility') != 'hidden' && list[i].style.display != 'none')
@@ -555,9 +577,11 @@ var iBox = function()
     }
   };
   
-  var showTags = function(tag)
+  // MS added "base" param
+  var showTags = function(base, tag)
   {
-    var list = document.getElementsByTagName(tag);
+  	// MS use "base" instead of "document"
+    var list = base.getElementsByTagName(tag);
     for (var i=0; i<list.length; i++)
     {
       if (list[i].wasHidden)
@@ -570,13 +594,16 @@ var iBox = function()
   
   var showInit = function(title, params, callback)
   {
+  	// MS added params to _pub
+  	_pub.params = params;
     els.loading.style.display = "block";
     _pub.center(els.loading);
     
     _pub.reposition();
     if (!_pub.is_firefox) var amount = 8;
     else var amount = 10;
-    for (var i=0; i<_pub.tags_to_hide.length; i++) hideTags(_pub.tags_to_hide[i]);
+    // MS pass in document param
+    for (var i=0; i<_pub.tags_to_hide.length; i++) hideTags(document, _pub.tags_to_hide[i]);
 
     window.onscroll = _pub.reposition;
 
@@ -586,10 +613,17 @@ var iBox = function()
     els.overlay.style.display = "block";
     // AK commented, is already in CSS
     // els.overlay.style.backgroundImage = "url('" + _pub.base_url + "images/bg.png')";
-	// AK added
-	// alert(document.getElementById('ibox_footer_wrapper').firstChild);
-	params.closeLabel = params.closeLabel ? params.closeLabel : _pub.close_label;
-	document.getElementById('ibox_footer_wrapper').firstChild.innerHTML = params.closeLabel;
+		// AK added
+		// alert(document.getElementById('ibox_footer_wrapper').firstChild);
+		params.closeLabel = params.closeLabel ? params.closeLabel : _pub.close_label;
+		document.getElementById('ibox_footer_wrapper').firstChild.innerHTML = params.closeLabel;
+		// MS added locked support
+		if (params.locked) {
+			document.getElementById('ibox_wrapper').className = 'locked';
+		}
+		else {
+			document.getElementById('ibox_wrapper').className = '';
+		}
     
     _pub.fadeIn(els.overlay, amount, _pub.fade_in_speed, callback);
     _pub.fireEvent('show');
@@ -617,7 +651,11 @@ var iBox = function()
   var initialize = function()
   {
     // elements here start the look up from the start non <a> tags
-    drawCSS();
+    // MS check for an existing ibox
+  	var new_ibox = document.getElementById('ibox') == null;
+    if (new_ibox) {
+	    drawCSS();
+    }
     var els = document.getElementsByTagName("a");
     for (var i=0; i<els.length; i++)
     {
@@ -626,18 +664,20 @@ var iBox = function()
         var t = els[i].getAttribute(_pub.attribute_name);
         if ((t.indexOf("ibox") != -1) || t.toLowerCase() == "ibox")
         { // check if this element is an iBox element
-          if (_pub.inherit_frames && window.parent) els[i].onclick = window.parent.iBox.handleTag;
-          else
           els[i].onclick = _pub.handleTag;
         }
       }
     }
-    create(document.body);
-    _pub.http = _pub.createXMLHttpRequest();
+    // MS check for an existing ibox
+    if (new_ibox) {
+	    create(document.body);
+	    _pub.http = _pub.createXMLHttpRequest();
+	  }
   };
 
   //AK : keypress didn't work for some reason
-  _pub.addEvent(window, 'keyup', function(e){if (e.keyCode == (window.event ? 27 : e.DOM_VK_ESCAPE)) { iBox.hide(); }});
+  // MS: Add 'cancel' flag to hide
+  _pub.addEvent(window, 'keyup', function(e){if (e.keyCode == (window.event ? 27 : e.DOM_VK_ESCAPE)) { iBox.hide(true); }});
   _pub.addEvent(window, 'resize', _pub.reposition);
   _pub.addEvent(window, 'load', initialize);
 
@@ -684,6 +724,7 @@ var iBox = function()
         if (!elemSrc)
         {
           was_error = true;
+          // AK: Changed to _pub.error_message_loading
           _pub.html(document.createTextNode(_pub.error_message_loading), params);
         }
         else
@@ -714,7 +755,8 @@ var iBox = function()
       render: function(url, params)
       {  
         var img = document.createElement('img');
-        img.onclick = _pub.hide;
+		    // MS: Add 'cancel' flag to hide
+        img.onclick = function() { _pub.hide(true) };
         img.className = 'ibox_image'
         img.style.cursor = 'pointer';
         img.onload = function()
@@ -723,6 +765,7 @@ var iBox = function()
         }
         img.onerror = function()
         {
+        	// AK: Changed to _pub.error_message_loading
           _pub.html(document.createTextNode(_pub.error_message_loading), params);
         }
         img.src = url;
@@ -761,7 +804,8 @@ var iBox = function()
     return {
       match: function(url)
       {
-      	var server = document.location.href.replace(new RegExp("(http:\/\/[^\/]+)\/.*"), "$1");
+      	// MS fix for https support
+      	var server = document.location.href.replace(new RegExp("(https?:\/\/[^\/]+)\/.*"), "$1");
         return url.indexOf(server) == -1;
       },
 
@@ -797,12 +841,14 @@ var iBox = function()
             }
             else
             {
+            	// AK: Changed to _pub.error_message_loading
               _pub.html(document.createTextNode(_pub.error_message_loading), params);
             }
           }
         }
         _pub.http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        _pub.http.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        // MS add in the XMLHttpRequest header
+        _pub.http.setRequestHeader("x-requested-with", "XMLHttpRequest");
         _pub.http.send(null);
       }
     };

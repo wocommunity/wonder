@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.Stack;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableData;
 import com.webobjects.foundation.NSRange;
 
@@ -20,15 +22,59 @@ import com.webobjects.foundation.NSRange;
  * @author ak
  */
 public class ERXResponse extends WOResponse {
-
 	public static class Context {
+		protected LinkedHashMap<String, ERXResponse> partials = new LinkedHashMap<String, ERXResponse>();
 
-		private LinkedHashMap<String, ERXResponse> partials = new LinkedHashMap<String, ERXResponse>();
-
-		private Stack<ERXResponse> stack = new Stack<ERXResponse>();
+		protected Stack<ERXResponse> stack = new Stack<ERXResponse>();
 	}
 
 	private LinkedHashMap<String, Integer> marks;
+	private Stack<Object> _contentStack;
+	
+	protected void __setContent(Object appendable) {
+		try {
+			WOMessage.class.getDeclaredField("_content").set(this, appendable);
+		}
+		catch (Throwable e) {
+			throw new NSForwardException(e);
+		}
+	}
+	
+	/**
+	 * Pushes a new _content onto the stack, so you can write to this response and capture the 
+	 * output.
+	 */
+	public void pushContent() {
+		if (_contentStack == null) {
+			_contentStack = new Stack<Object>();
+		}
+		_contentStack.push(_content);
+		Object newContent;
+		try {
+			newContent = _content.getClass().newInstance();
+		}
+		catch (Throwable e) {
+			throw new NSForwardException(e);
+		}
+		__setContent(newContent);
+	}
+
+	/**
+	 * Pops the last _content off the stack, optionally appending the current content to it.
+	 * 
+	 * @param append
+	 */
+	public void popContent(boolean append) {
+		if (_contentStack == null || _contentStack.size() == 0) {
+			throw new IllegalStateException("You attempted to popContent off of an empty stack.");
+		}
+		Object oldAppendable = _content;
+		Object appendable = _contentStack.pop();
+		__setContent(appendable);
+		if (append) {
+			appendContentString(oldAppendable.toString());
+		}
+	}
 
 	/**
 	 * Call this to mark the place where a partial should get rendered.
@@ -85,8 +131,8 @@ public class ERXResponse extends WOResponse {
 	 * Returns the associated response for the supplied key. Creates it if
 	 * needed.
 	 * 
-	 * @param key
-	 * @return
+	 * @param key the key to push the partial as
+	 * @return the new ERXResponse to write to
 	 */
 	public static ERXResponse pushPartial(String key) {
 		Context context = currentContext();
@@ -105,7 +151,7 @@ public class ERXResponse extends WOResponse {
 	 * Returns the top-most response after this one has been pulled from the
 	 * stack.
 	 * 
-	 * @return
+	 * @return the previous partial
 	 */
 	public static ERXResponse popPartial() {
 		Context context = currentContext();
@@ -120,13 +166,10 @@ public class ERXResponse extends WOResponse {
 	 * blank values, which would produce html like &lt;div style = ""&gt;. This
 	 * implementation also skips blank values.
 	 */
-	/* @Override
-	 * tcripps: commenting out this method because we need to allow for empty tag 
-	 * attributes.  E.g., specifically the alt attribute.
+	@Override
 	public void _appendTagAttributeAndValue(String name, String value, boolean escape) {
-		if (value != null && value.length() > 0) {
+		if (value != null) {
 			super._appendTagAttributeAndValue(name, value, escape);
 		}
 	}
-	*/
 }

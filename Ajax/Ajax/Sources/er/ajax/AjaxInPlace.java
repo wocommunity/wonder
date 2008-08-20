@@ -175,22 +175,22 @@ public class AjaxInPlace extends WOComponent {
 	}
 	
 	public String saveUpdateContainerID() {
-		String saveUpdateContainerID;
+		String saveUpdateContainerID = null;
 		if (hasBinding("saveUpdateContainerID")) {
 			saveUpdateContainerID = (String)valueForBinding("saveUpdateContainerID");
 		}
-		else {
+		if (saveUpdateContainerID == null) {
 			saveUpdateContainerID = id();
 		}
 		return saveUpdateContainerID;
 	}
 	
 	public String cancelUpdateContainerID() {
-		String cancelUpdateContainerID;
+		String cancelUpdateContainerID = null;
 		if (hasBinding("cancelUpdateContainerID")) {
 			cancelUpdateContainerID = (String)valueForBinding("cancelUpdateContainerID");
 		}
-		else {
+		if (cancelUpdateContainerID == null) {
 			cancelUpdateContainerID = id();
 		}
 		return cancelUpdateContainerID;
