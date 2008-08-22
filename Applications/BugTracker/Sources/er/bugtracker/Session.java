@@ -20,6 +20,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.appserver.ERXSession;
+import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXStringUtilities;
 
 public class Session extends ERXSession {
@@ -151,12 +152,19 @@ public class Session extends ERXSession {
     
     
     public WOComponent editMyInfo() {
-        EOEnterpriseObject user = user();
+        People user = user();
         EditPageInterface epi = (EditPageInterface) D2W.factory().pageForConfigurationNamed("EditMyPeople", this);
-        epi.setObject(user);
-        epi.setNextPage(context().page());
-        return (WOComponent) epi;
-    }
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        try {
+            user = (People) user.localInstanceIn(ec);
+            epi.setObject(user);
+            epi.setNextPage(context().page());
+            return (WOComponent) epi;
+      } finally {
+            ec.unlock();
+        }
+      }
 
 
     public NSArray indentedComponents() {
