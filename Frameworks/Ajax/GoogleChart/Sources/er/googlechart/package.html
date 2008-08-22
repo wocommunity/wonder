@@ -1,0 +1,187 @@
+<html>
+<body>
+<p>
+The GoogleChart framework provides WO wrappers around <a href="http://code.google.com/apis/chart">Google's charting API</a>.
+The WO Component API was inspired by the Ruby Googlecharts library (<a href="http://googlecharts.rubyforge.org/">http://googlecharts.rubyforge.org/</a>).
+GoogleChart framework depends on Ajax framework for decoding array variables, so you must include Ajax framework in your application, though
+you don't need to actually be an Ajax application.
+</p>
+
+<p>
+The examples are taken nearly directly from the Ruby library examples page (see <a href="http://googlecharts.rubyforge.org/">http://googlecharts.rubyforge.org/</a>), 
+and the framework supports the definition of data both with bindings to NSArrays of data as well as inline-String definitions of data using JSON syntax.  Also,
+their examples page looks a lot nicer :)
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="$someArrayOfData" colors="FF0000,00FF00"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chco=FF0000%2C00FF00&chd=e%3AAAkkJJ..SS&&cht=lc" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="$someArrayOfData" colors="$someArrayOfColors"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chco=FF0000%2C00FF00&chd=e%3AAAkkJJ..SS&&cht=lc" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="[0, 40, 10, 70, 20]" colors="FF0000,00FF00"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chco=FF0000%2C00FF00&chd=e%3AAAkkJJ..SS&&cht=lc" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="[[0, 40, 10, 70, 20],[41, 10, 80, 50]]" colors="FF0000,00FF00"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chco=FF0000%2C00FF00&chd=e%3AAAgAIA3.QA%2CgzIA..n.&&cht=lc" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCSparkline size="120x40" data="[27,25,25,25,25,27,100,31,25,36,25,25,39,25,31,25,25,25,26,26,25,25,28,25,25,100,28,27,31,25,27,27,29,25,27,26,26,25,26,26,35,33,34,25,26,25,36,25,26,37,33,33,37,37,39,25,25,25,25]" colors="0077CC"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=120x40&chco=0077CC&chd=e%3ARSQAQAQAQARS..T1QAXCQAQAY9QAT1QAQAQAQpQpQAQAR7QAQA..R7RST1QARSRSSkQARSQpQpQAQpQpWZVHVwQAQpQAXCQAQpXrVHVHXrXrY9QAQAQAQA&&cht=lc&cht=ls" width="120" height="40"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart data="[300, 100, 30, 200]" /&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3A..VVGaqq&&cht=bvs" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart data="[300, 100, 30, 200]" orientation="horizontal"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3A..VVGaqq&&cht=bhs" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart data="[[300, 100, 30, 200], [100, 200, 300, 10]]" colors="['FF0000', '00FF00']"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chco=FF0000%2C00FF00&chd=e%3A..VVGaqq%2CVVqq..CJ&&cht=bvs" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart data="[[300, 100, 30, 200], [100, 200, 300, 10]]" colors="['FF0000', '00FF00']" stacked="$false"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chco=FF0000%2C00FF00&chd=e%3A..VVGaqq%2CVVqq..CJ&&cht=bvg" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCPieChart data="[20, 35, 45]"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=s%3Abv9&&cht=p" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCPie3DChart data="[20, 35, 45]"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=s%3Abv9&&cht=p&cht=p3" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCVennDiagram data="[100, 80, 60, 30, 30, 30, 10]"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3A..zMmZTNTNTNGa&&cht=v" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCScatterPlot data="[[1, 2, 3, 4, 5], [1, 2, 3, 4 ,5], [5, 4, 3, 2, 1]]"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=s%3AMYlx9%2CMYlx9%2C9xlYM&&cht=s" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCMeter data="[70]" label="Flavor"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=t%3A70.0&&cht=gom&chl=Flavor" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart title="Recent Chart Sexyness" data="[15, 30, 10, 20, 100, 20, 40, 100]"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3AJmTNGaMz..MzZm..&&chtt=Recent+Chart+Sexyness&cht=bvs" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart title="Recent Chart Sexyness" titleSize="20" data="[15, 30, 10, 20, 100, 20, 40, 100]"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3AJmTNGaMz..MzZm..&&chtt=Recent+Chart+Sexyness&chts=454545%2C20&cht=bvs" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart title="Recent Chart Sexyness" titleColor="FF0000" data="[15, 30, 10, 20, 100, 20, 40, 100]"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3AJmTNGaMz..MzZm..&&chtt=Recent+Chart+Sexyness&chts=FF0000&cht=bvs" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart title="Recent Chart Sexyness" size="600x400" data="[15, 30, 10, 20, 100, 20, 40, 100]"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=600x400&chd=e%3AJmTNGaMz..MzZm..&&chtt=Recent+Chart+Sexyness&cht=bvs" width="600" height="400"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart title="Mike's Mojo" data="[15, 30, 10, 20, 100, 20, 40, 100, 90, 100, 80]" background="FF9994"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3AJmTNGaMz..MzZm..5m..zM&&chtt=Mike%27s+Mojo&chf=bg%2Cs%2CFF9994&cht=bvs" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart title="Mike's Mojo" data="[15, 30, 10, 20, 100, 20, 40, 100, 90, 100, 80]" background="FF9994" chartBackground="000000"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3AJmTNGaMz..MzZm..5m..zM&&chtt=Mike%27s+Mojo&chf=bg%2Cs%2CFF9994%7Cc%2Cs%2C000000&cht=bvs" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart title="Mike's Mojo" data="[15, 30, 10, 20, 100, 20, 40, 100, 90, 100, 80]" colors="76A4FB" background="EEEEEE" chartBackground="CCCCCC"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chco=76A4FB&chd=e%3AJmTNGaMz..MzZm..5m..zM&&chtt=Mike%27s+Mojo&chf=bg%2Cs%2CEEEEEE%7Cc%2Cs%2CCCCCCC&cht=bvs" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart title="Mike's Mojo" data="[15, 30, 10, 20, 100, 20, 40, 100, 90, 100, 80]" colors="76A4FB"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chco=76A4FB&chd=e%3AJmTNGaMz..MzZm..5m..zM&&chtt=Mike%27s+Mojo&cht=lc" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCBarChart title="Mike vs Anjo" data="[[300, 100, 30, 200], [100, 200, 300, 10]]" colors="FF0000,00FF00" stacked="$false" size="400x300" legend="['Mike\'s Mojo', 'Anjo\'s Mojo']"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=400x300&chco=FF0000%2C00FF00&chd=e%3A..VVGaqq%2CVVqq..CJ&&chtt=Mike+vs+Anjo&chdl=Mike%27s+Mojo%7CAnjo%27s+Mojo&cht=bvg" width="400" height="300"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart title="Mike vs Anjo" data="[[300, 100, 30, 200], [100, 200, 300, 10]]" colors="FF0000,00FF00" stacked="$false" size="400x300" legend="['Mike\'s Mojo', 'Anjo\'s Mojo']"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=400x300&chco=FF0000%2C00FF00&chd=e%3A..VVGaqq%2CVVqq..CJ&&chtt=Mike+vs+Anjo&chdl=Mike%27s+Mojo%7CAnjo%27s+Mojo&cht=lc" width="400" height="300"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCPie3DChart title="wo_fu" size="400x200" data="[10, 45, 45]" labels="Chuck,Anjo,Mike"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=400x200&chd=s%3AO99&&chtt=wo_fu&cht=p3&chl=Chuck%7CAnjo%7CMike" width="400" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="[300, 100, 30, 200, 100, 200, 300, 10]" labeledAxes="x,y,r" / &gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3A..VVGaqqVVqq..CJ&&chxt=x%2Cy%2Cr&cht=lc" width="300" height="200"/> 
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="[300, 100, 30, 200, 100, 200, 300, 10]" labeledAxes="x" axisLabels="[['Jan','July','Jan','July','Jan']]" / &gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3A..VVGaqqVVqq..CJ&&chxt=x&chxl=0%3A%7CJan%7CJuly%7CJan%7CJuly%7CJan&cht=lc" width="300" height="200"/> 
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="[300, 100, 30, 200, 100, 200, 300, 10]" labeledAxes="x,r" axisLabels="[['Jan','July','Jan','July','Jan'], ['2005','2006','2007']]" /&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3A..VVGaqqVVqq..CJ&&chxt=x%2Cr&chxl=0%3A%7CJan%7CJuly%7CJan%7CJuly%7CJan%7C1%3A%7C2005%7C2006%7C2007&cht=lc" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart custom="chd=s:93zyvneTTOMJMLIJFHEAECFJGHDBFCFIERcgnpy45879,IJKNUWUWYdnswz047977315533zy1246872tnkgcaZQONHCECAAAAEII&chls=3,6,3|1,1,0"/ &gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&&chd=s%3A93zyvneTTOMJMLIJFHEAECFJGHDBFCFIERcgnpy45879%2CIJKNUWUWYdnswz047977315533zy1246872tnkgcaZQONHCECAAAAEII&chls=3%2C6%2C3%7C1%2C1%2C0&cht=lc" width="300" height="200"/> 
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="[300, 100, 30, 200, 100, 200, 300, 10]"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3A..VVGaqqVVqq..CJ&&cht=lc" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="[300, 100, 30, 200, 100, 200, 300, 10]" maxValue="500"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3AmZMzD2ZmMzZmmZBS&&cht=lc" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCLineChart data="[300, 100, 30, 200, 100, 200, 300, 10]" maxValue="$false"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=300x200&chd=e%3AEsBkAeDIBkDIEsAK&&cht=lc" width="300" height="200"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCMap width="440" height="220" area="usa" colors="f5f5f5,edf0d4,6c9642,13390a" backgroundStyle="solid" background="eaf7fe" data="s:fSGBDQBQBBAGABCBDAKLCDGFCLBBEBBEPASDKJBDD9BHHEAACAC" regions="NY,PA,TN,WV,NV,NJ,NH,VA,HI,VT,NM,NC,ND,NE,LA,SD,DC,DE,FL,WA,KS,WI,OR,KY,ME,OH,IA,ID,CT,WY,UT,IN,IL,AK,TX,CO,MD,MA,AL,MO,MN,CA,OK,MI,GA,AZ,MT,MS,SC,RI,AR"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=440x220&chco=f5f5f5%2Cedf0d4%2C6c9642%2C13390a&chd=s%3AfSGBDQBQBBAGABCBDAKLCDGFCLBBEBBEPASDKJBDD9BHHEAACAC&&chf=bg%2Cs%2Ceaf7fe&cht=t&chtm=usa&chld=NYPATNWVNVNJNHVAHIVTNMNCNDNELASDDCDEFLWAKSWIORKYMEOHIAIDCTWYUTINILAKTXCOMDMAALMOMNCAOKMIGAAZMTMSSCRIAR" width="440" height="220"/>
+</p>
+
+<p>
+	<pre>&lt;wo:GCQRCode size="150x150" text="Hello world" encoding="UTF-8"/&gt;</pre>
+	<img src="http://chart.apis.google.com/chart?chs=150x150&&cht=qr&chl=Hello+world" width="150" height="150"/>
+</p>
+	
+</body>
+</html>
