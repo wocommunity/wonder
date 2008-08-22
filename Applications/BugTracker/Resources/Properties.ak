@@ -1,4 +1,4 @@
-NSProjectSearchPath=(/Volumes/Home/Wonder/Common/Applications)
+NSProjectSearchPath=(/Volumes/Home/Wonder/Applications,/Volumes/Home/Wonder/Frameworks/Core,/Volumes/Home/Wonder/Frameworks/Misc,/Volumes/Home/Wonder/Frameworks/Ajax)
 WOPort=2002
 WODocumentRoot=/Volumes/Home/Sites/web
 dbConnectURLGLOBAL=jdbc:postgresql://localhost/bug
