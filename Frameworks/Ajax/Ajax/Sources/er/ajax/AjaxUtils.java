@@ -292,7 +292,11 @@ public class AjaxUtils {
 	 * @return an array (or null)
 	 */
 	public static <T> NSArray<T> arrayValueForAssociation(WOComponent component, WOAssociation association) {
-		return AjaxUtils.arrayValueForObject(association.valueInComponent(component));
+		NSArray<T> array = null;
+		if (association != null) {
+			array = AjaxUtils.arrayValueForObject(association.valueInComponent(component));
+		}
+		return array;
 	}
 
 	/**
@@ -326,9 +330,13 @@ public class AjaxUtils {
 		}
 		else if (value instanceof String) {
 			try {
+				String strValue = ((String) value).trim();
+				if (!strValue.startsWith("[")) {
+					strValue = "[" + strValue + "]";
+				}
 				JSONSerializer serializer = new JSONSerializer();
 				serializer.registerDefaultSerializers();
-				Object objValue = serializer.fromJSON((String) value);
+				Object objValue = serializer.fromJSON(strValue);
 				if (objValue.getClass().isArray()) {
 					arrayValue = new NSArray((Object[]) objValue);
 				}
