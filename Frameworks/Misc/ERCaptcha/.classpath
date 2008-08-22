@@ -6,6 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ERExtensions"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
 	<classpathentry kind="lib" path="Libraries/commons-collections-3.2.jar"/>
-	<classpathentry kind="lib" path="Libraries/jcaptcha-all-1.0-RC3.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jcaptcha-all-1.0-RC3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
