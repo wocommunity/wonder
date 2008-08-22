@@ -1,0 +1,38 @@
+<?xml version = "1.0" encoding = "UTF-8" standalone = "yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "false" class = "GCLineChart">
+		<binding name ="data"/>
+		<binding name ="size"/>
+		<binding name ="width"/>
+		<binding name ="height"/>
+		<binding name ="colors"/>
+		<binding name ="title"/>
+		<binding name ="titleColor"/>
+		<binding name ="titleSize"/>
+		<binding name ="backgroundStyle"/>
+		<binding name ="background"/>
+		<binding name ="chartBackgroundStyle"/>
+		<binding name ="chartBackground"/>
+		<binding name ="transparency"/>
+		<binding name ="legend"/>
+		<binding name ="labeledAxes"/>
+		<binding name ="axisLabels"/>
+		<binding name ="custom"/>
+		<binding name ="id"/>
+		<binding name ="class"/>
+		<binding name ="alt"/>
+		<binding name ="encoding"/>
+		<binding name ="normalize"/>
+		<binding name ="maxValue"/>
+		<binding name ="scaling"/>
+		<binding name ="fillArea"/>
+		<binding name ="lineStyles"/>
+		<binding name ="rangeMarkers"/>
+		<binding name ="shapeMarkers"/>
+		<binding name ="gridLines"/>
+		<binding name ="gridXStep"/>
+		<binding name ="gridYStep"/>
+		<binding name ="gridLineSize"/>
+		<binding name ="gridBlankSize"/>
+	</wo>
+</wodefinitions>

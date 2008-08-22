@@ -1,0 +1,21 @@
+<?xml version = "1.0" encoding = "UTF-8" standalone = "yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "false" class = "GCMap">
+		<binding name ="data"/>
+		<binding name ="size"/>
+		<binding name ="width"/>
+		<binding name ="height"/>
+		<binding name ="colors"/>
+		<binding name ="backgroundStyle"/>
+		<binding name ="background"/>
+		<binding name ="custom"/>
+		<binding name ="id"/>
+		<binding name ="class"/>
+		<binding name ="alt"/>
+		<binding name ="encoding"/>
+		<binding name ="normalize"/>
+		<binding name ="maxValue"/>
+		<binding name ="area"/>
+		<binding name ="regions"/>
+	</wo>
+</wodefinitions>
