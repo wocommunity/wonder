@@ -232,12 +232,7 @@ public abstract class GCAbstractChart extends WODynamicElement {
   @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     ERXMutableURL chartUrl = new ERXMutableURL();
-    if (ERXRequest.isRequestSecure(context.request())) {
-      chartUrl.setProtocol("https");
-    }
-    else {
-      chartUrl.setProtocol("http");
-    }
+    chartUrl.setProtocol("http");
     chartUrl.setHost("chart.apis.google.com");
     chartUrl.setPath("/chart");
 
