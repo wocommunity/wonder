@@ -43,6 +43,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param url
 	 *            the URL to copy data from
+	 * @throws MalformedURLException if the URL is invalid
 	 */
 	public ERXMutableURL(URL url) throws MalformedURLException {
 		this();
@@ -55,6 +56,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param str
 	 *            a URL external form
+	 * @throws MalformedURLException if the URL is invalid
 	 */
 	public ERXMutableURL(String str) throws MalformedURLException {
 		this();
@@ -245,6 +247,19 @@ public class ERXMutableURL {
 	 */
 	public synchronized void setQueryParameters(String queryParameters) throws MalformedURLException {
 		clearQueryParameters();
+		addQueryParameters(queryParameters);
+	}
+	
+	/**
+	 * Appends the query parameters of this URL with the given k=v&k2=v2 format
+	 * string.
+	 * 
+	 * @param queryParameters
+	 *            the query parameters
+	 * @throws MalformedURLException
+	 *             if the string is malformed
+	 */
+	public synchronized void addQueryParameters(String queryParameters) throws MalformedURLException {
 		if (queryParameters != null) {
 			StringTokenizer queryStringTokenizer = new StringTokenizer(queryParameters, "&");
 			while (queryStringTokenizer.hasMoreTokens()) {
