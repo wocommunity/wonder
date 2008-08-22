@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXRequest;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -231,7 +232,12 @@ public abstract class GCAbstractChart extends WODynamicElement {
   @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     ERXMutableURL chartUrl = new ERXMutableURL();
-    chartUrl.setProtocol("http");
+    if (ERXRequest.isRequestSecure(context.request())) {
+      chartUrl.setProtocol("https");
+    }
+    else {
+      chartUrl.setProtocol("http");
+    }
     chartUrl.setHost("chart.apis.google.com");
     chartUrl.setPath("/chart");
 
