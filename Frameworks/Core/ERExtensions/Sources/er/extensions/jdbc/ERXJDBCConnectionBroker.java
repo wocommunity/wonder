@@ -580,7 +580,19 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
             }
             setStatus(FREE);
             setLockTime(0L);
-        }
+            try {
+                if (getConnection().isReadOnly()) {
+                    getConnection().setReadOnly(true);
+                }
+                // AK: PG MUST and other probably should have set the autocommit to true on putting back in pool
+                if(!getConnection().getAutoCommit()) {
+                	getConnection().setAutoCommit(true);
+                }
+			}
+			catch (SQLException e) {
+				log.error(e, e);
+			}
+       }
     
         public void lock() {
             if(!isFree()) {
@@ -591,6 +603,9 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
             try {
                 if (getConnection().isReadOnly()) {
                     getConnection().setReadOnly(false);
+                }
+                if(getConnection().getAutoCommit()) {
+                	getConnection().setAutoCommit(false);
                 }
             } catch (SQLException e) {
                 throw new NSForwardException(e, "Could not set read only to false for connection: "+ this);
