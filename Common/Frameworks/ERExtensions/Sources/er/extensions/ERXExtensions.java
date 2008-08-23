@@ -68,6 +68,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     private static boolean _initialized;
 
+	static {
+		// Without this the blasted ERXLogger factory doesn't get initialized early enough.
+		// When we move everything to use plain Loggers, we should revisit this initializer. - TC
+		ERXConfigurationManager.defaultManager().initialize();
+		ERXLogger.configureLogging(System.getProperties());
+	}
+
     public ERXExtensions() {
     }
 

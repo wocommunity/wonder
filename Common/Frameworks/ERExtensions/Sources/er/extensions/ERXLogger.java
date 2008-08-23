@@ -7,8 +7,17 @@
 package er.extensions;
 
 import java.util.Properties;
-import org.apache.log4j.*;
+
+import org.apache.log4j.Appender;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSNotificationCenter;
 
 
 /**
@@ -25,17 +34,19 @@ public class ERXLogger extends org.apache.log4j.Logger {
     public static Logger log;
     public static Factory factory = null;
     static {
-        String factoryClassName = System.getProperty("log4j.loggerFactory");
-        if(factoryClassName == null) {
-            factoryClassName = ERXLogger.Factory.class.getName();
-        }
-        try {
-            factory = (Factory)Class.forName(factoryClassName).newInstance();
-        } catch(Exception ex) {
-            System.err.println("Exception while creating logger factory of class " + factoryClassName + ": " + ex);
-        }
+    	String factoryClassName = System.getProperty("log4j.loggerFactory");
+    	if(factoryClassName == null) {
+    		factoryClassName = ERXLogger.Factory.class.getName();
+    	}
+    	if(factoryClassName != null) {
+    		try {
+    			factory = (Factory)Class.forName(factoryClassName).newInstance();
+    		} catch(Exception ex) {
+    			System.err.println("Exception while creating logger factory of class " + factoryClassName + ": " + ex);
+    		}
+    	}
     }
-    
+
     private static boolean _isFirstTimeConfig = true;
     
     /**
@@ -54,14 +65,22 @@ public class ERXLogger extends org.apache.log4j.Logger {
     public static class Factory implements org.apache.log4j.spi.LoggerFactory {
 
         /**
-         * Overriden method used to create new ERXLogger classes.
+         * Overriden method used to create new Logger classes.
          * @param name to create the new Logger instance for
-         * @return new ERXLogger object for the given name
+         * @return new Logger object for the given name
          */
         public Logger makeNewLoggerInstance(String name) {
             if (log != null && log.isDebugEnabled())
                 log.debug("makeNewLoggerInstance: " + name);
             return new ERXLogger(name);
+        }
+        
+        /**
+         * Override this in your own subclass to do something after the logging config did change.
+         * 
+         */
+        public void loggingConfigurationDidChange() {
+            // default is to do nothing
         }
     }
 
@@ -75,12 +94,12 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * @param name to create the logger for
      * @return Logger for the given name.
      */
-     public static ERXLogger getERXLogger(String name) {
+    public static ERXLogger getERXLogger(String name) {
     	Logger logger = getLogger(name);
     	if(logger != null && !(logger instanceof ERXLogger)) {
     		configureLoggingWithSystemProperties();
     		logger = getLogger(name);
-    	}
+     	}
     	if(logger != null && !(logger instanceof ERXLogger)) {
     		throw new RuntimeException("Can't load Logger for \""+name+"\" because it is not of class ERXLogger but \""+logger.getClass().getName()+"\". Let your Application class inherit from ERXApplication or call ERXLog4j.configureLogging() statically the first thing in your app. \nAlso check if there is a \"log4j.loggerFactory=er.extensions.Logger$Factory\" line in your properties.");
     	}
@@ -89,7 +108,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
 
     /**
      *  Overrides method of superclass to return a logger using our
-     *  custom ERXLogger$Factory class.
+     *  custom Logger$Factory class.
      *  This works identical to
      * {@link org.apache.log4j.Logger#getLogger log4.Logger.getLogger}
      *	@param name to create the logger for
@@ -106,11 +125,11 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * @return logger for the given class name
      */
     public static ERXLogger getERXLogger(Class clazz) {
-        return (ERXLogger)getLogger(clazz.getName());
+        return getERXLogger(clazz.getName());
     }
 
     public static Logger getLogger(Class clazz) {
-        return (ERXLogger)getERXLogger(clazz);
+        return getERXLogger(clazz);
     }
 
     /**
@@ -152,15 +171,21 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     public static synchronized void configureLogging(Properties properties) {
         if (_isFirstTimeConfig) {
-            if (!ERXProperties.webObjectsVersionIs522OrHigher()) {
-                BasicConfigurator.configure();
-                Logger.getRootLogger().setLevel(Level.INFO);
-            }
-
-            if(ERXProperties.webObjectsVersionIs522OrHigher()) {
-                NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
-                NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-                NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
+            BasicConfigurator.configure();
+            // AK: we re-configure the logging a few lines later from the properties, but in case
+            // no config is set, we set the root level to info, install the brigde
+            // which sets it's own logging level to DEBUG
+            // and the output should be pretty much the same as with plain WO
+            Logger.getRootLogger().setLevel(Level.INFO);
+            boolean is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
+            if (!is522OrHigher) {
+                int allowedLevel = NSLog.debug.allowedDebugLevel();
+                if(!(NSLog.debug instanceof ERXNSLogLog4jBridge)) {
+                    NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
+                    NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
+                    NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
+                }
+                NSLog.debug.setAllowedDebugLevel(allowedLevel);
             }
             
             _isFirstTimeConfig = false;
@@ -168,20 +193,32 @@ public class ERXLogger extends org.apache.log4j.Logger {
             LogManager.resetConfiguration();
         }
         PropertyConfigurator.configure(properties);
-        
-        if (log == null) 
-            log = Logger.getLogger(ERXLogger.class.getName(), factory);
-
+        // AK: if the root logger has no appenders, something is really broken
+        // most likely the properties didn't read correctly.
+        if(!Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
+            Appender appender = new ConsoleAppender(new ERXPatternLayout("%-5p %d{HH:mm:ss} (%-20c:%L):  %m%n"), "System.out");
+            Logger.getRootLogger().addAppender(appender);
+            Logger.getRootLogger().setLevel(Level.DEBUG);
+            Logger.getRootLogger().error("Logging prefs couldn't get read from properties, using defaults");
+        }
+        if (log == null) {
+            log = Logger.getLogger(Logger.class.getName());
+        }
         log.info("Updated the logging configuration with the current system properties.");
         if(log.isDebugEnabled()) {
             log.debug("log4j.loggerFactory: " + System.getProperty("log4j.loggerFactory"));
             log.debug("Factory: " + factory);
-            log.debug("", new RuntimeException());
+            // MS: This just trips everyone up, and it really seems to only be used by
+            // PW developers, so I say we just turn it on when we need it.
+            //log.debug("", new RuntimeException("This is not a real exception. It is just to show you where logging was initialized."));
         }
         //PropertyPrinter printer = new PropertyPrinter(new PrintWriter(System.out));
         //printer.print(new PrintWriter(System.out));
-
-
+        if(factory != null) {
+            factory.loggingConfigurationDidChange();
+        }
+        
+        NSNotificationCenter.defaultCenter().postNotification(ERXConfigurationManager.ConfigurationDidChangeNotification, null);
     }
 
     /**
