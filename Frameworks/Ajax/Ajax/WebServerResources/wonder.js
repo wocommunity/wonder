@@ -215,6 +215,13 @@ var AjaxInPlace = {
 };
 var AIP = AjaxInPlace;
 
+var AjaxModalContainer = {
+	close: function() {
+		iBox.hide();
+	}
+};
+var AMC = AjaxModalContainer;
+
 var AjaxOptions = {
 	defaultOptions: function(additionalOptions) {
 		var options = { method: 'get', asynchronous: true, evalScripts: true };
