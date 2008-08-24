@@ -176,6 +176,18 @@ var AjaxOnDemand = {
 };
 var AOD = AjaxOnDemand;
 
+var AjaxUtils = {
+	toggleClassName: function(element, className, toggled) {
+		element = $(element);
+		if (toggle) {
+			element.addClassName(className);
+		}
+		else {
+			element.removeClassName(className);
+		}
+	}
+};
+
 var AjaxInPlace = {
 	saveFunctionName: function(id) {
 		return "window." + id + "Save";
@@ -815,12 +827,6 @@ var AjaxHintedText = {
     }
 };
 
-var AjaxModalContainer = {
-	close: function() {
-		iBox.hide();
-	}
-};
-var AMC = AjaxModalContainer;
 
 // our own extensions 
 // MS: This doesn't appear to be used and it causes a failure 

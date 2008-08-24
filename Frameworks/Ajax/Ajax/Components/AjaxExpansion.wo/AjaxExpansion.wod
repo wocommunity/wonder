@@ -1,0 +1,31 @@
+ToggleLink : AjaxUpdateLink {
+  insertion = ^insertion;
+  insertionDuration = ^insertionDuration;
+  id = linkID;
+  action = toggle;
+  updateContainerID = id;
+  class = linkClass;
+}
+
+AjaxUpdateContainer : AjaxUpdateContainer {
+  id = id;
+  class = ^class;
+}
+
+Expanded : WOConditional {
+  condition = expanded;
+}
+
+ToggleLinkString : WOString {
+  value = string;
+}
+WOComponentContent : WOComponentContent {
+}
+
+LinkID : WOString {
+  value = linkID;
+}
+
+ExpandedVale : WOString {
+  value = expanded;
+}

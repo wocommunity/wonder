@@ -1,4 +1,5 @@
-<wo:AjaxUpdateLink insertion="$^insertion" insertionDuration="$^insertionDuration" id="$linkID" action="$toggle" updateContainerID="$id" class="$linkClass"><wo:str value="$string"/></wo:AjaxUpdateLink>
-<wo:AjaxUpdateContainer id="$id" class="$^class"><wo:if condition = "$expanded"><wo:WOComponentContent/></wo:if>
-<script><wo:if condition="$expanded">$('<wo:str value="$linkID"/>').addClassName('expanded');</wo:if><wo:else>$('<wo:str value="$linkID"/>').removeClassName('expanded');</wo:else></script>
-</wo:AjaxUpdateContainer>
+<webobject name = "ToggleLink"><webobject name = "ToggleLinkString" /></webobject>
+<webobject name = "AjaxUpdateContainer">
+  <webobject name = "Expanded"><webobject name = "WOComponentContent" /></webobject>
+  <script>AjaxUtils.toggleClassName('<webobject name = "LinkID" />', 'expanded', <webobject name = "ExpandedVale" />)</script>
+</webobject>
