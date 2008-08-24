@@ -179,7 +179,7 @@ var AOD = AjaxOnDemand;
 var AjaxUtils = {
 	toggleClassName: function(element, className, toggled) {
 		element = $(element);
-		if (toggle) {
+		if (toggled) {
 			element.addClassName(className);
 		}
 		else {
