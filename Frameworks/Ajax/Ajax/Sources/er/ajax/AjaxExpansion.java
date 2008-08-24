@@ -81,6 +81,7 @@ public class AjaxExpansion extends AjaxComponent {
 	protected void addRequiredWebResources(WOResponse response) {
 		addScriptResourceInHead(response, "prototype.js");
 		addScriptResourceInHead(response, "effects.js");
+		addScriptResourceInHead(response, "wonder.js");
 	}
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
