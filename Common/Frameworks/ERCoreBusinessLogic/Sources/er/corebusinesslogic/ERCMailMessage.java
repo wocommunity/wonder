@@ -298,13 +298,16 @@ public class ERCMailMessage extends _ERCMailMessage {
                 filesToDelete.addObject(attachment.file());
             }
         }
+        
         _filesToDelete = filesToDelete.immutableClone();
+        log.debug("found "+ _filesToDelete.count() +" files to delete");
     }
 
     private void deleteCapturedFiles() {
         for (int i = 0; i < _filesToDelete.count(); i++) {
             File file = (File) _filesToDelete.objectAtIndex(i);
-            file.delete();
+            if(!file.delete())
+                log.debug("failed to delete "+ file);
         }
     }
 }
