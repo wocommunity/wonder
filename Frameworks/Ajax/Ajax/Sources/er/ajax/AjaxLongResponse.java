@@ -4,7 +4,7 @@ import com.webobjects.appserver.WOContext;
 
 import er.extensions.components.ERXStatelessComponent;
 
-// PROTOTYPE (component uses PeriodicUpdater)
+// PROTOTYPE FUNCTIONS (component uses PeriodicUpdater)
 /**
  * Simple Ajax long response handler that stays on the same page. The parent
  * must start the actual task and call fooUpdate to trigger the refresh.

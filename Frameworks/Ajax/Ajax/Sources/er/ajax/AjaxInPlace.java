@@ -65,7 +65,7 @@ import er.extensions.components._private.ERXWOForm;
  * @binding onSaving the javascript action to fire when saving
  * @binding button if true, the save action is a button; if false, it's a link 
  * @binding submitOnSave if true, the save button is an AjaxSubmitButton; if false, it's an AjaxUpdateLink (which will not actually submit a form -- you would have to do some work here)
- * // PROTOTYPE
+ * // PROTOTYPE FUNCTIONS
  * @binding saveInsertion the insertion function to use on save
  * @binding saveInsertionDuration the duration of the before and after insertion animation (if using insertion) 
  * @binding saveBeforeInsertionDuration the duration of the before insertion animation (if using insertion) 
@@ -79,7 +79,7 @@ import er.extensions.components._private.ERXWOForm;
  * @binding onCancelSuccess the javascript function to execute after a successful cancel
  * @binding onCancelFailure the javascript function to execute after a failed cancel
  * @binding onCancelling the javascript action to fire when cancelling
- * // PROTOTYPE
+ * // PROTOTYPE FUNCTIONS
  * @binding cancelInsertion the insertion function to use on cancel
  * @binding cancelInsertionDuration the duration of the before and after insertion animation (if using insertion) 
  * @binding cancelBeforeInsertionDuration the duration of the before insertion animation (if using insertion) 
@@ -92,7 +92,7 @@ import er.extensions.components._private.ERXWOForm;
  * @binding onEditSuccess the javascript function to execute after a successful edit
  * @binding onEditFailure the javascript function to execute after a failed edit
  * @binding onEditing the javascript action to fire when editing mode is loading
- * // PROTOTYPE
+ * // PROTOTYPE FUNCTIONS
  * @binding editInsertion the insertion function to use on edit
  * @binding editInsertionDuration the duration of the before and after insertion animation (if using insertion) 
  * @binding editBeforeInsertionDuration the duration of the before insertion animation (if using insertion) 

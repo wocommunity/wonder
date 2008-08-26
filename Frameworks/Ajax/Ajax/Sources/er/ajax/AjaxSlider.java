@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSNumberFormatter;
 
 import er.extensions.components.ERXComponentUtilities;
 
-// PROTOTYPE
+// PROTOTYPE FUNCTIONS (WRAPPER)
 /**
  * Simple Ajax slider.
  * @author ak
