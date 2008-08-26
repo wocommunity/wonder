@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
@@ -22,6 +23,7 @@ import com.webobjects.foundation._NSUtilities;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities.ChannelAction;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.jdbc.ERXJDBCConnectionAnalyzer;
 import er.extensions.jdbc.ERXJDBCUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
 
@@ -182,6 +184,10 @@ public class ERXMigrator {
 			}
 			catch (ERXMigrationFailedException e) {
 				throw e;
+			}
+			catch (EOGeneralAdaptorException t) {
+    			new ERXJDBCConnectionAnalyzer(model.connectionDictionary());
+				throw new ERXMigrationFailedException("Failed to migrate model '" + model.name() + "'.", t);
 			}
 			catch (Throwable t) {
 				throw new ERXMigrationFailedException("Failed to migrate model '" + model.name() + "'.", t);
