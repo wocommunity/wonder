@@ -26,6 +26,6 @@ LinkID : WOString {
   value = linkID;
 }
 
-ExpandedVale : WOString {
+ExpandedValue : WOString {
   value = expanded;
 }
