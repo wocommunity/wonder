@@ -1108,7 +1108,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 
-	public static NSArray emptyArray() {
+	public static <T> NSArray<T> emptyArray() {
 		return EmptyArray;
 	}
 	
