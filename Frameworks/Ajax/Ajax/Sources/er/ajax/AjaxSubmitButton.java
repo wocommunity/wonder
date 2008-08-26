@@ -46,12 +46,12 @@ import er.extensions.foundation.ERXProperties;
  * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then try updateContainerID)
  * @binding beforeEffectDuration the duration of the effect to apply before
- * // PROTOYPE
+ * // PROTOTYPE
  * @binding afterEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then try updateContainerID)
  * @binding afterEffectDuration the duration of the effect to apply after
  * 
- * // PROTOYPE
+ * // PROTOTYPE
  * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
  * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
  * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
