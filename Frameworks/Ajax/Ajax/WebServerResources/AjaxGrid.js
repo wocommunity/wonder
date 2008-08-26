@@ -18,6 +18,7 @@ var AjaxGrid = {
 	 * Adds drag and drop support to the table
 	 */
 	ajaxGrid_init : function(table) {
+		table = $(table);
 		table.onselectstart = function () { return false; } 
 		table.onmousedown = function () { return false; }
 		table.onmouseup = AjaxGrid.drop;
