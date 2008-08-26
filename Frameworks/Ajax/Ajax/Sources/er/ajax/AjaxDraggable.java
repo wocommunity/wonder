@@ -77,6 +77,7 @@ public class AjaxDraggable extends AjaxComponent {
 
   public NSDictionary createAjaxOptions() {
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
+	// PROTOTYPE
     ajaxOptionsArray.addObject(new AjaxOption("starteffect", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("reverteffect", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("endeffect", AjaxOption.SCRIPT));

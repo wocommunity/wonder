@@ -50,6 +50,7 @@ public class AjaxDroppable extends AjaxComponent {
   }
 
   public NSDictionary createAjaxOptions() {
+	  // PROTOTYPE
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
     ajaxOptionsArray.addObject(new AjaxOption("accept", AjaxOption.STRING_ARRAY));
     ajaxOptionsArray.addObject(new AjaxOption("containment", AjaxOption.STRING_ARRAY));

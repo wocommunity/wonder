@@ -22,6 +22,7 @@ import com.webobjects.foundation.NSValidation.ValidationException;
 
 import er.extensions.appserver.ERXWOContext;
 
+// PROTOTYPE
 public class AjaxInPlaceEditor extends AjaxDynamicElement {
   private WOAssociation _idAssociation;
   private WOAssociation _elementNameAssociation;
