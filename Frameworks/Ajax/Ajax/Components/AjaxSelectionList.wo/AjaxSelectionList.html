@@ -10,7 +10,7 @@
 	var selectionList = new AjaxSelectionList('<webobject name = "ContainerID"/>');
 	selectionList.setSelectionIndex(<webobject name = "SelectedIndex"/>, false);
 	selectionList.onchange = function(list) {
-		$('<webobject name = "FieldID"/>').value = list.selectionIndex;
+		$wi('<webobject name = "FieldID"/>').value = list.selectionIndex;
 		<webobject name = "IfOnChange">
 		<webobject name = "OnChange"/>
 		</webobject>
@@ -22,6 +22,6 @@
 	selectionList.ondelete = function() { <webobject name = "OnDelete"/> }
 	</webobject>
 	<webobject name = "IfFocus">
-		$('<webobject name = "ContainerID"/>').focus();
+		$wi('<webobject name = "ContainerID"/>').focus();
 	</webobject>
 </script>
