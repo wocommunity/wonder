@@ -22,6 +22,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding style style for the link
  * @binding value value for the link (??)
  * @binding id id for the link
+ * @binding containerID container ID for non-Ajax WOComponentContent
  * @binding closeLabel string for the close link
  * @binding title title string for the link label and the window
  * @binding href when it is bound, the content of the url will be fetched into an iframe.
@@ -56,10 +57,11 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
-        String divID = (String)valueForBinding("id", component);
-        if (divID == null) {
-        	divID=ERXWOContext.safeIdentifierName(context, false);
+        String linkID = (String)valueForBinding("id", component);
+        if (linkID == null) {
+        	linkID=ERXWOContext.safeIdentifierName(context, false);
         }
+        String containerID = (String)valueForBinding("containerID", linkID + "Container", component);
         response.appendContentString("<a");
         String href = (String) valueForBinding("href", component);
         if(href == null) {
@@ -75,7 +77,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
             }
             else 
             if(href == null) {
-                href = "#" + divID;
+                href = "#" + containerID;
             }
         }
         appendTagAttributeToResponse(response, "href", href);
@@ -100,7 +102,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
         appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
         appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-        appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+        appendTagAttributeToResponse(response, "id", linkID);
         response.appendContentString(">");
         response.appendContentString(valueForBinding("label", "", component).toString());
         response.appendContentString("</a>");
@@ -114,12 +116,17 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 	        }
         }
         if (booleanValueForBinding("open", false, component)) {
-        	response.appendContentString("<script>Event.observe(window, 'load', iBox.handleTag.bind($('" + divID + "')))</script>");
+        	if (AjaxUtils.isAjaxRequest(context.request())) {
+        		response.appendContentString("<script>iBox.handleTag.bind($('" + linkID + "'))()</script>");
+        	}
+        	else {
+        		response.appendContentString("<script>Event.observe(window, 'load', iBox.handleTag.bind($('" + linkID + "')))</script>");
+        	}
         }
         if(href.startsWith("#")) {
         	response.appendContentString("<div");
 
-        	appendTagAttributeToResponse(response, "id", divID);
+        	appendTagAttributeToResponse(response, "id", containerID);
         	appendTagAttributeToResponse(response, "style", "display:none;");
         	response.appendContentString(">");
         	appendChildrenToResponse(response, context);
