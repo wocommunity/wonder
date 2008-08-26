@@ -25,7 +25,7 @@
 er.extensions.ERXLocalizer.isLocalizationEnabled = true
 
 ## The order in which localized files are searched (first entry wins)
-er.extensions.ERXLocalizer.frameworkSearchPath = (app,ERDirectToWeb,ERExtensions)
+#er.extensions.ERXLocalizer.frameworkSearchPath = (app,ERDirectToWeb,ERExtensions)
 
 ## Which files to search
 er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","ValidationTemplate.strings")
@@ -570,3 +570,8 @@ dbMinConnectionsGLOBAL=1
 ## an exception if the appropriate migration textfile can't be found.
 # er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations=false
 
+#########################################################################
+# ERXExceptionUtilities 
+#########################################################################
+er.extensions.stackTrace.cleanup=true
+er.extensions.stackTrace.skipPatternsFile=StackTraceSkipPatterns-Normal.plist
