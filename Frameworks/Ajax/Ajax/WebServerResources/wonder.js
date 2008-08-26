@@ -1,3 +1,6 @@
+// $wi = the Wonder "lookup by ID" function
+var $wi = $;
+ 
 Object.extend(Prototype, {
   exec: (function(){
     var script, scriptId = '__prototype_exec_script',

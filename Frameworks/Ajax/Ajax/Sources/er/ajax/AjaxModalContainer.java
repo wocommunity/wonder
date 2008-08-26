@@ -117,10 +117,10 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         }
         if (booleanValueForBinding("open", false, component)) {
         	if (AjaxUtils.isAjaxRequest(context.request())) {
-        		response.appendContentString("<script>iBox.handleTag.bind($('" + linkID + "'))()</script>");
+        		response.appendContentString("<script>iBox.handleTag.bind($wi('" + linkID + "'))()</script>");
         	}
         	else {
-        		response.appendContentString("<script>Event.observe(window, 'load', iBox.handleTag.bind($('" + linkID + "')))</script>");
+        		response.appendContentString("<script>Event.observe(window, 'load', iBox.handleTag.bind($wi('" + linkID + "')))</script>");
         	}
         }
         if(href.startsWith("#")) {
