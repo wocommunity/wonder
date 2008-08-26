@@ -137,9 +137,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	private static NSMutableArray monitoredFiles = new NSMutableArray();
 
-	static NSArray fileNamesToWatch;
-	static NSArray frameworkSearchPath;
-	static NSArray availableLanguages;
+	static NSArray<String> fileNamesToWatch;
+	static NSArray<String> frameworkSearchPath;
+	static NSArray<String> availableLanguages;
 	static String defaultLanguage;
 
 	static NSMutableDictionary localizers = new NSMutableDictionary();
@@ -348,11 +348,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		resetCache();
 	}
 
-	public static NSArray frameworkSearchPath() {
+	public static NSArray<String> frameworkSearchPath() {
 		if (frameworkSearchPath == null) {
 			frameworkSearchPath = ERXProperties.arrayForKey("er.extensions.ERXLocalizer.frameworkSearchPath");
 			if(frameworkSearchPath == null) {
-				NSMutableArray defaultValue = new NSMutableArray();
+				NSMutableArray<String> defaultValue = new NSMutableArray<String>();
 				for (Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
 					NSBundle bundle = (NSBundle) e.nextElement();
 					String name = bundle.name();
