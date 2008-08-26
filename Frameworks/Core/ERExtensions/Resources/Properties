@@ -573,5 +573,5 @@ dbMinConnectionsGLOBAL=1
 #########################################################################
 # ERXExceptionUtilities 
 #########################################################################
-er.extensions.stackTrace.cleanup=true
+er.extensions.stackTrace.cleanup=false
 er.extensions.stackTrace.skipPatternsFile=StackTraceSkipPatterns-Normal.plist
