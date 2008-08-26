@@ -9,6 +9,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -272,7 +274,7 @@ public class ERXStringUtilities {
             }
         }
         if( sortOrderings != null ) {
-            results = (NSMutableArray)EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray)results, sortOrderings);
+            results = (NSMutableArray)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
         }
         return (NSArray) results.valueForKey( eoKey );        
     }
@@ -1505,9 +1507,15 @@ public class ERXStringUtilities {
     // private methods
     // ##########################################################################################
     
-    private static void indent(StringBuffer sb, int level) {
+  public static void indent(PrintWriter writer, int level) {
+  	for (int i = 0; i < level; i++) {
+  	  writer.append("  ");
+	}
+  }
+  
+    public static void indent(StringBuffer sb, int level) {
     	for (int i = 0; i < level; i++) {
-			sb.append(' ');
+			sb.append("  ");
 		}
     }
     
@@ -1941,8 +1949,7 @@ public class ERXStringUtilities {
     public static String trimString(String s) {
     	if (s == null) {
     		return s;
-    	} else {
-    		return s.trim();
     	}
+    	return s.trim();
     }
 }
