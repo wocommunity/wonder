@@ -14,6 +14,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
+import er.extensions.foundation.ERXExceptionUtilities;
+
 /**
  * Attempts to verify that a JDBC connection can be made and prints out diagnostic suggestions and information if it
  * cannot.
@@ -89,7 +91,7 @@ public class ERXJDBCConnectionAnalyzer {
 			testConnection();
 		}
 		catch (RuntimeException t) {
-			ERXJDBCConnectionAnalyzer.log.error(t.getMessage());
+			ERXJDBCConnectionAnalyzer.log.error(ERXExceptionUtilities.toParagraph(t));
 		}
 		finally {
 			EOObjectStoreCoordinator.defaultCoordinator().unlock();
