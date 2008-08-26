@@ -224,7 +224,6 @@ public class ERXExceptionUtilities {
 					while (frameworksEnum.hasMoreElements()) {
 						String framework = frameworksEnum.nextElement();
 						URL path = ERXFileUtilities.pathURLForResourceNamed(skipPatternsFile, framework, null);
-						System.out.println("ERXExceptionUtilities.printStackTrace: " + path + ", " + framework);
 						if (path != null) {
 							try {
 								NSArray<String> skipPatternStrings = (NSArray<String>) ERXExtensions.readPropertyListFromFileInFramework(skipPatternsFile, framework, null);
