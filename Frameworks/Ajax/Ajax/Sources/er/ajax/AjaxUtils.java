@@ -103,7 +103,7 @@ public class AjaxUtils {
 	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
 		String processedFileName = fileName;
-		// PROTOTYPE
+		// PROTOTYPE MISC
 		if (ERXProperties.booleanForKey("er.ajax.compressed") && ("prototype.js".equals(fileName) || "scriptaculous.js".equals(fileName))) {
 			processedFileName = "sc-17-proto-15-compressed.js";
 		}
@@ -154,7 +154,7 @@ public class AjaxUtils {
 		// and you're in development mode (as far as your lame WOResourceManager is concerned), so we need to do Scriptaculous' job and manually
 		// load the dependent js files on its behalf.  You really should just suck it up and use ERXResourceManager because it really is just
 		// better.  But if you're holding out and scared like a child, then we'll do this for you. 
-		// PROTOTYPE
+		// PROTOTYPE MISC
 		if (!(WOApplication.application().resourceManager() instanceof ERXResourceManager) && "Ajax".equals(framework) && "scriptaculous.js".equals(fileName) && !(context.request() == null || context.request() != null && context.request().isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject())) {
 			boolean enqueueIfTagMissing = !AjaxUtils.isAjaxRequest(context.request());
 			ERXResponseRewriter.addResourceInHead(response, context, framework, "builder.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);

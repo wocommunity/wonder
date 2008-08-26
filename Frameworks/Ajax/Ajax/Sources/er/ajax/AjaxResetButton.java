@@ -49,7 +49,7 @@ public class AjaxResetButton extends WOComponent {
      * @return JavaScript to reset form
      */
     public String resetFormJavaScript() {
-		// PROTOTYPE
+		// PROTOTYPE FUNCTIONS
     	return clear() ? "Form.clear('" + formId() + "'); return false;" : "Form.reset('" + formId() + "'); return false;";
     }
     

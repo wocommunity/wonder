@@ -53,7 +53,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 	}
 
 	public NSMutableDictionary createAjaxOptions(WOComponent component) {
-		// PROTOTYPE
+		// PROTOTYPE OPTIONS
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("observeDelay", AjaxOption.NUMBER));

@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-// PROTOTYPE
+// PROTOTYPE FUNCTIONS (WRAPPER)
 /**
  * Autocompleting combo-box similar to Google suggest.<br/>
  * 

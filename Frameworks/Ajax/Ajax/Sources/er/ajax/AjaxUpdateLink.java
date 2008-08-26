@@ -47,21 +47,21 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding functionName if set, the link becomes a javascript function
  * @binding button if true, this is rendered as a javascript button
  * 
- * // PROTOTYPE
+ * // PROTOTYPE EFFECTS
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
  * @binding effectDuration the duration of the effect to apply before
- * // PROTOTYPE
+ * // PROTOTYPE EFFECTS
  * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then
  *          try updateContainerID)
  * @binding beforeEffectDuration the duration of the effect to apply before
- * // PROTOTYPE
+ * // PROTOTYPE EFFECTS
  * @binding afterEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then
  *          try updateContainerID)
  * @binding afterEffectDuration the duration of the effect to apply before
  * 
- * // PROTOTYPE
+ * // PROTOTYPE EFFECTS
  * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
  * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
  * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
@@ -85,7 +85,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		String function = (String) valueForBinding("function", component);
 		String replaceID = (String) valueForBinding("replaceID", component);
 
-		// PROTOTYPE
+		// PROTOTYPE EFFECTS
 		AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID, (String) valueForBinding("effectDuration", component));
 		String afterEffectID = (String) valueForBinding("afterEffectID", component);
 		if (afterEffectID == null) {
@@ -94,10 +94,10 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				afterEffectID = updateContainerID;
 			}
 		}
-		// PROTOTYPE
+		// PROTOTYPE EFFECTS
 		AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID, (String) valueForBinding("afterEffectDuration", component));
 
-		// PROTOTYPE
+		// PROTOTYPE EFFECTS
 		String beforeEffect = (String) valueForBinding("beforeEffect", component);
 
 		WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
@@ -135,7 +135,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				onClickBuffer.append(") {");
 			}
 
-			// PROTOTYPE
+			// PROTOTYPE EFFECTS
 			if (beforeEffect != null) {
 				onClickBuffer.append("new ");
 				onClickBuffer.append(AjaxUpdateLink.fullEffectName(beforeEffect));
@@ -179,7 +179,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				onClickBuffer.append("return " + function + "(" + actionUrl + ")");
 			}
 			else {
-				// PROTOTYPE
+				// PROTOTYPE FUNCTIONS
 				if (replaceID == null) {
 					if (updateContainerID == null) {
 						onClickBuffer.append("new Ajax.Request(" + actionUrl + ", ");
@@ -220,7 +220,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		return onClickBuffer.toString();
 	}
 
-	// PROTOTYPE
+	// PROTOTYPE EFFECTS
 	public static void addEffect(NSMutableDictionary options, String effect, String updateContainerID, String duration) {
 		if (effect != null) {
 			if (options.objectForKey("onSuccess") != null) {
@@ -243,7 +243,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		}
 	}
 
-	// PROTOTYPE
+	// PROTOTYPE EFFECTS
 	public static String fullEffectName(String effectName) {
 		String fullEffectName;
 		if (effectName == null) {
@@ -258,7 +258,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		return fullEffectName;
 	}
 
-	// PROTOTYPE
+	// PROTOTYPE OPTIONS
 	protected NSMutableDictionary createAjaxOptions(WOComponent component) {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
