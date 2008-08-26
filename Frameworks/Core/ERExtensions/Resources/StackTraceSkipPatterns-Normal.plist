@@ -11,11 +11,6 @@
 "^com\\.webobjects\\.appserver\\.WOComponent\\._appendPageToResponse$",
 "^com\\.webobjects\\.appserver\\.WOComponent\\._generateResponseInContext$",
 "^com\\.webobjects\\.appserver\\.WOComponent\\.generateResponse$",
-"^com\\.webobjects\\.appserver\\.WOComponent\\.takeValueForKey$",
-"^com\\.webobjects\\.appserver\\.WOComponent\\.takeValueForKeyPath$",
-"^com\\.webobjects\\.appserver\\.WOComponent\\.valueForBinding$",
-"^com\\.webobjects\\.appserver\\.WOComponent\\.valueForKey$",
-"^com\\.webobjects\\.appserver\\.WOComponent\\.valueForKeyPath$",
 
 "^com\\.webobjects\\.appserver\\._private\\..*",
 "^com\\.webobjects\\.appserver\\._private\\.WOActionRequestHandler\\..*",
@@ -32,6 +27,16 @@
 "^er\\.extensions\\.appserver\\.ERXApplication\\.dispatchRequestImmediately$",
 "^er\\.extensions\\.appserver\\.ERXApplication\\.dispatchRequest$",
 "^er\\.extensions\\.components\\._private\\..*",
-"^er\\.extensions\\.components\\.ERXComponent\\.appendToResponse$"
+
+"^.*\\.takeValuesFromRequest$",
+"^.*\\.invokeAction$",
+"^.*\\.appendChildrenToResponse$",
+"^.*\\.appendToResponse$",
+"^.*\\.takeValueForKey$",
+"^.*\\.takeValueForKeyPath$",
+"^.*\\.valueForBinding$",
+"^.*\\.valueForKey$",
+"^.*\\.valueForKeyPath$",
+"^.*\\.handleQueryWithUnboundKey$"
 
 )
