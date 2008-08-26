@@ -79,20 +79,25 @@ public class AjaxHighlight extends WODynamicGroup {
 		}
 		_elementName = (WOAssociation) associations.valueForKey("elementName");
 		_id = (WOAssociation) associations.valueForKey("id");
+		// PROTOTYPE
 		_effect = (WOAssociation) associations.valueForKey("effect");
 		_duration = (WOAssociation) associations.valueForKey("duration");
+		// PROTOTYPE
 		_newEffect = (WOAssociation) associations.valueForKey("newEffect");
 		_newDuration = (WOAssociation) associations.valueForKey("newDuration");
+		// PROTOTYPE
 		_updateEffect = (WOAssociation) associations.valueForKey("updateEffect");
 		_updateDuration = (WOAssociation) associations.valueForKey("updateDuration");
 		_hidden = (WOAssociation) associations.valueForKey("hidden");
 		_newHidden = (WOAssociation) associations.valueForKey("newHidden");
 		_updateHidden = (WOAssociation) associations.valueForKey("updateHidden");
 		_delay = (WOAssociation) associations.valueForKey("delay");
+		// PROTOTYPE
 		_showEffect = (WOAssociation) associations.valueForKey("showEffect");
 		_showDuration = (WOAssociation) associations.valueForKey("showDuration");
 		_hideDelay = (WOAssociation) associations.valueForKey("hideDelay");
 		_hideDuration = (WOAssociation) associations.valueForKey("hideDuration");
+		// PROTOTYPE
 		_hideEffect = (WOAssociation) associations.valueForKey("hideEffect");
 	}
 	

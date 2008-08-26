@@ -98,6 +98,7 @@ public class AjaxDragResizeContainer extends AjaxComponent {
 	}
 
 	private String jsForEvent(String event) {
+		// PROTOTYPE
 		return "function(isResize){ " + "this.reqNum += 1; " // Make sure that every request is unique. Otherwise
 																// requests get dropped somewhere.
 				+ "new Ajax.Request('" + _actionUrl + "', {method: 'get', parameters: " + "'id='+this.element.id+'&" + "event=" + event + "&" + "w='+this.elmW+'&" + "h='+this.elmH+'&" + "x='+this.elmX+'&" + "y='+this.elmY+'&" + "resized='+isResize+'&" + "reqNum='+this.reqNum" + " })}";
