@@ -66,7 +66,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	}
 
 	public NSDictionary createAjaxOptions(WOComponent component) {
-		// PROTOTYPE
+		// PROTOTYPE OPTIONS
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("decay", AjaxOption.NUMBER));
@@ -89,7 +89,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	}
 	
 	public static void expandInsertionFromOptions(NSMutableDictionary options, IAjaxElement element, WOComponent component) {
-		// PROTOTYPE
+		// PROTOTYPE EFFECTS
 		String insertionDuration = (String) element.valueForBinding("insertionDuration", component);
 		String beforeInsertionDuration = (String) element.valueForBinding("beforeInsertionDuration", component);
 		if (beforeInsertionDuration == null) {
@@ -107,7 +107,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	}
 
 	public static String expandInsertion(String originalInsertion, String beforeDuration, String afterDuration) {
-		// PROTOTYPE
+		// PROTOTYPE EFFECTS
 		String expandedInsertion = originalInsertion;
 		if (originalInsertion != null && originalInsertion.startsWith("Effect.")) {
 			String effectPairName = originalInsertion.substring("Effect.".length());
@@ -118,7 +118,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	}
 
 	public static NSDictionary removeDefaultOptions(NSDictionary options) {
-		// PROTOTYPE
+		// PROTOTYPE OPTIONS
 		NSMutableDictionary mutableOptions = options.mutableClone();
 		if ("'get'".equals(mutableOptions.objectForKey("method"))) {
 			mutableOptions.removeObjectForKey("method");
@@ -133,7 +133,6 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	}
 
 	public NSMutableDictionary createObserveFieldOptions(WOComponent component) {
-		// PROTOTYPE
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());

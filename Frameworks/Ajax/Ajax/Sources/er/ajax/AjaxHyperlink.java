@@ -49,7 +49,7 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 		}
 		NSDictionary options = createAjaxOptions(context.component());
 		String actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
-		// PROTOTYPE
+		// PROTOTYPE FUNCTIONS
 		sb.append("new Ajax.Request('");
 		sb.append(actionUrl);
 		sb.append("', ");
@@ -68,7 +68,7 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 
 	protected NSDictionary createAjaxOptions(WOComponent component) {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
-		// PROTOTYPE
+		// PROTOTYPE OPTIONS
 		ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));

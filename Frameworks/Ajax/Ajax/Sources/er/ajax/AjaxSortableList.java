@@ -17,7 +17,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSRange;
 
-// PROTOTYPE
+// PROTOTYPE FUNCTIONS (WRAPPER)
 /**
  * 
  * @binding id the id of the list

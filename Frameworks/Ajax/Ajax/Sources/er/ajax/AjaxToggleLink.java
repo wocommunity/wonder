@@ -78,7 +78,7 @@ public class AjaxToggleLink extends WOHTMLDynamicElement {
 
 		String toggleID = (String) toggleIDAssociation.valueInComponent(component);
 
-		// PROTOTYPE
+		// PROTOTYPE EFFECTS
 		response.appendContentString(" onclick = \"Effect.toggle($wi('");
 		response.appendContentString(toggleID);
 		response.appendContentString("'), '");

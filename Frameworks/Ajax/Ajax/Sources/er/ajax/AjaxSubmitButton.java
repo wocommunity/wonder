@@ -39,19 +39,19 @@ import er.extensions.foundation.ERXProperties;
  * @binding formSerializer the name of the javascript function to call to serialize the form
  * @binding elementName the element name to use (defaults to "a")
  * 
- * // PROTOTYPE
+ * // PROTOTYPE EFFECTS
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
  * @binding effectDuration synonym of afterEffectDuration except it always applies to updateContainerID
- * // PROTOTYPE
+ * // PROTOTYPE EFFECTS
  * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then try updateContainerID)
  * @binding beforeEffectDuration the duration of the effect to apply before
- * // PROTOTYPE
+ * // PROTOTYPE EFFECTS
  * @binding afterEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then try updateContainerID)
  * @binding afterEffectDuration the duration of the effect to apply after
  * 
- * // PROTOTYPE
+ * // PROTOTYPE EFFECTS
  * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
  * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
  * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
@@ -84,7 +84,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   }
 
   public NSMutableDictionary createAjaxOptions(WOComponent component) {
-	// PROTOTYPE
+	// PROTOTYPE OPTIONS
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
     ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
@@ -111,13 +111,13 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	// _asbn = AJAX_SUBMIT_BUTTON_NAME (but short)
     options.setObjectForKey("'" + submitButtonName + "'", "_asbn");
 
-	// PROTOTYPE
+	// PROTOTYPE OPTIONS
     // default to true in javascript
     if ("true".equals(options.objectForKey("asynchronous"))) {
     	options.removeObjectForKey("asynchronous");
     }
 
-	// PROTOTYPE
+	// PROTOTYPE OPTIONS
     // default to true in javascript
     if ("true".equals(options.objectForKey("evalScripts"))) {
     	options.removeObjectForKey("evalScripts");
@@ -157,7 +157,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	
 	String updateContainerID = (String)valueForBinding("updateContainerID", component);
 	
-	// PROTOTYPE
+	// PROTOTYPE EFFECTS
 	String beforeEffect = (String) valueForBinding("beforeEffect", component);
 	if (beforeEffect != null) {
 		onClickBuffer.append("new ");
