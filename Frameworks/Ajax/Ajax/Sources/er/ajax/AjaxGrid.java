@@ -144,7 +144,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * for this. This can be used as the <code>updateContainerID</code> in a
  * <code>AjaxUpdateLink</code> or
  * <code>&lt;updateContainerID&gt;Update()</code> can be called directly. This
- * results in a call to <code>ajaxGrid_init($(&lt;tableID&gt;));</code> to be
+ * results in a call to <code>ajaxGrid_init('&lt;tableID&gt;');</code> to be
  * re-enable drag and drop on the table.
  * <p>
  * Here is an example. In this example, <code>updateContainerID</code> is used
@@ -326,7 +326,7 @@ public class AjaxGrid extends WOComponent {
 	 */
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
-		AjaxUtils.addScriptResourceInHead(context, response, "movecolumns.js");
+		AjaxUtils.addScriptResourceInHead(context, response, "AjaxGrid.js");
 	}
 
 	/**
@@ -411,7 +411,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return JavaScript to initialize drag and drop on the grid
 	 */
 	public String initScript() {
-		return canReorder() ? "<script type=\"text/javascript\">AjaxGrid.ajaxGrid_init($(\"" + tableID() + "\"));</script>" : null;
+		return canReorder() ? "<script type=\"text/javascript\">AjaxGrid.ajaxGrid_init('" + tableID() + "'));</script>" : null;
 	}
 
 	/**
@@ -434,7 +434,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return ajaxGrid_init(TABLE);
 	 */
 	public String enableDragAndDrop() {
-		return canReorder() ? "AjaxGrid.ajaxGrid_init($('" + tableID() + "'));" : "";
+		return canReorder() ? "AjaxGrid.ajaxGrid_init('" + tableID() + "');" : "";
 	}
 
 	/**
