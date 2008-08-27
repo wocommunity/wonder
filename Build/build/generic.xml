@@ -423,7 +423,7 @@ There are many ways to use this script:
             <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.mysql" deploymentDir="${wonder.local.deployment.dir}">
                 <include name="*PlugIn.framework"/>
            </frameworks>
-           <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.system.bundles" deploymentDir="${wonder.system.deployment.dir}"> 
+           <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.system.bundles" deploymentDir="${wonder.system.deployment.dir}" embed="${wo.frameworks.bundles.embed}" > 
                 <include name="JavaFoundation.framework" />
                 <include name="JavaEOAccess.framework" />
                 <include name="JavaEOControl.framework" />
@@ -433,10 +433,10 @@ There are many ways to use this script:
                 <include name="JavaJDBCAdaptor.framework" />
                 <include name="JavaXML.framework" />
             </frameworks>
-            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.webservices.server" deploymentDir="${wonder.system.deployment.dir}"> 
+            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.webservices.server" deploymentDir="${wonder.system.deployment.dir}" embed="${wo.frameworks.bundles.embed}"> 
                 <include name="JavaWebServices*.framework" />
             </frameworks>
-            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.d2w" deploymentDir="${wonder.system.deployment.dir}"> 
+            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.d2w" deploymentDir="${wonder.system.deployment.dir}" embed="${wo.frameworks.bundles.embed}"> 
                 <include name="JavaDirectToWeb.framework" />
                 <include name="JavaEOProject.framework" />
                 <include name="JavaDTWGeneration.framework" />
