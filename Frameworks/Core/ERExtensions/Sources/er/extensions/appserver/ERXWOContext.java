@@ -575,4 +575,9 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		}
 		return url;
 	}
+	
+	public String safeElementID() {
+		return ERXStringUtilities.safeIdentifierName(elementID());
+	}
+	
 }
