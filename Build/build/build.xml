@@ -23,6 +23,14 @@
         </antcall>
     </target>
         
+    <target name="EROraclePlugIn.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="EROraclePlugIn" />
+            <param name="project.dir" value="Frameworks/PlugIns/EROraclePlugIn" />
+        </antcall>
+    </target>
+        
     <target name="WOOgnl53.pre">
         <delete>
             <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
@@ -707,6 +715,7 @@
             <param name="project.dir" value="Applications/JavaMonitor" />
       		<param name="wonder.lib.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework/Ajax" />
       		<param name="wonder.lib.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
+      		<param name="wo.frameworks.bundles.embed" value="${wonder.deployment.embed.jars}" />
         </antcall>
     </target>
 
@@ -719,6 +728,7 @@
             <param name="project.dir" value="Applications/wotaskd" />
       		<param name="wonder.lib.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework" />
       		<param name="wonder.lib.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
+      		<param name="wo.frameworks.bundles.embed" value="${wonder.deployment.embed.jars}" />
         </antcall>
     </target>
 
@@ -752,7 +762,7 @@
     <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, SproutCore.all, ERIUI.all, GoogleChart.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, SproutCoreExample.all, ERIUIExample.all" />
     
-    <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all" />
+    <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all" />
 
     <target name="validity.frameworks.all" depends="Validity.all" />
     <target name="validity.applications.all" depends="ValidityModeler.all" />
