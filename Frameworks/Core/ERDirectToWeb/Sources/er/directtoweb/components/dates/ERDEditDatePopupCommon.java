@@ -142,6 +142,10 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
         return time;
     }
 
+    public void setTime(String newTime) {
+    	time = newTime;
+    }
+    
     public String day() throws Exception {
         NSTimestamp date = (NSTimestamp)objectPropertyValue();
         if (date != null)
