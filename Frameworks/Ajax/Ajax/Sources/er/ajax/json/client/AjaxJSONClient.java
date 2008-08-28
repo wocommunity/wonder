@@ -1,11 +1,7 @@
 package er.ajax.json.client;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
 
-import er.ajax.AjaxUtils;
-import er.ajax.json.JSONRequestHandler;
-import er.extensions.components.ERXComponent;
 import er.extensions.foundation.ERXRandomGUID;
 
 /**
@@ -22,15 +18,14 @@ import er.extensions.foundation.ERXRandomGUID;
  * @binding global if true, a single component instance will be shared for the session (defaults false)
  * @binding instance if global is false, you can set a specific instance identifier (leave out for a generated value)
  */
-public class AjaxJSONClient extends ERXComponent {
+public class AjaxJSONClient extends AjaxStatelessJSONClient {
 	private String _instance;
 
 	public AjaxJSONClient(WOContext context) {
 		super(context);
 	}
 
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
+	public boolean isStateless() {
 		return false;
 	}
 
@@ -52,35 +47,5 @@ public class AjaxJSONClient extends ERXComponent {
 			instance = _instance;
 		}
 		return instance;
-	}
-
-	@Override
-	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-		AjaxUtils.addScriptResourceInHead(wocontext, woresponse, "jsonrpc.js");
-
-		String queryString = null;
-		if (wocontext.request().sessionID() != null && wocontext.session().storesIDsInURLs()) {
-			queryString = "wosid=" + wocontext.request().sessionID();
-		}
-
-		String componentName = jsonComponent();
-		String instance;
-		if (componentName == null) {
-			instance = null;
-		}
-		else {
-			instance = jsonInstance();
-		}
-
-		String jsonUrl = JSONRequestHandler.jsonUrl(wocontext, componentName, instance, queryString);
-		woresponse.appendContentString("new JSONRpcClient(");
-		String callback = stringValueForBinding("callback");
-		if (callback != null) {
-			woresponse.appendContentString(callback);
-			woresponse.appendContentString(",");
-		}
-		woresponse.appendContentString("'");
-		woresponse.appendContentString(jsonUrl);
-		woresponse.appendContentString("')");
 	}
 }
