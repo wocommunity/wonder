@@ -185,6 +185,8 @@ public class ERXPartialInitializer {
 			
 			EORelationship primaryRelationship = new EORelationship(relationshipPropertyList, entity);
 			primaryRelationship.awakeWithPropertyList(relationshipPropertyList);
+			// MS: This looks silly, but 5.4 has a bug where the relationship dictionary isn't necessarily initialized at this point, so we want to force it to load 
+			entity.relationshipNamed(relationship.name());
 			entity.removeRelationship(relationship);
 			entity.addRelationship(primaryRelationship);
 		}
