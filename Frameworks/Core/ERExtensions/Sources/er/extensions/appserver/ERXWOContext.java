@@ -8,6 +8,7 @@ package er.extensions.appserver;
 
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -138,9 +139,29 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		return _generateCompleteURLs;
 	}
 
+	/**
+	 * Creates a WOContext using a dummy WORequest.
+	 * @return the new WOContext
+	 */
 	public static WOContext newContext() {
 		WOApplication app = WOApplication.application();
-		return app.createContextForRequest(app.createRequest("GET", app.cgiAdaptorURL() + "/" + app.name(), "HTTP/1.1", null, null, null));
+		// Try to create a URL with a relative path into the application to mimic a real request.
+		// We must create a request with a relative URL, as using an absolute URL makes the new 
+		// WOContext's URL absolute, and it is then unable to render relative paths. (Long story short.)
+		//
+		// Note: If you configured the adaptor's WebObjectsAlias to something other than the default, 
+		// make sure to also set your WOAdaptorURL property to match.  Otherwise, asking the new context 
+		// the path to a direct action or component action URL will give an incorrect result.
+		String requestUrl = app.cgiAdaptorURL() + "/" + app.name() + ".woa";
+		try {
+			URL url = new URL(requestUrl);
+			requestUrl = url.getPath(); // Get just the part of the URL that is relative to the server root.
+		} catch (MalformedURLException mue) {
+			// The above should never fail.  As a last resort, using the empty string will 
+			// look funny in the request, but still allow the context to use a relative url.
+			requestUrl = "";
+		}
+		return app.createContextForRequest(app.createRequest("GET", requestUrl, "HTTP/1.1", null, null, null));
 	}
 
 	public NSMutableDictionary mutableUserInfo() {
