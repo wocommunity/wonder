@@ -78,11 +78,12 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 
-	/** Override to un-register for stop obsevring notifcations. */
+	/* Not necessary -- NSNotificationCenter uses weak references
 	public void finalize() throws Throwable {
 		NSNotificationCenter.defaultCenter().removeObserver(this);
 		super.finalize();
 	}
+	*/
 
 	// reimplementation of D2WList stuff
 
@@ -483,7 +484,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 			// the current index if out of range
 			log.debug("dg.currentBatchIndex() " + dg.currentBatchIndex());
 			dg.setCurrentBatchIndex(dg.currentBatchIndex());
-			if (listSize() > 0) {
+			if (listSize() > 0 && displayGroup().selectsFirstObjectAfterFetch()) {
 				d2wContext().takeValueForKey(dg.allObjects().objectAtIndex(0), "object");
 			}
 		}

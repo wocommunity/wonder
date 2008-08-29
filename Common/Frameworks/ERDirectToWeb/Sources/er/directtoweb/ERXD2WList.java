@@ -6,12 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WList;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import er.extensions.ERXArrayUtilities;
+import org.apache.log4j.Logger;
 
 // Only difference between this component and D2WList is that this one uses ERD2WSwitchComponent
 /**
@@ -26,9 +30,9 @@ import er.extensions.*;
  */
 
 public class ERXD2WList extends D2WList {
-    ERXLogger log = ERXLogger.getERXLogger(ERXD2WList.class);
+    Logger log = Logger.getLogger(ERXD2WList.class);
     
-    protected EOArrayDataSource _dataSource = null;
+    protected EOArrayDataSource _dataSource;
 
     public ERXD2WList(WOContext context) {
         super(context);
@@ -40,31 +44,43 @@ public class ERXD2WList extends D2WList {
     public void awake() {}
 
     public EODataSource dataSource() {
-        if (this.hasBinding("dataSource") && this.valueForBinding("list") == null)
+        if (this.hasBinding("dataSource") && (this.valueForBinding("list") == null || ((NSArray)this.valueForBinding("list")).count() == 0))
             return (EODataSource) this.valueForBinding("dataSource");
         if (this.hasBinding("list")) {
             NSArray nsarray = (NSArray) this.valueForBinding("list");
-            nsarray = ERXArrayUtilities.removeNullValues(nsarray);
-            EOEditingContext eoeditingcontext
-                = (nsarray != null && nsarray.count() > 0
-                   ? ((EOEnterpriseObject) nsarray.objectAtIndex(0))
-                   .editingContext()
-                   : null);
-            String entityName = (String) this.valueForBinding("entityName");
-            if(entityName == null) {
-                entityName = (nsarray != null && nsarray.count() > 0
-                              ? ((EOEnterpriseObject) nsarray.objectAtIndex(0))
-                              .entityName()
-                              : null);
+            if( nsarray != null && nsarray.count() > 0 ) {
+                nsarray = ERXArrayUtilities.removeNullValues(nsarray);
+                if( nsarray != null && nsarray.count() > 0 ) {
+                    EOEnterpriseObject firstObject = (EOEnterpriseObject)ERXArrayUtilities.firstObject(nsarray); //if our array is composed of non-EOs, we will blow up here; that's convenient, since the stacktrace will lead us to look here, and discover that binding a dataSource rather than a list is the solution
+                    if( firstObject != null ) { //the null checks before here aren't strictly needed, but will save some allocations
+                        EOEditingContext eoeditingcontext = firstObject.editingContext();
+                        if( eoeditingcontext != null ) {
+                            EOClassDescription classDescription = null;
+
+                            String entityName = (String) this.valueForBinding("entityName");
+                            if( entityName != null ) {
+                                classDescription = EOClassDescription.classDescriptionForEntityName(entityName);
+                            }
+
+                            if(classDescription == null) {
+                                classDescription = firstObject.classDescription();
+                            }
+
+                            if(classDescription != null) {
+                                if (_dataSource == null || !classDescription.equals(_dataSource.classDescriptionForObjects()) || _dataSource.editingContext() != eoeditingcontext) {
+                                    _dataSource = new EOArrayDataSource(classDescription, eoeditingcontext);
+                                }
+                                if (_dataSource != null) {
+                                    _dataSource.setArray(nsarray);
+                                }
+                                return _dataSource;
+                            }
+                        }
+                    }
+                }
             }
-            if(entityName != null) {
-                if (_dataSource == null || !entityName.equals(_dataSource.classDescriptionForObjects().entityName()) || _dataSource.editingContext() != eoeditingcontext)
-                    _dataSource = (eoeditingcontext != null
-                                   ? (new EOArrayDataSource(EOClassDescription.classDescriptionForEntityName(entityName), eoeditingcontext)) : null);
-            }
-            if (_dataSource != null)
-                _dataSource.setArray(nsarray);
+            _dataSource = null; //if we got here then some check above failed, so clear out our cached data source
         }
-        return _dataSource;
+        return null;
     }
 }

@@ -88,6 +88,10 @@ public class ERDList extends ERDCustomEditComponent {
     // we will get asked quite a lot of times, so caching is in order
 
     public NSArray list() {
+        if( valueForBinding("dataSource") != null) { //if we have an actual dataSource bound, return null for list so that ERXD2WList uses the dataSource
+            return null;
+        }
+
         if (list == null) {
             try {
                 if (hasBinding("list")) {

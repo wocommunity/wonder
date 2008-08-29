@@ -12,6 +12,7 @@ HasNoCreateButtonComponentName: WOConditional {
 List1: ERXD2WList { 	
 	pageConfiguration = ^listConfigurationName;
 	list = list;
+	dataSource = ^dataSource;
 	entityName = ^destinationEntityName;
 	settings = settings;
 }
