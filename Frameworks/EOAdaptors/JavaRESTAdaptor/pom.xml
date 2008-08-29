@@ -11,6 +11,11 @@
 	<packaging>woframework</packaging>
 	<dependencies>
 		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
+		</dependency>
+		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaEOAccess</artifactId>
 		</dependency>
@@ -25,10 +30,6 @@
 		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaXML</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

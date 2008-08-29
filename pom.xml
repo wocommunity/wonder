@@ -7,21 +7,39 @@
 	<packaging>pom</packaging>
 	<name>Project Wonder</name>
 	<url>http://wonder.sf.net/</url>
-	<properties>
-		<woversion>[5.4,)</woversion>
-	</properties>
 	<modules>
 		<module>Frameworks</module>
 		<module>Examples</module>
 		<module>Applications</module>
 	</modules>
+	<profiles>
+		<profile>
+			<id>wo53</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<woClassifier>wo53</woClassifier>
+				<!-- WebObjects version 5.3.x -->
+				<woversion>[5.3,5.4)</woversion>
+			</properties>
+		</profile>
+		<profile>
+			<id>wo54</id>
+			<properties>
+				<woClassifier>wo54</woClassifier>
+				<!-- WebObjects version 5.4.x -->
+				<woversion>[5.4,5.5)</woversion>
+			</properties>
+		</profile>
+	</profiles>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.objectstyle.woproject.maven2</groupId>
 				<artifactId>maven-wolifecycle-plugin</artifactId>
 				<extensions>true</extensions>
-				<version>2.0.15</version>
+				<version>2.0.16-SNAPSHOT</version>
 				<configuration>
 					<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
 				</configuration>
@@ -87,6 +105,7 @@
 				<groupId>wonder.core</groupId>
 				<artifactId>ERExtensions</artifactId>
 				<version>${pom.version}</version>
+				<classifier>${woClassifier}</classifier>
 			</dependency>
 			<dependency>
 				<groupId>wonder.core</groupId>
@@ -107,6 +126,7 @@
 				<groupId>wonder.core</groupId>
 				<artifactId>WOOgnl</artifactId>
 				<version>${pom.version}</version>
+				<classifier>${woClassifier}</classifier>
 			</dependency>
 			<dependency>
 				<groupId>wonder.businesslogic</groupId>
@@ -437,7 +457,7 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>
-		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk</connection>
-		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk</developerConnection>
+		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder</connection>
+		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder</developerConnection>
 	</scm>
 </project>

@@ -13,9 +13,18 @@
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
 	<dependencies>
+	<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
+		</dependency>
 		<dependency>
 			<groupId>wonder.ajax</groupId>
 			<artifactId>Ajax</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 	</dependencies>
 </project>
