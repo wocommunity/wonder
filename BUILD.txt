@@ -62,7 +62,7 @@ If you have write privileges in /Library/Frameworks, /Library/WebObjects/JavaApp
 Building with Maven: 
 =========================
 
-Steps 1 and 2 are required only once or when you clean your local Maven repository (rm -Rf ~/.m2)
+Steps 1 and 2 are required only once or when you clean your local Maven repository (rm -Rf ~/.m2/repository).
 
 1. Download and Install Maven (http://maven.apache.org)
 
@@ -72,9 +72,13 @@ Steps 1 and 2 are required only once or when you clean your local Maven reposito
  
 3. Open a terminal and cd into the Wonder root directory.
 
-4. Build wonder:
+4.a. Build Wonder compatible with WO 5.3:
   
   mvn clean install
+  
+4.b Build Wonder compatible with WO 5.4:
+
+  mvn clean install -P wo54
   
 NOTE: Make sure you have your settings.xml properly configured.
 See the step 2 of Maven Quick Start Tutorial for more information:

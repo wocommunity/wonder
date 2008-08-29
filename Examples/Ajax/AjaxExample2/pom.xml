@@ -13,6 +13,7 @@
 		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
 			<groupId>wonder.ajax</groupId>
@@ -21,6 +22,7 @@
 		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>WOOgnl</artifactId>
+			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
 			<groupId>wonder.core</groupId>

@@ -15,6 +15,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
@@ -23,20 +27,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWOJSPServlet</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.ibm.icu</groupId>
-			<artifactId>icu4j</artifactId>
+			<artifactId>JavaEOControl</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -21,6 +21,7 @@
 		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
 		</dependency>
 	</dependencies>
 	<build>
