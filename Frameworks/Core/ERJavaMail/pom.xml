@@ -13,6 +13,11 @@
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
 	<dependencies>
+	<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
+		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaFoundation</artifactId>
@@ -28,10 +33,6 @@
 		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaEOControl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.activation</groupId>

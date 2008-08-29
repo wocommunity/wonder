@@ -10,13 +10,24 @@
 	<name>JavaMemoryAdaptor</name>
 	<packaging>woframework</packaging>
 	<dependencies>
+		<!-- BEGIN: Required because of NSCollection's using generics -->
+	<dependency>
+		<groupId>wonder.core</groupId>
+		<artifactId>ERExtensions</artifactId>
+		<classifier>${woClassifier}</classifier>
+	</dependency>
+		<!-- END: Required because of NSCollection's using generics -->
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<artifactId>JavaFoundation</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaEOAccess</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOControl</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

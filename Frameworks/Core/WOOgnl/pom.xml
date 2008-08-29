@@ -9,29 +9,25 @@
 	<artifactId>WOOgnl</artifactId>
 	<name>WOOgnl Framework</name>
 	<packaging>woframework</packaging>
-	<build>
-		<sourceDirectory>${basedir}/Sources</sourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>Sources_WO54</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+	<profiles>
+		<profile>
+			<id>wo53</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<woClassifier>wo53</woClassifier>
+				<sourceForWOVersion>${basedir}/Sources_WO53</sourceForWOVersion>
+			</properties>
+		</profile>
+		<profile>
+			<id>wo54</id>
+			<properties>
+				<woClassifier>wo54</woClassifier>
+				<sourceForWOVersion>${basedir}/Sources_WO54</sourceForWOVersion>
+			</properties>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>com.webobjects</groupId>
@@ -46,4 +42,36 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<sourceDirectory>${basedir}/Sources</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.objectstyle.woproject.maven2</groupId>
+				<artifactId>maven-wolifecycle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
+					<classifier>${woClassifier}</classifier>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${sourceForWOVersion}</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

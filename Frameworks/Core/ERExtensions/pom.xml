@@ -9,26 +9,61 @@
 	<artifactId>ERExtensions</artifactId>
 	<name>ERExtensions Framework</name>
 	<packaging>woframework</packaging>
+	<profiles>
+		<profile>
+			<id>wo53</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<woClassifier>wo53</woClassifier>
+			</properties>
+		</profile>
+		<profile>
+			<id>wo54</id>
+			<properties>
+				<woClassifier>wo54</woClassifier>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>add-source</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>Sources_WO54</source>
+									</sources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Excluding this classes make the Maven build to fail. -->
+					<!--
+						<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> <configuration> <excludes> <exclude>**/com/webobjects/foundation/*</exclude> </excludes>
+						</configuration> </plugin>
+					-->
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	<build>
 		<sourceDirectory>${basedir}/Sources</sourceDirectory>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>Sources_WO54</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
+				<groupId>org.objectstyle.woproject.maven2</groupId>
+				<artifactId>maven-wolifecycle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
+					<classifier>${woClassifier}</classifier>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -39,11 +74,39 @@
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaXML</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOAccess</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOControl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
 			<artifactId>JavaJDBCAdaptor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWOJSPServlet</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
