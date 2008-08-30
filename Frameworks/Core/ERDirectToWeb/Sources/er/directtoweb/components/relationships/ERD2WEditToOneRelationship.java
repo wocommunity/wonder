@@ -17,6 +17,8 @@ import er.extensions.foundation.ERXUtilities;
 /**
  * Improves superclass by adding restrictions on the choices and uses ERXToOneRelationship, thus can handle localization
  * and has better layout options.
+ * @d2wKey restrictedChoiceKey keypath off the component that returns the list of objects to display
+ * @d2wKey restrictingFetchSpecification name of the fetchSpec to use for the list of objects.
  */
 
 public class ERD2WEditToOneRelationship extends D2WEditToOneRelationship {
