@@ -29,7 +29,9 @@
 "^er\\.extensions\\.components\\._private\\..*",
 
 "^.*\\.takeValuesFromRequest$",
+"^.*\\.takeChildrenValuesFromRequest$",
 "^.*\\.invokeAction$",
+"^.*\\.invokeChildrenAction$",
 "^.*\\.appendChildrenToResponse$",
 "^.*\\.appendToResponse$",
 "^.*\\.takeValueForKey$",
@@ -37,6 +39,7 @@
 "^.*\\.valueForBinding$",
 "^.*\\.valueForKey$",
 "^.*\\.valueForKeyPath$",
+"^.*\\.validateTakeValueForKeyPath$",
 "^.*\\.handleQueryWithUnboundKey$"
 
 )
