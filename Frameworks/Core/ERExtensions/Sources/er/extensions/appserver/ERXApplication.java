@@ -11,12 +11,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -182,23 +184,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	protected String replaceApplicationPathReplace;
 
-	private static Properties readProperties(File file) {
-		Properties result = null;
-		if (file.exists()) {
-			result = new Properties();
-			try {
-				result.load(file.toURL().openStream());
-			}
-			catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-
 	/**
 	 * Copies the props from the command line to the static dict
 	 * propertiesFromArgv.
@@ -276,6 +261,44 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		private Set<String> allFrameworks;
 
 		private Properties allBundleProps;
+		
+		private static Properties readProperties(File file) {
+			if (!file.exists()) {
+				return null;
+			}
+
+			URL url = null;
+
+			try {
+				url = file.toURL();
+			}
+			catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+			return readProperties(url);
+		}
+
+		private static Properties readProperties(URL url) {
+			if (url == null) {
+				return null;
+			}
+
+			Properties result = new Properties();
+
+			try {
+				result.load(url.openStream());
+			}
+			catch (MalformedURLException exception) {
+				exception.printStackTrace();
+				return null;
+			}
+			catch (IOException exception) {
+				exception.printStackTrace();
+				return null;
+			}
+			return result;
+		}
 
 		/**
 		 * Called prior to actually initializing the app. Defines framework load
@@ -434,7 +457,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					mainBundle = NSBundle.mainBundle();
 				}
 				if (mainBundle != null) {
-					mainProps = NSBundle.mainBundle().properties();
+					mainProps = mainBundle.properties();
 				}
 				if (mainProps == null) {
 					String woUserDir = NSProperties.getProperty("webobjects.user.dir");
@@ -442,6 +465,41 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						woUserDir = System.getProperty("user.dir");
 					}
 					mainProps = readProperties(new File(woUserDir, "Contents" + File.separator + "Resources" + File.separator + "Properties"));
+				}
+				
+				if (mainProps == null) {
+					ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+					Enumeration jarBundles = null;
+					try {
+						jarBundles = classLoader.getResources("Resources/Properties");
+					}
+					catch (IOException exception) {
+						exception.printStackTrace();
+					}
+
+					URL propertiesPath = null;
+
+					while (jarBundles.hasMoreElements()) {
+						URL url = (URL) jarBundles.nextElement();
+
+						String urlAsString = url.toString();
+
+						if (urlAsString.contains(mainBundleName + ".jar")) {
+							try {
+								propertiesPath = new URL(URLDecoder.decode(urlAsString, "UTF-8"));
+							}
+							catch (MalformedURLException exception) {
+								exception.printStackTrace();
+							}
+							catch (UnsupportedEncodingException exception) {
+								exception.printStackTrace();
+							}
+
+							break;
+						}
+					}
+					mainProps = readProperties(propertiesPath);
 				}
 
 				if (mainProps == null) {
