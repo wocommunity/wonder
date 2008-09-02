@@ -101,7 +101,7 @@ public class GCBarChart extends GCAbstractChart {
       barWidth = (String) _barWidth.valueInComponent(component);
       chbh.append(barWidth);
     }
-
+    
     if (_spacing != null) {
       if (_barWidth == null) {
         chbh.append(barWidth);
@@ -124,6 +124,9 @@ public class GCBarChart extends GCAbstractChart {
 
       String groupSpacing = (String) _groupSpacing.valueInComponent(component);
       chbh.append(groupSpacing);
+    }
+    if (chbh.length() > 0) {
+      chartUrl.setQueryParameter("chbh", chbh.toString());
     }
     
     NSArray<Object> zeroLine = AjaxUtils.arrayValueForAssociation(component, _zeroLine);
