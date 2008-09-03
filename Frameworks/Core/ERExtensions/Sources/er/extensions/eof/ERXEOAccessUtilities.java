@@ -180,7 +180,7 @@ public class ERXEOAccessUtilities {
         if (entityName == null)
             throw new IllegalStateException("Entity name argument is null for method: entityWithNamedIsShared");
         EOEntity entity = entityNamed(ec, entityName);
-        return entity.sharedObjectFetchSpecificationNames().count() > 0;
+        return entity != null && entity.sharedObjectFetchSpecificationNames().count() > 0;
     }
 
     /**
