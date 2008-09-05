@@ -45,6 +45,9 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
     }
 
     ERDatabaseAttachment attachment = ERDatabaseAttachment.createERDatabaseAttachment(editingContext, Boolean.TRUE, new NSTimestamp(), mimeType, recommendedFileName, Boolean.TRUE, Integer.valueOf((int) uploadedFile.length()), webPath);
+    if (delegate() != null) {
+      delegate().attachmentCreated(this, attachment);
+    }
     try {
       attachment.setWebPath(ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName));
       NSData data = new NSData(uploadedFile.toURL());
@@ -55,6 +58,9 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
         ERAttachmentData attachmentData = ERAttachmentData.createERAttachmentData(editingContext);
         attachmentData.setData(data);
         attachment.setAttachmentDataRelationship(attachmentData);
+      }
+      if (delegate() != null) {
+        delegate().attachmentAvailable(this, attachment);
       }
     }
     catch (IOException e) {

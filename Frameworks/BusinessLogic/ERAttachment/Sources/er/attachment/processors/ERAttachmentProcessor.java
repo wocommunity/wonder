@@ -51,6 +51,8 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   private static final String FILE_NAME_VARIABLE = "\\$\\{fileName\\}";
 
   private static NSMutableDictionary<String, ERAttachmentProcessor<?>> _processors;
+  
+  private IERAttachmentProcessorDelegate _delegate;
 
   /**
    * Returns all of the processors mapped by storageType.
@@ -152,6 +154,24 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.FILE_NAME_VARIABLE, recommendedFileName);
     parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.PK_VARIABLE, attachment.primaryKeyInTransaction());
     return parsedPath;
+  }
+  
+  /**
+   * Sets the attachment processor delegate for this processor.
+   * 
+   * @param delegate the attachment processor delegate for this processor
+   */
+  public void setDelegate(IERAttachmentProcessorDelegate delegate) {
+    _delegate = delegate;
+  }
+  
+  /**
+   * Returns the attachment processor delegate for this processor.
+   * 
+   * @return the attachment processor delegate for this processor
+   */
+  public IERAttachmentProcessorDelegate delegate() {
+    return _delegate;
   }
 
   /**

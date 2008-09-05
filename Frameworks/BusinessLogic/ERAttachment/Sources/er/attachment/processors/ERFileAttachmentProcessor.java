@@ -68,6 +68,9 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
     }
 
     ERFileAttachment attachment = ERFileAttachment.createERFileAttachment(editingContext, Boolean.TRUE, new NSTimestamp(), mimeType, recommendedFileName, Boolean.valueOf(proxy), Integer.valueOf((int) uploadedFile.length()), webPath);
+    if (delegate() != null) {
+      delegate().attachmentCreated(this, attachment);
+    }
     try {
       webPath = ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName);
       filesystemPath = ERAttachmentProcessor._parsePathTemplate(attachment, filesystemPath, recommendedFileName);
@@ -84,6 +87,10 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
 
       attachment.setWebPath(webPath);
       attachment.setFilesystemPath(actualFilesystemPath.getAbsolutePath());
+
+      if (delegate() != null) {
+        delegate().attachmentAvailable(this, attachment);
+      }
     }
     catch (IOException e) {
       attachment.delete();
