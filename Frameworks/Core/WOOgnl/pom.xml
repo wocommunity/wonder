@@ -11,10 +11,17 @@
 	<packaging>woframework</packaging>
 	<profiles>
 		<profile>
-			<id>wo53</id>
+			<id>unknown</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			<properties>
+				<woClassifier>unknown</woClassifier>
+				<sourceForWOVersion>${basedir}/Sources_WO54</sourceForWOVersion>
+			</properties>
+		</profile>
+		<profile>
+			<id>wo53</id>
 			<properties>
 				<woClassifier>wo53</woClassifier>
 				<sourceForWOVersion>${basedir}/Sources_WO53</sourceForWOVersion>

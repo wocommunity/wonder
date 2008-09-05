@@ -14,9 +14,23 @@
 	</modules>
 	<profiles>
 		<profile>
-			<id>wo53</id>
+			<id>unknown</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<woClassifier>unknown</woClassifier>
+				<!-- Any WebObjects version equals or superior to 5.3 -->
+				<woversion>[5.3,)</woversion>
+			</properties>
+		</profile>
+		<profile>
+			<id>wo53</id>
+			<activation>
+				<property>
+					<name>womajor</name>
+					<value>5.3</value>
+				</property>
 			</activation>
 			<properties>
 				<woClassifier>wo53</woClassifier>
@@ -26,6 +40,12 @@
 		</profile>
 		<profile>
 			<id>wo54</id>
+			<activation>
+				<property>
+					<name>womajor</name>
+					<value>5.4</value>
+				</property>
+			</activation>
 			<properties>
 				<woClassifier>wo54</woClassifier>
 				<!-- WebObjects version 5.4.x -->
@@ -106,6 +126,8 @@
 				<artifactId>ERExtensions</artifactId>
 				<version>${pom.version}</version>
 				<classifier>${woClassifier}</classifier>
+				<!-- Using the provided scope to avoid problems with profiles and variables substitution -->
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>wonder.core</groupId>
@@ -127,6 +149,8 @@
 				<artifactId>WOOgnl</artifactId>
 				<version>${pom.version}</version>
 				<classifier>${woClassifier}</classifier>
+				<!-- Using the provided scope to avoid problems with profiles and variables substitution -->
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>wonder.businesslogic</groupId>
