@@ -15,6 +15,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
+		</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
 			<artifactId>ERDirectToWeb</artifactId>
 		</dependency>
 	</dependencies>

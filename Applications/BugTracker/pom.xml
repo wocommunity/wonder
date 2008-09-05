@@ -11,6 +11,11 @@
 	<packaging>woapplication</packaging>
 	<dependencies>
 		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
+		</dependency>
+		<dependency>
 			<groupId>wonder.businesslogic</groupId>
 			<artifactId>BTBusinessLogic</artifactId>
 		</dependency>
@@ -44,16 +49,31 @@
 		</dependency>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
-			<classifier>${woClassifier}</classifier>
-		</dependency>
-		<dependency>
-			<groupId>wonder.core</groupId>
 			<artifactId>ERDirectToWeb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.eof</groupId>
 			<artifactId>ERRest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOAccess</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaDirectToWeb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOControl</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>jfree</groupId>
