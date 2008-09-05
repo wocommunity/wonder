@@ -24,6 +24,7 @@ import com.webobjects.foundation.NSTimestamp;
 import er.attachment.model.ERS3Attachment;
 import er.extensions.concurrency.ERXAsyncQueue;
 import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -61,6 +62,9 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
     }
 
     ERS3Attachment attachment = ERS3Attachment.createERS3Attachment(editingContext, Boolean.FALSE, new NSTimestamp(), mimeType, recommendedFileName, Boolean.FALSE, Integer.valueOf((int) uploadedFile.length()), null);
+    if (delegate() != null) {
+      delegate().attachmentCreated(this, attachment);
+    }
     try {
       String key = ERAttachmentProcessor._parsePathTemplate(attachment, keyTemplate, recommendedFileName);
       attachment.setS3Location(bucket, key);
@@ -219,6 +223,8 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 
     @Override
     public void process(ERS3QueueEntry object) {
+      ERS3Attachment attachment = object.attachment();
+
       File uploadedFile = object.uploadedFile();
       if (uploadedFile != null && uploadedFile.exists()) {
         String bucket;
@@ -226,8 +232,6 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
         String mimeType;
         String configurationName;
         String originalFileName = null;
-
-        ERS3Attachment attachment = object.attachment();
 
         _editingContext.lock();
         try {
@@ -245,8 +249,23 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 
         try {
           ERS3AttachmentProcessor.this.performUpload(uploadedFile, originalFileName, bucket, key, mimeType, configurationName);
+
+          _editingContext.lock();
+          try {
+            attachment.setAvailable(Boolean.TRUE);
+            _editingContext.saveChanges();
+          }
+          finally {
+            _editingContext.unlock();
+          }
+          if (ERS3AttachmentProcessor.this.delegate() != null) {
+            ERS3AttachmentProcessor.this.delegate().attachmentAvailable(ERS3AttachmentProcessor.this, attachment);
+          }
         }
         catch (Throwable t) {
+          if (ERS3AttachmentProcessor.this.delegate() != null) {
+            ERS3AttachmentProcessor.this.delegate().attachmentNotAvailable(ERS3AttachmentProcessor.this, attachment, ERXExceptionUtilities.toParagraph(t));
+          }
           ERAttachmentProcessor.log.error("Failed to upload '" + uploadedFile + "' to S3.", t);
         }
         finally {
@@ -254,17 +273,11 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
             uploadedFile.delete();
           }
         }
-
-        _editingContext.lock();
-        try {
-          attachment.setAvailable(Boolean.TRUE);
-          _editingContext.saveChanges();
-        }
-        finally {
-          _editingContext.unlock();
-        }
       }
       else {
+        if (ERS3AttachmentProcessor.this.delegate() != null) {
+          ERS3AttachmentProcessor.this.delegate().attachmentNotAvailable(ERS3AttachmentProcessor.this, attachment, "Missing attachment file '" + uploadedFile + "'.");
+        }
         ERAttachmentProcessor.log.error("Missing attachment file '" + uploadedFile + "'.");
       }
     }
