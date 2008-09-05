@@ -386,10 +386,23 @@ public class ERXEOAccessUtilities {
      * @return the EOSQLExpression which the EOFetchSpecification would use
      */
     public static EOSQLExpression sqlExpressionForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec, long start, long end) {
+    	EOSQLExpression expression = null;
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
         EOModel model = entity.model();
-        ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
-        return sqlHelper.sqlExpressionForFetchSpecification(ec, spec, start, end);
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        dbc.lock();
+        try {
+        	ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
+        	expression = sqlHelper.sqlExpressionForFetchSpecification(ec, spec, start, end);
+        }
+        catch (Exception e) {
+        	throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+        finally {
+        	dbc.unlock();
+        }
+        
+        return expression;
     }
 
     /**
@@ -406,7 +419,33 @@ public class ERXEOAccessUtilities {
     public static int rowCountForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
     	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
     	EOModel model = entity.model();
-    	return ERXSQLHelper.newSQLHelper(ec, model.name()).rowCountForFetchSpecification(ec, spec);
+
+    	EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+    	int results = 0;
+
+    	dbc.lock();
+    	try {
+    		results = ERXSQLHelper.newSQLHelper(ec, model.name()).rowCountForFetchSpecification(ec, spec);
+    	}
+    	catch (Exception localException) {
+    		if (dbc._isDroppedConnectionException(localException)) {
+    			try {
+    				dbc.database().handleDroppedConnection();
+    				results = ERXSQLHelper.newSQLHelper(ec, model.name()).rowCountForFetchSpecification(ec, spec);
+    			}
+    			catch (Exception ex) {
+    				throw NSForwardException._runtimeExceptionForThrowable(ex);
+    			}
+    		}
+    		else {
+    			throw NSForwardException._runtimeExceptionForThrowable(localException);
+    		}
+    	}
+    	finally {
+    		dbc.unlock();
+    	}
+
+    	return results;
     }
 
     /**
