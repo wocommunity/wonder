@@ -11,10 +11,16 @@
 	<packaging>woframework</packaging>
 	<profiles>
 		<profile>
-			<id>wo53</id>
+			<id>unknown</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			<properties>
+				<woClassifier>unknown</woClassifier>
+			</properties>
+		</profile>
+		<profile>
+			<id>wo53</id>
 			<properties>
 				<woClassifier>wo53</woClassifier>
 			</properties>

@@ -74,7 +74,7 @@ Steps 1 and 2 are required only once or when you clean your local Maven reposito
 
 4.a. Build Wonder compatible with WO 5.3:
   
-  mvn clean install
+  mvn clean install -P wo53
   
 4.b Build Wonder compatible with WO 5.4:
 
