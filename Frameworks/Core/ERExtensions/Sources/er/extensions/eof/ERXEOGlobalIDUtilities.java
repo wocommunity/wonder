@@ -239,6 +239,7 @@ public class ERXEOGlobalIDUtilities {
 	public static NSMutableArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs, boolean refreshesRefetchedObjects) {
     	NSMutableArray<EOEnterpriseObject> result = new NSMutableArray<EOEnterpriseObject>();
 		ec.lock();
+		ec.rootObjectStore().lock();
 		try {
 	    	NSDictionary gidsByEntity = globalIDsGroupedByEntityName(globalIDs);
 	    	for(Enumeration e = gidsByEntity.keyEnumerator(); e.hasMoreElements();) {
@@ -290,6 +291,7 @@ public class ERXEOGlobalIDUtilities {
 	    	}
 		}
 		finally {
+			ec.rootObjectStore().unlock();
 			ec.unlock();
 		}
     	return result;
