@@ -108,7 +108,7 @@
         }, 
         {
             columnName = ""; 
-            externalType = LONG; 
+            externalType = LONGINT; 
             name = longNumber; 
             valueClassName = NSNumber; 
             valueType = l; 
