@@ -43,7 +43,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * This is the wo5 java runtime plugin for FrontBase.
- * 
+ *
  * @author Cail Borrell
  */
 
@@ -90,7 +90,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 	 * WebObjects 5.4's version of JDBCAdaptor will use this in order to assemble the name of the prototype to use when
 	 * it loads models.
 	 * </P>
-	 * 
+	 *
 	 * @return the name of the plugin.
 	 */
 	public String name() {
@@ -102,7 +102,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 	 * This method returns true if the connection URL for the database has a special flag on it which indicates to the
 	 * system that the jdbcInfo which has been bundled into the plugin is acceptable to use in place of actually going
 	 * to the database and getting it.
-	 * 
+	 *
 	 * @return
 	 */
 	protected boolean shouldUseBundledJdbcInfo() {
@@ -577,7 +577,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			else
 				return s1.equals("YES");
 		}
-	    
+
 	    public String schemaCreationScriptForEntities(NSArray allEntities, NSDictionary options) {
 	/* 741*/        StringBuffer result = new StringBuffer();
 	/* 744*/        if(options == null)
@@ -649,7 +649,13 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			return new NSArray(_expressionForString("-- The 'Create Database' option is unavailable."));
 		}
 
+        public NSArray dropTableStatementsForEntityGroups(NSArray entityGroups) {
+            NSLog.debug.appendln("In dropTableStatementsForEntityGroups");
+            return super.dropTableStatementsForEntityGroups(entityGroups);
+        }
+
 		public NSArray dropTableStatementsForEntityGroup(NSArray nsarray) {
+            NSLog.debug.appendln("In dropTableStatementsForEntityGroup (no s)");
 			EOEntity entity = (EOEntity) nsarray.objectAtIndex(0);
 			String dropType = " CASCADE";
 
@@ -1647,7 +1653,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					}
 					else if (obj instanceof String) {
 						String str = (String)obj;
-						if ("yes".equalsIgnoreCase(str) || "y".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str) || "1".equalsIgnoreCase(str)) { 
+						if ("yes".equalsIgnoreCase(str) || "y".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str) || "1".equalsIgnoreCase(str)) {
 							return "TRUE";
 						}
 						else if ("no".equalsIgnoreCase(str) || "n".equalsIgnoreCase(str) || "false".equalsIgnoreCase(str) || "0".equalsIgnoreCase(str)) {
@@ -1667,6 +1673,11 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 						return "TRUE";
 					}
 				}
+				case FB_SmallInteger:
+				case FB_Float:
+				case FB_Real:
+				case FB_Double:
+				case FB_LongInteger:
 				case FB_TinyInteger:
 				case FB_Numeric:
 				case FB_Integer:
