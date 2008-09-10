@@ -46,6 +46,7 @@ NotManualEditControlConditional : WOConditional {
 EditFunction : AjaxUpdateLink {
 	action = startEditing;
 	onClick = ^onEditClick;
+	onClickBefore = ^onEditClickBefore;
 	onSuccess = ^onEditSuccess;
 	onFailure = ^onEditFailure;
 	//onClickServer = updateFunctionName;
@@ -78,6 +79,7 @@ CancelLabel : WOString {
 CancelFunction : AjaxUpdateLink {
 	action = cancel;
 	onClick = ^onCancelClick;
+	onClickBefore = ^onCancelClickBefore;
 	//onClickServer = updateFunctionName;
 	onSuccess = ^onCancelSuccess;
 	onFailure = ^onCancelFailure;
@@ -127,6 +129,7 @@ SaveSubmitFunction : AjaxSubmitButton {
 	button = false;
 	formName = formName;
 	onClick = ^onSaveClick;
+	onClickBefore = ^onSaveClickBefore;
 	//onClickServer = updateFunctionName;
 	onSuccess = ^onSaveSuccess;
 	onFailure = ^onSaveFailure;
@@ -145,6 +148,7 @@ SaveLinkFunction : AjaxUpdateLink {
 	action = save;
 	formName = formName;
 	onClick = ^onSaveClick;
+	onClickBefore = ^onSaveClickBefore;
 	//onClickServer = updateFunctionName;
 	onSuccess = ^onSaveSuccess;
 	onFailure = ^onSaveFailure;
