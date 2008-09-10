@@ -73,6 +73,10 @@ import er.extensions.foundation.ERXValueUtilities;
  *            {
  *                title = &quot;Department&quot;;
  *                keyPath = &quot;department.name&quot;;
+ *                sortPath = &quot;department.code&quot;;       // sortPath is an optional path to sort this column on, defaults to keyPath
+ *                                                              // This is useful if keyPath points to something that can't be sorted or a
+ *                                                              // different sort order is need, e.g. here by Department Code rather than name.
+ *                                                              // It can also be used when component is used to provide a sorting for the column
  *            },
  *            {
  *                title = &quot;Hire Date&quot;;
@@ -103,7 +107,8 @@ import er.extensions.foundation.ERXValueUtilities;
  *        );
  *        sortOrder = (
  *            {
- *                keyPath = &quot;department.name&quot;;
+ *                keyPath = &quot;department.code&quot;;        // If the related column definition uses sortPath, this keyPath should match it
+ *                                                              // This was left as keyPath (rather than sortPath) for backwards compatibility
  *                direction = &quot;ascending&quot;;
  *            },
  *            {
@@ -193,12 +198,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * </tr>
  * <tr>
  * <td>ajaxGridSortAscending</td>
- * <td>The span that wraps index and directoin indicator of columns sorted in
+ * <td>The span that wraps index and direction indicator of columns sorted in
  * ascending order</td>
  * </tr>
  * <tr>
  * <td>ajaxGridSortDescending</td>
- * <td>The span that wraps index and directoin indicator of columns sorted in
+ * <td>The span that wraps index and direction indicator of columns sorted in
  * descending order</td>
  * </tr>
  * <tr>
@@ -277,6 +282,7 @@ public class AjaxGrid extends WOComponent {
 
 	public static final String TITLE = "title";
 	public static final String KEY_PATH = "keyPath";
+	public static final String SORT_PATH = "sortPath";
 	public static final String SORT_DIRECTION = "direction";
 	public static final String SORT_ASCENDING = "ascending";
 	public static final String SORT_DESCENDING = "descending";
@@ -348,17 +354,15 @@ public class AjaxGrid extends WOComponent {
 	 * Updates configurationData() and displayGroup().
 	 */
 	public void sortOrderUpdated() {
-		String keyPath = (String) currentColumn().objectForKey(KEY_PATH);
-
-		// Columns without a key path can't be sorted
-		if (keyPath == null) {
+		// Columns without a key path or sort path can't be sorted
+		if (currentSortPath() == null) {
 			return;
 		}
 
 		NSMutableDictionary sortOrder = currentColumnSortOrder();
 		if (sortOrder == null) {
 			NSMutableDictionary newSortOrder = new NSMutableDictionary(2);
-			newSortOrder.setObjectForKey(keyPath, KEY_PATH);
+			newSortOrder.setObjectForKey(currentSortPath(), KEY_PATH);
 			newSortOrder.setObjectForKey(SORT_ASCENDING, SORT_DIRECTION);
 
 			sortOrders().addObject(newSortOrder);
@@ -603,6 +607,7 @@ public class AjaxGrid extends WOComponent {
 			NSArray sortOrders = sortOrders();
 			sortOrdersByKeypath = new NSMutableDictionary(sortOrders.count());
 			for (int i = 0; i < sortOrders.count(); i++) {
+				
 				sortOrdersByKeypath.setObjectForKey(sortOrders.objectAtIndex(i), ((NSKeyValueCoding) sortOrders.objectAtIndex(i)).valueForKey(KEY_PATH));
 			}
 		}
@@ -695,7 +700,7 @@ public class AjaxGrid extends WOComponent {
 	 *         isCurrentColumnSorted()
 	 */
 	public NSMutableDictionary currentColumnSortOrder() {
-		return (NSMutableDictionary) sortOrdersByKeypath().objectForKey(currentKeyPath());
+		return (NSMutableDictionary) sortOrdersByKeypath().objectForKey(currentSortPath());
 	}
 
 	/**
@@ -771,6 +776,13 @@ public class AjaxGrid extends WOComponent {
 		return (String) currentColumn().valueForKey(KEY_PATH);
 	}
 
+	/**
+	 * @return the sortPath value from currentColumn() or currentKeyPath() if not found 
+	 */
+	public String currentSortPath() {
+		return  currentColumn().valueForKey(SORT_PATH) ==  null ? currentKeyPath() : (String) currentColumn().valueForKey(SORT_PATH);
+	}
+	
 	/**
 	 * @return the name of the WOComponent to use to display the value from
 	 *         currentColumn()
