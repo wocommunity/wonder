@@ -659,6 +659,12 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     }
     return toStr;
   }
+  
+  // @Override
+  // override removed for 5.4 
+  public EOEditingContext newDefaultEditingContext() {
+    return ERXEC.newEditingContext();
+  }
 
   public static ERXSession session() {
 	  return (ERXSession) ERXThreadStorage.valueForKey("session");
