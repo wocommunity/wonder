@@ -2,6 +2,7 @@ package com.webobjects.eocontrol;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.webobjects.foundation.NSArray;
@@ -66,6 +67,11 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 		}
 	}
 
+	public Object get(int index) {
+		willRead();
+		return super.get(index);
+	}
+
 	public Object objectAtIndex(int index) {
 		willRead();
 		return super.objectAtIndex(index);
@@ -80,7 +86,12 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 		// willRead();
 		return super.hashCode();
 	}
-	
+
+    public Iterator iterator() {
+    	willRead();
+    	return super.iterator();
+    }
+
 	public ListIterator listIterator() {
 		willRead();
 		return super.listIterator();
