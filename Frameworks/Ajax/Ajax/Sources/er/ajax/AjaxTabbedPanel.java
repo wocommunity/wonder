@@ -79,7 +79,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 
     /**
      * Looks through the child components to local the AjaxTabbedPanelTabs that are controlled by this panel.
-     * Tabs without an explicit id attributed are assigned a caculated one.
+     * Tabs without an explicit id attributed are assigned a calculated one.
      *
      * @param template the graph of elements passed to the constructor.
      */
@@ -112,8 +112,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
         String idString = (String) id.valueInComponent(component);
-        if (idString == null)
-        {
+        if (idString == null) {
         	throw new RuntimeException("id binding evaluated to null");
         }
 
@@ -131,38 +130,40 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
             String index = new Integer(i).toString();
             String tabID = idString + "_tab_" + index;
             AjaxTabbedPanelTab tab = (AjaxTabbedPanelTab)tabs.objectAtIndex(i);
-            boolean isSelectedTab = tab.isSelected(context.component());
-            String panelTabID = (String) tab.id().valueInComponent(component);
-            String panelID = panelTabID + "_panel";
-            response.appendContentString("  <li class=\"ajaxTabbedPanelTab-");
-            response.appendContentString(isSelectedTab ? "selected" : "unselected");
-            response.appendContentString("\" ");
-            appendTagAttributeToResponse(response, "id", tabID);
-            response.appendContentString(">\n");
-            response.appendContentString("<a ");
-            appendTagAttributeToResponse(response, "id", panelTabID);
-            response.appendContentString(" href=\"javascript:void(0)\" onclick=\"");
-
-            response.appendContentString("AjaxTabbedPanel.loadPanel('");
-            response.appendContentString(panelID);
-            response.appendContentString("', '");
-            response.appendContentString((busyDiv != null) ? (String)busyDiv.valueInComponent(component) : "");
-            response.appendContentString("', ");
-            response.appendContentString(tab.refreshesOnSelect(context.component()).toString());
-            response.appendContentString("); ");
-
-            response.appendContentString("AjaxTabbedPanel.selectTab('");
-            response.appendContentString(idString);
-            response.appendContentString("', '");
-            response.appendContentString(tabID);
-            response.appendContentString("'); AjaxTabbedPanel.selectPanel('");
-            response.appendContentString(paneControlID);
-            response.appendContentString("', '");
-            response.appendContentString(panelID);
-            response.appendContentString("');\">");
-            response.appendContentString((String) tab.name().valueInComponent(component));
-            response.appendContentString("</a>\n");
-            response.appendContentString("</li>\n");
+            if (tab.isVisble(component)) {
+	            boolean isSelectedTab = tab.isSelected(context.component());
+	            String panelTabID = (String) tab.id().valueInComponent(component);
+	            String panelID = panelTabID + "_panel";
+	            response.appendContentString("  <li class=\"ajaxTabbedPanelTab-");
+	            response.appendContentString(isSelectedTab ? "selected" : "unselected");
+	            response.appendContentString("\" ");
+	            appendTagAttributeToResponse(response, "id", tabID);
+	            response.appendContentString(">\n");
+	            response.appendContentString("<a ");
+	            appendTagAttributeToResponse(response, "id", panelTabID);
+	            response.appendContentString(" href=\"javascript:void(0)\" onclick=\"");
+	
+	            response.appendContentString("AjaxTabbedPanel.loadPanel('");
+	            response.appendContentString(panelID);
+	            response.appendContentString("', '");
+	            response.appendContentString((busyDiv != null) ? (String)busyDiv.valueInComponent(component) : "");
+	            response.appendContentString("', ");
+	            response.appendContentString(tab.refreshesOnSelect(context.component()).toString());
+	            response.appendContentString("); ");
+	
+	            response.appendContentString("AjaxTabbedPanel.selectTab('");
+	            response.appendContentString(idString);
+	            response.appendContentString("', '");
+	            response.appendContentString(tabID);
+	            response.appendContentString("'); AjaxTabbedPanel.selectPanel('");
+	            response.appendContentString(paneControlID);
+	            response.appendContentString("', '");
+	            response.appendContentString(panelID);
+	            response.appendContentString("');\">");
+	            response.appendContentString((String) tab.name().valueInComponent(component));
+	            response.appendContentString("</a>\n");
+	            response.appendContentString("</li>\n");
+            }
         }
 
         response.appendContentString("</ul>\n");
@@ -172,8 +173,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
         appendTagAttributeToResponse(response, "id", paneControlID);
         response.appendContentString(">\n");
         // The tabs render themselves as panes
-        if (content !=  null)
-        {
+        if (content !=  null) {
         	content.appendToResponse(response, context);
         }
         response.appendContentString("</ul>\n");

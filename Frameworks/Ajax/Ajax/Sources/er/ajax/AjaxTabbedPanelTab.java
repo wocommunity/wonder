@@ -23,6 +23,7 @@ import com.webobjects.foundation.*;
  * @binding refreshOnSelect optional, if true the tab content will reload each
  *          time the tab is selected.  Defaults to false
  * @binding onLoad optional, String JavaScript to execute after the tab loads
+ * @binding isVisible optional, default is true, indicates if tab and panel should be displayed
  *
  * @author Chuck Hill
  */
@@ -34,6 +35,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     private WOAssociation isSelected;
     private WOAssociation refreshOnSelect;
     private WOAssociation onLoad;
+    private WOAssociation isVisible;
 
 
     public AjaxTabbedPanelTab(String aName, NSDictionary associations, WOElement template) {
@@ -45,9 +47,9 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
         isSelected = (WOAssociation) associations.objectForKey("isSelected");
         refreshOnSelect = (WOAssociation) associations.objectForKey("refreshOnSelect");
         onLoad = (WOAssociation) associations.objectForKey("onLoad");
-
-        if (name == null)
-        {
+        isVisible = (WOAssociation) associations.objectForKey("isVisible");
+        
+        if (name == null) {
         	throw new RuntimeException("name binding is required");
         }
     }
@@ -59,35 +61,37 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     public void appendToResponse(WOResponse aResponse, WOContext aContext)
     {
     	WOComponent component = aContext.component();
-        aResponse.appendContentString("<li id=\"");
-        aResponse.appendContentString((String)id().valueInComponent(component) + "_panel");
-        aResponse.appendContentString("\" updateUrl=\"");
-        aResponse.appendContentString(AjaxUtils.ajaxComponentActionUrl(aContext));
-		aResponse.appendContentString("\" class=\"");
-        aResponse.appendContentString(isSelected(component) ? "ajaxTabbedPanelPane-selected" : "ajaxTabbedPanelPane-unselected");
-        aResponse.appendContentString("\"");
-        if (onLoad != null) {
-            appendTagAttributeToResponse(aResponse, "onLoad", onLoad.valueInComponent(component));
-        }
-        aResponse.appendContentString(">");
+    	if (isVisble(component)) {
+            aResponse.appendContentString("<li id=\"");
+            aResponse.appendContentString((String)id().valueInComponent(component) + "_panel");
+            aResponse.appendContentString("\" updateUrl=\"");
+            aResponse.appendContentString(AjaxUtils.ajaxComponentActionUrl(aContext));
+    		aResponse.appendContentString("\" class=\"");
+            aResponse.appendContentString(isSelected(component) ? "ajaxTabbedPanelPane-selected" : "ajaxTabbedPanelPane-unselected");
+            aResponse.appendContentString("\"");
+            if (onLoad != null) {
+                appendTagAttributeToResponse(aResponse, "onLoad", onLoad.valueInComponent(component));
+            }
+            aResponse.appendContentString(">");
 
-        // The selected pane needs to have its content rendered when the page is first rendered.  After that
-        // it is controlled by the user clicking tabs
-        if (isSelected(component) && content != null)
-        {
-        	content.appendToResponse(aResponse, aContext);
-        }
+            // The selected pane needs to have its content rendered when the page is first rendered.  After that
+            // it is controlled by the user clicking tabs
+            if (isSelected(component) && content != null)
+            {
+            	content.appendToResponse(aResponse, aContext);
+            }
 
-        aResponse.appendContentString("</li>\n");
+            aResponse.appendContentString("</li>\n");
 
-        // The selected pane needs to have its onLoad fired when the page is first rendered.  After that
-        // it is fired by the user clicking tabs
-        if (isSelected(component) && content != null)
-        {
-        	aResponse.appendContentString("<script>AjaxTabbedPanel.onLoad('");
-        	aResponse.appendContentString((String)id().valueInComponent(component) + "_panel");
-        	aResponse.appendContentString("');</script>\n");
-        }
+            // The selected pane needs to have its onLoad fired when the page is first rendered.  After that
+            // it is fired by the user clicking tabs
+            if (isSelected(component) && content != null)
+            {
+            	aResponse.appendContentString("<script>AjaxTabbedPanel.onLoad('");
+            	aResponse.appendContentString((String)id().valueInComponent(component) + "_panel");
+            	aResponse.appendContentString("');</script>\n");
+            }
+    	}
     }
 
 
@@ -96,8 +100,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
      * @param component the component this is being rendered in
      * @return <code>true</code> if this pane is the selected one
      */
-    public boolean isSelected(WOComponent component)
-    {
+    public boolean isSelected(WOComponent component) {
         return (isSelected != null) ? ((Boolean)isSelected.valueInComponent(component)).booleanValue() : false;
     }
 
@@ -108,9 +111,9 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
      * to false when it is no longer the selected tab.
      *
      * @param component the component this is being rendered in
+     * @param isTabSelected true is this is being rendered as the selected tab
      */
-    public void setIsSelected(WOComponent component, boolean isTabSelected)
-    {
+    public void setIsSelected(WOComponent component, boolean isTabSelected) {
     	if (isSelected != null && isSelected.isValueSettableInComponent(component)) {
     		isSelected.setValue(new Boolean(isTabSelected), component);
     	}
@@ -131,13 +134,11 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 		String didSelect = request.stringFormValueForKey("didSelect");
 
 		// This is not set when the tab is initially loaded, that is our cue to generate our content
-		if ( didSelect == null)
-		{
+		if ( didSelect == null) {
 			response = AjaxUtils.createResponse(request, context);
 			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
 
-			if (content != null)
-			{
+			if (content != null) {
 				content.appendToResponse(response, context);
 			}
 		}
@@ -168,8 +169,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
      *
      * @param newID the association to use to get the HTML id attribute
      */
-    public void setId(WOAssociation newID)
-    {
+    public void setId(WOAssociation newID) {
         id = newID;
     }
 
@@ -186,9 +186,18 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
      * @param component the component this is being rendered in
      * @return Boolean value for refreshOnSelect binding, Boolean.FALSE if unset
      */
-    public Boolean refreshesOnSelect(WOComponent component)
-    {
+    public Boolean refreshesOnSelect(WOComponent component) {
        return (refreshOnSelect != null) ? (Boolean)refreshOnSelect.valueInComponent(component): Boolean.FALSE;
+    }
+    
+    /**
+     * Returns current component's value for the isVisible binding.
+     *
+     * @param component the component this is being rendered in
+     * @return Boolean value for isVisible binding, Boolean.TRUE if unset
+     */
+    public boolean isVisble(WOComponent component) {
+        return (isVisible != null) ? ((Boolean)isVisible.valueInComponent(component)).booleanValue() : true;
     }
 
 }
