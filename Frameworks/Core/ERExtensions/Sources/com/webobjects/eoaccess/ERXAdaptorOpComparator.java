@@ -73,7 +73,7 @@ public class ERXAdaptorOpComparator extends EOAdaptorOpComparator {
     
     /**
 	 * Returns the name of EOEntity updated by adaptorOp.  If this is updating through a flattened
-	 * attribute, the name return is the Entity of the target attribute.
+	 * attribute, the name returned is the Entity of the target attribute.
 	 * 
 	 * @param adaptorOp EOAdaptorOperation to return Entity name from
 	 * @return name of EOEntity updated by adaptorOp
@@ -87,9 +87,15 @@ public class ERXAdaptorOpComparator extends EOAdaptorOpComparator {
 			return entity.name();
 		}
 		
+		// Handling for flattened attributes commented out due to 
+		// http://article.gmane.org/gmane.comp.web.webobjects.wonder-disc/8055 
+		// This needs further investigation.  Commenting this out may break vertical inheritance!
+		
 		// Flattened attributes are grouped together by entity so any element in changedValues will work
-		EOAttribute attribute = entity.attributeNamed((String)adaptorOp.changedValues().allKeys().lastObject());
-		return attribute.isFlattened() ? attribute.targetAttribute().entity().name() : entity.name();
+		// EOAttribute attribute = entity.attributeNamed((String)adaptorOp.changedValues().allKeys().lastObject());
+		// return attribute.isFlattened() ? attribute.targetAttribute().entity().name() : entity.name();
+		
+		return entity.name();
 	}
 
 

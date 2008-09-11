@@ -91,9 +91,12 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
     protected boolean hasForeignKeyConstraint(EORelationship relationship) {
         logger.trace("Examining relationshp " + relationship.name());
 
-        // These can't be accomodated by entity ordering, these require ordering within the operations for an entity
-        if (relationship.entity().equals(relationship.destinationEntity())) {
-            logger.trace("Ignoring: self reflexive relationship");
+        // Reflexive relationships (circular dependencies) can't be accommodated by entity ordering, 
+        // these require ordering within the operations for an entity. Check the externalName() rather than
+        // entity name so that it will handle relationships to a super or subclass in a Single-Table inheritance structure
+		if (relationship.entity().externalName() != null &&
+			relationship.entity().externalName().equals(relationship.destinationEntity().externalName())) {
+            logger.trace("Ignoring: reflexive relationship");
             return false;
         }
 
