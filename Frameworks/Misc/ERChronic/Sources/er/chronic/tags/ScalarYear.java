@@ -6,7 +6,8 @@ import er.chronic.Options;
 import er.chronic.utils.Token;
 
 public class ScalarYear extends Scalar {
-  public static final Pattern YEAR_PATTERN = Pattern.compile("^([1-9]\\d)?\\d\\d?$");
+  // DIFF: Changed the year pattern to only allow [12]xxx or [0456789]x -- so 1989, or 78 but not 12 
+  public static final Pattern YEAR_PATTERN = Pattern.compile("^([12]\\d\\d\\d|[0456789]\\d)$");
 
   public ScalarYear(Integer type) {
     super(type);
