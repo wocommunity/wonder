@@ -109,11 +109,13 @@ public class Handler {
       Map<Handler.HandlerType, List<Handler>> definitions = new HashMap<Handler.HandlerType, List<Handler>>();
 
       List<Handler> timeHandlers = new LinkedList<Handler>();
-      timeHandlers.add(new Handler(null, new TagPattern(RepeaterTime.class), new TagPattern(RepeaterDayPortion.class, true)));
+      timeHandlers.add(new Handler(null, new TagPattern(RepeaterTime.class), new TagPattern(Grabber.class, true), new TagPattern(RepeaterDayPortion.class, true)));
       definitions.put(Handler.HandlerType.TIME, timeHandlers);
 
       List<Handler> dateHandlers = new LinkedList<Handler>();
       dateHandlers.add(new Handler(new RdnRmnSdTTzSyHandler(), new TagPattern(RepeaterDayName.class), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new TagPattern(RepeaterTime.class), new TagPattern(TimeZone.class), new TagPattern(ScalarYear.class)));
+      // DIFF: We add scalar year as a standalone match
+      dateHandlers.add(new Handler(new SyHandler(), new TagPattern(ScalarYear.class)));
       // DIFF: We add an optional comma to MDY
       dateHandlers.add(new Handler(new RmnSdSyHandler(), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new TagPattern(SeparatorComma.class, true), new TagPattern(ScalarYear.class)));
       dateHandlers.add(new Handler(new RmnSdSyHandler(), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new TagPattern(SeparatorComma.class, true), new TagPattern(ScalarYear.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
@@ -132,7 +134,8 @@ public class Handler {
       // tonight at 7pm
       List<Handler> anchorHandlers = new LinkedList<Handler>();
       anchorHandlers.add(new Handler(new RHandler(), new TagPattern(Grabber.class, true), new TagPattern(Repeater.class), new TagPattern(SeparatorAt.class, true), new TagPattern(Repeater.class, true), new TagPattern(Repeater.class, true)));
-      anchorHandlers.add(new Handler(new RHandler(), new TagPattern(Grabber.class, true), new TagPattern(Repeater.class), new TagPattern(Repeater.class), new TagPattern(SeparatorAt.class, true), new TagPattern(Repeater.class, true), new TagPattern(Repeater.class, true)));
+      // DIFF: Add support for "next" and "last" grabbers
+      anchorHandlers.add(new Handler(new RHandler(), new TagPattern(Grabber.class, true), new TagPattern(Repeater.class), new TagPattern(Repeater.class), new TagPattern(SeparatorAt.class, true), new TagPattern(Grabber.class, true), new TagPattern(Repeater.class, true), new TagPattern(Repeater.class, true)));
       anchorHandlers.add(new Handler(new RGRHandler(), new TagPattern(Repeater.class), new TagPattern(Grabber.class), new TagPattern(Repeater.class)));
       definitions.put(Handler.HandlerType.ANCHOR, anchorHandlers);
 
@@ -163,7 +166,7 @@ public class Handler {
     for (Handler handler : definitions.get(Handler.HandlerType.DATE)) {
       if (handler.isCompatible(options) && handler.match(tokens, definitions)) {
         if (options.isDebug()) {
-          System.out.println("Chronic.tokensToSpan: date");
+          System.out.println("Chronic.tokensToSpan: date " + handler);
         }
         List<Token> goodTokens = new LinkedList<Token>();
         for (Token token : tokens) {
@@ -179,7 +182,7 @@ public class Handler {
     for (Handler handler : definitions.get(Handler.HandlerType.ANCHOR)) {
       if (handler.isCompatible(options) && handler.match(tokens, definitions)) {
         if (options.isDebug()) {
-          System.out.println("Chronic.tokensToSpan: anchor");
+          System.out.println("Chronic.tokensToSpan: anchor " + handler);
         }
         List<Token> goodTokens = new LinkedList<Token>();
         for (Token token : tokens) {
@@ -195,7 +198,7 @@ public class Handler {
     for (Handler handler : definitions.get(Handler.HandlerType.ARROW)) {
       if (handler.isCompatible(options) && handler.match(tokens, definitions)) {
         if (options.isDebug()) {
-          System.out.println("Chronic.tokensToSpan: arrow");
+          System.out.println("Chronic.tokensToSpan: arrow " + handler);
         }
         List<Token> goodTokens = new LinkedList<Token>();
         for (Token token : tokens) {
@@ -211,7 +214,7 @@ public class Handler {
     for (Handler handler : definitions.get(Handler.HandlerType.NARROW)) {
       if (handler.isCompatible(options) && handler.match(tokens, definitions)) {
         if (options.isDebug()) {
-          System.out.println("Chronic.tokensToSpan: narrow");
+          System.out.println("Chronic.tokensToSpan: narrow " + handler);
         }
         //List<Token> goodTokens = new LinkedList<Token>();
         //for (Token token : tokens) {
@@ -244,8 +247,16 @@ public class Handler {
   }
 
   public static Span getAnchor(List<Token> tokens, Options options) {
-    Grabber grabber = new Grabber(Grabber.Relative.THIS);
-    Pointer.PointerType pointer = Pointer.PointerType.FUTURE;
+    Grabber grabber;
+    // DIFF: If your pointer is PAST, you want "last Monday" not "this Monday"
+    Pointer.PointerType pointer;
+    if (options.getContext() == PointerType.PAST) {
+      grabber = new Grabber(Grabber.Relative.LAST);
+    }
+    else {
+      grabber = new Grabber(Grabber.Relative.THIS);
+    }
+    pointer = Pointer.PointerType.FUTURE;
 
     List<Repeater<?>> repeaters = getRepeaters(tokens);
     for (int i = 0; i < repeaters.size(); i++) {
@@ -281,7 +292,7 @@ public class Handler {
     }
 
     if (options.isDebug()) {
-      System.out.println("Chronic.getAnchor: outerSpan = " + outerSpan + "; repeaters = " + repeaters);
+      System.out.println("Chronic.getAnchor: grabber = " + grabber + "; repeaters = " + repeaters + "; outerSpan = " + outerSpan);
     }
 
     Span anchor = findWithin(repeaters, outerSpan, pointer, options);
@@ -331,7 +342,13 @@ public class Handler {
 //      }
 //      /** SUPER HACK MODE FOR TIMES **/
 
-      options.setNow(outerSpan.getBeginCalendar());
+      // DIFF: If you're generating past dates, you want to use the end of the day as the offset so "5pm" ends up on the same day as the date you chose
+      if (options.getContext() == PointerType.PAST) {
+        options.setNow(outerSpan.getEndCalendar());
+      }
+      else {
+        options.setNow(outerSpan.getBeginCalendar());
+      }
       Span time = getAnchor(dealiasAndDisambiguateTimes(timeTokens, options), options);
       return time;
     }
