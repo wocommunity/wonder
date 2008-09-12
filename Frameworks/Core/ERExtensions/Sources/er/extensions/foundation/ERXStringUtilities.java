@@ -1952,4 +1952,64 @@ public class ERXStringUtilities {
     	}
     	return s.trim();
     }
+    
+    /**
+     * Removes line breaks and quotes the string if neccessary
+     * 
+     * @param s
+     * 
+     * @return the string in Excel save CSV format
+     */
+    public static String excelSafeCsvString(String s) {
+		if (s != null) {
+			boolean mustQuote = false;
+			s = unquote(s, "\"");
+			s = s.replaceAll("\r", "");
+			s = s.replaceAll("\n", "");
+			if (s.contains("\"")) {
+				s = s.replaceAll("\"", "\"\"");
+				mustQuote = true;
+			}
+			if (s.contains(","))
+				mustQuote = true;
+			if (mustQuote)
+				s = quote(s, "\"");
+		}
+		return s;
+	}
+
+	/**
+	 * Remove the quote symbols from the given string
+	 * 
+	 * @param s 
+	 * @param quoteSymbol
+	 * 
+	 * @return the string unquoted
+	 */
+	public static String unquote(String s, String quoteSymbol) {
+		if (s == null || quoteSymbol == null)
+			throw new IllegalArgumentException("Neither the string nor the quote symbol are allowed to be null");
+		if (s.startsWith(quoteSymbol) && s.endsWith(quoteSymbol)) {
+			s = s.substring(1);
+			s = s.substring(0, s.length() - 1);
+		}
+		return s;
+	}
+
+	/**
+	 * Quote the given string with the provided quote symbols
+	 * 
+	 * @param s the string to quote
+	 * @param quoteSymbol - the quote symbol
+	 * 
+	 * @return quoted string
+	 */
+	public static String quote(String s, String quoteSymbol) {
+		if (s == null || quoteSymbol == null) {
+			throw new IllegalArgumentException("Neither the string nor the quote symbol are allowed to be null");
+		}
+
+		s = new StringBuffer().append(quoteSymbol).append(s).append(quoteSymbol).toString();
+		return s;
+	}
 }
