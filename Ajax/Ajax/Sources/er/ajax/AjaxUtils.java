@@ -1,5 +1,9 @@
 package er.ajax;
 
+import java.util.Collection;
+
+import org.jabsorb.JSONSerializer;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -7,10 +11,10 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXApplication;
 import er.extensions.ERXResourceManager;
 import er.extensions.ERXResponseRewriter;
 import er.extensions.ERXWOContext;
@@ -99,6 +103,7 @@ public class AjaxUtils {
 	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
 		String processedFileName = fileName;
+		// PROTOTYPE MISC
 		if (ERXProperties.booleanForKey("er.ajax.compressed") && ("prototype.js".equals(fileName) || "scriptaculous.js".equals(fileName))) {
 			processedFileName = "sc-17-proto-15-compressed.js";
 		}
@@ -149,6 +154,7 @@ public class AjaxUtils {
 		// and you're in development mode (as far as your lame WOResourceManager is concerned), so we need to do Scriptaculous' job and manually
 		// load the dependent js files on its behalf.  You really should just suck it up and use ERXResourceManager because it really is just
 		// better.  But if you're holding out and scared like a child, then we'll do this for you. 
+		// PROTOTYPE MISC
 		if (!(WOApplication.application().resourceManager() instanceof ERXResourceManager) && "Ajax".equals(framework) && "scriptaculous.js".equals(fileName) && !(context.request() == null || context.request() != null && context.request().isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject())) {
 			boolean enqueueIfTagMissing = !AjaxUtils.isAjaxRequest(context.request());
 			ERXResponseRewriter.addResourceInHead(response, context, framework, "builder.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
@@ -221,7 +227,13 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptHeader(WOResponse response) {
-		response.appendContentString("<script>");
+		boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+		if (appendTypeAttribute) {
+			response.appendContentString("<script type=\"text/javascript\">");
+		}
+		else {
+			response.appendContentString("<script>");
+		}
 	}
 
 	public static void appendScriptFooterIfNecessary(WORequest request, WOResponse response) {
@@ -274,6 +286,77 @@ public class AjaxUtils {
 	}
 
 	/**
+	 * Returns the array bound to the given association.
+	 * 
+	 * @param component the component to resolve against
+	 * @param association the association to retrieve a value for
+	 * @return an array (or null)
+	 */
+	public static NSArray arrayValueForAssociation(WOComponent component, WOAssociation association) {
+		NSArray array = null;
+		if (association != null) {
+			array = AjaxUtils.arrayValueForObject(association.valueInComponent(component));
+		}
+		return array;
+	}
+
+	/**
+	 * Returns the array bound to the given binding name.
+	 * 
+	 * @param component the component to resolve against
+	 * @param bindingName the name of the binding
+	 * @return an array (or null)
+	 */
+	public static NSArray arrayValueForBinding(WOComponent component, String bindingName) {
+		return AjaxUtils.arrayValueForObject(component.valueForBinding(bindingName));
+	}
+
+	/**
+	 * Returns the array for the given object.  If the object is a string, it will be parsed as a
+	 * JSON value.
+	 * 
+	 * @param value the object value
+	 * @return an array (or null)
+	 */
+	@SuppressWarnings("unchecked")
+	public static NSArray arrayValueForObject(Object value) {
+		NSArray arrayValue;
+		if (value == null) {
+			arrayValue = null;
+		}
+		else if (value instanceof NSArray) {
+			arrayValue = (NSArray) value;
+		}
+		else if (value instanceof String) {
+			try {
+				String strValue = ((String) value).trim();
+				if (!strValue.startsWith("[")) {
+					strValue = "[" + strValue + "]";
+				}
+				JSONSerializer serializer = new JSONSerializer();
+				serializer.registerDefaultSerializers();
+				Object objValue = serializer.fromJSON(strValue);
+				if (objValue.getClass().isArray()) {
+					arrayValue = new NSArray((Object[]) objValue);
+				}
+				else if (objValue instanceof Collection) {
+					arrayValue = new NSArray((Collection) objValue);
+				}
+				else {
+					arrayValue = new NSArray(objValue);
+				}
+			}
+			catch (Throwable e) {
+				throw new IllegalArgumentException("Failed to convert String to array.", e);
+			}
+		}
+		else {
+			throw new IllegalArgumentException("Unable to convert '" + value + "' to an array.");
+		}
+		return arrayValue;
+	}
+
+	/**
 	 * Returns an Ajax component action url. Using an ajax component action urls guarantees that caching during your
 	 * ajax request will be handled appropriately.
 	 * 
@@ -294,7 +377,7 @@ public class AjaxUtils {
 	}
 	
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name, String appendValue) {
-		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, (WOAssociation)associations.objectForKey(name), appendValue);
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, (WOAssociation) associations.objectForKey(name), appendValue);
 	}
 
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association) {

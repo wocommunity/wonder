@@ -48,9 +48,10 @@ public class AjaxUpdateTrigger extends WODynamicElement {
 			Enumeration updateContainerIDEnum = updateContainerIDs.objectEnumerator();
 			while (updateContainerIDEnum.hasMoreElements()) {
 				String updateContainerID = (String) updateContainerIDEnum.nextElement();
+				// PROTOTYPE FUNCTIONS
 				Object evalScripts = AjaxUtils.valueForBinding("evalScripts", "true", _associations, component);
-				response.appendContentString("if ($('" + updateContainerID + "')) { ");
-				response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $('" + updateContainerID + "').getAttribute('updateUrl'), {" + " evalScripts: " + evalScripts + ", insertion: Element.update });\n");
+				response.appendContentString("if ($wi('" + updateContainerID + "')) { ");
+				response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $wi('" + updateContainerID + "').getAttribute('updateUrl'), {" + " evalScripts: " + evalScripts + ", insertion: Element.update });\n");
 				response.appendContentString(" }");
 			}
 			AjaxUtils.appendScriptFooter(response);

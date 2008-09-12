@@ -9,6 +9,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNumberFormatter;
 
 import er.extensions.ERXComponentUtilities;
+
+// PROTOTYPE FUNCTIONS (WRAPPER)
 /**
  * Simple Ajax slider.
  * @author ak

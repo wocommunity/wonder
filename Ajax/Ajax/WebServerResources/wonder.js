@@ -1,3 +1,6 @@
+// $wi = the Wonder "lookup by ID" function
+var $wi = $;
+
 Object.extend(Prototype, {
   exec: (function(){
     var script, scriptId = '__prototype_exec_script',
@@ -176,6 +179,18 @@ var AjaxOnDemand = {
 };
 var AOD = AjaxOnDemand;
 
+var AjaxUtils = {
+	toggleClassName: function(element, className, toggled) {
+		element = $(element);
+		if (toggled) {
+			element.addClassName(className);
+		}
+		else {
+			element.removeClassName(className);
+		}
+	}
+};
+
 var AjaxInPlace = {
 	saveFunctionName: function(id) {
 		return "window." + id + "Save";
@@ -202,6 +217,13 @@ var AjaxInPlace = {
 	}
 };
 var AIP = AjaxInPlace;
+
+var AjaxModalContainer = {
+	close: function() {
+		iBox.hide();
+	}
+};
+var AMC = AjaxModalContainer;
 
 var AjaxOptions = {
 	defaultOptions: function(additionalOptions) {
@@ -815,12 +837,6 @@ var AjaxHintedText = {
     }
 };
 
-var AjaxModalContainer = {
-	close: function() {
-		iBox.hide();
-	}
-};
-var AMC = AjaxModalContainer;
 
 // our own extensions 
 // MS: This doesn't appear to be used and it causes a failure 
