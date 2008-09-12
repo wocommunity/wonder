@@ -552,6 +552,9 @@ public class ERXSQLHelper {
 		}
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
+		if(spec.hints() != null && !spec.hints().isEmpty() && !(spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null)) {
+			sql = (String)spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+		}
 		if (end >= 0) {
 			sql = limitExpressionForSQL(sqlExpr, spec, sql, start, end);
 			sqlExpr.setStatement(sql);
@@ -559,7 +562,7 @@ public class ERXSQLHelper {
 		return sqlExpr;
 	}
 
-	protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+	public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating limit expressions.");
 	}
 
@@ -1005,16 +1008,31 @@ public class ERXSQLHelper {
 		int rowCount = -1;
 		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
 		EOModel model = entity.model();
-		if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
-			spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
-		}
+		NSArray result = null;
+		String sql;
+		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
+			// no hints
+			if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
+				spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
+			}
 
-		EOSQLExpression sql = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
-		String statement = sql.statement();
-		int index = statement.toLowerCase().indexOf(" from ");
-		statement = "select count(*) " + statement.substring(index, statement.length());
-		sql.setStatement(statement);
-		NSArray result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sql);
+			EOSQLExpression sqlExpression = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
+			String statement = sqlExpression.statement();
+			int index = statement.toLowerCase().indexOf(" from ");
+			statement = (new StringBuilder()).append("select count(*) ").append(statement.substring(index, statement.length())).toString();
+			sqlExpression.setStatement(statement);
+			sql = statement;
+			result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sqlExpression);
+		}
+		else {
+			// we have hints
+			sql = (String) spec.hints().valueForKey("EOCustomQueryExpressionHintKey");
+			if (sql.endsWith(";")) {
+				sql = sql.substring(0, sql.length() - 1);
+			}
+			sql = "select count(*) from (" + sql + ") as result_count_temp_table;";
+			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
+		}
 
 		if (result.count() > 0) {
 			NSDictionary dict = (NSDictionary) result.objectAtIndex(0);
@@ -1434,7 +1452,7 @@ public class ERXSQLHelper {
 		}
 
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			String limitSQL;
 			/*
 			 * Oracle can make you puke... These are grabbed from tips all over
@@ -1488,7 +1506,7 @@ public class ERXSQLHelper {
 
 	public static class OpenBaseSQLHelper extends ERXSQLHelper {
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			// Openbase support for limiting result set
 			return sql + " return results " + start + " to " + end;
 		}
@@ -1537,7 +1555,7 @@ public class ERXSQLHelper {
 		}
 
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			// add TOP(start, (end - start)) after the SELECT word
 			int index = sql.indexOf("select");
 			if (index == -1) {
@@ -1642,7 +1660,7 @@ public class ERXSQLHelper {
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + start + ", " + (end - start);
 		}
 
@@ -1707,7 +1725,7 @@ public class ERXSQLHelper {
 		}
 
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + (end - start) + " OFFSET " + start;
 		}
 
