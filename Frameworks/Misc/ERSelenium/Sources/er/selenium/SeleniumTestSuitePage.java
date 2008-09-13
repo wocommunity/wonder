@@ -53,18 +53,24 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 	
 	private NSArray<File> testFiles;
 	public File testFile;
+	private File groupDir;
 	private String testPath;
 	
 	public NSArray<File> testFiles() {
 		if (testFiles == null) {
-			testFiles = ERSelenium.testFilesFinder().findTests(testsRoot());
+			testFiles = ERSelenium.testFilesFinder().findTests(groupDir != null ? groupDir : testsRoot());
 		}
 		return testFiles;
 	}
 
 	public void setTestPath(String testPath) {
 		this.testPath = testPath;
-		testFile = new File(testsRoot().getAbsolutePath() + "/" + testPath);
+		File fpath = new File(testsRoot().getAbsolutePath() + "/" + testPath);
+		if (fpath.isDirectory()){
+			groupDir = fpath;
+		} else {
+			testFile = fpath;
+		}
 	}
 	
 	public String testPath() {
@@ -118,7 +124,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     }
     
     public String testContents() {
-    	if (testPath != null) {
+    	if (testPath != null && groupDir == null) {
     		SeleniumTestExporter exporter = null;
     		String format = context().request().stringFormValueForKey("format");
     		if (format != null) {
@@ -147,6 +153,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     public void reset() {
     	super.reset();
     	testPath = null;
+    	groupDir = null;
     }
     
 }
