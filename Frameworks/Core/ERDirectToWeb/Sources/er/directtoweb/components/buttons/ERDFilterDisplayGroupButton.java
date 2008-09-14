@@ -19,6 +19,7 @@ import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOQualifier;
 
 import er.directtoweb.components.ERDCustomQueryComponent;
+import er.extensions.appserver.ERXDisplayGroup;
 
 /**
  * Cool component that can be used in D2W list pages to filter the list, throwing to a D2W query page to restrict.<br />
@@ -84,6 +85,12 @@ public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
     public WOComponent clearFilter(){
         displayGroup().setQualifier(null);
         displayGroup().updateDisplayedObjects();
+        
+        if (displayGroup() instanceof ERXDisplayGroup) {
+            ERXDisplayGroup dg = (ERXDisplayGroup) displayGroup();
+            dg.clearExtraQualifiers();
+        }
+
         return null;
     }
 }
