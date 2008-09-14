@@ -1742,7 +1742,8 @@ public class ERXSQLHelper {
 		 * "serial".
 		 * 
 		 * cug: There seems to be also nothing useful for "BLOB", so we return
-		 * bytea for Type.BLOB  
+		 * bytea for Type.BLOB; int8 for BIGINT; numeric for DECIMAL; bool for
+		 * BOOLEAN
 		 * 
 		 * We know better than EOF.
 		 * 
@@ -1768,6 +1769,9 @@ public class ERXSQLHelper {
 			}
 			else if (jdbcType == Types.BOOLEAN) {
 				externalType = "bool";
+			}
+			else if (jdbcType == Types.DECIMAL) {
+				externalType = "numeric";
 			}
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
