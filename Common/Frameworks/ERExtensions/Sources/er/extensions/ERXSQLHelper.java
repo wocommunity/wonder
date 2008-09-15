@@ -67,8 +67,6 @@ public class ERXSQLHelper {
 
 	private static Map<String, ERXSQLHelper> _sqlHelperMap = new HashMap<String, ERXSQLHelper>();
 
-	private JDBCPlugIn _plugin;
-
 	public void prepareConnectionForSchemaChange(EOEditingContext ec, EOModel model) {
 		// do nothing by default
 	}
@@ -108,6 +106,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param model
 	 * @param coordinator
+	 * @return the database context for the given model
 	 */
 	private EODatabaseContext databaseContextForModel(EOModel model, EOObjectStoreCoordinator coordinator) {
 		EODatabaseContext dbc = null;
@@ -208,7 +207,6 @@ public class ERXSQLHelper {
 	 * @return a sql script
 	 */
 	public String createSchemaSQLForEntitiesWithOptions(NSArray entities, EOAdaptor adaptor, NSDictionary optionsDictionary) {
-		JDBCPlugIn jdbcPlugIn = ((JDBCAdaptor)adaptor).plugIn();
 		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
 		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsDictionary);  
 		return creationScript;
@@ -327,8 +325,6 @@ public class ERXSQLHelper {
 		String lineSeparator = System.getProperty("line.separator");
 		StringBuffer buf = new StringBuffer();
 
-		EOEntity ent = (EOEntity)entities.objectAtIndex(0);
-		String modelName = ent.model().name();
 		String commandSeparator = commandSeparatorString();
 
 		for (Enumeration entitiesEnum = entities.objectEnumerator(); entitiesEnum.hasMoreElements();) {
@@ -544,13 +540,14 @@ public class ERXSQLHelper {
 			spec.setPromptsAfterFetchLimit(false);
 		}
 		//spec = ERXEOAccessUtilities.localizeFetchSpecification(ec, spec);
-		String url = (String) model.connectionDictionary().objectForKey("URL");
-		String lowerCaseURL = (url != null ? url.toLowerCase() : "");
 		if (attributes == null) {
 			attributes = attributesToFetchForEntity(spec, entity);
 		}
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
+		if(spec.hints() != null && spec.hints().allKeys().count() > 0 && !(spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null)) {
+			sql = (String)spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+		}
 		if (end >= 0) {
 			sql = limitExpressionForSQL(sqlExpr, spec, sql, start, end);
 			sqlExpr.setStatement(sql);
@@ -558,7 +555,7 @@ public class ERXSQLHelper {
 		return sqlExpr;
 	}
 
-	protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+	public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating limit expressions.");
 	}
 
@@ -732,6 +729,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param key
 	 * @param value
+	 * @return the regex SQL
 	 */
 	public String sqlForRegularExpressionQuery(String key, String value) {
 		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating regex expressions.");
@@ -758,6 +756,7 @@ public class ERXSQLHelper {
 	 *            the name of the index to create
 	 * @param expression
 	 *            the EOSQLExpression context
+	 * @param tableName the name of the containing table
 	 * @param columnNames
 	 *            the list of column names to index on
 	 * @return a SQL expression
@@ -774,6 +773,7 @@ public class ERXSQLHelper {
 	 *            the name of the index to create
 	 * @param expression
 	 *            the EOSQLExpression context
+	 * @param tableName the name of the containing table
 	 * @param columnIndexes
 	 *            the list of columns to index on
 	 * @return a SQL expression
@@ -790,6 +790,7 @@ public class ERXSQLHelper {
 	 *            the name of the index to create
 	 * @param expression
 	 *            the EOSQLExpression context
+	 * @param tableName the name of the containing table
 	 * @param columnNames
 	 *            the list of column names to index on
 	 * @return a SQL expression
@@ -814,6 +815,7 @@ public class ERXSQLHelper {
 	 *            the name of the index to create
 	 * @param expression
 	 *            the EOSQLExpression context
+	 * @param tableName the name of the containing table
 	 * @param columnIndexes
 	 *            the list of columns to index on
 	 * @return a SQL expression
@@ -857,6 +859,24 @@ public class ERXSQLHelper {
 		public String toString() {
 			return "[ColumnIndex: columnName = " + _columnName + "; length = " + _length + "]";
 		}
+	}
+
+	/**
+	 * Returns the JDBCType that should be used for a varcharLarge column in migrations.
+	 * 
+	 * @return the JDBCType that should be used for a varcharLarge column in migrations
+	 */
+	public int varcharLargeJDBCType() {
+		return Types.VARCHAR;
+	}
+	
+	/**
+	 * Returns the width that should be used for a varcharLarge column in migrations.
+	 * 
+	 * @return the width that should be used for a varcharLarge column in migrations
+	 */
+	public int varcharLargeColumnWidth() {
+		return 10000000;
 	}
 
 	/**
@@ -983,16 +1003,31 @@ public class ERXSQLHelper {
 		int rowCount = -1;
 		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
 		EOModel model = entity.model();
-		if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
-			spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
-		}
+		NSArray result = null;
+		String sql;
+		if (spec.hints() == null || spec.hints().allKeys().count() == 0 || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
+			// no hints
+			if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
+				spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
+			}
 
-		EOSQLExpression sql = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
-		String statement = sql.statement();
-		int index = statement.toLowerCase().indexOf(" from ");
-		statement = "select count(*) " + statement.substring(index, statement.length());
-		sql.setStatement(statement);
-		NSArray result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sql);
+			EOSQLExpression sqlExpression = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
+			String statement = sqlExpression.statement();
+			int index = statement.toLowerCase().indexOf(" from ");
+			statement = (new StringBuilder()).append("select count(*) ").append(statement.substring(index, statement.length())).toString();
+			sqlExpression.setStatement(statement);
+			sql = statement;
+			result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sqlExpression);
+		}
+		else {
+			// we have hints
+			sql = (String) spec.hints().valueForKey("EOCustomQueryExpressionHintKey");
+			if (sql.endsWith(";")) {
+				sql = sql.substring(0, sql.length() - 1);
+			}
+			sql = "select count(*) from (" + sql + ") as result_count_temp_table;";
+			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
+		}
 
 		if (result.count() > 0) {
 			NSDictionary dict = (NSDictionary) result.objectAtIndex(0);
@@ -1021,6 +1056,17 @@ public class ERXSQLHelper {
 	}
 
 	/**
+	 * Returns the SQL required to select the next value from the given sequence.  This should
+	 * return a single row with a single column.
+	 * 
+	 * @param sequenceName the name of the sequence
+	 * @return the next sequence value
+	 */
+	protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for sequences.");
+	}
+	
+	/**
 	 * Convenience method to get the next unique ID from a sequence.
 	 * 
 	 * @param ec
@@ -1036,8 +1082,7 @@ public class ERXSQLHelper {
 	// around at
 	// the adaptor level and see if we can't find something better.
 	public Number getNextValFromSequenceNamed(EOEditingContext ec, String modelName, String sequenceName) {
-		String sqlString = "select " + sequenceName + ".nextVal from dual";
-		NSArray array = EOUtilities.rawRowsForSQL(ec, modelName, sqlString, null);
+		NSArray array = EOUtilities.rawRowsForSQL(ec, modelName, sqlForGetNextValFromSequencedNamed(sequenceName), null);
 		if (array.count() == 0) {
 			throw new RuntimeException("Unable to generate value from sequence named: " + sequenceName + " in model: " + modelName);
 		}
@@ -1049,6 +1094,11 @@ public class ERXSQLHelper {
 	/**
 	 * Creates a where clause string " someKey IN ( someValue1,...)". Can
 	 * migrate keyPaths.
+	 * 
+	 * @param e the SQL expression
+	 * @param key the name of the key
+	 * @param valueArray an array of values to generate an "in" clause for
+	 * @return the where clause for the given key
 	 */
 	public String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
 		if (valueArray.count() == 0) {
@@ -1314,6 +1364,12 @@ public class ERXSQLHelper {
 	}
 
 	public static class OracleSQLHelper extends ERXSQLHelper {
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			String sqlString = "select " + sequenceName + ".nextVal from dual";
+			return sqlString;
+		}
+
 		/**
 		 * oracle 9 has a maximum length of 30 characters for table names,
 		 * column names and constraint names Foreign key constraint names are
@@ -1391,7 +1447,7 @@ public class ERXSQLHelper {
 		}
 
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			String limitSQL;
 			/*
 			 * Oracle can make you puke... These are grabbed from tips all over
@@ -1445,7 +1501,7 @@ public class ERXSQLHelper {
 
 	public static class OpenBaseSQLHelper extends ERXSQLHelper {
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			// Openbase support for limiting result set
 			return sql + " return results " + start + " to " + end;
 		}
@@ -1477,6 +1533,11 @@ public class ERXSQLHelper {
 		private static final String PREFIX_LOCKING = "locking=";
 
 		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "select from unique from " + sequenceName;
+		}
+		
+		@Override
 		public boolean shouldExecute(String sql) {
 			boolean shouldExecute = true;
 			if (sql.startsWith("SET TRANSACTION ISOLATION LEVEL")) {
@@ -1489,7 +1550,7 @@ public class ERXSQLHelper {
 		}
 
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			// add TOP(start, (end - start)) after the SELECT word
 			int index = sql.indexOf("select");
 			if (index == -1) {
@@ -1596,7 +1657,7 @@ public class ERXSQLHelper {
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + start + ", " + (end - start);
 		}
 
@@ -1642,6 +1703,11 @@ public class ERXSQLHelper {
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
 		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "select NEXTVAL('" + sequenceName + "') as key"; 
+		}
+		
+		@Override
 		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
 			// The Postgres Expression has a problem using bind variables so we
 			// have to get the formatted
@@ -1656,7 +1722,7 @@ public class ERXSQLHelper {
 		}
 
 		@Override
-		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + (end - start) + " OFFSET " + start;
 		}
 
@@ -1673,7 +1739,8 @@ public class ERXSQLHelper {
 		 * "serial".
 		 * 
 		 * cug: There seems to be also nothing useful for "BLOB", so we return
-		 * bytea for Type.BLOB  
+		 * bytea for Type.BLOB; int8 for BIGINT; numeric for DECIMAL; bool for
+		 * BOOLEAN
 		 * 
 		 * We know better than EOF.
 		 * 
@@ -1699,6 +1766,9 @@ public class ERXSQLHelper {
 			}
 			else if (jdbcType == Types.BOOLEAN) {
 				externalType = "bool";
+			}
+			else if (jdbcType == Types.DECIMAL) {
+				externalType = "numeric";
 			}
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
