@@ -289,97 +289,85 @@ public class ERXEOAccessUtilities {
         return results;
     }
 
-    
     /**
-     * Creates the SQL which is used by the provided EOFetchSpecification, limited by the given range.
-     *
-     * @param ec the EOEditingContext
-     * @param spec the EOFetchSpecification in question
-     * @param start start of rows to fetch
-     * @param end end of rows to fetch (-1 if not used)
-     *
+     * Creates the SQL which is used by the provided EOFetchSpecification,
+     * limited by the given range.
+     * 
+     * @param ec
+     *            the EOEditingContext
+     * @param spec
+     *            the EOFetchSpecification in question
+     * @param start
+     *            start of rows to fetch
+     * @param end
+     *            end of rows to fetch (-1 if not used)
+     * @deprecated
+     * 
      * @return the EOSQLExpression which the EOFetchSpecification would use
      */
     public static EOSQLExpression sqlExpressionForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec, long start, long end) {
+    	EOSQLExpression expression = null;
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
         EOModel model = entity.model();
-        EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
-        EODatabase db = new EODatabase(adaptor);
-        EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
-
-        NSArray attributes = spec.rawRowKeyPaths();
-        if(attributes == null || attributes.count() == 0)
-            attributes = entity.attributesToFetch();
-        EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
-        String sql = sqlExpr.statement();
-        if(end >= 0) {
-            String url = (String)model.connectionDictionary().objectForKey("URL");
-            if(url != null) {
-                if(url.toLowerCase().indexOf("frontbase") != -1) {
-                    //add TOP(start, (end - start)) after the SELECT word
-                    int index = sql.indexOf("select");
-                    if (index == -1) {
-                        index = sql.indexOf("SELECT");
-                    }
-                    index += 6;
-
-                    //FIXME: this works for frontbase, might need to be adjusted for other db servers!
-                    StringBuffer buf = new StringBuffer();
-                    buf.append(sql.substring(0, index)).append(" TOP(").append(start).append(",").append(end - start).append(") ").append(sql.substring(index + 1, sql.length()));
-                    sql = buf.toString();
-
-                } else if(url.toLowerCase().indexOf("mysql") != -1) {
-                    sql += " LIMIT " + start + ", " + (end - start);
-                }
-            }
-            sqlExpr.setStatement(sql);
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        dbc.lock();
+        try {
+        	ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
+        	expression = sqlHelper.sqlExpressionForFetchSpecification(ec, spec, start, end);
         }
-
-        return sqlExpr;
+        catch (Exception e) {
+        	throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+        finally {
+        	dbc.unlock();
+        }
+        
+        return expression;
     }
 
     /**
-     * Returns the number of rows the supplied EOFetchSpecification would return.
-     *
-     * @param ec the EOEditingContext
-     * @param spec the EOFetchSpecification in question
+     * Returns the number of rows the supplied EOFetchSpecification would
+     * return.
+     * 
+     * @param ec
+     *            the EOEditingContext
+     * @param spec
+     *            the EOFetchSpecification in question
      * @return the number of rows
+     * @deprecated
      */
     public static int rowCountForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
-        int rowCount = -1;
-        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
-        EOModel model = entity.model();
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, 0, -1);
-        String statement = sql.statement();
-        int index = statement.toLowerCase().indexOf(" from ");
-        statement = "select count(*) " + statement.substring(index, statement.length());
-        sql.setStatement(statement);
-        NSArray result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sql);
+    	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+    	EOModel model = entity.model();
 
-        if (result.count() > 0) {
-            NSDictionary dict = (NSDictionary)result.objectAtIndex(0);
-            NSArray values = dict.allValues();
-            if (values.count() > 0) {
-                Object value = values.objectAtIndex(0);
-                if (value instanceof Number) {
-                    return ((Number)value).intValue();
-                } else {
-                    try {
-                        int c = Integer.parseInt(value.toString());
-                        rowCount = c;
-                    } catch (NumberFormatException e) {
-                        throw new IllegalStateException("sql "+sql+" returned a wrong result, could not convert "+value+" into an int!");
-                    }
-                }
-            } else {
-                throw new IllegalStateException("sql "+sql+" returned no result!");
-            }
-        } else {
-            throw new IllegalStateException("sql "+sql+" returned no result!");
-        }
-        return rowCount;
+    	EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+    	int results = 0;
+
+    	dbc.lock();
+    	try {
+    		results = ERXSQLHelper.newSQLHelper(ec, model.name()).rowCountForFetchSpecification(ec, spec);
+    	}
+    	catch (Exception localException) {
+    		if (dbc._isDroppedConnectionException(localException)) {
+    			try {
+    				dbc.database().handleDroppedConnection();
+    				results = ERXSQLHelper.newSQLHelper(ec, model.name()).rowCountForFetchSpecification(ec, spec);
+    			}
+    			catch (Exception ex) {
+    				throw NSForwardException._runtimeExceptionForThrowable(ex);
+    			}
+    		}
+    		else {
+    			throw NSForwardException._runtimeExceptionForThrowable(localException);
+    		}
+    	}
+    	finally {
+    		dbc.unlock();
+    	}
+
+    	return results;
     }
-    
+
 
     /**
      * Similar to the helper in EUUtilities, but allows for null editingContext.
