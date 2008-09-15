@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
@@ -52,6 +53,36 @@ public class ERXExceptionUtilities {
 	}
 
 	/**
+	 * Returns the cause of an exception.  This should be modified to be pluggable.
+	 * 
+	 * @param t the original exception
+	 * @return the cause of the exception or null of there isn't one
+	 */
+	protected static Throwable getCause(Throwable t) {
+		Throwable cause = null;
+		if (t != null) {
+			cause = t.getCause();
+			if (cause == null) {
+				try {
+					// Check for OGNL root causes
+					Class ognlExceptionClass = Class.forName("ognl.OgnlException");
+					if (ognlExceptionClass.isAssignableFrom(t.getClass())) {
+						Method reasonMethod = ognlExceptionClass.getDeclaredMethod("getReason");
+						cause = (Throwable) reasonMethod.invoke(t);
+					}
+				}
+				catch (Throwable e) {
+					// IGNORE
+				}
+			}
+		}
+		if (t == cause) {
+			cause = null;
+		}
+		return cause;
+	}
+
+	/**
 	 * Returns a paragraph form of the given throwable.
 	 * 
 	 * @param t
@@ -83,10 +114,7 @@ public class ERXExceptionUtilities {
 			else {
 				messageBuffer.append(" ");
 			}
-			throwable = oldThrowable.getCause();
-			if (throwable == oldThrowable) {
-				throwable = null;
-			}
+			throwable = ERXExceptionUtilities.getCause(oldThrowable);
 		}
 		return messageBuffer.toString();
 	}
@@ -219,7 +247,7 @@ public class ERXExceptionUtilities {
 				String skipPatternsFile = ERXProperties.stringForKey("er.extensions.stackTrace.skipPatternsFile");
 				if (skipPatternsFile != null) {
 					NSMutableArray<Pattern> mutableSkipPatterns = new NSMutableArray<Pattern>();
-					
+
 					Enumeration<String> frameworksEnum = ERXLocalizer.frameworkSearchPath().reverseObjectEnumerator();
 					while (frameworksEnum.hasMoreElements()) {
 						String framework = frameworksEnum.nextElement();
@@ -243,7 +271,7 @@ public class ERXExceptionUtilities {
 							}
 						}
 					}
-					
+
 					skipPatterns = mutableSkipPatterns;
 				}
 
@@ -330,7 +358,7 @@ public class ERXExceptionUtilities {
 				writer.println("... skipped " + skippedCount + " stack elements");
 			}
 
-			Throwable cause = actualThrowable.getCause();
+			Throwable cause = ERXExceptionUtilities.getCause(actualThrowable);
 			if (cause != null && cause != actualThrowable) {
 				ERXExceptionUtilities.printStackTrace(cause, writer, indent + 1);
 			}
