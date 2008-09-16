@@ -88,6 +88,7 @@ public class AjaxResponse extends ERXResponse {
 					length = builder.length();
 				}
 				if (length == 0) {
+				  setStatus(HTTP_STATUS_INTERNAL_ERROR);
 					Ajax.log.warn("You performed an Ajax update, but no response was generated. A common cause of this is that you spelled your updateContainerID wrong.  You specified a container ID '" + AjaxUpdateContainer.updateContainerID(_request) + "'."); 
 				}
 			}
