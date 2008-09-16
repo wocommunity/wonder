@@ -155,7 +155,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 		onClickBuffer.append(") {");
 	}
 	
-	String updateContainerID = (String)valueForBinding("updateContainerID", component);
+	String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
 	
 	// PROTOTYPE EFFECTS
 	String beforeEffect = (String) valueForBinding("beforeEffect", component);
@@ -296,7 +296,8 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     String nameInContext = nameInContext(wocontext, wocomponent);
     boolean shouldHandleRequest = (!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) && ((wocontext._isMultipleSubmitForm() && nameInContext.equals(worequest.formValueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME))) || !wocontext._isMultipleSubmitForm());
     if (shouldHandleRequest) {
-      AjaxUpdateContainer.setUpdateContainerID(worequest, (String) valueForBinding("updateContainerID", wocomponent));
+    	String updateContainerID = AjaxUpdateContainer.updateContainerID(this, wocomponent);
+      AjaxUpdateContainer.setUpdateContainerID(worequest, updateContainerID);
       wocontext._setActionInvoked(true);
       result = handleRequest(worequest, wocontext);
       AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);

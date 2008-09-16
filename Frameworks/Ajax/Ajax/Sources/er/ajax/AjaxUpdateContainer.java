@@ -276,4 +276,16 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 			ERXWOContext.contextDictionary().setObjectForKey(updateContainerID, AjaxUpdateContainer.CURRENT_UPDATE_CONTAINER_ID_KEY);
 		}
 	}
+
+	protected static String updateContainerID(AjaxDynamicElement element, WOComponent component) {
+		return AjaxUpdateContainer.updateContainerID(element, "updateContainerID", component);
+	}
+	
+	protected static String updateContainerID(AjaxDynamicElement element, String bindingName, WOComponent component) {
+		String updateContainerID = (String) element.valueForBinding("updateContainerID", component);
+		if ("_parent".equals(updateContainerID)) {
+			updateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+		}
+		return updateContainerID;
+	}
 }

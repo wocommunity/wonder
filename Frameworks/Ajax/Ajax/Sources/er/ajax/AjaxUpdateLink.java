@@ -72,7 +72,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 	public AjaxUpdateLink(String name, NSDictionary associations, WOElement children) {
 		super(name, associations, children);
 	}
-
+	
 	public String onClick(WOContext context, boolean generateFunctionWrapper) {
 		WOComponent component = context.component();
 		NSMutableDictionary options = createAjaxOptions(component);
@@ -80,7 +80,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 		String onClick = (String) valueForBinding("onClick", component);
 		String onClickBefore = (String) valueForBinding("onClickBefore", component);
-		String updateContainerID = (String) valueForBinding("updateContainerID", component);
+		String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
 		String functionName = (String) valueForBinding("functionName", component);
 		String function = (String) valueForBinding("function", component);
 		String replaceID = (String) valueForBinding("replaceID", component);
@@ -353,7 +353,8 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
-		AjaxUpdateContainer.setUpdateContainerID(request, (String) valueForBinding("updateContainerID", component));
+		String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
+		AjaxUpdateContainer.setUpdateContainerID(request, updateContainerID);
 		WOActionResults results = (WOActionResults) valueForBinding("action", component);
 		if (results == null || booleanValueForBinding("ignoreActionResponse", false, component)) {
 			String script = (String) valueForBinding("onClickServer", component);
