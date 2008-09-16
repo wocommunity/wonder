@@ -223,7 +223,7 @@ public class AjaxUtils {
 	 * @param context the context
 	 * @param script the script to append
 	 */
-	public static void appendString(WOContext context, String script) {
+	public static void appendScript(WOContext context, String script) {
 		AjaxUtils.appendScript(context.request(), context.response(), script);
 	}
 
