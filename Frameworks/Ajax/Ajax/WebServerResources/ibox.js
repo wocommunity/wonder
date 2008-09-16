@@ -179,7 +179,7 @@ var iBox = function()
     hide: function(cancel)
     {
     	// MS Added "locked" support
-    	if (_pub.params.locked) {
+    	if (cancel && _pub.params.locked) {
     		return;
     	}
     
