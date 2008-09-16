@@ -1,5 +1,7 @@
 ul#products {
 	width: 40%;
+	list-style-type: none;
+	padding-left: 0px;
 }
 
 a.edit {
