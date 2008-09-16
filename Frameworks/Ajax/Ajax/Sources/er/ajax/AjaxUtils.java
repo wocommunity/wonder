@@ -218,6 +218,16 @@ public class AjaxUtils {
 	}
 
 	/**
+	 * Shortcut for appendScript.
+	 * 
+	 * @param context the context
+	 * @param script the script to append
+	 */
+	public static void appendString(WOContext context, String script) {
+		AjaxUtils.appendScript(context.request(), context.response(), script);
+	}
+
+	/**
 	 * Appends the given javascript to the response, surrounding it in a script header/footer if necessary.
 	 * 
 	 * @param request the request
