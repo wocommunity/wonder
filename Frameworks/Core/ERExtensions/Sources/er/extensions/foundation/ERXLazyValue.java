@@ -43,6 +43,34 @@ public class ERXLazyValue<T> {
 	}
 
 	/**
+	 * Constructs a new ERXLazyValue with a shortcut for a KVCSource and a
+	 * NeverInvalidator, which behaves like a "once" lazy value.
+	 * 
+	 * @param target
+	 *            the target of the KVCSource
+	 * @param keyPath
+	 *            the keypath of the KVCSource
+	 */
+	public ERXLazyValue(Object target, String keyPath) {
+		this(new KVCSource<T>(target, keyPath), new ERXLazyValue.NeverInvalidator());
+	}
+
+	/**
+	 * Constructs a new ERXLazyValue with a shortcut for a KVCSource and an
+	 * invalidator.
+	 * 
+	 * @param target
+	 *            the target of the KVCSource
+	 * @param keyPath
+	 *            the keypath of the KVCSource
+	 * @param invalidator
+	 *            the invalidator to use
+	 */
+	public ERXLazyValue(Object target, String keyPath, ERXLazyValue.Invalidator invalidator) {
+		this(new KVCSource<T>(target, keyPath), invalidator);
+	}
+
+	/**
 	 * Constructs a new ERXLazyValue with a data source and an invalidator.
 	 * 
 	 * @param dataSource
@@ -343,19 +371,22 @@ public class ERXLazyValue<T> {
 		/**
 		 * Sets the current value of the cache key.
 		 * 
-		 * @param value the current value of the cache key
+		 * @param value
+		 *            the current value of the cache key
 		 */
 		protected abstract void setCacheKey(Object value);
-		
+
 		/**
-		 * Sets the current value of the cache key to be a randomly generated UUID.
+		 * Sets the current value of the cache key to be a randomly generated
+		 * UUID.
 		 */
 		public void uuid() {
 			setCacheKey(UUID.randomUUID());
 		}
-		
+
 		/**
-		 * Sets the current value of the cache key to be System.currentTimeMillis.
+		 * Sets the current value of the cache key to be
+		 * System.currentTimeMillis.
 		 */
 		public void timestamp() {
 			setCacheKey(Long.valueOf(System.currentTimeMillis()));
