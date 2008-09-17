@@ -213,6 +213,124 @@ public class ERXExceptionUtilities {
 
 	private static NSArray<Pattern> _skipPatterns;
 
+	protected static void _printSingleStackTrace(Throwable t, PrintWriter writer, int exceptionDepth, boolean cleanupStackTrace) {
+		NSArray<Pattern> skipPatterns = ERXExceptionUtilities._skipPatterns;
+		if (cleanupStackTrace && skipPatterns == null) {
+			String skipPatternsFile = ERXProperties.stringForKey("er.extensions.stackTrace.skipPatternsFile");
+			if (skipPatternsFile != null) {
+				NSMutableArray<Pattern> mutableSkipPatterns = new NSMutableArray<Pattern>();
+
+				Enumeration<String> frameworksEnum = ERXLocalizer.frameworkSearchPath().reverseObjectEnumerator();
+				while (frameworksEnum.hasMoreElements()) {
+					String framework = frameworksEnum.nextElement();
+					URL path = ERXFileUtilities.pathURLForResourceNamed(skipPatternsFile, framework, null);
+					if (path != null) {
+						try {
+							NSArray<String> skipPatternStrings = (NSArray<String>) ERXExtensions.readPropertyListFromFileInFramework(skipPatternsFile, framework, null);
+							if (skipPatternStrings != null) {
+								for (String skipPatternString : skipPatternStrings) {
+									try {
+										mutableSkipPatterns.addObject(Pattern.compile(skipPatternString));
+									}
+									catch (Throwable patternThrowable) {
+										ERXExceptionUtilities.log.error("Skipping invalid exception pattern '" + skipPatternString + "' in '" + skipPatternsFile + "' in the framework '" + framework + "' (" + ERXExceptionUtilities.toParagraph(patternThrowable) + ")");
+									}
+								}
+							}
+						}
+						catch (Throwable patternThrowable) {
+							ERXExceptionUtilities.log.error("Failed to read pattern file '" + skipPatternsFile + "' in the framework '" + framework + "' (" + ERXExceptionUtilities.toParagraph(patternThrowable) + ")");
+						}
+					}
+				}
+
+				skipPatterns = mutableSkipPatterns;
+			}
+
+			if (ERXProperties.booleanForKeyWithDefault("er.extensions.stackTrace.cachePatterns", true)) {
+				if (skipPatterns == null) {
+					ERXExceptionUtilities._skipPatterns = NSArray.<Pattern> emptyArray();
+				}
+				else {
+					ERXExceptionUtilities._skipPatterns = skipPatterns;
+				}
+			}
+		}
+
+		StackTraceElement[] elements = t.getStackTrace();
+
+		ERXStringUtilities.indent(writer, exceptionDepth);
+		if (exceptionDepth > 0) {
+			writer.print("Caused by a ");
+		}
+		if (cleanupStackTrace) {
+			writer.print(t.getClass().getSimpleName());
+		}
+		else {
+			writer.print(t.getClass().getName());
+		}
+		String message = t.getLocalizedMessage();
+		if (message != null) {
+			writer.print(": ");
+			writer.print(message);
+		}
+		writer.println();
+
+		int stackDepth = 0;
+		int skippedCount = 0;
+		for (StackTraceElement element : elements) {
+			boolean showElement = true;
+
+			if (stackDepth > 0 && cleanupStackTrace && skipPatterns != null && !skipPatterns.isEmpty()) {
+				String elementName = element.getClassName() + "." + element.getMethodName();
+				for (Pattern skipPattern : skipPatterns) {
+					if (skipPattern.matcher(elementName).matches()) {
+						showElement = false;
+						break;
+					}
+				}
+			}
+
+			if (!showElement) {
+				skippedCount++;
+			}
+			else {
+				if (skippedCount > 0) {
+					ERXStringUtilities.indent(writer, exceptionDepth + 1);
+					writer.println("   ... skipped " + skippedCount + " stack elements");
+					skippedCount = 0;
+				}
+				ERXStringUtilities.indent(writer, exceptionDepth + 1);
+				writer.print("at ");
+				writer.print(element.getClassName());
+				writer.print(".");
+				writer.print(element.getMethodName());
+				writer.print("(");
+				if (element.isNativeMethod()) {
+					writer.print("Native Method");
+				}
+				else if (element.getLineNumber() < 0) {
+					writer.print(element.getFileName());
+					writer.print(":Unknown");
+				}
+				else {
+					writer.print(element.getFileName());
+					writer.print(":");
+					writer.print(element.getLineNumber());
+				}
+				writer.print(")");
+				writer.println();
+			}
+
+			stackDepth++;
+		}
+
+		if (skippedCount > 0) {
+			ERXStringUtilities.indent(writer, exceptionDepth + 1);
+			writer.println("... skipped " + skippedCount + " stack elements");
+		}
+	}
+	
 	/**
 	 * Prints the given throwable to the given writer with an indent.
 	 * 
@@ -220,7 +338,7 @@ public class ERXExceptionUtilities {
 	 *            the throwable to print
 	 * @param writer
 	 *            the writer to print to
-	 * @param indent
+	 * @param exceptionDepth
 	 *            the indent level to use
 	 * @property er.extensions.stackTrace.cleanup if true, stack traces are
 	 *           cleaned up for easier use
@@ -228,11 +346,11 @@ public class ERXExceptionUtilities {
 	 *           that contains an array of class name and method regexes to skip
 	 *           in stack traces
 	 */
-	public static void printStackTrace(Throwable t, PrintWriter writer, int indent) {
+	public static void printStackTrace(Throwable t, PrintWriter writer, int exceptionDepth) {
 		try {
-			boolean cleanup = ERXProperties.booleanForKeyWithDefault("er.extensions.stackTrace.cleanup", false);
+			boolean cleanupStackTrace = ERXProperties.booleanForKeyWithDefault("er.extensions.stackTrace.cleanup", false);
 			Throwable actualThrowable;
-			if (cleanup) {
+			if (cleanupStackTrace) {
 				actualThrowable = t;
 			}
 			else {
@@ -242,125 +360,13 @@ public class ERXExceptionUtilities {
 				return;
 			}
 
-			NSArray<Pattern> skipPatterns = ERXExceptionUtilities._skipPatterns;
-			if (cleanup && skipPatterns == null) {
-				String skipPatternsFile = ERXProperties.stringForKey("er.extensions.stackTrace.skipPatternsFile");
-				if (skipPatternsFile != null) {
-					NSMutableArray<Pattern> mutableSkipPatterns = new NSMutableArray<Pattern>();
-
-					Enumeration<String> frameworksEnum = ERXLocalizer.frameworkSearchPath().reverseObjectEnumerator();
-					while (frameworksEnum.hasMoreElements()) {
-						String framework = frameworksEnum.nextElement();
-						URL path = ERXFileUtilities.pathURLForResourceNamed(skipPatternsFile, framework, null);
-						if (path != null) {
-							try {
-								NSArray<String> skipPatternStrings = (NSArray<String>) ERXExtensions.readPropertyListFromFileInFramework(skipPatternsFile, framework, null);
-								if (skipPatternStrings != null) {
-									for (String skipPatternString : skipPatternStrings) {
-										try {
-											mutableSkipPatterns.addObject(Pattern.compile(skipPatternString));
-										}
-										catch (Throwable patternThrowable) {
-											ERXExceptionUtilities.log.error("Skipping invalid exception pattern '" + skipPatternString + "' in '" + skipPatternsFile + "' in the framework '" + framework + "' (" + ERXExceptionUtilities.toParagraph(patternThrowable) + ")");
-										}
-									}
-								}
-							}
-							catch (Throwable patternThrowable) {
-								ERXExceptionUtilities.log.error("Failed to read pattern file '" + skipPatternsFile + "' in the framework '" + framework + "' (" + ERXExceptionUtilities.toParagraph(patternThrowable) + ")");
-							}
-						}
-					}
-
-					skipPatterns = mutableSkipPatterns;
-				}
-
-				if (ERXProperties.booleanForKeyWithDefault("er.extensions.stackTrace.cachePatterns", true)) {
-					if (skipPatterns == null) {
-						ERXExceptionUtilities._skipPatterns = NSArray.<Pattern> emptyArray();
-					}
-					else {
-						ERXExceptionUtilities._skipPatterns = skipPatterns;
-					}
-				}
-			}
-
-			StackTraceElement[] elements = actualThrowable.getStackTrace();
-
-			ERXStringUtilities.indent(writer, indent);
-			if (indent > 0) {
-				writer.print("Caused by a ");
-			}
-			if (cleanup) {
-				writer.print(actualThrowable.getClass().getSimpleName());
-			}
-			else {
-				writer.print(actualThrowable.getClass().getName());
-			}
-			String message = actualThrowable.getLocalizedMessage();
-			if (message != null) {
-				writer.print(": ");
-				writer.print(message);
-			}
-			writer.println();
-
-			int stackDepth = 0;
-			int skippedCount = 0;
-			for (StackTraceElement element : elements) {
-				boolean showElement = true;
-
-				if (stackDepth > 0 && cleanup && skipPatterns != null && !skipPatterns.isEmpty()) {
-					String elementName = element.getClassName() + "." + element.getMethodName();
-					for (Pattern skipPattern : skipPatterns) {
-						if (skipPattern.matcher(elementName).matches()) {
-							showElement = false;
-							break;
-						}
-					}
-				}
-
-				if (!showElement) {
-					skippedCount++;
-				}
-				else {
-					if (skippedCount > 0) {
-						ERXStringUtilities.indent(writer, indent + 1);
-						writer.println("   ... skipped " + skippedCount + " stack elements");
-						skippedCount = 0;
-					}
-					ERXStringUtilities.indent(writer, indent + 1);
-					writer.print("at ");
-					writer.print(element.getClassName());
-					writer.print(".");
-					writer.print(element.getMethodName());
-					writer.print("(");
-					if (element.isNativeMethod()) {
-						writer.print("Native Method");
-					}
-					else if (element.getLineNumber() < 0) {
-						writer.print(element.getFileName());
-						writer.print(":Unknown");
-					}
-					else {
-						writer.print(element.getFileName());
-						writer.print(":");
-						writer.print(element.getLineNumber());
-					}
-					writer.print(")");
-					writer.println();
-				}
-
-				stackDepth++;
-			}
-
-			if (skippedCount > 0) {
-				ERXStringUtilities.indent(writer, indent + 1);
-				writer.println("... skipped " + skippedCount + " stack elements");
-			}
-
 			Throwable cause = ERXExceptionUtilities.getCause(actualThrowable);
+			boolean showOnlyBottomException = ERXProperties.booleanForKeyWithDefault("er.extensions.stackTrace.bottomOnly", true);
+			if (!showOnlyBottomException || cause == null) {
+				ERXExceptionUtilities._printSingleStackTrace(actualThrowable, writer, exceptionDepth, cleanupStackTrace);
+			}
 			if (cause != null && cause != actualThrowable) {
-				ERXExceptionUtilities.printStackTrace(cause, writer, indent + 1);
+				ERXExceptionUtilities.printStackTrace(cause, writer, exceptionDepth);
 			}
 		}
 		catch (Throwable thisSucks) {
