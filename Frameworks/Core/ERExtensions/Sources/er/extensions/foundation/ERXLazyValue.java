@@ -1,5 +1,7 @@
 package er.extensions.foundation;
 
+import java.util.UUID;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -332,12 +334,41 @@ public class ERXLazyValue<T> {
 	}
 
 	/**
+	 * The base class for any invalidator that is triggered by the change in a
+	 * cache key with support for changing the value.
+	 * 
+	 * @author mschrag
+	 */
+	public static abstract class MutableCacheKeyInvalidator extends ERXLazyValue.CacheKeyInvalidator {
+		/**
+		 * Sets the current value of the cache key.
+		 * 
+		 * @param value the current value of the cache key
+		 */
+		protected abstract void setCacheKey(Object value);
+		
+		/**
+		 * Sets the current value of the cache key to be a randomly generated UUID.
+		 */
+		public void uuid() {
+			setCacheKey(UUID.randomUUID());
+		}
+		
+		/**
+		 * Sets the current value of the cache key to be System.currentTimeMillis.
+		 */
+		public void timestamp() {
+			setCacheKey(Long.valueOf(System.currentTimeMillis()));
+		}
+	}
+
+	/**
 	 * ThreadStorageCacheKeyInvalidator triggers a cache invalidation when the
 	 * value of the specified key changes in the ERXThreadStorage.
 	 * 
 	 * @author mschrag
 	 */
-	public static class ThreadStorageCacheKeyInvalidator extends CacheKeyInvalidator {
+	public static class ThreadStorageCacheKeyInvalidator extends ERXLazyValue.MutableCacheKeyInvalidator {
 		private String _key;
 
 		public ThreadStorageCacheKeyInvalidator(String key) {
@@ -362,7 +393,7 @@ public class ERXLazyValue<T> {
 	 * 
 	 * @author mschrag
 	 */
-	public static class PageUserInfoCacheKeyInvalidator extends CacheKeyInvalidator {
+	public static class PageUserInfoCacheKeyInvalidator extends ERXLazyValue.MutableCacheKeyInvalidator {
 		private String _key;
 
 		public PageUserInfoCacheKeyInvalidator(String key) {
@@ -388,7 +419,7 @@ public class ERXLazyValue<T> {
 	 * 
 	 * @author mschrag
 	 */
-	public static class AjaxPageUserInfoCacheKeyInvalidator extends CacheKeyInvalidator {
+	public static class AjaxPageUserInfoCacheKeyInvalidator extends ERXLazyValue.MutableCacheKeyInvalidator {
 		private String _key;
 
 		public AjaxPageUserInfoCacheKeyInvalidator(String key) {
