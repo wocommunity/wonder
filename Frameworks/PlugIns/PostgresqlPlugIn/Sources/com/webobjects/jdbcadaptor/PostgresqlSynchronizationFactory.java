@@ -286,6 +286,11 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             priKeyAttributes = entity.primaryKeyAttributes();
             if (priKeyAttributes.count() == 1) {
                 priKeyAttribute = (EOAttribute) priKeyAttributes.objectAtIndex(0);
+                
+                // Q: Don't create a sequence for non number primary keys
+                if (priKeyAttribute.adaptorValueType() != EOAttribute.AdaptorNumberType) {
+                	continue;
+                }
                 String sql;
 
                 sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
