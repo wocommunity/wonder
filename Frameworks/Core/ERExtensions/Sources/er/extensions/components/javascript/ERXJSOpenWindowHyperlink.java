@@ -14,6 +14,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.ERXExtensions;
+import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
  * Given an action opens the action in a new window.<br />
@@ -57,6 +58,13 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
             result.append(context().directActionURLForActionNamed(anActionName, (NSDictionary)valueForBinding("queryDictionary")));
             ERXExtensions.addRandomizeDirectActionURL(result);
         }
+        
+        NSDictionary urlParameters = (NSDictionary)valueForBinding("urlParameters");
+        if (urlParameters != null) {
+        	result.append(result.toString().indexOf('?') > - 1 ? '&' : '?');
+        	result.append(ERXDictionaryUtilities.queryStringForDictionary(urlParameters, null));
+        }
+        
         String fragment=(String)valueForBinding("fragment");
         if (fragment!=null)
             result.append("#"+fragment);
