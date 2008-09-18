@@ -46,6 +46,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding elementName the element name to use (defaults to "a")
  * @binding functionName if set, the link becomes a javascript function
  * @binding button if true, this is rendered as a javascript button
+ * @binding asynchronous boolean defining if the update request is sent asynchronously or synchronously, defaults to true
  * 
  * // PROTOTYPE EFFECTS
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
@@ -271,7 +272,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 
 		options.setObjectForKey("'get'", "method");
-		options.setObjectForKey("true", "asynchronous");
+		options.setObjectForKey(booleanValueForBinding("asynchronous", false, component) ? "true" : "false", "asynchronous");
 		if (options.objectForKey("evalScripts") == null) {
 			options.setObjectForKey("true", "evalScripts");
 		}
