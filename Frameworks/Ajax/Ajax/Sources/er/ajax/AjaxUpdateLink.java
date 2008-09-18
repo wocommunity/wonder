@@ -280,7 +280,6 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			options.setObjectForKey("true", "evalScripts");
 		}
 
-		System.out.println("AjaxUpdateLink.createAjaxOptions: " + options);
 		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 		return options;
 	}
