@@ -17,6 +17,7 @@
 	<binding name="id"/>
 	<binding name="fragment"/>
 	<binding name="disabled"/>
+	<binding name="urlParameters"/>
 </wo>
 </wodefinitions>
 
