@@ -92,6 +92,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
 	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
+	ajaxOptionsArray.addObject(new AjaxOption("asynchronous", AjaxOption.BOOLEAN));
 	
     String name = nameInContext(component.context(), component);
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());

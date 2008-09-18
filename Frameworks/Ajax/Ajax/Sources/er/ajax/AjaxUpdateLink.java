@@ -269,14 +269,18 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", AjaxOption.BOOLEAN));
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 
 		options.setObjectForKey("'get'", "method");
-		options.setObjectForKey(booleanValueForBinding("asynchronous", false, component) ? "true" : "false", "asynchronous");
+		if (options.objectForKey("asynchronous") == null) {
+			options.setObjectForKey("true", "asynchronous");
+		}
 		if (options.objectForKey("evalScripts") == null) {
 			options.setObjectForKey("true", "evalScripts");
 		}
 
+		System.out.println("AjaxUpdateLink.createAjaxOptions: " + options);
 		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 		return options;
 	}
