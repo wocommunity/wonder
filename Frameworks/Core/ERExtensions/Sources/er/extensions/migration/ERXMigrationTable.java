@@ -22,6 +22,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.jdbc.ERXJDBCUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
+import er.extensions.jdbc.ERXSQLHelper.CustomTypes;
 
 /**
  * ERXMigrationTable provides table-level migration API's.  To obtain a table, you
@@ -683,6 +684,31 @@ public class ERXMigrationTable {
 		return newColumn(name, Types.TIMESTAMP, 0, 0, 0, allowsNull, ERXMigrationColumn.NULL_VALUE_TYPE, defaultValue);
 	}
 
+	/**
+	 * Returns a new ipaddress column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newIpAddressColumn(String name, boolean allowsNull) throws SQLException {
+		return newColumn(name, CustomTypes.INET, 39, 0, 0, allowsNull, null);
+	}
+
+	/**
+	 * Returns a new ipaddress column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newIpAddressColumn(String name, boolean allowsNull, String defaultValue) throws SQLException {
+		return newColumn(name, CustomTypes.INET, 39, 0, 0, allowsNull, null, defaultValue);
+	}
+	
 	/**
 	 * Callback method for ERXMigrationColumn to notify the table that
 	 * it has been deleted.
