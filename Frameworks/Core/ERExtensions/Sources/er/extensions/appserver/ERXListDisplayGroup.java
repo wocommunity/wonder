@@ -16,21 +16,21 @@ import er.extensions.batching.IBatchingList;
  * 
  * @author mschrag
  */
-public class ERXListDisplayGroup extends WODisplayGroup {
-	private List _objectList;
-	private NSArray _displayedObjects;
+public class ERXListDisplayGroup<T> extends WODisplayGroup {
+	private List<T> _objectList;
+	private NSArray<T> _displayedObjects;
 
 	public ERXListDisplayGroup() {
 	}
 
-	public List getObjectList() {
+	public List<T> getObjectList() {
 		return _objectList;
 	}
 
 	protected int size() {
 		int size;
 		if (_objectList instanceof NSArray) {
-			size = ((NSArray) _objectList).count();
+			size = ((NSArray<T>) _objectList).count();
 		}
 		else {
 			size = _objectList.size();
@@ -38,7 +38,7 @@ public class ERXListDisplayGroup extends WODisplayGroup {
 		return size;
 	}
 
-	public void setObjectList(List objectList) {
+	public void setObjectList(List<T> objectList) {
 		_objectList = objectList;
 		if (objectList instanceof IBatchingList) {
 			((IBatchingList) objectList).setSortOrderings(sortOrderings());
@@ -49,6 +49,7 @@ public class ERXListDisplayGroup extends WODisplayGroup {
 		setObjectArray(fa);
 	}
 
+	@Override
 	public int batchCount() {
 		if (numberOfObjectsPerBatch() == 0) {
 			return 0;
@@ -60,6 +61,7 @@ public class ERXListDisplayGroup extends WODisplayGroup {
 		return (size - 1) / numberOfObjectsPerBatch() + 1;
 	}
 
+	@Override
 	public void setCurrentBatchIndex(int index) {
 		if (currentBatchIndex() != index) {
 			_displayedObjects = null;
@@ -70,6 +72,7 @@ public class ERXListDisplayGroup extends WODisplayGroup {
 		}
 	}
 
+	@Override
 	public void setNumberOfObjectsPerBatch(int count) {
 		if (numberOfObjectsPerBatch() != count) {
 			_displayedObjects = null;
@@ -80,8 +83,9 @@ public class ERXListDisplayGroup extends WODisplayGroup {
 		}
 	}
 
-	public NSArray displayedObjects() {
-		NSMutableArray displayedObjects = new NSMutableArray(numberOfObjectsPerBatch());
+	@Override
+	public NSArray<T> displayedObjects() {
+		NSMutableArray<T> displayedObjects = new NSMutableArray<T>(numberOfObjectsPerBatch());
 		if (_displayedObjects == null) {
 			int numberOfObjectsPerBatch = numberOfObjectsPerBatch();
 			int startIndex = (currentBatchIndex() - 1) * numberOfObjectsPerBatch;
@@ -94,6 +98,8 @@ public class ERXListDisplayGroup extends WODisplayGroup {
 		return displayedObjects;
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
 	public void setSortOrderings(NSArray sortOrderings) {
 		if (_objectList instanceof IBatchingList) {
 			((IBatchingList) _objectList).setSortOrderings(sortOrderings());
@@ -101,7 +107,7 @@ public class ERXListDisplayGroup extends WODisplayGroup {
 		super.setSortOrderings(sortOrderings);
 	}
 
-	protected class FakeArray extends NSMutableArray {
+	protected class FakeArray extends NSMutableArray<Object> {
 		private int _count;
 
 		public FakeArray(int count) {
