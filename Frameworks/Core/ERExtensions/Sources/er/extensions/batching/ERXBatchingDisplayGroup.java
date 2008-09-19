@@ -42,7 +42,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @author dt first version
  * @author ak gross hacks, made functional and usable.
  */
-public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
+public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 
 	/** Logging support */
 	private static final Logger log = Logger.getLogger(ERXBatchingDisplayGroup.class);
@@ -51,7 +51,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	protected int _batchCount;
 
 	/** cache for the displayed objects */
-	protected NSArray _displayedObjects;
+	protected NSArray<T> _displayedObjects;
 
 	/** cache batching flag */
 	protected Boolean _isBatching;
@@ -73,7 +73,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * @return the corresponding batching display group
 	 */
 	public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
-		return new ERXBatchingDisplayGroup(unarchiver);
+		return new ERXBatchingDisplayGroup<Object>(unarchiver);
 	}
 
 	/**
@@ -81,6 +81,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * 
 	 * @param unarchiver the unarchiver to construct this display group with
 	 */
+	@SuppressWarnings("unchecked")
 	private ERXBatchingDisplayGroup(EOKeyValueUnarchiver unarchiver) {
 		this();
 		setCurrentBatchIndex(1);
@@ -177,7 +178,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		if (isBatching() && numberOfObjectsPerBatch() != count) {
 			_displayedObjects = null;
 		}
-		NSArray selectedObjects = selectedObjects();
+		NSArray<T> selectedObjects = selectedObjects();
 		super.setNumberOfObjectsPerBatch(count);
 		setSelectedObjects(selectedObjects);
 		// we have already fetched, so we need to adapt the batch count
@@ -195,7 +196,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * @return the objects that should be diplayed.
 	 */
 	@Override
-	public NSArray displayedObjects() {
+	public NSArray<T> displayedObjects() {
 		if (isBatching()) {
 			refetchIfNecessary();
 			return _displayedObjects;
@@ -207,7 +208,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * Overridden to return allObjects() when batching, as we can't qualify in memory.
 	 */
 	@Override
-	public NSArray filteredObjects() {
+	public NSArray<T> filteredObjects() {
 		if (isBatching()) {
 			return allObjects();
 		}
@@ -227,8 +228,9 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * Overridden to preserve the selected objects.
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void setSortOrderings(NSArray nsarray) {
-		NSArray selectedObjects = selectedObjects();
+		NSArray<T> selectedObjects = selectedObjects();
 		super.setSortOrderings(nsarray);
 		setSelectedObjects(selectedObjects);
 		if (isBatching()) {
@@ -295,8 +297,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * @param start
 	 * @param end
 	 */
-	@SuppressWarnings("unchecked")
-	protected NSArray objectsInRange(int start, int end) {
+	protected NSArray<T> objectsInRange(int start, int end) {
 		EOEditingContext ec = dataSource().editingContext();
 		EOFetchSpecification spec = fetchSpecification();
 		NSArray result = null;
@@ -366,7 +367,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		}
 
 		if(filteredObjects().count() != rowCount) {
-			NSArray selectedObjects = selectedObjects();
+			NSArray<T> selectedObjects = selectedObjects();
 			setObjectArray(new FakeArray(rowCount));
 			setSelectedObjects(selectedObjects);
 		}
@@ -399,6 +400,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * Overridden to update the batch count.
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void setObjectArray(NSArray objects) {
 		super.setObjectArray(objects);
 		updateBatchCount();
@@ -438,8 +440,8 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	public void updateDisplayedObjects() {
 		if (isBatching()) {
 			// refetch();
-			NSMutableArray selectedObjects = (NSMutableArray) selectedObjects();
-			NSArray obj = allObjects();
+			NSMutableArray<T> selectedObjects = (NSMutableArray<T>) selectedObjects();
+			NSArray<T> obj = allObjects();
 			if (delegate() != null) {
 				_NSDelegate delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
 				if (delegate != null && delegate.respondsTo("displayGroupDisplayArrayForObjects")) {
@@ -477,8 +479,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * just fake that we an array with the number of objects the display group
 	 * should display.
 	 */
-	protected class FakeArray extends NSMutableArray {
-		@SuppressWarnings("unchecked")
+	protected class FakeArray extends NSMutableArray<Object> {
 		public FakeArray(int count) {
 			super(count);
 			Object fakeObject = new NSKeyValueCoding.ErrorHandling() {
