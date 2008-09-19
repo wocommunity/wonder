@@ -70,6 +70,12 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author mschrag
  */
 public class ERXSQLHelper {
+	
+	/** custom JDBC types */
+	public interface CustomTypes {
+		public static final int INET = 9001;
+	}
+	
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXSQLHelper.class);
 
@@ -893,6 +899,22 @@ public class ERXSQLHelper {
 	public String migrationTableName() {
 		return "_dbupdater";
 	}
+	
+	/**
+	 * Returns the JDBC type to use for a given ERXSQLHelper custom type
+	 * 
+	 * @param jdbcType
+	 * 				the ERXSQLHelper custom type
+	 * @return the JDBC type to use
+	 */
+	public int jdbcTypeForCustomType(int jdbcType) {
+		int result = jdbcType;
+
+		if (jdbcType == CustomTypes.INET) {
+			result = Types.VARCHAR;
+		}
+		return result;
+	}
 
 	/**
 	 * JDBCAdaptor.externalTypeForJDBCType just returns the first type it finds
@@ -909,6 +931,8 @@ public class ERXSQLHelper {
 	public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
 		String externalType = null;
 		NSArray<String> defaultJDBCTypes = null;
+		jdbcType = jdbcTypeForCustomType(jdbcType);
+		
 		try {
 			// MS: This is super dirty, but we can deadlock if we end up trying
 			// to request jdbc2Info during a migration. We have to be able to
@@ -951,11 +975,6 @@ public class ERXSQLHelper {
 					if (externalType == null) {
 						externalType = adaptor.externalTypeForJDBCType(jdbcType);
 					}
-
-					if (externalType == null) {
-
-					}
-
 				}
 			}
 			finally {
@@ -1773,6 +1792,9 @@ public class ERXSQLHelper {
 			else if (jdbcType == Types.DECIMAL) {
 				externalType = "numeric";
 			}
+			else if (jdbcType == CustomTypes.INET) {
+				externalType = "inet";
+			}
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
 			}
@@ -1793,5 +1815,6 @@ public class ERXSQLHelper {
 			}
 			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
+
 	}
 }
