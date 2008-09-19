@@ -34,7 +34,7 @@
             externalType = VARCHAR2; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = cryptoString; 
-            valueClassName = "ERXCryptoString"; 
+            valueClassName = ERXCryptoString; 
             valueFactoryMethodName = createInstanceFromCryptoString; 
             width = 100; 
         }, 
@@ -79,7 +79,7 @@
             externalType = VARCHAR2; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = globalID; 
-            valueClassName = "ERXKeyGlobalID"; 
+            valueClassName = ERXKeyGlobalID; 
             valueFactoryMethodName = fromString; 
             valueType = c; 
             width = 255; 
@@ -108,6 +108,13 @@
         }, 
         {
             columnName = ""; 
+            externalType = VARCHAR2; 
+            name = ipAddress; 
+            valueClassName = NSString; 
+            width = 39; 
+        }, 
+        {
+            columnName = ""; 
             externalType = NUMBER; 
             name = longNumber; 
             valueClassName = NSNumber; 
@@ -124,7 +131,7 @@
             columnName = ""; 
             externalType = BLOB; 
             name = mutableArray; 
-            valueClassName = "ERXMutableArray"; 
+            valueClassName = ERXMutableArray; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
@@ -132,7 +139,7 @@
             columnName = ""; 
             externalType = BLOB; 
             name = mutableDictionary; 
-            valueClassName = "ERXMutableDictionary"; 
+            valueClassName = ERXMutableDictionary; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
@@ -215,6 +222,7 @@
         id, 
         intBoolean, 
         intNumber, 
+        ipAddress, 
         longText, 
         mutableArray, 
         mutableDictionary, 
@@ -241,6 +249,7 @@
         globalID, 
         intBoolean, 
         intNumber, 
+        ipAddress, 
         longNumber, 
         longText, 
         mutableArray, 
