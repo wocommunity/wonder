@@ -895,7 +895,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     EOAttribute countAttribute = ERXEOAccessUtilities.createAggregateAttribute(editingContext, "COUNT", ERTag.NAME_KEY, _tagEntity.name(), Number.class, "i", "tagCount", "t2");
     tagsFetchAttributes.addObject(countAttribute);
 
-    EOQualifier idQualifier = new ERXKey<ERTag>("id").in(itemPrimaryKeys);
+    EOQualifier idQualifier = new ERXKey<Object>("id").in(itemPrimaryKeys);
     EOFetchSpecification tagsFetchSpec = new EOFetchSpecification(_entity.name(), idQualifier, null);
     EOSQLExpression tagsSqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, tagsFetchSpec, 0, -1, tagsFetchAttributes);
     NSMutableArray<EOAttribute> tagsGroupByAttributes = new NSMutableArray<EOAttribute>(new EOAttribute[] { tagNameAttribute, tagIDAttribute });
