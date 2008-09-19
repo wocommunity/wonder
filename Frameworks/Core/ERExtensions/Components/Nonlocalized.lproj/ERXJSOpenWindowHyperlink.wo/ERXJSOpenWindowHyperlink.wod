@@ -11,23 +11,25 @@ Content: WOComponentContent {}
 Content2: WOComponentContent {}
 
 Link: WOHyperlink {
-        onclick=openWindow;
+	onclick=openWindow;
 	class = ^linkClass;
+	string = ^string;
 	action = action;
 	target = ^target;
-        fragmentIdentifier = ^fragment;
+	fragmentIdentifier = ^fragment;
 	disabled = ^disabled;
 	id = ^id;
 }
 
 Link2: WOHyperlink {
 	class = ^linkClass;
-        onclick=openWindow;
+	onclick=openWindow;
+	string = ^string;
 	target = ^target;
 	actionClass = ^actionClass;
 	queryDictionary = ^queryDictionary;
 	directActionName = ^directActionName;
-        ?wosid=false;
+	?wosid=false;
 	disabled = ^disabled;
 	id = ^id;
 }

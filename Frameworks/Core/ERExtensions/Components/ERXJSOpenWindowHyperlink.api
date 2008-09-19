@@ -18,6 +18,7 @@
 	<binding name="fragment"/>
 	<binding name="disabled"/>
 	<binding name="urlParameters"/>
+	<binding name="positionAtCursor" defaults="Boolean"/>
 </wo>
 </wodefinitions>
 
