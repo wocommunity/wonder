@@ -66,6 +66,7 @@ public class ERXResponseComponent extends ERXStatelessComponent {
 	}
 
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+		aContext._setResponse(aResponse);
 		aResponse.setContent(_response.content());
 		aResponse.setContentEncoding(_response.contentEncoding());
 		aResponse.setHeaders(_response.headers());
