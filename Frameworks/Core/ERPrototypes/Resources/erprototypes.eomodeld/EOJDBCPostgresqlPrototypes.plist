@@ -35,7 +35,7 @@
             externalType = varchar; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = cryptoString; 
-            valueClassName = "ERXCryptoString"; 
+            valueClassName = ERXCryptoString; 
             valueFactoryMethodName = createInstanceFromCryptoString; 
             width = 100; 
         }, 
@@ -82,7 +82,7 @@
             externalType = varchar; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = globalID; 
-            valueClassName = "ERXKeyGlobalID"; 
+            valueClassName = ERXKeyGlobalID; 
             valueFactoryMethodName = fromString; 
             valueType = c; 
             width = 255; 
@@ -112,6 +112,14 @@
         }, 
         {
             columnName = ""; 
+            externalType = inet; 
+            name = ipAddress; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 39; 
+        }, 
+        {
+            columnName = ""; 
             externalType = int8; 
             name = longNumber; 
             valueClassName = NSNumber; 
@@ -129,7 +137,7 @@
             columnName = ""; 
             externalType = bytea; 
             name = mutableArray; 
-            valueClassName = "ERXMutableArray"; 
+            valueClassName = ERXMutableArray; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
@@ -137,7 +145,7 @@
             columnName = ""; 
             externalType = bytea; 
             name = mutableDictionary; 
-            valueClassName = "ERXMutableDictionary"; 
+            valueClassName = ERXMutableDictionary; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
@@ -237,6 +245,7 @@
         globalID, 
         intBoolean, 
         intNumber, 
+        ipAddress, 
         longNumber, 
         longText, 
         mutableArray, 
