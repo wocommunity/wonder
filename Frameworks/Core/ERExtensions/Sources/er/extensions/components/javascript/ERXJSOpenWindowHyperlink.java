@@ -14,6 +14,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.ERXExtensions;
+import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
@@ -78,7 +79,16 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
         result.append(",titlebar="+valueForBinding("titlebar"));
         result.append(",resizable="+valueForBinding("resizable"));
         result.append(",dependant=yes");
-        result.append("'); win.focus(); return false;");
+        result.append("'); win.focus(); ");
+        
+        // Opens pop-up at place clicked, use moveTo instead of top, left params to open
+        // command to avoid FireFox bugs
+        if (ERXComponentUtilities.booleanValueForBinding(this, "positionAtCursor", false)) {
+            result.append("win.moveTo(window.event.screenX, window.event.screenY); ");
+        }
+        
+        result.append("return false;");
+        
         return result.toString();
     }
 
