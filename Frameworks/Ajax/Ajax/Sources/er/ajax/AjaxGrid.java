@@ -60,6 +60,8 @@ import er.extensions.foundation.ERXValueUtilities;
  *        selectedRowCSSStyle = &quot;background:lightyellow;&quot;; // Secondary CSS style attribute on selected rows, optional
  *        unselectedRowCSSStyle = &quot;background:lightgrey;&quot;;// Secondary CSS style attribute on unselected rows, optional
  *        canReorder = true;                                    // Enables (or disables) drag and drop reordering of columns
+ *        dragHeaderOnly = true;                                // Optional, defaults to false, true if only the title/header cells can
+ *                                                              // be dragged to re-order columns
  *        batchSize = 10;                                       // Controls size of batch in display group, use zero for no batching
  *        rowIdentifier = adKey;                                // Optional, key path into row returning a unique identifier for the row 
  *                                                              // rowIdentifier is used to build HTML ID attributes, so a String or Number works best
@@ -293,6 +295,7 @@ public class AjaxGrid extends WOComponent {
 	public static final String TABLE_ID = "tableID";
 	public static final String ROW_IDENTIFIER = "rowIdentifier";
 	public static final String CAN_REORDER = "canReorder";
+	public static final String DRAG_HEADER_ONLY = "dragHeaderOnly";
 	public static final String SOURCE_COLUMN_FORM_VALUE = "sourceColumn";
 	public static final String DESTINATION_COLUMN_FORM_VALUE = "destinationColumn";
 	public static final String FORMATTER_CLASS = "formatterClass";
@@ -415,9 +418,19 @@ public class AjaxGrid extends WOComponent {
 	 * @return JavaScript to initialize drag and drop on the grid
 	 */
 	public String initScript() {
-		return canReorder() ? "<script type=\"text/javascript\">AjaxGrid.ajaxGrid_init('" + tableID() + "');</script>" : null;
+
+		return canReorder() ? "<script type=\"text/javascript\">AjaxGrid.ajaxGrid_init('" + tableID() + "', " + dragHeaderOnly() + ");</script>" : null;
 	}
 
+	/**
+	 * @return the value for the DRAG_HEADER_ONLY configuration item with a default of false
+	 */
+	public String dragHeaderOnly()
+	{
+		String dragHeaderOnly = (String) configurationData().objectForKey(DRAG_HEADER_ONLY);
+		return dragHeaderOnly == null ? "false" : dragHeaderOnly;
+	}	
+	
 	/**
 	 * Binding value for onRefreshComplete function of AjaxUpdate container.
 	 * Returns the value from the AFTER_UPDATE_BINDING followed by
@@ -438,7 +451,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return ajaxGrid_init(TABLE);
 	 */
 	public String enableDragAndDrop() {
-		return canReorder() ? "AjaxGrid.ajaxGrid_init('" + tableID() + "');" : "";
+		return canReorder() ? "AjaxGrid.ajaxGrid_init('" + tableID() + "', " + dragHeaderOnly() + ");" : "";
 	}
 
 	/**
