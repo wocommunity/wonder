@@ -11,6 +11,7 @@
 	selectedRowCSSStyle = "font-weight: bold;";   
 	selectedRowCSSClass = "ajaxGridSelectedRow"; 
 	rowIdentifier = number;
+	dragHeaderOnly = true;
     columns = (
 		{
 			title = "Column 1";		
