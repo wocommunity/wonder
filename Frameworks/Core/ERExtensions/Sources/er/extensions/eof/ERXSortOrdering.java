@@ -73,6 +73,27 @@ public class ERXSortOrdering extends EOSortOrdering {
 	}
 
 	/**
+	 * Returns an array sorted with this sort ordering.
+	 * 
+	 * @param <T> the type of the array
+	 * @param array the array to sort
+	 * @return a sorted copy of the array
+	 */
+	public <T> NSArray<T> sorted(NSArray<T> array) {
+		return ERXS.sorted(array, this);
+	}
+
+	/**
+	 * Sorts the given array with this sort ordering.
+	 * 
+	 * @param <T> the type of the array
+	 * @param array the array to sort
+	 */
+	public <T> void sort(NSMutableArray<T> array) {
+		ERXS.sort(array, this);
+	}
+
+	/**
 	 * Constructs an ERXSortOrdering (see EOSortOrdering).
 	 * 
 	 * @param key
@@ -97,7 +118,7 @@ public class ERXSortOrdering extends EOSortOrdering {
 	public static ERXSortOrdering sortOrderingWithKey(ERXKey key, NSSelector selector) {
 		return new ERXSortOrdering(key, selector);
 	}
-
+	
 	/**
 	 * ERXSortOrderings is an NSMutableArray<EOSortOrdering> that
 	 * provides methods for chaining.
@@ -149,6 +170,27 @@ public class ERXSortOrdering extends EOSortOrdering {
 		public ERXSortOrderings then(EOSortOrdering nextSortOrdering) {
 			addObject(nextSortOrdering);
 			return this;
+		}
+
+		/**
+		 * Returns an array sorted with this sort ordering.
+		 * 
+		 * @param <T> the type of the array
+		 * @param array the array to sort
+		 * @return a sorted copy of the array
+		 */
+		public <T> NSArray<T> sorted(NSArray<T> array) {
+			return ERXS.sorted(array, this);
+		}
+
+		/**
+		 * Sorts the given array with this sort ordering.
+		 * 
+		 * @param <T> the type of the array
+		 * @param array the array to sort
+		 */
+		public <T> void sort(NSMutableArray<T> array) {
+			ERXS.sort(array, this);
 		}
 	}
 }
