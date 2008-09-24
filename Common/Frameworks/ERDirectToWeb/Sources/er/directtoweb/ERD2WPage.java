@@ -175,6 +175,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         if (_context != null) {
             _context.unlock();
         }
+        // Make sure the property key is cleared out.  In some embedded page configurations, invoking an action in the embedded component 
+        // interrupts the repetition over the property keys, preventing the nullification of the value at the end of the repetition.  This causes
+        // weird stuff to happen.
+        d2wContext().takeValueForKey(null, "propertyKey");
         super.sleep();
     }
 
