@@ -17,6 +17,9 @@ import com.webobjects.appserver.WOContext;
  */
 public class ERXJSAutoClosePage extends WOComponent {
 
+	private String additionalJavaScript;
+	
+	
     /** Public constructor */
     public ERXJSAutoClosePage(WOContext aContext) {
         super(aContext);
@@ -24,4 +27,33 @@ public class ERXJSAutoClosePage extends WOComponent {
     
     /** component is stateless */
     public boolean isStateless() { return true; }
+    
+    
+    /**
+     * @return JavaScript for onLoad function, additionalJavaScript() (if any) followed by "window.close()"
+     */
+    public String onLoad() {
+    	return (additionalJavaScript() != null ? additionalJavaScript() : "") +  " window.close();";
+    }
+    
+    /**
+     * Convenience method to set additionalJavaScript() to "opener.location.reload(true);")
+     */
+    public void refreshOpener() {
+    	setAdditionalJavaScript("opener.location.reload(true);");
+    }
+
+	/**
+	 * @return additionalJavaScript to execute before closing the current window
+	 */
+	public String additionalJavaScript() {
+		return additionalJavaScript;
+	}
+
+	/**
+	 * @param javaScript the additional JavaScript to execute before closing the current window
+	 */
+	public void setAdditionalJavaScript(String javaScript) {
+		additionalJavaScript = javaScript;
+	}
 }

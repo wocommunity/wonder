@@ -76,7 +76,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		
 		WOComponent component = context.component();
 		String observeFieldID = (String) valueForBinding("observeFieldID", component);
-		String updateContainerID = (String) valueForBinding("updateContainerID", component);
+		String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
 		NSMutableDictionary options = createAjaxOptions(component);
 		boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
 		boolean observeFieldDescendents;

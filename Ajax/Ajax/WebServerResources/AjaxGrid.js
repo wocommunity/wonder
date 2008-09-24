@@ -17,18 +17,20 @@ var AjaxGrid = {
 	/*
 	 * Adds drag and drop support to the table
 	 */
-	ajaxGrid_init : function(table) {
+	ajaxGrid_init : function(table, dragHeaderOnly) {
 		table = $(table);
-		table.onselectstart = function () { return false; } 
-		table.onmousedown = function () { return false; }
-		table.onmouseup = AjaxGrid.drop;
 		
 		numberOfColumns = table.rows[0].cells.length;
 		tableRows = table.getElementsByTagName("TR");
+		numberOfRows = dragHeaderOnly ? 1 : tableRows.length;
 	
-		for (row=0; row < tableRows.length; row++) {
+		for (row=0; row < numberOfRows; row++) {
 			tds = tableRows[row].cells;
 			for (col=1; col<tds.length; col++) {
+				tds[col].onselectstart = function () { return false; } 
+				tds[col].onmousedown = function () { return false; }
+				tds[col].onmouseup = AjaxGrid.drop;
+				
 				AjaxGrid.drag(tds[col]);
 				tds[col].onmouseover = AjaxGrid.paint;
 				tds[col].onmouseout = AjaxGrid.paint;
@@ -95,7 +97,7 @@ var AjaxGrid = {
 		// Error and no-op handling
 		// A destinationIndex of -1 means not a table cell and 0 means the left most column which is not dropable
 		if (destinationIndex < 1 || columnIndex == destinationIndex) return
-	  updateServerColumnOrder('sourceColumn=' + columnIndex + '&destinationColumn=' + destinationIndex);
+		updateServerColumnOrder('sourceColumn=' + columnIndex + '&destinationColumn=' + destinationIndex);
 	
 		for (x=0; x<tableRows.length; x++) {
 			tds = tableRows[x].cells

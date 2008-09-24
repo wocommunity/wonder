@@ -4,17 +4,18 @@
     <binding name = "updateContainerID"/>
     <binding name = "action"/>
     <binding name = "directActionName"/>
-    <binding name = "disabled"/>
+    <binding name = "disabled" defaults = "Boolean" />
 		
 		<binding name = "onComplete"/>
 		<binding name = "onSuccess"/>
 		<binding name = "onFailure"/>
 		<binding name = "onException"/>
-		<binding name = "evalScripts"/>
+		<binding name = "evalScripts" defaults = "Boolean" />
 		<binding name = "function"/>
 		<binding name = "functionName"/>
 		<binding name = "elementName"/>
 		<binding name = "button"/>
+		<binding name = "asynchronous" defaults = "Boolean" />
 
 		<binding name = "insertion"/>
 		<binding name = "insertionDuration"/>
@@ -33,7 +34,7 @@
 		<binding name = "onClickServer"/>
 		
 		<binding name = "replaceID"/>
-		<binding name = "ignoreActionResponse"/>
+		<binding name = "ignoreActionResponse" defaults = "Boolean" />
     
     <validation message="&apos;action&apos; and &apos;directActionName&apos; cannot both be bound.">
 	    <bound name = "action"/>

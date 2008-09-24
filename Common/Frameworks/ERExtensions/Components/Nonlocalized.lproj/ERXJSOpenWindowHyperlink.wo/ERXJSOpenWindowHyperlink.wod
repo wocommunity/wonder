@@ -10,38 +10,26 @@ Conditional2: WOConditional {
 Content: WOComponentContent {}
 Content2: WOComponentContent {}
 
-JavaScriptDisabled: WOConditional {
-    condition=session.javaScriptEnabled;
-    negate=true;
-}
-
-JavaScriptEnabled: WOConditional {
-    condition=session.javaScriptEnabled;
-}
-
 Link: WOHyperlink {
-        onclick=openWindow;
+	onclick=openWindow;
 	class = ^linkClass;
+	string = ^string;
 	action = action;
 	target = ^target;
-        fragmentIdentifier = ^fragment;
+	fragmentIdentifier = ^fragment;
 	disabled = ^disabled;
+	id = ^id;
 }
 
 Link2: WOHyperlink {
 	class = ^linkClass;
-        onclick=openWindow;
+	onclick=openWindow;
+	string = ^string;
 	target = ^target;
 	actionClass = ^actionClass;
 	queryDictionary = ^queryDictionary;
 	directActionName = ^directActionName;
-        ?wosid=false;
+	?wosid=false;
 	disabled = ^disabled;
+	id = ^id;
 }
-LinkNoJS: WOHyperlink {
-	class = ^linkClass;
-	action = action;
-	target = ^target;
-        fragmentIdentifier = ^fragment;
-}
-

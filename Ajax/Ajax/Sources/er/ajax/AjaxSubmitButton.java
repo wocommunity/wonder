@@ -92,6 +92,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
 	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
+	ajaxOptionsArray.addObject(new AjaxOption("asynchronous", AjaxOption.BOOLEAN));
 	
     String name = nameInContext(component.context(), component);
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
@@ -155,7 +156,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 		onClickBuffer.append(") {");
 	}
 	
-	String updateContainerID = (String)valueForBinding("updateContainerID", component);
+	String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
 	
 	// PROTOTYPE EFFECTS
 	String beforeEffect = (String) valueForBinding("beforeEffect", component);
@@ -237,7 +238,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     if (showUI) {
     	boolean disabled = disabledInComponent(component);
     	String elementName = (String) valueForBinding("elementName", "a", component);
-    	boolean useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
+    	boolean useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
     	
 	    if (showButton) {
 	      elementName = useButtonTag ? "button" : "input";
@@ -296,7 +297,8 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     String nameInContext = nameInContext(wocontext, wocomponent);
     boolean shouldHandleRequest = (!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) && ((wocontext._isMultipleSubmitForm() && nameInContext.equals(worequest.formValueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME))) || !wocontext._isMultipleSubmitForm());
     if (shouldHandleRequest) {
-      AjaxUpdateContainer.setUpdateContainerID(worequest, (String) valueForBinding("updateContainerID", wocomponent));
+    	String updateContainerID = AjaxUpdateContainer.updateContainerID(this, wocomponent);
+      AjaxUpdateContainer.setUpdateContainerID(worequest, updateContainerID);
       wocontext._setActionInvoked(true);
       result = handleRequest(worequest, wocontext);
       AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);

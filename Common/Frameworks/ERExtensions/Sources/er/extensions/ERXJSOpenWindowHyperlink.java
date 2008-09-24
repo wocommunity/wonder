@@ -6,11 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.lang.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Given an action opens the action in a new window.<br />
@@ -24,7 +25,7 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
     }
 
     ///** logging support *//
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXJSOpenWindowHyperlink.class);
+    public static final Logger log = Logger.getLogger(ERXJSOpenWindowHyperlink.class);
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
@@ -54,6 +55,13 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
             result.append(context().directActionURLForActionNamed(anActionName, (NSDictionary)valueForBinding("queryDictionary")));
             ERXExtensions.addRandomizeDirectActionURL(result);
         }
+        
+        NSDictionary urlParameters = (NSDictionary)valueForBinding("urlParameters");
+        if (urlParameters != null) {
+        	result.append(result.toString().indexOf('?') > - 1 ? '&' : '?');
+        	result.append(ERXDictionaryUtilities.queryStringForDictionary(urlParameters, null));
+        }
+        
         String fragment=(String)valueForBinding("fragment");
         if (fragment!=null)
             result.append("#"+fragment);
@@ -67,7 +75,16 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
         result.append(",titlebar="+valueForBinding("titlebar"));
         result.append(",resizable="+valueForBinding("resizable"));
         result.append(",dependant=yes");
-        result.append("'); win.focus(); return false;");
+        result.append("'); win.focus(); ");
+        
+        // Opens pop-up at place clicked, use moveTo instead of top, left params to open
+        // command to avoid FireFox bugs
+        if (ERXComponentUtilities.booleanValueForBinding(this, "positionAtCursor", false)) {
+            result.append("win.moveTo(window.event.screenX, window.event.screenY); ");
+        }
+        
+        result.append("return false;");
+        
         return result.toString();
     }
 

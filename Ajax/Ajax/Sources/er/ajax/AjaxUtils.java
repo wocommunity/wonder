@@ -217,6 +217,29 @@ public class AjaxUtils {
 		return response;
 	}
 
+	/**
+	 * Shortcut for appendScript.
+	 * 
+	 * @param context the context
+	 * @param script the script to append
+	 */
+	public static void appendScript(WOContext context, String script) {
+		AjaxUtils.appendScript(context.request(), context.response(), script);
+	}
+
+	/**
+	 * Appends the given javascript to the response, surrounding it in a script header/footer if necessary.
+	 * 
+	 * @param request the request
+	 * @param response the response
+	 * @param script the script to append
+	 */
+	public static void appendScript(WORequest request, WOResponse response, String script) {
+		AjaxUtils.appendScriptHeaderIfNecessary(request, response);
+		response.appendContentString(script);
+		AjaxUtils.appendScriptFooterIfNecessary(request, response);
+	}
+	
 	public static void appendScriptHeaderIfNecessary(WORequest request, WOResponse response) {
 		if (AjaxUpdateContainer.hasUpdateContainerID(request)) {
 			AjaxUtils.appendScriptHeader(response);

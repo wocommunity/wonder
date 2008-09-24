@@ -46,6 +46,7 @@ import er.extensions.ERXStringUtilities;
  * @binding elementName the element name to use (defaults to "a")
  * @binding functionName if set, the link becomes a javascript function
  * @binding button if true, this is rendered as a javascript button
+ * @binding asynchronous boolean defining if the update request is sent asynchronously or synchronously, defaults to true
  * 
  * // PROTOTYPE EFFECTS
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
@@ -80,7 +81,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 		String onClick = (String) valueForBinding("onClick", component);
 		String onClickBefore = (String) valueForBinding("onClickBefore", component);
-		String updateContainerID = (String) valueForBinding("updateContainerID", component);
+		String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
 		String functionName = (String) valueForBinding("functionName", component);
 		String function = (String) valueForBinding("function", component);
 		String replaceID = (String) valueForBinding("replaceID", component);
@@ -268,10 +269,13 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", AjaxOption.BOOLEAN));
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 
 		options.setObjectForKey("'get'", "method");
-		options.setObjectForKey("true", "asynchronous");
+		if (options.objectForKey("asynchronous") == null) {
+			options.setObjectForKey("true", "asynchronous");
+		}
 		if (options.objectForKey("evalScripts") == null) {
 			options.setObjectForKey("true", "evalScripts");
 		}
@@ -353,7 +357,8 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
-		AjaxUpdateContainer.setUpdateContainerID(request, (String) valueForBinding("updateContainerID", component));
+		String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
+		AjaxUpdateContainer.setUpdateContainerID(request, updateContainerID);
 		WOActionResults results = (WOActionResults) valueForBinding("action", component);
 		if (results == null || booleanValueForBinding("ignoreActionResponse", false, component)) {
 			String script = (String) valueForBinding("onClickServer", component);
