@@ -2,9 +2,5 @@
 <wodefinitions>
 	<wo class="ERXWOComponentContent" wocomponentcontent="true">
 		<binding name="templateName"/>
-
-		<validation message="'templateName' is a required binding">
-			
-		</validation>
 	</wo>
 </wodefinitions>
