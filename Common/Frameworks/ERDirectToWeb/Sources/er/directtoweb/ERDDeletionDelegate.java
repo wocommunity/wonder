@@ -34,9 +34,8 @@ import er.extensions.ERXValidationException;
 import er.extensions.ERXValidationFactory;
 
 /**
- * A delegate used after confirming a delete action.
+ * A delegate invoked after confirming a delete action.
  */
-
 public class ERDDeletionDelegate implements NextPageDelegate {
 
     /** logging support */
@@ -56,104 +55,149 @@ public class ERDDeletionDelegate implements NextPageDelegate {
         _followPage = nextPage;
     }
 
+    /**
+     * Gets the object for deletion.
+     * @return the object for deletion
+     */
     public EOEnterpriseObject object() {
         return _object;
     }
 
-    // Can be overridden in subclasses to provide different followPages.
+    /**
+     * Gets the destination page which should be returned to the user when the delegate is invoked.
+     * Can be overridden in subclasses to provide different followPages.
+     * @return the destination page
+     */
     protected WOComponent followPage(WOComponent sender) {
-        log.debug("In FollowPage");
+        if (log.isDebugEnabled()) { log.debug("In FollowPage"); }
         return _followPage;
     }
 
+    /**
+     * Invokes the delegate to delete the object and save changes.
+     * @param sender component
+     * @return the {@link #followPage(WOComponent)}, or an error message page if there was an exception
+     */
     public WOComponent nextPage(WOComponent sender) {
         if (_object != null && _object.editingContext() != null) {
             EOEditingContext editingContext = _object.editingContext();
             NSValidation.ValidationException exception = null;
             try {
-                if (_dataSource != null) _dataSource.deleteObject(_object);
-                if (editingContext instanceof EOSharedEditingContext) {
-                    // Fault the eo into another ec, as one cannot delete objects
-                    // in an shared editing context.
-                    EOEditingContext ec = ERXEC.newEditingContext();
-                    ec.lock();
-                    try {
-                        ec.setSharedEditingContext(null);
-                        EOEnterpriseObject object = EOUtilities.localInstanceOfObject(ec, _object);
-                        ec.deleteObject(object);
-                        ec.saveChanges();
-                    } finally {
-                        ec.unlock();
-                        ec.dispose();
-                    }
-                } else { // Working with a normal editing context.
-                    editingContext.deleteObject(_object);
-                    
-                    if (ERXEOControlUtilities.isNewObject(_object)) {
-                        // This is necessary to force state synching, e.g., for display groups, etc.
-                        editingContext.processRecentChanges();
-                    } else { // Only save if the object is NOT new.
-                        // In order to support using the delete button in an embedded page configuration, where saving is 
-                        // not a desirable default behavior, we need to try to detect when the page was embedded.  We look 
-                        // at the task of the destination page (followPage) to take a best guess as to when it's appropriate
-                        // to save.
-                        if (_followPage != null && _followPage instanceof D2WPage) {
-                            D2WPage fp = (D2WPage)_followPage;
-                            if (!"edit".equals(fp.task())) {
-                                // Save when the destination page is not an edit page, as it will not have its own save button.
-                                editingContext.saveChanges();
-                            } else {
-                                // Just make sure the page will refresh properly.
-                                editingContext.processRecentChanges();
-                            }
-                        } else {
-                            // Fall back to the default behavior.
-                            editingContext.saveChanges();
-                        }
-                    }
-                    _object = null;
-                }
-            } catch (EOObjectNotAvailableException e) {
-                exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
-            } catch (EOGeneralAdaptorException e) {
-            	NSDictionary userInfo = e.userInfo();
-            	if(userInfo != null) {
-            		EODatabaseOperation op = (EODatabaseOperation)userInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
-            		if(op.databaseOperator() == EODatabaseOperation.DatabaseDeleteOperator) {
-            			exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
-            		}
-            	}
-            	if(exception == null) {
-            		exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "Database error: " + e.getMessage());
-            	}
+                deleteObject();
+                saveChanges(editingContext);
             } catch (NSValidation.ValidationException e) {
-                exception = e;
-            }
-            if(exception != null) {
-                if (exception instanceof ERXValidationException) {
-                    ERXValidationException ex = (ERXValidationException) exception;
-                    D2WContext context = (D2WContext) sender.valueForKey("d2wContext");
-                    Object o = ex.object();
-                    
-                    if (o instanceof EOEnterpriseObject) {
-                        EOEnterpriseObject eo = (EOEnterpriseObject) o;
-                        context.takeValueForKey(eo.entityName(), "entityName");
-                        context.takeValueForKey(ex.propertyKey(), "propertyKey");
-                    }
-                    ((ERXValidationException) exception).setContext(context);
-                }
-                log.info("Validation Exception: " + exception + exception.getMessage());
                 editingContext.revert();
-                String errorMessage = " Could not save your changes: " + exception.getMessage() + " ";
-                ErrorPageInterface epf = D2W.factory().errorPage(sender.session());
-                if (epf instanceof ERDErrorPageInterface) {
-                    ((ERDErrorPageInterface) epf).setException(exception);
-                }
-                epf.setMessage(errorMessage);
-                epf.setNextPage(followPage(sender));
-                return (WOComponent) epf;
+                return errorPageWithSenderAndException(sender, e);
             }
         }
         return followPage(sender);
+    }
+    
+    /**
+     * Deletes the object.  Override this method to customize deletion behavior.
+     * @throws NSValidation.ValidationException if something goes wrong during deletion
+     */
+    protected void deleteObject() throws NSValidation.ValidationException {
+        EOEditingContext editingContext = _object.editingContext();
+        if (_dataSource != null) _dataSource.deleteObject(_object);
+        if (editingContext instanceof EOSharedEditingContext) {
+            // Fault the eo into another ec, as one cannot delete objects
+            // in an shared editing context.
+            EOEditingContext ec = ERXEC.newEditingContext();
+            ec.lock();
+            try {
+                ec.setSharedEditingContext(null);
+                EOEnterpriseObject object = EOUtilities.localInstanceOfObject(ec, _object);
+                ec.deleteObject(object);
+                saveChanges(ec);
+            } catch (EOObjectNotAvailableException eonae) {
+                throw ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
+            } finally {
+                ec.unlock();
+                ec.dispose();
+            }
+        } else { // Working with a normal editing context.
+            if (ERXEOControlUtilities.isNewObject(_object)) {
+                editingContext.forgetObject(_object);
+            } else {
+                editingContext.deleteObject(_object);
+            }
+        }
+    }
+    
+    /**
+     * Saves the deletion of the object to the provided editing context.  Override this method to customize saving behavior.
+     * @param ec to which the changes should be saved
+     * @throws NSValidation.ValidationException if something goes wrong during save
+     */
+    protected void saveChanges(EOEditingContext ec) throws NSValidation.ValidationException {
+        try {
+            if (ERXEOControlUtilities.isNewObject(_object)) {
+                // This is necessary to force state synching, e.g., for display groups, etc.
+                ec.processRecentChanges();
+            } else { // Only save if the object is NOT new.
+                // In order to support using the delete button in an embedded page configuration, where saving is 
+                // not a desirable default behavior, we need to try to detect when the page was embedded.  We look 
+                // at the task of the destination page (followPage) to take a best guess as to when it's appropriate
+                // to save.
+                if (_followPage != null && _followPage instanceof D2WPage) {
+                    D2WPage fp = (D2WPage)_followPage;
+                    if (!"edit".equals(fp.task())) {
+                        // Save when the destination page is not an edit page, as it will not have its own save button.
+                        ec.saveChanges();
+                    } else {
+                        // Just make sure the page will refresh properly.
+                        ec.processRecentChanges();
+                    }
+                } else {
+                    // Fall back to the default behavior.
+                    ec.saveChanges();
+                }
+            }
+        } catch (EOGeneralAdaptorException gae) {
+            NSDictionary userInfo = gae.userInfo();
+            NSValidation.ValidationException exception = null;
+            if (userInfo != null) {
+                EODatabaseOperation op = (EODatabaseOperation)userInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+                if (op.databaseOperator() == EODatabaseOperation.DatabaseDeleteOperator) {
+                    exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
+                }
+            }
+            if (exception == null) {
+                exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "Database error: " + gae.getMessage());
+            }
+            throw exception;
+        }
+    }
+    
+    /**
+     * Returns an error message page with the given exception as its basis.
+     * @param sender component
+     * @param exception whose error message to display
+     * @return the error message page
+     */
+    private WOComponent errorPageWithSenderAndException(WOComponent sender, NSValidation.ValidationException exception) {
+        if (exception instanceof ERXValidationException) {
+            ERXValidationException ex = (ERXValidationException) exception;
+            D2WContext context = (D2WContext) sender.valueForKey("d2wContext");
+            Object o = ex.object();
+
+            if (o instanceof EOEnterpriseObject) {
+                EOEnterpriseObject eo = (EOEnterpriseObject) o;
+                context.takeValueForKey(eo.entityName(), "entityName");
+                context.takeValueForKey(ex.propertyKey(), "propertyKey");
+            }
+            ((ERXValidationException) exception).setContext(context);
+        }
+        log.info("Validation Exception: " + exception + exception.getMessage());
+        
+        String errorMessage = " Could not save your changes: " + exception.getMessage() + " ";
+        ErrorPageInterface epf = D2W.factory().errorPage(sender.session());
+        if (epf instanceof ERDErrorPageInterface) {
+            ((ERDErrorPageInterface) epf).setException(exception);
+        }
+        epf.setMessage(errorMessage);
+        epf.setNextPage(followPage(sender));
+        return (WOComponent) epf;
     }
 }
