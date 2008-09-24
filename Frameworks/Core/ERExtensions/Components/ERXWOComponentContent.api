@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo class = "ERXWOComponentContent" wocomponentcontent = "true">
-		<binding name = "templateName"/>
+	<wo class="ERXWOComponentContent" wocomponentcontent="true">
+		<binding name="templateName"/>
 
-		<validation message = "&apos;templateName&apos; is a required binding">
-			<unbound name = "templateName"/>
+		<validation message="'templateName' is a required binding">
+			
 		</validation>
 	</wo>
 </wodefinitions>
