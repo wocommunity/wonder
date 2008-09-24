@@ -15,6 +15,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.appserver._private.WOHTMLBareString;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.components.conditionals.ERXWOTemplate;
 
@@ -141,32 +142,47 @@ public class ERXWOComponentContent extends WODynamicElement {
     public ERXWOComponentContent(String name, NSDictionary associations, WOElement woelement) {
         super(name, associations, woelement);
         _templateName = (WOAssociation) associations.objectForKey("templateName");
-        if(!_templateName.isValueConstant()) {
-            //throw new IllegalStateException("You must bind 'templateName' to a constant string");
-        }
         _defaultTemplate = woelement == null ? new WOHTMLBareString("") : woelement;
     }
 
     private WOElement template(WOComponent component) {
-    	String myName = (String) _templateName.valueInComponent(component);
     	WOElement content =  component._childTemplate();
     	WOElement result = null;
+    	String templateName = (_templateName == null) ? null : (String) _templateName.valueInComponent(component);
     	if (content instanceof WODynamicGroup) {
 			WODynamicGroup group = (WODynamicGroup) content;
-	        for(Enumeration e = group.childrenElements().objectEnumerator(); e.hasMoreElements() && result == null ; ) {
-	        	WOElement current = (WOElement) e.nextElement();
-	        	if(current instanceof ERXWOTemplate) {
-	        		ERXWOTemplate template = (ERXWOTemplate)current;
-	        		String name = template.templateName(component);
-	        		if(name.equals(myName)) {
-	        			result = template;
-	        		}
-	        	}
-	        }
+			if (templateName == null) {
+				// MS: If you don't set a template name, then let's construct all the children of 
+				// this element that are NOT ERXWOTemplate's, so we don't double-display.  This lets
+				// you use an ERXWOComponentContent and have it just act like a "default" template
+				// that skips all the children that are explicitly wrapped in an ERXWOTemplate.
+				NSMutableArray<WOElement> originalChildrenElements = group.childrenElements();
+				if (originalChildrenElements != null && originalChildrenElements.count() > 0) {
+					NSMutableArray<WOElement> nonTemplateChildrenElements = new NSMutableArray<WOElement>();
+					for (WOElement originalChild : originalChildrenElements) {
+						if (!(originalChild instanceof ERXWOTemplate)) {
+							nonTemplateChildrenElements.addObject(originalChild);
+						}
+					}
+					result = new WODynamicGroup(null, null, nonTemplateChildrenElements);
+				}
+			}
+			else {
+		        for(Enumeration e = group.childrenElements().objectEnumerator(); e.hasMoreElements() && result == null ; ) {
+		        	WOElement current = (WOElement) e.nextElement();
+		        	if(current instanceof ERXWOTemplate) {
+		        		ERXWOTemplate template = (ERXWOTemplate)current;
+		        		String name = template.templateName(component);
+		        		if(name.equals(templateName)) {
+		        			result = template;
+		        		}
+		        	}
+		        }
+			}
 		} else if (content instanceof ERXWOTemplate) {
 			ERXWOTemplate template = (ERXWOTemplate) content;
     		String name = template.templateName(component);
-    		if(name.equals(myName)) {
+    		if(name.equals(templateName)) {
     			result = template;
     		}
 		}
@@ -178,7 +194,7 @@ public class ERXWOComponentContent extends WODynamicElement {
     	WOElement template = template(component);
     	if(template != null) {
     		wocontext._setCurrentComponent(component.parent());
-    		template.takeValuesFromRequest(worequest, wocontext);
+   			template.takeValuesFromRequest(worequest, wocontext);
     		wocontext._setCurrentComponent(component);
     	} else {
     		_defaultTemplate.takeValuesFromRequest(worequest, wocontext);
