@@ -3,11 +3,6 @@ ChildrenRepetition: WORepetition {
 	item = aChildItem;
 }
 
-ChildrenRepetition2: WORepetition {
-	list = children;
-	item = aChildItem;
-}
-
 DisplayNameString: WOString {
 	escapeHTML = false;
 	value = displayName;
@@ -18,18 +13,12 @@ DoesNotHaveActionConditional: WOConditional {
 	negate = true;
 }
 
-ERXModernNavigationMenuItem1: ERXModernNavigationMenuItem {
-	navigationItem = aChildItem;
-	navigationContext = navigationContext;
-}
-
-ERXModernNavigationMenuItem2: ERXModernNavigationMenuItem {
-	navigationItem = aChildItem;
-	navigationContext = navigationContext;
-}
-
 HasActionConditional: WOConditional {
 	condition = contextComponentActionURL;
+}
+
+HasActivityAndIsEnabled: WOConditional {
+	condition = hasActivityAndIsEnabled;
 }
 
 HasChildrenConditional: WOConditional {
@@ -54,8 +43,8 @@ IsRootNodeConditional: WOConditional {
 	condition = navigationItem.isRootNode;
 }
 
-ItemShouldDisplayConditions:WOConditional {
-	condition=shouldDisplay;
+ItemShouldDisplayConditional: WOConditional {
+	condition = shouldDisplay;
 }
 
 ListItemTag: WOGenericContainer {
@@ -64,27 +53,19 @@ ListItemTag: WOGenericContainer {
 	id = navigationItemID;
 }
 
-NewMarker: WOImage {
-	filename = "NewMarker.gif";
-	framework = "ERExtensions";
-}
-
-contextComponentActionURL: WOGenericContainer { 
+MenuItemHyperlink: WOGenericContainer { 
 	elementName = "a";
 	href = contextComponentActionURL;
 	invokeAction = menuItemSelected;
 }
 
-displayName: WOString {
-	value = displayName;
-    escapeHTML=false;
+NavigationMenuItem: ERXModernNavigationMenuItem {
+	navigationItem = aChildItem;
+	navigationContext = navigationContext;
 }
 
-displayName2: WOString {
-	value = displayName;
-    escapeHTML=false;
+NewMarker: WOImage {
+	filename = "NewMarker.gif";
+	framework = "ERExtensions";
 }
 
-hasActivityAndIsEnabled: WOConditional {
-	condition = hasActivityAndIsEnabled;
-}
