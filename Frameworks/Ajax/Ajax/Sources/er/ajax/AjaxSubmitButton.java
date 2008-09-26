@@ -38,6 +38,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
  * @binding formSerializer the name of the javascript function to call to serialize the form
  * @binding elementName the element name to use (defaults to "a")
+ * @binding asynchronous boolean defining if the update request is sent asynchronously or synchronously, defaults to true
  * 
  * // PROTOTYPE EFFECTS
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
@@ -58,7 +59,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion)
  *  
  * @property er.ajax.formSerializer the default form serializer to use for all ajax submits
- * 
+
  * @author anjo
  */
 public class AjaxSubmitButton extends AjaxDynamicElement {

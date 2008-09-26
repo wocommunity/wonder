@@ -42,5 +42,6 @@
 	    <unbound name="updateContainerID"/>
     </validation>
 	<binding name="elementName"/>
+    <binding defaults="Boolean" name="asynchronous"/>
     </wo>
 </wodefinitions>
