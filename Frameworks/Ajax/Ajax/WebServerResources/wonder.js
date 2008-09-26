@@ -363,8 +363,8 @@ var AjaxSubmitButton = {
 		actionUrl = actionUrl.sub('/wo/', '/ajax/', 1);
 		if (id != null) {
 			actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
-			actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		}
+		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		return actionUrl;
 	},
 	
