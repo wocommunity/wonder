@@ -26,6 +26,7 @@ public class AjaxOption {
   }
 
   private String _name;
+  private Object _constantValue;
   private AjaxOption.Type _type;
 
   public AjaxOption(String name) {
@@ -35,6 +36,13 @@ public class AjaxOption {
   public AjaxOption(String name, AjaxOption.Type type) {
     _name = name;
     _type = type;
+    _constantValue = null;
+  }
+  
+    public AjaxOption(String name, Object value, AjaxOption.Type type) {
+    _name = name;
+    _type = type;
+    _constantValue = value;
   }
 
   public String name() {
@@ -54,10 +62,13 @@ public class AjaxOption {
   }
 
   public void addToDictionary(String bindingName, WOComponent component, NSMutableDictionary dictionary) {
-    Object value = component.valueForBinding(bindingName);
-    if (value instanceof WOAssociation) {
-      WOAssociation association = (WOAssociation) value;
-      value = association.valueInComponent(component);
+    Object value = _constantValue;
+    if (value == null) {
+	   	value = component.valueForBinding(bindingName);
+	    if (value instanceof WOAssociation) {
+	      WOAssociation association = (WOAssociation) value;
+	      value = association.valueInComponent(component);
+	    }
     }
     String strValue = valueForObject(value).javascriptValue();
     if (strValue != null) {
@@ -70,16 +81,18 @@ public class AjaxOption {
   }
 
   public void addToDictionary(String bindingName, WOComponent component, NSDictionary associations, NSMutableDictionary dictionary) {
-    if (associations != null) {
-      Object value = associations.objectForKey(bindingName);
+	Object value = _constantValue;
+    if (value == null && associations != null) {
+      value = associations.objectForKey(bindingName);
       if (value instanceof WOAssociation) {
         WOAssociation association = (WOAssociation) value;
         value = association.valueInComponent(component);
       }
-      String strValue = valueForObject(value).javascriptValue();
-      if (strValue != null) {
-        dictionary.setObjectForKey(strValue, _name);
-      }
+    }
+
+    String strValue = valueForObject(value).javascriptValue();
+    if (strValue != null) {
+      dictionary.setObjectForKey(strValue, _name);
     }
   }
 
