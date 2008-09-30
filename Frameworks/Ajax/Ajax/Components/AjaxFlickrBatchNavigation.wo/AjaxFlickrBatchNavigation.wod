@@ -88,3 +88,7 @@ NextLabel : ERXLocalizedString {
 PreviousLabel : ERXLocalizedString {
 	value = "ERXFlickrBatchNavigation.previous";
 }
+
+OfLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.of";
+}
