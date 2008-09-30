@@ -43,5 +43,6 @@
     </validation>
 	<binding name="elementName"/>
     <binding defaults="Boolean" name="asynchronous"/>
+    <binding name="accesskey"/>
     </wo>
 </wodefinitions>
