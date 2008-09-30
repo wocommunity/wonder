@@ -57,6 +57,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("okText", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("cancelLink", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("cancelText", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("cancelControl", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("savingText", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("clickToEditText", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("formId", AjaxOption.STRING));
