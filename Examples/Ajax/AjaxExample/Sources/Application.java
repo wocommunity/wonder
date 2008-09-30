@@ -2,6 +2,9 @@
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
+
 import er.ajax.json.JSONRequestHandler;
 import er.extensions.appserver.ERXApplication;
 
@@ -21,4 +24,19 @@ public class Application extends ERXApplication {
 		JSONRequestHandler requestHandler = JSONRequestHandler.register();
 		requestHandler.registerService("exampleService", new ExampleService());
 	}
+	
+	
+	public WOResponse dispatchRequest(WORequest request) {
+//		if (request.uri().indexOf("/wo/") > -1) log.info("Received component action request " + request.uri());
+//		else if (request.uri().indexOf("/wa/") > -1) log.info("Received direct action request " + request.uri());
+//		else if (request.uri().indexOf("/ajax/") > -1) log.info("Received ajax action request " + request.uri());
+		WOResponse response =  super.dispatchRequest(request);
+		
+//    	NSLog.out.appendln("returned response " + response.contentString());
+//    	NSLog.out.appendln("returned response headers " + response.headers());
+    	
+    	return response;
+	}
+
+	
 }
