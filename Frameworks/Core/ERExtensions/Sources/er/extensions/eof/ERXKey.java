@@ -322,7 +322,7 @@ public class ERXKey<T> {
 	 *            the value
 	 * @return an ERXKeyValueQualifier
 	 */
-	public ERXKeyValueQualifier like(T value) {
+	public ERXKeyValueQualifier like(String value) {
 		return ERXQ.like(_key, value);
 	}
 
@@ -334,7 +334,7 @@ public class ERXKey<T> {
 	 *            the value
 	 * @return an ERXKeyValueQualifier
 	 */
-	public ERXKeyValueQualifier likeInsensitive(T value) {
+	public ERXKeyValueQualifier likeInsensitive(String value) {
 		return ERXQ.likeInsensitive(_key, value);
 	}
 
