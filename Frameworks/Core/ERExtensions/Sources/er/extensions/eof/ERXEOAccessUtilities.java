@@ -1207,6 +1207,8 @@ public class ERXEOAccessUtilities {
 		        String attributeName = (String) nsdictionary.valueForKey("BindVariableName");
 		        if (obj instanceof String) {
 		            obj = EOSQLExpression.sqlStringForString((String) obj);
+		        } else if (obj instanceof Number) {
+		        	obj = EOSQLExpression.sqlStringForNumber((Number) obj);
 		        } else if (obj instanceof NSData) {
 		            // ak: this is just for logging, however we would
 		            // like to get readable data
