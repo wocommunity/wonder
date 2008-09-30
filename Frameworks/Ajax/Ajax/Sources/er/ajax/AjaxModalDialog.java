@@ -267,7 +267,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	        response.appendContentString("); return false;\" >");
 	        
 	        if (hasBinding("label")) {
-	        	response.appendContentString(valueForStringBinding("label", null));
+	        	response.appendContentString((String)valueForBinding("label"));
 	        } else {
 	        	// This will append the contents of the ERXWOTemplate named "link"
 	            super.appendToResponse(response, context);
