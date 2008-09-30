@@ -899,6 +899,10 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
 			return new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop column \"" + columnName.toUpperCase() + "\" cascade"));
 		}
+		
+		public String _columnCreationClauseForAttribute(EOAttribute attribute) {
+			return addCreateClauseForAttribute(attribute).toString();
+		}
 
 		public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
 			String clause = _columnCreationClauseForAttribute(attribute);
