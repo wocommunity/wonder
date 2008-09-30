@@ -3,6 +3,7 @@ package er.ajax;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -10,6 +11,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjaxElement {
 	protected Logger log = Logger.getLogger(getClass());
@@ -25,21 +28,33 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	public NSDictionary associations() {
 		return _associations;
 	}
+	
+	public boolean hasBinding(String name) {
+		return AjaxUtils.hasBinding(name, associations());
+	}
+	
+	public WOAssociation bindingNamed(String name) {
+		return (WOAssociation) associations().objectForKey(name);
+	}
 
 	public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
-		return AjaxUtils.valueForBinding(name, defaultValue, _associations, component);
+		return AjaxUtils.valueForBinding(name, defaultValue, associations(), component);
 	}
 
 	public Object valueForBinding(String name, WOComponent component) {
-		return AjaxUtils.valueForBinding(name, _associations, component);
+		return AjaxUtils.valueForBinding(name, associations(), component);
 	}
 
+	public String stringValueForBinding(String name, WOComponent component) {
+		return AjaxUtils.stringValueForBinding(name, associations(), component);
+	}
+	
 	public boolean booleanValueForBinding(String name, boolean defaultValue, WOComponent component) {
-		return AjaxUtils.booleanValueForBinding(name, defaultValue, _associations, component);
+		return AjaxUtils.booleanValueForBinding(name, defaultValue, associations(), component);
 	}
 
 	public void setValueForBinding(Object value, String name, WOComponent component) {
-		AjaxUtils.setValueForBinding(value, name, _associations, component);
+		AjaxUtils.setValueForBinding(value, name, associations(), component);
 	}
 
 	protected void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
