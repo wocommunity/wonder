@@ -103,11 +103,12 @@ public class AjaxExpansion extends AjaxComponent {
 	}
 
 	public void setExpanded(boolean expanded) {
+		Boolean e = Boolean.valueOf(expanded);
 		if (hasBinding("expanded")) {
-			setValueForBinding(_expanded, "expanded");
+			setValueForBinding(e, "expanded");
 		}
 		else {
-			_expanded = Boolean.valueOf(expanded);
+			_expanded = e;
 		}
 	}
 
