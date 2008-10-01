@@ -466,11 +466,16 @@ public class NSBundle {
   		}
   		if (javaFolder.exists()) {
   	    	try {
-  	    		int classPathIndex = NSBundle.ClassPath.indexOfObject(nextPathComponent);
-  				nextPathComponent = javaFolder.getCanonicalPath();
-  	  			NSMutableArray<String> mutableClassPath = NSBundle.ClassPath.mutableClone();
-  	  			mutableClassPath.replaceObjectAtIndex(nextPathComponent, classPathIndex);
-  	  			NSBundle.ClassPath = mutableClassPath.immutableClone();
+  				String frameworkJavaPathComponent = javaFolder.getCanonicalPath();
+  				if (!NSBundle.ClassPath.containsObject(frameworkJavaPathComponent)) {
+	  	    		int classPathIndex = NSBundle.ClassPath.indexOfObject(nextPathComponent);
+	  	    		if (classPathIndex != -1) {
+		  	  			NSMutableArray<String> mutableClassPath = NSBundle.ClassPath.mutableClone();
+	  	    			mutableClassPath.replaceObjectAtIndex(frameworkJavaPathComponent, classPathIndex);
+		  	  			NSBundle.ClassPath = mutableClassPath.immutableClone();
+	  	    		}
+	  	  			nextPathComponent = frameworkJavaPathComponent;
+  				}
   			}
   			catch (IOException e) {
   				System.out.println("NSBundle.LoadBundlesFromClassPath: skipping " + projectWOFolder);
