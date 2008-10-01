@@ -451,7 +451,7 @@ public class NSBundle {
   }
 
   private static void LoadBundlesFromClassPath(NSArray array) {
-    Enumeration en = array.objectEnumerator();
+	Enumeration en = array.objectEnumerator();
     do {
       if (!en.hasMoreElements()) {
         break;
@@ -1806,8 +1806,12 @@ public class NSBundle {
     }
   }
 
+  boolean posted = false;
   private void postNotification() {
-    NSNotificationCenter.defaultCenter().postNotification("NSBundleDidLoadNotification", this, new NSDictionary(classNames, "NSLoadedClassesNotification"));
+	  if(!posted) {
+		  posted = true;
+		  NSNotificationCenter.defaultCenter().postNotification("NSBundleDidLoadNotification", this, new NSDictionary(classNames, "NSLoadedClassesNotification"));
+	  }
   }
 
   private boolean _prefixPathWithNonLocalizedPrefix(String aPath) {
@@ -2128,5 +2132,5 @@ public class NSBundle {
     catch (IOException e) {
       throw NSForwardException._runtimeExceptionForThrowable(e);
     }
-  }
+      }
 }
