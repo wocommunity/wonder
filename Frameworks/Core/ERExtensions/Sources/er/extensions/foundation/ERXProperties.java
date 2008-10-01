@@ -872,14 +872,14 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         /** /etc/WebObjects/AppName/Properties -- per-Application-per-Machine properties */
         String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
         if (applicationMachinePropertiesPath != null) {
-           projectsInfo.addObject("Application " + mainBundleName + "/Application-Machine Properties: " + aPropertiesPath);
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-Machine Properties: " + applicationMachinePropertiesPath);
            propertiesPaths.addObject(applicationMachinePropertiesPath);
         }
 
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
         if (applicationUserPropertiesPath != null) {
-           projectsInfo.addObject("Application " + mainBundleName + "/Application-User Properties: " + aPropertiesPath);
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-User Properties: " + applicationUserPropertiesPath);
            propertiesPaths.addObject(applicationUserPropertiesPath);
         }
         
