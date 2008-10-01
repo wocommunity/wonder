@@ -104,6 +104,13 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
         addRequiredWebResources(res);
     }
 
+
+	public void appendTagAttributeToResponse(WOResponse response, String name, Object object) {
+		if (object != null) {
+			response._appendTagAttributeAndValue(name, object.toString(), true);
+		}
+	}
+	
     /**
      * Override this method to append the needed scripts for this component.
      * @param res

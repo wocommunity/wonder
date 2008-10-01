@@ -27,7 +27,7 @@ import er.extensions.ERXStringUtilities;
  * @binding title title string for the link label and the window
  * @binding href when it is bound, the content of the url will be fetched into an iframe.
  * @binding action when it is bound, the content of the url will be fetched into a div
- * @binding ajax (optional) when true, the contents are only rendered during the Ajax request
+ * @binding ajax (optional) when true, the contents are only rendered during the Ajax request, using ajax=true is the preferred way to use this
  * @binding open if true, the container is rendered already opened (currently only workings, i think, with ajax=true)
  * @binding locked if true, the container will be "locked" and will not close unless you explicitly close it
  * 

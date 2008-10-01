@@ -118,3 +118,7 @@ SelectBatchSize : WOHyperlink {
 ShowBatchSizes : WOConditional {
   condition = showBatchSizes;
 }
+
+OfLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.of";
+}

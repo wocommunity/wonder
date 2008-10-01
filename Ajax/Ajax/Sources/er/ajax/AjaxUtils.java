@@ -70,6 +70,7 @@ public class AjaxUtils {
 		}
 		if (response == null) {
 			response = new AjaxResponse(request, context);
+			response.setHeader("text/plain; charset=utf-8", "content-type");
 		}
 		if (context != null) {
 			context._setResponse(response);
@@ -79,7 +80,7 @@ public class AjaxUtils {
 		// efficient for foreign character sets but it is needed to support
 		// naughty browsers such as Konqueror and Safari which do not honour the
 		// charset set in the response
-		response.setHeader("text/plain; charset=utf-8", "content-type");
+		
 		response.setHeader("Connection", "keep-alive");
 		response.setHeader(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
 		return response;
@@ -269,6 +270,14 @@ public class AjaxUtils {
 		response.appendContentString("</script>");
 	}
 
+	public static boolean hasBinding(String name, NSDictionary associations) {
+		return associations.objectForKey(name) != null;
+	}
+	
+	public static WOAssociation bindingNamed(String name, NSDictionary associations) {
+		return (WOAssociation) associations.objectForKey(name);
+	}
+	
 	public static Object valueForBinding(String name, Object defaultValue, NSDictionary associations, WOComponent component) {
 		Object value = AjaxUtils.valueForBinding(name, associations, component);
 		if (value != null) {

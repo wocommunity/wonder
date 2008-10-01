@@ -38,6 +38,9 @@ import er.extensions.ERXProperties;
  * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
  * @binding formSerializer the name of the javascript function to call to serialize the form
  * @binding elementName the element name to use (defaults to "a")
+ * @binding asynchronous boolean defining if the request is sent asynchronously or synchronously, defaults to true
+ * @binding accesskey hot key that should trigger the button (optional)
+ * @binding disabled if true, the button will be disabled (defaults to false)
  * 
  * // PROTOTYPE EFFECTS
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
@@ -247,7 +250,9 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	      String name = nameInContext(context, component);
 	      appendTagAttributeToResponse(response, "name", name);
 	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
-	      
+	      String accesskey = (String) valueForBinding("accesskey", component);
+	      if(accesskey != null)
+	    	  appendTagAttributeToResponse(response, "accesskey", accesskey);
 	      if (disabled) {
 	    	  appendTagAttributeToResponse(response, "disabled", "disabled");
 	      }
@@ -308,16 +313,20 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   }
 
   public WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
-    WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
     WOComponent wocomponent = wocontext.component();
-    Object obj = valueForBinding("action", wocomponent);
-    String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
-    if (onClickServer != null) {
-		AjaxUtils.appendScriptHeaderIfNecessary(worequest, response);
-		response.appendContentString(onClickServer);
-		AjaxUtils.appendScriptFooterIfNecessary(worequest, response);
+    WOActionResults result = (WOActionResults) valueForBinding("action", wocomponent);
+    if (result == null) {
+    	WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
+        String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
+        if (onClickServer != null) {
+    		AjaxUtils.appendScriptHeaderIfNecessary(worequest, response);
+    		response.appendContentString(onClickServer);
+    		AjaxUtils.appendScriptFooterIfNecessary(worequest, response);
+    		result = response;
+        }
     }
-    return response;
+
+    return result;
   }
 
 }
