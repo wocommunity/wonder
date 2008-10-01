@@ -316,9 +316,9 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     WOComponent wocomponent = wocontext.component();
     WOActionResults result = (WOActionResults) valueForBinding("action", wocomponent);
     if (result == null) {
+    	WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
         String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
         if (onClickServer != null) {
-       	    WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
     		AjaxUtils.appendScriptHeaderIfNecessary(worequest, response);
     		response.appendContentString(onClickServer);
     		AjaxUtils.appendScriptFooterIfNecessary(worequest, response);
