@@ -137,7 +137,8 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		String nameInContext = nameInContext(wocontext, wocomponent, this);
 		boolean shouldHandleRequest = !wocontext._wasActionInvoked() && wocontext._wasFormSubmitted() && nameInContext.equals(ERXAjaxApplication.ajaxSubmitButtonName(worequest));
 		if (shouldHandleRequest) {
-			AjaxUpdateContainer.setUpdateContainerID(worequest, (String) valueForBinding("updateContainerID", wocomponent));
+			String updateContainerID = AjaxUpdateContainer.updateContainerID(this, wocomponent);
+			AjaxUpdateContainer.setUpdateContainerID(worequest, updateContainerID);
 			wocontext._setActionInvoked(true);
 			result = (WOActionResults)valueForBinding("action", wocomponent);
 			if (result == null) {
