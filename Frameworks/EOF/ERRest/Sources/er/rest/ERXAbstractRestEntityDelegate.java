@@ -435,7 +435,12 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		EOEnterpriseObject eo;
 		try {
 			eo = delegate.objectForNode(entity, eoNode, context);
-			updateObjectFromDocument(entity, eo, eoNode, context);
+			if (eo == null) {
+				eo = insertObjectFromDocument(entity, eoNode, null, null, null, context);
+			}
+			else {
+				updateObjectFromDocument(entity, eo, eoNode, context);
+			}
 		}
 		catch (ERXRestNotFoundException e) {
 			eo = insertObjectFromDocument(entity, eoNode, null, null, null, context);
