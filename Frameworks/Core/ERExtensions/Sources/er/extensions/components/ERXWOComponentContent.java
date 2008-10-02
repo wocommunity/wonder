@@ -21,10 +21,9 @@ import er.extensions.components.conditionals.ERXWOTemplate;
 
 /**
  * Allows for multiple Component Contents.
-
-Currently, WOComponentContent can only access a single subtemplate.  We need a way to pass several 
-named contents.
-<code><pre>
+ * 
+ * Currently, WOComponentContent can only access a single subtemplate. We need a
+ * way to pass several named contents. <code><pre>
 ==============================
 Parent component:
 ==============================
@@ -99,12 +98,13 @@ ComponentContent3: ERXWOComponentContent {
     templateName = "thirdTemplate";
 }
 </pre></code>
-
-So, the way this could work is to add functionality to WOComponentContent which allows 
-it to iterate through its elements and locate the named templates.  It also needs to be extended 
-so that it takes the contents of its refernce as a default if no named template is provided/found.
-
-<code><pre>
+ * 
+ * So, the way this could work is to add functionality to WOComponentContent
+ * which allows it to iterate through its elements and locate the named
+ * templates. It also needs to be extended so that it takes the contents of its
+ * refernce as a default if no named template is provided/found.
+ * 
+ * <code><pre>
 &lt;webobject name=IfThenElse&gt;
     &lt;webobject name=TrueBlock&gt;
         This is true block
@@ -127,6 +127,11 @@ Template2: ERXWOTemplate {
     templateName = "false";
 }
 </pre></code>
+ * 
+ * @binding templateName The templateName of the ERXWOTemplate which should be rendered
+ *          in place of this element. If not set, this element will behave like
+ *          a regular WOComponentContent, but filter out all ERXWOTemplates.
+ *          
  * @author ak (Java port)
  * @author Charles Lloyd
  */
