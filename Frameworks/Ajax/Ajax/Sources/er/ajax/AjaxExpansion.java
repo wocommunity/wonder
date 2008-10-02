@@ -17,6 +17,11 @@ import er.extensions.appserver.ERXWOContext;
  * only updates the contents and applies an "expanded" class to the link, which
  * you can use to change the expansion icon in a stylesheet (see AjaxExample2's
  * ToggleDetails example).
+ * 
+ * If you want to use something fancier than a string as link label, you can put
+ * a ERXWOTemplate with templateName='label' inside the component. In this case, you should
+ * wrap the actual content in another ERXWOTemplate with templateName='content', as otherwise
+ * the label will get rendered twice (this is a limitation of ERXWOComponentContent). 
  *  
  * @author mschrag
  * @binding id the id of the contents div 
@@ -24,7 +29,7 @@ import er.extensions.appserver.ERXWOContext;
  * @binding class the class of the contents div
  * @binding linkClass the class of the toggle link (always gets "expansion" added, and "expanded" when opened)
  * @binding expanded optionally allows controlling the expansion state of the contents
- * @binding string the string displayed for the link
+ * @binding string the string displayed for the link. For something fancier than a plain string, see above.
  * @binding insertion the insertion effect (see AjaxUpdateLink)
  * @binding insertionDuration the insertion effect duration (see AjaxUpdateLink)
  * @binding action the action to fire when the contents are expanded
