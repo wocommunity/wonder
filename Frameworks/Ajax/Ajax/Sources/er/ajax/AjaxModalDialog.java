@@ -160,21 +160,24 @@ public class AjaxModalDialog extends AjaxComponent {
     
 
     /**
-     * Overridden to include result returned by action binding if bound.
+     * Only handle this phase if the modal box is open.  Also includes result returned by action binding if bound.
      *
      * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
      */
     public void takeValuesFromRequest(WORequest request, WOContext context) {
-    	if (actionResults != null) {
-			context._setCurrentComponent(actionResults);
-    		actionResults.takeValuesFromRequest(request, context);
-    	} else {
-    		super.takeValuesFromRequest(request, context);
+    	if (isOpen) {
+        	if (actionResults != null) {
+    			context._setCurrentComponent(actionResults);
+        		actionResults.takeValuesFromRequest(request, context);
+        	} else {
+        		super.takeValuesFromRequest(request, context);
+        	}
     	}
     }
     
 
     /**
+     * Only handle this phase if the modal box is open or it is our action (opening the box).  
      * Overridden to include result returned by action binding if bound.
      *
      * @see #close(WOContext)
@@ -187,12 +190,17 @@ public class AjaxModalDialog extends AjaxComponent {
     		ERXWOContext.contextDictionary().setObjectForKey(this, AjaxModalDialog.class.getName());
 
 	        WOActionResults result = null;
-        	if ( ! (context.elementID().equals(context.senderID()) || actionResults == null)) {
-    			context._setCurrentComponent(actionResults);
-        		result = actionResults.invokeAction(request, context);
-        	} else {
-        		result = super.invokeAction(request, context);
-        	}
+	        if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
+	        	result = super.invokeAction(request, context);
+	        } else if (isOpen) {
+	        	if (actionResults != null) {
+	    			context._setCurrentComponent(actionResults);
+	        		result = actionResults.invokeAction(request, context);
+	        	} else {
+	        		super.invokeAction(request, context);
+	        	}
+	    	}
+
         	return result;
         	
     	} finally {
@@ -213,8 +221,10 @@ public class AjaxModalDialog extends AjaxComponent {
     public WOActionResults handleRequest(WORequest request, WOContext context) {
     	WOActionResults response = null;
     	String modalBoxAction = request.stringFormValueForKey("modalBoxAction");
-    	if ("open".equals(modalBoxAction) || modalBoxAction == null) {
-    		openDialog();
+    	if (isOpen || "open".equals(modalBoxAction)) {
+    		if ( ! isOpen) {
+    			openDialog();
+    		}
     		
     		// Register the id of this component on the page in the request so that when 
     		// it comes time to cache the context, it knows that this area is an Ajax updating area
@@ -226,6 +236,7 @@ public class AjaxModalDialog extends AjaxComponent {
     		if (hasBinding("action")) {
     			if (actionResults == null) {
     				actionResults = (WOComponent) valueForBinding("action");
+        			actionResults._awakeInContext(context);
     			}
     			context._setCurrentComponent(actionResults);
     			actionResults.appendToResponse((WOResponse)response, context);
