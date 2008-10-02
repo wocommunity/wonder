@@ -47,7 +47,8 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding functionName if set, the link becomes a javascript function
  * @binding button if true, this is rendered as a javascript button
  * @binding asynchronous boolean defining if the update request is sent asynchronously or synchronously, defaults to true
- * 
+ * @binding accesskey hot key that should trigger the link (optional)
+
  * // PROTOTYPE EFFECTS
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
  * @binding effectDuration the duration of the effect to apply before
@@ -317,6 +318,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 				appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
 				appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+				appendTagAttributeToResponse(response, "accesskey", valueForBinding("accesskey", component));
 				if (button) {
 					if (stringValue != null) {
 						appendTagAttributeToResponse(response, "value", stringValue);
