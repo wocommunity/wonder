@@ -68,6 +68,7 @@ public class ModalDialogExample extends WOComponent {
     	isSecondConfirmation = ! isSecondConfirmation;
     	
     	if (isSecondConfirmation) {
+    		AjaxModalDialog.setTitle(context(), "Think again...");
     		AjaxModalDialog.update(context());
     	} else {
     		AjaxModalDialog.close(context());
