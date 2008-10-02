@@ -19,9 +19,8 @@ import er.extensions.appserver.ERXWOContext;
  * ToggleDetails example).
  * 
  * If you want to use something fancier than a string as link label, you can put
- * a ERXWOTemplate with templateName='label' inside the component. In this case, you should
- * wrap the actual content in another ERXWOTemplate with templateName='content', as otherwise
- * the label will get rendered twice (this is a limitation of ERXWOComponentContent). 
+ * a ERXWOTemplate with templateName='label' inside the component. If present,
+ * that will replace the label provided by the 'string' binding.
  *  
  * @author mschrag
  * @binding id the id of the contents div 

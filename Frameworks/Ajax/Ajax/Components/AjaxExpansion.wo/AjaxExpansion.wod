@@ -20,9 +20,6 @@ ToggleLinkString : WOString {
   value = string;
 }
 
-DefaultContent : WOComponentContent {
-}
-
 LinkID : WOString {
   value = linkID;
 }
@@ -36,5 +33,4 @@ LabelContent : ERXWOComponentContent {
 }
 
 Content : ERXWOComponentContent {
-  templateName = "content";
 }
