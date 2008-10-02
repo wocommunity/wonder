@@ -696,7 +696,7 @@
     </target>
     <target name="FrontBasePlugIn.all">
         <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="com.webobjects.jdbcadaptor.FrontbasePlugIn" />
+            <param name="project.principal.class" value="com.frontbase.FrontbasePlugInPrincipal" />
             <param name="project.name" value="FrontBasePlugIn" />
             <param name="project.dir" value="Frameworks/PlugIns/FrontBasePlugIn" />
         </antcall>
