@@ -136,6 +136,17 @@ public class AjaxModalDialog extends AjaxComponent {
     
 
     /**
+     * Call this method to have a JavaScript response returned that updates the title of the modal dialog.
+     *
+     * @param context the current WOContext
+     * @param title the new title for the dialog window
+     */
+    public static void setTitle(WOContext context, String title) {
+    	AjaxUtils.javascriptResponse("$wi(MB_caption).innerHTML='" + title + "';", context);
+    }
+
+    
+    /**
      * Start of R-R loop.  awakes the components from action if action is bound.
      *
      * @see com.webobjects.appserver.WOComponent#awake()
