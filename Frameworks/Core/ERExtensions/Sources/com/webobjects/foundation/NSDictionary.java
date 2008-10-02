@@ -602,7 +602,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	}
 
 	public boolean containsValue(Object value) {
-		if (value != null || _count != 0) {
+		if (value != null && _count != 0) {
 			Object values[] = _NSCollectionPrimitives.valuesInHashTable(_keys, _objects, _flags, _capacity, _hashtableBuckets);
 			for (int i = 0; i < values.length; i++) {
 				if (values[i].equals(value)) {
