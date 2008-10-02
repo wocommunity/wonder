@@ -104,7 +104,6 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   }
 
   public static void fillInAjaxOptions(IAjaxElement element, WOComponent component, String submitButtonName, NSMutableDictionary options) {
-    StringBuffer parametersBuffer = new StringBuffer();
     String systemDefaultFormSerializer = "Form.serializeWithoutSubmits";
     String defaultFormSerializer = ERXProperties.stringForKeyWithDefault("er.ajax.formSerializer", systemDefaultFormSerializer);
     String formSerializer = (String) element.valueForBinding("formSerializer", defaultFormSerializer, component);
@@ -250,9 +249,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	      String name = nameInContext(context, component);
 	      appendTagAttributeToResponse(response, "name", name);
 	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
-	      String accesskey = (String) valueForBinding("accesskey", component);
-	      if(accesskey != null)
-	    	  appendTagAttributeToResponse(response, "accesskey", accesskey);
+	      appendTagAttributeToResponse(response, "accesskey", valueForBinding("accesskey", component));
 	      if (disabled) {
 	    	  appendTagAttributeToResponse(response, "disabled", "disabled");
 	      }
