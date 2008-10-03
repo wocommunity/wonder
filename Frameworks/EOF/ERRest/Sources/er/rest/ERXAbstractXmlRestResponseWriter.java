@@ -36,6 +36,9 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		else if (value instanceof Integer) {
 			response.appendContentString(" type = \"integer\"");
 		}
+		else if (value instanceof Long) {
+			response.appendContentString(" type = \"long\"");
+		}
 		else if (value instanceof Short) {
 			response.appendContentString(" type = \"short\"");
 		}
