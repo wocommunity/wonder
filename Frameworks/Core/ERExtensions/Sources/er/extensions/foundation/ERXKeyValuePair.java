@@ -9,50 +9,51 @@ package er.extensions.foundation;
 /**
  * Very simple class used for hold key-value
  * pairs.
+ * @param <K> the key type
+ * @param <V> the value type 
  */
 // ENHANCEME: Should implement NSKeyValueCoding
-public class ERXKeyValuePair {
+public class ERXKeyValuePair<K, V> {
+    /** holds the key */
+    protected K _key;
+    /** holds the value */
+    protected V _value;
 
     /**
      * Public constructor
      * @param newKey key
      * @param newValue value
      */
-    public ERXKeyValuePair(Object newKey, Object newValue){
+    public ERXKeyValuePair(K newKey, V newValue){
         _key = newKey;
         _value = newValue;
     }
-
-    /** holds the key */
-    protected Object _key;
-    /** holds the value */
-    protected Object _value;
 
     /**
      * Sets the key.
      * @param newKey new key value
      */
-    public void setKey(Object newKey){ _key = newKey; }
+    public void setKey(K newKey){ _key = newKey; }
     /**
      * returns the key
      * @return da key 
      */
-    public Object key(){ return _key; }
+    public K key(){ return _key; }
     /**
      * Sets the value
      * @param value new value
      */
-    public void setValue(Object value) { _value = value; }
+    public void setValue(V value) { _value = value; }
     /**
      * returns the value
      * @return da value
      */
-    public Object value() { return _value; }
+    public V value() { return _value; }
     
     public boolean equals( Object object ) {
         if( object instanceof ERXKeyValuePair ) {
             ERXKeyValuePair kvp = (ERXKeyValuePair) object;
-            return kvp != null && value() != null && key() != null && 
+            return value() != null && key() != null && 
                 value().equals( kvp.value() ) && key().equals( kvp.key() );        
         }
         return false;
