@@ -1229,6 +1229,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	        if (mainBundleURL != null) {
 		        System.setProperty("webobjects.user.dir", new File(mainBundleURL.getFile()).getCanonicalPath());
 	        }
+	        // Odds are you are only using this method for test cases and development mode
+	        System.setProperty("er.extensions.ERXApplication.developmentMode", "true");
 	        ERXApplication.primeApplication(mainBundleName, mainBundleURL, applicationSubclass.getName());
 	        //NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidCreateNotification, WOApplication.application()));
 		}
