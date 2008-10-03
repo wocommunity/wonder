@@ -67,6 +67,13 @@
             valueType = d; 
         }, 
         {
+            columnName = eofKey; 
+            externalType = BYTE; 
+            name = eofKey; 
+            valueClassName = NSData; 
+            width = 24; 
+        }, 
+        {
             columnName = ""; 
             externalType = TINYINT; 
             name = flag; 
@@ -291,5 +298,5 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCFrontBasePrototypes; 
-    primaryKeyAttributes = (id); 
+    primaryKeyAttributes = (eofKey, id); 
 }
