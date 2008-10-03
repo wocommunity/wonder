@@ -9,7 +9,6 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueCoding;
@@ -20,6 +19,7 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.eof.ERXEOGlobalIDUtilities;
+import er.extensions.eof.ERXFetchSpecification;
 import er.extensions.eof.ERXGuardedObjectInterface;
 import er.extensions.eof.ERXQ;
 import er.extensions.foundation.ERXStringUtilities;
@@ -271,7 +271,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);
 		}
 		else {
-			EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), ERXQ.equals(idAttributeName, key), null);
+			ERXFetchSpecification fetchSpec = new ERXFetchSpecification(entity.name(), ERXQ.equals(idAttributeName, key), null);
+			fetchSpec.setIncludeEditingContextChanges(true);
 			fetchSpec.setIsDeep(true);
 			NSArray matchingObjects = context.editingContext().objectsWithFetchSpecification(fetchSpec);
 			if (matchingObjects.count() == 0) {
