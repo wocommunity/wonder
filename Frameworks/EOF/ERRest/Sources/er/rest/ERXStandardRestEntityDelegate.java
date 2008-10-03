@@ -132,6 +132,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	private NSMutableSet _insertPropertyNames;
 	private NSMutableDictionary _propertyAliasForPropertyName;
 	private NSMutableDictionary _propertyNameForPropertyAlias;
+	private String _defaultIDAttributeName;
 
 	/**
 	 * Constructs an ERXStandardRestEntityDelegate without an explicit entity reference.
@@ -178,9 +179,35 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 		this(entityName, true);
 	}
 	
+	/**
+	 * Sets the default "id" attribute name for all entities.
+	 * 
+	 * @param defaultIDAttributeName the default "id" attribute name for all entities
+	 */
+	public void setDefaultIDAttributeName(String defaultIDAttributeName) {
+		_defaultIDAttributeName = defaultIDAttributeName;
+	}
+	
+	/**
+	 * Returns the default "id" attribute name for all entities.
+	 * 
+	 * @return the default "id" attribute name for all entities
+	 */
+	protected String defaultIDAttributeName() {
+		String defaultIDAttributeName = _defaultIDAttributeName;
+		if (defaultIDAttributeName == null) {
+			defaultIDAttributeName = ERXProperties.stringForKey(IERXRestResponseWriter.REST_PREFIX + ".id");
+		}
+		return defaultIDAttributeName;
+	}
+	
 	@Override
 	protected String idAttributeName(EOEntity entity) {
-		return ERXProperties.stringForKey(IERXRestResponseWriter.REST_PREFIX + entity.name() + ".id");
+		String idAttributeName = ERXProperties.stringForKey(IERXRestResponseWriter.REST_PREFIX + entity.name() + ".id");
+		if (idAttributeName == null) {
+			idAttributeName = defaultIDAttributeName();
+		}
+		return idAttributeName;
 	}
 
 	/**
