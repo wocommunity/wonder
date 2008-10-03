@@ -31,6 +31,7 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
  */
 public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetchSpecification {
 	private NSMutableDictionary _userInfo;
+	private boolean _considerEditingContext;
 	
 	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
 		super(entityName, qualifier, sortOrderings, usesDistinct, isDeep, hints);
@@ -52,6 +53,14 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	public ERXFetchSpecification(ERXFetchSpecification<T> spec) {
 		this((EOFetchSpecification)spec);
 		_userInfo = spec.userInfo().count() > 0 ? null : spec.userInfo().mutableClone();
+	}
+	
+	public void setConsiderEditingContext(boolean considerEditingContext) {
+		_considerEditingContext = considerEditingContext;
+	}
+	
+	public boolean considerEditingContext() {
+		return _considerEditingContext;
 	}
 
 	/**
