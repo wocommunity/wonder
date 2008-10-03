@@ -1206,35 +1206,70 @@ public class ERXEOControlUtilities {
      * passed editing context or any parent editing contexts as well as specifying prefetching 
      * key paths.  Note that only NEW objects are supported in parent editing contexts.
      * 
-     * @param _editingContext editing context to fetch it into
-     * @param _entityName name of the entity
-     * @param _qualifier qualifier
-     * @param _prefetchKeyPaths prefetching key paths
-     * @param _includeNewObjects option to include newly inserted objects in the result set
-     * @param _includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
+     * @param editingContext editing context to fetch it into
+     * @param entityName name of the entity
+     * @param qualifier qualifier
+     * @param prefetchKeyPaths prefetching key paths
+     * @param includeNewObjects option to include newly inserted objects in the result set
+     * @param includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
      *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the
      *        qualifier are collected and faulted down through all parent editing contexts of ec.
-     * @param _filterUpdatedObjects option to include updated objects that now match the qualifier or remove updated
+     * @param filterUpdatedObjects option to include updated objects that now match the qualifier or remove updated
      *         objects thats no longer match the qualifier
-     * @param _removeDeletedObjects option to remove objects that have been deleted
+     * @param removeDeletedObjects option to remove objects that have been deleted
+     *
+     * @return array of objects matching the constructed qualifier
+     */
+    public static NSArray objectsWithQualifier(EOEditingContext editingContext, String entityName, EOQualifier qualifier, NSArray prefetchKeyPaths, boolean includeNewObjects, boolean includeNewObjectsInParentEditingContext, boolean filterUpdatedObjects, boolean removeDeletedObjects) {
+    	return ERXEOControlUtilities.objectsWithQualifier(editingContext, entityName, qualifier, prefetchKeyPaths, null, false, true, null, includeNewObjects, includeNewObjectsInParentEditingContext, filterUpdatedObjects, removeDeletedObjects);
+    }
+    
+    /**
+     * Utility method used to fetch an array of objects given a qualifier. Also
+     * has support for filtering the newly inserted, updateed, and deleted objects in the 
+     * passed editing context or any parent editing contexts as well as specifying prefetching 
+     * key paths.  Note that only NEW objects are supported in parent editing contexts.
+     * 
+     * @param editingContext editing context to fetch it into
+     * @param entityName name of the entity
+     * @param qualifier qualifier
+     * @param prefetchKeyPaths prefetching key paths
+     * @param sortOrderings the sort orderings to use on the results
+     * @param usesDistinct whether or not to distinct the results
+     * @param isDeep whether or not to fetch deeply
+     * @param hints fetch hints to apply
+     * @param includeNewObjects option to include newly inserted objects in the result set
+     * @param includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
+     *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the
+     *        qualifier are collected and faulted down through all parent editing contexts of ec.
+     * @param filterUpdatedObjects option to include updated objects that now match the qualifier or remove updated
+     *         objects thats no longer match the qualifier
+     * @param removeDeletedObjects option to remove objects that have been deleted
      *
      * @return array of objects matching the constructed qualifier
      */
     // ENHANCEME: This should handle entity inheritance for in memory filtering
-    public static NSArray objectsWithQualifier(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier, NSArray _prefetchKeyPaths, boolean _includeNewObjects, boolean _includeNewObjectsInParentEditingContext, boolean _filterUpdatedObjects, boolean _removeDeletedObjects) {
-      EOFetchSpecification fs = new EOFetchSpecification(_entityName, _qualifier, null);
-      fs.setPrefetchingRelationshipKeyPaths(_prefetchKeyPaths);
-      fs.setIsDeep(true);
+    public static NSArray objectsWithQualifier(EOEditingContext editingContext, String entityName, EOQualifier qualifier, NSArray prefetchKeyPaths, NSArray sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints, boolean includeNewObjects, boolean includeNewObjectsInParentEditingContext, boolean filterUpdatedObjects, boolean removeDeletedObjects) {
+    	boolean objectsMayGetAdded = includeNewObjects || includeNewObjectsInParentEditingContext || filterUpdatedObjects;
+    	NSArray<EOSortOrdering> fetchSortOrderings = sortOrderings;
+    	if (objectsMayGetAdded) {
+    		fetchSortOrderings = null;
+    	}
+      EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, fetchSortOrderings);
+      fs.setPrefetchingRelationshipKeyPaths(prefetchKeyPaths);
+      fs.setIsDeep(isDeep);
+      fs.setUsesDistinct(usesDistinct);
+      fs.setHints(hints);
       NSMutableArray cloneMatchingObjects = null;
-      NSArray matchingObjects = _editingContext.objectsWithFetchSpecification(fs);
+      NSArray matchingObjects = editingContext.objectsWithFetchSpecification(fs);
       // Filter again, because the in-memory versions may have been modified and no longer may match the qualifier
-      if (_filterUpdatedObjects) {
+      if (filterUpdatedObjects) {
         // remove any old objects that now no longer match the qualifier (the version we get THIS time is the in-memory one, because
         // it's already been faulted in if it's updated)
-        matchingObjects = EOQualifier.filteredArrayWithQualifier(matchingObjects, _qualifier);
+        matchingObjects = EOQualifier.filteredArrayWithQualifier(matchingObjects, qualifier);
 
         // and then we need to add back in any updated objects that now DO match the qualifier that didn't originally match the qualifier
-        NSArray updatedObjects = ERXEOControlUtilities.updatedObjects(_editingContext, _entityName, _qualifier);
+        NSArray updatedObjects = ERXEOControlUtilities.updatedObjects(editingContext, entityName, qualifier);
         if (updatedObjects != null) {
           Enumeration updatedObjectsEnum = updatedObjects.objectEnumerator();
           while (updatedObjectsEnum.hasMoreElements()) {
@@ -1252,8 +1287,8 @@ public class ERXEOControlUtilities {
         }
       }
 
-      if (_includeNewObjects) {
-        NSMutableArray insertedObjects = ERXEOControlUtilities.insertedObjects(_editingContext, _entityName, _qualifier);
+      if (includeNewObjects) {
+        NSMutableArray insertedObjects = ERXEOControlUtilities.insertedObjects(editingContext, entityName, qualifier);
         if (insertedObjects != null) {
           if (cloneMatchingObjects != null) {
             cloneMatchingObjects.addObjectsFromArray(insertedObjects);
@@ -1265,9 +1300,9 @@ public class ERXEOControlUtilities {
         }
       }
       
-      if (_includeNewObjectsInParentEditingContext && ! (_editingContext.parentObjectStore() instanceof EOObjectStoreCoordinator) ) {
+      if (includeNewObjectsInParentEditingContext && ! (editingContext.parentObjectStore() instanceof EOObjectStoreCoordinator) ) {
         final NSMutableArray parentEditingContexts = new NSMutableArray();
-        EOObjectStore objectStore = _editingContext.parentObjectStore();
+        EOObjectStore objectStore = editingContext.parentObjectStore();
         NSArray objects = NSArray.EmptyArray;
         int i;
         while (!(objectStore instanceof EOObjectStoreCoordinator)) {
@@ -1279,8 +1314,8 @@ public class ERXEOControlUtilities {
         i = parentEditingContexts.count();
         while (i-- > 0) {
           final EOEditingContext theEC = (EOEditingContext)parentEditingContexts.objectAtIndex(i);
-          final NSArray insertedObjects = ERXArrayUtilities.objectsWithValueForKeyPath(theEC.insertedObjects(), _entityName, "entityName");
-          final NSArray objectsMatchingQualifier = EOQualifier.filteredArrayWithQualifier(insertedObjects, _qualifier);
+          final NSArray insertedObjects = ERXArrayUtilities.objectsWithValueForKeyPath(theEC.insertedObjects(), entityName, "entityName");
+          final NSArray objectsMatchingQualifier = EOQualifier.filteredArrayWithQualifier(insertedObjects, qualifier);
 
           // fault the previous batch down
           objects = EOUtilities.localInstancesOfObjects(theEC, objects);
@@ -1291,7 +1326,7 @@ public class ERXEOControlUtilities {
         }
 
         if (objects.count() > 0) {
-          objects = EOUtilities.localInstancesOfObjects(_editingContext, objects);
+          objects = EOUtilities.localInstancesOfObjects(editingContext, objects);
           if (cloneMatchingObjects != null) {
             cloneMatchingObjects.addObjectsFromArray(objects);
           }
@@ -1303,8 +1338,8 @@ public class ERXEOControlUtilities {
         }
       }
 
-      if (_removeDeletedObjects) {
-        NSArray deletedObjects = ERXEOControlUtilities.deletedObjects(_editingContext, _entityName, _qualifier);
+      if (removeDeletedObjects) {
+        NSArray deletedObjects = ERXEOControlUtilities.deletedObjects(editingContext, entityName, qualifier);
         if (deletedObjects != null) {
           if (cloneMatchingObjects == null) {
             cloneMatchingObjects = matchingObjects.mutableClone();
@@ -1313,7 +1348,21 @@ public class ERXEOControlUtilities {
           cloneMatchingObjects.removeObjectsInArray(deletedObjects);
         }
       }
+      
+      // MS: We need an arrayWithoutDuplicates that can work in-place for NSMutable ...
+      if (objectsMayGetAdded && usesDistinct) {
+		  matchingObjects = ERXArrayUtilities.arrayWithoutDuplicates(matchingObjects);
+      }
 
+      if (objectsMayGetAdded && sortOrderings != null && sortOrderings.count() > 0) {
+    	  if (cloneMatchingObjects != null) {
+    		  ERXS.sort(cloneMatchingObjects, sortOrderings);
+    	  }
+    	  else {
+    		  matchingObjects = ERXS.sorted(matchingObjects, sortOrderings);
+    	  }
+      }
+      
       return matchingObjects;
     }
     
