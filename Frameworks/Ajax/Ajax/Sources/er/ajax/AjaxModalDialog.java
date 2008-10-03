@@ -142,7 +142,7 @@ public class AjaxModalDialog extends AjaxComponent {
      * @param title the new title for the dialog window
      */
     public static void setTitle(WOContext context, String title) {
-    	AjaxUtils.javascriptResponse("$wi(MB_caption).innerHTML='" + title + "';", context);
+    	AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML='" + title + "';", context);
     }
 
     
