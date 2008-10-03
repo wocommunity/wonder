@@ -92,14 +92,14 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		// }
 		// }
 	}
-	
+
 	/**
-	 * Returns whether or not the given key value is the primary key of
-	 * an EO.  This is crazy -- It tries to guess if it's looking at
-	 * a key or not.
+	 * Returns whether or not the given key value is the primary key of an EO. This is crazy -- It tries to guess if
+	 * it's looking at a key or not.
 	 * 
-	 * @param restKey the possible EO key
-         *
+	 * @param restKey
+	 *            the possible EO key
+	 * 
 	 * @return true if key is a primary key
 	 */
 	public boolean isEOID(ERXRestKey restKey) {
@@ -140,11 +140,11 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		}
 		return isID;
 	}
-	
+
 	protected String idAttributeName(EOEntity entity) {
 		return null;
 	}
-	
+
 	protected boolean _isEOID(EOEntity entity, String key) {
 		boolean isID = !entity._propertyNames().containsObject(key);
 		return isID;
@@ -153,7 +153,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	/**
 	 * Returns the string form of the primary key of the given EO.
 	 * 
-	 * @param eo the EO to get a primary key for
+	 * @param eo
+	 *            the EO to get a primary key for
 	 * @return the primary key
 	 */
 	public String stringIDForEO(EOEntity entity, EOEnterpriseObject eo) {
@@ -167,11 +168,12 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		}
 		return idStr;
 	}
-	
+
 	/**
 	 * Returns the primary key of the given EO.
 	 * 
-	 * @param eo the EO to get a primary key for
+	 * @param eo
+	 *            the EO to get a primary key for
 	 * @return the primary key
 	 */
 	public Object idForEO(EOEntity entity, EOEnterpriseObject eo) {
@@ -265,7 +267,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				String valueType = primaryKeyAttribute.valueType();
 				gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { key });
 			}
-		
+
 			obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);
 		}
 		else {
@@ -402,6 +404,14 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 					parsedValue = new NSTimestampFormatter().parseObject(attributeValue);
 				}
 			}
+			else if (Enum.class.isAssignableFrom(valueType)) {
+				try {
+					parsedValue = valueType.getMethod("valueOf", String.class).invoke(null, attributeValue);
+				}
+				catch (Throwable e) {
+					throw new ERXRestException("Failed to parse " + attributeValue + " as enum member of " + valueType);
+				}
+			}
 			else {
 				throw new ERXRestException("Unable to parse the value '" + attributeValue + "' into a " + valueType.getName() + ".");
 			}
@@ -447,7 +457,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		}
 		return eo;
 	}
-	
+
 	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		if (!canUpdateObject(entity, eo, context)) {
 			throw new ERXRestSecurityException("You are not allowed to update this " + entityAliasForEntityNamed(entity.name()) + " object.");
@@ -463,18 +473,19 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		if (!relationship.isToMany()) {
 			EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, relationship.name(), context);
 			EOEnterpriseObject newObject = destinationEntityDelegate.objectForNode(destinationEntity, relationshipNode, context);
-			
+
 			if (newObject == null && !relationshipNode.isNull() && relationshipNode.children().count() > 0) {
 				newObject = destinationEntityDelegate.insertObjectFromDocument(destinationEntity, relationshipNode, entity, eo, relationshipName, context);
 			}
-			
+
 			// MS: ignore nil="true" to-one?
 			if (relationshipNode.isNull() || newObject == null) {
 				if (!relationship.isMandatory()) {
 					eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, relationshipName);
 				}
 				else {
-					//System.out.println("ERXAbstractRestEntityDelegate._updateRelationshipFromDocument: A " + relationshipName);
+					// System.out.println("ERXAbstractRestEntityDelegate._updateRelationshipFromDocument: A " +
+					// relationshipName);
 					// MS: Throw?
 				}
 			}
@@ -502,7 +513,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			}
 		}
 	}
-	
+
 	public void _updatePropertiesFromDocument(boolean inserting, EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		String entityAlias = entityAliasForEntityNamed(entity.name());
 		String type = eoNode.type();
@@ -515,14 +526,14 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 		Enumeration attributeNodesEnum = eoNode.children().objectEnumerator();
 		while (attributeNodesEnum.hasMoreElements()) {
-			ERXRestRequestNode attributeNode = (ERXRestRequestNode)attributeNodesEnum.nextElement();
+			ERXRestRequestNode attributeNode = (ERXRestRequestNode) attributeNodesEnum.nextElement();
 
 			boolean updateAttribute = true;
 			String attributeName = entityDelegate.propertyNameForPropertyAlias(entity, attributeNode.name());
 			if ("id".equals(attributeName)) {
 				updateAttribute = false;
 			}
-			
+
 			if (updateAttribute) {
 				if (inserting && !canInsertProperty(entity, eo, attributeName, context)) {
 					throw new ERXRestSecurityException("You are not allowed to insert the property '" + attributeName + "' on " + entityAlias + ".");
@@ -530,7 +541,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				else if (!inserting && !canUpdateProperty(entity, eo, attributeName, context)) {
 					throw new ERXRestSecurityException("You are not allowed to update the property '" + attributeName + "' on " + entityAlias + ".");
 				}
-				
+
 				EORelationship relationship = entity.relationshipNamed(attributeName);
 				if (relationship != null) {
 					_updateRelationshipFromDocument(entity, eo, relationship, attributeNode, context);
@@ -592,7 +603,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				}
 			}
 			catch (ERXRestNotFoundException e) {
-				//System.out.println("ERXAbstractRestEntityDelegate._updateArrayFromDocument: inserting " + attributeName + " on " + parentObject);
+				// System.out.println("ERXAbstractRestEntityDelegate._updateArrayFromDocument: inserting " +
+				// attributeName + " on " + parentObject);
 				EOEnterpriseObject relatedObject = destinationEntityDelegate.insertObjectFromDocument(entity, toManyNode, parentEntity, parentObject, attributeName, context);
 				addObjects.addObject(relatedObject);
 			}
@@ -602,7 +614,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		while (currentObjectsEnum.hasMoreElements()) {
 			EOEnterpriseObject currentObject = (EOEnterpriseObject) currentObjectsEnum.nextElement();
 			if (!keepObjects.containsObject(currentObject)) {
-				//System.out.println("AbstractERXRestDelegate.updateArray: removing " + currentObject + " from " + parentObject + " (" + attributeName + ")");
+				// System.out.println("AbstractERXRestDelegate.updateArray: removing " + currentObject + " from " +
+				// parentObject + " (" + attributeName + ")");
 				parentObject.removeObjectFromBothSidesOfRelationshipWithKey(currentObject, attributeName);
 			}
 		}
@@ -610,7 +623,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		Enumeration addObjectsEnum = addObjects.objectEnumerator();
 		while (addObjectsEnum.hasMoreElements()) {
 			EOEnterpriseObject addObject = (EOEnterpriseObject) addObjectsEnum.nextElement();
-			//System.out.println("AbstractERXRestDelegate.updateArray: adding " + addObject + " to " + parentObject + " (" + attributeName + ")");
+			// System.out.println("AbstractERXRestDelegate.updateArray: adding " + addObject + " to " + parentObject +
+			// " (" + attributeName + ")");
 			parentObject.addObjectToBothSidesOfRelationshipWithKey(addObject, attributeName);
 		}
 

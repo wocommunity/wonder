@@ -54,6 +54,9 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		else if (value instanceof BigDecimal) {
 			response.appendContentString(" type = \"bigint\"");
 		}
+		else if (value instanceof Enum) {
+			response.appendContentString(" type = \"enum\"");
+		}
 	}
 
 	@Override
