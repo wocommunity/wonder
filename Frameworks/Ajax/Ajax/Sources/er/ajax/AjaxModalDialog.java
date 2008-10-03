@@ -221,10 +221,12 @@ public class AjaxModalDialog extends AjaxComponent {
     public WOActionResults handleRequest(WORequest request, WOContext context) {
     	WOActionResults response = null;
     	String modalBoxAction = request.stringFormValueForKey("modalBoxAction");
-    	if (isOpen || "open".equals(modalBoxAction)) {
-    		if ( ! isOpen) {
-    			openDialog();
-    		}
+    	
+    	if ("close".equals(modalBoxAction) && isOpen) {
+    		closeDialog();
+    	}
+    	else if ("open".equals(modalBoxAction) && ! isOpen) {
+    		openDialog();
     		
     		// Register the id of this component on the page in the request so that when 
     		// it comes time to cache the context, it knows that this area is an Ajax updating area
@@ -232,12 +234,15 @@ public class AjaxModalDialog extends AjaxComponent {
     		
     		// If there is an action binding, we need to cache the result of calling that so that
     		// the awake, takeValues, etc. messages can get passed onto it
-    		response = AjaxUtils.createResponse(request, context);
     		if (hasBinding("action")) {
-    			if (actionResults == null) {
     				actionResults = (WOComponent) valueForBinding("action");
         			actionResults._awakeInContext(context);
-    			}
+    		}
+    	}
+
+    	if (isOpen) {
+    		response = AjaxUtils.createResponse(request, context);
+    		if (actionResults != null) {
     			context._setCurrentComponent(actionResults);
     			actionResults.appendToResponse((WOResponse)response, context);
     		} else {
@@ -245,8 +250,6 @@ public class AjaxModalDialog extends AjaxComponent {
     			// in the "link" template.
         		super.appendToResponse((WOResponse)response, context);
     		}
-    	} else if ("close".equals(modalBoxAction)) {
-    		closeDialog();
     	}
     	
         return response;
