@@ -577,12 +577,18 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 
 			try {
 				EOEnterpriseObject relatedObject = destinationEntityDelegate.objectForNode(entity, toManyNode, context);
-				destinationEntityDelegate.updateObjectFromDocument(entity, relatedObject, toManyNode, context);
-				if (currentObjects.containsObject(relatedObject)) {
-					keepObjects.addObject(relatedObject);
+				if (relatedObject == null) {
+					relatedObject = destinationEntityDelegate.insertObjectFromDocument(entity, toManyNode, parentEntity, parentObject, attributeName, context);
+					addObjects.addObject(relatedObject);
 				}
 				else {
-					addObjects.addObject(relatedObject);
+					destinationEntityDelegate.updateObjectFromDocument(entity, relatedObject, toManyNode, context);
+					if (currentObjects.containsObject(relatedObject)) {
+						keepObjects.addObject(relatedObject);
+					}
+					else {
+						addObjects.addObject(relatedObject);
+					}
 				}
 			}
 			catch (ERXRestNotFoundException e) {
