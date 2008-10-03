@@ -71,6 +71,13 @@
         }, 
         {
             columnName = ""; 
+            externalType = bytea; 
+            name = eofKey; 
+            valueClassName = NSData; 
+            width = 24; 
+        }, 
+        {
+            columnName = ""; 
             externalType = bool; 
             name = flag; 
             valueClassName = NSNumber; 
@@ -294,5 +301,5 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCPostgresqlPrototypes; 
-    primaryKeyAttributes = (id); 
+    primaryKeyAttributes = (eofKey, id); 
 }
