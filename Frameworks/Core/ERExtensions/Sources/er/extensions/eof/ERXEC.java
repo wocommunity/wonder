@@ -1107,7 +1107,7 @@ public class ERXEC extends EOEditingContext {
 		boolean wasAutoLocked = autoLock("objectsWithFetchSpecification");
 		try {
 			NSArray objects;
-			if (eofetchspecification instanceof ERXFetchSpecification && ((ERXFetchSpecification)eofetchspecification).considerEditingContext()) {
+			if (eofetchspecification instanceof ERXFetchSpecification && ((ERXFetchSpecification)eofetchspecification).includeEditingContextChanges()) {
 				objects = ERXEOControlUtilities.objectsWithQualifier(this, eofetchspecification.entityName(), eofetchspecification.qualifier(), eofetchspecification.prefetchingRelationshipKeyPaths(), eofetchspecification.sortOrderings(), eofetchspecification.usesDistinct(), eofetchspecification.isDeep(), eofetchspecification.hints(), true, true, true, true);
 			}
 			else {

@@ -27,11 +27,11 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
  * </ul>
  * @author ak
  *
- * @param &lt;T&gt;
+ * @param <T> the type of objects this fetch spec will return
  */
 public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetchSpecification {
 	private NSMutableDictionary _userInfo;
-	private boolean _considerEditingContext;
+	private boolean _includeEditingContextChanges;
 	
 	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
 		super(entityName, qualifier, sortOrderings, usesDistinct, isDeep, hints);
@@ -55,12 +55,23 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		_userInfo = spec.userInfo().count() > 0 ? null : spec.userInfo().mutableClone();
 	}
 	
-	public void setConsiderEditingContext(boolean considerEditingContext) {
-		_considerEditingContext = considerEditingContext;
+	/**
+	 * When true, objectsWithFetchSpecification will include newly inserted objects, newly removed objects, and newly updated
+	 * objects in your fetch results (@see ERXEOControlUtilities.objectsWithQualifier).
+	 * 
+	 * @param includeEditingContextChanges whether or not to include editing context changes
+	 */
+	public void setIncludeEditingContextChanges(boolean includeEditingContextChanges) {
+		_includeEditingContextChanges = includeEditingContextChanges;
 	}
 	
-	public boolean considerEditingContext() {
-		return _considerEditingContext;
+	/**
+	 * Returns whether or not to include editing context changes.
+	 * 
+	 * @return whether or not to include editing context changes
+	 */
+	public boolean includeEditingContextChanges() {
+		return _includeEditingContextChanges;
 	}
 
 	/**
