@@ -115,6 +115,16 @@
             width = 39; 
         }, 
         {
+            adaptorValueConversionMethodName = name;
+            columnName = "";
+            externalType = VARCHAR;
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
+            name = javaEnum;
+            valueClassName = "java.lang.Enum";
+            valueFactoryMethodName = valueOf;
+            width = 50;
+        },
+        {
             columnName = ""; 
             externalType = LONG; 
             name = longNumber; 
@@ -242,6 +252,7 @@
         intBoolean, 
         intNumber, 
         ipAddress, 
+        javaEnum, 
         longNumber, 
         longText, 
         mutableArray, 
