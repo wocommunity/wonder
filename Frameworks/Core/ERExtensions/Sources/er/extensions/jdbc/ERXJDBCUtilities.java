@@ -466,22 +466,23 @@ public class ERXJDBCUtilities {
 	 * @return a new adaptor channel
 	 */
 	public static EOAdaptorChannel adaptorChannelWithUserAndPassword(EOModel model, String userName, String password) {
-		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
-		return ERXJDBCUtilities.adaptorChannelWithUserAndPassword(databaseContext.adaptorContext().adaptor(), userName, password);
+		String adaptorName = model.adaptorName();
+		NSDictionary connectionDictionary = model.connectionDictionary();
+		return ERXJDBCUtilities.adaptorChannelWithUserAndPassword(adaptorName, connectionDictionary, userName, password);
 	}
 
 	/**
 	 * Returns an adaptor channel with the given username and password.
 	 * 
-	 * @param oldAdaptor the old adaptor to base this connection off of
+	 * @param adaptorName the name of the adaptor to user
+	 * @param originalConnectionDictionary the original connection dictionary
 	 * @param userName the new username
 	 * @param password the new password
 	 * @return a new adaptor channel
 	 */
-	public static EOAdaptorChannel adaptorChannelWithUserAndPassword(EOAdaptor oldAdaptor, String userName, String password) {
-		String adaptorName = oldAdaptor.name();
-		EOAdaptor newAdaptor = EOAdaptor.adaptorWithName(adaptorName);
-		NSMutableDictionary newConnectionDictionary = oldAdaptor.connectionDictionary().mutableClone();
+	public static EOAdaptorChannel adaptorChannelWithUserAndPassword(String adaptorName, NSDictionary originalConnectionDictionary, String userName, String password) {
+		EOAdaptor adaptor = EOAdaptor.adaptorWithName(adaptorName);
+		NSMutableDictionary newConnectionDictionary = originalConnectionDictionary.mutableClone();
 		if (userName == null) {
 			newConnectionDictionary.removeObjectForKey(JDBCAdaptor.UsernameKey);
 		}
@@ -494,8 +495,8 @@ public class ERXJDBCUtilities {
 		else {
 			newConnectionDictionary.setObjectForKey(password, JDBCAdaptor.PasswordKey);
 		}
-		newAdaptor.setConnectionDictionary(newConnectionDictionary);
-		return newAdaptor.createAdaptorContext().createAdaptorChannel();
+		adaptor.setConnectionDictionary(newConnectionDictionary);
+		return adaptor.createAdaptorContext().createAdaptorChannel();
 	}
 
 	/**
