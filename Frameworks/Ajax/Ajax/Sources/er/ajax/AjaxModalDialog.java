@@ -36,7 +36,7 @@ import er.extensions.appserver.ERXWOContext;
  * </code>
  * </p>
  *  
- * <p>To cause the contents of thedialog to be updated in an Ajax action method, use this:
+ * <p>To cause the contents of the dialog to be updated in an Ajax action method, use this:
  * <code>
  * AjaxModalDialog.udpate(context());
  * </code>
@@ -97,9 +97,9 @@ public class AjaxModalDialog extends AjaxComponent {
 
 	/** JavaScript to execute on the client to close the modal dialog */
 	public static final String Close = "Modalbox.hide();";
+	
 	private boolean isOpen;
 	private WOComponent actionResults;
-	private String id;
 	
 	
     public AjaxModalDialog(WOContext context) {
@@ -227,7 +227,6 @@ public class AjaxModalDialog extends AjaxComponent {
     	}
     	else if ("open".equals(modalBoxAction) && ! isOpen) {
     		openDialog();
-    		
     		// Register the id of this component on the page in the request so that when 
     		// it comes time to cache the context, it knows that this area is an Ajax updating area
     		AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
@@ -357,10 +356,7 @@ public class AjaxModalDialog extends AjaxComponent {
      * @return the value bound to id or an manufactured string if id is not bound
      */
 	public String id() {
-		if (id == null) {
-			id = hasBinding("id") ? (String) valueForBinding("id") : ERXWOContext.safeIdentifierName(context(), true);
-        }
-		return id;
+		return hasBinding("id") ? (String) valueForBinding("id") : ERXWOContext.safeIdentifierName(context(), false);
 	}
 
 	  
