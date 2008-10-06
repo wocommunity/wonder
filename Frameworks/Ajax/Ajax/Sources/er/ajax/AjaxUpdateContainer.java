@@ -283,6 +283,10 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	
 	protected static String updateContainerID(AjaxDynamicElement element, String bindingName, WOComponent component) {
 		String updateContainerID = (String) element.valueForBinding("updateContainerID", component);
+		return AjaxUpdateContainer.updateContainerID(updateContainerID);
+	}
+	
+	protected static String updateContainerID(String updateContainerID) {
 		if ("_parent".equals(updateContainerID)) {
 			updateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
 		}
