@@ -12,7 +12,7 @@ ExtraPropertyKeysRepetition: WORepetition {
 }
 
 HasExtraPropertyKeysConditional: ERXNonZeroConditional {
-	condition = extraDisplayPropertyKeys;
+	condition = extraDisplayPropertyKeys.count;
 }
 
 PropertyKey: WOString {
