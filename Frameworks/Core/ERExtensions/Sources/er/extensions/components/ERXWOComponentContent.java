@@ -190,6 +190,8 @@ public class ERXWOComponentContent extends WODynamicElement {
     		if(name.equals(templateName)) {
     			result = template;
     		}
+		} else if (content instanceof WOHTMLBareString && templateName == null) {
+			result=content;
 		}
     	return result;
     }
