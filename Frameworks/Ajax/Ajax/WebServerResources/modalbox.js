@@ -185,7 +185,10 @@ Modalbox.Methods = {
 					}.bind(this)
 				});
 		} else {
-			this.MBwindow.setStyle({width: wWidth + byWidth + "px", height: wHeight + newHeight + "px"});
+			// MS: Modified to support height = -1 converts to height "auto"
+			var widthStyle = (this.options.width == -1) ? "auto" : (wWidth + byWidth + "px"); 
+			var heightStyle = (this.options.height == -1) ? "auto" : (wHeight + newHeight + "px");
+			this.MBwindow.setStyle({width: widthStyle, height: heightStyle});
 			setTimeout(function() {
 				this.event("_afterResize"); // Passing internal callback
 				this.event("afterResize"); // Passing callback
