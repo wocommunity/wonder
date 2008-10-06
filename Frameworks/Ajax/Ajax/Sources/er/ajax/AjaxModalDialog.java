@@ -10,8 +10,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXWOContext;
 
-
-
 /**
  * <p>AjaxModalDialog is a modal dialog window based on ModalBox (see below for link).  It differs from AjaxModalContainer
  * in that it handles submitting forms and updating the container contents.  It also looks more like an OS X modal
@@ -54,6 +52,7 @@ import er.extensions.appserver.ERXWOContext;
  * @binding onOpen server side method that runs before the dialog is opened, the return value is discarded
  * @binding onClose server side method that runs before the dialog is opened, the return value is discarded.
  *                  This will be executed if the page is reloaded, but not if the user navigates elsewhere.
+ * @binding closeUpdateContainerID the update container to refresh when onClose is called
  * 
  * @binding id HTML id for the link activating the modal dialog
  * @binding class CSS class for the link activating the modal dialog
@@ -96,280 +95,282 @@ import er.extensions.appserver.ERXWOContext;
 public class AjaxModalDialog extends AjaxComponent {
 
 	/** JavaScript to execute on the client to close the modal dialog */
-	public static final String Close = "Modalbox.hide();";
-	
-	private boolean isOpen;
-	private WOComponent actionResults;
-	
-	
-    public AjaxModalDialog(WOContext context) {
-        super(context);
-    }
-    
-    
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
-    
-    
-    /**
-     * Call this method to have a JavaScript response returned that closes the modal dialog.
-     *
-     * @param context the current WOContext
-     */
-    public static void close(WOContext context) {
-    	AjaxUtils.javascriptResponse(AjaxModalDialog.Close, context);
-    }
-    
-    
-    /**
-     * Call this method to have a JavaScript response returned that updates the contents of the modal dialog.
-     * Note that this does not work with the action binding.  You need to manage your own AjaxUpdateContainer
-     * if you use an action method for the contents of the dialog.
-     *
-     * @param context the current WOContext
-     */
-    public static void update(WOContext context) {
-    	AjaxModalDialog thisDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
-    	AjaxUtils.javascriptResponse(thisDialog.updateContainerID() + "Update();", context);
-    }
-    
+	public static final String Close = "AMD.close();";
 
-    /**
-     * Call this method to have a JavaScript response returned that updates the title of the modal dialog.
-     *
-     * @param context the current WOContext
-     * @param title the new title for the dialog window
-     */
-    public static void setTitle(WOContext context, String title) {
-    	AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML='" + title + "';", context);
-    }
+	private boolean _open;
+	private WOComponent _actionResults;
 
-    
-    /**
-     * Start of R-R loop.  awakes the components from action if action is bound.
-     *
-     * @see com.webobjects.appserver.WOComponent#awake()
-     */
-    public void awake() {
-    	super.awake();
-    	if (actionResults != null) {
-    		actionResults._awakeInContext(context());
-    	}
-    }
-    
+	public AjaxModalDialog(WOContext context) {
+		super(context);
+	}
 
-    /**
-     * Only handle this phase if the modal box is open.  Also includes result returned by action binding if bound.
-     *
-     * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
-     */
-    public void takeValuesFromRequest(WORequest request, WOContext context) {
-    	if (isOpen) {
-        	if (actionResults != null) {
-    			context._setCurrentComponent(actionResults);
-        		actionResults.takeValuesFromRequest(request, context);
-        	} else {
-        		super.takeValuesFromRequest(request, context);
-        	}
-    	}
-    }
-    
+	public boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
 
-    /**
-     * Only handle this phase if the modal box is open or it is our action (opening the box).  
-     * Overridden to include result returned by action binding if bound.
-     *
-     * @see #close(WOContext)
-     * @see #update(WOContext)
-     * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
-     */
-    public WOActionResults invokeAction(WORequest request, WOContext context) {
-    	try {
-	        // Stash this component in the context so we can access it from the static methods.
-    		ERXWOContext.contextDictionary().setObjectForKey(this, AjaxModalDialog.class.getName());
+	public boolean isOpen() {
+		return _open;
+	}
 
-	        WOActionResults result = null;
-	        if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
-	        	result = super.invokeAction(request, context);
-	        } else if (isOpen) {
-	        	if (actionResults != null) {
-	    			context._setCurrentComponent(actionResults);
-	        		result = actionResults.invokeAction(request, context);
-	        	} else {
-	        		super.invokeAction(request, context);
-	        	}
-	    	}
+	public void setOpen(boolean open) {
+		_open = open;
+	}
 
-        	return result;
-        	
-    	} finally {
-    		// Remove this component from the context
-        	ERXWOContext.contextDictionary().removeObjectForKey(AjaxModalDialog.class.getName());
-    	}
+	/**
+	 * Call this method to have a JavaScript response returned that closes the modal dialog.
+	 *
+	 * @param context the current WOContext
+	 */
+	public static void close(WOContext context) {
+		AjaxUtils.javascriptResponse(AjaxModalDialog.Close, context);
+	}
 
-    }
+	/**
+	 * Call this method to have a JavaScript response returned that updates the contents of the modal dialog.
+	 * Note that this does not work with the action binding.  You need to manage your own AjaxUpdateContainer
+	 * if you use an action method for the contents of the dialog.
+	 *
+	 * @param context the current WOContext
+	 */
+	public static void update(WOContext context) {
+		AjaxModalDialog thisDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
+		AjaxUtils.javascriptResponse(thisDialog.updateContainerID() + "Update();", context);
+	}
 
-    
-    /**
-     * Handles the open and close dialog actions.
-     *
-     * @see er.ajax.AjaxComponent#handleRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
- 	 *
-     * @return null or dialog contents
-     */
-    public WOActionResults handleRequest(WORequest request, WOContext context) {
-    	WOActionResults response = null;
-    	String modalBoxAction = request.stringFormValueForKey("modalBoxAction");
-    	
-    	if ("close".equals(modalBoxAction) && isOpen) {
-    		closeDialog();
-    	}
-    	else if ("open".equals(modalBoxAction) && ! isOpen) {
-    		openDialog();
-    		// Register the id of this component on the page in the request so that when 
-    		// it comes time to cache the context, it knows that this area is an Ajax updating area
-    		AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
-    		
-    		// If there is an action binding, we need to cache the result of calling that so that
-    		// the awake, takeValues, etc. messages can get passed onto it
-    		if (hasBinding("action")) {
-    				actionResults = (WOComponent) valueForBinding("action");
-        			actionResults._awakeInContext(context);
-    		}
-    	}
+	/**
+	 * Call this method to have a JavaScript response returned that updates the title of the modal dialog.
+	 *
+	 * @param context the current WOContext
+	 * @param title the new title for the dialog window
+	 */
+	public static void setTitle(WOContext context, String title) {
+		AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML='" + title + "';", context);
+	}
 
-    	if (isOpen) {
-    		response = AjaxUtils.createResponse(request, context);
-    		if (actionResults != null) {
-    			context._setCurrentComponent(actionResults);
-    			actionResults.appendToResponse((WOResponse)response, context);
-    		} else {
-    			// This loads the content from the default ERWOTemplate (our component contents that are not
-    			// in the "link" template.
-        		super.appendToResponse((WOResponse)response, context);
-    		}
-    	}
-    	
-        return response;
-    }
+	/**
+	 * Start of R-R loop.  awakes the components from action if action is bound.
+	 *
+	 * @see com.webobjects.appserver.WOComponent#awake()
+	 */
+	public void awake() {
+		super.awake();
+		if (_actionResults != null) {
+			_actionResults._awakeInContext(context());
+		}
+	}
 
-    
-    /**
-     * This has two modes.  One is to generate the link that opens the dialog.  The other is to return the contents
-     * of the dialog (the result returned by action binding is handled in handleRequest, not here).
-     *
-     * @see er.ajax.AjaxComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
-     */
-   public void appendToResponse(WOResponse response, WOContext context) {
-    	
-    	// If this is not an Ajax request, the page has been reloaded.  Try to recover state
-    	if ( ! context().request().requestHandlerKey().equals(AjaxRequestHandler.AjaxRequestHandlerKey)) {
-    		closeDialog();
-    	}
-    	
-    	if (isOpen) {
-        	if (actionResults != null) {
-        		throw new RuntimeException("Unexpected call to appendToResponse");
-        	}
-        	super.appendToResponse(response, context);
-    	} else {
-	    	response.appendContentString("<a href=\"javascript:void(0)\""); 	
-	    	
-	    	WOComponent component = context.component();
+	/**
+	 * Only handle this phase if the modal box is open.  Also includes result returned by action binding if bound.
+	 *
+	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
+	 */
+	public void takeValuesFromRequest(WORequest request, WOContext context) {
+		if (isOpen()) {
+			if (_actionResults != null) {
+				context._setCurrentComponent(_actionResults);
+				_actionResults.takeValuesFromRequest(request, context);
+			}
+			else {
+				super.takeValuesFromRequest(request, context);
+			}
+		}
+	}
 
-	        appendTagAttributeToResponse(response, "id", id());
-	        appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
-	        appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-	        appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
-	        
-	    	response.appendContentString(" onclick=\"Modalbox.show('"); 	
-	   		response.appendContentString(AjaxUtils.ajaxComponentActionUrl(component.context()));
-	   		response.appendContentString("?modalBoxAction=open");
-	    	response.appendContentString("', "); 
-	    	AjaxOptions.appendToResponse(createModalBoxOptions(), response, context);
-	        response.appendContentString("); return false;\" >");
-	        
-	        if (hasBinding("label")) {
-	        	// normally this would be done in super, but we're not supering here
-	        	addRequiredWebResources(response);
-	        	response.appendContentString((String)valueForBinding("label"));
-	        } else {
-	        	// This will append the contents of the ERXWOTemplate named "link"
-	            super.appendToResponse(response, context);
-	        }
-	
-	        response.appendContentString("</a>");
-	    }
-    }
+	/**
+	 * Only handle this phase if the modal box is open or it is our action (opening the box).  
+	 * Overridden to include result returned by action binding if bound.
+	 *
+	 * @see #close(WOContext)
+	 * @see #update(WOContext)
+	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
+	 */
+	public WOActionResults invokeAction(WORequest request, WOContext context) {
+		try {
+			// Stash this component in the context so we can access it from the static methods.
+			ERXWOContext.contextDictionary().setObjectForKey(this, AjaxModalDialog.class.getName());
 
+			WOActionResults result = null;
+			if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
+				result = super.invokeAction(request, context);
+			}
+			else if (isOpen()) {
+				if (_actionResults != null) {
+					context._setCurrentComponent(_actionResults);
+					result = _actionResults.invokeAction(request, context);
+				}
+				else {
+					super.invokeAction(request, context);
+				}
+			}
 
-   /**
-    * End of R-R loop.  Puts the components from action to sleep if action is bound.
-    *
-    * @see com.webobjects.appserver.WOComponent#sleep()
-    */
-    public void sleep() {
-    	super.sleep();
-    	if (actionResults != null) {
-    		actionResults._sleepInContext(context());
-    	}    	
-    }
-    
-    
-    /**
-     * Calls the method bound to onOpen (if any), and marks the dialog state as open.
-     */
-    public void openDialog() {
+			return result;
+
+		}
+		finally {
+			// Remove this component from the context
+			ERXWOContext.contextDictionary().removeObjectForKey(AjaxModalDialog.class.getName());
+		}
+
+	}
+
+	/**
+	 * Handles the open and close dialog actions.
+	 *
+	 * @see er.ajax.AjaxComponent#handleRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
+	 *
+	 * @return null or dialog contents
+	 */
+	public WOActionResults handleRequest(WORequest request, WOContext context) {
+		WOActionResults response = null;
+		String modalBoxAction = request.stringFormValueForKey("modalBoxAction");
+
+		if ("close".equals(modalBoxAction) && isOpen()) {
+			closeDialog();
+			String closeUpdateContainerID = AjaxUpdateContainer.updateContainerID((String) valueForBinding("closeUpdateContainerID"));
+			if (closeUpdateContainerID != null) {
+				AjaxUpdateContainer.setUpdateContainerID(request, closeUpdateContainerID);
+			}
+		}
+		else if ("open".equals(modalBoxAction) && !isOpen()) {
+			openDialog();
+			// Register the id of this component on the page in the request so that when 
+			// it comes time to cache the context, it knows that this area is an Ajax updating area
+			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
+
+			// If there is an action binding, we need to cache the result of calling that so that
+			// the awake, takeValues, etc. messages can get passed onto it
+			if (hasBinding("action")) {
+				_actionResults = (WOComponent) valueForBinding("action");
+				_actionResults._awakeInContext(context);
+			}
+		}
+
+		if (isOpen()) {
+			response = AjaxUtils.createResponse(request, context);
+			if (_actionResults != null) {
+				context._setCurrentComponent(_actionResults);
+				_actionResults.appendToResponse((WOResponse) response, context);
+			}
+			else {
+				// This loads the content from the default ERWOTemplate (our component contents that are not
+				// in the "link" template.
+				super.appendToResponse((WOResponse) response, context);
+			}
+		}
+
+		return response;
+	}
+
+	/**
+	 * This has two modes.  One is to generate the link that opens the dialog.  The other is to return the contents
+	 * of the dialog (the result returned by action binding is handled in handleRequest, not here).
+	 *
+	 * @see er.ajax.AjaxComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
+	 */
+	public void appendToResponse(WOResponse response, WOContext context) {
+
+		// If this is not an Ajax request, the page has been reloaded.  Try to recover state
+		if (!context().request().requestHandlerKey().equals(AjaxRequestHandler.AjaxRequestHandlerKey)) {
+			closeDialog();
+		}
+
+		if (isOpen()) {
+			if (_actionResults != null) {
+				throw new RuntimeException("Unexpected call to appendToResponse");
+			}
+			super.appendToResponse(response, context);
+		}
+		else {
+			response.appendContentString("<a href=\"javascript:void(0)\"");
+
+			WOComponent component = context.component();
+
+			appendTagAttributeToResponse(response, "id", id());
+			appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
+			appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
+			appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
+
+			response.appendContentString(" onclick=\"Modalbox.show('");
+			response.appendContentString(AjaxUtils.ajaxComponentActionUrl(component.context()));
+			response.appendContentString("?modalBoxAction=open");
+			response.appendContentString("', ");
+			AjaxOptions.appendToResponse(createModalBoxOptions(), response, context);
+			response.appendContentString("); return false;\" >");
+
+			if (hasBinding("label")) {
+				// normally this would be done in super, but we're not supering here
+				addRequiredWebResources(response);
+				response.appendContentString((String) valueForBinding("label"));
+			}
+			else {
+				// This will append the contents of the ERXWOTemplate named "link"
+				super.appendToResponse(response, context);
+			}
+
+			response.appendContentString("</a>");
+		}
+	}
+
+	/**
+	 * End of R-R loop.  Puts the components from action to sleep if action is bound.
+	 *
+	 * @see com.webobjects.appserver.WOComponent#sleep()
+	 */
+	public void sleep() {
+		super.sleep();
+		if (_actionResults != null) {
+			_actionResults._sleepInContext(context());
+		}
+	}
+
+	/**
+	 * Calls the method bound to onOpen (if any), and marks the dialog state as open.
+	 */
+	public void openDialog() {
 		if (hasBinding("onOpen")) {
 			valueForBinding("onOpen");
 		}
-		
-		isOpen = true;
-    }
-    
-    
-    /**
-     * Calls the method bound to onClose (if any), and marks the dialog state as closed.
-     */
-    public void closeDialog() {
+
+		setOpen(true);
+	}
+
+	/**
+	 * Calls the method bound to onClose (if any), and marks the dialog state as closed.
+	 */
+	public void closeDialog() {
 		if (hasBinding("onClose")) {
 			valueForBinding("onClose");
 		}
-		
-		isOpen = false;
-		actionResults = null;
-    }
-    
-    
-    /**
-     * @see er.ajax.AjaxComponent#_containerID(com.webobjects.appserver.WOContext)
+
+		setOpen(false);
+		_actionResults = null;
+	}
+
+	/**
+	 * @see er.ajax.AjaxComponent#_containerID(com.webobjects.appserver.WOContext)
 	 *
-     * @return id()
-     */
+	 * @return id()
+	 */
 	protected String _containerID(WOContext context) {
 		return id();
 	}
-	
-    
-    /**
-     * @return the value bound to id or an manufactured string if id is not bound
-     */
+
+	/**
+	 * @return the value bound to id or an manufactured string if id is not bound
+	 */
 	public String id() {
 		return hasBinding("id") ? (String) valueForBinding("id") : ERXWOContext.safeIdentifierName(context(), false);
 	}
 
-	  
-    /**
-     * Returns the ID of the AjaxUpdateContainer that wraps the in-line contents of this dialog.
-     * 
-     * @return  id() + "Updater"
-     */
+	/**
+	 * Returns the ID of the AjaxUpdateContainer that wraps the in-line contents of this dialog.
+	 * 
+	 * @return  id() + "Updater"
+	 */
 	public String updateContainerID() {
 		return id() + "Updater";
 	}
-	
-	
+
 	/**
 	 * Returns the template name for the ERXWOComponentContent: null to show the dialog (default) contents
 	 * and "link" to show the link contents
@@ -377,9 +378,8 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return null or "link"
 	 */
 	public String templateName() {
-		return  ! isOpen && ! hasBinding("label") ? "link" : null;
+		return !isOpen() && !hasBinding("label") ? "link" : null;
 	}
-
 
 	/**
 	 * @return binding values converted into Ajax options for ModalBox
@@ -403,7 +403,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("inactiveFade", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("transitions", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("autoFocusing", AjaxOption.BOOLEAN));
-		
+
 		// IMPORTANT NOTICE. Each callback gets removed from options of the ModalBox after execution
 		ajaxOptionsArray.addObject(new AjaxOption("beforeLoad", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("afterLoad", AjaxOption.SCRIPT));
@@ -411,39 +411,46 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("afterResize", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onShow", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onUpdate", AjaxOption.SCRIPT));
-		
+
 		// JS to notify server when the dialog box is closed.  This needs to be added to anything
 		// bound to afterHide
-		String serverUpdate = " new Ajax.Request('"+ AjaxUtils.ajaxComponentActionUrl(context()) +
-    						  "', {asynchronous:1, evalScripts:true, parameters: 'modalBoxAction=close'});";
-    	if(hasBinding("afterHide")) {
-        	String afterHide = (String) valueForBinding("afterHide");
-        	int closingBraceIndex = afterHide.lastIndexOf('}');
-        	if (closingBraceIndex > -1) {
-        		serverUpdate = afterHide.substring(0, closingBraceIndex) + serverUpdate + '}';
-        	}
-        	else throw new RuntimeException("Don't know how to handle afterHide value '" + afterHide +
-        			"', did you forget to wrap it in function() { ...}?");
-        } else {
-    		serverUpdate = "function(v) { " + serverUpdate + '}';
-    	}
-        ajaxOptionsArray.addObject(new AjaxOption("afterHide", serverUpdate, AjaxOption.SCRIPT));
+		String closeUpdateContainerID = AjaxUpdateContainer.updateContainerID((String) valueForBinding("closeUpdateContainerID"));
+		String serverUpdate;
+		if (closeUpdateContainerID == null) {
+			serverUpdate = " AUL.request('" + AjaxUtils.ajaxComponentActionUrl(context()) + "', null, null, 'modalBoxAction=close');";
+		}
+		else {
+			serverUpdate = " AUL._update('" + closeUpdateContainerID + "', '" + AjaxUtils.ajaxComponentActionUrl(context()) + "', null, null, 'modalBoxAction=close');";
+		}
+		//String serverUpdate = " new Ajax.Request('"+ AjaxUtils.ajaxComponentActionUrl(context()) + "', {asynchronous:1, evalScripts:true, parameters: 'modalBoxAction=close'});";
+		if (hasBinding("afterHide")) {
+			String afterHide = (String) valueForBinding("afterHide");
+			int closingBraceIndex = afterHide.lastIndexOf('}');
+			if (closingBraceIndex > -1) {
+				serverUpdate = afterHide.substring(0, closingBraceIndex) + serverUpdate + '}';
+			}
+			else
+				throw new RuntimeException("Don't know how to handle afterHide value '" + afterHide + "', did you forget to wrap it in function() { ...}?");
+		}
+		else {
+			serverUpdate = "function(v) { " + serverUpdate + '}';
+		}
+		ajaxOptionsArray.addObject(new AjaxOption("afterHide", serverUpdate, AjaxOption.SCRIPT));
 
-        NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 
 		return options;
 	}
-	
-   
+
 	/**
 	 * @see er.ajax.AjaxComponent#addRequiredWebResources(com.webobjects.appserver.WOResponse)
 	 */
 	protected void addRequiredWebResources(WOResponse response) {
-    	addScriptResourceInHead(response, "prototype.js");
-    	addScriptResourceInHead(response, "wonder.js");
-    	addScriptResourceInHead(response, "effects.js");
-        addScriptResourceInHead(response, "modalbox.js");
-        addStylesheetResourceInHead(response, "modalbox.css");
-    }
+		addScriptResourceInHead(response, "prototype.js");
+		addScriptResourceInHead(response, "wonder.js");
+		addScriptResourceInHead(response, "effects.js");
+		addScriptResourceInHead(response, "modalbox.js");
+		addStylesheetResourceInHead(response, "modalbox.css");
+	}
 
 }
