@@ -456,6 +456,47 @@ public class ERXJDBCUtilities {
 			log.error("could not commit destCon", e);
 		}
 	}
+	
+	/**
+	 * Returns an adaptor channel with the given username and password.
+	 * 
+	 * @param model the mode lto base this connection off of
+	 * @param userName the new username
+	 * @param password the new password
+	 * @return a new adaptor channel
+	 */
+	public static EOAdaptorChannel adaptorChannelWithUserAndPassword(EOModel model, String userName, String password) {
+		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
+		return ERXJDBCUtilities.adaptorChannelWithUserAndPassword(databaseContext.adaptorContext().adaptor(), userName, password);
+	}
+
+	/**
+	 * Returns an adaptor channel with the given username and password.
+	 * 
+	 * @param oldAdaptor the old adaptor to base this connection off of
+	 * @param userName the new username
+	 * @param password the new password
+	 * @return a new adaptor channel
+	 */
+	public static EOAdaptorChannel adaptorChannelWithUserAndPassword(EOAdaptor oldAdaptor, String userName, String password) {
+		String adaptorName = oldAdaptor.name();
+		EOAdaptor newAdaptor = EOAdaptor.adaptorWithName(adaptorName);
+		NSMutableDictionary newConnectionDictionary = oldAdaptor.connectionDictionary().mutableClone();
+		if (userName == null) {
+			newConnectionDictionary.removeObjectForKey(JDBCAdaptor.UsernameKey);
+		}
+		else {
+			newConnectionDictionary.setObjectForKey(userName, JDBCAdaptor.UsernameKey);
+		}
+		if (password == null) {
+			newConnectionDictionary.removeObjectForKey(JDBCAdaptor.PasswordKey);
+		}
+		else {
+			newConnectionDictionary.setObjectForKey(password, JDBCAdaptor.PasswordKey);
+		}
+		newAdaptor.setConnectionDictionary(newConnectionDictionary);
+		return newAdaptor.createAdaptorContext().createAdaptorChannel();
+	}
 
 	/**
 	 * Shortcut to java.sql.Statement.executeUpdate(..) that operates on an
@@ -655,9 +696,7 @@ public class ERXJDBCUtilities {
 			sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatementsFromInputStream(sqlScript);
 		}
 		finally {
-			if (sqlScript != null) {
-				sqlScript.close();
-			}
+			sqlScript.close();
 		}
 		return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements);
 	}
