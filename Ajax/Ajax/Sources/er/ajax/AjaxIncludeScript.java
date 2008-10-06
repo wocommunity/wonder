@@ -17,9 +17,11 @@ import com.webobjects.foundation.NSDictionary;
  * include the same library versions that ship in Ajax.framework.
  * 
  * @binding name The name of the javascript file to include ("prototype.js", "effects.js", etc)
+ * @binding framework The framework the javascript file resides in, defaults to "Ajax"
  */
 public class AjaxIncludeScript extends AjaxDynamicElement {
   private WOAssociation _name;
+  private WOAssociation _framework;
   
   public AjaxIncludeScript(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
@@ -27,12 +29,19 @@ public class AjaxIncludeScript extends AjaxDynamicElement {
     if (_name == null) {
       throw new WODynamicElementCreationException("'name' is a required binding for AjaxIncludeScript.");
     }
+    _framework = (WOAssociation)associations.objectForKey("framework");
   }
 
   protected void addRequiredWebResources(WOResponse res, WOContext context) {
     WOComponent component = context.component();
     String name = (String)_name.valueInComponent(component);
-    addScriptResourceInHead(context, res, name);
+    String framework = "Ajax";
+    if(_framework!=null) {
+      String value = (String)_framework.valueInComponent(component);
+      if (value!=null)
+        framework = value;
+	}
+    addScriptResourceInHead(context, res, framework, name);
   }
 
   public WOActionResults handleRequest(WORequest request, WOContext context) {

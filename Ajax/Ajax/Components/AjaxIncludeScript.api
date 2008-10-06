@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo wocomponentcontent = "false" class = "AjaxIncludeScript">
-    <binding name = "name"/>
+	<wo class="AjaxIncludeScript" wocomponentcontent="false">
+    <binding name="name"/>
 
-    <validation message = "&apos;name&apos; is a required binding">
-      <unbound name = "name"/>
+    <validation message="'name' is a required binding">
+      <unbound name="name"/>
     </validation>
-	</wo>
+	<binding name="framework"/>
+    </wo>
 </wodefinitions>

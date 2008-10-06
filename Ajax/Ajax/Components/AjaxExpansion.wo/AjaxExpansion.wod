@@ -19,8 +19,6 @@ Expanded : WOConditional {
 ToggleLinkString : WOString {
   value = string;
 }
-WOComponentContent : WOComponentContent {
-}
 
 LinkID : WOString {
   value = linkID;
@@ -28,4 +26,11 @@ LinkID : WOString {
 
 ExpandedValue : WOString {
   value = expanded;
+}
+
+LabelContent : ERXWOComponentContent {
+  templateName = "label";
+}
+
+Content : ERXWOComponentContent {
 }
