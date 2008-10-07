@@ -398,11 +398,23 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				parsedValue = Double.valueOf(attributeValue);
 			}
 			else if (NSTimestamp.class.isAssignableFrom(valueType)) {
-				if (attributeValue.indexOf(' ') == -1) {
-					parsedValue = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ").parseObject(attributeValue);
+				NSTimestampFormatter formatter = null;
+				try {
+					if (attributeValue.indexOf(' ') == -1) {
+						formatter = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ");
+					}
+					else {
+						formatter = new NSTimestampFormatter();
+					}
+					parsedValue = formatter.parseObject(attributeValue);
 				}
-				else {
-					parsedValue = new NSTimestampFormatter().parseObject(attributeValue);
+				catch (Throwable t) {
+					String msg = "Failed to parse '" + attributeValue + "' as a timestamp";
+					if (formatter != null) {
+						msg += " (example: " + formatter.format(new NSTimestamp()) + ")";
+					}
+					msg += ".";
+					throw new ERXRestException(msg);
 				}
 			}
 			else if (Enum.class.isAssignableFrom(valueType)) {
