@@ -329,7 +329,13 @@ var AjaxUpdateLink = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		var actionUrl = updateElement.getAttribute('updateUrl').sub('[^/]+$', elementID);
+		AjaxUpdateLink._update(id, updateElement.getAttribute('updateUrl'), options, elementID, queryParams);
+	},
+	
+	_update: function(id, actionUrl, options, elementID, queryParams) {
+		if (elementID) {
+			actionUrl = actionUrl.sub('[^/]+$', elementID);
+		}
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
@@ -337,7 +343,9 @@ var AjaxUpdateLink = {
 	},
 	
 	request: function(actionUrl, options, elementID, queryParams) {
-		var actionUrl = actionUrl.sub('[^/]+$', elementID);
+		if (elementID) {
+			actionUrl = actionUrl.sub('[^/]+$', elementID);
+		}
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		new Ajax.Request(actionUrl, AjaxOptions.defaultOptions(options));
 	}
@@ -975,6 +983,18 @@ var AjaxBusy = {
 	  });
 	}
 };
+
+var AjaxModalDialog = {
+	insertion: function(receiver, response) {
+		receiver.update(response);
+		Modalbox.resizeToContent({ transitions: false });
+	},
+	
+	close: function() {
+		Modalbox.hide();
+	}
+};
+var AMD = AjaxModalDialog;
 
 var WonderJSON = {
 	eoStub: function(eo) {

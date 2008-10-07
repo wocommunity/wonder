@@ -1,36 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-    <wo wocomponentcontent="false" class="AjaxModalDialogComponent.java">
-	    <binding name = "action" defaults="Actions" />
-	    <binding name = "label" />
-	    <binding name = "title" />
-	    <binding name = "width" />
-	    <binding name = "height" />
-	    <binding name = "onOpen" defaults="Actions" />
-	    <binding name = "onClose" defaults="Actions" />
-	    <binding name = "id" />
-	    <binding name = "class" />
-	    <binding name = "style" />
-	    <binding name = "overlayClose" defaults = "Boolean" />
-	    <binding name = "method" />
-	    <binding name = "params" />
-	    <binding name = "loadingString" />
-	    <binding name = "closeString" />
-	    <binding name = "closeValue" />
-	    <binding name = "overlayOpacity" />
-	    <binding name = "overlayDuration" />
-	    <binding name = "slideDownDuration" />
-	    <binding name = "slideUpDuration" />
-	    <binding name = "resizeDuration" />
-	    <binding name = "inactiveFade" defaults = "Boolean" />
-	    <binding name = "transitions" defaults = "Boolean" />
-	    <binding name = "autoFocusing" defaults = "Boolean" />
-	    <binding name = "beforeLoad" />
-	    <binding name = "afterLoad" />
-	    <binding name = "beforeHide" />
-	    <binding name = "afterHide" />
-	    <binding name = "afterResize" />
-	    <binding name = "onShow" />
-	    <binding name = "onUpdate" />
+    <wo class="AjaxModalDialogComponent.java" wocomponentcontent="false">
+	    <binding defaults="Actions" name="action"/>
+	    <binding name="label"/>
+	    <binding name="title"/>
+	    <binding name="width"/>
+	    <binding name="height"/>
+	    <binding defaults="Actions" name="onOpen"/>
+	    <binding defaults="Actions" name="onClose"/>
+	    <binding name="id"/>
+	    <binding name="class"/>
+	    <binding name="style"/>
+	    <binding defaults="Boolean" name="overlayClose"/>
+	    <binding name="method"/>
+	    <binding name="params"/>
+	    <binding name="loadingString"/>
+	    <binding name="closeString"/>
+	    <binding name="closeValue"/>
+	    <binding name="overlayOpacity"/>
+	    <binding name="overlayDuration"/>
+	    <binding name="slideDownDuration"/>
+	    <binding name="slideUpDuration"/>
+	    <binding name="resizeDuration"/>
+	    <binding defaults="Boolean" name="inactiveFade"/>
+	    <binding defaults="Boolean" name="transitions"/>
+	    <binding defaults="Boolean" name="autoFocusing"/>
+	    <binding name="beforeLoad"/>
+	    <binding name="afterLoad"/>
+	    <binding name="beforeHide"/>
+	    <binding name="afterHide"/>
+	    <binding name="afterResize"/>
+	    <binding name="onShow"/>
+	    <binding name="onUpdate"/>
+    <binding name="closeUpdateContainerID"/>
     </wo>
 </wodefinitions>
