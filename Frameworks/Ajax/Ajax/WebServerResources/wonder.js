@@ -329,7 +329,7 @@ var AjaxUpdateLink = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		AjaxUpdateLink.updateURL(id, updateElement.getAttribute('updateUrl'), options, elementID, queryParams);
+		AjaxUpdateLink._update(id, updateElement.getAttribute('updateUrl'), options, elementID, queryParams);
 	},
 	
 	_update: function(id, actionUrl, options, elementID, queryParams) {
