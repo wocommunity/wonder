@@ -34,6 +34,7 @@ import er.extensions.appserver.ajax.ERXAjaxSession;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXValueUtilities;
@@ -677,16 +678,17 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   }
   
   /**
-   * Override and return true if you want secure-only session and instance cookies.  This prevents
-   * cookie hijacking man-in-the-middle attacks.  Note that to make this effective (and for sessions to 
-   * work at all), your site must be behind HTTPS at all times.  In development mode, you can disable
-   * secure mode (@see er.extensions.ERXRequest.isSecureDisabled) for running in direct-connect 
-   * with this mode enabled.
+   * Override and return true, or set er.extensions.ERXSession.useSecureSessionCookies if you want 
+   * secure-only session and instance cookies.  This prevents cookie hijacking man-in-the-middle 
+   * attacks.  Note that to make this effective (and for sessions to work at all), your site must 
+   * be behind HTTPS at all times.  In development mode, you can disable secure mode 
+   * (@see er.extensions.ERXRequest.isSecureDisabled) for running in direct-connect with this 
+   * mode enabled.
    *  
    * @return whether or not secure cookies are enabled
    */
   public boolean useSecureSessionCookies() {
-	  return false;
+	  return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXSession.useSecureSessionCookies", false);
   }
 
   protected void _convertSessionCookiesToSecure(WOResponse response) {
