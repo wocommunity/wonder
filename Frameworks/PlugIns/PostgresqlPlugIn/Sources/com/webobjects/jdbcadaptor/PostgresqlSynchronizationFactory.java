@@ -431,7 +431,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
           usingClause = " USING " + usingExpression;
         }
       }
-      NSArray statements = new NSArray(_expressionForString("alter column " + formatTableName(tableName) + "." + formatColumnName(columnName) + " type " + columnTypeString + usingClause));
+      NSArray statements = new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " type " + columnTypeString + usingClause));
       return statements;
     }
 
