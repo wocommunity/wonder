@@ -7,8 +7,8 @@ package com.webobjects.jdbcadaptor;
  *  
  * @author mschrag
  */
-public class FrontbasePlugInIgnoreThis extends _FrontbasePlugInIgnoreThis {
-	public FrontbasePlugInIgnoreThis(JDBCAdaptor jdbcadaptor) {
+public class FrontBasePlugIn extends _FrontBasePlugIn {
+	public FrontBasePlugIn(JDBCAdaptor jdbcadaptor) {
 		super(jdbcadaptor);
 	}
 }
