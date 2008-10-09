@@ -47,7 +47,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * @author Cail Borrell
  */
 
-public class _FrontbasePlugInIgnoreThis extends JDBCPlugIn {
+public class _FrontBasePlugIn extends JDBCPlugIn {
 	private static final String QUERY_STRING_USE_BUNDLED_JDBC_INFO = "useBundledJdbcInfo";
 
 	static final boolean USE_NAMED_CONSTRAINTS = true;
@@ -61,7 +61,7 @@ public class _FrontbasePlugInIgnoreThis extends JDBCPlugIn {
 	static final String _frontbaseStoredProcedureSchemaPattern = System.getProperty("jdbcadaptor.frontbase.storedProcedureSchemaPattern", null);
 	static final String _frontbaseSqlStatementForGettingTableNames = System.getProperty("jdbcadaptor.frontbase.sqlStatementForGettingTableNames", null);
 
-	public _FrontbasePlugInIgnoreThis(JDBCAdaptor jdbcadaptor) {
+	public _FrontBasePlugIn(JDBCAdaptor jdbcadaptor) {
 		super(jdbcadaptor);
 	}
 
@@ -74,7 +74,7 @@ public class _FrontbasePlugInIgnoreThis extends JDBCPlugIn {
 	}
 
 	public EOSynchronizationFactory createSynchronizationFactory() {
-		return new _FrontbasePlugInIgnoreThis.FrontbaseSynchronizationFactory(_adaptor);
+		return new _FrontBasePlugIn.FrontbaseSynchronizationFactory(_adaptor);
 	}
 
 	public String defaultDriverName() {
@@ -109,7 +109,7 @@ public class _FrontbasePlugInIgnoreThis extends JDBCPlugIn {
 		boolean shouldUseBundledJdbcInfo = false;
 		String url = connectionURL();
 		if (url != null) {
-			shouldUseBundledJdbcInfo = url.toLowerCase().matches(".*/" + _FrontbasePlugInIgnoreThis.QUERY_STRING_USE_BUNDLED_JDBC_INFO.toLowerCase() + "=(true|yes)(\\/|$)");
+			shouldUseBundledJdbcInfo = url.toLowerCase().matches(".*/" + _FrontBasePlugIn.QUERY_STRING_USE_BUNDLED_JDBC_INFO.toLowerCase() + "=(true|yes)(\\/|$)");
 		}
 		return shouldUseBundledJdbcInfo;
 	}
@@ -879,7 +879,7 @@ public class _FrontbasePlugInIgnoreThis extends JDBCPlugIn {
 			NSArray statements;
 			if (allowsNull) {
 				if (USE_NAMED_CONSTRAINTS) {
-					statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop constraint " + quoteTableName(_FrontbasePlugInIgnoreThis.notNullConstraintName(tableName, columnName)) + " cascade"));
+					statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop constraint " + quoteTableName(_FrontBasePlugIn.notNullConstraintName(tableName, columnName)) + " cascade"));
 				}
 				else {
 					statements = null;
@@ -887,7 +887,7 @@ public class _FrontbasePlugInIgnoreThis extends JDBCPlugIn {
 			}
 			else {
 				if (USE_NAMED_CONSTRAINTS) {
-					statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " add constraint " + quoteTableName(_FrontbasePlugInIgnoreThis.notNullConstraintName(tableName, columnName)) + " check (" + quoteTableName(columnName) + " is not null)"));
+					statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " add constraint " + quoteTableName(_FrontBasePlugIn.notNullConstraintName(tableName, columnName)) + " check (" + quoteTableName(columnName) + " is not null)"));
 				}
 				else {
 					statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " add check (" + quoteTableName(columnName) + " is not null)"));
