@@ -1,7 +1,4 @@
-package com.frontbase;
-
-import com.webobjects.jdbcadaptor._FrontbasePlugInIgnoreThis;
-import com.webobjects.jdbcadaptor.JDBCPlugIn;
+package com.webobjects.jdbcadaptor;
 
 /**
  * 5.4 declares the same class name for the FrontBasePlugIn.  If your classpath isn't exactly right, they'll win,
@@ -10,8 +7,8 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
  *  
  * @author mschrag
  */
-public class FrontBasePlugInPrincipal {
-	static {
-		JDBCPlugIn.setPlugInNameForSubprotocol(_FrontbasePlugInIgnoreThis.class.getName(), "frontbase");
+public class FrontbasePlugInIgnoreThis extends _FrontbasePlugInIgnoreThis {
+	public FrontbasePlugInIgnoreThis(JDBCAdaptor jdbcadaptor) {
+		super(jdbcadaptor);
 	}
 }
