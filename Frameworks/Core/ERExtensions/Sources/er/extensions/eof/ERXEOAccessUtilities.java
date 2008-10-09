@@ -1612,6 +1612,9 @@ public class ERXEOAccessUtilities {
 	            } else {
 	                pluginName = ERXStringUtilities.lastPropertyKeyInKeyPath(pluginName);
 	                pluginName = pluginName.replaceFirst("PlugIn", "");
+	                if (pluginName.startsWith("_")) {
+	                	pluginName = pluginName.substring(1);
+	                }
 	            }
 	        }
 	    }
