@@ -1,6 +1,6 @@
 package com.frontbase;
 
-import com.webobjects.jdbcadaptor._FrontbasePlugInIgnoreThis;
+import com.webobjects.jdbcadaptor._FrontBasePlugIn;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 /**
@@ -12,6 +12,6 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
  */
 public class FrontBasePlugInPrincipal {
 	static {
-		JDBCPlugIn.setPlugInNameForSubprotocol(_FrontbasePlugInIgnoreThis.class.getName(), "frontbase");
+		JDBCPlugIn.setPlugInNameForSubprotocol(_FrontBasePlugIn.class.getName(), "frontbase");
 	}
 }
