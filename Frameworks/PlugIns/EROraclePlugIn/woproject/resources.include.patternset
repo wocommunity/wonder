@@ -1,6 +1,3 @@
-Properties
-**/*.eomodeld/
-**/*.d2wmodel
-**/*.wo/
-**/*.api
-**/*.strings
+Components/**/*.wo/**/*
+Components/**/*.api
+Resources/**/*
