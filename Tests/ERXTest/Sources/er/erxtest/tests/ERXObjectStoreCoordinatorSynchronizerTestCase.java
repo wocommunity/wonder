@@ -5,6 +5,7 @@ import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import junit.textui.TestRunner;
 
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -282,10 +283,45 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
       secondEmployee_osc2 = employee1_osc2;
     }
 
+    NSArray<Employee> holdingOnToEmployees = company_osc2.employees();
+    assertEquals(2, holdingOnToEmployees.count());
+    for (Employee employee : holdingOnToEmployees) {
+      assertNotNull(employee);
+      assertNotNull(employee.name());
+    }
+
+    NSArray<Employee> holdingOnToUntouchedEmployees = company_osc2.employees();
+    assertEquals(2, holdingOnToUntouchedEmployees.count());
+    
     // Delete Employee1 in OSC1 and Save
     editingContext_osc1.deleteObject(employee1_osc1);
     editingContext_osc1.saveChanges();
     sleep();
+
+    // Test that the deleted object is technically still in our EC
+    assertEquals(2, holdingOnToEmployees.count());
+    for (Employee employee : holdingOnToEmployees) {
+      assertNotNull(employee);
+      assertNotNull(employee.name());
+    }
+
+    // Test that the deleted object is technically still in our EC
+    assertEquals(2, holdingOnToUntouchedEmployees.count());
+    for (Employee employee : holdingOnToUntouchedEmployees) {
+      assertNotNull(employee);
+      assertNotNull(employee.name());
+    }
+
+//    for (Employee employee : holdingOnToEmployees) {
+//      employee.setName(employee.name() + " Modified");
+//    }
+//    try {
+//      editingContext_osc2.saveChanges();
+//      throw new AssertionFailedError("This should have failed.");
+//    }
+//    catch (EOGeneralAdaptorException e) {
+//      // expected
+//    }
 
     // Fetch and check employees for Company1 in OSC1
     assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee2_osc1 }), company_osc1.employees());
