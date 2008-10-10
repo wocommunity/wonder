@@ -270,7 +270,8 @@ public class AjaxModalDialog extends AjaxComponent {
 	public void appendToResponse(WOResponse response, WOContext context) {
 
 		// If this is not an Ajax request, the page has been reloaded.  Try to recover state
-		if (!context().request().requestHandlerKey().equals(AjaxRequestHandler.AjaxRequestHandlerKey)) {
+		String requestHandlerKey = context().request().requestHandlerKey();
+		if (requestHandlerKey == null || !requestHandlerKey.equals(AjaxRequestHandler.AjaxRequestHandlerKey)) {
 			closeDialog();
 		}
 
