@@ -116,7 +116,18 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public EOModelGroup defaultModelGroup() {
         if(defaultModelGroup == null) {
-            defaultModelGroup = new ERXModelGroup();
+        	String defaultModelGroupClassName = ERXProperties.stringForKey("er.extensions.defaultModelGroupClassName");
+        	if (defaultModelGroupClassName == null) {
+	            defaultModelGroup = new ERXModelGroup();
+        	}
+        	else {
+        		try {
+					defaultModelGroup = Class.forName(defaultModelGroupClassName).asSubclass(ERXModelGroup.class).newInstance();
+				}
+				catch (Exception e) {
+					throw new RuntimeException("Failed to create custom ERXModelGroup subclass '" + defaultModelGroupClassName + "'.", e);
+				}
+        	}
             defaultModelGroup.loadModelsFromLoadedBundles();
         }
         return defaultModelGroup;
