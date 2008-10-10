@@ -1,21 +1,15 @@
 // $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Post.java instead.
 package se.caboo.beast.model;
 
-import java.util.NoSuchElementException;
-
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.math.*;
+import java.util.*;
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOSortOrdering;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSTimestamp;
-
-import er.extensions.eof.ERXGenericRecord;
-import er.extensions.eof.ERXKey;
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Post extends  ERXGenericRecord {
@@ -105,7 +99,7 @@ public abstract class _Post extends  ERXGenericRecord {
     if (_Post.LOG.isDebugEnabled()) {
       _Post.LOG.debug("updating forum from " + forum() + " to " + value);
     }
-    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setForum(value);
     }
     else if (value == null) {
@@ -130,7 +124,7 @@ public abstract class _Post extends  ERXGenericRecord {
     if (_Post.LOG.isDebugEnabled()) {
       _Post.LOG.debug("updating topic from " + topic() + " to " + value);
     }
-    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setTopic(value);
     }
     else if (value == null) {
@@ -155,7 +149,7 @@ public abstract class _Post extends  ERXGenericRecord {
     if (_Post.LOG.isDebugEnabled()) {
       _Post.LOG.debug("updating user from " + user() + " to " + value);
     }
-    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setUser(value);
     }
     else if (value == null) {
