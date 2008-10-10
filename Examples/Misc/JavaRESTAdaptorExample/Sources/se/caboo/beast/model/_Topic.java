@@ -1,24 +1,15 @@
 // $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Topic.java instead.
 package se.caboo.beast.model;
 
-import java.util.Enumeration;
-import java.util.NoSuchElementException;
-
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.math.*;
+import java.util.*;
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOClassDescription;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOSortOrdering;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSTimestamp;
-
-import er.extensions.eof.ERXGenericRecord;
-import er.extensions.eof.ERXKey;
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Topic extends  ERXGenericRecord {
@@ -30,7 +21,7 @@ public abstract class _Topic extends  ERXGenericRecord {
 	public static final String HITS_KEY = "hits";
 	public static final ERXKey<Integer> HITS = new ERXKey<Integer>(HITS_KEY);
 	public static final String LOCKED_KEY = "locked";
-	public static final ERXKey<java.lang.Boolean> LOCKED = new ERXKey<java.lang.Boolean>(LOCKED_KEY);
+	public static final ERXKey<Boolean> LOCKED = new ERXKey<Boolean>(LOCKED_KEY);
 	public static final String POSTS_COUNT_KEY = "postsCount";
 	public static final ERXKey<Integer> POSTS_COUNT = new ERXKey<Integer>(POSTS_COUNT_KEY);
 	public static final String REPLIED_AT_KEY = "repliedAt";
@@ -84,11 +75,11 @@ public abstract class _Topic extends  ERXGenericRecord {
     takeStoredValueForKey(value, "hits");
   }
 
-  public java.lang.Boolean locked() {
-    return (java.lang.Boolean) storedValueForKey("locked");
+  public Boolean locked() {
+    return (Boolean) storedValueForKey("locked");
   }
 
-  public void setLocked(java.lang.Boolean value) {
+  public void setLocked(Boolean value) {
     if (_Topic.LOG.isDebugEnabled()) {
     	_Topic.LOG.debug( "updating locked from " + locked() + " to " + value);
     }
@@ -162,7 +153,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("updating forum from " + forum() + " to " + value);
     }
-    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setForum(value);
     }
     else if (value == null) {
@@ -187,7 +178,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("updating repliedBy from " + repliedBy() + " to " + value);
     }
-    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setRepliedBy(value);
     }
     else if (value == null) {
@@ -212,7 +203,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("updating user from " + user() + " to " + value);
     }
-    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	setUser(value);
     }
     else if (value == null) {
@@ -257,7 +248,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("adding " + object + " to posts relationship");
     }
-    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	addToPosts(object);
     }
     else {
@@ -269,7 +260,7 @@ public abstract class _Topic extends  ERXGenericRecord {
     if (_Topic.LOG.isDebugEnabled()) {
       _Topic.LOG.debug("removing " + object + " from posts relationship");
     }
-    if (ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
     	removeFromPosts(object);
     }
     else {
@@ -300,7 +291,7 @@ public abstract class _Topic extends  ERXGenericRecord {
 
   public static Topic createTopic(EOEditingContext editingContext, NSTimestamp createdAt
 , Integer hits
-, java.lang.Boolean locked
+, Boolean locked
 , Integer postsCount
 , NSTimestamp repliedAt
 , Integer sticky
