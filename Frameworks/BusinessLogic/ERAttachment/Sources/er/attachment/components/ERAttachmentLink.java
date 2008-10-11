@@ -1,5 +1,7 @@
 package er.attachment.components;
 
+import java.net.MalformedURLException;
+
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -13,6 +15,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.components.ERXComponentUtilities;
+import er.extensions.foundation.ERXMutableURL;
 
 /**
  * ERAttachmentLink is like a WOHyperlink that points to an attachment's contents.
@@ -23,16 +26,19 @@ import er.extensions.components.ERXComponentUtilities;
  * @binding class (optional) the css class
  * @binding id (optional) the html element id
  * @binding style (optional) the css inline style
+ * @binding download if true, the attachment will be downloaded instead of inlined
  */
 public class ERAttachmentLink extends WODynamicGroup {
   private WOAssociation _attachment;
   private WOAssociation _configurationName;
   private NSMutableDictionary<String, WOAssociation> _associations;
+  private WOAssociation _download;
 
   public ERAttachmentLink(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
     super(name, associations, template);
     _associations = associations.mutableClone();
     _attachment = _associations.removeObjectForKey("attachment");
+    _download = _associations.removeObjectForKey("download");
     if (_attachment == null) {
       throw new WODynamicElementCreationException("<ERAttachmentLink> The 'attachment' binding is required.");
     }
@@ -55,6 +61,16 @@ public class ERAttachmentLink extends WODynamicGroup {
       }
       else {
         response.appendContentString("<a href = \"");
+        if (_download != null && _download.booleanValueInComponent(component)) {
+          try {
+            ERXMutableURL attachmentMutableUrl = new ERXMutableURL(attachmentUrl);
+            attachmentMutableUrl.addQueryParameter("attachment", "true");
+            attachmentUrl = attachmentMutableUrl.toExternalForm();
+          }
+          catch (MalformedURLException e) {
+            throw new RuntimeException("Failed to create attachment URL.", e);
+          }
+        }
         response.appendContentString(attachmentUrl);
         response.appendContentString("\"");
         ERXComponentUtilities.appendHtmlAttributes(_associations, response, component);
