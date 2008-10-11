@@ -20,6 +20,11 @@ import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Generic link component used to view a list.<br />
+ * <br />
+ * 
+ * Uses the key "displayNameForLinkToViewList" now to provide a different name
+ * instead of the entity name if set in the rules
+ * 
  * @binding list the list to show
  * @binding object object to get list from
  * @binding key keypath to get list from object
