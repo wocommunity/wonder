@@ -62,7 +62,7 @@ public class ERDLinkToViewList extends ERDCustomEditComponent {
 
     public String linkName() {
     	String displayName = (String) d2wContext().valueForKey("displayNameForLinkToViewList");
-    	if ( displayName == null) {
+    	if (displayName == null) {
 	    	displayName = (String) valueForBinding("entityName");
 	    	if(displayName == null && !listIsEmpty() && list().lastObject() instanceof EOEnterpriseObject) {
 	    		displayName = ((EOEnterpriseObject)list().lastObject()).entityName();
