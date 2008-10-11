@@ -14,5 +14,5 @@ ViewLink: WOHyperlink {
 
 Description: ERXPluralString {
 	count = list.count;
-	value = entityName;
+	value = linkName;
 }
