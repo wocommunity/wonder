@@ -60,14 +60,17 @@ public class ERDLinkToViewList extends ERDCustomEditComponent {
         return (WOComponent)ipi;
     }
 
-    public String entityName() {
-    	String result = (String) valueForBinding("entityName");
-    	if(result == null && !listIsEmpty() && list().lastObject() instanceof EOEnterpriseObject) {
-    		result = ((EOEnterpriseObject)list().lastObject()).entityName();
-    	} else {
-    		result = "";
+    public String linkName() {
+    	String displayName = (String) d2wContext().valueForKey("displayNameForLinkToViewList");
+    	if ( displayName == null) {
+	    	displayName = (String) valueForBinding("entityName");
+	    	if(displayName == null && !listIsEmpty() && list().lastObject() instanceof EOEnterpriseObject) {
+	    		displayName = ((EOEnterpriseObject)list().lastObject()).entityName();
+	    	} else {
+	    		displayName = "";
+	    	}
     	}
-    	return result;
+    	return displayName;
     }
     
     public boolean listIsEmpty() {
