@@ -62,7 +62,11 @@ public abstract class ERXAjaxApplication extends WOApplication {
 					response = context.response();
 				}
 
-				ERXAjaxApplication.cleanUpHeaders(response);
+				// MS: We were removing headers, and I really don't know WHY.  It was causing AUC's
+				// inside of AjaxModalDialogs to break ... ERXAjaxSession is already cleaning up 
+				// headers at the end, so this seems very odd to me.  If you remove headers here,
+				// it causes ERXAjaxSession to not treat the response like an Ajax response.
+				//ERXAjaxApplication.cleanUpHeaders(response);
 				results = response;
 			}
 		}
