@@ -22,6 +22,7 @@ import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOObjectNotAvailableException;
 import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFaultHandler;
@@ -259,12 +260,19 @@ public class ERXDatabaseContextDelegate {
             EOEntity entity = ERXEOAccessUtilities.entityNamed(null, kgid.entityName());
             NSArray pks = entity.primaryKeyAttributes();
             NSArray values = kgid.keyValuesArray();
-            EOSQLExpression expression = context.database().adaptor().expressionFactory().expressionForEntity(entity);
+            EOSQLExpressionFactory expressionFactory = context.database().adaptor().expressionFactory();
+            EOSQLExpression expression = null;
+            if (expressionFactory != null) {
+            	expression = expressionFactory.expressionForEntity(entity);
+            }
             for(int i = 0; i < pks.count(); i++) {
                 Object value = values.objectAtIndex(i);
                 EOAttribute attribute = (EOAttribute) pks.objectAtIndex(i);
                 // ak: only Postgres seems to return reasonable values here...
-                String stringValue = expression.formatValueForAttribute(value, attribute);
+                String stringValue = "" + value;
+                if (expression != null) {
+                	stringValue = expression.formatValueForAttribute(value, attribute);
+                }
                 if("NULL".equals(stringValue)) {
                     stringValue = "" + value;
                 }
