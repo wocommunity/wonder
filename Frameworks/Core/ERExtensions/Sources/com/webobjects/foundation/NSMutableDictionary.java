@@ -20,11 +20,9 @@ import java.util.Map;
  * @param &lt;V&gt;
  *            type of value contents
  */
-
-//TODO iterator.remove() throws unimplemented
-
 @SuppressWarnings("unchecked")
 public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
+	//TODO iterator.remove() throws unimplemented
 
 	public NSMutableDictionary() {
 	}
@@ -34,10 +32,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		if (capacity < 0) {
 			throw new IllegalArgumentException(getClass().getName() + ": Capacity cannot be less than 0");
 		}
-		else {
-			_ensureCapacity(capacity);
-			return;
-		}
+		_ensureCapacity(capacity);
 	}
 
 	public NSMutableDictionary(V object, K key) {
