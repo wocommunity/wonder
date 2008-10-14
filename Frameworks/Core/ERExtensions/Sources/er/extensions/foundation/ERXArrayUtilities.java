@@ -939,7 +939,7 @@ public class ERXArrayUtilities extends Object {
      * @param selector sort order selector to use, if null, then sort will be case insensitive ascending.
      * @return sorted array.
      */
-    public static NSArray sortedArraySortedWithKeys(NSArray array, NSArray keys, NSSelector selector) {
+    public static <U> NSArray<U> sortedArraySortedWithKeys(NSArray array, NSArray keys, NSSelector selector) {
         ERXAssert.PRE.notNull("Attempting to sort null array of objects.", array);
         ERXAssert.PRE.notNull("Attepting to sort an array with null keys.", keys);
         if (keys.count() < 2)
