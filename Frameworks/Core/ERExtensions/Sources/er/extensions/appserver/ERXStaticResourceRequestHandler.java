@@ -130,9 +130,8 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 					WODynamicURL dynamicURL = new WODynamicURL(uri);
 					sb.append(dynamicURL.requestHandlerPath());
 				}
-				catch (WOURLFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				catch (Exception e) {
+					throw new RuntimeException("Failed to parse URL '" + uri + "'.", e);
 				}
 			}
 			else {
