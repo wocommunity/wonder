@@ -2,6 +2,7 @@ package er.attachment.migrations;
 
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.migration.ERXMigrationDatabase;
 import er.extensions.migration.ERXMigrationTable;
 
@@ -28,7 +29,7 @@ public class ERAttachment0 extends ERXMigrationDatabase.Migration {
     attachmentTable.newStringColumn("originalFileName", 255, false);
     attachmentTable.newIntegerColumn("parentID", true);
     attachmentTable.newStringColumn("proxied", 5, false);
-    attachmentTable.newIntegerColumn("size", false);
+    attachmentTable.newIntegerColumn(ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.ERAttachment.size", "size"), false);
     attachmentTable.newStringColumn("storageType", 10, true);
     attachmentTable.newBlobColumn("smallData", true);
     attachmentTable.newStringColumn("thumbnail", 10, true);
