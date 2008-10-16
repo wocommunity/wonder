@@ -90,5 +90,5 @@ PreviousLabel : ERXLocalizedString {
 }
 
 OfLabel : ERXLocalizedString {
-	value = "ERXFlickrBatchNavigation.of";
+	value = "ERXBatchNavigationBar.of";
 }
