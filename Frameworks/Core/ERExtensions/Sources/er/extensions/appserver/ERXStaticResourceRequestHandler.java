@@ -14,7 +14,6 @@ import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODeployedBundle;
 import com.webobjects.appserver._private.WODynamicURL;
-import com.webobjects.appserver._private.WOURLFormatException;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
