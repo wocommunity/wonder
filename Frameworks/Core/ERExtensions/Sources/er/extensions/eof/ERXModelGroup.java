@@ -1115,6 +1115,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * Modifies various settings of the entities and attributes in this model group based on System properties.
 	 * 
 	 * @property er.extensions.ERXModelGroup.[entityName].externalName change the table name for the given entityName
+	 * @property er.extensions.ERXModelGroup.[entityName].[attributeName].columnName change the column name for the given attribute
 	 */
 	protected void modifyModelsFromProperties() {
 		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
@@ -1125,6 +1126,15 @@ public class ERXModelGroup extends EOModelGroup {
 				String externalName = ERXProperties.stringForKey("er.extensions.ERXModelGroup." + entity.name() + ".externalName");
 				if (externalName != null) {
 					entity.setExternalName(externalName);
+				}
+				
+				for (Enumeration attributesEnum = entity.attributes().objectEnumerator(); attributesEnum.hasMoreElements();) {
+					EOAttribute attribute = (EOAttribute) attributesEnum.nextElement();
+					
+					String attributeColumnName = ERXProperties.stringForKey("er.extensions.ERXModelGroup." + entity.name() + "." + attribute.name() + ".columnName");
+					if (attributeColumnName != null) {
+						attribute.setColumnName(attributeColumnName);
+					}
 				}
 			}
 		}		
