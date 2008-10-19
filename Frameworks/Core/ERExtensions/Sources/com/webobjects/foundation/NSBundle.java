@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Locale;
@@ -199,7 +200,7 @@ public class NSBundle {
   private static final String __exctractStringFromURL(URL anURL) {
     String url2Path = null;
     try {
-      String urlPath = anURL.getPath();
+      String urlPath = URLDecoder.decode(anURL.getPath(), "UTF-8");
       if (urlPath.endsWith(NSBundle.jarEndsWithString)) {
         url2Path = urlPath.substring(0, urlPath.length() - NSBundle.JarResourcesInfoPlist.length());
         URL url2 = new URL(url2Path);
