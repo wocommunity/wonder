@@ -1194,6 +1194,12 @@ public class ERXSQLHelper {
 	public NSArray<String> splitSQLStatements(String sql) {
 		NSMutableArray<String> statements = new NSMutableArray<String>();
 		if (sql != null) {
+			char commandSeparatorChar = ';';
+			String commandSeparatorString = commandSeparatorString();
+			if (commandSeparatorString.length() > 0) {
+				commandSeparatorChar = commandSeparatorString.charAt(0);
+			}
+			
 			StringBuffer statementBuffer = new StringBuffer();
 			int length = sql.length();
 			boolean inQuotes = false;
@@ -1202,8 +1208,7 @@ public class ERXSQLHelper {
 				if (ch == '\r' || ch == '\n') {
 					// ignore
 				}
-				// MS: Should this use commandSeparatorString?
-				else if (!inQuotes && ch == ';') {
+				else if (!inQuotes && ch == commandSeparatorChar) {
 					String statement = statementBuffer.toString().trim();
 					if (statement.length() > 0) {
 						statements.addObject(statement);
