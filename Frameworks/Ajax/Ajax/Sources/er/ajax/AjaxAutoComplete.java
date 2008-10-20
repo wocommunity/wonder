@@ -71,6 +71,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding choices Look at the scriptaculous documentation (Local only)
  * @binding partialChars Look at the scriptaculous documentation (Local only)
  * @binding ignoreCase Look at the scriptaculous documentation (Local only)
+ * @binding accesskey hot key that should activate the text field (optional)
+ * @binding tabindex tab index of the text field (optional)
  * 
  * @author ak
  */

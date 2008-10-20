@@ -5,6 +5,7 @@ ToggleLink : AjaxUpdateLink {
   action = toggle;
   updateContainerID = id;
   class = linkClass;
+  accesskey = ^accesskey;
 }
 
 AjaxUpdateContainer : AjaxUpdateContainer {
