@@ -93,7 +93,7 @@
             width = 255; 
         }, 
         {
-            columnName = ""; 
+            columnName = id; 
             externalType = int; 
             internalInfo = {"_nameInObjectStore" = id; }; 
             name = id; 
@@ -126,15 +126,15 @@
             width = 39; 
         }, 
         {
-            adaptorValueConversionMethodName = name;
-            columnName = "";
-            externalType = VARCHAR;
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
-            name = javaEnum;
-            valueClassName = "java.lang.Enum";
-            valueFactoryMethodName = valueOf;
-            width = 50;
-        },
+            adaptorValueConversionMethodName = name; 
+            columnName = ""; 
+            externalType = VARCHAR; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = javaEnum; 
+            valueClassName = "java.lang.Enum"; 
+            valueFactoryMethodName = valueOf; 
+            width = 50; 
+        }, 
         {
             columnName = ""; 
             externalType = long; 
@@ -287,7 +287,6 @@
         doubleNumber, 
         flag, 
         globalID, 
-        id, 
         intBoolean, 
         intNumber, 
         ipAddress, 
