@@ -50,6 +50,9 @@ AjaxSelectionList.prototype = {
 		if (firstItem != null) {
 			items = firstItem.up().immediateDescendants();
 		}
+		else {
+			items = this.list.immediateDescendants();
+		}
 		items.each(function(item, index) {
 			Event.observe(item, "mousedown", this.itemClicked.bindAsEventListener(this));
 		}.bind(this));
