@@ -1521,6 +1521,11 @@ public class ERXSQLHelper {
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return "REGEXP_LIKE(" + key + ", " + value + ")";
 		}
+
+		@Override
+		public String migrationTableName() {
+			return "dbupdater";
+		}
 	}
 
 	public static class OpenBaseSQLHelper extends ERXSQLHelper {
