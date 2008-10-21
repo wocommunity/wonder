@@ -22,13 +22,34 @@ import com.webobjects.jdbcadaptor.OraclePlugIn.OracleExpression;
  *
  */
 public class EROracleExpression extends OracleExpression {
+  public static interface Delegate {
+    /**
+     * Returns the constraint name for the given relationship.
+     * 
+     * @param relationship the relationship
+     * @param sourceColumns the source columns
+     * @param destinationColumns the destination columns
+     * @return the constraint name (or null for default)
+     */
+    public String constraintStatementForRelationship(EORelationship relationship, NSArray sourceColumns, NSArray destinationColumns);
+  }
+  
     private static final NSTimestampFormatter _TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
+    private static EROracleExpression.Delegate _delegate;
 
+    /**
+     * Sets the delegate for this expression.
+     * 
+     * @param delegate the delegate for this expression
+     */
+    public static void setDelegate(EROracleExpression.Delegate delegate) {
+      EROracleExpression._delegate = delegate;
+    }
     
     public EROracleExpression(EOEntity eoentity) {
         super(eoentity);
     }
-
+    
     /** Overridden in order to add milliseconds to the value. This
      * applies only if obj is an instance of NSTimestamp and if 
      * valueType from the eoattribute is T
@@ -108,8 +129,11 @@ public class EROracleExpression extends OracleExpression {
         tableName = tableName.substring(lastDot + 1);
       }
       String constraintName = null;
-      if (entity != null) {
-        constraintName = System.getProperty("er.extensions.ERXModelGroup." + entity.name() + "_" + relationship.name() + ".foreignKey");
+      if (EROracleExpression._delegate != null) {
+        constraintName = EROracleExpression._delegate.constraintStatementForRelationship(relationship, sourceColumns, destinationColumns);
+      }
+      if (constraintName == null && entity != null) {
+        constraintName = System.getProperty("er.extensions.ERXModelGroup." + entity.name() + "." + relationship.name() + ".foreignKey");
       }
       if (constraintName == null) {
         constraintName = _NSStringUtilities.concat(tableName, "_", relationship.name(), "_FK");
@@ -124,7 +148,6 @@ public class EROracleExpression extends OracleExpression {
       }
       else {
         setStatement("ALTER TABLE " + entity.externalName() + " ADD CONSTRAINT " + constraintName + " FOREIGN KEY (" + sourceKeyList + ") REFERENCES " + relationship.destinationEntity().externalName() + " (" + destinationKeyList + ")");
-        return;
       }
     }
 }
