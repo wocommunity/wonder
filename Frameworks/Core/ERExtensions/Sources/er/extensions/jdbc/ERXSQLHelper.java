@@ -1194,12 +1194,8 @@ public class ERXSQLHelper {
 	public NSArray<String> splitSQLStatements(String sql) {
 		NSMutableArray<String> statements = new NSMutableArray<String>();
 		if (sql != null) {
-			char commandSeparatorChar = ';';
-			String commandSeparatorString = commandSeparatorString();
-			if (commandSeparatorString.length() > 0) {
-				commandSeparatorChar = commandSeparatorString.charAt(0);
-			}
-			
+			char commandSeparatorChar = commandSeparatorChar();
+
 			StringBuffer statementBuffer = new StringBuffer();
 			int length = sql.length();
 			boolean inQuotes = false;
@@ -1268,6 +1264,17 @@ public class ERXSQLHelper {
 		}
 	}
 
+	/**
+	 * This is totally cheating ... But I just need the separator character for now.  We
+	 * can rewrite the script parser later.  Actually, somewhere on earth there is already
+	 * a sql parser or two.  Probably worth getting that one.
+	 * 
+	 * @return the separator character used by this database
+	 */
+	protected char commandSeparatorChar() {
+		return ';';
+	}
+	
 	protected String commandSeparatorString() {
 		String lineSeparator = System.getProperty("line.separator");
 		return ";" + lineSeparator;
@@ -1504,6 +1511,11 @@ public class ERXSQLHelper {
 		}
 
 		@Override
+		protected char commandSeparatorChar() {
+			return '/';
+		}
+
+		@Override
 		protected String commandSeparatorString() {
 			String lineSeparator = System.getProperty("line.separator");
 			String commandSeparator = lineSeparator + "/" + lineSeparator;
@@ -1519,7 +1531,15 @@ public class ERXSQLHelper {
 			oracleExternalTypesToIgnore.addObject("BLOB");
 			oracleExternalTypesToIgnore.addObject("CLOB");
 			return super.createIndexSQLForEntities(entities, oracleExternalTypesToIgnore);
-
+		}
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
