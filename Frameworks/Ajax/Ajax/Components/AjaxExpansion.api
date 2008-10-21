@@ -16,5 +16,6 @@
         </validation>
     
         <binding name="accesskey"/>
+    <binding name="elementName"/>
     </wo>
 </wodefinitions>
