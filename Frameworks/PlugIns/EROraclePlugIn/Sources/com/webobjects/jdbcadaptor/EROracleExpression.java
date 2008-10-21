@@ -1,9 +1,17 @@
 package com.webobjects.jdbcadaptor;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
-import java.sql.*;
-import com.webobjects.jdbcadaptor.OraclePlugIn.*;
+import java.sql.Timestamp;
+
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
+import com.webobjects.foundation._NSStringUtilities;
+import com.webobjects.jdbcadaptor.OraclePlugIn.OracleExpression;
 
 /** overrides OracleExpression in order to add
  * TIMESTAMP values including milliseconds. The
@@ -80,7 +88,7 @@ public class EROracleExpression extends OracleExpression {
      * @return true to indicate that the Oracle jdbc driver should use
      * bind variables
      */
-    public boolean shouldUseBindVariableForAttribute(EOAttribute arg0) {
+    public boolean shouldUseBindVariableForAttribute(EOAttribute attribute) {
         return true;
     }
 
@@ -88,7 +96,35 @@ public class EROracleExpression extends OracleExpression {
      * @return true to indicate that the Oracle jdbc driver should use
      * bind variables
      */
-    public boolean mustUseBindVariableForAttribute(EOAttribute arg0) {
+    public boolean mustUseBindVariableForAttribute(EOAttribute attribute) {
         return true;
+    }
+    
+    public void prepareConstraintStatementForRelationship(EORelationship relationship, NSArray sourceColumns, NSArray destinationColumns) {
+      EOEntity entity = relationship.entity();
+      String tableName = entity.externalName();
+      int lastDot = tableName.lastIndexOf('.');
+      if (lastDot >= 0) {
+        tableName = tableName.substring(lastDot + 1);
+      }
+      String constraintName = null;
+      if (entity != null) {
+        constraintName = System.getProperty("er.extensions.ERXModelGroup." + entity.name() + "_" + relationship.name() + ".foreignKey");
+      }
+      if (constraintName == null) {
+        constraintName = _NSStringUtilities.concat(tableName, "_", relationship.name(), "_FK");
+      }
+      String sourceKeyList = sourceColumns.componentsJoinedByString(", ");
+      String destinationKeyList = destinationColumns.componentsJoinedByString(", ");
+
+      EOModel sourceModel = entity.model();
+      EOModel destModel = relationship.destinationEntity().model();
+      if (sourceModel != destModel && !sourceModel.connectionDictionary().equals(destModel.connectionDictionary())) {
+        throw new IllegalArgumentException("prepareConstraintStatementForRelationship unable to create a constraint for " + relationship.name() + " because the source and destination entities reside in different databases");
+      }
+      else {
+        setStatement("ALTER TABLE " + entity.externalName() + " ADD CONSTRAINT " + constraintName + " FOREIGN KEY (" + sourceKeyList + ") REFERENCES " + relationship.destinationEntity().externalName() + " (" + destinationKeyList + ")");
+        return;
+      }
     }
 }
