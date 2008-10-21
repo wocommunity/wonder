@@ -11,6 +11,7 @@ import com.webobjects.eoaccess.EOSynchronizationFactory;
 public class EROraclePlugIn extends OraclePlugIn {
   public EROraclePlugIn(JDBCAdaptor jdbcadaptor) {
     super(jdbcadaptor);
+    System.out.println("EROraclePlugIn.enclosing_method: ");
   }
 
   /* (non-Javadoc)
@@ -24,6 +25,7 @@ public class EROraclePlugIn extends OraclePlugIn {
    * @see com.webobjects.jdbcadaptor.JDBCPlugIn#createSynchronizationFactory()
    */
   public EOSynchronizationFactory createSynchronizationFactory() {
+    System.out.println("EROraclePlugIn.createSynchronizationFactory: ");
     return new EROracleSynchronizationFactory(adaptor());
   }
 }
