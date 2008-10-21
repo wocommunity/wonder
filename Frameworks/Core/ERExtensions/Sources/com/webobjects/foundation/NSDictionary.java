@@ -665,7 +665,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		_JavaNSDictionaryMapEntry<K, V> set[] = new _JavaNSDictionaryMapEntry[keys.length];
 		for (int i = 0; i < keys.length; i++) {
 			Object key = keys[i];
-			Object object = valueForKey((String) key);
+			Object object = objectForKey(key);
 			_JavaNSDictionaryMapEntry<K, V> current = new _JavaNSDictionaryMapEntry(key, object);
 			set[i] = current;
 		}
