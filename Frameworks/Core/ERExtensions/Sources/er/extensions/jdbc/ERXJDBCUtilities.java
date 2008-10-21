@@ -547,7 +547,7 @@ public class ERXJDBCUtilities {
 				if(autoCommit) {
 					conn.rollback();
 				}
-				throw ex;
+				throw new RuntimeException("Failed to execute the statement '" + sql + "'.", ex);
 			}
 			finally {
 				stmt.close();
@@ -609,7 +609,12 @@ public class ERXJDBCUtilities {
 						if (ERXJDBCUtilities.log.isInfoEnabled()) {
 							ERXJDBCUtilities.log.info("Executing " + sql);
 						}
-						rowsUpdated += stmt.executeUpdate(sql);
+						try {
+							rowsUpdated += stmt.executeUpdate(sql);
+						}
+						catch (Throwable t) {
+							throw new RuntimeException("Failed to execute '" + sql + "'.", t);
+						}
 					}
 					else {
 						if (ERXJDBCUtilities.log.isInfoEnabled()) {
