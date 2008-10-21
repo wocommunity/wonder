@@ -1053,7 +1053,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		catch (RuntimeException t) {
 			if (ERXApplication._wasMainInvoked) {
 				ERXApplication.log.error(name() + " failed to start.", t);
-				throw new ERXExceptionUtilities.HideStackTraceException(t);
+				//throw new ERXExceptionUtilities.HideStackTraceException(t);
 			}
 			throw t;
 		}
