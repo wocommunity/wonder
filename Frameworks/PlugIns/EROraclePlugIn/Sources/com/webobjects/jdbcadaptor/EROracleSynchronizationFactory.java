@@ -1,7 +1,7 @@
 package com.webobjects.jdbcadaptor;
 
-import com.webobjects.jdbcadaptor.OraclePlugIn.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.jdbcadaptor.OraclePlugIn.OracleSynchronizationFactory;
 
 /** Overrides OracleSynchronizationFactory. This class does not add any
  * additional implementation, its just there to be consistent with the
