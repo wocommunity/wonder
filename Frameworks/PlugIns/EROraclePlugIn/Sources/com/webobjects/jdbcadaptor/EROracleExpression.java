@@ -147,7 +147,7 @@ public class EROracleExpression extends OracleExpression {
         throw new IllegalArgumentException("prepareConstraintStatementForRelationship unable to create a constraint for " + relationship.name() + " because the source and destination entities reside in different databases");
       }
       else {
-        setStatement("ALTER TABLE " + entity.externalName() + " ADD CONSTRAINT " + constraintName + " FOREIGN KEY (" + sourceKeyList + ") REFERENCES " + relationship.destinationEntity().externalName() + " (" + destinationKeyList + ")");
+        setStatement("ALTER TABLE " + entity.externalName() + " ADD CONSTRAINT " + constraintName + " FOREIGN KEY (" + sourceKeyList + ") REFERENCES " + relationship.destinationEntity().externalName() + " (" + destinationKeyList + ") DEFERRABLE INITIALLY DEFERRED");
       }
     }
 }
