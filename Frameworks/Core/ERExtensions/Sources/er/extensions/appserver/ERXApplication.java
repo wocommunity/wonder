@@ -888,6 +888,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	    	replaceApplicationPathPattern = null;
 	    }
 	    replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
+	    
+	    if (replaceApplicationPathPattern == null && rewriteDirectConnectURL()) {
+	    	replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + ".woa";
+	        if (replaceApplicationPathReplace == null) {
+	        	replaceApplicationPathReplace = "";
+	        }
+	    }
 	}
 
 	/**
@@ -1101,7 +1108,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			someHeaders = someHeaders.mutableClone();
 			((NSMutableDictionary)someHeaders).removeObjectForKey("content-type");
 		}
-		
+
+		if (rewriteDirectConnectURL()) {
+			aURL = "/cgi-bin/WebObjects/" + name() + ".woa" + aURL;
+		}
+
 		WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
 		return worequest;
 	}
@@ -2008,6 +2019,27 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	      processedURL = processedURL.replaceFirst(replaceApplicationPathPattern, replaceApplicationPathReplace);
 	    }
 		return processedURL;
+	}
+
+	/**
+	 * Returns whether or not to rewrite direct connect URLs.
+	 * 
+	 * @return whether or not to rewrite direct connect URLs
+	 */
+	public boolean rewriteDirectConnectURL() {
+		return isDirectConnectEnabled() && !isCachingEnabled() && isDevelopmentMode() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.rewriteDirectConnect", true);
+	}
+
+	/**
+	 * Returns the directConnecURL, optionally rewritten. 
+	 */
+	@Override
+	public String directConnectURL() {
+		String directConnectURL = super.directConnectURL();
+		if (rewriteDirectConnectURL()) {
+			directConnectURL = _rewriteURL(directConnectURL);
+		}
+		return directConnectURL;
 	}
 
 	/**
