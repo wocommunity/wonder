@@ -2027,7 +2027,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @return whether or not to rewrite direct connect URLs
 	 */
 	public boolean rewriteDirectConnectURL() {
-		return isDirectConnectEnabled() && !isCachingEnabled() && isDevelopmentMode() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.rewriteDirectConnect", true);
+		return isDirectConnectEnabled() && !isCachingEnabled() && isDevelopmentMode() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.rewriteDirectConnect", false);
 	}
 
 	/**
