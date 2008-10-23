@@ -810,6 +810,7 @@
         <copy todir="${dist.base}/Wonder-src-${project.version}" 
                 includeEmptyDirs="false" preservelastmodified="true">
             <fileset dir=".">
+                <include name="**/*" />
                 <exclude name="**/CVS/*" />
              	<exclude name="**/dist/**"/>
              	<exclude name="**/bin/**"/>
