@@ -1,4 +1,6 @@
 package er.erxtest.tests;
+import java.util.Date;
+
 import junit.framework.TestCase;
 import er.extensions.foundation.ERXExpiringCache;
 
@@ -60,7 +62,9 @@ public class ERXExpiringCacheTestCase extends TestCase {
   }
 
   public void testTimeExpiration() {
-    ERXExpiringCache<String, String> cache = new ERXExpiringCache<String, String>(15);
+    // MS we have to have a long time here because ERXExpiringCache has a 10 second slop 
+    // built in, so the test will fail if our timeout is small
+    ERXExpiringCache<String, String> cache = new ERXExpiringCache<String, String>(30);
     cache.startBackgroundExpiration();
     
     cache.setObjectForKey("Krank", "Anjo");
@@ -70,7 +74,7 @@ public class ERXExpiringCacheTestCase extends TestCase {
     assertEquals(null, cache.objectForKey("Chuck"));
 
     try {
-      Thread.sleep(5000);
+      Thread.sleep(20000);
     }
     catch (Throwable t) {
       t.printStackTrace();
@@ -85,7 +89,7 @@ public class ERXExpiringCacheTestCase extends TestCase {
     assertEquals("Hill", cache.objectForKey("Chuck"));
 
     try {
-      Thread.sleep(12000);
+      Thread.sleep(15000);
     }
     catch (Throwable t) {
       t.printStackTrace();
@@ -95,7 +99,7 @@ public class ERXExpiringCacheTestCase extends TestCase {
     assertEquals("Hill", cache.objectForKey("Chuck"));
     
     try {
-      Thread.sleep(10000);
+      Thread.sleep(20000);
     }
     catch (Throwable t) {
       t.printStackTrace();
