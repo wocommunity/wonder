@@ -24,6 +24,7 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
@@ -208,6 +209,55 @@ public class ERXSQLHelper {
 		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext.adaptorContext().adaptor(), optionsCreate);
 	}
 
+	/**
+	 * Generates table create statements for a set of entities, then finds all the entities that those entities depend on (in other models) and generates
+	 * foreign key statements for those, so you can generate sql for cross-model.
+	 * 
+	 * @param entities the entities to generate for
+	 * @param adaptor the adaptor to use
+	 * @return the sql script
+	 */
+	public String createDependentSchemaSQLForEntities(NSArray<EOEntity> entities, EOAdaptor adaptor) {
+		NSMutableDictionary<String, String> optionsCreateTables = new NSMutableDictionary<String, String>();
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
+		optionsCreateTables.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
+		optionsCreateTables.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+		optionsCreateTables.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
+		StringBuffer sqlBuffer = new StringBuffer();
+		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
+		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsCreateTables);
+		sqlBuffer.append(creationScript);
+		
+		NSMutableArray<EOEntity> foreignKeyEntities = entities.mutableClone();
+		for (EOEntity entity : entities) {
+			for (EORelationship relationship : (NSArray<EORelationship>)entity.relationships()) {
+				if (!relationship.isToMany()) {
+					EOEntity destinationEntity = relationship.destinationEntity();
+					if (destinationEntity.model() != entity.model()) {
+						foreignKeyEntities.addObject(destinationEntity);
+					}
+				}
+			}
+		}
+		
+		NSMutableDictionary<String, String> optionsCreateForeignKeys = new NSMutableDictionary<String, String>();
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.CreateTablesKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+		optionsCreateForeignKeys.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
+		String foreignKeyScript = sf.schemaCreationScriptForEntities(foreignKeyEntities, optionsCreateForeignKeys);
+		sqlBuffer.append(foreignKeyScript);
+		
+		return sqlBuffer.toString();
+	}
 	/**
 	 * Creates the schema sql for a set of entities.
 	 * 
