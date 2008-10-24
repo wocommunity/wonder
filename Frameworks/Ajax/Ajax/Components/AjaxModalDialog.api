@@ -4,6 +4,7 @@
 	    <binding defaults="Actions" name="action"/>
 	    <binding name="label"/>
 	    <binding name="title"/>
+	    <binding name="linkTitle"/>
 	    <binding name="width"/>
 	    <binding name="height"/>
 	    <binding defaults="Actions" name="onOpen"/>

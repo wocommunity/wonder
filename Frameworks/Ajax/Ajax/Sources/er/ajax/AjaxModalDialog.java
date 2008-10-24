@@ -42,8 +42,9 @@ import er.extensions.appserver.ERXWOContext;
  * </p>
  * 
  * @binding action returns the contents of the dialog box
- * @binding label the text for the link that opens the dialog box
+ * @binding label the text for the link that opens the dialog box0
  * @binding title Title to be displayed in the ModalBox window header, also used as title attribute of link opening dialog
+ * @binding linkTitle Title to be used as title attribute of link opening dialog, title is used if this is not present
  *
  * @binding width integer Width in pixels. Default is 
  * @binding height integer Height in pixels. Then set Modalbox will operate in 'fixed-height' mode. 
@@ -289,8 +290,12 @@ public class AjaxModalDialog extends AjaxComponent {
 			appendTagAttributeToResponse(response, "id", id());
 			appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 			appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-			appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
-
+			if (hasBinding("linkTitle")) {
+				appendTagAttributeToResponse(response, "title", valueForBinding("linkTitle", component));
+			} else {
+				appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
+			}
+			
 			response.appendContentString(" onclick=\"Modalbox.show('");
 			response.appendContentString(AjaxUtils.ajaxComponentActionUrl(component.context()));
 			response.appendContentString("?modalBoxAction=open");
