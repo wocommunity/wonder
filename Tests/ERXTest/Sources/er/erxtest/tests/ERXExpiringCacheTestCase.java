@@ -1,6 +1,4 @@
 package er.erxtest.tests;
-import java.util.Date;
-
 import junit.framework.TestCase;
 import er.extensions.foundation.ERXExpiringCache;
 
