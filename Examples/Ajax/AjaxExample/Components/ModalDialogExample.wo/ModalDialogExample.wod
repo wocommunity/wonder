@@ -5,6 +5,7 @@ AjaxExampleComponent : AjaxExampleComponent {
 
 ComponentModalDialog: AjaxModalDialog {
 	id = "ComponentModalDialog";
+	linkTitle = "Click to Delete";
 	title = "Confirm Deletion";
 	width = 300;
 	overlayOpacity = "0.3";
