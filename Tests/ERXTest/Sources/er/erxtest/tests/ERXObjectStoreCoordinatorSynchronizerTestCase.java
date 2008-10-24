@@ -5,7 +5,6 @@ import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import junit.textui.TestRunner;
 
-import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
