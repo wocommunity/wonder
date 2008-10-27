@@ -3,6 +3,7 @@ package er.rest;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -74,7 +75,12 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			Enumeration childrenNodesEnum = restRequest.rootNode().children().objectEnumerator();
 			while (childrenNodesEnum.hasMoreElements()) {
 				ERXRestRequestNode node = (ERXRestRequestNode) childrenNodesEnum.nextElement();
-				EOEnterpriseObject eo = entityDelegate.processObjectFromDocument(entity, node, context);
+				// Re-parse the entity, based on the current node. this allows subclasses to be held in collections, ie
+				// <Superclass>
+				// <superclass>
+				// <subclass>
+				EOEntity arrayEntity = EOModelGroup.defaultGroup().entityNamed(context.delegate().entityNameForAlias(node.name()));
+				EOEnterpriseObject eo = entityDelegate.processObjectFromDocument(arrayEntity, node, context);
 				if (eo != null) {
 					eos.addObject(eo);
 				}
