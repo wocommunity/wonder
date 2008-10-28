@@ -12,8 +12,9 @@ JavascriptTags : WOString {
 
 TagField : WOTextField {
   value = tags;
-  size = "60";
+  size = size;
   id = id;
+  style = ^style;
 }
 
 AvailableTags : WOGenericContainer {
