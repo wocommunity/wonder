@@ -51,6 +51,17 @@ public class ERTagField extends er.extensions.components.ERXComponent {
     return (ERTaggable<?>) valueForBinding("taggable");
   }
 
+  public String size() {
+    String size;
+    if (hasBinding("size")) {
+      size = stringValueForBinding("size");
+    }
+    else {
+      size = "60";
+    }
+    return size;
+  }
+  
   public int minimum() {
     return intValueForBinding("minimum", -1);
   }
