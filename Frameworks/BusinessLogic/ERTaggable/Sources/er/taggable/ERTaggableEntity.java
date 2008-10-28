@@ -630,6 +630,9 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
           set.addObject(normalizedTag);
         }
       }
+      else if (objTag instanceof ERTag) {
+        set.addObject(((ERTag)objTag).name());
+      }
       else {
         throw new IllegalArgumentException("Unknown tag type '" + objTag.getClass().getName() + "' (" + objTag + " ).");
       }
