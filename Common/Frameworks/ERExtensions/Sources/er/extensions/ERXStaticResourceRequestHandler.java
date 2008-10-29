@@ -12,6 +12,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODeployedBundle;
+import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -29,8 +31,34 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 
 	private String _documentRoot;
 
+	private boolean _useRequestHandlerPath;
+	
 	public ERXStaticResourceRequestHandler() {
 		_documentRoot = null;
+	}
+
+	/**
+	 * Creates a static resource handler for the given framework, which gives you
+	 * nicer relative URLs to work with.  For instance, you could register a request
+	 * handler "aj" that maps to the "Ajax" framework, which would make URLs of the 
+	 * form "/aj/wonder.js" map onto Ajax's WebServerResources/wonder.js folder.
+	 * 
+	 * @param frameworkName the name of the framework to map to (or null/"app" for the application) 
+	 */
+	public ERXStaticResourceRequestHandler(String frameworkName) {
+		if ("app".equals(frameworkName)) {
+			frameworkName = null;
+		}
+		WODeployedBundle bundle = WOApplication.application().resourceManager()._cachedBundleForFrameworkNamed(frameworkName);
+		File bundleFile = new File(bundle.bundlePath());
+		if (bundle.isFramework()) {
+			bundleFile = new File(bundleFile, "WebServerResources");
+		}
+		else {
+			bundleFile = new File(new File(bundleFile, "Contents"), "WebServerResources");
+		}
+		_documentRoot = bundleFile.getAbsolutePath();
+		_useRequestHandlerPath = true;
 	}
 
 	protected WOResponse _generateResponseForInputStream(InputStream is, int length, String type) {
@@ -92,7 +120,21 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 					sb.append(documentRoot);
 				}
 			}
-			sb.append(uri);
+			
+			if (_useRequestHandlerPath) {
+					try {
+						WODynamicURL dynamicURL = new WODynamicURL(uri);
+						sb.append("/");
+						sb.append(dynamicURL.requestHandlerPath());
+					}
+					catch (Exception e) {
+						throw new RuntimeException("Failed to parse URL '" + uri + "'.", e);
+					}
+			}
+			else {
+				sb.append(uri);
+			}
+			
 			String path = sb.toString();
 			try {
 				path = path.replace('+', ' ');

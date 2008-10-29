@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo wocomponentcontent="true" class="AjaxAutoComplete">
+	<wo class="AjaxAutoComplete" wocomponentcontent="true">
 	<binding name="list"/>
     <binding name="item"/>
     <binding name="value"/>
@@ -22,8 +22,10 @@
     <binding name="partialChars"/>
     <binding name="ignoreCase"/>
 
-    <validation message="&apos;list&apos; is a required binding">
+    <validation message="'list' is a required binding">
       <unbound name="list"/>
     </validation>
-	</wo>
+	<binding name="accesskey"/>
+        <binding name="tabindex"/>
+    </wo>
 </wodefinitions>

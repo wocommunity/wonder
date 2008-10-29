@@ -396,6 +396,13 @@ var iBox = function()
       events[name].push(callback);
     },
     
+    // MS: Added removeEventListener
+    removeEventListener: function(name, callback) {
+    	if (events[name]) {
+    		events[name] = events[name].without(callback);
+    	}
+    },
+    
     fireEvent: function(name)
     {
         if (events[name] && events[name].length)

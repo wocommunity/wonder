@@ -34,4 +34,6 @@ TextField: WOTextField {
 	size= ^size;
 	onblur = ^onblur;
 	onchange = ^onchange;
+	accesskey = ^accesskey;
+	tabindex = ^tabindex;
 }

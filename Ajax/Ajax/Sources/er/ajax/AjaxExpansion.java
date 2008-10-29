@@ -32,6 +32,7 @@ import er.extensions.ERXWOContext;
  * @binding insertion the insertion effect (see AjaxUpdateLink)
  * @binding insertionDuration the insertion effect duration (see AjaxUpdateLink)
  * @binding action the action to fire when the contents are expanded
+ * @binding accesskey hot key that should toggle the expansion (optional)
  */
 public class AjaxExpansion extends AjaxComponent {
 	private String _id;

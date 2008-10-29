@@ -407,7 +407,10 @@ public class ERXResponseRewriter {
 		// ERXResponseRewriter.addResourceInHead(response, context, framework,
 		// fileName, cssStartTag, cssEndTag, fallbackStartTag, fallbackEndTag,
 		// TagMissingBehavior.SkipAndWarn);
-		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, null, null, TagMissingBehavior.Top);
+		
+		// Q: We use TagMissingBehaviour.Inline in case this is called from inside the 
+		// HEAD tag and there is no close tag yet
+		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, null, null, TagMissingBehavior.Inline);
 	}
 
 	/**

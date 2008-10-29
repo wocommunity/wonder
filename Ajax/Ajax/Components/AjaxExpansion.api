@@ -14,5 +14,8 @@
         <validation message="'expanded' must be bound to a settable value">
             <unsettable name="expanded"/>
         </validation>
+    
+        <binding name="accesskey"/>
+    <binding name="elementName"/>
     </wo>
 </wodefinitions>

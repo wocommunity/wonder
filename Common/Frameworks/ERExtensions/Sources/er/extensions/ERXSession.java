@@ -10,15 +10,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -651,6 +654,12 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return toStr;
   }
 
+  // @Override
+  // override removed for 5.4 
+  public EOEditingContext newDefaultEditingContext() {
+    return ERXEC.newEditingContext();
+  }
+
   public static ERXSession session() {
 	  return (ERXSession) ERXThreadStorage.valueForKey("session");
   }
@@ -658,4 +667,62 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   public static void setSession(ERXSession session) {
 	  ERXThreadStorage.takeValueForKey(session, "session");
   }
+  
+  /**
+   * Override and return true, or set er.extensions.ERXSession.useSecureSessionCookies if you want 
+   * secure-only session and instance cookies.  This prevents cookie hijacking man-in-the-middle 
+   * attacks.  Note that to make this effective (and for sessions to work at all), your site must 
+   * be behind HTTPS at all times.  In development mode, you can disable secure mode 
+   * (@see er.extensions.ERXRequest.isSecureDisabled) for running in direct-connect with this 
+   * mode enabled.
+   *  
+   * @return whether or not secure cookies are enabled
+   */
+  public boolean useSecureSessionCookies() {
+	  return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXSession.useSecureSessionCookies", false);
+  }
+
+  protected void _convertSessionCookiesToSecure(WOResponse response) {
+	    if(storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
+			for (Enumeration cookiesEnum = response.cookies().objectEnumerator(); cookiesEnum.hasMoreElements();) {
+				WOCookie cookie = (WOCookie)cookiesEnum.nextElement();
+				String sessionIdKey;
+				String instanceIdKey;
+				if (ERXApplication.isWO54()) {
+					try {
+						sessionIdKey = (String)WOApplication.class.getMethod("sessionIdKey").invoke(WOApplication.application());
+						instanceIdKey = (String)WOApplication.class.getMethod("instanceIdKey").invoke(WOApplication.application());
+					}
+					catch (Throwable e) {
+						throw new NSForwardException(e);
+					}
+				}
+				else {
+					sessionIdKey = WORequest.SessionIDKey;
+					instanceIdKey = WORequest.InstanceKey;
+				}
+				String cookieName = cookie.name();
+				if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
+					 cookie.setIsSecure(true);
+				}
+			}
+		}
+  }
+  
+  @Override
+	public void _appendCookieToResponse(WOResponse response) {
+		super._appendCookieToResponse(response);
+		if (useSecureSessionCookies()) {
+			_convertSessionCookiesToSecure(response);
+		}
+	}
+  
+  @Override
+	public void _clearCookieFromResponse(WOResponse response) {
+		super._clearCookieFromResponse(response);
+		if (useSecureSessionCookies()) {
+			_convertSessionCookiesToSecure(response);
+		}
+	}
+  
 }
