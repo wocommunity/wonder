@@ -5,17 +5,34 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import com.webobjects.directtoweb.D2WContext;
-import com.webobjects.eoaccess.EOGeneralAdaptorException;
-
-import er.extensions.*;
 import org.apache.log4j.Logger;
 
-import java.util.Enumeration;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOGenericRecord;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSValidation;
+import com.webobjects.foundation._NSDictionaryUtilities;
+
+import er.extensions.ERXConstant;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXExceptionHolder;
+import er.extensions.ERXValidation;
 
 /**
  * List page for editing all items in the list.
@@ -98,7 +115,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     public String dummy;
 
     public boolean showCancel() {
-        return nextPage()!=null;
+        return _nextPage!=null;
     }
 
     public boolean isEntityInspectable() {
@@ -107,7 +124,6 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     public void setObject(EOEnterpriseObject eo) {
         super.setObject(eo);
-        d2wContext().takeValueForKey(eo,"object");
     }
 
     public WOComponent backAction() {
@@ -124,6 +140,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     private static final NSSelector ValidateForInsertSelector = new NSSelector("validateForInsert");
     private static final NSSelector ValidateForSaveSelector = new NSSelector("validateForUpdate");
+    
     public boolean tryToSaveChanges(boolean validateObjects) {
         if (log.isDebugEnabled()) log.debug("tryToSaveChanges() validateObjects: "+validateObjects+"  shouldSaveChanges: "+shouldSaveChanges());
         boolean saved = false;
@@ -134,14 +151,16 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
                 editingContext().updatedObjects().makeObjectsPerformSelector(ValidateForSaveSelector, null);
             }
             if (!isListEmpty() && shouldSaveChanges() && editingContext().hasChanges())
-                ERXEOControlUtilities.saveChanges(editingContext());
+                editingContext().saveChanges();
             saved = true;
         } catch (NSValidation.ValidationException ex) {
-            errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex);
+            setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex));
             validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
         } catch(EOGeneralAdaptorException ex) {
-            if(shouldRecoverFromOptimisticLockingFailure() && ERXEOAccessUtilities.recoverFromAdaptorException(object().editingContext(), ex)) {
-                errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext());
+            if(shouldRecoverFromOptimisticLockingFailure()) {
+                EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(editingContext(), ex);
+                setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext()));
+                validationFailedWithException(ex, eo, "CouldNotSavePleaseReapply");
             } else {
                 throw ex;
             }
@@ -232,7 +251,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     public static final String MassChangeEntityDisplayKey = "massChangeEntityDisplay";
     private D2WContext _d2wContextForMassChangeEO;
-    protected D2WContext d2wContextForMassChangeEO() {
+    public D2WContext d2wContextForMassChangeEO() {
         if (_d2wContextForMassChangeEO == null) {
             _d2wContextForMassChangeEO = new D2WContext(d2wContext());
             _d2wContextForMassChangeEO.takeValueForKey(Boolean.TRUE, MassChangeEntityDisplayKey);

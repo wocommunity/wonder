@@ -6,24 +6,36 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+
+import er.extensions.ERXEOControlUtilities;
 
 /**
  * Generic link component used to view a list.<br />
+ * <br />
  * 
- * @binding list
- * @binding listConfigurationName
+ * Uses the key "displayNameForLinkToViewList" now to provide a different name
+ * instead of the entity name if set in the rules
+ * 
+ * @binding list the list to show
+ * @binding object object to get list from
+ * @binding key keypath to get list from object
+ * @binding listConfigurationName name of the page configuration to jump to
+ * @binding entityName
  */
 
 public class ERDLinkToViewList extends ERDCustomEditComponent {
 
     public ERDLinkToViewList(WOContext context) { super(context); }
     
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDLinkToViewList.class,"directtoweb,components");
+    public static final Logger log = Logger.getLogger(ERDLinkToViewList.class);
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
@@ -45,13 +57,26 @@ public class ERDLinkToViewList extends ERDCustomEditComponent {
     }
 
     public WOComponent view() {
-        ListPageInterface ipi = (ListPageInterface)D2W.factory().pageForConfigurationNamed((String)valueForBinding("listPageConfigurationName"),
-                                                                                           session());
+    	String listConfigurationName = (String)valueForBinding("listConfigurationName");
+        ListPageInterface ipi = (ListPageInterface)D2W.factory().pageForConfigurationNamed(listConfigurationName, session());
         ipi.setNextPage(context().page());
         ipi.setDataSource(ERXEOControlUtilities.dataSourceForArray(list()));
         return (WOComponent)ipi;
     }
 
+    public String linkName() {
+    	String displayName = (String) d2wContext().valueForKey("displayNameForLinkToViewList");
+    	if (displayName == null) {
+	    	displayName = (String) valueForBinding("entityName");
+	    	if(displayName == null && !listIsEmpty() && list().lastObject() instanceof EOEnterpriseObject) {
+	    		displayName = ((EOEnterpriseObject)list().lastObject()).entityName();
+	    	} else {
+	    		displayName = "";
+	    	}
+    	}
+    	return displayName;
+    }
+    
     public boolean listIsEmpty() {
         return list()==null || list().count()==0;
     }

@@ -2,17 +2,17 @@ HasItems: ERXNonZeroConditional {
 	condition = list.count;
 }
 
-HasItems2: ERXNonZeroConditional {
+HasNoItems: ERXNonZeroConditional {
 	condition = list.count;
 	negate = true;
 }
 
-Hyperlink1: WOHyperlink {
+ViewLink: WOHyperlink {
 	action = view;
 	disabled = listIsEmpty;
 }
 
-String1: WOString {
-	value = list.count;
+Description: ERXPluralString {
+	count = list.count;
+	value = linkName;
 }
-
