@@ -525,7 +525,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 					EOKeyGlobalID gid = (EOKeyGlobalID) cacheChange.gid();
 					EODatabaseContext dbc = ERXEOAccessUtilities.databaseContextForEntityNamed(osc, gid.entityName());
 					EODatabase database = dbc.database();
-					EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
 					dbc.lock();
 					try {
 						if (cacheChange instanceof ERXDatabase.SnapshotInserted) {
