@@ -981,15 +981,37 @@ public class ERXEOControlUtilities {
         NSDictionary<String, Object> primaryKey = null;
         try {
             dbContext.lock();
-            EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
-            if (!adaptorChannel.isOpen()) {
-                adaptorChannel.openChannel();
-            }
-            NSArray<NSDictionary<String, Object>> arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
-            if (arr != null) {
-                primaryKey = arr.lastObject();
-            } else {
-                log.warn("Could not get primary key array for entity: " + entityName);
+            
+            boolean willRetryAfterHandlingDroppedConnection = true;
+            while (willRetryAfterHandlingDroppedConnection) {
+            	try {
+		            EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
+		            if (!adaptorChannel.isOpen()) {
+		                adaptorChannel.openChannel();
+		            }
+		            NSArray<NSDictionary<String, Object>> arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
+		            if (arr != null) {
+		                primaryKey = arr.lastObject();
+		            } else {
+		                log.warn("Could not get primary key array for entity: " + entityName);
+		            }
+		            willRetryAfterHandlingDroppedConnection = false;
+	            }
+	            catch (Exception localException) {
+	            	if (willRetryAfterHandlingDroppedConnection && 
+	            			dbContext._isDroppedConnectionException(localException)) {
+	                    try {
+	                    	dbContext.database().handleDroppedConnection();
+	                        
+	                    }
+	                    catch(Exception ex) {
+	                        throw NSForwardException._runtimeExceptionForThrowable(ex);
+	                    }
+	                }
+	                else {
+	                	throw NSForwardException._runtimeExceptionForThrowable(localException);
+	                }
+	            }
             }
         } catch (Exception e) {
             log.error("Caught exception when generating primary key for entity: " + entityName, e);
