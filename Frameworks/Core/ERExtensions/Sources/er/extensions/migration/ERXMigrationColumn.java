@@ -323,6 +323,9 @@ public class ERXMigrationColumn {
 	public EOAttribute _newAttribute(EOEntity entity) {
 		JDBCAdaptor adaptor = (JDBCAdaptor) _table.database().adaptor();
 		String externalType = ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, _jdbcType);
+		if (externalType == null) {
+			externalType = "IF_YOU_ARE_SEEING_THIS_SOMETHING_WENT_WRONG_WITH_EXTERNAL_TYPES";
+		}
 		EOAttribute attribute = adaptor.createAttribute(_name, _name, _jdbcType, externalType, _precision, _scale, _allowsNull ? 1 : 0);
 		if (_width > 0) {
 			attribute.setWidth(_width);
