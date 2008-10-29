@@ -148,8 +148,8 @@ public class ERXQ {
 	}
 
 	/**
-	 * Returns the first object that matches the qualifier in the given array (or
-	 * null if there is no match).
+	 * Returns the first object that matches the qualifier in the given array
+	 * (or null if there is no match).
 	 * 
 	 * @param <T>
 	 *            the type of the objects
@@ -621,8 +621,8 @@ public class ERXQ {
 	}
 
 	/**
-	 * Equivalent to new ERXKeyValueQualifier(key,
-	 * EOQualifier.OperatorContains, value).
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.OperatorContains,
+	 * value).
 	 * 
 	 * @param key
 	 *            the key
@@ -777,6 +777,62 @@ public class ERXQ {
 			NSMutableArray<EOQualifier> searchQualifiers = new NSMutableArray<EOQualifier>();
 			for (String token : tokens) {
 				searchQualifiers.addObject(ERXQ.contains(key, token));
+			}
+			qualifier = new ERXAndQualifier(searchQualifiers);
+		}
+		return qualifier;
+	}
+
+	/**
+	 * Returns a qualifier that evaluates to true when all values in the given
+	 * tokens are found when searching across any of the keypaths.  As an example, you
+	 * could search for "Mike Schrag" across the keys (firstName, lastName) and it would
+	 * find (firstName=Mike or lastName=Mike) and (firstName=Schrag or lastName=Schrag).
+	 * Be careful of this one as it permutes quickly.
+	 * 
+	 * @param keys
+	 *            keypaths to perform search in
+	 * @param tokensWithWhitespace
+	 *            tokens to search for
+	 * @return an ERXAndQualifier
+	 */
+	public static ERXAndQualifier containsAllInAny(String[] keys, String tokensWithWhitespace) {
+		String[] searchStrings;
+		if (tokensWithWhitespace == null) {
+			searchStrings = new String[0];
+		}
+		else {
+			searchStrings = tokensWithWhitespace.split("\\s+");
+		}
+		return ERXQ.containsAllInAny(keys, searchStrings);
+	}
+
+	/**
+	 * Returns a qualifier that evaluates to true when all values in the given
+	 * tokens are found when searching across any of the keypaths.  As an example, you
+	 * could search for "Mike Schrag" across the keys (firstName, lastName) and it would
+	 * find (firstName=Mike or lastName=Mike) and (firstName=Schrag or lastName=Schrag).
+	 * Be careful of this one as it permutes quickly.
+	 * 
+	 * @param keys
+	 *            keypaths to perform search in
+	 * @param tokens
+	 *            tokens to search for
+	 * @return an ERXAndQualifier
+	 */
+	public static ERXAndQualifier containsAllInAny(String[] keys, String[] tokens) {
+		ERXAndQualifier qualifier;
+		if (tokens.length == 0) {
+			qualifier = null;
+		}
+		else {
+			NSMutableArray<EOQualifier> searchQualifiers = new NSMutableArray<EOQualifier>();
+			for (String token : tokens) {
+				NSMutableArray<EOQualifier> tokenQualifiers = new NSMutableArray<EOQualifier>();
+				for (String key : keys) {
+					tokenQualifiers.addObject(ERXQ.contains(key, token));
+				}
+				searchQualifiers.addObject(new ERXOrQualifier(tokenQualifiers));
 			}
 			qualifier = new ERXAndQualifier(searchQualifiers);
 		}
