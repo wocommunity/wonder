@@ -7,6 +7,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
@@ -49,7 +50,40 @@ public class EROracleExpression extends OracleExpression {
     public EROracleExpression(EOEntity eoentity) {
         super(eoentity);
     }
-    
+
+    protected boolean isInherited(EOAttribute attribute) {
+        boolean inherited = false;
+        
+        EOEntity parentEntity = attribute.entity().parentEntity();
+        while (!inherited && parentEntity != null && attribute.entity().externalName().equals(parentEntity.externalName())) {
+            inherited = (parentEntity.attributeNamed(attribute.name()) != null);
+            parentEntity = parentEntity.parentEntity();
+        }
+        return inherited;
+    }
+
+    public void addCreateClauseForAttribute(EOAttribute attribute) {
+      NSDictionary userInfo = attribute.userInfo();
+      Object defaultValue = null;
+      if (userInfo != null) {
+        defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default");
+      }
+      String sql;
+      boolean allowsNull = attribute.allowsNull();
+      if(!allowsNull) {
+          allowsNull = !isInherited(attribute);
+      }
+ 
+      String allowsNullClauseForConstraint = allowsNullClauseForConstraint(allowsNull);
+      if (defaultValue == null) {
+          sql = _NSStringUtilities.concat(attribute.columnName(), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint);
+      }
+      else {
+          sql = _NSStringUtilities.concat(attribute.columnName(), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint);
+      }
+      appendItemToListString(sql, _listString());
+    }
+
     /** Overridden in order to add milliseconds to the value. This
      * applies only if obj is an instance of NSTimestamp and if 
      * valueType from the eoattribute is T
