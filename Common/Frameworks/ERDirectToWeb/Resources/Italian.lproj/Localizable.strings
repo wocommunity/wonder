@@ -26,8 +26,20 @@
     "CouldNotSavePleaseReapply" = "Non posso salvare le modifiche. Il/la @@displayNameForEntity@@ risulta già  modificato/a nel database. Le tue modifiche sono state scartate, inviale nuovamente.";
     "ERD2WInspect.alreadyAborted" = "<b>Hai già annullato questa operazione</b>. Premi cancel e riprova dall'inizio.";
     "ERD2WList.confirmDeletionMessage" = "<b>Sei sicuro di voler eliminare questo/a @@displayNameForEntity@@?</b><br />@@object.userPresentableDescription@@";
-    "ERDInspect.objectUnsetMessage" = "Nessun @@displayNameForDestinationEntity@@ specificato.";
-    "ERDInspect.select" = "Seleziona...";
-    "ERDInspect.clear" = "Cancella";
-    "ERDList.create" = "Aggiungi";
+    "ERDEditStringWithChoices.noSelectionString" = "Nessuna Selezione"; 
+    "ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>Nessun record trovato.</b>"; 
+    "ERDEmptyListMessage.emptyListMessage" = "<b>Nessun record trovato.</b>"; 
+    "ERDInspect.clear" = Cancella; 
+    "ERDInspect.create" = Crea;
+    "ERDInspect.objectUnsetMessage" = "Nessun @@displayNameForDestinationEntity@@ specificato."; 
+    "ERDInspect.select" = "Seleziona..."; 
+    "ERDList.create" = Aggiungi; 
+    "ERDQueryDateRangeJavaScript.and" = "e";
+    "ERDQueryDateRangeJavaScript.between" = "fra";
+    "ERDQueryTwoLevelRelationship.all" = "- tutti/e -"; 
+    "ERDTrashcan.confirmDeletionMessage" = "<b>Sei sicuro di voler eliminare questo/a @@displayNameForEntity@@?</b>"; 
+    is = "è"; 
+    like = "è come"; 
+    "starts with" = "inizia con";
+
 }

@@ -6,12 +6,18 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXTimestampFormatter;
+import er.extensions.ERXValidationException;
+import er.extensions.ERXValidationFactory;
 
 /**
  * Crazy cool little date picker that uses javascript to pick the date from a little calendar. <br />
@@ -19,7 +25,7 @@ import er.extensions.*;
  */
 
 public class ERDEditDateJavascript extends ERDCustomEditComponent {
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDEditDateJavascript.class);
+    static final Logger log = Logger.getLogger(ERDEditDateJavascript.class);
 
     public ERDEditDateJavascript(WOContext context) {super(context);}
 
@@ -29,13 +35,15 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
     
     public void appendToResponse(WOResponse r, WOContext c){
         NSTimestamp date = (NSTimestamp)objectPropertyValue();
-        if(date != null)
+        if(date != null) {
             try {
                 dateString = dateFormatter().format(date);
             } catch(IllegalArgumentException nsfe){
+                // nothing?
             }
-        else
+        } else {
             dateString = null;
+        }
         super.appendToResponse(r,c);
     }
     
@@ -69,7 +77,7 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
     
     protected NSTimestampFormatter dateFormatter() {
     	if(_dateFormatter == null) {
-    		_dateFormatter = new NSTimestampFormatter(formatter());
+    		_dateFormatter = ERXTimestampFormatter.dateFormatterForPattern(formatter());
     	}
     	return _dateFormatter;
     }
@@ -79,7 +87,7 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
 			_formatter = (String)valueForBinding("formatter");
 		}
 		if(_formatter == null || _formatter.length() == 0) {
-			_formatter = "%m/%d/%Y";
+			_formatter = ERXTimestampFormatter.DEFAULT_PATTERN;
 		}
 		return _formatter;
 	}
@@ -87,4 +95,4 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
 	public void setFormatter(String formatter) {
 		_formatter = formatter;
 	}
- }
+}

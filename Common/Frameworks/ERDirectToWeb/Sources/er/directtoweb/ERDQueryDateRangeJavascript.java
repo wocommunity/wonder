@@ -6,11 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import java.text.Format;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXWOForm;
+import er.extensions.ERXEditDateJavascript;
+import er.extensions.ERXTimestampFormatter;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXValidationFactory;
 
 /**
  * Used for building date queries with javascript.<br />
@@ -20,13 +26,15 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
 	protected static String _datePickerJavaScriptUrl;
 	protected String key;
-	protected NSTimestampFormatter _dateFormatter;
+	protected Format _dateFormatter;
 	protected String _minValue;
 	protected String _maxValue;
 	protected String _minName;
 	protected String _formatter;
 	protected String _maxName;
-	
+	protected String _formName;
+	protected String _javascriptName;
+		
 	public ERDQueryDateRangeJavascript(WOContext context) { 
     	super(context); 
     }
@@ -37,9 +45,9 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         return key;
     }
 
-    public NSTimestampFormatter dateFormatter() {
+    public Format dateFormatter() {
     	if(_dateFormatter == null) {
-    		_dateFormatter = new NSTimestampFormatter(formatter());
+    		_dateFormatter = ERXTimestampFormatter.dateFormatterForPattern(formatter());
     	}
     	return _dateFormatter;
     }
@@ -55,6 +63,11 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         return result;
     }
 
+    public String javascriptName() {
+    	if(_javascriptName == null) _javascriptName = "date_" + context().elementID().replace('.', '_');
+    	return _javascriptName;
+    }
+    
     public Object minValue() {
         if(_minValue == null){
             _minValue=stringForDate((NSTimestamp)displayGroup().queryMin().valueForKey(propertyKey()));
@@ -113,33 +126,48 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         return _datePickerJavaScriptUrl;
     }
 
+    public String formName() {
+        if (_formName==null) _formName=ERXWOForm.formName(context(), "QueryForm");
+        return _formName;
+    }
+
     public String minName() {
-        if (_minName==null) _minName="min"+hashCode();
+        if (_minName==null) _minName=javascriptName()+ "min";
         return _minName;
     }
+    
     public String minHREF() {
-        return "javascript:show_calendar('QueryForm." + minName() + "',null,null,'"+formatterStringForScript()+"')"; 
+        return "javascript:show_calendar('"+formName()+"." + minName() + "',null,null,'"+formatterStringForScript()+"')"; 
     }
 
     public String maxName() {
-    	if (_maxName==null) _maxName="max"+hashCode();
+    	if (_maxName==null) _maxName=javascriptName()+ "max";
     	return _maxName;
     }
     public String maxHREF() {
-    	return "javascript:show_calendar('QueryForm." + maxName() + "',null,null,'"+formatterStringForScript()+"')";
+    	return "javascript:show_calendar('"+formName()+ "." + maxName() + "',null,null,'"+formatterStringForScript()+"')";
+    }
+    
+    public int formatLength() {
+        String formatter = formatterStringForScript();
+        return formatter.length() < 12 ? 12 : formatter.length();
+    }
+    
+    public String localizedFormatString() {
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(formatter());
     }
     
     public String formatter() {
 		if(_formatter == null) {
 			_formatter = (String)valueForBinding("formatter");
 			if(_formatter == null || _formatter.length() == 0) {
-				_formatter = "MM/dd/yyyy";
+				_formatter = ERXTimestampFormatter.DEFAULT_PATTERN;
 			}
-		}
+ 		}
 		return _formatter;
 	}
     
     public String formatterStringForScript() {
-    	return ERXEditDateJavascript.formatterStringForScript(formatter());
+    	return ERXEditDateJavascript.formatterStringForScript(localizedFormatString());
     }
 }

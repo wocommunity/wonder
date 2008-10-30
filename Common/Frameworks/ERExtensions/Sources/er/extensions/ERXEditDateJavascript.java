@@ -74,4 +74,9 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 		result = ERXStringUtilities.replaceStringByStringInString("%b", "MON", result);
 		return result;
 	}
+	
+	public int formatLength() {
+        String formatter = formatterStringForScript();
+        return formatter.length() < 12 ? 12 : formatter.length();
+    }
 }

@@ -21,4 +21,19 @@
     "ERDDatePopup.monthList" = ( "Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
     "ERDEditDatePopupOrNull.none" = "None";
     "ERDEditDatePopupOrNull.or" = "- or -";
+	"ERDEditStringWithChoices.noSelectionString" = "None";
+	"ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>No matching @@displayNameForDestinationEntity@@ records found.</b>";
+	"ERDEmptyListMessage.emptyListMessage" = "<b>Aucune valeurs trouv\U00e9e pour @@displayNameForEntity@@.</b>";
+	"ERDInspect.clear" = "Clear";
+	"ERDInspect.create" = "Create";
+	"ERDInspect.objectUnsetMessage" = "No @@displayNameForDestinationEntity@@ set.";
+	"ERDInspect.select" = "Select...";
+	"ERDList.create" = "Add";
+	"ERDQueryDateRangeJavaScript.and" = "and";
+	"ERDQueryDateRangeJavaScript.between" = "between";
+	"ERDQueryTwoLevelRelationship.all" = "- all -";
+	"ERDTrashcan.confirmDeletionMessage" = "<b>Etes-vous sur de vouloir \U00e9liminer ce @@displayNameForEntity@@?</b>";
+	"is" = "is";
+	"like" = "is like";
+	"starts with" = "starts with";
 }

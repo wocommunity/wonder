@@ -224,12 +224,12 @@ Calendar.prototype.show = function() {
 	
 	this.wwrite("<TABLE WIDTH='100%' BORDER=0 CELLSPACING=0 CELLPADDING=0 BGCOLOR='#f2f2f2'><TR><TD ALIGN=center>");
 	this.wwrite("<A HREF=\"" +
-		"javascript:window.opener.Build(" + 
+		"javascript:window.opener.CalendarBuild(" + 
 		"'" + gReturnItem + "', '" + gMonth + "', '" + (parseInt(gYear)-1) + "', '" + gFormat + "'" +
 		");" +
 		"\"><b><<</b><\/A></TD><TD ALIGN=center>");
 	this.wwrite("<A HREF=\"" +
-		"javascript:window.opener.Build(" + 
+		"javascript:window.opener.CalendarBuild(" + 
 		"'" + gReturnItem + "', '" + prevMM + "', '" + prevYYYY + "', '" + gFormat + "'" +
 		");" +
 		"\"><b><</b><\/A></TD><TD ALIGN=center>");
@@ -239,12 +239,12 @@ Calendar.prototype.show = function() {
 	this.wwrite("</TD><TD ALIGN=center>");
 	//this.wwrite("<A HREF=\"javascript:window.print();\">Print</A></TD><TD ALIGN=center>");
 	this.wwrite("<A HREF=\"" +
-		"javascript:window.opener.Build(" + 
+		"javascript:window.opener.CalendarBuild(" + 
 		"'" + gReturnItem + "', '" + nextMM + "', '" + nextYYYY + "', '" + gFormat + "'" +
 		");" +
 		"\"><b>></b><\/A></TD><TD ALIGN=center>");
 	this.wwrite("<A HREF=\"" +
-		"javascript:window.opener.Build(" + 
+		"javascript:window.opener.CalendarBuild(" + 
 		"'" + gReturnItem + "', '" + gMonth + "', '" + (parseInt(gYear)+1) + "', '" + gFormat + "'" +
 		");" +
 		"\"><b>>></b><\/A></TD></TR></TABLE><BR>");
@@ -305,13 +305,13 @@ Calendar.prototype.showY = function() {
 	
 	this.wwrite("<TABLE WIDTH='100%' BORDER=1 CELLSPACING=0 CELLPADDING=0 BGCOLOR='#e0e0e0'><TR><TD ALIGN=center>");
 	this.wwrite("[<A HREF=\"" +
-		"javascript:window.opener.Build(" + 
+		"javascript:window.opener.CalendarBuild(" + 
 		"'" + gReturnItem + "', null, '" + prevYYYY + "', '" + gFormat + "'" +
 		");" +
 		"\" alt='Prev Year'><<<\/A>]</TD><TD ALIGN=center>");
 	this.wwrite("[<A HREF=\"javascript:window.print();\">Print</A>]</TD><TD ALIGN=center>");
 	this.wwrite("[<A HREF=\"" +
-		"javascript:window.opener.Build(" + 
+		"javascript:window.opener.CalendarBuild(" + 
 		"'" + gReturnItem + "', null, '" + nextYYYY + "', '" + gFormat + "'" +
 		");" +
 		"\">>><\/A>]</TD></TR></TABLE><BR>");
@@ -480,7 +480,7 @@ Calendar.prototype.format_data = function(p_day) {
 }
 
 
-function Build(p_item, p_month, p_year, p_format) {
+function CalendarBuild(p_item, p_month, p_year, p_format) {
 	var p_WinCal = ggWinCal;
 	gCal = new Calendar(p_item, p_WinCal, p_month, p_year, p_format);
 	// Customize your Calendar here..
@@ -509,7 +509,7 @@ function show_calendar() {
 	elementName  = p_item.substring(indexOfPoint+1, p_item.length);
 	element = form.elements[elementName];
 	selectedDate  = element.value;
-        if(selectedDate.length==0){
+        if(!selectedDate || selectedDate.length==0){
             selectedDate = new Date();
         }
 	temporaryDate = new Date(selectedDate);
@@ -542,7 +542,7 @@ function show_calendar() {
 	vWinCal.opener = self;
 	ggWinCal = vWinCal;
 
-	Build(p_item, p_month, p_year, p_format);
+	CalendarBuild(p_item, p_month, p_year, p_format);
 	vWinCal.focus();
 }
 /*
@@ -559,5 +559,5 @@ function show_yearly_calendar(p_item, p_year, p_format) {
 	vWinCal.opener = self;
 	ggWinCal = vWinCal;
 
-	Build(p_item, null, p_year, p_format);
+	CalendarBuild(p_item, null, p_year, p_format);
 }

@@ -1,53 +1,53 @@
-Hyperlink1: WOHyperlink {
-	href = minHREF;
-	onmouseout = "window.status='';return true;";
-	onmouseover = "window.status='Date Picker';return true;";
+DateFormat: WOString {
+	value = formatterStringForScript.toLowerCase;
 }
 
-Hyperlink2: WOHyperlink {
+DatePickerUrl: WOJavaScript {
+	scriptSource = datePickerJavaScriptUrl;
+}
+
+MaxImage: WOImage {
+	border = 0;
+	filename = "calendar.gif";
+	framework = "ERExtensions";
+}
+
+MaxLink: WOHyperlink {
 	href = maxHREF;
 	onmouseout = "window.status='';return true;";
 	onmouseover = "window.status='Date Picker';return true;";
 }
 
-Image1: WOImage {
-	border = 0;
-	filename = "calendar.gif";
-	framework = "ERExtensions";
-}
-
-Image2: WOImage {
-	border = 0;
-	filename = "calendar.gif";
-	framework = "ERExtensions";
-}
-
-JavaScript2: WOJavaScript {
-	scriptSource = datePickerJavaScriptUrl;
-}
-
-String1: WOString {
-	value = formatterStringForScript.toLowerCase;
-}
-
-String2: WOString {
-	value = minName;
-}
-
-String3: WOString {
-	value = maxName;
-}
-
-TextField1: WOTextField {
-	name = minName;
-	value = minValue;
-	maxlength = 12;
-	size = 12;
-}
-
-TextField2: WOTextField {
+MaxValue: WOTextField {
 	name = maxName;
 	value = maxValue;
-	maxlength = 12;
-	size = 12;
+	maxlength = formatLength;
+	size = formatLength;
+}
+
+MinImage: WOImage {
+	border = 0;
+	filename = "calendar.gif";
+	framework = "ERExtensions";
+}
+
+MinLink: WOHyperlink {
+	href = minHREF;
+	onmouseout = "window.status='';return true;";
+	onmouseover = "window.status='Date Picker';return true;";
+}
+
+MinName: WOTextField {
+	name = minName;
+	value = minValue;
+	maxlength = formatLength;
+	size = formatLength;
+}
+
+and: ERXLocalizedString {
+	value = "ERDQueryDateRangeJavaScript.and";
+}
+
+between: ERXLocalizedString {
+	value = "ERDQueryDateRangeJavaScript.between";
 }

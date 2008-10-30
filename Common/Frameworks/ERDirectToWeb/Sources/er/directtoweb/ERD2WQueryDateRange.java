@@ -1,11 +1,7 @@
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WQueryDateRange;
 
 public class ERD2WQueryDateRange extends D2WQueryDateRange {
 
