@@ -43,6 +43,7 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCContext;
 
 import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -395,6 +396,7 @@ public class ERXJDBCUtilities {
 	 * EOModel model = EOModelGroup.defaultGroup().modelNamed(&quot;YourModelName&quot;);
 	 * ERXJDBCUtilities._copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(model, sourceDict, destDict);
 	 * </pre>
+	 * @param m the model that defines the database to copy
 	 * 
 	 * @param sourceDict
 	 *            a NSDictionary containing the following keys for the source
@@ -434,8 +436,7 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * @see _copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel,
-	 *      NSDictionary, NSDictionary)
+	 * @see ERXJDBCUtilities._copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel, NSDictionary, NSDictionary)
 	 * @param modelGroup
 	 *            the model group to copy
 	 * @param sourceDict
@@ -574,8 +575,25 @@ public class ERXJDBCUtilities {
 	 *             if there is a problem
 	 */
 	public static int executeUpdateScript(EOAdaptorChannel channel, String sqlScript) throws SQLException {
+		return ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, false);
+	}
+
+	/**
+	 * Splits the given sqlscript and executes each of the statements in a
+	 * single transaction
+	 * 
+	 * @param channel
+	 *            the JDBCChannel to work with
+	 * @param sqlScript
+	 *            the sql script to execute
+	 * @param ignoreFailures if true, failures in a particular statement are ignored
+	 * @return the number of rows updated
+	 * @throws SQLException
+	 *             if there is a problem
+	 */
+	public static int executeUpdateScript(EOAdaptorChannel channel, String sqlScript, boolean ignoreFailures) throws SQLException {
 		NSArray sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatements(sqlScript);
-		return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements);
+		return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements, ignoreFailures);
 	}
 
 	/**
@@ -592,6 +610,24 @@ public class ERXJDBCUtilities {
 	 *             if there is a problem
 	 */
 	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray sqlStatements) throws SQLException {
+		return executeUpdateScript(channel, sqlStatements, false);
+	}
+	
+	/**
+	 * Splits the given sqlscript and executes each of the statements in a
+	 * single transaction
+	 * 
+	 * @param channel
+	 *            the JDBCChannel to work with
+	 * @param sqlStatements
+	 *            the array of sql scripts to execute
+	 * @param ignoreFailures if true, failures in a particular statement are ignored
+	 * 
+	 * @return the number of rows updated
+	 * @throws SQLException
+	 *             if there is a problem
+	 */
+	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray sqlStatements, boolean ignoreFailures) throws SQLException {
 		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(channel);
 		int rowsUpdated = 0;
 		boolean wasOpen = channel.isOpen();
@@ -613,7 +649,10 @@ public class ERXJDBCUtilities {
 							rowsUpdated += stmt.executeUpdate(sql);
 						}
 						catch (Throwable t) {
-							throw new RuntimeException("Failed to execute '" + sql + "'.", t);
+							if (!ignoreFailures) {
+								throw new RuntimeException("Failed to execute '" + sql + "'.", t);
+							}
+							ERXJDBCUtilities.log.warn("Failed to execute '" + sql + "', but ignoring: " + ERXExceptionUtilities.toParagraph(t));
 						}
 					}
 					else {
@@ -715,11 +754,12 @@ public class ERXJDBCUtilities {
 	 *            the channel to use for execution
 	 * @param model
 	 *            the model to drop tables for
+	 * @param ignoreFailures if true, failures in a particular statement are ignored
 	 * @throws SQLException
 	 *             if something fails
 	 */
-	public static void dropTablesForModel(EOAdaptorChannel channel, EOModel model) throws SQLException {
-		ERXJDBCUtilities.dropTablesForEntities(channel, model.entities());
+	public static void dropTablesForModel(EOAdaptorChannel channel, EOModel model, boolean ignoreFailures) throws SQLException {
+		ERXJDBCUtilities.dropTablesForEntities(channel, model.entities(), ignoreFailures);
 	}
 
 	/**
@@ -730,13 +770,14 @@ public class ERXJDBCUtilities {
 	 *            the channel to use for execution
 	 * @param entities
 	 *            the entities to drop tables for
+	 * @param ignoreFailures if true, failures in a particular statement are ignored
 	 * @throws SQLException
 	 *             if something fails
 	 */
-	public static void dropTablesForEntities(EOAdaptorChannel channel, NSArray<EOEntity> entities) throws SQLException {
+	public static void dropTablesForEntities(EOAdaptorChannel channel, NSArray<EOEntity> entities, boolean ignoreFailures) throws SQLException {
 		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(channel);
 		String sqlScript = sqlHelper.createSchemaSQLForEntitiesWithOptions(entities, channel.adaptorContext().adaptor(), sqlHelper.defaultOptionDictionary(false, true));
-		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
+		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, ignoreFailures);
 	}
 
 	/**
