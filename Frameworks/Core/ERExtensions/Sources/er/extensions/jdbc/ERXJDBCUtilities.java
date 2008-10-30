@@ -689,29 +689,10 @@ public class ERXJDBCUtilities {
 	 * @return the number of rows updated
 	 * @throws SQLException
 	 *             if there is a problem
+	 * @deprecated use executeUpdateScript with the boolean param
 	 */
 	public static int executeUpdateScriptIgnoringErrors(EOAdaptorChannel channel, String script) throws SQLException {
-		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(channel);
-		int rowsUpdated = 0;
-		Enumeration sqlStatementsEnum = sqlHelper.splitSQLStatements(script).objectEnumerator();
-		while (sqlStatementsEnum.hasMoreElements()) {
-			String sql = (String) sqlStatementsEnum.nextElement();
-			if (sqlHelper.shouldExecute(sql)) {
-				if (ERXJDBCUtilities.log.isInfoEnabled()) {
-					ERXJDBCUtilities.log.info("Executing " + sql);
-				}
-				try {
-					rowsUpdated += executeUpdate(channel, sql, true);
-				} catch(SQLException ex) {
-					ERXJDBCUtilities.log.warn("Ignoring Error: " + sql + " " + ex);
-				}
-			} else {
-				if (ERXJDBCUtilities.log.isInfoEnabled()) {
-					ERXJDBCUtilities.log.info("Skipping " + sql);
-				}
-			}
-		}
-		return rowsUpdated;
+		return ERXJDBCUtilities.executeUpdateScript(channel, script, true);
 	}
 
 	/**
