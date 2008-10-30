@@ -168,13 +168,13 @@ public class BTDataCreator {
 
 				String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
 				log.info("Creating tables: " + eomodel.name());
-				ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sqlScript);
+				ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, true);
 				if (eomodel.name().equals("BugTracker")) {
 					ERTaggableEntity0.upgrade(ec, channel, eomodel, Bug.ENTITY_NAME);
 					InputStream is = ERXFileUtilities.inputStreamForResourceNamed("populate.sql", "BTBusinessLogic", null);
 					String sql = ERXFileUtilities.stringFromInputStream(is);
 					log.info("Populating: " + eomodel.name());
-					ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sql);
+					ERXJDBCUtilities.executeUpdateScript(channel, sql, true);
 					// re-read shared data, the first time around it probably
 					// wasn't there
 					// strictly speaking, we'd also need to do this for ERC too
