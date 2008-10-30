@@ -60,6 +60,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 200
  * &lt;Sites type = &quot;Site&quot;&gt;
@@ -79,7 +80,7 @@ import er.extensions.eof.ERXEC;
  *       &lt;Bulletin id = &quot;243&quot;/&gt;
  *     &lt;/bulletins&gt;
  *   &lt;/Site&gt;
- * &lt;/Sites&gt;  
+ * &lt;/Sites&gt;
  * </pre>
  * 
  * <h2>Get a single site from the Site list</h2>
@@ -87,6 +88,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 200
  * &lt;Site id = &quot;100&quot;&gt;
@@ -104,6 +106,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/112.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 404
  * There is no Site with the id '112'.
@@ -114,6 +117,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/114.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 403
  * You are not allowed to view the Site with the id '112'.
@@ -124,6 +128,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 200
  * &lt;Bulletins type = &quot;Bulletin&quot;&gt;
@@ -150,6 +155,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 200
  * &lt;Bulletin id = &quot;201&quot;&gt;
@@ -164,6 +170,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -x PUT -d '&lt;Bulletin&gt;&lt;title&gt;Some random Bulletin!&lt;/title&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 200
  * </pre>
@@ -173,6 +180,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -X PUT -d '&lt;Bulletin&gt;&lt;title&gt;Some random Bulletin Again!&lt;/title&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 403
  * You tried to put a Bulletin into a Site.
@@ -183,6 +191,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -X PUT -d '&lt;Site&gt;&lt;title&gt;My Personal Site!&lt;/title&gt;&lt;/Site&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 200
  * </pre>
@@ -192,6 +201,7 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -X POST -d '&lt;Bulletin&gt;&lt;title&gt;New Bulletin By Me&lt;/title&gt;&lt;contents&gt;This is the contents of my bulletin&lt;/contents&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 201
  * &lt;Bulletin id = &quot;7324&quot;&gt;
@@ -205,14 +215,14 @@ import er.extensions.eof.ERXEC;
  * <pre>
  * curl -X DELETE -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/7324.xml?membershipTicket=someAuthToken
  * </pre>
+ * 
  * <pre>
  * HTTP Status Code: 200
  * </pre>
  * 
- * <h2>Using it Programmatically</h2>
- * If you want to process the results of a REST call to a remote server on your local
+ * <h2>Using it Programmatically</h2> If you want to process the results of a REST call to a remote server on your local
  * system (i.e. simple EO syncing), you can execute something like:
- *  
+ * 
  * <pre>
  * EOEditingContext editingContext = ERXEC.newEditingContext();
  * 
@@ -220,15 +230,15 @@ import er.extensions.eof.ERXEC;
  * restDelegate.addDelegateForEntityNamed(new ERXUnsafeRestEntityDelegate(true), Manufacturer.ENTITY_NAME);
  * ERXRestContext restContext = new ERXRestContext(context(), editingContext, restDelegate);
  * 
- * String contentStr = ERXFileUtilities.stringFromURL(new URL("http://someserver/rest/Manufacturer.xml"));
- * ERXRestRequest restRequest = new ERXXmlRestRequestParser().parseRestRequest(restContext, contentStr, "Manufacturer");
+ * String contentStr = ERXFileUtilities.stringFromURL(new URL(&quot;http://someserver/rest/Manufacturer.xml&quot;));
+ * ERXRestRequest restRequest = new ERXXmlRestRequestParser().parseRestRequest(restContext, contentStr, &quot;Manufacturer&quot;);
  * ERXRestKey restResponse = restDelegate.process(restRequest, restContext);
  * 
  * editingContext.saveChanges();
  * </pre>
  * 
- * This assumes your PK match across systems, which means you should probably be using UUID PK's for syncing
- * unless it's only one-way and read-only on the client.
+ * This assumes your PK match across systems, which means you should probably be using UUID PK's for syncing unless it's
+ * only one-way and read-only on the client.
  * 
  * @author mschrag
  */
@@ -432,7 +442,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 				String method = request.method();
 				if ("GET".equalsIgnoreCase(method)) {
 					IERXRestResponseWriter restResponseWriter = responseWriterForType(type);
-					restResponseWriter.appendToResponse(restContext, response, restRequest.key());
+					restResponseWriter.appendToResponse(restContext, new ERXWOResponseResponseWriter(response), restRequest.key());
 					editingContext.saveChanges();
 				}
 				else if ("DELETE".equalsIgnoreCase(method)) {
@@ -448,7 +458,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 					editingContext.saveChanges();
 
 					IERXRestResponseWriter restResponseWriter = responseWriterForType(type);
-					restResponseWriter.appendToResponse(restContext, response, responseKey);
+					restResponseWriter.appendToResponse(restContext, new ERXWOResponseResponseWriter(response), responseKey);
 					response.setStatus(201);
 				}
 			}
