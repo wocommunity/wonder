@@ -2,8 +2,6 @@ package er.rest;
 
 import java.text.ParseException;
 
-import com.webobjects.appserver.WOResponse;
-
 /**
  * IERXRestResponseWriter provides the interface for generating the output of a restful request.
  * 
@@ -32,5 +30,5 @@ public interface IERXRestResponseWriter {
 	 * @throws ParseException
 	 *             if there is a parse error
 	 */
-	public void appendToResponse(ERXRestContext context, WOResponse response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+	public void appendToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
 }

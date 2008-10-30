@@ -3,7 +3,6 @@ package er.rest;
 import java.text.ParseException;
 import java.util.Enumeration;
 
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -37,7 +36,7 @@ public class ERXJSONRestResponseWriter extends ERXAbstractRestResponseWriter {
 	}
 
 	@Override
-	protected void appendArrayToResponse(ERXRestContext context, WOResponse response, ERXRestKey key, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendArrayToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey key, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		response.appendContentString("[");
 
 		Enumeration valueKeysEnum = valueKeys.objectEnumerator();
@@ -53,7 +52,7 @@ public class ERXJSONRestResponseWriter extends ERXAbstractRestResponseWriter {
 	}
 
 	@Override
-	protected void appendDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendDetailsToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		indent(response, indent);
 		response.appendContentString("{\n");
 		
@@ -117,7 +116,7 @@ public class ERXJSONRestResponseWriter extends ERXAbstractRestResponseWriter {
 	}
 
 	@Override
-	protected void appendNoDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
+	protected void appendNoDetailsToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		response.appendContentString("{ \"id\" = ");
 		if (id instanceof String) {
 			response.appendContentString("\"");
@@ -131,13 +130,13 @@ public class ERXJSONRestResponseWriter extends ERXAbstractRestResponseWriter {
 	}
 
 	@Override
-	protected void appendPrimitiveToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, Object value) throws ERXRestException {
+	protected void appendPrimitiveToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, Object value) throws ERXRestException {
 		indent(response, indent);
 		response.appendContentString(String.valueOf(value));
 	}
 
 	@Override
-	protected void appendVisitedToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
+	protected void appendVisitedToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		response.appendContentString("{");
 		response.appendContentString("}");
 	}
