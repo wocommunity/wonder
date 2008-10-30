@@ -708,6 +708,38 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
+	 * Drops tables, primary keys, and foreign keys for the tables in the
+	 * given model.
+	 * 
+	 * @param channel
+	 *            the channel to use for execution
+	 * @param model
+	 *            the model to drop tables for
+	 * @throws SQLException
+	 *             if something fails
+	 */
+	public static void dropTablesForModel(EOAdaptorChannel channel, EOModel model) throws SQLException {
+		ERXJDBCUtilities.dropTablesForEntities(channel, model.entities());
+	}
+
+	/**
+	 * Drops tables, primary keys, and foreign keys for the given list of
+	 * entities. This is useful in your Migration #0 class.
+	 * 
+	 * @param channel
+	 *            the channel to use for execution
+	 * @param entities
+	 *            the entities to drop tables for
+	 * @throws SQLException
+	 *             if something fails
+	 */
+	public static void dropTablesForEntities(EOAdaptorChannel channel, NSArray<EOEntity> entities) throws SQLException {
+		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(channel);
+		String sqlScript = sqlHelper.createSchemaSQLForEntitiesWithOptions(entities, channel.adaptorContext().adaptor(), sqlHelper.defaultOptionDictionary(false, true));
+		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
+	}
+
+	/**
 	 * Creates tables, primary keys, and foreign keys for the tables in the
 	 * given model. This is useful in your Migration #0 class.
 	 * 
