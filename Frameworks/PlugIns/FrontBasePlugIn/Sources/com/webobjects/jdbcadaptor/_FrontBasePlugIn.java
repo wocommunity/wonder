@@ -1077,8 +1077,19 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			appendItemToListString(sql.toString(), _listString());
 		}
 
+	    protected boolean isInherited(EOAttribute attribute) {
+	        boolean inherited = false;
+	        
+	        EOEntity parentEntity = attribute.entity().parentEntity();
+	        while (!inherited && parentEntity != null && attribute.entity().externalName().equals(parentEntity.externalName())) {
+	            inherited = (parentEntity.attributeNamed(attribute.name()) != null);
+	            parentEntity = parentEntity.parentEntity();
+	        }
+	        return inherited;
+	    }
+		
 		private void _appendNotNullConstraintIfNecessary(EOAttribute attribute, StringBuffer sql) {
-			if (!attribute.allowsNull()) {
+			if (!attribute.allowsNull() && !isInherited(attribute)) {
 				if (USE_NAMED_CONSTRAINTS) {
 					sql.append(" CONSTRAINT ");
 					sql.append(notNullConstraintName(attribute));
