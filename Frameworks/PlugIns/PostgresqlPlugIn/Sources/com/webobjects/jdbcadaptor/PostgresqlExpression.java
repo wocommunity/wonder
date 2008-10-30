@@ -731,8 +731,9 @@ public class PostgresqlExpression extends JDBCExpression {
 
     protected boolean isInherited(EOAttribute attribute) {
         boolean inherited = false;
+        
         EOEntity parentEntity = attribute.entity().parentEntity();
-        while (!inherited && parentEntity != null) {
+        while (!inherited && parentEntity != null && attribute.entity().externalName().equals(parentEntity.externalName())) {
             inherited = (parentEntity.attributeNamed(attribute.name()) != null);
             parentEntity = parentEntity.parentEntity();
         }
