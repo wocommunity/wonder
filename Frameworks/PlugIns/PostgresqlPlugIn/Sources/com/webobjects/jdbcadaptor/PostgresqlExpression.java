@@ -728,6 +728,16 @@ public class PostgresqlExpression extends JDBCExpression {
     public String externalNameQuoteCharacter() { 
         return (enableIdentifierQuoting() ? EXTERNAL_NAME_QUOTE_CHARACTER : ""); 
     }
+
+    protected boolean isInherited(EOAttribute attribute) {
+        boolean inherited = false;
+        EOEntity parentEntity = attribute.entity().parentEntity();
+        while (!inherited && parentEntity != null) {
+            inherited = (parentEntity.attributeNamed(attribute.name()) != null);
+            parentEntity = parentEntity.parentEntity();
+        }
+        return inherited;
+    }
     
     public void addCreateClauseForAttribute(EOAttribute attribute) {
       NSDictionary userInfo = attribute.userInfo();
@@ -736,15 +746,22 @@ public class PostgresqlExpression extends JDBCExpression {
         defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default");
       }
       String sql;
+      boolean allowsNull = attribute.allowsNull();
+      if(!allowsNull) {
+          allowsNull = !isInherited(attribute);
+      }
+ 
+      String allowsNullClauseForConstraint = allowsNullClauseForConstraint(allowsNull);
       if (defaultValue == null) {
-        sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint(attribute.allowsNull()));
+          sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint);
       }
       else {
-        sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint(attribute.allowsNull()));
+          sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint);
       }
       appendItemToListString(sql, _listString());
     }
-    
+
+
     /**
      * cug: Quick hack for bug in WebObjects 5.4 where the "not null" statement is added without a space, 
      * and "addCreateClauseForAttribute" is not called anymore. Will probably change.
