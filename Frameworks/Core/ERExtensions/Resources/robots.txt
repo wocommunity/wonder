@@ -104,6 +104,7 @@ fastbug
 fast\-webcrawler
 fastcrawler
 fdse
+feedhub
 felix
 ferret
 fetchrover
