@@ -1,0 +1,13 @@
+/**
+ * This file lists all the styles used in Wonder. 
+ * It should include sensible defaults, but you might as well copy the contents to your own css file
+ */
+
+/* used by checkbox and radio boy matrix */
+.ERXMatrixTable {
+	
+}
+
+.ERXMatrixTableCell {
+	padding: 0px 2px 0px 8px;
+}
