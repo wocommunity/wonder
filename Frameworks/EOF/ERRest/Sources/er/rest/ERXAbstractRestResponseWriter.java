@@ -3,7 +3,6 @@ package er.rest;
 import java.text.ParseException;
 import java.util.Enumeration;
 
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -19,11 +18,11 @@ import er.extensions.localization.ERXLocalizer;
  * @author mschrag
  */
 public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseWriter {
-	public void appendToResponse(ERXRestContext context, WOResponse response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	public void appendToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		appendToResponse(context, response, result.trimPrevious(), 0, new NSMutableSet());
 	}
 
-	protected void appendArrayToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendArrayToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		EOEntity entity = result.nextEntity();
 		IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 		if (!(entityDelegate instanceof ERXDenyRestEntityDelegate)) {
@@ -53,7 +52,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		}
 	}
 
-	protected void appendToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		Object value = result.value();
 		if (value == null) {
 			// DO NOTHING
@@ -122,7 +121,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		}
 	}
 
-	protected void indent(WOResponse response, int indent) {
+	protected void indent(IERXResponseWriter response, int indent) {
 		for (int i = 0; i < indent; i++) {
 			response.appendContentString("  ");
 		}
@@ -212,7 +211,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @throws ParseException
 	 *             if a parse error occurs
 	 */
-	protected abstract void appendArrayToResponse(ERXRestContext context, WOResponse response, ERXRestKey key, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+	protected abstract void appendArrayToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey key, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
 
 	/**
 	 * Returns whether or not the details (i.e. the keys of an EO) should displayed for the given key.
@@ -270,7 +269,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @param indent
 	 *            the indent level
 	 */
-	protected abstract void appendVisitedToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
+	protected abstract void appendVisitedToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
 
 	/**
 	 * Write an object to the response without showing its details. This is typically similar to
@@ -294,7 +293,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @param indent
 	 *            the indent level
 	 */
-	protected abstract void appendNoDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
+	protected abstract void appendNoDetailsToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
 
 	/**
 	 * Writes the visible details of an object to the response. Permissions have already been checked by the time this
@@ -329,7 +328,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @throws ParseException
 	 *             if a parse error occurs
 	 */
-	protected abstract void appendDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+	protected abstract void appendDetailsToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
 
 	/**
 	 * Writes the bare primitive out to the response. Permissions have already been checked by the time this method is
@@ -348,5 +347,5 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @throws ERXRestException
 	 *             if a general failure occurs
 	 */
-	protected abstract void appendPrimitiveToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, Object value) throws ERXRestException;
+	protected abstract void appendPrimitiveToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, Object value) throws ERXRestException;
 }

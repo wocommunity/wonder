@@ -1,5 +1,7 @@
 package er.rest;
 
+import er.extensions.foundation.ERXProperties;
+
 /**
  * <p>
  * ERXXmlRestResponseWriter provides a concrete implementation of a restful response writer that can generate XML
@@ -131,7 +133,7 @@ public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 
 	@Override
 	protected boolean displayDetails(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		return _displayDetailsFromProperties(context, result);
+		return _displayDetailsFromProperties(context, result) || ERXProperties.booleanForKey(IERXRestResponseWriter.REST_PREFIX + ".details");
 	}
 
 	@Override
