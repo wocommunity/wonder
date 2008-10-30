@@ -173,16 +173,16 @@ public class ERXJDBCUtilities {
 
 		protected String[] columnsFromAttributes(EOAttribute[] attributes, boolean quoteNames) {
 
-			NSArray a = columnsFromAttributesAsArray(attributes, quoteNames);
+			NSArray<String> a = columnsFromAttributesAsArray(attributes, quoteNames);
 			String[] result = new String[a.count()];
 			for (int i = 0; i < a.count(); i++) {
-				String s = (String) a.objectAtIndex(i);
+				String s = a.objectAtIndex(i);
 				result[i] = s;
 			}
 			return result;
 		}
 
-		protected NSArray columnsFromAttributesAsArray(EOAttribute[] attributes, boolean quoteNames) {
+		protected NSArray<String> columnsFromAttributesAsArray(EOAttribute[] attributes, boolean quoteNames) {
 
 			if (attributes == null) {
 				throw new NullPointerException("attributes cannot be null!");
@@ -207,10 +207,10 @@ public class ERXJDBCUtilities {
 			return columns;
 		}
 
-		protected EOAttribute[] attributesArray(NSArray array) {
+		protected EOAttribute[] attributesArray(NSArray<EOAttribute> array) {
 			NSMutableArray<EOAttribute> attributes = new NSMutableArray<EOAttribute>();
 			for (int i = 0; i < array.count(); i++) {
-				EOAttribute att = (EOAttribute) array.objectAtIndex(i);
+				EOAttribute att = array.objectAtIndex(i);
 				if (!ERXStringUtilities.stringIsNullOrEmpty(att.columnName())) {
 					attributes.addObject(att);
 				}
@@ -592,7 +592,7 @@ public class ERXJDBCUtilities {
 	 *             if there is a problem
 	 */
 	public static int executeUpdateScript(EOAdaptorChannel channel, String sqlScript, boolean ignoreFailures) throws SQLException {
-		NSArray sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatements(sqlScript);
+		NSArray<String> sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatements(sqlScript);
 		return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements, ignoreFailures);
 	}
 
@@ -609,7 +609,7 @@ public class ERXJDBCUtilities {
 	 * @throws SQLException
 	 *             if there is a problem
 	 */
-	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray sqlStatements) throws SQLException {
+	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray<String> sqlStatements) throws SQLException {
 		return executeUpdateScript(channel, sqlStatements, false);
 	}
 	
@@ -627,7 +627,7 @@ public class ERXJDBCUtilities {
 	 * @throws SQLException
 	 *             if there is a problem
 	 */
-	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray sqlStatements, boolean ignoreFailures) throws SQLException {
+	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray<String> sqlStatements, boolean ignoreFailures) throws SQLException {
 		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(channel);
 		int rowsUpdated = 0;
 		boolean wasOpen = channel.isOpen();
@@ -638,9 +638,9 @@ public class ERXJDBCUtilities {
 		try {
 			Statement stmt = conn.createStatement();
 			try {
-				Enumeration sqlStatementsEnum = sqlStatements.objectEnumerator();
+				Enumeration<String> sqlStatementsEnum = sqlStatements.objectEnumerator();
 				while (sqlStatementsEnum.hasMoreElements()) {
-					String sql = (String) sqlStatementsEnum.nextElement();
+					String sql = sqlStatementsEnum.nextElement();
 					if (sqlHelper.shouldExecute(sql)) {
 						if (ERXJDBCUtilities.log.isInfoEnabled()) {
 							ERXJDBCUtilities.log.info("Executing " + sql);
@@ -736,7 +736,7 @@ public class ERXJDBCUtilities {
 		if (sqlScript == null) {
 			throw new IllegalArgumentException("There is no resource named '" + resourceName + "'.");
 		}
-		NSArray sqlStatements;
+		NSArray<String> sqlStatements;
 		try {
 			sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatementsFromInputStream(sqlScript);
 		}
