@@ -729,7 +729,7 @@ public class PostgresqlExpression extends JDBCExpression {
         return (enableIdentifierQuoting() ? EXTERNAL_NAME_QUOTE_CHARACTER : ""); 
     }
 
-    protected boolean isInherited(EOAttribute attribute) {
+    protected boolean isSingleTableInherited(EOAttribute attribute) {
         boolean inherited = false;
         
         EOEntity parentEntity = attribute.entity().parentEntity();
@@ -749,7 +749,7 @@ public class PostgresqlExpression extends JDBCExpression {
       String sql;
       boolean allowsNull = attribute.allowsNull();
       if(!allowsNull) {
-          allowsNull = !isInherited(attribute);
+          allowsNull = !isSingleTableInherited(attribute);
       }
  
       String allowsNullClauseForConstraint = allowsNullClauseForConstraint(allowsNull);
