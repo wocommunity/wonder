@@ -8,6 +8,7 @@ import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EODataSource;
@@ -335,7 +336,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			
 			EOModel model = EOModelGroup.defaultGroup().entityNamed(spec.entityName()).model();
 			ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
-			String sql = (String) spec.hints().valueForKey("EOCustomQueryExpressionHintKey");
+			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+			String sql = sqlHelper.customQueryExpressionHintAsString(sqlHelper);
 			sql = sqlHelper.limitExpressionForSQL(null, spec, sql, start, end);
 			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
 		}

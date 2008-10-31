@@ -567,6 +567,29 @@ public class ERXSQLHelper {
 	}
 
 	/**
+	 * Returns the custom query expression hint as a String.  At the moment, if it's an EOSQLExpression, it just returns .statement().
+	 * 
+	 * @param hint the hint to convert to a String 
+	 * @return the hint as a String
+	 */
+	public String customQueryExpressionHintAsString(Object hint) {
+		String sql;
+		if (hint instanceof String) {
+			sql = (String) hint;
+		}
+		else if (hint instanceof EOSQLExpression) {
+			sql = ((EOSQLExpression)hint).statement();
+			if (sql == null) {
+				throw new IllegalArgumentException("This EOSQLExpression's statement was null (" + hint + ").");
+			}
+		}
+		else {
+			sql = null;
+		}
+		return sql;
+	}
+	
+	/**
 	 * Creates the SQL which is used by the provided EOFetchSpecification,
 	 * limited by the given range.
 	 * 
@@ -609,7 +632,8 @@ public class ERXSQLHelper {
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
 		if(spec.hints() != null && !spec.hints().isEmpty() && !(spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null)) {
-			sql = (String)spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+			sql = customQueryExpressionHintAsString(hint);
 		}
 		if (end >= 0) {
 			sql = limitExpressionForSQL(sqlExpr, spec, sql, start, end);
@@ -1095,7 +1119,9 @@ public class ERXSQLHelper {
 		}
 		else {
 			// we have hints
-			sql = (String) spec.hints().valueForKey("EOCustomQueryExpressionHintKey");
+			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+			sql = ERXSQLHelper.newSQLHelper(model).customQueryExpressionHintAsString(hint);
+			// MS: This looks super sketchy ...
 			if (sql.endsWith(";")) {
 				sql = sql.substring(0, sql.length() - 1);
 			}
