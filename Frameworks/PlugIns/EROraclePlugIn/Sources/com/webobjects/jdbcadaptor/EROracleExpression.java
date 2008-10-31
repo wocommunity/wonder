@@ -51,7 +51,7 @@ public class EROracleExpression extends OracleExpression {
         super(eoentity);
     }
 
-    protected boolean isInherited(EOAttribute attribute) {
+    protected boolean isSingleTableInherited(EOAttribute attribute) {
         boolean inherited = false;
         
         EOEntity parentEntity = attribute.entity().parentEntity();
@@ -71,7 +71,7 @@ public class EROracleExpression extends OracleExpression {
       String sql;
       boolean allowsNull = attribute.allowsNull();
       if(!allowsNull) {
-          allowsNull = !isInherited(attribute);
+          allowsNull = !isSingleTableInherited(attribute);
       }
  
       String allowsNullClauseForConstraint = allowsNullClauseForConstraint(allowsNull);
