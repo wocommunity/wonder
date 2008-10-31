@@ -850,6 +850,17 @@ public class ERXFileUtilities {
     public static void chmod(File file, String mode) throws IOException {
     	Runtime.getRuntime().exec(new String[] {"chmod", mode, file.getAbsolutePath()});
     }
+
+    /**
+     * Java wrapper for call out to chmod with -R parameter for recursive processing.  Only works if your OS supports the chmod command.
+     *
+     * @param dir the File to run chmod on
+     * @param mode see the chmod man page
+     * @throws IOException if things go wrong
+     */
+    public static void chmodRecusively(File dir, String mode) throws IOException {
+    	Runtime.getRuntime().exec(new String[] {"chmod", "-R", mode, dir.getAbsolutePath()});
+    }
     
     /**
         * Creates a symlink for a given file. Note this only works on
