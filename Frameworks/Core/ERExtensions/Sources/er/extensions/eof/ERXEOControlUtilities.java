@@ -549,11 +549,11 @@ public class ERXEOControlUtilities {
      * @return objects in the given range
      */
     public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
+    	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
         NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
-        spec.setHints(hints);
-
-        return ec.objectsWithFetchSpecification(spec);
+        clonedFetchSpec.setHints(hints);
+        return ec.objectsWithFetchSpecification(clonedFetchSpec);
     }
 
     /**
@@ -573,10 +573,11 @@ public class ERXEOControlUtilities {
         NSArray pkNames = (NSArray) entity.primaryKeyAttributes().valueForKey("name");
         spec.setFetchesRawRows(true);
         spec.setRawRowKeyPaths(pkNames);
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
+    	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
         NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
-        spec.setHints(hints);
-        return ec.objectsWithFetchSpecification(spec);
+        clonedFetchSpec.setHints(hints);
+        return ec.objectsWithFetchSpecification(clonedFetchSpec);
     }
     
     /**
