@@ -550,7 +550,7 @@ public class ERXEOControlUtilities {
      */
     public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
-        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, "EOCustomQueryExpressionHintKey");
+        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
         spec.setHints(hints);
 
         return ec.objectsWithFetchSpecification(spec);
@@ -574,7 +574,7 @@ public class ERXEOControlUtilities {
         spec.setFetchesRawRows(true);
         spec.setRawRowKeyPaths(pkNames);
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
-        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, "EOCustomQueryExpressionHintKey");
+        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
         spec.setHints(hints);
         return ec.objectsWithFetchSpecification(spec);
     }
