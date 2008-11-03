@@ -4,11 +4,13 @@ import java.text.ParseException;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
+import er.extensions.eof.ERXModelGroup;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.localization.ERXLocalizer;
 
@@ -61,7 +63,9 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 			appendArrayToResponse(context, response, result, indent, visitedObjects);
 		}
 		else if (value instanceof EOEnterpriseObject) {
-			EOEntity entity = result.nextEntity();
+			String entityName = ((EOEnterpriseObject)value).entityName();
+			EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+			//EOEntity entity = result.nextEntity();
 			IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 			String entityAlias = entityDelegate.entityAliasForEntityNamed(entity.name());
 
