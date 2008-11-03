@@ -6,6 +6,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -315,7 +316,11 @@ public class ERXRestKey {
 	protected EOEntity nextEntity() throws ERXRestException {
 		EOEntity nextEntity = _nextEntity;
 		if (_nextEntity == null) {
-			if (isKeyAll()) {
+		  if (_value instanceof EOEnterpriseObject) {
+		    EOEnterpriseObject eo = (EOEnterpriseObject) _value;
+		    nextEntity = ERXEOAccessUtilities.entityNamed(eo.editingContext(), eo.entityName());
+		  }
+		  else if (isKeyAll()) {
 				nextEntity = _entity;
 			}
 			else if (isKeyGID()) {
