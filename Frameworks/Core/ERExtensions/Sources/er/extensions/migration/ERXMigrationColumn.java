@@ -322,7 +322,8 @@ public class ERXMigrationColumn {
 	@SuppressWarnings("unchecked")
 	public EOAttribute _newAttribute(EOEntity entity) {
 		JDBCAdaptor adaptor = (JDBCAdaptor) _table.database().adaptor();
-		String externalType = ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, _jdbcType);
+		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(adaptor);
+		String externalType = sqlHelper.externalTypeForJDBCType(adaptor, _jdbcType);
 		if (externalType == null) {
 			externalType = "IF_YOU_ARE_SEEING_THIS_SOMETHING_WENT_WRONG_WITH_EXTERNAL_TYPES";
 		}
@@ -350,7 +351,9 @@ public class ERXMigrationColumn {
 			else {
 				attribute.setValueType(_overrideValueType);
 			}
-			adaptor.assignExternalTypeForAttribute(attribute);
+			if (sqlHelper.reassignExternalTypeForValueTypeOverride(attribute)) {
+				adaptor.assignExternalTypeForAttribute(attribute);
+			}
 		}
 
 		if (_overrideExternalType != null) {

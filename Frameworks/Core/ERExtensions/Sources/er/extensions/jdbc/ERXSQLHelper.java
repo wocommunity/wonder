@@ -1363,6 +1363,10 @@ public class ERXSQLHelper {
 		}
 		return columnNames;
 	}
+	
+	public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
+		return true;
+	}
 
 	public static ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
 		// This is REALLY hacky.
@@ -1635,6 +1639,23 @@ public class ERXSQLHelper {
 		@Override
 		public String migrationTableName() {
 			return "dbupdater";
+		}
+		
+		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.TIMESTAMP) {
+				externalType = "DATE";
+			}
+			else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			System.out.println("OracleSQLHelper.externalTypeForJDBCType: " + jdbcType + ", " + externalType);
+			return externalType;
+		}
+		
+		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
+			return false;
 		}
 	}
 
