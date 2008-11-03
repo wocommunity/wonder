@@ -1650,7 +1650,6 @@ public class ERXSQLHelper {
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
 			}
-			System.out.println("OracleSQLHelper.externalTypeForJDBCType: " + jdbcType + ", " + externalType);
 			return externalType;
 		}
 		
