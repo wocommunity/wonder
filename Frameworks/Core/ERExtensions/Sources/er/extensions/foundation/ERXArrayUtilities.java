@@ -1441,6 +1441,16 @@ public class ERXArrayUtilities extends Object {
         return value;
     }
     
+    /**
+     * Shorter name for arrayWithoutDuplicates, which I always forget the name of.
+     * 
+     * @param <T> type of the array
+     * @param array the array to return distinct values from
+     * @return an array of distinct elements from the input array
+     */
+    public static <T> NSArray<T> distinct(NSArray<T> array) {
+      return ERXArrayUtilities.arrayWithoutDuplicates(array);
+    }
     
     /**
      * Filters out all of the duplicate objects in
