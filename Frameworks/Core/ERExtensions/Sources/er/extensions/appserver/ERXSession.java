@@ -18,6 +18,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
@@ -669,11 +670,11 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return ERXEC.newEditingContext();
   }
 
-  public static ERXSession session() {
-	  return (ERXSession) ERXThreadStorage.valueForKey("session");
+  public static <T extends WOSession> T session() {
+	  return (T) ERXThreadStorage.valueForKey("session");
   }
 
-  public static void setSession(ERXSession session) {
+  public static <T extends WOSession> void setSession(WOSession session) {
 	  ERXThreadStorage.takeValueForKey(session, "session");
   }
   
