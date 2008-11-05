@@ -146,7 +146,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
                 WOContext context = ERXWOContext.currentContext();
                 session = context != null ? context.session() : null;
             } else {
-                session = ERXSession.session();   // get it from the thread specific storage
+                session = ERXSession.anySession();   // get it from the thread specific storage
             }
 
             if (session != null  &&  session instanceof ERXSession) {
