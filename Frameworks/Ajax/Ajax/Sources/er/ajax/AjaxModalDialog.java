@@ -46,9 +46,8 @@ import er.extensions.appserver.ERXWOContext;
  * @binding title Title to be displayed in the ModalBox window header, also used as title attribute of link opening dialog
  * @binding linkTitle Title to be used as title attribute of link opening dialog, title is used if this is not present
  *
- * @binding width integer Width in pixels. Default is 
- * @binding height integer Height in pixels. Then set Modalbox will operate in 'fixed-height' mode. 
- * 			Otherwise the height will be calculated to fit content.
+ * @binding width integer Width in pixels, use -1 for auto-width
+ * @binding height integer Height in pixels, use -1 for auto-height. When set Modalbox will operate in 'fixed-height' mode. 
  * 
  * @binding onOpen server side method that runs before the dialog is opened, the return value is discarded
  * @binding onClose server side method that runs before the dialog is opened, the return value is discarded.
