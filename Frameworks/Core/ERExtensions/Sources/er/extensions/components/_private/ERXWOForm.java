@@ -433,6 +433,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		else {
 			if (!_disabled(context)) {
 				log.warn("This form is embedded inside another form, so the inner form is being omitted: " + this.toString());
+				log.warn("    page: " + context.page());
+				log.warn("    component: " + context.component());
 			}
 			appendChildrenToResponse(response, context);
 		}
