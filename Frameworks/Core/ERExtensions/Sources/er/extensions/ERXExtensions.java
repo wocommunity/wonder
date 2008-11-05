@@ -35,7 +35,6 @@ import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -1101,7 +1100,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param session that is currently active for this thread.
      * @deprecated use  ERXSession.setSession(session) instead
      */
-    public synchronized static void setSession(ERXSession session) {
+    public synchronized static <T extends WOSession> void setSession(T session) {
     	 ERXSession.setSession(session);
     }
 
@@ -1110,7 +1109,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @return current session object for this thread
      * @deprecated use  ERXSession.session() instead
      */
-    public synchronized static ERXSession session() {
+    public synchronized static <T extends WOSession> T session() {
         return  ERXSession.session();
     }
 

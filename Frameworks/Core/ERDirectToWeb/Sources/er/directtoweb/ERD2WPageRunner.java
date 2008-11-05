@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.ConfirmPageInterface;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.InspectPageInterface;
@@ -45,7 +46,7 @@ public class ERD2WPageRunner {
 	}
 
 	public void createPages() {
-		ERXSession session = ERXSession.session();
+		WOSession session = ERXSession.session();
 		// session = (ERXSession)context.session();
 		for (Enumeration pages = _pages.objectEnumerator(); pages.hasMoreElements();) {
 			String pageName = (String) pages.nextElement();

@@ -15,6 +15,7 @@ import org.jabsorb.serializer.UnmarshallException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
@@ -436,7 +437,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	@SuppressWarnings("unchecked")
 	public static Map<EOEditingContext, String> contexts() {
 		Map<EOEditingContext, String> contexts;
-		ERXSession session = ERXSession.session();
+		WOSession session = ERXSession.session();
 		if (session == null) {
 			contexts = _contexts;
 		}
