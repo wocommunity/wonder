@@ -54,7 +54,7 @@ public class AjaxSelectionList extends AjaxComponent {
 			setValueForBinding(null, "item");
 		}
 		else {
-			setValueForBinding(item, "item");
+			setValueForBinding(item, "item");  
 		}
 	}
 
@@ -68,8 +68,9 @@ public class AjaxSelectionList extends AjaxComponent {
 	}
 
 	public NSArray list() {
-		if (_list == null) {
-			_list = (NSArray) valueForBinding("list");
+	  NSArray list = (NSArray) valueForBinding("list");
+		if (_list == null || !_list.equals(list)) {
+		  _list = list;
 			if (!ERXComponentUtilities.booleanValueForBinding(this, "mandatory", true)) {
 				NSMutableArray optionList = _list.mutableClone();
 				optionList.insertObjectAtIndex(NSKeyValueCoding.NullValue, 0);
