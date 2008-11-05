@@ -465,7 +465,7 @@ public class ERXEOAccessUtilities {
     		// which is the default. In my case it was called indirectly from ERXEntityClassDescription.Factory.classDescriptionNeededForEntityName 
     		// resulting in locking problems
     		
-            WOSession s = ERXSession.session();
+            WOSession s = ERXSession.anySession();
             if (s != null) {
                 ec = s.defaultEditingContext();
             }

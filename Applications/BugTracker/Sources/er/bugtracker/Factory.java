@@ -124,7 +124,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     }
     
     private Session session() {
-        return ERXSession.session();
+        return (Session) ERXSession.anySession();
     }
     
     public WOComponent currentPage() {

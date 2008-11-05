@@ -670,11 +670,15 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return ERXEC.newEditingContext();
   }
 
-  public static <T extends WOSession> T session() {
-	  return (T) ERXThreadStorage.valueForKey("session");
+  public static WOSession anySession() {
+	  return (WOSession) ERXThreadStorage.valueForKey("session");
   }
 
-  public static <T extends WOSession> void setSession(WOSession session) {
+  public static ERXSession session() {
+	  return (ERXSession) ERXThreadStorage.valueForKey("session");
+  }
+
+  public static void setSession(ERXSession session) {
 	  ERXThreadStorage.takeValueForKey(session, "session");
   }
   

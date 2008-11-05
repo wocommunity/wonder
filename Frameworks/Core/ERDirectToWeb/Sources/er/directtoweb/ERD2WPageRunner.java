@@ -46,7 +46,7 @@ public class ERD2WPageRunner {
 	}
 
 	public void createPages() {
-		WOSession session = ERXSession.session();
+		WOSession session = ERXSession.anySession();
 		// session = (ERXSession)context.session();
 		for (Enumeration pages = _pages.objectEnumerator(); pages.hasMoreElements();) {
 			String pageName = (String) pages.nextElement();
