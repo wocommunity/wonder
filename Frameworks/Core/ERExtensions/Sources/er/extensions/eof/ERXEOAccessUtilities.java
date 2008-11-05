@@ -15,6 +15,7 @@ import java.util.Set;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAdaptorOperation;
@@ -464,7 +465,7 @@ public class ERXEOAccessUtilities {
     		// which is the default. In my case it was called indirectly from ERXEntityClassDescription.Factory.classDescriptionNeededForEntityName 
     		// resulting in locking problems
     		
-            ERXSession s = ERXSession.session();
+            WOSession s = ERXSession.session();
             if (s != null) {
                 ec = s.defaultEditingContext();
             }
