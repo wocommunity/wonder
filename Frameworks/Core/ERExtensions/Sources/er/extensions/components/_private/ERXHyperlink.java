@@ -73,8 +73,8 @@ public class ERXHyperlink extends WOHyperlink {
                 result = invokeChildrenAction(request, context);
             }
         }
-        if (result != null && ERXSession.session() != null) {
-        	ERXSession.session().setObjectForKey(this.toString(), "ERXActionLogging");
+        if (result != null && ERXSession.anySession() != null) {
+        	ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
         }
         return result;
     }

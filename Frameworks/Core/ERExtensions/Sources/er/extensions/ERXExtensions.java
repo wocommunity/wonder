@@ -1100,7 +1100,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param session that is currently active for this thread.
      * @deprecated use  ERXSession.setSession(session) instead
      */
-    public synchronized static <T extends WOSession> void setSession(T session) {
+    public synchronized static void setSession(ERXSession session) {
     	 ERXSession.setSession(session);
     }
 
@@ -1109,7 +1109,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @return current session object for this thread
      * @deprecated use  ERXSession.session() instead
      */
-    public synchronized static <T extends WOSession> T session() {
+    public synchronized static ERXSession session() {
         return  ERXSession.session();
     }
 
