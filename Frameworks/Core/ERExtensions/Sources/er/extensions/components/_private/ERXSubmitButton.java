@@ -51,12 +51,23 @@ public class ERXSubmitButton extends WOInput {
     "        btns[i].btnonclick = btns[i].onclick;\n" +
     "        btns[i].onclick = function() {\n" +
     "            var bs = document.getElementsByTagName('button');\n" +
-    "            for (var i=0;i<btns.length;i++) {\n" +
-    "                if (btns[i] != this) \n" +
-    "                    btns[i].disabled = true;\n" +
-    "            }" +
+    "            var disabledbs = new Array();\n" +
+    "            for (var i=0;i<bs.length;i++) {\n" +
+    "                if (bs[i] != this && ! bs[i].disabled) { \n" +
+    "                    bs[i].disabled = true;\n" +
+    "                    disabledbs[disabledbs.length] = bs[i];\n" +
+    "                }\n" +
+    "            }\n" +
     "            this.innerHTML = this.value;\n" +
-    "            if(this.btnonclick) return this.btnonclick();\n" +
+    "            if(this.btnonclick) {\n" +
+    "                var result = this.btnonclick();\n" +
+    "                if ( ! result) {\n" +
+    "                    for (var i=0;i<disabledbs.length;i++) {\n" +
+    "                        disabledbs[i].disabled = false;\n" +
+    "                    }\n" +
+    "                }\n" +
+    "                return result;\n" +
+    "            }\n" +
     "            return true;\n" +
     "        }\n" +
     "    }\n" +
