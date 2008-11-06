@@ -38,6 +38,7 @@ public class ERXSubmitButton extends WOInput {
 	public static final String STYLE_PREFIX = "ERXSubmitButton-";
 	
     protected WOAssociation _class;
+    protected WOAssociation _id;
     protected WOAssociation _action;
     protected WOAssociation _actionClass;
     protected WOAssociation _directActionName;
@@ -85,7 +86,15 @@ public class ERXSubmitButton extends WOInput {
         else {
         	_class = (WOAssociation)_associations.removeObjectForKey("class");
         }
-        
+
+        // hack for 5.4
+        if (ERXApplication.isWO54()) {
+        	_id = (WOAssociation) nsdictionary.valueForKey("id");
+        }
+        else {
+        	_id = (WOAssociation)_associations.removeObjectForKey("id");
+        }
+
         if(_action != null && _action.isValueConstant())
             throw new WODynamicElementCreationException("<" + getClass().getName() + ">'action' is a constant.");
         if(_action != null && _directActionName != null || _action != null && _actionClass != null)
