@@ -170,7 +170,7 @@ public class ERXPatcher {
 		    public void appendChildrenToResponse(WOResponse aResponse, WOContext aContext) {
 				super.appendChildrenToResponse(aResponse, aContext);
 		        if(useButtonTag && !hasChildrenElements()) {
-		        	aResponse.appendContentHTMLString(_valueStringInContext(aContext));
+		        	aResponse.appendContentString(_valueStringInContext(aContext));
 		        }
 		    }
 			
