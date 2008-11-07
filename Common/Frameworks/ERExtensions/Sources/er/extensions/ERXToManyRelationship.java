@@ -265,4 +265,13 @@ public class ERXToManyRelationship extends WOToManyRelationship {
     protected String _localRelativeRelationshipKey() {
         return hasKeyPath() ? ERXStringUtilities.lastPropertyKeyInKeyPath(_localRelationshipKey()) : _localRelationshipKey();
     }
+
+    public boolean isBrowser() {
+        return !(isCheckBox() || isJSEditor()); // Browser is the default.
+    }
+
+    public boolean isJSEditor() {
+        return "jsEditor".equalsIgnoreCase(uiStyle());
+    }
+
 }

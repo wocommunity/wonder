@@ -7,7 +7,7 @@
 		<binding name="destinationDisplayKey"/>
 		<binding name="isMandatory"/>
 		<binding name="relationshipKey"/>
-		<binding name="destitationEntityName"/>
+		<binding name="destinationEntityName"/>
 		<binding name="sourceEntityName"/>
 		<binding name="sourceObject"/>
 		<binding name="uiStyle"/>

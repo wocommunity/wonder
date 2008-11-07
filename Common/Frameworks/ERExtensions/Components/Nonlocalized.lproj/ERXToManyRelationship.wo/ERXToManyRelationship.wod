@@ -7,6 +7,10 @@ BrowserList: WOBrowser {
 	size = ^size;
 }
 
+CheckboxLabelString: WOString {
+	value = theCurrentValue;
+}
+
 CheckboxMatrix: ERXCheckboxMatrix {
 	item = theCurrentItem;
 	list = theList;
@@ -18,15 +22,20 @@ CheckboxMatrix: ERXCheckboxMatrix {
 }
 
 IsBrowserConditional: WOConditional {
-	condition = isCheckBox;
-	negate = true;
+	condition = isBrowser;
 }
 
 IsCheckboxConditional: WOConditional {
 	condition = isCheckBox;
 }
 
-String: WOString {
-	value = theCurrentValue;
+IsJSEditorConditional: WOConditional {
+	condition = isJSEditor;
 }
 
+JSEditor: ERXJSToManyRelationshipEditor {
+	displayString = theCurrentValue;
+	item = theCurrentItem;
+	list = theList;
+	selections = selections;
+}
