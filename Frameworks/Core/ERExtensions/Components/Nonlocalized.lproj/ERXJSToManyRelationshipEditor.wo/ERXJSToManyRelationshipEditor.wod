@@ -1,0 +1,72 @@
+AddHyperlink: WOHyperlink {
+	href = "javascript:void(0)";
+	onclick = addItemScript;
+}
+
+AddImage: WOImage {
+	alt = "Add";
+	filename = "plus.gif";
+	framework = "ERExtensions";
+	height = 14;
+	width = 15;
+}
+
+AvailableValuesPopup: WOString {
+	escapeHTML = false;
+	value = availableValuesPopupMenu;
+}
+
+DisplayNameString: WOString {
+	value = displayString;
+}
+
+OncePerRequest: ERXOncePerRequestConditional {
+	keyName = "ERXJSToManyRelationshipEditor";
+}
+
+RemoveHyperlink: WOHyperlink {
+	href = "javascript:void(0)";
+	onclick = removeItemScript;
+}
+
+RemoveImageTemplate: WOImage {
+	alt = "Remove";
+	filename = "minus.gif";
+	framework = "ERExtensions";
+	height = 14;
+	id = "ERXJSToManyRelationshipEditor_RemoveImageTemplate";
+	style = "display: none;";
+	width = 15;
+}
+
+RemoveImage: WOImage {
+	alt = "Remove";
+	filename = "minus.gif";
+	framework = "ERExtensions";
+	height = 14;
+	width = 15;
+}
+
+ScriptForThisEditorInstance: WOString {
+	escapeHTML = false;
+	value = javascriptForThisEditorInstance;
+}
+
+SelectedObjectsRepetition: WORepetition {
+	item = currentItem;
+	list = selections;
+}
+
+SelectedValuesHiddenField: WOHiddenField {
+	id = hiddenFieldName;
+	value = selectionsString;
+}
+
+SelectedValuesTable: WOGenericContainer {
+	border = "0";
+	cellpadding = "2";
+	cellspacing = "0";
+	class = "SelectedValuesTable";
+	elementName = "table";
+	id = selectedValuesTableName;
+}
