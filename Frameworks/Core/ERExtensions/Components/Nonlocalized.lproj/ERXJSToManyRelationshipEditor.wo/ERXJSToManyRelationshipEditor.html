@@ -1,0 +1,166 @@
+<webobject name="OncePerRequest">
+<script type="text/javascript">
+//<![CDATA[
+ERXJSToManyRelationshipEditor = function() {};
+ERXJSToManyRelationshipEditor.prototype = {
+	
+	elementID: null,
+	possibleValues: {},
+	selectedValues: [],
+	
+	addToSelectedValues: function() {
+		var hiddenFieldName = 'ERXJSToManyRelationshipEditor_SelectedValues_' + this.elementID;
+		var hiddenFieldEl = document.getElementById(hiddenFieldName);
+		
+		var popupName = 'ERXJSToManyRelationshipEditor_SelectedValuesPopup_' + this.elementID;
+		var popupEl = document.getElementById(popupName);
+		
+		var selectedValue = popupEl.value;
+		if (selectedValue) {
+			if (this.selectedValues.indexOf(selectedValue) == -1) {
+				this.selectedValues.push(selectedValue);
+				this.selectedValues.sort(function(a, b) { return a - b });
+			}
+		}
+		
+		hiddenFieldEl.value = this.selectedValues.join(', ');
+		
+		this.addValueToSelectionsTable(selectedValue);
+		this.removeValueFromAvailableValuesPopup(selectedValue);
+	},
+	
+	removeFromSelectedValues: function(el, value) {
+		var hiddenFieldName = 'ERXJSToManyRelationshipEditor_SelectedValues_' + this.elementID;
+		var hiddenFieldEl = document.getElementById(hiddenFieldName);
+		
+		var index = this.selectedValues.indexOf(value);
+		if (index > 0) {
+			this.selectedValues.splice(index, 1);
+		}
+		
+		hiddenFieldEl.value = this.selectedValues.join(', ');
+		
+		this.removeValueFromSelectionsTable(el);
+		this.addValueToAvailableValuesPopup(value);
+	},
+	
+	addValueToSelectionsTable: function(value) {
+		var tableName = 'ERXJSToManyRelationshipEditor_SelectedValuesTable_' + this.elementID;
+		var tableEl = document.getElementById(tableName);
+		
+		// Create the new row.
+		var newRow = document.createElement('tr');
+		
+		// Create the cell for the display string.
+		var nameCell = document.createElement('td');
+		var displayStringNode = document.createTextNode(this.possibleValues[value])
+		nameCell.appendChild(displayStringNode);
+		newRow.appendChild(nameCell);
+		
+		// Create the cell and the delete link.
+		var deleteLinkCell = document.createElement('td');
+		var deleteLink = document.createElement('a')
+		deleteLink.setAttribute('href', 'javascript:void(0)');
+		deleteLink.setAttribute('onclick', 'ERXJSToManyRelationshipEditor_' + this.elementID + '.removeFromSelectedValues(this, ' + value + '); return false;');
+		
+		// Create the remove imag
+		var removeImageTemplateEl = document.getElementById('ERXJSToManyRelationshipEditor_RemoveImageTemplate');
+		if (removeImageTemplateEl) {
+			var newRemoveImageEl = removeImageTemplateEl.cloneNode(false);
+			newRemoveImageEl.removeAttribute('id');
+			newRemoveImageEl.removeAttribute('style');
+			deleteLink.appendChild(newRemoveImageEl);
+		} else {
+			var linkText = document.createTextNode('Remove');
+			deleteLink.appendChild(linkText);
+		}
+		
+		deleteLinkCell.appendChild(deleteLink);
+		newRow.appendChild(deleteLinkCell);
+		
+		var rowEls = tableEl.getElementsByTagName('tr');
+		var lastRowEl = rowEls[rowEls.length - 1];
+		
+		// Finally, insert the new row into the table.
+		lastRowEl.parentNode.insertBefore(newRow, lastRowEl);
+	},
+	
+	addValueToAvailableValuesPopup: function(value) {
+		var popupName = 'ERXJSToManyRelationshipEditor_SelectedValuesPopup_' + this.elementID;
+		var popupEl = document.getElementById(popupName);
+		var options = popupEl.options;
+		
+		// Create the new option element
+		var newOptionEl = document.createElement('option');
+		newOptionEl.setAttribute('value', value);
+		newOptionEl.appendChild(document.createTextNode(this.possibleValues[value]));
+		
+		// Find the correct position in the select menu and insert the new options element.
+		var numOptions = options.length;
+		if (numOptions == 0) {
+			popupEl.appendChild(newOptionEl);
+		} else {
+			for (var i = 0; i < numOptions; i++) {
+				var anOption = options[i];
+				if (i == numOptions - 1) {
+					popupEl.appendChild(newOptionEl);
+					break;
+				} else if (anOption.value > value) {
+					popupEl.insertBefore(newOptionEl, anOption);
+					break;
+				}
+			}
+		}
+	},
+	
+	removeValueFromSelectionsTable: function(originating_el) {
+		var rowEl = originating_el.parentNode;
+		while (rowEl && rowEl.nodeName.toLowerCase() != 'tr') {
+			rowEl = rowEl.parentNode;
+		}
+		if (rowEl && rowEl.nodeName.toLowerCase() == 'tr') {
+			rowEl.parentNode.removeChild(rowEl);
+		}
+	},
+	
+	removeValueFromAvailableValuesPopup: function(value) {
+		var popupName = 'ERXJSToManyRelationshipEditor_SelectedValuesPopup_' + this.elementID;
+		var popupEl = document.getElementById(popupName);
+		var options = popupEl.options;
+		
+		for (var i = 0; i < options.length; i++) {
+			var option = options[i];
+			if (option.value == value) {
+				popupEl.removeChild(option);
+				break;
+			}
+		}
+	}
+};
+// ]]>
+</script>
+
+<webobject name="RemoveImageTemplate"></webobject>
+
+</webobject>
+
+<script type="text/javascript">
+//<![CDATA[
+<webobject name="ScriptForThisEditorInstance"></webobject>
+// ]]>
+</script>
+
+<webobject name="SelectedValuesHiddenField"></webobject>
+
+<webobject name="SelectedValuesTable">
+	<webobject name="SelectedObjectsRepetition">
+	<tr>
+		<td><webobject name="DisplayNameString"></webobject></td>
+		<td><webobject name="RemoveHyperlink"><webobject name="RemoveImage"></webobject></webobject></td>
+	</tr>
+	</webobject>
+	<tr class="AvailableValuesRow">
+		<td><webobject name="AvailableValuesPopup"></webobject></td>
+		<td><webobject name="AddHyperlink"><webobject name="AddImage"></webobject></webobject></td>
+	</tr>
+</webobject>
