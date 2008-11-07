@@ -62,8 +62,8 @@ public class ERXAccessibleSubmitButton  extends ERXSubmitButton {
 	public ERXAccessibleSubmitButton(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
 		super(name, associations, template);
 
-        _accesskey = _associations.removeObjectForKey("accesskey");
-        _accesskeyElement = _associations.removeObjectForKey("accesskeyElement");
+        _accesskey = (WOAssociation)_associations.removeObjectForKey("accesskey");
+        _accesskeyElement = (WOAssociation)_associations.removeObjectForKey("accesskeyElement");
         if(_accesskeyElement == null) {
         	_accesskeyElement = new WOConstantValueAssociation("u");
         }
