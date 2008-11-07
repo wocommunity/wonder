@@ -68,4 +68,12 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         }
         return _dataSource;
     }
+
+    public boolean isBrowser() {
+        return !(isCheckBox() || isJSEditor()); // Browser is the default.
+    }
+
+    public boolean isJSEditor() {
+        return "jsEditor".equalsIgnoreCase(uiStyle());
+    }
 }
