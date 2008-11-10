@@ -1,5 +1,7 @@
 package er.sproutcore.views;
 
+import java.util.Set;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
@@ -29,4 +31,11 @@ public class SCSliderView extends SCView {
         String html = "<span class=\"outer\"><span " + style + "class=\"inner\"></span><img src=\"" + SCUtilities.staticUrl("blank.gif") + "\" class=\"sc-handle\" /></span>";
         response.appendContentString(html);
     }
+
+	@Override
+	public Set<String> cssNames(WOContext context) {
+		Set<String> cssNames = super.cssNames(context);
+		cssNames.add("sc-slider-view");
+		return cssNames;
+	}
 }

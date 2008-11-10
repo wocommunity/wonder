@@ -1,5 +1,8 @@
 package er.sproutcore.views.button;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
@@ -50,14 +53,17 @@ public class SCButtonView extends SCView {
 	}
 
 	@Override
-	public String css(WOContext context) {
-		String css = super.css(context);
-		css += " " + buttonStyle(context);
-		css += (booleanValueForBinding("enabled", true, context.component()) ? "" : " disabled");
-		Object selected = valueForBinding("selected", context.component());
-		css += (selected instanceof String ? " " + selected : "");
-		css += (selected instanceof Boolean && ((Boolean) selected) ? " selected" : "");
-		return css;
+	public Set<String> cssNames(WOContext context) {
+		Set<String> cssNames = super.cssNames(context);
+		cssNames.add("sc-button-view");
+		cssNames.add("button");
+		String theme = theme(context);
+		if (theme != null) cssNames.add(theme);
+		String size = size(context);
+		if (size != null) cssNames.add(size);
+		String image = image(context);
+		if (image != null) cssNames.add(image);
+		return cssNames;
 	}
 
 	@Override
@@ -77,22 +83,16 @@ public class SCButtonView extends SCView {
 		return (String) valueForBinding("size", defaultSize(context), context.component());
 	}
 
+	public String image(WOContext context) {
+		return (String) valueForBinding("image", context.component());
+	}
+
 	public String defaultTheme(WOContext context) {
 		return "regular";
 	}
 
 	public String defaultSize(WOContext context) {
 		return "normal";
-	}
-
-	public String buttonStyle(WOContext context) {
-		StringBuffer css = new StringBuffer();
-		css.append("button");
-		css.append(" ");
-		css.append(theme(context));
-		css.append(" ");
-		css.append(size(context));
-		return css.toString();
 	}
 
 	protected String label(WOContext context) {

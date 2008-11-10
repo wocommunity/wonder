@@ -1,5 +1,7 @@
 package er.sproutcore.views.button;
 
+import java.util.Set;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
@@ -21,8 +23,10 @@ public class SCDisclosureView extends SCButtonView {
 	}
 
 	@Override
-	public String cssName(WOContext context) {
-		return "sc-disclosure-view";
+	public Set<String> cssNames(WOContext context) {
+		Set<String> cssNames = super.cssNames(context);
+		cssNames.add("sc-disclosure-view");
+		return cssNames;
 	}
 
 	@Override

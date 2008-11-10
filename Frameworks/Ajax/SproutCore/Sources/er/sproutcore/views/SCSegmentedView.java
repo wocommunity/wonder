@@ -1,5 +1,7 @@
 package er.sproutcore.views;
 
+import java.util.Set;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
@@ -52,6 +54,13 @@ public class SCSegmentedView extends SCComponent {
 	public String containerID() {
 		SCItem item = SCItem.currentItem();
 		return (item.isRoot()) ? item.id() : null;
+	}
+
+	// TODO: Override
+	public Set<String> cssNames(WOContext context) {
+		Set<String> cssNames = null; // super.cssNames();
+		//cssNames.add("segments");
+		return cssNames;
 	}
 
 	@Override

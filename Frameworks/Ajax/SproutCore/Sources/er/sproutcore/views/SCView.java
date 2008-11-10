@@ -1,6 +1,8 @@
 package er.sproutcore.views;
 
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -231,6 +233,10 @@ public class SCView extends WODynamicGroup implements ISCView {
       return defaultName;
     }
 
+    public Set<String> cssNames(WOContext context) {
+    	return new HashSet<String>();
+    }
+    
     public String cssName(WOContext context) {
         if (getClass() == SCView.class)
             return "";
@@ -260,27 +266,38 @@ public class SCView extends WODynamicGroup implements ISCView {
         return "div";
     }
 
+    public static String join( String token, String[] strings ) {
+        StringBuffer sb = new StringBuffer();
+        
+        String addToken = "";
+
+        for (String s : strings) {
+        	sb.append(addToken).append(s);
+        	addToken = token;
+        }
+
+        return( sb.toString() );
+    }
+    
     public String css(WOContext context) {
+    	Set<String> cssNames = new HashSet<String>();
         String css = (String) valueForBinding("class", context.component());
-        if (css == null) {
-            css = "";
+        if (css != null) {
+        	cssNames.add(css);
         }
-        String cssName = cssName(context);
-        if (cssName != null) {
-        	css = css + " " + cssName;
-        }
-        return css;
+		if (!enabled(context)) {
+			cssNames.add("disabled");
+		}
+        cssNames.addAll(cssNames(context));
+        return SCView.join(" ", cssNames.toArray(new String[0]));
     }
 
+	public boolean enabled(WOContext context) {
+		return booleanValueForBinding("enabled", true, context.component());
+	}
+
     public String style(WOContext context) {
-        String style = (String) valueForBinding("style", context.component());
-        /*boolean isVisible = booleanValueForBinding("visible", true, context.component());
-        if(!isVisible) {
-        	style = (style == null ? "" : style);
-        	style += "display: none;";
-        }
- */
-        return style;
+        return (String) valueForBinding("style", context.component());
     }
 
     public SCItem currentItem() {
