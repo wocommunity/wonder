@@ -3,17 +3,16 @@ package er.rest;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableSet;
 
 /**
- * ERXUnsafeRestEntityDelegate should probably never be used in production.  This is an entity delegate
- * implementation designed to allow you to explore the features of ERRest without having to 
- * actually write custom delegates.  This implementation allows full access to read any object in 
- * any model in your system that it is assigned to be a delegate for.
+ * ERXUnsafeRestEntityDelegate should probably never be used in production. This is an entity delegate implementation
+ * designed to allow you to explore the features of ERRest without having to actually write custom delegates. This
+ * implementation allows full access to read any object in any model in your system that it is assigned to be a delegate
+ * for.
  * 
  * @author mschrag
  */
@@ -23,12 +22,12 @@ public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDe
 	public ERXUnsafeReadOnlyRestEntityDelegate() {
 		_initializedEntityNames = new NSMutableSet();
 	}
-	
+
 	@Override
 	public void initializeEntityNamed(String entityName) {
 		if (!_initializedEntityNames.containsObject(entityName)) {
 			super.initializeEntityNamed(entityName);
-			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(EOModelGroup.defaultGroup().entityNamed(entityName), true);
+			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(ERXRestUtils.getEntityNamed(entityName), true);
 			Enumeration allPropertyNamesEnum = allPropertyNames.objectEnumerator();
 			while (allPropertyNamesEnum.hasMoreElements()) {
 				String propertyName = (String) allPropertyNamesEnum.nextElement();

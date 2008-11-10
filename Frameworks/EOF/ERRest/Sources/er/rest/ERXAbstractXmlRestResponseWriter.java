@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -24,37 +25,39 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		response.appendContentString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		super.appendToResponse(context, response, result);
 	}
-	
+
 	protected void appendTypeToResponse(IERXResponseWriter response, Object value) {
 		if (value instanceof String) {
 			// do nothing
 		}
-		else if (value instanceof NSTimestamp) {
-			response.appendContentString(" type = \"datetime\"");
-		}
-		else if (value instanceof Integer) {
-			response.appendContentString(" type = \"integer\"");
-		}
-		else if (value instanceof Long) {
-			response.appendContentString(" type = \"long\"");
-		}
-		else if (value instanceof Short) {
-			response.appendContentString(" type = \"short\"");
-		}
-		else if (value instanceof Double) {
-			response.appendContentString(" type = \"double\"");
-		}
-		else if (value instanceof Float) {
-			response.appendContentString(" type = \"float\"");
-		}
-		else if (value instanceof Boolean) {
-			response.appendContentString(" type = \"boolean\"");
-		}
-		else if (value instanceof BigDecimal) {
-			response.appendContentString(" type = \"bigint\"");
-		}
-		else if (value instanceof Enum) {
-			response.appendContentString(" type = \"enum\"");
+		else if (!ERXProperties.booleanForKeyWithDefault("ERXRest.suppressTypeAttributesForSimpleTypes", false)) {
+			if (value instanceof NSTimestamp) {
+				response.appendContentString(" type = \"datetime\"");
+			}
+			else if (value instanceof Integer) {
+				response.appendContentString(" type = \"integer\"");
+			}
+			else if (value instanceof Long) {
+				response.appendContentString(" type = \"long\"");
+			}
+			else if (value instanceof Short) {
+				response.appendContentString(" type = \"short\"");
+			}
+			else if (value instanceof Double) {
+				response.appendContentString(" type = \"double\"");
+			}
+			else if (value instanceof Float) {
+				response.appendContentString(" type = \"float\"");
+			}
+			else if (value instanceof Boolean) {
+				response.appendContentString(" type = \"boolean\"");
+			}
+			else if (value instanceof BigDecimal) {
+				response.appendContentString(" type = \"bigint\"");
+			}
+			else if (value instanceof Enum) {
+				response.appendContentString(" type = \"enum\"");
+			}
 		}
 	}
 
@@ -83,7 +86,7 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		response.appendContentString(">");
 		response.appendContentString("\n");
 	}
-	
+
 	@Override
 	protected void appendVisitedToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		indent(response, indent);
@@ -95,15 +98,15 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 			response.appendContentString(entityName);
 			response.appendContentString("\"");
 		}
-		
+
 		response.appendContentString(" id = \"");
 		response.appendContentString(String.valueOf(id));
 		response.appendContentString("\"");
-		
+
 		response.appendContentString("/>");
 		response.appendContentString("\n");
 	}
-	
+
 	@Override
 	protected void appendNoDetailsToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		indent(response, indent);
@@ -115,41 +118,41 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 			response.appendContentString(entityName);
 			response.appendContentString("\"");
 		}
-		
+
 		response.appendContentString(" id = \"");
 		response.appendContentString(String.valueOf(id));
 		response.appendContentString("\"");
-		
+
 		response.appendContentString("/>");
 		response.appendContentString("\n");
-		
-//		response.appendContentString(">");
-//
-//		response.appendContentString(String.valueOf(id));
-//
-//		response.appendContentString("</");
-//		response.appendContentString(objectName);
-//		response.appendContentString(">\n");
-		
-//		response.appendContentString(" id = \"");
-//		response.appendContentString(String.valueOf(id));
-//		response.appendContentString("\"");
-//		response.appendContentString("/>\n");
-//		
-//		response.appendContentString(">\n");
-//		
-//		indent(response, indent + 1);
-//		response.appendContentString("<id");
-//		appendTypeToResponse(response, id);
-//		response.appendContentString(">");
-//		response.appendContentString(String.valueOf(id));
-//		response.appendContentString("</id>");
-//		response.appendContentString("\n");
-//
-//		indent(response, indent);
-//		response.appendContentString("</");
-//		response.appendContentString(objectName);
-//		response.appendContentString(">\n");
+
+		// response.appendContentString(">");
+		//
+		// response.appendContentString(String.valueOf(id));
+		//
+		// response.appendContentString("</");
+		// response.appendContentString(objectName);
+		// response.appendContentString(">\n");
+
+		// response.appendContentString(" id = \"");
+		// response.appendContentString(String.valueOf(id));
+		// response.appendContentString("\"");
+		// response.appendContentString("/>\n");
+		//		
+		// response.appendContentString(">\n");
+		//		
+		// indent(response, indent + 1);
+		// response.appendContentString("<id");
+		// appendTypeToResponse(response, id);
+		// response.appendContentString(">");
+		// response.appendContentString(String.valueOf(id));
+		// response.appendContentString("</id>");
+		// response.appendContentString("\n");
+		//
+		// indent(response, indent);
+		// response.appendContentString("</");
+		// response.appendContentString(objectName);
+		// response.appendContentString(">\n");
 	}
 
 	@Override
@@ -165,7 +168,7 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		}
 		response.appendContentString(">");
 		response.appendContentString("\n");
-		
+
 		indent(response, indent + 1);
 		response.appendContentString("<id");
 		appendTypeToResponse(response, id);
@@ -173,10 +176,10 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		response.appendContentString(String.valueOf(id));
 		response.appendContentString("</id>");
 		response.appendContentString("\n");
-		
+
 		Enumeration displayKeysEnum = displayKeys.objectEnumerator();
 		while (displayKeysEnum.hasMoreElements()) {
-			ERXRestKey displayKey = (ERXRestKey)displayKeysEnum.nextElement();
+			ERXRestKey displayKey = (ERXRestKey) displayKeysEnum.nextElement();
 			String propertyName = displayKey.key();
 			Object propertyValue = displayKey.value();
 			if (propertyValue instanceof NSArray) {
@@ -192,10 +195,15 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 					indent(response, indent + 1);
 					response.appendContentString("<");
 					response.appendContentString(propertyAlias);
-					appendTypeToResponse(response, propertyValue);
+					if (propertyValue instanceof String) {
+						appendTypeToResponse(response, ERXStringUtilities.escapeNonBasicLatinChars((String) propertyValue));
+					}
+					else {
+						appendTypeToResponse(response, propertyValue);
+					}
 					response.appendContentString(">");
 
-					String attributeValueStr = ERXStringUtilities.escapeNonXMLChars(formattedPropertyValue);
+					String attributeValueStr = ERXStringUtilities.escapeNonBasicLatinChars(ERXStringUtilities.escapeNonXMLChars(formattedPropertyValue));
 					response.appendContentString(attributeValueStr);
 
 					response.appendContentString("</");
@@ -205,14 +213,14 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 				}
 			}
 		}
-		
+
 		indent(response, indent);
 		response.appendContentString("</");
 		response.appendContentString(objectName);
 		response.appendContentString(">");
 		response.appendContentString("\n");
 	}
-	
+
 	@Override
 	protected void appendPrimitiveToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, Object value) throws ERXRestException {
 		indent(response, indent);

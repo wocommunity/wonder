@@ -143,12 +143,12 @@ public class ERXJSONRestResponseWriter extends ERXAbstractRestResponseWriter {
 
 	@Override
 	protected boolean displayDetails(ERXRestContext context, ERXRestKey key) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		return _displayDetailsFromProperties(context, key);
+		return _displayDetailsFromProperties(key);
 	}
 
 	@Override
 	protected String[] displayProperties(ERXRestContext context, ERXRestKey key) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		return _displayPropertiesFromProperties(context, key, _displayAllProperties, _displayAllToMany);
+		return _displayPropertiesFromProperties(key, _displayAllProperties, _displayAllToMany);
 	}
 
 }

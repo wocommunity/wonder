@@ -3,7 +3,6 @@ package er.rest;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -79,7 +78,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 				// <Superclass>
 				// <superclass>
 				// <subclass>
-				EOEntity arrayEntity = EOModelGroup.defaultGroup().entityNamed(context.delegate().entityNameForAlias(node.name()));
+				EOEntity arrayEntity = ERXRestUtils.getEntityNamed(context.delegate().entityNameForAlias(node.name()));
 				EOEnterpriseObject eo = entityDelegate.processObjectFromDocument(arrayEntity, node, context);
 				if (eo != null) {
 					eos.addObject(eo);

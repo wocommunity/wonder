@@ -15,6 +15,7 @@ import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
@@ -93,6 +94,19 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		// }
 	}
 
+	protected NSArray<String> allPossiblePropertyNamesOnEarth(EOEntity entity) {
+		NSArray<String> propertyNames = entity._propertyNames();
+		NSArray<EOEntity> subEntities = entity.subEntities();
+		if (subEntities.count() > 0) {
+			NSMutableSet<String> mutablePropertyNames = new NSMutableSet<String>(propertyNames);
+			for (EOEntity subEntity : subEntities) {
+				mutablePropertyNames.addObjectsFromArray(subEntity._propertyNames());
+			}
+			propertyNames = mutablePropertyNames.allObjects();
+		}
+		return propertyNames;
+	}
+
 	/**
 	 * Returns whether or not the given key value is the primary key of an EO. This is crazy -- It tries to guess if
 	 * it's looking at a key or not.
@@ -112,12 +126,20 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			}
 			else if (restKey.previousKey() == null) {
 				if (!restKey.isKeyAll()) {
-					isID = true;
+					if (allPossiblePropertyNamesOnEarth(entity).containsObject(key)) {
+						isID = false;
+					}
+					else {
+						isID = true;
+					}
 				}
 			}
 			else {
 				if (restKey.previousKey().isKeyAll()) {
 					isID = true;
+				}
+				else if (allPossiblePropertyNamesOnEarth(entity).containsObject(key)) {
+					isID = false;
 				}
 				else {
 					try {
@@ -146,7 +168,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	protected boolean _isEOID(EOEntity entity, String key) {
-		boolean isID = !entity._propertyNames().containsObject(key);
+		boolean isID = !allPossiblePropertyNamesOnEarth(entity).containsObject(key);
 		return isID;
 	}
 
@@ -353,83 +375,88 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	 *             if a general failure occurs
 	 */
 	public Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
-		NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(object, attributeName);
-		Class valueType = binding.valueType();
+		try {
+			NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(object, attributeName);
+			Class valueType = binding.valueType();
 
-		Object parsedValue;
-		if (attributeValue == null || attributeValue.length() == 0) {
-			EOAttribute attribute = entity.attributeNamed(attributeName);
-			if (attribute != null && !attribute.allowsNull() && String.class.isAssignableFrom(valueType)) {
-				parsedValue = "";
-			}
-			else {
-				parsedValue = EOKeyValueCoding.NullValue;
-			}
-		}
-		else {
-			if (String.class.isAssignableFrom(valueType)) {
-				parsedValue = attributeValue;
-			}
-			else if (Boolean.class.isAssignableFrom(valueType)) {
-				parsedValue = Boolean.valueOf(attributeValue);
-			}
-			else if (Character.class.isAssignableFrom(valueType)) {
-				parsedValue = new Character(attributeValue.charAt(0));
-			}
-			else if (Byte.class.isAssignableFrom(valueType)) {
-				parsedValue = Byte.valueOf(attributeValue);
-			}
-			else if (BigDecimal.class.isAssignableFrom(valueType)) {
-				parsedValue = new BigDecimal(attributeValue);
-			}
-			else if (Integer.class.isAssignableFrom(valueType)) {
-				parsedValue = Integer.valueOf(attributeValue);
-			}
-			else if (Short.class.isAssignableFrom(valueType)) {
-				parsedValue = Short.valueOf(attributeValue);
-			}
-			else if (Long.class.isAssignableFrom(valueType)) {
-				parsedValue = Long.valueOf(attributeValue);
-			}
-			else if (Float.class.isAssignableFrom(valueType)) {
-				parsedValue = Float.valueOf(attributeValue);
-			}
-			else if (Double.class.isAssignableFrom(valueType)) {
-				parsedValue = Double.valueOf(attributeValue);
-			}
-			else if (NSTimestamp.class.isAssignableFrom(valueType)) {
-				NSTimestampFormatter formatter = null;
-				try {
-					if (attributeValue.indexOf(' ') == -1) {
-						formatter = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ");
-					}
-					else {
-						formatter = new NSTimestampFormatter();
-					}
-					parsedValue = formatter.parseObject(attributeValue);
+			Object parsedValue;
+			if (attributeValue == null || attributeValue.length() == 0) {
+				EOAttribute attribute = entity.attributeNamed(attributeName);
+				if (attribute != null && !attribute.allowsNull() && String.class.isAssignableFrom(valueType)) {
+					parsedValue = "";
 				}
-				catch (Throwable t) {
-					String msg = "Failed to parse '" + attributeValue + "' as a timestamp";
-					if (formatter != null) {
-						msg += " (example: " + formatter.format(new NSTimestamp()) + ")";
-					}
-					msg += ".";
-					throw new ERXRestException(msg);
-				}
-			}
-			else if (Enum.class.isAssignableFrom(valueType)) {
-				try {
-					parsedValue = valueType.getMethod("valueOf", String.class).invoke(null, attributeValue);
-				}
-				catch (Throwable e) {
-					throw new ERXRestException("Failed to parse " + attributeValue + " as enum member of " + valueType);
+				else {
+					parsedValue = EOKeyValueCoding.NullValue;
 				}
 			}
 			else {
-				throw new ERXRestException("Unable to parse the value '" + attributeValue + "' into a " + valueType.getName() + ".");
+				if (String.class.isAssignableFrom(valueType)) {
+					parsedValue = attributeValue;
+				}
+				else if (Boolean.class.isAssignableFrom(valueType)) {
+					parsedValue = Boolean.valueOf(attributeValue);
+				}
+				else if (Character.class.isAssignableFrom(valueType)) {
+					parsedValue = new Character(attributeValue.charAt(0));
+				}
+				else if (Byte.class.isAssignableFrom(valueType)) {
+					parsedValue = Byte.valueOf(attributeValue);
+				}
+				else if (BigDecimal.class.isAssignableFrom(valueType)) {
+					parsedValue = new BigDecimal(attributeValue);
+				}
+				else if (Integer.class.isAssignableFrom(valueType)) {
+					parsedValue = Integer.valueOf(attributeValue);
+				}
+				else if (Short.class.isAssignableFrom(valueType)) {
+					parsedValue = Short.valueOf(attributeValue);
+				}
+				else if (Long.class.isAssignableFrom(valueType)) {
+					parsedValue = Long.valueOf(attributeValue);
+				}
+				else if (Float.class.isAssignableFrom(valueType)) {
+					parsedValue = Float.valueOf(attributeValue);
+				}
+				else if (Double.class.isAssignableFrom(valueType)) {
+					parsedValue = Double.valueOf(attributeValue);
+				}
+				else if (NSTimestamp.class.isAssignableFrom(valueType)) {
+					NSTimestampFormatter formatter = null;
+					try {
+						if (attributeValue.indexOf(' ') == -1) {
+							formatter = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ");
+						}
+						else {
+							formatter = new NSTimestampFormatter();
+						}
+						parsedValue = formatter.parseObject(attributeValue);
+					}
+					catch (Throwable t) {
+						String msg = "Failed to parse '" + attributeValue + "' as a timestamp";
+						if (formatter != null) {
+							msg += " (example: " + formatter.format(new NSTimestamp()) + ")";
+						}
+						msg += ".";
+						throw new ERXRestException(msg);
+					}
+				}
+				else if (Enum.class.isAssignableFrom(valueType)) {
+					try {
+						parsedValue = valueType.getMethod("valueOf", String.class).invoke(null, attributeValue);
+					}
+					catch (Throwable e) {
+						throw new ERXRestException("Failed to parse " + attributeValue + " as enum member of " + valueType);
+					}
+				}
+				else {
+					throw new ERXRestException("Unable to parse the value '" + attributeValue + "' into a " + valueType.getName() + ".");
+				}
 			}
+			return parsedValue;
 		}
-		return parsedValue;
+		catch (Throwable e) {
+			throw new ERXRestException("Failed to parse attribute " + attributeName + " for entity " + entity.name(), e);
+		}
 	}
 
 	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
@@ -481,7 +508,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 
 	public void _updateRelationshipFromDocument(EOEntity entity, EOEnterpriseObject eo, EORelationship relationship, ERXRestRequestNode relationshipNode, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String relationshipName = relationship.name();
-		EOEntity destinationEntity = relationship.destinationEntity();
+		// EOEntity destinationEntity = relationship.destinationEntity();
+		EOEntity destinationEntity = ERXRestUtils.getEntityNamed(relationshipNode.attributeForKey("type"));
 		IERXRestEntityDelegate destinationEntityDelegate = context.delegate().entityDelegate(destinationEntity);
 		if (!relationship.isToMany()) {
 			EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, relationship.name(), context);
@@ -528,11 +556,12 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public void _updatePropertiesFromDocument(boolean inserting, EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		String entityAlias = entityAliasForEntityNamed(entity.name());
+		entity = ERXRestUtils.getEntityNamed(eo.entityName());
+		String entityAlias = entityAliasForEntityNamed(eo.entityName());
 		String type = eoNode.type();
 		if (!entityAlias.equals(type)) {
 			if (!entityAlias.equals(eoNode.name())) {
-				throw new ERXRestException("You attempted to put a " + eoNode.name() + " into a " + entityAlias + ".");
+				throw new ERXRestException("You attempted to put a " + eoNode.name() + " into a " + entityAlias + "." + eo + "  " + eoNode);
 			}
 		}
 
@@ -595,6 +624,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		while (toManyNodesEnum.hasMoreElements()) {
 			ERXRestRequestNode toManyNode = (ERXRestRequestNode) toManyNodesEnum.nextElement();
 			String toManyNodeName = toManyNode.name();
+			entity = ERXRestUtils.getEntityNamed(toManyNodeName);
 			if (!entityAliasForEntityNamed(entity.name()).equals(toManyNodeName)) {
 				throw new ERXRestException("You attempted to put a " + toManyNodeName + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
 			}
