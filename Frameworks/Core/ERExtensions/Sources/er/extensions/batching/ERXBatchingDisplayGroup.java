@@ -337,7 +337,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			EOModel model = EOModelGroup.defaultGroup().entityNamed(spec.entityName()).model();
 			ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
 			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
-			String sql = sqlHelper.customQueryExpressionHintAsString(sqlHelper);
+			String sql = sqlHelper.customQueryExpressionHintAsString(hint);
 			sql = sqlHelper.limitExpressionForSQL(null, spec, sql, start, end);
 			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
 		}
