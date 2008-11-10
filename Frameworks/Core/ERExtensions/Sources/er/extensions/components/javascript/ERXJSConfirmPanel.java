@@ -12,9 +12,15 @@ import com.webobjects.appserver.WOContext;
 // Stateless confirm panel
 /**
  * Stateless implementation of JSConfirmPanel.*<br />
- * 
+ *
  * @binding hyperlinkMessage
  * @binding action
+ * @binding confirmMessage
+ * @binding title title of the link
+ * @binding id id of the link
+ * @binding class class of the link
+ * @binding style style of the link
+ * @binding disabled whether or not this link is disabled
  */
 
 public class ERXJSConfirmPanel extends WOComponent {
@@ -25,7 +31,7 @@ public class ERXJSConfirmPanel extends WOComponent {
 
     public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
-    
+
     public String confirmMessage() { return "return confirm('" +
         (String)valueForBinding("confirmMessage") + "')"; }
 }
