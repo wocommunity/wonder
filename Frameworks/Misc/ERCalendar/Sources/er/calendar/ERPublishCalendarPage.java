@@ -76,7 +76,7 @@ public class ERPublishCalendarPage extends WOComponent {
     public void appendToResponse (WOResponse aResponse, WOContext aContext)
     {
 	eventTimestamp = new NSTimestamp();
-	aResponse.setContentEncoding ("UTF8");
+	aResponse.setContentEncoding ("UTF-8");
 	super.appendToResponse (aResponse, aContext);
 	aResponse.setHeader ("text/calendar","content-type");
 	try {
