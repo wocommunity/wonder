@@ -1,7 +1,6 @@
 package er.rest;
 
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -88,11 +87,11 @@ public class ERXRestKey {
 		// we want to ignore the error for now long enough to get the primary key of the object on the other
 		// side of the relationship, then queue that up for later.
 		Object value = _value(false);
-		ERXRestKey trimmedKey = cloneKey(false);
+		ERXRestKey trimmedKey = cloneKey(false, false);
 		trimmedKey._entity = nextEntity();
 		if (value instanceof EOEnterpriseObject) {
 			IERXRestEntityDelegate entityDelegate = _context.delegate().entityDelegate(trimmedKey._entity);
-			trimmedKey._key =  entityDelegate.stringIDForEO(trimmedKey._entity, (EOEnterpriseObject) value);
+			trimmedKey._key = entityDelegate.stringIDForEO(trimmedKey._entity, (EOEnterpriseObject) value);
 		}
 		else {
 			trimmedKey._key = null;
@@ -104,13 +103,33 @@ public class ERXRestKey {
 	 * Returns a clone of this key, optionally also cloning back up the keypath. If you choose not to clone the previous
 	 * key, it will not have a previous key.
 	 * 
+	 * @param entity
+	 *            the new entity to clone with (typically a superentity)
 	 * @param clonePrevious
 	 *            if true, the previous key is also cloned
 	 * @return the cloned key
 	 * @throws ERXRestException
 	 *             if a general exception occurs
 	 */
-	protected ERXRestKey cloneKey(boolean clonePrevious) throws ERXRestException {
+	protected ERXRestKey cloneKeyWithNewEntity(EOEntity entity, boolean clonePrevious, boolean cloneNext) throws ERXRestException {
+		ERXRestKey clonedKey = cloneKey(clonePrevious, cloneNext);
+		clonedKey._entity = entity;
+		return clonedKey;
+	}
+
+	/**
+	 * Returns a clone of this key, optionally also cloning back up the keypath. If you choose not to clone the previous
+	 * key, it will not have a previous key.
+	 * 
+	 * @param clonePrevious
+	 *            if true, the previous key is also cloned
+	 * @param cloneNext
+	 *            if true, the next key is also cloned
+	 * @return the cloned key
+	 * @throws ERXRestException
+	 *             if a general exception occurs
+	 */
+	protected ERXRestKey cloneKey(boolean clonePrevious, boolean cloneNext) throws ERXRestException {
 		ERXRestKey cloneKey = new ERXRestKey();
 		cloneKey._context = _context;
 		cloneKey._entity = _entity;
@@ -118,8 +137,15 @@ public class ERXRestKey {
 		cloneKey._value = _value;
 		cloneKey._valueFetched = _valueFetched;
 		if (_previousKey != null && clonePrevious) {
-			cloneKey._previousKey = _previousKey.cloneKey(true);
+			cloneKey._previousKey = _previousKey.cloneKey(true, false);
 			cloneKey._previousKey._nextKey = cloneKey;
+		}
+		if (cloneNext) {
+			if (_nextKey != null) {
+				cloneKey._nextKey = _nextKey.cloneKey(false, true);
+				cloneKey._nextKey._previousKey = cloneKey;
+			}
+			cloneKey._nextEntity = _nextEntity;
 		}
 		return cloneKey;
 	}
@@ -188,7 +214,7 @@ public class ERXRestKey {
 			}
 		}
 		else if (clone) {
-			ERXRestKey cloneKey = cloneKey(true);
+			ERXRestKey cloneKey = cloneKey(true, false);
 			cloneKey._nextKey = nextKey;
 			nextKey._previousKey = cloneKey;
 		}
@@ -316,11 +342,11 @@ public class ERXRestKey {
 	protected EOEntity nextEntity() throws ERXRestException {
 		EOEntity nextEntity = _nextEntity;
 		if (_nextEntity == null) {
-		  if (_value instanceof EOEnterpriseObject) {
-		    EOEnterpriseObject eo = (EOEnterpriseObject) _value;
-		    nextEntity = ERXEOAccessUtilities.entityNamed(eo.editingContext(), eo.entityName());
-		  }
-		  else if (isKeyAll()) {
+			if (_value instanceof EOEnterpriseObject) {
+				EOEnterpriseObject eo = (EOEnterpriseObject) _value;
+				nextEntity = ERXEOAccessUtilities.entityNamed(eo.editingContext(), eo.entityName());
+			}
+			else if (isKeyAll()) {
 				nextEntity = _entity;
 			}
 			else if (isKeyGID()) {
@@ -338,6 +364,7 @@ public class ERXRestKey {
 					}
 				}
 			}
+			// System.out.println("ERXRestKey.nextEntity: next entity = " + nextEntity);
 			_nextEntity = nextEntity;
 		}
 		return nextEntity;
@@ -452,14 +479,14 @@ public class ERXRestKey {
 	}
 
 	/**
-	 * Returns whether or not this key requests a primary key.  Right now, only integer primary keys are supported.
-	 *  
+	 * Returns whether or not this key requests a primary key. Right now, only integer primary keys are supported.
+	 * 
 	 * @return whether or not this key requests a primary key
 	 */
 	public boolean isKeyGID() {
 		return _context.delegate().entityDelegate(_entity).isEOID(this);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "[ERXRestKey: entity = " + _entity + "; key = " + _key + "]";
@@ -483,11 +510,11 @@ public class ERXRestKey {
 		String[] paths = path.split("/");
 		if (paths.length > 0) {
 			String entityName = context.delegate().entityNameForAlias(paths[0]);
-			EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+			EOEntity entity = ERXRestUtils.getEntityNamed(entityName);
 			if (entity == null) {
 				String railsyEntityName = ERXStringUtilities.capitalize(ERXLocalizer.currentLocalizer().singularifiedString(entityName));
 				if (!railsyEntityName.equals(entityName)) {
-					entity = EOModelGroup.defaultGroup().entityNamed(railsyEntityName);
+					entity = ERXRestUtils.getEntityNamed(railsyEntityName);
 				}
 				if (entity == null) {
 					throw new ERXRestNotFoundException("There is no entity named '" + entityName + "' or '" + railsyEntityName + "'.");

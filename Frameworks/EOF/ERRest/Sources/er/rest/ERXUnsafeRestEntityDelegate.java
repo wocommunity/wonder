@@ -4,7 +4,6 @@ import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -52,7 +51,7 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	public void initializeEntityNamed(String entityName) {
 		if (!_initializedEntityNames.containsObject(entityName)) {
 			super.initializeEntityNamed(entityName);
-			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(EOModelGroup.defaultGroup().entityNamed(entityName), true);
+			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(ERXRestUtils.getEntityNamed(entityName), true);
 			Enumeration allPropertyNamesEnum = allPropertyNames.objectEnumerator();
 			while (allPropertyNamesEnum.hasMoreElements()) {
 				String propertyName = (String) allPropertyNamesEnum.nextElement();
