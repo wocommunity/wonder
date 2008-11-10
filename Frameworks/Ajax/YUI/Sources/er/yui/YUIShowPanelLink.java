@@ -31,7 +31,7 @@ public class YUIShowPanelLink extends WODynamicGroup {
     String id = AjaxUtils.stringValueForBinding("panelID", _associations, context.component());
     String varName = YUIUtils.varName(id, _associations, context);
     String type = AjaxUtils.stringValueForBinding("type", _associations, context.component());
-    String showScript = varName + ".render();" + varName + ".show()";
+    String showScript = varName + ".render();" + varName + ".show();return false;";
     if ("button".equals(type)) {
       response.appendContentString("<input");
       YUIUtils.appendAttributeValue(response, context, "type", "button");
