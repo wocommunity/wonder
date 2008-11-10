@@ -130,6 +130,11 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
         setEditingContext(ec);
         setBatchSize(batchSize);
         setFiltersBatches(false);
+        
+        EOQualifier qualifier = this.fetchSpecification.qualifier();
+        if (qualifier != null) {
+            this.fetchSpecification.setQualifier(entity.schemaBasedQualifier(qualifier));
+        }
     }
 
     /**
