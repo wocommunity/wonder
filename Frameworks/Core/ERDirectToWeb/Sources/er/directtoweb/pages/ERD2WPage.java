@@ -121,6 +121,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         public static final String tabSectionsContents = "tabSectionsContents";
 
         public static final String alternateKeyInfo = "alternateKeyInfo";
+        
+        public static final String clickToOpenEnabled = "clickToOpenEnabled";
 
 		// The propertyKey whose form widget gets the focus upon loading an edit page.
 		public static final String firstResponderKey = "firstResponderKey";
@@ -160,7 +162,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return whether or not click-to-open is enabled for this component
      */
     public boolean clickToOpenEnabled(WOResponse response, WOContext context) {
-        return ERXClickToOpenSupport.isEnabled();
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey(Keys.clickToOpenEnabled), ERXClickToOpenSupport.isEnabled());
     }
     
     /**
@@ -909,6 +911,12 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return result;
     }
 
+    /**
+     * Returns the page's {@link NextPageDelegate NextPageDelegate},
+     * if any, checking for a "nextPageDelegate" binding if no delegate
+     * has been explicitly set.
+     * @return The page's next page delegate.
+     */
     public NextPageDelegate nextPageDelegate() {
         if (_nextPageDelegate == null) {
             _nextPageDelegate = (NextPageDelegate) d2wContext().valueForKey("nextPageDelegate");
