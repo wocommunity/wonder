@@ -1,0 +1,12 @@
+Link : WOHyperlink {
+  href = submissionUrl;
+  class = ^class;
+  id = ^id;
+  style = ^style;
+}
+
+Image : WOImage {
+  framework = "Ajax";
+  filename = socialNetwork.iconName;
+  alt=alt;
+}

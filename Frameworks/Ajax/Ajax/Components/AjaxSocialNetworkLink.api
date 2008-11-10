@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="AjaxSocialNetworkLink.java" wocomponentcontent="false">
+
+        <binding name="url"/>
+        <binding name="name"/>
+        <validation message="'name' is a required binding.">
+            <unbound name="name"/>
+        </validation>
+        <validation message="'url' is a required binding.">
+            <unbound name="url"/>
+        </validation>
+        <binding name="title"/>
+    <binding name="class"/>
+        <binding name="id"/>
+        <binding name="style"/>
+        <binding name="alt"/>
+    </wo>
+</wodefinitions>
