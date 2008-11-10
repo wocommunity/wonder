@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERXBooleanPopUpButton.java" wocomponentcontent="false">
+
+        <binding name="yesString"/>
+        <binding name="noString"/>
+        <binding name="selection"/>
+    <binding name="noSelectionString"/>
+    <validation message="'selection' is a required binding.">
+            <unbound name="selection"/>
+        </validation>
+    <binding name="style"/>
+        <binding name="id"/>
+        <binding name="class"/>
+    </wo>
+</wodefinitions>
