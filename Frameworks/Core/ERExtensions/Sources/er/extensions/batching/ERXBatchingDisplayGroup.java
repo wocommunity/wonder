@@ -363,6 +363,10 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			start = 0;
 			end = rowCount;
 		}
+		
+		if (start > rowCount) {
+			start = rowCount;
+		}
 
 		if (end > rowCount) {
 			end = rowCount;
