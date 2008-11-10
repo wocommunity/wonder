@@ -2012,4 +2012,22 @@ public class ERXStringUtilities {
 		s = new StringBuffer().append(quoteSymbol).append(s).append(quoteSymbol).toString();
 		return s;
 	}
+	
+	/**
+	 * Appends a CSS class to an existing (possibly null) CSS class string.
+	 * 
+	 * @param originalString the original string
+	 * @param cssClass the new CSS class to append
+	 * @return the CSS classes appended together (with a space between if originalString is non-empty)
+	 */
+	public static String stringByAppendingCSSClass(String originalString, String cssClass) {
+		String newString;
+		if (originalString == null || originalString.length() == 0) {
+			newString = cssClass;
+		}
+		else {
+			newString = originalString + " " + cssClass;
+		}
+		return newString;
+	}
 }
