@@ -103,7 +103,7 @@ public class YUIPanel extends YUIDivContainer {
     AjaxUtils.appendScriptHeader(response);
     String id = divID(context);
     String varName = YUIUtils.varName(id, associations(), context);
-    response.appendContentString(varName + " = new YAHOO.widget.Panel(\"" + id + "\",");
+    response.appendContentString("var " + varName + " = new YAHOO.widget.Panel(\"" + id + "\",");
     AjaxOptions.appendToResponse(createYUIOptions(context), response, context);
     response.appendContentString(");");
     response.appendContentString("\n");
