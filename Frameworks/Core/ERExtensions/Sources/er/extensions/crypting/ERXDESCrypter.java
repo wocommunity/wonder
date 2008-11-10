@@ -160,7 +160,7 @@ public class ERXDESCrypter implements ERXCrypterInterface {
 		try {
 			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-			byte[] stringBytes = clearText.getBytes("UTF8");
+			byte[] stringBytes = clearText.getBytes("UTF-8");
 			stringBytes = ERXCompressionUtilities.deflateByteArray(stringBytes);
 			byte[] raw = cipher.doFinal(stringBytes);
 			String encBase64String = ERXCrypto.base64Encode(raw);
