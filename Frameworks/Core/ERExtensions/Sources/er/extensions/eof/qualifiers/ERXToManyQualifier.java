@@ -19,10 +19,12 @@ import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 
 /**
@@ -270,5 +272,21 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
     @Override
 	public void addQualifierKeysToSet(NSMutableSet arg0) {
         throw new IllegalStateException(getClass().getName() + " doesn't support adding keys");
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean evaluateWithObject(Object object) {
+    	boolean result = false;
+    	if ( ( object != null ) && ( ( object instanceof NSKeyValueCoding ) == true ) ) {
+            Object obj = ((NSKeyValueCoding)object).valueForKey(this.key());
+            if (obj instanceof NSArray) {
+            	NSArray objArray = (NSArray)obj;
+            	if (objArray.count() > 0) {
+            		result = ERXArrayUtilities.arrayContainsAnyObjectFromArray(objArray, elements());
+            	}
+            }
+    	}
+    	return result;
     }
 }
