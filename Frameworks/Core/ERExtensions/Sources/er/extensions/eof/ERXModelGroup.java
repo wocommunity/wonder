@@ -9,6 +9,7 @@ package er.extensions.eof;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
@@ -541,8 +542,31 @@ public class ERXModelGroup extends EOModelGroup {
 	@Override
 	public EOModel addModelWithPathURL(URL url) {
 		EOModel model = null;
+		String customModelClass = null;
 		if (patchModelsOnLoad) {
-			model = new Model(url);
+			if ((customModelClass = ERXProperties.stringForKey("er.extensions.ERXModelGroup.patchedModelClassName")) != null) {
+				try {
+					Class<? extends EOModel> modelClass = Class.forName(customModelClass).asSubclass(Model.class);
+					Constructor<? extends EOModel> modelConstructor = modelClass.getConstructor(URL.class);
+					model = modelConstructor.newInstance(url);
+				}
+				catch (Exception e) {
+					throw new RuntimeException("Failed to create custom patched Model subclass '" + customModelClass + "'.", e);
+				}
+			}
+			else {
+				model = new Model(url);
+			}
+		}
+		else if ((customModelClass = ERXProperties.stringForKey("er.extensions.ERXModelGroup.modelClassName")) != null) {
+			try {
+				Class<? extends EOModel> modelClass = Class.forName(customModelClass).asSubclass(EOModel.class);
+				Constructor<? extends EOModel> modelConstructor = modelClass.getConstructor(URL.class);
+				model = modelConstructor.newInstance(url);
+			}
+			catch (Exception e) {
+				throw new RuntimeException("Failed to create custom EOModel subclass '" + customModelClass + "'.", e);
+			}
 		}
 		else {
 			model = new EOModel(url);
@@ -616,6 +640,8 @@ public class ERXModelGroup extends EOModelGroup {
 	
 	/**
 	 * Returns whether or not the given entity is a prototype.
+	 * @param entity the entity to check
+	 * @return whether or not the entity is a prototype
 	 */
 	public static boolean isPrototypeEntity(EOEntity entity) {
 		return ERXModelGroup.isPrototypeEntityName(entity.name());
