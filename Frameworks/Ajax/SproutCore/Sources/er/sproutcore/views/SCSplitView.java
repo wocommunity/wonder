@@ -1,5 +1,7 @@
 package er.sproutcore.views;
 
+import java.util.Set;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
@@ -16,6 +18,15 @@ public class SCSplitView extends SCView {
     	addProperty("direction", "layoutDirection");
     	addProperty("can_collapse_views");
     }
+
+	@Override
+	public Set<String> cssNames(WOContext context) {
+		Set<String> cssNames = super.cssNames(context);
+		cssNames.add("sc-split-view");
+		cssNames.add((String) valueForBinding("direction", "horizontal", context.component()));
+		cssNames.add((String) valueForBinding("splitter", "default", context.component()));
+		return cssNames;
+	}
     
     @Override
     public String css(WOContext context) {
