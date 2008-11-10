@@ -455,7 +455,7 @@ public class EGSimpleTableParser {
     		
     		takeClassValueForKey(dict, "underline", font, null);
     		takeClassValueForKey(dict, "typeOffset", font, null);
-    		takeClassValueForKey(dict, "boldWeigth", font, null);
+    		takeClassValueForKey(dict, "boldweight", font, null);
     		
     		_fonts.setObjectForKey(font, id);
     	}
