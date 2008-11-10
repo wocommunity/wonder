@@ -91,6 +91,13 @@ public class ERXDatabaseContextDelegate {
         return _defaultDelegate;
     }
     
+    /**
+     * @param delegate - the singleton database context delegate to set
+     */
+    public static void setDefaultDelegate(ERXDatabaseContextDelegate delegate) {
+    	_defaultDelegate = delegate;
+	}
+    
     public ERXArrayFaultCache arrayFaultCache() {
         return _arrayFaultCache;
     }
@@ -287,7 +294,7 @@ public class ERXDatabaseContextDelegate {
         NSNotificationCenter.defaultCenter().postNotification(DatabaseContextFailedToFetchObject, object);
         if(raiseException) {
         	throw new ObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString, gid); 
-        } else if (!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.logTolerantEntityNotAvailable", true)) {
+        } else if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.logTolerantEntityNotAvailable", true)) {
         	log.error("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString + "\n" + ERXUtilities.stackTrace()); 
         }
         return false;
