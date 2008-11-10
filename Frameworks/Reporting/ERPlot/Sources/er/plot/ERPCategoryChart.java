@@ -34,7 +34,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  * @binding yName the name for the y axis (String)
  * @binding showLegends true, if legends should be shown
  * @binding showToolTips true, if tool tips should be shown
- * @binding showLegends true, if legends should be shown
+ * @binding showUrls true, if urls should be shown
  * @binding orientation either "horizontal" (default) or "vertical"
  * @binding chart Chart to use instead of the created one. If this binding is setable, then it will be set to the actually used chart
  * @binding configuration NSDictionary that will be applied to the chart via key-value-coding prior to rendering. Contains 
