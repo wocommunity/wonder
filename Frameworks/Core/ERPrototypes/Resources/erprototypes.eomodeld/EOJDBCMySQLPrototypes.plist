@@ -114,18 +114,18 @@
             width = 39; 
         }, 
         {
-            adaptorValueConversionMethodName = name;
-            columnName = "";
-            externalType = VARCHAR;
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
-            name = javaEnum;
-            valueClassName = "java.lang.Enum";
-            valueFactoryMethodName = valueOf;
-            width = 50;
-        },
+            adaptorValueConversionMethodName = name; 
+            columnName = ""; 
+            externalType = VARCHAR; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = javaEnum; 
+            valueClassName = "java.lang.Enum"; 
+            valueFactoryMethodName = valueOf; 
+            width = 50; 
+        }, 
         {
             columnName = ""; 
-            externalType = LONG; 
+            externalType = BIGINT; 
             name = longNumber; 
             valueClassName = NSNumber; 
             valueType = l; 
