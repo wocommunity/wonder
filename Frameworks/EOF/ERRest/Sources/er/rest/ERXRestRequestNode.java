@@ -8,9 +8,9 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * ERXRestRequestNode provides a model of a REST request.  Because the incoming document
- * format can vary (XML, JSON, etc), we needed a document model that is more abstract
- * than just an org.w3c.dom.  Or, rather, one that isn't obnoxious to use.
+ * ERXRestRequestNode provides a model of a REST request. Because the incoming document format can vary (XML, JSON,
+ * etc), we needed a document model that is more abstract than just an org.w3c.dom. Or, rather, one that isn't obnoxious
+ * to use.
  * 
  * @author mschrag
  */
@@ -23,25 +23,27 @@ public class ERXRestRequestNode {
 	/**
 	 * Construct a node with the given name
 	 * 
-	 * @param name the name of this node
+	 * @param name
+	 *            the name of this node
 	 */
 	public ERXRestRequestNode(String name) {
 		_name = name;
 		_attributes = new NSMutableDictionary();
 		_children = new NSMutableArray();
 	}
-	
+
 	/**
 	 * Returns the first child named 'name'.
 	 * 
-	 * @param name the name to look for
+	 * @param name
+	 *            the name to look for
 	 * @return the first child with this name (or null if not found)
 	 */
 	public ERXRestRequestNode childNamed(String name) {
 		ERXRestRequestNode matchingChildNode = null;
 		Enumeration childrenEnum = _children.objectEnumerator();
 		while (matchingChildNode == null && childrenEnum.hasMoreElements()) {
-			ERXRestRequestNode childNode = (ERXRestRequestNode)childrenEnum.nextElement();
+			ERXRestRequestNode childNode = (ERXRestRequestNode) childrenEnum.nextElement();
 			if (name.equals(childNode.name())) {
 				matchingChildNode = childNode;
 			}
@@ -57,7 +59,7 @@ public class ERXRestRequestNode {
 	public String type() {
 		return attributeForKey("type");
 	}
-	
+
 	/**
 	 * Returns true if the attribute "nil" is "true".
 	 * 
@@ -66,7 +68,7 @@ public class ERXRestRequestNode {
 	public boolean isNull() {
 		return "true".equals(attributeForKey("nil"));
 	}
-	
+
 	/**
 	 * Returns the name of this node.
 	 * 
@@ -88,7 +90,8 @@ public class ERXRestRequestNode {
 	/**
 	 * Sets the value for this node.
 	 * 
-	 * @param value the value for this node
+	 * @param value
+	 *            the value for this node
 	 */
 	public void setValue(String value) {
 		_value = value;
@@ -97,8 +100,10 @@ public class ERXRestRequestNode {
 	/**
 	 * Sets the attribute value for the given key.
 	 * 
-	 * @param attribute the attribute value
-	 * @param key the key
+	 * @param attribute
+	 *            the attribute value
+	 * @param key
+	 *            the key
 	 */
 	public void setAttributeForKey(String attribute, String key) {
 		_attributes.setObjectForKey(attribute, key);
@@ -107,7 +112,8 @@ public class ERXRestRequestNode {
 	/**
 	 * Returns the attribute value for the given key.
 	 * 
-	 * @param key the key
+	 * @param key
+	 *            the key
 	 * @return the attribute value
 	 */
 	public String attributeForKey(String key) {
@@ -126,7 +132,8 @@ public class ERXRestRequestNode {
 	/**
 	 * Adds a child to this node.
 	 * 
-	 * @param child the child to add
+	 * @param child
+	 *            the child to add
 	 */
 	public void addChild(ERXRestRequestNode child) {
 		_children.addObject(child);

@@ -133,11 +133,11 @@ public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 
 	@Override
 	protected boolean displayDetails(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		return _displayDetailsFromProperties(context, result) || ERXProperties.booleanForKey(IERXRestResponseWriter.REST_PREFIX + "details");
+		return _displayDetailsFromProperties(result) || ERXProperties.booleanForKey(IERXRestResponseWriter.REST_PREFIX + "details");
 	}
 
 	@Override
 	protected String[] displayProperties(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		return _displayPropertiesFromProperties(context, result, _displayAllProperties, _displayAllToMany);
+		return _displayPropertiesFromProperties(result, _displayAllProperties, _displayAllToMany);
 	}
 }
