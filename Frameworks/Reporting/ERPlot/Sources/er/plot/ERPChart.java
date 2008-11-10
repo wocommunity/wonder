@@ -38,7 +38,7 @@ import er.extensions.foundation.ERXAssert;
  * @binding valueKey the key for the value (must return Number)
  * @binding showLegends true, if legends should be shown
  * @binding showToolTips true, if tool tips should be shown
- * @binding showLegends true, if legends should be shown
+ * @binding showUrls true, if urls should be shown
  * @binding chart Chart to use instead of the created one. If this binding is setable, then it will be set to the actually used chart
  * @binding configuration NSDictionary that will be applied to the chart via key-value-coding prior to rendering. Contains 
  *      entries like <code>antiAlias=true</code> or <code>categoryPlot.dataAreaRatio = 0.8</code>.
@@ -222,7 +222,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
                     if("image/jpeg".equals(imageType())) {
                         ChartUtilities.writeChartAsJPEG(imageStream, chart, width(), height(), info);
                     } else {
-                        ChartUtilities.writeChartAsPNG(imageStream, chart, width(), height(), info);
+                        ChartUtilities.writeChartAsPNG(imageStream, chart, width(), height(), info, true, 0);
                     }
                     if(showToolTips() || showUrls()) {
                         _imageMapName = "ERP" + System.identityHashCode(chart);

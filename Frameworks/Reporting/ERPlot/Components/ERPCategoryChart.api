@@ -12,7 +12,7 @@
 		<binding name="dataset"/>
 		<binding name="orientation"/>
 		<binding name="showUrls"/>
-		<binding name="showLegend"/>
+		<binding name="showLegends"/>
 		<binding name="showToolTips"/>
 		<binding name="chart"/>
 		<binding name="configuration"/>
