@@ -2022,7 +2022,10 @@ public class ERXStringUtilities {
 	 */
 	public static String stringByAppendingCSSClass(String originalString, String cssClass) {
 		String newString;
-		if (originalString == null || originalString.length() == 0) {
+		if (cssClass == null || cssClass.length() == 0) {
+			newString = originalString;
+		}
+		else if (originalString == null || originalString.length() == 0) {
 			newString = cssClass;
 		}
 		else {
