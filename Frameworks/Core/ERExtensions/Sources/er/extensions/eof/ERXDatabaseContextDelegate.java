@@ -287,7 +287,7 @@ public class ERXDatabaseContextDelegate {
         NSNotificationCenter.defaultCenter().postNotification(DatabaseContextFailedToFetchObject, object);
         if(raiseException) {
         	throw new ObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString, gid); 
-        } else {
+        } else if (!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.logTolerantEntityNotAvailable", true)) {
         	log.error("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString + "\n" + ERXUtilities.stackTrace()); 
         }
         return false;
