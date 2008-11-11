@@ -3,7 +3,6 @@ import java.util.Enumeration;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-import junit.textui.TestRunner;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -380,9 +379,5 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
     }
     catch (Throwable t) {
     }
-  }
-
-  public static void main(String[] args) {
-    TestRunner.run(ERXObjectStoreCoordinatorSynchronizerTestCase.class);
   }
 }
