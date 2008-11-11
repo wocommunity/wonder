@@ -30,7 +30,7 @@ public class ERCHelpText extends _ERCHelpText {
                 } finally {
                     ec.unlock();
                 }
-                cache().put(key, gid);
+                cache().setObjectForKey(gid, key);
             }
         };
         
