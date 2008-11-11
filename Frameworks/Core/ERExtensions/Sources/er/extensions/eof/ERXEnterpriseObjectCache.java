@@ -1,8 +1,6 @@
 package er.extensions.eof;
 
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.webobjects.eoaccess.EOEntity;
@@ -21,6 +19,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.foundation.ERXExpiringCache;
 import er.extensions.foundation.ERXSelectorUtilities;
 
 /**
@@ -40,7 +39,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     private String _entityName;
     private String _keyPath;
     private EOQualifier _qualifier;
-    private Map<Object, EOGlobalID> _cache;
+    private ERXExpiringCache<Object, EOGlobalID> _cache;
     private long _timeout;
     private long _fetchTime;
     private boolean _fetchInitialValues;
@@ -118,11 +117,16 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         selector = ERXSelectorUtilities.notificationSelector("clearCaches");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 ERXEnterpriseObjectCache.ClearCachesNotification, null);
+        
+        if (_timeout > 0) {
+        	_cache.startBackgroundExpiration();
+        }
 	}
 	
 	public void stop() {
 		NSNotificationCenter.defaultCenter().removeObserver(this, EOEditingContext.EditingContextDidSaveChangesNotification, null);
 		NSNotificationCenter.defaultCenter().removeObserver(this, ERXEnterpriseObjectCache.ClearCachesNotification, null);
+    	_cache.stopBackgroundExpiration();
 	}
     
     /**
@@ -158,7 +162,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         	NSArray<T> releventsInsertedEOs = relevantChanges(n.userInfo(), EOEditingContext.InsertedKey);
         	NSArray<T> releventsUpdatedEOs = relevantChanges(n.userInfo(), EOEditingContext.UpdatedKey);
         	NSArray<T> releventsDeletedEOs = relevantChanges(n.userInfo(), EOEditingContext.DeletedKey);
-        	Map<Object, EOGlobalID> cache = cache();
+        	ERXExpiringCache<Object, EOGlobalID> cache = cache();
         	synchronized (cache) { 
 	        	if (releventsInsertedEOs != null) {
 	        		for (T eo : releventsInsertedEOs) {
@@ -206,13 +210,21 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Returns the backing cache. If the cache is to old, it is cleared first.
      * @return 
      */
-    protected synchronized Map<Object, EOGlobalID> cache() {
+    protected synchronized ERXExpiringCache<Object, EOGlobalID> cache() {
         long now = System.currentTimeMillis();
-        if(_timeout > 0L && (now - _timeout) > _fetchTime) {
+        if(_fetchInitialValues && _timeout > 0L && (now - _timeout) > _fetchTime) {
             reset();
         }
         if(_cache == null) {
-            _cache = Collections.synchronizedMap(new HashMap());
+        	if (_fetchInitialValues) {
+                _cache = new ERXExpiringCache<Object, EOGlobalID>(ERXExpiringCache.NO_TIMEOUT);
+        	}
+        	else {
+                _cache = new ERXExpiringCache<Object, EOGlobalID>(_timeout);
+                if (_timeout > 0) {
+                	_cache.startBackgroundExpiration();
+                }
+        	}
             if (_fetchInitialValues) {
 	            ERXEC ec = (ERXEC)ERXEC.newEditingContext();
 	            ec.setCoalesceAutoLocks(false);
@@ -265,7 +277,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	        if(eo != null) {
 	            gid = eo.editingContext().globalIDForObject(eo);
 	        }
-	        cache().put(key, gid);
+	        cache().setObjectForKey(gid, key);
     	}
     }
 
@@ -275,7 +287,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
 
     public void removeObjectForKey(T eo, Object key) {
-        cache().put(key, NO_GID_MARKER);
+        cache().setObjectForKey(NO_GID_MARKER, key);
     }
 
     public void updateObject(T eo) {
@@ -288,12 +300,13 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         if(eo != null) {
             gid = eo.editingContext().globalIDForObject(eo);
         }
-        Map<Object, EOGlobalID> cache = cache();
+        ERXExpiringCache<Object, EOGlobalID> cache = cache();
         synchronized (cache) {
         	Object previousKey = null;
-        	for (Map.Entry<Object, EOGlobalID> entry : cache.entrySet()) {
-        		if (gid.equals(entry.getValue())) {
-        			previousKey = entry.getKey();
+        	for (Object entryKey : cache.allKeys()) {
+        		EOGlobalID entryValue = cache.objectForKey(entryKey);
+        		if (entryValue != null && entryValue.equals(gid)) {
+        			previousKey = entryKey;
         			break;
         		}
         	}
@@ -323,13 +336,13 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @return 
      */
     public T objectForKey(EOEditingContext ec, Object key) {
-        Map cache = cache();
-        EOGlobalID gid = (EOGlobalID) cache.get(key);
+        ERXExpiringCache<Object, EOGlobalID> cache = cache();
+        EOGlobalID gid = cache.objectForKey(key);
         if(gid == NO_GID_MARKER) {
             return null;
         } else if(gid == null) {
             handleUnsuccessfullQueryForKey(key);
-            gid = (EOGlobalID) cache.get(key);
+            gid = cache.objectForKey(key);
             if(gid == NO_GID_MARKER) {
                 return null;
             } else if(gid == null) {
@@ -348,13 +361,13 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @return 
      */
     public T objectsForKey(EOEditingContext ec, Object key) {
-        Map cache = cache();
-        EOGlobalID gid = (EOGlobalID) cache.get(key);
+        ERXExpiringCache<Object, EOGlobalID> cache = cache();
+        EOGlobalID gid = cache.objectForKey(key);
         if(gid == NO_GID_MARKER) {
             return null;
         } else if(gid == null) {
             handleUnsuccessfullQueryForKey(key);
-            gid = (EOGlobalID) cache.get(key);
+            gid = cache.objectForKey(key);
             if(gid == NO_GID_MARKER) {
                 return null;
             } else if(gid == null) {
@@ -384,7 +397,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         			addObject(eo);
         		}
         		catch (EOObjectNotAvailableException e) {
-            		cache().put(key, NO_GID_MARKER);
+            		cache().setObjectForKey(NO_GID_MARKER, key);
         		}
         	}
         	finally {
@@ -393,7 +406,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         	}
     	}
     	else {
-    		cache().put(key, NO_GID_MARKER);
+    		cache().setObjectForKey(NO_GID_MARKER, key);
     	}
     }
 
@@ -402,7 +415,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * is accessed, the objects are refetched.
      */
     public synchronized void reset() {
-        _cache = null;
+    	if (_cache != null) {
+    		_cache.removeAllObjects();
+    	}
     }
     
     /**
