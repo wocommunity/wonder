@@ -136,7 +136,7 @@ public class ERXGoogleSpell {
 			request.append(ERXStringUtilities.escapeNonXMLChars(text));
 			request.append("</text></spellrequest>");
 
-			URL url = new URL("https://www.google.com/tbproxy/spell?lang=" + lang + "&hl=" + lang);
+			URL url = new URL("https://www.google.com/tbproxy/spell?lang=" + lang + "&hl=" + hl);
 			URLConnection connection = url.openConnection();
 			connection.setDoOutput(true);
 
