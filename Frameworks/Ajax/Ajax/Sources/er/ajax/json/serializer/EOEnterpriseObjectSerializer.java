@@ -437,7 +437,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	@SuppressWarnings("unchecked")
 	public static Map<EOEditingContext, String> contexts() {
 		Map<EOEditingContext, String> contexts;
-		WOSession session = ERXSession.session();
+		WOSession session = ERXSession.anySession();
 		if (session == null) {
 			contexts = _contexts;
 		}
