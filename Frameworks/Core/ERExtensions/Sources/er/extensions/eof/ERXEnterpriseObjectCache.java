@@ -6,14 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOObjectNotAvailableException;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
@@ -31,13 +34,16 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * You can supply a timeout after which the cache is to get cleared and all the objects refetched. Note
  * that this implementation only caches the global IDs, not the actual data. 
  * @author ak inspired by a class from Dominik Westner
+ * @param <T> 
  */
 public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     private String _entityName;
     private String _keyPath;
-    private Map _cache;
+    private EOQualifier _qualifier;
+    private Map<Object, EOGlobalID> _cache;
     private long _timeout;
     private long _fetchTime;
+    private boolean _fetchInitialValues;
     protected static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
     
     
@@ -56,13 +62,16 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Creates the cache for the given entity name and the given keypath. No
      * timeout value is used.
+     * @param c 
+     * @param keyPath 
      */
     public ERXEnterpriseObjectCache(Class c, String keyPath) {
        this(entityNameForClass(c), keyPath);
     }
     
     private static String entityNameForClass(Class c) {
-    	EOEditingContext ec = ERXEC.newEditingContext();
+        ERXEC ec = (ERXEC)ERXEC.newEditingContext();
+        ec.setCoalesceAutoLocks(false);
     	ec.lock();
     	try {
     		EOEntity entity = EOUtilities.entityForClass(ec, c);
@@ -72,6 +81,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     		return null;
     	} finally {
     		ec.unlock();
+    		ec.dispose();
     	}
     }
     
@@ -79,16 +89,29 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Creates the cache for the given entity, keypath and timeout value in milliseconds.
      * @param entityName
      * @param keyPath
+     * @param qualifier
      * @param timeout
      */
     public ERXEnterpriseObjectCache(String entityName, String keyPath, long timeout) {
+    	this(entityName, keyPath, null, timeout);
+    }
+    
+    /**
+     * Creates the cache for the given entity, keypath and timeout value in milliseconds.
+     * @param entityName
+     * @param keyPath
+     * @param qualifier
+     * @param timeout
+     */
+    public ERXEnterpriseObjectCache(String entityName, String keyPath, EOQualifier qualifier, long timeout) {
         _entityName = entityName;
         _keyPath = keyPath;
         _timeout = timeout;
-        registerForNotifications();
+        _qualifier = qualifier;
+        start();
     }
 
-	protected void registerForNotifications() {
+	public void start() {
 		NSSelector selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 EOEditingContext.EditingContextDidSaveChangesNotification, null);
@@ -96,20 +119,32 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 ERXEnterpriseObjectCache.ClearCachesNotification, null);
 	}
+	
+	public void stop() {
+		NSNotificationCenter.defaultCenter().removeObserver(this, EOEditingContext.EditingContextDidSaveChangesNotification, null);
+		NSNotificationCenter.defaultCenter().removeObserver(this, ERXEnterpriseObjectCache.ClearCachesNotification, null);
+	}
     
     /**
      * Helper to check if an array of EOs contains the handled entity. 
+     * @param dict 
+     * @param key 
      * @param eos
+     * @return 
      */
-    private boolean hadRelevantChanges(NSDictionary dict, String key) {
-        NSArray eos = (NSArray) dict.objectForKey(key);
+    private NSArray<T> relevantChanges(NSDictionary dict, String key) {
+    	NSMutableArray<T> releventEOs = null;
+        NSArray<EOEnterpriseObject> eos = (NSArray<EOEnterpriseObject>) dict.objectForKey(key);
         for (Enumeration enumeration = eos.objectEnumerator(); enumeration.hasMoreElements();) {
             EOEnterpriseObject eo = (EOEnterpriseObject) enumeration.nextElement();
             if(eo.entityName().equals(entityName())) {
-                return true;
+            	if (releventEOs == null) {
+            		releventEOs = new NSMutableArray();
+            	}
+            	releventEOs.addObject((T)eo);
             }
         }
-        return false;
+        return releventEOs;
     }
     
     /**
@@ -120,14 +155,27 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     public void editingContextDidSaveChanges(NSNotification n) {
         EOEditingContext ec = (EOEditingContext) n.object();
         if(ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
-            if(!hadRelevantChanges(n.userInfo(), EOEditingContext.InsertedKey)) {
-                if(!hadRelevantChanges(n.userInfo(), EOEditingContext.UpdatedKey)) {
-                    if(!hadRelevantChanges(n.userInfo(), EOEditingContext.DeletedKey)) {
-                        return;
-                    }
-                }
-            }
-            reset();
+        	NSArray<T> releventsInsertedEOs = relevantChanges(n.userInfo(), EOEditingContext.InsertedKey);
+        	NSArray<T> releventsUpdatedEOs = relevantChanges(n.userInfo(), EOEditingContext.UpdatedKey);
+        	NSArray<T> releventsDeletedEOs = relevantChanges(n.userInfo(), EOEditingContext.DeletedKey);
+        	Map<Object, EOGlobalID> cache = cache();
+        	synchronized (cache) { 
+	        	if (releventsInsertedEOs != null) {
+	        		for (T eo : releventsInsertedEOs) {
+	        			addObject(eo);
+	        		}
+	        	}
+	        	if (releventsUpdatedEOs != null) {
+	        		for (T eo : releventsUpdatedEOs) {
+	        			updateObject(eo);
+	        		}
+	        	}
+	        	if (releventsDeletedEOs != null) {
+	        		for (T eo : releventsDeletedEOs) {
+	        			removeObject(eo);
+	        		}
+	        	}
+        	}
         }
     }
     
@@ -148,6 +196,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * The key path which should get used for the key of the cache.
+     * @return 
      */
     protected String keyPath() {
         return _keyPath;
@@ -155,24 +204,29 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 
     /**
      * Returns the backing cache. If the cache is to old, it is cleared first.
+     * @return 
      */
-    protected synchronized Map cache() {
+    protected synchronized Map<Object, EOGlobalID> cache() {
         long now = System.currentTimeMillis();
         if(_timeout > 0L && (now - _timeout) > _fetchTime) {
             reset();
         }
         if(_cache == null) {
-            _cache = Collections.synchronizedMap(new HashMap()); 
-            EOEditingContext ec = ERXEC.newEditingContext();
-            ec.lock();
-            try {
-                NSArray objects = initialObjects(ec);
-                for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
-                    T eo = (T) enumeration.nextElement();
-                    addObject(eo);
-                }
-            } finally {
-                ec.unlock();
+            _cache = Collections.synchronizedMap(new HashMap());
+            if (_fetchInitialValues) {
+	            ERXEC ec = (ERXEC)ERXEC.newEditingContext();
+	            ec.setCoalesceAutoLocks(false);
+	            ec.lock();
+	            try {
+	                NSArray objects = initialObjects(ec);
+	                for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
+	                    T eo = (T) enumeration.nextElement();
+	                    addObject(eo);
+	                }
+	            } finally {
+	                ec.unlock();
+	                ec.dispose();
+	            }
             }
             _fetchTime = System.currentTimeMillis();
         }
@@ -182,6 +236,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Returns the objects to cache initially.
      * @param ec
+     * @return 
      */
     protected NSArray<T> initialObjects(EOEditingContext ec) {
         NSArray objects = EOUtilities.objectsForEntityNamed(ec, entityName());
@@ -202,13 +257,62 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Add an object to the cache with the given key. The object
      * can be null.
      * @param eo
+     * @param key 
      */
     public void addObjectForKey(T eo, Object key) {
+    	if (_qualifier == null || _qualifier.evaluateWithObject(eo)) {
+	        EOGlobalID gid = NO_GID_MARKER;
+	        if(eo != null) {
+	            gid = eo.editingContext().globalIDForObject(eo);
+	        }
+	        cache().put(key, gid);
+    	}
+    }
+
+    public void removeObject(T eo) {
+        Object key = eo.valueForKeyPath(keyPath());
+        removeObjectForKey(eo, key);
+    }
+
+    public void removeObjectForKey(T eo, Object key) {
+        cache().put(key, NO_GID_MARKER);
+    }
+
+    public void updateObject(T eo) {
+        Object key = eo.valueForKeyPath(keyPath());
+        updateObjectForKey(eo, key);
+    }
+
+    public void updateObjectForKey(T eo, Object key) {
         EOGlobalID gid = NO_GID_MARKER;
         if(eo != null) {
             gid = eo.editingContext().globalIDForObject(eo);
         }
-        cache().put(key, gid);
+        Map<Object, EOGlobalID> cache = cache();
+        synchronized (cache) {
+        	Object previousKey = null;
+        	for (Map.Entry<Object, EOGlobalID> entry : cache.entrySet()) {
+        		if (gid.equals(entry.getValue())) {
+        			previousKey = entry.getKey();
+        			break;
+        		}
+        	}
+        	if (previousKey != null) {
+        		if (!previousKey.equals(key)) {
+	        		removeObjectForKey(eo, previousKey);
+	            	addObjectForKey(eo, key);
+	        	}
+	        	else if (_qualifier != null && !_qualifier.evaluateWithObject(eo)) {
+	        		removeObjectForKey(eo, previousKey);
+	        	}
+	        	else {
+	            	// leave it alone
+	        	}
+        	}
+        	else {
+        		addObjectForKey(eo, key);
+        	}
+        }
     }
     
     /**
@@ -216,6 +320,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * is in the cache.
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
+     * @return 
      */
     public T objectForKey(EOEditingContext ec, Object key) {
         Map cache = cache();
@@ -240,6 +345,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * is in the cache.
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
+     * @return 
      */
     public T objectsForKey(EOEditingContext ec, Object key) {
         Map cache = cache();
@@ -268,7 +374,27 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param key
      */
     protected void handleUnsuccessfullQueryForKey(Object key) {
-        cache().put(key, NO_GID_MARKER);
+    	if (!_fetchInitialValues) {
+            ERXEC ec = (ERXEC)ERXEC.newEditingContext();
+            ec.setCoalesceAutoLocks(false);
+        	ec.lock();
+        	try {
+        		try {
+        			T eo = (T) EOUtilities.objectMatchingKeyAndValue(ec, _entityName, _keyPath, key);
+        			addObject(eo);
+        		}
+        		catch (EOObjectNotAvailableException e) {
+            		cache().put(key, NO_GID_MARKER);
+        		}
+        	}
+        	finally {
+        		ec.unlock();
+        		ec.dispose();
+        	}
+    	}
+    	else {
+    		cache().put(key, NO_GID_MARKER);
+    	}
     }
 
     /**
@@ -279,4 +405,13 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         _cache = null;
     }
     
+    /**
+     * Sets whether or not the initial values should be fetched into
+     * this cache or whether or should lazy load.
+     * 
+     * @param fetchInitialValues if true, the initial values are fetched into the cache
+     */
+    public void setFetchInitialValues(boolean fetchInitialValues) {
+		_fetchInitialValues = fetchInitialValues;
+	}
 }
