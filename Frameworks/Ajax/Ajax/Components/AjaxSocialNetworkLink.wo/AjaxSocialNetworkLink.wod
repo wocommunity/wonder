@@ -6,7 +6,7 @@ Link : WOHyperlink {
 }
 
 Image : WOImage {
-  framework = "Ajax";
+  framework = socialNetwork.iconFramework;
   filename = socialNetwork.iconName;
   alt=alt;
 }
