@@ -8,6 +8,12 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXStringUtilities;
 
+/**
+ * Provides an interface to retrieving information and URLs 
+ * about various social network sites.
+ * 
+ * @author mschrag
+ */
 public abstract class AjaxSocialNetwork {
 	private static NSMutableDictionary<String, AjaxSocialNetwork> _socialNetworks;
 	static {
@@ -33,6 +39,15 @@ public abstract class AjaxSocialNetwork {
 		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Tagtooga(), "tagtooga");
 	}
 
+	/**
+	 * Returns the social network with the given name.  Supported names include:
+	 * delicious, digg, facebook, furl, newsvine, netscape, reddit, stumble, technorati,
+	 * squidoo, live, yahoo, ask, google, magnolia, ning, rawsugar, spurl, and tagtooga.
+	 * 
+	 * @param name the name of the social network site
+	 * @return the matching Social Network
+	 * @throws NoSuchElementException if there is no social network registered with that name
+	 */
 	public static AjaxSocialNetwork socialNetworkNamed(String name) {
 		AjaxSocialNetwork socialNetwork = AjaxSocialNetwork._socialNetworks.objectForKey(name);
 		if (socialNetwork == null) {
@@ -41,6 +56,16 @@ public abstract class AjaxSocialNetwork {
 		return socialNetwork;
 	}
 
+	/**
+	 * Registers a new social network with the given name.
+	 * 
+	 * @param socialNetwork the social network
+	 * @param name the lookup name
+	 */
+	public static void registerSocialNetworkNamed(AjaxSocialNetwork socialNetwork, String name) {
+		AjaxSocialNetwork._socialNetworks.setObjectForKey(socialNetwork, name);
+	}
+	
 	protected String _submissionUrl(String baseUrl, String urlKey, String targetUrl, String titleKey, String title, NSDictionary<String, String> additionalParams) {
 		try {
 			ERXMutableURL url = new ERXMutableURL(baseUrl);
@@ -58,14 +83,39 @@ public abstract class AjaxSocialNetwork {
 		}
 	}
 
+	/**
+	 * Returns the display name of the social network.
+	 *  
+	 * @return the display name of the social network
+	 */
 	public String name() {
 		return ERXStringUtilities.displayNameForKey(getClass().getSimpleName());
 	}
 
+	/**
+	 * Returns the icon framework for the social network.
+	 * @return the icon framework for the social network
+	 */
+	public String iconFramework() {
+		return "Ajax";
+	}
+	
+	/**
+	 * Returns the icon path for the social network.
+	 * 
+	 * @return the icon path for the social network
+	 */
 	public String iconName() {
 		return "SocialNetwork/" + getClass().getSimpleName() + ".png";
 	}
 
+	/**
+	 * Returns the URL for submitting the given url and title to the social network.
+	 * 
+	 * @param url the URL of the page to submit
+	 * @param title the title of the pageto submit
+	 * @return the submission URL
+	 */
 	public abstract String submissionUrl(String url, String title);
 
 	public static class Delicious extends AjaxSocialNetwork {
