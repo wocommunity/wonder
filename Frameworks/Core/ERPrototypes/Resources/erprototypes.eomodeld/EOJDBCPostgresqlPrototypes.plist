@@ -41,7 +41,7 @@
         }, 
         {
             columnName = ""; 
-            externalType = decimal; 
+            externalType = numeric; 
             name = currencyAmount; 
             precision = 38; 
             scale = 4; 
@@ -126,15 +126,15 @@
             width = 39; 
         }, 
         {
-            adaptorValueConversionMethodName = name;
-            columnName = "";
-            externalType = varchar;
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
-            name = javaEnum;
-            valueClassName = "java.lang.Enum";
-            valueFactoryMethodName = valueOf;
-            width = 50;
-        },
+            adaptorValueConversionMethodName = name; 
+            columnName = ""; 
+            externalType = varchar; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = javaEnum; 
+            valueClassName = "java.lang.Enum"; 
+            valueFactoryMethodName = valueOf; 
+            width = 50; 
+        }, 
         {
             columnName = ""; 
             externalType = int8; 
