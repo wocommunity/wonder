@@ -782,13 +782,14 @@ public class ERXPatcher {
 					buf.append(ch);
 					i = consumeAttributeValue(string, i + 1, buf);
 				} else if( ch == '>' ) {
-					buf.append(ch);
 					String t = tagName.toString();
 
-					if ("img".equals(t) || "input".equals(t)) {
-						buf.append("</").append(tagName).append(">");
+					if ("img".equals(t) || "input".equals(t) || "link".equals(t) ) {
+						buf.append(" /");
 					}
-
+					
+					buf.append(ch);
+					
 					return i - 1;
 				} else {
 					i = consumeAttributeName(string, i, buf);
