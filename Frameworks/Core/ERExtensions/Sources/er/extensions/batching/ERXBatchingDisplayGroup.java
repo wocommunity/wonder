@@ -252,7 +252,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * Returns the prefetching key paths for the underlying fetch spec.
 	 * @return the prefetching key paths for the underlying fetch spec
 	 */
-	public NSArray<String> getPrefetchingRelationshipKeyPaths() {
+	public NSArray<String> prefetchingRelationshipKeyPaths() {
 		return _prefetchingRelationshipKeyPaths;
 	}
 
