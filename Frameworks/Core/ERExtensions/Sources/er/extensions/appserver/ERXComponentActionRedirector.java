@@ -20,7 +20,7 @@ import er.extensions.foundation.ERXThreadStorage;
 /**
  * Allows you to develop your app using component actions while still providing bookmarkable URLs.
  * It should be considered <b>highly</b> experimental and it uses a few very dirty shortcuts, but no private API to work it's magic. 
- * The main problems may be garbabe collection or space requirements. You might be better of to compress the responses.
+ * The main problems may be garbage collection or space requirements. You might be better of to compress the responses.
  * <br>
  *  The mode of operation is as follows; given a component action in a typical page:
  * <br>
@@ -43,7 +43,7 @@ import er.extensions.foundation.ERXThreadStorage;
  *          super(aContext);
  *      }
  *      
- *      // this page has a "Incement Some Value" link to itself which just doubles the current value
+ *      // this page has a "Increment Some Value" link to itself which just doubles the current value
  *      public WOComponent addAction() {
  *          someValue = new Integer(someValue.intValue()*2);
  *          log.info(someValue);
@@ -92,7 +92,7 @@ import er.extensions.foundation.ERXThreadStorage;
  * <code><pre>
  *  public WOActionResults invokeAction(WORequest request, WOContext context) {
  *      WOActionResults results = super.invokeAction(request, context);
- *      ERXComponentActionRedirector.createRedirectorInContext(results, context);
+ *      ERXComponentActionRedirector.createRedirector(results);
  *      return results;
  *  }
  * 
@@ -119,8 +119,8 @@ import er.extensions.foundation.ERXThreadStorage;
  *      return response;
  *  }
  * </pre></code>
- * Instead of the code above, you should be able to simply use ERXApplication and set the 
- * <code>er.extensions.ERXComponentActionRedirector.enabled=true</code> property.
+ * If you are using ERXApplication, you should set the 
+ * <code>er.extensions.ERXComponentActionRedirector.enabled=true</code> property instead.
  *  
  * @author ak
  *  */
@@ -131,8 +131,9 @@ public class ERXComponentActionRedirector {
 
     /** implemented by the pages that want to be restorable */
     public static interface Restorable {
-        /** url for the current state. This method will be called directly after invokeAction(), so any temporary variables 
-         * should have the same setting as they had when the action was invoked. */
+        /** This method will be called directly after invokeAction(), so any temporary variables 
+         * should have the same setting as they had when the action was invoked. 
+         * @return url for the current state. */
         public String urlForCurrentState();
     }
 
@@ -151,7 +152,8 @@ public class ERXComponentActionRedirector {
     /** static cache to hold the responses. They are stored on a by-session basis. */
     protected static NSMutableDictionary responses = new NSMutableDictionary();
 
-    /** stores the redirector in the cache. */
+    /** stores the redirector in the cache. 
+     * @param redirector The redirector to store. */
     protected static void storeRedirector(ERXComponentActionRedirector redirector) {
         synchronized (responses) {
             NSMutableDictionary sessionRef = (NSMutableDictionary)responses.objectForKey(redirector.sessionID());
@@ -166,7 +168,9 @@ public class ERXComponentActionRedirector {
         }
     }
 
-    /** returns the previously stored redirector for the given request. */
+    /**
+     * @param request The request
+     * @return the previously stored redirector for the given request */
     public static ERXComponentActionRedirector redirectorForRequest(WORequest request) {
         ERXComponentActionRedirector redirector = null;
         synchronized (responses) {
@@ -184,7 +188,8 @@ public class ERXComponentActionRedirector {
         return redirector;
     }
 
-    /** Creates and stores a Redirector if the given results implement Restorable. */
+    /** Creates and stores a Redirector if the given results implement Restorable. 
+     * @param results */
     public static void createRedirector(WOActionResults results) {
         ERXThreadStorage.removeValueForKey("redirector");
         if(results instanceof WOComponent) {
@@ -201,24 +206,29 @@ public class ERXComponentActionRedirector {
         }
     }
 
-    /** returns the currently active Redirector in the request-response loop. Uses ERXThreadStorage with the key "redirector". */
+    /** Uses ERXThreadStorage with the key "redirector".
+     * @return the currently active Redirector in the request-response loop. 
+     */
     public static ERXComponentActionRedirector currentRedirector() {
         return (ERXComponentActionRedirector)ERXThreadStorage.valueForKey("redirector");
     }
 
-    /** contructs the redirector from the Restorable. */
+    /** contructs the redirector from the Restorable. 
+     * @param r - Restorable component used to construct a redirector */
     public ERXComponentActionRedirector(Restorable r) {
         WOComponent component = (WOComponent)r;
         WOContext context = component.context();
         sessionID = component.session().sessionID();
         url = r.urlForCurrentState();
-        String argsChar = url.indexOf("?") >= 0? "&" : "?";
-        if(url.indexOf("wosid=") < 0) {
-            url = url + argsChar + "wosid=" +sessionID;
-            argsChar = "&";
-        }
-        if(url.indexOf("wocid=") < 0) {
-            url = url + argsChar + "wocid=" + context.contextID();
+        if(context.session().storesIDsInURLs()) {
+	        String argsChar = url.indexOf("?") >= 0? "&" : "?";
+	        if(url.indexOf("wosid=") < 0) {
+	            url = url + argsChar + "wosid=" +sessionID;
+	            argsChar = "&";
+	        }
+	        if(url.indexOf("wocid=") < 0) {
+	            url = url + argsChar + "wocid=" + context.contextID();
+	        }
         }
         redirectionResponse = WOApplication.application().createResponseInContext(context);
         redirectionResponse.setHeader(url, "location");
@@ -274,7 +284,8 @@ public class ERXComponentActionRedirector {
             responses.removeObjectForKey(sessionID);
         }
     }
-    private static Observer observer;
+    @SuppressWarnings("unused")
+	private static Observer observer;
     static {
         observer = new Observer();
     }
