@@ -1218,6 +1218,23 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		}
 		super.takeStoredValueForKey(value, key);
 	}
+	
+	/**
+	 * This method explicitly turns off inverse relationship updating, because
+	 * it's only called during undo and revert inside of EOF.  If you are 
+	 * calling this method, it's presumed that you understand the consequences
+	 * of your actions :)
+	 */
+	@Override
+	public void updateFromSnapshot(NSDictionary snapshot) {
+		boolean old = _setUpdateInverseRelationships(false);
+		try {
+			super.updateFromSnapshot(snapshot);
+		}
+		finally {
+			_setUpdateInverseRelationships(old);
+		}
+	}
 
 	// Debugging aids -- turn off during production
 	// These methods are used to catch the classic mistake of:
