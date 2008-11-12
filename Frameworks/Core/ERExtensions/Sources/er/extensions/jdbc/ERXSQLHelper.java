@@ -1693,7 +1693,7 @@ public class ERXSQLHelper {
 
 		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
-			return "select from unique from " + sequenceName;
+			return "select unique from " + sequenceName;
 		}
 		
 		@Override
