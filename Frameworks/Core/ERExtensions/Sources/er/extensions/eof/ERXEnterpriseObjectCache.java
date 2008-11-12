@@ -1,10 +1,8 @@
 package er.extensions.eof;
 
 import java.util.Enumeration;
-import java.util.Map;
 
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOObjectNotAvailableException;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -36,17 +34,20 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * @param <T> 
  */
 public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
+    public static String ClearCachesNotification = "ERXEnterpriseObjectCache.ClearCaches";
+    protected static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
+    
     private String _entityName;
     private String _keyPath;
     private EOQualifier _qualifier;
-    private ERXExpiringCache<Object, EOGlobalID> _cache;
+    private ERXExpiringCache<Object, EORecord<T>> _cache;
     private long _timeout;
     private long _fetchTime;
     private boolean _fetchInitialValues;
-    protected static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
     
-    
-    public static String ClearCachesNotification = "ERXEnterpriseObjectCache.ClearCaches";
+    private boolean _reuseEditingContext;
+    private boolean _retainObjects;
+    private ERXEC _editingContext;
     
     /**
      * Creates the cache for the given entity name and the given keypath. No
@@ -107,6 +108,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         _keyPath = keyPath;
         _timeout = timeout;
         _qualifier = qualifier;
+        _fetchInitialValues = true; // MS: for backwards compatibility
         start();
     }
 
@@ -129,6 +131,24 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     	_cache.stopBackgroundExpiration();
 	}
     
+	protected ERXEC editingContext() {
+		ERXEC editingContext;
+		if (_reuseEditingContext) {
+			synchronized (this) {
+				if (_editingContext == null) {
+					_editingContext = (ERXEC)ERXEC.newEditingContext();
+		            _editingContext.setCoalesceAutoLocks(false);
+				}
+			}
+			editingContext = _editingContext;
+		}
+		else {
+			editingContext = (ERXEC)ERXEC.newEditingContext();
+            editingContext.setCoalesceAutoLocks(false);
+		}
+		return editingContext;
+	}
+	
     /**
      * Helper to check if an array of EOs contains the handled entity. 
      * @param dict 
@@ -162,7 +182,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         	NSArray<T> releventsInsertedEOs = relevantChanges(n.userInfo(), EOEditingContext.InsertedKey);
         	NSArray<T> releventsUpdatedEOs = relevantChanges(n.userInfo(), EOEditingContext.UpdatedKey);
         	NSArray<T> releventsDeletedEOs = relevantChanges(n.userInfo(), EOEditingContext.DeletedKey);
-        	ERXExpiringCache<Object, EOGlobalID> cache = cache();
+        	ERXExpiringCache<Object, EORecord<T>> cache = cache();
         	synchronized (cache) { 
 	        	if (releventsInsertedEOs != null) {
 	        		for (T eo : releventsInsertedEOs) {
@@ -210,23 +230,23 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Returns the backing cache. If the cache is to old, it is cleared first.
      * @return 
      */
-    protected synchronized ERXExpiringCache<Object, EOGlobalID> cache() {
+    protected synchronized ERXExpiringCache<Object, EORecord<T>> cache() {
         long now = System.currentTimeMillis();
         if(_fetchInitialValues && _timeout > 0L && (now - _timeout) > _fetchTime) {
             reset();
         }
         if(_cache == null) {
         	if (_fetchInitialValues) {
-                _cache = new ERXExpiringCache<Object, EOGlobalID>(ERXExpiringCache.NO_TIMEOUT);
+                _cache = new ERXExpiringCache<Object, EORecord<T>>(ERXExpiringCache.NO_TIMEOUT);
         	}
         	else {
-                _cache = new ERXExpiringCache<Object, EOGlobalID>(_timeout);
+                _cache = new ERXExpiringCache<Object, EORecord<T>>(_timeout);
                 if (_timeout > 0) {
                 	_cache.startBackgroundExpiration();
                 }
         	}
             if (_fetchInitialValues) {
-	            ERXEC ec = (ERXEC)ERXEC.newEditingContext();
+	            ERXEC ec = editingContext();
 	            ec.setCoalesceAutoLocks(false);
 	            ec.lock();
 	            try {
@@ -243,6 +263,19 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             _fetchTime = System.currentTimeMillis();
         }
         return _cache;
+    }
+    
+    protected EORecord<T> createRecord(EOGlobalID gid, T eo) {
+    	EORecord<T> record;
+    	if (_retainObjects) {
+    		EOEditingContext editingContext = editingContext();
+    		T localEO = ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
+    		record = new EORecord<T>(gid, localEO);
+    	}
+    	else {
+    		record = new EORecord<T>(gid, null);
+    	}
+    	return record;
     }
 
     /**
@@ -277,7 +310,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	        if(eo != null) {
 	            gid = eo.editingContext().globalIDForObject(eo);
 	        }
-	        cache().setObjectForKey(gid, key);
+	        cache().setObjectForKey(createRecord(gid, eo), key);
     	}
     }
 
@@ -287,7 +320,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
 
     public void removeObjectForKey(T eo, Object key) {
-        cache().setObjectForKey(NO_GID_MARKER, key);
+        cache().setObjectForKey(createRecord(NO_GID_MARKER, null), key);
     }
 
     public void updateObject(T eo) {
@@ -300,12 +333,12 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         if(eo != null) {
             gid = eo.editingContext().globalIDForObject(eo);
         }
-        ERXExpiringCache<Object, EOGlobalID> cache = cache();
+        ERXExpiringCache<Object, EORecord<T>> cache = cache();
         synchronized (cache) {
         	Object previousKey = null;
         	for (Object entryKey : cache.allKeys()) {
-        		EOGlobalID entryValue = cache.objectForKey(entryKey);
-        		if (entryValue != null && entryValue.equals(gid)) {
+        		EORecord<T> entryValue = cache.objectForKey(entryKey);
+        		if (entryValue != null && entryValue.gid.equals(gid)) {
         			previousKey = entryKey;
         			break;
         		}
@@ -336,45 +369,28 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @return 
      */
     public T objectForKey(EOEditingContext ec, Object key) {
-        ERXExpiringCache<Object, EOGlobalID> cache = cache();
-        EOGlobalID gid = cache.objectForKey(key);
-        if(gid == NO_GID_MARKER) {
-            return null;
-        } else if(gid == null) {
+        ERXExpiringCache<Object, EORecord<T>> cache = cache();
+        EORecord<T> record = cache.objectForKey(key);
+        if (record == null) {
             handleUnsuccessfullQueryForKey(key);
-            gid = cache.objectForKey(key);
-            if(gid == NO_GID_MARKER) {
-                return null;
-            } else if(gid == null) {
+            record = cache.objectForKey(key);
+            if (record == null) {
+            	return null;
+            }
+            else if (record.gid == NO_GID_MARKER) {
                return null;
             }
         }
-        T eo = (T) ec.faultForGlobalID(gid, ec);
-        return eo;
-    }
-    
-    /**
-     * Retrieves an EO that matches the given key or null if no match 
-     * is in the cache.
-     * @param ec editing context to get the object into
-     * @param key key value under which the object is registered 
-     * @return 
-     */
-    public T objectsForKey(EOEditingContext ec, Object key) {
-        ERXExpiringCache<Object, EOGlobalID> cache = cache();
-        EOGlobalID gid = cache.objectForKey(key);
-        if(gid == NO_GID_MARKER) {
+        else if (record.gid == NO_GID_MARKER) {
             return null;
-        } else if(gid == null) {
-            handleUnsuccessfullQueryForKey(key);
-            gid = cache.objectForKey(key);
-            if(gid == NO_GID_MARKER) {
-                return null;
-            } else if(gid == null) {
-               return null;
-            }
         }
-        T eo = (T) ec.faultForGlobalID(gid, ec);
+        T eo = record.eo;
+        if (eo == null) {
+        	eo = (T) ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(ec, record.gid);
+        }
+        else {
+        	eo = ERXEOControlUtilities.localInstanceOfObject(ec, eo);
+        }
         return eo;
     }
   
@@ -388,25 +404,38 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     protected void handleUnsuccessfullQueryForKey(Object key) {
     	if (!_fetchInitialValues) {
-            ERXEC ec = (ERXEC)ERXEC.newEditingContext();
-            ec.setCoalesceAutoLocks(false);
+            ERXEC ec = editingContext();
         	ec.lock();
         	try {
-        		try {
-        			T eo = (T) EOUtilities.objectMatchingKeyAndValue(ec, _entityName, _keyPath, key);
+    			EOQualifier qualifier;
+    			if (_qualifier == null) {
+    				qualifier = ERXQ.is(_keyPath, key);
+    			}
+    			else {
+    				qualifier = ERXQ.is(_keyPath, key).and(_qualifier);
+    			}
+    			ERXFetchSpecification fetchSpec = new ERXFetchSpecification(_entityName, qualifier, null);
+    			NSArray<T> objects = ec.objectsWithFetchSpecification(fetchSpec);
+    			if (objects.count() == 0) {
+    				cache().setObjectForKey(createRecord(NO_GID_MARKER, null), key);
+    			}
+    			else if (objects.count() == 1) {
+        			T eo = objects.objectAtIndex(0);
         			addObject(eo);
-        		}
-        		catch (EOObjectNotAvailableException e) {
-            		cache().setObjectForKey(NO_GID_MARKER, key);
-        		}
+    			}
+    			else {
+    				throw new EOUtilities.MoreThanOneException("There was more than one " + _entityName + " matching the qualifier '" + qualifier + "'.");
+    			}
         	}
         	finally {
         		ec.unlock();
-        		ec.dispose();
+        		if (!_reuseEditingContext) {
+        			ec.dispose();
+        		}
         	}
     	}
     	else {
-    		cache().setObjectForKey(NO_GID_MARKER, key);
+    		cache().setObjectForKey(createRecord(NO_GID_MARKER, null), key);
     	}
     }
 
@@ -429,4 +458,37 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     public void setFetchInitialValues(boolean fetchInitialValues) {
 		_fetchInitialValues = fetchInitialValues;
 	}
+    
+    /**
+     * Sets whether or not the editing context for this cache is reused for multiple requests.
+     * 
+     * @param reuseEditingContext whether or not the editing context for this cache is reused for multiple requests
+     */
+    public void setReuseEditingContext(boolean reuseEditingContext) {
+		if (_retainObjects && !reuseEditingContext) {
+			throw new IllegalArgumentException("If retainObjects is true, reuseEditingContext cannot be false.");
+		}
+		_reuseEditingContext = reuseEditingContext;
+	}
+    
+    /**
+     * Sets whether or not the cached EO's themselves are retained versus just their GID's.  If set,
+     * this implicitly sets reuseEditingContext to true.
+     *   
+     * @param retainObjects if true, the EO's are retained
+     */
+    public void setRetainObjects(boolean retainObjects) {
+		_retainObjects = retainObjects;
+		setReuseEditingContext(true);
+	}
+    
+    private static class EORecord<T> {
+    	public EOGlobalID gid;
+    	public T eo;
+    	
+    	public EORecord(EOGlobalID gid, T eo) {
+    		this.gid = gid;
+    		this.eo = eo;
+    	}
+    }
 }
