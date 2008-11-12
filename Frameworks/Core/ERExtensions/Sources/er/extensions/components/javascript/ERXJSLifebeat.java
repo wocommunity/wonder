@@ -1,11 +1,14 @@
 package er.extensions.components.javascript;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 
 import er.extensions.appserver.ERXSession;
 import er.extensions.components.ERXStatelessComponent;
@@ -20,7 +23,8 @@ import er.extensions.components.ERXStatelessComponent;
  * @author ak
  */
 public class ERXJSLifebeat extends ERXStatelessComponent {
-
+	protected final static Logger log=Logger.getLogger(ERXJSLifebeat.class);
+	
 	public ERXJSLifebeat(WOContext arg0) {
 		super(arg0);
 	}
@@ -34,6 +38,10 @@ public class ERXJSLifebeat extends ERXStatelessComponent {
 		return interval;
 	}
 	
+	public String sessionID() {
+		return context().session().sessionID();
+	}
+	
 	public static class Action extends WODirectAction {
 
 		public Action(WORequest arg0) {
@@ -41,10 +49,26 @@ public class ERXJSLifebeat extends ERXStatelessComponent {
 		}
 		
 		public WOActionResults keepAliveAction() {
-            WOResponse response = WOApplication.application().createResponseInContext(context());
-            // we give over the session id as we also need to touch the session anyway
-            response.setHeader(ERXSession.DONT_STORE_PAGE, session().sessionID());
-		    return response;
+			WOApplication application = WOApplication.application();
+			WOContext context = context();
+			WOResponse response = application.createResponseInContext(context);
+			String sessionID = context.request().stringFormValueForKey("erxsid");
+			if (!application.isRefusingNewSessions()) {
+				WOSession session = application.restoreSessionWithID(sessionID, context);
+				if (session != null) {
+					log.debug("Pinging " + sessionID);
+					// CHECKME TH do we still need that?
+					// we give over the session id as we also need to touch the session anyway
+					response.setHeader(ERXSession.DONT_STORE_PAGE, sessionID);
+				}
+				else {
+					log.debug("Couldn't ping " + sessionID);
+				}
+			}
+			else {
+				log.debug("Application is refusing new sessions. Not pinging " + sessionID);
+			}
+			return response;
 		}
 	}
 }
