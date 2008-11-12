@@ -134,4 +134,30 @@ public class ERXGenericRecordUpdateInverseRelationshipsTest extends TestCase {
     assertEquals(1, company.employees().count());
     assertEquals(p2, company.employees().objectAtIndex(0));
   }
+  
+  public void testRevertToManyWithoutInverseRelationshipUpdating() {
+    testRevertToMany(false);
+  }
+  
+  public void testRevertToManyWithInverseRelationshipUpdating() {
+    testRevertToMany(true);
+  }
+  
+  public void testRevertToMany(boolean updateInverseRelationships) {
+    ERXGenericRecord.InverseRelationshipUpdater.setUpdateInverseRelationships(updateInverseRelationships);
+    EOEditingContext editingContext = ERXEC.newEditingContext();
+    Company company = Company.createCompany(editingContext, "XYZ");
+    editingContext.saveChanges();
+    
+    Employee p1 = (Employee) EOUtilities.createAndInsertInstance(editingContext, Employee.ENTITY_NAME);
+    p1.setCompanyRelationship(company);
+
+    assertEquals(company, p1.company());
+    assertEquals(1, company.employees().count());
+    assertEquals(p1, company.employees().objectAtIndex(0));
+    
+    editingContext.revert();
+    
+    assertEquals(0, company.employees().count());
+  }
 }
