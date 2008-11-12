@@ -365,7 +365,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     public T objectMatchingKeyAndValue(EOEditingContext ec, String key, Object value) {
         NSArray<T> result = objectsMatchingKeyAndValue(ec, key, value);
         if(result.count() > 1) {
-        	throw new EOUtilities.MoreThanOneException("Mor than one: " + key + "->" + value);
+        	throw new EOUtilities.MoreThanOneException("More than one: " + key + "->" + value);
         }
         return result.lastObject();
     }
