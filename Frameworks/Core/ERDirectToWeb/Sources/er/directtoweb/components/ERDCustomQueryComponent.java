@@ -50,8 +50,14 @@ public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXEx
     }
 
     public void setDisplayGroupQueryMatchValue(Object newValue) {
-        if (key() != null && displayGroup() != null && displayGroup().queryMatch() != null)
-                displayGroup().queryMatch().setObjectForKey(newValue, key());
+        if (key() != null && displayGroup() != null && displayGroup().queryMatch() != null) {
+        	if(newValue != null) {
+        		displayGroup().queryMatch().setObjectForKey(newValue, key());
+        	} else {
+                displayGroup().queryMatch().removeObjectForKey(key());
+                displayGroup().queryOperator().removeObjectForKey(key());
+            }
+        }
     }
 
     public void reset() {
