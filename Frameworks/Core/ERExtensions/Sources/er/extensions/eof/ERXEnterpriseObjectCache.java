@@ -369,17 +369,34 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @return 
      */
     public T objectForKey(EOEditingContext ec, Object key) {
+    	return objectForKey(ec, key, true);
+    }
+    
+    /**
+     * Retrieves an EO that matches the given key or null if no match 
+     * is in the cache.
+     * @param ec editing context to get the object into
+     * @param key key value under which the object is registered 
+     * @param handleUnsuccessfulQueryForKey if false, a cache miss returns null rather than fetching
+     * @return 
+     */
+    public T objectForKey(EOEditingContext ec, Object key, boolean handleUnsuccessfulQueryForKey) {
         ERXExpiringCache<Object, EORecord<T>> cache = cache();
         EORecord<T> record = cache.objectForKey(key);
         if (record == null) {
-            handleUnsuccessfullQueryForKey(key);
-            record = cache.objectForKey(key);
-            if (record == null) {
-            	return null;
-            }
-            else if (record.gid == NO_GID_MARKER) {
-               return null;
-            }
+        	if (handleUnsuccessfulQueryForKey) {
+	            handleUnsuccessfullQueryForKey(key);
+	            record = cache.objectForKey(key);
+	            if (record == null) {
+	            	return null;
+	            }
+	            else if (record.gid == NO_GID_MARKER) {
+	               return null;
+	            }
+        	}
+        	else {
+        		return null;
+        	}
         }
         else if (record.gid == NO_GID_MARKER) {
             return null;
