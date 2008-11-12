@@ -29,6 +29,7 @@ import com.webobjects.foundation.NSValidation;
 import er.directtoweb.interfaces.ERDErrorPageInterface;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.localization.ERXLocalizer;
 import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
 
@@ -124,7 +125,7 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                 }
                 log.info("Validation Exception: " + exception + exception.getMessage());
                 editingContext.revert();
-                String errorMessage = " Could not save your changes: " + exception.getMessage() + " ";
+                String errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", exception);
                 ErrorPageInterface epf = D2W.factory().errorPage(sender.session());
                 if (epf instanceof ERDErrorPageInterface) {
                     ((ERDErrorPageInterface) epf).setException(exception);
