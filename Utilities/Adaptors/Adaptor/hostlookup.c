@@ -195,7 +195,8 @@ static hostent_t copyhostent(hostent_t host)
    /*
     *	add pointer and address space for addr_list
     */
-   len += addr_ct * (sizeof(char *) + host->h_length + 1);
+   len = ROUND_UP(len, host->h_length);
+   len += (addr_ct+1) * (sizeof(char *) + host->h_length);
 
    m = WOMALLOC(ROUND_UP(len,sizeof(char *)));
    /*
