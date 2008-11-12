@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
@@ -66,6 +67,10 @@ public class ERDQuickSearch extends ERDCustomComponent {
             searchKeys = ERXEOControlUtilities.stringAttributeListForEntityNamed(ec, entityName);
         }
         EOQualifier qualifier = ERXEOControlUtilities.qualifierMatchingAnyKey(searchKeys, EOQualifier.QualifierOperatorCaseInsensitiveLike, "*" + searchValue + "*");
+        EOQualifier restrictingQualifier = (EOQualifier) valueForBinding("extraRestrictingQualifier");
+        if(restrictingQualifier != null) {
+            qualifier = new EOAndQualifier(new NSArray(new Object[]{qualifier, restrictingQualifier}));
+        }
         EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, null);
         ds.setFetchSpecification(fs);
         return ds;
