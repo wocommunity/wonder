@@ -5,8 +5,14 @@ ERXOncePerRequestConditional1: ERXOncePerRequestConditional {
 Link: WOActionURL {
 	directActionName = "keepAlive";
 	actionClass = "ERXJSLifebeat$Action";
+	?wosid = false;
+	?erxsid = sessionID;
 }
 
 Interval: WOString {
 	value = interval;
+}
+
+HasSession : WOConditional {
+	condition = context.hasSession;
 }
