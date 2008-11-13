@@ -1,16 +1,16 @@
-Conditional1: WOConditional {
+IsDirectAction: WOConditional {
 	condition = isDirectAction;
 }
 
-Conditional2: WOConditional {
+IsComponentAction: WOConditional {
 	condition = isDirectAction;
 	negate = true;
 }
 
-Content: WOComponentContent {}
-Content2: WOComponentContent {}
+ComponentActionContent: WOComponentContent {}
+DirectActionContent: WOComponentContent {}
 
-Link: WOHyperlink {
+ComponentActionLink: WOHyperlink {
 	onclick=openWindow;
 	class = ^linkClass;
 	string = ^string;
@@ -21,7 +21,7 @@ Link: WOHyperlink {
 	id = ^id;
 }
 
-Link2: WOHyperlink {
+DirectActionLink: WOHyperlink {
 	class = ^linkClass;
 	onclick=openWindow;
 	string = ^string;
