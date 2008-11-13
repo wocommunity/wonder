@@ -1,9 +1,12 @@
 package er.sproutcore.views.collection;
 
+import java.util.Set;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
+
+import er.ajax.AjaxOption;
 
 public class SCGridView extends SCCollectionView {
 	public SCGridView(String name, NSDictionary associations, WOElement element) {
@@ -15,10 +18,13 @@ public class SCGridView extends SCCollectionView {
 		super.addProperties();
 		addProperty("row_height");
 		addProperty("column_width");
+		addProperty("example_view", AjaxOption.SCRIPT);
 	}
 
 	@Override
-	protected void doAppendToResponse(WOResponse response, WOContext context) {
-		super.doAppendToResponse(response, context);
+	public Set<String> cssNames(WOContext context) {
+		Set<String> cssNames = super.cssNames(context);
+		cssNames.add("sc-grid-view");
+		return cssNames;
 	}
 }

@@ -90,7 +90,7 @@ public class SCView extends WODynamicGroup implements ISCView {
 		view.addProperty("max_thickness");
 		view.addProperty("min_thickness");
 		view.addProperty("can_collapse");
-		view.addProperty("collapse", "isCollapsed");
+		view.addProperty("collapse", "isCollapsed", AjaxOption.SCRIPT);
 
 		// General delegate support
 		view.addProperty("delegate", AjaxOption.SCRIPT);

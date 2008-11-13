@@ -1,8 +1,9 @@
 package er.sproutcore.views.collection;
 
+import java.util.Set;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 public class SCListView extends SCCollectionView {
@@ -20,9 +21,11 @@ public class SCListView extends SCCollectionView {
     public String css(WOContext context) {
     	return super.css(context) + " focus";
     }
-    
-    @Override
-    protected void doAppendToResponse(WOResponse response, WOContext context) {
-        super.doAppendToResponse(response, context);
-    }
+
+	@Override
+	public Set<String> cssNames(WOContext context) {
+		Set<String> cssNames = super.cssNames(context);
+		cssNames.add("sc-list-view");
+		return cssNames;
+	}
 }
