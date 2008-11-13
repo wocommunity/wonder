@@ -1,6 +1,5 @@
 package er.sproutcore.views.button;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.webobjects.appserver.WOContext;

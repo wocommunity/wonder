@@ -1,8 +1,9 @@
 package er.sproutcore.views.collection;
 
+import java.util.Set;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -31,7 +32,7 @@ public class SCCollectionView extends SCView {
 		addProperty("group_visible_key");
 		addProperty("group_title_key");
 		addProperty("content_value_editable", "contentValueIsEditable");
-		addPropertyWithDefault("accepts_first_response", true);
+		addPropertyWithDefault("accepts_first_responder", true);
 		addProperty("can_reorder_content");
 		addProperty("can_delete_content");
 
@@ -49,13 +50,13 @@ public class SCCollectionView extends SCView {
 		addProperty("content_unread_count_key");
 		addProperty("content_action_key");
 
-		addProperty(new SCProperty("groupBy", associationNamed("group"), null, AjaxOption.DEFAULT, true) {
+		addProperty(new SCProperty("groupBy", associationNamed("group"), null, AjaxOption.ARRAY, true) {
 			@Override
 			public String javascriptValue(Object value) {
-				if (value instanceof NSArray) {
-					return new AjaxValue(AjaxOption.STRING_ARRAY, value).javascriptValue();
+				if (!(value instanceof NSArray)) {
+					value = new NSArray(value);
 				}
-				return super.javascriptValue(value);
+				return new AjaxValue(AjaxOption.ARRAY, value).javascriptValue();
 			}
 		});
 
@@ -68,12 +69,9 @@ public class SCCollectionView extends SCView {
 	}
 
 	@Override
-	public String cssName(WOContext context) {
-		return "sc-collection-view " + super.cssName(context);
-	}
-
-	@Override
-	protected void doAppendToResponse(WOResponse response, WOContext context) {
-		super.doAppendToResponse(response, context);
+	public Set<String> cssNames(WOContext context) {
+		Set<String> cssNames = super.cssNames(context);
+		cssNames.add("sc-collection-view");
+		return cssNames;
 	}
 }
