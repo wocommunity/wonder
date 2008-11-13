@@ -47,6 +47,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     private boolean _reuseEditingContext;
     private boolean _retainObjects;
+    private boolean _resetOnChange;
     private ERXEC _editingContext;
     
     /**
@@ -108,6 +109,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         _keyPath = keyPath;
         _timeout = timeout;
         _qualifier = qualifier;
+        _resetOnChange = true; // MS: for backwards compatibility
         _fetchInitialValues = true; // MS: for backwards compatibility
         start();
     }
@@ -182,22 +184,29 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         	NSArray<T> releventsInsertedEOs = relevantChanges(n.userInfo(), EOEditingContext.InsertedKey);
         	NSArray<T> releventsUpdatedEOs = relevantChanges(n.userInfo(), EOEditingContext.UpdatedKey);
         	NSArray<T> releventsDeletedEOs = relevantChanges(n.userInfo(), EOEditingContext.DeletedKey);
-        	ERXExpiringCache<Object, EORecord<T>> cache = cache();
-        	synchronized (cache) { 
-	        	if (releventsInsertedEOs != null) {
-	        		for (T eo : releventsInsertedEOs) {
-	        			addObject(eo);
-	        		}
-	        	}
-	        	if (releventsUpdatedEOs != null) {
-	        		for (T eo : releventsUpdatedEOs) {
-	        			updateObject(eo);
-	        		}
-	        	}
-	        	if (releventsDeletedEOs != null) {
-	        		for (T eo : releventsDeletedEOs) {
-	        			removeObject(eo);
-	        		}
+        	if (_resetOnChange) {
+        		if ((releventsInsertedEOs != null && releventsInsertedEOs.count() > 0) || (releventsUpdatedEOs != null && releventsUpdatedEOs.count() > 0) || (releventsDeletedEOs != null && releventsDeletedEOs.count() > 0)) {
+        			reset();
+        		}
+        	}
+        	else {
+	        	ERXExpiringCache<Object, EORecord<T>> cache = cache();
+	        	synchronized (cache) { 
+		        	if (releventsInsertedEOs != null) {
+		        		for (T eo : releventsInsertedEOs) {
+		        			addObject(eo);
+		        		}
+		        	}
+		        	if (releventsUpdatedEOs != null) {
+		        		for (T eo : releventsUpdatedEOs) {
+		        			updateObject(eo);
+		        		}
+		        	}
+		        	if (releventsDeletedEOs != null) {
+		        		for (T eo : releventsDeletedEOs) {
+		        			removeObject(eo);
+		        		}
+		        	}
 	        	}
         	}
         }
@@ -468,12 +477,16 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * Sets whether or not the initial values should be fetched into
-     * this cache or whether or should lazy load.
+     * this cache or whether or should lazy load.  If turned off, resetOnChange
+     * will also be turned off.
      * 
      * @param fetchInitialValues if true, the initial values are fetched into the cache
      */
     public void setFetchInitialValues(boolean fetchInitialValues) {
-		_fetchInitialValues = fetchInitialValues;
+    	_fetchInitialValues = fetchInitialValues;
+    	if (!fetchInitialValues) {
+    		setResetOnChange(false);
+    	}
 	}
     
     /**
@@ -497,6 +510,19 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     public void setRetainObjects(boolean retainObjects) {
 		_retainObjects = retainObjects;
 		setReuseEditingContext(true);
+	}
+    
+    /**
+     * Sets whether or not the cache is cleared when any change occurs.  This requires fetching initial values (and will
+     * be turned on if you set this)
+     * 
+     * @param resetOnChange if true, the cache will clear on changes; if false, the cache will update on changes
+     */
+    public void setResetOnChange(boolean resetOnChange) {
+		_resetOnChange = resetOnChange;
+		if (_resetOnChange) {
+			setFetchInitialValues(true);
+		}
 	}
     
     private static class EORecord<T> {
