@@ -199,7 +199,7 @@ public class AjaxModalDialog extends AjaxComponent {
 					result = _actionResults.invokeAction(request, context);
 				}
 				else {
-					super.invokeAction(request, context);
+					result = super.invokeAction(request, context);
 				}
 			}
 
