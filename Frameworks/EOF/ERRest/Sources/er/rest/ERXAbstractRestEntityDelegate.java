@@ -304,7 +304,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				obj = (EOEnterpriseObject) matchingObjects.objectAtIndex(0);
 			}
 			else {
-				throw new ERXRestException("There was more than one " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
+				throw new ERXRestException("There was more than one " + entityAliasForEntityNamed(entity.name()) + " with the " + idAttributeName + " '" + key + "'.");
 			}
 		}
 		return obj;
