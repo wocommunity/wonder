@@ -3,7 +3,7 @@
   <div class="property">
     <label>Title:</label>
     <span class="value">
-    <%= text_field_view :outlet => true, 
+    <%= text_field_view :outlet => true,
       :bind => { :value => 'Photos.photoController.name' } %>
     </span>
   </div>
@@ -11,8 +11,8 @@
     <label>Opacity:</label>
     <span class="value">
       <%= slider_view :outlet => true, :minimum => 0, :maximum => 1.0,
-        :bind => { 
-          :value => 'Photos.photoController.opacity' 
+        :bind => {
+          :value => 'Photos.photoController.opacity'
         } %>
     </span>
   </div>
@@ -21,9 +21,9 @@
     <label>Rotation:</label>
     <span class="value">
       <%= slider_view :outlet => true, :minimum => 0, :maximum => 360,
-        :bind => { 
+        :bind => {
           :enabled => 'Photos.photoController.canShowEffects',
-          :value => 'Photos.photoController.rotation' 
+          :value => 'Photos.photoController.rotation'
         } %>
     </span>
   </div>
