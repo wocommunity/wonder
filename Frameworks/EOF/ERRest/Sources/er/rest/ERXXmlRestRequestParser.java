@@ -15,6 +15,8 @@ import org.xml.sax.InputSource;
 
 import com.webobjects.appserver.WORequest;
 
+import er.extensions.localization.ERXLocalizer;
+
 /**
  * ERXXmlRestRequestParser is an implementation of the IERXRestRequestParser interface that supports XML document
  * requests.
@@ -86,7 +88,7 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 				Element rootElement = document.getDocumentElement();
 				if (requestPath == null) {
 					requestPath = rootElement.getNodeName();
-					requestPath = requestPath.substring(0, requestPath.length() - 1);
+					requestPath = ERXLocalizer.currentLocalizer().singularifiedString(requestPath);
 				}
 				rootRequestNode = createRequestNodeForElement(rootElement);
 			}
