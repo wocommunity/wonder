@@ -51,15 +51,26 @@ public class EROracleExpression extends OracleExpression {
         super(eoentity);
     }
 
-    protected boolean isSingleTableInherited(EOAttribute attribute) {
-        boolean inherited = false;
-        
-        EOEntity parentEntity = attribute.entity().parentEntity();
-        while (!inherited && parentEntity != null && attribute.entity().externalName().equals(parentEntity.externalName())) {
-            inherited = (parentEntity.attributeNamed(attribute.name()) != null);
-            parentEntity = parentEntity.parentEntity();
+    protected boolean shouldAllowNull(EOAttribute attribute) {
+      boolean shouldAllowNull = attribute.allowsNull();
+      // If you allow nulls, then there's never a problem ...
+      if (!shouldAllowNull) {
+        EOEntity entity = attribute.entity();
+        EOEntity parentEntity = entity.parentEntity();
+        String externalName = entity.externalName();
+        if (externalName != null) {
+          // If you have a parent entity and that parent entity shares your table name, then you're single table inheritance
+          boolean singleTableInheritance = (parentEntity != null && externalName.equals(parentEntity.externalName()));
+          if (singleTableInheritance) {
+            EOAttribute parentAttribute = parentEntity.attributeNamed(attribute.name());
+            if (parentAttribute == null) {
+              // If this attribute is new in the subclass, you have to allow nulls
+              shouldAllowNull = true;
+            }
+          }
         }
-        return inherited;
+      }
+      return shouldAllowNull;
     }
 
     public void addCreateClauseForAttribute(EOAttribute attribute) {
@@ -69,12 +80,7 @@ public class EROracleExpression extends OracleExpression {
         defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default");
       }
       String sql;
-      boolean allowsNull = attribute.allowsNull();
-      if(!allowsNull) {
-          allowsNull = !isSingleTableInherited(attribute);
-      }
- 
-      String allowsNullClauseForConstraint = allowsNullClauseForConstraint(allowsNull);
+      String allowsNullClauseForConstraint = allowsNullClauseForConstraint(shouldAllowNull(attribute));
       if (defaultValue == null) {
           sql = _NSStringUtilities.concat(attribute.columnName(), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint);
       }
