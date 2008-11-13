@@ -16,8 +16,8 @@ import org.xml.sax.InputSource;
 import com.webobjects.appserver.WORequest;
 
 /**
- * ERXXmlRestRequestParser is an implementation of the IERXRestRequestParser interface
- * that supports XML document requests.
+ * ERXXmlRestRequestParser is an implementation of the IERXRestRequestParser interface that supports XML document
+ * requests.
  * 
  * @author mschrag
  */
@@ -25,9 +25,9 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 	protected ERXRestRequestNode createRequestNodeForElement(Element element) {
 		String name = element.getTagName();
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name);
-		
+
 		String value = element.getNodeValue();
-		
+
 		NamedNodeMap attributeNodes = element.getAttributes();
 		for (int attributeNum = 0; attributeNum < attributeNodes.getLength(); attributeNum++) {
 			Node attribute = attributeNodes.item(attributeNum);
@@ -60,16 +60,15 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 		}
 
 		requestNode.setValue(value);
-		
+
 		return requestNode;
 	}
 
 	public ERXRestRequest parseRestRequest(ERXRestContext context, WORequest request, String requestPath) throws ERXRestException, ERXRestNotFoundException {
 		return parseRestRequest(context, request.contentString(), requestPath);
 	}
-	
+
 	public ERXRestRequest parseRestRequest(ERXRestContext context, String contentStr, String requestPath) throws ERXRestException, ERXRestNotFoundException {
-		ERXRestKey requestKey = ERXRestKey.parse(context, requestPath);
 
 		ERXRestRequestNode rootRequestNode = null;
 
@@ -79,12 +78,16 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 			if (!contentStr.trim().startsWith("<")) {
 				contentStr = "<FakeWrapper>" + contentStr.trim() + "</FakeWrapper>";
 			}
-			
+
 			Document document;
 			try {
 				document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
 				document.normalize();
 				Element rootElement = document.getDocumentElement();
+				if (requestPath == null) {
+					requestPath = rootElement.getNodeName();
+					requestPath = requestPath.substring(0, requestPath.length() - 1);
+				}
 				rootRequestNode = createRequestNodeForElement(rootElement);
 			}
 			catch (Exception e) {
@@ -92,6 +95,7 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 			}
 		}
 
+		ERXRestKey requestKey = ERXRestKey.parse(context, requestPath);
 		ERXRestRequest restRequest = new ERXRestRequest(requestKey, rootRequestNode);
 		return restRequest;
 	}
