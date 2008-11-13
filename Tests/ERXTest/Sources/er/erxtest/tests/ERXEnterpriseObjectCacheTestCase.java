@@ -117,9 +117,10 @@ public class ERXEnterpriseObjectCacheTestCase extends TestCase {
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(fetchInitialValues);
     EOEditingContext editingContext = ERXEC.newEditingContext();
-    Company c1 = Company.createCompany(editingContext, "Company 1");
+    String name1 = "Company " + UUID.randomUUID().toString();
+    Company c1 = Company.createCompany(editingContext, name1);
     editingContext.saveChanges();
-    Company c1Test = cache.objectForKey(editingContext, "Company 1");
+    Company c1Test = cache.objectForKey(editingContext, name1);
     assertSame(c1, c1Test);
     cache.stop();
   }
@@ -128,13 +129,14 @@ public class ERXEnterpriseObjectCacheTestCase extends TestCase {
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(fetchInitialValues);
     EOEditingContext editingContext = ERXEC.newEditingContext();
-    Company c1 = Company.createCompany(editingContext, "Company 1");
+    String name1 = "Company " + UUID.randomUUID().toString();
+    Company c1 = Company.createCompany(editingContext, name1);
     editingContext.saveChanges();
-    Company c1Test = cache.objectForKey(editingContext, "Company 1");
+    Company c1Test = cache.objectForKey(editingContext, name1);
     assertSame(c1, c1Test);
     c1.delete();
     editingContext.saveChanges();
-    Company c1DeleteTest = cache.objectForKey(editingContext, "Company 1");
+    Company c1DeleteTest = cache.objectForKey(editingContext, name1);
     assertNull(c1DeleteTest);
     cache.stop();
   }
@@ -143,16 +145,18 @@ public class ERXEnterpriseObjectCacheTestCase extends TestCase {
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(fetchInitialValues);
     EOEditingContext editingContext = ERXEC.newEditingContext();
-    Company c1 = Company.createCompany(editingContext, "Company 1");
+    String name1 = "Company " + UUID.randomUUID().toString();
+    Company c1 = Company.createCompany(editingContext, name1);
     editingContext.saveChanges();
 
-    c1.setName("Company 2");
+    String name2 = "Company " + UUID.randomUUID().toString();
+    c1.setName(name2);
     editingContext.saveChanges();
 
-    Company c1DeleteTest = cache.objectForKey(editingContext, "Company 1");
+    Company c1DeleteTest = cache.objectForKey(editingContext, name1);
     assertNull(c1DeleteTest);
 
-    Company c2UpdateTest = cache.objectForKey(editingContext, "Company 2");
+    Company c2UpdateTest = cache.objectForKey(editingContext, name2);
     assertSame(c1, c2UpdateTest);
     cache.stop();
   }
