@@ -1272,7 +1272,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			if (destinationEditingContext != sourceEditingContext && !(sourceEditingContext instanceof EOSharedEditingContext) && !(destinationEditingContext instanceof EOSharedEditingContext)) {
 				if (destinationEditingContext == null || sourceEditingContext == null) {
 					if (sourceEditingContext == null) {
-						throw new RuntimeException("You crossed editing context boundaries attempting to set the '" + relationshipName + "' relationship of " + source + " (which is not an in editing context) to " + destination + " (in EC " + destinationEditingContext + ").");
+						if (!(destination instanceof ERXGenericRecord && ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships() && !((ERXGenericRecord)destination)._updateInverseRelationships)) {
+							throw new RuntimeException("You crossed editing context boundaries attempting to set the '" + relationshipName + "' relationship of " + source + " (which is not in an editing context) to " + destination + " (in EC " + destinationEditingContext + ").");
+						}
 					}
 					else {
 						// MS: Why is this not considered an error?
