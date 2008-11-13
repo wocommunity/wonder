@@ -25,6 +25,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding onClickServer JS returned from the server after the update
  * @binding action method to call
  * @binding title title of the link
+ * @binding string optional string for link text for when there is no element content
  * @binding id id of the link
  * @binding class class of the link
  * @binding style style of the link
@@ -109,7 +110,12 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 			response.appendContentString(functionName + " = function() { " + onClick(context) + " }\n");
 			AjaxUtils.appendScriptFooter(response);
 		}
-		appendChildrenToResponse(response, context);
+		if ( ! hasBinding("string")) {
+			appendChildrenToResponse(response, context);
+		} else {
+			response.appendContentString((String)valueForBinding("string", component));
+		}
+		
 		if (renderTags) {
 			response.appendContentString("</");
 			response.appendContentString(elementName);
