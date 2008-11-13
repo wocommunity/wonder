@@ -5,7 +5,7 @@
 require('core') ;
 
 Photos.FIXTURES = Photos.FIXTURES.concat(function() {
-  
+
   var recs = [
 
   {
@@ -63,7 +63,7 @@ Photos.FIXTURES = Photos.FIXTURES.concat(function() {
     name: "Chris's Photos",
     albumType: 'Subscription'
   } ] ;
-  
+
   // for each rec, randomly assign some photos.
   var idx = recs.length ;
   while(--idx >= 0) {
@@ -76,7 +76,7 @@ Photos.FIXTURES = Photos.FIXTURES.concat(function() {
     guids = guids.uniq().compact() ;
     rec.photos = guids ;
   }
-  
+
   return recs ;
-  
+
 }());
