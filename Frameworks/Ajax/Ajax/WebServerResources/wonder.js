@@ -386,6 +386,7 @@ var AjaxSubmitButton = {
 				processedOptions['_asbn'] = null;
 				var parameters = processedOptions['parameters'];
 				if (parameters === undefined || parameters == null) {
+					$(form).fire('ajax:submit');
 					var formSerializer = processedOptions['_fs'];
 					if (formSerializer == null) {
 						formSerializer = Form.serializeWithoutSubmits;
