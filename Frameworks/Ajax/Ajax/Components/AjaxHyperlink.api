@@ -8,6 +8,7 @@
 		<binding name = "style"/>
 		<binding name = "action"/>
 		<binding name = "title"/>
+		<binding name = "string"/>
 		<binding name = "disabled"/>
 		<binding name = "functionName"/>
 		
