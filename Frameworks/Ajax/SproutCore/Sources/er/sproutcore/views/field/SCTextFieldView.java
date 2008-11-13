@@ -6,8 +6,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.ajax.AjaxOption;
-import er.ajax.AjaxValue;
-import er.sproutcore.views.SCProperty;
 
 public class SCTextFieldView extends SCFieldView {
 

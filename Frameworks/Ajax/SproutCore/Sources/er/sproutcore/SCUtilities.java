@@ -40,7 +40,7 @@ public class SCUtilities {
      */
     public static String scBase() {
         if (scBase == null) {
-            String version = ERXProperties.stringForKeyWithDefault("er.sproutcore.version", "0.9.13");
+            String version = ERXProperties.stringForKeyWithDefault("er.sproutcore.version", "0.9.20");
             scBase = ERXProperties.stringForKeyWithDefault("er.sproutcore.base", "/Library/Ruby/Gems/1.8/gems/sproutcore-" + version + "/frameworks");
         }
         return scBase;
@@ -130,8 +130,7 @@ public class SCUtilities {
 
     public static String staticUrl(String asset) {
     	ERXWOContext context = (ERXWOContext) ERXWOContext.currentContext();
-    	String url = context.urlWithRequestHandlerKey(SproutCore.SC_KEY, "SproutCore/sproutcore/english.lproj/" + asset, null);
-        return url;
+		return context.urlWithRequestHandlerKey(SproutCore.SC_KEY, "SproutCore/sproutcore/english.lproj/" + asset, null);
     }
 
 	public static String defaultCssName(Class clazz) {
