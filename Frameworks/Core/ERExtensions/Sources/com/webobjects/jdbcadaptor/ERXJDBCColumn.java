@@ -80,10 +80,10 @@ public class ERXJDBCColumn extends JDBCColumn {
 			}
 			if(_constantClassName != NO_NAME) {
 				try {
+					int i =_rs.getInt(_column);
 					if(_rs.wasNull()) {
 						return null;
 					}
-					int i =_rs.getInt(_column);
 					Object result = ERXConstant.NumberConstant.constantForClassNamed(i, _constantClassName);
  					return result;
 				} catch (SQLException e) {
