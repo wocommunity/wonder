@@ -38,7 +38,7 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
         return valueForBinding("directActionName") != null;
     }
 
-    // see EROpenJSWindowSubmitButton for the purpose of this method
+    // see ERXJSOpenWindowSubmitButton for the purpose of this method
     public String contextComponentActionURL() {
         return context().componentActionURL();
     }
