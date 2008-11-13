@@ -9,20 +9,20 @@ require('core');
   Displays a single photo.
 
   @extends SC.View
-  @author    AuthorName  
+  @author    AuthorName
   @version 0.1
 */
 Photos.PhotoView = SC.ImageCellView.extend(
 /** @scope Photos.PhotoView.prototype */ {
-  
+
   /** The current rotation of the image view. */
   rotation: 0,
-  
+
   imageMargin: 10,
-  
+
   // handle rotation...
   contentPropertyDidChange: function(target, key) {
-    
+
     if (key === 'rotation' || key === '*') {
       var content = this.get('content') ;
       var rot = (content) ? content.get('rotation') : 0 ;
@@ -40,10 +40,10 @@ Photos.PhotoView = SC.ImageCellView.extend(
         this.set('opacity', opacity) ;
       }
     }
-    
+
     arguments.callee.base.apply(this, arguments) ;
   },
-  
+
 
   /** When the rotation changes, set the transform... */
   rotationObserver: function() {
@@ -55,6 +55,6 @@ Photos.PhotoView = SC.ImageCellView.extend(
   opacityObserver: function() {
     var opacity = this.get('opacity') ;
     this.set('styleOpacity', opacity) ;
-  }.observes('opacity') 
-  
+  }.observes('opacity')
+
 }) ;

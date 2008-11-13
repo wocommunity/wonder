@@ -2,7 +2,7 @@
 // Photos
 // ==========================================================================
 
-// This is the function that will start your app running.  The default 
+// This is the function that will start your app running.  The default
 // implementation will load any fixtures you have created then instantiate
 // your controllers and awake the elements on your page.
 //
@@ -10,9 +10,9 @@
 // See comments for some pointers on what to do next.
 //
 function main() {
-  
+
   Photos.initDatabase() ;
-  
+
   // Start the page views that are currently visible on screen.
   SC.page.get('workspace') ;
   SC.page.get('footer') ;
@@ -24,8 +24,8 @@ function main() {
 
 };
 
-// This method is called either after the fixtures are loaded or the data 
-// is restored from the database.  It will actually cause the UI to "come 
+// This method is called either after the fixtures are loaded or the data
+// is restored from the database.  It will actually cause the UI to "come
 // alive" with data.
 Photos.startApplication = function() {
   var albums = Photos.Album.findAll().clone() ;
@@ -56,16 +56,16 @@ Photos.initDatabase = function() {
 Photos.loadDatabase = function() {
   // determine if the table already exists...
   Photos.db.transaction(function(tx) {
-    tx.executeSql("SELECT COUNT(*) FROM PhotoStoreData", [], 
-    
+    tx.executeSql("SELECT COUNT(*) FROM PhotoStoreData", [],
+
     // success! -- load the data unless the count is 0....
     function(tx, result) {
       Photos.restoreRecordsFromDatabase() ;
-      
+
     // table does not yet exist...build it...
     }, function(tx, error) {
-      tx.executeSql("CREATE TABLE PhotoStoreData (id REAL UNIQUE, json TEXT)", [], function() { 
-        Photos.loadFixtures(); 
+      tx.executeSql("CREATE TABLE PhotoStoreData (id REAL UNIQUE, json TEXT)", [], function() {
+        Photos.loadFixtures();
 
         // also dump initial data...
         var recs = SC.Store.get('records').invoke('get','attributes') ;
@@ -80,18 +80,18 @@ Photos.loadDatabase = function() {
 Photos.restoreRecordsFromDatabase = function() {
   if (!Photos.db) return ;
   Photos.db.transaction(function(tx) {
-    tx.executeSql("SELECT id, json FROM PhotoStoreData", [], 
-    
+    tx.executeSql("SELECT id, json FROM PhotoStoreData", [],
+
     // success! process records...
     function(tx, result) {
-      
+
       if (result.rows.length >= 1) {
         var json = result.rows.item(0)["json"] ;
         var recs = eval(json) ;
         Photos.server.preload(recs) ;
         Photos.startApplication() ;
       } else Photo.loadFixtures() ;
-      
+
     // major fail...
     }, function(tx, error) {
       Photo.loadFixtures() ;

@@ -1,9 +1,9 @@
 <% content_for('body') do %>
 
-<% split_view :workspace, :class => 'sc-app-workspace footer', :direction => :horizontal do %>  
+<% split_view :workspace, :class => 'sc-app-workspace footer', :direction => :horizontal do %>
   <% view :sidebar, :outlet => true, :max_thickness => 400, :min_thickness => 100, :bind => { :is_collapsed => 'SC.Binding.Not("Photos.masterController.albumsVisible")' } do %>
     <% scroll_view :source_list, :outlet => true do %>
-      <%= source_list_view :outlet => true, 
+      <%= source_list_view :outlet => true,
         :group => :albumType,
         :delegate => 'Photos.masterController',
         :drop_target => true,
@@ -18,9 +18,9 @@
         } %>
     <% end %>
   <% end %>
-  
+
   <%= split_divider_view :outlet => true, :width => 5 %>
-  
+
   <% scroll_view :grid_view, :outlet => true do %>
     <%= grid_view :outlet => true, :view => 'Photos.PhotoGridView',
       :example_view => 'Photos.PhotoView',
@@ -46,18 +46,18 @@
     <%= label_view :outlet => true, :bind => { :value => 'Photos.detailController.countLabel' } %>
   </div>
   <div class="right">
-    <%= button_view :outlet => :edit_button, :title => "Edit", 
-      :action => 'Photos.photoController.showPicker', 
-      :bind => { 
+    <%= button_view :outlet => :edit_button, :title => "Edit",
+      :action => 'Photos.photoController.showPicker',
+      :bind => {
         :selected => 'Photos.photoController.pickerIsVisible',
-        :enabled => 'SC.Binding.Not("Photos.photoController.hasNoContent")' 
+        :enabled => 'SC.Binding.Not("Photos.photoController.hasNoContent")'
       } %>
     50
     <%= slider_view :outlet => true,
       :minimum => 50,
       :maximum => 320,
       :step => 10,
-      :bind => { :value => 'Photos.detailController.photoSize' } 
+      :bind => { :value => 'Photos.detailController.photoSize' }
     %>
     320
   </div>
