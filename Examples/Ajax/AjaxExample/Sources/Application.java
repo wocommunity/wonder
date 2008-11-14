@@ -27,6 +27,7 @@ public class Application extends ERXApplication {
 	
 	
 	public WOResponse dispatchRequest(WORequest request) {
+//    	NSLog.out.appendln("---- start of RR loop ----\n");
 //		if (request.uri().indexOf("/wo/") > -1) log.info("Received component action request " + request.uri());
 //		else if (request.uri().indexOf("/wa/") > -1) log.info("Received direct action request " + request.uri());
 //		else if (request.uri().indexOf("/ajax/") > -1) log.info("Received ajax action request " + request.uri());
@@ -34,7 +35,7 @@ public class Application extends ERXApplication {
 		
 //    	NSLog.out.appendln("returned response " + response.contentString());
 //    	NSLog.out.appendln("returned response headers " + response.headers());
-    	
+//    	NSLog.out.appendln("\n");
     	return response;
 	}
 
