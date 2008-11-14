@@ -233,9 +233,6 @@ public class AjaxModalDialog extends AjaxComponent {
 		}
 		else if ("open".equals(modalBoxAction) && !isOpen()) {
 			openDialog();
-			// Register the id of this component on the page in the request so that when 
-			// it comes time to cache the context, it knows that this area is an Ajax updating area
-			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
 
 			// If there is an action binding, we need to cache the result of calling that so that
 			// the awake, takeValues, etc. messages can get passed onto it
@@ -247,6 +244,11 @@ public class AjaxModalDialog extends AjaxComponent {
 
 		if (isOpen()) {
 			response = AjaxUtils.createResponse(request, context);
+			
+			// Register the id of this component on the page in the request so that when 
+			// it comes time to cache the context, it knows that this area is an Ajax updating area
+			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
+
 			if (_actionResults != null) {
 				context._setCurrentComponent(_actionResults);
 				_actionResults.appendToResponse((WOResponse) response, context);
