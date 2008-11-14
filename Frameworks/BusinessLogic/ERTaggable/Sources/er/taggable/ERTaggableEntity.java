@@ -30,6 +30,7 @@ import er.extensions.eof.ERXEOAttribute;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.eof.ERXKey;
+import er.extensions.eof.ERXQ;
 import er.extensions.foundation.ERXCommandLineTokenizer;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.taggable.model.ERTag;
@@ -676,6 +677,22 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    */
   @SuppressWarnings("unchecked")
   public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags) {
+    return fetchTaggedWith(editingContext, inclusion, limit, tags, null);
+  }
+
+  /**
+   * Fetches the list of objects of this entity type that are tagged
+   * with the given tags. 
+   * 
+   * @param editingContext the editing context to fetch into
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param inclusion find matches for ANY tags or ALL tags provided
+   * @param limit limit the number of results to be returned (-1 for unlimited)
+   * @param additionalQualifier an additional qualifier to chain in
+   * @return the array of matching eos
+   */
+  @SuppressWarnings("unchecked")
+  public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags, EOQualifier additionalQualifier) {
     NSArray<String> tagNames = splitTagNames(tags);
     if (tagNames.count() == 0) {
       throw new IllegalArgumentException("No tags were passed in.");
@@ -684,6 +701,9 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
 
     EOQualifier qualifier = new ERXKey<ERTag>(_tagsRelationship.name()).append(ERTag.NAME).in(tagNames);
+    if (additionalQualifier != null) {
+      qualifier = ERXQ.and(qualifier, additionalQualifier);
+    }
     NSArray<EOSortOrdering> sortOrderings = null;
     EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), qualifier, sortOrderings);
 
