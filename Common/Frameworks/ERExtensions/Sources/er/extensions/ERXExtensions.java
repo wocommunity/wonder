@@ -68,11 +68,40 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     private static boolean _initialized;
 
+	public static Observer observer;
+	/**
+     * This public observer is used to perform basic functions in
+     * response to notifications. Specifically it handles
+     * configuring the adapator context so that SQL debugging can
+     * be enabled and disabled on the fly throgh the log4j system.
+     * Handling cleanup issues when sessions timeout, i.e. releasing
+     * all references to editing contexts created for that session.
+     * Handling call all of the <code>did*</code> methods on
+     * {@link ERXGenericRecord} subclasses after an editing context
+     * has been saved. This delegate is also responsible for configuring
+     * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
+     * This delegate is configured when this framework is loaded.
+     */
+    public static class Observer {
+		/**
+         * This method is called everytime an editingcontext is
+         * saved. This allows us to call all of the didInsert,
+         * didUpdate and didSave methods on the enterprise objects
+         * after the transaction is complete.
+         * @param n notification that contains the array of inserted,
+         *		updated and deleted objects.
+         */
+        public void didSave(NSNotification n) {
+            ERXGenericRecord.didSave(n);
+        }
+	}
+
 	static {
 		// Without this the blasted ERXLogger factory doesn't get initialized early enough.
 		// When we move everything to use plain Loggers, we should revisit this initializer. - TC
 		ERXConfigurationManager.defaultManager().initialize();
 		ERXLogger.configureLogging(System.getProperties());
+		observer = new Observer();
 	}
 
     public ERXExtensions() {
@@ -161,6 +190,15 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sharedEditingContextWasInitialized", ERXConstant.NotificationClassArray), EOSharedEditingContext.DefaultSharedEditingContextWasInitializedNotification, null);
 
     		ERXEntityClassDescription.registerDescription();
+
+			// TODO: Remove this and the "Observer" when we really update ERXEnterpriseObject and ERXEC from trunk,
+			// as they will no longer be necessary.
+			NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                             new NSSelector("didSave", ERXConstant.NotificationClassArray),
+                                                             EOEditingContext.EditingContextDidSaveChangesNotification,
+                                                             null);
+			// End TODO
+
     		//ERXPartialInitializer.registerModelGroupListener();
     		if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
     			NSNotificationCenter.defaultCenter().addObserver(this,
