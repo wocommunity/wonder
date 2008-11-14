@@ -116,7 +116,7 @@ Form : WOForm {
 }
 
 InlineEditEmployee: AjaxModalDialog {
-	id = "EditEmployeeModalDialog";
+	id = "InlineEditEmployeeModalDialog";
 	title = "Edit Employee";
 	label = "edit";
 	width = 300;
@@ -137,6 +137,7 @@ EditEmployee: AjaxModalDialog {
 	title = "Edit Employee";
 	action = editEmployee;
 	width = 300;
+	height = -1;
 	overlayOpacity = "0.5";
 	overlayDuration = "0.0";
 	slideDownDuration = "0.0";
