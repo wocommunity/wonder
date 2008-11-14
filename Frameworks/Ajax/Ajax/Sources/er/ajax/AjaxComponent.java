@@ -30,13 +30,29 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     /**
      * Utility to get the value of a binding or a default value if none is
      * supplied.
-     * @param name
-     * @param defaultValue
+     * @param name name of the binding
+     * @param defaultValue value to return if unbound
+     * @return value for binding or defaultValue value if unbound
      */
     public Object valueForBinding(String name, Object defaultValue) {
         Object value = defaultValue;
         if(hasBinding(name)) {
             value = valueForBinding(name);
+        }
+        return value;
+    }
+    
+    /**
+     * Utility to get the boolean value of a binding or a default value if none is
+     * supplied.
+     * @param name name of the binding
+     * @param defaultValue value to return if unbound
+     * @return value for binding or defaultValue value if unbound
+     */
+    public boolean booleanValueForBinding(String name, boolean defaultValue) {
+    	boolean value = defaultValue;
+        if(hasBinding(name)) {
+            value = ((Boolean)valueForBinding(name)).booleanValue();
         }
         return value;
     }
