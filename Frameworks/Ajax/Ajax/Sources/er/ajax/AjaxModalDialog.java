@@ -36,19 +36,30 @@ import er.extensions.appserver.ERXWOContext;
  *  
  * <p>To cause the contents of the dialog to be updated in an Ajax action method, use this:
  * <code>
- * AjaxModalDialog.udpate(context());
+ * AjaxModalDialog.update(context());
  * </code>
  * <br /><b>NOTE: this does not work if you use the action binding.  You must manage your own updating if you use this binding.</b>
  * </p>
  * 
+ * <p>The modal dialog is opened by calling a JavaScript function.  While this is normally done from an onclick
+ * handler, you can call it directly.  The function name is openAMD_<ID>():
+ * <code>
+ * openAMD_MyDialogId();
+ * </code>
+ * </p>
+ * 
  * @binding action returns the contents of the dialog box
- * @binding label the text for the link that opens the dialog box0
+ * @binding label the text for the link that opens the dialog box
  * @binding title Title to be displayed in the ModalBox window header, also used as title attribute of link opening dialog
  * @binding linkTitle Title to be used as title attribute of link opening dialog, title is used if this is not present
  *
  * @binding width integer Width in pixels, use -1 for auto-width
  * @binding height integer Height in pixels, use -1 for auto-height. When set Modalbox will operate in 'fixed-height' mode. 
  * 
+ * @binding open if true, the container is rendered already opened, the default is false
+ * @binding showOpener if false, no HTML is generated for the link, button etch to open this dialog, it can only be opened from
+ * 			custom  JavaScript (see below).  The default is true
+ *
  * @binding onOpen server side method that runs before the dialog is opened, the return value is discarded
  * @binding onClose server side method that runs before the dialog is opened, the return value is discarded.
  *                  This will be executed if the page is reloaded, but not if the user navigates elsewhere.
@@ -115,7 +126,28 @@ public class AjaxModalDialog extends AjaxComponent {
 	public void setOpen(boolean open) {
 		_open = open;
 	}
+	
+	/**
+	 * Call this method to have a JavaScript response returned that closes the modal dialog.
+	 *
+	 * @param context the current WOContext
+	 * @param id the HTML ID of the AjaxModalDialog to open
+	 */
+	public static void open(WOContext context, String id) {
+		AjaxUtils.javascriptResponse(openDialogFunctionName(id) + "();", context);
+	}
 
+	/**
+	 * Returns the JavaScript function name for the function to open the AjaxModalDialog with
+	 * the specified ID.
+	 *
+	 * @param id the HTML ID of the AjaxModalDialog to open
+	 * @return JavaScript function name for the function to open the AjaxModalDialog
+	 */
+	public static String openDialogFunctionName(String id) {
+		return "openAMD_" + id;
+	}
+	
 	/**
 	 * Call this method to have a JavaScript response returned that closes the modal dialog.
 	 *
@@ -284,38 +316,67 @@ public class AjaxModalDialog extends AjaxComponent {
 			super.appendToResponse(response, context);
 		}
 		else {
-			response.appendContentString("<a href=\"javascript:void(0)\"");
-
-			WOComponent component = context.component();
-
-			appendTagAttributeToResponse(response, "id", id());
-			appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
-			appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-			if (hasBinding("linkTitle")) {
-				appendTagAttributeToResponse(response, "title", valueForBinding("linkTitle", component));
-			} else {
-				appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
+			boolean showOpener = booleanValueForBinding("showOpener", true);
+			
+			if (showOpener) {
+				response.appendContentString("<a href=\"javascript:void(0)\"");
+				appendTagAttributeToResponse(response, "id", id());
+				appendTagAttributeToResponse(response, "class", valueForBinding("class", null));
+				appendTagAttributeToResponse(response, "style", valueForBinding("style", null));
+				if (hasBinding("linkTitle")) {
+					appendTagAttributeToResponse(response, "title", valueForBinding("linkTitle", null));
+				} else {
+					appendTagAttributeToResponse(response, "title", valueForBinding("title", null));
+				}
+				
+				// onclick calls the script below
+				response.appendContentString(" onclick=\"");
+				response.appendContentString(openDialogFunctionName(id()));
+				response.appendContentString("(); return false;\" >");
+	
+				if (hasBinding("label")) {
+					response.appendContentString((String) valueForBinding("label"));
+				} else {
+					// This will append the contents of the ERXWOTemplate named "link"
+					super.appendToResponse(response, context);
+				}
+				response.appendContentString("</a>");
 			}
 			
-			response.appendContentString(" onclick=\"Modalbox.show('");
-			response.appendContentString(AjaxUtils.ajaxComponentActionUrl(component.context()));
-			response.appendContentString("?modalBoxAction=open");
-			response.appendContentString("', ");
-			AjaxOptions.appendToResponse(createModalBoxOptions(), response, context);
-			response.appendContentString("); return false;\" >");
-
-			if (hasBinding("label")) {
-				// normally this would be done in super, but we're not supering here
-				addRequiredWebResources(response);
-				response.appendContentString((String) valueForBinding("label"));
+			// This script can also be called directly by other code to show the modal dialog
+			response.appendContentString("<script>\n");
+			response.appendContentString(openDialogFunctionName(id()));
+			response.appendContentString(" = function() {\n");
+			appendOpenModalDialogFunction(response, context);
+			response.appendContentString("}\n");
+			
+			// Auto-open
+			if (booleanValueForBinding("open", false)) {
+				response.appendContentString(openDialogFunctionName(id()));
+				response.appendContentString("();\n");
 			}
-			else {
-				// This will append the contents of the ERXWOTemplate named "link"
-				super.appendToResponse(response, context);
-			}
-
-			response.appendContentString("</a>");
+			response.appendContentString("</script>");
+			
+			// normally this would be done in super, but we're not always calling super here
+			addRequiredWebResources(response);
 		}
+	}
+
+	/**
+	 * Appends function body to open the modal dialog window.
+	 * 
+	 * @see AjaxModalDialog#openDialogFunctionName(String)
+	 * 
+	 * @param response WOResponse to append to
+	 * @param context WOContext of response
+	 */
+	protected void appendOpenModalDialogFunction(WOResponse response, WOContext context) {
+		response.appendContentString("    Modalbox.show('");
+		response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context));
+		response.appendContentString("?modalBoxAction=open");
+		response.appendContentString("', ");
+		AjaxOptions.appendToResponse(createModalBoxOptions(), response, context);
+		response.appendContentString(");\n");
 	}
 
 	/**
@@ -377,7 +438,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	public String updateContainerID() {
 		return id() + "Updater";
 	}
-
+	
 	/**
 	 * Returns the template name for the ERXWOComponentContent: null to show the dialog (default) contents
 	 * and "link" to show the link contents
@@ -453,6 +514,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @see er.ajax.AjaxComponent#addRequiredWebResources(com.webobjects.appserver.WOResponse)
 	 */
 	protected void addRequiredWebResources(WOResponse response) {
+		System.out.println("Adding resources");
 		addScriptResourceInHead(response, "prototype.js");
 		addScriptResourceInHead(response, "wonder.js");
 		addScriptResourceInHead(response, "effects.js");

@@ -7,6 +7,8 @@
 	    <binding name="linkTitle"/>
 	    <binding name="width"/>
 	    <binding name="height"/>
+	    <binding name="open" defaults="Boolean"/>
+	    <binding name="showOpener" defaults="Boolean"/>
 	    <binding defaults="Actions" name="onOpen"/>
 	    <binding defaults="Actions" name="onClose"/>
 	    <binding name="id"/>
