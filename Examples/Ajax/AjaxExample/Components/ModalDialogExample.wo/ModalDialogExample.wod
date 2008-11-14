@@ -2,6 +2,17 @@ AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Modal Dialog";
 }
 
+WelcomeModalDialog: AjaxModalDialog {
+	id = "WelcomeModalDialog";
+	title = "Welcome";
+	width = 400;
+	overlayOpacity = "0.4";
+	overlayDuration = "0.1";
+	slideDownDuration = "0.2";
+	slideUpDuration = "0.2";
+	open = true;
+	showOpener = false;
+}
 
 ComponentModalDialog: AjaxModalDialog {
 	id = "ComponentModalDialog";
