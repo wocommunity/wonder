@@ -10,6 +10,7 @@
 	<packaging>pom</packaging>
 	<name>Reporting Examples</name>
 	<modules>
+		<module>DocsByExample</module>
 		<module>DRGroupingTest</module>
 		<module>DynaReporter</module>
 	</modules>

@@ -10,6 +10,12 @@
 	<packaging>pom</packaging>
 	<name>Misc Examples</name>
 	<modules>
+		<module>DevStudio</module>
+		<module>ERIndexingExample</module>
+		<!--  <module>EROpenIDExample</module> won't build because of dependency issues -->
+		<module>ERSeleniumExample</module>
+		<module>ExcelGeneratorExample</module>
+		<module>JavaRESTAdaptorExample</module>
 		<module>ValidityExample</module>
 	</modules>
 </project>

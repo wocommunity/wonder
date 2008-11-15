@@ -14,10 +14,6 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 			<classifier>${woClassifier}</classifier>
@@ -29,6 +25,10 @@
 		<dependency>
 			<groupId>wonder.ajax</groupId>
 			<artifactId>YUI</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 	</dependencies>
 </project>
