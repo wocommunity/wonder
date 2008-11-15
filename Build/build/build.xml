@@ -31,41 +31,9 @@
         </antcall>
     </target>
         
-    <target name="WOOgnl53.pre">
-        <delete>
-            <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
-            <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.java" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.java" />
-            <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="com/webobjects/appserver/**/*.java" />
-        </delete>
-        <copy todir="Frameworks/Core/WOOgnl/Sources">
-            <fileset dir="Frameworks/Core/WOOgnl/Sources_WO53" includes="**/*.java"/>
-        </copy>
-    </target>
-
-    <target name="WOOgnl54.pre">
-        <delete>
-            <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
-            <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.java" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.java" />
-            <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="com/webobjects/appserver/**/*.java" />
-        </delete>
-        <copy todir="Frameworks/Core/WOOgnl/Sources">
-            <fileset dir="Frameworks/Core/WOOgnl/Sources_WO54" includes="**/*.java"/>
-        </copy>
-    </target>
-
-    <target name="WOOgnl.post">
-        <delete>
-            <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
-            <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.java" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.java" />
-            <fileset dir="Frameworks/Core/WOOgnl/Sources/" includes="com/webobjects/appserver/**/*.java" />
-        </delete>
-    </target>
-
     <target name="WOOgnl.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="ognl.webobjects.WOOgnl" />
-            <param name="before.compile" value="${woognl.pre}" />
-            <param name="after.compile" value="WOOgnl.post" />
             <param name="project.name" value="WOOgnl" />
             <param name="project.dir" value="Frameworks/Core/WOOgnl" />
 
@@ -772,23 +740,7 @@
     <target name="woadaptors.all" depends="ERIMAdaptor.all" />
     <target name="experimental.all" depends="DevStudio.all" />
 
-    <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
-     </target>
-     
-     <target name="frameworks.patch54.all">
-       <property name="woognl.pre" value="WOOgnl54.pre" />
-       <antcall target="_frameworks.all" />
-     </target>
-     
-     <target name="frameworks.patch53.all">
-        <property name="woognl.pre" value="WOOgnl53.pre" />
-        <antcall target="_frameworks.all" />
-     </target>
-     
-     <target name="frameworks.all">
-        <!-- AK: need to remove when 54 is default -->
-        <property name="wonder.patch" value="53" />
-        <antcall target="frameworks.patch${wonder.patch}.all" ></antcall>
+    <target name="frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
      </target>
    
     <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
@@ -834,31 +786,11 @@
             excludes="**/CVS/*, **/dist/**" />
     </target>
 
-    
-    <target name="patch.54">
-       <property name="woognl.pre" value="WOOgnl54.pre" />
-       <property name="erx.class.exclude.0" value="com/webobjects/appserver/_private/WOHTTPIO.java" />  
-       <property name="erx.class.exclude.1" value="com/webobjects/foundation/*.*" /> 
-
-        <property name="include.source" value="true" />
-        <antcall target="all.run" >
-            <param name="build.action" value="build" />
-        </antcall>
-    </target>
-    
-    <target name="patch.53">
-       <property name="woognl.pre" value="WOOgnl53.pre" />
-
-        <property name="include.source" value="true" />
-        <antcall target="all.run" >
-            <param name="build.action" value="build" />
-        </antcall>
-    </target>
-
     <target name="build">
-        <!-- AK: need to remove when 54 is default -->
-        <property name="wonder.patch" value="53" />
-        <antcall target="patch.${wonder.patch}" ></antcall>
+        <property name="include.source" value="true" />
+        <antcall target="all.run" >
+            <param name="build.action" value="build" />
+        </antcall>
     </target>
 
     <target name="install">
