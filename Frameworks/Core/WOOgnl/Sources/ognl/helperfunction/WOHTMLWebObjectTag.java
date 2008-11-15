@@ -3,9 +3,6 @@ package ognl.helperfunction;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import ognl.helperfunction.compatibility.WOMiddleManDeclarationFormatException;
-import ognl.helperfunction.compatibility.WOMiddleManHTMLFormatException;
-
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver._private.WOBundle;
@@ -27,11 +24,11 @@ public class WOHTMLWebObjectTag {
 	private WOHTMLWebObjectTag _parent;
 	private NSMutableArray _children;
 
-	private void extractName(String s) throws WOMiddleManHTMLFormatException {
+	private void extractName(String s) throws WOHelperFunctionHTMLFormatException {
 
 		StringTokenizer stringtokenizer = new StringTokenizer(s, "=");
 		if (stringtokenizer.countTokens() != 2) {
-			throw new WOMiddleManHTMLFormatException("<WOHTMLWebObjectTag cannot initialize WebObject tag " + s + "> . It has no NAME=... parameter");
+			throw new WOHelperFunctionHTMLFormatException("<WOHTMLWebObjectTag cannot initialize WebObject tag " + s + "> . It has no NAME=... parameter");
 		}
 
 		stringtokenizer.nextToken();
@@ -50,7 +47,7 @@ public class WOHTMLWebObjectTag {
 		}
 
 		if (_name == null) {
-			throw new WOMiddleManHTMLFormatException("<WOHTMLWebObjectTag cannot initialize WebObject tag " + s + "> . Failed parsing NAME parameter");
+			throw new WOHelperFunctionHTMLFormatException("<WOHTMLWebObjectTag cannot initialize WebObject tag " + s + "> . Failed parsing NAME parameter");
 		}
 	}
 
@@ -58,7 +55,7 @@ public class WOHTMLWebObjectTag {
 		_name = null;
 	}
 
-	public WOHTMLWebObjectTag(String s, WOHTMLWebObjectTag wohtmlwebobjecttag) throws WOMiddleManHTMLFormatException {
+	public WOHTMLWebObjectTag(String s, WOHTMLWebObjectTag wohtmlwebobjecttag) throws WOHelperFunctionHTMLFormatException {
 		_parent = wohtmlwebobjecttag;
 		extractName(s);
 	}
@@ -123,7 +120,7 @@ public class WOHTMLWebObjectTag {
 		_children.addObject(obj);
 	}
 
-	public WOElement dynamicElement(NSDictionary nsdictionary, NSArray nsarray) throws WOMiddleManDeclarationFormatException, ClassNotFoundException {
+	public WOElement dynamicElement(NSDictionary nsdictionary, NSArray nsarray) throws WOHelperFunctionDeclarationFormatException, ClassNotFoundException {
 		String s = name();
 		WOElement woelement = template();
 		WODeclaration wodeclaration = (WODeclaration) nsdictionary.objectForKey(s);
@@ -153,7 +150,7 @@ public class WOHTMLWebObjectTag {
 		return woelement1;
 	}
 
-	private static WOElement _elementWithDeclaration(WODeclaration wodeclaration, String s, WOElement woelement, NSArray nsarray) throws ClassNotFoundException, WOMiddleManDeclarationFormatException {
+	private static WOElement _elementWithDeclaration(WODeclaration wodeclaration, String s, WOElement woelement, NSArray nsarray) throws ClassNotFoundException, WOHelperFunctionDeclarationFormatException {
 		WOElement woelement1 = null;
 		if (wodeclaration != null) {
 			String s1 = wodeclaration.type();
@@ -199,11 +196,11 @@ public class WOHTMLWebObjectTag {
 				}
 			}
 			else {
-				throw new WOMiddleManDeclarationFormatException("<WOHTMLWebObjectTag> declaration object for dynamic element (or component) named " + s + "has no class name.");
+				throw new WOHelperFunctionDeclarationFormatException("<WOHTMLWebObjectTag> declaration object for dynamic element (or component) named " + s + "has no class name.");
 			}
 		}
 		else {
-			throw new WOMiddleManDeclarationFormatException("<WOHTMLTemplateParser> no declaration for dynamic element (or component) named " + s);
+			throw new WOHelperFunctionDeclarationFormatException("<WOHTMLTemplateParser> no declaration for dynamic element (or component) named " + s);
 		}
 
 		WOGenerationSupport.insertInElementsTableWithName(woelement1, s, wodeclaration.associations());

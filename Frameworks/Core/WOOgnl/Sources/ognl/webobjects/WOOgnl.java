@@ -16,8 +16,7 @@ import ognl.Ognl;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
 import ognl.helperfunction.WOHelperFunctionHTMLParser;
-import ognl.helperfunction.WOHelperFunctionHTMLTemplateParser;
-import ognl.helperfunction.compatibility.WOMiddleManParser;
+import ognl.helperfunction.WOHelperFunctionTagRegistry;
 
 import org.apache.log4j.Logger;
 
@@ -100,6 +99,19 @@ public class WOOgnl {
 		return h;
 	}
 
+	// Borrowed from ERXApplication, but we can't depend on ERX
+	private boolean isWO54() {
+		boolean isWO54;
+		try {
+			WOApplication.class.getMethod("getWebObjectsVersion", new Class[0]);
+			isWO54 = true;
+		}
+		catch (Exception e) {
+			isWO54 = false;
+		}
+		return isWO54;
+	}
+
 	public void configureWOForOgnl() {
 		// Configure runtime.
 		// Configure foundation classes.
@@ -113,10 +125,27 @@ public class WOOgnl {
 		OgnlRuntime.setElementsAccessor(NSSet.class, e);
 		// Register template parser
 		if (!"false".equals(System.getProperty("ognl.active"))) {
-			String parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionHTMLTemplateParser");
-			WOMiddleManParser.setWOHTMLTemplateParserClassName(parserClassName);
+			String parserClassName;
+			if (isWO54()) {
+				parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionParser54");
+				try {
+					Class.forName("com.webobjects.appserver.parser.WOComponentTemplateParser").getMethod("setWOHTMLTemplateParserClassName", String.class).invoke(null, parserClassName);
+				}
+				catch (Exception e1) {
+					throw new RuntimeException("Failed to set the template parser to WOHelperFunctionParser54.", e1);
+				}
+			}
+			else {
+				parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionParser53");
+				try {
+					Class.forName("com.webobjects.appserver._private.WOParser").getMethod("setWOHTMLTemplateParserClassName", String.class).invoke(null, parserClassName);
+				}
+				catch (Exception e1) {
+					throw new RuntimeException("Failed to set the template parser to WOHelperFunctionParser54.", e1);
+				}
+			}
 			if ("true".equalsIgnoreCase(System.getProperty("ognl.inlineBindings"))) {
-				WOHelperFunctionHTMLTemplateParser.setAllowInlineBindings(true);
+				WOHelperFunctionTagRegistry.setAllowInlineBindings(true);
 			}
 			if ("true".equalsIgnoreCase(System.getProperty("ognl.parseStandardTags"))) {
 				WOHelperFunctionHTMLParser.setParseStandardTags(true);
