@@ -12,4 +12,31 @@
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
+		</dependency>
+		<dependency>
+			<groupId>wonder.reporting</groupId>
+			<artifactId>DRGrouping</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOAccess</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOControl</artifactId>
+		</dependency>
+	</dependencies>
 </project>

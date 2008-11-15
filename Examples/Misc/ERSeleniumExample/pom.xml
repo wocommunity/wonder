@@ -6,28 +6,25 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.misc</groupId>
-	<artifactId>ValidityExample</artifactId>
-	<name>ValidityExample Application</name>
+	<artifactId>ERSeleniumExample</artifactId>
+	<name>ERSelenium Example Application</name>
 	<packaging>woapplication</packaging>
+	<build>
+		<sourceDirectory>Sources</sourceDirectory>
+	</build>
 	<dependencies>
 		<dependency>
-			<groupId>wonder.eof</groupId>
-			<artifactId>Validity</artifactId>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
+			<groupId>wonder.misc</groupId>
+			<artifactId>ERSelenium</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
-		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>

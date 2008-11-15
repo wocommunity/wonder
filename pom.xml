@@ -54,12 +54,20 @@
 		</profile>
 	</profiles>
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.objectstyle.woproject.maven2</groupId>
+					<artifactId>maven-wolifecycle-plugin</artifactId>
+					<version>2.0.16</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.objectstyle.woproject.maven2</groupId>
 				<artifactId>maven-wolifecycle-plugin</artifactId>
 				<extensions>true</extensions>
-				<version>2.0.16-SNAPSHOT</version>
 				<configuration>
 					<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
 				</configuration>
@@ -188,6 +196,11 @@
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>wonder.ajax</groupId>
+				<artifactId>ERIUI</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>wonder.reporting</groupId>
 				<artifactId>WRReporting</artifactId>
 				<version>${pom.version}</version>
@@ -213,6 +226,11 @@
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>wonder.eof</groupId>
+				<artifactId>ERIndexing</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>wonder.misc</groupId>
 				<artifactId>ERSelenium</artifactId>
 				<version>${pom.version}</version>
@@ -235,6 +253,11 @@
 			<dependency>
 				<groupId>wonder.misc</groupId>
 				<artifactId>WOLips</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.misc</groupId>
+				<artifactId>EROpenID</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>
@@ -417,6 +440,16 @@
 				<groupId>org.openqa.selenium.client-drivers</groupId>
 				<artifactId>selenium-java-client-driver</artifactId>
 				<version>1.0-beta-1</version>
+			</dependency>
+			<dependency>
+				<groupId>jtidy</groupId>
+				<artifactId>jtidy</artifactId>
+				<version>4aug2000r7-dev</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge</groupId>
+				<artifactId>jode</artifactId>
+				<version>1.1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
