@@ -50,11 +50,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- Excluding this classes make the Maven build to fail. -->
-					<!--
-						<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> <configuration> <excludes> <exclude>**/com/webobjects/foundation/*</exclude> </excludes>
-						</configuration> </plugin>
-					-->
 				</plugins>
 			</build>
 		</profile>
