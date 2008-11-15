@@ -514,7 +514,6 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @see er.ajax.AjaxComponent#addRequiredWebResources(com.webobjects.appserver.WOResponse)
 	 */
 	protected void addRequiredWebResources(WOResponse response) {
-		System.out.println("Adding resources");
 		addScriptResourceInHead(response, "prototype.js");
 		addScriptResourceInHead(response, "wonder.js");
 		addScriptResourceInHead(response, "effects.js");
