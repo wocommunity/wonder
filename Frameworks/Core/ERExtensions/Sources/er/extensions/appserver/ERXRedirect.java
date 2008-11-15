@@ -28,12 +28,13 @@ public class ERXRedirect extends WOComponent {
 
 	private String _directActionClass;
 	private String _directActionName;
+	private WOComponent _originalComponent;
 	private WOComponent _component;
 	private NSDictionary<String, ? extends Object> _queryParameters;
 
 	public ERXRedirect(WOContext context) {
 		super(context);
-		_component = context.page();
+		_originalComponent = context.page();
 	}
 
 	/**
@@ -98,6 +99,13 @@ public class ERXRedirect extends WOComponent {
 	 */
 	public void setUrl(String url) {
 		_url = url;
+	}
+
+	/**
+	 * Sets the redirect component to be the original page that we were just on.
+	 */
+	public void setComponentToPage() {
+		_component = _originalComponent;
 	}
 
 	/**
