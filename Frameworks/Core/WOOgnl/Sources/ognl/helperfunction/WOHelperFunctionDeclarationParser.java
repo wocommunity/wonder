@@ -4,8 +4,6 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import ognl.helperfunction.compatibility.WOMiddleManDeclarationFormatException;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -36,7 +34,7 @@ public class WOHelperFunctionDeclarationParser {
 		_quotedStrings = new NSMutableDictionary();
 	}
 
-	public static NSMutableDictionary declarationsWithString(String declarationStr) throws WOMiddleManDeclarationFormatException {
+	public static NSMutableDictionary declarationsWithString(String declarationStr) throws WOHelperFunctionDeclarationFormatException {
 		WOHelperFunctionDeclarationParser declarationParser = new WOHelperFunctionDeclarationParser();
 		NSMutableDictionary declarations = declarationParser.parseDeclarations(declarationStr);
 		return declarations;
@@ -46,7 +44,7 @@ public class WOHelperFunctionDeclarationParser {
 		return "<WOHelperFunctionDeclarationParser quotedStrings = " + _quotedStrings.toString() + ">";
 	}
 
-	public NSMutableDictionary parseDeclarations(String declarationStr) throws WOMiddleManDeclarationFormatException {
+	public NSMutableDictionary parseDeclarations(String declarationStr) throws WOHelperFunctionDeclarationFormatException {
 		String strWithoutComments = _removeOldStyleCommentsFromString(declarationStr);
 		strWithoutComments = _removeNewStyleCommentsAndQuotedStringsFromString(strWithoutComments);
 		NSMutableDictionary declarations = parseDeclarationsWithoutComments(strWithoutComments);
@@ -150,7 +148,7 @@ public class WOHelperFunctionDeclarationParser {
 		return _NSStringUtilities.stringFromBuffer(declarationWithoutCommentsBuffer);
 	}
 
-	private NSMutableDictionary parseDeclarationsWithoutComments(String declarationWithoutComment) throws WOMiddleManDeclarationFormatException {
+	private NSMutableDictionary parseDeclarationsWithoutComments(String declarationWithoutComment) throws WOHelperFunctionDeclarationFormatException {
 		NSMutableDictionary declarations = new NSMutableDictionary();
 		NSMutableDictionary rawDeclarations = _rawDeclarationsWithoutComment(declarationWithoutComment);
 		String tagName;
@@ -161,18 +159,18 @@ public class WOHelperFunctionDeclarationParser {
 			String declarationBody = (String) rawDeclarations.objectForKey(declarationHeader);
 			int colonIndex = declarationHeader.indexOf(':');
 			if (colonIndex < 0) {
-				throw new WOMiddleManDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing ':' for declaration:\n" + declarationHeader + " " + declarationBody);
+				throw new WOHelperFunctionDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing ':' for declaration:\n" + declarationHeader + " " + declarationBody);
 			}
 			tagName = declarationHeader.substring(0, colonIndex).trim();
 			if (tagName.length() == 0) {
-				throw new WOMiddleManDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing tag name for declaration:\n" + declarationHeader + " " + declarationBody);
+				throw new WOHelperFunctionDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing tag name for declaration:\n" + declarationHeader + " " + declarationBody);
 			}
 			if (declarations.objectForKey(tagName) != null) {
-				throw new WOMiddleManDeclarationFormatException("<WOHelperFunctionDeclarationParser> Duplicate tag name '" + tagName + "' in declaration:\n" + declarationBody);
+				throw new WOHelperFunctionDeclarationFormatException("<WOHelperFunctionDeclarationParser> Duplicate tag name '" + tagName + "' in declaration:\n" + declarationBody);
 			}
 			String type = declarationHeader.substring(colonIndex + 1).trim();
 			if (type.length() == 0) {
-				throw new WOMiddleManDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing element name for declaration:\n" + declarationHeader + " " + declarationBody);
+				throw new WOHelperFunctionDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing element name for declaration:\n" + declarationHeader + " " + declarationBody);
 			}
 			NSMutableDictionary associations = _associationsForDictionaryString(declarationHeader, declarationBody);
 			declaration = new WODeclaration(tagName, type, associations);
@@ -182,11 +180,11 @@ public class WOHelperFunctionDeclarationParser {
 		return declarations;
 	}
 
-	private NSMutableDictionary _associationsForDictionaryString(String declarationHeader, String declarationBody) throws WOMiddleManDeclarationFormatException {
+	private NSMutableDictionary _associationsForDictionaryString(String declarationHeader, String declarationBody) throws WOHelperFunctionDeclarationFormatException {
 		NSMutableDictionary associations = new NSMutableDictionary();
 		String trimmedDeclarationBody = declarationBody.trim();
 		if (!trimmedDeclarationBody.startsWith("{") && !trimmedDeclarationBody.endsWith("}")) {
-			throw new WOMiddleManDeclarationFormatException("<WOHelperFunctionDeclarationParser> Internal inconsistency : invalid dictionary for declaration:\n" + declarationHeader + " " + declarationBody);
+			throw new WOHelperFunctionDeclarationFormatException("<WOHelperFunctionDeclarationParser> Internal inconsistency : invalid dictionary for declaration:\n" + declarationHeader + " " + declarationBody);
 		}
 		int declarationBodyLength = trimmedDeclarationBody.length();
 		if (declarationBodyLength <= 2) {
@@ -203,15 +201,15 @@ public class WOHelperFunctionDeclarationParser {
 			if (binding.length() != 0) {
 				int equalsIndex = binding.indexOf('=');
 				if (equalsIndex < 0) {
-					throw new WOMiddleManDeclarationFormatException("<WOHelperFunctionDeclarationParser> Invalid line. No equal in line:\n" + binding + "\nfor declaration:\n" + declarationHeader + " " + declarationBody);
+					throw new WOHelperFunctionDeclarationFormatException("<WOHelperFunctionDeclarationParser> Invalid line. No equal in line:\n" + binding + "\nfor declaration:\n" + declarationHeader + " " + declarationBody);
 				}
 				String key = binding.substring(0, equalsIndex).trim();
 				if (key.length() == 0) {
-					throw new WOMiddleManDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing binding in line:\n" + binding + "\nfor declaration:\n" + declarationHeader + " " + declarationBody);
+					throw new WOHelperFunctionDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing binding in line:\n" + binding + "\nfor declaration:\n" + declarationHeader + " " + declarationBody);
 				}
 				String value = binding.substring(equalsIndex + 1).trim();
 				if (value.length() == 0) {
-					throw new WOMiddleManDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing value in line:\n" + binding + "\nfor declaration:\n" + declarationHeader + " " + declarationBody);
+					throw new WOHelperFunctionDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing value in line:\n" + binding + "\nfor declaration:\n" + declarationHeader + " " + declarationBody);
 				}
 				WOAssociation association = WOHelperFunctionDeclarationParser._associationWithKey(value, _quotedStrings);
 				Object quotedString = _quotedStrings.objectForKey(key);
