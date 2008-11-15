@@ -14,5 +14,6 @@
 		<module>Ajax</module>
 		<module>D2W</module>
 		<module>Misc</module>
+		<module>Reporting</module>
 	</modules>
 </project>

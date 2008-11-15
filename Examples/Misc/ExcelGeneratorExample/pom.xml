@@ -6,17 +6,17 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.misc</groupId>
-	<artifactId>ValidityExample</artifactId>
-	<name>ValidityExample Application</name>
+	<artifactId>ExcelGeneratorExample</artifactId>
+	<name>Excel Generator Example Application</name>
 	<packaging>woapplication</packaging>
+	<build>
+		<sourceDirectory>Sources</sourceDirectory>
+	</build>
 	<dependencies>
 		<dependency>
-			<groupId>wonder.eof</groupId>
-			<artifactId>Validity</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
@@ -24,10 +24,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaXML</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>
