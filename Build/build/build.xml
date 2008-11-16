@@ -740,7 +740,13 @@
     <target name="woadaptors.all" depends="ERIMAdaptor.all" />
     <target name="experimental.all" depends="DevStudio.all" />
 
-    <target name="frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
+    <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
+     </target>
+     
+     <target name="frameworks.all">
+        <!-- AK: need to remove when 54 is default -->
+        <property name="wonder.patch" value="53" />
+        <antcall target="_frameworks.all" ></antcall>
      </target>
    
     <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
@@ -786,11 +792,27 @@
             excludes="**/CVS/*, **/dist/**" />
     </target>
 
-    <target name="build">
+    
+    <target name="patch.54">
+       <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" /> 
+
         <property name="include.source" value="true" />
         <antcall target="all.run" >
             <param name="build.action" value="build" />
         </antcall>
+    </target>
+    
+    <target name="patch.53">
+        <property name="include.source" value="true" />
+        <antcall target="all.run" >
+            <param name="build.action" value="build" />
+        </antcall>
+    </target>
+
+    <target name="build">
+        <!-- AK: need to remove when 54 is default -->
+        <property name="wonder.patch" value="53" />
+        <antcall target="patch.${wonder.patch}" ></antcall>
     </target>
 
     <target name="install">
