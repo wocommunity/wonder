@@ -75,7 +75,7 @@ static unsigned int WOShmem_size = 0;
 
 static WA_recursiveLock WOShmem_mutex;
 
-#define offset_to_addr(offset) ((void *)(WOShmem_base_address + offset))
+#define offset_to_addr(offset) ((void *)(WOShmem_base_address + (intptr_t)offset))
 #define addr_to_offset(addr) ((intptr_t)addr - WOShmem_base_address)
 
 #ifndef MAP_FAILED
