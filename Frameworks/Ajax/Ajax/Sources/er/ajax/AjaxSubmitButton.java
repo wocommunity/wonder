@@ -279,6 +279,8 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	      response.appendContentString(">");
 	      if (hasChildrenElements()) {
 	        appendChildrenToResponse(response, context);
+	      } else {
+	    	  response.appendContentString((String)valueForBinding("value", component));
 	      }
 	      response.appendContentString("</" + elementName + ">");
 	    }
