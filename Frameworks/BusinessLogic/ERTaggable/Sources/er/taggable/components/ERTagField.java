@@ -116,7 +116,7 @@ public class ERTagField extends er.extensions.components.ERXComponent {
 
   public String tags() {
     clearCacheIfNecessary();
-    if (_tags == null) {
+    if (_tags == null || true) {
       String separator = " ";
       NSMutableArray<String> tagNames = taggable().tagNames().mutableClone();
       if (ERTaggableEntity.isWhitespaceSeparator(separator)) {
