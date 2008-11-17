@@ -273,9 +273,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       if (pendingAttachment.isPendingDelete()) {
         uploadedFile.delete();
       }
-      ERXValidationException maxSizeExceededException = new ERXValidationException("AttachmentExceedsMaximumLengthException", uploadedFile, "size");
-      maxSizeExceededException.takeValueForKey(Long.valueOf(maxSize), "maxSize");
-      maxSizeExceededException.takeValueForKey(recommendedFileName, "recommendedFileName");
+      ERXAttachmentExceedsLengthException maxSizeExceededException = new ERXAttachmentExceedsLengthException("AttachmentExceedsMaximumLengthException", uploadedFile, "size", maxSize, recommendedFileName);
       throw maxSizeExceededException;
     }
 
@@ -377,4 +375,36 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @throws IOException if the delete fails
    */
   public abstract void deleteAttachment(T attachment) throws IOException;
+
+  /**
+   * ERXAttachmentExceedsLengthException thrown when an attachment exceeds the maximum attachment size.
+   * 
+   * @author mschrag
+   */
+  public static class ERXAttachmentExceedsLengthException extends ERXValidationException {
+    private long _maxSize;
+    private String _recommendedFileName;
+    
+    public ERXAttachmentExceedsLengthException(String type, Object object, String key, long maxSize, String recommendedFileName) {
+      super(type, object, key);
+      _maxSize = maxSize;
+      _recommendedFileName = recommendedFileName;
+    }
+    
+    public void setMaxSize(long maxSize) {
+      _maxSize = maxSize;
+    }
+    
+    public long getMaxSize() {
+      return _maxSize;
+    }
+    
+    public void setRecommendedFileName(String recommendedFileName) {
+      _recommendedFileName = recommendedFileName;
+    }
+    
+    public String getRecommendedFileName() {
+      return _recommendedFileName;
+    }
+  }
 }
