@@ -41,13 +41,15 @@ public class ERXYahooContentAnalysisService {
 	 * @param context
 	 *            an optional search phrase that can provide context for the
 	 *            term extraction
+	 * @param maxTerms
+	 *            the maximum number of terms to return, or null for unlimited
 	 * @return an array of extract terms
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 * @throws FactoryConfigurationError
 	 */
-	public static NSArray<String> termExtraction(String appid, String content, String context) throws IOException, SAXException, ParserConfigurationException, FactoryConfigurationError {
+	public static NSArray<String> termExtraction(String appid, String content, String context, Integer maxTerms) throws IOException, SAXException, ParserConfigurationException, FactoryConfigurationError {
 		if (content == null || content.trim().length() == 0) {
 			return NSArray.<String> emptyArray();
 		}
@@ -82,7 +84,7 @@ public class ERXYahooContentAnalysisService {
 			Document resultsDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(conn.getInputStream());
 			resultsDoc.normalize();
 			NodeList resultNodes = resultsDoc.getDocumentElement().getElementsByTagName("Result");
-			for (int i = 0; i < resultNodes.getLength(); i++) {
+			for (int i = 0; i < resultNodes.getLength() && (maxTerms == null || terms.count() <= maxTerms.intValue()); i++) {
 				Node resultNode = resultNodes.item(i);
 				String result = ((Element) resultNode).getChildNodes().item(0).getNodeValue();
 				if (result != null && result.length() > 0) {
