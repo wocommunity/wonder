@@ -1,26 +1,25 @@
 var TagField = Class.create();
 TagField.prototype = {
-	typedTags: [],
-	typingTagNum: -1,
-
-	availableTags: [],
-	suggestedTags: [],
-	suggestionsElement: [],
-	
-	tagElements: {},
-	
-	textElement: null,
-	tagsElement: null,
-	
-  initialize: function(textElement, tagsElement) {
+  initialize: function(textElement, tagsElement, availableTags) {
+  	this.typedTags = [];
+  	this.typingTagNum = -1;
+  	this.availableTags = [];
+  	this.suggestedTags = [];
+  	this.suggestionsElement = [];
+  	this.tagElements = {};
+  	this.textElement = null;
+  	this.tagsElement = null;
+  	
   	this.textElement = $(textElement);
   	this.tagsElement = $(tagsElement);
   	this.lastValue = this.textElement.value;
+  	
 		Event.observe(this.textElement, "keydown", this.keyPress.bindAsEventListener(this));
 		Event.observe(this.textElement, "keyup", this.keyUp.bindAsEventListener(this));
 		
+		this.addAll(availableTags);
 		this.processTyping();
-		this.updateHighlights();
+		//this.updateHighlights();
 	},
 		
 	keyPress : function(e) {
