@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
 
 import org.apache.log4j.Logger;
 
@@ -142,6 +143,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 			try {
 				path = path.replace('+', ' ');
 				path = path.replaceAll("\\?.*", "");
+				path = URLDecoder.decode(path, "UTF-8");
 				file = new File(path);
 				length = (int) file.length();
 				is = new FileInputStream(file);
