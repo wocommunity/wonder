@@ -22,8 +22,10 @@ import org.apache.log4j.Logger;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -43,6 +45,7 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSArrayUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
+import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
@@ -206,12 +209,14 @@ public class ERXModelGroup extends EOModelGroup {
 		if (!patchModelsOnLoad) {
 			modifyModelsFromProperties();
 			flattenPrototypes();
-			Enumeration<EOModel> modelsEnum = EOModelGroup.defaultGroup().models().objectEnumerator();
+			Enumeration<EOModel> modelsEnum = models().objectEnumerator();
 			while (modelsEnum.hasMoreElements()) {
 				EOModel model = modelsEnum.nextElement();
 				preloadERXConstantClassesForModel(model);
 			}
 		}
+		
+		checkForMismatchedJoinTypes();
 
 		NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, this);
 		if (!patchModelsOnLoad) {
@@ -575,6 +580,30 @@ public class ERXModelGroup extends EOModelGroup {
 		return model;
 	}
 
+	/**
+	 * Looks for foreign key attributes that have a different type from the destination attribute.  The classic example of this is a
+	 * long foreign key pointing to an integer primary key, which has a terrible consequence that is nearly impossible to track down.
+	 */
+	public void checkForMismatchedJoinTypes() {
+		for (EOModel model : (NSArray<EOModel>)models()) {
+			for (EOEntity entity : (NSArray<EOEntity>)model.entities()) {
+				for (EORelationship relationship : (NSArray<EORelationship>)entity.relationships()) {
+					for (EOJoin join : (NSArray<EOJoin>)relationship.joins()) {
+						EOAttribute sourceAttribute = join.sourceAttribute();
+						EOAttribute destinationAttribute = join.destinationAttribute();
+						if (sourceAttribute != null && destinationAttribute != null) {
+							if (!ERXExtensions.safeEquals(sourceAttribute.className(), destinationAttribute.className()) || !ERXExtensions.safeEquals(sourceAttribute.valueType(), destinationAttribute.valueType())) {
+								if (!ERXProperties.booleanForKey("er.extensions.ERXModelGroup." + sourceAttribute.entity().name() + "." + sourceAttribute.name() + ".ignoreTypeMismatch")) {
+									throw new RuntimeException("The attribute " + sourceAttribute.name() + " in " + sourceAttribute.entity().name() + " (" + sourceAttribute.className() + ", " + sourceAttribute.valueType() + ") is a foreign key to " + destinationAttribute.name() + " in " + destinationAttribute.entity().name() + " (" + destinationAttribute.className() + ", " + destinationAttribute.valueType() + ") but their class names or value types do not match.  If this is actually OK, you can set er.extensions.ERXModelGroup." + sourceAttribute.entity().name() + "." + sourceAttribute.name() + ".ignoreTypeMismatch=true in your Properties file.");
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Corrects a strange EOF inheritance issue where if a model gets loaded and an entity that has children located in
 	 * a different model that hasn't been loaded yet will not be setup correctly. Specifically when those child entities
