@@ -2033,4 +2033,31 @@ public class ERXStringUtilities {
 		}
 		return newString;
 	}
+
+	/**
+	 * Removes HTML characters from the given string.
+	 * 
+	 * @param str the string to remove HTML from
+	 * @return the string without HTML characters in it
+	 */
+	public static String stripHtml(String str) {
+		String stripped = str;
+		if (stripped != null) {
+			stripped = stripped.replaceAll("<[^>]*>", " ");
+			stripped = stripped.replaceAll("\\s+", " ");
+			stripped = stripped.replaceAll("&#8217;", "'");
+			stripped = stripped.replaceAll("&#169;", "(C)");
+			stripped = stripped.replaceAll("&#215;", " x ");
+			stripped = stripped.replaceAll("&#8230;", "...");
+			stripped = stripped.replaceAll("&#8212;", " -- ");
+			stripped = stripped.replaceAll("&#8211;", " - ");
+			stripped = stripped.replaceAll("&#8220;", "\"");
+			stripped = stripped.replaceAll("&#8221;", "\"");
+			stripped = stripped.replaceAll("&#174;", "(C)");
+			stripped = stripped.replaceAll("&#174;", "(R)");
+			stripped = stripped.replaceAll("&#8482;", "(TM)");
+			stripped = stripped.trim();
+		}
+		return stripped;
+	}
 }
