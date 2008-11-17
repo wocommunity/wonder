@@ -82,6 +82,7 @@ diibot
 direct_hit
 dnabot
 docomo
+dotbot
 download_express
 dragonbot
 dumbot
