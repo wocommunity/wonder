@@ -477,7 +477,10 @@ Modalbox.Methods = {
 	},
 	
 	_setWidth: function () { //Set size
-		$(this.MBwindow).setStyle({width: this.options.width + "px", height: this.options.height + "px"});
+		// MS: Add support for -1 width/height
+		var widthStyle = (this.options.width == -1) ? "auto" : (this.options.width + "px"); 
+		var heightStyle = (this.options.height == -1) ? "auto" : (this.options.height + "px");
+		$(this.MBwindow).setStyle({width: widthStyle, height: heightStyle});
 	},
 	
 	_setPosition: function () {
