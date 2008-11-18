@@ -22,6 +22,7 @@ import er.extensions.appserver.ERXWOContext;
 public abstract class ERXAjaxApplication extends WOApplication {
 	public static final String KEY_AJAX_SUBMIT_BUTTON = "AJAX_SUBMIT_BUTTON_NAME";
 	public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
+	public static final String KEY_UPDATE_CONTAINER_ID = "__updateID";
 
 	private ERXAjaxResponseDelegate _responseDelegate;
 
