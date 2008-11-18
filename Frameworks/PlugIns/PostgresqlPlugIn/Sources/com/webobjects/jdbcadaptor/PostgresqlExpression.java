@@ -487,7 +487,7 @@ public class PostgresqlExpression extends JDBCExpression {
             }
         } else if(obj instanceof Boolean) {
         	// GN: when booleans are stored as strings in the db, we need the values quoted
-        	if (enableBooleanQuoting()) {
+        	if (enableBooleanQuoting() || "S".equals(eoattribute.valueType())) {
         		value = "'" + ((Boolean)obj).toString() + "'";
         	} else {
         		value = ((Boolean)obj).toString();
