@@ -7,6 +7,8 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.extensions.appserver.ERXWOContext;
 
@@ -44,16 +46,30 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     
     /**
      * Utility to get the boolean value of a binding or a default value if none is
-     * supplied.
+     * supplied.  Handles non-boolean bindings Numbers, NSArray, String, NSKeyValueCoding.
      * @param name name of the binding
      * @param defaultValue value to return if unbound
      * @return value for binding or defaultValue value if unbound
      */
     public boolean booleanValueForBinding(String name, boolean defaultValue) {
     	boolean value = defaultValue;
-        if(hasBinding(name)) {
-            value = ((Boolean)valueForBinding(name)).booleanValue();
-        }
+        if (hasBinding(name)) {
+			Object boundValue = valueForBinding(name);
+			if (boundValue instanceof Number) {
+				value = ((Number) boundValue).intValue() != 0;
+			} else if (boundValue instanceof String) {
+				String boundValueString = ((String) boundValue).toLowerCase();
+				value = ! (boundValueString.equals("no") || boundValueString.equals("false"));
+			} else if (boundValue instanceof Boolean) {
+				value = ((Boolean) boundValue).booleanValue();
+			} else if (boundValue instanceof NSArray) {
+				value = ((NSArray) boundValue).count() > 0;
+			} else if (NSKeyValueCoding.NullValue.equals(boundValue)) {
+				value = false;
+			} else {
+				value = boundValue != null;
+			}
+		}
         return value;
     }
     
