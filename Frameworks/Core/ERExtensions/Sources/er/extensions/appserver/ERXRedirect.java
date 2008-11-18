@@ -186,8 +186,17 @@ public class ERXRedirect extends WOComponent {
 		}
 
 		if (ERXAjaxApplication.isAjaxRequest(context.request())) {
-			response.setHeader("text/javascript", "Content-Type");
+			boolean hasUpdateContainer = context.request().stringFormValueForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID) != null;
+			if (hasUpdateContainer) {
+				response.appendContentString("<script type=\"text/javascript\">");
+			}
+			else {
+				response.setHeader("text/javascript", "Content-Type");
+			}
 			response.appendContentString("document.location.href='" + url + "';");
+			if (hasUpdateContainer) {
+				response.appendContentString("</script>");
+			}
 		}
 		else {
 			response.setHeader(url, "location");
