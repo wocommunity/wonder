@@ -75,7 +75,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   }
 
   public static boolean isAjaxSubmit(WORequest request) {
-	  return request.valueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME) != null;
+	  return request.formValueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME) != null;
   }
   
   public boolean disabledInComponent(WOComponent component) {
