@@ -13,6 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXWOContext;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -27,7 +28,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion) 
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
-	public static final String UPDATE_CONTAINER_ID_KEY = "__updateID";
+	public static final String UPDATE_CONTAINER_ID_KEY = ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID;
 	private static final String CURRENT_UPDATE_CONTAINER_ID_KEY = "er.ajax.AjaxUpdateContainer.currentID";
 	
 	public AjaxUpdateContainer(String name, NSDictionary associations, WOElement children) {
