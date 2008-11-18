@@ -186,7 +186,8 @@ public class ERXRedirect extends WOComponent {
 		}
 
 		if (ERXAjaxApplication.isAjaxRequest(context.request())) {
-			response.appendContentString("<script type=\"text/javascript\">document.location.href='" + url + "';</script>");
+			response.setHeader("text/javascript", "Content-Type");
+			response.appendContentString("document.location.href='" + url + "';");
 		}
 		else {
 			response.setHeader(url, "location");
