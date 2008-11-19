@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.components.ERXComponentUtilities;
@@ -59,28 +60,49 @@ public class ERXValueUtilities {
      * @return boolean evaluation of the given object
      */
     public static boolean booleanValueWithDefault(Object obj, boolean def) {
-        boolean flag = true;
-        if (obj != null) {
+        boolean flag;
+        if (obj != null && !obj.equals(NSKeyValueCoding.NullValue)) {
             if (obj instanceof Number) {
-                if (((Number)obj).intValue() == 0)
+                if (((Number)obj).intValue() == 0) {
                     flag = false;
+                }
+                else {
+                	flag = true;
+                }
             } else if(obj instanceof String) {
                 String s = ((String)obj).trim();
-                if (s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false") || s.equalsIgnoreCase("n"))
+                if (s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false") || s.equalsIgnoreCase("n")) {
                     flag = false;
-                else if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("y"))
+                }
+                else if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("y")) {
                     flag = true;
-                else
+                }
+                else {
                     try {
-                        if (s.length() > 0 && Integer.parseInt(s) == 0)
+                        if (s.length() > 0 && Integer.parseInt(s) == 0) {
                             flag = false;
-                    } catch(NumberFormatException numberformatexception) {
-                        throw new RuntimeException("Error parsing boolean from value \"" + s + "\"");
+                        }
+                        else {
+                        	flag = true;
+                        }
                     }
-            } else if (obj instanceof Boolean) {
+                    catch(NumberFormatException numberformatexception) {
+                    	throw new RuntimeException("Error parsing boolean from value \"" + s + "\"");
+                    }
+                }
+            }
+            else if (obj instanceof Boolean) {
                 flag = ((Boolean)obj).booleanValue();
-            } else if( obj instanceof ERXUtilities.BooleanOperation )
+            }
+            else if (obj instanceof NSArray) {
+            	flag = ((NSArray) obj).count() > 0;
+            }
+            else if( obj instanceof ERXUtilities.BooleanOperation ) {
                 flag = ((ERXUtilities.BooleanOperation) obj ).value();
+            }
+            else {
+            	flag = true;
+            }
         } else {
             flag = def;
         }
@@ -341,5 +363,5 @@ public class ERXValueUtilities {
             }
         }
         return value;
-    }    
+    }
 }
