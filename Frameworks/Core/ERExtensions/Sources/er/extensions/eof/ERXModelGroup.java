@@ -585,6 +585,9 @@ public class ERXModelGroup extends EOModelGroup {
 	 * long foreign key pointing to an integer primary key, which has a terrible consequence that is nearly impossible to track down.
 	 */
 	public void checkForMismatchedJoinTypes() {
+		if (ERXProperties.booleanForKey("er.extensions.ERXModelGroup.ignoreTypeMismatch")) {
+			return;
+		}
 		for (EOModel model : (NSArray<EOModel>)models()) {
 			for (EOEntity entity : (NSArray<EOEntity>)model.entities()) {
 				for (EORelationship relationship : (NSArray<EORelationship>)entity.relationships()) {
