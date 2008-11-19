@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * This abstract (by design) superclass component isolate general utility methods.
@@ -55,20 +56,7 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     	boolean value = defaultValue;
         if (hasBinding(name)) {
 			Object boundValue = valueForBinding(name);
-			if (boundValue instanceof Number) {
-				value = ((Number) boundValue).intValue() != 0;
-			} else if (boundValue instanceof String) {
-				String boundValueString = ((String) boundValue).toLowerCase();
-				value = ! (boundValueString.equals("no") || boundValueString.equals("false"));
-			} else if (boundValue instanceof Boolean) {
-				value = ((Boolean) boundValue).booleanValue();
-			} else if (boundValue instanceof NSArray) {
-				value = ((NSArray) boundValue).count() > 0;
-			} else if (NSKeyValueCoding.NullValue.equals(boundValue)) {
-				value = false;
-			} else {
-				value = boundValue != null;
-			}
+			value = ERXValueUtilities.booleanValue(boundValue);
 		}
         return value;
     }
