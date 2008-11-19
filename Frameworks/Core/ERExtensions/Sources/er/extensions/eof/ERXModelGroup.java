@@ -216,12 +216,12 @@ public class ERXModelGroup extends EOModelGroup {
 			}
 		}
 		
-		checkForMismatchedJoinTypes();
-
 		NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, this);
 		if (!patchModelsOnLoad) {
 			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
 		}
+
+		checkForMismatchedJoinTypes();
 	}
 	
 	static {
