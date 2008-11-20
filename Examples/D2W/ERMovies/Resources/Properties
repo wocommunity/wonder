@@ -9,7 +9,7 @@ er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEC.defaultCoalesceAutoLocks=true
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 
-dbConnectURLGLOBAL=jdbc:derby:ERMovies;create=true
+dbConnectURLGLOBAL=jdbc:derby:ERMoviesDB;create=true
 
 # Migrations
 er.migration.migrateAtStartup=true
