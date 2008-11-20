@@ -11,7 +11,7 @@
         {
             allowsNull = Y; 
             columnName = REVIEW; 
-            externalType = object; 
+            externalType = clob; 
             name = review; 
             valueClassName = NSString; 
         }, 
@@ -26,7 +26,7 @@
         {
             allowsNull = Y; 
             columnName = REVIEWER; 
-            externalType = char; 
+            externalType = varchar; 
             name = reviewer; 
             valueClassName = NSString; 
             width = 50; 
