@@ -1226,7 +1226,7 @@ public class ERXEOControlUtilities {
     
     /**
      * Utility method used to fetch an array of objects given a qualifier. Also
-     * has support for filtering the newly inserted, updateed, and deleted objects in the 
+     * has support for filtering the newly inserted, updated, and deleted objects in the 
      * passed editing context or any parent editing contexts as well as specifying prefetching 
      * key paths.  Note that only NEW objects are supported in parent editing contexts.
      * 
