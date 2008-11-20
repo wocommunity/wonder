@@ -2,7 +2,7 @@
     EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
     connectionDictionary = {
-        URL = "jdbc:derby:ERMovies;create=true"; 
+        URL = "jdbc:derby:ERMoviesDB;create=true"; 
         driver = ""; 
         jdbc2Info = {
             "ANSI92_CONFORMANCE" = ANSI92Intermediate; 
@@ -163,7 +163,7 @@
                 Default = {
                     adaptorName = JDBC; 
                     connectionDictionary = {
-                        URL = "jdbc:derby:ERMovies;create=true"; 
+                        URL = "jdbc:derby:ERMoviesDB;create=true"; 
                         driver = ""; 
                         jdbc2Info = {
                             "ANSI92_CONFORMANCE" = ANSI92Intermediate; 
