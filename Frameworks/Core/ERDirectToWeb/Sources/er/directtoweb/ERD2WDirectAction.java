@@ -369,6 +369,11 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         WOActionResults newPage = null;
         try {
             String message = context().request().stringFormValueForKey("__message");
+            // AK: actually, this isn't enough to prevent hacks, as you might also be able 
+            // to social-engineer your way around. We should simply use a key into the localizer.
+            if(message != null) {
+                message = message.replaceAll("<.*?>", "");
+            }
             epi.setMessage(message);
             epi.setNextPage(previousPageFromRequest());
             newPage = (WOActionResults)epi;
