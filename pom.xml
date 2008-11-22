@@ -451,6 +451,16 @@
 				<artifactId>jode</artifactId>
 				<version>1.1</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.derby</groupId>
+				<artifactId>derby</artifactId>
+				<version>10.4.2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.derby</groupId>
+				<artifactId>derbytools</artifactId>
+				<version>10.4.2.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<repositories>
