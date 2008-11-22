@@ -57,8 +57,10 @@ import er.extensions.appserver.ERXWOContext;
  * @binding height integer Height in pixels, use -1 for auto-height. When set Modalbox will operate in 'fixed-height' mode. 
  * 
  * @binding open if true, the container is rendered already opened, the default is false
- * @binding showOpener if false, no HTML is generated for the link, button etch to open this dialog, it can only be opened from
+ * @binding showOpener if false, no HTML is generated for the link, button etc. to open this dialog, it can only be opened from
  * 			custom  JavaScript (see below).  The default is true
+ * @binding enabled if false, nothing is rendered for this component.  This can be used instead of wrapping this in a WOConditional.
+ *          The default is true.
  *
  * @binding onOpen server side method that runs before the dialog is opened, the return value is discarded
  * @binding onClose server side method that runs before the dialog is opened, the return value is discarded.
@@ -128,7 +130,8 @@ public class AjaxModalDialog extends AjaxComponent {
 	}
 	
 	/**
-	 * Call this method to have a JavaScript response returned that closes the modal dialog.
+	 * Call this method to have a JavaScript response returned that opens the modal dialog.
+	 * The title of the dialog will be what it was when rendered.
 	 *
 	 * @param context the current WOContext
 	 * @param id the HTML ID of the AjaxModalDialog to open
@@ -136,7 +139,20 @@ public class AjaxModalDialog extends AjaxComponent {
 	public static void open(WOContext context, String id) {
 		AjaxUtils.javascriptResponse(openDialogFunctionName(id) + "();", context);
 	}
-
+	
+	/**
+	 * Call this method to have a JavaScript response returned that opens the modal dialog.
+	 * The title of the dialog will be the passed title.  This is useful if the script to
+	 * open this dialog was rendered without the title or with an incorrect title.
+	 *
+	 * @param context the current WOContext
+	 * @param id the HTML ID of the AjaxModalDialog to open
+	 * @param title the title for the AjaxModalDialog
+	 */
+	public static void open(WOContext context, String id, String title) {
+		AjaxUtils.javascriptResponse(openDialogFunctionName(id) + "(" + AjaxValue.javaScriptEscaped(title) + ");", context);
+	}
+	
 	/**
 	 * Returns the JavaScript function name for the function to open the AjaxModalDialog with
 	 * the specified ID.
@@ -176,7 +192,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @param title the new title for the dialog window
 	 */
 	public static void setTitle(WOContext context, String title) {
-		AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML='" + title + "';", context);
+		AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML=" + AjaxValue.javaScriptEscaped(title) + ";", context);
 	}
 
 	/**
@@ -302,6 +318,9 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @see er.ajax.AjaxComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
 	 */
 	public void appendToResponse(WOResponse response, WOContext context) {
+		if( ! booleanValueForBinding("enabled", true)) {
+			return;
+		}
 
 		// If this is not an Ajax request, the page has been reloaded.  Try to recover state
 		String requestHandlerKey = context().request().requestHandlerKey();
@@ -332,8 +351,8 @@ public class AjaxModalDialog extends AjaxComponent {
 				// onclick calls the script below
 				response.appendContentString(" onclick=\"");
 				response.appendContentString(openDialogFunctionName(id()));
-				response.appendContentString("(); return false;\" >");
-	
+				response.appendContentString("(); return false;\" >");	
+				
 				if (hasBinding("label")) {
 					response.appendContentString((String) valueForBinding("label"));
 				} else {
@@ -346,7 +365,7 @@ public class AjaxModalDialog extends AjaxComponent {
 			// This script can also be called directly by other code to show the modal dialog
 			response.appendContentString("<script>\n");
 			response.appendContentString(openDialogFunctionName(id()));
-			response.appendContentString(" = function() {\n");
+			response.appendContentString(" = function(titleBarText) {\n");
 			appendOpenModalDialogFunction(response, context);
 			response.appendContentString("}\n");
 			
@@ -371,12 +390,13 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @param context WOContext of response
 	 */
 	protected void appendOpenModalDialogFunction(WOResponse response, WOContext context) {
+		response.appendContentString("    options = ");
+		AjaxOptions.appendToResponse(createModalBoxOptions(), response, context);
+		response.appendContentString(";\n");
+		response.appendContentString("    if (titleBarText) options.title = titleBarText;\n");
 		response.appendContentString("    Modalbox.show('");
 		response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context));
-		response.appendContentString("?modalBoxAction=open");
-		response.appendContentString("', ");
-		AjaxOptions.appendToResponse(createModalBoxOptions(), response, context);
-		response.appendContentString(");\n");
+		response.appendContentString("?modalBoxAction=open', options);\n");
 	}
 
 	/**
@@ -490,7 +510,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		else {
 			serverUpdate = " AUL._update('" + closeUpdateContainerID + "', '" + AjaxUtils.ajaxComponentActionUrl(context()) + "', null, null, 'modalBoxAction=close');";
 		}
-		//String serverUpdate = " new Ajax.Request('"+ AjaxUtils.ajaxComponentActionUrl(context()) + "', {asynchronous:1, evalScripts:true, parameters: 'modalBoxAction=close'});";
+
 		if (hasBinding("afterHide")) {
 			String afterHide = (String) valueForBinding("afterHide");
 			int closingBraceIndex = afterHide.lastIndexOf('}');
