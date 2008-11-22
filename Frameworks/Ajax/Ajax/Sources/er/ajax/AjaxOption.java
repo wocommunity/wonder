@@ -16,7 +16,6 @@ public class AjaxOption {
   public static AjaxOption.Type BOOLEAN = new AjaxOption.Type(6);
   public static AjaxOption.Type STRING_OR_ARRAY = new AjaxOption.Type(7);
   public static AjaxOption.Type DICTIONARY = new AjaxOption.Type(8);
-  public static AjaxOption.Type RAW = new AjaxOption.Type(9);
   
   public static class Type {
     private int _number;
