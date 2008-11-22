@@ -16,6 +16,18 @@ public class AjaxValue {
 	private AjaxOption.Type _type;
 	private Object _value;
 
+	/**
+	 * @param obj Object to convert to String and escape
+	 * @return obj converted to a string and escaped for use as a quoted JS string
+	 */
+	public static String javaScriptEscaped(Object obj) {
+		String escapedValue = String.valueOf(obj);
+		escapedValue = escapedValue.replaceAll("\\\\", "\\\\\\\\");
+		escapedValue = escapedValue.replaceAll("'", "\\\\'");
+		escapedValue = "'" + escapedValue + "'";
+		return escapedValue;
+	}
+	
 	public AjaxValue(Object value) {
 		this(AjaxOption.DEFAULT, value);
 	}
@@ -79,10 +91,7 @@ public class AjaxValue {
 			strValue = null;
 		}
 		else if (type == AjaxOption.STRING) {
-			String escapedValue = String.valueOf(_value);
-			escapedValue = escapedValue.replaceAll("\\\\", "\\\\\\\\");
-			escapedValue = escapedValue.replaceAll("'", "\\\\'");
-			strValue = "'" + escapedValue + "'";
+			strValue = javaScriptEscaped(_value);
 		}
 		else if (type == AjaxOption.NUMBER) {
 			strValue = _value.toString();
@@ -158,6 +167,9 @@ public class AjaxValue {
 			else {
 				strValue = _value.toString();
 			}
+		}
+		else if (type == AjaxOption.RAW) {
+			strValue = _value.toString();
 		}
 		else {
 			strValue = _value.toString();
