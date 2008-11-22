@@ -168,7 +168,7 @@ public class AjaxValue {
 				strValue = _value.toString();
 			}
 		}
-		else if (type == AjaxOption.RAW) {
+		else if (type == AjaxOption.SCRIPT) {
 			strValue = _value.toString();
 		}
 		else {
