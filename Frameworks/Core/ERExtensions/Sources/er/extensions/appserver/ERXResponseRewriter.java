@@ -544,6 +544,8 @@ public class ERXResponseRewriter {
 	 * present in the response.
 	 * 
 	 * @param response
+	 * @param context 
+	 * @param framework 
 	 * @param fileName
 	 * @param startTag
 	 * @param endTag
@@ -555,6 +557,14 @@ public class ERXResponseRewriter {
 	 */
 	public static boolean addResourceInHead(WOResponse response, WOContext context, String framework, String fileName, String startTag, String endTag, String fallbackStartTag, String fallbackEndTag, TagMissingBehavior tagMissingBehavior) {
 		boolean inserted = true;
+		
+		String replacementResourceStr = ERXProperties.stringForKey("er.extensions.ERXResponseRewriter.resource." + framework + "." + fileName);
+		if (replacementResourceStr != null) {
+			int dotIndex = replacementResourceStr.indexOf('.');
+			framework = replacementResourceStr.substring(0, dotIndex);
+			fileName = replacementResourceStr.substring(dotIndex + 1);
+		}
+		
 		if (!ERXResponseRewriter.isResourceAddedToHead(context, framework, fileName) && (_delagate == null || _delagate.responseRewriterShouldAddResource(framework, fileName))) {
 			boolean insert = true;
 			
