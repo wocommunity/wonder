@@ -1,9 +1,11 @@
 Image : ERAttachmentIcon {
 	attachment = ^attachment;
 	size = 64;
+	alt = ^alt;
 	class = ^class;
-	id = ^class;
+	id = ^id;
 	style = ^style;
+	title = ^title;
 	width = ^width;
 	height = ^height;
 }

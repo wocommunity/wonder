@@ -15,6 +15,7 @@ FileUpload : WOFileUpload {
 	id = ^id;
 	class = ^class;
 	style = ^style;
+	title = ^title;
 }
 
 AjaxFileUpload : AjaxFileUpload {
