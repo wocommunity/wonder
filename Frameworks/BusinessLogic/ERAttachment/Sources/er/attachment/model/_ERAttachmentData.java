@@ -13,13 +13,15 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _ERAttachmentData extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "ERAttachmentData";
+  public static final String ENTITY_NAME = "ERAttachmentData";
 
-	// Attributes
-	public static final String DATA_KEY = "data";
-	public static final ERXKey<NSData> DATA = new ERXKey<NSData>(DATA_KEY);
+  // Attribute Keys
+  public static final ERXKey<NSData> DATA = new ERXKey<NSData>("data");
+  // Relationship Keys
 
-	// Relationships
+  // Attributes
+  public static final String DATA_KEY = DATA.key();
+  // Relationships
 
   private static Logger LOG = Logger.getLogger(_ERAttachmentData.class);
 
