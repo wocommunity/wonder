@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo wocomponentcontent="false" class="ERAttachmentViewer">
+	<wo class="ERAttachmentViewer" wocomponentcontent="false">
 		<binding name="attachment"/>	
 		<binding name="configurationName"/>	
 		<binding name="class"/>	
@@ -9,8 +9,9 @@
 		<binding name="width"/>
 		<binding name="height"/>
 		
-		<validation message="&apos;attachment&apos; is required.">
+		<validation message="'attachment' is required.">
 			<unbound name="attachment"/>
 		</validation>
-	</wo>
+	<binding name="alt"/>
+    </wo>
 </wodefinitions>

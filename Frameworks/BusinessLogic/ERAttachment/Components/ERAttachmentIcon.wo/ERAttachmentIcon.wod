@@ -1,9 +1,11 @@
 Icon : WOImage {
 	filename = iconPath;
 	framework = "ERAttachment";
+	alt = ^alt;
 	id = ^id;
 	class = ^class;
 	style  = ^style;
+	title = ^title;
 }
 
 Link : ERAttachmentLink {
