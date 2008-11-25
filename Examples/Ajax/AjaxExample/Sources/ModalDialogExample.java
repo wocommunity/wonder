@@ -12,14 +12,21 @@ import er.extensions.eof.*;
  * Example usage of AjaxModalDialog.  Not intended as a best practice example of WO coding...
  *
  * @see AjaxModalDialog
- * 
- * @author Copyright (c) 2006-2006 Harte-Hanks Shoppers, Inc.
  */
 public class ModalDialogExample extends WOComponent {
 
 	private boolean isSecondConfirmation;
 	private Employee employee;
-	private String errorMessages;
+	protected String errorMessages;
+	
+	public final NSArray companyNames = new NSArray(new String[]{"Gimcrack, Intl.", 
+			   "Betty's Baubles, LLC",
+			   "Sally's Seashore Seashells",
+			   "The Fu Bar",
+			   "Acme Ajax, Inc."});
+	
+	public NSArray companies = new NSMutableArray();
+	
 	
 	
 	public ModalDialogExample(WOContext context) {
@@ -27,14 +34,21 @@ public class ModalDialogExample extends WOComponent {
         
         // Fetch/create some sample data to edit
         EOEditingContext ec = session().defaultEditingContext();
-        Company company = Company.fetchCompany(ec, Company.NAME_KEY, "Gimcrack, Intl.");
-        if (company == null) {
-        	company = Company.createCompany(ec, "Gimcrack, Intl.");
-        }
+        
+        for (int i = 0; i < companyNames.count(); i++) {
+			String name = (String) companyNames.objectAtIndex(i);
+	        Company company = Company.fetchCompany(ec, Company.NAME_KEY, name);
+	        if (company == null) {
+	        	company = Company.createCompany(ec, name);
+	        }
+	        ((NSMutableArray)companies).addObject(company);
+		}
+        ec.saveChanges();
         
         employee = Employee.fetchEmployee(ec, ERXQ.and(ERXQ.equals(Employee.FIRST_NAME_KEY, "Bill"),
         										       ERXQ.equals(Employee.LAST_NAME_KEY, "Wratchit")));
         if (employee == null) {
+            Company company = Company.fetchCompany(ec, Company.NAME_KEY, companyNames.objectAtIndex(0));
             employee = Employee.createEmployee(ec, "Bill", "Wratchit", company);
         }
         ec.saveChanges();
