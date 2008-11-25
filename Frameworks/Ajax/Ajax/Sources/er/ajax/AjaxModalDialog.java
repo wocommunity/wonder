@@ -1,5 +1,7 @@
 package er.ajax;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -9,19 +11,24 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXWOContext;
+import er.extensions.components._private.ERXWOForm;
 
 /**
  * <p>AjaxModalDialog is a modal dialog window based on ModalBox (see below for link).  It differs from AjaxModalContainer
  * in that it handles submitting forms and updating the container contents.  It also looks more like an OS X modal
  * dialog if you consider that to be a benefit.</p>
  * 
- * <p>The links shown to open the dialog can some from three sources:
+ * <p>The AjaxModalDialog is not rendered where it is located in your page.  Because of this, it should not be physically 
+ * nested in a form if it uses form input (needs a form), as it will be  rendered outside of the form.  If you want to have
+ * such a dialog, place the AjaxModalDialog outside of the form and use an AjaxModalDialogOpener in the form.</p>
+ * 
+ * <p>The links shown to open the dialog can come from two sources:
  * <ul>
  * <li>the label binding</li>
  * <li>an in-line ERXWOTemplate named "link".  This allows for images etc to be used to open the dialog</li>
  * </ul></p>
  *
- * <p>The contents for the modal dialog can some from three sources:
+ * <p>The contents for the modal dialog can come from three sources:
  * <ul>
  * <li>in-line, between the open in close tags</li>
  * <li>externally (i.e. from another template), from an in-line WOComponent</li>
@@ -63,7 +70,7 @@ import er.extensions.appserver.ERXWOContext;
  *          The default is true.
  *
  * @binding onOpen server side method that runs before the dialog is opened, the return value is discarded
- * @binding onClose server side method that runs before the dialog is opened, the return value is discarded.
+ * @binding onClose server side method that runs before the dialog is closed, the return value is discarded.
  *                  This will be executed if the page is reloaded, but not if the user navigates elsewhere.
  * @binding closeUpdateContainerID the update container to refresh when onClose is called
  * 
@@ -96,6 +103,7 @@ import er.extensions.appserver.ERXWOContext;
  * @binding onShow client side method, fires on first appearing of ModalBox before the contents are being loaded.
  * @binding onUpdate client side method, fires on updating the content of ModalBox (on call of Modalbox.show method from active ModalBox instance).
  * 
+ * @see AjaxModalDialogOpener
  * @see <a href="http://www.wildbit.com/labs/modalbox"/>Modalbox Page</a>
  * @see <a href="http://code.google.com/p/modalbox/">Google Group</a>
  * @author chill
@@ -112,6 +120,9 @@ public class AjaxModalDialog extends AjaxComponent {
 
 	private boolean _open;
 	private WOComponent _actionResults;
+	
+	public static final Logger logger = Logger.getLogger(AjaxModalDialog.class);
+	
 
 	public AjaxModalDialog(WOContext context) {
 		super(context);
@@ -182,6 +193,9 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public static void update(WOContext context) {
 		AjaxModalDialog thisDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
+		if (thisDialog == null) {
+			throw new RuntimeException("Attempted to get current AjaxModalDialog when none active.  Check your page structure.");
+		}
 		AjaxUtils.javascriptResponse(thisDialog.updateContainerID() + "Update();", context);
 	}
 
@@ -318,13 +332,20 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @see er.ajax.AjaxComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
 	 */
 	public void appendToResponse(WOResponse response, WOContext context) {
+		if (context.isInForm()) {
+			logger.warn("The AjaxModalDialog should not be used inside of a WOForm (" + ERXWOForm.formName(context, "- not specified -") +
+					") if it contains any form inputs or buttons.  Remove this AMD from this form, add a form of its own. Replace it with " +
+					"an AjaxModalDialogOpener with a dialogID that matches the ID of this dialog.");
+					log.warn("    page: " + context.page());
+					log.warn("    component: " + context.component());
+		}
+		
 		if( ! booleanValueForBinding("enabled", true)) {
 			return;
 		}
 
 		// If this is not an Ajax request, the page has been reloaded.  Try to recover state
-		String requestHandlerKey = context().request().requestHandlerKey();
-		if (requestHandlerKey == null || !requestHandlerKey.equals(AjaxRequestHandler.AjaxRequestHandlerKey)) {
+		if ( ! AjaxRequestHandler.AjaxRequestHandlerKey.equals(context().request().requestHandlerKey())) {
 			closeDialog();
 		}
 
@@ -423,7 +444,9 @@ public class AjaxModalDialog extends AjaxComponent {
 	}
 
 	/**
-	 * Calls the method bound to onClose (if any), and marks the dialog state as closed.
+	 * Calls the method bound to onClose (if any), and marks the dialog state as closed.  This can get called if the page
+	 * gets reloaded.  Be careful modifying the response if 
+	 * <code>! AjaxRequestHandler.AjaxRequestHandlerKey.equals(context().request().requestHandlerKey())</code>
 	 */
 	public void closeDialog() {
 		if (hasBinding("onClose")) {
