@@ -106,6 +106,10 @@ ModalDialog: WOHyperlink {
 	pageName = "ModalDialogExample";
 }
 
+ModalDialogOpener: WOHyperlink {
+	pageName = "ModalDialogOpenerExample";
+}
+
 AjaxFileUpload : WOHyperlink {
 	pageName = "FileUploadExample";
 }
