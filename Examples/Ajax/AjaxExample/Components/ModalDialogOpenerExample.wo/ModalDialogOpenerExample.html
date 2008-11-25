@@ -1,0 +1,122 @@
+<webobject name = "AjaxExampleComponent">
+
+	<h3>AjaxModalDialog Used in a Form</h3>
+	<div>
+		Demonstrates an AjaxModalDialog with inputs incorrectly nested in a form: 
+		<ul>
+			<li>buttons are inactive as the dialog is <b>not</b> rendered in the context of a form</li>
+			<li>close X still works</li>
+			<li>warning in log: <em>The AjaxModalDialog should not be used inside of a WOForm <br/>
+			(EmployeeForm) if it contains any form inputs or buttons.  Remove this AMD from this <br/>
+			form, add a form of its own. Replace it with an AjaxModalDialogOpener with a dialogID <br/>
+			that matches the ID of this dialog.</em></li>
+		</ul>
+
+		<div style="border: 1px solid black; width: 50%;">
+			<webobject name = "Form">
+				<div style="clear:both">
+					<span style="text-align:center; color: red">
+						<webobject name = "ValidationMessageContainer">
+							<webobject name = "ValidationMessage"/>
+						</webobject>
+					</span>
+				</div>
+				<div style="clear:both">
+					<span style="float:right">&nbsp;</span>
+				</div>
+				<div>
+					<span style="float:left">First Name:</span>
+					<span style="float:right"><webobject name = "FirstName"/></span>
+				</div>
+				<div style="clear:both">
+					<span style="float:left">Last Name:</span>
+					<span style="float:right"><webobject name = "LastName"/></span>
+				</div>
+				<webobject name = "UIUpdater1">
+					<div style="clear:both">
+						<span style="float:left">Company Name:</span>
+						<span style="float:right">
+							<webobject name = "CompanyEditorDialog">
+								<webobject name = "CompanyName"/><br/><br/>
+								<span style="float:left"><webobject name = "CancelSelection"/></span>
+								<span style="float:right"><webobject name = "SelectCompany"/></span>
+							</webobject name = "CompanyEditorDialog">
+						</span>
+					</div>
+				</webobject name = "UIUpdater1">				
+				<div style="clear:both">
+					<span style="float:right">&nbsp;</span>
+				</div>
+				<div style="clear:both">
+					<span style="float:left"><webobject name = "Cancel"/></span>
+					<span style="float:right"><webobject name = "Save"/></span>
+				</div>
+			</webobject>
+			<br />
+		</div>
+	</div><br/>
+
+
+
+	<h3>AjaxModalDialogOpener Used in a Form</h3>
+	<div>
+		Demonstrates an AjaxModalDialogOpener used in a form: 
+		<ul>
+			<li>AjaxModalDialog is physically outside of the form</li>
+			<li>AjaxModalDialog contains its own form</li>
+			<li>AjaxModalDialog has an explicit ID</li>
+			<li>AjaxModalDialog uses showOpener = false binding</li>
+			<li>AjaxModalDialogOpener used inside of form to open AjaxModalDialog</li>
+			<li>AjaxModalDialogOpener overrides title specified on AjaxModalDialog</li>
+			<li>AjaxModalDialogOpener uses child components as link contents</li>
+		</ul>
+
+		<div style="border: 1px solid black; width: 50%;">
+			<webobject name = "Form">
+				<div style="clear:both">
+					<span style="text-align:center; color: red">
+						<webobject name = "ValidationMessageContainer">
+							<webobject name = "ValidationMessage"/>
+						</webobject>
+					</span>
+				</div>
+				<div style="clear:both">
+					<span style="float:right">&nbsp;</span>
+				</div>
+				<div>
+					<span style="float:left">First Name:</span>
+					<span style="float:right"><webobject name = "FirstName"/></span>
+				</div>
+				<div style="clear:both">
+					<span style="float:left">Last Name:</span>
+					<span style="float:right"><webobject name = "LastName"/></span>
+				</div>
+				<webobject name = "UIUpdater2">
+				<div style="clear:both">
+					<span style="float:left">Company Name:</span>
+					<span style="float:right">
+						<webobject name = "CompanyEditorDialogOpener"><webobject name = "CompanyNameString"/></webobject>
+					</span>
+				</div>
+				</webobject name = "UIUpdater2">
+				<div style="clear:both">
+					<span style="float:right">&nbsp;</span>
+				</div>
+				<div style="clear:both">
+					<span style="float:left"><webobject name = "Cancel"/></span>
+					<span style="float:right"><webobject name = "Save"/></span>
+				</div>
+			</webobject>
+			<br />
+		</div>
+	</div><br/>
+
+	<webobject name = "CompanyEditorDialog2">
+		<webobject name = "Form2">
+			<webobject name = "CompanyName"/><br/><br/>
+			<span style="float:left"><webobject name = "CancelSelection"/></span>
+			<span style="float:right"><webobject name = "SelectCompany"/></span>
+		</webobject name = "Form2">
+	</webobject name = "CompanyEditorDialog2">
+	
+</webobject name = "AjaxExampleComponent">
