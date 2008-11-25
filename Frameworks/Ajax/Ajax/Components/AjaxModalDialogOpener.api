@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="AjaxModalDialogOpener.java" wocomponentcontent="false">
+        <binding name="dialogId"/>
+	    <binding name="label"/>
+	    <binding name="title"/>
+	    <binding name="linkTitle"/>
+	    <binding name="id"/>
+	    <binding name="class"/>
+	    <binding name="style"/>
+	    
+    	<validation message="'dialogId' is a required binding.">
+            <unbound name="dialogId"/>
+        </validation>
+    </wo>
+</wodefinitions>
