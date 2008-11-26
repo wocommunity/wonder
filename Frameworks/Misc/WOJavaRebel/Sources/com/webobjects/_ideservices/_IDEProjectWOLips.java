@@ -92,6 +92,15 @@ public class _IDEProjectWOLips implements _IDEProject {
   }
 
   public static _IDEProjectWOLips wolipsProjectAtPath(String bundlePath) {
+	if (bundlePath == null)
+		return null;
+	
+	boolean isJar = bundlePath.endsWith(".jar");
+	if (isJar) {
+		// Can we do anything more useful here?
+		return null;
+	}
+	  
     _WOLipsProject project = _IDEProjectWOLips.wolipsProjectFromEclipseProject(bundlePath);
 
     _IDEProjectWOLips ideProjectWOLips = null;
