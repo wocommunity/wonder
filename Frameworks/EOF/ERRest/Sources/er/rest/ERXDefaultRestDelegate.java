@@ -242,10 +242,12 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		IERXRestEntityDelegate entityDelegate = (IERXRestEntityDelegate) _entityDelegates.objectForKey(entity.name());
 		if (entityDelegate == null) {
 			String entityDelegateClassName = ERXProperties.stringForKey("ERXRest." + entity.name() + ".delegate");
-			Class<IERXRestEntityDelegate> entityDelegateClass;
-			if (entityDelegateClassName == null && _guessDelegateNames) {
-				entityDelegateClassName = entity.name() + "RestEntityDelegate";
-				entityDelegateClass = _NSUtilities.classWithName(entityDelegateClassName);
+			Class<IERXRestEntityDelegate> entityDelegateClass = null;
+			if (entityDelegateClassName == null) {
+				if (_guessDelegateNames) {
+					entityDelegateClassName = entity.name() + "RestEntityDelegate";
+					entityDelegateClass = _NSUtilities.classWithName(entityDelegateClassName);
+				}
 			}
 			else {
 				entityDelegateClass = _NSUtilities.classWithName(entityDelegateClassName);
