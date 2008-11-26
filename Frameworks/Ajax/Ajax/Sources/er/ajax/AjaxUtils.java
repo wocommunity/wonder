@@ -57,7 +57,7 @@ public class AjaxUtils {
 	 */
 	public static AjaxResponse createResponse(WORequest request, WOContext context) {
 		AjaxResponse response = null;
-		if (context != null) {
+		if (context != null && context.response() != null) {
 			WOResponse existingResponse = context.response();
 			if (existingResponse instanceof AjaxResponse) {
 				response = (AjaxResponse) existingResponse;
