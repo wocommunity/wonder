@@ -98,6 +98,28 @@ public class ERXDictionaryUtilities extends Object {
         }
         return result.immutableClone();
     }
+    
+    /**
+     * Creates a new dictionary with only the keys and objects in the array.  The result is the objects for the
+     * intersection of key in the dictionary and the array.  This is the  opposite of dictionaryByRemovingFromDictionaryKeysInArray.
+     * 
+     * @param d dictionary to be pruned
+     * @param a array of keys to be included
+     * @return pruned dictionary
+     */
+    public static NSDictionary dictionaryByRemovingKeysNotInArray(NSDictionary d, NSArray a) {
+        NSMutableDictionary result=new NSMutableDictionary();
+        if (d != null && a != null) {
+            for (Enumeration e = a.objectEnumerator(); e.hasMoreElements();) {
+                Object key = e.nextElement();
+                Object value = d.objectForKey(key);
+                if (value != null) {
+                    result.setObjectForKey(value, key);
+                }
+            }
+        }
+        return result.immutableClone();
+    }
 
     /**
      *
