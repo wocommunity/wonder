@@ -200,6 +200,10 @@ There are many ways to use this script:
         <property name="classes.exclude.0" value="does_not_exists_hopefully" />
         <property name="classes.exclude.1" value="does_not_exists_hopefully" />
         <property name="classes.exclude.2" value="does_not_exists_hopefully" />
+        <tempfile property="manifest.mf.temp" deleteonexit="true" />
+        <condition property="manifest.mf" value="${project.dir}/manifest.mf" else="${manifest.mf.temp}" >
+            <available file="${project.dir}/manifest.mf" type="file" />
+        </condition>
     </target>
 
     <target name="global.properties" depends="global.environment">
@@ -220,6 +224,7 @@ There are many ways to use this script:
         <mkdir dir="${project.dir}/WebServerResources" />
         <mkdir dir="${build.root}" />
         <mkdir dir="${build.classes}" />
+		<echo message="" file="${manifest.mf}" append="true" />
     </target>
 
     <target name="dist.properties" depends="global.environment">
@@ -360,7 +365,7 @@ There are many ways to use this script:
             </wsresources>
         </woframework>
         
-        <jar destfile="${build.root}/${project.name}-${project.version}.jar">
+        <jar destfile="${build.root}/${project.name}-${project.version}.jar" manifest="${manifest.mf}">
             <fileset dir="${build.classes}">
                     <exclude name="${classes.exclude.0}" />
                     <exclude name="${classes.exclude.1}" />
