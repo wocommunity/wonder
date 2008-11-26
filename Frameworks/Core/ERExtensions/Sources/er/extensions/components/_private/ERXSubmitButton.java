@@ -58,7 +58,7 @@ public class ERXSubmitButton extends WOInput {
     "                    disabledbs[disabledbs.length] = bs[i];\n" +
     "                }\n" +
     "            }\n" +
-    "            savedInnerHTML = this.innerHTML;\n" +
+    "            var savedInnerHTML = this.innerHTML;\n" +
     "            this.innerHTML = this.value;\n" +
     "            if(this.btnonclick) {\n" +
     "                var result = this.btnonclick();\n" +
