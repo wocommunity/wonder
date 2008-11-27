@@ -11,11 +11,12 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
-import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXBrowser;
+import er.extensions.appserver.ERXBrowserFactory;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
@@ -76,9 +77,12 @@ public class ERXSubmitButton extends WOInput {
     "    if(window.btnunload) return window.btnunload();\n" +
     "};</script>";
     
-    public static void appendIEButtonFixToResponse(WOResponse woresponse) {
+    public static void appendIEButtonFixToResponse(WOContext wocontext, WOResponse woresponse) {
 		if(!ERXWOContext.contextDictionary().containsKey("ERXWOSubmit.ieFixed")) {
-			woresponse._appendContentAsciiString(ieFix);
+			ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(wocontext.request());
+			if (browser.isIE()) {
+				woresponse._appendContentAsciiString(ieFix);
+			}
 			ERXWOContext.contextDictionary().setObjectForKey(Boolean.TRUE, "ERXWOSubmit.ieFixed");
 		}
     }
@@ -145,7 +149,7 @@ public class ERXSubmitButton extends WOInput {
     }
     
     protected void _appendOpenTagToResponse(WOResponse woresponse, WOContext wocontext) {
-    	appendIEButtonFixToResponse(woresponse);
+    	appendIEButtonFixToResponse(wocontext, woresponse);
     	woresponse.appendContentCharacter('<');
     	woresponse._appendContentAsciiString(elementName(wocontext));   	
     	appendAttributesToResponse(woresponse, wocontext);
