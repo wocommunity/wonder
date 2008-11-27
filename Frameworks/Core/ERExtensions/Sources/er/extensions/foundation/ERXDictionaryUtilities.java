@@ -101,7 +101,7 @@ public class ERXDictionaryUtilities extends Object {
     
     /**
      * Creates a new dictionary with only the keys and objects in the array.  The result is the objects for the
-     * intersection of key in the dictionary and the array.  This is the  opposite of dictionaryByRemovingFromDictionaryKeysInArray.
+     * intersection of keys in the dictionary and the array.  This is the opposite of dictionaryByRemovingFromDictionaryKeysInArray.
      * 
      * @param d dictionary to be pruned
      * @param a array of keys to be included
@@ -309,7 +309,6 @@ public class ERXDictionaryUtilities extends Object {
 	 * Encodes a dictionary into a string that can be used in a request uri.
 	 * @param dict dictionary with form values
 	 * @param separator optional value separator
-	 * @return
 	 */
 	public static String queryStringForDictionary(NSDictionary<Object, Object> dict, String separator) {
 		return queryStringForDictionary(dict, separator,  WOMessage.defaultURLEncoding());
@@ -319,7 +318,6 @@ public class ERXDictionaryUtilities extends Object {
 	 * Encodes a dictionary into a string that can be used in a request uri.
 	 * @param dict dictionary with form values
 	 * @param separator optional value separator
-	 * @return
 	 */
 	public static String queryStringForDictionary(NSDictionary<Object, Object> dict, String separator, String encoding) {
 		if (separator == null) {

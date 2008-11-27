@@ -76,7 +76,6 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	/**
 	 * Sets a arbitrary value.
-	 * @return
 	 */
 	public void setObjectForKey(Object value, String key) {
 		_userInfo = _userInfo == null ? new NSMutableDictionary() : _userInfo;
@@ -93,7 +92,6 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Gets the user info.
-	 * @return
 	 */
 	public NSDictionary userInfo() {
 		return _userInfo == null ? NSDictionary.EmptyDictionary : _userInfo.immutableClone(); 
@@ -102,7 +100,6 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	/**
 	 * Type-safe method to fetch objects for this fetch spec.
 	 * @param ec
-	 * @return
 	 */
 	public NSArray<T> fetchObjects(EOEditingContext ec) {
 		return ec.objectsWithFetchSpecification(this);
@@ -111,7 +108,6 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	/**
 	 * Type-safe method to fetch raw rows.
 	 * @param ec
-	 * @return
 	 */
 	public NSArray<NSDictionary<String, Object>> fetchRawRows(EOEditingContext ec) {
 		boolean old = fetchesRawRows();
@@ -129,7 +125,6 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	/**
 	 * Collects all relevant attributes and the bindings and returns a key suitable for caching.
-	 * @return
 	 */
 	public String identifier() {
 		return identifierForFetchSpec(this);
@@ -149,7 +144,6 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 * @param <T>
 	 * @param fs
 	 * @param clazz
-	 * @return
 	 */
 	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs, Class<T> clazz) {
 		if (fs instanceof ERXFetchSpecification) {
@@ -162,8 +156,6 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 * Converts a normal fetch spec to an ERX one.
 	 * @param <T>
 	 * @param fs
-	 * @param clazz
-	 * @return
 	 */
 	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs) {
 		if (fs instanceof ERXFetchSpecification) {
@@ -175,7 +167,6 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	/**
 	 * Helper to create a string from a qualifier.
 	 * @param q
-	 * @return
 	 */
 	protected static String identifierForQualifier(EOQualifier q) {
 		final StringBuilder sb = new StringBuilder();
@@ -223,7 +214,6 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	/**
 	 * Builds an identifier for the given fetch spec which is suitable for caching.
 	 * @param fs
-	 * @return
 	 */
 	public static String identifierForFetchSpec(EOFetchSpecification fs) {
 		StringBuilder sb = new StringBuilder( identifierForQualifier(fs.qualifier()));

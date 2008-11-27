@@ -114,8 +114,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	/**
 	 * Implemented so the the thread checks if it should get interrupted.
 	 * 
-	 * @param eoadaptorchannel
-	 * @param nsmutabledictionary
+	 * @param wocomponent
 	 */
 	@Override
 	public void _setCurrentComponent(WOComponent wocomponent) {

@@ -959,7 +959,6 @@ public class ERXModelGroup extends EOModelGroup {
 	 * Returns whether the given model is listed as a prototype model in the properties.
 	 * 
 	 * @param model
-	 * @return
 	 */
 	public boolean isPrototypeModel (EOModel model) {
 		if (_prototypeModelNames != null && model != null && _prototypeModelNames.containsObject(model.name())) {

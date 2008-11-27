@@ -1036,9 +1036,8 @@ public class ERXEOControlUtilities {
 
     /**
      * Returns the propertylist-encoded string representation of the global ID.
-     * @param eo object to get the primary key for.
-     * @return string representation of the primary key of the
-     *		object.
+     * @param gid the global id of the oject to get the primary key for.
+     * @return string representation of the primary key of the object.
      */
     public static String primaryKeyStringForGlobalID(EOKeyGlobalID gid) {
     	if(gid.keyValuesArray().count() > 1) {

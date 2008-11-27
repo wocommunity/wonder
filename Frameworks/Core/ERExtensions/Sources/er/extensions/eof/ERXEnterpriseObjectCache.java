@@ -90,7 +90,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Creates the cache for the given entity, keypath and timeout value in milliseconds.
      * @param entityName
      * @param keyPath
-     * @param qualifier
      * @param timeout
      */
     public ERXEnterpriseObjectCache(String entityName, String keyPath, long timeout) {
@@ -155,8 +154,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Helper to check if an array of EOs contains the handled entity. 
      * @param dict 
      * @param key 
-     * @param eos
-     * @return 
      */
     private NSArray<T> relevantChanges(NSDictionary dict, String key) {
     	NSMutableArray<T> releventEOs = null;
@@ -229,7 +226,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * The key path which should get used for the key of the cache.
-     * @return 
      */
     protected String keyPath() {
         return _keyPath;
@@ -237,7 +233,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 
     /**
      * Returns the backing cache. If the cache is to old, it is cleared first.
-     * @return 
      */
     protected synchronized ERXExpiringCache<Object, EORecord<T>> cache() {
         long now = System.currentTimeMillis();
@@ -290,7 +285,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Returns the objects to cache initially.
      * @param ec
-     * @return 
      */
     protected NSArray<T> initialObjects(EOEditingContext ec) {
         NSArray objects = EOUtilities.objectsForEntityNamed(ec, entityName());
@@ -375,7 +369,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * is in the cache.
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
-     * @return 
      */
     public T objectForKey(EOEditingContext ec, Object key) {
     	return objectForKey(ec, key, true);
@@ -387,7 +380,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
      * @param handleUnsuccessfulQueryForKey if false, a cache miss returns null rather than fetching
-     * @return 
      */
     public T objectForKey(EOEditingContext ec, Object key, boolean handleUnsuccessfulQueryForKey) {
         ERXExpiringCache<Object, EORecord<T>> cache = cache();

@@ -204,8 +204,6 @@ public class SCComponent extends ERXNonSynchronizingComponent implements ISCView
 
 	/**
 	 * Returns a nice class name like MyApp.MyView.
-	 * 
-	 * @return
 	 */
 	protected String className() {
 		return _className;

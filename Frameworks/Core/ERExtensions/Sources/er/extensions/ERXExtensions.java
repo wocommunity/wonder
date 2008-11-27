@@ -1266,7 +1266,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * not need to call this method if you already called initApp.  This is lighter-weight than 
      * initApp, and tries to just get enough configured to make EOF work properly.
      * 
-     * @param mainBundleFile the folder of your main bundle
+     * @param mainBundleFolder the folder of your main bundle
      * @param args the commandline arguments for your application
      */
     public static void initEOF(File mainBundleFolder, String[] args) {

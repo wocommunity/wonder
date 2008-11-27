@@ -35,8 +35,6 @@ public class SCUtilities {
      * Returns an external URL for the sproutcore libs to prepend via the
      * property <code>er.sproutcore.base</code> or the empty String. MUST end
      * with "/" if set.
-     * 
-     * @return
      */
     public static String scBase() {
         if (scBase == null) {

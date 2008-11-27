@@ -267,8 +267,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	/**
 	 * Returns true if the request handler key can be handled.
 	 * 
-	 * @param key
-	 * @return
+	 * @param request
 	 */
 	protected boolean canHandleRequest(WORequest request) {
 		String contentType = request.headerForKey("content-type");
@@ -286,7 +285,6 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * @param request
 	 * @param delayedRequest
 	 * @param id
-	 * @return
 	 */
 	protected WOResponse handle(WORequest request, DelayedRequest delayedRequest, String id) {
 		final ERXApplication app = ERXApplication.erxApplication();
@@ -350,7 +348,6 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * session has not been awakened.
 	 * 
 	 * @param request
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	protected WOResponse createErrorResponse(WORequest request) {
@@ -370,8 +367,6 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * redirect to the entry.
 	 * 
 	 * @param request
-	 * @param url
-	 * @return
 	 */
 	protected WOResponse createStoppedResponse(WORequest request) {
 		final ERXApplication app = ERXApplication.erxApplication();
@@ -393,9 +388,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * and you probably shouldn't do it either.
 	 * 
 	 * @param request
-	 * @param timeout
 	 * @param url
-	 * @return
 	 */
 	protected WOResponse createRefreshResponse(WORequest request, String url) {
 		WOResponse result = new WOResponse();
@@ -420,8 +413,6 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 
 	/**
 	 * Returns the refresh time in seconds for the message page;
-	 * 
-	 * @return
 	 */
 	protected int refresh() {
 		return _refreshTimeSeconds;
@@ -430,8 +421,6 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	/**
 	 * Returns the maximum time in milliseconds for allowed for a request before
 	 * returning the message page.
-	 * 
-	 * @return
 	 */
 	protected int maxRequestTimeMillis() {
 		return _maxRequestTimeMillis;
@@ -439,8 +428,6 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 
 	/**
 	 * Returns all active delayed requests.
-	 * 
-	 * @return
 	 */
 	public NSArray<DelayedRequest> activeRequests() {
 		NSMutableArray<DelayedRequest> result = new NSMutableArray<DelayedRequest>();

@@ -608,7 +608,6 @@ public class ERXRuntimeUtilities {
 	/**
 	 * Clear the interrupt flag for the thread.
 	 * @param thread
-	 * @return
 	 */
 	public static synchronized String clearThreadInterrupt(Thread thread) {
 		if(flags == null) {
