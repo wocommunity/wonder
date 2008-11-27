@@ -81,7 +81,7 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
     
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
     	if(useButton()) {
-    		ERXSubmitButton.appendIEButtonFixToResponse(aResponse);
+    		ERXSubmitButton.appendIEButtonFixToResponse(aContext, aResponse);
     	}
     	super.appendToResponse(aResponse, aContext);
     }
