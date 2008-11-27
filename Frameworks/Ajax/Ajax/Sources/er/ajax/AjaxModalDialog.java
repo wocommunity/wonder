@@ -192,11 +192,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @param context the current WOContext
 	 */
 	public static void update(WOContext context) {
-		AjaxModalDialog thisDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
-		if (thisDialog == null) {
-			throw new RuntimeException("Attempted to get current AjaxModalDialog when none active.  Check your page structure.");
-		}
-		AjaxUtils.javascriptResponse(thisDialog.updateContainerID() + "Update();", context);
+		AjaxUtils.javascriptResponse(currentDialog(context).updateContainerID() + "Update();", context);
 	}
 
 	/**
@@ -207,6 +203,19 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public static void setTitle(WOContext context, String title) {
 		AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML=" + AjaxValue.javaScriptEscaped(title) + ";", context);
+	}
+
+	/**
+	 * @param context the current WOContext
+	 * @return the AjaxModalDialog currently being processed
+	 * @throws RuntimeException if no AjaxModalDialog is currently being processed
+	 */
+	public static AjaxModalDialog currentDialog(WOContext context) {
+		AjaxModalDialog currentDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
+		if (currentDialog == null) {
+			throw new RuntimeException("Attempted to get current AjaxModalDialog when none active.  Check your page structure.");
+		}
+		return currentDialog;
 	}
 
 	/**
@@ -247,6 +256,13 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 */
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
+		// If there is one AMD in another (a rather dubious thing to do but it may have its uses), 
+		// we need to remember the outer one while processing this inner one
+		AjaxModalDialog outerDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
+		if (outerDialog != null) {
+			logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
+		}
+		
 		try {
 			// Stash this component in the context so we can access it from the static methods.
 			ERXWOContext.contextDictionary().setObjectForKey(this, AjaxModalDialog.class.getName());
@@ -266,13 +282,16 @@ public class AjaxModalDialog extends AjaxComponent {
 			}
 
 			return result;
-
 		}
 		finally {
-			// Remove this component from the context
-			ERXWOContext.contextDictionary().removeObjectForKey(AjaxModalDialog.class.getName());
+			// Remove this component from the context or restore the outer one
+			if (outerDialog != null) {
+				ERXWOContext.contextDictionary().setObjectForKey(outerDialog, AjaxModalDialog.class.getName());
+			}
+			else {
+				ERXWOContext.contextDictionary().removeObjectForKey(AjaxModalDialog.class.getName());
+			}
 		}
-
 	}
 
 	/**
