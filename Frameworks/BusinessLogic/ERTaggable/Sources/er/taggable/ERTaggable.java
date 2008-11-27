@@ -121,7 +121,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * This method removes tags from the target object, by looking up the corresponding 
    * Tag object instances and removing them from the tag collection of the object if they exist.
    *
-   * @param tags the tags to remove (String to tokenize, NSArray<String>, etc)
+   * @param tagName the tag to remove (String to tokenize, NSArray<String>, etc)
    */
   @SuppressWarnings("unchecked")
   public void removeTagNamed(String tagName) {

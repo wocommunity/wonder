@@ -91,8 +91,6 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * Constructs an ERTaggableEntity.
    * 
    * @param entity the entity to tag
-   * @param tagsRelationshipName the name of the flattened to-many relationship to the tag entity
-   * @param tagEntityName the name of the tag entity
    */
   @SuppressWarnings("unchecked")
   protected ERTaggableEntity(EOEntity entity) {
@@ -134,8 +132,6 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * Constructs an ERTaggableEntity.
    * 
    * @param entity the entity to tag
-   * @param tagsRelationshipName the name of the flattened to-many relationship to the tag entity
-   * @param tagEntity the tag entity
    */
   @SuppressWarnings("unchecked")
   public static <T extends ERXGenericRecord> ERTaggableEntity<T> taggableEntity(EOEntity entity) {
@@ -736,7 +732,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @param editingContext the editing context to remove with
    * @param oldTags the tags to find and remove (String to tokenize, NSArray<String>, etc)
    * @param newTags the tags to add
-   * @param inclusiong if ANY, finds any tags that match, removes them all, and adds newTags; if all, requires all tags to match before replacing  
+   * @param inclusion if ANY, finds any tags that match, removes them all, and adds newTags; if all, requires all tags to match before replacing  
    */
   public void replaceTags(EOEditingContext editingContext, ERTag.Inclusion inclusion, Object oldTags, Object newTags) {
     for (T item : fetchTaggedWith(editingContext, inclusion, oldTags)) {

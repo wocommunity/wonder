@@ -180,9 +180,11 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
 
     /**
      * Checks if a given property key is in the format (foo) or [foo] and returns the stripped string.
+     *
      * @param s the String to convert
      * @param start the start char
-     * @param start the end char to check for
+     * @param end the end char to check for
+     *
      * @return stripped String or null if the string does not start with <code>start</code> and ends with <code>end</code>.
      */
     public static String convertedPropertyKeyFromString(String s, char start, char end) {

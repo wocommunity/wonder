@@ -213,8 +213,7 @@ public class ERXAccessibleSubmitButton  extends ERXSubmitButton {
     }
     
     /**
-	 * @param component WOComponent to evaluate the associations in
-     * @param hotKey the character to check
+     * @param component WOComponent to evaluate the associations in
      * @return NSMutableArray containing the hotKeys being used by ERXAccessibleSubmitButtons on this page 
      */
     protected NSMutableArray usedHotKeys(WOComponent component) {

@@ -573,8 +573,6 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 * 
 	 * @param authenticationDelegate
 	 *            the authentication delegate
-	 * @param delegate
-	 *            the rest delegate
 	 * @param displayAllProperties
 	 *            if true, by default all properties are eligible to be displayed (probably should only be true in
 	 *            development, but it won't really hurt anything). Note that entity delegates will still control

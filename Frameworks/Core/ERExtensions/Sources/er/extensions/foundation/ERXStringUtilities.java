@@ -730,7 +730,7 @@ public class ERXStringUtilities {
      * otherwise it will return the passed in
      * string.
      * @param s string to test
-     * @return "" if the string is null else the string
+     * @return the empty string if the string is null, else the string
      */
     public static String emptyStringForNull(String s) {
         return s==null ? "" : s;
@@ -1789,7 +1789,6 @@ public class ERXStringUtilities {
     /**
      * Utility to encode an URL without the try/catch. Throws an NSForwardException in the unlikely case that ERXMessageEncoding.defaultEncoding() can't be found.
      * @param string
-     * @return
      */
     public static String urlEncode(String string) {
     	try {
@@ -1803,7 +1802,6 @@ public class ERXStringUtilities {
     /**
      * Utility to decode an URL without the try/catch. Throws an NSForwardException in the unlikely case that ERXMessageEncoding.defaultEncoding() can't be found.
      * @param string
-     * @return
      */
     public static String urlDecode(String string) {
     	try {
@@ -1817,8 +1815,6 @@ public class ERXStringUtilities {
     /**
      * Utility to convert to UTF-8 bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
      * @param string string to convert
-     * @param encoding
-     * @return
      */
     public static byte[] toUTF8Bytes(String string) {
     	return toBytes(string, "UTF-8");
@@ -1828,7 +1824,6 @@ public class ERXStringUtilities {
      * Utility to convert to bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
      * @param string string to convert
      * @param encoding
-     * @return
      */
     public static byte[] toBytes(String string, String encoding) {
     	if(string == null) {
@@ -1845,9 +1840,7 @@ public class ERXStringUtilities {
 
     /**
      * Utility to convert from UTF-8 bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
-     * @param string string to convert
-     * @param encoding
-     * @return
+     * @param bytes string to convert
      */
     public static String fromUTF8Bytes(byte bytes[]) {
     	return fromBytes(bytes, "UTF-8");
@@ -1855,9 +1848,8 @@ public class ERXStringUtilities {
 
     /**
      * Utility to convert from bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
-     * @param string string to convert
+     * @param bytes string to convert
      * @param encoding
-     * @return
      */
     public static String fromBytes(byte bytes[], String encoding) {
     	if(bytes == null) {

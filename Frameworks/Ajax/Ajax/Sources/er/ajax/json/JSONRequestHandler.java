@@ -174,8 +174,7 @@ public class JSONRequestHandler extends WORequestHandler {
 	 * 
 	 * @param context the current WOContext
 	 * @param requestHandlerKey if you registered a custom JSON request handler key
-	 * @param componentName the name of the component to lookup (or null for the shared bridge)
-	 * @param componentInstance the instance identifier (any value) to create a unique instance (or null for a session-global)
+	 * @param componentNameAndInstance the name/instance identifier of the component to lookup (or null for the shared bridge)
 	 * @param queryString the query string to append
 	 * @return a JSON request handler URL
 	 */

@@ -67,7 +67,6 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * system that the jdbcInfo which has been bundled into the
    * plugin is acceptable to use in place of actually going to
    * the database and getting it.
-   * @return
    */
   protected boolean shouldUseBundledJdbcInfo() {
     boolean shouldUseBundledJdbcInfo = false;

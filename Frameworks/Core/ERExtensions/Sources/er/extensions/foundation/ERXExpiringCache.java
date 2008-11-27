@@ -426,7 +426,6 @@ public class ERXExpiringCache<K, V> {
 
 	/**
 	 * Returns all keys.
-	 * @return
 	 */
 	public synchronized NSArray<K> allKeys() {
 		NSMutableArray<K> result = new NSMutableArray<K>(_backingDictionary.count());
