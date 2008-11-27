@@ -14,5 +14,7 @@ To use it add the following Java VM arguments to your launch configuration:
 
 Next you must add the WOJavaRebel framework to the application's classpath.
 The easiest way to do this so that the framework isn't also included in your deployment 
-build is by adding the WOJavaRebel jar as an external jar to the launch configuration 
-using the classpath tab menu.
+build is by adding the jar version of the framework (eg. WOJavaRebel-5.0.jar) as an 
+external jar to your application's launch configuration using the classpath tab menu.
+Ensure that it appears early in the classpath order, before system frameworks like 
+JavaWebObjects.
