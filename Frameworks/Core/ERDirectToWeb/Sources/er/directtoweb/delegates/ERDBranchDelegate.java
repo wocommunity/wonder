@@ -54,19 +54,16 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 	public @interface D2WDelegate {
 		/**
 		 * Returns the names of the scope where you can have this method. One of "selection,object"
-		 * @return
 		 */
 		public String scope() default "";
 
 		/**
 		 * Returns the names of the tasks where you can have this method. Example "query,select"
-		 * @return
 		 */
 		public String availableTasks() default "";
 		
 		/**
 		 * Returns the names of the pages where you can have this method. Example "ListWebMaster,QueryWebMaster"
-		 * @return
 		 */
 		public String availablePages() default "";
 	}

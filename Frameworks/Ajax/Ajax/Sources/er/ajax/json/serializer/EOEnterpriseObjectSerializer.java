@@ -287,8 +287,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return whether or not a new entity can be inserted.
-	 * @param eo
-	 * @return
+	 * @param entityName
 	 */
 	protected boolean _canInsert(String entityName) {
 		return ERXProperties.booleanForKeyWithDefault("er.ajax.json." + entityName + ".canInsert", false);
@@ -297,7 +296,6 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * Override to return the appropriate attribute names.
 	 * @param eo
-	 * @return
 	 */
 	protected NSArray<String> _readableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.readableAttributeNames(eo);
@@ -306,7 +304,6 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * Override to return the appropriate attribute names.
 	 * @param eo
-	 * @return
 	 */
 	protected NSArray<String> _writableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.writableAttributeNames(eo);
@@ -315,7 +312,6 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * Override to return the appropriate relationship names.
 	 * @param eo
-	 * @return
 	 */
 	protected NSArray<String> _includedRelationshipNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.includedRelationshipNames(eo);

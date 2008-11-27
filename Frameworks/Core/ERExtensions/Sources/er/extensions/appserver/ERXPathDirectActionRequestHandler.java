@@ -111,7 +111,6 @@ public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHan
 	 * @param request request to parse
 	 * @param useActionClass true if first item should get ignored
 	 * @param useActionName true if last item should get ignored
-	 * @return 
 	 */
 	public static NSDictionary<String, String> formValuesFromRequest(WORequest request, boolean useActionClass, boolean useActionName) {
 		NSMutableDictionary params = new NSMutableDictionary<String, String>();

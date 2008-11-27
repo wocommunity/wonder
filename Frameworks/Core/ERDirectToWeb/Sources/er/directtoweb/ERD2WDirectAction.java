@@ -363,7 +363,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
 
     /**
      * Returns an error page and sets the message to the key<code> __message</code>.
-     * @return
      */
     protected WOActionResults prepareErrorPage(D2WContext d2wContext, ErrorPageInterface epi) {
         WOActionResults newPage = null;
@@ -386,7 +385,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     /**
      * Creates an error page with the given exception.
      * @param ex
-     * @return
      */
     public WOActionResults reportException(Exception ex) {
         WOActionResults newPage = null;

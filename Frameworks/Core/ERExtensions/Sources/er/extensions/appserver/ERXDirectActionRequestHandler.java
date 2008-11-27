@@ -59,7 +59,6 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
      * Return true if you want to handle the request even though the app is refusing new sessions.
      * Currently, this includes all urls with "stats" in them
      * @param request
-     * @return
      */
     protected boolean isSystemRequest(WORequest request) {
     	return request.requestHandlerPath() != null && request.requestHandlerPath().toLowerCase().indexOf("stats") >= 0;

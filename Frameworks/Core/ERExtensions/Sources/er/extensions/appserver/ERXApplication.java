@@ -1597,7 +1597,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	
 	/**
 	 * Returns the delayedRequestHandler, if any is registered.
-	 * @return
 	 */
 	public ERXDelayedRequestHandler delayedRequestHandler() {
 		return (ERXDelayedRequestHandler) requestHandlerForKey(ERXDelayedRequestHandler.KEY);
@@ -1627,7 +1626,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Dispatches the request without checking for the delayedRequestHandler()
 	 * @param request
-	 * @return
 	 */
 	public WOResponse dispatchRequestImmediately(WORequest request) {
 		WOResponse response;
@@ -2088,7 +2086,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Makes ERXConstants available for binding in the UI. Bind to <code>application.constants.MyConstantClass</code>.
-	 * @return
 	 */
 	public NSKeyValueCodingAdditions constants() {
 		return new NSKeyValueCodingAdditions() {

@@ -840,8 +840,6 @@ public class ERXSQLHelper {
 	 * 
 	 * @param indexName
 	 *            the name of the index to create
-	 * @param expression
-	 *            the EOSQLExpression context
 	 * @param tableName the name of the containing table
 	 * @param columnNames
 	 *            the list of column names to index on
@@ -857,8 +855,6 @@ public class ERXSQLHelper {
 	 * 
 	 * @param indexName
 	 *            the name of the index to create
-	 * @param expression
-	 *            the EOSQLExpression context
 	 * @param tableName the name of the containing table
 	 * @param columnIndexes
 	 *            the list of columns to index on
@@ -874,8 +870,6 @@ public class ERXSQLHelper {
 	 * 
 	 * @param indexName
 	 *            the name of the index to create
-	 * @param expression
-	 *            the EOSQLExpression context
 	 * @param tableName the name of the containing table
 	 * @param columnNames
 	 *            the list of column names to index on
@@ -899,8 +893,6 @@ public class ERXSQLHelper {
 	 * 
 	 * @param indexName
 	 *            the name of the index to create
-	 * @param expression
-	 *            the EOSQLExpression context
 	 * @param tableName the name of the containing table
 	 * @param columnIndexes
 	 *            the list of columns to index on

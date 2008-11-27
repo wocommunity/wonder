@@ -54,7 +54,6 @@ public class ERDFlowDelegate implements NextPageDelegate {
 
 	/**
 	 * Returns the current component.
-	 * @return
 	 */
 	public WOComponent currentComponent() {
 		return _current;
@@ -62,8 +61,6 @@ public class ERDFlowDelegate implements NextPageDelegate {
 
 	/**
 	 * Returns the current page.
-	 * 
-	 * @return
 	 */
 	public WOComponent page() {
 		return currentComponent().context().page();
@@ -71,8 +68,6 @@ public class ERDFlowDelegate implements NextPageDelegate {
 
 	/**
 	 * Returns the session.
-	 * 
-	 * @return
 	 */
 	public WOSession session() {
 		return currentComponent().session();
@@ -84,7 +79,6 @@ public class ERDFlowDelegate implements NextPageDelegate {
 	 * 
 	 * @param <T>
 	 * @param clazz
-	 * @return
 	 */
 	protected <T> T parent(Class<? extends T> clazz) {
 		WOComponent curr = currentComponent();
@@ -103,7 +97,6 @@ public class ERDFlowDelegate implements NextPageDelegate {
 	 * 
 	 * @param <T>
 	 * @param clazz
-	 * @return
 	 */
 	protected <T> T page(Class<? extends T> clazz) {
 		return (T) currentComponent().context().page();
@@ -112,8 +105,6 @@ public class ERDFlowDelegate implements NextPageDelegate {
 	/**
 	 * Returns either the pageConfiguration of the topmost page or the name of
 	 * the topmost page.
-	 * 
-	 * @return
 	 */
 	protected String pageName() {
 		String pageName = ERD2WFactory.pageConfigurationFromPage(page());

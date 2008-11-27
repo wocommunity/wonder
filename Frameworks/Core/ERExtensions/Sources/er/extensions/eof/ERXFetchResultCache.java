@@ -48,7 +48,6 @@ public class ERXFetchResultCache {
 	 * Returns an array of EOs that where cached for the given fetch specification or null.
 	 * @param ec
 	 * @param fs
-	 * @return
 	 */
 	public NSArray<? extends EOEnterpriseObject> objectsForFetchSpecification(EODatabaseContext dbc, EOEditingContext ec, EOFetchSpecification fs) {
 		String identifier = ERXFetchSpecification.identifierForFetchSpec(fs);
@@ -83,7 +82,6 @@ public class ERXFetchResultCache {
 	
 	/**
 	 * Returns a list of entities that should not be cached.
-	 * @return
 	 */
 	protected NSArray<String> excludedEntities() {
 		return NSArray.EmptyArray;
@@ -92,7 +90,6 @@ public class ERXFetchResultCache {
 	/**
 	 * Returns the time the result should stay in the cache. Less or equal than zero means don't cache.
 	 * @param fs
-	 * @return
 	 */
 	protected long cacheTime(NSArray eos, EOFetchSpecification fs) {
 		if(fs.fetchesRawRows() || fs.refreshesRefetchedObjects()) {

@@ -119,7 +119,6 @@ public class ERXDatabaseContextDelegate {
 	 * @param dbc
 	 * @param fs
 	 * @param ec
-	 * @return
 	 */
 	public NSArray databaseContextShouldFetchObjects(EODatabaseContext dbc, EOFetchSpecification fs, EOEditingContext ec) {
 		NSArray result = null;
