@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="ERXIEConditionalComment" wocomponentcontent="true">
+        <binding name="isGreaterThan"/>
+        <binding name="isGreaterThanEqual"/>
+        <binding name="isLessThan"/>
+        <binding name="isLessThanEqual"/>
+        <binding name="negate"/>
+        <binding name="versionString"/>
+        <validation message="Binding more than one value for 'isGreaterThan', 'isGreaterThanEqual', 'isLessThan', or 'isLessThanEqual' is invalid.">
+            <count test=">1">
+                <bound name="isGreaterThan" />
+                <bound name="isGreaterThanEqual" />
+                <bound name="isLessThan" />
+                <bound name="isLessThanEqual" />
+            </count>
+        </validation>
+        <validation message="'versionString' must be bound if 'isGreaterThan', 'isGreaterThanEqual', 'isLessThan', or 'isLessThanEqual' is bound.">
+            <and>
+                <or>
+                    <bound name="isGreaterThan" />
+                    <bound name="isGreaterThanEqual" />
+                    <bound name="isLessThan" />
+                    <bound name="isLessThanEqual" />
+                </or>
+                <unbound name="versionString" />
+            </and>
+        </validation>
+    </wo>
+</wodefinitions>

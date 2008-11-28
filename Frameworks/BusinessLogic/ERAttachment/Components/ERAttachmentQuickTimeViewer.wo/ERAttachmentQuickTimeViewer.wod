@@ -1,0 +1,64 @@
+AltContent: WOComponentContent {
+	
+}
+
+EmptyAttachment: WOConditional {
+	condition = ^attachment;
+	negate = true;
+}
+
+EmptyAttachmentComponent: WOSwitchComponent {
+	WOComponentName = ^emptyAttachmentComponentName;
+}
+
+HasAttachment: WOConditional {
+	condition = ^attachment;
+}
+
+IEMovieObject: WOGenericContainer {
+	class = ^class;
+	classid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
+	codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
+	elementName = "object";
+	height = ^height;
+	id = ^id;
+	standby = ^standby;
+	title = ^title;
+	width = ^width;
+}
+
+IfIE: ERXIEConditionalComment {
+	
+}
+
+IfNotIE: ERXIEConditionalComment {
+	negate = true;
+}
+
+MovieObject: WOGenericContainer {
+	data = attachmentUrl;
+	elementName = "object";
+	height = ^height;
+	id = ^id;
+	standby = ^standby;
+	title = ^title;
+	type = attachment.mimeType;
+	width = ^width;
+}
+
+OtherParams: WORepetition {
+	item = item;
+	list = ^parameterDictionary.allKeys;
+}
+
+Param: WOGenericElement {
+	elementName = "param";
+	name = item;
+	value = parameterValue;
+}
+
+Source: WOGenericElement {
+	elementName = "param";
+	name = "src";
+	value = attachmentUrl;
+}
