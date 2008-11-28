@@ -1,0 +1,96 @@
+Bang: WOString {
+	escapeHTML = false;
+	value = "!(";
+}
+
+BeginIf: WOString {
+	escapeHTML = false;
+	value = "<!--[if ";
+}
+
+Close: WOString {
+	escapeHTML = false;
+	value = " <-->";
+}
+
+CloseBang: WOString {
+	escapeHTML = false;
+	value = ")";
+}
+
+CloseIf: WOString {
+	escapeHTML = false;
+	value = "]>";
+}
+
+Content: WOComponentContent {
+	
+}
+
+EndIf: WOString {
+	escapeHTML = false;
+	value = "<![endif]-->";
+}
+
+GT: WOString {
+	value = "gt ";	
+}
+
+GTE: WOString {
+	value = "gte ";	
+}
+
+HasNoVersion: WOConditional {
+	condition = ^versionString;
+	negate = true;
+}
+
+HasVersion: WOConditional {
+	condition = ^versionString;
+}
+
+IE: WOString {
+	escapeHTML = false;
+	value = "IE";
+}
+
+IsGT: WOConditional {
+	condition = ^isGreaterThan;
+}
+
+IsGTE: WOConditional {
+	condition = ^isGreaterThanEqual;
+}
+
+IsLT: WOConditional {
+	condition = ^isLessThan;
+}
+
+IsLTE: WOConditional {
+	condition = ^isLessThanEqual;
+}
+
+LT: WOString {
+	value = "lt ";	
+}
+
+LTE: WOString {
+	value = "lte ";	
+}
+
+Negate: WOConditional {
+	condition = ^negate;
+}
+
+Open: WOString {
+	escapeHTML = false;
+	value = "<!--> ";
+}
+
+Space: WOString {
+	value = " ";
+}
+
+VersionString: WOString {
+	value = ^versionString;
+}
