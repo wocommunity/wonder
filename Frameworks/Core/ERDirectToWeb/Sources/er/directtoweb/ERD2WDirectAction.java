@@ -6,7 +6,12 @@
 //
 package er.directtoweb;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.text.Format;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -38,12 +43,15 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.directtoweb.interfaces.ERDErrorPageInterface;
@@ -141,6 +149,17 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     protected EOEditingContext newEditingContext() {
         return ERXEC.newEditingContext(session().defaultEditingContext().parentObjectStore());
     }
+    
+    /**
+     * Overwrite for custom value conversion.
+     * @param attribute
+     * @param stringValue
+     * @return
+     */
+    protected Object qualifierValueForAttribute(EOAttribute attribute, String stringValue) {
+        //AK: I still don't like this...in particular the new NSTimestampFormatter() which would be totally arbitrary...
+        return ERXStringUtilities.attributeValueFromString(attribute, stringValue, context().request().formValueEncoding(), new NSTimestampFormatter());
+    }
 
     /** Retrieves and executes the fetch specification given in the request. */
     public EOFetchSpecification fetchSpecificationFromRequest(String entityName) {
@@ -166,21 +185,20 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     					if(attribute != null) {
     						String stringValue = context().request().stringFormValueForKey(key);
     						if(stringValue != null) {
-    							Object value;
-    							if(attribute.adaptorValueType() == EOAttribute.AdaptorDateType) {
-    								try {
-    									value = (new NSTimestampFormatter()).parseObject(stringValue);
-    								} catch (ParseException e1) {
-										throw NSForwardException._runtimeExceptionForThrowable(e1);
-									}
-    							} else {
-          							 value = attribute.newValueForString(stringValue);
-    							}
+    							Object value = null;
     							NSSelector selector = EOKeyValueQualifier.QualifierOperatorEqual;
     							if(stringValue.indexOf('*') >= 0) {
     								selector = EOKeyValueQualifier.QualifierOperatorCaseInsensitiveLike;
     							}
-    							qualifiers.addObject(new EOKeyValueQualifier(key, selector, value));
+    							if(!NSKeyValueCoding.NullValue.toString().equals(stringValue)) {
+                                    //AK: I still don't like this...in particular the new NSTimestampFormatter() which would be totally arbitrary...
+    								value = qualifierValueForAttribute(attribute, stringValue);
+    								if(value!=null) {
+        								qualifiers.addObject(new EOKeyValueQualifier(key, selector, value));
+    								}
+    							} else {
+    								qualifiers.addObject(new EOKeyValueQualifier(key, selector, value));
+    							}
     						}
     					}
     				}
