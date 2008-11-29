@@ -13,15 +13,17 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Company extends  ERXGenericRecord {
-	public static final String ENTITY_NAME = "Company";
+  public static final String ENTITY_NAME = "Company";
 
-	// Attributes
-	public static final String NAME_KEY = "name";
-	public static final ERXKey<String> NAME = new ERXKey<String>(NAME_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> NAME = new ERXKey<String>("name");
+  // Relationship Keys
+  public static final ERXKey<er.ajax.example.Employee> EMPLOYEES = new ERXKey<er.ajax.example.Employee>("employees");
 
-	// Relationships
-	public static final String EMPLOYEES_KEY = "employees";
-	public static final ERXKey<er.ajax.example.Employee> EMPLOYEES = new ERXKey<er.ajax.example.Employee>(EMPLOYEES_KEY);
+  // Attributes
+  public static final String NAME_KEY = NAME.key();
+  // Relationships
+  public static final String EMPLOYEES_KEY = EMPLOYEES.key();
 
   private static Logger LOG = Logger.getLogger(_Company.class);
 
