@@ -364,7 +364,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		}
 
 		// If this is not an Ajax request, the page has been reloaded.  Try to recover state
-		if ( ! AjaxRequestHandler.AjaxRequestHandlerKey.equals(context().request().requestHandlerKey())) {
+		if (isOpen() && ! AjaxRequestHandler.AjaxRequestHandlerKey.equals(context().request().requestHandlerKey())) {
 			closeDialog();
 		}
 
@@ -555,9 +555,9 @@ public class AjaxModalDialog extends AjaxComponent {
 
 		if (hasBinding("afterHide")) {
 			String afterHide = (String) valueForBinding("afterHide");
-			int closingBraceIndex = afterHide.lastIndexOf('}');
-			if (closingBraceIndex > -1) {
-				serverUpdate = afterHide.substring(0, closingBraceIndex) + serverUpdate + '}';
+			int openingBraceIndex = afterHide.indexOf('{');
+			if (openingBraceIndex > -1) {
+				serverUpdate = "function() {" + serverUpdate + " " + afterHide.substring(openingBraceIndex + 1);
 			}
 			else
 				throw new RuntimeException("Don't know how to handle afterHide value '" + afterHide + "', did you forget to wrap it in function() { ...}?");
