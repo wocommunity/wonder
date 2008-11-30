@@ -13,13 +13,15 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "Role";
+  public static final String ENTITY_NAME = "Role";
 
-	// Attributes
+  // Attribute Keys
+  // Relationship Keys
+  public static final ERXKey<er.erxtest.model.Employee> EMPLOYEES = new ERXKey<er.erxtest.model.Employee>("employees");
 
-	// Relationships
-	public static final String EMPLOYEES_KEY = "employees";
-	public static final ERXKey<er.erxtest.model.Employee> EMPLOYEES = new ERXKey<er.erxtest.model.Employee>(EMPLOYEES_KEY);
+  // Attributes
+  // Relationships
+  public static final String EMPLOYEES_KEY = EMPLOYEES.key();
 
   private static Logger LOG = Logger.getLogger(_Role.class);
 

@@ -13,31 +13,33 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "Employee";
+  public static final String ENTITY_NAME = "Employee";
 
-	// Attributes
-	public static final String ADDRESS1_KEY = "address1";
-	public static final ERXKey<String> ADDRESS1 = new ERXKey<String>(ADDRESS1_KEY);
-	public static final String ADDRESS2_KEY = "address2";
-	public static final ERXKey<String> ADDRESS2 = new ERXKey<String>(ADDRESS2_KEY);
-	public static final String CITY_KEY = "city";
-	public static final ERXKey<String> CITY = new ERXKey<String>(CITY_KEY);
-	public static final String MANAGER_KEY = "manager";
-	public static final ERXKey<Boolean> MANAGER = new ERXKey<Boolean>(MANAGER_KEY);
-	public static final String NAME_KEY = "name";
-	public static final ERXKey<String> NAME = new ERXKey<String>(NAME_KEY);
-	public static final String STATE_KEY = "state";
-	public static final ERXKey<String> STATE = new ERXKey<String>(STATE_KEY);
-	public static final String ZIPCODE_KEY = "zipcode";
-	public static final ERXKey<String> ZIPCODE = new ERXKey<String>(ZIPCODE_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> ADDRESS1 = new ERXKey<String>("address1");
+  public static final ERXKey<String> ADDRESS2 = new ERXKey<String>("address2");
+  public static final ERXKey<String> CITY = new ERXKey<String>("city");
+  public static final ERXKey<Boolean> MANAGER = new ERXKey<Boolean>("manager");
+  public static final ERXKey<String> NAME = new ERXKey<String>("name");
+  public static final ERXKey<String> STATE = new ERXKey<String>("state");
+  public static final ERXKey<String> ZIPCODE = new ERXKey<String>("zipcode");
+  // Relationship Keys
+  public static final ERXKey<er.erxtest.model.Company> COMPANY = new ERXKey<er.erxtest.model.Company>("company");
+  public static final ERXKey<er.erxtest.model.Paycheck> PAYCHECKS = new ERXKey<er.erxtest.model.Paycheck>("paychecks");
+  public static final ERXKey<er.erxtest.model.Role> ROLES = new ERXKey<er.erxtest.model.Role>("roles");
 
-	// Relationships
-	public static final String COMPANY_KEY = "company";
-	public static final ERXKey<er.erxtest.model.Company> COMPANY = new ERXKey<er.erxtest.model.Company>(COMPANY_KEY);
-	public static final String PAYCHECKS_KEY = "paychecks";
-	public static final ERXKey<er.erxtest.model.Paycheck> PAYCHECKS = new ERXKey<er.erxtest.model.Paycheck>(PAYCHECKS_KEY);
-	public static final String ROLES_KEY = "roles";
-	public static final ERXKey<er.erxtest.model.Role> ROLES = new ERXKey<er.erxtest.model.Role>(ROLES_KEY);
+  // Attributes
+  public static final String ADDRESS1_KEY = ADDRESS1.key();
+  public static final String ADDRESS2_KEY = ADDRESS2.key();
+  public static final String CITY_KEY = CITY.key();
+  public static final String MANAGER_KEY = MANAGER.key();
+  public static final String NAME_KEY = NAME.key();
+  public static final String STATE_KEY = STATE.key();
+  public static final String ZIPCODE_KEY = ZIPCODE.key();
+  // Relationships
+  public static final String COMPANY_KEY = COMPANY.key();
+  public static final String PAYCHECKS_KEY = PAYCHECKS.key();
+  public static final String ROLES_KEY = ROLES.key();
 
   private static Logger LOG = Logger.getLogger(_Employee.class);
 
