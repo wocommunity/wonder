@@ -13,19 +13,21 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "Paycheck";
+  public static final String ENTITY_NAME = "Paycheck";
 
-	// Attributes
-	public static final String AMOUNT_KEY = "amount";
-	public static final ERXKey<BigDecimal> AMOUNT = new ERXKey<BigDecimal>(AMOUNT_KEY);
-	public static final String CASHED_KEY = "cashed";
-	public static final ERXKey<Boolean> CASHED = new ERXKey<Boolean>(CASHED_KEY);
-	public static final String PAYMENT_DATE_KEY = "paymentDate";
-	public static final ERXKey<NSTimestamp> PAYMENT_DATE = new ERXKey<NSTimestamp>(PAYMENT_DATE_KEY);
+  // Attribute Keys
+  public static final ERXKey<BigDecimal> AMOUNT = new ERXKey<BigDecimal>("amount");
+  public static final ERXKey<Boolean> CASHED = new ERXKey<Boolean>("cashed");
+  public static final ERXKey<NSTimestamp> PAYMENT_DATE = new ERXKey<NSTimestamp>("paymentDate");
+  // Relationship Keys
+  public static final ERXKey<er.erxtest.model.Employee> EMPLOYEE = new ERXKey<er.erxtest.model.Employee>("employee");
 
-	// Relationships
-	public static final String EMPLOYEE_KEY = "employee";
-	public static final ERXKey<er.erxtest.model.Employee> EMPLOYEE = new ERXKey<er.erxtest.model.Employee>(EMPLOYEE_KEY);
+  // Attributes
+  public static final String AMOUNT_KEY = AMOUNT.key();
+  public static final String CASHED_KEY = CASHED.key();
+  public static final String PAYMENT_DATE_KEY = PAYMENT_DATE.key();
+  // Relationships
+  public static final String EMPLOYEE_KEY = EMPLOYEE.key();
 
   private static Logger LOG = Logger.getLogger(_Paycheck.class);
 
