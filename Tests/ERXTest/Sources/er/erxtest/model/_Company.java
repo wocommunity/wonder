@@ -13,25 +13,27 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "Company";
+  public static final String ENTITY_NAME = "Company";
 
-	// Attributes
-	public static final String ADDRESS1_KEY = "address1";
-	public static final ERXKey<String> ADDRESS1 = new ERXKey<String>(ADDRESS1_KEY);
-	public static final String ADDRESS2_KEY = "address2";
-	public static final ERXKey<String> ADDRESS2 = new ERXKey<String>(ADDRESS2_KEY);
-	public static final String CITY_KEY = "city";
-	public static final ERXKey<String> CITY = new ERXKey<String>(CITY_KEY);
-	public static final String NAME_KEY = "name";
-	public static final ERXKey<String> NAME = new ERXKey<String>(NAME_KEY);
-	public static final String STATE_KEY = "state";
-	public static final ERXKey<String> STATE = new ERXKey<String>(STATE_KEY);
-	public static final String ZIPCODE_KEY = "zipcode";
-	public static final ERXKey<String> ZIPCODE = new ERXKey<String>(ZIPCODE_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> ADDRESS1 = new ERXKey<String>("address1");
+  public static final ERXKey<String> ADDRESS2 = new ERXKey<String>("address2");
+  public static final ERXKey<String> CITY = new ERXKey<String>("city");
+  public static final ERXKey<String> NAME = new ERXKey<String>("name");
+  public static final ERXKey<String> STATE = new ERXKey<String>("state");
+  public static final ERXKey<String> ZIPCODE = new ERXKey<String>("zipcode");
+  // Relationship Keys
+  public static final ERXKey<er.erxtest.model.Employee> EMPLOYEES = new ERXKey<er.erxtest.model.Employee>("employees");
 
-	// Relationships
-	public static final String EMPLOYEES_KEY = "employees";
-	public static final ERXKey<er.erxtest.model.Employee> EMPLOYEES = new ERXKey<er.erxtest.model.Employee>(EMPLOYEES_KEY);
+  // Attributes
+  public static final String ADDRESS1_KEY = ADDRESS1.key();
+  public static final String ADDRESS2_KEY = ADDRESS2.key();
+  public static final String CITY_KEY = CITY.key();
+  public static final String NAME_KEY = NAME.key();
+  public static final String STATE_KEY = STATE.key();
+  public static final String ZIPCODE_KEY = ZIPCODE.key();
+  // Relationships
+  public static final String EMPLOYEES_KEY = EMPLOYEES.key();
 
   private static Logger LOG = Logger.getLogger(_Company.class);
 
