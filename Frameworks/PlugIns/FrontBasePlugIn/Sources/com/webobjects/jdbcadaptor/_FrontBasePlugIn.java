@@ -102,6 +102,8 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	 * This method returns true if the connection URL for the database has a special flag on it which indicates to the
 	 * system that the jdbcInfo which has been bundled into the plugin is acceptable to use in place of actually going
 	 * to the database and getting it.
+	 *
+	 * @return <code>true</code> jdbcInfo which has been bundled into the plugin is acceptable to use
 	 */
 	protected boolean shouldUseBundledJdbcInfo() {
 		boolean shouldUseBundledJdbcInfo = false;
