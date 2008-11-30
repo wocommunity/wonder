@@ -13,13 +13,15 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _ERTag extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "ERTag";
+  public static final String ENTITY_NAME = "ERTag";
 
-	// Attributes
-	public static final String NAME_KEY = "name";
-	public static final ERXKey<String> NAME = new ERXKey<String>(NAME_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> NAME = new ERXKey<String>("name");
+  // Relationship Keys
 
-	// Relationships
+  // Attributes
+  public static final String NAME_KEY = NAME.key();
+  // Relationships
 
   private static Logger LOG = Logger.getLogger(_ERTag.class);
 
