@@ -791,6 +791,8 @@ public class ERXPatcher {
 					buf.append(ch);
 					
 					return i - 1;
+				} else if (ch == '/' && i+1 < length && string.charAt(i+1) == '>') {
+					continue;
 				} else {
 					i = consumeAttributeName(string, i, buf);
 				}
