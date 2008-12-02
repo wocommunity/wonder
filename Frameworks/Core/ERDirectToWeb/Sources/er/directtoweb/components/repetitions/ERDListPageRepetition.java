@@ -53,7 +53,10 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
     	if(result.count() == 1) {
     		return result;
     	}
-    	ERD2WContainer pair = (ERD2WContainer) result.objectAtIndex(0);
+        if(result.count() == 0) {
+            return NSArray.EmptyArray;
+        }
+        ERD2WContainer pair = (ERD2WContainer) result.objectAtIndex(0);
     	return (NSArray) new NSArray(pair);
     }
     
