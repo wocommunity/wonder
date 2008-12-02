@@ -20,10 +20,9 @@ import com.webobjects.appserver.WOContext;
  * <br/><code>&lt;webobject name = "IsGTEIE7" &gt;Content only rendered by IE 7 and above&lt;/webobject&gt;</code>
  * </p>
  * <p>In your WOD file, those conditionals would be bound like:
- * <br/><code>IsNotIE: ERXIEConditionalComment { negate = true; }
- * <br/><code>IsNotIE6: ERXIEConditionalComment { negate = true; versionString = "6"; }
- * <br/><code>IsGTEIE7: ERXIEConditionalComment { isGreaterThanEqual = true; versionString = "7"; }
- * </code>
+ * <br/><code>IsNotIE: ERXIEConditionalComment { negate = true; }</code>
+ * <br/><code>IsNotIE6: ERXIEConditionalComment { negate = true; versionString = "6"; }</code>
+ * <br/><code>IsGTEIE7: ERXIEConditionalComment { isGreaterThanEqual = true; versionString = "7"; }</code>
  * </p>
  * 
  * @author Ramsey Gurley
