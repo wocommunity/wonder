@@ -1161,7 +1161,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.fixCachingEnabled", true)) {
 			// _expectedLanguages already contains all the languages in all projects, so
 			// there is no need to check for the ones that come in...
-			return super._componentDefinition(s, _expectedLanguages());
+			return super._componentDefinition(s, (nsarray !=null ? nsarray.arrayByAddingObjectsFromArray(_expectedLanguages()) : _expectedLanguages()));
 		}
 		return super._componentDefinition(s, nsarray);
 	}
