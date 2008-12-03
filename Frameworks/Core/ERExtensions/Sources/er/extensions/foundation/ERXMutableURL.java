@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 /**
  * ERXMutableURL provides a mutable model of a URL, including support for
@@ -540,6 +541,9 @@ public class ERXMutableURL {
 					Map.Entry<String, List<String>> queryParameter = queryParameterIter.next();
 					String key = queryParameter.getKey();
 					Iterator<String> valuesIter = queryParameter.getValue().iterator();
+					if (!valuesIter.hasNext()) {
+						sb.append(URLEncoder.encode(key, "UTF-8"));
+					}
 					while (valuesIter.hasNext()) {
 						String value = valuesIter.next();
 						sb.append(URLEncoder.encode(key, "UTF-8"));
