@@ -107,14 +107,14 @@ public class ERXBeanSerializer extends AbstractSerializer {
 				String name = method.getName();
 				if (!_ignoreMethodNames.contains(name)) {
 					Class<?> returnType = method.getReturnType();
-					String propertyName = method.getName();
+					String propertyName = name;
 					if (propertyName.startsWith("get") || propertyName.startsWith("set")) {
 						propertyName = ERXStringUtilities.uncapitalize(propertyName.substring("set".length()));
 					}
 					if (returnType == void.class && name.startsWith("set") && method.getParameterTypes().length == 1) {
 						bd.writableProps.put(propertyName, method);
 					}
-					else if (returnType != null && method.getParameterTypes().length == 0) {
+					else if (returnType != null && method.getParameterTypes().length == 0 && !name.startsWith("_")) {
 						bd.readableProps.put(propertyName, method);
 					}
 				}
