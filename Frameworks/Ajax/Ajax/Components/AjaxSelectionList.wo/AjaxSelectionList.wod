@@ -13,7 +13,7 @@ FieldID : WOString {
 }
 
 ContainerLink : WOGenericContainer {
-	elementName = "a";
+	elementName = containerElementName;
 	id = containerID;
 	class = "_selectionList";
 	href = "javascript:void(0)";
