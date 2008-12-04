@@ -8,6 +8,7 @@ import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
@@ -250,8 +251,8 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			dbUpdaterModel = _dbUpdaterModelCache;
 		}
 		else {
-			ERXModelGroup modelGroup = (ERXModelGroup) model.modelGroup();
-			EOEntity prototypeEntity = modelGroup.entityNamed(modelGroup.prototypeEntityNameForModel(model));
+			EOModelGroup modelGroup = model.modelGroup();
+			EOEntity prototypeEntity = modelGroup.entityNamed(ERXModelGroup.prototypeEntityNameForModel(model));
 			boolean isWonderPrototype = (prototypeEntity != null && prototypeEntity.model().name().equals("erprototypes"));
 
 			dbUpdaterModel = new EOModel();
