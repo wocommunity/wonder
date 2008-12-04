@@ -212,6 +212,8 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
 	public void appendToResponse(WOResponse response, WOContext context) {
 		if(entry == null) {
 			WOResponse newResponse = application().createResponseInContext(context);
+			newResponse.setHeaders(response.headers());
+			newResponse.setUserInfo(response.userInfo());
 			super.appendToResponse(newResponse, context);
 			String content = newResponse.contentString();
 			entry = new Entry(content, cacheDuration(), (context.hasSession() ? context.session().sessionID() : null));
