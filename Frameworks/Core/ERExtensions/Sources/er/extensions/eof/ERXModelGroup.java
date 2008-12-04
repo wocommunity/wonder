@@ -698,7 +698,7 @@ public class ERXModelGroup extends EOModelGroup {
 		resetConnectionDictionaryInModel(model);
 	}
 
-	private String getProperty(String key, String alternateKey, String defaultValue) {
+	private static String getProperty(String key, String alternateKey, String defaultValue) {
 		String value = ERXProperties.stringForKey(key);
 		if (value == null) {
 			value = ERXProperties.stringForKey(alternateKey);
@@ -709,11 +709,11 @@ public class ERXModelGroup extends EOModelGroup {
 		return value;
 	}
 
-	private String getProperty(String key, String alternateKey) {
+	private static String getProperty(String key, String alternateKey) {
 		return getProperty(key, alternateKey, null);
 	}
 
-	private String decryptProperty(String key, String alternateKey) {
+	private static String decryptProperty(String key, String alternateKey) {
 		String value = ERXProperties.decryptedStringForKey(key);
 		if (value == null) {
 			value = ERXProperties.decryptedStringForKey(alternateKey);
@@ -1038,7 +1038,7 @@ public class ERXModelGroup extends EOModelGroup {
 		fixPrototypesForModel(model);
 	}
 
-	public String prototypeEntityNameForModel(EOModel model) {
+	public static String prototypeEntityNameForModel(EOModel model) {
 		String modelName = model.name();
 		String prototypeEntityName = getProperty(modelName + ".EOPrototypesEntity", "dbEOPrototypesEntityGLOBAL");
 		NSDictionary databaseConfig = databaseConfigForModel(model);
@@ -1064,7 +1064,7 @@ public class ERXModelGroup extends EOModelGroup {
 		return prototypeEntityName;
 	}
 
-	protected NSDictionary databaseConfigForModel(EOModel model) {
+	protected static NSDictionary databaseConfigForModel(EOModel model) {
 		// Support for EODatabaseConfig from EntityModeler. The value of YourEOModelName.DBConfigName is
 		// used to lookup the corresponding EODatabaseConfig name from user info. The connection dictionary
 		// defined in the databaseConfig section completely replaces the connection dictionary in the
