@@ -13,6 +13,7 @@
 		<binding name="class"/>
 	<binding defaults="Boolean" name="ajax"/>
     <binding defaults="Boolean" name="open"/>
+    <binding name="directActionName"/>
     </wo>
     
     <validation message="If 'ajax' is bound, 'id' must also be bound.">
