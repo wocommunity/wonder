@@ -56,7 +56,6 @@ public class ERXSimpleSpamCheck extends ERXComponent {
 			if (!ERXExtensions.safeEquals(_expectedSpamCheck, _spamCheck)) {
 				validationFailedWithException(new NSValidation.ValidationException("Spam check failed."), this, ERXSimpleSpamCheck.SPAM_CHECK_KEY);
 			}
-			_expectedSpamCheck = null;
 			_spamCheck = null;
 		}
 	}
