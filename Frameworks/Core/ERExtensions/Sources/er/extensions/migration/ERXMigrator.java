@@ -19,6 +19,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation._NSUtilities;
+import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities.ChannelAction;
@@ -283,6 +284,11 @@ public class ERXMigrator {
 	}
 
 	protected void _buildDependenciesForModel(EOModel model, int migrateToVersion, Map<String, Integer> versions, Map<IERXMigration, ERXModelVersion> migrations) throws InstantiationException, IllegalAccessException {
+		if (model.connectionDictionary().objectForKey(JDBCAdaptor.URLKey) == null ||
+			! ((String) model.connectionDictionary().objectForKey(JDBCAdaptor.URLKey)).toLowerCase().startsWith("jdbc:")) {
+			return;
+		}
+		
 		String modelName = model.name();
 
 		Integer migratorVersion = versions.get(modelName);
