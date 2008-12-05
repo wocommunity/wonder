@@ -88,6 +88,10 @@ public class AjaxDraggable extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("handle", AjaxOption.DEFAULT));
     ajaxOptionsArray.addObject(new AjaxOption("change", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("keyPress", AjaxOption.SCRIPT));
+    // scroll can be either a dom ID or a dom reference. In case of a dom reference the value must not be quoted.
+    // set binding to "window" to scroll the window when the draggable reaches the window boundary.
+    // set binding to "'someID'" to scroll the element with ID "someID"
+    ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
   }
