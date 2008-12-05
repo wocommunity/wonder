@@ -43,7 +43,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	private boolean _generateCompleteURLs;
 
 	public static final String CONTEXT_KEY = "wocontext";
-	private static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
+	public static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
 
 	public static class Observer {
 		public void applicationDidHandleRequest(NSNotification n) {

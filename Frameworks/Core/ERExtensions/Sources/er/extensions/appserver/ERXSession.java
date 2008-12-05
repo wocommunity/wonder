@@ -677,9 +677,14 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   public static ERXSession session() {
 	  return (ERXSession) ERXThreadStorage.valueForKey("session");
   }
+  
+  public static String currentSessionID() {
+	  return (String) ERXThreadStorage.valueForKey("ERXSession.sessionID");
+  }
 
   public static void setSession(ERXSession session) {
 	  ERXThreadStorage.takeValueForKey(session, "session");
+	  ERXThreadStorage.takeValueForKey(session == null ? null : session.sessionID(), "ERXSession.sessionID");
   }
   
   /**

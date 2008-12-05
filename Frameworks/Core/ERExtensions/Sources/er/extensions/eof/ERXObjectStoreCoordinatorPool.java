@@ -122,12 +122,7 @@ public class ERXObjectStoreCoordinatorPool {
      * @return the sessionID from the session stored in ERXThreadStorage.
      */
     protected String sessionID() {
-        WOSession session = ERXSession.anySession();
-        String sessionID = null;
-        if (session != null) {
-            sessionID = session.sessionID();
-        }
-        return sessionID;
+        return ERXSession.currentSessionID();
     }
     
     /** 
