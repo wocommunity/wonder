@@ -88,8 +88,27 @@ import er.extensions.jdbc.ERXSQLHelper;
  * previous version number.
  * <p>
  * Startup migration runs in response to the
- * ApplicationDidFinishLaunchingNotification, so you should not access your EO's
- * until after that notification is complete.
+ * ApplicationWillFinishLaunchingNotification, so you should not access your EO's
+ * until after that notification is complete.  ApplicationWillFinishLaunchingNotification
+ * is used instead of ApplicationDidFinishLaunchingNotification so that the
+ * application will not start accepting requests before migration is complete.
+ * <p>
+ * If you are not extending ERXApplication, you can add Migrations into your own
+ * application by adding this to your Application constructor:
+ * <pre>
+ * NSNotificationCenter.defaultCenter().addObserver(this, 
+ *     new NSSelector("willFinishLaunching", ERXConstant.NotificationClassArray), 
+ *     WOApplication.ApplicationWillFinishLaunchingNotification, null);
+ * </pre>
+ * 
+ * And implementing the willFinishLaunching method like this:
+ * <pre>
+ * public void willFinishLaunching(NSNotification n) {
+ *     if (ERXMigrator.shouldMigrateAtStartup()) {
+ *         new ERXMigrator(name() + "-" + number()).migrateToLatest();
+ *     }
+ * }
+ * </pre>
  * 
  * @property er.migration.migrateAtStartup if true, migrateToLatest is
  *           automatically called at startup
