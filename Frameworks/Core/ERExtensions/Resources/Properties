@@ -517,8 +517,10 @@ dbMinConnectionsGLOBAL=1
 #########################################################################
 # ERXThreadStorage 
 #########################################################################
-## Define if child threads inherit the variables of the parent or not
+## Define if child threads inherit the variables of the parent or not. Defaults to true.
 # er.extensions.ERXThreadStorage.useInheritableThreadLocal = false
+## Define whether to log potential problems when using certain values inherited by the parent thread. Defaults to true.
+# er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues = false
 
 #########################################################################
 # ERXModelGroup 
