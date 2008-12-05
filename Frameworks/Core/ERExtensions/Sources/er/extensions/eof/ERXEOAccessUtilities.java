@@ -64,6 +64,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.statistics.ERXStats;
@@ -460,8 +461,8 @@ public class ERXEOAccessUtilities {
      */
 
     public static EOModelGroup modelGroup(EOEditingContext ec) {
-    	if (ec == null) {
-    		// FIXME this can be problematic, if called from a background thread with ERXThreadStorage.useInheritableThreadLocal=true, 
+    	if (ec == null && !ERXThreadStorage.wasInheritedFromParentThread()) {
+			// this can be problematic, if called from a background thread with ERXThreadStorage.useInheritableThreadLocal=true, 
     		// which is the default. In my case it was called indirectly from ERXEntityClassDescription.Factory.classDescriptionNeededForEntityName 
     		// resulting in locking problems
     		
