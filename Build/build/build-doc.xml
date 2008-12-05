@@ -152,6 +152,7 @@
             <link href="http://junit.sourceforge.net/javadoc/"/>
             <taglet name="BindingTaglet" path="${wonder.root}/Build/lib/" />
             <taglet name="D2WKeyTaglet" path="${wonder.root}/Build/lib/" />
+            <taglet name="PropertyTaglet" path="${wonder.root}/Build/lib/" />
         </javadoc>
     </target>
 
