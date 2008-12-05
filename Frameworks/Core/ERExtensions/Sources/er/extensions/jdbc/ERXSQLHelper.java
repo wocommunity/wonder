@@ -1,10 +1,12 @@
 package er.extensions.jdbc;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -1263,37 +1265,54 @@ public class ERXSQLHelper {
 		NSMutableArray<String> statements = new NSMutableArray<String>();
 		if (sql != null) {
 			char commandSeparatorChar = commandSeparatorChar();
-
+			Pattern commentPattern = commentPattern();
 			StringBuffer statementBuffer = new StringBuffer();
-			int length = sql.length();
+			BufferedReader reader = new BufferedReader(new StringReader(sql));
 			boolean inQuotes = false;
-			for (int i = 0; i < length; i++) {
-				char ch = sql.charAt(i);
-				if (ch == '\r' || ch == '\n') {
-					// ignore
-				}
-				else if (!inQuotes && ch == commandSeparatorChar) {
-					String statement = statementBuffer.toString().trim();
-					if (statement.length() > 0) {
-						statements.addObject(statement);
+
+			try {
+				String nextLine = reader.readLine();
+				while (nextLine != null) {
+					nextLine = nextLine.trim();
+					
+					// Skip blank lines and new lines starting with the comment pattern
+					if (nextLine.length() == 0 ||
+							(statementBuffer.length() == 0 && commentPattern.matcher(nextLine).find())) {
+						nextLine = reader.readLine();
+						continue;
 					}
-					statementBuffer.setLength(0);
-				}
-				else {
-					// Support for escaping apostrophes, e.g. 'Mike\'s Code' 
-					if (inQuotes && ch == '\\') {
-						statementBuffer.append(ch);
-						ch = sql.charAt(++ i);
+
+					// Determine if the line ends inside a single quoted string
+					int length = nextLine.length();
+					char ch = 0;
+					for (int i = 0; i < length; i++) {
+						ch = nextLine.charAt(i);
+						// Determine if we are in a quoted string, but ignore escaped apostrophes, e.g. 'Mike\'s Code' 
+						if (inQuotes && ch == '\\') {
+							i++;
+						}
+						else if (ch == '\'') {
+							inQuotes = !inQuotes;
+						}
 					}
-					else if (ch == '\'') {
-						inQuotes = !inQuotes;
+
+					// If we are not in a quoted string, either this is the end of the command or we need to 
+					// add some whitespace before the continuation of this command
+					statementBuffer.append(nextLine);		
+					if (!inQuotes) {
+						if (ch == commandSeparatorChar) {
+							statements.addObject(statementBuffer.toString());
+							statementBuffer.setLength(0);
+						}
+						else {
+							statementBuffer.append(' ');
+						}
 					}
-					statementBuffer.append(ch);
+					nextLine = reader.readLine();
 				}
 			}
-			String statement = statementBuffer.toString().trim();
-			if (statement.length() > 0) {
-				statements.addObject(statement);
+			catch (IOException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 		}
 		return statements;
@@ -1348,6 +1367,16 @@ public class ERXSQLHelper {
 		return ";" + lineSeparator;
 	}
 
+	/**
+	 * Returns a pattern than matches only blank lines.  Subclasses should implement this to return a pattern
+	 * matching the vendor specific comment indicator(s).
+	 * 
+	 * @return regex pattern that indicates this line is an SQL comment
+	 */
+	protected Pattern commentPattern() {
+		return Pattern.compile("^$");
+	}
+	
 	public NSMutableArray<String> columnNamesFromColumnIndexes(ColumnIndex... columnIndexes) {
 		NSMutableArray<String> columnNames = new NSMutableArray<String>();
 		for (ColumnIndex columnIndex : columnIndexes) {
@@ -1801,6 +1830,16 @@ public class ERXSQLHelper {
 				}
 			};
 			action.perform(ec, model.name());
+		}
+		
+
+		/**
+		 * Returns a pattern than matches lines that start with "--".
+		 * 
+		 * @return regex pattern that indicates this line is an SQL comment
+		 */
+		protected Pattern commentPattern() {
+			return Pattern.compile("^--");
 		}
 	}
 
