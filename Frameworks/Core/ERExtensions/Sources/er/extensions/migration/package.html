@@ -149,8 +149,6 @@ In my Properties file, I define the following:
 <pre>
 er.migration.migrateAtStartup=true 
 er.migration.createTablesIfNecessary=true 
-er.migration.modelNames=HotNewModel
-
 HotNewModel.MigrationClassPrefix=com.mdimension.hotnew.migration.HotNewModel 
 </pre>
 
@@ -179,15 +177,6 @@ run with multiple instances the first time you startup your app,
 because this table is used for locking across multiple instances. 
 </p>
 
-<h3>er.migration.modelNames</h3>
-<p>
-<em>er.migration.modelNames</em> defines the list of top level models to   
-migrate.  You do not need to list all the models here, only the top   
-level model.  Migrations will look for superclasses and relationships   
-to determine interdependent models that must be migrated first (along   
-with explicit model interdependencies you declare in your migration). 
-</p>
-
 <h3>[modelName].MigrationClassPrefix</h3>
 <p>
 Last but not least, the <em>MigrationClassPrefix</em>.  In this case, we have   
@@ -202,6 +191,9 @@ would declare the migration class prefixes for its own models in the
 framework Properties file, so the top level app Properties would only   
 define the app's model. 
 </p>
+
+<p>See the JavaDocs for ERXMigrator and ERXJDBCMigrationLock for more 
+properties controlling the migration process.</p>
 
 <h2>Java</h2>
 <p>
