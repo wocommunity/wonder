@@ -464,6 +464,26 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @return the fetch objects
      */
     protected NSArray<T> fetchObjectsForKey(EOEditingContext editingContext, Object key) {
+		EOQualifier qualifier = fetchObjectsQualifier(key);
+		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(_entityName, qualifier, null);
+		NSArray<T> objects = editingContext.objectsWithFetchSpecification(fetchSpec);
+		return objects;
+    }
+    
+    /**
+     * Returns the additional qualifier for this cache. 
+     * @return the additional qualifier for this cache
+     */
+    public EOQualifier qualifier() {
+    	return _qualifier;
+    }
+    
+    /**
+     * Returns the qualifier to use during for fetching.
+     * @param key the key to fetch
+     * @return the qualifier to use
+     */
+    protected EOQualifier fetchObjectsQualifier(Object key) {
 		EOQualifier qualifier;
 		if (_qualifier == null) {
 			qualifier = ERXQ.is(_keyPath, key);
@@ -471,9 +491,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 		else {
 			qualifier = ERXQ.is(_keyPath, key).and(_qualifier);
 		}
-		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(_entityName, qualifier, null);
-		NSArray<T> objects = editingContext.objectsWithFetchSpecification(fetchSpec);
-		return objects;
+		return qualifier;
     }
 
     /**
