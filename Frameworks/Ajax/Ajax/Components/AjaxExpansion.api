@@ -17,5 +17,6 @@
     
         <binding name="accesskey"/>
     <binding name="elementName"/>
+    <binding name="initiallyExpanded"/>
     </wo>
 </wodefinitions>
