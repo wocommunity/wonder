@@ -3,6 +3,7 @@ package er.extensions.appserver;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -249,6 +250,38 @@ public class ERXResponseRewriter {
 		return ERXResponseRewriter.insertInResponseBeforeTag(response, context, content, ERXResponseRewriter._htmlCloseHeadTag(), tagMissingBehavior);
 	}
 
+	/**
+	 * Replaces all occurrences of the given pattern in the response with the replacement string.
+	 * 
+	 * @param response the response
+	 * @param context the context
+	 * @param pattern the pattern to match
+	 * @param replacement the replacement value
+	 */
+	public static void replaceAllInResponse(WOResponse response, WOContext context, Pattern pattern, String replacement) {
+		String responseContent = response.contentString();
+		if (responseContent != null) {
+			String responseReplaced = pattern.matcher(responseContent).replaceAll(replacement);
+			response.setContent(responseReplaced);
+		}
+	}
+
+	/**
+	 * Replaces the first occurrence of the given pattern in the response with the replacement string.
+	 * 
+	 * @param response the response
+	 * @param context the context
+	 * @param pattern the pattern to match
+	 * @param replacement the replacement value
+	 */
+	public static void replaceFirstInResponse(WOResponse response, WOContext context, Pattern pattern, String replacement) {
+		String responseContent = response.contentString();
+		if (responseContent != null) {
+			String responseReplaced = pattern.matcher(responseContent).replaceFirst(replacement);
+			response.setContent(responseReplaced);
+		}
+	}
+	
 	/**
 	 * Utility to add the given content into the response before a particular
 	 * HTML tag.
