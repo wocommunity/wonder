@@ -154,6 +154,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Helper to check if an array of EOs contains the handled entity. 
      * @param dict 
      * @param key 
+     * @return the relevant changes for this cache
      */
     private NSArray<T> relevantChanges(NSDictionary dict, String key) {
     	NSMutableArray<T> releventEOs = null;
@@ -226,6 +227,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * The key path which should get used for the key of the cache.
+     * @return the cache keypath
      */
     protected String keyPath() {
         return _keyPath;
@@ -233,6 +235,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 
     /**
      * Returns the backing cache. If the cache is to old, it is cleared first.
+     * @return the backing cache
      */
     protected synchronized ERXExpiringCache<Object, EORecord<T>> cache() {
         long now = System.currentTimeMillis();
@@ -285,6 +288,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Returns the objects to cache initially.
      * @param ec
+     * @return the initial objects for the cache
      */
     protected NSArray<T> initialObjects(EOEditingContext ec) {
         NSArray objects = EOUtilities.objectsForEntityNamed(ec, entityName());
@@ -369,6 +373,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * is in the cache.
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
+     * @return the matching object
      */
     public T objectForKey(EOEditingContext ec, Object key) {
     	return objectForKey(ec, key, true);
@@ -380,6 +385,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
      * @param handleUnsuccessfulQueryForKey if false, a cache miss returns null rather than fetching
+     * @return the matching object
      */
     public T objectForKey(EOEditingContext ec, Object key, boolean handleUnsuccessfulQueryForKey) {
         ERXExpiringCache<Object, EORecord<T>> cache = cache();
@@ -422,18 +428,10 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     protected void handleUnsuccessfullQueryForKey(Object key) {
     	if (!_fetchInitialValues) {
-            ERXEC ec = editingContext();
-        	ec.lock();
+            ERXEC editingContext = editingContext();
+        	editingContext.lock();
         	try {
-    			EOQualifier qualifier;
-    			if (_qualifier == null) {
-    				qualifier = ERXQ.is(_keyPath, key);
-    			}
-    			else {
-    				qualifier = ERXQ.is(_keyPath, key).and(_qualifier);
-    			}
-    			ERXFetchSpecification fetchSpec = new ERXFetchSpecification(_entityName, qualifier, null);
-    			NSArray<T> objects = ec.objectsWithFetchSpecification(fetchSpec);
+        		NSArray<T> objects = fetchObjectsForKey(editingContext, key);
     			if (objects.count() == 0) {
     				cache().setObjectForKey(createRecord(NO_GID_MARKER, null), key);
     			}
@@ -442,19 +440,40 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         			addObject(eo);
     			}
     			else {
-    				throw new EOUtilities.MoreThanOneException("There was more than one " + _entityName + " matching the qualifier '" + qualifier + "'.");
+    				throw new EOUtilities.MoreThanOneException("There was more than one " + _entityName + " with the key '" + key + "'.");
     			}
         	}
         	finally {
-        		ec.unlock();
+        		editingContext.unlock();
         		if (!_reuseEditingContext) {
-        			ec.dispose();
+        			editingContext.dispose();
         		}
         	}
     	}
     	else {
     		cache().setObjectForKey(createRecord(NO_GID_MARKER, null), key);
     	}
+    }
+    
+    /**
+     * Actually performs a fetch for the given key. Override this method to implement
+     * custom fetch rules.
+     * 
+     * @param editingContext the editingcontext to fetch in
+     * @param key the key to fetch with
+     * @return the fetch objects
+     */
+    protected NSArray<T> fetchObjectsForKey(EOEditingContext editingContext, Object key) {
+		EOQualifier qualifier;
+		if (_qualifier == null) {
+			qualifier = ERXQ.is(_keyPath, key);
+		}
+		else {
+			qualifier = ERXQ.is(_keyPath, key).and(_qualifier);
+		}
+		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(_entityName, qualifier, null);
+		NSArray<T> objects = editingContext.objectsWithFetchSpecification(fetchSpec);
+		return objects;
     }
 
     /**
@@ -521,7 +540,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     	public EOGlobalID gid;
     	public T eo;
     	
-    	public EORecord(EOGlobalID gid, T eo) {
+    	public EORecord(@SuppressWarnings("hiding") EOGlobalID gid, @SuppressWarnings("hiding") T eo) {
     		this.gid = gid;
     		this.eo = eo;
     	}
