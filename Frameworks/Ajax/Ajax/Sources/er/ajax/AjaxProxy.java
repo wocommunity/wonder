@@ -78,10 +78,10 @@ import er.ajax.json.JSONBridge;
  * object will be created and pushed to the binding so that this new object can be shared 
  * for multiple proxy.
  * 
- * @author Jean-Fran�ois Veillette <jfveillette@os.ca>
+ * @author Jean-François Veillette <jfveillette@os.ca>
  * @version $Revision $, $Date $ <br>
  *          &copy; 2005-2006 OS communications informatiques, inc. http://www.os.ca
- *          Tous droits r�serv�s.
+ *          Tous droits réservés.
  */
 public class AjaxProxy extends AjaxComponent {
 
