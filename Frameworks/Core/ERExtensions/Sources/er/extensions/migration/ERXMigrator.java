@@ -137,7 +137,7 @@ public class ERXMigrator {
 	private String _lockOwnerName;
 
 	/**
-	 * Costructs an ERXMigrator with the given lock owner. For an application,
+	 * Constructs an ERXMigrator with the given lock owner. For an application,
 	 * the lock owner name defaults to appname-instancenumber.
 	 * 
 	 * @param lockOwnerName
@@ -190,27 +190,33 @@ public class ERXMigrator {
 			ERXModelVersion modelVersion = migrations.get(migration);
 			EOModel model = modelVersion.model();
 			IERXMigrationLock migrationLock = databaseLockForModel(model);
-			EOEditingContext editingContext = ERXEC.newEditingContext();
-			ERXMigrationAction migrationAction = new ERXMigrationAction(editingContext, migration, modelVersion, migrationLock, _lockOwnerName, postMigrations);
+			EOEditingContext editingContext = newEditingContext();
+			editingContext.lock();
 			try {
-				ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(model);
+				ERXMigrationAction migrationAction = new ERXMigrationAction(editingContext, migration, modelVersion, migrationLock, _lockOwnerName, postMigrations);
 				try {
-					helper.prepareConnectionForSchemaChange(editingContext, model);
-					migrationAction.perform(editingContext, model.name());
+					ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(model);
+					try {
+						helper.prepareConnectionForSchemaChange(editingContext, model);
+						migrationAction.perform(editingContext, model.name());
+					}
+					finally {
+						helper.restoreConnectionSettingsAfterSchemaChange(editingContext, model);
+					}
 				}
-				finally {
-					helper.restoreConnectionSettingsAfterSchemaChange(editingContext, model);
+				catch (ERXMigrationFailedException e) {
+					throw e;
 				}
+				catch (EOGeneralAdaptorException t) {
+	    			new ERXJDBCConnectionAnalyzer(model.connectionDictionary());
+					throw new ERXMigrationFailedException("Failed to migrate model '" + model.name() + "'.", t);
+				}
+				catch (Throwable t) {
+					throw new ERXMigrationFailedException("Failed to migrate model '" + model.name() + "'.", t);
+				}				
 			}
-			catch (ERXMigrationFailedException e) {
-				throw e;
-			}
-			catch (EOGeneralAdaptorException t) {
-    			new ERXJDBCConnectionAnalyzer(model.connectionDictionary());
-				throw new ERXMigrationFailedException("Failed to migrate model '" + model.name() + "'.", t);
-			}
-			catch (Throwable t) {
-				throw new ERXMigrationFailedException("Failed to migrate model '" + model.name() + "'.", t);
+			finally {
+				editingContext.unlock();
 			}
 		}
 
@@ -218,13 +224,19 @@ public class ERXMigrator {
 		while (postMigrationsIter.hasNext()) {
 			IERXPostMigration postMigration = postMigrationsIter.next();
 			ERXModelVersion modelVersion = postMigrations.get(postMigration);
-			EOEditingContext editingContext = ERXEC.newEditingContext();
+			EOEditingContext editingContext = newEditingContext();
+			editingContext.lock();
 			try {
-				postMigration.postUpgrade(editingContext, modelVersion.model());
-				editingContext.saveChanges();
+				try {
+					postMigration.postUpgrade(editingContext, modelVersion.model());
+					editingContext.saveChanges();
+				}
+				catch (Throwable t) {
+					throw new ERXMigrationFailedException("Failed on post migrations for model '" + modelVersion.model().name() + "'.", t);
+				}	
 			}
-			catch (Throwable t) {
-				throw new ERXMigrationFailedException("Failed on post migrations for model '" + modelVersion.model().name() + "'.", t);
+			finally {
+				editingContext.unlock();
 			}
 		}
 	}
@@ -359,6 +371,15 @@ public class ERXMigrator {
 		}
 	}
 
+	/**
+	 * Subclasses can override this to return a different editing context.
+	 * 
+	 * @return EOEditingContext to be used for migration
+	 */
+	protected EOEditingContext newEditingContext() {
+		return ERXEC.newEditingContext();
+	}
+	
 	/**
 	 * ModelVersion represents a particular version of an EOModel.
 	 * 
