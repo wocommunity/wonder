@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
 
 /**
  * ERXMutableURL provides a mutable model of a URL, including support for
@@ -535,36 +534,7 @@ public class ERXMutableURL {
 			if (_host != null || _path != null) {
 				sb.append('?');
 			}
-			try {
-				Iterator<Map.Entry<String, List<String>>> queryParameterIter = _queryParameters.entrySet().iterator();
-				while (queryParameterIter.hasNext()) {
-					Map.Entry<String, List<String>> queryParameter = queryParameterIter.next();
-					String key = queryParameter.getKey();
-					Iterator<String> valuesIter = queryParameter.getValue().iterator();
-					if (!valuesIter.hasNext()) {
-						sb.append(URLEncoder.encode(key, "UTF-8"));
-					}
-					while (valuesIter.hasNext()) {
-						String value = valuesIter.next();
-						sb.append(URLEncoder.encode(key, "UTF-8"));
-						if (value != null) {
-							if (key.length() > 0) {
-								sb.append('=');
-							}
-							sb.append(URLEncoder.encode(value, "UTF-8"));
-						}
-						if (valuesIter.hasNext()) {
-							sb.append('&');
-						}
-					}
-					if (queryParameterIter.hasNext()) {
-						sb.append('&');
-					}
-				}
-			}
-			catch (UnsupportedEncodingException e) {
-				throw new RuntimeException("Every VM is supposed to support UTF-8 encoding.", e);
-			}
+			queryParametersAsString(sb);
 		}
 		if (_ref != null) {
 			sb.append('#');
@@ -573,6 +543,50 @@ public class ERXMutableURL {
 		return sb.toString();
 	}
 
+	/**
+	 * Returns the query parameters of this URL as a String (in x=y&a=b syntax).
+	 * 
+	 * @return the query parameters of this URL as a String
+	 */
+	public String queryParametersAsString() {
+		StringBuffer sb = new StringBuffer();
+		queryParametersAsString(sb);
+		return sb.toString();
+	}
+	
+	protected void queryParametersAsString(StringBuffer sb) {
+		try {
+			Iterator<Map.Entry<String, List<String>>> queryParameterIter = _queryParameters.entrySet().iterator();
+			while (queryParameterIter.hasNext()) {
+				Map.Entry<String, List<String>> queryParameter = queryParameterIter.next();
+				String key = queryParameter.getKey();
+				Iterator<String> valuesIter = queryParameter.getValue().iterator();
+				if (!valuesIter.hasNext()) {
+					sb.append(URLEncoder.encode(key, "UTF-8"));
+				}
+				while (valuesIter.hasNext()) {
+					String value = valuesIter.next();
+					sb.append(URLEncoder.encode(key, "UTF-8"));
+					if (value != null) {
+						if (key.length() > 0) {
+							sb.append('=');
+						}
+						sb.append(URLEncoder.encode(value, "UTF-8"));
+					}
+					if (valuesIter.hasNext()) {
+						sb.append('&');
+					}
+				}
+				if (queryParameterIter.hasNext()) {
+					sb.append('&');
+				}
+			}
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Every VM is supposed to support UTF-8 encoding.", e);
+		}
+	}
+	
 	/**
 	 * Returns a java.net.URL object of this URL (which might fail if you have a
 	 * relative URL).
