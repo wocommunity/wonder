@@ -7,5 +7,6 @@
         <binding name="key"/>
         <binding name="media"/>
     	<binding defaults="Boolean" name="inline"/>
+    <binding defaults="Boolean" name="generateCompleteURLs"/>
     </wo>
 </wodefinitions>
