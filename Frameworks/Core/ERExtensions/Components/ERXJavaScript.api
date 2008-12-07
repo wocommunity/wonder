@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo wocomponentcontent="true" class="ERXJavaScript.java">
+        <wo class="ERXJavaScript.java" wocomponentcontent="true">
 		<binding name="scriptSource"/>
 		<binding name="scriptFile"/>
 		<binding name="filename"/>
@@ -9,5 +9,6 @@
 		<binding name="framework"/>
 		<binding name="scriptString"/>
 		<binding name="hideInComment"/>
-        </wo>
+        <binding defaults="Boolean" name="generateCompleteURLs"/>
+    </wo>
 </wodefinitions>

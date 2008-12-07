@@ -217,6 +217,38 @@ public class ERXResourceManager extends WOResourceManager {
 	}
 
 	/**
+	 * Returns whether or not complete resource URLs should be generated.
+	 * @param context the context
+	 * @return whether or not complete resource URLs should be generated
+	 */
+	public static boolean _shouldGenerateCompleteResourceURL(WOContext context) {
+		return ((ERXWOContext)context)._generatingCompleteURLs() && !ERXApplication.erxApplication().rewriteDirectConnectURL();
+	}
+	
+ 	/**
+	 * Returns a fully qualified URL for the given partial resource URL (i.e. turns /whatever into http://server/whatever). 
+	 * @param url the partial resource URL
+	 * @param context the current context
+	 * @return the complete URL
+	 */
+	public static String _completeURLForResource(String url, WOContext context) {
+		String completeUrl;
+		boolean secure = ERXRequest.isRequestSecure(context.request());
+		if ((secure && ERXProperties.stringForKey("er.extensions.ERXResourceManager.secureResourceUrlPrefix") == null) || (!secure && ERXProperties.stringForKey("er.extensions.ERXResourceManager.resourceUrlPrefix") == null)) {
+			StringBuffer sb = new StringBuffer();
+			String serverPortStr = context.request()._serverPort();
+			int serverPort = (serverPortStr == null) ? 0 : Integer.parseInt(serverPortStr); 
+			((ERXRequest) context.request())._completeURLPrefix(sb, secure, serverPort);
+			sb.append(url);
+			completeUrl = sb.toString();
+		}
+		else {
+			completeUrl = url;
+		}
+		return completeUrl;
+	}
+	
+	/**
 	 * IVersionManager provides an interface for adding version numbers to
 	 * WebServerResources. This allows you to turn on "infinite" expiration
 	 * dates in mod_expires, and instead control reloading by changing the
