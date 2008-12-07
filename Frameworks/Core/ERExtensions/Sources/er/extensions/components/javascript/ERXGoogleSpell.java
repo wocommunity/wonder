@@ -197,7 +197,11 @@ public class ERXGoogleSpell {
 					Node correctionNode = correctionNodes.item(correctionNum);
 					if (correctionNode instanceof Element) {
 						Element correctionElement = (Element) correctionNode;
-						String correctionsStr = correctionElement.getChildNodes().item(0).getNodeValue();
+						String correctionsStr = "";
+						Node correctionsNodeItem = correctionElement.getChildNodes().item(0);
+						if (correctionsNodeItem != null) {
+							correctionsStr = correctionsNodeItem.getNodeValue();
+						}
 						int offset = Integer.parseInt(correctionElement.getAttribute("o"));
 						int length = Integer.parseInt(correctionElement.getAttribute("l"));
 						int confidence = Integer.parseInt(correctionElement.getAttribute("s"));
