@@ -29,7 +29,7 @@ public class ERXGoogleSpell {
 	}
 
 	/**
-	 * Corrects the spelling of the given text (language = "en").
+	 * Corrects the spelling of the given text (language = "en", escaping XML).
 	 * 
 	 * @param text
 	 *            the misspelled text
@@ -42,7 +42,7 @@ public class ERXGoogleSpell {
 	}
 
 	/**
-	 * Corrects the spelling of the given text.
+	 * Corrects the spelling of the given text (escaping XML).
 	 * 
 	 * @param text
 	 *            the misspelled text
@@ -57,7 +57,7 @@ public class ERXGoogleSpell {
 	}
 
 	/**
-	 * Corrects the spelling of the given text.
+	 * Corrects the spelling of the given text (escaping XML).
 	 * 
 	 * @param text
 	 *            the misspelled text
@@ -70,7 +70,25 @@ public class ERXGoogleSpell {
 	 *             if there is a problem correcting the text
 	 */
 	public static String correct(String text, String lang, String hl) throws CorrectionException {
-		Correction[] corrections = ERXGoogleSpell.suggestions(text, lang, hl);
+		return ERXGoogleSpell.correct(text, lang, hl, true);
+	}
+	
+	/**
+	 * Corrects the spelling of the given text.
+	 * 
+	 * @param text
+	 *            the misspelled text
+	 * @param lang
+	 *            the language of the text
+	 * @param hl
+	 *            the human interface language
+	 * @param escapeXml if true, xml characters in the text will be escaped
+	 * @return the corrected text
+	 * @throws CorrectionException
+	 *             if there is a problem correcting the text
+	 */
+	public static String correct(String text, String lang, String hl, boolean escapeXml) throws CorrectionException {
+		Correction[] corrections = ERXGoogleSpell.suggestions(text, lang, hl, escapeXml);
 		int lastOffset = 0;
 		StringBuffer buffer = new StringBuffer();
 		for (int correctionNum = 0; correctionNum < corrections.length; correctionNum++) {
@@ -89,7 +107,7 @@ public class ERXGoogleSpell {
 	}
 
 	/**
-	 * Returns possible spelling corrections of the given text (language = "en").
+	 * Returns possible spelling corrections of the given text (language = "en", escaping XML).
 	 * 
 	 * @param text
 	 *            the misspelled text
@@ -102,7 +120,7 @@ public class ERXGoogleSpell {
 	}
 
 	/**
-	 * Returns possible spelling corrections of the given text.
+	 * Returns possible spelling corrections of the given text (escaping XML).
 	 * 
 	 * @param text
 	 *            the misspelled text
@@ -117,7 +135,7 @@ public class ERXGoogleSpell {
 	}
 
 	/**
-	 * Returns possible spelling corrections of the given text.
+	 * Returns possible spelling corrections of the given text (escaping XML).
 	 * 
 	 * @param text
 	 *            the misspelled text
@@ -130,10 +148,33 @@ public class ERXGoogleSpell {
 	 *             if there is a problem correcting the text
 	 */
 	public static Correction[] suggestions(String text, String lang, String hl) throws CorrectionException {
+		return ERXGoogleSpell.suggestions(text, lang, hl, true);
+	}
+	
+	/**
+	 * Returns possible spelling corrections of the given text.
+	 * 
+	 * @param text
+	 *            the misspelled text
+	 * @param lang
+	 *            the language of the text
+	 * @param hl
+	 *            the human interface language
+	 * @param escapeXml if true, xml characters in the text will be escaped
+	 * @return the list of suggested corrections
+	 * @throws CorrectionException
+	 *             if there is a problem correcting the text
+	 */
+	public static Correction[] suggestions(String text, String lang, String hl, boolean escapeXml) throws CorrectionException {
 		try {
 			StringBuffer request = new StringBuffer();
 			request.append("<spellrequest textalreadyclipped=\"0\" ignoredups=\"1\" ignoredigits=\"1\" ignoreallcaps=\"0\"><text>");
-			request.append(ERXStringUtilities.escapeNonXMLChars(text));
+			if (escapeXml) {
+				request.append(ERXStringUtilities.escapeNonXMLChars(text));
+			}
+			else {
+				request.append(text);
+			}
 			request.append("</text></spellrequest>");
 
 			URL url = new URL("https://www.google.com/tbproxy/spell?lang=" + lang + "&hl=" + hl);
