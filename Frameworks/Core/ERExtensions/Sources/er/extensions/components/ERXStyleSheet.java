@@ -43,7 +43,6 @@ import er.extensions.foundation.ERXStringUtilities;
  *          when false it'll be placed in the head of the page, when unset it
  *          will be placed inline for ajax requests and in the head for regular
  *          requests
- * @binding generateCompleteURLs if true, resource URL generation respects context._generatingCompleteURLs
  * @property er.extensions.ERXStyleSheet.xhtml (defaults true) if false, link
  *           tags are not closed, which is compatible with older HTML
  */
@@ -103,12 +102,11 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			String name = styleSheetName();
 			if (name != null) {
 				url = application().resourceManager().urlForResourceNamed(styleSheetName(), styleSheetFrameworkName(), languages(), context().request());
-				if (booleanValueForBinding("generateCompleteURLs") && ERXResourceManager._shouldGenerateCompleteResourceURL(context())) {
-					url = ERXResourceManager._completeURLForResource(url, context());
+				if (ERXResourceManager._shouldGenerateCompleteResourceURL(context())) {
+					url = ERXResourceManager._completeURLForResource(url, null, context());
 				}
 			}
 		}
-		System.out.println("ERXStyleSheet.styleSheetUrl: " + url);
 		return url;
 	}
 

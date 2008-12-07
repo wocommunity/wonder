@@ -9,6 +9,6 @@
 		<binding name="framework"/>
 		<binding name="scriptString"/>
 		<binding name="hideInComment"/>
-        <binding defaults="Boolean" name="generateCompleteURLs"/>
+        
     </wo>
 </wodefinitions>

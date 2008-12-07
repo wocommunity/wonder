@@ -43,7 +43,6 @@ import er.extensions.foundation.ERXExpiringCache;
  * @binding scriptKey if set, the content will get rendered into an external script src
  * @binding hideInComment boolean that specifies if the script content should
  *   be included in HTML comments, true by default of the script tag contains a script
- * @binding generateCompleteURLs if true, resource URL generation respects context._generatingCompleteURLs
  */
 public class ERXJavaScript extends WOHTMLDynamicElement {
 
@@ -82,7 +81,6 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	WOAssociation _scriptKey;
 	WOAssociation _hideInComment;
 	WOAssociation _language;
-	WOAssociation _generateCompleteURLs;
 
 	public ERXJavaScript(String s, NSDictionary nsdictionary, WOElement woelement) {
 		super("script", nsdictionary, woelement);
@@ -95,7 +93,6 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		_hideInComment = (WOAssociation)_associations.removeObjectForKey("hideInComment");
 		_scriptFramework = (WOAssociation) _associations.removeObjectForKey("scriptFramework");
 		_framework = (WOAssociation) _associations.removeObjectForKey("framework");
-		_generateCompleteURLs = (WOAssociation) _associations.removeObjectForKey("generateCompleteURLs");
 		if((_scriptFile != null && _scriptString != null) 
 				|| (_scriptFile != null && (_scriptSource != null || _filename != null)) 
 				|| (_scriptString != null && (_scriptSource != null || _filename != null))) {
@@ -142,8 +139,8 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 						if(src == null) {
 							src = wocomponent.baseURL() + "/" + srcFromBindings;
 						}
-						else if (_generateCompleteURLs != null && _generateCompleteURLs.booleanValueInComponent(wocomponent) && ERXResourceManager._shouldGenerateCompleteResourceURL(wocontext)) {
-							src = ERXResourceManager._completeURLForResource(src, wocontext);
+						else if (ERXResourceManager._shouldGenerateCompleteResourceURL(wocontext)) {
+							src = ERXResourceManager._completeURLForResource(src, null, wocontext);
 						}
 					} else {
 						log.warn("relative fragment URL" + srcFromBindings);
@@ -213,8 +210,8 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 						throw new WODynamicElementCreationException("<" + getClass().getName() + "> : cannot find script file '" + filename + "'");
 					}
 					script = _NSStringUtilities.stringFromPathURL(url);
-					if (_generateCompleteURLs != null && _generateCompleteURLs.booleanValueInComponent(wocomponent) && ERXResourceManager._shouldGenerateCompleteResourceURL(wocontext)) {
-						script = ERXResourceManager._completeURLForResource(script, wocontext);
+					if (ERXResourceManager._shouldGenerateCompleteResourceURL(wocontext)) {
+						script = ERXResourceManager._completeURLForResource(script, null, wocontext);
 					}
 				}
 				woresponse.appendContentString(script);
