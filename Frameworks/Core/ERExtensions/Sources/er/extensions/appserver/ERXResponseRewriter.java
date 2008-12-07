@@ -626,11 +626,10 @@ public class ERXResponseRewriter {
 						languages = context.session().languages();
 					}
 					url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
-					if (ERXProperties.stringForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY) != null) {
-						StringBuffer urlBuffer = new StringBuffer();
-						context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY), 0);
-						urlBuffer.append(url);
-						url = urlBuffer.toString();
+					boolean generateCompleteResourceURLs = ERXResourceManager._shouldGenerateCompleteResourceURL(context);
+					boolean secureAllResources = ERXProperties.booleanForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY) && !ERXRequest.isRequestSecure(context.request());
+					if (generateCompleteResourceURLs || secureAllResources) {
+						url = ERXResourceManager._completeURLForResource(url, secureAllResources ? Boolean.TRUE : null, context);
 					}
 				}
 				String html = startTag + url + endTag + "\n";
