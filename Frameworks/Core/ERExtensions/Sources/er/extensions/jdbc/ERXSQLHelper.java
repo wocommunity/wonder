@@ -1475,6 +1475,9 @@ public class ERXSQLHelper {
 						else if (databaseProductName.equalsIgnoreCase("derby")) {
 							sqlHelper = new DerbySQLHelper();
 						}
+						else if (databaseProductName.equalsIgnoreCase("microsoft")) {
+							sqlHelper = new MicrosoftSQLHelper();
+						}
 						else {
 							try {
 								sqlHelper = (ERXSQLHelper) Class.forName(ERXSQLHelper.class.getName() + "$" + databaseProductName + "SQLHelper").newInstance();
@@ -1983,4 +1986,18 @@ public class ERXSQLHelper {
 		}
 
 	}
+	
+	
+	public static class MicrosoftSQLHelper extends ERXSQLHelper {
+
+		/**
+		 * Returns a pattern than matches lines that start with "--".
+		 * 
+		 * @return regex pattern that indicates this line is an SQL comment
+		 */
+		protected Pattern commentPattern() {
+			return Pattern.compile("^--");
+		}
+	}
+
 }
