@@ -49,6 +49,7 @@ TabLink: WOHyperlink {
 
 TabName: WOString {
 	value = currentTabName;
+	escapeHTML = false;
 }
 
 Tabs: WORepetition {
