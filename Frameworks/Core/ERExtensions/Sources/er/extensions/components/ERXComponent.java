@@ -103,8 +103,12 @@ public abstract class ERXComponent extends WOComponent {
 		
 		boolean clickToOpenEnabled = clickToOpenEnabled(response, context); 
 		ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
-		super.appendToResponse(response, context);
-		ERXClickToOpenSupport.postProcessResponse(getClass(), response, context, clickToOpenEnabled);
+		try {
+			super.appendToResponse(response, context);
+		}
+		finally {
+			ERXClickToOpenSupport.postProcessResponse(getClass(), response, context, clickToOpenEnabled);
+		}
 		
 		postAppendToResponse(response, context);
 
