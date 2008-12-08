@@ -7,11 +7,11 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXMutableDictionary;
 import er.extensions.foundation.ERXSimpleTemplateParser;
 
@@ -49,7 +49,7 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
 public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 	public static Logger log = Logger.getLogger(ERXInlineTemplate.class);
 
-	private static final String ERROR_TEMPLATE_DEFAULT = "<div class=\"ERXInlineTemplateError\" style=\"background-color: #faa; border: 2px dotted red;\"><b>ERROR in ERXInlineTemplate.@@method@@</b><br />@@message@@</div>";
+	private static final String ERROR_TEMPLATE_DEFAULT = "<div class=\"ERXInlineTemplateError\" style=\"background-color: #faa; border: 2px dotted red;\">@@message@@</div>";
 
 	private static final String ERROR_TEMPLATE_BINDING = "errorTemplate";
 
@@ -259,11 +259,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		}
 
 		public String message() {
-			if (_t.getMessage() == null && _t instanceof NSForwardException) {
-				NSForwardException e = (NSForwardException) _t;
-				_t = e.originalException();
-			}
-			String s = _t.getMessage();
+			String s = ERXExceptionUtilities.toParagraph(_t);
 			if (s != null) {
 				s = s.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br />");
 			}
