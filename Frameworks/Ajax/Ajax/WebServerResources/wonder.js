@@ -993,6 +993,10 @@ var AjaxModalDialog = {
 	
 	close: function() {
 		Modalbox.hide();
+	},
+	
+	open: function(id) {
+		eval("openAMD_" + id + "()");
 	}
 };
 var AMD = AjaxModalDialog;
