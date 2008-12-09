@@ -120,11 +120,28 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private static boolean wasERXApplicationMainInvoked = false;
 
 	/**
-	 * Notification to get posted when we can an OutOfMemoryError. You should
-	 * register your caching classes for this notification so you can release
+	 * Notification to get posted when we get an OutOfMemoryError or when memory passes
+	 * the low memory threshold set in er.extensions.ERXApplication.memoryLowThreshold. 
+	 * You should register your caching classes for this notification so you can release
 	 * memory. Registration should happen at launch time.
 	 */
 	public static final String LowMemoryNotification = "LowMemoryNotification";
+
+	/**
+	 * Notification to get posted when we have recovered from a LowMemory condition.
+	 */
+	public static final String LowMemoryResolvedNotification = "LowMemoryResolvedNotification";
+
+	/**
+	 * Notification to get posted when we are on the brink of running out of memory.  By
+	 * default, sessions will begin to be refused when this happens as well.
+	 */
+	public static final String StarvedMemoryNotification = "StarvedMemoryNotification";
+
+	/**
+	 * Notification to get posted when we have recovered from a StarvedMemory condition.
+	 */
+	public static final String StarvedMemoryResolvedNotification = "StarvedMemoryResolvedNotification";
 
 	/**
 	 * Buffer we reserve lowMemBufSize KB to release when we get an
@@ -169,19 +186,25 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Holds the value of the property
-	 * er.extensions.ERXApplication.memoryThreshold
+	 * er.extensions.ERXApplication.memoryStarvedThreshold
 	 */
-	protected BigDecimal memoryThreshold;
+	protected BigDecimal _memoryStarvedThreshold;
+
+	/**
+	 * Holds the value of the property
+	 * er.extensions.ERXApplication.memoryLowThreshold
+	 */
+	protected BigDecimal _memoryLowThreshold;
 	
 	/**
 	 * The path rewriting pattern to match (@see _rewriteURL)
 	 */
-	protected String replaceApplicationPathPattern;
+	protected String _replaceApplicationPathPattern;
 	
 	/**
 	 * The path rewriting replacement to apply to the matched pattern (@see _rewriteURL) 
 	 */
-	protected String replaceApplicationPathReplace;
+	protected String _replaceApplicationPathReplace;
 
 	/**
 	 * Copies the props from the command line to the static dict
@@ -880,18 +903,20 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// instance to a port
 		EOTemporaryGlobalID._setProcessIdentificationBytesFromInt(port().intValue());
 
-		memoryThreshold = ERXProperties.bigDecimalForKey("er.extensions.ERXApplication.memoryThreshold");
+		_memoryStarvedThreshold = ERXProperties.bigDecimalForKey("er.extensions.ERXApplication.memoryThreshold"); // MS: Kept around for backwards compat, replaced by memoryStarvedThreshold now
+		_memoryStarvedThreshold = ERXProperties.bigDecimalForKeyWithDefault("er.extensions.ERXApplication.memoryStarvedThreshold", _memoryStarvedThreshold);
+		_memoryLowThreshold = ERXProperties.bigDecimalForKeyWithDefault("er.extensions.ERXApplication.memoryLowThreshold", _memoryLowThreshold);
 		
-	    replaceApplicationPathPattern = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.pattern");
-	    if (replaceApplicationPathPattern != null && replaceApplicationPathPattern.length() == 0) {
-	    	replaceApplicationPathPattern = null;
+	    _replaceApplicationPathPattern = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.pattern");
+	    if (_replaceApplicationPathPattern != null && _replaceApplicationPathPattern.length() == 0) {
+	    	_replaceApplicationPathPattern = null;
 	    }
-	    replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
+	    _replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
 	    
-	    if (replaceApplicationPathPattern == null && rewriteDirectConnectURL()) {
-	    	replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + ".woa";
-	        if (replaceApplicationPathReplace == null) {
-	        	replaceApplicationPathReplace = "";
+	    if (_replaceApplicationPathPattern == null && rewriteDirectConnectURL()) {
+	    	_replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + ".woa";
+	        if (_replaceApplicationPathReplace == null) {
+	        	_replaceApplicationPathReplace = "";
 	        }
 	    }
 	}
@@ -1166,11 +1191,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return super._componentDefinition(s, nsarray);
 	}
 	
+	private boolean _isMemoryLow = false;
 	private boolean _isMemoryStarved = false;
 	
 	/**
+	 * <p>
 	 * Checks if the free memory is less than the threshold given in
-	 * <code>er.extensions.ERXApplication.memoryThreshold</code> (should be
+	 * <code>er.extensions.ERXApplication.memoryStarvedThreshold</code> (should be
 	 * set to around 0.90 meaning 90% of total memory or 100 meaning 100 MB of
 	 * minimal available memory) and if it is greater start to refuse new
 	 * sessions until more memory becomes available. This helps when the
@@ -1178,21 +1205,59 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * collecting than processing requests. The default is to do nothing unless
 	 * the property is set. This method is called on each request, but garbage
 	 * collection will be done only every minute.
+	 * </p>
+	 * 
+	 * <p>
+	 * Additionally, you can set <code>er.extensions.ERXApplication.memoryLowThreshold</code>, which
+	 * you can set at a higher "warning" level, before the situation is critical.
+	 * </p>
+	 * 
+	 * <p>
+	 * Both of these methods post notifications both at the start of the event as well as the end
+	 * of the event (LowMemoryNotification/LowMemoryResolvedNotification and StarvedMemoryNotification
+	 * and StarvedMemoryResolvedNotification). 
+	 * </p>
 	 * 
 	 * @author ak
 	 */
-	
 	protected void checkMemory() {
+		boolean memoryLow = checkMemory(_memoryLowThreshold, false);
+		if(memoryLow != _isMemoryLow) {
+			if(!memoryLow) {
+				log.warn("App is no longer low on memory");
+				NSNotificationCenter.defaultCenter().postNotification(new NSNotification(LowMemoryResolvedNotification, this));
+			} else {
+				log.error("App is low on memory");
+				NSNotificationCenter.defaultCenter().postNotification(new NSNotification(LowMemoryNotification, this));
+			}
+			_isMemoryLow = memoryLow;
+		}
+		
+		boolean memoryStarved = checkMemory(_memoryStarvedThreshold, true);
+		if(memoryStarved != _isMemoryStarved) {
+			if(!memoryStarved) {
+				log.warn("App is no longer starved, handling new sessions again");
+				NSNotificationCenter.defaultCenter().postNotification(new NSNotification(StarvedMemoryResolvedNotification, this));
+			} else {
+				log.error("App is starved, starting to refuse new sessions");
+				NSNotificationCenter.defaultCenter().postNotification(new NSNotification(StarvedMemoryNotification, this));
+			}
+			_isMemoryStarved = memoryStarved;
+		}
+	}
+	
+	protected boolean checkMemory(BigDecimal memoryThreshold, boolean attemptGC) {
+		boolean pastThreshold = false;
 		if (memoryThreshold != null) {
 			long max = Runtime.getRuntime().maxMemory();
 			long total = Runtime.getRuntime().totalMemory();
 			long free = Runtime.getRuntime().freeMemory() + (max - total);
 			long used = max - free;
-			long threshold = (long) (memoryThreshold.doubleValue() < 1.0 ? memoryThreshold.doubleValue() * max : (max - (memoryThreshold.doubleValue() * 1024 * 1024)));
+			long starvedThreshold = (long) (memoryThreshold.doubleValue() < 1.0 ? memoryThreshold.doubleValue() * max : (max - (memoryThreshold.doubleValue() * 1024 * 1024)));
 
 			synchronized (this) {
 				long time = System.currentTimeMillis();
-				if ((used > threshold) && (time > _lastGC + 60 * 1000L)) {
+				if (attemptGC && (used > starvedThreshold) && (time > _lastGC + 60 * 1000L)) {
 					_lastGC = time;
 					Runtime.getRuntime().gc();
 					max = Runtime.getRuntime().maxMemory();
@@ -1200,17 +1265,19 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					free = Runtime.getRuntime().freeMemory() + (max - total);
 					used = max - free;
 				}
-				boolean isStarved = (used > threshold);
-				if(isStarved != _isMemoryStarved) {
-					if(!isStarved) {
-						log.warn("App is no longer starved, handling new sessions again");
-					} else {
-						log.error("App is starved, starting to refuse new sessions");
-					}
-					_isMemoryStarved = isStarved;
-				}
+				pastThreshold = (used > starvedThreshold);
 			}
 		}
+		return pastThreshold;
+	}
+	
+	/**
+	 * Override and return false if you do not want sessions to be refused when memory is starved.
+	 * 
+	 * @return whether or not sessions should be refused on starved memory
+	 */
+	protected boolean refuseSessionsOnStarvedMemory() {
+		return true;
 	}
 	
 	/**
@@ -1218,7 +1285,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	@Override
 	public boolean isRefusingNewSessions() {
-		return super.isRefusingNewSessions() || _isMemoryStarved;
+		return super.isRefusingNewSessions() || (refuseSessionsOnStarvedMemory() && _isMemoryStarved);
 	}
 
 	/**
@@ -2012,8 +2079,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public String _rewriteURL(String url) {
 	    String processedURL = url;
-	    if (url != null && replaceApplicationPathPattern != null && replaceApplicationPathReplace != null) {
-	      processedURL = processedURL.replaceFirst(replaceApplicationPathPattern, replaceApplicationPathReplace);
+	    if (url != null && _replaceApplicationPathPattern != null && _replaceApplicationPathReplace != null) {
+	      processedURL = processedURL.replaceFirst(_replaceApplicationPathPattern, _replaceApplicationPathReplace);
 	    }
 		return processedURL;
 	}
