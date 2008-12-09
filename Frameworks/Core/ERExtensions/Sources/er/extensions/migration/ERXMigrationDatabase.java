@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.eof.ERXModelGroup;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.jdbc.ERXJDBCUtilities;
 
 /**
  * <p>
@@ -289,7 +290,25 @@ public class ERXMigrationDatabase {
 	public void _tableDropped(ERXMigrationTable table) {
 		_tables.removeObject(table);
 	}
+	
+	/**
+	 * @see #productName()
+	 * @param name name of database to match productName()
+	 * @return <code>true</code> if productName().equals(name)
+	 */
+	public boolean is(String name) {
+		return productName().equals(name);
+	}
 
+	/**
+	 * @see ERXJDBCUtilities#databaseProductName(EOAdaptorChannel)
+	 * @return database product name
+	 */
+	public String productName() {
+		return ERXJDBCUtilities.databaseProductName(adaptorChannel());	
+	}
+	
+	
 	/**
 	 * Returns an ERXMigrationDatabase for the given EOAdaptorChannel. This will
 	 * return a new ERXMigrationDatabase for every call, so if you need to
