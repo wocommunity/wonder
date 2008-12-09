@@ -340,6 +340,18 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.QualifierOperatorCaseInsensitiveLike, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyValueQualifier
+	 */
+	public ERXKeyValueQualifier ilike(String value) {
+		return ERXQ.likeInsensitive(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorEqual, null);
 	 * 
 	 * @return an ERXKeyValueQualifier
