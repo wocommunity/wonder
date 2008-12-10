@@ -29,6 +29,7 @@ import er.extensions.appserver.ERXResponseRewriter.TagMissingBehavior;
 import er.extensions.appserver.ajax.ERXAjaxContext;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXMutableUserInfoHolderInterface;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXSelectorUtilities;
 import er.extensions.foundation.ERXStringUtilities;
@@ -201,11 +202,30 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		return mutableUserInfo();
 	}
 
+	/**
+	 * If er.extensions.ERXWOContext.forceRemoveApplicationNumber is true, then always remove the 
+	 * application number from the generated URLs.  You have to be aware of how your app is written
+	 * to know if this is something you can do without causing problems.  For instance, you MUST be
+	 * using cookies, and you must not use WOImages with data bindings -- anything that requires a 
+	 * per-instance cache has the potential to fail when this is enabled (if you have more than
+	 * one instance of your app deployed). 
+	 */
+	protected void _preprocessURL() {
+		if (ERXProperties.booleanForKey("er.extensions.ERXWOContext.forceRemoveApplicationNumber")) {
+			_url().setApplicationNumber(null);
+		}
+	}
+
+	protected String _postprocessURL(String url) {
+		return ERXApplication.erxApplication()._rewriteURL(url);
+	}
+	
 	@Override
 	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean secure) {
+		_preprocessURL();
 		String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
 		if (!ERXApplication.isWO54()) {
-			url = ERXApplication.erxApplication()._rewriteURL(url);
+			url = _postprocessURL(url);
 		}
 		return url;
 	}
