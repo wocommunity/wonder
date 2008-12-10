@@ -11,7 +11,7 @@ public class ERXWOContext54 extends ERXWOContext {
 	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean isSecure, int somePort) {
 		_preprocessURL();
 		String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, isSecure, somePort);
-		_postprocessURL();
+		url = _postprocessURL(url);
 		return url;
 	}
 }
