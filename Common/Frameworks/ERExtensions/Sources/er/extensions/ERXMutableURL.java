@@ -43,6 +43,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param url
 	 *            the URL to copy data from
+	 * @throws MalformedURLException if the URL is invalid
 	 */
 	public ERXMutableURL(URL url) throws MalformedURLException {
 		this();
@@ -55,6 +56,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param str
 	 *            a URL external form
+	 * @throws MalformedURLException if the URL is invalid
 	 */
 	public ERXMutableURL(String str) throws MalformedURLException {
 		this();
@@ -245,6 +247,19 @@ public class ERXMutableURL {
 	 */
 	public synchronized void setQueryParameters(String queryParameters) throws MalformedURLException {
 		clearQueryParameters();
+		addQueryParameters(queryParameters);
+	}
+	
+	/**
+	 * Appends the query parameters of this URL with the given k=v&k2=v2 format
+	 * string.
+	 * 
+	 * @param queryParameters
+	 *            the query parameters
+	 * @throws MalformedURLException
+	 *             if the string is malformed
+	 */
+	public synchronized void addQueryParameters(String queryParameters) throws MalformedURLException {
 		if (queryParameters != null) {
 			StringTokenizer queryStringTokenizer = new StringTokenizer(queryParameters, "&");
 			while (queryStringTokenizer.hasMoreTokens()) {
@@ -497,43 +512,29 @@ public class ERXMutableURL {
 			sb.append(_host);
 		}
 		if (_port != null) {
-			sb.append(':');
-			sb.append(_port);
+			boolean includePort = true;
+			if ("http".equalsIgnoreCase(_protocol) && Integer.valueOf(80).equals(_port)) {
+				includePort = false;
+			}
+			else if ("https".equalsIgnoreCase(_protocol) && Integer.valueOf(443).equals(_port)) {
+				includePort = false;
+			}
+			if (includePort) {
+				sb.append(':');
+				sb.append(_port);
+			}
 		}
 		if (_path != null) {
+			if (!_path.startsWith("/")) {
+				sb.append("/");
+			}
 			sb.append(_path);
 		}
 		if (_queryParameters != null && !_queryParameters.isEmpty()) {
 			if (_host != null || _path != null) {
 				sb.append('?');
 			}
-			try {
-				Iterator<Map.Entry<String, List<String>>> queryParameterIter = _queryParameters.entrySet().iterator();
-				while (queryParameterIter.hasNext()) {
-					Map.Entry<String, List<String>> queryParameter = queryParameterIter.next();
-					String key = queryParameter.getKey();
-					Iterator<String> valuesIter = queryParameter.getValue().iterator();
-					while (valuesIter.hasNext()) {
-						String value = valuesIter.next();
-						sb.append(URLEncoder.encode(key, "UTF-8"));
-						if (value != null) {
-							if (key.length() > 0) {
-								sb.append('=');
-							}
-							sb.append(URLEncoder.encode(value, "UTF-8"));
-						}
-						if (valuesIter.hasNext()) {
-							sb.append('&');
-						}
-					}
-					if (queryParameterIter.hasNext()) {
-						sb.append('&');
-					}
-				}
-			}
-			catch (UnsupportedEncodingException e) {
-				throw new RuntimeException("Every VM is supposed to support UTF-8 encoding.", e);
-			}
+			queryParametersAsString(sb);
 		}
 		if (_ref != null) {
 			sb.append('#');
@@ -542,6 +543,50 @@ public class ERXMutableURL {
 		return sb.toString();
 	}
 
+	/**
+	 * Returns the query parameters of this URL as a String (in x=y&a=b syntax).
+	 * 
+	 * @return the query parameters of this URL as a String
+	 */
+	public String queryParametersAsString() {
+		StringBuffer sb = new StringBuffer();
+		queryParametersAsString(sb);
+		return sb.toString();
+	}
+	
+	protected void queryParametersAsString(StringBuffer sb) {
+		try {
+			Iterator<Map.Entry<String, List<String>>> queryParameterIter = _queryParameters.entrySet().iterator();
+			while (queryParameterIter.hasNext()) {
+				Map.Entry<String, List<String>> queryParameter = queryParameterIter.next();
+				String key = queryParameter.getKey();
+				Iterator<String> valuesIter = queryParameter.getValue().iterator();
+				if (!valuesIter.hasNext()) {
+					sb.append(URLEncoder.encode(key, "UTF-8"));
+				}
+				while (valuesIter.hasNext()) {
+					String value = valuesIter.next();
+					sb.append(URLEncoder.encode(key, "UTF-8"));
+					if (value != null) {
+						if (key.length() > 0) {
+							sb.append('=');
+						}
+						sb.append(URLEncoder.encode(value, "UTF-8"));
+					}
+					if (valuesIter.hasNext()) {
+						sb.append('&');
+					}
+				}
+				if (queryParameterIter.hasNext()) {
+					sb.append('&');
+				}
+			}
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Every VM is supposed to support UTF-8 encoding.", e);
+		}
+	}
+	
 	/**
 	 * Returns a java.net.URL object of this URL (which might fail if you have a
 	 * relative URL).

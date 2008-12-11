@@ -308,9 +308,11 @@ Modalbox.Methods = {
 			this._setWidth();
 			this.MBcontent.setStyle({overflow: 'auto', height: $(this.MBwindow).getHeight() - $(this.MBheader).getHeight() - 13 + 'px'});
 			this.MBcontent.show();
-			this.focusableElements = this._findFocusableElements();
-			this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
 			setTimeout(function(){ // MSIE fix
+				// MS: moved this code inside the setTimeout to compute focusable elements after a delay .. fixes bug in FireFox
+				this.focusableElements = this._findFocusableElements();
+				this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
+				
 				if(callback != undefined)
 					callback(); // Executing internal JS from loaded content
 				this.event("afterLoad"); // Passing callback
@@ -475,7 +477,10 @@ Modalbox.Methods = {
 	},
 	
 	_setWidth: function () { //Set size
-		$(this.MBwindow).setStyle({width: this.options.width + "px", height: this.options.height + "px"});
+		// MS: Add support for -1 width/height
+		var widthStyle = (this.options.width == -1) ? "auto" : (this.options.width + "px"); 
+		var heightStyle = (this.options.height == -1) ? "auto" : (this.options.height + "px");
+		$(this.MBwindow).setStyle({width: widthStyle, height: heightStyle});
 	},
 	
 	_setPosition: function () {

@@ -34,9 +34,10 @@ import er.extensions.ERXResponseRewriter.TagMissingBehavior;
 public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHolderInterface {
 	private static Observer observer;
 	private boolean _generateCompleteURLs;
+	private boolean _generateCompleteResourceURLs;
 
 	public static final String CONTEXT_KEY = "wocontext";
-	private static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
+	public static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
 
 	public static class Observer {
 		public void applicationDidHandleRequest(NSNotification n) {
@@ -107,13 +108,37 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	/**
 	 * Implemented so the the thread checks if it should get interrupted.
 	 * 
-	 * @param eoadaptorchannel
-	 * @param nsmutabledictionary
+	 * @param wocomponent
 	 */
 	@Override
 	public void _setCurrentComponent(WOComponent wocomponent) {
 		ERXRuntimeUtilities.checkThreadInterrupt();
 		super._setCurrentComponent(wocomponent);
+	}
+
+	@Override
+	public Object clone() {
+		ERXWOContext context = (ERXWOContext)super.clone();
+		context._setGenerateCompleteResourceURLs(_generateCompleteResourceURLs);
+		return context;
+	}
+	
+	/**
+	 * Turn on complete resource URL generation.
+	 * 
+	 * @param generateCompleteResourceURLs if true, resources will generate complete URLs.
+	 */
+	public void _setGenerateCompleteResourceURLs(boolean generateCompleteResourceURLs) {
+		_generateCompleteResourceURLs = generateCompleteResourceURLs;
+	}
+
+	/**
+	 * Returns whether or not resources generate complete URLs.
+	 * 
+	 * @return whether or not resources generate complete URLs
+	 */
+	public boolean _generatingCompleteResourceURLs() {
+		return _generateCompleteResourceURLs;
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import org.jabsorb.serializer.UnmarshallException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
@@ -286,8 +287,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return whether or not a new entity can be inserted.
-	 * @param eo
-	 * @return
+	 * @param entityName
 	 */
 	protected boolean _canInsert(String entityName) {
 		return ERXProperties.booleanForKeyWithDefault("er.ajax.json." + entityName + ".canInsert", false);
@@ -296,7 +296,6 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * Override to return the appropriate attribute names.
 	 * @param eo
-	 * @return
 	 */
 	protected NSArray _readableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.readableAttributeNames(eo);
@@ -305,7 +304,6 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * Override to return the appropriate attribute names.
 	 * @param eo
-	 * @return
 	 */
 	protected NSArray _writableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.writableAttributeNames(eo);
@@ -314,7 +312,6 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * Override to return the appropriate relationship names.
 	 * @param eo
-	 * @return
 	 */
 	protected NSArray _includedRelationshipNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.includedRelationshipNames(eo);
@@ -436,7 +433,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	@SuppressWarnings("unchecked")
 	public static Map<EOEditingContext, String> contexts() {
 		Map<EOEditingContext, String> contexts;
-		ERXSession session = ERXSession.session();
+		WOSession session = ERXSession.anySession();
 		if (session == null) {
 			contexts = _contexts;
 		}

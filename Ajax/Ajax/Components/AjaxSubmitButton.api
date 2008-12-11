@@ -18,7 +18,9 @@
 		<binding name="formSerializer"/>
 		<binding name="functionName"/>
 		<binding name="updateContainerID"/>
+		<binding name="requestFailureUpdateContainerID"/>
 		<binding name="showUI"/>
+		<binding defaults="Boolean" name="evalScripts"/>
 		
 		<binding name="insertion"/>
 		<binding name="insertionDuration"/>
@@ -26,11 +28,15 @@
 		<binding name="afterInsertionDuration"/>
 		
 		<binding name="effect"/>
-    <binding name="beforeEffect"/>
+    	<binding name="beforeEffect"/>
 		<binding name="beforeEffectID"/>
 		<binding name="beforeEffectDuration"/>
 		<binding name="afterEffect"/>
 		<binding name="afterEffectID"/>
+
+		<binding name="elementName"/>
+   		<binding defaults="Boolean" name="asynchronous"/>
+    	<binding name="accesskey"/>
     
     <validation message="'effect' and 'onSuccess' cannot both be bound.">
 	    <bound name="effect"/>
@@ -41,8 +47,5 @@
 	    <bound name="effect"/>
 	    <unbound name="updateContainerID"/>
     </validation>
-	<binding name="elementName"/>
-    <binding defaults="Boolean" name="asynchronous"/>
-    <binding name="accesskey"/>
     </wo>
 </wodefinitions>

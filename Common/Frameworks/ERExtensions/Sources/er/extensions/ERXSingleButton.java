@@ -6,12 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 // A Submit button that can be used stand alone.
 /**
  * A stand alone submit button to be used as an action button.<br />
- * 
+ * Useful for cancel buttons which should not submit the page and create all the validation messages.
+ * Can also create its own FORM, so you can drop it anywhere.
  * @binding action
  * @binding value
  * @binding doNotUseForm" defaults="Boolean
@@ -49,8 +53,33 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
         return result;
     }
 
+    public String buttonCssClass() {
+    	String css = (String) valueForBinding("css");
+    	if(css == null) {
+    		css = "";
+    	}
+    	WOAssociation assoc = _associationWithName("action");
+    	if(assoc != null) {
+    		css += " " + ERXSubmitButton.STYLE_PREFIX + assoc.keyPath().replaceAll("\\W+", "");
+    	} else {
+    		css += " " + ERXSubmitButton.STYLE_PREFIX + valueForBinding("directActionName");
+    	}
+    	if(css.length() == 0) {
+    		css = null;
+    	}
+    	return css;
+    }
+
+    public boolean useButton() {
+    	return ERXPatcher.classForName("WOSubmitButton").equals(ERXSubmitButton.class);
+    }
     
-    
+    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+    	if(useButton()) {
+    		ERXSubmitButton.appendIEButtonFixToResponse(aContext, aResponse);
+    	}
+    	super.appendToResponse(aResponse, aContext);
+    }
 
     // determines wether the form this component is in (wether it was output by this component or not
     // has to be submitted or can be bypassed

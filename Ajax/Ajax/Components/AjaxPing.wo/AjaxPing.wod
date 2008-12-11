@@ -22,3 +22,8 @@ PingUpdate : AjaxPingUpdate {
 Frequency : WOString {
 	value = frequency;
 }
+
+Running : WOConditional {
+	condition = ^stop;
+	negate = true;
+}

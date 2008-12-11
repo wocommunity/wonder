@@ -7,7 +7,9 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * @deprecated use AjaxModelContainer
+ * @see AjaxModelContainer
+ * @see AjaxModalDialog
+ * @deprecated use AjaxModelContainer or AjaxModalDialog
  */
 public class AjaxIBoxComponentContent extends AjaxModalContainer {
 

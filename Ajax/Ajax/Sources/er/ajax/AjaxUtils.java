@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXRedirect;
 import er.extensions.ERXResourceManager;
 import er.extensions.ERXResponseRewriter;
 import er.extensions.ERXWOContext;
@@ -56,7 +57,7 @@ public class AjaxUtils {
 	 */
 	public static AjaxResponse createResponse(WORequest request, WOContext context) {
 		AjaxResponse response = null;
-		if (context != null) {
+		if (context != null && context.response() != null) {
 			WOResponse existingResponse = context.response();
 			if (existingResponse instanceof AjaxResponse) {
 				response = (AjaxResponse) existingResponse;
@@ -437,4 +438,17 @@ public class AjaxUtils {
 		}
 	}
 
+	/**
+	 * Creates (or modifies if already created) an AjaxResponse to redirect to the passed component with a component action.
+	 * Anything previously written to the AjaxResponse is preserved.
+	 *
+	 * @param component full page WOComponent instance to redirect to
+	 */
+	public static void redirectTo(WOComponent component) {
+		WOContext context = component.context();
+        	ERXRedirect redirect = (ERXRedirect)component.pageWithName(ERXRedirect.class.getName());
+        	redirect.setComponent(component);
+        	redirect.appendToResponse(AjaxUtils.createResponse(context.request(), context), context);
+	}
+	
 }

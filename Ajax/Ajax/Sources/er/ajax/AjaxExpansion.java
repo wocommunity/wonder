@@ -28,6 +28,7 @@ import er.extensions.ERXWOContext;
  * @binding class the class of the contents div
  * @binding linkClass the class of the toggle link (always gets "expansion" added, and "expanded" when opened)
  * @binding expanded optionally allows controlling the expansion state of the contents
+ * @binding initiallyExpanded optionally allows controlling the initial expansion state when the "expanded" binding is NOT used
  * @binding string the string displayed for the link. For something fancier than a plain string, see above.
  * @binding insertion the insertion effect (see AjaxUpdateLink)
  * @binding insertionDuration the insertion effect duration (see AjaxUpdateLink)
@@ -100,7 +101,7 @@ public class AjaxExpansion extends AjaxComponent {
 		}
 		else {
 			if (_expanded == null) {
-				_expanded = Boolean.FALSE;
+				_expanded = Boolean.valueOf(booleanValueForBinding("initiallyExpanded", false));
 			}
 			expanded = _expanded.booleanValue();
 		}

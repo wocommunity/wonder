@@ -37,6 +37,7 @@ public class ERXAjaxSession extends WOSession {
    * between the two frameworks independent.
    */
   public static final String DONT_STORE_PAGE = "erxsession.dont_store_page";
+  public static final String FORCE_STORE_PAGE = "erxsession.force_store_page";
 
   /**
    * Key that is used to specify that a page should go in the replacement cache instead of

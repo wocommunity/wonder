@@ -1,6 +1,6 @@
 // $wi = the Wonder "lookup by ID" function
 var $wi = $;
-
+ 
 Object.extend(Prototype, {
   exec: (function(){
     var script, scriptId = '__prototype_exec_script',
@@ -386,6 +386,7 @@ var AjaxSubmitButton = {
 				processedOptions['_asbn'] = null;
 				var parameters = processedOptions['parameters'];
 				if (parameters === undefined || parameters == null) {
+					$(form).fire('ajax:submit');
 					var formSerializer = processedOptions['_fs'];
 					if (formSerializer == null) {
 						formSerializer = Form.serializeWithoutSubmits;
@@ -992,6 +993,10 @@ var AjaxModalDialog = {
 	
 	close: function() {
 		Modalbox.hide();
+	},
+	
+	open: function(id) {
+		eval("openAMD_" + id + "()");
 	}
 };
 var AMD = AjaxModalDialog;

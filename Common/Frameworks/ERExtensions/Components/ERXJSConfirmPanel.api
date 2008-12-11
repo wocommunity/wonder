@@ -1,16 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
 	<wo class="ERXJSConfirmPanel" wocomponentcontent="false">
 
 		<binding name="hyperlinkMessage"/>
 		<binding name="action"/>
-
-		<validation message="&apos;hyperlinkMessage&apos; is a required binding">
-			<unbound name="hyperlinkMessage"/>
-		</validation>
-
-		<validation message="&apos;action&apos; is a required binding">
+		<validation message="'action' is a required binding">
 			<unbound name="action"/>
 		</validation>
-	</wo>
+	<binding name="confirmMessage"/>
+        <validation message="'confirmMessage' is a required binding.">
+            <unbound name="confirmMessage"/>
+        </validation>
+    <binding name="title"/>
+        <binding name="class"/>
+        <binding name="style"/>
+        <binding name="disabled"/>
+    </wo>
 </wodefinitions>

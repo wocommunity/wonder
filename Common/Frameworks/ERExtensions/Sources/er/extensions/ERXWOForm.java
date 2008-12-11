@@ -67,6 +67,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	WOAssociation _fragmentIdentifier;
 	WOAssociation _secure;
 	WOAssociation _disabled;
+	WOAssociation _id;
 
 	protected WOAssociation _action;
 	protected WOAssociation _href;
@@ -79,10 +80,11 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
 	public static boolean multipleSubmitDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.multipleSubmitDefault", false);
 	public static boolean addDefaultSubmitButtonDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.addDefaultSubmitButtonDefault", false);
+	public static boolean useIdInsteadOfNameTag = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.useIdInsteadOfNameTag", false);
 
 	@SuppressWarnings("unchecked")
-	public ERXWOForm(String s, NSDictionary nsdictionary, WOElement woelement) {
-		super("form", nsdictionary, woelement);
+	public ERXWOForm(String name, NSDictionary associations, WOElement element) {
+		super("form", associations, element);
 		_otherQueryAssociations = _NSDictionaryUtilities.extractObjectsForKeysWithPrefix(_associations, "?", true);
 		if (_otherQueryAssociations.count() == 0) {
 			_otherQueryAssociations = null;
@@ -90,13 +92,18 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		_action = (WOAssociation) _associations.removeObjectForKey("action");
 		_href = (WOAssociation) _associations.removeObjectForKey("href");
 		_multipleSubmit = (WOAssociation) _associations.removeObjectForKey("multipleSubmit");
-		if (_multipleSubmit == null && multipleSubmitDefault) {
+		if (_multipleSubmit == null && ERXWOForm.multipleSubmitDefault) {
 			_multipleSubmit = new WOConstantValueAssociation(Boolean.valueOf(multipleSubmitDefault));
 		}
 		_actionClass = (WOAssociation) _associations.removeObjectForKey("actionClass");
 		_queryDictionary = (WOAssociation) _associations.removeObjectForKey("queryDictionary");
 		_directActionName = (WOAssociation) _associations.removeObjectForKey("directActionName");
 		_formName = (WOAssociation) _associations.removeObjectForKey("name");
+		_id = (WOAssociation) associations.objectForKey("id");
+		if (ERXWOForm.useIdInsteadOfNameTag && _id != null) {
+			_formName = _id;	// id takes precedence over name - then subsequently written as id
+			_id = null;
+		}
 		_enctype = (WOAssociation) _associations.removeObjectForKey("enctype");
 		_fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
 		_secure = (WOAssociation) _associations.removeObjectForKey("secure");
@@ -115,7 +122,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
 	@Override
 	public String toString() {
-		return "<" + getClass().getName() + " action: " + (_action == null ? "null" : _action.toString()) + " actionClass: " + (_actionClass == null ? "null" : _actionClass.toString()) + " directActionName: " + (_directActionName == null ? "null" : _directActionName.toString()) + " href: " + (_href == null ? "null" : _href.toString()) + " multipleSubmit: " + (_multipleSubmit == null ? "null" : _multipleSubmit.toString()) + " queryDictionary: " + (_queryDictionary == null ? "null" : _queryDictionary.toString()) + " otherQueryAssociations: " + (_otherQueryAssociations == null ? "null" : _otherQueryAssociations.toString()) + " >";
+		return "<" + getClass().getName() + " name: " + (_formName == null ? "null" : _formName.toString()) + " id: " + (_id == null ? "null" : _id.toString()) + " action: " + (_action == null ? "null" : _action.toString()) + " actionClass: " + (_actionClass == null ? "null" : _actionClass.toString()) + " directActionName: " + (_directActionName == null ? "null" : _directActionName.toString()) + " href: " + (_href == null ? "null" : _href.toString()) + " multipleSubmit: " + (_multipleSubmit == null ? "null" : _multipleSubmit.toString()) + " queryDictionary: " + (_queryDictionary == null ? "null" : _queryDictionary.toString()) + " otherQueryAssociations: " + (_otherQueryAssociations == null ? "null" : _otherQueryAssociations.toString()) + " >";
 	}
 
 	protected boolean _enterFormInContext(WOContext context) {
@@ -222,15 +229,15 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		NSDictionary hiddenFields;
 		if (ERXApplication.isWO54()) {
 			try {
-				Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, WOContext.class });
-				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, context });
+				Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, boolean.class, WOContext.class });
+				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, false, context });
 			}
-			catch (Exception e) {
+			catch (Throwable ex1) {
 				try {
-					Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, boolean.class, WOContext.class });
-					hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, false, context });
+					Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, WOContext.class });
+					hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, context });
 				}
-				catch (Exception ex1) {
+				catch (Throwable e) {
 					throw new RuntimeException("computeQueryDictionaryInContext failed.", ex1);
 				}
 			}
@@ -248,10 +255,10 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			for (Enumeration enumeration = hiddenFields.keyEnumerator(); enumeration.hasMoreElements();) {
 				String s = (String) enumeration.nextElement();
 				Object obj = hiddenFields.objectForKey(s);
-				response._appendContentAsciiString("<input type=\"hidden\"");
+				response._appendContentAsciiString("<div><input type=\"hidden\"");
 				response._appendTagAttributeAndValue("name", s, false);
 				response._appendTagAttributeAndValue("value", obj.toString(), false);
-				response._appendContentAsciiString(" />\n");
+				response._appendContentAsciiString(" /></div>\n");
 			}
 
 		}
@@ -333,7 +340,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		String formName = _formName(context);
 		if (formName != null) {
-			response._appendTagAttributeAndValue("name", formName, false);
+			response._appendTagAttributeAndValue(ERXWOForm.useIdInsteadOfNameTag ? "id" : "name", formName, false);
 		}
 		String enctype = _enctype(context);
 		if (enctype != null) {
@@ -403,9 +410,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 					ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
 					boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("522") > 0);
 					if(useDisplayNone) {
-						response._appendContentAsciiString("<input type=\"submit\" style=\"position: absolute; left: -10000px; display: none;\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" />");
+						response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; display: none;\"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
 					} else {
-						response._appendContentAsciiString("<input type=\"submit\" style=\"position: absolute; left: -10000px; \" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" />");
+						response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; \"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
 					}
 				}
 			}
@@ -417,7 +424,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		}
 		else {
 			if (!_disabled(context)) {
-				log.warn("This form is embedded inside another form, so the inner form is being omitted: " + this.toString());
+				log.warn("This form is embedded inside another form, so the inner form with these bindings is being omitted: " + this.toString());
+				log.warn("    page: " + context.page());
+				log.warn("    component: " + context.component());
 			}
 			appendChildrenToResponse(response, context);
 		}

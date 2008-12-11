@@ -3,6 +3,7 @@ package er.extensions;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -244,6 +245,38 @@ public class ERXResponseRewriter {
 		return ERXResponseRewriter.insertInResponseBeforeTag(response, context, content, ERXResponseRewriter._htmlCloseHeadTag(), tagMissingBehavior);
 	}
 
+	/**
+	 * Replaces all occurrences of the given pattern in the response with the replacement string.
+	 * 
+	 * @param response the response
+	 * @param context the context
+	 * @param pattern the pattern to match
+	 * @param replacement the replacement value
+	 */
+	public static void replaceAllInResponse(WOResponse response, WOContext context, Pattern pattern, String replacement) {
+		String responseContent = response.contentString();
+		if (responseContent != null) {
+			String responseReplaced = pattern.matcher(responseContent).replaceAll(replacement);
+			response.setContent(responseReplaced);
+		}
+	}
+
+	/**
+	 * Replaces the first occurrence of the given pattern in the response with the replacement string.
+	 * 
+	 * @param response the response
+	 * @param context the context
+	 * @param pattern the pattern to match
+	 * @param replacement the replacement value
+	 */
+	public static void replaceFirstInResponse(WOResponse response, WOContext context, Pattern pattern, String replacement) {
+		String responseContent = response.contentString();
+		if (responseContent != null) {
+			String responseReplaced = pattern.matcher(responseContent).replaceFirst(replacement);
+			response.setContent(responseReplaced);
+		}
+	}
+	
 	/**
 	 * Utility to add the given content into the response before a particular
 	 * HTML tag.
@@ -539,6 +572,8 @@ public class ERXResponseRewriter {
 	 * present in the response.
 	 * 
 	 * @param response
+	 * @param context 
+	 * @param framework 
 	 * @param fileName
 	 * @param startTag
 	 * @param endTag
@@ -550,6 +585,14 @@ public class ERXResponseRewriter {
 	 */
 	public static boolean addResourceInHead(WOResponse response, WOContext context, String framework, String fileName, String startTag, String endTag, String fallbackStartTag, String fallbackEndTag, TagMissingBehavior tagMissingBehavior) {
 		boolean inserted = true;
+		
+		String replacementResourceStr = ERXProperties.stringForKey("er.extensions.ERXResponseRewriter.resource." + framework + "." + fileName);
+		if (replacementResourceStr != null) {
+			int dotIndex = replacementResourceStr.indexOf('.');
+			framework = replacementResourceStr.substring(0, dotIndex);
+			fileName = replacementResourceStr.substring(dotIndex + 1);
+		}
+		
 		if (!ERXResponseRewriter.isResourceAddedToHead(context, framework, fileName) && (_delagate == null || _delagate.responseRewriterShouldAddResource(framework, fileName))) {
 			boolean insert = true;
 			
@@ -578,11 +621,10 @@ public class ERXResponseRewriter {
 						languages = context.session().languages();
 					}
 					url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
-					if (ERXProperties.stringForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY) != null) {
-						StringBuffer urlBuffer = new StringBuffer();
-						context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY), 0);
-						urlBuffer.append(url);
-						url = urlBuffer.toString();
+					boolean generateCompleteResourceURLs = ERXResourceManager._shouldGenerateCompleteResourceURL(context);
+					boolean secureAllResources = ERXProperties.booleanForKey(ERXResponseRewriter.SECURE_RESOURCES_KEY) && !ERXRequest.isRequestSecure(context.request());
+					if (generateCompleteResourceURLs || secureAllResources) {
+						url = ERXResourceManager._completeURLForResource(url, secureAllResources ? Boolean.TRUE : null, context);
 					}
 				}
 				String html = startTag + url + endTag + "\n";

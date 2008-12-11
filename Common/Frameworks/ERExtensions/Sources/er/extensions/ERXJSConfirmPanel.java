@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 // Stateless confirm panel
 /**
@@ -15,6 +15,12 @@ import com.webobjects.appserver.WOComponent;
  * 
  * @binding hyperlinkMessage
  * @binding action
+ * @binding confirmMessage
+ * @binding title title of the link
+ * @binding id id of the link
+ * @binding class class of the link
+ * @binding style style of the link
+ * @binding disabled whether or not this link is disabled
  */
 
 public class ERXJSConfirmPanel extends WOComponent {

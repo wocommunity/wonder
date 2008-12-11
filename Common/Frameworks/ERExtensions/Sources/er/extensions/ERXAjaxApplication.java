@@ -20,6 +20,7 @@ import com.webobjects.foundation.NSLog;
 public abstract class ERXAjaxApplication extends WOApplication {
 	public static final String KEY_AJAX_SUBMIT_BUTTON = "AJAX_SUBMIT_BUTTON_NAME";
 	public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
+	public static final String KEY_UPDATE_CONTAINER_ID = "__updateID";
 
 	private ERXAjaxResponseDelegate _responseDelegate;
 
@@ -71,6 +72,21 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		return results;
 	}
 
+	public static void setForceStorePage(WOMessage message) {
+		ERXWOContext.contextDictionary().setObjectForKey(Boolean.TRUE, ERXAjaxSession.FORCE_STORE_PAGE);
+	}
+	
+	/**
+	 * Checks if the page should not be stored in the cache
+	 */
+	public static boolean forceStorePage(WOMessage message) {
+		NSDictionary userInfo = NSDictionary.EmptyDictionary;
+		if (message != null) {
+			userInfo = ERXWOContext.contextDictionary();
+		}
+		return (message != null && (message.headerForKey(ERXAjaxSession.FORCE_STORE_PAGE) != null || (userInfo.objectForKey(ERXAjaxSession.FORCE_STORE_PAGE) != null)));
+	}
+
 	/**
 	 * Checks if the page should not be stored in the cache
 	 */
@@ -105,7 +121,7 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		// page structure changes such that the form that
 		// is being submitted to is hidden, it ends up not notifying the system
 		// not to cache the page.
-		boolean shouldNotStorePage = (shouldNotStorePage(response) || shouldNotStorePage(request) || isAjaxSubmit(request));
+		boolean shouldNotStorePage = (shouldNotStorePage(response) || shouldNotStorePage(request) || isAjaxSubmit(request)) && !forceStorePage(response);
 		return shouldNotStorePage;
 	}
 

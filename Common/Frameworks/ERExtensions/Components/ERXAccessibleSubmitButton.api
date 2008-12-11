@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERXAccessibleSubmitButton" wocomponentcontent="true">
+
+		<binding name="action"/>
+		<binding name="value"/>
+		<binding name="id"/>
+		<binding name="class"/>
+		<binding name="actionClass"/>
+		<binding name="directActionName"/>
+		<binding name="shouldSubmitForm" defaults="Boolean"/>
+		<binding name="accesskey"/>
+		<binding name="accesskeyElement"/>
+	</wo>
+</wodefinitions>

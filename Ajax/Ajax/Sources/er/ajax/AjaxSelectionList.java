@@ -20,7 +20,8 @@ import er.extensions.ERXComponentUtilities;
  * enter key), and an item being deleted (with the delete key).
  * 
  * @author mschrag
- * @binding elementName (optional) the type of element for the wrapper (ul, ol, table)
+ * @binding elementName (optional) the type of the list element inside the selection list (ul, ol, table)
+ * @binding elementName (optional) the type of element for the wrapper (default to "a" to support tabbing, but presents some styling complexities in IE)
  * @binding list (required) the list to render
  * @binding item (required) bound for each item of the list
  * @binding selection (optional) the current selection
@@ -49,6 +50,10 @@ public class AjaxSelectionList extends AjaxComponent {
 		return false;
 	}
 
+	public String containerElementName() {
+		return (String) valueForBinding("containerElementName", "a");
+	}
+	
 	public void setItem(Object item) {
 		if (item instanceof NSKeyValueCoding.Null) {
 			setValueForBinding(null, "item");
@@ -68,8 +73,9 @@ public class AjaxSelectionList extends AjaxComponent {
 	}
 
 	public NSArray list() {
-		if (_list == null) {
-			_list = (NSArray) valueForBinding("list");
+	  NSArray list = (NSArray) valueForBinding("list");
+		if (_list == null || !_list.equals(list)) {
+		  _list = list;
 			if (!ERXComponentUtilities.booleanValueForBinding(this, "mandatory", true)) {
 				NSMutableArray optionList = _list.mutableClone();
 				optionList.insertObjectAtIndex(NSKeyValueCoding.NullValue, 0);

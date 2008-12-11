@@ -93,6 +93,9 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			String name = styleSheetName();
 			if (name != null) {
 				url = application().resourceManager().urlForResourceNamed(styleSheetName(), styleSheetFrameworkName(), languages(), context().request());
+				if (ERXResourceManager._shouldGenerateCompleteResourceURL(context())) {
+					url = ERXResourceManager._completeURLForResource(url, null, context());
+				}
 			}
 		}
 		return url;

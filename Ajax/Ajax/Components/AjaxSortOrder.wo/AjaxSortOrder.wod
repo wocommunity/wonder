@@ -1,0 +1,39 @@
+Conditional1: WOConditional {
+	condition = hasCustomImageSrcForCurrentState;
+}
+
+Conditional2: WOConditional {
+	condition = hasCustomImageSrcForCurrentState;
+	negate = true;
+}
+
+ToggleSubmit : AjaxSubmitButton {
+	action = toggleClicked;
+	button = false;
+	updateContainerID = ^updateContainerID;
+}
+
+ToggleImage: WOImage {
+	align = "ABSMIDDLE";
+	alt = helpString;
+	border = 0;
+	src = customImageSrcForCurrentState;
+	height = 11;
+	width = 9;
+}
+
+ToggleSubmit2 : AjaxSubmitButton {
+	action = toggleClicked;
+	button = false;
+	updateContainerID = ^updateContainerID;
+}
+
+ToggleImage2: WOImage {
+	align = "ABSMIDDLE";
+	alt = helpString;
+	border = 0;
+	height = 11;
+	width = 9;
+	filename = imageNameForCurrentState;
+	framework = frameworkName;
+}

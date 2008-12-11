@@ -153,12 +153,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * The path rewriting pattern to match (@see _rewriteURL)
 	 */
-	protected String replaceApplicationPathPattern;
+	protected String _replaceApplicationPathPattern;
 	
 	/**
 	 * The path rewriting replacement to apply to the matched pattern (@see _rewriteURL) 
 	 */
-	protected String replaceApplicationPathReplace;
+	protected String _replaceApplicationPathReplace;
 
 	private static Properties readProperties(File file) {
 		Properties result = null;
@@ -367,11 +367,18 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		memoryThreshold = ERXProperties.bigDecimalForKey("er.extensions.ERXApplication.memoryThreshold");
 		
-	    replaceApplicationPathPattern = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.pattern");
-	    if (replaceApplicationPathPattern != null && replaceApplicationPathPattern.length() == 0) {
-	    	replaceApplicationPathPattern = null;
+	    _replaceApplicationPathPattern = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.pattern");
+	    if (_replaceApplicationPathPattern != null && _replaceApplicationPathPattern.length() == 0) {
+	    	_replaceApplicationPathPattern = null;
 	    }
-	    replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
+	    _replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
+	    
+	    if (_replaceApplicationPathPattern == null && rewriteDirectConnectURL()) {
+	    	_replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + ".woa";
+	        if (_replaceApplicationPathReplace == null) {
+	        	_replaceApplicationPathReplace = "";
+	        }
+	    }
 	}
 
 	/**
@@ -559,7 +566,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			someHeaders = someHeaders.mutableClone();
 			((NSMutableDictionary)someHeaders).removeObjectForKey("content-type");
 		}
-		
+
+		if (rewriteDirectConnectURL()) {
+			aURL = "/cgi-bin/WebObjects/" + name() + ".woa" + aURL;
+		}
+
 		WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
 		return worequest;
 	}
@@ -1429,10 +1440,31 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public String _rewriteURL(String url) {
 	    String processedURL = url;
-	    if (url != null && replaceApplicationPathPattern != null && replaceApplicationPathReplace != null) {
-	      processedURL = processedURL.replaceFirst(replaceApplicationPathPattern, replaceApplicationPathReplace);
+	    if (url != null && _replaceApplicationPathPattern != null && _replaceApplicationPathReplace != null) {
+	      processedURL = processedURL.replaceFirst(_replaceApplicationPathPattern, _replaceApplicationPathReplace);
 	    }
 		return processedURL;
+	}
+
+	/**
+	 * Returns whether or not to rewrite direct connect URLs.
+	 * 
+	 * @return whether or not to rewrite direct connect URLs
+	 */
+	public boolean rewriteDirectConnectURL() {
+		return isDirectConnectEnabled() && !isCachingEnabled() && isDevelopmentMode() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.rewriteDirectConnect", false);
+	}
+
+	/**
+	 * Returns the directConnecURL, optionally rewritten. 
+	 */
+	@Override
+	public String directConnectURL() {
+		String directConnectURL = super.directConnectURL();
+		if (rewriteDirectConnectURL()) {
+			directConnectURL = _rewriteURL(directConnectURL);
+		}
+		return directConnectURL;
 	}
 
 	/**

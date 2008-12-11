@@ -367,10 +367,11 @@ public class AjaxInPlace extends WOComponent {
 
 	public WOActionResults save() {
 		// check to see if we can save before firing the action (for permissions)
+		WOActionResults results = null;
 		boolean canSave = canSave();
 		if (canSave) {
 			if (hasBinding("saveAction")) {
-				WOActionResults results = (WOActionResults) valueForBinding("saveAction");
+				results = (WOActionResults) valueForBinding("saveAction");
 				canSave = canSave();
 			}
 			// check to see if we can save after firing the action (in case validation failed or something)
@@ -379,7 +380,7 @@ public class AjaxInPlace extends WOComponent {
 			}
 		}
 		// ignore results
-		return null;
+		return results;
 	}
 
 	public WOActionResults cancel() {
@@ -388,7 +389,7 @@ public class AjaxInPlace extends WOComponent {
 			setEditing(false);
 		}
 		// ignore results
-		return null;
+		return results;
 	}
 
 }

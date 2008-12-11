@@ -21,6 +21,7 @@ import er.extensions.ERXWOContext;
  * @binding onBeforeUpdate (optional) the javascript function to call before updating (should return true if the update
  *          should happen, false if not)
  * @binding id (optional) the id of the ping update container (set this if you want to attach an AjaxBusyIndicator)
+ * @binding stop (optional) if true, the ping will stop.  If false, the ping will run.  It's up to you to refresh the ping's container to get it running again after the binding changes from false to true.  
  * 
  * @author mschrag
  */
@@ -55,7 +56,7 @@ public class AjaxPing extends WOComponent {
 	 */
 	public String id() {
 		if (_id == null) {
-			_id = (String)valueForBinding("id");
+			_id = (String) valueForBinding("id");
 			if (_id == null) {
 				_id = ERXWOContext.safeIdentifierName(context(), true);
 			}
