@@ -116,7 +116,7 @@ public class ERXMigrationTable {
 		EOModel newModel = _database._blankModel();
 		EOEntity newEntity = new EOEntity();
 		newEntity.setExternalName(_name);
-		newEntity.setName(_name);
+		newEntity.setName("ERXMigrationTable_" + _name);
 		newModel.addEntity(newEntity);
 		return newEntity;
 	}
