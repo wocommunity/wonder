@@ -2027,8 +2027,8 @@ public class ERXEOControlUtilities {
 	   }
 	   return result;
    }
-   
-   /**
+
+	/**
 	 * Validates whether the values of the specified keyPaths are unique for an
 	 * Entity. Throws a {@link ERXValidationException} if there is already an EO
 	 * with the same values on the given key paths.
@@ -2046,7 +2046,7 @@ public class ERXEOControlUtilities {
 	 *       ...
 	 *       	public void validateForSave() throws ValidationException {
 	 *       		super.validateForSave();
-	 *       		ERXEOControlUtilities.validateUniquenessOf(this, ERXQ.equals(&quot;active&quot;, true), &quot;title&quot;, &quot;wiki&quot;);
+	 *       		ERXEOControlUtilities.validateUniquenessOf(null, this, ERXQ.equals(&quot;active&quot;, true), &quot;title&quot;, &quot;wiki&quot;);
 	 *       	}
 	 *       ...
 	 *       }
@@ -2069,6 +2069,11 @@ public class ERXEOControlUtilities {
 	 *            an optional resticting qualifier to exclude certain objects
 	 *            from the check
 	 * 
+	 * @param entityName
+	 *            the name of the entity to check. Defaults to eo.entityName().
+	 *            It can be necessary to set this to the name of the parent
+	 *            entity when using single table inheritance.
+	 * 
 	 * @throws ERXValidationException
 	 *             if an EO with the same property values already exists. If you
 	 *             specify more than one keyPath to validate, the 'key' property
@@ -2079,9 +2084,13 @@ public class ERXEOControlUtilities {
 	 * 
 	 * @author th
 	 */
-	public static void validateUniquenessOf(EOEnterpriseObject eo, EOQualifier restrictingQualifier, String... keys) {
-		if (restrictingQualifier != null && !restrictingQualifier.evaluateWithObject(eo))
+	public static void validateUniquenessOf(String entityName, EOEnterpriseObject eo, EOQualifier restrictingQualifier, String... keys) {
+		if (restrictingQualifier != null && !restrictingQualifier.evaluateWithObject(eo)) {
 			return;
+		}
+		if(entityName==null) {
+			entityName=eo.entityName();
+		}
 		NSArray<String> keyPaths = new NSArray(keys);
 		NSDictionary<String, Object> dict = ERXDictionaryUtilities.dictionaryFromObjectWithKeys(eo, keyPaths);
 		EOQualifier qualifier = EOKeyValueQualifier.qualifierToMatchAllValues(dict);
@@ -2089,8 +2098,7 @@ public class ERXEOControlUtilities {
 			qualifier = ERXEOControlUtilities.andQualifier(qualifier, restrictingQualifier);
 		}
 		// take into account unsaved objects and skip deleted objects. The
-		// "includeNewObjects" part won't work for inheritance!
-		NSArray<EOEnterpriseObject> objects = ERXEOControlUtilities.objectsWithQualifier(eo.editingContext(), eo.entityName(), qualifier, null, true, false, true, true);
+		NSArray<EOEnterpriseObject> objects = ERXEOControlUtilities.objectsWithQualifier(eo.editingContext(), entityName, qualifier, null, true, false, true, true);
 		// should we throw if the supplied eo is not included in the results?
 		objects = ERXArrayUtilities.arrayMinusObject(objects, eo);
 		int count = objects.count();
@@ -2104,32 +2112,60 @@ public class ERXEOControlUtilities {
 				if (ERXEOControlUtilities.isNewObject(eo)) {
 					throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationNewObject");
 				}
-				else {
-					throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationExistingObject");
-				}
+				throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationExistingObject");
 			}
-			else {
-				// DB is already inconsitent!
-				throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationDatabaseInconsistent");
-			}
+			// DB is already inconsitent!
+			throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationDatabaseInconsistent");
 		}
 	}
 
 	/**
-	 * Convinience method which calls
-	 * <code>validateUniquenessOf(EOEnterpriseObject
-	 * eo, EOQualifier restrictingQualifier, String... keys)</code>
-	 * with <code>null</code> as <code>restrictingQualifier</code>.
+	 * Convinience method which passes <code>null</code> for
+	 * <code>entityName</code>.
+	 * 
+	 * @param eo
+	 *            the {@link EOEnterpriseObject} to validate
+	 * @param restrictingQualifier
+	 *            an optional resticting qualifier to exclude certain objects
+	 *            from the check
+	 * @param keys
+	 *            an arbitrary number of keyPaths to validate.
+	 * @author th
+	 */
+	public static void validateUniquenessOf(EOEnterpriseObject eo, EOQualifier restrictingQualifier, String... keys) {
+		validateUniquenessOf(null, eo, restrictingQualifier, keys);
+	}
+
+	/**
+	 * Convinience method which passes <code>null</code> for
+	 * <code>restrictingQualifier</code> and <code>entityName</code>.
 	 * 
 	 * @param eo
 	 *            the {@link EOEnterpriseObject} to validate
 	 * @param keys
 	 *            an arbitrary number of keyPaths to validate.
-	 * 
 	 * @author th
 	 */
 	public static void validateUniquenessOf(EOEnterpriseObject eo, String... keys) {
-		validateUniquenessOf(eo, null, keys);
+		validateUniquenessOf(null, eo, null, keys);
+	}
+	
+	/**
+	 * Convinience method which passes <code>null</code> for
+	 * <code>restrictingQualifier</code>.
+	 * 
+	 * @param eo
+	 *            the {@link EOEnterpriseObject} to validate
+	 * @param keys
+	 *            an arbitrary number of keyPaths to validate.
+	 * @param entityName
+	 *            the name of the entity to check. Defaults to eo.entityName().
+	 *            It can be necessary to set this to the name of the parent
+	 *            entity when using single table inheritance.
+	 * @author th
+	 */
+	public static void validateUniquenessOf(String entityName, EOEnterpriseObject eo, String... keys) {
+		validateUniquenessOf(entityName, eo, null, keys);
 	}
 	
 	/**
