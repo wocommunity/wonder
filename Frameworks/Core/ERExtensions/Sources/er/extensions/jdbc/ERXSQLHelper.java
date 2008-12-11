@@ -32,6 +32,7 @@ import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
@@ -1100,16 +1101,28 @@ public class ERXSQLHelper {
 		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
 			// no hints
 			if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
+				boolean usesDistinct=spec.usesDistinct();
 				spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
+				spec.setUsesDistinct(usesDistinct);
 			}
 
 			EOSQLExpression sqlExpression = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
 			String statement = sqlExpression.statement();
 			int index = statement.toLowerCase().indexOf(" from ");
-			// FIXME TH: count(*) won't always yield corect results, if the spec
-			// is using distinct. count(pk) would be a working alternative. What
-			// was the easiest way to get the primary key column name again?
-			statement = (new StringBuilder()).append("select count(*) ").append(statement.substring(index, statement.length())).toString();
+
+			String countExpression;
+			if (spec.usesDistinct()) {
+				NSArray primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+				if (primaryKeyAttributeNames.count() > 1)
+					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
+				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
+				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
+				countExpression = "count(t0." + pkColumnName + ") ";
+			}
+			else {
+				countExpression = "count(*) ";
+			}
+			statement = (new StringBuilder()).append("select ").append(countExpression).append(statement.substring(index, statement.length())).toString();
 			sqlExpression.setStatement(statement);
 			sql = statement;
 			result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sqlExpression);
