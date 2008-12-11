@@ -582,3 +582,31 @@ er.extensions.stackTrace.skipPatternsFile=StackTraceSkipPatterns-Normal.plist
 # Components 
 #########################################################################
 er.extensions.ERXWOForm.multipleSubmitDefault=true
+
+#########################################################################
+# SSL DirectConnect
+#########################################################################
+## You should probably not enable any of these settings in a normal Apache webserver deployment,
+## in particular the ssl port property, as this is used by ERX to generate https URLs, which must
+## match your Apache config.
+##
+## To enable SSL support with DirectConnect, you must do the following:
+##
+## * In your Resources folder, run "keytool -genkey -alias WebObjects -keyalg RSA -keystore adaptorssl.key".  Select a 
+##   password for your keystore (i.e. "changeit"), and set the "your first name and last name" field to match the hostname 
+##   that you will be running your directconnect app off of.
+## * In your Resources folder, create an executable script (it MUST BE EXECUTABLE) named "adaptorsslpassphrase" with the
+##   contents:
+##   echo changeit
+##   where you should replace "changeit" for whatever password you selected in the previous step.
+## * Set the following property to true
+#er.extensions.ERXApplication.ssl.enabled=true
+
+## (optional) To specify an SSL host name other than what is returned from a call to
+## application.host(), you can override it below  
+#er.extensions.ERXApplication.ssl.host=localhost
+
+## (optional) To select an SSL port other than 443, uncomment the following. If you are already running Apache with SSL,
+## you probably want to set this.  If the port number is 0, the SSL port will be automatically assigned (using the same
+## mechanism that WO uses to set the regular port) 
+#er.extensions.ERXApplication.ssl.port=0
