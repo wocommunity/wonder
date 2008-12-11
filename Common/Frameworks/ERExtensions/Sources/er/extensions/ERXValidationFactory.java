@@ -6,12 +6,23 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * The validation factory controls creating validation
@@ -23,7 +34,7 @@ import java.lang.reflect.*;
 public class ERXValidationFactory {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXValidationFactory.class);
+    public final static Logger log = Logger.getLogger(ERXValidationFactory.class);
     
     /** holds a reference to the default validation factory */
     private static ERXValidationFactory _defaultFactory;
@@ -123,7 +134,7 @@ public class ERXValidationFactory {
         Object keys[] = {				// MESSAGE LIST:
             "to be null", 				// "The 'xxxxx' property is not allowed to be NULL"
             "Invalid Number", 				// "Invalid Number"
-            "must have a", 				// "The owner property of Bug must have a People assigned "
+            "must have a ", 				// "The owner property of Bug must have a People assigned "
             "must have at least one",			// "The exercises property of ERPCompanyRole must have at least one ERPExercise"
             "relationship, there is a related object",	// "Removal of ERPAccount object denied because its children relationship is not empty"
             "relationship, there are related objects",	// "Removal of ERPAccount object denied because its children relationship is not empty"
@@ -236,7 +247,7 @@ public class ERXValidationFactory {
      * a cover method for calling the four arguement method
      * specifying <code>null</code> for proptery and value.
      * @param eo enterprise object failing validation
-     * @param name name of the method to use to look up the validation
+     * @param method name of the method to use to look up the validation
      *		exception template, for instance "FirstNameCanNotMatchLastNameValidationException"
      * @return a custom validation exception for the given criteria
      */
@@ -290,7 +301,8 @@ public class ERXValidationFactory {
             log.debug("Converting exception: " + eov + " value: " + (value != null ? value : "<NULL>"));
         if (!(eov instanceof ERXValidationException)) {
             String message = eov.getMessage();
-            EOEnterpriseObject eo = (EOEnterpriseObject)eov.object();
+            Object o = eov.object();
+            EOEnterpriseObject eo = ((o instanceof EOEnterpriseObject) ? (EOEnterpriseObject) o: null);
             //NSDictionary userInfo = eov.userInfo() != null ? (NSDictionary)eov.userInfo() : NSDictionary.EmptyDictionary;
             for (Enumeration e = _mappings.allKeys().objectEnumerator(); e.hasMoreElements();) {
                 //EOEnterpriseObject eo = (EOEnterpriseObject)userInfo.objectForKey(NSValidation.ValidationException.ValidatedObjectUserInfoKey);
@@ -325,9 +337,9 @@ public class ERXValidationFactory {
             NSArray erveAdditionalExceptions = convertAdditionalExceptions(eov);
             if (erveAdditionalExceptions.count() > 0)
                 erve.setAdditionalExceptions(erveAdditionalExceptions);
-        }
-        if(erve != eov) {
-            erve.setStackTrace(eov.getStackTrace());
+            if(erve != eov) {
+                erve.setStackTrace(eov.getStackTrace());
+            }
         }
         return erve;
     }
@@ -369,19 +381,29 @@ public class ERXValidationFactory {
         }
         if (message == null) {
         	Object context = erv.context();
-        	// AK: as the exception doesn«t have a very special idea in how the message should get 
+        	// AK: as the exception doesn't have a very special idea in how the message should get 
         	// formatted when gets displayed, we ask the context *first* before asking the exception.
-        	if(context == erv || context == null) {
-        		message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
-        				templateForException(erv),
-						templateDelimiter(),
-						erv);
+        	String template = templateForException(erv);
+        	if(template.startsWith(UNDEFINED_VALIDATION_TEMPLATE)) {
+                // try to get the actual exception message if one is set
+        	    message = erv._getMessage();
+        	    if(message == null) {
+        	        message = template;
+        	    }
         	} else {
-        		message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
-        				templateForException(erv), 
-						templateDelimiter(),
-						context,
-						erv);
+
+        	    if(context == erv || context == null) {
+        	        message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
+        	                template,
+        	                templateDelimiter(),
+        	                erv);
+        	    } else {
+        	        message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
+        	                template, 
+        	                templateDelimiter(),
+        	                context,
+        	                erv);
+        	    }
         	}
         }
         return message;
@@ -477,7 +499,7 @@ public class ERXValidationFactory {
      */
     public void configureFactory() {
         // CHECKME: This might be better configured in a static init block of ERXValidationFactory.        
-        ERXValidation.setPushChangesDefault(ERXValueUtilities.booleanValueWithDefault(System.getProperties().getProperty("er.extensions.ERXValidationShouldPushChangesToObject"), ERXValidation.DO_NOT_PUSH_INCORRECT_VALUE_ON_EO));
+        ERXValidation.setPushChangesDefault(ERXValueUtilities.booleanValueWithDefault(ERXSystem.getProperty("er.extensions.ERXValidationShouldPushChangesToObject"), ERXValidation.DO_NOT_PUSH_INCORRECT_VALUE_ON_EO));
 
         if (WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
             NSNotificationCenter center = NSNotificationCenter.defaultCenter();
@@ -520,9 +542,8 @@ public class ERXValidationFactory {
         if (template == null)
             template = templateForKeyPath(type, targetLanguage);
         if (template == null) {
-            String message = "Undefined validation template for entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
-            template = message;
-            log.error(message);
+            template = UNDEFINED_VALIDATION_TEMPLATE + " entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
+            log.error(template);
         }
         return template;
     }
@@ -533,6 +554,6 @@ public class ERXValidationFactory {
      * @return template for key or null if none is found
      */
     public String templateForKeyPath(String key, String language) {
-        return ERXLocalizer.localizerForLanguage(language).localizedStringForKey(VALIDATION_TEMPLATE_PREFIX + key);
+        return ERXLocalizer.localizerForLanguage(language).localizedStringForKey(VALIDATION_TEMPLATE_PREFIX + key); 
     }
 }

@@ -6,9 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * ERXValidationExceptions extends the regular
@@ -19,7 +25,7 @@ import com.webobjects.eoaccess.*;
 public class ERXValidationException extends NSValidation.ValidationException implements NSKeyValueCoding {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXValidationException.class);
+    public static final Logger log = Logger.getLogger(ERXValidationException.class);
 
     // Validation Exception Types
     /** corresponds to a model thrown 'null property' exception */
@@ -27,6 +33,9 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     
     /** corresponds to a number formatter exception */
     public static final String InvalidNumberException = "InvalidNumberException";
+
+    /** corresponds to a generic 'invalid value' exception */
+    public static final String InvalidValueException = "InvalidValueException";
 
     /** corresponds to a model thrown 'mandatory toOne relationship' exception */
     public static final String MandatoryToOneRelationshipException = "MandatoryToOneRelationshipException";
@@ -115,12 +124,23 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * Gets the message for this exception.
      * @return the correctly formatted validation exception.
      */
-    public String getMessage() {
+    @Override
+	public String getMessage() {
         if (message == null)
             message = ERXValidationFactory.defaultFactory().messageForException(this);
         return message;
     }
 
+    /**
+     * 
+     */
+    protected String _getMessage() {
+        if(message == null) {
+            return type;
+        }
+        return message;
+    }
+    
     /**
      * Implementation of key value coding.
      * Uses the default implementation.
@@ -182,14 +202,15 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * the validation exception to an EOEnterpriseObject.
      * @return object cast as an enterprise object.
      */
-    public EOEnterpriseObject eoObject() { return (EOEnterpriseObject)object(); }
+    public EOEnterpriseObject eoObject() { return object() instanceof EOEnterpriseObject ? (EOEnterpriseObject)object() : null; }
 
 
     /**
      * Overrides super implementation to allow for setable object value.
      * @return object object for this exception.
      */
-    public Object object() {
+    @Override
+	public Object object() {
         if(object == null)
         	object = super.object();
         return object;
@@ -335,7 +356,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * exceptions.
      * @return array of additional exceptions
      */
-    public NSArray additionalExceptions() {
+    @Override
+	public NSArray additionalExceptions() {
         if (additionalExceptions == null) {
             additionalExceptions = super.additionalExceptions();
             if (additionalExceptions == null)
@@ -393,7 +415,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * Compares this exception to anything else.
      * @return description of the validation exception
      */
-    public boolean equals(Object anotherObject) {
+    @Override
+	public boolean equals(Object anotherObject) {
         if(anotherObject != null && anotherObject instanceof ERXValidationException) {
             ERXValidationException ex = (ERXValidationException)anotherObject;
             return ERXExtensions.safeEquals(type(), ex.type()) && ERXExtensions.safeEquals(key(), ex.key()) && ERXExtensions.safeEquals(object(), ex.object())
@@ -408,7 +431,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * without calling <code>getMessage</code>.
      * @return description of the validation exception
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "<" + getClass().getName() + " object: " + object() + "; propertyKey: "
         + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
     }
