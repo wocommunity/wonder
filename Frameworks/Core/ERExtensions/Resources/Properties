@@ -115,7 +115,7 @@ er.extensions.ERXMessageEncoding.Enabled=true
 ## ERXGenericRecord and ERXCustomObject's didXXX() rely on a proper EC delegate 
 er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 
-## You can speficy a factory class that creates the actual class description 
+## You can specify a factory class that creates the actual class description 
 ## before anyone sees them. Useful for model-munging or checking 
 ## (eg. TIMESTAMPS with Mysql)
 # er.extensions.ERXClassDescription.factoryClass = 

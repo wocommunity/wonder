@@ -389,7 +389,7 @@ public class ERXValidationFactory {
         }
         if (message == null) {
         	Object context = erv.context();
-        	// AK: as the exception doesn�t have a very special idea in how the message should get 
+        	// AK: as the exception doesn't have a very special idea in how the message should get 
         	// formatted when gets displayed, we ask the context *first* before asking the exception.
         	String template = templateForException(erv);
         	if(template.startsWith(UNDEFINED_VALIDATION_TEMPLATE)) {
@@ -548,10 +548,10 @@ public class ERXValidationFactory {
             template = templateForKeyPath(property, targetLanguage);
         // 5th try just type
         if (template == null)
-        	template = templateForKeyPath(type, targetLanguage);
+            template = templateForKeyPath(type, targetLanguage);
         if (template == null) {
-        	template = UNDEFINED_VALIDATION_TEMPLATE + " entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
-        	log.error(template);
+            template = UNDEFINED_VALIDATION_TEMPLATE + " entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
+            log.error(template);
         }
         return template;
     }
