@@ -173,7 +173,7 @@ public class WOHelperFunctionDeclarationParser {
 				throw new WOHelperFunctionDeclarationFormatException("<WOHelperFunctionDeclarationParser> Missing element name for declaration:\n" + declarationHeader + " " + declarationBody);
 			}
 			NSMutableDictionary associations = _associationsForDictionaryString(declarationHeader, declarationBody);
-			declaration = new WODeclaration(tagName, type, associations);
+			declaration = WOHelperFunctionParser.createDeclaration(tagName, type, associations);
 			declarations.setObjectForKey(declaration, tagName);
 		}
 
@@ -255,16 +255,16 @@ public class WOHelperFunctionDeclarationParser {
 			}
 			ognlValue.append(associationValue.substring(lastIndex));
 			associationValue = ognlValue.toString();
-			association = WOAssociation.associationWithValue(associationValue);
+			association = WOHelperFunctionAssociation.associationWithValue(associationValue);
 		}
 		else {
 			String quotedString = (String) quotedStrings.objectForKey(associationValue);
 			if (quotedString != null) {
-				association = WOAssociation.associationWithValue(quotedString);
+				association = WOHelperFunctionAssociation.associationWithValue(quotedString);
 			}
 			else if (_NSStringUtilities.isNumber(associationValue)) {
 				Integer integer = WOShared.unsignedIntNumber(Integer.parseInt(associationValue));
-				association = WOAssociation.associationWithValue(integer);
+				association = WOHelperFunctionAssociation.associationWithValue(integer);
 			}
 			else if (associationValue.equalsIgnoreCase("true") || associationValue.equalsIgnoreCase("yes")) {
 				association = WOConstantValueAssociation.TRUE;
@@ -273,7 +273,7 @@ public class WOHelperFunctionDeclarationParser {
 				association = WOConstantValueAssociation.FALSE;
 			}
 			else {
-				association = WOAssociation.associationWithKeyPath(associationValue);
+				association = WOHelperFunctionAssociation.associationWithKeyPath(associationValue);
 			}
 		}
 		return association;
