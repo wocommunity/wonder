@@ -892,7 +892,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			WOMessage.setDefaultEncoding(defaultMessageEncoding);
 		}
 
-		// Configure the WOStatistics CLFF logging since it can't be controled
+		// Configure the WOStatistics CLFF logging since it can't be controlled
 		// by a property, grrr.
 		configureStatisticsLogging();
 
@@ -990,7 +990,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Notification method called when the application posts the notification
 	 * {@link WOApplication#ApplicationWillFinishLaunchingNotification}. This
-	 * method calls subclasse's {@link #finishInitialization} method.
+	 * method calls subclasses' {@link #finishInitialization} method.
 	 * 
 	 * @param n
 	 *            notification that is posted after the WOApplication has been

@@ -288,8 +288,8 @@ public  class ERXRequest extends WORequest {
     
     /** Translates ("de", "en-us;q=0.33", "en", "en-gb;q=0.66") to ("de", "en_gb", "en-us", "en").
      * @param languages NSArray of Strings
-        * @return sorted NSArray of normalized Strings
-        */
+     * @return sorted NSArray of normalized Strings
+     */
     private final static NSComparator COMPARE_Qs = new _LanguageComparator();
     protected NSArray<String> fixAbbreviationArray(NSArray<String> languages) {
         try {
