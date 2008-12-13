@@ -16,7 +16,7 @@ import er.directtoweb.assignments.delayed.ERDDelayedAssignment;
 import er.directtoweb.assignments.delayed.ERDDelayedObjectCreationAssignment;
 
 /**
- * Assignment used to create objects on the fly. You suse this by
+ * Assignment used to create objects on the fly. You use this by
  * specifing the class name as a string, ie "foo.bar.MyClass". This
  * will create an instance of the MyClass object.
  * @deprecated use ERDDelayedObjectCreationAssignment instead.

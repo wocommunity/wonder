@@ -307,6 +307,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
         EOEntity destinationEntity = (EOEntity)c.valueForKeyPath("smartRelationship.destinationEntity");
         return destinationEntity;
     }
+
     /**
      * Called when firing this assignment with the key-path:
      * <b>sortKeyForList</b>.

@@ -70,7 +70,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * <ul>
  *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryAll</code><br >
  * will create an query page all entities.
-*   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryArticle</code><br >
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryArticle</code><br >
  * will create an query page for articles.
  *
  *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryArticle?__fs=findNewArticles</code><br >

@@ -319,7 +319,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Subclass of NSForwardException that can hold a d2wContext. Usefull when the exception 
+     * Subclass of NSForwardException that can hold a d2wContext. Useful when the exception
      * occurs while evaluating embedded components. The page's d2wContext will not show you the error.
      * 
      * @author ak
@@ -446,7 +446,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         }
     }
     
-    // This is the actual method that turns trace rule firign on and off.
+    // This is the actual method that turns trace rule firing on and off.
     public static void configureTraceRuleFiring() {
         //AK: we can trace firing much more fine-grained than the default engine
         // and also enabling the debug level NSLog spews out a ton of ridiculous 
