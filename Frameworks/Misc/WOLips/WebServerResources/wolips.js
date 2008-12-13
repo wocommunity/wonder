@@ -56,8 +56,6 @@ var WOLipsClickToOpen = {
     WOLipsClickToOpen.oldKeyPressHandler = null;
     WOLipsClickToOpen.active = false;
     WOLipsClickToOpen.targetChanged(null, false);
-    WOLipsClickToOpen.verb = null;
-    WOLipsClickToOpen.id = null;
   },
   
   targetChanged : function(target, highlight) {
