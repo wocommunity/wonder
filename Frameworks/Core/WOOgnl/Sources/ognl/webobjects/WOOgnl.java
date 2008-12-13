@@ -16,6 +16,7 @@ import ognl.Ognl;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
 import ognl.helperfunction.WOHelperFunctionHTMLParser;
+import ognl.helperfunction.WOHelperFunctionParser;
 import ognl.helperfunction.WOHelperFunctionTagRegistry;
 
 import org.apache.log4j.Logger;
@@ -35,6 +36,15 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSUtilities;
 
+/**
+ * WOOgnl provides a template parser that support WOOgnl associations, Helper Functions, Inline Bindings, and Binding Debugging. 
+ * 
+ * @author mschrag
+ * @property ognl.active defaults to true, if false ognl support is disabled
+ * @property ognl.inlineBindings if true, inline bindings are supported in component templates
+ * @property ognl.parseStandardTags if true, you can use inline bindings in regular html tags, but requires well-formed templates
+ * @property ognl.debugSupport if true, debug metadata is included in all bindings (but binding debug is not automatically turned on) 
+ */
 public class WOOgnl {
 	public static Logger log = Logger.getLogger(WOOgnl.class);
 
@@ -149,6 +159,9 @@ public class WOOgnl {
 			}
 			if ("true".equalsIgnoreCase(System.getProperty("ognl.parseStandardTags"))) {
 				WOHelperFunctionHTMLParser.setParseStandardTags(true);
+			}
+			if ("true".equalsIgnoreCase(System.getProperty("ognl.debugSupport"))) {
+				WOHelperFunctionParser._debugSupport = true;
 			}
 		}
 	}

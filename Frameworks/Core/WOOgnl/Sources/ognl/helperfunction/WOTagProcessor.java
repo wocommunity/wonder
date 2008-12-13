@@ -15,6 +15,6 @@ public abstract class WOTagProcessor {
 	}
 
 	public WODeclaration createDeclaration(String elementName, String elementType, NSMutableDictionary associations) {
-		return new WODeclaration(elementName, elementType, associations);
+		return WOHelperFunctionParser.createDeclaration(elementName, elementType, associations);
 	}
 }
