@@ -22,7 +22,7 @@ public class WOHelperFunctionDebugUtilities {
 		if (!_resolvedMethods) {
 			_resolvedMethods = true;
 			try {
-				_debugEnabledForComponentMethod = WOApplication.application().getClass().getMethod("debugEnabledForComponent", WOComponent.class);
+				_debugEnabledForComponentMethod = WOApplication.application().getClass().getMethod("debugEnabledForComponent", String.class);
 			}
 			catch (Throwable e) {
 				WOHelperFunctionDebugUtilities.log.error("Binding debugging is not available because your application does not implement debugEnabledForComponent(WOComponent).", e);
@@ -41,7 +41,7 @@ public class WOHelperFunctionDebugUtilities {
 			WOHelperFunctionDebugUtilities.resolveMethods();
 			Boolean debugEnabled = Boolean.FALSE;
 			if (_debugEnabledForComponentMethod != null) {
-				debugEnabled = (Boolean) _debugEnabledForComponentMethod.invoke(WOApplication.application(), component);
+				debugEnabled = (Boolean) _debugEnabledForComponentMethod.invoke(WOApplication.application(), component.name());
 			}
 			return debugEnabled.booleanValue();
 		}

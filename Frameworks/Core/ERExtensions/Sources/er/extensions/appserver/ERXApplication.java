@@ -2377,25 +2377,25 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * template parser and setting ognl.debugSupport=true.
 	 * 
 	 * @param debugEnabled whether or not to enable debugging 
-	 * @param component the component to enable debugging for
+	 * @param componentName the component name to enable debugging for
 	 */
-	public void setDebugEnabledForComponent(boolean debugEnabled, WOComponent component) {
+	public void setDebugEnabledForComponent(boolean debugEnabled, String componentName) {
 		if (debugEnabled) {
-			_debugComponents.addObject(component.name());
+			_debugComponents.addObject(componentName);
 		}
 		else {
-			_debugComponents.removeObject(component.name());
+			_debugComponents.removeObject(componentName);
 		}
 	}
 
 	/**
 	 * Returns whether or not binding debugging is enabled for the given component
 	 * 
-	 * @param component the component
+	 * @param componentName the component name
 	 * @return whether or not binding debugging is enabled for the given componen
 	 */
-	public boolean debugEnabledForComponent(WOComponent component) {
-		return _debugComponents.containsObject(component.name());
+	public boolean debugEnabledForComponent(String componentName) {
+		return _debugComponents.containsObject(componentName);
 	}
 	
 	/**
