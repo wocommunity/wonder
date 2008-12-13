@@ -83,7 +83,7 @@
 	"ERDEditDatePopupOrNull.or" = "- or -";
 	"ERDEditFile.deleteButton" = "Delete File";
 	"ERDEditFile.selectButton" = "Select File";
-	"ERDEditFile.selectMessage" = "Select a file on you local disk:";
+	"ERDEditFile.selectMessage" = "Select a file on your local disk:";
 	"ERDEditFile.uploadButton" = "Upload File";
 	"ERDEditFile.uploadMessage" = "Upload the file to the server:";
 	"ERDEditList.saveLabel" = "Save @@pluralCount@@ @@pluralString@@?";
