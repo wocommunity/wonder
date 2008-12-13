@@ -410,7 +410,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         private NSMutableArray _registeredModelNames = new NSMutableArray();
         /** holds a mapping of class to entities */
         private NSMutableDictionary _entitiesForClass = new NSMutableDictionary();
-        /** holds a mapping of entity to class descrpitions */
+        /** holds a mapping of entity to class descriptions */
         private NSMutableDictionary _classDescriptionForEntity = new NSMutableDictionary();
 
         /**
@@ -567,13 +567,14 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          */
         protected void registerDescriptionForEntity(EOEntity entity) {
             Class entityClass = EOGenericRecord.class;
+            String className = entity.className();
+            if (log.isDebugEnabled()) {
+                log.debug("Registering description for entity: " + entity.name() + " with class: " + className);
+            }
             try {
-                String className = entity.className();
-                if (log.isDebugEnabled())
-                    log.debug("Registering description for entity: " + entity.name() + " with class: " + className);
-                entityClass = className.equals("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
+                entityClass = className.endsWith("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
             } catch (java.lang.ClassNotFoundException ex) {
-                throw new RuntimeException("Invalid class name '" + entityClass.getName() + "' for entity '" + entity.name() + "'.", ex);
+                throw new RuntimeException("Invalid class name '" + className + "' for entity '" + entity.name() + "'." + (!className.contains(".") ? "  (The class name should include the full package path of the class.)" : ""), ex);
             }
             ERXEntityClassDescription cd = newClassDescriptionForEntity(entity);
             EOClassDescription.registerClassDescription(cd, entityClass);
