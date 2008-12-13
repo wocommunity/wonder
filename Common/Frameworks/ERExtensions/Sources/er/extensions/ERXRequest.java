@@ -194,7 +194,8 @@ public  class ERXRequest extends WORequest {
     	String serverName = _serverName();
         String portStr;
         if (port == 0) {
-        	portStr = secure ? "443" : _serverPort();
+        	String sslPort = String.valueOf(ERXApplication.erxApplication().sslPort());
+        	portStr = secure ? sslPort : _serverPort();
         } else {
         	portStr = WOShared.unsignedIntString(port);
         }
@@ -234,7 +235,24 @@ public  class ERXRequest extends WORequest {
 	
 	        // If either the https header is 'on' or the server port is 443 then we
 	        // consider this to be an HTTP request.
-	        isRequestSecure = ((httpsMode != null && httpsMode.equalsIgnoreCase("on")) || (serverPort != null && "443".equals(serverPort)));
+	        if (httpsMode != null && httpsMode.equalsIgnoreCase("on")) {
+	        	isRequestSecure = true;
+	        }
+	        else if (serverPort != null && String.valueOf(ERXApplication.erxApplication().sslPort()).equals(serverPort)) {
+	        	isRequestSecure = true;
+	        }
+	        // MS: I have no idea how to do this properly ... There doesn't appear to be any way to
+	        // determine which adaptor is servicing this request right now, and WOHttpIO only tracks the
+	        // the originating port, not the original server port that serviced the request.  
+	        else if (!request.isUsingWebServer()) {
+	        	// It turns out there appears to always be a "host" header of the format "hostname:port" ... I
+	        	// don't believe this is actually secure at ALL, so I'm only enabling it when you're not using
+	        	// a webserver (i.e. probably testing).
+	        	String hostHeader = request.headerForKey("host");
+	        	if (hostHeader != null && hostHeader.endsWith(":" + ERXApplication.erxApplication().sslPort())) {
+	        		isRequestSecure = true;
+	        	}
+	        }
         }
 
         return isRequestSecure;

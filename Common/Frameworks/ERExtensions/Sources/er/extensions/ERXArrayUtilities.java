@@ -1294,6 +1294,7 @@ public class ERXArrayUtilities extends Object {
         }
     }
     
+    
     /**
      * Calculates the median value of an array.
      * The median is the value for which half of the elements are above and half the elements are below.
@@ -1326,6 +1327,15 @@ public class ERXArrayUtilities extends Object {
         return value;
     }
 
+    /**
+     * Shorter name for arrayWithoutDuplicates, which I always forget the name of.
+     * 
+     * @param array the array to return distinct values from
+     * @return an array of distinct elements from the input array
+     */
+    public static NSArray distinct(NSArray array) {
+      return ERXArrayUtilities.arrayWithoutDuplicates(array);
+    }
     
     /**
      * Filters out all of the duplicate objects in

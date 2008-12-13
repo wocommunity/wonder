@@ -9,7 +9,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -19,6 +24,9 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.MalformedInputException;
+import java.text.Format;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -27,6 +35,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptorOperation;
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseOperation;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -41,6 +50,8 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Collection of {@link java.lang.String String} utilities. Contains
@@ -269,7 +280,7 @@ public class ERXStringUtilities {
             }
         }
         if( sortOrderings != null ) {
-            results = (NSMutableArray)EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray)results, sortOrderings);
+            results = (NSMutableArray)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
         }
         return (NSArray) results.valueForKey( eoKey );        
     }
@@ -725,7 +736,7 @@ public class ERXStringUtilities {
      * otherwise it will return the passed in
      * string.
      * @param s string to test
-     * @return "" if the string is null else the string
+     * @return the empty string if the string is null, else the string
      */
     public static String emptyStringForNull(String s) {
         return s==null ? "" : s;
@@ -1502,9 +1513,15 @@ public class ERXStringUtilities {
     // private methods
     // ##########################################################################################
     
-    private static void indent(StringBuffer sb, int level) {
+  public static void indent(PrintWriter writer, int level) {
+  	for (int i = 0; i < level; i++) {
+  	  writer.append("  ");
+	}
+  }
+  
+    public static void indent(StringBuffer sb, int level) {
     	for (int i = 0; i < level; i++) {
-			sb.append(' ');
+			sb.append("  ");
 		}
     }
     
@@ -1778,7 +1795,6 @@ public class ERXStringUtilities {
     /**
      * Utility to encode an URL without the try/catch. Throws an NSForwardException in the unlikely case that ERXMessageEncoding.defaultEncoding() can't be found.
      * @param string
-     * @return
      */
     public static String urlEncode(String string) {
     	try {
@@ -1792,7 +1808,6 @@ public class ERXStringUtilities {
     /**
      * Utility to decode an URL without the try/catch. Throws an NSForwardException in the unlikely case that ERXMessageEncoding.defaultEncoding() can't be found.
      * @param string
-     * @return
      */
     public static String urlDecode(String string) {
     	try {
@@ -1806,8 +1821,6 @@ public class ERXStringUtilities {
     /**
      * Utility to convert to UTF-8 bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
      * @param string string to convert
-     * @param encoding
-     * @return
      */
     public static byte[] toUTF8Bytes(String string) {
     	return toBytes(string, "UTF-8");
@@ -1817,7 +1830,6 @@ public class ERXStringUtilities {
      * Utility to convert to bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
      * @param string string to convert
      * @param encoding
-     * @return
      */
     public static byte[] toBytes(String string, String encoding) {
     	if(string == null) {
@@ -1834,9 +1846,7 @@ public class ERXStringUtilities {
 
     /**
      * Utility to convert from UTF-8 bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
-     * @param string string to convert
-     * @param encoding
-     * @return
+     * @param bytes string to convert
      */
     public static String fromUTF8Bytes(byte bytes[]) {
     	return fromBytes(bytes, "UTF-8");
@@ -1844,9 +1854,8 @@ public class ERXStringUtilities {
 
     /**
      * Utility to convert from bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
-     * @param string string to convert
+     * @param bytes string to convert
      * @param encoding
-     * @return
      */
     public static String fromBytes(byte bytes[], String encoding) {
     	if(bytes == null) {
@@ -1938,8 +1947,290 @@ public class ERXStringUtilities {
     public static String trimString(String s) {
     	if (s == null) {
     		return s;
-    	} else {
-    		return s.trim();
     	}
+    	return s.trim();
     }
+    
+    /**
+     * Removes line breaks and quotes the string if neccessary
+     * 
+     * @param s
+     * 
+     * @return the string in Excel save CSV format
+     */
+    public static String excelSafeCsvString(String s) {
+		if (s != null) {
+			boolean mustQuote = false;
+			s = unquote(s, "\"");
+			s = s.replaceAll("\r", "");
+			s = s.replaceAll("\n", "");
+			if (s.contains("\"")) {
+				s = s.replaceAll("\"", "\"\"");
+				mustQuote = true;
+			}
+			if (s.contains(","))
+				mustQuote = true;
+			if (mustQuote)
+				s = quote(s, "\"");
+		}
+		return s;
+	}
+
+	/**
+	 * Remove the quote symbols from the given string
+	 * 
+	 * @param s 
+	 * @param quoteSymbol
+	 * 
+	 * @return the string unquoted
+	 */
+	public static String unquote(String s, String quoteSymbol) {
+		if (s == null || quoteSymbol == null)
+			throw new IllegalArgumentException("Neither the string nor the quote symbol are allowed to be null");
+		if (s.startsWith(quoteSymbol) && s.endsWith(quoteSymbol)) {
+			s = s.substring(1);
+			s = s.substring(0, s.length() - 1);
+		}
+		return s;
+	}
+
+	/**
+	 * Quote the given string with the provided quote symbols
+	 * 
+	 * @param s the string to quote
+	 * @param quoteSymbol - the quote symbol
+	 * 
+	 * @return quoted string
+	 */
+	public static String quote(String s, String quoteSymbol) {
+		if (s == null || quoteSymbol == null) {
+			throw new IllegalArgumentException("Neither the string nor the quote symbol are allowed to be null");
+		}
+
+		s = new StringBuffer().append(quoteSymbol).append(s).append(quoteSymbol).toString();
+		return s;
+	}
+	
+	/**
+	 * Appends a CSS class to an existing (possibly null) CSS class string.
+	 * 
+	 * @param originalString the original string
+	 * @param cssClass the new CSS class to append
+	 * @return the CSS classes appended together (with a space between if originalString is non-empty)
+	 */
+	public static String stringByAppendingCSSClass(String originalString, String cssClass) {
+		String newString;
+		if (cssClass == null || cssClass.length() == 0) {
+			newString = originalString;
+		}
+		else if (originalString == null || originalString.length() == 0) {
+			newString = cssClass;
+		}
+		else {
+			newString = originalString + " " + cssClass;
+		}
+		return newString;
+	}
+
+	/**
+	 * Removes HTML characters from the given string.
+	 * 
+	 * @param str the string to remove HTML from
+	 * @return the string without HTML characters in it
+	 */
+	public static String stripHtml(String str) {
+		String stripped = str;
+		if (stripped != null) {
+			stripped = stripped.replaceAll("<[^>]*>", " ");
+			stripped = stripped.replaceAll("\\s+", " ");
+			stripped = stripped.replaceAll("&#8217;", "'");
+			stripped = stripped.replaceAll("&#169;", "(C)");
+			stripped = stripped.replaceAll("&#215;", " x ");
+			stripped = stripped.replaceAll("&#8230;", "...");
+			stripped = stripped.replaceAll("&#8212;", " -- ");
+			stripped = stripped.replaceAll("&#8211;", " - ");
+			stripped = stripped.replaceAll("&#8220;", "\"");
+			stripped = stripped.replaceAll("&#8221;", "\"");
+			stripped = stripped.replaceAll("&#174;", "(C)");
+			stripped = stripped.replaceAll("&#174;", "(R)");
+			stripped = stripped.replaceAll("&#8482;", "(TM)");
+			stripped = stripped.trim();
+		}
+		return stripped;
+	}
+
+	/**
+	 * Attempts to convert string values for attributes into the appropriate
+	 * value class for the attribute. If the method is unable to convert the
+	 * value, it returns null.
+	 * 
+	 * @param attr The attribute for the value in question.
+	 * @param strVal The string value to be coerced.
+	 * @param encoding The encoding used if the attribute value class is custom
+	 * and the factory method does not accept a string.
+	 * @param formatter The formatter used if the value class is NSTimestamp.
+	 * @return The coerced object value or null.
+	 */
+	public static Object attributeValueFromString(EOAttribute attr, String strVal, String encoding, Format formatter) {
+		Object val = null;
+		Class attrValueClass = null;
+		try {
+			attrValueClass = Class.forName(attr.className());
+		} catch (ClassNotFoundException cnfe) {
+			//An attribute has a className that is not in the classpath
+			NSForwardException._runtimeExceptionForThrowable(cnfe);
+		}
+		
+    	// If value is a date, parse using the formatter.
+    	if(NSTimestamp.class.equals(attrValueClass)) {
+
+    		Date parseResult = null;
+    		try {
+    			parseResult = (Date)formatter.parseObject(strVal);
+        		val = new NSTimestamp(parseResult);
+    		} catch(ParseException pe) {
+    			// If the user mangles the date format in the URL, we probably 
+    			// want to feed them an error page rather than handle it here.
+    			throw NSForwardException._runtimeExceptionForThrowable(pe);
+    		}
+    		    		
+    	// If number, convert string to number type with reflection.
+    	} else if(Number.class.isAssignableFrom(attrValueClass)) {
+    		val = attributeNumberValueFromString(attr, strVal);
+				
+    	// If string, it's a direct assignment
+    	} else if (String.class.equals(attrValueClass)) {
+    		val = strVal;
+    	
+    	// If none of the above, check for a custom factory method.
+    	} else if(attr.valueFactoryMethod()!=null) {
+    		val = attributeCustomValueFromString(attr, strVal, encoding);
+    	}
+		
+		return val;
+	}
+
+
+	/**
+	 * Attempts to convert string values for attributes into the appropriate
+	 * value class for the attribute. If the method is unable to convert the
+	 * value, it returns null.
+	 * 
+	 * @param attr The attribute for the value in question.
+	 * @param strVal The string value to be coerced.
+	 * @return The coerced object value or null.
+	 */
+	public static Number attributeNumberValueFromString(EOAttribute attr, String strVal) {
+		Number val = null;
+		// Determine the date class required
+		String typeString = attr.valueType();
+		if (typeString != null) {
+    		char key = typeString.charAt(0);
+			String numberType = null;
+
+			switch (key) {
+			case EOAttribute._VTByte:
+				numberType = Byte.class.getName();
+				break;
+			
+			case EOAttribute._VTShort:
+				numberType = Short.class.getName();
+				break;
+			
+			case EOAttribute._VTInteger:
+				numberType = Integer.class.getName();
+				break;
+				
+			case EOAttribute._VTLong:
+				numberType = Long.class.getName();
+				break;
+				
+			case EOAttribute._VTFloat:
+				numberType = Float.class.getName();
+				break;
+				
+			case EOAttribute._VTDouble:
+				numberType = Double.class.getName();
+				break;
+				
+			case EOAttribute._VTBigDecimal:
+				numberType = BigDecimal.class.getName();
+				break;
+				
+			case EOAttribute._VTBoolean:
+				numberType = Boolean.class.getName();
+				break;
+				
+			default:
+				break;
+			}
+    		
+			// Generate value through reflection
+			if(numberType!=null) {
+	    		try {
+	    			Class numberClass = Class.forName(numberType);
+	    			Constructor numberConstructor = numberClass.getConstructor(new Class[] {String.class});
+	    			val = (Number)numberConstructor.newInstance(strVal);
+	    		} catch(Exception e) {
+	    			NSForwardException._runtimeExceptionForThrowable(e);
+	    		}
+			}
+		}
+		return val;
+	}
+	
+
+	/**
+	 * Attempts to convert string values for attributes into the appropriate
+	 * value class for the attribute. If the method is unable to convert the
+	 * value, it returns null.
+	 * 
+	 * @param attr The attribute for the value in question.
+	 * @param strVal The string value to be coerced.
+	 * @param encoding The encoding used if the attribute value class is custom
+	 * and the factory method does not accept a string.
+	 * @return The coerced object value or null.
+	 */
+	public static Object attributeCustomValueFromString(EOAttribute attr, String strVal, String encoding) {
+		Object val = null;
+		Class attrValueClass = null;
+		try {
+			attrValueClass = Class.forName(attr.className());
+		} catch (ClassNotFoundException cnfe) {
+			//An attribute has a className that is not in the classpath
+			NSForwardException._runtimeExceptionForThrowable(cnfe);
+		}
+		NSSelector sel = attr.valueFactoryMethod();
+		
+		try {
+			Method m = sel.methodOnClass(attrValueClass);
+			
+    		switch (attr.factoryMethodArgumentType()) {
+			case EOAttribute.FactoryMethodArgumentIsBytes:
+				if(encoding==null){throw new NullPointerException();}
+				byte[] b = strVal.getBytes(encoding);
+				val = m.invoke(null, new Object[] {b});
+				break;
+
+			case EOAttribute.FactoryMethodArgumentIsData:
+				if(encoding==null){throw new NullPointerException();}
+				NSData d = new NSData(strVal, encoding);
+				val = m.invoke(null, new Object[] {d});
+				break;
+				
+			case EOAttribute.FactoryMethodArgumentIsString:
+				val = m.invoke(null, new Object[] {strVal});
+				break;
+				
+			default:
+				break;
+			}
+		} catch (NullPointerException npe) {
+			throw npe;
+		} catch (Exception e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+
+		return val;
+	}
 }

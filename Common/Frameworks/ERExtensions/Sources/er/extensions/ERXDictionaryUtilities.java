@@ -22,6 +22,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+
 /**
  * Collection of {@link com.webobjects.foundation.NSDictionary NSDictionary} utilities.
  */
@@ -93,6 +94,28 @@ public class ERXDictionaryUtilities extends Object {
                 Object key = e.nextElement();
                 if (!a.containsObject(key))
                     result.setObjectForKey(d.objectForKey(key), key);
+            }
+        }
+        return result.immutableClone();
+    }
+
+    /**
+     * Creates a new dictionary with only the keys and objects in the array.  The result is the objects for the
+     * intersection of keys in the dictionary and the array.  This is the opposite of dictionaryByRemovingFromDictionaryKeysInArray.
+     * 
+     * @param d dictionary to be pruned
+     * @param a array of keys to be included
+     * @return pruned dictionary
+     */
+    public static NSDictionary dictionaryByRemovingKeysNotInArray(NSDictionary d, NSArray a) {
+        NSMutableDictionary result=new NSMutableDictionary();
+        if (d != null && a != null) {
+            for (Enumeration e = a.objectEnumerator(); e.hasMoreElements();) {
+                Object key = e.nextElement();
+                Object value = d.objectForKey(key);
+                if (value != null) {
+                    result.setObjectForKey(value, key);
+                }
             }
         }
         return result.immutableClone();
@@ -260,8 +283,7 @@ public class ERXDictionaryUtilities extends Object {
     	 if (dict != null) {
     		 clonedDict = dict.mutableClone();
 	    	 for (Enumeration keysEnum = dict.allKeys().objectEnumerator(); keysEnum.hasMoreElements();) {
-				 Object key = keysEnum.nextElement(); 
-	    		 Object value = dict.objectForKey(key);
+				 Object key = keysEnum.nextElement(); 	    		 Object value = dict.objectForKey(key);
 	    		 Object cloneKey = ERXUtilities.deepClone(key, onlyCollections);
 	    		 Object cloneValue = ERXUtilities.deepClone(value, onlyCollections);
 	    		 if (cloneKey != key) {
@@ -287,9 +309,17 @@ public class ERXDictionaryUtilities extends Object {
 	 * Encodes a dictionary into a string that can be used in a request uri.
 	 * @param dict dictionary with form values
 	 * @param separator optional value separator
-	 * @return
 	 */
 	public static String queryStringForDictionary(NSDictionary dict, String separator) {
+		return queryStringForDictionary(dict, separator,  WOMessage.defaultURLEncoding());
+	}
+    
+    /**
+	 * Encodes a dictionary into a string that can be used in a request uri.
+	 * @param dict dictionary with form values
+	 * @param separator optional value separator
+	 */
+	public static String queryStringForDictionary(NSDictionary dict, String separator, String encoding) {
 		if (separator == null) {
 			separator = "&";
 		}
@@ -297,9 +327,9 @@ public class ERXDictionaryUtilities extends Object {
 		for (Enumeration e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
 			Object key = (Object) e.nextElement();
 			try {
-				sb.append(URLEncoder.encode(key.toString(), WOMessage.defaultURLEncoding()));
+				sb.append(URLEncoder.encode(key.toString(), encoding));
 				sb.append("=");
-				sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), WOMessage.defaultURLEncoding()));
+				sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), encoding));
 				if (e.hasMoreElements()) {
 					sb.append(separator);
 				}

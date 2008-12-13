@@ -851,6 +851,17 @@ public class ERXFileUtilities {
     }
     
     /**
+     * Java wrapper for call out to chmod with -R parameter for recursive processing.  Only works if your OS supports the chmod command.
+     *
+     * @param dir the File to run chmod on
+     * @param mode see the chmod man page
+     * @throws IOException if things go wrong
+     */
+    public static void chmodRecusively(File dir, String mode) throws IOException {
+    	Runtime.getRuntime().exec(new String[] {"chmod", "-R", mode, dir.getAbsolutePath()});
+    }
+    
+    /**
         * Creates a symlink for a given file. Note this only works on
      * civilized OSs which support symbolic linking.
      * @param source to create the link to
@@ -1463,6 +1474,32 @@ public class ERXFileUtilities {
                 File currentDir = files [i];
                 File[] currentDirs = listDirectories(currentDir, true);
                 a.addObjects(currentDirs);
+            }
+            Object[] objects = a.objects();
+            files = new File[objects.length];
+            System.arraycopy(objects, 0, files, 0, objects.length);
+        }
+        return files;
+    }
+
+    
+    /** Lists all directories in the specified directory, is desired recursive.
+     *  
+     * @param baseDir the dir from which to list the child directories
+     * @param recursive if true this methods works recursively
+     * @return an array of files which are directories
+     */
+    public static File[] listFiles(File baseDir, boolean recursive, FileFilter filter) {
+        File[] files = baseDir.listFiles(filter);
+        if (files != null && recursive) {
+        	NSMutableArray a = new NSMutableArray(files);
+            for (int i = files.length; i-- > 0;) {
+                File currentDir = files [i];
+            	a.addObject(currentDir);
+                if(currentDir.isDirectory()) {
+                	File[] currentDirs = listFiles(currentDir, true, filter);
+                	a.addObjects(currentDirs);
+                }
             }
             Object[] objects = a.objects();
             files = new File[objects.length];

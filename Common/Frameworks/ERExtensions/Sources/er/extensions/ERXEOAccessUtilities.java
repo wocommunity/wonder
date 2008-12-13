@@ -764,19 +764,23 @@ public class ERXEOAccessUtilities {
 
     /**
      * Creates a where clause string " someKey IN ( someValue1,...)".
+     * @deprecated
      */
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
-        StringBuffer sb=new StringBuffer();
-        sb.append(e.sqlStringForAttributeNamed(key));
-        sb.append(" IN ");
-        sb.append("(");
-        for (int i = 0; i < valueArray.count(); i++ ) {
-            if ( i > 0 )
-                sb.append(", ");
-            sb.append(e.sqlStringForValue(valueArray.objectAtIndex(i), key));
-        }
-        sb.append(")");
-        return sb.toString();
+    	return ERXSQLHelper.newSQLHelper(e).sqlWhereClauseStringForKey(e, key, valueArray);
+    }
+
+    /**
+     * Returns the database context for an EO.
+     * 
+     * @param eo the EO to get a database context for
+     * @return the eo's database context
+     */
+    public static EODatabaseContext databaseContextForObject(EOEnterpriseObject eo) {
+        EOEditingContext editingContext = eo.editingContext();
+        EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) editingContext.rootObjectStore();
+        EODatabaseContext databaseContext = (EODatabaseContext) osc.objectStoreForObject(eo);
+        return databaseContext;
     }
     
     /**
@@ -790,6 +794,43 @@ public class ERXEOAccessUtilities {
         EOModel model = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model();
         EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, osc);
         return dbc;
+    }
+
+    /**
+     * Closes the (JDBC) Connection from all database channels for the specified
+     * EOObjectStoreCoordinator
+     * 
+     * @param osc
+     *            the EOObjectStoreCoordinator from which the (JDBC)Connections
+     *            should be closed
+     */
+    public static boolean closeDatabaseConnections(EOObjectStoreCoordinator osc) {
+        boolean couldClose = true;
+        try {
+            int i, contextCount, j, channelCount;
+            NSArray databaseContexts;
+            databaseContexts = osc.cooperatingObjectStores();
+            contextCount = databaseContexts.count();
+            for (i = contextCount; i-- > 0;) {
+                NSArray channels = ((EODatabaseContext) databaseContexts.objectAtIndex(i)).registeredChannels();
+                channelCount = channels.count();
+                for (j = channelCount; j-- > 0;) {
+                    EODatabaseChannel dbch = (EODatabaseChannel) channels.objectAtIndex(j);
+                    if (!dbch.adaptorChannel().adaptorContext().hasOpenTransaction()) {
+                        dbch.adaptorChannel().closeChannel();
+                        
+                    } else {
+                        log.warn("could not close Connection from " + dbch + " because its EOAdaptorContext "
+                                + dbch.adaptorChannel().adaptorContext() + " had open Transactions");
+                        couldClose = false;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("could not close all Connections, reason:", e);
+            couldClose = false;
+        }
+        return couldClose;
     }
 
     /**
@@ -1221,6 +1262,222 @@ public class ERXEOAccessUtilities {
         }
         return pluginName;
     }
+
+    /**
+     * Batch fetch a relationship, optionally skipping any relationship that has already faulted in its to-many relationship.
+     * 
+     * @param databaseContext the database context to fetch in
+     * @param entityName the name of the entity to fetch on
+     * @param relationshipName the name of the relationship in that entity to fetch
+     * @param objects the objects to fetch the relationship on
+     * @param editingContext the editingContext to fetch in
+     * @param skipFaultedRelationships if true, skip any object whose relationship has already been faulted
+     */
+    public static void batchFetchRelationship(EODatabaseContext databaseContext, String entityName, String relationshipName, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
+    	 EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+    	 EORelationship relationship = entity.relationshipNamed(relationshipName);
+    	 ERXEOAccessUtilities.batchFetchRelationship(databaseContext, relationship, objects, editingContext, skipFaultedRelationships);
+    }
+    
+	/**
+	 * Batch fetch a relationship, optionally skipping any relationship that has
+	 * already faulted in its to-many relationship.
+	 * 
+	 * @param databaseContext
+	 *            the database context to fetch in
+	 * @param relationship
+	 *            the relationship to fetch
+	 * @param objects
+	 *            the objects to fetch the relationship on
+	 * @param editingContext
+	 *            the editingContext to fetch in
+	 * @param skipFaultedRelationships
+	 *            if true, skip any object whose relationship has already been
+	 *            faulted
+	 */
+	public static void batchFetchRelationship(EODatabaseContext databaseContext, EORelationship relationship, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
+		NSArray objectsToBatchFetch;
+		if (skipFaultedRelationships) {
+			if (relationship.isToMany()) {
+				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+				String relationshipName = relationship.name();
+				Enumeration objectsEnum = objects.objectEnumerator();
+				while (objectsEnum.hasMoreElements()) {
+					EOEnterpriseObject object = (EOEnterpriseObject) objectsEnum.nextElement();
+					Object relationshipValue = object.storedValueForKey(relationshipName);
+					if (EOFaultHandler.isFault(relationshipValue)) {
+						objectsWithUnfaultedRelationships.addObject(object);
+					}
+				}
+				objectsToBatchFetch = objectsWithUnfaultedRelationships;
+			}
+			else {
+		 		NSMutableArray gids = new NSMutableArray();
+		 		
+				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+				EOEntity destinationEntity = relationship.destinationEntity();
+				String relationshipName = relationship.name();
+				Enumeration objectsEnum = objects.objectEnumerator();
+				while (objectsEnum.hasMoreElements()) {
+					EOEnterpriseObject object = (EOEnterpriseObject) objectsEnum.nextElement();
+					NSDictionary sourceSnapshot = databaseContext.snapshotForGlobalID(editingContext.globalIDForObject(object));
+					if (sourceSnapshot == null) {
+						objectsWithUnfaultedRelationships.addObject(object);
+					}
+					else {
+						NSDictionary destinationPK = relationship._foreignKeyForSourceRow(sourceSnapshot);
+						EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
+						if (destinationGID != null) {
+    						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
+    						if (destinationSnapshot == null) {
+    							gids.addObject(destinationGID);
+    							//objectsWithUnfaultedRelationships.addObject(object);
+    						}
+						}
+					}
+				}
+				objectsToBatchFetch = objectsWithUnfaultedRelationships;
+				
+				// MS: This is split out into a separate fetch because EOF does not handle batch
+				// fetching of abstract entities very effectively.  We instead want to create
+				// our own GID and batch fetch the GIDs ourselves.
+				if (gids.count() > 0) {
+					ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids);
+				}
+			}
+		}
+		else {
+			objectsToBatchFetch = objects;
+		}
+		if (objectsToBatchFetch.count() > 0) {
+			databaseContext.batchFetchRelationship(relationship, objectsToBatchFetch, editingContext);
+		}
+	}
+	
+	/**
+	 * In a multi-OSC or multi-instance scenario, when there are bugs, it is possible for the snapshots to become out of
+	 * sync with the database. It is useful to have some way to determine when exactly this condition occurs for writing
+	 * test cases.
+	 * 
+	 * @return a set of strings that describe the mismatches that occurred
+	 */
+	public static NSSet verifyAllSnapshots() {
+		NSMutableSet mismatches = new NSMutableSet();
+		NSMutableSet verifiedDatabases = new NSMutableSet();
+		EOEditingContext editingContext = ERXEC.newEditingContext();
+		EOModelGroup modelGroup = EOModelGroup.defaultGroup();
+		Enumeration modelsEnum = modelGroup.models().objectEnumerator();
+		while (modelsEnum.hasMoreElements()) {
+			EOModel model = (EOModel) modelsEnum.nextElement();
+			EODatabaseContext databaseContext = null;
+			try {
+				databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, editingContext);
+			}
+			catch (IllegalStateException e) {
+				log.warn("Model " + model.name() + " failed: " + e.getMessage());
+			}
+			if (databaseContext != null) {
+				databaseContext.lock();
+				try {
+					EODatabase database = databaseContext.database();
+					if (!verifiedDatabases.containsObject(database)) {
+						Enumeration gidEnum = database.snapshots().keyEnumerator();
+						while (gidEnum.hasMoreElements()) {
+							EOGlobalID gid = (EOGlobalID) gidEnum.nextElement();
+							if (gid instanceof EOKeyGlobalID) {
+								EOEnterpriseObject eo = null;
+								EOKeyGlobalID keyGID = (EOKeyGlobalID) gid;
+								String entityName = keyGID.entityName();
+								EOEntity entity = modelGroup.entityNamed(entityName);
+								NSDictionary snapshot = database.snapshotForGlobalID(gid);
+								if (snapshot != null) {
+									EOQualifier gidQualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(gid));
+									EOFetchSpecification gidFetchSpec = new EOFetchSpecification(entityName, gidQualifier, null);
+
+									NSMutableDictionary databaseSnapshotClone;
+									NSMutableDictionary memorySnapshotClone = snapshot.mutableClone();
+									EOAdaptorContext context;
+									EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
+									channel.openChannel();
+									channel.selectAttributes(entity.attributesToFetch(), gidFetchSpec, false, entity);
+									NSDictionary nextRow;
+									try {
+										databaseSnapshotClone = channel.fetchRow().mutableClone();
+									}
+									finally {
+										channel.cancelFetch();
+									}
+									// gidFetchSpec.setRefreshesRefetchedObjects(true);
+									// NSArray databaseEOs = editingContext.objectsWithFetchSpecification(gidFetchSpec);
+									if (databaseSnapshotClone == null) {
+										mismatches.addObject(gid + " was deleted in the database, but the snapshot still exists: " + memorySnapshotClone);
+									}
+									else {
+										// NSMutableDictionary refreshedSnapshotClone =
+										// database.snapshotForGlobalID(gid).mutableClone();
+										ERXDictionaryUtilities.removeMatchingEntries(memorySnapshotClone, databaseSnapshotClone);
+										if (databaseSnapshotClone.count() > 0 || memorySnapshotClone.count() > 0) {
+											mismatches.addObject(gid + " doesn't match the database: original = " + memorySnapshotClone + "; database = " + databaseSnapshotClone);
+										}
+										eo = (EOEnterpriseObject) editingContext.objectsWithFetchSpecification(gidFetchSpec).objectAtIndex(0);
+									}
+								}
+
+								if (eo != null) {
+									Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
+									while (relationshipsEnum.hasMoreElements()) {
+										EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
+										String relationshipName = relationship.name();
+										NSArray originalDestinationGIDs = database.snapshotForSourceGlobalID(keyGID, relationshipName);
+										if (originalDestinationGIDs != null) {
+											NSMutableArray newDestinationGIDs = new NSMutableArray();
+											EOQualifier qualifier = relationship.qualifierWithSourceRow(database.snapshotForGlobalID(keyGID));
+											EOFetchSpecification relationshipFetchSpec = new EOFetchSpecification(entityName, qualifier, null);
+											EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
+											channel.openChannel();
+											try {
+												channel.selectAttributes(relationship.destinationEntity().attributesToFetch(), relationshipFetchSpec, false, relationship.destinationEntity());
+												NSDictionary nextRow;
+												NSDictionary destinationSnapshot = null;
+												do {
+													destinationSnapshot = channel.fetchRow();
+													if (destinationSnapshot != null) {
+														EOGlobalID destinationGID = relationship.destinationEntity().globalIDForRow(destinationSnapshot);
+														newDestinationGIDs.addObject(destinationGID);
+													}
+													else {
+														destinationSnapshot = null;
+													}
+												}
+												while (destinationSnapshot != null);
+											}
+											finally {
+												channel.cancelFetch();
+											}
+
+											NSArray objectsNotInDatabase = ERXArrayUtilities.arrayMinusArray(originalDestinationGIDs, newDestinationGIDs);
+											if (objectsNotInDatabase.count() > 0) {
+												mismatches.addObject(gid + "." + relationshipName + " has entries not in the database: " + objectsNotInDatabase);
+											}
+											NSArray objectsNotInMemory = ERXArrayUtilities.arrayMinusArray(newDestinationGIDs, originalDestinationGIDs);
+											if (objectsNotInMemory.count() > 0) {
+												mismatches.addObject(gid + "." + relationshipName + " is missing entries in the database: " + objectsNotInMemory);
+											}
+										}
+									}
+								}
+							}
+						}
+						verifiedDatabases.addObject(database);
+					}
+				}
+				finally {
+					databaseContext.unlock();
+				}
+			}
+		}
+		return mismatches;
+	}
 
     /**
      * Utility method to make a shared entity editable. This

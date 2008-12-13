@@ -38,14 +38,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.ERXApplication;
-import er.extensions.ERXSession;
-import er.extensions.ERXWOContext;
-import er.extensions.ERXHyperlink;
-import er.extensions.ERXWOFileUpload;
-//import er.extensions.ERXWOConditional;
-import er.extensions.WOToManyRelationship;
-import er.extensions.WOToOneRelationship;
 
 /**
  * Wrapper around the WO-private NSUtilities which allows for some Objective-C-Style poseAs. Using these methods may or
@@ -169,7 +161,7 @@ public class ERXPatcher {
 		    public void appendChildrenToResponse(WOResponse aResponse, WOContext aContext) {
 				super.appendChildrenToResponse(aResponse, aContext);
 		        if(useButtonTag && !hasChildrenElements()) {
-		        	aResponse.appendContentHTMLString(_valueStringInContext(aContext));
+		        	aResponse.appendContentString(_valueStringInContext(aContext));
 		        }
 		    }
 			
@@ -209,8 +201,8 @@ public class ERXPatcher {
 			 */
 			public WOActionResults invokeAction(WORequest arg0, WOContext arg1) {
 				WOActionResults result = super.invokeAction(arg0, arg1);
-				if (result != null && _action != null && ERXSession.session() != null) {
-					ERXSession.session().setObjectForKey(this.toString(), "ERXActionLogging");
+				if (result != null && _action != null && ERXSession.anySession() != null) {
+					ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
 				}
 				return result;
 			}
@@ -348,8 +340,8 @@ public class ERXPatcher {
 			 */
 			public WOActionResults invokeAction(WORequest arg0, WOContext arg1) {
 				WOActionResults result = super.invokeAction(arg0, arg1);
-				if (result != null && ERXSession.session() != null) {
-					ERXSession.session().setObjectForKey(this.toString(), "ERXActionLogging");
+				if (result != null && ERXSession.anySession() != null) {
+					ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
 				}
 				return result;
 			}
@@ -781,14 +773,17 @@ public class ERXPatcher {
 					buf.append(ch);
 					i = consumeAttributeValue(string, i + 1, buf);
 				} else if( ch == '>' ) {
-					buf.append(ch);
 					String t = tagName.toString();
 
-					if ("img".equals(t) || "input".equals(t)) {
-						buf.append("</").append(tagName).append(">");
+					if ("img".equals(t) || "input".equals(t) || "link".equals(t) ) {
+						buf.append(" /");
 					}
 
+					buf.append(ch);
+					
 					return i - 1;
+				} else if (ch == '/' && i+1 < length && string.charAt(i+1) == '>') {
+					continue;
 				} else {
 					i = consumeAttributeName(string, i, buf);
 				}

@@ -1,10 +1,12 @@
 package er.extensions;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -24,11 +26,13 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
@@ -62,6 +66,12 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
  * @author mschrag
  */
 public class ERXSQLHelper {
+	
+	/** custom JDBC types */
+	public interface CustomTypes {
+		public static final int INET = 9001;
+	}
+	
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXSQLHelper.class);
 
@@ -194,6 +204,57 @@ public class ERXSQLHelper {
 		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext.adaptorContext().adaptor(), optionsCreate);
 	}
 
+	/**
+	 * Generates table create statements for a set of entities, then finds all the entities that those entities depend on (in other models) and generates
+	 * foreign key statements for those, so you can generate sql for cross-model.
+	 * 
+	 * @param entities the entities to generate for
+	 * @param adaptor the adaptor to use
+	 * @return the sql script
+	 */
+	public String createDependentSchemaSQLForEntities(NSArray entities, EOAdaptor adaptor) {
+		NSMutableDictionary optionsCreateTables = new NSMutableDictionary();
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
+		optionsCreateTables.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
+		optionsCreateTables.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+		optionsCreateTables.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
+		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
+		StringBuffer sqlBuffer = new StringBuffer();
+		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
+		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsCreateTables);
+		sqlBuffer.append(creationScript);
+		
+		NSMutableArray foreignKeyEntities = entities.mutableClone();
+		for (Enumeration entitiesEnum = entities.objectEnumerator(); entitiesEnum.hasMoreElements();) {
+			EOEntity entity = (EOEntity)entitiesEnum.nextElement();
+			for (Enumeration relationshipsEnum = entity.relationships().objectEnumerator(); relationshipsEnum.hasMoreElements();) {
+				EORelationship relationship = (EORelationship)relationshipsEnum.nextElement();
+				if (!relationship.isToMany()) {
+					EOEntity destinationEntity = relationship.destinationEntity();
+					if (destinationEntity.model() != entity.model()) {
+						foreignKeyEntities.addObject(destinationEntity);
+					}
+				}
+			}
+		}
+		
+		NSMutableDictionary optionsCreateForeignKeys = new NSMutableDictionary();
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.CreateTablesKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+		optionsCreateForeignKeys.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
+		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
+		String foreignKeyScript = sf.schemaCreationScriptForEntities(foreignKeyEntities, optionsCreateForeignKeys);
+		sqlBuffer.append(foreignKeyScript);
+		
+		return sqlBuffer.toString();
+	}
 	/**
 	 * Creates the schema sql for a set of entities.
 	 * 
@@ -504,6 +565,29 @@ public class ERXSQLHelper {
 	}
 
 	/**
+	 * Returns the custom query expression hint as a String.  At the moment, if it's an EOSQLExpression, it just returns .statement().
+	 * 
+	 * @param hint the hint to convert to a String 
+	 * @return the hint as a String
+	 */
+	public String customQueryExpressionHintAsString(Object hint) {
+		String sql;
+		if (hint instanceof String) {
+			sql = (String) hint;
+		}
+		else if (hint instanceof EOSQLExpression) {
+			sql = ((EOSQLExpression)hint).statement();
+			if (sql == null) {
+				throw new IllegalArgumentException("This EOSQLExpression's statement was null (" + hint + ").");
+			}
+		}
+		else {
+			sql = null;
+		}
+		return sql;
+	}
+	
+	/**
 	 * Creates the SQL which is used by the provided EOFetchSpecification,
 	 * limited by the given range.
 	 * 
@@ -546,7 +630,8 @@ public class ERXSQLHelper {
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
 		if(spec.hints() != null && spec.hints().allKeys().count() > 0 && !(spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null)) {
-			sql = (String)spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+			sql = customQueryExpressionHintAsString(hint);
 		}
 		if (end >= 0) {
 			sql = limitExpressionForSQL(sqlExpr, spec, sql, start, end);
@@ -754,8 +839,6 @@ public class ERXSQLHelper {
 	 * 
 	 * @param indexName
 	 *            the name of the index to create
-	 * @param expression
-	 *            the EOSQLExpression context
 	 * @param tableName the name of the containing table
 	 * @param columnNames
 	 *            the list of column names to index on
@@ -771,8 +854,6 @@ public class ERXSQLHelper {
 	 * 
 	 * @param indexName
 	 *            the name of the index to create
-	 * @param expression
-	 *            the EOSQLExpression context
 	 * @param tableName the name of the containing table
 	 * @param columnIndexes
 	 *            the list of columns to index on
@@ -788,8 +869,6 @@ public class ERXSQLHelper {
 	 * 
 	 * @param indexName
 	 *            the name of the index to create
-	 * @param expression
-	 *            the EOSQLExpression context
 	 * @param tableName the name of the containing table
 	 * @param columnNames
 	 *            the list of column names to index on
@@ -813,8 +892,6 @@ public class ERXSQLHelper {
 	 * 
 	 * @param indexName
 	 *            the name of the index to create
-	 * @param expression
-	 *            the EOSQLExpression context
 	 * @param tableName the name of the containing table
 	 * @param columnIndexes
 	 *            the list of columns to index on
@@ -889,6 +966,22 @@ public class ERXSQLHelper {
 	}
 
 	/**
+	 * Returns the JDBC type to use for a given ERXSQLHelper custom type
+	 * 
+	 * @param jdbcType
+	 * 				the ERXSQLHelper custom type
+	 * @return the JDBC type to use
+	 */
+	public int jdbcTypeForCustomType(int jdbcType) {
+		int result = jdbcType;
+
+		if (jdbcType == CustomTypes.INET) {
+			result = Types.VARCHAR;
+		}
+		return result;
+	}
+
+	/**
 	 * JDBCAdaptor.externalTypeForJDBCType just returns the first type it finds
 	 * instead of trying to find a best match. This can still fail, mind you,
 	 * but it should be much better than the EOF default impl.
@@ -903,6 +996,8 @@ public class ERXSQLHelper {
 	public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
 		String externalType = null;
 		NSArray defaultJDBCTypes = null;
+		jdbcType = jdbcTypeForCustomType(jdbcType);
+		
 		try {
 			// MS: This is super dirty, but we can deadlock if we end up trying
 			// to request jdbc2Info during a migration. We have to be able to
@@ -946,11 +1041,6 @@ public class ERXSQLHelper {
 					if (externalType == null) {
 						externalType = adaptor.externalTypeForJDBCType(jdbcType);
 					}
-
-					if (externalType == null) {
-
-					}
-
 				}
 			}
 			finally {
@@ -1008,20 +1098,37 @@ public class ERXSQLHelper {
 		if (spec.hints() == null || spec.hints().allKeys().count() == 0 || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
 			// no hints
 			if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
+				boolean usesDistinct=spec.usesDistinct();
 				spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
+				spec.setUsesDistinct(usesDistinct);
 			}
 
 			EOSQLExpression sqlExpression = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
 			String statement = sqlExpression.statement();
 			int index = statement.toLowerCase().indexOf(" from ");
-			statement = (new StringBuilder()).append("select count(*) ").append(statement.substring(index, statement.length())).toString();
+
+			String countExpression;
+			if (spec.usesDistinct()) {
+				NSArray primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+				if (primaryKeyAttributeNames.count() > 1)
+					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
+				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
+				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
+				countExpression = "count(t0." + pkColumnName + ") ";
+			}
+			else {
+				countExpression = "count(*) ";
+			}
+			statement = (new StringBuilder()).append("select ").append(countExpression).append(statement.substring(index, statement.length())).toString();
 			sqlExpression.setStatement(statement);
 			sql = statement;
 			result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sqlExpression);
 		}
 		else {
 			// we have hints
-			sql = (String) spec.hints().valueForKey("EOCustomQueryExpressionHintKey");
+			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+			sql = ERXSQLHelper.newSQLHelper(model).customQueryExpressionHintAsString(hint);
+			// MS: This looks super sketchy ...
 			if (sql.endsWith(";")) {
 				sql = sql.substring(0, sql.length() - 1);
 			}
@@ -1170,37 +1277,55 @@ public class ERXSQLHelper {
 	public NSArray splitSQLStatements(String sql) {
 		NSMutableArray statements = new NSMutableArray();
 		if (sql != null) {
+			char commandSeparatorChar = commandSeparatorChar();
+			Pattern commentPattern = commentPattern();
 			StringBuffer statementBuffer = new StringBuffer();
-			int length = sql.length();
+			BufferedReader reader = new BufferedReader(new StringReader(sql));
 			boolean inQuotes = false;
-			for (int i = 0; i < length; i++) {
-				char ch = sql.charAt(i);
-				if (ch == '\r' || ch == '\n') {
-					// ignore
-				}
-				// MS: Should this use commandSeparatorString?
-				else if (!inQuotes && ch == ';') {
-					String statement = statementBuffer.toString().trim();
-					if (statement.length() > 0) {
-						statements.addObject(statement);
+
+			try {
+				String nextLine = reader.readLine();
+				while (nextLine != null) {
+					nextLine = nextLine.trim();
+					
+					// Skip blank lines and new lines starting with the comment pattern
+					if (nextLine.length() == 0 ||
+							(statementBuffer.length() == 0 && commentPattern.matcher(nextLine).find())) {
+						nextLine = reader.readLine();
+						continue;
 					}
-					statementBuffer.setLength(0);
-				}
-				else {
-					// Support for escaping apostrophes, e.g. 'Mike\'s Code' 
-					if (inQuotes && ch == '\\') {
-						statementBuffer.append(ch);
-						ch = sql.charAt(++ i);
+
+					// Determine if the line ends inside a single quoted string
+					int length = nextLine.length();
+					char ch = 0;
+					for (int i = 0; i < length; i++) {
+						ch = nextLine.charAt(i);
+						// Determine if we are in a quoted string, but ignore escaped apostrophes, e.g. 'Mike\'s Code' 
+						if (inQuotes && ch == '\\') {
+							i++;
+						}
+						else if (ch == '\'') {
+							inQuotes = !inQuotes;
+						}
 					}
-					else if (ch == '\'') {
-						inQuotes = !inQuotes;
+
+					// If we are not in a quoted string, either this is the end of the command or we need to 
+					// add some whitespace before the continuation of this command
+					statementBuffer.append(nextLine);		
+					if (!inQuotes) {
+						if (ch == commandSeparatorChar) {
+							statements.addObject(statementBuffer.toString());
+							statementBuffer.setLength(0);
+						}
+						else {
+							statementBuffer.append(' ');
+						}
 					}
-					statementBuffer.append(ch);
+					nextLine = reader.readLine();
 				}
 			}
-			String statement = statementBuffer.toString().trim();
-			if (statement.length() > 0) {
-				statements.addObject(statement);
+			catch (IOException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 		}
 		return statements;
@@ -1239,17 +1364,42 @@ public class ERXSQLHelper {
 		}
 	}
 
+	/**
+	 * This is totally cheating ... But I just need the separator character for now.  We
+	 * can rewrite the script parser later.  Actually, somewhere on earth there is already
+	 * a sql parser or two.  Probably worth getting that one.
+	 * 
+	 * @return the separator character used by this database
+	 */
+	protected char commandSeparatorChar() {
+		return ';';
+	}
+	
 	protected String commandSeparatorString() {
 		String lineSeparator = System.getProperty("line.separator");
 		return ";" + lineSeparator;
 	}
 
+	/**
+	 * Returns a pattern than matches only blank lines.  Subclasses should implement this to return a pattern
+	 * matching the vendor specific comment indicator(s).
+	 * 
+	 * @return regex pattern that indicates this line is an SQL comment
+	 */
+	protected Pattern commentPattern() {
+		return Pattern.compile("^$");
+	}
+	
 	public NSMutableArray columnNamesFromColumnIndexes(ColumnIndex... columnIndexes) {
 		NSMutableArray columnNames = new NSMutableArray();
 		for (ColumnIndex columnIndex : columnIndexes) {
 			columnNames.addObject(columnIndex.columnName());
 		}
 		return columnNames;
+	}
+
+	public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
+		return true;
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
@@ -1337,6 +1487,9 @@ public class ERXSQLHelper {
 						}
 						else if (databaseProductName.equalsIgnoreCase("derby")) {
 							sqlHelper = new DerbySQLHelper();
+						}
+						else if (databaseProductName.equalsIgnoreCase("microsoft")) {
+							sqlHelper = new MicrosoftSQLHelper();
 						}
 						else {
 							try {
@@ -1475,6 +1628,11 @@ public class ERXSQLHelper {
 		}
 
 		@Override
+		protected char commandSeparatorChar() {
+			return '/';
+		}
+
+		@Override
 		protected String commandSeparatorString() {
 			String lineSeparator = System.getProperty("line.separator");
 			String commandSeparator = lineSeparator + "/" + lineSeparator;
@@ -1490,12 +1648,50 @@ public class ERXSQLHelper {
 			oracleExternalTypesToIgnore.addObject("BLOB");
 			oracleExternalTypesToIgnore.addObject("CLOB");
 			return super.createIndexSQLForEntities(entities, oracleExternalTypesToIgnore);
-
+		}
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray columnNames = new NSMutableArray();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray columnNames = new NSMutableArray();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return "REGEXP_LIKE(" + key + ", " + value + ")";
+		}
+
+		@Override
+		public String migrationTableName() {
+			return "dbupdater";
+		}
+		
+		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.TIMESTAMP) {
+				externalType = "DATE";
+			}
+			else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			return externalType;
+		}
+		
+		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
+			return false;
 		}
 	}
 
@@ -1534,7 +1730,7 @@ public class ERXSQLHelper {
 
 		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
-			return "select from unique from " + sequenceName;
+			return "select unique from " + sequenceName;
 		}
 		
 		@Override
@@ -1653,6 +1849,16 @@ public class ERXSQLHelper {
 			};
 			action.perform(ec, model.name());
 		}
+		
+
+		/**
+		 * Returns a pattern than matches lines that start with "--".
+		 * 
+		 * @return regex pattern that indicates this line is an SQL comment
+		 */
+		protected Pattern commentPattern() {
+			return Pattern.compile("^--");
+		}
 	}
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {
@@ -1770,6 +1976,9 @@ public class ERXSQLHelper {
 			else if (jdbcType == Types.DECIMAL) {
 				externalType = "numeric";
 			}
+			else if (jdbcType == CustomTypes.INET) {
+				externalType = "inet";
+			}
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
 			}
@@ -1790,5 +1999,20 @@ public class ERXSQLHelper {
 			}
 			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
+
 	}
+	
+	
+	public static class MicrosoftSQLHelper extends ERXSQLHelper {
+
+		/**
+		 * Returns a pattern than matches lines that start with "--".
+		 * 
+		 * @return regex pattern that indicates this line is an SQL comment
+		 */
+		protected Pattern commentPattern() {
+			return Pattern.compile("^--");
+		}
+	}
+
 }

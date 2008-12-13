@@ -160,6 +160,21 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	protected String _replaceApplicationPathReplace;
 
+	/**
+	 * The SSL host used by this application.
+	 */
+	protected String _sslHost;
+
+	/**
+	 * The SSL port used by this application.
+	 */
+	protected Integer _sslPort;
+
+	/**
+	 * Tracks whether or not _addAdditionalAdaptors has been called yet.
+	 */
+	protected boolean _initializedAdaptors = false;
+
 	private static Properties readProperties(File file) {
 		Properties result = null;
 		if (file.exists()) {
@@ -1536,5 +1551,111 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 
 		};
+	}
+
+	/**
+	 * Returns whether or not DirectConnect SSL should be enabled.  If you set this, please
+	 * review the DirectConnect SSL section of the ERExtensions sample Properties file to
+	 * learn more about how to properly configure it.
+	 *  
+	 * @return whether or not DirectConnect SSL should be enabled
+	 * @property er.extensions.ERXApplication.ssl.enabled
+	 */
+	public boolean sslEnabled() {
+		return ERXProperties.booleanForKey("er.extensions.ERXApplication.ssl.enabled");
+	}
+
+	/**
+	 * Returns the host name that will be used to bind the SSL socket to (defaults to host()).
+	 * 
+	 * @return the SSL socket host
+	 * @property er.extensions.ERXApplication.ssl.host
+	 */
+	public String sslHost() {
+		String sslHost = _sslHost;
+		if (sslHost == null) {
+			sslHost = ERXProperties.stringForKeyWithDefault("er.extensions.ERXApplication.ssl.host", host());
+		}
+		return sslHost;
+	}
+	
+	/**
+	 * Sets an SSL host override.
+	 * 
+	 * @param sslHost an SSL host override
+	 */
+	public void _setSslHost(String sslHost) {
+		_sslHost = sslHost;
+	}
+
+	/**
+	 * Returns the SSL port that will be used for DirectConnect SSL (defaults to 443).  A value of
+	 * 0 will cause WO to autogenerate an SSL port number.
+	 * 
+	 * @return the SSL port that will be used for DirectConnect SSL
+	 * @property er.extensions.ERXApplication.ssl.port
+	 */
+	public int sslPort() {
+		int sslPort;
+		if (_sslPort != null) {
+			sslPort = _sslPort.intValue();
+		}
+		else {
+			sslPort = ERXProperties.intForKeyWithDefault("er.extensions.ERXApplication.ssl.port", 443);
+		}
+		return sslPort;
+	}
+	
+	/**
+	 * Sets an SSL port override (called back by the ERXSecureAdaptor)
+	 * 
+	 * @param sslPort an ssl port override
+	 */
+	public void _setSslPort(int sslPort) {
+		_sslPort = sslPort;
+	}
+
+	/**
+	 * Injects additional adaptors into the WOAdditionalAdaptors setting.  Subclasses can extend this
+	 * method, but should call super._addAdditionalAdaptors.
+	 * 
+	 * @param additionalAdaptors the mutable adaptors array
+	 */
+	protected void _addAdditionalAdaptors(NSMutableArray additionalAdaptors) {
+		if (sslEnabled()) {
+			boolean sslAdaptorConfigured = false;
+			for (Enumeration adaptorsEnum = additionalAdaptors.objectEnumerator(); adaptorsEnum.hasMoreElements();) {
+				NSDictionary adaptor = (NSDictionary)adaptorsEnum.nextElement();
+				if (ERXSecureDefaultAdaptor.class.getName().equals(adaptor.objectForKey(WOProperties._AdaptorKey))) {
+					sslAdaptorConfigured = true;
+				}
+			}
+			ERXSecureDefaultAdaptor.checkSSLConfig();
+			if (!sslAdaptorConfigured) {
+				NSMutableDictionary sslAdaptor = new NSMutableDictionary();
+				sslAdaptor.setObjectForKey(ERXSecureDefaultAdaptor.class.getName(), WOProperties._AdaptorKey);
+				sslAdaptor.setObjectForKey(sslHost(), WOProperties._HostKey);
+				sslAdaptor.setObjectForKey(Integer.valueOf(sslPort()), WOProperties._PortKey);
+				additionalAdaptors.addObject(sslAdaptor);
+			}
+		}
+	}
+	
+	/**
+	 * Returns the additionalAdaptors, but calls _addAdditionalAdaptors to give the runtime an opportunity to
+	 * programmatically force adaptors into the list.  
+	 */
+	@Override
+	@SuppressWarnings("deprecation")
+	public NSArray additionalAdaptors() {
+		NSArray additionalAdaptors = super.additionalAdaptors();
+		if (!_initializedAdaptors) {
+			NSMutableArray mutableAdditionalAdaptors = additionalAdaptors.mutableClone();
+			_addAdditionalAdaptors(mutableAdditionalAdaptors);
+			_initializedAdaptors = true;
+			additionalAdaptors = mutableAdditionalAdaptors;
+			setAdditionalAdaptors(mutableAdditionalAdaptors);
+		}
+		return additionalAdaptors;
 	}
 }

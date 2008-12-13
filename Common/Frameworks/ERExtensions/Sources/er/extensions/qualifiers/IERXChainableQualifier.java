@@ -46,8 +46,6 @@ public interface IERXChainableQualifier {
 	 *            the type of the array
 	 * @param array
 	 *            the array to filter
-	 * @param qualifier
-	 *            the qualifier to filter with
 	 * @return the filtered array
 	 */
 	public NSArray filtered(NSArray array);
@@ -58,8 +56,6 @@ public interface IERXChainableQualifier {
 	 * 
 	 * @param array
 	 *            the array to filter (in place)
-	 * @param qualifier
-	 *            the qualifier to filter with
 	 */
 	public void filter(NSMutableArray array);
 
@@ -70,8 +66,6 @@ public interface IERXChainableQualifier {
 	 *            the type of the array
 	 * @param array
 	 *            the array to filter (in place)
-	 * @param qualifier
-	 *            the qualifier to filter with
 	 * @return the first matching object or null
 	 */
 	public <T> T first(NSArray array);
@@ -83,8 +77,6 @@ public interface IERXChainableQualifier {
 	 *            the type of the array
 	 * @param array
 	 *            the array to filter (in place)
-	 * @param qualifier
-	 *            the qualifier to filter with
 	 * @return one matching object or null
 	 * @throw IllegalStateException if more than one object matched
 	 */
@@ -97,8 +89,6 @@ public interface IERXChainableQualifier {
 	 *            the type of the array
 	 * @param array
 	 *            the array to filter (in place)
-	 * @param qualifier
-	 *            the qualifier to filter with
 	 * @return one matching object
 	 * @throw IllegalStateException if more than one object matched
 	 * @throw NoSuchElementException if no objects matched

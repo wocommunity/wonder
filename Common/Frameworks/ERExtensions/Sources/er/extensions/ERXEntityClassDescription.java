@@ -553,14 +553,14 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          */
         protected void registerDescriptionForEntity(EOEntity entity) {
             Class entityClass = EOGenericRecord.class;
+            String className = entity.className();
+            if (log.isDebugEnabled()) {
+                log.debug("Registering description for entity: " + entity.name() + " with class: " + className);
+            }
             try {
-                String className = entity.className();
-                if (log.isDebugEnabled())
-                    log.debug("Registering description for entity: " + entity.name() + " with class: " + className);
-                entityClass = className.equals("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
+                entityClass = className.endsWith("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
             } catch (java.lang.ClassNotFoundException ex) {
-                log.warn("Invalid class name for entity: " + entity.name() + " exception: " + ex + " using " + entityClass.getName() + " instead");
-                entity.setClassName("EOGenericRecord");
+                throw new RuntimeException("Invalid class name '" + className + "' for entity '" + entity.name() + "'." + (!className.contains(".") ? "  (The class name should include the full package path of the class.)" : ""), ex);
             }
             ERXEntityClassDescription cd = newClassDescriptionForEntity(entity);
             EOClassDescription.registerClassDescription(cd, entityClass);

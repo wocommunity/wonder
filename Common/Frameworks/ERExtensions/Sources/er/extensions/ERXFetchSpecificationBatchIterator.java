@@ -18,6 +18,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -128,6 +129,11 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
         setEditingContext(ec);
         setBatchSize(batchSize);
         setFiltersBatches(false);
+        
+        EOQualifier qualifier = this.fetchSpecification.qualifier();
+        if (qualifier != null) {
+            this.fetchSpecification.setQualifier(entity.schemaBasedQualifier(qualifier));
+        }
     }
 
     /**
@@ -344,11 +350,14 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             log.debug("Of primaryKey count: " + primaryKeys.count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
 
             ERXInQualifier qual = new ERXInQualifier(primaryKeyAttributeName, primaryKeysToFetch);
-            EOFetchSpecification fetchSpec = batchFetchSpecificationForQualifier(qual);
+            EOFetchSpecification batchFS = new EOFetchSpecification(fetchSpecification.entityName(), qual, fetchSpecification.sortOrderings());
+            if (fetchSpecification.prefetchingRelationshipKeyPaths() != null) {
+            	batchFS.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
+            }
+            batchFS.setRawRowKeyPaths(fetchSpecification.rawRowKeyPaths());
+            nextBatch = ec.objectsWithFetchSpecification(batchFS);
 
-            nextBatch = ec.objectsWithFetchSpecification(fetchSpec);
-
-            log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + fetchSpec);
+            log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + batchFS);
 
             if (shouldFilterBatches) {
                 EOQualifier originalQualifier = fetchSpecification.qualifier();

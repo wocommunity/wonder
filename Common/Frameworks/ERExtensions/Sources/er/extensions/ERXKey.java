@@ -15,7 +15,9 @@ import er.extensions.qualifiers.ERXOrQualifier;
  * qualifiers, ERXKey provides a starting point for the qualifier chain. As an
  * example:
  * </p>
- * <pre><code>
+ * 
+ * <pre>
+ * &lt;code&gt;
  * public class Person extends ERXGenericRecord {
  *   ...
  *   public static final ERXKey&lt;Country&gt; country = new ERXKey&lt;Country&gt;(Person.COUNTRY_KEY);
@@ -26,7 +28,10 @@ import er.extensions.qualifiers.ERXOrQualifier;
  *   Country germany = ...;
  *   NSTimestamp someRandomDate = ...;
  *   EOQualifier qualifier = Person.country.is(germany).and(Person.birthDate.after(someRandomDate));
- * </code></pre>
+ * &lt;/code&gt;
+ * </pre>
+ * 
+ * @param <T> the type of the value of this key
  * 
  * @author mschrag
  */
@@ -34,6 +39,7 @@ public class ERXKey<T> {
 	
 	public interface ValueCoding {
 		public <T> T valueForKey(ERXKey<T> key);
+
 		public <T> void takeValueForKey(Object value, ERXKey<T> key);
 	}
 	
@@ -51,6 +57,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to ERXS.asc(key())
+	 * 
 	 * @return asc sort ordering for key
 	 */
 	public ERXSortOrdering asc() {
@@ -59,6 +66,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to ERXS.ascs(key())
+	 * 
 	 * @return asc sort ordering for key
 	 */
 	public ERXSortOrdering.ERXSortOrderings ascs() {
@@ -67,6 +75,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to ERXS.desc(key())
+	 * 
 	 * @return desc sort ordering for key
 	 */
 	public ERXSortOrdering desc() {
@@ -75,6 +84,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to ERXS.descs(key())
+	 * 
 	 * @return desc sort ordering for key
 	 */
 	public ERXSortOrdering.ERXSortOrderings descs() {
@@ -83,6 +93,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to ERXS.ascInsensitive(key())
+	 * 
 	 * @return ascInsensitive sort ordering for key
 	 */
 	public ERXSortOrdering ascInsensitive() {
@@ -91,6 +102,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to ERXS.ascInsensitives(key())
+	 * 
 	 * @return ascInsensitive sort ordering for key
 	 */
 	public ERXSortOrdering.ERXSortOrderings ascInsensitives() {
@@ -99,6 +111,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to ERXS.descInsensitive(key())
+	 * 
 	 * @return descInsensitive sort ordering for key
 	 */
 	public ERXSortOrdering descInsensitive() {
@@ -107,6 +120,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to ERXS.descInsensitives(key())
+	 * 
 	 * @return descInsensitive sort ordering for key
 	 */
 	public ERXSortOrdering.ERXSortOrderings descInsensitives() {
@@ -308,7 +322,7 @@ public class ERXKey<T> {
 	 *            the value
 	 * @return an ERXKeyValueQualifier
 	 */
-	public ERXKeyValueQualifier like(Object value) {
+	public ERXKeyValueQualifier like(String value) {
 		return ERXQ.like(_key, value);
 	}
 
@@ -320,7 +334,19 @@ public class ERXKey<T> {
 	 *            the value
 	 * @return an ERXKeyValueQualifier
 	 */
-	public ERXKeyValueQualifier likeInsensitive(Object value) {
+	public ERXKeyValueQualifier likeInsensitive(String value) {
+		return ERXQ.likeInsensitive(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.QualifierOperatorCaseInsensitiveLike, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyValueQualifier
+	 */
+	public ERXKeyValueQualifier ilike(String value) {
 		return ERXQ.likeInsensitive(_key, value);
 	}
 
@@ -405,8 +431,8 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Equivalent to key > lowerBound and key < upperBound (exclusive). Note that
-	 * this does not return an ERXBetweenQualifier.
+	 * Equivalent to key > lowerBound and key < upperBound (exclusive). Note
+	 * that this does not return an ERXBetweenQualifier.
 	 * 
 	 * @param lowerBound
 	 *            the lower bound value
@@ -426,10 +452,12 @@ public class ERXKey<T> {
 	 *            the lower bound value
 	 * @param upperBound
 	 *            the upper bound value
+	 * @param inclusive
+	 *            whether or not the between includes the endpoints
 	 * @return the qualifier
 	 */
 	public EOQualifier between(Object lowerBound, Object upperBound, boolean inclusive) {
-		return ERXQ.between(_key, lowerBound, upperBound);
+		return ERXQ.between(_key, lowerBound, upperBound, inclusive);
 	}
 
 	/**
@@ -511,10 +539,13 @@ public class ERXKey<T> {
 	 * 
 	 * Note: ERXKey has a limitation that it will not return the proper generic
 	 * type if you attempt to build a keypath extension of an NSArray. For
-	 * instance, ERXKey&lt;NSArray&lt;Person&gt;&gt;.append(ERXKey&lt;String&gt;) will return
-	 * ERXKey&lt;String&gt; when, in fact, it should be ERXKey&lt;NSArray&lt;String&gt;&gt;.
-	 * This is a limitation due to type erasure with generics that we cannot
-	 * currently resolve this problem.
+	 * instance,
+	 * ERXKey&lt;NSArray&lt;Person&gt;&gt;.append(ERXKey&lt;String&gt;) will
+	 * return ERXKey&lt;String&gt; when, in fact, it should be
+	 * ERXKey&lt;NSArray&lt;String&gt;&gt;. This is a limitation due to type
+	 * erasure with generics that we cannot currently resolve this problem.
+	 * 
+	 * @param <U> the type of the next key 
 	 * 
 	 * @param key
 	 *            the key to append to this keypath
@@ -527,7 +558,8 @@ public class ERXKey<T> {
 	/**
 	 * Calls append(key)
 	 * 
-	 * @param <U> the key type
+	 * @param <U>
+	 *            the key type
 	 * @param key
 	 *            the key to append to this keypath
 	 * @return the new appended key
@@ -543,10 +575,13 @@ public class ERXKey<T> {
 	 * 
 	 * Note: ERXKey has a limitation that it will not return the proper generic
 	 * type if you attempt to build a keypath extension of an NSArray. For
-	 * instance, ERXKey&lt;NSArray&lt;Person&gt;&gt;.append(ERXKey&lt;String&gt;) will return
-	 * ERXKey&lt;String&gt; when, in fact, it should be ERXKey&lt;NSArray&lt;String&gt;&gt;.
-	 * This is a limitation due to type erasure with generics that we cannot
-	 * currently resolve this problem.
+	 * instance,
+	 * ERXKey&lt;NSArray&lt;Person&gt;&gt;.append(ERXKey&lt;String&gt;) will
+	 * return ERXKey&lt;String&gt; when, in fact, it should be
+	 * ERXKey&lt;NSArray&lt;String&gt;&gt;. This is a limitation due to type
+	 * erasure with generics that we cannot currently resolve this problem.
+	 * 
+	 * @param <U> the type of the next key
 	 * 
 	 * @param key
 	 *            the key to append to this keypath
@@ -560,7 +595,8 @@ public class ERXKey<T> {
 	/**
 	 * Calls append(key)
 	 * 
-	 * @param <U> the key type
+	 * @param <U>
+	 *            the key type
 	 * @param key
 	 *            the key to append to this keypath
 	 * @return the new appended key
@@ -572,17 +608,24 @@ public class ERXKey<T> {
 	/**
 	 * Returns a new ERXKey that appends the given key to this keypath. For
 	 * instance, if this key is "person" and you add "firstName" to it, this
-	 * will return a new ERXKey "person.firstName".<pre><code>
-		ERXKey&lt;String&gt; k = new ERXKey&lt;String&gt;("foo");
-		ERXKey&lt;NSArray&lt;String&gt;&gt; a = new ERXKey&lt;NSArray&lt;String&gt;&gt;("foos");
-		k = k.append(k);
-		a = a.append(k);
-		a = k.appendAsArray(k);
-		k = k.appendAsArray(k);
-		a = k.appendAsArray(a);
-		a = a.appendAsArray(k);
-		a = a.appendAsArray(a);
-	 * </code></pre>
+	 * will return a new ERXKey "person.firstName".
+	 * 
+	 * <pre>
+	 * &lt;code&gt;
+	 * 		ERXKey&lt;String&gt; k = new ERXKey&lt;String&gt;(&quot;foo&quot;);
+	 * 		ERXKey&lt;NSArray&lt;String&gt;&gt; a = new ERXKey&lt;NSArray&lt;String&gt;&gt;(&quot;foos&quot;);
+	 * 		k = k.append(k);
+	 * 		a = a.append(k);
+	 * 		a = k.appendAsArray(k);
+	 * 		k = k.appendAsArray(k);
+	 * 		a = k.appendAsArray(a);
+	 * 		a = a.appendAsArray(k);
+	 * 		a = a.appendAsArray(a);
+	 * &lt;/code&gt;
+	 * </pre>
+	 * 
+	 * @param <U> the type of the next key in the array 
+	 * 
 	 * @param key
 	 *            the key to append to this keypath
 	 * @return the new appended key
@@ -595,8 +638,10 @@ public class ERXKey<T> {
 	/**
 	 * Calls appendAsArray(key).
 	 * 
-	 * @param <U> the type
-	 * @param key the key to append to this keypath
+	 * @param <U>
+	 *            the type
+	 * @param key
+	 *            the key to append to this keypath
 	 * @return the new append to this keypath
 	 */
 	public <U> ERXKey dotArray(ERXKey<U> key) {
@@ -620,8 +665,10 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 *  Returns the value of this keypath on the given object.
-	 * @param obj the target object to apply this keypath on
+	 * Returns the value of this keypath on the given object.
+	 * 
+	 * @param obj
+	 *            the target object to apply this keypath on
 	 * @return the value of the keypath on the target object
 	 */
 	public Object rawValueInObject(Object obj) {
@@ -630,7 +677,9 @@ public class ERXKey<T> {
 
 	/**
 	 * Returns the value of this keypath on the given object cast as an NSArray.
-	 * @param obj the target object to apply this keypath on
+	 * 
+	 * @param obj
+	 *            the target object to apply this keypath on
 	 * @return the value of the keypath on the target object
 	 */
 	@SuppressWarnings("unchecked")
