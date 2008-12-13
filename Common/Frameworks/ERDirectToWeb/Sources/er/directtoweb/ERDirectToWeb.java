@@ -67,6 +67,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
     public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
     public final static Logger propertyKeyLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
+    public final static NSSelector D2WCONTEXT_SELECTOR = new NSSelector("d2wContext");
     
     static {
     	setUpFrameworkPrincipalClass (ERDirectToWeb.class);
@@ -180,9 +181,11 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
 
     /**
      * Checks if a given property key is in the format (foo) or [foo] and returns the stripped string.
+     *
      * @param s the String to convert
      * @param start the start char
-     * @param start the end char to check for
+     * @param end the end char to check for
+     *
      * @return stripped String or null if the string does not start with <code>start</code> and ends with <code>end</code>.
      */
     public static String convertedPropertyKeyFromString(String s, char start, char end) {

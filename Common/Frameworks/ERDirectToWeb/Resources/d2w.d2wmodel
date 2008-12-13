@@ -1,5 +1,6 @@
 {
   "rules" = (
+    {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "actionBarComponentName"; "value" = "ERDActionBar"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "EOKeyValueQualifier"; "key" = "task"; "selectorName" = "isEqualTo:"; "value" = "select"; }; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "actions"; "value" = {"left" = ("selectAction"); }; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "er.directtoweb.ERDKeyValueAssignment"; "keyPath" = "actions"; "value" = "defaultActions"; }; }, 
     {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "er.directtoweb.ERDDelayedLocalizedAssignment"; "keyPath" = "addButtonLabel"; "value" = "ERD2W.addButtonLabel"; }; }, 
