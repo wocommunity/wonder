@@ -454,7 +454,7 @@ public class ERXEOAccessUtilities {
      * Similar to the helper in EUUtilities, but allows for null editingContext.
      * If ec is null, it will try to get at the session via thread storage and
      * use its defaultEditingContext. This is here now so we can remove the
-     * delgate in ERXApplication.
+     * delegate in ERXApplication.
      * 
      * @param ec
      *            editing context used to locate the model group (can be null)

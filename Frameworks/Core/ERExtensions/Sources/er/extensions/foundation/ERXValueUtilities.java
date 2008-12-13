@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import er.extensions.components.ERXComponentUtilities;
 
 /**
- * ERXValueUtilities has usefull conversion methods for
+ * ERXValueUtilities has useful conversion methods for
  * reading and transforming <code>boolean</code>,
  * <code>int</code> and <code>float</code>values.
  * Unless otherwise stated, when an empty string
@@ -269,7 +269,7 @@ public class ERXValueUtilities {
 
     /**
      * Basic utility method for reading <code>NSArray</code> values
-     * which also works with serialzed NSArrays and comma seperated items. The default value is used if
+     * which also works with serialized NSArrays and comma seperated items. The default value is used if
      * the object is null.
      * @param obj object to be evaluated
      * @param def default value if object is null

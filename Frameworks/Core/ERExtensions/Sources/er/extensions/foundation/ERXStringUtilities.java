@@ -64,7 +64,7 @@ public class ERXStringUtilities {
     
     /** Holds the default display language, which is English */
     private static final String DEFAULT_TARGET_DISPLAY_LANGUAGE = "English";
-    /** Holds the chars for hex enconding */
+    /** Holds the chars for hex encoding */
     public static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     /** Holds the distance key */
     private static final String _DISTANCE = "distance";

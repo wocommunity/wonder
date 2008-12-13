@@ -20,7 +20,7 @@ import er.extensions.foundation.ERXThreadStorage;
 /**
  * Allows you to develop your app using component actions while still providing bookmarkable URLs.
  * It should be considered <b>highly</b> experimental and it uses a few very dirty shortcuts, but no private API to work it's magic. 
- * The main problems may be garbage collection or space requirements. You might be better of to compress the responses.
+ * The main problems may be garbage collection or space requirements. You might be better off to compress the responses.
  * <br>
  *  The mode of operation is as follows; given a component action in a typical page:
  * <br>

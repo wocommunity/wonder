@@ -461,7 +461,7 @@ public class ERXJDBCUtilities {
 	/**
 	 * Returns an adaptor channel with the given username and password.
 	 * 
-	 * @param model the mode lto base this connection off of
+	 * @param model the model to base this connection off of
 	 * @param userName the new username
 	 * @param password the new password
 	 * @return a new adaptor channel
