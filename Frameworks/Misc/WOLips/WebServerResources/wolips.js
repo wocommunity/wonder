@@ -3,7 +3,10 @@ if (typeof Prototype == 'undefined') {
 }
 
 var WOLipsClickToOpen = {
-  url : null,
+	id : null,
+	verb : null,
+	
+  url : $H(),
   
   active : false,
   ignoreClick : true,
@@ -15,10 +18,16 @@ var WOLipsClickToOpen = {
   
   lastTarget : null,
   
-  start : function() {
+  start : function(id, verb) {
+  	if (WOLipsClickToOpen.verb != null && WOLipsClickToOpen.verb != verb) {
+      WOLipsClickToOpen.stop();
+  	}
+  	
+  	WOLipsClickToOpen.id = id;
+  	WOLipsClickToOpen.verb = verb;
     if (!WOLipsClickToOpen.active) {
       WOLipsClickToOpen.hideComponentList();
-      $('clickToOpen').innerHTML = '<span class = "_wolUnimportant">Open</span> <span id = "_componentBreadCrumb" class = "_wolImportant">&nbsp;</span>';
+      $(id).innerHTML = '<span class = "_wolUnimportant">' + verb + '</span> <span id = "_componentBreadCrumb" class = "_wolImportant">&nbsp;</span>';
       WOLipsClickToOpen.oldClickHandler = document.onclick;
       WOLipsClickToOpen.oldMoveHandler = document.onmousemove;
       WOLipsClickToOpen.oldSelectHandler = document.onselectstart;
@@ -36,7 +45,7 @@ var WOLipsClickToOpen = {
   },
   
   stop : function() {
-    $('clickToOpen').innerHTML = 'Click to Open';
+    $(WOLipsClickToOpen.id).innerHTML = 'Click to ' + WOLipsClickToOpen.verb;
     document.onclick = WOLipsClickToOpen.oldClickHandler;
     document.onmousemove = WOLipsClickToOpen.oldMoveHandler;
     document.onselectstart = WOLipsClickToOpen.oldSelectHandler;
@@ -47,6 +56,8 @@ var WOLipsClickToOpen = {
     WOLipsClickToOpen.oldKeyPressHandler = null;
     WOLipsClickToOpen.active = false;
     WOLipsClickToOpen.targetChanged(null, false);
+    WOLipsClickToOpen.verb = null;
+    WOLipsClickToOpen.id = null;
   },
   
   targetChanged : function(target, highlight) {
@@ -108,7 +119,7 @@ var WOLipsClickToOpen = {
     if (componentStack == null || componentStack.componentNames.length == 0) {
       alert('The component you selected could not be identifed.  Make sure er.component.clickToOpen=true.');
     }
-    else if (WOLipsClickToOpen.url == null) {
+    else if (WOLipsClickToOpen.url[WOLipsClickToOpen.verb] == null) {
       alert('You do not have a click-to-open url set.');
     }
     else if (componentStack.componentNames.length == 1) {
@@ -129,7 +140,7 @@ var WOLipsClickToOpen = {
   },
   
   openComponentNamed : function(selectedComponentName) {
-    WOLips.perform(WOLipsClickToOpen.url.replace('REPLACEME', selectedComponentName));
+    WOLips.perform(WOLipsClickToOpen.url[WOLipsClickToOpen.verb].replace('REPLACEME', selectedComponentName));
   },
   
   hideComponentList : function() {

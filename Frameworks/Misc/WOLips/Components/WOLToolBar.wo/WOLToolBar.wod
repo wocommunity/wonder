@@ -14,23 +14,6 @@ WOLComponentLink : WOLComponentLink {
 WOLClickToOpen : WOLClickToOpen {
 }
 
-DebugConditional : WOConditional {
-	condition = isDebugEnabled;
-}
-
-NotDebugConditional : WOConditional {
-	condition = isDebugEnabled;
-	negate = true;
-}
-
-WOLStartDebug : WOHyperlink {
-	action=toggleDebugEnabled;
-}
-
-WOLStopDebug : WOHyperlink {
-	action=toggleDebugEnabled;
-}
-
 ComponentContent : WOComponentContent {
 }
 
