@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODeclaration;
+import com.webobjects.appserver._private.WOHTMLAttribute;
 import com.webobjects.appserver._private.WOHTMLCommentString;
 import com.webobjects.appserver._private.WOKeyValueAssociation;
 import com.webobjects.foundation.NSArray;
@@ -18,6 +19,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 public class WOHelperFunctionParser {
 	public static Logger log = Logger.getLogger(WOHelperFunctionParser.class);
+
+	public static boolean _debugSupport;
 
 	private static String WO_REPLACEMENT_MARKER = "__REPL__";
 
@@ -174,7 +177,7 @@ public class WOHelperFunctionParser {
 			// this takes the value found after the "wo:" part in the element and generates a WOGenericContainer with that value
 			// as the elementName binding
 			elementType = elementType.replaceAll(WO_REPLACEMENT_MARKER, "");
-			associations.setObjectForKey(WOAssociation.associationWithValue(elementType), "elementName");
+			associations.setObjectForKey(WOHelperFunctionAssociation.associationWithValue(elementType), "elementName");
 			elementType = "WOGenericContainer";
 		}
 		String elementName;
@@ -185,7 +188,7 @@ public class WOHelperFunctionParser {
 		WOTagProcessor tagProcessor = (WOTagProcessor) WOHelperFunctionTagRegistry.tagProcessorMap().objectForKey(elementType);
 		WODeclaration declaration;
 		if (tagProcessor == null) {
-			declaration = new WODeclaration(elementName, elementType, associations);
+			declaration = WOHelperFunctionParser.createDeclaration(elementName, elementType, associations);
 		}
 		else {
 			declaration = tagProcessor.createDeclaration(elementName, elementType, associations);
@@ -388,5 +391,22 @@ public class WOHelperFunctionParser {
 		if (_declarations == null && _declarationString != null) {
 			_declarations = WOHelperFunctionDeclarationParser.declarationsWithString(_declarationString);
 		}
+	}
+
+	public static WODeclaration createDeclaration(String declarationName, String declarationType, NSMutableDictionary associations) {
+		WODeclaration declaration = new WODeclaration(declarationName, declarationType, associations);
+
+		if (WOHelperFunctionParser._debugSupport && associations != null && associations.objectForKey(WOHTMLAttribute.Debug) == null) {
+			//associations.setObjectForKey(new WOConstantValueAssociation(Boolean.TRUE), WOHTMLAttribute.Debug);
+			Enumeration associationsEnum = associations.keyEnumerator();
+			while (associationsEnum.hasMoreElements()) {
+				String bindingName = (String) associationsEnum.nextElement();
+				WOAssociation association = (WOAssociation) associations.objectForKey(bindingName);
+				association.setDebugEnabledForBinding(bindingName, declarationName, declarationType);
+				association._setDebuggingEnabled(false);
+			}
+		}
+
+		return declaration;
 	}
 }
