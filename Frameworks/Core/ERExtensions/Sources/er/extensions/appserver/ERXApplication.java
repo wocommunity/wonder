@@ -2296,4 +2296,112 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		return additionalAdaptors;
 	}
+
+	protected void _debugValueForDeclarationNamed(WOComponent component, String verb, String aDeclarationName, String aDeclarationType, String aBindingName, String anAssociationDescription, Object aValue) {
+		if (aValue instanceof String) {
+			StringBuffer stringbuffer = new StringBuffer(((String) aValue).length() + 2);
+			stringbuffer.append('"');
+			stringbuffer.append(aValue);
+			stringbuffer.append('"');
+			aValue = stringbuffer;
+		}
+		if (aDeclarationName.startsWith("_")) {
+			aDeclarationName = "[inline]";
+		}
+
+		StringBuffer sb = new StringBuffer();
+
+		//NSArray<WOComponent> componentPath = ERXWOContext._componentPath(ERXWOContext.currentContext());
+		//componentPath.lastObject()
+		//WOComponent lastComponent = ERXWOContext.currentContext().component();
+		String lastComponentName = component.name().replaceFirst(".*\\.", "");
+		sb.append(lastComponentName);
+
+		sb.append(verb);
+
+		if (!aDeclarationName.startsWith("_")) {
+			sb.append(aDeclarationName);
+			sb.append(":");
+		}
+		sb.append(aDeclarationType);
+
+		sb.append(" { ");
+		sb.append(aBindingName);
+		sb.append("=");
+
+		String valueStr = aValue != null ? aValue.toString() : "null";
+		if (anAssociationDescription.startsWith("class ")) {
+			sb.append(valueStr);
+			sb.append("; }");
+		}
+		else {
+			sb.append(anAssociationDescription);
+			sb.append("; } value ");
+			sb.append(valueStr);
+		}
+
+		NSLog.debug.appendln(sb.toString());
+	}
+
+	/**
+	 * The set of component names that have binding debug enabled
+	 */
+	private NSMutableSet<String> _debugComponents = new NSMutableSet<String>();
+
+	/**
+	 * Little bit better binding debug output than the original.
+	 */
+	@Override
+	public void logTakeValueForDeclarationNamed(String aDeclarationName, String aDeclarationType, String aBindingName, String anAssociationDescription, Object aValue) {
+		WOComponent component = ERXWOContext.currentContext().component();
+		if (component.parent() != null) {
+			component = component.parent();
+		}
+		_debugValueForDeclarationNamed(component, " ==> ", aDeclarationName, aDeclarationType, aBindingName, anAssociationDescription, aValue);
+	}
+
+	/**
+	 * Little bit better binding debug output than the original.
+	 */
+	@Override
+	public void logSetValueForDeclarationNamed(String aDeclarationName, String aDeclarationType, String aBindingName, String anAssociationDescription, Object aValue) {
+		WOComponent component = ERXWOContext.currentContext().component();
+		if (component.parent() != null) {
+			component = component.parent();
+		}
+		_debugValueForDeclarationNamed(component, " <== ", aDeclarationName, aDeclarationType, aBindingName, anAssociationDescription, aValue);
+	}
+
+	/**
+	 * Turns on/off binding debugging for the given component.  Binding debugging requires using the WOOgnl
+	 * template parser and setting ognl.debugSupport=true.
+	 * 
+	 * @param debugEnabled whether or not to enable debugging 
+	 * @param component the component to enable debugging for
+	 */
+	public void setDebugEnabledForComponent(boolean debugEnabled, WOComponent component) {
+		if (debugEnabled) {
+			_debugComponents.addObject(component.name());
+		}
+		else {
+			_debugComponents.removeObject(component.name());
+		}
+	}
+
+	/**
+	 * Returns whether or not binding debugging is enabled for the given component
+	 * 
+	 * @param component the component
+	 * @return whether or not binding debugging is enabled for the given componen
+	 */
+	public boolean debugEnabledForComponent(WOComponent component) {
+		return _debugComponents.containsObject(component.name());
+	}
+	
+	/**
+	 * Turns off binding debugging for all components.
+	 */
+	public void clearDebugEnabledForAllComponents() {
+		_debugComponents.removeAllObjects();
+	}
 }
