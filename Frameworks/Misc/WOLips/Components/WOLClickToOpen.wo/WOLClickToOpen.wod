@@ -3,6 +3,11 @@ ClickToOpenURL : WOString {
 	escapeHTML = false;
 }
 
+ClickToDebugURL : WOString {
+	value = clickToDebugUrl;
+	escapeHTML = false;
+}
+
 CanClickToOpen : WOConditional {
 	condition = canClickToOpen;
 }
