@@ -47,9 +47,9 @@ div#_clickToOpenComponentList ul li:hover {
 	WOLipsClickToOpen.url['Open'] = '<webobject name = "ClickToOpenURL"/>';
 	WOLipsClickToOpen.url['Debug'] = '<webobject name = "ClickToDebugURL"/>';
 </script>
-<a href = "javascript:void(0);" onclick = "WOLipsClickToOpen.start('clickToOpen', 'Open')" id = "clickToOpen">Click to Open</a>
+<a href = "javascript:void(0);" onclick = "WOLipsClickToOpen.start('clickToOpen', 'Open', false)" id = "clickToOpen">Click to Open</a>
 <span class = "_wolUnimportant">&nbsp;|&nbsp;</span>
-<a href = "javascript:void(0);" onclick = "WOLipsClickToOpen.start('clickToDebug', 'Debug')" id = "clickToDebug">Click to Debug</a>
+<a href = "javascript:void(0);" onclick = "WOLipsClickToOpen.start('clickToDebug', 'Debug', true)" id = "clickToDebug">Click to Debug</a>
 </webobject>
 <webobject name = "NoClickToOpen">
 <span class = "_wolImportant">Click to Open Disabled</span>

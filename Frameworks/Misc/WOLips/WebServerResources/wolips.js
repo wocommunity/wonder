@@ -5,6 +5,7 @@ if (typeof Prototype == 'undefined') {
 var WOLipsClickToOpen = {
 	id : null,
 	verb : null,
+	reload : false,
 	
   url : $H(),
   
@@ -18,13 +19,14 @@ var WOLipsClickToOpen = {
   
   lastTarget : null,
   
-  start : function(id, verb) {
+  start : function(id, verb, reload) {
   	if (WOLipsClickToOpen.verb != null && WOLipsClickToOpen.verb != verb) {
       WOLipsClickToOpen.stop();
   	}
   	
   	WOLipsClickToOpen.id = id;
   	WOLipsClickToOpen.verb = verb;
+  	WOLipsClickToOpen.reload = reload;
     if (!WOLipsClickToOpen.active) {
       WOLipsClickToOpen.hideComponentList();
       $(id).innerHTML = '<span class = "_wolUnimportant">' + verb + '</span> <span id = "_componentBreadCrumb" class = "_wolImportant">&nbsp;</span>';
@@ -138,7 +140,13 @@ var WOLipsClickToOpen = {
   },
   
   openComponentNamed : function(selectedComponentName) {
-    WOLips.perform(WOLipsClickToOpen.url[WOLipsClickToOpen.verb].replace('REPLACEME', selectedComponentName));
+  	var url = WOLipsClickToOpen.url[WOLipsClickToOpen.verb].replace('REPLACEME', selectedComponentName);
+  	if (WOLipsClickToOpen.reload) {
+  		document.location.href=url;
+  	}
+  	else {
+    	WOLips.perform(url);
+  	}
   },
   
   hideComponentList : function() {
