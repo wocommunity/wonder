@@ -35,8 +35,8 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
     /** holds the array of keys this assignment depends upon */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"propertyKey", "task", "entity.name"}), "idForProperty",
-        new NSArray(new Object[] {"pageConfiguration", "task", "entity.name", "sectionKey"}), "idForSection",
-        new NSArray(new Object[] {"pageConfiguration", "task", "entity.name"}), "idForPageConfiguration",
+        new NSArray(new Object[] {"pageConfiguration", "sectionKey"}), "idForSection",
+        new NSArray(new Object[] {"task", "entity.name"}), "idForPageConfiguration",
     });
 
     /**
@@ -93,14 +93,14 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
      * A DOM id based on the pageConfig
      * 
      * @param c d2w context
-     * @return an id representing the pageConfig
+     * @return an id representing the <task, entity>
      */
     public Object idForPageConfiguration(D2WContext c) {
-    	return ERXStringUtilities.safeIdentifierName((String) c.valueForKey("pageConfiguration"));
+    	return ERXStringUtilities.safeIdentifierName(c.entity().name() + "_" + c.task());
     }
     
     /**
-     * A DOM id based on the pageConfig
+     * A DOM id based on the pageConfig and sectionKey
      * 
      * @param c d2w context
      * @return an id representing the section in a tab page
