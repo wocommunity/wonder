@@ -162,7 +162,7 @@ There are many ways to use this script:
    <target name="global.environment">
         <property name="wonder.root" value="${basedir}" />
         <property file="${wonder.root}/build.properties" />
-        <property file="${user.home}/Library/wobuild.properties" />
+        <property file="${user.home}/Library/Application Support/WOLips/wolips.properties" />
         <property file="${wonder.root}/Build/build/default.properties" />
 
         <!-- default values. can be overridden by *.properties files or -D options. -->
