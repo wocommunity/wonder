@@ -111,7 +111,7 @@ AjaxSelectionList.prototype = {
 	},
 
 	itemClicked: function(e) {
-		var item = e.target;
+		var item = $(e.target);
 		var lastSelection = this.selection;
 		if (item == null) {
 		}
