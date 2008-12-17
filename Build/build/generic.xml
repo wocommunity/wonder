@@ -177,7 +177,7 @@ There are many ways to use this script:
         <property name="build.root" value="${user.home}/Roots" />
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
         <property name="wonder.development" value="true" />
-        <property name="wonder.local.deployment.dir" value="${wo.wolocalroot}/Library/Frameworks" />
+        <property name="wonder.local.deployment.dir" value="${wo.localroot}/Library/Frameworks" />
         <property name="wonder.system.deployment.dir" value="${wo.wosystemroot}/Library/Frameworks" />
         
         <!-- if project.type is application and wonder.development is false, use installed frameworks, 
