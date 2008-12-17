@@ -1734,8 +1734,24 @@ public class ERXEOAccessUtilities {
  						if (destinationGID != null) {
 	 						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
 	 						if (destinationSnapshot == null) {
-	 							gids.addObject(destinationGID);
-	 							//objectsWithUnfaultedRelationships.addObject(object);
+	 	 						gids.addObject(destinationGID);
+	 	 						
+	 	 						// The ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs below will fetch the row and register 
+	 	 						// the snapshot.  BUT as the fault is deferred, it will not get fired.  This means there is no
+	 							// strong reference to the fetched object in the EC.  If the garbage collector runs, it will detect
+	 							// this and place the EO on the EC's cleanup queue (_referenceQueue()).  This is processed from 
+	 							// _processReferenceQueue() which is called at various points in EOEditingContext, most problematically
+	 							// from unlockObjectStore().  If this happens before the deferred fault is fired, the snapshot will be discarded.
+	 							// The object will get re-fetched when next referenced.  This makes batch fetching of to-one relationships of
+	 							// little use.  To avoid this, the call to storedValueForKey below will call (via the _LazyGenericRecordBinding) 
+	 							// willReadRelationship() on the deferred fault.  This fires the deferred fault (calls createFaultForDeferredFault() 
+	 							// defined on EOAccessDeferredFaultHandler), making it a regular fault.  When the EO is batch fetched below, 
+	 							// the regular fault resolves and there is a strong reference to the EO.  This is what EOFetchSpecification 
+	 							// pre-fetching does for to-one relationships.
+	 							// References:
+	 							// http://developer.apple.com/documentation/developertools/reference/wo541reference/com/webobjects/eocontrol/EODeferredFaulting.html
+	 							// http://developer.apple.com/DOCUMENTATION/WebObjects/Enterprise_Objects/Fetching/chapter_6_section_8.html
+	 	 						object.storedValueForKey(relationshipName);
 	 						}
  						}
  					}
