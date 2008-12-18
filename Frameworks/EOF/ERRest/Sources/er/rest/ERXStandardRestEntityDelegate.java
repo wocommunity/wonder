@@ -1,10 +1,17 @@
 package er.rest;
 
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSelector;
 
+import er.extensions.eof.ERXSortOrdering;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -471,5 +478,51 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 			nextEntity = entity.model().modelGroup().entityNamed(nextEntityName);
 		}
 		return nextEntity;
+	}
+	
+	/**
+	 * A shortcut for pulling a qualifier from the "qualifier" form value.
+	 * 
+	 * @param context the rest context
+	 * @return the requested qualifir
+	 */
+	protected EOQualifier qualifierFromContext(ERXRestContext context) {
+		EOQualifier qualifier = null;
+		WOContext wocontext = context.context();
+		if (wocontext != null) {
+			WORequest request = wocontext.request();
+			String qualifierStr = request.stringFormValueForKey("qualifier");
+			if (qualifierStr != null) {
+				qualifier = EOQualifier.qualifierWithQualifierFormat(qualifierStr, null);
+			}
+		}
+		return qualifier;
+	}
+
+	/**
+	 * A shortcut for pulling the sort ordering from the "order" and "direction" form values.
+	 *  
+	 * @param context the rest context
+	 * @return an array of sort orderings
+	 */
+	protected NSArray<EOSortOrdering> sortOrderingsFromContext(ERXRestContext context) {
+		NSArray<EOSortOrdering> sortOrderings = null;
+		WOContext wocontext = context.context();
+		if (wocontext != null) {
+			WORequest request = wocontext.request();
+			String sortOrder = request.stringFormValueForKey("order");
+			if (sortOrder != null) {
+				NSSelector selector = EOSortOrdering.CompareAscending;
+				String selectorStr = request.stringFormValueForKey("direction");
+				if ("asc".equalsIgnoreCase(selectorStr)) {
+					selector = EOSortOrdering.CompareAscending;
+				}
+				else if ("desc".equalsIgnoreCase(selectorStr)) {
+					selector = EOSortOrdering.CompareDescending;
+				}
+				sortOrderings = ERXSortOrdering.sortOrderingWithKey(sortOrder, selector).array();
+			}
+		}
+		return sortOrderings;
 	}
 }
