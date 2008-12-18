@@ -9,13 +9,14 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
+import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.localization.ERXLocalizer;
 
 /**
  * <p>
- * ERXAbstractRestResponseWriter provides the output-method-agnostic methods for processing a rest response and 
- * provides support for specifying rendering configuration in your application properties.
+ * ERXAbstractRestResponseWriter provides the output-method-agnostic methods for processing a rest response and provides
+ * support for specifying rendering configuration in your application properties.
  * </p>
  * 
  * <p>
@@ -223,7 +224,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		}
 		else if (value instanceof EOEnterpriseObject) {
 			String entityName = ((EOEnterpriseObject) value).entityName();
-			EOEntity entity = ERXRestUtils.getEntityNamed(entityName);
+			EOEntity entity = ERXRestUtils.getEntityNamed(context, entityName);
 			// EOEntity entity = result.nextEntity();
 			IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 			String entityAlias = entityDelegate.entityAliasForEntityNamed(entity.name());
