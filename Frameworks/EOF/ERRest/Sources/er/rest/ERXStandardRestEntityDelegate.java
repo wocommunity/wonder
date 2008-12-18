@@ -44,7 +44,7 @@ import er.extensions.foundation.ERXProperties;
  * For example:
  * 
  * <pre>
- * ERXRest.Person.alias=Employee
+ * ERXRest.Person.alias = Employee
  * </pre>
  * 
  * In the above example, our entity is named Person, but we want users of our service to see it named "Employee."
@@ -63,7 +63,7 @@ import er.extensions.foundation.ERXProperties;
  * For example:
  * 
  * <pre>
- * ERXRest.Person.displayName.alias=name
+ * ERXRest.Person.displayName.alias = name
  * </pre>
  * 
  * In the above example, the we are saying that the "displayName" property of the "Person" entity should be called
@@ -118,7 +118,8 @@ import er.extensions.foundation.ERXProperties;
  * ERXRest.[EntityName].updateProperties=property1,property2,property3,...
  * </pre>
  * 
- * For example: 
+ * For example:
+ * 
  * <pre>
  * ERXRest.BlogPost.viewProperties=author,title,submissionDate,contents
  * ERXRest.BlogPost.insertProperties=author,title,contents
@@ -156,8 +157,8 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 
 	/**
 	 * Constructs an ERXStandardRestEntityDelegate with an explicit entity name, optionally loading details properties
-	 * as view properties.  Additionally, loadViewPropertiesForEntityNamed, loadUpdatePropertiesForEntityNamed,
-	 * and loadInsertPropertiesForEntityNamed WILL be called.
+	 * as view properties. Additionally, loadViewPropertiesForEntityNamed, loadUpdatePropertiesForEntityNamed, and
+	 * loadInsertPropertiesForEntityNamed WILL be called.
 	 * 
 	 * @param entityName
 	 *            the name of the entity that this delegate represents
@@ -175,9 +176,9 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Constructs an ERXStandardRestEntityDelegate with an explicit entity name, and WILL load details properties
-	 * as view properties.  Additionally, loadViewPropertiesForEntityNamed, loadUpdatePropertiesForEntityNamed,
-	 * and loadInsertPropertiesForEntityNamed WILL be called.
+	 * Constructs an ERXStandardRestEntityDelegate with an explicit entity name, and WILL load details properties as
+	 * view properties. Additionally, loadViewPropertiesForEntityNamed, loadUpdatePropertiesForEntityNamed, and
+	 * loadInsertPropertiesForEntityNamed WILL be called.
 	 * 
 	 * @param entityName
 	 *            the name of the entity that this delegate represents
@@ -185,16 +186,17 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	public ERXStandardRestEntityDelegate(String entityName) {
 		this(entityName, true);
 	}
-	
+
 	/**
 	 * Sets the default "id" attribute name for all entities.
 	 * 
-	 * @param defaultIDAttributeName the default "id" attribute name for all entities
+	 * @param defaultIDAttributeName
+	 *            the default "id" attribute name for all entities
 	 */
 	public void setDefaultIDAttributeName(String defaultIDAttributeName) {
 		_defaultIDAttributeName = defaultIDAttributeName;
 	}
-	
+
 	/**
 	 * Returns the default "id" attribute name for all entities.
 	 * 
@@ -207,7 +209,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 		}
 		return defaultIDAttributeName;
 	}
-	
+
 	@Override
 	protected String idAttributeName(EOEntity entity) {
 		String idAttributeName = ERXProperties.stringForKey(IERXRestResponseWriter.REST_PREFIX + entity.name() + ".id");
@@ -218,10 +220,11 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Returns the entity alias for the given entity name.  This looks in the
-	 * ERXRest.[EntityName].alias property.  If not found, entityName is returned.
+	 * Returns the entity alias for the given entity name. This looks in the ERXRest.[EntityName].alias property. If not
+	 * found, entityName is returned.
 	 * 
-	 * @param entityName the name of the entity
+	 * @param entityName
+	 *            the name of the entity
 	 * @return the entity alias
 	 */
 	@Override
@@ -234,12 +237,13 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Returns the property alias for the given property name for the specified entity.  
-	 * This looks in the ERXRest.[EntityName].[propertyName].alias property.  If not found, 
-	 * entityName is returned.
+	 * Returns the property alias for the given property name for the specified entity. This looks in the
+	 * ERXRest.[EntityName].[propertyName].alias property. If not found, entityName is returned.
 	 * 
-	 * @param entity the entity
-	 * @param propertyName the name of the property
+	 * @param entity
+	 *            the entity
+	 * @param propertyName
+	 *            the name of the property
 	 * @return the property alias
 	 */
 	@Override
@@ -252,12 +256,13 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Returns the property name for the given property alias for the specified entity.  
-	 * This looks in the ERXRest.[EntityName].[propertyName].alias property.  If not found, 
-	 * entityName is returned.
+	 * Returns the property name for the given property alias for the specified entity. This looks in the
+	 * ERXRest.[EntityName].[propertyName].alias property. If not found, entityName is returned.
 	 * 
-	 * @param entity the entity
-	 * @param propertyAlias the name of the property alias
+	 * @param entity
+	 *            the entity
+	 * @param propertyAlias
+	 *            the name of the property alias
 	 * @return the property name
 	 */
 	@Override
@@ -270,11 +275,11 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Loads the view properties for the specified entity from the 
-	 * property ERXRest.[EntityName].viewProperties and calls
-	 * addViewPropertyName for each.
+	 * Loads the view properties for the specified entity from the property ERXRest.[EntityName].viewProperties and
+	 * calls addViewPropertyName for each.
 	 * 
-	 * @param entityName the name of the entity to load properties for
+	 * @param entityName
+	 *            the name of the entity to load properties for
 	 */
 	protected void loadViewPropertiesForEntityNamed(String entityName) {
 		String propertiesKey = IERXRestResponseWriter.REST_PREFIX + entityName + ".viewProperties";
@@ -289,11 +294,11 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Loads the update properties for the specified entity from the 
-	 * property ERXRest.[EntityName].updateProperties and calls
-	 * addUpdatePropertyName for each.
+	 * Loads the update properties for the specified entity from the property ERXRest.[EntityName].updateProperties and
+	 * calls addUpdatePropertyName for each.
 	 * 
-	 * @param entityName the name of the entity to load properties for
+	 * @param entityName
+	 *            the name of the entity to load properties for
 	 */
 	protected void loadUpdatePropertiesForEntityNamed(String entityName) {
 		String propertiesKey = IERXRestResponseWriter.REST_PREFIX + entityName + ".updateProperties";
@@ -308,11 +313,11 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Loads the insert properties for the specified entity from the 
-	 * property ERXRest.[EntityName].insertProperties and calls
-	 * addInsertPropertyName for each.
+	 * Loads the insert properties for the specified entity from the property ERXRest.[EntityName].insertProperties and
+	 * calls addInsertPropertyName for each.
 	 * 
-	 * @param entityName the name of the entity to load properties for
+	 * @param entityName
+	 *            the name of the entity to load properties for
 	 */
 	protected void loadInsertPropertiesForEntityNamed(String entityName) {
 		String propertiesKey = IERXRestResponseWriter.REST_PREFIX + entityName + ".insertProperties";
@@ -327,11 +332,11 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Loads the details properties for the specified entity from the
-	 * configuration for ERXXmlRestResponseWriter and calls 
-	 * addViewPropertyName for each.
+	 * Loads the details properties for the specified entity from the configuration for ERXXmlRestResponseWriter and
+	 * calls addViewPropertyName for each.
 	 * 
-	 * @param entityName the name of the entity to load properties for
+	 * @param entityName
+	 *            the name of the entity to load properties for
 	 */
 	protected void loadDetailsPropertiesAsViewPropertiesForEntityNamed(String entityName) {
 		String propertiesKey = IERXRestResponseWriter.REST_PREFIX + entityName + IERXRestResponseWriter.DETAILS_PROPERTIES_PREFIX;
@@ -348,15 +353,17 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	/**
 	 * Adds a view property for the specified entity.
 	 * 
-	 * @param entityName the name of the entity
-	 * @param visiblePropertyName the name of the view property
+	 * @param entityName
+	 *            the name of the entity
+	 * @param visiblePropertyName
+	 *            the name of the view property
 	 */
 	public void addViewPropertyName(String entityName, String visiblePropertyName) {
 		_viewPropertyNames.addObject(entityName + "." + visiblePropertyName);
-		
+
 		updatePropertyAliasForPropertyNamed(entityName, visiblePropertyName);
 	}
-	
+
 	protected void updatePropertyAliasForPropertyNamed(String entityName, String propertyName) {
 		String propertyAliasKey = IERXRestResponseWriter.REST_PREFIX + entityName + "." + propertyName + ".alias";
 		String propertyAlias = ERXProperties.stringForKey(propertyAliasKey);
@@ -369,8 +376,10 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	/**
 	 * Adds an update property for the specified entity.
 	 * 
-	 * @param entityName the name of the entity
-	 * @param updatePropertyName the name of the update property
+	 * @param entityName
+	 *            the name of the entity
+	 * @param updatePropertyName
+	 *            the name of the update property
 	 */
 	public void addUpdatePropertyName(String entityName, String updatePropertyName) {
 		addViewPropertyName(entityName, updatePropertyName);
@@ -381,8 +390,10 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	/**
 	 * Adds an insert property for the specified entity.
 	 * 
-	 * @param entityName the name of the entity
-	 * @param insertPropertyName the name of the insert property
+	 * @param entityName
+	 *            the name of the entity
+	 * @param insertPropertyName
+	 *            the name of the insert property
 	 */
 	public void addInsertPropertyName(String entityName, String insertPropertyName) {
 		addViewPropertyName(entityName, insertPropertyName);
@@ -392,10 +403,14 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	/**
 	 * Returns true if propertyName is declared as an insert property.
 	 * 
-	 * @param entity the entity
-	 * @param eo the object to check
-	 * @param propertyName the property name to check
-	 * @param context the rest context
+	 * @param entity
+	 *            the entity
+	 * @param eo
+	 *            the object to check
+	 * @param propertyName
+	 *            the property name to check
+	 * @param context
+	 *            the rest context
 	 * @return true if propertyName is declared as an insert property
 	 */
 	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
@@ -405,10 +420,14 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	/**
 	 * Returns true if propertyName is declared as an update property.
 	 * 
-	 * @param entity the entity
-	 * @param eo the object to check
-	 * @param propertyName the property name to check
-	 * @param context the rest context
+	 * @param entity
+	 *            the entity
+	 * @param eo
+	 *            the object to check
+	 * @param propertyName
+	 *            the property name to check
+	 * @param context
+	 *            the rest context
 	 * @return true if propertyName is declared as an update property
 	 */
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
@@ -418,16 +437,20 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	/**
 	 * Returns true if propertyName is declared as a view property.
 	 * 
-	 * @param entity the entity
-	 * @param obj the object to check
-	 * @param propertyName the property name to check
-	 * @param context the rest context
+	 * @param entity
+	 *            the entity
+	 * @param obj
+	 *            the object to check
+	 * @param propertyName
+	 *            the property name to check
+	 * @param context
+	 *            the rest context
 	 * @return true if propertyName is declared as a view property
 	 */
 	public boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return _viewPropertyNames.containsObject(entity.name() + "." + propertyName);
 	}
-	
+
 	/**
 	 * Returns whether or not there are any view properties.
 	 * 
@@ -438,13 +461,18 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Default empty implementation.  Extend to do custom insertion processing for the object.
+	 * Default empty implementation. Extend to do custom insertion processing for the object.
 	 * 
-	 * @param entity the entity of the object
-	 * @param eo the inserted object
-	 * @param context the rest context
-	 * @throws ERXRestException if a general error occurs
-	 * @throws ERXRestSecurityException if a security exception occurs
+	 * @param entity
+	 *            the entity of the object
+	 * @param eo
+	 *            the inserted object
+	 * @param context
+	 *            the rest context
+	 * @throws ERXRestException
+	 *             if a general error occurs
+	 * @throws ERXRestSecurityException
+	 *             if a security exception occurs
 	 */
 	@Override
 	public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
@@ -452,13 +480,18 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Default empty implementation.  Extend to do custom update processing for the object.
+	 * Default empty implementation. Extend to do custom update processing for the object.
 	 * 
-	 * @param entity the entity of the object
-	 * @param eo the updated object
-	 * @param context the rest context
-	 * @throws ERXRestException if a general error occurs
-	 * @throws ERXRestSecurityException if a security exception occurs
+	 * @param entity
+	 *            the entity of the object
+	 * @param eo
+	 *            the updated object
+	 * @param context
+	 *            the rest context
+	 * @throws ERXRestException
+	 *             if a general error occurs
+	 * @throws ERXRestSecurityException
+	 *             if a security exception occurs
 	 */
 	@Override
 	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
@@ -466,10 +499,13 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Looks up the key from the property ERXRest.[EntityName].[key].nextEntity . Extend to provide support for custom non-model properties.
+	 * Looks up the key from the property ERXRest.[EntityName].[key].nextEntity . Extend to provide support for custom
+	 * non-model properties.
 	 * 
-	 * @param entity the entity of the object
-	 * @param key the key of the entity to return an entity definition for
+	 * @param entity
+	 *            the entity of the object
+	 * @param key
+	 *            the key of the entity to return an entity definition for
 	 */
 	public EOEntity nextEntity(EOEntity entity, String key) {
 		EOEntity nextEntity = null;
@@ -479,49 +515,43 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 		}
 		return nextEntity;
 	}
-	
+
 	/**
 	 * A shortcut for pulling a qualifier from the "qualifier" form value.
 	 * 
-	 * @param context the rest context
+	 * @param context
+	 *            the rest context
 	 * @return the requested qualifir
 	 */
 	protected EOQualifier qualifierFromContext(ERXRestContext context) {
 		EOQualifier qualifier = null;
-		WOContext wocontext = context.context();
-		if (wocontext != null) {
-			WORequest request = wocontext.request();
-			String qualifierStr = request.stringFormValueForKey("qualifier");
-			if (qualifierStr != null) {
-				qualifier = EOQualifier.qualifierWithQualifierFormat(qualifierStr, null);
-			}
+		String qualifierStr = (String) context.valueForKey("qualifier");
+		if (qualifierStr != null) {
+			qualifier = EOQualifier.qualifierWithQualifierFormat(qualifierStr, null);
 		}
 		return qualifier;
 	}
 
 	/**
 	 * A shortcut for pulling the sort ordering from the "order" and "direction" form values.
-	 *  
-	 * @param context the rest context
+	 * 
+	 * @param context
+	 *            the rest context
 	 * @return an array of sort orderings
 	 */
 	protected NSArray<EOSortOrdering> sortOrderingsFromContext(ERXRestContext context) {
 		NSArray<EOSortOrdering> sortOrderings = null;
-		WOContext wocontext = context.context();
-		if (wocontext != null) {
-			WORequest request = wocontext.request();
-			String sortOrder = request.stringFormValueForKey("order");
-			if (sortOrder != null) {
-				NSSelector selector = EOSortOrdering.CompareAscending;
-				String selectorStr = request.stringFormValueForKey("direction");
-				if ("asc".equalsIgnoreCase(selectorStr)) {
-					selector = EOSortOrdering.CompareAscending;
-				}
-				else if ("desc".equalsIgnoreCase(selectorStr)) {
-					selector = EOSortOrdering.CompareDescending;
-				}
-				sortOrderings = ERXSortOrdering.sortOrderingWithKey(sortOrder, selector).array();
+		String sortOrder = (String) context.valueForKey("order");
+		if (sortOrder != null) {
+			NSSelector selector = EOSortOrdering.CompareAscending;
+			String selectorStr = (String) context.valueForKey("direction");
+			if ("asc".equalsIgnoreCase(selectorStr)) {
+				selector = EOSortOrdering.CompareAscending;
 			}
+			else if ("desc".equalsIgnoreCase(selectorStr)) {
+				selector = EOSortOrdering.CompareDescending;
+			}
+			sortOrderings = ERXSortOrdering.sortOrderingWithKey(sortOrder, selector).array();
 		}
 		return sortOrderings;
 	}

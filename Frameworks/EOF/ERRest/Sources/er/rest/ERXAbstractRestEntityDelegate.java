@@ -509,7 +509,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	public void _updateRelationshipFromDocument(EOEntity entity, EOEnterpriseObject eo, EORelationship relationship, ERXRestRequestNode relationshipNode, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String relationshipName = relationship.name();
 		// EOEntity destinationEntity = relationship.destinationEntity();
-		EOEntity destinationEntity = ERXRestUtils.getEntityNamed(relationshipNode.attributeForKey("type"));
+		EOEntity destinationEntity = ERXRestUtils.getEntityNamed(context, relationshipNode.attributeForKey("type"));
 		IERXRestEntityDelegate destinationEntityDelegate = context.delegate().entityDelegate(destinationEntity);
 		if (!relationship.isToMany()) {
 			EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, relationship.name(), context);
@@ -556,7 +556,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public void _updatePropertiesFromDocument(boolean inserting, EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		entity = ERXRestUtils.getEntityNamed(eo.entityName());
+		entity = ERXRestUtils.getEntityNamed(context, eo.entityName());
 		String entityAlias = entityAliasForEntityNamed(eo.entityName());
 		String type = eoNode.type();
 		if (!entityAlias.equals(type)) {
@@ -624,7 +624,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		while (toManyNodesEnum.hasMoreElements()) {
 			ERXRestRequestNode toManyNode = (ERXRestRequestNode) toManyNodesEnum.nextElement();
 			String toManyNodeName = toManyNode.name();
-			entity = ERXRestUtils.getEntityNamed(toManyNodeName);
+			entity = ERXRestUtils.getEntityNamed(context, toManyNodeName);
 			if (!entityAliasForEntityNamed(entity.name()).equals(toManyNodeName)) {
 				throw new ERXRestException("You attempted to put a " + toManyNodeName + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
 			}

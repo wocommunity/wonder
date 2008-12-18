@@ -43,6 +43,17 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	}
 
 	/**
+	 * Constructs an ERXDefaultRestDelegate with the given default entity delegate and with delegate name guessing
+	 * turned on. If no entity delegate is specified for a particular entity name, the default delegate will be returned.
+	 * 
+	 * @param defaultDelegate
+	 *            the default entity delegate to use
+	 */
+	public ERXDefaultRestDelegate(IERXRestEntityDelegate defaultDelegate) {
+		this(defaultDelegate, true);
+	}
+
+	/**
 	 * Constructs an ERXDefaultRestDelegate with the given default entity delegate. If no entity delegate is specified
 	 * for a particular entity name, the default delegate will be returned.
 	 * 
@@ -78,7 +89,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 				// <Superclass>
 				// <superclass>
 				// <subclass>
-				EOEntity arrayEntity = ERXRestUtils.getEntityNamed(context.delegate().entityNameForAlias(node.name()));
+				EOEntity arrayEntity = ERXRestUtils.getEntityNamed(context, context.delegate().entityNameForAlias(node.name()));
 				EOEnterpriseObject eo = entityDelegate.processObjectFromDocument(arrayEntity, node, context);
 				if (eo != null) {
 					eos.addObject(eo);

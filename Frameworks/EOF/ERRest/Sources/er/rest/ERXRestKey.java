@@ -151,6 +151,15 @@ public class ERXRestKey {
 	}
 
 	/**
+	 * Returns the rest context that was used to create this key.
+	 * 
+	 * @return the rest context that was used to create this key
+	 */
+	public ERXRestContext context() {
+		return _context;
+	}
+	
+	/**
 	 * Clones and extends this key to the next key in a path with the given cached value.
 	 * 
 	 * @param key
@@ -510,11 +519,11 @@ public class ERXRestKey {
 		String[] paths = path.split("/");
 		if (paths.length > 0) {
 			String entityName = context.delegate().entityNameForAlias(paths[0]);
-			EOEntity entity = ERXRestUtils.getEntityNamed(entityName);
+			EOEntity entity = ERXRestUtils.getEntityNamed(context, entityName);
 			if (entity == null) {
 				String railsyEntityName = ERXStringUtilities.capitalize(ERXLocalizer.currentLocalizer().singularifiedString(entityName));
 				if (!railsyEntityName.equals(entityName)) {
-					entity = ERXRestUtils.getEntityNamed(railsyEntityName);
+					entity = ERXRestUtils.getEntityNamed(context, railsyEntityName);
 				}
 				if (entity == null) {
 					throw new ERXRestNotFoundException("There is no entity named '" + entityName + "' or '" + railsyEntityName + "'.");

@@ -8,6 +8,8 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableSet;
 
+import er.extensions.eof.ERXEC;
+
 /**
  * ERXUnsafeRestEntityDelegate should probably never be used in production. This is an entity delegate implementation
  * designed to allow you to explore the features of ERRest without having to actually write custom delegates. This
@@ -27,7 +29,7 @@ public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDe
 	public void initializeEntityNamed(String entityName) {
 		if (!_initializedEntityNames.containsObject(entityName)) {
 			super.initializeEntityNamed(entityName);
-			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(ERXRestUtils.getEntityNamed(entityName), true);
+			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(ERXRestUtils.getEntityNamed(new ERXRestContext(null, ERXEC.newEditingContext(), null), entityName), true);
 			Enumeration allPropertyNamesEnum = allPropertyNames.objectEnumerator();
 			while (allPropertyNamesEnum.hasMoreElements()) {
 				String propertyName = (String) allPropertyNamesEnum.nextElement();
