@@ -2,23 +2,23 @@ package er.rest;
 
 import java.text.ParseException;
 
-import net.sf.json.JSONObject;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
- * Provides the output methods for generating JSON responses to a REST request.
+ * Provides the output methods for generating PList responses to a REST request.
  * 
  * @author mschrag
  */
-public class ERXJSONRestResponseWriter implements IERXRestResponseWriter {
+public class ERXPListRestResponseWriter implements IERXRestResponseWriter {
 	private boolean _displayAllProperties;
 	private boolean _displayAllToMany;
 
-	public ERXJSONRestResponseWriter() {
+	public ERXPListRestResponseWriter() {
 		this(false, false);
 	}
 
 	/**
-	 * Constructs an ERXJSONRestResponseWriter.
+	 * Constructs an ERXPListRestResponseWriter.
 	 * 
 	 * @param displayAllProperties
 	 *            if true, by default all properties are eligible to be displayed (probably should only be true in
@@ -27,7 +27,7 @@ public class ERXJSONRestResponseWriter implements IERXRestResponseWriter {
 	 * @param displayAllToMany
 	 *            if true, all to-many relationships will be displayed
 	 */
-	public ERXJSONRestResponseWriter(boolean displayAllProperties, boolean displayAllToMany) {
+	public ERXPListRestResponseWriter(boolean displayAllProperties, boolean displayAllToMany) {
 		_displayAllProperties = displayAllProperties;
 		_displayAllToMany = displayAllToMany;
 	}
@@ -36,7 +36,6 @@ public class ERXJSONRestResponseWriter implements IERXRestResponseWriter {
 		ERXDictionaryRestResponseWriter dictResponseWriter = new ERXDictionaryRestResponseWriter(_displayAllProperties, _displayAllToMany);
 		dictResponseWriter.appendToResponse(context, response, result);
 		Object obj = dictResponseWriter.root();
-		JSONObject json = JSONObject.fromObject(obj);
-		response.appendContentString(json.toString());
+		response.appendContentString(NSPropertyListSerialization.stringFromPropertyList(obj));
 	}
 }
