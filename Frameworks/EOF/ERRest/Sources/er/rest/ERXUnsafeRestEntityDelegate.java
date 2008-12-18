@@ -2,8 +2,6 @@ package er.rest;
 
 import java.util.Enumeration;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
@@ -16,8 +14,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.components.ERXSortOrder;
-import er.extensions.eof.ERXSortOrdering;
 import er.extensions.foundation.ERXProperties;
 
 /**
