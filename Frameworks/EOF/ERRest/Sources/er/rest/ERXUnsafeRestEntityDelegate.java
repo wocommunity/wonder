@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -53,7 +54,7 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	public void initializeEntityNamed(String entityName) {
 		if (!_initializedEntityNames.containsObject(entityName)) {
 			super.initializeEntityNamed(entityName);
-			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(ERXRestUtils.getEntityNamed(entityName), true);
+			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(ERXRestUtils.getEntityNamed(new ERXRestContext(null, ERXEC.newEditingContext(), null), entityName), true);
 			Enumeration allPropertyNamesEnum = allPropertyNames.objectEnumerator();
 			while (allPropertyNamesEnum.hasMoreElements()) {
 				String propertyName = (String) allPropertyNamesEnum.nextElement();

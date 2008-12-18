@@ -1,9 +1,13 @@
 package er.rest;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.eof.ERXEC;
 
 /**
  * ERXRestContext contains all the state for a single REST request. ERXRestContext provides access to the WOContext,
@@ -21,6 +25,15 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 	private NSMutableDictionary _attributes;
 
 	/**
+	 * Shortcut for constructing a rest context with a single default entity delegate.
+	 * 
+	 * @param defaultEntityDelegate the default entity delegate
+	 */
+	public ERXRestContext(IERXRestEntityDelegate defaultEntityDelegate) {
+		this(new ERXDefaultRestDelegate(defaultEntityDelegate));
+	}
+	
+	/**
 	 * Constructs a rest context.
 	 * 
 	 * @param context
@@ -28,11 +41,34 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 	 * @param editingContext
 	 *            the EOEditingContext
 	 */
+	public ERXRestContext(IERXRestDelegate delegate) {
+		this(null, ERXEC.newEditingContext(), delegate);
+	}
+
+	/**
+	 * Constructs a rest context.
+	 * 
+	 * @param context
+	 *            the WOContext
+	 * @param editingContext
+	 *            the EOEditingContext
+	 */
+	@SuppressWarnings("unchecked")
 	public ERXRestContext(WOContext context, EOEditingContext editingContext, IERXRestDelegate delegate) {
 		_context = context;
 		_editingContext = editingContext;
 		_attributes = new NSMutableDictionary();
 		_delegate = delegate;
+
+		if (context != null) {
+			WORequest request = context.request();
+			if (request != null) {
+				for (String key : (NSArray<String>) request.formValueKeys()) {
+					Object formValue = request.formValueForKey(key);
+					takeValueForKey(formValue, key);
+				}
+			}
+		}
 	}
 
 	/**
@@ -85,6 +121,9 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 	}
 
 	public void takeValueForKey(Object obj, String key) {
+		if ("delegate".equals(key)) {
+			throw new IllegalArgumentException("You are not allowed to set the 'delegate' key through KVC.");
+		}
 		NSKeyValueCoding.DefaultImplementation.takeValueForKey(this, obj, key);
 	}
 
