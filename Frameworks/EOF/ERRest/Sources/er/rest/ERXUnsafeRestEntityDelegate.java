@@ -2,16 +2,22 @@ package er.rest;
 
 import java.util.Enumeration;
 
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.components.ERXSortOrder;
+import er.extensions.eof.ERXSortOrdering;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -73,7 +79,9 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	}
 
 	public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) {
-		EOFetchSpecification entityFetchSpec = new EOFetchSpecification(entity.name(), null, null);
+		EOQualifier qualifier = qualifierFromContext(context);
+		NSArray<EOSortOrdering> sortOrderings = sortOrderingsFromContext(context);
+		EOFetchSpecification entityFetchSpec = new EOFetchSpecification(entity.name(), qualifier, sortOrderings);
 		NSArray objects = context.editingContext().objectsWithFetchSpecification(entityFetchSpec);
 		return objects;
 	}
