@@ -40,15 +40,20 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 	public ERXDictionaryRestResponseWriter(boolean displayAllProperties, boolean displayAllToMany) {
 		super(displayAllProperties, displayAllToMany);
 		_stack = new Stack<Object>();
-		_stack.push(new NSMutableDictionary<String, Object>());
+		//_stack.push(new NSMutableDictionary<String, Object>());
 	}
 
 	public Object root() {
-		return _stack.peek();
+		return _stack.size() > 0 ? _stack.firstElement() : null;
+	}
+
+	public Object current() {
+		return _stack.size() > 0 ? _stack.peek() : null;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void addToCollection(String name, Object value, Object collection) {
+	protected void addToCollection(String name, Object value) {
+		Object collection = current();
 		if (collection instanceof NSMutableDictionary) {
 			((NSMutableDictionary<String, Object>) collection).setObjectForKey(value, name);
 		}
@@ -74,7 +79,7 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 		}
 		_stack.pop();
 
-		addToCollection(arrayName, array, _stack.peek());
+		addToCollection(arrayName, array);
 	}
 
 	@Override
@@ -82,7 +87,7 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 		NSMutableDictionary<String, Object> value = new NSMutableDictionary<String, Object>();
 		value.setObjectForKey(entityName, "_type");
 		value.setObjectForKey(String.valueOf(id), "id");
-		addToCollection(objectName, value, _stack.peek());
+		addToCollection(objectName, value);
 	}
 
 	@Override
@@ -90,7 +95,7 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 		NSMutableDictionary<String, Object> value = new NSMutableDictionary<String, Object>();
 		value.setObjectForKey(entityName, "_type");
 		value.setObjectForKey(String.valueOf(id), "id");
-		addToCollection(objectName, value, _stack.peek());
+		addToCollection(objectName, value);
 	}
 
 	@Override
@@ -121,11 +126,11 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 		}
 		_stack.pop();
 
-		addToCollection(objectName, value, _stack.peek());
+		addToCollection(objectName, value);
 	}
 
 	@Override
 	protected void appendPrimitiveToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, Object value) throws ERXRestException {
-		addToCollection("_", value, _stack.peek());
+		addToCollection("_", value);
 	}
 }
