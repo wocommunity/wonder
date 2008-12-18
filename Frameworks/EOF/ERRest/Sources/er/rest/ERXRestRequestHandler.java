@@ -551,7 +551,11 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 *            the rest delegate
 	 */
 	public static void register(IERXRestAuthenticationDelegate authenticationDelegate, IERXRestDelegate delegate) {
-		ERXRestRequestHandler.register(new ERXRestRequestHandler(authenticationDelegate, delegate));
+		ERXRestRequestHandler requestHandler = new ERXRestRequestHandler(authenticationDelegate, delegate);
+		requestHandler.setResponseWriterForType(new ERXJSONRestResponseWriter(), "json");
+		requestHandler.setResponseWriterForType(new ERXPListRestResponseWriter(), "plist");
+		requestHandler.setResponseWriterForType(new ERXXmlRestResponseWriter(), "xml");
+		ERXRestRequestHandler.register(requestHandler);
 	}
 
 	/**
@@ -582,6 +586,9 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 */
 	public static final ERXRestRequestHandler register(IERXRestAuthenticationDelegate authenticationDelegate, boolean displayAllProperties, boolean displayAllToMany) {
 		ERXRestRequestHandler requestHandler = new ERXRestRequestHandler(authenticationDelegate, new ERXDefaultRestDelegate(), new ERXXmlRestResponseWriter(displayAllProperties, displayAllToMany), new ERXXmlRestRequestParser());
+		requestHandler.setResponseWriterForType(new ERXJSONRestResponseWriter(displayAllProperties, displayAllToMany), "json");
+		requestHandler.setResponseWriterForType(new ERXPListRestResponseWriter(displayAllProperties, displayAllToMany), "plist");
+		requestHandler.setResponseWriterForType(new ERXXmlRestResponseWriter(displayAllProperties, displayAllToMany), "xml");
 		ERXRestRequestHandler.register(requestHandler);
 		return requestHandler;
 	}
