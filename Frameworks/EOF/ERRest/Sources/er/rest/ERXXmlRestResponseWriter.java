@@ -14,8 +14,28 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
+ * <p>
  * Provides the common output methods for generating XML responses to a REST request.
+ * </p>
  * 
+ * <p>
+ * The response writers can be used in two styles. In one style, they can be connected
+ * to a rest request handler and are controlled with Properties. In another form, they 
+ * can be used programmatically and can be configured with ERXKeyFilters to control
+ * their output. ERXKeyFilters provides a really bad version of Rails' to_json 
+ * :include maps.
+ * </p>
+ * 
+ * <pre>
+ * ERXKeyFilter companyFilter = new ERXKeyFilter(ERXKeyFilter.Base.Attributes);
+ * ERXKeyFilter remindersFilter = companyFilter.include(Company.REMINDERS);
+ * remindersFilter.include(Reminder.SUMMARY);
+ * remindersFilter.exclude(Reminder.CREATION_DATE);
+ * 
+ * ERXPListRestResponseWriter writer = new ERXPListRestResponseWriter(companyFilter);
+ * String str = writer.toString(Company.fetchRequiredCompany(ERXEC.newEditingContext(), Company.NAME.is("mDT Consulting")));
+ * </pre>
+
  * @author mschrag
  */
 public class ERXXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
