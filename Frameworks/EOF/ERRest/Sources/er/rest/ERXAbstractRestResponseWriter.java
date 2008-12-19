@@ -3,13 +3,16 @@ package er.rest;
 import java.text.ParseException;
 import java.util.Enumeration;
 
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
-import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXKey;
+import er.extensions.eof.ERXKeyFilter;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.localization.ERXLocalizer;
 
@@ -117,6 +120,7 @@ import er.extensions.localization.ERXLocalizer;
  * @author mschrag
  */
 public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseWriter {
+	private ERXKeyFilter _filter;
 	private boolean _displayAllProperties;
 	private boolean _displayAllToMany;
 
@@ -143,6 +147,16 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	}
 
 	/**
+	 * Constructs an ERXAbstractRestResponseWriter.
+	 * 
+	 * @param filter
+	 *            the filter to apply to the written results
+	 */
+	public ERXAbstractRestResponseWriter(ERXKeyFilter filter) {
+		_filter = filter;
+	}
+
+	/**
 	 * Returns whether or not the details (i.e. the keys of an EO) should displayed for the given key.
 	 * 
 	 * @param context
@@ -158,7 +172,20 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 *             if an object is not found
 	 */
 	protected boolean displayDetails(ERXRestContext context, ERXRestKey key) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		return _displayDetailsFromProperties(key) || ERXProperties.booleanForKey(IERXRestResponseWriter.REST_PREFIX + "details");
+		boolean displayDetails;
+		if (_filter == null) {
+			displayDetails = _displayDetailsFromProperties(key) || ERXProperties.booleanForKey(IERXRestResponseWriter.REST_PREFIX + "details");
+		}
+		else {
+			ERXKeyFilter filter = _filter;
+			for (ERXRestKey pathKey = key.firstKey(); pathKey != null && pathKey != key; pathKey = pathKey.nextKey()) {
+				if (!pathKey.isKeyGID()) {
+					filter = filter._filterForKey(new ERXKey(pathKey.key()));
+				}
+			}
+			displayDetails = (filter.base() != ERXKeyFilter.Base.None || filter.includes().count() > 0);
+		}
+		return displayDetails;
 	}
 
 	/**
@@ -177,14 +204,51 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 *             if an object is not found
 	 */
 	protected String[] displayProperties(ERXRestContext context, ERXRestKey key) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		return _displayPropertiesFromProperties(key, _displayAllProperties, _displayAllToMany);
+		String[] displayProperties;
+		if (_filter == null) {
+			displayProperties = _displayPropertiesFromProperties(key, _displayAllProperties, _displayAllToMany);
+		}
+		else {
+			ERXKeyFilter filter = _filter;
+			for (ERXRestKey pathKey = key.firstKey(); pathKey != null && pathKey != key; pathKey = pathKey.nextKey()) {
+				if (!pathKey.isKeyGID()) {
+					filter = filter._filterForKey(new ERXKey(pathKey.key()));
+				}
+			}
+
+			NSMutableSet<String> displayPropertySet = new NSMutableSet<String>();
+			EOEntity entity = key.nextEntity();
+			NSArray classProperties = entity.classProperties();
+			Enumeration attributesEnum = entity.attributes().objectEnumerator();
+			while (attributesEnum.hasMoreElements()) {
+				EOAttribute attribute = (EOAttribute) attributesEnum.nextElement();
+				if (classProperties.containsObject(attribute) && filter.matches(new ERXKey(attribute.name()), ERXKey.Type.Attribute)) {
+					displayPropertySet.addObject(attribute.name());
+				}
+			}
+
+			Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
+			while (relationshipsEnum.hasMoreElements()) {
+				EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
+				if (classProperties.containsObject(relationship) && filter.matches(new ERXKey(relationship.name()), relationship.isToMany() ? ERXKey.Type.ToManyRelationship : ERXKey.Type.ToOneRelationship)) {
+					displayPropertySet.addObject(relationship.name());
+				}
+			}
+
+			for (ERXKey includeKey : filter.includes().allKeys()) {
+				displayPropertySet.addObject(includeKey.key());
+			}
+
+			displayProperties = displayPropertySet.toArray(new String[displayPropertySet.count()]);
+		}
+		return displayProperties;
 	}
 
 	public void appendToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
-		appendToResponse(context, response, result.trimPrevious(), 0, new NSMutableSet());
+		appendToResponse(context, response, result.trimPrevious(), 0, new NSMutableSet<Object>());
 	}
 
-	protected void appendArrayToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendArrayToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		EOEntity entity = result.nextEntity();
 		IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 		if (!(entityDelegate instanceof ERXDenyRestEntityDelegate)) {
@@ -202,7 +266,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 			}
 			entityDelegate.preprocess(entity, values, context);
 
-			NSMutableArray valueKeys = new NSMutableArray();
+			NSMutableArray<ERXRestKey> valueKeys = new NSMutableArray<ERXRestKey>();
 			Enumeration valuesEnum = values.objectEnumerator();
 			while (valuesEnum.hasMoreElements()) {
 				EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();
@@ -214,7 +278,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		}
 	}
 
-	protected void appendToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		Object value = result.value();
 		if (value == null) {
 			// DO NOTHING
@@ -255,7 +319,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 					appendNoDetailsToResponse(context, response, entity, eo, objectName, entityAlias, id, indent);
 				}
 				else {
-					NSMutableArray displayKeys = new NSMutableArray();
+					NSMutableArray<ERXRestKey> displayKeys = new NSMutableArray<ERXRestKey>();
 					String[] displayPropertyNames = displayProperties(context, result);
 					if (displayPropertyNames != null && displayPropertyNames.length > 0) {
 						for (int displayPropertyNum = 0; displayPropertyNum < displayPropertyNames.length; displayPropertyNum++) {
@@ -386,7 +450,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @throws ParseException
 	 *             if a parse error occurs
 	 */
-	protected abstract void appendArrayToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey key, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+	protected abstract void appendArrayToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey key, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
 
 	/**
 	 * Write an object to the response that has already been visited. Typically this would just write out the type and
@@ -469,7 +533,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @throws ParseException
 	 *             if a parse error occurs
 	 */
-	protected abstract void appendDetailsToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+	protected abstract void appendDetailsToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
 
 	/**
 	 * Writes the bare primitive out to the response. Permissions have already been checked by the time this method is
@@ -489,4 +553,32 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 *             if a general failure occurs
 	 */
 	protected abstract void appendPrimitiveToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, int indent, Object value) throws ERXRestException;
+
+	/**
+	 * Returns a String form of the given object using the unsafe delegate.
+	 * 
+	 * @param value the value to write
+	 * @return a string form of the value using the given writer
+	 * @throws ERXRestException
+	 * @throws ERXRestSecurityException
+	 * @throws ERXRestNotFoundException
+	 * @throws ParseException
+	 */
+	public String toString(EOEnterpriseObject value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, value);
+	}
+
+	/**
+	 * Returns a String form of the given objects using the unsafe delegate.
+	 * 
+	 * @param values the values to write
+	 * @return a string form of the value using the given writer
+	 * @throws ERXRestException
+	 * @throws ERXRestSecurityException
+	 * @throws ERXRestNotFoundException
+	 * @throws ParseException
+	 */
+	public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, entity, values);
+	}
 }

@@ -22,7 +22,7 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 	private WOContext _context;
 	private EOEditingContext _editingContext;
 	private IERXRestDelegate _delegate;
-	private NSMutableDictionary _attributes;
+	private NSMutableDictionary<String, Object> _attributes;
 
 	/**
 	 * Shortcut for constructing a rest context with a single default entity delegate.

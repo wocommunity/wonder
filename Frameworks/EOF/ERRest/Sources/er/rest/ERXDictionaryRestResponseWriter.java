@@ -11,6 +11,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 
+import er.extensions.eof.ERXKeyFilter;
+
 /**
  * Provides the common output methods for generating a dictionary response, which can be used by several other writers
  * (json, plist, etc).
@@ -40,7 +42,17 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 	public ERXDictionaryRestResponseWriter(boolean displayAllProperties, boolean displayAllToMany) {
 		super(displayAllProperties, displayAllToMany);
 		_stack = new Stack<Object>();
-		//_stack.push(new NSMutableDictionary<String, Object>());
+	}
+
+	/**
+	 * Constructs an ERXDictionaryRestResponseWriter.
+	 * 
+	 * @param filter
+	 *            the filter to apply to the written results
+	 */
+	public ERXDictionaryRestResponseWriter(ERXKeyFilter filter) {
+		super(filter);
+		_stack = new Stack<Object>();
 	}
 
 	public Object root() {
@@ -69,7 +81,7 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 	}
 
 	@Override
-	protected void appendArrayToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendArrayToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		NSMutableArray<Object> array = new NSMutableArray<Object>();
 		_stack.push(array);
 		Enumeration valueKeysEnum = valueKeys.objectEnumerator();
@@ -99,7 +111,7 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 	}
 
 	@Override
-	protected void appendDetailsToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendDetailsToResponse(ERXRestContext context, IERXResponseWriter response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		NSMutableDictionary<String, Object> value = new NSMutableDictionary<String, Object>();
 		value.setObjectForKey(entityName, "_type");
 		value.setObjectForKey(String.valueOf(id), "id");

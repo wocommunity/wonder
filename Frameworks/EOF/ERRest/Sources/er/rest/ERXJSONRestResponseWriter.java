@@ -2,7 +2,12 @@ package er.rest;
 
 import java.text.ParseException;
 
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+
 import net.sf.json.JSONObject;
+import er.extensions.eof.ERXKeyFilter;
 
 /**
  * Provides the output methods for generating JSON responses to a REST request.
@@ -10,6 +15,7 @@ import net.sf.json.JSONObject;
  * @author mschrag
  */
 public class ERXJSONRestResponseWriter implements IERXRestResponseWriter {
+	private ERXKeyFilter _filter;
 	private boolean _displayAllProperties;
 	private boolean _displayAllToMany;
 
@@ -32,11 +38,55 @@ public class ERXJSONRestResponseWriter implements IERXRestResponseWriter {
 		_displayAllToMany = displayAllToMany;
 	}
 
+	/**
+	 * Constructs an ERXJSONRestResponseWriter.
+	 * 
+	 * @param filter
+	 *            the filter to apply to the written results
+	 */
+	public ERXJSONRestResponseWriter(ERXKeyFilter filter) {
+		_filter = filter;
+	}
+
 	public void appendToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
-		ERXDictionaryRestResponseWriter dictResponseWriter = new ERXDictionaryRestResponseWriter(_displayAllProperties, _displayAllToMany);
+		ERXDictionaryRestResponseWriter dictResponseWriter;
+		if (_filter == null) {
+			dictResponseWriter = new ERXDictionaryRestResponseWriter(_displayAllProperties, _displayAllToMany);
+		}
+		else {
+			dictResponseWriter = new ERXDictionaryRestResponseWriter(_filter);
+		}
 		dictResponseWriter.appendToResponse(context, response, result);
 		Object obj = dictResponseWriter.root();
 		JSONObject json = JSONObject.fromObject(obj);
 		response.appendContentString(json.toString());
+	}
+
+	/**
+	 * Returns a String form of the given object using the unsafe delegate.
+	 * 
+	 * @param value the value to write
+	 * @return a string form of the value using the given writer
+	 * @throws ERXRestException
+	 * @throws ERXRestSecurityException
+	 * @throws ERXRestNotFoundException
+	 * @throws ParseException
+	 */
+	public String toString(EOEnterpriseObject value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, value);
+	}
+
+	/**
+	 * Returns a String form of the given objects using the unsafe delegate.
+	 * 
+	 * @param values the values to write
+	 * @return a string form of the value using the given writer
+	 * @throws ERXRestException
+	 * @throws ERXRestSecurityException
+	 * @throws ERXRestNotFoundException
+	 * @throws ParseException
+	 */
+	public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, entity, values);
 	}
 }

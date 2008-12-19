@@ -54,8 +54,8 @@ public class ERXRestUtils {
 		 * @throws ERXRestNotFoundException
 		 * @throws ParseException
 		 */
-		public String toUnsafeString(EOEnterpriseObject value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException, IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-			return ERXRestUtils.toUnsafeString(defaultWriter(), value);
+		public String toString(EOEnterpriseObject value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException, IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+			return ERXRestUtils.toString(defaultWriter(), value);
 		}
 
 		/**
@@ -68,8 +68,8 @@ public class ERXRestUtils {
 		 * @throws ERXRestNotFoundException
 		 * @throws ParseException
 		 */
-		public String toUnsafeString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException, IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-			return ERXRestUtils.toUnsafeString(defaultWriter(), entity, values);
+		public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException, IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+			return ERXRestUtils.toString(defaultWriter(), entity, values);
 		}
 	}
 
@@ -129,7 +129,7 @@ public class ERXRestUtils {
 	 * @throws ERXRestNotFoundException
 	 * @throws ParseException
 	 */
-	public static String toUnsafeString(IERXRestResponseWriter writer, EOEnterpriseObject value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	public static String toString(IERXRestResponseWriter writer, EOEnterpriseObject value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), writer, value);
 	}
 
@@ -144,7 +144,7 @@ public class ERXRestUtils {
 	 * @throws ERXRestNotFoundException
 	 * @throws ParseException
 	 */
-	public static String toUnsafeString(IERXRestResponseWriter writer, EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	public static String toString(IERXRestResponseWriter writer, EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), writer, entity, values);
 	}
 }

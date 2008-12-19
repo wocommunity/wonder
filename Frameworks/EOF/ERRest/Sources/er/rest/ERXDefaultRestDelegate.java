@@ -19,8 +19,8 @@ import er.extensions.localization.ERXLocalizer;
  * @author mschrag
  */
 public class ERXDefaultRestDelegate implements IERXRestDelegate {
-	private NSMutableDictionary _entityAliases;
-	private NSMutableDictionary _entityDelegates;
+	private NSMutableDictionary<String, String> _entityAliases;
+	private NSMutableDictionary<String, IERXRestEntityDelegate> _entityDelegates;
 	private IERXRestEntityDelegate _defaultDelegate;
 	private boolean _guessDelegateNames;
 
@@ -64,8 +64,8 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	 *            default
 	 */
 	public ERXDefaultRestDelegate(IERXRestEntityDelegate defaultDelegate, boolean guessDelegateNames) {
-		_entityAliases = new NSMutableDictionary();
-		_entityDelegates = new NSMutableDictionary();
+		_entityAliases = new NSMutableDictionary<String, String>();
+		_entityDelegates = new NSMutableDictionary<String, IERXRestEntityDelegate>();
 		_defaultDelegate = defaultDelegate;
 		_guessDelegateNames = guessDelegateNames;
 	}
@@ -81,7 +81,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			restResult = new ERXRestKey(context, entity, "processed", eo);
 		}
 		else if (lastKey.isKeyAll()) {
-			NSMutableArray eos = new NSMutableArray();
+			NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
 			Enumeration childrenNodesEnum = restRequest.rootNode().children().objectEnumerator();
 			while (childrenNodesEnum.hasMoreElements()) {
 				ERXRestRequestNode node = (ERXRestRequestNode) childrenNodesEnum.nextElement();
@@ -144,7 +144,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			insertResult = new ERXRestKey(context, entity, "inserted", eo);
 		}
 		else if (pluralEntityAlias.equals(nodeName)) {
-			NSMutableArray eos = new NSMutableArray();
+			NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
 			Enumeration insertNodesEnum = insertRootNode.children().objectEnumerator();
 			while (insertNodesEnum.hasMoreElements()) {
 				ERXRestRequestNode insertNode = (ERXRestRequestNode) insertNodesEnum.nextElement();
@@ -241,7 +241,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	}
 
 	public String entityNameForAlias(String entityAlias) {
-		String entityName = (String) _entityAliases.objectForKey(entityAlias);
+		String entityName = _entityAliases.objectForKey(entityAlias);
 		if (entityName == null) {
 			entityName = entityAlias;
 		}
@@ -250,7 +250,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 
 	@SuppressWarnings("unchecked")
 	public IERXRestEntityDelegate entityDelegate(EOEntity entity) {
-		IERXRestEntityDelegate entityDelegate = (IERXRestEntityDelegate) _entityDelegates.objectForKey(entity.name());
+		IERXRestEntityDelegate entityDelegate = _entityDelegates.objectForKey(entity.name());
 		if (entityDelegate == null) {
 			String entityDelegateClassName = ERXProperties.stringForKey("ERXRest." + entity.name() + ".delegate");
 			Class<IERXRestEntityDelegate> entityDelegateClass = null;
