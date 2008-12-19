@@ -251,8 +251,8 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	private IERXRestDelegate _delegate;
 	private IERXRestResponseWriter _defaultResponseWriter;
 	private IERXRestRequestParser _defaultRequestParser;
-	private NSMutableDictionary _responseWriters;
-	private NSMutableDictionary _requestParsers;
+	private NSMutableDictionary<String, IERXRestResponseWriter> _responseWriters;
+	private NSMutableDictionary<String, IERXRestRequestParser> _requestParsers;
 
 	/**
 	 * Construct an ERXRestRequestHandler with a default response writer of ERXXmlRestResponseWriter.
@@ -281,8 +281,8 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	public ERXRestRequestHandler(IERXRestAuthenticationDelegate authenticationDelegate, IERXRestDelegate delegate, IERXRestResponseWriter defaultResponseWriter, IERXRestRequestParser defaultRequestParser) {
 		_authenticationDelegate = authenticationDelegate;
 		_delegate = delegate;
-		_responseWriters = new NSMutableDictionary();
-		_requestParsers = new NSMutableDictionary();
+		_responseWriters = new NSMutableDictionary<String, IERXRestResponseWriter>();
+		_requestParsers = new NSMutableDictionary<String, IERXRestRequestParser>();
 		_defaultResponseWriter = defaultResponseWriter;
 		_defaultRequestParser = defaultRequestParser;
 	}
@@ -321,7 +321,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 * @return the response writer to use
 	 */
 	protected IERXRestResponseWriter responseWriterForType(String type) {
-		IERXRestResponseWriter responseWriter = (IERXRestResponseWriter) _responseWriters.objectForKey(type);
+		IERXRestResponseWriter responseWriter = _responseWriters.objectForKey(type);
 		if (responseWriter == null) {
 			responseWriter = _defaultResponseWriter;
 		}
@@ -358,7 +358,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 * @return the request parser to use
 	 */
 	protected IERXRestRequestParser requestParserForType(String type) {
-		IERXRestRequestParser requestParser = (IERXRestRequestParser) _requestParsers.objectForKey(type);
+		IERXRestRequestParser requestParser = _requestParsers.objectForKey(type);
 		if (requestParser == null) {
 			requestParser = _defaultRequestParser;
 		}
