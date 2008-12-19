@@ -493,7 +493,7 @@ public class ERXRestKey {
 	 * @return whether or not this key requests a primary key
 	 */
 	public boolean isKeyGID() {
-		return _context.delegate().entityDelegate(_entity).isEOID(this);
+		return (_previousKey == null || !_previousKey.isKeyGID()) && _context.delegate().entityDelegate(_entity).isEOID(this);
 	}
 
 	@Override

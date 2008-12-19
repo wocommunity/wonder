@@ -17,8 +17,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERXRestRequestNode {
 	private String _name;
 	private String _value;
-	private NSMutableDictionary _attributes;
-	private NSMutableArray _children;
+	private NSMutableDictionary<String, String> _attributes;
+	private NSMutableArray<ERXRestRequestNode> _children;
 
 	/**
 	 * Construct a node with the given name
@@ -28,8 +28,8 @@ public class ERXRestRequestNode {
 	 */
 	public ERXRestRequestNode(String name) {
 		_name = name;
-		_attributes = new NSMutableDictionary();
-		_children = new NSMutableArray();
+		_attributes = new NSMutableDictionary<String, String>();
+		_children = new NSMutableArray<ERXRestRequestNode>();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class ERXRestRequestNode {
 	 * @return the attribute value
 	 */
 	public String attributeForKey(String key) {
-		return (String) _attributes.objectForKey(key);
+		return _attributes.objectForKey(key);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class ERXRestRequestNode {
 	 * 
 	 * @return the attributes dictionary
 	 */
-	public NSDictionary attributes() {
+	public NSDictionary<String, String> attributes() {
 		return _attributes;
 	}
 
@@ -144,7 +144,7 @@ public class ERXRestRequestNode {
 	 * 
 	 * @return the children of this node
 	 */
-	public NSArray children() {
+	public NSArray<ERXRestRequestNode> children() {
 		return _children;
 	}
 }

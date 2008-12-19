@@ -1,7 +1,5 @@
 package er.rest;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOQualifier;
@@ -135,11 +133,11 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntityDelegate {
-	private NSMutableSet _viewPropertyNames;
-	private NSMutableSet _updatePropertyNames;
-	private NSMutableSet _insertPropertyNames;
-	private NSMutableDictionary _propertyAliasForPropertyName;
-	private NSMutableDictionary _propertyNameForPropertyAlias;
+	private NSMutableSet<String> _viewPropertyNames;
+	private NSMutableSet<String> _updatePropertyNames;
+	private NSMutableSet<String> _insertPropertyNames;
+	private NSMutableDictionary<String, String> _propertyAliasForPropertyName;
+	private NSMutableDictionary<String, String> _propertyNameForPropertyAlias;
 	private String _defaultIDAttributeName;
 
 	/**
@@ -148,11 +146,11 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * loadUpdatePropertiesForEntityNamed, and loadInsertPropertiesForEntityNamed will NOT be called.
 	 */
 	public ERXStandardRestEntityDelegate() {
-		_viewPropertyNames = new NSMutableSet();
-		_updatePropertyNames = new NSMutableSet();
-		_insertPropertyNames = new NSMutableSet();
-		_propertyAliasForPropertyName = new NSMutableDictionary();
-		_propertyNameForPropertyAlias = new NSMutableDictionary();
+		_viewPropertyNames = new NSMutableSet<String>();
+		_updatePropertyNames = new NSMutableSet<String>();
+		_insertPropertyNames = new NSMutableSet<String>();
+		_propertyAliasForPropertyName = new NSMutableDictionary<String, String>();
+		_propertyNameForPropertyAlias = new NSMutableDictionary<String, String>();
 	}
 
 	/**
@@ -248,7 +246,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 */
 	@Override
 	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
-		String propertyAlias = (String) _propertyAliasForPropertyName.objectForKey(entity.name() + "." + propertyName);
+		String propertyAlias = _propertyAliasForPropertyName.objectForKey(entity.name() + "." + propertyName);
 		if (propertyAlias == null) {
 			propertyAlias = super.propertyAliasForPropertyNamed(entity, propertyName);
 		}
@@ -267,7 +265,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 */
 	@Override
 	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
-		String propertyName = (String) _propertyNameForPropertyAlias.objectForKey(entity.name() + "." + propertyAlias);
+		String propertyName = _propertyNameForPropertyAlias.objectForKey(entity.name() + "." + propertyAlias);
 		if (propertyName == null) {
 			propertyName = super.propertyNameForPropertyAlias(entity, propertyAlias);
 		}

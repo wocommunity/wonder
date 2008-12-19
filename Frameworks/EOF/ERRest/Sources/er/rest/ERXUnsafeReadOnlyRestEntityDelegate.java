@@ -19,10 +19,10 @@ import er.extensions.eof.ERXEC;
  * @author mschrag
  */
 public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDelegate {
-	private NSMutableSet _initializedEntityNames;
+	private NSMutableSet<String> _initializedEntityNames;
 
 	public ERXUnsafeReadOnlyRestEntityDelegate() {
-		_initializedEntityNames = new NSMutableSet();
+		_initializedEntityNames = new NSMutableSet<String>();
 	}
 
 	@Override

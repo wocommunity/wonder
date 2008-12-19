@@ -94,6 +94,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		// }
 	}
 
+	@SuppressWarnings("unchecked")
 	protected NSArray<String> allPossiblePropertyNamesOnEarth(EOEntity entity) {
 		NSArray<String> propertyNames = entity._propertyNames();
 		NSArray<EOEntity> subEntities = entity.subEntities();
@@ -311,7 +312,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
-		NSMutableArray filteredObjs = new NSMutableArray();
+		NSMutableArray<EOEnterpriseObject> filteredObjs = new NSMutableArray<EOEnterpriseObject>();
 		Enumeration objsEnum = objs.objectEnumerator();
 		while (objsEnum.hasMoreElements()) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) objsEnum.nextElement();
@@ -615,9 +616,9 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	protected void _updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		NSMutableArray keepObjects = new NSMutableArray();
-		NSMutableArray addObjects = new NSMutableArray();
-		NSMutableArray removeObjects = new NSMutableArray();
+		NSMutableArray<EOEnterpriseObject> keepObjects = new NSMutableArray<EOEnterpriseObject>();
+		NSMutableArray<EOEnterpriseObject> addObjects = new NSMutableArray<EOEnterpriseObject>();
+		NSMutableArray<EOEnterpriseObject> removeObjects = new NSMutableArray<EOEnterpriseObject>();
 
 		IERXRestEntityDelegate destinationEntityDelegate = context.delegate().entityDelegate(entity);
 		Enumeration toManyNodesEnum = toManyNodes.objectEnumerator();

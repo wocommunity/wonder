@@ -2,6 +2,10 @@ package er.rest;
 
 import java.text.ParseException;
 
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+
 /**
  * IERXRestResponseWriter provides the interface for generating the output of a restful request.
  * 
@@ -31,4 +35,28 @@ public interface IERXRestResponseWriter {
 	 *             if there is a parse error
 	 */
 	public void appendToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+
+	/**
+	 * Returns a String form of the given object using the unsafe delegate.
+	 * 
+	 * @param value the value to write
+	 * @return a string form of the value using the given writer
+	 * @throws ERXRestException
+	 * @throws ERXRestSecurityException
+	 * @throws ERXRestNotFoundException
+	 * @throws ParseException
+	 */
+	public String toString(EOEnterpriseObject value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+
+	/**
+	 * Returns a String form of the given objects using the unsafe delegate.
+	 * 
+	 * @param values the values to write
+	 * @return a string form of the value using the given writer
+	 * @throws ERXRestException
+	 * @throws ERXRestSecurityException
+	 * @throws ERXRestNotFoundException
+	 * @throws ParseException
+	 */
+	public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
 }

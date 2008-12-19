@@ -27,7 +27,7 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
-	private NSMutableSet _initializedEntityNames;
+	private NSMutableSet<String> _initializedEntityNames;
 
 	/**
 	 * Constructs an ERXUnsafeRestEntityDelegate.
@@ -43,7 +43,7 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	 *            if true, this can be used in production without throwing an exception. BE VERY CAREFUL.
 	 */
 	public ERXUnsafeRestEntityDelegate(boolean allowProductionUse) {
-		_initializedEntityNames = new NSMutableSet();
+		_initializedEntityNames = new NSMutableSet<String>();
 
 		if (!allowProductionUse && !ERXApplication.isDevelopmentModeSafe()) {
 			throw new SecurityException("You are attempting to use ERXUnsafeRestEntityDelegate outside of development mode!.");
@@ -112,8 +112,8 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 		return objects;
 	}
 
-	public static NSArray allPropertyNames(EOEntity entity, boolean includeToMany) {
-		NSMutableArray displayPropertyNames = new NSMutableArray();
+	public static NSArray<String> allPropertyNames(EOEntity entity, boolean includeToMany) {
+		NSMutableArray<String> displayPropertyNames = new NSMutableArray<String>();
 		NSArray classProperties = entity.classProperties();
 		Enumeration attributesEnum = entity.attributes().objectEnumerator();
 		while (attributesEnum.hasMoreElements()) {
