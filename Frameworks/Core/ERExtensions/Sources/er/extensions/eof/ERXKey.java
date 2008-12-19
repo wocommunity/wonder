@@ -36,7 +36,15 @@ import er.extensions.qualifiers.ERXOrQualifier;
  * @author mschrag
  */
 public class ERXKey<T> {
-
+	/**
+	 * Enums to desribe the type of key this represents.
+	 * 
+	 * @author mschrag
+	 */
+	public static enum Type {
+		Attribute, ToOneRelationship, ToManyRelationship
+	}
+	
 	public interface ValueCoding {
 		public <T> T valueForKey(ERXKey<T> key);
 
