@@ -36,10 +36,6 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 	/**
 	 * Constructs a rest context.
 	 * 
-	 * @param context
-	 *            the WOContext
-	 * @param editingContext
-	 *            the EOEditingContext
 	 */
 	public ERXRestContext(IERXRestDelegate delegate) {
 		this(null, ERXEC.newEditingContext(), delegate);

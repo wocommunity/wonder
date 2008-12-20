@@ -154,7 +154,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
      * Overwrite for custom value conversion.
      * @param attribute
      * @param stringValue
-     * @return
      */
     protected Object qualifierValueForAttribute(EOAttribute attribute, String stringValue) {
         //AK: I still don't like this...in particular the new NSTimestampFormatter() which would be totally arbitrary...

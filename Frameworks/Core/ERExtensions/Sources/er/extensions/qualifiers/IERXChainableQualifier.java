@@ -78,7 +78,7 @@ public interface IERXChainableQualifier {
 	 * @param array
 	 *            the array to filter (in place)
 	 * @return one matching object or null
-	 * @throw IllegalStateException if more than one object matched
+	 * @throws IllegalStateException if more than one object matched
 	 */
 	public <T> T one(NSArray<T> array);
 
@@ -90,8 +90,8 @@ public interface IERXChainableQualifier {
 	 * @param array
 	 *            the array to filter (in place)
 	 * @return one matching object
-	 * @throw IllegalStateException if more than one object matched
-	 * @throw NoSuchElementException if no objects matched
+	 * @throws IllegalStateException if more than one object matched
+	 * @throws NoSuchElementException if no objects matched
 	 */
 	public <T> T requiredOne(NSArray<T> array);
 }
