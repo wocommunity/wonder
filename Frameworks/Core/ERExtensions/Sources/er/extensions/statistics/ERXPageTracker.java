@@ -11,11 +11,11 @@ import er.extensions.components.ERXStatelessComponent;
  * Integration into Google analytics. Supports custom url values and server names via bindings. 
  * Beware that this is a severe privacy invasion against your users...
  * 
- * @binding key Google tracking key. If omitted or null, leaves out the content alltogether.
- * @href url to give to Google. If omitted or null, first looks if context.page is an {@link ERXComponentActionRedirector.Restorable} or 
- * if not uses the normal URL which will not make a lot of sense in case of a component url.
- * @omitQuotes if set, does not quote the href value. This is useful if you want to use javascript values.
- * @server server to give to Google. If omitted or null, leaves the default.
+ * <ul><li>binding - key Google tracking key. If omitted or null, leaves out the content alltogether.</li>
+ * <li>href - url to give to Google. If omitted or null, first looks if context.page is an {@link ERXComponentActionRedirector.Restorable} or 
+ * if not uses the normal URL which will not make a lot of sense in case of a component url.</li>
+ * <li>omitQuotes - if set, does not quote the href value. This is useful if you want to use javascript values.</li>
+ * <li>server -  server to give to Google. If omitted or null, leaves the default.</li></ul>
  * 
  * @author ak, privacy invader extra-ordinaire
  */
