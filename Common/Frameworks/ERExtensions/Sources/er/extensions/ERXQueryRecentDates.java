@@ -4,7 +4,7 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-package er.extensions;
+package er.extensions.components;
 
 import org.apache.log4j.Logger;
 
@@ -13,6 +13,9 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
+
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXTimestampUtility;
 
 /**
  * Nice for adjusting the query specs for dates on a display group.<br />
@@ -62,7 +65,7 @@ public class ERXQueryRecentDates extends WOComponent {
 
     public Object date() {
         int found=0;
-        NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMin().valueForKey(key);
+        NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMatch().valueForKey(key);
         if (dateFromQueryMin!=null) {
             NSTimestamp now=new NSTimestamp();
             int d = (int)ERXTimestampUtility.differenceByDay(dateFromQueryMin, now);
@@ -81,9 +84,14 @@ public class ERXQueryRecentDates extends WOComponent {
     public void setDate(Integer dateIndex) {
         NSTimestamp now=new NSTimestamp();
         int howManyDaysAgo=dateIndex!=null ? daysAgoArray[dateIndex.intValue()] : 0;
-        if(howManyDaysAgo==0)
-            displayGroup.queryMin().removeObjectForKey(key);
-        else
-            displayGroup.queryMin().takeValueForKey(now.timestampByAddingGregorianUnits(0,0,-howManyDaysAgo,0,0,0), key);
+	System.out.println("howMany="+howManyDaysAgo+" key="+key);
+        if(howManyDaysAgo==0) {
+            displayGroup.queryMatch().removeObjectForKey(key);
+            displayGroup.queryOperator().removeObjectForKey(key);
+	}
+        else {
+            displayGroup.queryMatch().takeValueForKey(now.timestampByAddingGregorianUnits(0,0,-howManyDaysAgo,0,0,0), key);
+            displayGroup.queryOperator().takeValueForKey(">", key);	    
+	}
     }
 }
