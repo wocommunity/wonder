@@ -65,7 +65,7 @@ public class ERXQueryRecentDates extends WOComponent {
 
     public Object date() {
         int found=0;
-        NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMin().valueForKey(key);
+        NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMatch().valueForKey(key);
         if (dateFromQueryMin!=null) {
             NSTimestamp now=new NSTimestamp();
             int d = (int)ERXTimestampUtility.differenceByDay(dateFromQueryMin, now);
@@ -84,9 +84,14 @@ public class ERXQueryRecentDates extends WOComponent {
     public void setDate(Integer dateIndex) {
         NSTimestamp now=new NSTimestamp();
         int howManyDaysAgo=dateIndex!=null ? daysAgoArray[dateIndex.intValue()] : 0;
-        if(howManyDaysAgo==0)
-            displayGroup.queryMin().removeObjectForKey(key);
-        else
-            displayGroup.queryMin().takeValueForKey(now.timestampByAddingGregorianUnits(0,0,-howManyDaysAgo,0,0,0), key);
+	System.out.println("howMany="+howManyDaysAgo+" key="+key);
+        if(howManyDaysAgo==0) {
+            displayGroup.queryMatch().removeObjectForKey(key);
+            displayGroup.queryOperator().removeObjectForKey(key);
+	}
+        else {
+            displayGroup.queryMatch().takeValueForKey(now.timestampByAddingGregorianUnits(0,0,-howManyDaysAgo,0,0,0), key);
+            displayGroup.queryOperator().takeValueForKey(">", key);	    
+	}
     }
 }
