@@ -33,6 +33,7 @@ and limitations under the License.
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #ifdef WIN32
 #include <winnt-pdo.h>
 #ifndef strncasecmp
