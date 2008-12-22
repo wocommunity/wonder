@@ -244,7 +244,7 @@ public class ERXXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
 					}
 					response.appendContentString(">");
 
-					String attributeValueStr = ERXStringUtilities.escapeNonBasicLatinChars(ERXStringUtilities.escapeNonXMLChars(formattedPropertyValue));
+					String attributeValueStr = ERXStringUtilities.escapeNonXMLChars(formattedPropertyValue);
 					response.appendContentString(attributeValueStr);
 
 					response.appendContentString("</");
