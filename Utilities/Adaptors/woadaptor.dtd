@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="ASCII"?>
+<?xml version="1.0" encoding='UTF-8'?>
 
-<!ELEMENT adaptor (application)*>
-	<!ELEMENT application (instance)*>
+<!ELEMENT adaptor (application*)>
+	<!ELEMENT application (instance*)>
 		<!ATTLIST application 
 			name CDATA #REQUIRED
 			retries CDATA #IMPLIED
-			scheduler ( "RANDOM" | "ROUNDROBIN" | "LOADAVERAGE" | <!-- Custom Scheduler Name --> ) #IMPLIED
+			scheduler ( RANDOM | ROUNDROBIN | LOADAVERAGE | CUSTOM ) #IMPLIED
 			dormant CDATA #IMPLIED
-			protocol "http" #IMPLIED
+			protocol ( http ) #IMPLIED
 			redir CDATA #IMPLIED
 			poolsize CDATA #IMPLIED
-			urlVersion ( "3" | "4" ) #IMPLIED
+			urlVersion ( 3 | 4 ) #IMPLIED
 			additionalArgs CDATA #IMPLIED>
-		<!ELEMENT instance>
+		<!ELEMENT instance EMPTY>
 			<!ATTLIST instance
 				id CDATA #REQUIRED 
 				port CDATA #REQUIRED 
@@ -23,4 +23,3 @@
 				sendBufSize CDATA #IMPLIED
 				recvBufSize CDATA #IMPLIED
 				additionalArgs CDATA #IMPLIED>
-
