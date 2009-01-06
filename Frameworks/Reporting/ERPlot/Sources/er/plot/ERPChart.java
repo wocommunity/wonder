@@ -7,7 +7,7 @@ import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.StandardEntityCollection;
-import org.jfree.chart.imagemap.ImageMapUtil;
+import org.jfree.chart.imagemap.ImageMapUtilities;
 import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
 import org.jfree.chart.imagemap.URLTagFragmentGenerator;
 import org.jfree.data.general.Dataset;
@@ -55,7 +55,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
     public String _imageMap;
     public String _imageMapName;
 
-    protected NSArray _items;
+    protected NSArray<?> _items;
     protected String _name;
     protected String _chartType;
     protected String _imageType;
@@ -65,7 +65,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
     protected int _height = 0;
     protected Dataset _dataset;
     protected JFreeChart _chart;
-    protected NSDictionary _configuration;
+    protected NSDictionary<String,?> _configuration;
 
     /**
      * Public constructor
@@ -75,9 +75,9 @@ public abstract class ERPChart extends ERXStatelessComponent {
         super(context);
     }
 
-    public NSArray items() {
+    public NSArray<?> items() {
         if(_items == null) {
-            _items = (NSArray)valueForBinding("items");
+            _items = (NSArray<?>)valueForBinding("items");
             ERXAssert.DURING.notNull("items", _items);
         }
         return _items;
@@ -142,9 +142,10 @@ public abstract class ERPChart extends ERXStatelessComponent {
         return booleanValueForBinding("showToolTips", true);
     }
 
-    public NSDictionary configuration() {
+    @SuppressWarnings("unchecked")
+	public NSDictionary<String,?> configuration() {
         if(_configuration == null) {
-            _configuration = (NSDictionary)valueForBinding("configuration");
+            _configuration = (NSDictionary<String,Object>)valueForBinding("configuration");
             if(_configuration == null) {
                 _configuration = NSDictionary.EmptyDictionary;
             }
@@ -152,7 +153,8 @@ public abstract class ERPChart extends ERXStatelessComponent {
         return _configuration;
     }
 
-    public void reset() {
+    @Override
+	public void reset() {
         super.reset();
         _imageData = null;
         _imageKey = null;
@@ -171,7 +173,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
 
     protected abstract JFreeChart createChart();
     protected abstract Dataset createDataset();
-    protected abstract NSArray supportedTypes();
+    protected abstract NSArray<String> supportedTypes();
 
     
     public Dataset dataset() {
@@ -199,8 +201,8 @@ public abstract class ERPChart extends ERXStatelessComponent {
                 if(hasBinding("chart") && canSetValueForBinding("chart")) {
                     setValueForBinding(_chart, "chart");
                 }
-                for (Enumeration keys = configuration().keyEnumerator(); keys.hasMoreElements();) {
-                    String keypath = (String) keys.nextElement();
+                for (Enumeration<String> keys = configuration().keyEnumerator(); keys.hasMoreElements();) {
+                    String keypath = keys.nextElement();
                     Object value = configuration().objectForKey(keypath);
                     NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(_chart, value, keypath);
                 }
@@ -242,8 +244,10 @@ public abstract class ERPChart extends ERXStatelessComponent {
                                 }
                             };
                         }
-                        _imageMap = ImageMapUtil.getImageMap(_imageMapName, info, 
-                                toolTipGenerator, urlTagFragmentGenerator);
+                        // for jfreechart-1.0.x use this line
+						 _imageMap = ImageMapUtilities.getImageMap(_imageMapName, info, toolTipGenerator, urlTagFragmentGenerator);
+						// for jfreechart-0.9.x use this line
+                        // _imageMap = ImageMapUtil.getImageMap(_imageMapName, info, toolTipGenerator, urlTagFragmentGenerator);
                     }
                     _imageData = new NSData(imageStream.toByteArray());
                 }
@@ -256,7 +260,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
     }
     
     public String imageMap() {
-        NSData data = imageData();
+    	imageData();
         return _imageMap;
     }
     
