@@ -4,6 +4,7 @@ import java.util.Enumeration;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
@@ -30,6 +31,7 @@ import er.extensions.foundation.ERXAssert;
  * @binding nameKey the key for the name (must return String)
  * @binding valueKey the key for the value (must return Number)
  * @binding showLegends true, if legends should be shown
+ * @binding showLabels true, if labels should be shown (default is true)
  * @binding showToolTips true, if tool tips should be shown
  * @binding showUrls true, if urls should be shown
  * @binding chart Chart to use instead of the created one. If this binding is setable, then it will be set to the actually used chart
@@ -41,7 +43,7 @@ import er.extensions.foundation.ERXAssert;
 public class ERPPieChart extends ERPChart {
 
     /** logging support */
-    public static final NSArray SUPPORTED_TYPES = new NSArray(new Object[] {"PieChart", "PieChart3D"});
+    public static final NSArray<String> SUPPORTED_TYPES = new NSArray<String>(new String[] {"PieChart", "PieChart3D", "RingChart"});
         
     /**
      * Utility class to accomodate for accumulating data (the superclass can only replace values, 
@@ -53,6 +55,8 @@ public class ERPPieChart extends ERPChart {
         /**
          * Overridden so it adds the value to the current value for the key instead of replacing it.
          */
+    	@SuppressWarnings("unchecked")
+		@Override
         public void setValue(Comparable key, Number value) {
             Number oldValue = getValue(key);
             if(oldValue != null) {
@@ -88,9 +92,9 @@ public class ERPPieChart extends ERPChart {
 
     protected Dataset createDataset() {
         AccumulatingPieDataset dataset = new AccumulatingPieDataset();
-         for(Enumeration items = items().objectEnumerator(); items.hasMoreElements(); ) {
+         for(Enumeration<?> items = items().objectEnumerator(); items.hasMoreElements(); ) {
             Object item = items.nextElement();
-            Comparable name = (Comparable)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, nameKey());
+            Comparable<?> name = (Comparable<?>)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, nameKey());
             Number value = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, valueKey());
             dataset.setValue(name, value);
         }
@@ -104,13 +108,23 @@ public class ERPPieChart extends ERPChart {
         
         if("PieChart3D".equals(chartType())) {
             chart = ChartFactory.createPieChart3D(name,dataset,showLegends(),showToolTips(),showUrls());
+        } else if("RingChart".equals(chartType())) {
+        	chart = ChartFactory.createRingChart(name,dataset,showLegends(),showToolTips(),showUrls());
         } else {
             chart = ChartFactory.createPieChart(name,dataset,showLegends(),showToolTips(),showUrls());
         }
+        
+        if(!showLabels())
+        	((PiePlot) chart.getPlot()).setLabelGenerator(null);
         return chart;
     }
 
-    protected NSArray supportedTypes() {
+    protected NSArray<String> supportedTypes() {
         return SUPPORTED_TYPES;
     }
+    
+    public boolean showLabels() {
+        return booleanValueForBinding("showLabels", true);
+    }
+
 }

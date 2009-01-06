@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
 	<wo class="ERPPieChart" wocomponentcontent="false">
 
@@ -26,5 +26,6 @@
 				<unbound name="dataset"/>
 			</and>
 		</validation>
-	</wo>
+	<binding name="showLabels"/>
+    </wo>
 </wodefinitions>
