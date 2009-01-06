@@ -1,13 +1,16 @@
 package er.plot;
 
 import org.apache.log4j.Logger;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.StandardChartTheme;
 
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.foundation.ERXProperties;
 
 public class ERPlot extends ERXFrameworkPrincipal {
 
-    public final static Class REQUIRES[] = new Class[] {ERXExtensions.class};
+    public final static Class<?> REQUIRES[] = new Class[] {ERXExtensions.class};
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERPlot.class);
@@ -28,7 +31,7 @@ public class ERPlot extends ERXFrameworkPrincipal {
      */
     public static ERPlot sharedInstance() {
         if (sharedInstance == null) {
-            sharedInstance = (ERPlot)ERXFrameworkPrincipal.sharedInstance(ERPlot.class);
+            sharedInstance = ERXFrameworkPrincipal.sharedInstance(ERPlot.class);
         }
         return sharedInstance;
     }
@@ -37,7 +40,12 @@ public class ERPlot extends ERXFrameworkPrincipal {
      * Called when it is time to finish the
      * initialization of the framework.
      */
-    public void finishInitialization() {
+    @Override
+	public void finishInitialization() {
         log.debug("finishInitialization");
+        // make charts look like they looked in jfreechart-0.9.x by default
+		if(ERXProperties.booleanForKeyWithDefault("er.plot.useLegacyTheme", false)) {
+			ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
+		}
     }
 }    

@@ -44,7 +44,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 public class ERPCategoryChart extends ERPChart {
 
-    public static final NSArray SUPPORTED_TYPES = new NSArray(new Object[]{
+    public static final NSArray<String> SUPPORTED_TYPES = new NSArray<String>(new String[]{
             "BarChart", "StackedBarChart", "BarChart3D", "StackedBarChart3D", "AreaChart", 
             "StackedAreaChart", "LineChart", "WaterfallChart"
     });
@@ -95,15 +95,14 @@ public class ERPCategoryChart extends ERPChart {
         return _orientation;
     }
     
-    protected NSArray supportedTypes() {
+    protected NSArray<String> supportedTypes() {
         return SUPPORTED_TYPES;
     }
     
     protected JFreeChart createChart() {
         JFreeChart chart = null;
-        CategoryDataset dataset = (CategoryDataset)dataset();
         String name = stringValueForBinding("name", "");
-        Class clazz = ChartFactory.class;
+        Class<ChartFactory> clazz = ChartFactory.class;
         try {
             Method method = clazz.getDeclaredMethod("create" + chartType(), new Class[] {
                 String.class, String.class, String.class, CategoryDataset.class, PlotOrientation.class, 
@@ -124,13 +123,13 @@ public class ERPCategoryChart extends ERPChart {
     protected Dataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         
-        for(Enumeration items = items().objectEnumerator(); items.hasMoreElements(); ) {
+        for(Enumeration<?> items = items().objectEnumerator(); items.hasMoreElements(); ) {
             Object item = items.nextElement();
-            Comparable name = (Comparable)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, nameKey());
+            Comparable<?> name = (Comparable<?>)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, nameKey());
             Number value = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, valueKey());
-            Comparable category = null;
+            Comparable<?> category = null;
             if(categoryKey() != null) {
-                category = (Comparable)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, categoryKey());
+                category = (Comparable<?>)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, categoryKey());
             }
             dataset.setValue(value, name, category);
         }
