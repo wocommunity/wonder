@@ -18,7 +18,8 @@ import er.extensions.components._private.ERXWOForm;
  * @binding onDrop the function to execute after notifying the server of the drop
  * @binding submit if true, drop will perform a form submit
  * @binding formName the name of the form to submit (if submit is true)
- * 
+ * @binding confirmMessage if set, a confirm dialog with the given message is shown on drop. Allows cancelling a drop.
+ *  
  * @author mschrag
  */
 public class AjaxDroppable extends AjaxComponent {
@@ -94,6 +95,9 @@ public class AjaxDroppable extends AjaxComponent {
 	  NSMutableDictionary options = new NSMutableDictionary();
 	  if (canGetValueForBinding("onComplete")) {
 		  options.setObjectForKey(valueForBinding("onComplete"), "onComplete");
+	  }
+	  if (canGetValueForBinding("confirmMessage")) {
+			options.setObjectForKey(new AjaxValue(AjaxOption.STRING, valueForBinding("confirmMessage")).javascriptValue(), "confirmMessage");
 	  }
 	  if (submit) {
 		  AjaxSubmitButton.fillInAjaxOptions(this, this, _elementID, options);

@@ -25,5 +25,6 @@
 		</validation>
 	<binding defaults="Boolean" name="submit"/>
         <binding name="formName"/>
+    <binding name="confirmMessage"/>
     </wo>
 </wodefinitions>
