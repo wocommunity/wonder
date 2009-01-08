@@ -14,6 +14,7 @@
 		<module>BugTracker</module>
 		<module>ERMailer</module>
 		<module>JavaMonitor</module>
+		<module>TickTockMan</module>
 		<module>ValidityModeler</module>
 		<module>wotaskd</module>
 	</modules>
