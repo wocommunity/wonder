@@ -11,12 +11,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -92,8 +94,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private static boolean wasERXApplicationMainInvoked = false;
 
 	/**
-	 * Notification to get posted when we can an OutOfMemoryError. You should
-	 * register your caching classes for this notification so you can release
+	 * Notification to get posted when we get an OutOfMemoryError or when memory passes
+	 * the low memory threshold set in er.extensions.ERXApplication.memoryLowThreshold. 
+	 * You should register your caching classes for this notification so you can release
 	 * memory. Registration should happen at launch time.
 	 */
 	public static final String LowMemoryNotification = "LowMemoryNotification";
@@ -284,7 +287,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// Fix for 3190479 URI encoding should always be UTF8
 		// See http://www.w3.org/International/O-URL-code.html
 		// For WO 5.1.x users, please comment this statement to compile.
-		com.webobjects.appserver._private.WOURLEncoder.WO_URL_ENCODING = "UTF8";
+		com.webobjects.appserver._private.WOURLEncoder.WO_URL_ENCODING = "UTF-8";
 
 		// WO 5.1 specific patches
 		if (ERXProperties.webObjectsVersionAsDouble() < 5.2d) {
@@ -508,35 +511,44 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	@Override
 	public void run() {
-		int timeToLive = ERXProperties.intForKey("ERTimeToLive");
-		if (timeToLive > 0) {
-			log.info("Instance will live " + timeToLive + " seconds.");
-			NSLog.out.appendln("Instance will live " + timeToLive + " seconds.");
-			// add a fudge factor of around 10 minutes
-			timeToLive += (new Random()).nextFloat() * 600;
-			NSTimestamp exitDate = (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, timeToLive);
-			WOTimer t = new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
-			t.schedule();
+		try {
+			int timeToLive = ERXProperties.intForKey("ERTimeToLive");
+			if (timeToLive > 0) {
+				log.info("Instance will live " + timeToLive + " seconds.");
+				NSLog.out.appendln("Instance will live " + timeToLive + " seconds.");
+				// add a fudge factor of around 10 minutes
+				timeToLive += (new Random()).nextFloat() * 600;
+				NSTimestamp exitDate = (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, timeToLive);
+				WOTimer t = new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
+				t.schedule();
+			}
+			int timeToDie = ERXProperties.intForKey("ERTimeToDie");
+			if (timeToDie > 0) {
+				log.info("Instance will not live past " + timeToDie + ":00.");
+				NSLog.out.appendln("Instance will not live past " + timeToDie + ":00.");
+				NSTimestamp now = new NSTimestamp();
+				int s = (timeToDie - ERXTimestampUtility.hourOfDay(now)) * 3600 - ERXTimestampUtility.minuteOfHour(now) * 60;
+				if (s < 0)
+					s += 24 * 3600; // how many seconds to the deadline
+	
+				// deliberately randomize this so that not all instances restart at
+				// the same time
+				// adding up to 1 hour
+				s += (new Random()).nextFloat() * 3600;
+	
+				NSTimestamp stopDate = now.timestampByAddingGregorianUnits(0, 0, 0, 0, 0, s);
+				WOTimer t = new WOTimer(stopDate, 0, this, "startRefusingSessions", null, null, false);
+				t.schedule();
+			}
+			super.run();
 		}
-		int timeToDie = ERXProperties.intForKey("ERTimeToDie");
-		if (timeToDie > 0) {
-			log.info("Instance will not live past " + timeToDie + ":00.");
-			NSLog.out.appendln("Instance will not live past " + timeToDie + ":00.");
-			NSTimestamp now = new NSTimestamp();
-			int s = (timeToDie - ERXTimestampUtility.hourOfDay(now)) * 3600 - ERXTimestampUtility.minuteOfHour(now) * 60;
-			if (s < 0)
-				s += 24 * 3600; // how many seconds to the deadline
-
-			// deliberately randomize this so that not all instances restart at
-			// the same time
-			// adding up to 1 hour
-			s += (new Random()).nextFloat() * 3600;
-
-			NSTimestamp stopDate = now.timestampByAddingGregorianUnits(0, 0, 0, 0, 0, s);
-			WOTimer t = new WOTimer(stopDate, 0, this, "startRefusingSessions", null, null, false);
-			t.schedule();
+		catch (RuntimeException t) {
+			if (ERXApplication._wasMainInvoked) {
+				ERXApplication.log.error(name() + " failed to start.", t);
+				//throw new ERXExceptionUtilities.HideStackTraceException(t);
+			}
+			throw t;
 		}
-		super.run();
 	}
 
 	/**
@@ -635,11 +647,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.fixCachingEnabled", true)) {
 			// _expectedLanguages already contains all the languages in all projects, so
 			// there is no need to check for the ones that come in...
-			return super._componentDefinition(s, _expectedLanguages());
+			return super._componentDefinition(s, (nsarray !=null ? nsarray.arrayByAddingObjectsFromArray(_expectedLanguages()) : _expectedLanguages()));
 		}
 		return super._componentDefinition(s, nsarray);
 	}
-
+	
 	/**
 	 * Checks if the free memory is less than the threshold given in
 	 * <code>er.extensions.ERXApplication.memoryThreshold</code> (should be
@@ -1529,7 +1541,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Makes ERXConstants available for binding in the UI. Bind to <code>application.constants.MyConstantClass</code>.
-	 * @return
 	 */
 	public NSKeyValueCodingAdditions constants() {
 		return new NSKeyValueCodingAdditions() {
@@ -1657,5 +1668,113 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			setAdditionalAdaptors(mutableAdditionalAdaptors);
 		}
 		return additionalAdaptors;
+	}
+
+	protected void _debugValueForDeclarationNamed(WOComponent component, String verb, String aDeclarationName, String aDeclarationType, String aBindingName, String anAssociationDescription, Object aValue) {
+		if (aValue instanceof String) {
+			StringBuffer stringbuffer = new StringBuffer(((String) aValue).length() + 2);
+			stringbuffer.append('"');
+			stringbuffer.append(aValue);
+			stringbuffer.append('"');
+			aValue = stringbuffer;
+		}
+		if (aDeclarationName.startsWith("_")) {
+			aDeclarationName = "[inline]";
+		}
+
+		StringBuffer sb = new StringBuffer();
+
+		//NSArray componentPath = ERXWOContext._componentPath(ERXWOContext.currentContext());
+		//componentPath.lastObject()
+		//WOComponent lastComponent = ERXWOContext.currentContext().component();
+		String lastComponentName = component.name().replaceFirst(".*\\.", "");
+		sb.append(lastComponentName);
+
+		sb.append(verb);
+
+		if (!aDeclarationName.startsWith("_")) {
+			sb.append(aDeclarationName);
+			sb.append(":");
+		}
+		sb.append(aDeclarationType);
+
+		sb.append(" { ");
+		sb.append(aBindingName);
+		sb.append("=");
+
+		String valueStr = aValue != null ? aValue.toString() : "null";
+		if (anAssociationDescription.startsWith("class ")) {
+			sb.append(valueStr);
+			sb.append("; }");
+		}
+		else {
+			sb.append(anAssociationDescription);
+			sb.append("; } value ");
+			sb.append(valueStr);
+		}
+
+		NSLog.debug.appendln(sb.toString());
+	}
+
+	/**
+	 * The set of component names that have binding debug enabled
+	 */
+	private NSMutableSet _debugComponents = new NSMutableSet();
+
+	/**
+	 * Little bit better binding debug output than the original.
+	 */
+	@Override
+	public void logTakeValueForDeclarationNamed(String aDeclarationName, String aDeclarationType, String aBindingName, String anAssociationDescription, Object aValue) {
+		WOComponent component = ERXWOContext.currentContext().component();
+		if (component.parent() != null) {
+			component = component.parent();
+		}
+		_debugValueForDeclarationNamed(component, " ==> ", aDeclarationName, aDeclarationType, aBindingName, anAssociationDescription, aValue);
+	}
+
+	/**
+	 * Little bit better binding debug output than the original.
+	 */
+	@Override
+	public void logSetValueForDeclarationNamed(String aDeclarationName, String aDeclarationType, String aBindingName, String anAssociationDescription, Object aValue) {
+		WOComponent component = ERXWOContext.currentContext().component();
+		if (component.parent() != null) {
+			component = component.parent();
+		}
+		_debugValueForDeclarationNamed(component, " <== ", aDeclarationName, aDeclarationType, aBindingName, anAssociationDescription, aValue);
+	}
+
+	/**
+	 * Turns on/off binding debugging for the given component.  Binding debugging requires using the WOOgnl
+	 * template parser and setting ognl.debugSupport=true.
+	 * 
+	 * @param debugEnabled whether or not to enable debugging 
+	 * @param componentName the component name to enable debugging for
+	 */
+	public void setDebugEnabledForComponent(boolean debugEnabled, String componentName) {
+		if (debugEnabled) {
+			_debugComponents.addObject(componentName);
+		}
+		else {
+			_debugComponents.removeObject(componentName);
+		}
+	}
+
+	/**
+	 * Returns whether or not binding debugging is enabled for the given component
+	 * 
+	 * @param componentName the component name
+	 * @return whether or not binding debugging is enabled for the given componen
+	 */
+	public boolean debugEnabledForComponent(String componentName) {
+		return _debugComponents.containsObject(componentName);
+	}
+	
+	/**
+	 * Turns off binding debugging for all components.
+	 */
+	public void clearDebugEnabledForAllComponents() {
+		_debugComponents.removeAllObjects();
 	}
 }

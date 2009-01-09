@@ -578,9 +578,13 @@ var AjaxDroppable = Class.create({
 	
 	dropped: function(element, droppableElement) {
     if (droppableElement.id == this.droppableElementID) {
-			if (this.onbeforedrop) {
-				this.onbeforedrop(element, droppableElement);
-			}
+		if(typeof this.options.confirmMessage != "undefined") {
+			if(!confirm(this.options.confirmMessage))
+				return;
+		}
+		if (this.onbeforedrop) {
+			this.onbeforedrop(element, droppableElement);
+		}
 
     	var data = this.draggableKeyName + '=' + element.getAttribute('draggableID');
     	

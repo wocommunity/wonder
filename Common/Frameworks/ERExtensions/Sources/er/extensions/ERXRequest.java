@@ -238,7 +238,7 @@ public  class ERXRequest extends WORequest {
 	        if (httpsMode != null && httpsMode.equalsIgnoreCase("on")) {
 	        	isRequestSecure = true;
 	        }
-	        else if (serverPort != null && String.valueOf(ERXApplication.erxApplication().sslPort()).equals(serverPort)) {
+	        else if (serverPort != null && WOApplication.application() instanceof ERXApplication && String.valueOf(ERXApplication.erxApplication().sslPort()).equals(serverPort)) {
 	        	isRequestSecure = true;
 	        }
 	        // MS: I have no idea how to do this properly ... There doesn't appear to be any way to
@@ -249,7 +249,7 @@ public  class ERXRequest extends WORequest {
 	        	// don't believe this is actually secure at ALL, so I'm only enabling it when you're not using
 	        	// a webserver (i.e. probably testing).
 	        	String hostHeader = request.headerForKey("host");
-	        	if (hostHeader != null && hostHeader.endsWith(":" + ERXApplication.erxApplication().sslPort())) {
+	        	if (hostHeader != null && WOApplication.application() instanceof ERXApplication && hostHeader.endsWith(":" + ERXApplication.erxApplication().sslPort())) {
 	        		isRequestSecure = true;
 	        	}
 	        }

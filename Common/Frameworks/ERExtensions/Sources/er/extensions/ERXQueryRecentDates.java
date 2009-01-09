@@ -6,8 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
+
 
 /**
  * Nice for adjusting the query specs for dates on a display group.<br />
@@ -23,7 +29,7 @@ public class ERXQueryRecentDates extends WOComponent {
     }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXQueryRecentDates.class);
+    public final static Logger log = Logger.getLogger(ERXQueryRecentDates.class);
     
     public WODisplayGroup displayGroup;
     public String key;
@@ -57,10 +63,10 @@ public class ERXQueryRecentDates extends WOComponent {
 
     public Object date() {
         int found=0;
-        NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMin().valueForKey(key);
+        NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMatch().valueForKey(key);
         if (dateFromQueryMin!=null) {
             NSTimestamp now=new NSTimestamp();
-            int d = (int)ERXTimestampUtility.differenceByDay(now, dateFromQueryMin);
+            int d = (int)ERXTimestampUtility.differenceByDay(dateFromQueryMin, now);
             if (d>0) {
                 for (int i=0;i<daysAgoArray.length-1;i++) {
                     if (d>=daysAgoArray[i] && d<= daysAgoArray[i+1]) {
@@ -76,9 +82,13 @@ public class ERXQueryRecentDates extends WOComponent {
     public void setDate(Integer dateIndex) {
         NSTimestamp now=new NSTimestamp();
         int howManyDaysAgo=dateIndex!=null ? daysAgoArray[dateIndex.intValue()] : 0;
-        if(howManyDaysAgo==0)
-            displayGroup.queryMin().removeObjectForKey(key);
-        else
-            displayGroup.queryMin().takeValueForKey(now.timestampByAddingGregorianUnits(0,0,-howManyDaysAgo,0,0,0), key);
+        if(howManyDaysAgo==0) {
+            displayGroup.queryMatch().removeObjectForKey(key);
+            displayGroup.queryOperator().removeObjectForKey(key);
+	}
+        else {
+            displayGroup.queryMatch().takeValueForKey(now.timestampByAddingGregorianUnits(0,0,-howManyDaysAgo,0,0,0), key);
+            displayGroup.queryOperator().takeValueForKey(">", key);	    
+	}
     }
 }

@@ -17,8 +17,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author mschrag
  */
 public abstract class ERXComponent extends WOComponent {
-
-    protected NSMutableDictionary _dynamicBindings = null;
+	protected NSMutableDictionary _dynamicBindings = null;
 
 	/**
 	 * Constructs a new ERXComponent.
@@ -50,7 +49,7 @@ public abstract class ERXComponent extends WOComponent {
 	@Override
 	public void _awakeInContext(WOContext aArg0) {
 		super._awakeInContext(aArg0);
-		if(isStateless()) {
+		if (isStateless()) {
 			_dynamicBindings = null;
 		}
 	}
@@ -91,7 +90,8 @@ public abstract class ERXComponent extends WOComponent {
 	}
 
 	/**
-	 * Calls _checkAccess prior to super.appendToResponse and adds support for ClickToOpen (TM).
+	 * Calls _checkAccess prior to super.appendToResponse and adds support for
+	 * ClickToOpen (TM).
 	 */
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -114,169 +114,190 @@ public abstract class ERXComponent extends WOComponent {
 	}
 	
 	/**
-	 * Returns whether or not click-to-open should be enabled for this component.  By
-	 * default this returns ERXClickToOpenSupport.isEnabled().
+	 * Returns whether or not click-to-open should be enabled for this
+	 * component. By default this returns ERXClickToOpenSupport.isEnabled().
 	 * 
-	 * @param response the response
-	 * @param context the context
+	 * @param response
+	 *            the response
+	 * @param context
+	 *            the context
 	 * @return whether or not click-to-open is enabled for this component
 	 */
 	public boolean clickToOpenEnabled(WOResponse response, WOContext context) {
 		return ERXClickToOpenSupport.isEnabled();
 	}
 
-    /**
-     * Resolves a given binding as a int value. Useful for image sizes and the like.
-     * @param binding binding to be resolved as a int value.
-     * @param defaultValue default int value to be used if the
-     *        binding is not bound.
-     * @return result of evaluating binding as a int.
-     */
-    protected int intValueForBinding(String binding, int defaultValue) {
-        return ERXValueUtilities.intValueWithDefault(valueForBinding(binding), defaultValue);
-    }
+	/**
+	 * Resolves a given binding as a int value. Useful for image sizes and the
+	 * like.
+	 * 
+	 * @param binding
+	 *            binding to be resolved as a int value.
+	 * @param defaultValue
+	 *            default int value to be used if the binding is not bound.
+	 * @return result of evaluating binding as a int.
+	 */
+	protected int intValueForBinding(String binding, int defaultValue) {
+		return ERXValueUtilities.intValueWithDefault(valueForBinding(binding), defaultValue);
+	}
 
-    /**
-     * Resolves a given binding as a float value.
-     * @param binding binding to be resolved as a float value.
-     * @param defaultValue default float value to be used if the
-     *        binding is not bound.
-     * @return result of evaluating binding as a float.
-     */
-    protected float floatValueForBinding(String binding, float defaultValue) {
-        return ERXValueUtilities.floatValueWithDefault(valueForBinding(binding), defaultValue);
-    }
+	/**
+	 * Resolves a given binding as a float value.
+	 * 
+	 * @param binding
+	 *            binding to be resolved as a float value.
+	 * @param defaultValue
+	 *            default float value to be used if the binding is not bound.
+	 * @return result of evaluating binding as a float.
+	 */
+	protected float floatValueForBinding(String binding, float defaultValue) {
+		return ERXValueUtilities.floatValueWithDefault(valueForBinding(binding), defaultValue);
+	}
 
-    /**
-     * Resolves a given binding as a boolean value. Defaults to
-     * false.
-     * @param binding binding to be resolved as a boolean value.
-     * @return result of evaluating binding as a boolean. 
-     */
-    protected boolean booleanValueForBinding(String binding) {
-        return booleanValueForBinding(binding, false);
-    }
-    
-    /**
-     * Resolves a given binding as a boolean value. 
-     * @param binding binding to be resolved as a boolean value.
-     * @param defaultValue default boolean value to be used if the
-     *        binding is not bound.
-     * @return result of evaluating binding as a boolean.
-     */
-    protected boolean booleanValueForBinding(String binding, boolean defaultValue) {
+	/**
+	 * Resolves a given binding as a boolean value. Defaults to false.
+	 * 
+	 * @param binding
+	 *            binding to be resolved as a boolean value.
+	 * @return result of evaluating binding as a boolean.
+	 */
+	protected boolean booleanValueForBinding(String binding) {
+		return booleanValueForBinding(binding, false);
+	}
+
+	/**
+	 * Resolves a given binding as a boolean value.
+	 * 
+	 * @param binding
+	 *            binding to be resolved as a boolean value.
+	 * @param defaultValue
+	 *            default boolean value to be used if the binding is not bound.
+	 * @return result of evaluating binding as a boolean.
+	 */
+	protected boolean booleanValueForBinding(String binding, boolean defaultValue) {
 		return ERXComponentUtilities.booleanValueForBinding(this, binding, defaultValue);
-    }
+	}
 
-    /**
-     * Resolves a given binding as a boolean value with the option of
-     * specifing a boolean operator as the default value.
-     * @param binding name of the component binding.
-     * @param defaultValue boolean operator to be evaluated if the
-     *        binding is not present.
-     * @return result of evaluating binding as a boolean.
-     */
-    protected boolean booleanValueForBinding(String binding, ERXUtilities.BooleanOperation defaultValue) {
-        if (hasBinding(binding)) {
-            return booleanValueForBinding(binding, false);
-        } else {
-            return defaultValue.value();
-        }
-    }
+	/**
+	 * Resolves a given binding as a boolean value with the option of specifing
+	 * a boolean operator as the default value.
+	 * 
+	 * @param binding
+	 *            name of the component binding.
+	 * @param defaultValue
+	 *            boolean operator to be evaluated if the binding is not
+	 *            present.
+	 * @return result of evaluating binding as a boolean.
+	 */
+	protected boolean booleanValueForBinding(String binding, ERXUtilities.BooleanOperation defaultValue) {
+		if (hasBinding(binding)) {
+			return booleanValueForBinding(binding, false);
+		}
+		else {
+			return defaultValue.value();
+		}
+	}
 
-    /**
-     * Resolves a given binding as an object in the normal fashion of
-     * calling <code>valueForBinding</code>. This has the one advantage
-     * of being able to resolve the resulting object as
-     * a {link ERXUtilities$Operation} if it is an Operation and
-     * then returning the result as the evaluation of that operation.
-     * @param binding name of the component binding.
-     * @return the object for the given binding and in the case that
-     *         it is an instance of an Operation the value of that operation.
-     */
-    protected Object objectValueForBinding(String binding) {
-        return objectValueForBinding(binding, null);
-    }
+	/**
+	 * Resolves a given binding as an object in the normal fashion of calling
+	 * <code>valueForBinding</code>. This has the one advantage of being able to
+	 * resolve the resulting object as a {link ERXUtilities$Operation} if it is
+	 * an Operation and then returning the result as the evaluation of that
+	 * operation.
+	 * 
+	 * @param binding
+	 *            name of the component binding.
+	 * @return the object for the given binding and in the case that it is an
+	 *         instance of an Operation the value of that operation.
+	 */
+	protected Object objectValueForBinding(String binding) {
+		return objectValueForBinding(binding, null);
+	}
 
-    /**
-     * Resolves a given binding as an object in the normal fashion of
-     * calling <code>valueForBinding</code>. This has the one advantage
-     * of being able to resolve the resulting object as
-     * a {link ERXUtilities$Operation} if it is an Operation and
-     * then returning the result as the evaluation of that operation.
-     * @param binding name of the component binding.
-     * @param defaultValue value to be used if <code>valueForBinding</code>
-     *        returns null.
-     * @return the object for the given binding and in the case that
-     *         it is an instance of an Operation the value of that operation.
-     */
-    protected Object objectValueForBinding(String binding, Object defaultValue) {
-        Object result = null;
-        if (hasBinding(binding)) {
-            Object o = valueForBinding(binding);
-            result = (o == null) ? defaultValue : o;
-        } else {
-            result = defaultValue;
-        }
-        if (result instanceof ERXUtilities.Operation) {
-            result = ((ERXUtilities.Operation)result).value();
-        }
-        return result;
-    }
+	/**
+	 * Resolves a given binding as an object in the normal fashion of calling
+	 * <code>valueForBinding</code>. This has the one advantage of being able to
+	 * resolve the resulting object as a {link ERXUtilities$Operation} if it is
+	 * an Operation and then returning the result as the evaluation of that
+	 * operation.
+	 * 
+	 * @param binding
+	 *            name of the component binding.
+	 * @param defaultValue
+	 *            value to be used if <code>valueForBinding</code> returns null.
+	 * @return the object for the given binding and in the case that it is an
+	 *         instance of an Operation the value of that operation.
+	 */
+	protected Object objectValueForBinding(String binding, Object defaultValue) {
+		Object result = null;
+		if (hasBinding(binding)) {
+			Object o = valueForBinding(binding);
+			result = (o == null) ? defaultValue : o;
+		}
+		else {
+			result = defaultValue;
+		}
+		if (result instanceof ERXUtilities.Operation) {
+			result = ((ERXUtilities.Operation) result).value();
+		}
+		return result;
+	}
 
-    /**
-     * Retrieves a given binding and if it is not null
-     * then returns <code>toString</code> called on the
-     * bound object.
-     * @param binding to be resolved
-     * @return resolved binding in string format
-     */
-    protected String stringValueForBinding(String binding) {
-        return stringValueForBinding(binding, null);
-    }
+	/**
+	 * Retrieves a given binding and if it is not null then returns
+	 * <code>toString</code> called on the bound object.
+	 * 
+	 * @param binding
+	 *            to be resolved
+	 * @return resolved binding in string format
+	 */
+	protected String stringValueForBinding(String binding) {
+		return stringValueForBinding(binding, null);
+	}
 
-    /**
-     * Retrieves a given binding and if it is not null
-     * then returns <code>toString</code> called on the
-     * bound object.
-     * @param binding to be resolved
-     * @param defaultValue value to be used if <code>valueForBinding</code>
-     *        returns null.
-     * @return resolved binding in string format
-     */
-    protected String stringValueForBinding(String binding, String defaultValue) {
-        Object v=objectValueForBinding(binding, defaultValue);
-        return v!=null ? v.toString() : null;
-    }
-    
-    /**
-     * Convenience method to get the localizer.
-     */
-    public ERXLocalizer localizer() {
-        return ERXLocalizer.currentLocalizer();
-    }
-    
-    /**
-     * Lazily initialized dictionary which can be used for the 'item' binding in
-     * a repetition for example: 'item = dynamicBindings.myVariable'. Useful in
-     * rapid turnaround modes where adding a iVar would cause hot code swapping
-     * to stop working.
-     * 
-     */
-    public NSMutableDictionary dynamicBindings() {
-        if (_dynamicBindings == null) {
-            _dynamicBindings = new NSMutableDictionary();
-        }
-        return _dynamicBindings;
-    }
-    
-    @Override
+	/**
+	 * Retrieves a given binding and if it is not null then returns
+	 * <code>toString</code> called on the bound object.
+	 * 
+	 * @param binding
+	 *            to be resolved
+	 * @param defaultValue
+	 *            value to be used if <code>valueForBinding</code> returns null.
+	 * @return resolved binding in string format
+	 */
+	protected String stringValueForBinding(String binding, String defaultValue) {
+		Object v = objectValueForBinding(binding, defaultValue);
+		return v != null ? v.toString() : null;
+	}
+
+	/**
+	 * Convenience method to get the localizer.
+	 */
+	public ERXLocalizer localizer() {
+		return ERXLocalizer.currentLocalizer();
+	}
+
+	/**
+	 * Lazily initialized dictionary which can be used for the 'item' binding in
+	 * a repetition for example: 'item = dynamicBindings.myVariable'. Useful in
+	 * rapid turnaround modes where adding a iVar would cause hot code swapping
+	 * to stop working.
+	 * 
+	 */
+	public NSMutableDictionary dynamicBindings() {
+		if (_dynamicBindings == null) {
+			_dynamicBindings = new NSMutableDictionary();
+		}
+		return _dynamicBindings;
+	}
+
+	@Override
 	public void reset() {
-    	super.reset();
-    	if(_dynamicBindings != null) {
-    		_dynamicBindings.removeAllObjects();
-    	}
-    }
+		super.reset();
+		if (_dynamicBindings != null) {
+			_dynamicBindings.removeAllObjects();
+		}
+	}
 
 	/**
 	 * Returns the name of this component without the package name.

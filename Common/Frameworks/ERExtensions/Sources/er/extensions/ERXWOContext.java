@@ -290,9 +290,10 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	/**
-	 * Debugging help, returns the path to current component.
+	 * Debugging help, returns the path to current component as a list of component names.
 	 * 
-	 * @param context
+	 * @param context the current context
+	 * @return an array of component names
 	 */
 	public static NSArray componentPath(WOContext context) {
 		NSMutableArray result = new NSMutableArray();
@@ -301,6 +302,26 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 			while (component != null) {
 				if (component.name() != null) {
 					result.insertObjectAtIndex(component.name(), 0);
+				}
+				component = component.parent();
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Debugging help, returns the path to current component as WOComponent objects.
+	 * 
+	 * @param context the current context
+	 * @return an array of components
+	 */
+	public static NSArray _componentPath(WOContext context) {
+		NSMutableArray result = new NSMutableArray();
+		if (context != null) {
+			WOComponent component = context.component();
+			while (component != null) {
+				if (component.name() != null) {
+					result.insertObjectAtIndex(component, 0);
 				}
 				component = component.parent();
 			}

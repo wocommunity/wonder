@@ -321,7 +321,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 				ERXBatchFetchUtilities.batchFetch(objects, prefetchingRelationshipKeyPaths, true);
 			}
 
-			ERXS.sort(objects, sortOrderings());
+			ERXS.sort(objects, spec.sortOrderings());
 			result = objects.immutableClone();
 		}
 		else {
