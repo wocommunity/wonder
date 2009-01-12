@@ -550,6 +550,9 @@
       </antcall>
   </target>
     <target name="Ajax.all">
+      	<exec dir="Frameworks/Ajax/Ajax/Support" executable="/bin/sh" os="Mac OS X" >
+					<arg line="compress.sh" />
+				</exec>
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.ajax.Ajax" />
             <param name="project.name" value="Ajax" />
