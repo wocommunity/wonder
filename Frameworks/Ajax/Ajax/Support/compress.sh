@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# http://www.boogdesign.com/b2evo/index.php/a/2008/05/27/compressed_prototype_scriptaculous
+
+UNCOMPRESSED=../WebServerResources/wondaculous.js
+COMPRESSED=../WebServerResources/wondaculous-min.js
+
+# remove concatenated file if it exists
+
+rm -f $UNCOMPRESSED
+
+# prototype
+
+cat ../WebServerResources/prototype.js       >> $UNCOMPRESSED
+
+# scriptaculous
+
+# scriptaculous loads it's dependent scripts dynamically by inserting <script> elements into the document head, 
+# since we're not going to have the separate scripts in the combined file we need to stop it doing that
+cat ./scriptaculous_patched.js               >> $UNCOMPRESSED
+
+cat ../WebServerResources/builder.js         >> $UNCOMPRESSED
+cat ../WebServerResources/effects.js         >> $UNCOMPRESSED
+cat ../WebServerResources/dragdrop.js        >> $UNCOMPRESSED
+cat ../WebServerResources/controls.js        >> $UNCOMPRESSED
+cat ../WebServerResources/slider.js          >> $UNCOMPRESSED
+cat ../WebServerResources/sound.js           >> $UNCOMPRESSED
+
+# modal box
+
+cat ../WebServerResources/modalbox.js        >> $UNCOMPRESSED
+
+# wonder
+
+cat ../WebServerResources/wonder.js          >> $UNCOMPRESSED
+cat ../WebServerResources/wonder_inplace.js  >> $UNCOMPRESSED
+cat ../WebServerResources/switchtabs.js      >> $UNCOMPRESSED
+
+# run YUI compressor
+
+java -jar yuicompressor-2.4.1.jar -o $COMPRESSED $UNCOMPRESSED
