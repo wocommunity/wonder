@@ -27,6 +27,11 @@ import org.apache.log4j.Logger;
 
 /**
  * A qualifier that qualifies using an EXISTS clause.
+ *
+ * It will produce an SQL clause like the following:
+ *
+ * <code>select t0.ID, t0.ATT_1, ... t0.ATT_N from FIRST_TABLE t0 where EXISTS (select t1.ID from ANOTHER_TABLE where t1.ATT_1 = ? and t1.FIRST_TABLE_ID = t0.ID)</code>
+ *
  * @author Travis Cripps
  */
 public class ERXExistsQualifier extends EOQualifier implements Cloneable {
@@ -146,9 +151,9 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable {
             if (baseKeyPath != null) {
                 for (Enumeration pathEnum = NSArray.componentsSeparatedByString(baseKeyPath, ".").objectEnumerator(); pathEnum.hasMoreElements();) {
                     String path = (String)pathEnum.nextElement();
-                    if (null == relationship)
+                    if (null == relationship) {
                         relationship = baseEntity.anyRelationshipNamed(path);
-                    else {
+                    } else {
                         relationship = relationship.destinationEntity().anyRelationshipNamed(path);
                     }
                 }
@@ -158,9 +163,9 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable {
             EOEntity destEntity = relationship != null ? relationship.destinationEntity() : baseEntity;
 
             // We need to do a bunch of hand-waiving to get the right table aliases for the table used in the exists
-            // subquery and for the join clause back to the .
-            String sourceTableAlias = "t0";
-            String destTableAlias;
+            // subquery and for the join clause back to the source table.
+            String sourceTableAlias = "t0"; // The alias for the the source table of the baseKeyPath from the main query.
+            String destTableAlias; // The alias for the table used in the subquery.
             if (!srcEntity.equals(baseEntity)) { // The exists clause is applied to the different table.
                 String sourceKeyPath = ERXStringUtilities.keyPathWithoutLastProperty(baseKeyPath);
                 sqlStringForAttributeNamedInExpression(sourceKeyPath, expression);
@@ -172,7 +177,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable {
                     expression.aliasesByRelationshipPath().takeValueForKey(destTableAlias, baseKeyPath);
                 }
             } else { // The exists clause is applied to the base table.
-                destTableAlias = "t0";
+                destTableAlias = "t" + expression.aliasesByRelationshipPath().count(); // Probably "t1"
             }
 
             EOAttribute pk = (EOAttribute)srcEntity.primaryKeyAttributes().lastObject();
