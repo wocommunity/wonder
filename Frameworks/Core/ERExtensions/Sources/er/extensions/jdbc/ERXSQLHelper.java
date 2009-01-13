@@ -1117,7 +1117,7 @@ public class ERXSQLHelper {
 					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
 				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
 				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(t0." + pkColumnName + ") ";
+				countExpression = "count(distinct t0." + pkColumnName + ") ";
 			}
 			else {
 				countExpression = "count(*) ";
