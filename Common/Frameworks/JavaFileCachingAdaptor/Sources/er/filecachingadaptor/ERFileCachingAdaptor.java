@@ -5,9 +5,12 @@
 //
 package er.filecachingadaptor;
 
+import com.sun.tools.example.debug.bdi.MethodNotFoundException;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
+
 import java.util.*;
 import java.math.BigDecimal;
 import java.io.*;
@@ -58,6 +61,11 @@ public class ERFileCachingAdaptor extends ERXForwardingAdaptor {
     // Stupid hack - not allowed to know what model we're being asked to create for.
     protected String forwardedAdaptorName() {
         return "JDBC";
+    }
+    
+    @Override
+    public EOSchemaSynchronizationFactory schemaSynchronizationFactory() {
+    	throw new UnsupportedOperationException("You cannot request a schemaSynchronizationFactory for ERFileCachingAdaptor.");
     }
 
     public EOAdaptorContext createAdaptorContext() {

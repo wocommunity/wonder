@@ -41,6 +41,7 @@ public class ERFileCachingAdaptorChannel extends ERXForwardingAdaptorChannel {
         return NSPropertyListSerialization.booleanForString((String)dict.valueForKey("bloodyWellDontCacheMe")) || ERXProperties.booleanForKey("ERFileCachingAdapter.disableEntityCachingFor_"+entity.name());
     }
 
+    @Override
     public void selectAttributes(NSArray attributes, EOFetchSpecification fetchSpecification, boolean yn, EOEntity entity) {
         _fetchFromAdaptorInParallelAndDebug = ERXProperties.booleanForKeyWithDefault("ERFileCachingAdaptorChannel.doDBFetchesInParallel",false);
         boolean disabled = ERXProperties.booleanForKeyWithDefault("ERFileCachingAdaptor.disabled",false) || _isEntityDisabledForCaching(entity);

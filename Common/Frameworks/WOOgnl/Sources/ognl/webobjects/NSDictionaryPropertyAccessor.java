@@ -8,9 +8,13 @@
 /* DictionaryPropertyAccessor.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
-import com.webobjects.foundation.*;
-import ognl.*;
 import java.util.Map;
+
+import ognl.OgnlException;
+import ognl.PropertyAccessor;
+
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 public class NSDictionaryPropertyAccessor implements PropertyAccessor {
 

@@ -8,9 +8,11 @@
 /* NSFoundationElementsAccessor.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
-import com.webobjects.foundation.*;
 import java.util.Enumeration;
+
 import ognl.ElementsAccessor;
+
+import com.webobjects.foundation.NSSelector;
 
 public class NSFoundationElementsAccessor implements ElementsAccessor {
     private static NSSelector sel = new NSSelector( "objectEnumerator" );
