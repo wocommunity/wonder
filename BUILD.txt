@@ -7,7 +7,7 @@ For information on getting started with Project Wonder, go to:
 
     http://en.wikibooks.org/wiki/Programming:WebObjects/Project_WONDER/Quickstart
 
-Building with Ant: 
+Building with Ant:
 =========================
 
 Ant should be found in /Developer/Java/Ant/bin
@@ -59,7 +59,7 @@ Ant should be found in /Developer/Java/Ant/bin
 If you have write privileges in /Library/Frameworks, /Library/WebObjects/JavaApplications, and
 /Library/WebServer/Documents/WebObjects/Frameworks, you may do without the "sudo".
 
-Building with Maven: 
+Building with Maven:
 =========================
 
 Steps 1 and 2 are required only once or when you clean your local Maven repository (rm -Rf ~/.m2/repository).
@@ -69,17 +69,34 @@ Steps 1 and 2 are required only once or when you clean your local Maven reposito
 2. Import the WebObjects frameworks as jars into the local repository:
 
   mvn wobootstrap:install
- 
+
 3. Open a terminal and cd into the Wonder root directory.
 
 4.a. Build Wonder compatible with WO 5.3:
-  
+
   mvn clean install -P wo53
-  
+
 4.b Build Wonder compatible with WO 5.4:
 
   mvn clean install -P wo54
-  
+
+NOTE: Sometimes the Maven version range mechanism doesn't work as expected and
+you can experience the following problem:
+
+   [INFO] Failed to resolve artifact.
+
+   No versions are present in the repository for the artifact with a range [5.4,5.5)
+     com.webobjects:JavaFoundation:jar:null
+
+That problem is usually caused by some wrong Maven metadata in your local repository.
+To avoid that problem, you can force the WebObjects version using the 'woversion' property, i.e.:
+
+  mvn clean install -P wo53 -Dwoversion=5.3.3
+
+  or
+
+  mvn clean install -P wo54 -Dwoversion=5.4.3
+
 NOTE: Make sure you have your settings.xml properly configured.
 See the step 2 of Maven Quick Start Tutorial for more information:
 
