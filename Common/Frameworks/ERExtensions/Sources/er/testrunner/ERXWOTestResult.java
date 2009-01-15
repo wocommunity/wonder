@@ -44,7 +44,8 @@ public class ERXWOTestResult extends WOComponent {
         currentError = value;
         if(currentError != null) {
             exception = currentError.thrownException();
-            error = new WOExceptionParser(exception);
+            // NTS BUG WARN WARN WARN
+            // error = new WOExceptionParser(exception);
         }
     }
 
