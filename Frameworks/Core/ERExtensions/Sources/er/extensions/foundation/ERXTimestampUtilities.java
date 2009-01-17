@@ -184,7 +184,7 @@ public class ERXTimestampUtilities extends Object {
      */    
     public static NSTimestamp today() {
         ERXTimestamp now = getInstance();
-        return (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+        return now.ts.timestampByAddingGregorianUnits(0, 0, 0, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
 
     /**
@@ -195,7 +195,7 @@ public class ERXTimestampUtilities extends Object {
      */    
     public static NSTimestamp tomorrow() {
         ERXTimestamp now = getInstance();
-        return (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+        return now.ts.timestampByAddingGregorianUnits(0, 0, 1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
     
     /**
@@ -206,7 +206,7 @@ public class ERXTimestampUtilities extends Object {
      */    
     public static NSTimestamp yesterday() {
         ERXTimestamp now = getInstance();
-        return (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, -1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+        return now.ts.timestampByAddingGregorianUnits(0, 0, -1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
 
     /**
