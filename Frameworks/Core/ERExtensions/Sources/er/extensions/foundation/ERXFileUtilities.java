@@ -858,7 +858,7 @@ public class ERXFileUtilities {
      * @param mode see the chmod man page
      * @throws IOException if things go wrong
      */
-    public static void chmodRecusively(File dir, String mode) throws IOException {
+    public static void chmodRecursively(File dir, String mode) throws IOException {
     	Runtime.getRuntime().exec(new String[] {"chmod", "-R", mode, dir.getAbsolutePath()});
     }
     
