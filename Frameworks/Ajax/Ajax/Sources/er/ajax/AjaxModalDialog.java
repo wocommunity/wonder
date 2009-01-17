@@ -93,7 +93,8 @@ import er.extensions.components._private.ERXWOForm;
  * @binding resizeDuration Modalbox resize duration in seconds.
  * @binding inactiveFade true | false, Toggles Modalbox window fade on inactive state.
  * @binding transitions true | false, Toggles transition effects. Transitions are enabled by default.
- * @binding autoFocusing true | false, Toggles auto-focusing for form elements. Disable it for long text pages.
+ * @binding autoFocusing true | false, Toggles auto-focusing for form elements. Disable it for long text pages.  Add the class MB_notFocusable to
+ *          any inputs you want excluded from focusing.
  *
  * @binding beforeLoad client side method, fires right before loading contents into the ModalBox. If the callback function returns false, content loading will skipped. This can be used for redirecting user to another MB-page for authorization purposes for example.
  * @binding afterLoad client side method, fires after loading content into the ModalBox (i.e. after showing or updating existing window).
