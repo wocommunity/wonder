@@ -6,17 +6,16 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSTimestamp NSTimestamp} utilities.
  */
 public class ERXTimestampUtilities extends Object {
-
-    /** holds a static reference to a GregorianCalendar */
-    // FIXME: Not thread safe
-    protected static GregorianCalendar _calendar = (GregorianCalendar)GregorianCalendar.getInstance();
 
     /**
      * Calculates a timestamp given a string. Currently supports
@@ -48,8 +47,12 @@ public class ERXTimestampUtilities extends Object {
      * timestamp. Only used internally.
      */
     static class ERXTimestamp {
+        /** the number of days elapsed from 4713 BC to 1 C.E. */
+        private static final long _YEAR_1 = 1721426;
+        /** holds the calendar instance */
+        private GregorianCalendar _calendar;
         /** holds the timestamp */
-        NSTimestamp ts;
+        private NSTimestamp ts;
 
         /**
          * Public constructor.
@@ -57,17 +60,24 @@ public class ERXTimestampUtilities extends Object {
          */
         ERXTimestamp(NSTimestamp value) {
             ts = value;
+            _calendar = new GregorianCalendar();
+            _calendar.setTime(ts);
         }
 
         /**
-         * Returns the day of the common era. This is the
-         * year of the common era multiplied by 365 plus
-         * the day of the year.
+         * Returns the day of the common era.
+         * Please note that even if leap years are handled but
+         * result is not consistent with <code>NSTimestamp<code>'s.
+         * The formula used is detailed here:
+         * http://www.tondering.dk/claus/cal/node3.html#SECTION003151000000000000000
          * @return day of the common era
          */
-        // FIXME: This isn't quite correct as this does not handle leap years
-        public int dayOfCommonEra() {
-            return yearOfCommonEra()*365 + dayOfYear();
+        public long dayOfCommonEra() {
+            int a = (14- (monthOfYear()+1) )/12;
+            int y = yearOfCommonEra() + 4800 - a;
+            long m = monthOfYear()+1 + 12*a - 3;
+            long julianDays = dayOfMonth() + (153*m + 2)/5 + 365 * y + y/4 - y/100 + y/400 - 32045;
+            return julianDays - _YEAR_1;
         }
 
         /**
@@ -76,8 +86,16 @@ public class ERXTimestampUtilities extends Object {
          * @return day of the week as an int.
          */
         public int dayOfWeek() {
-            _calendar.setTime(ts);
-            return _calendar.get(GregorianCalendar.DAY_OF_WEEK);
+            return _calendar.get(Calendar.DAY_OF_WEEK);
+        }
+
+        /**
+         * Returns the day of the month as returned by
+         * a GregorianCalendar.
+         * @return day of the month as an int.
+         */
+        public int dayOfMonth() {
+            return _calendar.get(Calendar.DATE);
         }
 
         /**
@@ -86,8 +104,7 @@ public class ERXTimestampUtilities extends Object {
          * @return day of the year as an int.
          */
         public int dayOfYear() {
-            _calendar.setTime(ts);
-            return _calendar.get(GregorianCalendar.DAY_OF_YEAR);
+            return _calendar.get(Calendar.DAY_OF_YEAR);
         }
 
         /**
@@ -96,8 +113,7 @@ public class ERXTimestampUtilities extends Object {
          * @return hour of the day as an int.
          */        
         public int hourOfDay() {
-            _calendar.setTime(ts);
-            return _calendar.get(GregorianCalendar.HOUR_OF_DAY);
+            return _calendar.get(Calendar.HOUR_OF_DAY);
         }
 
         /**
@@ -106,8 +122,7 @@ public class ERXTimestampUtilities extends Object {
          * @return minute of the hour as an int.
          */
         public int minuteOfHour() {
-            _calendar.setTime(ts);
-            return _calendar.get(GregorianCalendar.MINUTE);
+            return _calendar.get(Calendar.MINUTE);
         }
 
         /**
@@ -116,8 +131,7 @@ public class ERXTimestampUtilities extends Object {
          * @return seconds of the minute as an int.
          */
         public int secondOfMinute() {
-            _calendar.setTime(ts);
-            return _calendar.get(GregorianCalendar.SECOND);
+            return _calendar.get(Calendar.SECOND);
         }
 
         /**
@@ -126,8 +140,7 @@ public class ERXTimestampUtilities extends Object {
          * @return month of the year as an int.
          */
         public int monthOfYear() {
-            _calendar.setTime(ts);
-            return _calendar.get(GregorianCalendar.MONTH);
+            return _calendar.get(Calendar.MONTH);
         }
 
         /**
@@ -136,8 +149,7 @@ public class ERXTimestampUtilities extends Object {
          * @return year of the common era as an int.
          */
         public int yearOfCommonEra() {
-            _calendar.setTime(ts);
-            return _calendar.get(GregorianCalendar.YEAR);
+            return _calendar.get(Calendar.YEAR);
         }
     }
 
@@ -172,7 +184,7 @@ public class ERXTimestampUtilities extends Object {
      */    
     public static NSTimestamp today() {
         ERXTimestamp now = getInstance();
-        return (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+        return now.ts.timestampByAddingGregorianUnits(0, 0, 0, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
 
     /**
@@ -183,7 +195,7 @@ public class ERXTimestampUtilities extends Object {
      */    
     public static NSTimestamp tomorrow() {
         ERXTimestamp now = getInstance();
-        return (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+        return now.ts.timestampByAddingGregorianUnits(0, 0, 1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
     
     /**
@@ -194,15 +206,15 @@ public class ERXTimestampUtilities extends Object {
      */    
     public static NSTimestamp yesterday() {
         ERXTimestamp now = getInstance();
-        return (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, -1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+        return now.ts.timestampByAddingGregorianUnits(0, 0, -1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
 
     /**
      * Cover method for returning DistantPast
      * off of NSTimestamp.
+     * @deprecated use <code>NSTimestamp.DistantPast</code> instead
      * @return a date in the distant past
      */
-    // CHECKME: Is this needed?
     public static NSTimestamp distantPast() {
        return NSTimestamp.DistantPast;
     }
@@ -210,14 +222,16 @@ public class ERXTimestampUtilities extends Object {
     /**
      * Cover method for returning DistantFuture
      * off of NSTimestamp.
+     * @deprecated use <code>NSTimestamp.DistantFuture</code> instead
      * @return a date in the distant future
      */    
-    // CHECKME: Is this needed?
     public static NSTimestamp distantFuture() {
         return NSTimestamp.DistantFuture;
     }
 
-    // DELTEME: This is the same as timestampByAddingTime
+    /**
+     * @deprecated use <code>timestampByAddingTime</code> instead
+     */
     public static NSTimestamp dateByAddingTime(NSTimestamp ts, NSTimestamp t1) {
         ERXTimestamp time = getInstance(t1);
         return ts.timestampByAddingGregorianUnits(0, 0, 0, time.hourOfDay(), time.minuteOfHour(), time.secondOfMinute());
@@ -238,24 +252,24 @@ public class ERXTimestampUtilities extends Object {
 
     /**
      * Compares two timestamps.
+     * @deprecated use <code>java.sql.Timestamp.before<code> instead.
      * @param ts1 first timestamp
      * @param ts2 second timestamp
      * @return true if the the second timestamp is earlier than the
      *		first timestamp.
      */
-    // CHECKME: Is this needed? java.sql.Timestamp has after and before
     public static boolean isEarlierThan(NSTimestamp ts1, NSTimestamp ts2) {
         return ts1.compare(ts2) == NSComparator.OrderedAscending;
     }
 
     /**
      * Compares two timestamps.
+     * @deprecated use <code>java.sql.Timestamp.after<code> instead.
      * @param ts1 first timestamp
      * @param ts2 second timestamp
      * @return true if the the second timestamp is later than the
      *		first timestamp.
      */
-    // CHECKME: Is this needed? java.sql.Timestamp has after and before
     public static boolean isLaterThan(NSTimestamp ts1, NSTimestamp ts2) {
         return ts1.compare(ts2) == NSComparator.OrderedDescending;
     }    
@@ -263,7 +277,7 @@ public class ERXTimestampUtilities extends Object {
     /************** Start Of UnixTimeAdditions ***************/
     
     /** holds a static reference to the epoch */
-    static NSTimestamp _epoch;
+    static NSTimestamp _epoch = new NSTimestamp(1970, 1, 1, 0, 0, 0, null);
 
     /**
      * Utility method used to retrun the epoch,
@@ -271,9 +285,6 @@ public class ERXTimestampUtilities extends Object {
      * @return the epoch as an NSTimestamp
      */
     public static NSTimestamp epoch() {
-        if (_epoch == null) {
-            _epoch = new NSTimestamp(1970, 1, 1, 0, 0, 0, null);
-        }
         return _epoch;
     }
 
@@ -299,5 +310,5 @@ public class ERXTimestampUtilities extends Object {
         long seconds = 0;
         seconds = ts.getTime() - epoch().getTime();
         return (new Integer((int)((seconds-60*60)/1000L)));
-    }    
+    }
 }

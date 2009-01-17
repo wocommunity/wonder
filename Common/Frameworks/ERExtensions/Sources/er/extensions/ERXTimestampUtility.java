@@ -6,59 +6,59 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
- * A simle utility for providing deprecated functionality for NSTimestamps<br />
+ * A simple utility for providing deprecated functionality for NSTimestamps<br />
  * 
  */
 
 public class ERXTimestampUtility {
 
-    protected static GregorianCalendar _calendar = (GregorianCalendar)GregorianCalendar.getInstance();
-    
     public static GregorianCalendar calendarForTimestamp(NSTimestamp t) {
-        _calendar.setTime(t);
-        return _calendar;
+        GregorianCalendar calendar = (GregorianCalendar) Calendar.getInstance();
+        calendar.setTime(t);
+        return calendar;
     }
 
     public static long offsetForDateInCommonEra(NSTimestamp t, int mode) {
-        _calendar.setTime(t);
+        GregorianCalendar calendar = calendarForTimestamp(t);
         switch(mode) {
-            case GregorianCalendar.YEAR:
-                return _calendar.get(GregorianCalendar.YEAR);
-            case GregorianCalendar.MONTH:
-                return _calendar.get(GregorianCalendar.YEAR) * 12 + _calendar.get(GregorianCalendar.MONTH);
-            case GregorianCalendar.WEEK_OF_YEAR:
-                return _calendar.get(GregorianCalendar.YEAR) * 52 + _calendar.get(GregorianCalendar.WEEK_OF_YEAR);
-            case GregorianCalendar.DAY_OF_MONTH:
-            case GregorianCalendar.DAY_OF_YEAR:
-                return _calendar.get(GregorianCalendar.YEAR) * 365 + _calendar.get(GregorianCalendar.DAY_OF_YEAR);
-            case GregorianCalendar.HOUR_OF_DAY:
-            case GregorianCalendar.HOUR:
-                return (_calendar.get(GregorianCalendar.YEAR) * 365 + _calendar.get(GregorianCalendar.DAY_OF_YEAR)) * 24 + _calendar.get(GregorianCalendar.HOUR_OF_DAY);
+            case Calendar.YEAR:
+                return calendar.get(Calendar.YEAR);
+            case Calendar.MONTH:
+                return calendar.get(Calendar.YEAR) * 12 + calendar.get(Calendar.MONTH);
+            case Calendar.WEEK_OF_YEAR:
+                return calendar.get(Calendar.YEAR) * 52 + calendar.get(Calendar.WEEK_OF_YEAR);
+            case Calendar.DAY_OF_MONTH:
+            case Calendar.DAY_OF_YEAR:
+                return calendar.get(Calendar.YEAR) * 365 + calendar.get(Calendar.DAY_OF_YEAR);
+            case Calendar.HOUR_OF_DAY:
+            case Calendar.HOUR:
+                return (calendar.get(Calendar.YEAR) * 365 + calendar.get(Calendar.DAY_OF_YEAR)) * 24 + calendar.get(Calendar.HOUR_OF_DAY);
             default:
                 return 0;
         }
     }
 
     public static long differenceByDay(NSTimestamp t1, NSTimestamp t2) {
-        return compareDatesInCommonEra(t1, t2, GregorianCalendar.DAY_OF_YEAR);
+        return compareDatesInCommonEra(t1, t2, Calendar.DAY_OF_YEAR);
     }
 
     public static long differenceByWeek(NSTimestamp t1, NSTimestamp t2) {
-        return compareDatesInCommonEra(t1, t2, GregorianCalendar.WEEK_OF_YEAR);
+        return compareDatesInCommonEra(t1, t2, Calendar.WEEK_OF_YEAR);
     }
 
     public static long differenceByMonth(NSTimestamp t1, NSTimestamp t2) {
-        return compareDatesInCommonEra(t1, t2, GregorianCalendar.MONTH);
+        return compareDatesInCommonEra(t1, t2, Calendar.MONTH);
     }
 
     public static long differenceByYear(NSTimestamp t1, NSTimestamp t2) {
-        return compareDatesInCommonEra(t1, t2, GregorianCalendar.YEAR);
+        return compareDatesInCommonEra(t1, t2, Calendar.YEAR);
     }
 
     public static NSTimestamp firstDateInSameWeek(NSTimestamp value) {
@@ -90,42 +90,46 @@ public class ERXTimestampUtility {
 
     public static boolean isWeekDay(NSTimestamp t) {
         int day = dayOfWeek(t);
-        return !((day == GregorianCalendar.SATURDAY) || (day == GregorianCalendar.SUNDAY));
+        return !((day == Calendar.SATURDAY) || (day == Calendar.SUNDAY));
     }
 
     public static int dayOfWeek(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.DAY_OF_WEEK);        
+        return calendarForTimestamp(t).get(Calendar.DAY_OF_WEEK);        
     }
 
     public static int dayOfMonth(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.DAY_OF_MONTH);
+        return calendarForTimestamp(t).get(Calendar.DAY_OF_MONTH);
     }
 
     public static int weekOfYear(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.WEEK_OF_YEAR);
+        return calendarForTimestamp(t).get(Calendar.WEEK_OF_YEAR);
     }    
 
     public static int weekOfMonth(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.WEEK_OF_MONTH);
+        return calendarForTimestamp(t).get(Calendar.WEEK_OF_MONTH);
     }
 
     public static int dayOfYear(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.DAY_OF_YEAR);
+        return calendarForTimestamp(t).get(Calendar.DAY_OF_YEAR);
     }
 
     public static int hourOfDay(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.HOUR_OF_DAY);
+        return calendarForTimestamp(t).get(Calendar.HOUR_OF_DAY);
     }
 
     public static int minuteOfHour(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.MINUTE);        
+        return calendarForTimestamp(t).get(Calendar.MINUTE);        
+    }
+
+    public static int secondOfMinute(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.SECOND);        
     }
 
     public static int monthOfYear(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.MONTH);        
+        return calendarForTimestamp(t).get(Calendar.MONTH);        
     }
 
     public static int yearOfCommonEra(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.YEAR);
+        return calendarForTimestamp(t).get(Calendar.YEAR);
     }
 }
