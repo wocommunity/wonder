@@ -94,7 +94,7 @@ public class WOHelperFunctionTagRegistry {
 		WOHelperFunctionTagRegistry.registerTagShortcut("WOPopUpButton", "select"); // not in 5.4
         WOHelperFunctionTagRegistry.registerTagShortcut("WORadioButtonList", "radioButtonList");
         WOHelperFunctionTagRegistry.registerTagShortcut("WOPasswordField", "passwordField");
-        WOHelperFunctionTagRegistry.registerTagShortcut("WOPassword", "password");
+        WOHelperFunctionTagRegistry.registerTagShortcut("WOPasswordField", "password");
         WOHelperFunctionTagRegistry.registerTagShortcut("WORadioButton", "radioButton");
         WOHelperFunctionTagRegistry.registerTagShortcut("WORadioButton", "radio");
         WOHelperFunctionTagRegistry.registerTagShortcut("WOResetButton", "resetButton");
