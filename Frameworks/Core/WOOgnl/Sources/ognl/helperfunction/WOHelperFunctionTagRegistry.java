@@ -40,8 +40,6 @@ public class WOHelperFunctionTagRegistry {
 	static {
 		WOHelperFunctionTagRegistry.log.setLevel(Level.WARN);
 
-        // aliases for convenience
-        // Note that aliases are case insensitive.
 		WOHelperFunctionTagRegistry.registerTagShortcut("ERXLocalizedString", "localized"); // not in 5.4
 
 		WOHelperFunctionTagRegistry.registerTagShortcut("ERXElse", "else");
