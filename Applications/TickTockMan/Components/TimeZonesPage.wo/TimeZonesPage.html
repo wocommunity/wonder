@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>TickTockMan</title>
+</head>
+<body>
+
+<h2>All TimeZones Available</h2>
+
+<table border="1">
+<tr>
+	<th><wo:link action="$sortById">TimeZone Id</wo:link></th>
+	<th><wo:link action="$sortByName">Display Name</wo:link></th>
+	<th><wo:link action="$sortByDSTSavings">DST Savings</wo:link></th>
+	<th><wo:link action="$sortByRawOffset">Row Offset (from UTC)</wo:link></th>
+</tr>
+<wo:loop list="$allTimeZones" item="$timeZoneId">
+
+<tr>
+	<td><wo:str value="$timeZoneId" /></td>
+	<td><wo:str value="$tzDisplayName" /></td>
+	<td><wo:str value="$tzDSTSavings" numberformat="0" /></td>
+	<td><wo:str value="$tzRawOffset" numberformat="0" /></td>
+</tr>
+</wo:loop>
+</table>
+
+</body>
+</html>
