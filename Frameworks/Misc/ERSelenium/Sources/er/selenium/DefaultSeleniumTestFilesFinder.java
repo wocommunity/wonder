@@ -43,7 +43,7 @@ public class DefaultSeleniumTestFilesFinder implements SeleniumTestFilesFinder {
 			}
 		}
 		
-		ERXArrayUtilities.sortArrayWithKey(result, "name");
+		ERXArrayUtilities.sortArrayWithKey(result, "absolutePath");
 		return result;
 	}
 	
