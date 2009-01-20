@@ -145,4 +145,35 @@ public class AjaxResponse extends ERXResponse {
 			return finalActionResults;
 		}
 	}
+	
+	/**
+	 * Convenience method that calls <code>AjaxUtils.appendScriptHeaderIfNecessary</code> with this request. 
+	 * @see AjaxUtils#appendScriptHeaderIfNecessary
+	 */
+	public void appendScriptHeaderIfNecessary() {
+		AjaxUtils.appendScriptHeaderIfNecessary(_request, this);
+	}
+	
+	/**
+	 * Convenience method that calls <code>AjaxUtils.appendScriptFooterIfNecessary</code> with this request. 
+	 * @see AjaxUtils#appendScriptFooterIfNecessary
+	 */
+	public void appendScriptFooterIfNecessary() {
+		AjaxUtils.appendScriptFooterIfNecessary(_request, this);
+	}
+	
+	/**
+	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request. 
+	 * @see AjaxUtils#updateDomElement
+	 */
+	public void updateDomElement(String id, Object value, String numberFormat, String dateFormat, String valueWhenEmpty) {
+		AjaxUtils.updateDomElement(this, id, value, numberFormat, dateFormat, valueWhenEmpty);
+	}
+
+	/**
+	 * Convenience method that calls <code>updateDomElement</code> with no formatters and no valueWhenEmpty string. 
+	 */
+	public void updateDomElement(String id, Object value) {
+		updateDomElement(id, value, null, null, null);
+	}
 }
