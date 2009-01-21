@@ -8,5 +8,6 @@
         </validation>
     <binding name="limit"/>
         <binding name="minimum"/>
+    <binding name="size"/>
     </wo>
 </wodefinitions>

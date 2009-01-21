@@ -49,7 +49,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
   
   @Override
   public boolean equals(Object obj) {
-    return (obj instanceof ERTaggable && ((ERTaggable)obj)._item.equals(_item)); 
+    return (obj instanceof ERTaggable && ((ERTaggable<?>)obj)._item.equals(_item)); 
   }
 
   /**
@@ -95,7 +95,6 @@ public class ERTaggable<T extends ERXGenericRecord> {
   /**
    * Removes all of the tags associated with this item.
    */
-  @SuppressWarnings("unchecked")
   public void clearTags() {
     for (ERTag tag : tags().immutableClone()) {
       removeTag(tag);
@@ -108,7 +107,6 @@ public class ERTaggable<T extends ERXGenericRecord> {
    *
    * @param tags the tags to remove (String to tokenize, NSArray<String>, etc)
    */
-  @SuppressWarnings("unchecked")
   public void removeTags(Object tags) {
     NSArray<ERTag> erTags = tags();
     NSArray<ERTag> matchingTags = ERXQ.filtered(erTags, ERTag.NAME.in(_entity.splitTagNames(tags)));
@@ -123,7 +121,6 @@ public class ERTaggable<T extends ERXGenericRecord> {
    *
    * @param tagName the tag to remove (String to tokenize, NSArray<String>, etc)
    */
-  @SuppressWarnings("unchecked")
   public void removeTagNamed(String tagName) {
     NSArray<ERTag> erTags = tags();
     NSArray<ERTag> matchingTags = ERXQ.filtered(erTags, ERTag.NAME.is(tagName));
@@ -246,7 +243,6 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
    * @return true if this eo is tagged with all of the given tag names, false otherwise
    */
-  @SuppressWarnings("unchecked")
   public boolean isTaggedWithAll(Object tags) {
     NSArray<String> tagNames = _entity.splitTagNames(tags);
     return ERXQ.filtered(tags(), ERTag.NAME.in(tagNames)).count() == tagNames.count();
@@ -259,7 +255,6 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
    * @return true if this eo is tagged with any of the given tag names, false otherwise
    */
-  @SuppressWarnings("unchecked")
   public boolean isTaggedWithAny(Object tags) {
     NSArray<String> tagNames = _entity.splitTagNames(tags);
     return ERXQ.filtered(tags(), ERTag.NAME.in(tagNames)).count() > 0;

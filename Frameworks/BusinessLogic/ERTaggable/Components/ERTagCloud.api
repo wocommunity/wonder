@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo class="ERTagCloud.java" wocomponentcontent="false">
+	<wo class="ERTagCloud.java" wocomponentcontent="true">
 		<binding name="entityName"/>	
 		<binding name="tag"/>	
 		<binding name="tagClass"/>	
@@ -14,5 +14,9 @@
         <binding name="categories"/>
         <binding name="categoryCount"/>
     <binding name="tagClassPrefix"/>
+    <binding name="shouldResetTagCloud"/>
+        <validation message="'shouldResetTagCloud' must be bound to a settable value">
+            <unsettable name="shouldResetTagCloud"/>
+        </validation>
     </wo>
 </wodefinitions>

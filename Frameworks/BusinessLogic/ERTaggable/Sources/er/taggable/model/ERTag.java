@@ -23,6 +23,7 @@ public class ERTag extends _ERTag {
     ANY, ALL
   }
 
+  @SuppressWarnings("unused")
   private static Logger log = Logger.getLogger(ERTag.class);
 
   @Override
@@ -38,7 +39,7 @@ public class ERTag extends _ERTag {
   public void untagAllTaggables() {
     EOEditingContext editingContext = editingContext();
     for (EOEntity entity : ERTaggableEntity.taggableEntities()) {
-      ERTaggableEntity taggableEntity = ERTaggableEntity.taggableEntity(entity);
+      ERTaggableEntity<?> taggableEntity = ERTaggableEntity.taggableEntity(entity);
       taggableEntity.removeTags(editingContext, this);
     }
   }

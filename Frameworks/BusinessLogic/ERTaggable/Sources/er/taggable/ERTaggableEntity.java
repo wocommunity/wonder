@@ -77,7 +77,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    */
   public static final String DEFAULT_TAGS_RELATIONSHIP_NAME = "tags";
 
-  private static final NSMutableDictionary<String, Class<? extends ERTaggableEntity>> _taggableEntities = new NSMutableDictionary<String, Class<? extends ERTaggableEntity>>();
+  private static final NSMutableDictionary<String, Class<? extends ERTaggableEntity<?>>> _taggableEntities = new NSMutableDictionary<String, Class<? extends ERTaggableEntity<?>>>();
 
   private EOEntity _tagEntity;
 
@@ -92,7 +92,6 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * 
    * @param entity the entity to tag
    */
-  @SuppressWarnings("unchecked")
   protected ERTaggableEntity(EOEntity entity) {
     if (!ERTaggableEntity.isTaggable(entity)) {
       throw new IllegalArgumentException("The entity '" + entity.name() + "' has not been registered as taggable.");
@@ -114,7 +113,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
 
   @Override
   public boolean equals(Object obj) {
-    return (obj instanceof ERTaggableEntity && ((ERTaggableEntity) obj)._entity.equals(_entity));
+    return (obj instanceof ERTaggableEntity && ((ERTaggableEntity<?>) obj)._entity.equals(_entity));
   }
 
   /**
@@ -124,7 +123,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @param taggableEntity the taggable entity class
    * @param entityName the name of the entity to associate with
    */
-  public static void setTaggableEntityForEntityNamed(Class<? extends ERTaggableEntity> taggableEntity, String entityName) {
+  public static void setTaggableEntityForEntityNamed(Class<? extends ERTaggableEntity<?>> taggableEntity, String entityName) {
     ERTaggableEntity._taggableEntities.setObjectForKey(taggableEntity, entityName);
   }
 
@@ -270,7 +269,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @param taggableEntity the taggable entity to associate with this taggable
    * @return the join entity (you can probably ignore this)
    */
-  public static EOEntity registerTaggable(String entityName, Class<? extends ERTaggableEntity> taggableEntity) {
+  public static EOEntity registerTaggable(String entityName, Class<? extends ERTaggableEntity<?>> taggableEntity) {
     EOEntity joinEntity = ERTaggableEntity.registerTaggable(entityName);
     ERTaggableEntity.setTaggableEntityForEntityNamed(taggableEntity, entityName);
     return joinEntity;
@@ -341,7 +340,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @return the join entity (you can probably ignore this)
    */
   @SuppressWarnings("unchecked")
-  public static EOEntity registerTaggable(EOEntity entity, String tagsRelationshipName, EOEntity tagEntity, Class<? extends ERTaggableEntity> taggableEntity) {
+  public static EOEntity registerTaggable(EOEntity entity, String tagsRelationshipName, EOEntity tagEntity, Class<? extends ERTaggableEntity<?>> taggableEntity) {
     EORelationship tagsRelationship;
     if (tagsRelationshipName == null) {
       tagsRelationship = ERTaggableEntity.tagsRelationshipForEntity(entity, tagEntity);
@@ -671,7 +670,6 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @param limit limit the number of results to be returned (-1 for unlimited)
    * @return the array of matching eos
    */
-  @SuppressWarnings("unchecked")
   public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags) {
     return fetchTaggedWith(editingContext, inclusion, limit, tags, null);
   }
@@ -793,7 +791,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     fetchAttributes.addObject(countAttribute);
 
     ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), null, null);
+    EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), additionalTagCountQualifier(), null);
     EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, limit, fetchAttributes);
     NSMutableArray<EOAttribute> groupByAttributes = new NSMutableArray<EOAttribute>(tagNameAttribute);
     sqlHelper.addGroupByClauseToExpression(groupByAttributes, sqlExpression);
@@ -830,7 +828,6 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @param inclusion find matches for ANY tags or ALL tags provided
    * @return the count of distinct objects for the given tags
    */
-  @SuppressWarnings("unchecked")
   public int countUniqueTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, Object tags) {
     NSArray<String> tagNames = splitTagNames(tags);
     if (tagNames.count() == 0) {
@@ -1015,6 +1012,10 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     NSArray<ERTag> erTags = ERTag.fetchERTags(editingContext, ERTag.NAME.likeInsensitive(startsWith + "*"), null);
     NSArray<String> tags = (NSArray<String>) erTags.valueForKey(ERTag.NAME_KEY);
     return tags;
+  }
+  
+  protected EOQualifier additionalTagCountQualifier () {
+	  return null;
   }
 
   //I just can't muster the strength the port this one right now -- that query is ROUGH :)
