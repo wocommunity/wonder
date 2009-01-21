@@ -1,6 +1,7 @@
 package er.taggable.components;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
@@ -35,7 +36,8 @@ import er.taggable.ERTaggableEntity;
  * @binding categories the tag category names to use (NSArray of Strings)
  * @binding categoryCount the number of categories to split into (default 5)
  * @binding tagClassPrefix the prefix to prepend to the tag cloud class name ("tagCloud" by default)
- * 
+ * @binding shouldResetTagCloud forces recalculation of the tag cloud when the binding evaluates to true. 
+ * 			After recalculation, the binding will be set to false again.
  * @author mschrag
  */
 public class ERTagCloud extends ERXComponent {
@@ -124,4 +126,16 @@ public class ERTagCloud extends ERXComponent {
     }
     return _tagCloud;
   }
+
+	@Override
+	protected void preAppendToResponse(WOResponse response, WOContext context) {
+		if (booleanValueForBinding("shouldResetTagCloud")) {
+			_tagCloud = null;
+			if (canSetValueForBinding("shouldResetTagCloud")) {
+				setValueForBinding(false, "shouldResetTagCloud");
+			}
+		}
+	}
+  
+  
 }

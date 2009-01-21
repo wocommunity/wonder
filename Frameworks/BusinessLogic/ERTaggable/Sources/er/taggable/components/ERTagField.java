@@ -26,12 +26,12 @@ import er.taggable.model.ERTag;
  * @binding taggable the ERTaggable to manage
  * @binding limit the maximum number of tags to show
  * @binding minimum the minimum tag count required for a tag to be shown
+ * @binding size the size of the text field. Defaults to 60.
  */
 public class ERTagField extends er.extensions.components.ERXComponent {
   private String _id;
   private NSArray<String> _availableTags;
   private String _tags;
-  private boolean _tagsChanged;
   private ERTaggable<?> _taggable;
 
   public ERTagField(WOContext context) {
@@ -78,10 +78,7 @@ public class ERTagField extends er.extensions.components.ERXComponent {
       int minimum = minimum();
       int limit = limit();
       NSArray<String> availableTags;
-      if (minimum == -1 && limit == -1) {
-        availableTags = taggable().taggableEntity().fetchAllTags(editingContext);
-      }
-      else if (minimum == -1) {
+      if (minimum == -1) {
         NSDictionary<String, Integer> tagCount = taggable().taggableEntity().tagCount(editingContext, limit);
         availableTags = tagCount.allKeys();
       }
