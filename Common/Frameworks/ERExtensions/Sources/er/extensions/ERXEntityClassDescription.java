@@ -219,6 +219,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         * so this saves some time in multithreaded apps.
         */
     private static Boolean useValidity;
+
+	public static final String ValidateEntityClassAvailability = "ERXEntityClassDescription.validateEntityClassAvailability";
     
 
     /**
@@ -557,10 +559,12 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             if (log.isDebugEnabled()) {
                 log.debug("Registering description for entity: " + entity.name() + " with class: " + className);
             }
-            try {
-                entityClass = className.endsWith("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
-            } catch (java.lang.ClassNotFoundException ex) {
-                throw new RuntimeException("Invalid class name '" + className + "' for entity '" + entity.name() + "'." + (!className.contains(".") ? "  (The class name should include the full package path of the class.)" : ""), ex);
+            if (ERXProperties.booleanForKeyWithDefault(ValidateEntityClassAvailability, false)) { // Make this an opt-in exception.
+                try {
+                    entityClass = className.endsWith("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
+                } catch (java.lang.ClassNotFoundException ex) {
+                    throw new RuntimeException("Invalid class name '" + className + "' for entity '" + entity.name() + "'." + (!className.contains(".") ? "  (The class name should include the full package path of the class.)" : ""), ex);
+                }
             }
             ERXEntityClassDescription cd = newClassDescriptionForEntity(entity);
             EOClassDescription.registerClassDescription(cd, entityClass);
