@@ -58,7 +58,7 @@ public class Session extends ERXSession implements ErrorCollector {
             if (_isLoggedIn) {
                 super.appendToResponse(aResponse, aContext);
             } else {
-                if (aContext.page().getClass().getName().equals(Main.class)) {
+                if (aContext.page().getClass().getName().equals(Main.class.getName())) {
                     // needs to login on Main page.
                     super.appendToResponse(aResponse, aContext);
                 } else {
