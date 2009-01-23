@@ -620,7 +620,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * This method is called by the principal class
      * of the framework when the framework's NSBundle is
      * loaded. This method registers an observer, either
-     * a Factory object, ehich is an inner class of this class
+     * a Factory object, which is an inner class of this class
      * or a custom Factory subclass specified in the property:
      * <b>er.extensions.ERXClassDescription.factoryClass</b>.
      * This observer listens for notifications when a model
@@ -631,7 +631,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     	if (_factory == null) {
     		_factory = null;
     		try {
-    			String className = System.getProperty("er.extensions.ERXClassDescription.factoryClass");
+    			String className = ERXProperties.stringForKey("er.extensions.ERXClassDescription.factoryClass");
     			if (className != null) {
     				_factory = (Factory)Class.forName(className).newInstance();
     			}
