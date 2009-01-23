@@ -14,7 +14,7 @@
         }
     ); 
     attributesUsedForLocking = (attributeId, validationRuleId); 
-    className = ERXGenericRecord; 
+    className = EOGenericRecord; 
     externalName = ERIAttributeValidationRule; 
     fetchSpecificationDictionary = {}; 
     name = ERIAttributeValidationRule; 
