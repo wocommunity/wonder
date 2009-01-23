@@ -5,6 +5,7 @@
     <binding name="otherTagString" passthrough="NO"/>
     <binding name="disabled" passthrough="NO" defaults="YES/NO"/>
     <binding name="onclick" passthrough="YES"/>
+    <binding name="onClick" passthrough="YES"/>
     <binding name="updateContainerID"/>
     <binding name="action"/>
     
