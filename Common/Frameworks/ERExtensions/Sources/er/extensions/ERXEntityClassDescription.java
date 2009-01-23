@@ -559,7 +559,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             if (log.isDebugEnabled()) {
                 log.debug("Registering description for entity: " + entity.name() + " with class: " + className);
             }
-            if (ERXProperties.booleanForKeyWithDefault(ValidateEntityClassAvailability, false)) { // Make this an opt-in exception.
+            if (ERXProperties.booleanForKeyWithDefault(ValidateEntityClassAvailability, true)) { // Make it possible to opt-out of this check.
                 try {
                     entityClass = className.endsWith("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
                 } catch (java.lang.ClassNotFoundException ex) {
