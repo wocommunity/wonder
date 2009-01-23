@@ -21,7 +21,7 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXStringUtilities;
 /**
- * Shows a link and wraps an area that is later presented as a modal window.
+ * Shows a link and wraps an area that is later presented as a modal window. Alternately, when you bind <b>action</b> then the content is used as the link.
  * @binding label label for the link
  * @binding class class for the link
  * @binding style style for the link
@@ -123,10 +123,10 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 		Object width = valueForBinding("width", component);
 		Object closeLabel = valueForBinding("closeLabel", component);
 		if (height != null) {
-			relAttributeValue += "&height=" + height;
+			relAttributeValue += "&height=" +  ERXStringUtilities.urlEncode(height.toString());
 		}
 		if (width != null) {
-			relAttributeValue += "&width=" + width;
+			relAttributeValue += "&width=" +  ERXStringUtilities.urlEncode(width.toString());
 		}
 		if (closeLabel != null) {
 			relAttributeValue += "&closeLabel=" + ERXStringUtilities.urlEncode(closeLabel.toString());
@@ -141,7 +141,12 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
         appendTagAttributeToResponse(response, "id", linkID);
         response.appendContentString(">");
-        response.appendContentString(valueForBinding("label", "", component).toString());
+        if(!href.startsWith("#") && childrenElements().count() > 0) {
+        	appendChildrenToResponse(response, context);
+        } else {
+            Object label = valueForBinding("label", "", component);
+            response.appendContentString(label.toString());
+        }
         response.appendContentString("</a>");
         if (AjaxUtils.isAjaxRequest(context.request())) {
 	        NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(response);
