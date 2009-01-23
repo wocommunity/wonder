@@ -26,6 +26,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * 
  * @binding disabled if true, disables the link
  * @binding onclick the javascript to execute when the link is clicked.
+ * @binding onClick synonym of onclick
  * @binding action the type of event to fire ("update", "save", "edit", "cancel")
  * @binding updateContainerID the id of the container to fire the event to (optional if inside of the container)
  * 
@@ -40,7 +41,11 @@ public class AjaxFunctionLink extends WOHTMLDynamicElement {
 		super("a", AjaxFunctionLink.processAssociations(associations), template);
 		_action = (WOAssociation) _associations.removeObjectForKey("action");
 		_updateContainerID = (WOAssociation) _associations.removeObjectForKey("updateContainerID");
-		if (_associations.objectForKey("onclick") != null && _action != null) {
+		WOAssociation onclick = _associations.objectForKey("onclick");
+		if (onclick == null) {
+			onclick = _associations.objectForKey("onClick");
+		}
+		if (onclick != null && _action != null) {
 			throw new WODynamicElementCreationException("You cannot bind both 'action' and 'onclick' at the same time.");
 		}
 		if (_updateContainerID != null && _action == null) {
