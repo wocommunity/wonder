@@ -17,8 +17,8 @@ public class ERCHelpText extends _ERCHelpText {
     public static class ERCHelpTextClazz extends _ERCHelpTextClazz {
 
         ERXEnterpriseObjectCache cache = new ERXEnterpriseObjectCache(ENTITY, Key.KEY) {
-
-            protected void handleUnsuccessfulQueryForKey(Object key) {
+            @Override
+            protected void handleUnsuccessfullQueryForKey(Object key) {
                 EOEditingContext ec = ERXEC.newEditingContext();
                 EOGlobalID gid = NO_GID_MARKER;
                 ec.lock();
@@ -30,7 +30,7 @@ public class ERCHelpText extends _ERCHelpText {
                 } finally {
                     ec.unlock();
                 }
-                cache().setObjectForKey(gid, key);
+                cache().setObjectForKey(createRecord(gid, null), key);
             }
         };
         
