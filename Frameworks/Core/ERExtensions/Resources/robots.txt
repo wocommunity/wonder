@@ -2,6 +2,7 @@
 [^a]fish
 abcdatos
 acme\.spider
+adsbot\-google
 ahoythehomepagefinder
 aipbot
 alkaline
@@ -143,6 +144,7 @@ grub
 gsa\-crawler
 gulliver
 gulperbot
+gurujibot
 hambot
 harvest
 hatena
@@ -322,6 +324,7 @@ rpt\-httpclient
 rules
 safaribookmarkchecker
 safetynetrobot
+sapphirewebcrawler
 scooter
 search_au
 search\-info
@@ -440,7 +443,9 @@ worm
 wwwc
 wwweasel
 wz101
+xenu
 xget
+yacybot
 yahoo\-verticalcrawler
 yahooseeker
 yandex
