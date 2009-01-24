@@ -41,9 +41,9 @@ public class AjaxFunctionLink extends WOHTMLDynamicElement {
 		super("a", AjaxFunctionLink.processAssociations(associations), template);
 		_action = (WOAssociation) _associations.removeObjectForKey("action");
 		_updateContainerID = (WOAssociation) _associations.removeObjectForKey("updateContainerID");
-		WOAssociation onclick = _associations.objectForKey("onclick");
+		WOAssociation onclick = (WOAssociation) _associations.objectForKey("onclick");
 		if (onclick == null) {
-			onclick = _associations.objectForKey("onClick");
+			onclick = (WOAssociation) _associations.objectForKey("onClick");
 		}
 		if (onclick != null && _action != null) {
 			throw new WODynamicElementCreationException("You cannot bind both 'action' and 'onclick' at the same time.");
