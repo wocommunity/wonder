@@ -24,7 +24,7 @@ public class WOStatsPage extends WOComponent {
     public NSDictionary detailsDict;
     public NSDictionary pagesDict;
     public NSDictionary directActionsDict;
-    public Map sessionMemoryDict;
+    public NSDictionary sessionMemoryDict;
     public NSDictionary transactions;
     public NSDictionary statsDict;
     public NSDictionary memoryDict;
@@ -79,7 +79,7 @@ public class WOStatsPage extends WOComponent {
         transactions = (NSDictionary)statsDict.objectForKey("Transactions");
         memoryDict = (NSDictionary)statsDict.objectForKey("Memory");
         sessionsDict = ((NSDictionary)statsDict.objectForKey("Sessions")).mutableClone();
-        sessionMemoryDict = (Map)sessionsDict.removeObjectForKey("Avg. Memory Per Session");
+        sessionMemoryDict = new NSDictionary((Map)sessionsDict.removeObjectForKey("Avg. Memory Per Session"), true);
         sessionStats = (NSArray)sessionsDict.removeObjectForKey("Last Session's Statistics");
         maxSessionsDate = (NSTimestamp) sessionsDict.removeObjectForKey("Peak Active Sessions Date");
 
