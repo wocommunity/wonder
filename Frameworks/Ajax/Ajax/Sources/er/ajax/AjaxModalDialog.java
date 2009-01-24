@@ -121,6 +121,9 @@ public class AjaxModalDialog extends AjaxComponent {
 
 	private boolean _open;
 	private WOComponent _actionResults;
+	private AjaxModalDialog outerDialog;
+	private boolean hasWarnedOnNesting = false;
+	private WOComponent previousComponent;
 	
 	public static final Logger logger = Logger.getLogger(AjaxModalDialog.class);
 	
@@ -238,13 +241,25 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if (isOpen()) {
-			if (_actionResults != null) {
-				context._setCurrentComponent(_actionResults);
-				_actionResults.takeValuesFromRequest(request, context);
+			try {
+				pushDialog();
+				if (_actionResults != null) {
+					pushActionResultsIntoContext(context);
+					try {
+						_actionResults.takeValuesFromRequest(request, context);
+					}
+					finally {
+						popActionResultsFromContext(context);
+					}
+				}
+				else {
+					super.takeValuesFromRequest(request, context);
+				}
 			}
-			else {
-				super.takeValuesFromRequest(request, context);
+			finally {
+				popDialog();
 			}
+
 		}
 	}
 
@@ -257,25 +272,21 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 */
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		// If there is one AMD in another (a rather dubious thing to do but it may have its uses), 
-		// we need to remember the outer one while processing this inner one
-		AjaxModalDialog outerDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
-		if (outerDialog != null) {
-			logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
-		}
-		
+		pushDialog();		
 		try {
-			// Stash this component in the context so we can access it from the static methods.
-			ERXWOContext.contextDictionary().setObjectForKey(this, AjaxModalDialog.class.getName());
-
 			WOActionResults result = null;
 			if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
 				result = super.invokeAction(request, context);
 			}
 			else if (isOpen()) {
 				if (_actionResults != null) {
-					context._setCurrentComponent(_actionResults);
-					result = _actionResults.invokeAction(request, context);
+					pushActionResultsIntoContext(context);
+					try {
+						result = _actionResults.invokeAction(request, context);
+					}
+					finally {
+						popActionResultsFromContext(context);
+					}
 				}
 				else {
 					result = super.invokeAction(request, context);
@@ -285,13 +296,7 @@ public class AjaxModalDialog extends AjaxComponent {
 			return result;
 		}
 		finally {
-			// Remove this component from the context or restore the outer one
-			if (outerDialog != null) {
-				ERXWOContext.contextDictionary().setObjectForKey(outerDialog, AjaxModalDialog.class.getName());
-			}
-			else {
-				ERXWOContext.contextDictionary().removeObjectForKey(AjaxModalDialog.class.getName());
-			}
+			popDialog();
 		}
 	}
 
@@ -332,8 +337,13 @@ public class AjaxModalDialog extends AjaxComponent {
 			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
 
 			if (_actionResults != null) {
-				context._setCurrentComponent(_actionResults);
-				_actionResults.appendToResponse((WOResponse) response, context);
+				pushActionResultsIntoContext(context);
+				try {
+					_actionResults.appendToResponse((WOResponse) response, context);
+				}
+				finally {
+					popActionResultsFromContext(context);
+				}
 			}
 			else {
 				// This loads the content from the default ERWOTemplate (our component contents that are not
@@ -373,7 +383,14 @@ public class AjaxModalDialog extends AjaxComponent {
 			if (_actionResults != null) {
 				throw new RuntimeException("Unexpected call to appendToResponse");
 			}
-			super.appendToResponse(response, context);
+			try {
+				pushDialog();
+				super.appendToResponse(response, context);
+			}
+			finally {
+				popDialog();
+			}
+
 		}
 		else {
 			boolean showOpener = booleanValueForBinding("showOpener", true);
@@ -583,5 +600,58 @@ public class AjaxModalDialog extends AjaxComponent {
 		addScriptResourceInHead(response, "modalbox.js");
 		addStylesheetResourceInHead(response, "modalbox.css");
 	}
+	
+	/**
+	 * Stash this dialog instance in the context so we can access it from the static methods.  If there is one AMD 
+	 * next in another (a rather dubious thing to do that we warn about but it may have its uses), we need to remember 
+	 * the outer one while processing this inner one
+	 * @see AjaxModalDialog#popDialog()
+	 */
+	protected void pushDialog() {
+		// 
+		// 
+		outerDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
+		ERXWOContext.contextDictionary().setObjectForKey(this, AjaxModalDialog.class.getName());
+		if ( ! hasWarnedOnNesting && outerDialog != null) {
+			hasWarnedOnNesting = true;
+			logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
+		}		
 
+	}
+	
+	/**
+	 * Remove this dialog instance from the context, replacing the previous one if any.
+	 * @see #pushDialog()
+	 */
+	protected void popDialog() {
+		if (outerDialog != null) {
+			ERXWOContext.contextDictionary().setObjectForKey(outerDialog, AjaxModalDialog.class.getName());
+		}
+		else {
+			ERXWOContext.contextDictionary().removeObjectForKey(AjaxModalDialog.class.getName());
+		}
+	}
+	
+	/**
+	 * Make _actionResults (result of the action binding) the current component in context for WO processing.
+	 * Remembers the current component so that it can be restored.
+	 * @param context WOContext to push _cationResults into
+	 * @see #popActionResultsFromContext(WOContext)
+	 */
+	protected void pushActionResultsIntoContext(WOContext context) {
+		previousComponent = context.component();
+		context._setCurrentComponent(_actionResults);
+	}
+	
+	/**
+	 * Sets the current component in context to the one there before pushActionResultsIntoContext
+	 * was called.
+	 * @param context WOContext to restore previous component in
+	 * @see #pushActionResultsIntoContext(WOContext)
+	 */
+	protected void popActionResultsFromContext(WOContext context) {
+		context._setCurrentComponent(previousComponent);
+	}
+		
+	
 }
