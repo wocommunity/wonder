@@ -22,7 +22,13 @@ public class ModalDialogContents extends WOComponent {
     public WOActionResults deleteIt() {
     	NSLog.out.appendln(isSecondConfirmation ? "ModalDialogContents deleteIt called will delete" : "ModalDialogContents deleteIt called will reconfirm");
     	isSecondConfirmation = ! isSecondConfirmation;
-    	AjaxUtils.javascriptResponse(isSecondConfirmation ? "ConfirmationMessageUpdate(); " : AjaxModalDialog.Close, context());
+    	if (isSecondConfirmation) {
+        	AjaxModalDialog.update(context());
+    	}
+    	else  {
+    		AjaxModalDialog.close(context());
+    	}
+
     	return null;
     }
     
