@@ -29,11 +29,6 @@ Form : WOForm {
 	multipleSubmit = true;
 }
 
-
-ValidationMessageContainer: AjaxUpdateContainer {
-	id = "ValidationMessage";
-}
-
 ValidationMessage: WOString {
 	value = errorMessages;
 	escapeHTML = false;
