@@ -45,7 +45,6 @@ import er.extensions.components._private.ERXWOForm;
  * <code>
  * AjaxModalDialog.update(context());
  * </code>
- * <br /><b>NOTE: this does not work if you use the action binding.  You must manage your own updating if you use this binding.</b>
  * </p>
  * 
  * <p>The modal dialog is opened by calling a JavaScript function.  While this is normally done from an onclick
@@ -336,6 +335,7 @@ public class AjaxModalDialog extends AjaxComponent {
 			// it comes time to cache the context, it knows that this area is an Ajax updating area
 			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
 
+			appendOpenAjaxUpdateDiv((WOResponse) response, context);
 			if (_actionResults != null) {
 				pushActionResultsIntoContext(context);
 				try {
@@ -350,6 +350,7 @@ public class AjaxModalDialog extends AjaxComponent {
 				// in the "link" template.
 				super.appendToResponse((WOResponse) response, context);
 			}
+			appendCloseAjaxUpdateDiv((WOResponse) response, context);
 		}
 
 		return response;
@@ -455,6 +456,34 @@ public class AjaxModalDialog extends AjaxComponent {
 		response.appendContentString("    Modalbox.show('");
 		response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context));
 		response.appendContentString("?modalBoxAction=open', options);\n");
+	}
+	
+	/**
+	 * Appends opening div that will function as an AjaxUpdateContainer.
+	 * 
+	 * @param response WOResponse to append to
+	 * @param context WOContext of response
+	 */
+	protected void appendOpenAjaxUpdateDiv(WOResponse response, WOContext context) {
+		System.out.println("PUTPUT");
+		response.appendContentString("<div id=\"");
+		response.appendContentString(updateContainerID());
+		response.appendContentString("\" updateUrl=\"");
+		response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context));
+		response.appendContentString("\">");
+	}
+
+	/**
+	 * Appends closing div that will function as an AjaxUpdateContainer and the JavaScript to register it.
+	 * 
+	 * @param response WOResponse to append to
+	 * @param context WOContext of response
+	 */
+	protected void appendCloseAjaxUpdateDiv(WOResponse response, WOContext context) {
+		response.appendContentString("</div>");
+		response.appendContentString("<script>AUC.register('");
+		response.appendContentString(updateContainerID());
+		response.appendContentString("', {onComplete:function() { Modalbox.resizeToContent(); }});</script>");
 	}
 
 	/**

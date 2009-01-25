@@ -37,9 +37,7 @@ public class ModalDialogEmployeeEditor extends WOComponent {
         	if (e.additionalExceptions().count() > 0) {
         		errorMessages += "<br/>" + ((NSArray)e.additionalExceptions().valueForKey("localizedMessage")).componentsJoinedByString("<br/>");
         	}
-        	// When the content is loaded from an action method, AjaxModalDialog.update(context()) will not work
-        	// You must manage your own updating
-        	AjaxUtils.javascriptResponse("ValidationMessageUpdate(); ", context());
+        	AjaxModalDialog.update(context());
     	}
     	
     	return null;
