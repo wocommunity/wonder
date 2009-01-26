@@ -43,6 +43,8 @@ import er.extensions.foundation.ERXArrayUtilities;
  * @binding relationshipName
  * @binding relationshipOwner
  * @binding tableOtherTagString
+ * @binding id optional ID for element wrapping checkbox matrix
+ * @binding itemID optional ID for each checkbox element
  */
 
 public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
