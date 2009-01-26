@@ -6,18 +6,37 @@
  */
 package er.excel;
 
-import java.io.*;
-import java.text.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.ParseException;
 
-import javax.xml.parsers.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.log4j.*;
-import org.apache.poi.hssf.usermodel.*;
-import org.w3c.dom.*;
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNumberFormatter;
 
-import er.extensions.*;
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
@@ -335,7 +354,8 @@ public class EGSimpleTableParser {
     				if(cellNode.getNodeType() == Node.ELEMENT_NODE
     						&& ("td".equals(cellNode.getLocalName().toLowerCase())
     								|| "th".equals(cellNode.getLocalName().toLowerCase()))) {
-    					HSSFCell cell = row.createCell((short) (row.getLastCellNum()+1));
+    					int currentColumnNumber = row.getPhysicalNumberOfCells();
+						HSSFCell cell = row.createCell(currentColumnNumber); 
     					Object value = null;
     					if(cellNode.getFirstChild() != null) {
     	   					value = cellNode.getFirstChild().getNodeValue();
@@ -375,24 +395,24 @@ public class EGSimpleTableParser {
     							}
     							
     						case HSSFCell.CELL_TYPE_STRING:
-    						default:
-    							cell.setCellType(cellType.intValue());
-    						cell.setCellValue(value != null ? value.toString() : null);
-    						break;
+							default:
+								cell.setCellType(cellType.intValue());
+								cell.setCellValue(new HSSFRichTextString(value != null ? value.toString() : null));
+								break;
     					}
     					
     					String cellWidthString = nodeValueForKey(cellNode, "width", null);
     					if(cellWidthString != null && cellWidthString.indexOf("%") < 0) {
     						if ("auto".equalsIgnoreCase(cellWidthString)) {
 	      						try {
-	      							sheet.autoSizeColumn(row.getLastCellNum());
+	      							sheet.autoSizeColumn((short) currentColumnNumber);
 	      						} catch (Exception ex) {
 	      							log.warn(ex);
 	      						}
     						} else {
         						try {
         							short width = Integer.valueOf(cellWidthString).shortValue();
-        							sheet.setColumnWidth(row.getLastCellNum(),(short) (width * 256));
+        							sheet.setColumnWidth(currentColumnNumber, width * 256);
         						} catch (Exception ex) {
         							log.warn(ex);
         						}
@@ -418,7 +438,8 @@ public class EGSimpleTableParser {
     					String colspanString = dictValueForKey(cellDict, "colspan", "1");
     					short colspan = Integer.valueOf(colspanString).shortValue();
     					for(int col = 1; col < colspan; col++) {
-    						cell = row.createCell((short)(row.getLastCellNum()+1));
+    						int nextColumnNumber = row.getPhysicalNumberOfCells();
+							cell = row.createCell(nextColumnNumber);
     						if(style != null) {
     							cell.setCellStyle(style);
     						}
@@ -484,8 +505,7 @@ public class EGSimpleTableParser {
     		// we can have multiple styles like 'class="header bold"
     		String styles[] = cellClass.split(" +");
     		NSMutableDictionary stylesFromClass = new NSMutableDictionary();
-    		for (int i = 0; i < styles.length; i++) {
-    			String string = styles[i];
+    		for (String string : styles) {
     			NSDictionary current = ((NSDictionary)_styleDicts.objectForKey(string));
     			if(current == null) {
     				throw new IllegalArgumentException("Cell Style not found: " + cellClass);
