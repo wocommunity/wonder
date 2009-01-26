@@ -4,6 +4,7 @@ CheckBox: WOGenericElement {
 	otherTagString = isCurrentItemChecked;
 	type = "checkbox";
 	value = index;
+	id = ^itemID;
 }
 
 HiddenInput: WOGenericElement {
@@ -34,6 +35,7 @@ CheckBoxWrapper: WOGenericContainer {
 	formValues = selections;
 	name = context.elementID;
 	elementName = "span";
+	id = id;
 }
 
 Conditional1: WOConditional {
