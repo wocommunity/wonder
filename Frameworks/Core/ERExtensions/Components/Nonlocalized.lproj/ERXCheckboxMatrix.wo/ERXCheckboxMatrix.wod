@@ -35,7 +35,7 @@ CheckBoxWrapper: WOGenericContainer {
 	formValues = selections;
 	name = context.elementID;
 	elementName = "span";
-	id = id;
+	id = ^id;
 }
 
 Conditional1: WOConditional {
