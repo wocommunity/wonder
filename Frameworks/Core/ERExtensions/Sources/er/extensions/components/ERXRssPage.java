@@ -8,18 +8,19 @@ import com.webobjects.appserver.WOResponse;
 
 /**
  * Simple RSS feed provider.
- * @binding feedTitle
- * @binding feedUrl
- * @binding feedDescription
- * @binding list
- * @binding item
- * @binding itemGuid
- * @binding itemTitle
- * @binding itemLink
- * @binding itemPubDate
+ * 
+ * @binding feedTitle the title of the RSS feed
+ * @binding feedUrl the URL of the website associated with the RSS feed
+ * @binding feedDescription the description of the RSS feed
+ * @binding list the list of items to show in the feed
+ * @binding item the repetition item binding for the feed items
+ * @binding itemGuid the GUID of the current item
+ * @binding itemTitle the title of the current item
+ * @binding itemLink the link associated with the current item
+ * @binding itemPubDate the publish date of the current item
+ * 
  * @author ak
  */
-
 public class ERXRssPage extends ERXStatelessComponent {
 	 
 	public ERXRssPage(WOContext context) {
