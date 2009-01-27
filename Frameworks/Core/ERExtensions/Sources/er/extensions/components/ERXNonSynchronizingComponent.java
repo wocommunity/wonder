@@ -6,7 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 
 /**
  * Abstract non-synchronizing component used as the super class for a number of
