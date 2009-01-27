@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.ERXApplication;
+import er.extensions.ERXEC;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXLogger;
 import er.extensions.ERXProperties;
@@ -75,7 +76,7 @@ public class Application extends ERXApplication {
     public void testSendingMail() {
         log.info("Sending test mail");
         try {
-            EOEditingContext ec = ERXExtensions.newEditingContext();
+            EOEditingContext ec = ERXEC.newEditingContext();
             
             ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(ERJavaMail.sharedInstance().adminEmail(),
                                                           new NSArray(ERJavaMail.sharedInstance().adminEmail()),
