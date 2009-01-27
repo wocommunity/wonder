@@ -46,6 +46,9 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     /** Holds the {@link D2WContext}. */
     private D2WContext d2wContext;
 
+    /** Holds the current D2W task. */
+    private String task;
+
     /** Holds the property key. */
     private String key;
 
@@ -86,6 +89,20 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         }
         return d2wContext;
     }
+
+    /**
+     * Gets the current D2W task.
+     */
+    public String task() {
+        if (task == null) {
+            task = (String)valueForBinding("task");
+        }
+        return task;
+    }
+
+    public boolean taskIsEdit() { return "edit".equals(task()); }
+    public boolean taskIsInspect() { return "inspect".equals(task()); }
+    public boolean taskIsList() { return "list".equals(task()); }
 
     /** Validation Support. Passes errors to the parent. */
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
@@ -195,12 +212,22 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         return value;
     }
 
+    /** Used by stateful but non-synching subclasses */
+    public void resetCachedBindingsInStatefulComponent() {
+        super.resetCachedBindingsInStatefulComponent();
+        extraBindings = null;
+        key = null;
+        d2wContext = null;
+        task = null;
+    }
+
     /** Used by stateless subclasses. */
     public void reset() {
         super.reset();
         extraBindings = null;
         key = null;
         d2wContext = null;
+        task = null;
     }
 
     /** Sets the extra bindings. */

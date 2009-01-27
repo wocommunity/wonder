@@ -203,6 +203,31 @@ public class ERD2WFactory extends D2W {
         return (WOComponent)epi;
     }
 
+    /**
+     * Produces an error page that displays the provided message and returns the user to the current page.
+     * @param message to display
+     * @param session - the active session
+     * @return the error page
+     */
+    public WOComponent errorPageWithMessage(String message, WOSession session) {
+        return errorPageWithMessageAndDestination(message, session.context().page(), session);
+    }
+
+    /**
+     * Produces an error page that displays the provided message and returns the user to the destination page.
+     * @param message to display
+     * @param destination page to which the error component returns the user
+     * @param session - the active session
+     * @return the error page
+     */
+    public WOComponent errorPageWithMessageAndDestination(String message, WOComponent destination, WOSession session) {
+        myCheckRules();
+        ErrorPageInterface epi = D2W.factory().errorPage(session);
+        epi.setMessage(message);
+        epi.setNextPage(destination);
+        return (WOComponent)epi;
+    }
+
     // ak: These next set of methods are intented to be overidden and extended
     // however, the java compiler refuses to create a object method with the
     // same name as a static one, thus the "_" prefix
