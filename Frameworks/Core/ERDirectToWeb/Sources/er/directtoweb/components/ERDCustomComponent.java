@@ -12,6 +12,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.ERDirectToWeb;
@@ -45,6 +46,9 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
 
     /** Holds the {@link D2WContext}. */
     private D2WContext d2wContext;
+
+    /** Holds the current D2W task. */
+    private String task;
 
     /** Holds the property key. */
     private String key;
@@ -86,7 +90,21 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         }
         return d2wContext;
     }
+
+    /**
+     * Gets the current D2W task.
+     */
+    public String task() {
+        if (task == null) {
+            task = (String)valueForBinding("task");
+        }
+        return task;
+    }
     
+    public boolean taskIsEdit() { return "edit".equals(task()); }
+    public boolean taskIsInspect() { return "inspect".equals(task()); }
+    public boolean taskIsList() { return "list".equals(task()); }
+
     /** Validation Support. Passes errors to the parent. */
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
@@ -195,12 +213,22 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         return value;
     }
 
+    /** Used by stateful but non-synching subclasses */
+    public void resetCachedBindingsInStatefulComponent() {
+        super.resetCachedBindingsInStatefulComponent();
+        extraBindings = null;
+        key = null;
+        d2wContext = null;
+        task = null;
+    }
+
     /** Used by stateless subclasses. */
     public void reset() {
         super.reset();
         extraBindings = null;
         key = null;
         d2wContext = null;
+        task = null;
     }
 
     /** Sets the extra bindings. */
@@ -245,6 +273,24 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     /** Should the property keys be shown. */
     public boolean d2wPropertyKeyDebuggingEnabled() {
         return ERDirectToWeb.d2wPropertyKeyDebuggingEnabled(session());
+    }
+
+    /**
+     * Finds the containing D2WPage, if possible.  There are certain situations when having a 
+     * reference to the containing D2W page is useful, e.g., when needing to use the userInfo 
+     * dictionary of {@link ERD2WPage} to pass information between subcomponents.
+     * @return the containing D2WPage
+     */
+    public D2WPage d2wPage() {
+        // Can't just use context().page(), because the d2wPage isn't necessarily the top-level
+        // component.
+        WOComponent component = this;
+
+        do {
+            component = component.parent();
+        } while( component != null && !(component instanceof D2WPage) );
+
+        return (D2WPage)component;
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
