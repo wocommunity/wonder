@@ -1114,7 +1114,7 @@ public class ERXSQLHelper {
 					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
 				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
 				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(t0." + pkColumnName + ") ";
+				countExpression = "count(distinct t0." + pkColumnName + ") ";
 			}
 			else {
 				countExpression = "count(*) ";
@@ -1307,20 +1307,23 @@ public class ERXSQLHelper {
 						else if (ch == '\'') {
 							inQuotes = !inQuotes;
 						}
+						if (inQuotes || ch != commandSeparatorChar) {
+							statementBuffer.append(ch);
+						}
 					}
 
 					// If we are not in a quoted string, either this is the end of the command or we need to 
 					// add some whitespace before the continuation of this command
-					statementBuffer.append(nextLine);		
 					if (!inQuotes) {
 						if (ch == commandSeparatorChar) {
-							statements.addObject(statementBuffer.toString());
+							statements.addObject(statementBuffer.toString().trim());
 							statementBuffer.setLength(0);
 						}
 						else {
 							statementBuffer.append(' ');
 						}
 					}
+					
 					nextLine = reader.readLine();
 				}
 			}
