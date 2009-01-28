@@ -2236,4 +2236,39 @@ public class ERXStringUtilities {
 
 		return val;
 	}
+
+	/**
+	 * Returns whether the given value falls in a range defined by the given string, which is 
+	 * in the format "1-5,100,500,800-1000".
+	 * 
+	 * @param value the value to check for
+	 * @param rangeString the range string to parse
+	 * @return whether or not the value falls within the given ranges
+	 */
+	public static boolean isValueInRange(int value, String rangeString) {
+		boolean rangeMatches = false;
+		if (rangeString != null && rangeString.length() > 0) {
+			String[] ranges = rangeString.split(",");
+			for (String range : ranges) {
+				range = range.trim();
+				int dashIndex = range.indexOf('-');
+				if (dashIndex == -1) {
+					int singleValue = Integer.parseInt(range);
+					if (value == singleValue) {
+						rangeMatches = true;
+						break;
+					}
+				}
+				else {
+					int lowValue = Integer.parseInt(range.substring(0, dashIndex).trim());
+					int highValue = Integer.parseInt(range.substring(dashIndex + 1).trim());
+					if (value >= lowValue && value <= highValue) {
+						rangeMatches = true;
+						break;
+					}
+				}
+			}
+		}
+		return rangeMatches;
+	}
 }

@@ -1289,34 +1289,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		}
 
 		public NSDictionary<String, String> compute(String key, String value, String parameters) {
-			NSDictionary<String, String> computedProperties = null;
+			NSDictionary computedProperties = null;
 			if (parameters != null && parameters.length() > 0) {
-				boolean instanceNumberMatches = false;
-				String[] ranges = parameters.split(",");
-				for (String range : ranges) {
-					range = range.trim();
-					int dashIndex = range.indexOf('-');
-					if (dashIndex == -1) {
-						int singleValue = Integer.parseInt(range);
-						if (_instanceNumber == singleValue) {
-							instanceNumberMatches = true;
-							break;
-						}
-					}
-					else {
-						int lowValue = Integer.parseInt(range.substring(0, dashIndex).trim());
-						int highValue = Integer.parseInt(range.substring(dashIndex + 1).trim());
-						if (_instanceNumber >= lowValue && _instanceNumber <= highValue) {
-							instanceNumberMatches = true;
-							break;
-						}
-					}
-				}
-				if (instanceNumberMatches) {
-					computedProperties = new NSDictionary<String, String>(value, key);
+				if (ERXStringUtilities.isValueInRange(_instanceNumber, parameters)) {
+					computedProperties = new NSDictionary(value, key);
 				}
 				else {
-					computedProperties = new NSDictionary<String, String>();
+					computedProperties = new NSDictionary();
 				}
 			}
 			return computedProperties;
