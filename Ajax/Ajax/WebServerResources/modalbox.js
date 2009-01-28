@@ -380,9 +380,9 @@ Modalbox.Methods = {
 			$(this.MBclose).focus(); // If no focusable elements exist focus on close button
 	},
 	
-	_findFocusableElements: function(){ // Collect form elements or links from MB content
+	_findFocusableElements: function(){ // Collect form elements or links from MB content, elements with class MB_notFocusable are excluded
 		this.MBcontent.select('input:not([type~=hidden]), select, textarea, button, a[href]').invoke('addClassName', 'MB_focusable');
-		return this.MBcontent.select('.MB_focusable');
+		return this.MBcontent.select('.MB_focusable').reject(function(e) { return e.hasClassName('MB_notFocusable'); });
 	},
 	
 	_kbdHandler: function(event) {
