@@ -112,7 +112,6 @@ public class AjaxModalContainer extends AjaxDynamicElement {
             	// don't use ajax request handler here
                 href = context.componentActionURL();
             }
-            else 
             if(href == null) {
                 href = "#" + containerID;
             }
