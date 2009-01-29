@@ -4,6 +4,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.appserver.ajax.ERXAjaxApplication;
@@ -158,8 +159,38 @@ public class ERXRedirect extends WOComponent {
 
 		WOComponent component = _component;
 		if (component != null) {
-			String requestHandlerPath = context.contextID() + ".0";
-			url = context._urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), requestHandlerPath, queryParametersString(), secure);
+			
+			// Build request handler path with session ID if needed
+	        WOSession aSession = session();
+			String aContextId = context.contextID();
+			StringBuffer requestHandlerPath = new StringBuffer();
+			if (WOApplication.application().pageCacheSize() == 0) {
+				if (aSession.storesIDsInURLs()) {
+					requestHandlerPath.append(component.name());
+					requestHandlerPath.append('/');
+					requestHandlerPath.append(aSession.sessionID());
+					requestHandlerPath.append('/');
+					requestHandlerPath.append(aContextId);
+					requestHandlerPath.append(".0");
+				}
+				else {
+					requestHandlerPath.append(component.name());
+					requestHandlerPath.append('/');
+					requestHandlerPath.append(aContextId);
+					requestHandlerPath.append(".0");
+				}
+			}
+			else if (aSession.storesIDsInURLs()) {
+				requestHandlerPath.append(aSession.sessionID());
+				requestHandlerPath.append('/');
+				requestHandlerPath.append(aContextId);
+				requestHandlerPath.append(".0");
+			}
+			else {
+				requestHandlerPath.append(aContextId);
+				requestHandlerPath.append(".0");
+			}
+			url = context._urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), requestHandlerPath.toString(), queryParametersString(), secure);
 			context._setPageComponent(component);
 		}
 		else if (_url != null) {
