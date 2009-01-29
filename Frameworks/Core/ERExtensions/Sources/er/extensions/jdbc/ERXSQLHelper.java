@@ -32,7 +32,6 @@ import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
@@ -1329,6 +1328,10 @@ public class ERXSQLHelper {
 					
 					nextLine = reader.readLine();
 				}
+				String finalStatement = statementBuffer.toString().trim();
+				if (finalStatement.length() > 0) {
+					statements.addObject(finalStatement);
+				}
 			}
 			catch (IOException e) {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -1601,7 +1604,6 @@ public class ERXSQLHelper {
 					buf.append("/");
 				}
 			}
-			System.out.println("finished!");
 			return buf.toString();
 		}
 
