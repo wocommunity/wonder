@@ -11,7 +11,6 @@
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "batchNavigationBarComponentName"; "value" = "ERXBatchNavigationBar"; }; }, 
     {"author" = "600"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "EOKeyValueQualifier"; "key" = "targetOutput"; "selectorName" = "isEqualTo:"; "value" = "xml"; }; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "batchSize"; "value" = "0"; }; }, 
     {"author" = "200"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "EOKeyValueQualifier"; "key" = "task"; "selectorName" = "isEqualTo:"; "value" = "select"; }; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "batchSize"; "value" = "10"; }; }, 
-    {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "branchChoices"; "value" = (); }; }, 
     {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "browserSize"; "value" = "5"; }; }, 
     {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "er.directtoweb.ERDDelayedLocalizedAssignment"; "keyPath" = "cancelButtonLabel"; "value" = "ERD2W.cancelButtonLabel"; }; }, 
     {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "er.directtoweb.ERDDelayedLocalizedAssignment"; "keyPath" = "cancelMessage"; "value" = "ERD2W.cancelCreationMessage"; }; }, 
