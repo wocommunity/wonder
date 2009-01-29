@@ -9,8 +9,7 @@
 var ERXCheckboxMatrix = {
 checkAll : function (form, name, shouldCheck) {
     var elements = form.elements;
-    var i = elements.length;
-    while  (i-- >= 0) {
+    for (var i = 0; i < elements.length; i++) {
         var element = elements[i];
         if (element.type.toLowerCase() == "checkbox") {
             if (element.name == name && element.checked != shouldCheck) {
