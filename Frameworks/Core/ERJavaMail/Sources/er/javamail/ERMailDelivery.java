@@ -28,6 +28,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * This is the main class for sending mail with the JavaMail API. You typically don't create instances of this class
@@ -239,6 +240,11 @@ public abstract class ERMailDelivery {
 		setAddresses(toAddresses, Message.RecipientType.TO, true);
 	}
 
+	/** Sets the to-addresses array for the current message instance */
+	public void setToAddresses(NSDictionary<String, String> toAddresses) throws MessagingException, AddressException {
+		setAddresses(toAddresses, Message.RecipientType.TO, true);
+	}
+
 	/** Sets the reply-to address for the current message instance */
 	public void setReplyToAddress(String toAddress) throws MessagingException, AddressException {
 		setReplyToAddress(toAddress, null);
@@ -255,8 +261,18 @@ public abstract class ERMailDelivery {
 		setAddresses(ccAddresses, Message.RecipientType.CC, true);
 	}
 
+	/** Sets the cc-addresses array for the current message instance */
+	public void setCCAddresses(NSDictionary<String, String> ccAddresses) throws MessagingException, AddressException {
+		setAddresses(ccAddresses, Message.RecipientType.CC, true);
+	}
+
 	/** Sets the bcc-addresses array for the current message instance */
 	public void setBCCAddresses(NSArray<String> bccAddresses) throws MessagingException, AddressException {
+		setAddresses(bccAddresses, Message.RecipientType.BCC, true);
+	}
+	
+	/** Sets the bcc-addresses array for the current message instance */
+	public void setBCCAddresses(NSDictionary<String, String> bccAddresses) throws MessagingException, AddressException {
 		setAddresses(bccAddresses, Message.RecipientType.BCC, true);
 	}
 
@@ -456,6 +472,27 @@ public abstract class ERMailDelivery {
 			return;
 		}
 		InternetAddress[] addresses = ERMailUtils.convertNSArrayToInternetAddresses(addressesArray);
+		this.mimeMessage().setRecipients(type, addresses);
+	}
+
+	/**
+	 * Sets addresses regarding their recipient type in the current message. Has the option to filter the address list
+	 * based on the white and black lists.
+	 */
+	private void setAddresses(NSDictionary<String, String> addressesDictionary, Message.RecipientType type, boolean filterAddresses) throws MessagingException, AddressException {
+		NSArray<String> mailAdresses = addressesDictionary.allKeys();
+		if (filterAddresses) {
+			mailAdresses = ERJavaMail.sharedInstance().filterEmailAddresses(mailAdresses);
+		}
+		if (mailAdresses.count() == 0) {
+			// don't do anything.
+			return;
+		}
+		NSMutableDictionary<String, String> newDictionary = new NSMutableDictionary<String, String>();
+		for (String key: mailAdresses) {
+			newDictionary.takeValueForKey(addressesDictionary.objectForKey(key), key);
+		}
+		InternetAddress[] addresses = ERMailUtils.convertNSDictionaryToInternetAddresses(newDictionary.immutableClone(), charset());
 		this.mimeMessage().setRecipients(type, addresses);
 	}
 
