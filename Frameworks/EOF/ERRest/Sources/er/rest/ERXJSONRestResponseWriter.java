@@ -1,12 +1,15 @@
 package er.rest;
 
 import java.text.ParseException;
+import java.util.List;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import net.sf.json.JSONObject;
 import er.extensions.eof.ERXKeyFilter;
 
 /**
@@ -58,8 +61,14 @@ public class ERXJSONRestResponseWriter implements IERXRestResponseWriter {
 		}
 		dictResponseWriter.appendToResponse(context, response, result);
 		Object obj = dictResponseWriter.root();
-		JSONObject json = JSONObject.fromObject(obj);
-		response.appendContentString(json.toString());
+		if (obj instanceof List) {
+			JSONArray json = JSONArray.fromObject(obj);
+			response.appendContentString(json.toString());
+		}
+		else {
+			JSONObject json = JSONObject.fromObject(obj);
+			response.appendContentString(json.toString());
+		}
 	}
 
 	/**
