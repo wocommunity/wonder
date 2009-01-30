@@ -11,12 +11,6 @@ Image1: WOImage {
 	framework = "ERExtensions";
 	key = "calendar.gif";
 }
-Once : ERXOncePerRequestConditional {
-	keyName = "datepicker-js";
-}
-JavaScript2: WOJavaScript {
-	scriptSource = datePickerJavaScriptUrl;
-}
 
 String1: WOString {
 	value = formatterStringForScript.toLowerCase;
