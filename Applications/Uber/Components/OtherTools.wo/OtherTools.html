@@ -1,0 +1,22 @@
+<wo:UberHeaderFooter title="Other Tools">
+  <wo:UberPanel title="Thread Storage">
+  	<p>
+  	The value "A Thread Value" is placed in the thread storage when you reset the value. After reload, though, the 
+  	thread storage will be cleaned out, and so the value should be blank.
+  	</p>
+  	
+  	<p>Current Value: <wo:str value="$threadStorageValue" valueWhenEmpty="{None}"/></p>
+  	<p><wo:WOHyperlink action="$resetThreadValue">reset</wo:WOHyperlink> / <wo:WOHyperlink action="$reload">reload</wo:WOHyperlink></p>
+  </wo:UberPanel>
+
+  <wo:UberPanel title="Chronic">
+  	<p>ERChronic is a natural language date parser. Type an English description of date to see it parsed (i.e. "next tue").</p>
+  	 
+  	<p><wo:str value="$dateSpan"/></p>
+  	
+  	<wo:form>
+  		<wo:WOTextField value="$dateString"/>
+  		<wo:WOSubmitButton action="$chronic" value="parse"/>
+  	</wo:form>
+  </wo:UberPanel>
+</wo:UberHeaderFooter>

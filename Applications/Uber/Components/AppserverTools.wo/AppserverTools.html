@@ -1,0 +1,21 @@
+<wo:UberHeaderFooter title="Appserver Tools">
+  <wo:UberPanel title="Script Injection">
+  	<p>This code navigates the DOM and renders the list of scripts that were included in this page's HEAD tag, which should be: prototype.js, wolips.js, effects.js, wonder.js (in that order).</p>
+  	
+  	<ul id="scripts"></ul>
+  	
+  	<script language="Javascript">
+  		var headElement = $$('head')[0];
+  		var scriptsListElement = $('scripts');
+  		headElement.select('script').each(function(scriptElement) {
+  			var scriptItemElement = document.createElement('li');
+  			scriptItemElement.innerHTML = scriptElement.src.replace(/.*\/WebServerResources\//, '');
+  			scriptsListElement.appendChild(scriptItemElement);
+  		});
+  	</script>
+  </wo:UberPanel>
+
+  <wo:UberPanel title="URL Rewriting">
+  	<wo:WOHyperlink directActionName="rewriteBroken">This link should be rewritten to /wa/rewriteWorked instead of /wa/rewriteBroken.</wo:WOHyperlink>
+  </wo:UberPanel>
+</wo:UberHeaderFooter>

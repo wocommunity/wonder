@@ -1,0 +1,22 @@
+<wo:UberHeaderFooter title="Ajax">
+  <wo:UberPanel title="Ajax">
+  	<p>Click on a company to see its location, then click on the location to modify it.</p>
+  	<ul>
+  		<wo:WORepetition list="$companies.displayedObjects" item="$company">
+  			<li>
+  				<wo:AjaxExpansion insertion="Effect.blind" insertionDuration="0.1">
+  					<wo:ERXWOTemplate templateName="label"><wo:str value="$company.name"/></wo:ERXWOTemplate>
+  					<wo:AjaxInPlace onsubmit="return false" editInsertion="Effect.blind" editInsertionDuration="0.2" saveInsertion="Effect.blind" saveInsertionDuration="0.2" cancelInsertion="Effect.blind" cancelInsertionDuration="0.2">
+  						<wo:AjaxInPlaceViewTemplate>
+				  			<wo:str value="$company.name"/> is located in <wo:str value="$company.location" valueWhenEmpty="???"/>.
+  						</wo:AjaxInPlaceViewTemplate>
+  						<wo:AjaxInPlaceEditTemplate>
+			  				<wo:str value="$company.name"/> is located in <wo:WOTextField value="$company.location" size="20"/>.
+  						</wo:AjaxInPlaceEditTemplate>
+  					</wo:AjaxInPlace>
+  				</wo:AjaxExpansion>
+  			</li>
+  		</wo:WORepetition>
+  	</ul>
+  </wo:UberPanel>
+</wo:UberHeaderFooter>
