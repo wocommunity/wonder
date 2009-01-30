@@ -1,0 +1,26 @@
+{
+    "WebObjects Release" = "WebObjects 5.0"; 
+    encoding = "UTF-8"; 
+    variables = {
+        employees = {
+            class = WODisplayGroup; 
+            dataSource = {
+                class = EODatabaseDataSource; 
+                editingContext = editingContext; 
+                fetchSpecification = {
+                    class = EOFetchSpecification; 
+                    entityName = Employee; 
+                    isDeep = YES; 
+                    prefetchingRelationshipKeyPaths = (); 
+                }; 
+            }; 
+            fetchesOnLoad = YES; 
+            formatForLikeQualifier = "%@*"; 
+            numberOfObjectsPerBatch = 5; 
+            selectsFirstObjectAfterFetch = NO; 
+            sortOrdering = (
+                {class = EOSortOrdering; key = lastName; selectorName = "compareAscending:"; }
+            ); 
+        }; 
+    }; 
+}

@@ -1,0 +1,8 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    entities = (
+        {className = "er.uber.model.Company"; name = Company; }, 
+        {className = "er.uber.model.Employee"; name = Employee; }
+    ); 
+}

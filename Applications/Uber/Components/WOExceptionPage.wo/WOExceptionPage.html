@@ -1,0 +1,34 @@
+<wo:UberHeaderFooter title="Exception">
+<style>
+table {
+	width: 100%;
+}
+
+th {
+	text-align: left;
+}
+</style>
+
+  <wo:UberPanel id="exception" title="Exception">
+  	<p><wo:str value="$exceptionParagraph"/></p>
+  	
+  	<p><b><webobject name=ExceptionNameString></webobject></b></p>
+    <table>
+      <tr> 
+        <th>File</th>
+        <th>Line#</th>
+        <th>Method</th>
+        <th>Package</th>
+      </tr>
+      
+      <webobject name=ReasonRepetition> 
+	      <tr> 
+	        <td><webobject name=filename></webobject></td>
+	        <td><webobject name=line></webobject></td>
+	        <td><webobject name=methodname></webobject></td>
+	        <td><webobject name=packagename></webobject></td>
+	      </tr>
+      </webobject> 
+    </table>
+    </wo:UberPanel>
+</wo:UberHeaderFooter>

@@ -1,0 +1,39 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = Y; 
+            columnName = location; 
+            name = location; 
+            prototypeName = varchar255; 
+        }, 
+        {allowsNull = Y; columnName = logoID; name = logoID; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (id, location, logoID, name); 
+    className = "er.uber.model.Company"; 
+    classProperties = (employees, location, logo, name); 
+    externalName = Company; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_clientClassPropertyNames" = (name); }; 
+    name = Company; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = Employee; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = companyID; sourceAttribute = id; }); 
+            name = employees; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = ERAttachment; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = logoID; }); 
+            name = logo; 
+        }
+    ); 
+}
