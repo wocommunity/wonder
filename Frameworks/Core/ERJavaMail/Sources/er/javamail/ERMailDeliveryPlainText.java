@@ -14,6 +14,16 @@ import javax.activation.DataHandler;
  * @author Camille Troillard <tuscland@mac.com>
  */
 public class ERMailDeliveryPlainText extends ERMailDelivery {
+	
+	/** Designated constructor */
+	public ERMailDeliveryPlainText(javax.mail.Session session) {
+		super(session);
+	}
+
+	/** Default constructor */
+	public ERMailDeliveryPlainText() {
+		super();
+	}
 
 	/** String Message content */
 	private String textContent;
