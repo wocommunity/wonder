@@ -27,5 +27,7 @@
     </validation>
 	<binding name="accesskey"/>
         <binding name="tabindex"/>
+    <binding name="default"/>
+        <binding name="id"/>
     </wo>
 </wodefinitions>
