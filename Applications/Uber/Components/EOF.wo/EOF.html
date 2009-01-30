@@ -1,0 +1,12 @@
+<wo:UberHeaderFooter title="EOF">
+  <wo:UberPanel title="EC Unlocking">
+  	<p>
+  	If you select "lock," the page's editing context will lock. When you select "reload," the lock count should go
+  	back to zero automatically.
+  	</p>
+  	
+  	<p>lock count: <wo:str value="$editingContext.lockCount // VALID"/></p>
+  	
+  	<wo:WOHyperlink action="$lock">lock</wo:WOHyperlink> / <wo:WOHyperlink action="$reload">reload</wo:WOHyperlink> 
+  </wo:UberPanel>
+</wo:UberHeaderFooter>

@@ -1,0 +1,34 @@
+<wo:UberHeaderFooter title="Taggable">
+<style>
+div.tagCloud {
+	text-align: center;
+}
+</style>
+	<wo:ERXStyleSheet framework="ERTaggable" filename="ERTagCloud.css"/>
+	
+  <wo:UberPanel title="Tag Cloud">
+    <wo:ERTagCloud entityName="Employee" tag="$tag" tagClass="$tagClass" cache="$false"><wo:WOGenericContainer elementName="span" class="$tagClass"><wo:str value="$tag" /></wo:WOGenericContainer></wo:ERTagCloud>
+  </wo:UberPanel>
+  <wo:UberPanel title="Employees">
+  	<p>Select an employee to change his or her tags.</p>
+    <ul>
+      <wo:WORepetition list="$employees.displayedObjects" item="$employee">
+        <li><wo:WOHyperlink action="$selectEmployee"><wo:str value="$employee|displayName" /></wo:WOHyperlink></li>
+      </wo:WORepetition>
+    </ul>
+    <wo:ERXFlickrBatchNavigation displayGroup="$employees" />
+  </wo:UberPanel>
+
+	<wo:if condition="$selectedEmployee">
+	  <wo:UberPanel>
+	  	<p>Select from the tags below and press save when you are done.</p>
+	  	
+	  	<wo:ERXWOTemplate templateName="title">Tags for <wo:str value="$selectedEmployee|displayName"/></wo:ERXWOTemplate>
+	  	
+	  	<wo:form>
+	    	<wo:ERTagField taggable="$selectedEmployee.taggable"/>
+	    	<wo:WOSubmitButton action="$save" value="save"/>
+    	</wo:form>
+	  </wo:UberPanel>
+	</wo:if>
+</wo:UberHeaderFooter>

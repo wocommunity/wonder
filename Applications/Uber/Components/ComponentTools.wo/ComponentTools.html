@@ -1,0 +1,14 @@
+<wo:UberHeaderFooter title="Component Tools">
+  <wo:UberPanel title="Repetition Checking">
+  	<p>
+  	This test is designed to fail. This is verifying that repetition hash checks are working. When you click on an item in
+  	this list, it changes the underlying array before invokeAction runs so that the item you clicked on is guaranteed 
+  	to no longer exist, which will result in an UnmatchedObjectException.
+  	</p>
+  	<ul>
+  		<wo:WORepetition list="$values" item="$value">
+  			<li><wo:WOHyperlink action="$selectValue"><wo:str value="$value"/></wo:WOHyperlink></li>
+  		</wo:WORepetition>
+  	</ul>
+  </wo:UberPanel>
+</wo:UberHeaderFooter>

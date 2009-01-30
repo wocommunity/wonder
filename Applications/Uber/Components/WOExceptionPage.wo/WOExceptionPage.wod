@@ -1,0 +1,34 @@
+ExceptionNameString: WOString {
+    value = exception.class.simpleName;
+    escapeHTML = false;
+}
+
+ReasonRepetition: WORepetition {
+	item = errorline;
+	list = error.stackTrace;
+}
+
+filename:  WOString {
+	value = errorline.fileName;
+}
+
+line: WOString {
+	value = errorline.lineNumber;
+}
+
+methodname: WOHyperlink {
+	disabled = errorline.isDisable;
+	directActionName = "openInProjectBuilder";
+        actionClass = "WOProjectBuilderAction";
+        ?methodName = errorline.methodName;
+        ?line = errorline.lineNumber;
+        ?filename = errorline.fileName;
+        ?errorMessage = errorMessage;
+        ?fullClassName = errorline.packageClassPath;
+	string = errorline.methodName;
+}
+
+packagename: WOString {
+	value = errorline.packageName;
+}
+ 
