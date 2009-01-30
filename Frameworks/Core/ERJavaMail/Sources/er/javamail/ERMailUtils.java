@@ -248,4 +248,52 @@ public class ERMailUtils extends Object {
 		return addresses;
 	}
 
+	/**
+	 * Method that converts NSDictionary consisting of String emails as keys and String personal names
+	 * to InternetAddress [].
+	 * 
+	 * @param addrs
+	 *            a <code>NSDictionary</code> with email, personal name as key value pair
+	 * @param charset
+	 *            a <code>String</code> of the charset to use for personal string
+	 * @return an <code>InternetAddress[]</code> value
+	 * @exception AddressException
+	 *                if an error occurs
+	 */
+	public static InternetAddress[] convertNSDictionaryToInternetAddresses(NSDictionary<String, String> addrs, String charset) throws AddressException {
+		if (addrs == null || addrs.isEmpty())
+			return new InternetAddress[0];
+		InternetAddress[] addrArray = new InternetAddress[addrs.count()];
+		InternetAddress address;
+		int i = 0;
+
+		for (String email : addrs.allKeys()) {
+			String personal = addrs.objectForKey(email);
+			
+			if (personal != null && personal.length() > 0) {
+				address = new InternetAddress();
+				address.setAddress(email);
+
+				try {
+					address.setPersonal(personal, charset);
+				}
+				catch (java.io.UnsupportedEncodingException ex) {
+					// set the string anyway.
+					try {
+						address.setPersonal(personal);
+					}
+					catch (Exception e) {
+						// give up ...
+					}
+				}
+			}
+			else {
+				address = new InternetAddress(email);
+			}
+			addrArray[i++] = address;
+		}
+
+		return addrArray;
+	}
+
 }
