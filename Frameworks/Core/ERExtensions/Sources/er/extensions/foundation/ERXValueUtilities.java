@@ -281,11 +281,14 @@ public class ERXValueUtilities {
             if (obj instanceof NSArray) {
                 value =(NSArray)obj;
             } else if(obj instanceof String) {
-            	String s = (String)obj;
-            	if(s.length() > 0 && s.charAt(0) != '(') {
-            		s = "(" + s + ")";
-            	}
+                String s = (String)obj;
+                if (s.length() > 0 && s.charAt(0) != '(') {
+                    s = "(" + s + ")";
+                }
                 value = (NSArray)NSPropertyListSerialization.propertyListFromString(s);
+                if (value == null) {
+                    value = def;
+                }
             } else {
                 throw new RuntimeException("Not a String or NSArray " + obj);
             }
@@ -319,6 +322,9 @@ public class ERXValueUtilities {
                 value =(NSDictionary)obj;
             } else if(obj instanceof String) {
                 value = (NSDictionary)NSPropertyListSerialization.propertyListFromString((String)obj);
+                if (value == null) {
+                    value = def;
+                }
             } else {
                 throw new RuntimeException("Not a String or NSDictionary " + obj);
             }
