@@ -246,7 +246,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
-     * Converts the standard propertyName into one with a .&lt;AppName> on the end, iff the property is defined with
+     * Converts the standard propertyName into one with a .&lt;AppName> on the end, if the property is defined with
      * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
      * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
      * @param propertyName
@@ -872,14 +872,14 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         /** /etc/WebObjects/AppName/Properties -- per-Application-per-Machine properties */
         String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
         if (applicationMachinePropertiesPath != null) {
-           projectsInfo.addObject("Application " + mainBundleName + "/Application-Machine Properties: " + aPropertiesPath);
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-Machine Properties: " + applicationMachinePropertiesPath);
            propertiesPaths.addObject(applicationMachinePropertiesPath);
         }
 
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
         if (applicationUserPropertiesPath != null) {
-           projectsInfo.addObject("Application " + mainBundleName + "/Application-User Properties: " + aPropertiesPath);
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-User Properties: " + applicationUserPropertiesPath);
            propertiesPaths.addObject(applicationUserPropertiesPath);
         }
         
@@ -1291,28 +1291,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		public NSDictionary compute(String key, String value, String parameters) {
 			NSDictionary computedProperties = null;
 			if (parameters != null && parameters.length() > 0) {
-				boolean instanceNumberMatches = false;
-				String[] ranges = parameters.split(",");
-				for (String range : ranges) {
-					range = range.trim();
-					int dashIndex = range.indexOf('-');
-					if (dashIndex == -1) {
-						int singleValue = Integer.parseInt(range);
-						if (_instanceNumber == singleValue) {
-							instanceNumberMatches = true;
-							break;
-						}
-					}
-					else {
-						int lowValue = Integer.parseInt(range.substring(0, dashIndex).trim());
-						int highValue = Integer.parseInt(range.substring(dashIndex + 1).trim());
-						if (_instanceNumber >= lowValue && _instanceNumber <= highValue) {
-							instanceNumberMatches = true;
-							break;
-						}
-					}
-				}
-				if (instanceNumberMatches) {
+				if (ERXStringUtilities.isValueInRange(_instanceNumber, parameters)) {
 					computedProperties = new NSDictionary(value, key);
 				}
 				else {
@@ -1397,6 +1376,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 					}
 					else {
 						originalProperties.remove(key);
+						
+						// The key exists in the System properties' defaults with a different value, we must reinsert
+						// the property so it doesn't get overwritten with the default value when we evaluate again.
+						// This happens because ERXConfigurationManager processes the properties after a configuration
+						// change in multiple passes and each calls this method.
+						if (System.getProperty(key) != null && !System.getProperty(key).equals(value)) {
+							originalProperties.put(key, value);
+						}
+						
 						Enumeration computedPropertyKeysEnum = computedProperties.keyEnumerator();
 						while (computedPropertyKeysEnum.hasMoreElements()) {
 							Object computedKey = computedPropertyKeysEnum.nextElement();
@@ -1410,5 +1398,4 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			}
 		}
 	}
-
 }
