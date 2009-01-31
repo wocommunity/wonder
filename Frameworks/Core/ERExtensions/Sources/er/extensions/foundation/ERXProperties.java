@@ -246,7 +246,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
-     * Converts the standard propertyName into one with a .&lt;AppName> on the end, iff the property is defined with
+     * Converts the standard propertyName into one with a .&lt;AppName> on the end, if the property is defined with
      * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
      * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
      * @param propertyName
@@ -1374,6 +1374,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 					}
 					else {
 						originalProperties.remove(key);
+						
+						// If the key exists in the System properties' defaults with a different value, we must reinsert
+						// the property so it doesn't get overwritten with the default value when we evaluate again.
+						// This happens because ERXConfigurationManager processes the properties after a configuration
+						// change in multiple passes and each calls this method.
+						if (System.getProperty(key) != null && !System.getProperty(key).equals(value)) {
+							originalProperties.put(key, value);
+						}
+						
 						for (String computedKey : computedProperties.allKeys()) {
 							destinationProperties.put(computedKey, computedProperties.objectForKey(computedKey));
 						}
