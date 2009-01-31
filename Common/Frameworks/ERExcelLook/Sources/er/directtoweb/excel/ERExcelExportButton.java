@@ -56,7 +56,7 @@ public class ERExcelExportButton extends ERDCustomQueryComponent {
     public WOComponent excelExport(EODataSource ds){
         D2WContext context=d2wContext();
 
-        D2WContext newContext=new D2WContext(session());
+        D2WContext newContext=new D2WContext(context);
         newContext.takeValueForKey(context.task(),"task");
 
         // not using subTask directly here because the cache mechanism relies on being able to compute wether this key
