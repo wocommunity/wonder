@@ -10,6 +10,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -291,4 +292,31 @@ public class ERXSimpleTemplateParser {
         }   	
         return result;
     }
+    
+    /**
+     * Parses the given templateString with an ERXSimpleTemplateParser.
+     * 
+     * @param templateString the template string to parse
+     * @param templateObject the object to bind to
+     * @return the parsed template string
+     */
+	public static String parseTemplatedStringWithObject(String templateString, Object templateObject) {
+		String convertedValue = templateString;
+		if (templateString == null || templateString.indexOf("@@") == -1) {
+			return templateString;
+		}
+
+		String lastConvertedValue = null;
+		while (convertedValue != lastConvertedValue && convertedValue.indexOf("@@") > -1) {
+			lastConvertedValue = convertedValue;
+			convertedValue = new ERXSimpleTemplateParser("ERXSystem:KEY_NOT_FOUND").parseTemplateWithObject(convertedValue, "@@", templateObject, WOApplication.application());
+		}
+
+		// MS: Should we warn here? This is awfully quiet ...
+		if (convertedValue.indexOf("ERXSystem:KEY_NOT_FOUND") > -1) {
+			return templateString; // not all keys are present
+		}
+
+		return convertedValue;
+	}
 }
