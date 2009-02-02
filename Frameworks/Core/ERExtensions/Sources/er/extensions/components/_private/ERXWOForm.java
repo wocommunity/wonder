@@ -358,11 +358,11 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		boolean secure = _secure != null && _secure.booleanValueInComponent(context.component());
 		if (_secure == null && ERXApplication.isWO54()) {
 			try {
-				Boolean secureMode = (Boolean)WOContext.class.getDeclaredMethod("secureMode").invoke(context);
-				secure = secureMode.booleanValue();
+				Boolean secureInContext = (Boolean)WOHTMLDynamicElement.class.getDeclaredMethod("secureInContext", WOContext.class).invoke(this, context);
+				secure = secureInContext.booleanValue();
 			}
 			catch (Throwable t) {
-				throw new RuntimeException("Failed to invoke 'secureMode' on WOForm.", t);
+				throw new RuntimeException("Failed to check for 'secure' binding on WOForm.", t);
 			}
 		}
 		Object hrefObject = null;
