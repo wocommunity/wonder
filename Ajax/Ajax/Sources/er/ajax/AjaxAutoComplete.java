@@ -73,6 +73,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding ignoreCase Look at the scriptaculous documentation (Local only)
  * @binding accesskey hot key that should activate the text field (optional)
  * @binding tabindex tab index of the text field (optional)
+ * @binding default hint for the text field, when used together with {@link AjaxTextHinter}. 
  * 
  * @author ak
  */

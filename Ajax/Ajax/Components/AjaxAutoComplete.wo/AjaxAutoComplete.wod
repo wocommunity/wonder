@@ -36,4 +36,5 @@ TextField: WOTextField {
 	onchange = ^onchange;
 	accesskey = ^accesskey;
 	tabindex = ^tabindex;
+	default = ^default;
 }
