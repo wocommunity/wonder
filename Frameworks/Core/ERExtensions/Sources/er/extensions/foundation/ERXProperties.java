@@ -32,6 +32,8 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
@@ -642,6 +644,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         _cache.remove(key);
     }
     
+    public static void removeKey(String key) {
+    	System.getProperties().remove(key);
+    	_cache.remove(key);
+    }
+    
     /** 
      * Copies all properties from source to dest. 
      * 
@@ -1039,6 +1046,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             AppSpecificPropertyNames.clear();
         }
         _cache.clear();
+        // MS: Leave for future WO support ...
+        NSNotificationCenter.defaultCenter().postNotification("PropertiesDidChange", null, null);
     }
 
     //	===========================================================================
