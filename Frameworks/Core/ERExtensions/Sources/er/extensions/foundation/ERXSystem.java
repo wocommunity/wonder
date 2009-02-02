@@ -9,7 +9,6 @@ package er.extensions.foundation;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSProperties;
@@ -46,24 +45,7 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 	 */
 	public static String getProperty(String key) {
 		String originalValue = (String) ERXSystem.sharedInstance.valueForKey(key);
-
-		String convertedValue = originalValue;
-		if (originalValue == null || originalValue.indexOf("@@") == -1) {
-			return originalValue;
-		}
-
-		String lastConvertedValue = null;
-		while (convertedValue != lastConvertedValue && convertedValue.indexOf("@@") > -1) {
-			lastConvertedValue = convertedValue;
-			convertedValue = new ERXSimpleTemplateParser("ERXSystem:KEY_NOT_FOUND").parseTemplateWithObject(convertedValue, "@@", ERXSystem.sharedInstance, WOApplication.application());
-		}
-
-		// MS: Should we warn here? This is awfully quiet ...
-		if (convertedValue.indexOf("ERXSystem:KEY_NOT_FOUND") > -1) {
-			return originalValue; // not all keys are present
-		}
-
-		return convertedValue;
+		return ERXSimpleTemplateParser.parseTemplatedStringWithObject(originalValue, ERXSystem.sharedInstance);
 	}
 
 	/**
