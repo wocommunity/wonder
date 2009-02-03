@@ -19,6 +19,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Stack;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -35,9 +36,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
-
-import er.extensions.ERXCrypto;
-import er.extensions.ERXConstant;
 
 /**
  * Collection of simple utility methods used to get and set properties
@@ -252,7 +250,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
      * @param propertyName
      */
-    private static String getApplicationSpecificPropertyName(final String propertyName) {
+    public static String getApplicationSpecificPropertyName(final String propertyName) {
         synchronized(AppSpecificPropertyNames) {
             // only keep 128 of these around
             if (AppSpecificPropertyNames.size() > 128) {
@@ -670,7 +668,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     // FIXME: This shouldn't eat the exception
     public static Properties propertiesFromPath(String path) {
-        Properties prop = new Properties();
+    	ERXProperties._Properties prop = new ERXProperties._Properties();
 
         if (path == null  ||  path.length() == 0) {
             log.warn("Attempting to read property file for null file path");
@@ -684,9 +682,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
 
         try {
-            BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
-            prop.load(in);
-            in.close();
+        	prop.load(file);
             log.debug("Loaded configuration file at path: "+ path);
         } catch (IOException e) {
             log.error("Unable to initialize properties from file \"" + path + "\"", e);
@@ -702,10 +698,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     public static Properties propertiesFromFile(File file) throws IOException {
         if (file == null)
             throw new IllegalStateException("Attempting to get properties for a null file!");
-        Properties prop = new Properties();
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-        prop.load(in);
-        in.close();
+        ERXProperties._Properties prop = new ERXProperties._Properties();
+        prop.load(file);
         return prop;
     }
     
@@ -719,7 +713,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *          the argv
      */
     public static Properties propertiesFromArgv(String[] argv) {
-        Properties properties = new Properties();
+    	ERXProperties._Properties properties = new ERXProperties._Properties();
         NSDictionary argvDict = NSProperties.valuesFromArgv(argv);
         Enumeration e = argvDict.allKeys().objectEnumerator();
         while (e.hasMoreElements()) {
@@ -835,16 +829,22 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
         /* *** WebObjects.properties in the user home directory *** */
         String userHome = ERXSystem.getProperty("user.home");
-        if (userHome != null  &&  userHome.length() > 0) { 
-            File file = new File(userHome, "WebObjects.properties");
-            if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
-                try {
-                    aPropertiesPath = file.getCanonicalPath();
-                    projectsInfo.addObject("User:        WebObjects.properties " + aPropertiesPath);  
-                    propertiesPaths.addObject(aPropertiesPath);
-                } catch (java.io.IOException ex) {
-                	ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
-                }
+        File mainPropsFile = null;
+        String replacementPropsName = System.getProperty("WebObjectsPropertiesReplacement");
+        if (replacementPropsName != null) {
+            mainPropsFile = new File(replacementPropsName);
+            if (!mainPropsFile.isFile()) {
+            	mainPropsFile = new File(userHome, replacementPropsName);
+            }
+        } else if (userHome != null && userHome.length() > 0) {
+            mainPropsFile = new File(userHome, "WebObjects.properties");
+        }
+        if (mainPropsFile != null && mainPropsFile.exists() && mainPropsFile.isFile() && mainPropsFile.canRead()) {
+            try {
+                propertiesPaths.addObject(mainPropsFile.getCanonicalPath());
+                projectsInfo.addObject("User:        WebObjects.properties " + propertiesPaths.lastObject());
+            } catch (java.io.IOException ex) {
+            	ERXProperties.log.error("Failed to load the configuration file '" + mainPropsFile + "'.", ex);
             }
         }
 
@@ -1319,7 +1319,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 					computedProperties = new NSDictionary(value, key);
 				}
 				else {
-					computedProperties = new NSDictionary();
+					computedProperties = NSDictionary.EmptyDictionary;
 				}
 			}
 			return computedProperties;
@@ -1400,6 +1400,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 					}
 					else {
 						originalProperties.remove(key);
+
+                        // If the key exists in the System properties' defaults with a different value, we must reinsert
+                        // the property so it doesn't get overwritten with the default value when we evaluate again.
+                        // This happens because ERXConfigurationManager processes the properties after a configuration
+                        // change in multiple passes and each calls this method.
+                        if (System.getProperties() == originalProperties && System.getProperty(key) != null && !System.getProperty(key).equals(value)) {
+                            originalProperties.put(key, value);
+                        }
+                        
 						Enumeration computedPropertyKeysEnum = computedProperties.keyEnumerator();
 						while (computedPropertyKeysEnum.hasMoreElements()) {
 							Object computedKey = computedPropertyKeysEnum.nextElement();
@@ -1414,4 +1423,82 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		}
 	}
 
+	/**
+	 * _Properties is a subclass of Properties that provides support for including other
+	 * Properties files on the fly.  If you create a property named .includeProps, the value
+	 * will be interpreted as a file to load.  If the path is absolute, it will just load it
+	 * directly.  If it's relative, the path will be loaded relative to the current user's
+	 * home directory.  Multiple .includeProps can be included in a Properties file and they
+	 * will be loaded in the order they appear within the file.
+	 *  
+	 * @author mschrag
+	 */
+	public static class _Properties extends Properties {
+		public static final String IncludePropsKey = ".includeProps";
+		
+		private Stack<File> _files = new Stack<File>();
+		
+		@Override
+		public synchronized Object put(Object key, Object value) {
+			if (_Properties.IncludePropsKey.equals(key)) {
+				String propsFileName = (String)value;
+                File propsFile = new File(propsFileName);
+                if (!propsFile.isAbsolute()) {
+                    // if we don't have any context for a relative (non-absolute) props file,
+                    // we presume that it's relative to the user's home directory
+    				File cwd = null;
+    				if (_files.size() > 0) {
+    					cwd = _files.peek();
+    				}
+    				else {
+    					cwd = new File(System.getProperty("user.home"));
+                	}
+                    propsFile = new File(cwd, propsFileName);
+                }
+
+                // Detect mutually recursing props files by tracking what we've already loaded:
+                String existingIncludeProps = this.getProperty(_Properties.IncludePropsKey);
+                if (existingIncludeProps == null) {
+                	existingIncludeProps = "";
+                }
+                if (existingIncludeProps.indexOf(propsFile.getPath()) > -1) {
+                    log.error("_Properties.load(): recursive includeProps detected! " + propsFile + " in " + existingIncludeProps);
+                    log.error("_Properties.load() cannot proceed - QUITTING!");
+                    System.exit(1);
+                }
+                if (existingIncludeProps.length() > 0) {
+                	existingIncludeProps += ", ";
+                }
+                existingIncludeProps += propsFile;
+                super.put(_Properties.IncludePropsKey, existingIncludeProps);
+
+                try {
+                    log.info("_Properties.load(): Including props file: " + propsFile);
+					this.load(propsFile);
+				} catch (IOException e) {
+					throw new RuntimeException("Failed to load the property file '" + value + "'.", e);
+				}
+				return null;
+			}
+			else {
+				return super.put(key, value);
+			}
+		}
+
+		public synchronized void load(File propsFile) throws IOException {
+			_files.push(propsFile.getParentFile());
+			try {
+	            BufferedInputStream is = new BufferedInputStream(new FileInputStream(propsFile));
+	            try {
+	            	load(is);
+	            }
+	            finally {
+	            	is.close();
+	            }
+			}
+			finally {
+				_files.pop();
+			}
+		}
+	}
 }
