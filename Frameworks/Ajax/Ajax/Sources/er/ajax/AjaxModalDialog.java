@@ -417,7 +417,10 @@ public class AjaxModalDialog extends AjaxComponent {
 			closeDialog();
 		}
 
-		if (isOpen()) {
+		// If we are open, but the request is not for us, don't render the content.
+		// This shouldHandleRequest prevents showing an open dialog in the page when 
+		// an AUC refreshes
+		if (isOpen() && shouldHandleRequest(context.request(), context)) {
 			if (_actionResults != null) {
 				throw new RuntimeException("Unexpected call to appendToResponse");
 			}
