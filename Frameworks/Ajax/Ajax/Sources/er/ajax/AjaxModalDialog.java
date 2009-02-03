@@ -80,6 +80,8 @@ import er.extensions.components._private.ERXWOForm;
  * @binding style CSS style for the link activating the modal dialog
  *
  * @binding overlayClose true | false Close modal box by clicking on overlay. Default is true.
+ * @binding locked if true, suppresses the close window link, prevents Esc key and overlay from closing dialog.  Default is false,
+ *          true implies overlayClose false
  * @binding method get | post. Method of passing variables to a server. Default is 'get'.
  * @binding params {} Collection of parameters to pass on AJAX request. Should be URL-encoded. See PassingFormValues for details.
  * 
@@ -605,6 +607,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("loadingString", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("closeString", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("closeValue", AjaxOption.STRING));
+		ajaxOptionsArray.addObject(new AjaxOption("locked", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("overlayOpacity", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("overlayDuration", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("slideDownDuration", AjaxOption.NUMBER));

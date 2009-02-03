@@ -48,6 +48,7 @@ SimpleModalDialog: AjaxModalDialog {
 	overlayDuration = "0.1";
 	slideDownDuration = "0.2";
 	slideUpDuration = "0.2";
+	locked = true;
 }
 
 Yes : AjaxHyperlink {
