@@ -105,6 +105,13 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
         return (WOActionResults) result;
     }
 
+    /**
+     * Returns the ID that represents this container for the purposes of Ajax updates. In common cases,
+     * this corresponds to your updateContainerID.
+     * 
+     * @param context the current context
+     * @return your container ID
+     */
     protected String _containerID(WOContext context) {
     	return null;
     }
