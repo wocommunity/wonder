@@ -9,8 +9,10 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPathUtilities;
 
 import er.extensions.appserver.ERXWOContext;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.components._private.ERXWOForm;
 
 /**
@@ -117,7 +119,14 @@ public class AjaxModalDialog extends AjaxComponent {
 
 	/** JavaScript to execute on the client to close the modal dialog */
 	public static final String Close = "AMD.close();";
-
+	
+	/** Element ID suffix indicating an Open Dialog action. */
+	public static final String Open_ElementID_Suffix = ".open";
+	
+	/** Element ID suffix indicating an C Dialog action. */
+	public static final String Close_ElementID_Suffix = ".close";
+	
+	
 	private boolean _open;
 	private WOComponent _actionResults;
 	private AjaxModalDialog outerDialog;
@@ -274,7 +283,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		pushDialog();		
 		try {
 			WOActionResults result = null;
-			if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
+			if (shouldHandleRequest(request, context)) {
 				result = super.invokeAction(request, context);
 			}
 			else if (isOpen()) {
@@ -298,6 +307,32 @@ public class AjaxModalDialog extends AjaxComponent {
 			popDialog();
 		}
 	}
+	
+	/**
+	 * Removes Open_ElementID_Suffix or Close_ElementID_Suffix before evaluating senderID.
+	 *
+	 * @see er.ajax.AjaxComponent#shouldHandleRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
+	 *
+	 * @return <code>true</code> if this request is for this component
+	 */
+    protected boolean shouldHandleRequest(WORequest request, WOContext context) {
+		String elementID = context.elementID();
+		String senderID = context.senderID();
+		if (senderID.endsWith(Open_ElementID_Suffix) || senderID.endsWith(Close_ElementID_Suffix)) {
+			senderID = NSPathUtilities.stringByDeletingPathExtension(senderID);
+		}
+		String containerID = _containerID(context);
+		String updateContainerID = null;
+		if (containerID != null) {
+			if (AjaxResponse.isAjaxUpdatePass(request)) {
+				updateContainerID = AjaxUpdateContainer.updateContainerID(request);
+			}
+		}
+		boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || 
+				(containerID != null && containerID.equals(updateContainerID)) || 
+				elementID.equals(ERXAjaxApplication.ajaxSubmitButtonName(request)));
+		return shouldHandleRequest;
+	}
 
 	/**
 	 * Handles the open and close dialog actions.
@@ -308,7 +343,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOActionResults response = null;
-		String modalBoxAction = request.stringFormValueForKey("modalBoxAction");
+		String modalBoxAction = NSPathUtilities.pathExtension(context.senderID());
 
 		if ("close".equals(modalBoxAction) && isOpen()) {
 			closeDialog();
@@ -391,7 +426,6 @@ public class AjaxModalDialog extends AjaxComponent {
 			finally {
 				popDialog();
 			}
-
 		}
 		else {
 			boolean showOpener = booleanValueForBinding("showOpener", true);
@@ -454,8 +488,8 @@ public class AjaxModalDialog extends AjaxComponent {
 		response.appendContentString(";\n");
 		response.appendContentString("    if (titleBarText) options.title = titleBarText;\n");
 		response.appendContentString("    Modalbox.show('");
-		response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context));
-		response.appendContentString("?modalBoxAction=open', options);\n");
+		response.appendContentString(openDialogURL(context));
+		response.appendContentString("', options);\n");
 	}
 	
 	/**
@@ -465,7 +499,6 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @param context WOContext of response
 	 */
 	protected void appendOpenAjaxUpdateDiv(WOResponse response, WOContext context) {
-		System.out.println("PUTPUT");
 		response.appendContentString("<div id=\"");
 		response.appendContentString(updateContainerID());
 		response.appendContentString("\" updateUrl=\"");
@@ -580,7 +613,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("inactiveFade", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("transitions", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("autoFocusing", AjaxOption.BOOLEAN));
-
+		
 		// IMPORTANT NOTICE. Each callback gets removed from options of the ModalBox after execution
 		ajaxOptionsArray.addObject(new AjaxOption("beforeLoad", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("afterLoad", AjaxOption.SCRIPT));
@@ -594,10 +627,10 @@ public class AjaxModalDialog extends AjaxComponent {
 		String closeUpdateContainerID = AjaxUpdateContainer.updateContainerID((String) valueForBinding("closeUpdateContainerID"));
 		String serverUpdate;
 		if (closeUpdateContainerID == null) {
-			serverUpdate = " AUL.request('" + AjaxUtils.ajaxComponentActionUrl(context()) + "', null, null, 'modalBoxAction=close');";
+			serverUpdate = " AUL.request('" + closeDialogURL(context()) + "', null, null, null);";
 		}
 		else {
-			serverUpdate = " AUL._update('" + closeUpdateContainerID + "', '" + AjaxUtils.ajaxComponentActionUrl(context()) + "', null, null, 'modalBoxAction=close');";
+			serverUpdate = " AUL._update('" + closeUpdateContainerID + "', '" + closeDialogURL(context())  + "', null, null, null);";
 		}
 
 		if (hasBinding("afterHide")) {
@@ -682,5 +715,19 @@ public class AjaxModalDialog extends AjaxComponent {
 		context._setCurrentComponent(previousComponent);
 	}
 		
+	/**
+	 * @param context WOContext to create URL in
+	 * @return URL to invoke when the dialog is opened
+	 */
+	protected String openDialogURL(WOContext context) {
+		return new StringBuffer(AjaxUtils.ajaxComponentActionUrl(context)).append(Open_ElementID_Suffix).toString();
+	}
 	
+	/**
+	 * @param context WOContext to create URL in
+	 * @return URL to invoke when the dialog is closed
+	 */
+	protected String closeDialogURL(WOContext context) {
+		return new StringBuffer(AjaxUtils.ajaxComponentActionUrl(context)).append(Close_ElementID_Suffix).toString();
+	}
 }
