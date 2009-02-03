@@ -253,17 +253,24 @@ public class AjaxModalDialog extends AjaxComponent {
 		if (isOpen()) {
 			try {
 				pushDialog();
-				if (_actionResults != null) {
-					pushActionResultsIntoContext(context);
-					try {
-						_actionResults.takeValuesFromRequest(request, context);
+				String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+				try {
+					AjaxUpdateContainer.setCurrentUpdateContainerID(updateContainerID());
+					if (_actionResults != null) {
+						pushActionResultsIntoContext(context);
+						try {
+							_actionResults.takeValuesFromRequest(request, context);
+						}
+						finally {
+							popActionResultsFromContext(context);
+						}
 					}
-					finally {
-						popActionResultsFromContext(context);
+					else {
+						super.takeValuesFromRequest(request, context);
 					}
 				}
-				else {
-					super.takeValuesFromRequest(request, context);
+				finally {
+					AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
 				}
 			}
 			finally {
@@ -289,17 +296,24 @@ public class AjaxModalDialog extends AjaxComponent {
 				result = super.invokeAction(request, context);
 			}
 			else if (isOpen()) {
-				if (_actionResults != null) {
-					pushActionResultsIntoContext(context);
-					try {
-						result = _actionResults.invokeAction(request, context);
+				String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+				try {
+					AjaxUpdateContainer.setCurrentUpdateContainerID(updateContainerID());
+					if (_actionResults != null) {
+						pushActionResultsIntoContext(context);
+						try {
+							result = _actionResults.invokeAction(request, context);
+						}
+						finally {
+							popActionResultsFromContext(context);
+						}
 					}
-					finally {
-						popActionResultsFromContext(context);
+					else {
+						result = super.invokeAction(request, context);
 					}
 				}
-				else {
-					result = super.invokeAction(request, context);
+				finally {
+					AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
 				}
 			}
 
@@ -373,19 +387,26 @@ public class AjaxModalDialog extends AjaxComponent {
 			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
 
 			appendOpenAjaxUpdateDiv((WOResponse) response, context);
-			if (_actionResults != null) {
-				pushActionResultsIntoContext(context);
-				try {
-					_actionResults.appendToResponse((WOResponse) response, context);
+			String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+			try {
+				AjaxUpdateContainer.setCurrentUpdateContainerID(updateContainerID());
+				if (_actionResults != null) {
+					pushActionResultsIntoContext(context);
+					try {
+						_actionResults.appendToResponse((WOResponse) response, context);
+					}
+					finally {
+						popActionResultsFromContext(context);
+					}
 				}
-				finally {
-					popActionResultsFromContext(context);
+				else {
+					// This loads the content from the default ERWOTemplate (our component contents that are not
+					// in the "link" template.
+					super.appendToResponse((WOResponse) response, context);
 				}
 			}
-			else {
-				// This loads the content from the default ERWOTemplate (our component contents that are not
-				// in the "link" template.
-				super.appendToResponse((WOResponse) response, context);
+			finally {
+				AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
 			}
 			appendCloseAjaxUpdateDiv((WOResponse) response, context);
 		}
@@ -567,7 +588,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return id()
 	 */
 	protected String _containerID(WOContext context) {
-		return id();
+		return updateContainerID();
 	}
 
 	/**
