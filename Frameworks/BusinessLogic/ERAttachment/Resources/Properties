@@ -1,6 +1,6 @@
 ERAttachment.MigrationClassPrefix=er.attachment.migrations.ERAttachment
 
-er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,image/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime
+er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,image/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/css,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime
 
 er.attachment.mimeType.video/quicktime.viewer=er.attachment.components.viewers.ERAttachmentQuickTimeViewer
 er.attachment.mimeType.image/*.viewer=er.attachment.components.viewers.ERAttachmentImageViewer
@@ -59,6 +59,10 @@ er.attachment.mimeType.image/x-pict.extensions=pic,pct,pict
 er.attachment.mimeType.text/plain.name=Text
 er.attachment.mimeType.text/plain.uti=public.plain-text
 er.attachment.mimeType.text/plain.extensions=txt
+
+er.attachment.mimeType.text/css.name=CSS
+er.attachment.mimeType.text/css.uti=public.plain-text
+er.attachment.mimeType.text/css.extensions=css
 
 er.attachment.mimeType.text/html.name=HTML
 er.attachment.mimeType.text/html.uti=public.html
