@@ -19,6 +19,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Stack;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -32,13 +33,11 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.crypting.ERXCrypto;
-import er.extensions.eof.ERXConstant;
 
 /**
  * Collection of simple utility methods used to get and set properties
@@ -289,22 +288,23 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-
-        Object value = _cache.get(propertyName);
-        if (value == UndefinedMarker) {
-            return defaultValue;
-        }
-        if (value instanceof NSArray) {
-            return (NSArray)value;
-        }
-        
-        final String propertyValue = ERXSystem.getProperty(propertyName);
-        final NSArray array = ERXValueUtilities.arrayValueWithDefault(propertyValue, defaultValue);
-        if (retainDefaultsEnabled() && propertyValue == null && array != null) {
-            setArrayForKey(array, propertyName);
-        }
-        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : array);
-        return array;
+		NSArray value;
+		Object cachedValue = _cache.get(propertyName);
+		if (cachedValue == UndefinedMarker) {
+			value = defaultValue;
+		} else if (cachedValue instanceof NSArray) {
+			value = (NSArray) cachedValue;
+		} else {
+			value = ERXValueUtilities.arrayValueWithDefault(ERXSystem.getProperty(propertyName), null);
+			_cache.put(s, value == null ? (Object)UndefinedMarker : value);
+			if (value == null) {
+				value = defaultValue;
+			}
+	        if (retainDefaultsEnabled() && value == null && defaultValue != null) {
+	            setArrayForKey(defaultValue, propertyName);
+	        }
+		}
+		return value;
     }
     
     /**
@@ -332,23 +332,25 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-        
-        Object value = _cache.get(propertyName);
-        if (value == UndefinedMarker) {
-            return defaultValue;
-        }
-        if (value instanceof Boolean) {
-            return ((Boolean)value).booleanValue();
-        }
-        
-        String propertyValue = ERXSystem.getProperty(propertyName);
-        final boolean booleanValue = ERXValueUtilities.booleanValueWithDefault(propertyValue, defaultValue);
-        if (retainDefaultsEnabled() && propertyValue == null) {
-            propertyValue = Boolean.toString(booleanValue);
-            System.setProperty(propertyName, propertyValue);
-        }
-        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : Boolean.valueOf(booleanValue));
-        return booleanValue;
+        boolean value;
+		Object cachedValue = _cache.get(propertyName);
+		if (cachedValue == UndefinedMarker) {
+			value = defaultValue;
+		} else if (cachedValue instanceof Boolean) {
+			value = ((Boolean) cachedValue).booleanValue();
+		} else {
+			Boolean objValue = ERXValueUtilities.BooleanValueWithDefault(ERXSystem.getProperty(propertyName), null);
+			_cache.put(propertyName, objValue == null ? (Object)UndefinedMarker : objValue);
+			if (objValue == null) {
+				value = defaultValue;
+			} else {
+				value = objValue.booleanValue();
+			}
+	        if (retainDefaultsEnabled() && objValue == null) {
+	            System.setProperty(propertyName, Boolean.toString(defaultValue));
+	        }
+		}
+		return value;
     }
     
     /**
@@ -372,22 +374,23 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     public static NSDictionary dictionaryForKeyWithDefault(final String s, final NSDictionary defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-
-        Object value = _cache.get(propertyName);
-        if (value == UndefinedMarker) {
-            return defaultValue;
-        }
-        if (value instanceof NSDictionary) {
-            return (NSDictionary)value;
-        }
-        
-        final String propertyValue = ERXSystem.getProperty(propertyName);
-        final NSDictionary dictionary = ERXValueUtilities.dictionaryValueWithDefault(propertyValue, defaultValue);
-        if (retainDefaultsEnabled() && propertyValue == null && dictionary != null) {
-            setDictionaryForKey(dictionary, propertyName);
-        }
-        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : dictionary);
-        return dictionary;
+		NSDictionary value;
+		Object cachedValue = _cache.get(propertyName);
+		if (cachedValue == UndefinedMarker) {
+			value = defaultValue;
+		} else if (cachedValue instanceof NSDictionary) {
+			value = (NSDictionary) cachedValue;
+		} else {
+			value = ERXValueUtilities.dictionaryValueWithDefault(ERXSystem.getProperty(propertyName), null);
+			_cache.put(s, value == null ? (Object)UndefinedMarker : value);
+			if (value == null) {
+				value = defaultValue;
+			}
+	        if (retainDefaultsEnabled() && value == null && defaultValue != null) {
+	            setDictionaryForKey(defaultValue, propertyName);
+	        }
+		}
+		return value;
     }
 
     /**
@@ -408,6 +411,26 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     public static long longForKey(String s) {
         return longForKeyWithDefault(s, 0);
+    }
+
+    /**
+     * Cover method for returning a float for a
+     * given system property.
+     * @param s system property
+     * @return float value of the system property or 0
+     */
+    public static float floatForKey(String s) {
+        return floatForKeyWithDefault(s, 0);
+    }
+
+    /**
+     * Cover method for returning a double for a
+     * given system property.
+     * @param s system property
+     * @return double value of the system property or 0
+     */
+    public static double doubleForKey(String s) {
+        return doubleForKeyWithDefault(s, 0);
     }
 
     /**
@@ -463,23 +486,25 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */    
     public static int intForKeyWithDefault(final String s, final int defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-
-        Object value = _cache.get(propertyName);
-        if (value == UndefinedMarker) {
-            return defaultValue;
-        }
-        if (value instanceof Integer) {
-            return ((Integer)value).intValue();
-        }
-        
-        String propertyValue = ERXSystem.getProperty(propertyName);
-        final int intValue = ERXValueUtilities.intValueWithDefault(propertyValue, defaultValue);
-        if (retainDefaultsEnabled() && propertyValue == null) {
-            propertyValue = Integer.toString(intValue);
-            System.setProperty(propertyName, propertyValue);
-        }
-        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : ERXConstant.integerForInt(intValue));
-        return intValue;
+		int value;
+		Object cachedValue = _cache.get(propertyName);
+		if (cachedValue == UndefinedMarker) {
+			value = defaultValue;
+		} else if (cachedValue instanceof Integer) {
+			value = ((Integer) cachedValue).intValue();
+		} else {
+			Integer objValue = ERXValueUtilities.IntegerValueWithDefault(ERXSystem.getProperty(propertyName), null);
+			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			if (objValue == null) {
+				value = defaultValue;
+			} else {
+				value = objValue.intValue();
+			}
+	        if (retainDefaultsEnabled() && objValue == null) {
+	            System.setProperty(propertyName, Integer.toString(defaultValue));
+	        }
+		}
+		return value;
     }
 
     /**
@@ -491,23 +516,87 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */    
     public static long longForKeyWithDefault(final String s, final long defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-        
-        Object value = _cache.get(propertyName);
-        if (value == UndefinedMarker) {
-            return defaultValue;
-        }
-        if (value instanceof Long) {
-            return ((Long)value).longValue();
-        }
+		long value;
+		Object cachedValue = _cache.get(propertyName);
+		if (cachedValue == UndefinedMarker) {
+			value = defaultValue;
+		} else if (cachedValue instanceof Long) {
+			value = ((Long) cachedValue).longValue();
+		} else {
+			Long objValue = ERXValueUtilities.LongValueWithDefault(ERXSystem.getProperty(propertyName), null);
+			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			if (objValue == null) {
+				value = defaultValue;
+			} else {
+				value = objValue.longValue();
+			}
+	        if (retainDefaultsEnabled() && objValue == null) {
+	            System.setProperty(propertyName, Long.toString(defaultValue));
+	        }
+		}
+		return value;
+    }
 
-        String propertyValue = ERXSystem.getProperty(propertyName);
-        final long longValue = ERXValueUtilities.longValueWithDefault(propertyValue, defaultValue);
-        if (retainDefaultsEnabled() && propertyValue == null) {
-            propertyValue = Long.toString(longValue);
-            System.setProperty(propertyName, propertyValue);
-        }
-        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : new Long(longValue));
-        return longValue;
+    /**
+     * Cover method for returning a float for a
+     * given system property with a default value.
+     * @param s system property
+     * @param defaultValue default value
+     * @return float value of the system property or the default value
+     */    
+    public static float floatForKeyWithDefault(final String s, final float defaultValue) {
+        final String propertyName = getApplicationSpecificPropertyName(s);
+
+		float value;
+		Object cachedValue = _cache.get(propertyName);
+		if (cachedValue == UndefinedMarker) {
+			value = defaultValue;
+		} else if (cachedValue instanceof Float) {
+			value = ((Float) cachedValue).floatValue();
+		} else {
+			Float objValue = ERXValueUtilities.FloatValueWithDefault(ERXSystem.getProperty(propertyName), null);
+			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			if (objValue == null) {
+				value = defaultValue;
+			} else {
+				value = objValue.floatValue();
+			}
+	        if (retainDefaultsEnabled() && objValue == null) {
+	            System.setProperty(propertyName, Float.toString(defaultValue));
+	        }
+		}
+		return value;
+    }
+
+    /**
+     * Cover method for returning a double for a
+     * given system property with a default value.
+     * @param s system property
+     * @param defaultValue default value
+     * @return double value of the system property or the default value
+     */    
+    public static double doubleForKeyWithDefault(final String s, final double defaultValue) {
+        final String propertyName = getApplicationSpecificPropertyName(s);
+
+		double value;
+		Object cachedValue = _cache.get(propertyName);
+		if (cachedValue == UndefinedMarker) {
+			value = defaultValue;
+		} else if (cachedValue instanceof Double) {
+			value = ((Double) cachedValue).doubleValue();
+		} else {
+			Double objValue = ERXValueUtilities.DoubleValueWithDefault(ERXSystem.getProperty(propertyName), null);
+			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			if (objValue == null) {
+				value = defaultValue;
+			} else {
+				value = objValue.doubleValue();
+			}
+	        if (retainDefaultsEnabled() && objValue == null) {
+	            System.setProperty(propertyName, Double.toString(defaultValue));
+	        }
+		}
+		return value;
     }
     
     /**
@@ -638,7 +727,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param string to be set in the System properties
      * @param key to be used to get the value
      */
-    // DELETEME: Really not needed anymore
+    // DELETEME: Really not needed anymore -- MS: Why?  We need the cache clearing.
     public static void setStringForKey(String string, String key) {
         System.setProperty(key, string);
         _cache.remove(key);
@@ -676,7 +765,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     // FIXME: This shouldn't eat the exception
     public static Properties propertiesFromPath(String path) {
-        Properties prop = new Properties();
+    	ERXProperties._Properties prop = new ERXProperties._Properties();
 
         if (path == null  ||  path.length() == 0) {
             log.warn("Attempting to read property file for null file path");
@@ -690,9 +779,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
 
         try {
-            BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
-            prop.load(in);
-            in.close();
+        	prop.load(file);
             log.debug("Loaded configuration file at path: "+ path);
         } catch (IOException e) {
             log.error("Unable to initialize properties from file \"" + path + "\"", e);
@@ -708,10 +795,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     public static Properties propertiesFromFile(File file) throws IOException {
         if (file == null)
             throw new IllegalStateException("Attempting to get properties for a null file!");
-        Properties prop = new Properties();
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-        prop.load(in);
-        in.close();
+        ERXProperties._Properties prop = new ERXProperties._Properties();
+        prop.load(file);
         return prop;
     }
     
@@ -725,7 +810,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *          the argv
      */
     public static Properties propertiesFromArgv(String[] argv) {
-        Properties properties = new Properties();
+    	ERXProperties._Properties properties = new ERXProperties._Properties();
         NSDictionary argvDict = NSProperties.valuesFromArgv(argv);
         Enumeration e = argvDict.allKeys().objectEnumerator();
         while (e.hasMoreElements()) {
@@ -1304,7 +1389,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 					computedProperties = new NSDictionary(value, key);
 				}
 				else {
-					computedProperties = new NSDictionary();
+					computedProperties = NSDictionary.EmptyDictionary;
 				}
 			}
 			return computedProperties;
@@ -1400,6 +1485,85 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				else {
 					destinationProperties.put(key, value);
 				}
+			}
+		}
+	}
+
+	/**
+	 * _Properties is a subclass of Properties that provides support for including other
+	 * Properties files on the fly.  If you create a property named .includeProps, the value
+	 * will be interpreted as a file to load.  If the path is absolute, it will just load it
+	 * directly.  If it's relative, the path will be loaded relative to the current user's
+	 * home directory.  Multiple .includeProps can be included in a Properties file and they
+	 * will be loaded in the order they appear within the file.
+	 *  
+	 * @author mschrag
+	 */
+	public static class _Properties extends Properties {
+		public static final String IncludePropsKey = ".includeProps";
+		
+		private Stack<File> _files = new Stack<File>();
+		
+		@Override
+		public synchronized Object put(Object key, Object value) {
+			if (_Properties.IncludePropsKey.equals(key)) {
+				String propsFileName = (String)value;
+                File propsFile = new File(propsFileName);
+                if (!propsFile.isAbsolute()) {
+                    // if we don't have any context for a relative (non-absolute) props file,
+                    // we presume that it's relative to the user's home directory
+    				File cwd = null;
+    				if (_files.size() > 0) {
+    					cwd = _files.peek();
+    				}
+    				else {
+    					cwd = new File(System.getProperty("user.home"));
+                	}
+                    propsFile = new File(cwd, propsFileName);
+                }
+
+                // Detect mutually recursing props files by tracking what we've already loaded:
+                String existingIncludeProps = this.getProperty(_Properties.IncludePropsKey);
+                if (existingIncludeProps == null) {
+                	existingIncludeProps = "";
+                }
+                if (existingIncludeProps.indexOf(propsFile.getPath()) > -1) {
+                    log.error("_Properties.load(): recursive includeProps detected! " + propsFile + " in " + existingIncludeProps);
+                    log.error("_Properties.load() cannot proceed - QUITTING!");
+                    System.exit(1);
+                }
+                if (existingIncludeProps.length() > 0) {
+                	existingIncludeProps += ", ";
+                }
+                existingIncludeProps += propsFile;
+                super.put(_Properties.IncludePropsKey, existingIncludeProps);
+
+                try {
+                    log.info("_Properties.load(): Including props file: " + propsFile);
+					this.load(propsFile);
+				} catch (IOException e) {
+					throw new RuntimeException("Failed to load the property file '" + value + "'.", e);
+				}
+				return null;
+			}
+			else {
+				return super.put(key, value);
+			}
+		}
+
+		public synchronized void load(File propsFile) throws IOException {
+			_files.push(propsFile.getParentFile());
+			try {
+	            BufferedInputStream is = new BufferedInputStream(new FileInputStream(propsFile));
+	            try {
+	            	load(is);
+	            }
+	            finally {
+	            	is.close();
+	            }
+			}
+			finally {
+				_files.pop();
 			}
 		}
 	}
