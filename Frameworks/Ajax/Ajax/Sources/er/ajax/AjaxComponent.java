@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.extensions.appserver.ERXWOContext;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -86,13 +87,13 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     }
 
     /**
-     * Execute the request, if it's comming from our action, then invoke the
+     * Execute the request, if it's coming from our action, then invoke the
      * ajax handler and put the key <code>AJAX_REQUEST_KEY</code> in the
      * request userInfo dictionary (<code>request.userInfo()</code>).
      */
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         Object result;
-        if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
+        if (shouldHandleRequest(request, context)) {
             result = handleRequest(request, context);
             AjaxUtils.updateMutableUserInfoWithAjaxInfo(context());
 			if (result == null) {
@@ -107,7 +108,11 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     protected String _containerID(WOContext context) {
     	return null;
     }
-
+	
+    protected boolean shouldHandleRequest(WORequest request, WOContext context) {
+    	return AjaxUtils.shouldHandleRequest(request, context, _containerID(context));
+	}
+	
     public String safeElementID() {
     	String id = (String)valueForBinding("id");
     	if(id == null) {
