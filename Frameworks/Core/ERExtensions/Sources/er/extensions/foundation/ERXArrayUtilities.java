@@ -1887,11 +1887,16 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Just like the method on NSArray, except it catches the NSComparator.ComparisonException and, if thrown,
+     * Just like the method {@link NSArray#sortedArrayUsingComparator(NSComparator)}, 
+     * except it catches the NSComparator.ComparisonException and, if thrown,
      * it wraps it in a runtime exception.  Returns null when passed null for array.
+     * @param array 
+     * @param comparator 
+     * @param <T> 
+     * @return the sorted array
      */
-    public static NSArray sortedArrayUsingComparator(final NSArray array, final NSComparator comparator) {
-        NSArray result = array;
+    public static  <T> NSArray<T> sortedArrayUsingComparator(final NSArray<T> array, final NSComparator comparator) {
+        NSArray<T> result = array;
 
         if ( array != null ) {
             if ( array.count() < 2 ) {
@@ -1917,6 +1922,7 @@ public class ERXArrayUtilities extends Object {
 	 * element of the {@link NSArray} a {@link RuntimeException} will be thrown.
 	 * 
 	 * @author edgar - Jan 7, 2008
+	 * @param <T> 
 	 * @param array
 	 *            in that the two given {@link Object}s have to be swapped
 	 * @param object1
@@ -1929,14 +1935,13 @@ public class ERXArrayUtilities extends Object {
 	 * @throws {@link RuntimeException}
 	 *             if one of the {@link Object}s is not in the {@link NSArray}
 	 */
-    public static NSArray arrayWithObjectsSwapped(final NSArray array, final Object object1, final Object object2) {
+    public static <T> NSArray<T> arrayWithObjectsSwapped(final NSArray<T> array, final Object object1, final Object object2) {
     	int indexOfObject1 = array.indexOf(object1);
     	int indexOfObject2 = array.indexOf(object2);
     	
     	if (indexOfObject1 >= 0 && indexOfObject2 >= 0) {
     		return ERXArrayUtilities.arrayWithObjectsAtIndexesSwapped(array, indexOfObject1, indexOfObject2);
-    	}
-    	else {
+    	} else {
     		throw new RuntimeException("At least one of the given objects is not element of the array!");
     	}
     }
