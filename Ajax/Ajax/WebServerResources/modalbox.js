@@ -32,6 +32,7 @@ Modalbox.Methods = {
 		loadingString: "Please wait. Loading...", // Default loading string message
 		closeString: "Close window", // Default title attribute for close window link
 		closeValue: "&times;", // Default string for close link in the header
+		locked: false, // Use true to supress close window link, prevent Esc key and overlay from closing dialog
 		params: {},
 		method: 'get', // Default Ajax request method
 		autoFocusing: true, // Toggles auto-focusing for form elements. Disable for long text pages.
@@ -40,6 +41,10 @@ Modalbox.Methods = {
 	_options: new Object,
 	
 	setOptions: function(options) {
+		// locked implies the overlay is also deactivated
+		if (options.locked) {
+			options.overlayClose = false;
+		}
 		Object.extend(this.options, options || {});
 	},
 	
@@ -59,9 +64,10 @@ Modalbox.Methods = {
 				)
 			)
 		);
+		if ( ! this.options.locked) {
 		this.MBclose = new Element("a", {id: "MB_close", title: this.options.closeString, href: "#"}).update("<span>" + this.options.closeValue + "</span>");
 		this.MBheader.insert({'bottom':this.MBclose});
-		
+		}
 		this.MBcontent = new Element("div", {id: "MB_content"}).update(
 			this.MBloading = new Element("div", {id: "MB_loading"}).update(this.options.loadingString)
 		);
@@ -323,9 +329,11 @@ Modalbox.Methods = {
 	activate: function(options){
 		this.setOptions(options);
 		this.active = true;
+		if ( ! this.options.locked) 
 		$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
+		if ( ! this.options.locked) 
 		$(this.MBclose).show();
 		if(this.options.transitions && this.options.inactiveFade)
 			new Effect.Appear(this.MBwindow, {duration: this.options.slideUpDuration});
@@ -334,15 +342,18 @@ Modalbox.Methods = {
 	deactivate: function(options) {
 		this.setOptions(options);
 		this.active = false;
+		if ( ! this.options.locked) 
 		$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
+		if ( ! this.options.locked) 
 		$(this.MBclose).hide();
 		if(this.options.transitions && this.options.inactiveFade)
 			new Effect.Fade(this.MBwindow, {duration: this.options.slideUpDuration, to: .75});
 	},
 	
 	_initObservers: function(){
+		if ( ! this.options.locked) 
 		$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
@@ -353,6 +364,7 @@ Modalbox.Methods = {
 	},
 	
 	_removeObservers: function(){
+		if ( ! this.options.locked) 
 		$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
@@ -376,7 +388,7 @@ Modalbox.Methods = {
 			}) || this.focusableElements.first();
 			this.currFocused = this.focusableElements.toArray().indexOf(firstEl);
 			firstEl.focus(); // Focus on first focusable element except close button
-		} else if($(this.MBclose).visible())
+		} else if(! this.options.locked && $(this.MBclose).visible())
 			$(this.MBclose).focus(); // If no focusable elements exist focus on close button
 	},
 	
@@ -414,7 +426,7 @@ Modalbox.Methods = {
 				}
 				break;			
 			case Event.KEY_ESC:
-				if(this.active) this._hide(event);
+				if(this.active && ! this.options.locked) this._hide(event);
 				break;
 			case 32:
 				this._preventScroll(event);
