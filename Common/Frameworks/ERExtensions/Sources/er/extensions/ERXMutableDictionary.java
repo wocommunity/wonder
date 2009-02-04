@@ -392,7 +392,7 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 		}
 
 		@Override
-		protected synchronized Object[] keysNoCopy() {
+		public synchronized Object[] keysNoCopy() {
 			return super.keysNoCopy();
 		}
 
@@ -412,7 +412,7 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 		}
 
 		@Override
-		protected synchronized Object[] objectsNoCopy() {
+		public synchronized Object[] objectsNoCopy() {
 			return super.objectsNoCopy();
 		}
 
