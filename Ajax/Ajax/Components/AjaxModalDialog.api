@@ -16,6 +16,7 @@
 	    <binding name="class"/>
 	    <binding name="style"/>
 	    <binding defaults="Boolean" name="overlayClose"/>
+	    <binding defaults="Boolean" name="locked"/>
 	    <binding name="method"/>
 	    <binding name="params"/>
 	    <binding name="loadingString"/>

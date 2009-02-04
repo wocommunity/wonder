@@ -79,7 +79,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	 */
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		Object result = null;
-		if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
+		if (shouldHandleRequest(request, context)) {
 			WOComponent component = context.component();
 			String elementID = context.elementID();
 			AjaxResponse response = AjaxUtils.createResponse(request, context);
@@ -102,6 +102,10 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 
 	protected String _containerID(WOContext context) {
 		return null;
+	}
+
+    protected boolean shouldHandleRequest(WORequest request, WOContext context) {
+    	return AjaxUtils.shouldHandleRequest(request, context, _containerID(context));
 	}
 
 	/**

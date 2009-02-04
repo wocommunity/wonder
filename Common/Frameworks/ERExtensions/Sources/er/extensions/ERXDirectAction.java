@@ -6,26 +6,64 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WORedirect;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.woextensions.WOEventDisplayPage;
+import com.webobjects.woextensions.WOEventSetupPage;
+import com.webobjects.woextensions.WOStatsPage;
 
 /**
- * Basic collector for direct action additions. This class currectly adds two
- * direct actions: <b>testAction</b> for performing junit tests and <b>log4jAction</b>
- * for re-configuring logging settings at runtime.
+ * Basic collector for direct action additions. All of the actions are password protected, 
+ * you need to give an argument "pw" that matches the corresponding system property for the action.
  */
 public class ERXDirectAction extends WODirectAction {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXDirectAction.class);
+    public final static Logger log = Logger.getLogger(ERXDirectAction.class);
 
     /** holds a reference to the current browser used for this session */
     private ERXBrowser browser;
 
     /** Public constructor */
     public ERXDirectAction(WORequest r) { super(r); }
+
+
+    /**
+     * Checks if the action can be executed.
+     * @param passwordKey
+     */
+    protected boolean canPerformActionWithPasswordKey(String passwordKey) {
+    	if(ERXApplication.isDevelopmentModeSafe()) {
+    		return true;
+    	}
+    	String password = ERXProperties.decryptedStringForKey(passwordKey);
+    	if(password == null || password.length() == 0) {
+    		log.error("Attempt to use action when key is not set: " + passwordKey);
+    		return false;
+    	}
+    	String requestPassword = request().stringFormValueForKey("pw");
+    	if(requestPassword == null) {
+    		requestPassword = (String) context().session().objectForKey("ERXDirectAction." + passwordKey);
+    	} else {
+    		context().session().setObjectForKey(requestPassword, "ERXDirectAction." + passwordKey);
+    	}
+    	if(requestPassword == null || requestPassword.length() == 0) {
+    		return false;
+    	}
+    	return password.equals(requestPassword);
+    }
 
     /**
      * Action used for junit tests. This method is only active when WOCachingEnabled is
@@ -43,8 +81,7 @@ public class ERXDirectAction extends WODirectAction {
      */
     public WOComponent testAction() {
         WOComponent result=null;
-        if (!WOApplication.application().isCachingEnabled() ||
-            ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXJUnitPassword"))) {
+        if (canPerformActionWithPasswordKey("er.extensions.ERXJUnitPassword")) {
             
             result=pageWithName("ERXWOTestInterface");
             String testCase = request().stringFormValueForKey("case");
@@ -73,12 +110,50 @@ public class ERXDirectAction extends WODirectAction {
      */
     public WOComponent log4jAction() {
         WOComponent result=null;
-        if (!WOApplication.application().isCachingEnabled() ||
-            ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXLog4JPassword")))
-            result=pageWithName("ERXLog4JConfiguration");
+        if (canPerformActionWithPasswordKey("er.extensions.ERXLog4JPassword")) {
+		result=pageWithName("ERXLog4JConfiguration");
+		session().setObjectForKey(Boolean.TRUE, "ERXLog4JConfiguration.enabled");
+	}
         return result;
     }
 
+    /**
+     * Action used for forcing garbage collection. If WOCachingEnabled is true (we take this to mean 
+     * that the application is in production) you need to give a password to access it.<br/>
+     * <br/>
+     * Synopsis:<br/>
+     * pw=<i>aPassword</i>
+     * <br/>
+     * Form Values:<br/>
+     * <b>pw</b> password to be checked against the system property <code>er.extensions.ERXGCPassword</code>.
+     * <br/>
+     * @return short info about free and used memory before and after GC.
+     */
+    public WOComponent forceGCAction() {
+        ERXStringHolder result=(ERXStringHolder)pageWithName("ERXStringHolder");
+        if (canPerformActionWithPasswordKey("er.extensions.ERXGCPassword")) {
+            Runtime runtime = Runtime.getRuntime();
+            ERXUnitAwareDecimalFormat decimalFormatter = new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE);
+            decimalFormatter.setMaximumFractionDigits(2);
+           
+            String info = "Before: ";
+            info += decimalFormatter.format(runtime.maxMemory()) + " max, ";
+            info += decimalFormatter.format(runtime.totalMemory()) + " total, ";
+            info += decimalFormatter.format(runtime.totalMemory()-runtime.freeMemory()) + " used, ";
+            info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
+            
+            ERXExtensions.forceGC(5);
+  
+            info += "After: ";
+            info += decimalFormatter.format(runtime.maxMemory()) + " max, ";
+            info += decimalFormatter.format(runtime.totalMemory()) + " total, ";
+            info += decimalFormatter.format(runtime.totalMemory()-runtime.freeMemory()) + " used, ";
+            info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
+
+            result.setValue(info);
+        }
+        return result;
+    }
 
     public WOActionResults logoutAction() {
         if (existingSession()!=null) {
@@ -117,23 +192,17 @@ public class ERXDirectAction extends WODirectAction {
     /**
         * Sets a System property. This is also active in deployment mode because one might want to change a System property
      * at runtime.
-     * @param key the System property key
-     * @param value the System property value, can be null or empty
-     * @param password must be equal to the password set by the System property er.extensions.ERXDirectAction.ChangeSystemPropertyPassword
+     * Synopsis:<br/>
+     * pw=<i>aPassword</i>&key=<i>someSystemPropertyKey</i>&value=<i>someSystemPropertyValue</i>
+     *
      * @return either null when the password is wrong or the key is missing or a new page showing the System properties
      */
     public WOActionResults systemPropertyAction() {
-        if (ERXStringUtilities.stringIsNullOrEmpty(System.getProperty("er.extensions.ERXDirectAction.ChangeSystemPropertyPassword"))) {
-            //returns null, do not give any feedback like password wrong or disabled
-            return null;
-        }
+    	WOResponse r = null;
+    	if (canPerformActionWithPasswordKey("er.extensions.ERXDirectAction.ChangeSystemPropertyPassword")) {
         String key = request().stringFormValueForKey("key");
         String value = request().stringFormValueForKey("value");
-        String password = request().stringFormValueForKey("password");
-        if (!System.getProperty("er.extensions.ERXDirectAction.ChangeSystemPropertyPassword").equals(password)) {
-            return null;
-        }
-        WOResponse r = new WOResponse();
+    		r = new WOResponse();
         if (ERXStringUtilities.stringIsNullOrEmpty(key) ) {
             r.appendContentString("key cannot be null or empty old System properties:\n"+System.getProperties());
         } else {
@@ -141,7 +210,7 @@ public class ERXDirectAction extends WODirectAction {
             java.util.Properties p = System.getProperties();
             p.put(key, value);
             System.setProperties(p);
-            ERXLogger.configureLogging(System.getProperties());
+                ERXLogger.configureLoggingWithSystemProperties();
             r.appendContentString("<html><body>New System properties:<br>");
             for (java.util.Enumeration e = p.keys(); e.hasMoreElements();) {
                 Object k = e.nextElement();
@@ -153,6 +222,44 @@ public class ERXDirectAction extends WODirectAction {
             }
             r.appendContentString("</body></html>");
         }
-        return r;
+    	}
+		return r;
     }
+    
+    /**
+     * Opens the localizer edit page if the app is in development mode.
+     */
+    public WOActionResults editLocalizedFilesAction() {
+    	WOResponse r = null;
+    	if (ERXApplication.isDevelopmentModeSafe()) {
+    		return pageWithName("ERXLocalizationEditor");
+    	}
+		return r;
+    }
+    
+    
+    public WOActionResults dumpCreatedKeysAction() {
+    	WOResponse r = new WOResponse();
+    	if (ERXApplication.isDevelopmentModeSafe()) {
+    		session();
+            ERXLocalizer.currentLocalizer().dumpCreatedKeys();
+    	}
+		return r;
+    }
+    
+    /**
+     * Returns an empty response.
+     * 
+     * @return nothing
+     */
+    public WOActionResults emptyAction() {
+    	WOResponse response = new WOResponse();
+    	return response;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
+      return (T) super.pageWithName(componentClass.getName());
+    }
+
 }

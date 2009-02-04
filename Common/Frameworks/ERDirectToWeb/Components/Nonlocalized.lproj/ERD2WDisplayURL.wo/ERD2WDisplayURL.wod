@@ -1,5 +1,5 @@
 Link: WOHyperlink {
-target="_blank";
-   href= href;
+	href = href;
 	string = objectPropertyValue;
+	target = target;
 }

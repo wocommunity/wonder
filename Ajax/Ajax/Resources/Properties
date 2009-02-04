@@ -1,0 +1,13 @@
+# Set ALL of the following properties to use a compressed version of the various scripts
+#er.extensions.ERXResponseRewriter.resource.Ajax.prototype.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.scriptaculous.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.builder.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.effects.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.dragdrop.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.controls.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.slider.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.sound.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.modalbox.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.wonder.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.wonder_inplace.js=Ajax.wondaculous-min.js
+#er.extensions.ERXResponseRewriter.resource.Ajax.switchtabs.js=Ajax.wondaculous-min.js

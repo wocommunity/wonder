@@ -9,8 +9,10 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPathUtilities;
 
 import er.extensions.ERXWOContext;
+import er.extensions.ERXAjaxApplication;
 import er.extensions.ERXWOForm;
 
 /**
@@ -45,7 +47,6 @@ import er.extensions.ERXWOForm;
  * <code>
  * AjaxModalDialog.update(context());
  * </code>
- * <br /><b>NOTE: this does not work if you use the action binding.  You must manage your own updating if you use this binding.</b>
  * </p>
  * 
  * <p>The modal dialog is opened by calling a JavaScript function.  While this is normally done from an onclick
@@ -79,6 +80,8 @@ import er.extensions.ERXWOForm;
  * @binding style CSS style for the link activating the modal dialog
  *
  * @binding overlayClose true | false Close modal box by clicking on overlay. Default is true.
+ * @binding locked if true, suppresses the close window link, prevents Esc key and overlay from closing dialog.  Default is false,
+ *          true implies overlayClose false
  * @binding method get | post. Method of passing variables to a server. Default is 'get'.
  * @binding params {} Collection of parameters to pass on AJAX request. Should be URL-encoded. See PassingFormValues for details.
  * 
@@ -93,7 +96,8 @@ import er.extensions.ERXWOForm;
  * @binding resizeDuration Modalbox resize duration in seconds.
  * @binding inactiveFade true | false, Toggles Modalbox window fade on inactive state.
  * @binding transitions true | false, Toggles transition effects. Transitions are enabled by default.
- * @binding autoFocusing true | false, Toggles auto-focusing for form elements. Disable it for long text pages.
+ * @binding autoFocusing true | false, Toggles auto-focusing for form elements. Disable it for long text pages.  Add the class MB_notFocusable to
+ *          any inputs you want excluded from focusing.
  *
  * @binding beforeLoad client side method, fires right before loading contents into the ModalBox. If the callback function returns false, content loading will skipped. This can be used for redirecting user to another MB-page for authorization purposes for example.
  * @binding afterLoad client side method, fires after loading content into the ModalBox (i.e. after showing or updating existing window).
@@ -118,8 +122,18 @@ public class AjaxModalDialog extends AjaxComponent {
 	/** JavaScript to execute on the client to close the modal dialog */
 	public static final String Close = "AMD.close();";
 
+	/** Element ID suffix indicating an Open Dialog action. */
+	public static final String Open_ElementID_Suffix = ".open";
+	
+	/** Element ID suffix indicating an C Dialog action. */
+	public static final String Close_ElementID_Suffix = ".close";
+	
+	
 	private boolean _open;
 	private WOComponent _actionResults;
+	private AjaxModalDialog outerDialog;
+	private boolean hasWarnedOnNesting = false;
+	private WOComponent previousComponent;
 
 	public static final Logger logger = Logger.getLogger(AjaxModalDialog.class);
 	
@@ -237,13 +251,32 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if (isOpen()) {
+			try {
+				pushDialog();
+				String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+				try {
+					AjaxUpdateContainer.setCurrentUpdateContainerID(updateContainerID());
 			if (_actionResults != null) {
-				context._setCurrentComponent(_actionResults);
+						pushActionResultsIntoContext(context);
+						try {
 				_actionResults.takeValuesFromRequest(request, context);
 			}
+						finally {
+							popActionResultsFromContext(context);
+						}
+					}
 			else {
 				super.takeValuesFromRequest(request, context);
 			}
+		}
+				finally {
+					AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
+				}
+			}
+			finally {
+				popDialog();
+			}
+
 		}
 	}
 
@@ -256,42 +289,65 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 */
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		// If there is one AMD in another (a rather dubious thing to do but it may have its uses), 
-		// we need to remember the outer one while processing this inner one
-		AjaxModalDialog outerDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
-		if (outerDialog != null) {
-			logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
-		}
-		
+		pushDialog();		
 		try {
-			// Stash this component in the context so we can access it from the static methods.
-			ERXWOContext.contextDictionary().setObjectForKey(this, AjaxModalDialog.class.getName());
-
 			WOActionResults result = null;
-			if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
+			if (shouldHandleRequest(request, context)) {
 				result = super.invokeAction(request, context);
 			}
 			else if (isOpen()) {
+				String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+				try {
+					AjaxUpdateContainer.setCurrentUpdateContainerID(updateContainerID());
 				if (_actionResults != null) {
-					context._setCurrentComponent(_actionResults);
+						pushActionResultsIntoContext(context);
+						try {
 					result = _actionResults.invokeAction(request, context);
 				}
+						finally {
+							popActionResultsFromContext(context);
+						}
+					}
 				else {
 					result = super.invokeAction(request, context);
+				}
+			}
+				finally {
+					AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
 				}
 			}
 
 			return result;
 		}
 		finally {
-			// Remove this component from the context or restore the outer one
-			if (outerDialog != null) {
-				ERXWOContext.contextDictionary().setObjectForKey(outerDialog, AjaxModalDialog.class.getName());
-			}
-			else {
-				ERXWOContext.contextDictionary().removeObjectForKey(AjaxModalDialog.class.getName());
+			popDialog();
+		}
+	}
+	
+	/**
+	 * Removes Open_ElementID_Suffix or Close_ElementID_Suffix before evaluating senderID.
+	 *
+	 * @see er.ajax.AjaxComponent#shouldHandleRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
+	 *
+	 * @return <code>true</code> if this request is for this component
+	 */
+    protected boolean shouldHandleRequest(WORequest request, WOContext context) {
+		String elementID = context.elementID();
+		String senderID = context.senderID();
+		if (senderID.endsWith(Open_ElementID_Suffix) || senderID.endsWith(Close_ElementID_Suffix)) {
+			senderID = NSPathUtilities.stringByDeletingPathExtension(senderID);
+		}
+		String containerID = _containerID(context);
+		String updateContainerID = null;
+		if (containerID != null) {
+			if (AjaxResponse.isAjaxUpdatePass(request)) {
+				updateContainerID = AjaxUpdateContainer.updateContainerID(request);
 			}
 		}
+		boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || 
+				(containerID != null && containerID.equals(updateContainerID)) || 
+				elementID.equals(ERXAjaxApplication.ajaxSubmitButtonName(request)));
+		return shouldHandleRequest;
 	}
 
 	/**
@@ -303,7 +359,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOActionResults response = null;
-		String modalBoxAction = request.stringFormValueForKey("modalBoxAction");
+		String modalBoxAction = NSPathUtilities.pathExtension(context.senderID());
 
 		if ("close".equals(modalBoxAction) && isOpen()) {
 			closeDialog();
@@ -330,15 +386,29 @@ public class AjaxModalDialog extends AjaxComponent {
 			// it comes time to cache the context, it knows that this area is an Ajax updating area
 			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
 
+			appendOpenAjaxUpdateDiv((WOResponse) response, context);
+			String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+			try {
+				AjaxUpdateContainer.setCurrentUpdateContainerID(updateContainerID());
 			if (_actionResults != null) {
-				context._setCurrentComponent(_actionResults);
+					pushActionResultsIntoContext(context);
+					try {
 				_actionResults.appendToResponse((WOResponse) response, context);
 			}
+					finally {
+						popActionResultsFromContext(context);
+					}
+				}
 			else {
 				// This loads the content from the default ERWOTemplate (our component contents that are not
 				// in the "link" template.
 				super.appendToResponse((WOResponse) response, context);
 			}
+		}
+			finally {
+				AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
+			}
+			appendCloseAjaxUpdateDiv((WOResponse) response, context);
 		}
 
 		return response;
@@ -368,11 +438,20 @@ public class AjaxModalDialog extends AjaxComponent {
 			closeDialog();
 		}
 
-		if (isOpen()) {
+		// If we are open, but the request is not for us, don't render the content.
+		// This shouldHandleRequest prevents showing an open dialog in the page when 
+		// an AUC refreshes
+		if (isOpen() && shouldHandleRequest(context.request(), context)) {
 			if (_actionResults != null) {
 				throw new RuntimeException("Unexpected call to appendToResponse");
 			}
+			try {
+				pushDialog();
 			super.appendToResponse(response, context);
+		}
+			finally {
+				popDialog();
+			}
 		}
 		else {
 			boolean showOpener = booleanValueForBinding("showOpener", true);
@@ -435,8 +514,35 @@ public class AjaxModalDialog extends AjaxComponent {
 		response.appendContentString(";\n");
 		response.appendContentString("    if (titleBarText) options.title = titleBarText;\n");
 		response.appendContentString("    Modalbox.show('");
+		response.appendContentString(openDialogURL(context));
+		response.appendContentString("', options);\n");
+	}
+	
+	/**
+	 * Appends opening div that will function as an AjaxUpdateContainer.
+	 * 
+	 * @param response WOResponse to append to
+	 * @param context WOContext of response
+	 */
+	protected void appendOpenAjaxUpdateDiv(WOResponse response, WOContext context) {
+		response.appendContentString("<div id=\"");
+		response.appendContentString(updateContainerID());
+		response.appendContentString("\" updateUrl=\"");
 		response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context));
-		response.appendContentString("?modalBoxAction=open', options);\n");
+		response.appendContentString("\">");
+	}
+
+	/**
+	 * Appends closing div that will function as an AjaxUpdateContainer and the JavaScript to register it.
+	 * 
+	 * @param response WOResponse to append to
+	 * @param context WOContext of response
+	 */
+	protected void appendCloseAjaxUpdateDiv(WOResponse response, WOContext context) {
+		response.appendContentString("</div>");
+		response.appendContentString("<script>AUC.register('");
+		response.appendContentString(updateContainerID());
+		response.appendContentString("', {onComplete:function() { Modalbox.resizeToContent(); }});</script>");
 	}
 
 	/**
@@ -482,7 +588,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return id()
 	 */
 	protected String _containerID(WOContext context) {
-		return id();
+		return updateContainerID();
 	}
 	
 	/**
@@ -525,6 +631,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("loadingString", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("closeString", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("closeValue", AjaxOption.STRING));
+		ajaxOptionsArray.addObject(new AjaxOption("locked", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("overlayOpacity", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("overlayDuration", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("slideDownDuration", AjaxOption.NUMBER));
@@ -547,10 +654,10 @@ public class AjaxModalDialog extends AjaxComponent {
 		String closeUpdateContainerID = AjaxUpdateContainer.updateContainerID((String) valueForBinding("closeUpdateContainerID"));
 		String serverUpdate;
 		if (closeUpdateContainerID == null) {
-			serverUpdate = " AUL.request('" + AjaxUtils.ajaxComponentActionUrl(context()) + "', null, null, 'modalBoxAction=close');";
+			serverUpdate = " AUL.request('" + closeDialogURL(context()) + "', null, null, null);";
 		}
 		else {
-			serverUpdate = " AUL._update('" + closeUpdateContainerID + "', '" + AjaxUtils.ajaxComponentActionUrl(context()) + "', null, null, 'modalBoxAction=close');";
+			serverUpdate = " AUL._update('" + closeUpdateContainerID + "', '" + closeDialogURL(context())  + "', null, null, null);";
 		}
 
 		if (hasBinding("afterHide")) {
@@ -583,4 +690,71 @@ public class AjaxModalDialog extends AjaxComponent {
 		addStylesheetResourceInHead(response, "modalbox.css");
 	}
 
+	/**
+	 * Stash this dialog instance in the context so we can access it from the static methods.  If there is one AMD 
+	 * next in another (a rather dubious thing to do that we warn about but it may have its uses), we need to remember 
+	 * the outer one while processing this inner one
+	 * @see AjaxModalDialog#popDialog()
+	 */
+	protected void pushDialog() {
+		// 
+		// 
+		outerDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
+		ERXWOContext.contextDictionary().setObjectForKey(this, AjaxModalDialog.class.getName());
+		if ( ! hasWarnedOnNesting && outerDialog != null) {
+			hasWarnedOnNesting = true;
+			logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
+		}		
+
+	}
+	
+	/**
+	 * Remove this dialog instance from the context, replacing the previous one if any.
+	 * @see #pushDialog()
+	 */
+	protected void popDialog() {
+		if (outerDialog != null) {
+			ERXWOContext.contextDictionary().setObjectForKey(outerDialog, AjaxModalDialog.class.getName());
+		}
+		else {
+			ERXWOContext.contextDictionary().removeObjectForKey(AjaxModalDialog.class.getName());
+		}
+	}
+	
+	/**
+	 * Make _actionResults (result of the action binding) the current component in context for WO processing.
+	 * Remembers the current component so that it can be restored.
+	 * @param context WOContext to push _cationResults into
+	 * @see #popActionResultsFromContext(WOContext)
+	 */
+	protected void pushActionResultsIntoContext(WOContext context) {
+		previousComponent = context.component();
+		context._setCurrentComponent(_actionResults);
+	}
+	
+	/**
+	 * Sets the current component in context to the one there before pushActionResultsIntoContext
+	 * was called.
+	 * @param context WOContext to restore previous component in
+	 * @see #pushActionResultsIntoContext(WOContext)
+	 */
+	protected void popActionResultsFromContext(WOContext context) {
+		context._setCurrentComponent(previousComponent);
+	}
+		
+	/**
+	 * @param context WOContext to create URL in
+	 * @return URL to invoke when the dialog is opened
+	 */
+	protected String openDialogURL(WOContext context) {
+		return new StringBuffer(AjaxUtils.ajaxComponentActionUrl(context)).append(Open_ElementID_Suffix).toString();
+	}
+	
+	/**
+	 * @param context WOContext to create URL in
+	 * @return URL to invoke when the dialog is closed
+	 */
+	protected String closeDialogURL(WOContext context) {
+		return new StringBuffer(AjaxUtils.ajaxComponentActionUrl(context)).append(Close_ElementID_Suffix).toString();
+	}
 }

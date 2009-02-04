@@ -2,6 +2,7 @@ package er.ajax;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jabsorb.JSONSerializer;
 
 import com.webobjects.appserver.WOApplication;
@@ -21,10 +22,13 @@ import er.extensions.ERXResponseRewriter;
 import er.extensions.ERXWOContext;
 import er.extensions.ERXAjaxApplication;
 import er.extensions.ERXAjaxSession;
+import er.extensions.ERXNumberFormatter;
+import er.extensions.ERXTimestampFormatter;
 import er.extensions.ERXProperties;
 import er.extensions.ERXStringUtilities;
 
 public class AjaxUtils {
+	private final static Logger log = Logger.getLogger(AjaxUtils.class);
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 
 	/**
@@ -451,4 +455,69 @@ public class AjaxUtils {
         	redirect.appendToResponse(AjaxUtils.createResponse(context.request(), context), context);
 	}
 	
+	/**
+	 * <code>updateDomElement</code> appends JavaScript code to the given
+	 * AjaxResponse that updates the content of the DOM Element with the given
+	 * ID to the specified value. Useful if you want to update multiple small
+	 * regions on a page with a single request, e.g. when an AjaxObserveField
+	 * triggers an action.
+	 * 
+	 * This method is also available on instances. The example
+	 * below uses the method on AjaxResponse.
+	 * 
+	 * <pre>
+	 * public WOActionResults cartItemChanged() {
+	 * 	ShoppingCart cart; // assume this exists
+	 * 	ShoppingCartItem item; // assume this exists
+	 * 	AjaxResponse response = AjaxUtils.createResponse(context().request(), context());
+	 * 	response.appendScriptHeaderIfNecessary();
+	 * 	response.updateDomElement(&quot;orderAmount_&quot; + item.primaryKey(), item.orderAmount(), &quot;#,##0.&quot;, null, null);
+	 * 	response.updateDomElement(&quot;price_&quot; + item.primaryKey(), item.priceForOrderAmount(), &quot;#,##0.00&quot;, null, null);
+	 * 	response.updateDomElement(&quot;shoppingCartPrice&quot;, cart.totalPrice(), &quot;#,##0.00&quot;, null, null);
+	 * 	response.appendScriptFooterIfNecessary();
+	 * 	return response;
+	 * }
+	 * </pre>
+	 * 
+	 * @see AjaxResponse#updateDomElement(String, Object, String, String, String)
+	 * @see AjaxResponse#updateDomElement(String, Object)
+	 * 
+	 * @param response
+	 *            The response to append the JavaScript to
+	 * @param id
+	 *            ID of the DOM element to update
+	 * @param value
+	 *            The new value
+	 * @param numberFormat
+	 *            optional number format to format the value with
+	 * @param dateFormat
+	 *            optional date format to format the value with
+	 * @param valueWhenEmpty
+	 *            string to use when value is null
+	 */
+	public static void updateDomElement(WOResponse response, String id, Object value, String numberFormat, String dateFormat, String valueWhenEmpty) {
+		if (numberFormat != null && dateFormat != null)
+			throw new IllegalArgumentException("You can only specify a numberFormat or a dateFormat, not both.");
+
+		if (value == null && valueWhenEmpty != null) {
+			value = valueWhenEmpty;
+		}
+		else {
+			try {
+				if (numberFormat != null) {
+					value = ERXNumberFormatter.numberFormatterForPattern(numberFormat).format(value);
+				}
+				if (dateFormat != null) {
+					value = ERXTimestampFormatter.dateFormatterForPattern(dateFormat).format(value);
+				}
+			}
+			catch (Exception e) {
+				log.error(e);
+				value = null;
+			}
+		}
+
+		response.appendContentString("Element.update('" + id + "'," + AjaxValue.javaScriptEscaped(value) + ");");
+	}
+
 }
