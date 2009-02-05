@@ -56,14 +56,14 @@ public class ERPPieChart extends ERPChart {
          * Overridden so it adds the value to the current value for the key instead of replacing it.
          */
     	@SuppressWarnings("unchecked")
-		@Override
-        public void setValue(Comparable key, Number value) {
-            Number oldValue = getValue(key);
-            if(oldValue != null) {
-                value = new Double(value.doubleValue() + oldValue.doubleValue());
-            }
-            super.setValue(key, value);
-        }
+    	@Override
+    	public void setValue(Comparable key, Number value) {
+    	    if(getIndex(key) >= 0) {
+    	        Number oldValue = getValue(key);
+    	        value = new Double(value.doubleValue() + oldValue.doubleValue());
+    	    }
+    	    super.setValue(key, value);
+    	}
     }
     
     /**
