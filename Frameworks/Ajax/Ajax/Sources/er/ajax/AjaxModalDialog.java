@@ -195,6 +195,11 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @param context the current WOContext
 	 */
 	public static void close(WOContext context) {
+		// If the page structure changes as a result of changes from the dialog, and the dialog is no longer
+		// part of the page, the onClose action can't be triggered when the dialog closes.  To ensure that this
+		// action is always called, it is invoked on the server side when the message is sent to the client to hide
+		// the dialog.  In theory this should not be needed, in practice page state can get messy.
+		currentDialog(context).closeDialog();
 		AjaxUtils.javascriptResponse(AjaxModalDialog.Close, context);
 	}
 
@@ -361,8 +366,12 @@ public class AjaxModalDialog extends AjaxComponent {
 		WOActionResults response = null;
 		String modalBoxAction = NSPathUtilities.pathExtension(context.senderID());
 
-		if ("close".equals(modalBoxAction) && isOpen()) {
+		if ("close".equals(modalBoxAction)) {
 			closeDialog();
+			// This update can't be done in the closeDialog() method as that also gets called from close(WOContext) and
+			// and Ajax update is not taking place.  If the page structure changes, this update will not take place,
+			// but the correct container ID is on the URL and the update will still happen thanks to the magic in
+			// AjaxResponse.AjaxResponseDelegate
 			String closeUpdateContainerID = AjaxUpdateContainer.updateContainerID((String) valueForBinding("closeUpdateContainerID"));
 			if (closeUpdateContainerID != null) {
 				AjaxUpdateContainer.setUpdateContainerID(request, closeUpdateContainerID);
@@ -569,17 +578,19 @@ public class AjaxModalDialog extends AjaxComponent {
 	}
 
 	/**
-	 * Calls the method bound to onClose (if any), and marks the dialog state as closed.  This can get called if the page
-	 * gets reloaded.  Be careful modifying the response if 
+	 * If the dialog is open, calls the method bound to onClose (if any), and marks the dialog state as closed.  
+	 * This method can get called if the page gets reloaded so be careful modifying the response if 
 	 * <code>! AjaxRequestHandler.AjaxRequestHandlerKey.equals(context().request().requestHandlerKey())</code>
 	 */
 	public void closeDialog() {
-		if (hasBinding("onClose")) {
-			valueForBinding("onClose");
-		}
+		if (isOpen()) {
+			if (hasBinding("onClose")) {
+				valueForBinding("onClose");
+			}
 
-		setOpen(false);
-		_actionResults = null;
+			setOpen(false);
+			_actionResults = null;
+		}			
 	}
 
 	/**
