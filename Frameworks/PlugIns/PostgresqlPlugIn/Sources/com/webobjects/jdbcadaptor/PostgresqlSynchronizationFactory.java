@@ -181,12 +181,23 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             for (int j = 0; j < columnNames.count(); j++) {
                 sbColumnNames.append((j == 0 ? "" : ", ") + expression.sqlStringForSchemaObjectName((String) columnNames.objectAtIndex(j)));
             }
-            String indexName = relationship.entity().externalName() + "_" + columnNames.componentsJoinedByString("_") + "_idx";
+            String indexName = externalNameForEntityWithoutSchema(relationship.entity()) + "_" + columnNames.componentsJoinedByString("_") + "_idx";
             results.addObject(createExpression(expression.entity(), "CREATE INDEX " + indexName + " ON " + tableName + "( " + sbColumnNames.toString() + " )"));
         }
         return results;
     }
 
+    protected String externalNameForEntityWithoutSchema(EOEntity entity) {
+      String externalName = entity.externalName();
+      if (externalName != null) {
+        int dotIndex = externalName.indexOf('.');
+        if (dotIndex != -1) {
+          externalName = externalName.substring(dotIndex + 1);
+        }
+      }
+      return externalName;
+    }
+    
     /**
      * Generates the PostgreSQL-specific SQL statements to enforce primary key
      * constraints.
@@ -214,7 +225,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             // timc 2006-11-06 create result here so we can check for
             // enableIdentifierQuoting while building the statement
             PostgresqlExpression result = new PostgresqlExpression(entity);
-            String constraintName = result.sqlStringForSchemaObjectName(entity.externalName() + "_pk");
+            String constraintName = result.sqlStringForSchemaObjectName(externalNameForEntityWithoutSchema(entity) + "_pk");
             String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
 
             StringBuffer statement = new StringBuffer("ALTER TABLE ");
@@ -440,7 +451,19 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
       String clause = _columnCreationClauseForAttribute(attribute);
       return new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add " + clause));
     }
-    
+
+/*
+    public StringBuffer addCreateClauseForAttribute(EOAttribute eoattribute) {
+      EOSQLExpression expression = _expressionForEntity(eoattribute.entity());
+      expression.addCreateClauseForAttribute(eoattribute);
+      return new StringBuffer(expression.listString());
+    }
+
+    public String _columnCreationClauseForAttribute(EOAttribute attribute) {
+      return addCreateClauseForAttribute(attribute).toString();
+    }
+*/
+
     public String schemaCreationScriptForEntities(NSArray allEntities, NSDictionary options)
     {
 /* 741*/        StringBuffer result = new StringBuffer();
