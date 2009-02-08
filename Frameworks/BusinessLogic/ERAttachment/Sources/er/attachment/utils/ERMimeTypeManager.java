@@ -144,4 +144,29 @@ public class ERMimeTypeManager {
     }
     return matchingMimeType;
   }
+
+  /**
+   * Returns the ERMimeType for the given UTI, optionally throwing an exception
+   * if the type isn't found.
+   * 
+   * @param uti the UTI to lookup
+   * @param exceptionIfNotFound if true, a NoSuchElementException exception is thrown if the mime type isn't found
+   * @return the matching ERMimeType
+   */
+  public ERMimeType mimeTypeForUTI(String uti, boolean exceptionIfNotFound) {
+    ERMimeType matchingMimeType = null;
+    if (uti != null) {
+      Iterator<ERMimeType> mimeTypesIter = _mimeTypes.iterator();
+      while (matchingMimeType == null && mimeTypesIter.hasNext()) {
+        ERMimeType mimeType = mimeTypesIter.next();
+        if (uti.equals(mimeType.uti())) {
+          matchingMimeType = mimeType;
+        }
+      }
+    }
+    if (exceptionIfNotFound && matchingMimeType == null) {
+      throw new NoSuchElementException("There is no registered mime type for the uti '" + uti + "'.");
+    }
+    return matchingMimeType;
+  }
 }
