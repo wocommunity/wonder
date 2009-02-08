@@ -1,0 +1,116 @@
+// !$*UTF8*$!
+{
+	00E6828EFEC88D1A11DB9C8B /* Project object */ = {
+		activeBuildConfigurationName = Deployment;
+		activeExecutable = 6A9FA6570246BA6C0CC91562 /* JNIWrapper */;
+		activeTarget = 6A9FA557024694440CC91562 /* ImageIOImageProcessor */;
+		addToTargets = (
+		);
+		codeSenseManager = 559D18010F3F4EE600B0F7AC /* Code sense */;
+		executables = (
+			6A9FA6570246BA6C0CC91562 /* JNIWrapper */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					669,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					629,
+					60,
+					20,
+					48.16259765625,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 255807316;
+			PBXWorkspaceStateSaveDate = 255807316;
+		};
+		sourceControlManager = 559D18000F3F4EE600B0F7AC /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	559D18000F3F4EE600B0F7AC /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	559D18010F3F4EE600B0F7AC /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	6A9FA557024694440CC91562 /* ImageIOImageProcessor */ = {
+		activeExec = 0;
+	};
+	6A9FA570024696E90CC91562 /* JNILib */ = {
+		activeExec = 0;
+	};
+	6A9FA6570246BA6C0CC91562 /* JNIWrapper */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+			YES,
+		);
+		argumentStrings = (
+			"-cp JNIWrapper.jar JNIWrapper",
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		launchableReference = 6A9FA6590246BA770CC91562 /* java */;
+		libgmallocEnabled = 0;
+		name = JNIWrapper;
+		sourceDirectories = (
+		);
+	};
+	6A9FA6590246BA770CC91562 /* java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = "compiled.mach-o.executable";
+		name = java;
+		path = /usr/bin/java;
+		sourceTree = "<absolute>";
+	};
+}
