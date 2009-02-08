@@ -1,5 +1,6 @@
 package er.attachment.utils;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,6 +92,48 @@ public class ERMimeTypeManager {
     _mimeTypes.add(mimeType);
   }
 
+  /**
+   * Returns the extension for the given filename.
+   * 
+   * @param fileName the filename
+   * @return the extension of the filename (or null)
+   */
+  public String extensionForFileName(String fileName) {
+    String extension = null;
+    if (fileName != null) {
+      int dotIndex = fileName.lastIndexOf('.');
+      if (dotIndex != -1) {
+        extension = fileName.substring(dotIndex + 1);
+      }
+    }
+    return extension;
+  }
+  
+  /**
+   * Returns the ERMimeType for the given file name, optionally throwing an exception
+   * if the type isn't found.
+   * 
+   * @param fileName the file name to lookup
+   * @param exceptionIfNotFound if true, a NoSuchElementException exception is thrown if the mime type isn't found
+   * @return the matching ERMimeType
+   */
+  public ERMimeType mimeTypeForFileName(String fileName, boolean exceptionIfNotFound) {
+    return mimeTypeForExtension(extensionForFileName(fileName), exceptionIfNotFound);
+  }
+  
+  /**
+   * Returns the ERMimeType for the given file, optionally throwing an exception
+   * if the type isn't found.
+   * 
+   * @param file the file to lookup
+   * @param exceptionIfNotFound if true, a NoSuchElementException exception is thrown if the mime type isn't found
+   * @return the matching ERMimeType
+   */
+  public ERMimeType mimeTypeForFile(File file, boolean exceptionIfNotFound) {
+    String extension = (file == null ? null : extensionForFileName(file.getName()));
+    return mimeTypeForExtension(extension, exceptionIfNotFound);
+  }
+  
   /**
    * Returns the ERMimeType for the given mime type string, optionally throwing an exception
    * if the type isn't found.
