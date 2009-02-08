@@ -140,7 +140,7 @@ public class ERMimeType {
    */
   public String primaryExtension() {
     String extension;
-    if (_extensions.count() > 0) {
+    if (_extensions != null && _extensions.count() > 0) {
       extension = _extensions.objectAtIndex(0);
     }
     else {
@@ -192,5 +192,10 @@ public class ERMimeType {
    */
   public boolean isAudio() {
     return _mimeType.startsWith("audio/");
+  }
+  
+  @Override
+  public String toString() {
+    return "[ERMimeType: mimeType=" + _mimeType + "]";
   }
 }
