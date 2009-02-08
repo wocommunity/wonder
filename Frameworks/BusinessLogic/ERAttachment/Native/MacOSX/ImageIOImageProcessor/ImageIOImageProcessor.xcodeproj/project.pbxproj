@@ -7,25 +7,12 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		550AA27F0986C5F3005BB922 /* ImageIOImageProcessor (Copied) */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 550AA2840986C5F3005BB922 /* Build configuration list for PBXAggregateTarget "ImageIOImageProcessor (Copied)" */;
-			buildPhases = (
-			);
-			dependencies = (
-				550AA2A60986C5F3005BB922 /* PBXTargetDependency */,
-				550AA2A80986C5F3005BB922 /* PBXTargetDependency */,
-			);
-			name = "ImageIOImageProcessor (Copied)";
-			productName = JNIApplication;
-		};
 		6A9FA557024694440CC91562 /* ImageIOImageProcessor */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 5539DBD2085DDAE1008FA0F7 /* Build configuration list for PBXAggregateTarget "ImageIOImageProcessor" */;
 			buildPhases = (
 			);
 			dependencies = (
-				6A9FA6060246ADAE0CC91562 /* PBXTargetDependency */,
 				55D4F7DD08087E07004AAAA1 /* PBXTargetDependency */,
 			);
 			name = ImageIOImageProcessor;
@@ -34,50 +21,15 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		550AA28A0986C5F3005BB922 /* er_attachment_thumbnail_ImageIOImageProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 558E303C07BDC56B0077DB70 /* er_attachment_thumbnail_ImageIOImageProcessor.h */; };
-		550AA28C0986C5F3005BB922 /* ImageIOImageProcessorjnilib.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A52677B022AFE3B0CC91562 /* ImageIOImageProcessorjnilib.m */; };
-		550AA28E0986C5F3005BB922 /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AE2200B0208CA9C0CC91562 /* JavaVM.framework */; };
-		550AA28F0986C5F3005BB922 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5539DBE5085DDB19008FA0F7 /* AppKit.framework */; };
-		550AA2900986C5F3005BB922 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5539DBEA085DDB26008FA0F7 /* Foundation.framework */; };
-		550AA2910986C5F3005BB922 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55F36B2C090C2A4400ABA2AE /* QuartzCore.framework */; };
-		550AA29B0986C5F3005BB922 /* er_attachment_thumbnail_ImageIOImageProcessor.h in JavaArchive */ = {isa = PBXBuildFile; fileRef = 558E303C07BDC56B0077DB70 /* er_attachment_thumbnail_ImageIOImageProcessor.h */; settings = {JAVA_ARCHIVE_SUBDIR = ""; }; };
-		550AA29D0986C5F3005BB922 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5539DBE5085DDB19008FA0F7 /* AppKit.framework */; };
-		550AA29E0986C5F3005BB922 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5539DBEA085DDB26008FA0F7 /* Foundation.framework */; };
-		550AA29F0986C5F3005BB922 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55F36B2C090C2A4400ABA2AE /* QuartzCore.framework */; };
 		5539DBE6085DDB19008FA0F7 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5539DBE5085DDB19008FA0F7 /* AppKit.framework */; };
-		5539DBE7085DDB19008FA0F7 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5539DBE5085DDB19008FA0F7 /* AppKit.framework */; };
 		5539DBEB085DDB26008FA0F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5539DBEA085DDB26008FA0F7 /* Foundation.framework */; };
-		5539DBEC085DDB26008FA0F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5539DBEA085DDB26008FA0F7 /* Foundation.framework */; };
 		558E303D07BDC56B0077DB70 /* er_attachment_thumbnail_ImageIOImageProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 558E303C07BDC56B0077DB70 /* er_attachment_thumbnail_ImageIOImageProcessor.h */; };
-		558E303E07BDC56B0077DB70 /* er_attachment_thumbnail_ImageIOImageProcessor.h in JavaArchive */ = {isa = PBXBuildFile; fileRef = 558E303C07BDC56B0077DB70 /* er_attachment_thumbnail_ImageIOImageProcessor.h */; settings = {JAVA_ARCHIVE_SUBDIR = ""; }; };
 		55F36B2D090C2A4400ABA2AE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55F36B2C090C2A4400ABA2AE /* QuartzCore.framework */; };
-		55F36B2E090C2A4400ABA2AE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55F36B2C090C2A4400ABA2AE /* QuartzCore.framework */; };
 		6A9FA572024696FD0CC91562 /* ImageIOImageProcessorjnilib.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A52677B022AFE3B0CC91562 /* ImageIOImageProcessorjnilib.m */; };
 		6A9FA587024697120CC91562 /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AE2200B0208CA9C0CC91562 /* JavaVM.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		36ABB26A061E0EED00C43093 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00E6828EFEC88D1A11DB9C8B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6A9FA6030246AD840CC91562;
-			remoteInfo = Headers;
-		};
-		550AA2A50986C5F3005BB922 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00E6828EFEC88D1A11DB9C8B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 550AA2980986C5F3005BB922;
-			remoteInfo = "Headers (Upgraded)";
-		};
-		550AA2A70986C5F3005BB922 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00E6828EFEC88D1A11DB9C8B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 550AA2880986C5F3005BB922;
-			remoteInfo = "JNILib (Upgraded)";
-		};
 		55D4F7DC08087E07004AAAA1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00E6828EFEC88D1A11DB9C8B /* Project object */;
@@ -88,9 +40,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		550AA2970986C5F3005BB922 /* libImageIOImageProcessor.jnilib.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; name = libImageIOImageProcessor.jnilib.dylib; path = /Users/mschrag/Documents/workspace/Wonder/Frameworks/BusinessLogic/ERAttachment/Native/MacOSX/ImageIOImageProcessor/ImageIOImageProcessor/build/Deployment/libImageIOImageProcessor.jnilib.dylib; sourceTree = "<absolute>"; };
-		5526B6CB0D4806B40051F353 /* libHeaders/JNIWrapper.h.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libHeaders/JNIWrapper.h.a; path = /Users/mschrag/Documents/workspace/Wonder/Frameworks/BusinessLogic/ERAttachment/Native/MacOSX/ImageIOImageProcessor/ImageIOImageProcessor/build/Deployment/libHeaders/JNIWrapper.h.a; sourceTree = "<absolute>"; };
-		5526B6CC0D4806B40051F353 /* Headers/JNIWrapper.h */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; name = Headers/JNIWrapper.h; path = /Users/mschrag/Documents/workspace/Wonder/Frameworks/BusinessLogic/ERAttachment/Native/MacOSX/ImageIOImageProcessor/ImageIOImageProcessor/build/Deployment/Headers/JNIWrapper.h; sourceTree = "<absolute>"; };
 		5526B6CD0D4806B40051F353 /* libImageIOImageProcessor.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libImageIOImageProcessor.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
 		5539DBE5085DDB19008FA0F7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		5539DBEA085DDB26008FA0F7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -101,27 +50,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		550AA28D0986C5F3005BB922 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				550AA28E0986C5F3005BB922 /* JavaVM.framework in Frameworks */,
-				550AA28F0986C5F3005BB922 /* AppKit.framework in Frameworks */,
-				550AA2900986C5F3005BB922 /* Foundation.framework in Frameworks */,
-				550AA2910986C5F3005BB922 /* QuartzCore.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		550AA29C0986C5F3005BB922 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				550AA29D0986C5F3005BB922 /* AppKit.framework in Frameworks */,
-				550AA29E0986C5F3005BB922 /* Foundation.framework in Frameworks */,
-				550AA29F0986C5F3005BB922 /* QuartzCore.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6A9FA56E024696E90CC91562 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -130,16 +58,6 @@
 				5539DBE6085DDB19008FA0F7 /* AppKit.framework in Frameworks */,
 				5539DBEB085DDB26008FA0F7 /* Foundation.framework in Frameworks */,
 				55F36B2D090C2A4400ABA2AE /* QuartzCore.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6A9FA6020246AD840CC91562 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5539DBE7085DDB19008FA0F7 /* AppKit.framework in Frameworks */,
-				5539DBEC085DDB26008FA0F7 /* Foundation.framework in Frameworks */,
-				55F36B2E090C2A4400ABA2AE /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,14 +96,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		550AA2890986C5F3005BB922 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				550AA28A0986C5F3005BB922 /* er_attachment_thumbnail_ImageIOImageProcessor.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6A9FA56C024696E90CC91562 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -195,25 +105,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
-
-/* Begin PBXJavaArchiveBuildPhase section */
-		550AA29A0986C5F3005BB922 /* JavaArchive */ = {
-			isa = PBXJavaArchiveBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				550AA29B0986C5F3005BB922 /* er_attachment_thumbnail_ImageIOImageProcessor.h in JavaArchive */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6A9FA6010246AD840CC91562 /* JavaArchive */ = {
-			isa = PBXJavaArchiveBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				558E303E07BDC56B0077DB70 /* er_attachment_thumbnail_ImageIOImageProcessor.h in JavaArchive */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXJavaArchiveBuildPhase section */
 
 /* Begin PBXLibraryTarget section */
 		6A9FA570024696E90CC91562 /* JNILib */ = {
@@ -231,62 +122,7 @@
 			productName = ExampleJNILib;
 			productReference = 5526B6CD0D4806B40051F353 /* libImageIOImageProcessor.jnilib */;
 		};
-		6A9FA6030246AD840CC91562 /* Headers */ = {
-			isa = PBXLibraryTarget;
-			buildConfigurationList = 5539DBCA085DDAE1008FA0F7 /* Build configuration list for PBXLibraryTarget "Headers" */;
-			buildPhases = (
-				6A9FA6000246AD840CC91562 /* Sources */,
-				6A9FA6010246AD840CC91562 /* JavaArchive */,
-				6A9FA6020246AD840CC91562 /* Frameworks */,
-			);
-			dependencies = (
-			);
-			name = Headers;
-			productInstallPath = /usr/local/lib;
-			productName = CreateHeaders;
-			productReference = 5526B6CC0D4806B40051F353 /* Headers/JNIWrapper.h */;
-		};
 /* End PBXLibraryTarget section */
-
-/* Begin PBXNativeTarget section */
-		550AA2880986C5F3005BB922 /* JNILib (Upgraded) */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 550AA2930986C5F3005BB922 /* Build configuration list for PBXNativeTarget "JNILib (Upgraded)" */;
-			buildPhases = (
-				550AA2890986C5F3005BB922 /* Headers */,
-				550AA28B0986C5F3005BB922 /* Sources */,
-				550AA28D0986C5F3005BB922 /* Frameworks */,
-				550AA2920986C5F3005BB922 /* Rez */,
-				55F6FEE40D45164E007CDEB4 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "JNILib (Upgraded)";
-			productName = ExampleJNILib;
-			productReference = 550AA2970986C5F3005BB922 /* libImageIOImageProcessor.jnilib.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
-		};
-		550AA2980986C5F3005BB922 /* Headers (Upgraded) */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 550AA2A00986C5F3005BB922 /* Build configuration list for PBXNativeTarget "Headers (Upgraded)" */;
-			buildPhases = (
-				550AA2990986C5F3005BB922 /* Sources */,
-				550AA29A0986C5F3005BB922 /* JavaArchive */,
-				550AA29C0986C5F3005BB922 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Headers (Upgraded)";
-			productInstallPath = /usr/local/lib;
-			productName = CreateHeaders;
-			productReference = 5526B6CB0D4806B40051F353 /* libHeaders/JNIWrapper.h.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		00E6828EFEC88D1A11DB9C8B /* Project object */ = {
@@ -299,24 +135,13 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				550AA27F0986C5F3005BB922 /* ImageIOImageProcessor (Copied) */,
-				550AA2880986C5F3005BB922 /* JNILib (Upgraded) */,
-				550AA2980986C5F3005BB922 /* Headers (Upgraded) */,
 				6A9FA557024694440CC91562 /* ImageIOImageProcessor */,
 				6A9FA570024696E90CC91562 /* JNILib */,
-				6A9FA6030246AD840CC91562 /* Headers */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXRezBuildPhase section */
-		550AA2920986C5F3005BB922 /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6A9FA56F024696E90CC91562 /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
@@ -326,38 +151,7 @@
 		};
 /* End PBXRezBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		55F6FEE40D45164E007CDEB4 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "mv ${BUILD_DIR}/${BUILD_STYLE}/libImageIOImageProcessor.jnilib.dylib ${BUILD_DIR}/${BUILD_STYLE}/libImageIOImageProcessor.jnilib";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		550AA28B0986C5F3005BB922 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				550AA28C0986C5F3005BB922 /* ImageIOImageProcessorjnilib.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		550AA2990986C5F3005BB922 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6A9FA56D024696E90CC91562 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -366,255 +160,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6A9FA6000246AD840CC91562 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		550AA2A60986C5F3005BB922 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 550AA2980986C5F3005BB922 /* Headers (Upgraded) */;
-			targetProxy = 550AA2A50986C5F3005BB922 /* PBXContainerItemProxy */;
-		};
-		550AA2A80986C5F3005BB922 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 550AA2880986C5F3005BB922 /* JNILib (Upgraded) */;
-			targetProxy = 550AA2A70986C5F3005BB922 /* PBXContainerItemProxy */;
-		};
 		55D4F7DD08087E07004AAAA1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6A9FA570024696E90CC91562 /* JNILib */;
 			targetProxy = 55D4F7DC08087E07004AAAA1 /* PBXContainerItemProxy */;
 		};
-		6A9FA6060246ADAE0CC91562 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6A9FA6030246AD840CC91562 /* Headers */;
-			targetProxy = 36ABB26A061E0EED00C43093 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		550AA2850986C5F3005BB922 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ImageIOImageProcessor;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		550AA2860986C5F3005BB922 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
-				LIBRARY_STYLE = DYNAMIC;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ImageIOImageProcessor;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		550AA2870986C5F3005BB922 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ImageIOImageProcessor;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Default;
-		};
-		550AA2940986C5F3005BB922 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
-				LIBRARY_STYLE = DYNAMIC;
-				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = libImageIOImageProcessor.jnilib;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		550AA2950986C5F3005BB922 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
-				LIBRARY_STYLE = DYNAMIC;
-				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = libImageIOImageProcessor.jnilib;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		550AA2960986C5F3005BB922 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				HEADER_SEARCH_PATHS = (
-					"${OBJROOT}/Headers",
-					"$(SYSTEM_LIBRARY_DIR)/Frameworks/JavaVM.framework/Headers",
-				);
-				LIBRARY_STYLE = DYNAMIC;
-				MACH_O_TYPE = mh_dylib;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = libImageIOImageProcessor.jnilib;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Default;
-		};
-		550AA2A10986C5F3005BB922 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
-				PRODUCT_NAME = Headers/JNIWrapper.h;
-				REZ_EXECUTABLE = YES;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		550AA2A20986C5F3005BB922 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
-				LIBRARY_STYLE = DYNAMIC;
-				PRODUCT_NAME = Headers/JNIWrapper.h;
-				REZ_EXECUTABLE = YES;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		550AA2A30986C5F3005BB922 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = Headers/JNIWrapper.h;
-				REZ_EXECUTABLE = YES;
-			};
-			name = Default;
-		};
-		5539DBCB085DDAE1008FA0F7 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
-				PRODUCT_NAME = Headers/JNIWrapper.h;
-				REZ_EXECUTABLE = YES;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		5539DBCC085DDAE1008FA0F7 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
-				LIBRARY_STYLE = DYNAMIC;
-				PRODUCT_NAME = Headers/JNIWrapper.h;
-				REZ_EXECUTABLE = YES;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		5539DBCD085DDAE1008FA0F7 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = Headers/JNIWrapper.h;
-				REZ_EXECUTABLE = YES;
-			};
-			name = Default;
-		};
 		5539DBCF085DDAE1008FA0F7 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -795,46 +351,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		550AA2840986C5F3005BB922 /* Build configuration list for PBXAggregateTarget "ImageIOImageProcessor (Copied)" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				550AA2850986C5F3005BB922 /* Development */,
-				550AA2860986C5F3005BB922 /* Deployment */,
-				550AA2870986C5F3005BB922 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		550AA2930986C5F3005BB922 /* Build configuration list for PBXNativeTarget "JNILib (Upgraded)" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				550AA2940986C5F3005BB922 /* Development */,
-				550AA2950986C5F3005BB922 /* Deployment */,
-				550AA2960986C5F3005BB922 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		550AA2A00986C5F3005BB922 /* Build configuration list for PBXNativeTarget "Headers (Upgraded)" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				550AA2A10986C5F3005BB922 /* Development */,
-				550AA2A20986C5F3005BB922 /* Deployment */,
-				550AA2A30986C5F3005BB922 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		5539DBCA085DDAE1008FA0F7 /* Build configuration list for PBXLibraryTarget "Headers" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				5539DBCB085DDAE1008FA0F7 /* Development */,
-				5539DBCC085DDAE1008FA0F7 /* Deployment */,
-				5539DBCD085DDAE1008FA0F7 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
 		5539DBCE085DDAE1008FA0F7 /* Build configuration list for PBXLibraryTarget "JNILib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
