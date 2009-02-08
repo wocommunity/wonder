@@ -39,6 +39,18 @@ public interface IERImageProcessor {
   public void processImage(int resizeWidth, int resizeHeight, Quality resizeQuality, int dpi, float sharpenRadius, float sharpenIntensity, float gamma, int cropX, int cropY, int cropWidth, int cropHeight, File watermarkFile, boolean tileWatermark, float compressionQuality, File colorProfileFile, File inputFile, File outputFile, ERMimeType outputMimeType) throws IOException;
 
   /**
+   * Provides a shortcut to thumbnailing an image using some default values that produce
+   * decent quality thumbnail outputs.
+   * 
+   * @param resizeWidth the maximum resize width
+   * @param resizeHeight the maximum resize height
+   * @param inputFile the input file to thumbnail
+   * @param outputFile the output file to write the thumbnail into
+   * @throws IOException if the thumbnailing fails
+   */
+  public void thumbnail(int resizeWidth, int resizeHeight, File inputFile, File outputFile) throws IOException;
+
+  /**
    * Quality is an enumerated type used to specify the resize quality.
    * 
    * @author mschrag
