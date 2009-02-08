@@ -34,7 +34,8 @@ public class ERAttachmentQuickTimeViewer extends AbstractERAttachmentViewer {
         super(context);
     }
 	
-	public void reset() {
+	@Override
+  public void reset() {
 		super.reset();
 		item = null;
 		parameters = null;
