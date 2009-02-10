@@ -647,6 +647,19 @@
         </antcall>
     </target>
 
+    <target name="JavaFSAdaptor.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.fsadaptor.JavaFSAdaptor&lt;/string&gt;"/>
+            <param name="project.name" value="JavaFSAdaptor" />
+            <param name="project.dir" value="Frameworks/EOAdaptors/JavaFSAdaptor" />
+            <param name = "compiler.target" value = "1.5" />
+            <param name = "compiler.source" value = "1.5" />
+
+            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+        </antcall>
+    </target>
+
     <target name="JavaRESTAdaptor.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -736,7 +749,7 @@
         to add your own, add a target definition above and choose the correct group below 
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, WOLips.all, WOJavaRebel.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, WOLips.all, WOJavaRebel.all" />
     
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, TickTockMan.all" />
 
