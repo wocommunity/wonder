@@ -506,7 +506,7 @@ public class ERXModelGroup extends EOModelGroup {
 				}
 
 				addAttributesToPrototypesCache(entityNamed("EOCustomPrototypes"));
-				addAttributesToPrototypesCache(entityNamed("EOCustom" + adaptorName() + "Prototypes"));
+				addAttributesToPrototypesCache(entityNamed("EO" + adaptorName() + "CustomPrototypes"));
 				if (plugin != null) {
 					addAttributesToPrototypesCache(entityNamed("EOJDBCCustom" + plugin + "Prototypes"));
 				}
