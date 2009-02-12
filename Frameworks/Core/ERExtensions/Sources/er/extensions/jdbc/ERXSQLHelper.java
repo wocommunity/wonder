@@ -1868,6 +1868,30 @@ public class ERXSQLHelper {
 	}
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {
+		
+		/** 
+		 * We know better than EOF.
+		 * 
+		 * For any other case, we pass it up to the default impl.
+		 * 
+		 * @param adaptor
+		 *            the adaptor to retrieve an external type for
+		 * @param jdbcType
+		 *            the JDBC type number
+		 * @return a guess at the external type name to use
+		 */
+		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.LONGVARCHAR) {
+				externalType = "longtext";
+			}
+			else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			return externalType;
+		}
+		
 		@Override
 		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + start + ", " + (end - start);
@@ -1910,6 +1934,16 @@ public class ERXSQLHelper {
 					sql.append(", ");
 				}
 			}
+		}
+		
+		@Override
+		public int varcharLargeJDBCType() {
+			return Types.LONGVARCHAR;
+		}
+		
+		@Override
+		public int varcharLargeColumnWidth() {
+			return -1;
 		}
 	}
 
@@ -1985,6 +2019,9 @@ public class ERXSQLHelper {
 			else if (jdbcType == CustomTypes.INET) {
 				externalType = "inet";
 			}
+			else if (jdbcType == Types.LONGVARCHAR) {
+				externalType = "text";
+			}
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
 			}
@@ -2004,6 +2041,16 @@ public class ERXSQLHelper {
 				columnNames.addObject(columnIndex.columnName());
 			}
 			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+		
+		@Override
+		public int varcharLargeJDBCType() {
+			return Types.LONGVARCHAR;
+		}
+		
+		@Override
+		public int varcharLargeColumnWidth() {
+			return -1;
 		}
 
 	}
