@@ -160,4 +160,8 @@ public class ERXNavigationState {
         }
         return children;
     }
+
+    public String toString() {
+        return "\"" + stateAsString() + "\"";
+    }
 }
