@@ -297,6 +297,18 @@ public class ERXMigrationTable {
 	}
 
 	/**
+	 * Returns a new String column (VARCHAR) with an unbounded length.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newStringColumn(String name, boolean allowsNull) throws SQLException {
+		return newLargeStringColumn(name, allowsNull);
+	}
+
+	/**
 	 * Returns a new String column (VARCHAR) that corresponds to the varcharLarge prototype.  See newColumn(..) for the full docs.
 	 * 
 	 * @param name the name of the column
