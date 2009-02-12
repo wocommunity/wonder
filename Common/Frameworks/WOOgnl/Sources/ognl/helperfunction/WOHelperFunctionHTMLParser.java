@@ -203,7 +203,7 @@ public class WOHelperFunctionHTMLParser {
 					}
 				}
 			}
-			else if (!token.startsWith("</") && this._stackDict.containsKey(tokenPart)) {
+			else if (!token.startsWith("</") && this._stackDict.objectForKey(tokenPart) != null) {
 				// standard opening tag
 				Stack stack = (Stack) this._stackDict.objectForKey(tokenPart);
 				if (this._stackDict != null && stack != null) {
