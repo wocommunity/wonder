@@ -650,7 +650,7 @@
     <target name="JavaFSAdaptor.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
-            <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.fsadaptor.JavaFSAdaptor&lt;/string&gt;"/>
+            <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.fsadaptor.FSAdaptor&lt;/string&gt;"/>
             <param name="project.name" value="JavaFSAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaFSAdaptor" />
             <param name = "compiler.target" value = "1.5" />
