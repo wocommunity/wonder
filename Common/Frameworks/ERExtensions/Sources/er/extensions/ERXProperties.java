@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver._private.WOProjectBundle;
+import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -668,7 +669,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     // FIXME: This shouldn't eat the exception
     public static Properties propertiesFromPath(String path) {
-    	ERXProperties._Properties prop = new ERXProperties._Properties();
+    	ERXProperties.NestedProperties prop = new ERXProperties.NestedProperties();
 
         if (path == null  ||  path.length() == 0) {
             log.warn("Attempting to read property file for null file path");
@@ -698,7 +699,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     public static Properties propertiesFromFile(File file) throws IOException {
         if (file == null)
             throw new IllegalStateException("Attempting to get properties for a null file!");
-        ERXProperties._Properties prop = new ERXProperties._Properties();
+        ERXProperties.NestedProperties prop = new ERXProperties.NestedProperties();
         prop.load(file);
         return prop;
     }
@@ -713,7 +714,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *          the argv
      */
     public static Properties propertiesFromArgv(String[] argv) {
-    	ERXProperties._Properties properties = new ERXProperties._Properties();
+    	ERXProperties.NestedProperties properties = new ERXProperties.NestedProperties();
         NSDictionary argvDict = NSProperties.valuesFromArgv(argv);
         Enumeration e = argvDict.allKeys().objectEnumerator();
         while (e.hasMoreElements()) {
@@ -1200,6 +1201,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 */
 	public static interface Operator {
 		/**
+		 * Called to reinitialize operators prior to processing.
+		 */
+		public void initialize();
+		
+		/**
 		 * Performs some computation on the key, value, and parameters and
 		 * returns a dictionary of new properties. If this method returns null,
 		 * the original key and value will be used. If any other dictionary is
@@ -1291,10 +1297,62 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			_instanceNumber = value;
 		}
 
+		public InRangeOperator() {
+			_instanceNumber = -1;
+		}
+		
+		public synchronized void initialize() {
+			if (_instanceNumber == -1) {
+				_instanceNumber = ERXProperties.intForKey(ERXProperties.stringForKeyWithDefault("er.extensions.ERXProperties.instanceNumberKey", "er.extensions.instanceNumber"));
+			}
+		}
+
 		public NSDictionary compute(String key, String value, String parameters) {
 			NSDictionary computedProperties = null;
 			if (parameters != null && parameters.length() > 0) {
 				if (ERXStringUtilities.isValueInRange(_instanceNumber, parameters)) {
+					computedProperties = new NSDictionary(value, key);
+				}
+				else {
+					computedProperties = NSDictionary.EmptyDictionary;
+				}
+			}
+			return computedProperties;
+		}
+	}
+
+	public static class AppNameOperator implements ERXProperties.Operator {
+		/**
+		 * The default key name of the App operator.
+		 */
+		public static final String AppKey = "app";
+
+		private String _name;
+
+		/**
+		 * Constructs a new InRangeOperator.
+		 * 
+		 * @param value
+		 *            the instance number of this application
+		 */
+		public AppNameOperator() {
+			initialize();
+		}
+		
+		public synchronized void initialize() {
+            String appName = NSProperties.getProperty(WOProperties._ApplicationNameKey);
+            if (appName == null) {
+                _name = NSBundle.mainBundle().name();
+            } else {
+                _name = appName;
+            }
+            System.out.println("AppNameOperator.compute: app name = " + _name);
+		}
+
+		public NSDictionary compute(String key, String value, String parameters) {
+			NSDictionary computedProperties = null;
+			if (_name != null && parameters != null && parameters.length() > 0) {
+				if (parameters.equals(_name)) {
 					computedProperties = new NSDictionary(value, key);
 				}
 				else {
@@ -1329,6 +1387,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		public static void register() {
 			ERXProperties.setOperatorForKey(new ERXProperties.EncryptedOperator(), ERXProperties.EncryptedOperator.Key);
 		}
+		
+		public void initialize() {
+			// nothing to do
+		}
 
 		public NSDictionary compute(String key, String value, String parameters) {
 			String decryptedValue = ERXCrypto.defaultCrypter().decrypt(value);
@@ -1347,6 +1409,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 *            the properties to copy into
 	 */
 	public static void evaluatePropertyOperators(Properties originalProperties, Properties destinationProperties) {
+		Enumeration operatorsEnum = ERXProperties.operators.allValues().objectEnumerator();
+		while (operatorsEnum.hasMoreElements()) { 
+			ERXProperties.Operator operator = (ERXProperties.Operator)operatorsEnum.nextElement();
+			operator.initialize();
+		}
 		NSArray operatorKeys = ERXProperties.operators.allKeys();
 		for (Object keyObj : new TreeSet<Object>(originalProperties.keySet())) {
 			String key = (String) keyObj;
@@ -1401,8 +1468,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			}
 		}
 	}
+	
 	/**
-	 * _Properties is a subclass of Properties that provides support for including other
+	 * NestedProperties is a subclass of Properties that provides support for including other
 	 * Properties files on the fly.  If you create a property named .includeProps, the value
 	 * will be interpreted as a file to load.  If the path is absolute, it will just load it
 	 * directly.  If it's relative, the path will be loaded relative to the current user's
@@ -1411,14 +1479,23 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 *  
 	 * @author mschrag
 	 */
-	public static class _Properties extends Properties {
+	// @WOHack(why="This is a copy of NSProperties.NestedProperties, but Wonder doesn't build against the custom WO 5.2.3.")
+	public static class NestedProperties extends Properties {
+		public static final String IncludePropsSoFarKey = ".includePropsSoFar";
 		public static final String IncludePropsKey = ".includeProps";
 		
 		private Stack<File> _files = new Stack<File>();
 		
+		public NestedProperties() {
+		}
+
+		public NestedProperties(Properties defaults) {
+			super(defaults);
+		}
+		
 		@Override
 		public synchronized Object put(Object key, Object value) {
-			if (_Properties.IncludePropsKey.equals(key)) {
+			if (NestedProperties.IncludePropsKey.equals(key)) {
 				String propsFileName = (String)value;
                 File propsFile = new File(propsFileName);
                 if (!propsFile.isAbsolute()) {
@@ -1435,23 +1512,23 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 }
 
                 // Detect mutually recursing props files by tracking what we've already loaded:
-                String existingIncludeProps = this.getProperty(_Properties.IncludePropsKey);
+                String existingIncludeProps = this.getProperty(NestedProperties.IncludePropsSoFarKey);
                 if (existingIncludeProps == null) {
                 	existingIncludeProps = "";
                 }
                 if (existingIncludeProps.indexOf(propsFile.getPath()) > -1) {
-                    log.error("_Properties.load(): recursive includeProps detected! " + propsFile + " in " + existingIncludeProps);
-                    log.error("_Properties.load() cannot proceed - QUITTING!");
+                	log.info("ERXProperties.NestedProperties.load(): recursive includeProps detected! " + propsFile + " in " + existingIncludeProps);
+                	log.info("ERXProperties.NestedProperties.load() cannot proceed - QUITTING!");
                     System.exit(1);
                 }
                 if (existingIncludeProps.length() > 0) {
                 	existingIncludeProps += ", ";
                 }
                 existingIncludeProps += propsFile;
-                super.put(_Properties.IncludePropsKey, existingIncludeProps);
+                super.put(NestedProperties.IncludePropsSoFarKey, existingIncludeProps);
 
                 try {
-                    log.info("_Properties.load(): Including props file: " + propsFile);
+                    log.info("ERXProperties.NestedProperties.load(): Including props file: " + propsFile);
 					this.load(propsFile);
 				} catch (IOException e) {
 					throw new RuntimeException("Failed to load the property file '" + value + "'.", e);
