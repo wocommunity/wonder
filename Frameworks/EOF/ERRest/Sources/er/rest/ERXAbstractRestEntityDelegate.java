@@ -509,8 +509,12 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 
 	public void _updateRelationshipFromDocument(EOEntity entity, EOEnterpriseObject eo, EORelationship relationship, ERXRestRequestNode relationshipNode, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String relationshipName = relationship.name();
-		// EOEntity destinationEntity = relationship.destinationEntity();
-		EOEntity destinationEntity = ERXRestUtils.getEntityNamed(context, relationshipNode.attributeForKey("type"));
+		String typeName = relationshipNode.type();
+		if (typeName == null) {
+			EOEntity destinationEntity = relationship.destinationEntity();
+			typeName = destinationEntity.name();
+		}
+		EOEntity destinationEntity = ERXRestUtils.getEntityNamed(context, typeName);
 		IERXRestEntityDelegate destinationEntityDelegate = context.delegate().entityDelegate(destinationEntity);
 		if (!relationship.isToMany()) {
 			EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, relationship.name(), context);
