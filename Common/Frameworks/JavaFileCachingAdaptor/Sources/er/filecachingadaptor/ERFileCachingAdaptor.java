@@ -5,17 +5,10 @@
 //
 package er.filecachingadaptor;
 
-import com.sun.tools.example.debug.bdi.MethodNotFoundException;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 
-import java.util.*;
-import java.math.BigDecimal;
-import java.io.*;
-import java.text.ParseException;
-import er.extensions.*;
+import er.extensions.ERXForwardingAdaptor;
 
 /**
  * ERFileCachingAdaptor is not a flat-file adaptor.  Ok, it really is, but it's a poor-man's flat file adaptor.  A very poor
@@ -63,10 +56,9 @@ public class ERFileCachingAdaptor extends ERXForwardingAdaptor {
         return "JDBC";
     }
     
-    @Override
-    public EOSchemaSynchronizationFactory schemaSynchronizationFactory() {
-    	throw new UnsupportedOperationException("You cannot request a schemaSynchronizationFactory for ERFileCachingAdaptor.");
-    }
+//    public EOSchemaSynchronizationFactory schemaSynchronizationFactory() {
+//    	throw new UnsupportedOperationException("You cannot request a schemaSynchronizationFactory for ERFileCachingAdaptor.");
+//    }
 
     public EOAdaptorContext createAdaptorContext() {
         EOAdaptorContext raw = super.createAdaptorContext();
