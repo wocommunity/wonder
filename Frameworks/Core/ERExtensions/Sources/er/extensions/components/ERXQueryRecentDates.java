@@ -84,7 +84,6 @@ public class ERXQueryRecentDates extends WOComponent {
     public void setDate(Integer dateIndex) {
         NSTimestamp now=new NSTimestamp();
         int howManyDaysAgo=dateIndex!=null ? daysAgoArray[dateIndex.intValue()] : 0;
-	System.out.println("howMany="+howManyDaysAgo+" key="+key);
         if(howManyDaysAgo==0) {
             displayGroup.queryMatch().removeObjectForKey(key);
             displayGroup.queryOperator().removeObjectForKey(key);
