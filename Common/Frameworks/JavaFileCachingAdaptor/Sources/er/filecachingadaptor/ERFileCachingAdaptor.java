@@ -6,7 +6,6 @@
 package er.filecachingadaptor;
 
 import com.webobjects.eoaccess.EOAdaptorContext;
-import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 
 import er.extensions.ERXForwardingAdaptor;
 
