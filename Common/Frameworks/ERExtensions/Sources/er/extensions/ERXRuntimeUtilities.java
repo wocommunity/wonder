@@ -116,28 +116,18 @@ public class ERXRuntimeUtilities {
     					extraInfo.setObjectForKey(ERXWOContext.componentPath(context), "CurrentComponentHierarchy");
     				}
     			}
-    			//AK: this actually should be delegated somewhere so we could handle it in ERD2W, but what the heck...
+
+
+    			// If this is a D2W component, get its D2W-related information from ERDirectToWeb.
     			NSSelector d2wSelector = new NSSelector("d2wContext");
     			if (d2wSelector.implementedByObject(context.page())) {
-    				try {
-    					NSKeyValueCoding c = (NSKeyValueCoding) d2wSelector.invoke(context.page());
-    					if (c != null) {
-    						String pageConfiguration = (String) c.valueForKey("pageConfiguration");
-    						if (pageConfiguration != null) {
-    							extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
-    						}
-    						String propertyKey = (String) c.valueForKey("propertyKey");
-    						if (propertyKey != null) {
-    							extraInfo.setObjectForKey(propertyKey, "D2W-PropertyKey");
-    						}
-    						NSArray displayPropertyKeys = (NSArray) c.valueForKey("displayPropertyKeys");
-    						if (displayPropertyKeys != null) {
-    							extraInfo.setObjectForKey(displayPropertyKeys, "D2W-DisplayPropertyKeys");
-    						}
-    					}
-    				}
-    				catch (Exception ex) {
-    				}
+                    try {
+                        Class erDirectToWebClazz = Class.forName("er.directtoweb.ERDirectToWeb");
+                        NSSelector infoSelector = new NSSelector("informationForContext", new Class [] {WOContext.class});
+                        NSDictionary d2wExtraInfo = (NSDictionary)infoSelector.invoke(erDirectToWebClazz, context);
+                        extraInfo.addEntriesFromDictionary(d2wExtraInfo);
+                    } catch (Exception e) {
+                    }
     			}
     		}
     		if(context.request() != null) {
