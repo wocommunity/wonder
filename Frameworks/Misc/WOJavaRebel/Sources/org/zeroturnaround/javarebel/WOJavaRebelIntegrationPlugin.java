@@ -20,4 +20,8 @@ public class WOJavaRebelIntegrationPlugin implements Plugin {
 				"com.webobjects", "com.apple", "org.apache", "javax.xml",
 				"org.w3c", "org.xml", "ognl", "org.zeroturnaround" }));
 	}
+
+  public boolean checkDependencies(ClassLoader arg0, ClassResourceSource arg1) {
+    return false;
+  }
 }
