@@ -12,9 +12,11 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.directtoweb.KeyValuePath;
 import com.webobjects.directtoweb.QueryPageInterface;
@@ -27,14 +29,18 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
+import er.directtoweb.pages.ERD2WPage;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
@@ -364,7 +370,101 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
             throw (D2WException)ex;
         }
     }
-    
+
+    /**
+     * Gathers D2W-related information from the current context.  This is mainly useful for debugging.
+     * @param context the current context
+     * @return a dictionary of D2W-related keys to describe the D2W state of the context.
+     */
+    public static synchronized NSMutableDictionary informationForContext(WOContext context) {
+        NSMutableDictionary info = new NSMutableDictionary();
+        D2WContext d2wContext = null;
+        NSArray componentStack = ERXWOContext._componentPath(context);
+        // Try to get the information for the D2WPage closest to the end of the component stack, i.e., more specific
+        // info., that is especially helpful for finding problems in embedded page configurations.
+        WOComponent component = null;
+        for (Enumeration componentsEnum = componentStack.reverseObjectEnumerator(); componentsEnum.hasMoreElements();) {
+            WOComponent c = (WOComponent)componentsEnum.nextElement();
+            if (c instanceof D2WPage) {
+                component = c;
+                break;
+            }
+        }
+        if (null == component) { // Fall back to the highest level page.
+            component = context.page();
+        }
+
+        try {
+            d2wContext = (D2WContext)component.valueForKey("d2wContext");
+        } catch (NSKeyValueCoding.UnknownKeyException uke) {
+            if (log.isInfoEnabled()) {
+                log.info("Could not retrieve D2WContext from component context; it is probably not a D2W component.");
+            }
+        }
+
+        if (d2wContext != null) {
+            NSMutableDictionary d2wInfo = informationForD2WContext(d2wContext);
+            if (component instanceof ERD2WPage) {
+                ERD2WPage currentPage = (ERD2WPage)component;
+                String subTask = (String)d2wContext.valueForKey("subTask");
+                if ("tab".equals(subTask) || "wizard".equals("subTask")) {
+                    NSArray sections = currentPage.sectionsForCurrentTab();
+                    d2wInfo.setObjectForKey(sections != null ? sections : "null", "D2W-SectionsContentsForCurrentTab");
+                    d2wInfo.removeObjectForKey("D2W-TabSectionsContents");
+                }
+            }
+            info.addEntriesFromDictionary(d2wInfo);
+        }
+
+        return info;
+    }
+
+    /**
+     * Gathers D2W-related information from the current context.  This is mainly useful for debugging.
+     * @param d2wContext the D2W context from which to derive the debugging information
+     * @return a dictionary of D2W-related keys to describe the state of the provided D2W context.
+     */
+    public static synchronized NSMutableDictionary informationForD2WContext(D2WContext d2wContext) {
+        NSMutableDictionary info = new NSMutableDictionary();
+        if (d2wContext != null) {
+            String pageConfiguration = (String)d2wContext.valueForKeyPath("pageConfiguration");
+            info.setObjectForKey(pageConfiguration != null ? pageConfiguration : "null", "D2W-PageConfiguration");
+
+            String propertyKey = d2wContext.propertyKey();
+            info.setObjectForKey(propertyKey != null ? propertyKey : "null", "D2W-PropertyKey");
+
+            String entityName = (String)d2wContext.valueForKeyPath("entity.name");
+            info.setObjectForKey(entityName != null ? entityName : "null", "D2W-EntityName");
+
+            String task = (String)d2wContext.valueForKey("task");
+            info.setObjectForKey(task != null ? task : "null", "D2W-SubTask");
+
+            String subTask = (String)d2wContext.valueForKey("subTask");
+            info.setObjectForKey(subTask != null ? subTask : "null", "D2W-SubTask");
+
+            if ("tab".equals(subTask) || "wizard".equals("subTask")) {
+                String tabKey = (String)d2wContext.valueForKey("tabKey");
+                info.setObjectForKey(tabKey != null ? tabKey : "null", "D2W-TabKey");
+
+                NSArray tabSections = (NSArray)d2wContext.valueForKey("tabSectionsContents");
+                info.setObjectForKey(tabSections != null ? tabSections : "null", "D2W-TabSectionsContents");
+            } else {
+                NSArray displayPropertyKeys = (NSArray)d2wContext.valueForKey("displayPropertyKeys");
+                info.setObjectForKey(displayPropertyKeys != null ? displayPropertyKeys : "null", "D2W-DisplayPropertyKeys");
+            }
+
+            String componentName = (String)d2wContext.valueForKey("componentName");
+            info.setObjectForKey(componentName != null ? componentName : "null", "D2W-ComponentName");
+
+            if (componentName.indexOf("CustomComponent") > 0) {
+                String customComponentName = (String)d2wContext.valueForKey("customComponentName");
+                info.setObjectForKey(customComponentName != null ? customComponentName : "null", "D2W-ComponentName");
+            }
+
+        }
+        return info;
+    }
+
     /**
      * Checks the system property <code>er.directtoweb.ERDirectToWeb.shouldRaiseExceptions</code>.
      * @param defaultValue
