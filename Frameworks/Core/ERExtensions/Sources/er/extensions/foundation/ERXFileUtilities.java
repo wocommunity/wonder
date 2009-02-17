@@ -274,7 +274,7 @@ public class ERXFileUtilities {
 	 * @return the temp file that was created 
 	 */
 	public static File writeInputStreamToTempFile(InputStream stream) throws IOException {
-		return ERXFileUtilities.writeInputStreamToTempFile(stream, "_Wonder", "tmp");
+		return ERXFileUtilities.writeInputStreamToTempFile(stream, "_Wonder", ".tmp");
 	}
 	
 	/**
