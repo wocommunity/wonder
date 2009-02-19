@@ -177,6 +177,8 @@ public class ERXLogger extends org.apache.log4j.Logger {
             // which sets it's own logging level to DEBUG
             // and the output should be pretty much the same as with plain WO
             Logger.getRootLogger().setLevel(Level.INFO);
+            // MS: DO NOT REMOVE THIS CALL -- IT MAKES SURE NSBUNDLE INITIALIZES 
+            NSBundle.mainBundle();
             boolean is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
             if (!is522OrHigher) {
                 int allowedLevel = NSLog.debug.allowedDebugLevel();
