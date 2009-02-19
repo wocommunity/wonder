@@ -16,6 +16,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSNotificationCenter;
 
