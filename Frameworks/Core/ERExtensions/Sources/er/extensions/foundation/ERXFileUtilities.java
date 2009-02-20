@@ -28,6 +28,7 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -869,6 +870,8 @@ public class ERXFileUtilities {
      * @param destination file to create the link to
      * @param symbolic determines if a symlink should be created
      * @param allowUnlink determines if the symlink is a hardlink which allows unlinking
+     * @param followSymbolicLinks If the destination is a symbolic link, follow it
+     * @throws IOException 
      */
     public static void linkFiles(File source, File destination,
                                  boolean symbolic,
@@ -877,15 +880,24 @@ public class ERXFileUtilities {
                                      if (destination == null || source == null)
                                          throw new IllegalArgumentException("null source or destination not allowed");
 
-                                     String[] cmd = new String[6];
+                                 	ArrayList<String> array = new ArrayList<String>();
+                                	array.add("ln");
 
-                                     int i = 0;
-                                     cmd[i++] = "ln";
-                                     if (allowUnlink         ) cmd[i++] = "-f";
-                                     if (symbolic            ) cmd[i++] = "-s";
-                                     if (!followSymbolicLinks) cmd[i++] = "-h";
-                                     cmd[i++] = source.getPath();
-                                     cmd[i++] = destination.getPath();
+                                	if (allowUnlink)
+                                		array.add("-f");
+
+                                	if (symbolic)
+                                		array.add("-s");
+
+                                	if (!followSymbolicLinks)
+                                		array.add("-h");
+
+                                	array.add(source.getPath());
+                                	array.add(destination.getPath());
+
+                                	String[] cmd = new String[array.size()];
+                                	for (int i=0; i<array.size(); i++)
+                                		cmd[i] = array.get(i);
 
                                      Process task = null;
                                      try {
