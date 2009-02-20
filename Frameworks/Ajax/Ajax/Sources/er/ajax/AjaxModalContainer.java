@@ -140,7 +140,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
         appendTagAttributeToResponse(response, "id", linkID);
         response.appendContentString(">");
-        if(!href.startsWith("#") && childrenElements().count() > 0) {
+        if(!href.startsWith("#") && childrenElements() != null && childrenElements().count() > 0) {
         	appendChildrenToResponse(response, context);
         } else {
             Object label = valueForBinding("label", "", component);
