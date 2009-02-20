@@ -19,11 +19,13 @@ public class ModalDialogExample extends WOComponent {
 	private Employee employee;
 	protected String errorMessages;
 	
-	public final NSArray companyNames = new NSArray(new String[]{"Gimcrack, Intl.", 
-			   "Betty's Baubles, LLC",
-			   "Sally's Seashore Seashells",
-			   "The Fu Bar",
-			   "Acme Ajax, Inc."});
+	public final NSArray companyNames = new NSArray(new String[]{
+			"Acme Ajax, Inc.",
+			"Betty's Baubles, LLC",
+			"Gimcrack, Intl.", 
+			 "Sally's Seashore Seashells",
+			 "The Fu Bar"
+	});
 	
 	public NSArray companies = new NSMutableArray();
 	
@@ -48,7 +50,7 @@ public class ModalDialogExample extends WOComponent {
         employee = Employee.fetchEmployee(ec, ERXQ.and(ERXQ.equals(Employee.FIRST_NAME_KEY, "Bill"),
         										       ERXQ.equals(Employee.LAST_NAME_KEY, "Wratchit")));
         if (employee == null) {
-            Company company = Company.fetchCompany(ec, Company.NAME_KEY, companyNames.objectAtIndex(0));
+            Company company = Company.fetchCompany(ec, Company.NAME_KEY, companyNames.objectAtIndex(2));
             employee = Employee.createEmployee(ec, "Bill", "Wratchit", company);
         }
         ec.saveChanges();

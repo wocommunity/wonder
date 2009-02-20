@@ -97,8 +97,54 @@ CompanyEditorDialog2: AjaxModalDialog {
 CompanyEditorDialogOpener: AjaxModalDialogOpener {
 	dialogId = "CompanyEditorDialog2ID";
 	title = "Actually Working Dialog";
+	action = willOpen;
 }
 
 CompanyNameString: WOString {
 	value = employee.company.name; 
+}
+
+CompanyListUpdater : AjaxUpdateContainer {
+	id = "CompanyListUpdater";
+}
+
+CompanyRepetition : WORepetition {
+	list = companies;
+	item = aCompany;
+	index = companyIndex;
+}
+
+EditCompanyOpener: AjaxModalDialogOpener {
+	label = aCompany.name; 
+	dialogId = "EditCompanyDialog";
+	action = selectCompanyToEdit;
+	title = editCompanyTitle;
+}
+
+EditCompanyDialog: AjaxModalDialog {
+	id = "EditCompanyDialog";
+	showOpener = false;
+	transitions = false;
+	locked = true;
+	onClose = cleanupAfterCompanyEdit;
+}
+
+ValidationError: WOString {
+	value = validationMessage;
+	escapeHTML = false;
+};
+
+EditableCompanyName: WOTextField {
+	value = companyToEdit.name;
+}
+
+EditCompany: AjaxSubmitButton {
+	action = saveCompanyChanges;
+	value = "Save";
+}
+
+
+DeleteCompany: AjaxSubmitButton {
+	action = deleteCompany;
+	value = "Delete";
 }
