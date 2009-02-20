@@ -119,4 +119,37 @@
 		</webobject name = "Form2">
 	</webobject name = "CompanyEditorDialog2">
 	
+	
+	<h3>AjaxModalDialogOpener Used in a WORepetition</h3>
+	<div>
+		Demonstrates an AjaxModalDialogOpener used in a WORepetition 
+		<ul>
+			<li>AjaxModalDialog is physically outside of the repetition</li>
+			<li>AjaxModalDialog contains its own form</li>
+			<li>AjaxModalDialog has an explicit ID</li>
+			<li>AjaxModalDialog uses showOpener = false binding</li>
+			<li>AjaxModalDialogOpener uses action binding to get current item from repetition</li>
+			<li>AjaxModalDialogOpener overrides title specified on AjaxModalDialog</li>
+		</ul>
+
+		<webobject name = "CompanyListUpdater">
+			<webobject name = "CompanyRepetition">
+				<div style="border: 1px solid black; width: 50%;">
+					<webobject name = "EditCompanyOpener" />
+				</div>
+			</webobject>		
+		</webobject name = "CompanyListUpdater">
+		<webobject name = "EditCompanyDialog">
+			<div style="clear:both; text-align:center; color: red;">
+				<webobject name = "ValidationError"/>
+			</div>
+			<webobject name = "Form2">
+				<webobject name = "EditableCompanyName"/><br/><br/>
+				<span style="float:left"><webobject name = "CancelSelection"/></span>
+				<span style="float:left"><webobject name = "DeleteCompany"/></span>
+				<span style="float:left""><webobject name = "EditCompany"/></span>
+			</webobject name = "Form2">
+		</webobject>
+	</div>
+	
 </webobject name = "AjaxExampleComponent">
