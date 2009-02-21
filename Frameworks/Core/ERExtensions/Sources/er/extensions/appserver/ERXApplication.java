@@ -2062,7 +2062,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Returns an ERXMigrator with the lock owner name "appname-instancenumber".
 	 */
 	public ERXMigrator migrator() {
-		return new ERXMigrator(name() + "-" + number());
+		return new ERXMigrator(name() + "-" + host() + ":" + port());
 	}
 
 	/**
