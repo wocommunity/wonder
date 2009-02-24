@@ -6,8 +6,8 @@ import java.util.List;
 import er.chronic.Options;
 import er.chronic.tags.ScalarDay;
 import er.chronic.tags.ScalarMonth;
-import er.chronic.utils.Time;
 import er.chronic.utils.Span;
+import er.chronic.utils.Time;
 import er.chronic.utils.Token;
 
 public class SmSdHandler implements IHandler {

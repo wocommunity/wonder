@@ -34,6 +34,7 @@ import er.chronic.tags.Tag;
 import er.chronic.tags.TimeZone;
 import er.chronic.tags.Pointer.PointerType;
 import er.chronic.utils.EndianPrecedence;
+import er.chronic.utils.Range;
 import er.chronic.utils.Span;
 import er.chronic.utils.Time;
 import er.chronic.utils.Token;
@@ -68,15 +69,28 @@ public class Handler {
   }
 
   public boolean match(List<Token> tokens, Map<Handler.HandlerType, List<Handler>> definitions) {
-    // System.out.println("Handler.match: " + this);
+    return matchCount(tokens, definitions) != null;
+  }
+  
+  public Range matchCount(List<Token> tokens, Map<Handler.HandlerType, List<Handler>> definitions) {
+    Range range = _matchCount(tokens, definitions);
+    return (range != null && range.getEnd() == tokens.size()) ? range : null;
+  }
+  
+  // MS: Switching to count offsets allows us to have variable length times at the front instead of
+  // the end ... for instance, 5pm 2/10 instead of 2/10 5pm
+  public Range _matchCount(List<Token> tokens, Map<Handler.HandlerType, List<Handler>> definitions) {
+    int tokenStartIndex = 0;
     int tokenIndex = 0;
     for (HandlerPattern pattern : _patterns) {
+      //System.out.println("Handler.match:   pattern = " + pattern + " (tokenIndex = " + tokenIndex + ", " + tokens.get(tokenIndex) + ")");
       boolean optional = pattern.isOptional();
       if (pattern instanceof TagPattern) {
         boolean match = (tokenIndex < tokens.size() && tokens.get(tokenIndex).getTags(((TagPattern) pattern).getTagClass()).size() > 0);
         // System.out.println("Handler.match:   " + pattern + "=" + match);
         if (!match && !optional) {
-          return false;
+          return null;
+          //return false;
         }
         if (match) {
           tokenIndex++;
@@ -85,21 +99,29 @@ public class Handler {
       }
       else if (pattern instanceof HandlerTypePattern) {
         if (optional && tokenIndex == tokens.size()) {
-          return true;
+          return new Range(0, tokens.size());
         }
         List<Handler> subHandlers = definitions.get(((HandlerTypePattern) pattern).getType());
         for (Handler subHandler : subHandlers) {
-          if (subHandler.match(tokens.subList(tokenIndex, tokens.size()), definitions)) {
-            return true;
+          Range range = subHandler._matchCount(tokens.subList(tokenIndex, tokens.size()), definitions);
+          if (range != null) {
+            if (tokenIndex == 0) {
+              tokenStartIndex = (int)range.getEnd();
+            }
+            tokenIndex += range.getEnd();
           }
         }
-        return false;
+        //return false;
+      }
+      else {
+        throw new IllegalArgumentException("Unknown pattern: " + pattern);
       }
     }
-    if (tokenIndex != tokens.size()) {
-      return false;
-    }
-    return true;
+    //if (tokenIndex != tokens.size()) {
+      //return -1;
+      //return false;
+    //}
+    return new Range(tokenStartIndex, tokenIndex);
   }
 
   @Override
@@ -160,6 +182,8 @@ public class Handler {
       dateHandlers.add(new Handler(new SySmSdHandler(), new TagPattern(ScalarYear.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarMonth.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarDay.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
       // DIFF: We make 05/06 interpret as month/day before month/year
       dateHandlers.add(new Handler(new SmSdHandler(), false, new TagPattern(ScalarMonth.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarDay.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
+      // DIFF: Also, we support a leading time -- for 5pm 2/10
+      dateHandlers.add(new Handler(new SmSdHandler(), false, new HandlerTypePattern(Handler.HandlerType.TIME, true), new TagPattern(SeparatorOn.class, true), new TagPattern(ScalarMonth.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarDay.class)));
       dateHandlers.add(new Handler(new SmSyHandler(), new TagPattern(ScalarMonth.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarYear.class)));
       definitions.put(Handler.HandlerType.DATE, dateHandlers);
 
@@ -196,15 +220,16 @@ public class Handler {
       System.out.println("Chronic.tokensToSpan: " + tokens);
     }
 
+    Range range = null;
     // maybe it's a specific date
     Map<Handler.HandlerType, List<Handler>> definitions = Handler.definitions(options);
     for (Handler handler : definitions.get(Handler.HandlerType.DATE)) {
-      if (handler.isCompatible(options) && handler.match(tokens, definitions)) {
+      if (handler.isCompatible(options) && (range = handler.matchCount(tokens, definitions)) != null) {
         if (options.isDebug()) {
           System.out.println("Chronic.tokensToSpan: date " + handler);
         }
         List<Token> goodTokens = new LinkedList<Token>();
-        for (Token token : tokens) {
+        for (Token token : range.subList(tokens)) {
           if (token.getTag(Separator.class) == null) {
             goodTokens.add(token);
           }
@@ -215,12 +240,12 @@ public class Handler {
 
     // I guess it's not a specific date, maybe it's just an anchor
     for (Handler handler : definitions.get(Handler.HandlerType.ANCHOR)) {
-      if (handler.isCompatible(options) && handler.match(tokens, definitions)) {
+      if (handler.isCompatible(options) && (range = handler.matchCount(tokens, definitions)) != null) {
         if (options.isDebug()) {
           System.out.println("Chronic.tokensToSpan: anchor " + handler);
         }
         List<Token> goodTokens = new LinkedList<Token>();
-        for (Token token : tokens) {
+        for (Token token : range.subList(tokens)) {
           if (token.getTag(Separator.class) == null) {
             goodTokens.add(token);
           }
@@ -231,12 +256,12 @@ public class Handler {
 
     // not an anchor, perhaps it's an arrow
     for (Handler handler : definitions.get(Handler.HandlerType.ARROW)) {
-      if (handler.isCompatible(options) && handler.match(tokens, definitions)) {
+      if (handler.isCompatible(options) && (range = handler.matchCount(tokens, definitions)) != null) {
         if (options.isDebug()) {
           System.out.println("Chronic.tokensToSpan: arrow " + handler);
         }
         List<Token> goodTokens = new LinkedList<Token>();
-        for (Token token : tokens) {
+        for (Token token : range.subList(tokens)) {
           if (token.getTag(SeparatorAt.class) == null && token.getTag(SeparatorSlashOrDash.class) == null && token.getTag(SeparatorComma.class) == null) {
             goodTokens.add(token);
           }
@@ -247,7 +272,7 @@ public class Handler {
 
     // not an arrow, let's hope it's a narrow
     for (Handler handler : definitions.get(Handler.HandlerType.NARROW)) {
-      if (handler.isCompatible(options) && handler.match(tokens, definitions)) {
+      if (handler.isCompatible(options) && (range = handler.matchCount(tokens, definitions)) != null) {
         if (options.isDebug()) {
           System.out.println("Chronic.tokensToSpan: narrow " + handler);
         }
@@ -257,7 +282,7 @@ public class Handler {
         //  goodTokens.add(token);
         //}
         //}
-        return handler.getHandler().handle(tokens, options);
+        return handler.getHandler().handle(range.subList(tokens), options);
       }
     }
 
