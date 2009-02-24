@@ -72,7 +72,7 @@ public class RepeaterFortnight extends RepeaterUnit {
   }
 
   @Override
-  public Span getOffset(Span span, int amount, PointerType pointer) {
+  public Span getOffset(Span span, float amount, PointerType pointer) {
     int direction = (pointer == PointerType.FUTURE) ? 1 : -1;
     Span offsetSpan = span.add(direction * amount * RepeaterFortnight.FORTNIGHT_SECONDS);
     return offsetSpan;

@@ -100,7 +100,7 @@ public abstract class RepeaterDayPortion<T> extends Repeater<T> {
   }
 
   @Override
-  public Span getOffset(Span span, int amount, PointerType pointer) {
+  public Span getOffset(Span span, float amount, PointerType pointer) {
     setStart(span.getBeginCalendar());
     Span portionSpan = nextSpan(pointer);
     int direction = (pointer == Pointer.PointerType.FUTURE) ? 1 : -1;

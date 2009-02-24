@@ -11,6 +11,7 @@ import er.chronic.utils.Token;
 public class Pointer extends Tag<Pointer.PointerType> {
   private static final Pattern IN_PATTERN = Pattern.compile("\\bin\\b");
   private static final Pattern FUTURE_PATTERN = Pattern.compile("\\bfuture\\b");
+  private static final Pattern FOR_PATTERN = Pattern.compile("\\bfor\\b");
   private static final Pattern PAST_PATTERN = Pattern.compile("\\bpast\\b");
 
   public enum PointerType {
@@ -35,6 +36,7 @@ public class Pointer extends Tag<Pointer.PointerType> {
     Map<Pattern, Pointer.PointerType> scanner = new HashMap<Pattern, Pointer.PointerType>();
     scanner.put(Pointer.PAST_PATTERN, Pointer.PointerType.PAST);
     scanner.put(Pointer.FUTURE_PATTERN, Pointer.PointerType.FUTURE);
+    scanner.put(Pointer.FOR_PATTERN, Pointer.PointerType.FUTURE);
     scanner.put(Pointer.IN_PATTERN, Pointer.PointerType.FUTURE);
     for (Pattern scannerItem : scanner.keySet()) {
       if (scannerItem.matcher(token.getWord()).matches()) { 

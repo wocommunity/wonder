@@ -25,16 +25,22 @@ public class Numerizer {
   }
   
   protected static class Prefix {
-    private Pattern _name;
+    private String _name;
+    private Pattern _pattern;
     private long _number;
     
-    public Prefix(Pattern name, long number) {
+    public Prefix(String name, Pattern pattern, long number) {
       _name = name;
+      _pattern = pattern;
       _number = number;
     }
     
-    public Pattern getName() {
+    public String getName() {
       return _name;
+    }
+    
+    public Pattern getPattern() {
+      return _pattern;
     }
     
     public long getNumber() {
@@ -44,13 +50,13 @@ public class Numerizer {
 
   protected static class TenPrefix extends Prefix {
     public TenPrefix(String name, long number) {
-      super(Pattern.compile("(?:" + name + ")( *\\d(?=\\D|$))*", Pattern.CASE_INSENSITIVE), number);
+      super(name, Pattern.compile("(?:" + name + ") *<num>(\\d(?=\\D|$))*", Pattern.CASE_INSENSITIVE), number);
     }
   }
 
   protected static class BigPrefix extends Prefix {
     public BigPrefix(String name, long number) {
-      super(Pattern.compile("(\\d*) *" + name, Pattern.CASE_INSENSITIVE), number);
+      super(name, Pattern.compile("(?:<num>)?(\\d*) *" + name, Pattern.CASE_INSENSITIVE), number);
     }
   }
   
@@ -87,7 +93,8 @@ public class Numerizer {
     List<TenPrefix> tenPrefixes = new LinkedList<TenPrefix>();
     tenPrefixes.add(new TenPrefix("twenty", 20));
     tenPrefixes.add(new TenPrefix("thirty", 30));
-    tenPrefixes.add(new TenPrefix("fourty", 40));
+    tenPrefixes.add(new TenPrefix("fourty", 40)); // Common mis-spelling
+    tenPrefixes.add(new TenPrefix("forty", 40));
     tenPrefixes.add(new TenPrefix("fifty", 50));
     tenPrefixes.add(new TenPrefix("sixty", 60));
     tenPrefixes.add(new TenPrefix("seventy", 70));
@@ -108,7 +115,7 @@ public class Numerizer {
   private static final Pattern DEHYPHENATOR = Pattern.compile(" +|(\\D)-(\\D)");
   private static final Pattern DEHALFER = Pattern.compile("a half", Pattern.CASE_INSENSITIVE);
   private static final Pattern DEHAALFER = Pattern.compile("(\\d+)(?: | and |-)*haAlf", Pattern.CASE_INSENSITIVE);
-  private static final Pattern ANDITION_PATTERN = Pattern.compile("(\\d+)( | and )(\\d+)(?=\\W|$)", Pattern.CASE_INSENSITIVE);
+  private static final Pattern ANDITION_PATTERN = Pattern.compile("<num>(\\d+)( | and )<num>(\\d+)(?=\\W|$)", Pattern.CASE_INSENSITIVE);
   
   // FIXES
   //string.gsub!(/ +|([^\d])-([^d])/, '\1 \2') # will mutilate hyphenated-words but shouldn't matter for date extraction
@@ -123,20 +130,20 @@ public class Numerizer {
     
     // easy/direct replacements
     for (DirectNum dn : Numerizer.DIRECT_NUMS) {
-      numerizedStr = dn.getName().matcher(numerizedStr).replaceAll(dn.getNumber());
+      numerizedStr = dn.getName().matcher(numerizedStr).replaceAll("<num>" + dn.getNumber());
     }
     
     // ten, twenty, etc.
     for (Prefix tp : Numerizer.TEN_PREFIXES) {
-      Matcher matcher = tp.getName().matcher(numerizedStr);
+      Matcher matcher = tp.getPattern().matcher(numerizedStr);
       if (matcher.find()) {
         StringBuffer matcherBuffer = new StringBuffer();
         do {
           if (matcher.group(1) == null) {
-            matcher.appendReplacement(matcherBuffer, String.valueOf(tp.getNumber()));
+            matcher.appendReplacement(matcherBuffer, "<num>" + String.valueOf(tp.getNumber()));
           }
           else {
-            matcher.appendReplacement(matcherBuffer, String.valueOf(tp.getNumber() + Long.parseLong(matcher.group(1).trim())));
+            matcher.appendReplacement(matcherBuffer, "<num>" + String.valueOf(tp.getNumber() + Long.parseLong(matcher.group(1).trim())));
           }
         } while (matcher.find());
         matcher.appendTail(matcherBuffer);
@@ -144,17 +151,21 @@ public class Numerizer {
       }
     }
     
+    for (Prefix tp : Numerizer.TEN_PREFIXES) {
+      numerizedStr = Pattern.compile(tp.getName(), Pattern.CASE_INSENSITIVE).matcher(numerizedStr).replaceAll("<num>" + tp.getNumber());
+    }
+
     // hundreds, thousands, millions, etc.
     for (Prefix bp : Numerizer.BIG_PREFIXES) {
-      Matcher matcher = bp.getName().matcher(numerizedStr);
+      Matcher matcher = bp.getPattern().matcher(numerizedStr);
       if (matcher.find()) {
         StringBuffer matcherBuffer = new StringBuffer();
         do {
           if (matcher.group(1) == null) {
-            matcher.appendReplacement(matcherBuffer, String.valueOf(bp.getNumber()));
+            matcher.appendReplacement(matcherBuffer, "<num>" + String.valueOf(bp.getNumber()));
           }
           else {
-            matcher.appendReplacement(matcherBuffer, String.valueOf(bp.getNumber() * Long.parseLong(matcher.group(1).trim())));
+            matcher.appendReplacement(matcherBuffer, "<num>" + String.valueOf(bp.getNumber() * Long.parseLong(matcher.group(1).trim())));
           }
         } while (matcher.find());
         matcher.appendTail(matcherBuffer);
@@ -178,6 +189,7 @@ public class Numerizer {
     }
     //string.gsub!(/(\d+)(?: | and |-)*haAlf/i) { ($1.to_f + 0.5).to_s }
 
+    numerizedStr = numerizedStr.replaceAll("<num>", "");
     return numerizedStr;
   }
 
@@ -186,7 +198,7 @@ public class Numerizer {
     Matcher matcher = Numerizer.ANDITION_PATTERN.matcher(anditionStr);
     while (matcher.find()) {
       if (matcher.group(2).equalsIgnoreCase(" and ") || (matcher.group(1).length() > matcher.group(3).length() && matcher.group(1).matches("^.+0+$"))) {
-        anditionStr.replace(matcher.start(), matcher.end(), String.valueOf(Integer.parseInt(matcher.group(1).trim()) + Integer.parseInt(matcher.group(3).trim())));
+        anditionStr.replace(matcher.start(), matcher.end(), "<num>" + String.valueOf(Integer.parseInt(matcher.group(1).trim()) + Integer.parseInt(matcher.group(3).trim())));
         matcher = Numerizer.ANDITION_PATTERN.matcher(anditionStr);
       }
     }

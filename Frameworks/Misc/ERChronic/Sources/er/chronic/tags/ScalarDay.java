@@ -20,7 +20,7 @@ public class ScalarDay extends Scalar {
   public static ScalarDay scan(Token token, Token postToken, Options options) {
     if (ScalarDay.DAY_PATTERN.matcher(token.getWord()).matches()) {
       int scalarValue = Integer.parseInt(token.getWord());
-      if (!(scalarValue > 31 || (postToken != null && Scalar.TIMES.contains(postToken.getWord())))) {
+      if (!(scalarValue > 31 || scalarValue < 1 || (postToken != null && Scalar.TIMES.contains(postToken.getWord())))) {
         return new ScalarDay(Integer.valueOf(scalarValue));
       }
     }

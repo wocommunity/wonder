@@ -74,7 +74,7 @@ public abstract class Repeater<T> extends Tag<T> implements Comparable<Repeater<
 
   protected abstract Span _thisSpan(Pointer.PointerType pointer);
 
-  public abstract Span getOffset(Span span, int amount, Pointer.PointerType pointer);
+  public abstract Span getOffset(Span span, float amount, Pointer.PointerType pointer);
 
   @Override
   public String toString() {

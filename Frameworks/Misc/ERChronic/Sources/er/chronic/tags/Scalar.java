@@ -9,8 +9,9 @@ import er.chronic.Options;
 import er.chronic.utils.StringUtils;
 import er.chronic.utils.Token;
 
-public class Scalar extends Tag<Integer> {
-  private static final Pattern SCALAR_PATTERN = Pattern.compile("^\\d*$");
+public class Scalar extends Tag<Number> {
+  public static final Pattern SCALAR_PATTERN = Pattern.compile("^\\d*$");
+  public static final Pattern FRACTIONAL_SCALAR_PATTERN = Pattern.compile("^\\d\\.\\d*$");
   public static Set<String> TIMES = new HashSet<String>();
 
   static {
@@ -22,7 +23,7 @@ public class Scalar extends Tag<Integer> {
     Scalar.TIMES.add("night");
   }
 
-  public Scalar(Integer type) {
+  public Scalar(Number type) {
     super(type);
   }
 
@@ -55,9 +56,9 @@ public class Scalar extends Tag<Integer> {
   }
 
   public static Scalar scan(Token token, Token postToken, Options options) {
-    if (Scalar.SCALAR_PATTERN.matcher(token.getWord()).matches()) {
+    if (Scalar.SCALAR_PATTERN.matcher(token.getWord()).matches() || Scalar.FRACTIONAL_SCALAR_PATTERN.matcher(token.getWord()).matches()) {
       if (token.getWord() != null && token.getWord().length() > 0 && !(postToken != null && Scalar.TIMES.contains(postToken.getWord()))) {
-        return new Scalar(Integer.valueOf(token.getWord()));
+        return new Scalar(Float.valueOf(token.getWord()));
       }
     }
     else {

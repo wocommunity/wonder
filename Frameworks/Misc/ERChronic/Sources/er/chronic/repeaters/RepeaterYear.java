@@ -8,6 +8,8 @@ import er.chronic.utils.Span;
 import er.chronic.utils.Time;
 
 public class RepeaterYear extends RepeaterUnit {
+  public static final int YEAR_SECONDS = 31536000; // 365 * 24 * 60 * 60
+  
   private Calendar _currentYearStart;
 
   @Override
@@ -54,7 +56,7 @@ public class RepeaterYear extends RepeaterUnit {
   }
 
   @Override
-  public Span getOffset(Span span, int amount, Pointer.PointerType pointer) {
+  public Span getOffset(Span span, float amount, Pointer.PointerType pointer) {
     int direction = (pointer == Pointer.PointerType.FUTURE) ? 1 : -1;
     Calendar newBegin = Time.cloneAndAdd(span.getBeginCalendar(), Calendar.YEAR, amount * direction);
     Calendar newEnd = Time.cloneAndAdd(span.getEndCalendar(), Calendar.YEAR, amount * direction);
