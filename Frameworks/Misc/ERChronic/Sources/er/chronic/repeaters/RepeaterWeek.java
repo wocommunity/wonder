@@ -77,7 +77,7 @@ public class RepeaterWeek extends RepeaterUnit {
   }
 
   @Override
-  public Span getOffset(Span span, int amount, Pointer.PointerType pointer) {
+  public Span getOffset(Span span, float amount, Pointer.PointerType pointer) {
     int direction = (pointer == Pointer.PointerType.FUTURE) ? 1 : -1;
     // WARN: Does not use Calendar
     return span.add(direction * amount * RepeaterWeek.WEEK_SECONDS);

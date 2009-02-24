@@ -7,7 +7,7 @@ import er.chronic.utils.Token;
 
 public class Separator extends Tag<Separator.SeparatorType> {
   public static enum SeparatorType {
-    COMMA, DASH, SLASH, AT, NEWLINE, IN
+    COMMA, DASH, SLASH, AT, NEWLINE, IN, ON
   }
 
   public Separator(Separator.SeparatorType type) {
@@ -30,6 +30,10 @@ public class Separator extends Tag<Separator.SeparatorType> {
         token.tag(t);
       }
       t = SeparatorIn.scan(token, options);
+      if (t != null) {
+        token.tag(t);
+      }
+      t = SeparatorOn.scan(token, options);
       if (t != null) {
         token.tag(t);
       }

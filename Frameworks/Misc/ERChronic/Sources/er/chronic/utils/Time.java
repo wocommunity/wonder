@@ -3,11 +3,17 @@ package er.chronic.utils;
 import java.util.Calendar;
 
 public class Time {
+  public static Calendar construct(int year) {
+    return Time.construct(year, 1);
+  }
+  
   public static Calendar construct(int year, int month) {
     if (year <= 37) {
       year += 2000;
     }
-    else if (year <= 137 && year >= 69) {
+    // MS: windowing seems to leave out >= 38 and went straight to 69? odd ... we're switching back
+    //else if (year <= 137 && year >= 69) {
+    else if (year <= 137 && year >= 38) {
       year += 1900;
     }
 
@@ -100,9 +106,43 @@ public class Time {
     return clone;
   }
 
-  public static Calendar cloneAndAdd(Calendar basis, int field, long amount) {
+  public static Calendar cloneAndAdd(Calendar basis, int field, float amount) {
     Calendar next = (Calendar) basis.clone();
-    next.add(field, (int) amount);
+//    next.add(field, (int) amount);
+    double amountFloor = Math.floor(amount);
+    if (amountFloor == amount) {
+      next.add(field, (int) amount);
+    }
+    else if (field == Calendar.YEAR) {
+      double remainder = amount - amountFloor;
+      next.add(Calendar.YEAR, (int)amountFloor);
+      // MS: This is going to break on leap days and 31 day months (well, I guess? what does 3.5 years mean in the general case?)
+      next.add(Calendar.SECOND, (int)(remainder * 365 * 24 * 60 * 60));
+    }
+    else if (field == Calendar.MONTH) {
+      double remainder = amount - amountFloor;
+      next.add(Calendar.MONTH, (int)amountFloor);
+      // MS: This is going to break on leap days and 31 day months (well, I guess? what does 3.5 months mean in the general case?)
+      next.add(Calendar.SECOND, (int)(remainder * 30 * 24 * 60 * 60));
+    }
+    else if (field == Calendar.DAY_OF_MONTH) {
+      double remainder = amount - amountFloor;
+      next.add(Calendar.DAY_OF_MONTH, (int)amountFloor);
+      // MS: This is going to break on leap days
+      next.add(Calendar.SECOND, (int)(remainder * 24 * 60 * 60));
+    }
+    else if (field == Calendar.HOUR) {
+      next.add(Calendar.MILLISECOND, (int)(amount * 60 * 60 * 1000));
+    }
+    else if (field == Calendar.MINUTE) {
+      next.add(Calendar.MILLISECOND, (int)(amount * 60 * 1000));
+    }
+    else if (field == Calendar.SECOND) {
+      next.add(Calendar.MILLISECOND, (int)(amount * 1000));
+    }
+    else if (field == Calendar.MILLISECOND) {
+      throw new IllegalArgumentException("Fractional milliseconds (" + amount + ") are not supported.");
+    }
     return next;
   }
 }

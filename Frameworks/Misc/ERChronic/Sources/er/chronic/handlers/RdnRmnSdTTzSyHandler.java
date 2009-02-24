@@ -14,6 +14,10 @@ import er.chronic.utils.Token;
 public class RdnRmnSdTTzSyHandler implements IHandler {
 
   public Span handle(List<Token> tokens, Options options) {
+    // MS: Original changed to:
+    // t = Chronic.time_class.parse(@text)
+    // Span.new(t, t + 1)
+
     int month = tokens.get(1).getTag(RepeaterMonthName.class).getType().ordinal();
     int day = tokens.get(2).getTag(ScalarDay.class).getType().intValue();
     int year = tokens.get(5).getTag(ScalarYear.class).getType().intValue();

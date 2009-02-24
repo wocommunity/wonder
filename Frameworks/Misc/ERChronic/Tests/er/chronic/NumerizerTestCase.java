@@ -51,4 +51,8 @@ public class NumerizerTestCase extends TestCase {
       assertEquals(value.intValue(), Integer.parseInt(Numerizer.numerize(str)));
     }
   }
+  
+  public void testEdges() {
+    assertEquals("27 Oct 2006 7:30am", Numerizer.numerize("27 Oct 2006 7:30am"));
+  }
 }

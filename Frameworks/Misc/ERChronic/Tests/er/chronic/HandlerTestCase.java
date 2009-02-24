@@ -23,12 +23,14 @@ import er.chronic.utils.Time;
 import er.chronic.utils.Token;
 
 public class HandlerTestCase extends TestCase {
+  private Options _options;
   private Calendar _now;
   
   @Override
   protected void setUp() throws Exception {
     super.setUp();
     _now = Time.construct(2006, 8, 16, 14, 0, 0, 0);
+    _options = new Options();
   }
   
   public void testHandlerClass1() {
@@ -37,12 +39,12 @@ public class HandlerTestCase extends TestCase {
     tokens.add(new Token("friday"));
     tokens.get(0).tag(new RepeaterDayName(RepeaterDayName.DayName.FRIDAY));
     
-    assertTrue(handler.match(tokens, Handler.definitions()));
+    assertTrue(handler.match(tokens, Handler.definitions(_options)));
     
     tokens.add(new Token("afternoon"));
     tokens.get(1).tag(new EnumRepeaterDayPortion(RepeaterDayPortion.DayPortion.AFTERNOON));
     
-    assertFalse(handler.match(tokens, Handler.definitions()));
+    assertFalse(handler.match(tokens, Handler.definitions(_options)));
   }
   
   public void testHandlerClass2() {
@@ -51,17 +53,17 @@ public class HandlerTestCase extends TestCase {
     tokens.add(new Token("friday"));
     tokens.get(0).tag(new RepeaterDayName(RepeaterDayName.DayName.FRIDAY));
     
-    assertTrue(handler.match(tokens, Handler.definitions()));
+    assertTrue(handler.match(tokens, Handler.definitions(_options)));
     
     tokens.add(new Token("afternoon"));
     tokens.get(1).tag(new EnumRepeaterDayPortion(RepeaterDayPortion.DayPortion.AFTERNOON));
     
-    assertTrue(handler.match(tokens, Handler.definitions()));
+    assertTrue(handler.match(tokens, Handler.definitions(_options)));
     
     tokens.add(new Token("afternoon"));
     tokens.get(2).tag(new EnumRepeaterDayPortion(RepeaterDayPortion.DayPortion.AFTERNOON));
     
-    assertFalse(handler.match(tokens, Handler.definitions()));
+    assertFalse(handler.match(tokens, Handler.definitions(_options)));
   }
 
   public void testHandlerClass3() {
@@ -70,12 +72,12 @@ public class HandlerTestCase extends TestCase {
     tokens.add(new Token("friday"));
     tokens.get(0).tag(new RepeaterDayName(RepeaterDayName.DayName.FRIDAY));
     
-    assertTrue(handler.match(tokens, Handler.definitions()));
+    assertTrue(handler.match(tokens, Handler.definitions(_options)));
     
     tokens.add(new Token("afternoon"));
     tokens.get(1).tag(new EnumRepeaterDayPortion(RepeaterDayPortion.DayPortion.AFTERNOON));
     
-    assertFalse(handler.match(tokens, Handler.definitions()));
+    assertFalse(handler.match(tokens, Handler.definitions(_options)));
   }
 
   public void testHandlerClass4() {
@@ -84,12 +86,12 @@ public class HandlerTestCase extends TestCase {
     tokens.add(new Token("may"));
     tokens.get(0).tag(new RepeaterMonthName(RepeaterMonthName.MonthName.MAY));
     
-    assertFalse(handler.match(tokens, Handler.definitions()));
+    assertFalse(handler.match(tokens, Handler.definitions(_options)));
     
     tokens.add(new Token("27"));
     tokens.get(1).tag(new ScalarDay(Integer.valueOf(27)));
     
-    assertTrue(handler.match(tokens, Handler.definitions()));
+    assertTrue(handler.match(tokens, Handler.definitions(_options)));
   }
 
   public void testHandlerClass5() {
@@ -98,17 +100,17 @@ public class HandlerTestCase extends TestCase {
     tokens.add(new Token("friday"));
     tokens.get(0).tag(new RepeaterDayName(RepeaterDayName.DayName.FRIDAY));
     
-    assertTrue(handler.match(tokens, Handler.definitions()));
+    assertTrue(handler.match(tokens, Handler.definitions(_options)));
     
     tokens.add(new Token("5:00"));
     tokens.get(1).tag(new RepeaterTime("5:00"));
     
-    assertTrue(handler.match(tokens, Handler.definitions()));
+    assertTrue(handler.match(tokens, Handler.definitions(_options)));
     
     tokens.add(new Token("pm"));
     tokens.get(2).tag(new EnumRepeaterDayPortion(RepeaterDayPortion.DayPortion.PM));
     
-    assertTrue(handler.match(tokens, Handler.definitions()));
+    assertTrue(handler.match(tokens, Handler.definitions(_options)));
   }
 
   public void testHandlerClass6() {
@@ -122,7 +124,7 @@ public class HandlerTestCase extends TestCase {
     tokens.get(1).tag(new RepeaterYear());
     tokens.get(2).tag(new Pointer(Pointer.PointerType.PAST));
     
-    assertTrue(handler.match(tokens, Handler.definitions()));
+    assertTrue(handler.match(tokens, Handler.definitions(_options)));
   }
 
 //    def test_constantize

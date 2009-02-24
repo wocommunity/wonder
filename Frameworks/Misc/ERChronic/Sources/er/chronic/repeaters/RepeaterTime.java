@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import er.chronic.Options;
 import er.chronic.tags.Pointer;
+import er.chronic.tags.Scalar;
 import er.chronic.tags.Pointer.PointerType;
 import er.chronic.utils.Span;
 import er.chronic.utils.StringUtils;
@@ -94,12 +95,16 @@ public class RepeaterTime extends Repeater<Tick> {
       Calendar midnight = Time.ymd(now);
       Calendar yesterdayMidnight = Time.cloneAndAdd(midnight, Calendar.SECOND, -fullDay);
       Calendar tomorrowMidnight = Time.cloneAndAdd(midnight, Calendar.SECOND, fullDay);
+      
+      int offsetFix = (midnight.get(Calendar.ZONE_OFFSET) - tomorrowMidnight.get(Calendar.ZONE_OFFSET)) / 1000;
+      tomorrowMidnight.add(Calendar.SECOND, offsetFix);
+
       boolean done = false;
       if (pointer == Pointer.PointerType.FUTURE) {
         if (tick.isAmbiguous()) {
           List<Calendar> futureDates = new LinkedList<Calendar>();
-          futureDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue()));
-          futureDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, halfDay + tick.intValue()));
+          futureDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue() + offsetFix));
+          futureDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, halfDay + tick.intValue() + offsetFix));
           futureDates.add(Time.cloneAndAdd(tomorrowMidnight, Calendar.SECOND, tick.intValue()));
           for (Calendar futureDate : futureDates) {
             if (futureDate.after(now) || futureDate.equals(now)) {
@@ -111,7 +116,7 @@ public class RepeaterTime extends Repeater<Tick> {
         }
         else {
           List<Calendar> futureDates = new LinkedList<Calendar>();
-          futureDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue()));
+          futureDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue() + offsetFix));
           futureDates.add(Time.cloneAndAdd(tomorrowMidnight, Calendar.SECOND, tick.intValue()));
           for (Calendar futureDate : futureDates) {
             if (futureDate.after(now) || futureDate.equals(now)) {
@@ -125,9 +130,9 @@ public class RepeaterTime extends Repeater<Tick> {
       else {
         if (tick.isAmbiguous()) {
           List<Calendar> pastDates = new LinkedList<Calendar>();
-          pastDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, halfDay + tick.intValue()));
-          pastDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue()));
-          pastDates.add(Time.cloneAndAdd(yesterdayMidnight, Calendar.SECOND, tick.intValue() * 2));
+          pastDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, halfDay + tick.intValue() + offsetFix));
+          pastDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue() + offsetFix));
+          pastDates.add(Time.cloneAndAdd(yesterdayMidnight, Calendar.SECOND, tick.intValue() + halfDay));
           for (Calendar pastDate : pastDates) {
             if (pastDate.before(now) || pastDate.equals(now)) {
               _currentTime = pastDate;
@@ -138,7 +143,7 @@ public class RepeaterTime extends Repeater<Tick> {
         }
         else {
           List<Calendar> pastDates = new LinkedList<Calendar>();
-          pastDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue()));
+          pastDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue() + offsetFix));
           pastDates.add(Time.cloneAndAdd(yesterdayMidnight, Calendar.SECOND, tick.intValue()));
           for (Calendar pastDate : pastDates) {
             if (pastDate.before(now) || pastDate.equals(now)) {
@@ -173,7 +178,7 @@ public class RepeaterTime extends Repeater<Tick> {
   }
 
   @Override
-  public Span getOffset(Span span, int amount, PointerType pointer) {
+  public Span getOffset(Span span, float amount, PointerType pointer) {
     throw new IllegalStateException("Not implemented.");
   }
 
@@ -188,7 +193,9 @@ public class RepeaterTime extends Repeater<Tick> {
   }
 
   public static RepeaterTime scan(Token token, List<Token> tokens, Options options) {
-    if (RepeaterTime.TIME_PATTERN.matcher(token.getWord()).matches()) {
+    // MS: added an exclusion so 3.25 doesn't match a time ...
+    if (RepeaterTime.TIME_PATTERN.matcher(token.getWord()).matches() && !Scalar.FRACTIONAL_SCALAR_PATTERN.matcher(token.getWord()).matches()) {
+    // if (RepeaterTime.TIME_PATTERN.matcher(token.getWord()).matches()) {
       return new RepeaterTime(token.getWord());
     }
     Integer intStrValue = StringUtils.integerValue(token.getWord());
