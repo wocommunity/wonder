@@ -1,5 +1,7 @@
 package er.chronic.utils;
 
+import java.util.List;
+
 public class Range {
   private long _begin;
   private long _end;
@@ -39,6 +41,14 @@ public class Range {
 
   @Override
   public boolean equals(Object obj) {
-    return obj instanceof Range && ((Range)obj)._begin == _begin && ((Range)obj)._end == _end;
+    return obj instanceof Range && ((Range) obj)._begin == _begin && ((Range) obj)._end == _end;
+  }
+
+  public <T> List<T> subList(List<T> list) {
+    return list.subList((int) _begin, (int) _end);
+  }
+  
+  public String toString() {
+    return "[Range: " + _begin + "-" + _end + "]";
   }
 }

@@ -218,8 +218,4 @@ public class Chronic {
     Span guess = new Span(guessValue, guessValue);
     return guess;
   }
-  
-  public static void main(String[] args) {
-    System.out.println("Chronic.main: " + Chronic.parse("Mon Apr 02 17:00:00 PDT 2007", new Options()));
-  }
 }
