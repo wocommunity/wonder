@@ -192,7 +192,6 @@ public class Handler {
   }
 
   public static Span tokensToSpan(List<Token> tokens, Options options) {
-    System.out.println("Handler.tokensToSpan: " + tokens);
     if (options.isDebug()) {
       System.out.println("Chronic.tokensToSpan: " + tokens);
     }
