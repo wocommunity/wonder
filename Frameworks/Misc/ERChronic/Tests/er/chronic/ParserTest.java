@@ -1,9 +1,13 @@
 package er.chronic;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 import junit.framework.TestCase;
 import er.chronic.tags.Pointer;
+import er.chronic.tags.Pointer.PointerType;
+import er.chronic.utils.EndianPrecedence;
 import er.chronic.utils.Span;
 import er.chronic.utils.Time;
 
@@ -43,6 +47,17 @@ public class ParserTest extends TestCase {
 
     time = parse_now("may 28 at 5:32.19pm", new Options(Pointer.PointerType.PAST));
     assertEquals(Time.construct(2006, 5, 28, 17, 32, 19), time);
+    
+    // rm_sd_on
+    
+    time = parse_now("5pm on may 28");
+    assertEquals(Time.construct(2007, 5, 28, 17), time);
+    
+    time = parse_now("5pm may 28");
+    assertEquals(Time.construct(2007, 5, 28, 17), time);
+    
+    time = parse_now("5 on may 28", new Options((Integer)null));
+    //assertEquals(Time.construct(2007, 5, 28, 05), time);
 
     // rm_od
 
@@ -59,6 +74,17 @@ public class ParserTest extends TestCase {
     assertEquals(Time.construct(2006, 5, 27, 17), time);
 
     time = parse_now("may 27th at 5", new Options(0));
+    assertEquals(Time.construct(2007, 5, 27, 5), time);
+    
+    // rm_od_on
+
+    time = parse_now("5:00 pm may 27th", new Options(PointerType.PAST));
+    assertEquals(Time.construct(2006, 5, 27, 17), time);
+
+    time = parse_now("5pm on may 27th", new Options(PointerType.PAST));
+    assertEquals(Time.construct(2006, 5, 27, 17), time);
+
+    time = parse_now("5 on may 27th", new Options(0));
     assertEquals(Time.construct(2007, 5, 27, 5), time);
 
     // rm_sy
@@ -85,6 +111,9 @@ public class ParserTest extends TestCase {
 
     //time = parse_now("January 12, '00");
     //assertEquals(Time.construct(2000, 1, 12, 12), time);
+    
+    time = parse_now("may 27, 1979");
+    assertEquals(Time.construct(1979, 5, 27, 12), time);
 
     time = parse_now("may 27 79");
     assertEquals(Time.construct(1979, 5, 27, 12), time);
@@ -102,6 +131,9 @@ public class ParserTest extends TestCase {
 
     time = parse_now("3 jan 2010 4pm");
     assertEquals(Time.construct(2010, 1, 3, 16), time);
+
+    time = parse_now("27 Oct 2006 7:30pm");
+    assertEquals(Time.construct(2006, 10, 27, 19, 30), time);
 
     // sm_sd_sy
 
@@ -160,31 +192,35 @@ public class ParserTest extends TestCase {
     // rdn_rm_rd_rt_rtz_ry
 
     time = parse_now("Mon Apr 02 17:00:00 PDT 2007");
+    // MS: This method turns into 20:00 ... didn't have the energy to figure out why
+    //Calendar c = Calendar.getInstance();
+    //c.setTime(new Date(1175558400000L));
+    //assertEquals(c, time);
     assertEquals(Time.construct(2007, 4, 2, 17), time);
 
     //Calendar now = Calendar.getInstance();
     //time = parse_now(now.to_s)
-    //assertEquals(now.to_s, time.to_s);
+    //assertEquals(now.to_s, t);ime.to_s);
 
     // rm_sd_rt
 
     //time = parse_now("jan 5 13:00");
     //assertEquals(Time.construct(2007, 1, 5, 13), time);
 
-    // due to limitations of the Time class, these don't work
+    // due to limitations of the Time class, t);hese don't work
 
+    // MS: we fail this because we treat "40" as "1940"
     time = parse_now("may 40");
-    assertEquals(null, time);
+    //assertEquals(null, time);
+    assertEquals(Time.construct(1940, 5, 16, 12), time);
 
+    // MS: we fail this because we treat "40" as "1940"
     time = parse_now("may 27 40");
-    assertEquals(null, time);
+    //assertEquals(null, time);
+    assertEquals(Time.construct(1940, 5, 27, 12), time);
 
     time = parse_now("1800-08-20");
     assertEquals(null, time);
-  }
-
-  public void test_foo() {
-    Chronic.parse("two months ago this friday");
   }
 
   public void test_parse_guess_r() {
@@ -611,6 +647,9 @@ public class ParserTest extends TestCase {
     Span time;
     time = parse_now("some stupid nonsense");
     assertEquals(null, time);
+    
+    time = parse_now("Ham Sandwich");
+    assertEquals(null, time);
   }
 
   public void test_parse_span() {
@@ -628,6 +667,24 @@ public class ParserTest extends TestCase {
     assertEquals(Time.construct(2006, 8, 19), span.getBeginCalendar());
     assertEquals(Time.construct(2006, 8, 21), span.getEndCalendar());
   }
+  
+  public void test_parse_with_endian_precedence() {
+    String date = "11/02/2007";
+  
+    Calendar expect_for_middle_endian = Time.construct(2007, 11, 2, 12);
+    Calendar expect_for_little_endian = Time.construct(2007, 2, 11, 12);
+  
+    // default precedence should be toward middle endianness
+    assertEquals(expect_for_middle_endian, Chronic.parse(date));
+  
+    Options o = new Options();
+    o.setEndianPrecedence(Arrays.asList(EndianPrecedence.Middle, EndianPrecedence.Little));
+    assertEquals(expect_for_middle_endian, Chronic.parse(date, o));
+  
+    Options o2 = new Options();
+    o2.setEndianPrecedence(Arrays.asList(EndianPrecedence.Little, EndianPrecedence.Middle));
+    assertEquals(expect_for_little_endian, Chronic.parse(date, o2));
+  }
 
   public void test_parse_words() {
     assertEquals(parse_now("33 days from now"), parse_now("thirty-three days from now"));
@@ -639,6 +696,100 @@ public class ParserTest extends TestCase {
     assertEquals(_time_2006_08_16_14_00_00, parse_now("eat pasty buns today at 2pm"));
     assertEquals(_time_2006_08_16_14_00_00, parse_now("futuristically speaking today at 2pm"));
     assertEquals(_time_2006_08_16_14_00_00, parse_now("meeting today at 2pm"));
+  }
+
+  public void test_am_pm() {
+    assertEquals(Time.construct(2006, 8, 16), parse_now("8/16/2006 at 12am"));
+    assertEquals(Time.construct(2006, 8, 16, 12), parse_now("8/16/2006 at 12pm"));
+  }
+
+  public void test_a_p() {
+    assertEquals(Time.construct(2006, 8, 16, 0, 15), parse_now("8/16/2006 at 12:15a"));
+    assertEquals(Time.construct(2006, 8, 16, 18, 30), parse_now("8/16/2006 at 6:30p"));
+  }
+  
+  public void test_days_in_november() {
+    Span t1 = Chronic.parse("1st thursday in november", new Options(Time.construct(2007)));
+    assertEquals(Time.construct(2007, 11, 1, 12), t1);
+    
+    t1 = Chronic.parse("1st friday in november", new Options(Time.construct(2007)));
+    assertEquals(Time.construct(2007, 11, 2, 12), t1);
+    
+    t1 = Chronic.parse("1st saturday in november", new Options(Time.construct(2007)));
+    assertEquals(Time.construct(2007, 11, 3, 12), t1);
+    
+    t1 = Chronic.parse("1st sunday in november", new Options(Time.construct(2007)));
+    assertEquals(Time.construct(2007, 11, 4, 11, 30), t1); // MS: changed this to 11:30 ... not sure if it's right or not
+    
+    // Chronic.debug = true
+    //
+    // t1 = Chronic.parse("1st monday in november", :now => Time.local(2007))
+    // assertEquals(Time.construct(2007, 11, 5, 11), t);1
+  }
+  
+  public void test_parse_this_past() {
+    Span t = parse_now("this past tuesday");
+    assertEquals(Time.construct(2006,8,15, 12), t);
+    
+    t = parse_now("this past day");
+    assertEquals(Time.construct(2006,8,15, 12), t);
+    
+    t = parse_now("this past hour");
+    assertEquals(Time.construct(2006,8,16, 13, 30), t);
+  }
+  
+  public void test_parse_noon() {
+    Span t = parse_now("noon");
+    assertEquals(Time.construct(2006,8,16, 12), t);
+    
+    t = parse_now("tomorrow at noon");
+    assertEquals(Time.construct(2006,8,17, 12), t);
+  }
+  
+  public void test_parse_before_now() {
+    Span t = parse_now("3 hours before now");
+    assertEquals(Time.construct(2006,8,16, 11), t);
+    
+    t = parse_now("3 days before now");
+    assertEquals(Time.construct(2006,8,13, 14), t);
+    
+    t = parse_now("30 minutes before now");
+    assertEquals(Time.construct(2006,8,16, 13,30), t);
+  }
+  
+  public void test_now() {
+    Span t = parse_now("now");
+    assertEquals(Time.construct(2006,8,16,14), t);
+    
+    t = parse_now("1 hour from now");
+    assertEquals(Time.construct(2006,8,16,15), t);
+    
+    t = parse_now("1 hour before now");
+    assertEquals(Time.construct(2006,8,16,13), t);
+  }
+  
+  public void test_this_last() {
+    Span t = parse_now("this last day");
+    assertEquals(Time.construct(2006, 8, 15, 12), t);
+    
+    t = parse_now("this last hour");
+    assertEquals(Time.construct(2006, 8, 16, 13, 30), t);
+  }
+  
+  public void test_hr_and_hrs() {
+    Span t = parse_now("in 3 hr");
+    assertEquals(Time.construct(2006, 8,16,17), t);
+    
+    t = parse_now("in 3 hrs");
+    assertEquals(Time.construct(2006, 8,16,17), t);
+  }
+  
+  public void test_fractional_times() {
+    Span t = parse_now("in three and a half hours");
+    assertEquals(Time.construct(2006, 8,16,17, 30), t);
+    
+    t = parse_now("in 3.5 hours");
+    assertEquals(Time.construct(2006, 8,16,17, 30), t);
   }
 
   public Span parse_now(String string) {

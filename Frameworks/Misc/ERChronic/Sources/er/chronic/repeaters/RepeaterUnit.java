@@ -13,13 +13,14 @@ public abstract class RepeaterUnit extends Repeater<Object> {
   private static final Pattern FORTNIGHT_PATTERN = Pattern.compile("^fortnights?$");
   private static final Pattern WEEK_PATTERN = Pattern.compile("^weeks?$");
   private static final Pattern WEEKEND_PATTERN = Pattern.compile("^weekends?$");
+  private static final Pattern WEEKDAY_PATTERN = Pattern.compile("^(week|business)days?$");
   private static final Pattern DAY_PATTERN = Pattern.compile("^days?$");
   private static final Pattern HOUR_PATTERN = Pattern.compile("^hours?$");
   private static final Pattern MINUTE_PATTERN = Pattern.compile("^minutes?$");
   private static final Pattern SECOND_PATTERN = Pattern.compile("^seconds?$");
 
   public static enum UnitName {
-    YEAR, SEASON, MONTH, FORTNIGHT, WEEK, WEEKEND, DAY, HOUR, MINUTE, SECOND
+    YEAR, SEASON, MONTH, FORTNIGHT, WEEK, WEEKEND, WEEKDAY, DAY, HOUR, MINUTE, SECOND
   }
   
   public RepeaterUnit() {
@@ -35,6 +36,7 @@ public abstract class RepeaterUnit extends Repeater<Object> {
       scanner.put(RepeaterUnit.FORTNIGHT_PATTERN, RepeaterUnit.UnitName.FORTNIGHT);
       scanner.put(RepeaterUnit.WEEK_PATTERN, RepeaterUnit.UnitName.WEEK);
       scanner.put(RepeaterUnit.WEEKEND_PATTERN, RepeaterUnit.UnitName.WEEKEND);
+      scanner.put(RepeaterUnit.WEEKDAY_PATTERN, RepeaterUnit.UnitName.WEEKDAY);
       scanner.put(RepeaterUnit.DAY_PATTERN, RepeaterUnit.UnitName.DAY);
       scanner.put(RepeaterUnit.HOUR_PATTERN, RepeaterUnit.UnitName.HOUR);
       scanner.put(RepeaterUnit.MINUTE_PATTERN, RepeaterUnit.UnitName.MINUTE);

@@ -57,7 +57,7 @@ public class RepeaterWeekend extends RepeaterUnit {
   }
 
   @Override
-  public Span getOffset(Span span, int amount, PointerType pointer) {
+  public Span getOffset(Span span, float amount, PointerType pointer) {
     int direction = (pointer == Pointer.PointerType.FUTURE) ? 1 : -1;
     RepeaterWeekend weekend = new RepeaterWeekend();
     weekend.setStart(span.getBeginCalendar());

@@ -1,5 +1,6 @@
 package er.chronic.handlers;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,10 +28,12 @@ import er.chronic.tags.Separator;
 import er.chronic.tags.SeparatorAt;
 import er.chronic.tags.SeparatorComma;
 import er.chronic.tags.SeparatorIn;
+import er.chronic.tags.SeparatorOn;
 import er.chronic.tags.SeparatorSlashOrDash;
 import er.chronic.tags.Tag;
 import er.chronic.tags.TimeZone;
 import er.chronic.tags.Pointer.PointerType;
+import er.chronic.utils.EndianPrecedence;
 import er.chronic.utils.Span;
 import er.chronic.utils.Time;
 import er.chronic.utils.Token;
@@ -104,23 +107,52 @@ public class Handler {
     return "[Handler: " + _handler + "]";
   }
 
-  public static synchronized Map<Handler.HandlerType, List<Handler>> definitions() {
-    if (_definitions == null) {
-      Map<Handler.HandlerType, List<Handler>> definitions = new HashMap<Handler.HandlerType, List<Handler>>();
+  public static synchronized Map<Handler.HandlerType, List<Handler>> definitions(Options options) {
+    Map<Handler.HandlerType, List<Handler>> definitions = _definitions;
+    
+    // MS: technically we can't cache any longer because endian precendence mucks with the settings ...
+    List<EndianPrecedence> defaultEndianPrecedences = Arrays.asList(EndianPrecedence.Middle, EndianPrecedence.Little);
+    if (definitions == null || (options.getEndianPrecedence() != null && !options.getEndianPrecedence().equals(defaultEndianPrecedences))) {
+      List<EndianPrecedence> endianPrecendence = options.getEndianPrecedence();
+      if (endianPrecendence == null) {
+        endianPrecendence = defaultEndianPrecedences;
+      }
+
+      // ensure the endian precedence is exactly two elements long
+      if (endianPrecendence.size() != 2) {
+        throw new IllegalArgumentException("More than two elements specified for endian precedence array: " + endianPrecendence + ".");
+      }
+
+      Map<EndianPrecedence, Handler> endianHandlers = new HashMap<EndianPrecedence, Handler>();
+      // handler for dd/mm/yyyy
+      endianHandlers.put(EndianPrecedence.Little, new Handler(new SdSmSyHandler(), new TagPattern(ScalarDay.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarMonth.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarYear.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
+
+      // handler for mm/dd/yyyy
+      endianHandlers.put(EndianPrecedence.Middle, new Handler(new SmSdSyHandler(), new TagPattern(ScalarMonth.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarDay.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarYear.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
+
+      // ensure we have valid endian values
+      // MS: generics guarantee this for us 
+
+      definitions = new HashMap<Handler.HandlerType, List<Handler>>();
 
       List<Handler> timeHandlers = new LinkedList<Handler>();
       timeHandlers.add(new Handler(null, new TagPattern(RepeaterTime.class), new TagPattern(Grabber.class, true), new TagPattern(RepeaterDayPortion.class, true)));
       definitions.put(Handler.HandlerType.TIME, timeHandlers);
 
       List<Handler> dateHandlers = new LinkedList<Handler>();
-      dateHandlers.add(new Handler(new RdnRmnSdTTzSyHandler(), new TagPattern(RepeaterDayName.class), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new TagPattern(RepeaterTime.class), new TagPattern(TimeZone.class), new TagPattern(ScalarYear.class)));
+      dateHandlers.add(new Handler(new RdnRmnSdTTzSyHandler(), new TagPattern(RepeaterDayName.class), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new TagPattern(RepeaterTime.class), new TagPattern(SeparatorSlashOrDash.class, true), new TagPattern(TimeZone.class), new TagPattern(ScalarYear.class)));
       // DIFF: We add scalar year as a standalone match
       dateHandlers.add(new Handler(new SyHandler(), new TagPattern(ScalarYear.class)));
       // DIFF: We add an optional comma to MDY
       dateHandlers.add(new Handler(new RmnSdSyHandler(), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new TagPattern(SeparatorComma.class, true), new TagPattern(ScalarYear.class)));
       dateHandlers.add(new Handler(new RmnSdSyHandler(), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new TagPattern(SeparatorComma.class, true), new TagPattern(ScalarYear.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
       dateHandlers.add(new Handler(new RmnSdHandler(), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
+      for (EndianPrecedence precedence : endianPrecendence) {
+        dateHandlers.add(endianHandlers.get(precedence));
+      }
+      dateHandlers.add(new Handler(new RmnSdOnHandler(), new TagPattern(RepeaterTime.class), new TagPattern(RepeaterDayPortion.class, true), new TagPattern(SeparatorOn.class, true), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class)));
       dateHandlers.add(new Handler(new RmnOdHandler(), new TagPattern(RepeaterMonthName.class), new TagPattern(OrdinalDay.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
+      dateHandlers.add(new Handler(new RmnOdOnHandler(), new TagPattern(RepeaterTime.class), new TagPattern(RepeaterDayPortion.class, true), new TagPattern(SeparatorOn.class, true), new TagPattern(RepeaterMonthName.class), new TagPattern(OrdinalDay.class)));
       dateHandlers.add(new Handler(new RmnSyHandler(), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarYear.class)));
       dateHandlers.add(new Handler(new SdRmnSyHandler(), new TagPattern(ScalarDay.class), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarYear.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
       dateHandlers.add(new Handler(new SmSdSyHandler(), new TagPattern(ScalarMonth.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarDay.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarYear.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
@@ -151,18 +183,22 @@ public class Handler {
       narrowHandlers.add(new Handler(new ORSRHandler(), new TagPattern(Ordinal.class), new TagPattern(Repeater.class), new TagPattern(SeparatorIn.class), new TagPattern(Repeater.class)));
       narrowHandlers.add(new Handler(new ORGRHandler(), new TagPattern(Ordinal.class), new TagPattern(Repeater.class), new TagPattern(Grabber.class), new TagPattern(Repeater.class)));
       definitions.put(Handler.HandlerType.NARROW, narrowHandlers);
-      _definitions = definitions;
+      
+      if (_definitions == null) {
+        _definitions = definitions;
+      }
     }
-    return _definitions;
+    return definitions;
   }
 
   public static Span tokensToSpan(List<Token> tokens, Options options) {
+    System.out.println("Handler.tokensToSpan: " + tokens);
     if (options.isDebug()) {
       System.out.println("Chronic.tokensToSpan: " + tokens);
     }
 
     // maybe it's a specific date
-    Map<Handler.HandlerType, List<Handler>> definitions = definitions();
+    Map<Handler.HandlerType, List<Handler>> definitions = Handler.definitions(options);
     for (Handler handler : definitions.get(Handler.HandlerType.DATE)) {
       if (handler.isCompatible(options) && handler.match(tokens, definitions)) {
         if (options.isDebug()) {
@@ -298,6 +334,11 @@ public class Handler {
     Span anchor = findWithin(repeaters, outerSpan, pointer, options);
     return anchor;
   }
+  
+  // MS: Not necessary because we changed the impl to be more javaish
+  //def apply_endian_precedences(precedences)
+  //def endian_variable_name_for(e)
+  //def swap(arr, a, b); arr[a], arr[b] = arr[b], arr[a]; end
 
   public static Span dayOrTime(Calendar dayStart, List<Token> timeTokens, Options options) {
     Span outerSpan = new Span(dayStart, Time.cloneAndAdd(dayStart, Calendar.DAY_OF_MONTH, 1));

@@ -13,7 +13,7 @@ import er.chronic.utils.Token;
 public class SRPHandler implements IHandler {
 
   public Span handle(List<Token> tokens, Span span, Options options) {
-    int distance = tokens.get(0).getTag(Scalar.class).getType().intValue();
+    float distance = tokens.get(0).getTag(Scalar.class).getType().floatValue();
     Repeater<?> repeater = tokens.get(1).getTag(Repeater.class);
     Pointer.PointerType pointer = tokens.get(2).getTag(Pointer.class).getType();
     return repeater.getOffset(span, distance, pointer);

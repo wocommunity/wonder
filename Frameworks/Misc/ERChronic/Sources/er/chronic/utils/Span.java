@@ -10,7 +10,7 @@ import java.util.Calendar;
  */
 public class Span extends Range {
 
-  public Span(Calendar begin, int field, long amount) {
+  public Span(Calendar begin, int field, float amount) {
     this(begin, Time.cloneAndAdd(begin, field, amount));
   }
 
@@ -40,6 +40,14 @@ public class Span extends Range {
    */
   public Span add(long seconds) {
     return new Span(getBegin() + seconds, getEnd() + seconds);
+  }
+
+  /**
+   * Add a number of seconds to this span, returning the 
+   * resulting Span
+   */
+  public Span add(float seconds) {
+    return new Span(getBegin() + (long)seconds, getEnd() + (long)seconds);
   }
 
   /**

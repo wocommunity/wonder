@@ -18,7 +18,7 @@ public class OrdinalDay extends Ordinal {
     Matcher ordinalMatcher = Ordinal.ORDINAL_PATTERN.matcher(token.getWord());
     if (ordinalMatcher.find()) {
       int ordinalValue = Integer.parseInt(ordinalMatcher.group(1));
-      if (!(ordinalValue > 31)) {
+      if (!(ordinalValue > 31 || ordinalValue < 1)) {
         return new OrdinalDay(Integer.valueOf(ordinalValue));
       }
     }

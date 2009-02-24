@@ -87,6 +87,6 @@ public class Token {
 
   @Override
   public String toString() {
-    return _word + " " + _tags;
+    return _word + "" + _tags;
   }
 }

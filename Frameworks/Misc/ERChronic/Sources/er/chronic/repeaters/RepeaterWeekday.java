@@ -7,21 +7,23 @@ import er.chronic.tags.Pointer.PointerType;
 import er.chronic.utils.Span;
 import er.chronic.utils.Time;
 
-public class RepeaterDay extends RepeaterUnit {
+// MS: Not ported yet
+public class RepeaterWeekday extends RepeaterUnit {
+  public static final int WEEK_WEEKDAYS = 5;
   public static final int DAY_SECONDS = 86400; // (24 * 60 * 60);
 
-  private Calendar _currentDayStart;
+  private Calendar _currentWeekdayStart;
 
   @Override
   protected Span _nextSpan(PointerType pointer) {
-    if (_currentDayStart == null) {
-      _currentDayStart = Time.ymd(getNow());
+    if (_currentWeekdayStart == null) {
+      _currentWeekdayStart = Time.ymd(getNow());
     }
 
     int direction = (pointer == Pointer.PointerType.FUTURE) ? 1 : -1;
-    _currentDayStart.add(Calendar.DAY_OF_MONTH, direction);
+    _currentWeekdayStart.add(Calendar.DAY_OF_MONTH, direction);
 
-    return new Span(_currentDayStart, Calendar.DAY_OF_MONTH, 1);
+    return new Span(_currentWeekdayStart, Calendar.DAY_OF_MONTH, 1);
   }
 
   @Override
@@ -38,7 +40,7 @@ public class RepeaterDay extends RepeaterUnit {
     }
     else if (pointer == PointerType.NONE) {
       dayBegin = Time.ymd(getNow());
-      dayEnd = Time.cloneAndAdd(Time.ymdh(getNow()), Calendar.SECOND, RepeaterDay.DAY_SECONDS);
+      dayEnd = Time.cloneAndAdd(Time.ymdh(getNow()), Calendar.SECOND, RepeaterWeekday.DAY_SECONDS);
     }
     else {
       throw new IllegalArgumentException("Unable to handle pointer " + pointer + ".");
@@ -50,13 +52,13 @@ public class RepeaterDay extends RepeaterUnit {
   public Span getOffset(Span span, float amount, Pointer.PointerType pointer) {
     int direction = (pointer == Pointer.PointerType.FUTURE) ? 1 : -1;
     // WARN: Does not use Calendar
-    return span.add(direction * amount * RepeaterDay.DAY_SECONDS);
+    return span.add(direction * amount * RepeaterWeekday.DAY_SECONDS);
   }
 
   @Override
   public int getWidth() {
     // WARN: Does not use Calendar
-    return RepeaterDay.DAY_SECONDS;
+    return RepeaterWeekday.DAY_SECONDS;
   }
 
   @Override

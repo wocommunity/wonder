@@ -20,7 +20,7 @@ public class ScalarMonth extends Scalar {
   public static ScalarMonth scan(Token token, Token postToken, Options options) {
     if (ScalarMonth.MONTH_PATTERN.matcher(token.getWord()).matches()) {
       int scalarValue = Integer.parseInt(token.getWord());
-      if (!(scalarValue > 12 || (postToken != null && Scalar.TIMES.contains(postToken.getWord())))) {
+      if (!(scalarValue > 12 || scalarValue < 1 || (postToken != null && Scalar.TIMES.contains(postToken.getWord())))) {
         return new ScalarMonth(Integer.valueOf(scalarValue));
       }
     }

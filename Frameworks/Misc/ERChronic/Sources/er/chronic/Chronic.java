@@ -1,5 +1,6 @@
 package er.chronic;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import er.chronic.utils.Span;
 import er.chronic.utils.Token;
 
 public class Chronic {
-  public static final String VERSION = "0.2.3";
+  public static final String VERSION = "0.3.0";
 
   private Chronic() {
     // DO NOTHING
@@ -45,7 +46,7 @@ public class Chronic {
    *     Time (defaults to Time.now)
    *
    *     By setting <tt>:now</tt> to a Time, all computations will be based off
-   *     of that time instead of Time.now
+   *     of that time instead of Time.now. If set to null, Chronic will use Time.now.
    *
    * [<tt>:guess</tt>]
    *     +true+ or +false+ (defaults to +true+)
@@ -69,6 +70,17 @@ public class Chronic {
   public static Span parse(String text, Options options) {
     // store now for later =)
     //_now = options.getNow();
+    
+    // handle options that were set to nil
+    if (options.getContext() == null) {
+      options.setContext(Pointer.PointerType.FUTURE);
+    }
+    if (options.getNow() == null) {
+      options.setNow(Calendar.getInstance());
+    }
+    if (options.getAmbiguousTimeRange() == null) {
+      options.setAmbiguousTimeRange(Integer.valueOf(6));
+    }
 
     // put the text into a normal format to ease scanning
     String normalizedText = Chronic.preNormalize(text);
@@ -134,23 +146,29 @@ public class Chronic {
   protected static String preNormalize(String text) {
     String normalizedText = text.toLowerCase();
     normalizedText = Chronic.numericizeNumbers(normalizedText);
-    normalizedText = normalizedText.replaceAll("['\"\\.]", "");
+    normalizedText = normalizedText.replaceAll("['\",]", "");
+    normalizedText = normalizedText.replaceAll("(\\d+\\:\\d+)\\.(\\d+)", "$1$2");
+    normalizedText = normalizedText.replaceAll(" \\-(\\d{4})\\b", " tzminus$1");
     normalizedText = normalizedText.replaceAll("([/\\-,@])", " $1 ");
     normalizedText = normalizedText.replaceAll("\\btoday\\b", "this day");
     normalizedText = normalizedText.replaceAll("\\btomm?orr?ow\\b", "next day");
     normalizedText = normalizedText.replaceAll("\\byesterday\\b", "last day");
     normalizedText = normalizedText.replaceAll("\\bnoon\\b", "12:00");
     normalizedText = normalizedText.replaceAll("\\bmidnight\\b", "24:00");
-    normalizedText = normalizedText.replaceAll("\\bbefore now\\b", "past");
     normalizedText = normalizedText.replaceAll("\\bnow\\b", "this second");
     normalizedText = normalizedText.replaceAll("\\b(ago|before)\\b", "past");
     normalizedText = normalizedText.replaceAll("\\bthis past\\b", "last");
     normalizedText = normalizedText.replaceAll("\\bthis last\\b", "last");
+    normalizedText = normalizedText.replaceAll("\\bhr\\b", "hour");
+    normalizedText = normalizedText.replaceAll("\\bhrs\\b", "hour");
     normalizedText = normalizedText.replaceAll("\\b(?:in|during) the (morning)\\b", "$1");
     normalizedText = normalizedText.replaceAll("\\b(?:in the|during the|at) (afternoon|evening|night)\\b", "$1");
     normalizedText = normalizedText.replaceAll("\\btonight\\b", "this night");
-    normalizedText = normalizedText.replaceAll("(?=\\w)([ap]m|oclock)\\b", " $1");
+    normalizedText = normalizedText.replaceAll("\\b\\d+:?\\d*[ap]\\b", "$0m");
+    normalizedText = normalizedText.replaceAll("(\\d)([ap]m|oclock)\\b", "$1 $2");
     normalizedText = normalizedText.replaceAll("\\b(hence|after|from)\\b", "future");
+    //not needed - see test_parse_before_now test_parsing.rb ln 726
+    //normalized_text.gsub!(/\bbefore now\b/, 'past')
     normalizedText = Chronic.numericizeOrdinals(normalizedText);
     return normalizedText;
   }
@@ -199,5 +217,9 @@ public class Chronic {
     }
     Span guess = new Span(guessValue, guessValue);
     return guess;
+  }
+  
+  public static void main(String[] args) {
+    System.out.println("Chronic.main: " + Chronic.parse("Mon Apr 02 17:00:00 PDT 2007", new Options()));
   }
 }

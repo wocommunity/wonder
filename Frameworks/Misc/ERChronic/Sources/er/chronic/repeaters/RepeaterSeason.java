@@ -17,7 +17,7 @@ public class RepeaterSeason extends RepeaterUnit {
   }
 
   @Override
-  public Span getOffset(Span span, int amount, PointerType pointer) {
+  public Span getOffset(Span span, float amount, PointerType pointer) {
     throw new IllegalStateException("Not implemented.");
   }
 
