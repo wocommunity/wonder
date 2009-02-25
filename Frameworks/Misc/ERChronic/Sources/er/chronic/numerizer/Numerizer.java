@@ -87,7 +87,7 @@ public class Numerizer {
     directNums.add(new DirectNum("eight(\\W|$)", "8$1"));
     directNums.add(new DirectNum("nine(\\W|$)", "9$1"));
     directNums.add(new DirectNum("ten", "10"));
-    directNums.add(new DirectNum("\\ba\\b", "1"));
+    directNums.add(new DirectNum("\\ba\\b(.)", "1$1"));
     Numerizer.DIRECT_NUMS = directNums.toArray(new DirectNum[directNums.size()]);
     
     List<TenPrefix> tenPrefixes = new LinkedList<TenPrefix>();
@@ -127,12 +127,12 @@ public class Numerizer {
     // preprocess
     numerizedStr = Numerizer.DEHYPHENATOR.matcher(numerizedStr).replaceAll("$1 $2"); // will mutilate hyphenated-words but shouldn't matter for date extraction
     numerizedStr = Numerizer.DEHALFER.matcher(numerizedStr).replaceAll("haAlf"); // take the 'a' out so it doesn't turn into a 1, save the half for the end
-    
+
     // easy/direct replacements
     for (DirectNum dn : Numerizer.DIRECT_NUMS) {
       numerizedStr = dn.getName().matcher(numerizedStr).replaceAll("<num>" + dn.getNumber());
     }
-    
+
     // ten, twenty, etc.
     for (Prefix tp : Numerizer.TEN_PREFIXES) {
       Matcher matcher = tp.getPattern().matcher(numerizedStr);
