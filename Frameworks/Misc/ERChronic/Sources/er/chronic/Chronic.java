@@ -127,11 +127,17 @@ public class Chronic {
       System.out.println("Chronic.parse: " + tokens);
     }
 
-    Span span = Handler.tokensToSpan(tokens, options);
+    Span span;
+    if (tokens.size() == 0) {
+      span = null;
+    }
+    else {
+      span = Handler.tokensToSpan(tokens, options);
 
-    // guess a time within a span if required
-    if (options.isGuess()) {
-      span = guess(span);
+      // guess a time within a span if required
+      if (options.isGuess()) {
+        span = guess(span);
+      }
     }
 
     return span;
