@@ -5,6 +5,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSet;
@@ -24,6 +25,16 @@ import er.extensions.components.ERXComponentUtilities;
  */
 
 public class ERXValueUtilities {
+	/**
+	 * Returns whether or not the given object is null or NSKVC.Null.
+	 * 
+	 * @param obj the object to check
+	 * @return true if the object is null or NSKVC.Null
+	 */
+	public static boolean isNull(Object obj) {
+		return obj == null || obj == NSKeyValueCoding.NullValue || obj instanceof NSKeyValueCoding.Null;
+	}
+	
     /**
      * @deprecated use ERXComponentUtilities.booleanValueForBinding(component, binding, def)
      */
@@ -63,7 +74,7 @@ public class ERXValueUtilities {
 	 * 
 	 */
 	public static boolean booleanValueWithDefault(Object obj, boolean def) {
-		return obj == null ? def : BooleanValueWithDefault(obj, Boolean.valueOf(def));
+		return ERXValueUtilities.isNull(obj) ? def : BooleanValueWithDefault(obj, Boolean.valueOf(def));
 	}
 
 	/**
@@ -83,7 +94,7 @@ public class ERXValueUtilities {
 	 */
 	public static Boolean BooleanValueWithDefault(Object obj, Boolean def) {
 		Boolean flag = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof Number) {
 				if (((Number) obj).intValue() == 0) {
 					flag = Boolean.FALSE;
@@ -149,7 +160,7 @@ public class ERXValueUtilities {
 	 * 
 	 */
 	public static int intValueWithDefault(Object obj, int def) {
-		return obj == null ? def : IntegerValueWithDefault(obj, Integer.valueOf(def));
+		return ERXValueUtilities.isNull(obj) ? def : IntegerValueWithDefault(obj, Integer.valueOf(def));
 	}
 
 	/**
@@ -167,7 +178,7 @@ public class ERXValueUtilities {
 	 */
 	public static Integer IntegerValueWithDefault(Object obj, Integer def) {
 		Integer value = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof Integer) {
 				value = ((Integer) obj).intValue();
 			} else if (obj instanceof Number) {
@@ -220,7 +231,7 @@ public class ERXValueUtilities {
 	 * 
 	 */
 	public static float floatValueWithDefault(Object obj, float def) {
-		return obj == null ? def : FloatValueWithDefault(obj, Float.valueOf(def));
+		return ERXValueUtilities.isNull(obj) ? def : FloatValueWithDefault(obj, Float.valueOf(def));
 	}
 
 	/**
@@ -238,7 +249,7 @@ public class ERXValueUtilities {
 	 */
 	public static Float FloatValueWithDefault(Object obj, Float def) {
 		Float value = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof Float) {
 				value = (Float) obj;
 			} else if (obj instanceof Number) {
@@ -291,7 +302,7 @@ public class ERXValueUtilities {
 	 * 
 	 */
 	public static double doubleValueWithDefault(Object obj, double def) {
-		return obj == null ? def : DoubleValueWithDefault(obj, Double.valueOf(def));
+		return ERXValueUtilities.isNull(obj) ? def : DoubleValueWithDefault(obj, Double.valueOf(def));
 	}
 
 	/**
@@ -309,7 +320,7 @@ public class ERXValueUtilities {
 	 */
 	public static Double DoubleValueWithDefault(Object obj, Double def) {
 		Double value = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof Double) {
 				value = (Double) obj;
 			} else if (obj instanceof Number) {
@@ -362,7 +373,7 @@ public class ERXValueUtilities {
 	 * 
 	 */
 	public static long longValueWithDefault(Object obj, long def) {
-		return obj == null ? def : LongValueWithDefault(obj, Long.valueOf(def));
+		return ERXValueUtilities.isNull(obj) ? def : LongValueWithDefault(obj, Long.valueOf(def));
 	}
 
 	/**
@@ -380,7 +391,7 @@ public class ERXValueUtilities {
 	 */
 	public static Long LongValueWithDefault(Object obj, Long def) {
 		Long value = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof Long) {
 				value = (Long) obj;
 			} else if (obj instanceof Number) {
@@ -434,7 +445,7 @@ public class ERXValueUtilities {
 	 */
 	public static NSArray arrayValueWithDefault(Object obj, NSArray def) {
 		NSArray value = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof NSArray) {
 				value = (NSArray) obj;
 			} else if (obj instanceof String) {
@@ -484,7 +495,7 @@ public class ERXValueUtilities {
 	 */
 	public static NSSet setValueWithDefault(Object obj, NSSet def) {
 		NSSet value = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof NSSet) {
 				value = (NSSet) obj;
 			} else if (obj instanceof NSArray) {
@@ -530,7 +541,7 @@ public class ERXValueUtilities {
 	 */
 	public static NSDictionary dictionaryValueWithDefault(Object obj, NSDictionary def) {
 		NSDictionary value = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof NSDictionary) {
 				value = (NSDictionary) obj;
 			} else if (obj instanceof String) {
@@ -578,7 +589,7 @@ public class ERXValueUtilities {
 	 */
 	public static NSData dataValueWithDefault(Object obj, NSData def) {
 		NSData value = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof NSData) {
 				value = (NSData) obj;
 			} else if (obj instanceof byte[]) {
@@ -629,7 +640,7 @@ public class ERXValueUtilities {
 	 */
 	public static BigDecimal bigDecimalValueWithDefault(Object obj, BigDecimal def) {
 		BigDecimal value = def;
-		if (obj != null) {
+		if (!ERXValueUtilities.isNull(obj)) {
 			if (obj instanceof BigDecimal) {
 				value = (BigDecimal) obj;
 			} else if (obj instanceof String) {
