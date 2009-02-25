@@ -906,7 +906,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 
 		public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
 			String clause = _columnCreationClauseForAttribute(attribute);
-			return new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add " + clause));
+			return new NSArray(_expressionForString("alter table " + quoteTableName(attribute.entity().externalName()) + " add " + clause));
 		}
 
 		private String statementToCreateDataTypeClause(EOSchemaSynchronization.ColumnTypes columntypes) {
