@@ -2,8 +2,10 @@ package ognl.helperfunction;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation._NSReflectionUtilities;
@@ -67,10 +69,59 @@ public class WOHelperFunctionClassKeyValueCoding {
 			}
 		}
 
+		  private static final Class _noArgumentTypes[] = new Class[0];
+
+		  // MS: slurped in from _NSReflectionUtilities because the original won't return a typed keypath for an abstract method, which
+		  // means you don't get type information when you bind a helper function to an interface method
+		  public static Method _methodForClass(Class objectClass, String methodName, Class argumentTypes[], boolean publicMethodOnly) {
+		    /* <-MISALIGNED-> *//*  75*/Method method = null;
+		    /* <-MISALIGNED-> *//*  76*/if (publicMethodOnly) {
+		      /* <-MISALIGNED-> *//*  78*/try {
+		        /* <-MISALIGNED-> *//*  78*/method = objectClass.getMethod(methodName, argumentTypes == null ? _noArgumentTypes : argumentTypes);
+		      }
+		      /* <-MISALIGNED-> *//*  79*/catch (NoSuchMethodException exception) {
+		        /* <-MISALIGNED-> *//*  80*/NSLog._conditionallyLogPrivateException(exception);
+		        /* <-MISALIGNED-> *//*  81*/method = null;
+		      }
+		      /* <-MISALIGNED-> *//*  82*/catch (SecurityException exception) {
+		        /* <-MISALIGNED-> *//*  83*/NSLog._conditionallyLogPrivateException(exception);
+		        /* <-MISALIGNED-> *//*  84*/method = null;
+		      }
+		    }
+		    else {
+		      /* <-MISALIGNED-> *//*  87*/do {
+		        /* <-MISALIGNED-> *//*  87*/if (objectClass == _NSUtilities._ObjectClass || method != null) {
+		          /* <-MISALIGNED-> *//*  89*/break;
+		        }
+		        /* <-MISALIGNED-> *//*  89*/try {
+		          /* <-MISALIGNED-> *//*  89*/method = objectClass.getDeclaredMethod(methodName, argumentTypes == null ? _noArgumentTypes : argumentTypes);
+		        }
+		        /* <-MISALIGNED-> *//*  90*/catch (NoSuchMethodException exception) {
+		          /* <-MISALIGNED-> *//*  91*/NSLog._conditionallyLogPrivateException(exception);
+		          /* <-MISALIGNED-> *//*  92*/method = null;
+		        }
+		        /* <-MISALIGNED-> *//*  93*/catch (SecurityException exception) {
+		          /* <-MISALIGNED-> *//*  94*/NSLog._conditionallyLogPrivateException(exception);
+		          /* <-MISALIGNED-> *//*  95*/method = null;
+		        }
+		        /* <-MISALIGNED-> *//*  98*/if (method == null) {
+		          /* <-MISALIGNED-> *//*  99*/objectClass = objectClass.getSuperclass();
+		        }
+		      } while (true);
+		    }
+		    /* <-MISALIGNED-> *//* 103*/if (method != null) {
+		      /* <-MISALIGNED-> *//* 104*/int modifiers = method.getModifiers();
+		      /* <-MISALIGNED-> *//* 105*/if (Modifier.isPrivate(modifiers) || Modifier.isStatic(modifiers)/* || Modifier.isAbstract(modifiers)*/) {
+		        /* <-MISALIGNED-> *//* 106*/return null;
+		      }
+		    }
+		    /* <-MISALIGNED-> *//* 109*/return method;
+		  }
+	
 		public static _KeyBinding _methodKeyGetBinding(Class objectClass, String key, String methodName) {
 			ValueAccessor valueAccessor = ValueAccessor._valueAccessorForClass(objectClass);
 			boolean publicMethodOnly = valueAccessor == null;
-			Method method = _NSReflectionUtilities._methodForClass(objectClass, methodName, null, publicMethodOnly);
+			Method method = WOHelperFunctionClassKeyValueCoding._ReflectionKeyBindingCreation._methodForClass(objectClass, methodName, null, publicMethodOnly);
 			if (method != null) {
 				Class valueClass = _NSUtilities.classObjectForClass(method.getReturnType());
 				if (_NSUtilities._isClassANumber(valueClass)) {
