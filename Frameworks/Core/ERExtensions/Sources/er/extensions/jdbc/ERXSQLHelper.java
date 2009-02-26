@@ -1116,7 +1116,9 @@ public class ERXSQLHelper {
 					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
 				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
 				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(distinct t0." + pkColumnName + ") ";
+				countExpression = "count(distinct " +
+						quoteColumnName("t0." + pkColumnName) 
+						+ ") ";
 			}
 			else {
 				countExpression = "count(*) ";
@@ -1409,6 +1411,11 @@ public class ERXSQLHelper {
 	
 	public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 		return true;
+	}
+	
+	public String quoteColumnName(String columnName){
+		// just pass through by default
+		return columnName;
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
@@ -1864,6 +1871,19 @@ public class ERXSQLHelper {
 		 */
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
+		}
+		
+		@Override
+		public String quoteColumnName(String columnName){
+			if (columnName == null)
+				return null;
+
+			int i = columnName.lastIndexOf(46);
+			
+			if (i == -1)
+				return "\"" + columnName + "\"";
+
+			return "\"" + columnName.substring(0, i) + "\".\"" + columnName.substring(i + 1, columnName.length()) + "\"";
 		}
 	}
 
