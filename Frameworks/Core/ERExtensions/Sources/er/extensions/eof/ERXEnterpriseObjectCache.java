@@ -21,50 +21,83 @@ import er.extensions.foundation.ERXExpiringCache;
 import er.extensions.foundation.ERXSelectorUtilities;
 
 /**
- * Caches one entity by a given key. Listens to
- * EOEditingContextDidSaveChanges notifications to track changes.
- * Typically you'd have an "identifier" property and you'd fetch values by:<code><pre>
+ * Caches instances of one entity by a given key(path).  Typically you'd have an "identifier" property 
+ * and you'd fetch values by:<code><pre>
  * ERXEnterpriseObjectCache&lt;HelpText&gt; helpTextCache = new ERXEnterpriseObjectCache&lt;HelpText&gt;("HelpText", "pageConfiguration");
  * ...
  * HelpText helpText = helpTextCache.objectForKey(ec, "ListHelpText");
  * </pre></code>
- * You can supply a timeout after which the cache is to get cleared and all the objects refetched. Note
- * that this implementation only caches the global IDs, not the actual data. 
+ * 
+ * You can supply a timeout after which individual objects (or all objects if fetchInitialValues
+ * is <code>true</code>) get cleared and re-fetched. This implementation can cache either only the global IDs, 
+ * or the global ID and a copy of the actual object.  Caching the actual object ensures that the snapshot stays around
+ * and thus prevent additional trips to the database.
+ * 
+ * Listens to EOEditingContextDidSaveChanges notifications to track changes to objects in the cache and ClearCachesNotification 
+ * for  messages to purge the cache.
  * @author ak inspired by a class from Dominik Westner
- * @param <T> 
+ * @param <T> the type of EOEnterpriseObject in this cache
  */
 public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
+	
+	/** Other code can send this notification if it needs to have this cache discard all of the
+	 * objects that it has.  The object in the notification is the name of the EOEntity to discard cache for.
+	 */
     public static String ClearCachesNotification = "ERXEnterpriseObjectCache.ClearCaches";
+    
     protected static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
     
+    /** Name of the EOEntity to cache. */
     private String _entityName;
+    
+    /** Key path to data uniquely identifying an instance of this entity. */
     private String _keyPath;
+    
+    /** EOQualifier restricting which instances are stored in this cache */
     private EOQualifier _qualifier;
+    
+    /** Actual cache implementation.  */
     private ERXExpiringCache<Object, EORecord<T>> _cache;
+    
+    /** Time to live in milliseconds for an object in this cache. */
     private long _timeout;
+    
+    /** The time when the objects in this cache were fetched. */
     private long _fetchTime;
+    
+    /** <code>true</code> if this cache should be populated when created, <code>false</code> for lazy population.  */
     private boolean _fetchInitialValues;
     
+    /** If <code>true</code>, just a single editing context instance is used for this cache instance. */
     private boolean _reuseEditingContext;
-    private boolean _retainObjects;
-    private boolean _resetOnChange;
+
+    /** The single editing context instance is used for this cache instance if <code>_reuseEditingContext</code> is <code>true</code>. */
     private ERXEC _editingContext;
+
+    /** If <code>true</code>, this cache retains an instance of each object so that the snapshot does not expire. */
+    private boolean _retainObjects;
+    
+    /** If <code>true</code>, the entire cache contents are discarded when any object in it changes.  Probably not what you want.
+     * @see #editingContextDidSaveChanges(NSNotification)
+     */
+    private boolean _resetOnChange;
+    
     
     /**
      * Creates the cache for the given entity name and the given keypath. No
      * timeout value is used.
-     * @param entityName
-     * @param keyPath
+     * @param entityName name of the EOEntity to cache
+     * @param keyPath key path to data uniquely identifying an instance of this entity
      */
     public ERXEnterpriseObjectCache(String entityName, String keyPath) {
        this(entityName, keyPath, 0L);
     }
     
     /**
-     * Creates the cache for the given entity name and the given keypath. No
+     * Creates the cache for the entity implemented by the passed class and the given keypath. No
      * timeout value is used.
-     * @param c 
-     * @param keyPath 
+     * @param c Class used to identify which EOEntity this cache is for
+     * @param keyPath key path to data uniquely identifying an instance of this entity
      */
     public ERXEnterpriseObjectCache(Class c, String keyPath) {
        this(entityNameForClass(c), keyPath);
@@ -88,20 +121,27 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * Creates the cache for the given entity, keypath and timeout value in milliseconds.
-     * @param entityName
-     * @param keyPath
-     * @param timeout
+     * @param entityName name of the EOEntity to cache
+     * @param keyPath key path to data uniquely identifying an instance of this entity
+     * @param timeout time to live in milliseconds for an object in this cache
      */
     public ERXEnterpriseObjectCache(String entityName, String keyPath, long timeout) {
     	this(entityName, keyPath, null, timeout);
     }
     
     /**
-     * Creates the cache for the given entity, keypath and timeout value in milliseconds.
-     * @param entityName
-     * @param keyPath
-     * @param qualifier
-     * @param timeout
+     * Creates the cache for the given entity, keypath and timeout value in milliseconds.  Only objects
+     * that match qualifier are stored in the cache. Note that _resetOnChange (and _fetchInitialValues) are
+     * both <code>false</code> after this constructor.  You will almost certainly want to call
+     * <code>setResetOnChange(false);</code>.
+ 	 *
+ 	 * @see #setResetOnChange(boolean)
+ 	 * @see #setFetchInitialValues(boolean)
+ 	 * 
+     * @param entityName name of the EOEntity to cache
+     * @param keyPath key path to data uniquely identifying an instance of this entity
+     * @param qualifier EOQualifier restricting which instances are stored in this cache
+     * @param timeout time to live in milliseconds for an object in this cache
      */
     public ERXEnterpriseObjectCache(String entityName, String keyPath, EOQualifier qualifier, long timeout) {
         _entityName = entityName;
@@ -113,10 +153,18 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         start();
     }
 
+    /**
+     * Call this to re-start cache updating after stop() is called.  This is automatically called from the
+     * constructor so unless you call stop(), there is no need to ever call this method.
+	 * @see #stop()
+     */
 	public void start() {
+		// Catch this to update the cache when an object is changed
 		NSSelector selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 EOEditingContext.EditingContextDidSaveChangesNotification, null);
+        
+        // Catch this for custom  notifications that the cache should be discarded
         selector = ERXSelectorUtilities.notificationSelector("clearCaches");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 ERXEnterpriseObjectCache.ClearCachesNotification, null);
@@ -126,12 +174,22 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         }
 	}
 	
+    /**
+     * Call this to stop cache updating.  
+	 * @see #start()
+     */
 	public void stop() {
 		NSNotificationCenter.defaultCenter().removeObserver(this, EOEditingContext.EditingContextDidSaveChangesNotification, null);
 		NSNotificationCenter.defaultCenter().removeObserver(this, ERXEnterpriseObjectCache.ClearCachesNotification, null);
     	_cache.stopBackgroundExpiration();
 	}
     
+	/**
+	 * Returns the editing context that holds object that are in this cache.  If _reuseEditingContext is false, 
+	 * a new editing context instance is returned each time.  The returned editing context is <b>not</b> locked.
+	 * 
+	 * @return the editing context that holds object that are in this cache
+	 */
 	protected ERXEC editingContext() {
 		ERXEC editingContext;
 		if (_reuseEditingContext) {
@@ -151,10 +209,12 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	}
 	
     /**
-     * Helper to check if an array of EOs contains the handled entity. 
-     * @param dict 
-     * @param key 
-     * @return the relevant changes for this cache
+     * Helper to check a dictionary of objects from an EOF notification and return any that are for the
+     * entity that we are caching.
+     * 
+     * @param dict dictionary of key to NSArray<EOEnterpriseObject>
+     * @param key key into dict indicating which list to process
+     * @return objects from the list that are of the entity we are caching, or null if there are no matches
      */
     private NSArray<T> relevantChanges(NSDictionary dict, String key) {
     	NSMutableArray<T> releventEOs = null;
@@ -172,9 +232,15 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Handler for the editingContextDidSaveChanges notification. Calls reset if
-     * and object of the given entity were changed.
-     * @param n
+     * Handler for the editingContextDidSaveChanges notification.  If <code>_resetOnChange</code> is <code>true</code>, this
+     * calls reset() to discard the entire cache contents if an object of the given entity has been changed.  
+     * If <code>_resetOnChange</code> is <code>false</code>, this updates the cache to reflect the added/changed/removed
+     * objects.
+     * 
+     * @see EOEditingContext#ObjectsChangedInEditingContextNotification
+     * @see #reset()
+     * 
+     * @param n NSNotification with EOEditingContext as the object and a dictionary of changes in the userInfo
      */
     public void editingContextDidSaveChanges(NSNotification n) {
         EOEditingContext ec = (EOEditingContext) n.object();
@@ -211,8 +277,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Handler for the clearCaches notification. Calls reset if
-     * n.object is the entity name.
+     * Handler for the clearCaches notification. Calls reset if n.object is the name of the entity we are caching.
+     * Other code can send this notification if it needs to have this cache discard all of the objects.
      * @param n
      */
     public void clearCaches(NSNotification n) {
@@ -221,20 +287,23 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     	}
     }
     
+    /**
+     * @return the name of the EOEntity this cache is for
+     */
     protected String entityName() {
         return _entityName;
     }
     
     /**
-     * The key path which should get used for the key of the cache.
-     * @return the cache keypath
+     * @return Key path to data uniquely identifying an instance of the entity in this cache
      */
     protected String keyPath() {
         return _keyPath;
     }
 
     /**
-     * Returns the backing cache. If the cache is to old, it is cleared first.
+     * Returns the backing cache. If the cache is to old, it is cleared first.  The cache is created if needed,
+     * and the contents populated if <code>_fetchInitialValues</code>.
      * @return the backing cache
      */
     protected synchronized ERXExpiringCache<Object, EORecord<T>> cache() {
@@ -272,6 +341,14 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         return _cache;
     }
     
+    /**
+     * Created an EORecord instance representing eo using its EOGlobalID.  If <code>_retainObjects</code>, 
+     * this will also include an instance of the EO to ensure that the snapshot is retained.
+     *
+     * @param gid EOGlobalID of eo
+     * @param eo the EO to make an EORecord for
+     * @return EORecord instance representing eo
+     */
     protected EORecord<T> createRecord(EOGlobalID gid, T eo) {
     	EORecord<T> record;
     	if (_retainObjects) {
@@ -287,7 +364,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 
     /**
      * Returns the objects to cache initially.
-     * @param ec
+     * @param ec EOEditingContext to fetch objects into
      * @return the initial objects for the cache
      */
     protected NSArray<T> initialObjects(EOEditingContext ec) {
@@ -296,9 +373,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
 
     /**
-     * Add an object to the cache. Subclasses may want to override this if the object 
-     * to reside under more than one entry (eg, title and identifier).
-     * @param eo
+     * Add an object to the cache using <code>eo.valueForKeyPath(keyPath())</code> as the key. 
+     * @see #addObjectForKey(EOEnterpriseObject, Object)
+     * @param eo the object to add to the cache
      */
     public void addObject(T eo) {
         Object key = eo.valueForKeyPath(keyPath());
@@ -306,10 +383,11 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
 
     /**
-     * Add an object to the cache with the given key. The object
-     * can be null.
-     * @param eo
-     * @param key 
+     * Add an object to the cache with the given key if it matches the qualifier, or 
+     * if there is no qualifier. The object can be null, in which case a place holder 
+     * is added.
+     * @param eo eo the object to add to the cache
+     * @param key the key to add the object under
      */
     public void addObjectForKey(T eo, Object key) {
     	if (_qualifier == null || _qualifier.evaluateWithObject(eo)) {
@@ -321,20 +399,45 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     	}
     }
 
+    /**
+     * Removes an object from the cache using <code>eo.valueForKeyPath(keyPath())</code> as the key. 
+     * @see #removeObjectForKey(EOEnterpriseObject, Object)
+     * @param eo the object to remove from the cache
+     */
     public void removeObject(T eo) {
         Object key = eo.valueForKeyPath(keyPath());
         removeObjectForKey(eo, key);
     }
 
+    /**
+     * Removes the object associated with key from the cache.
+     *
+     * @param eo eo the object to remove from the cache (ignored)
+     * @param key the key to remove the object for
+     */
     public void removeObjectForKey(T eo, Object key) {
         cache().setObjectForKey(createRecord(NO_GID_MARKER, null), key);
     }
-
+    
+    /**
+     * Updates an object in the cache (adding if not present) using 
+     * <code>eo.valueForKeyPath(keyPath())</code> as the key.
+     * @see #updateObjectForKey(EOEnterpriseObject, Object)
+     * @param eo the object to update in the cache
+     */
     public void updateObject(T eo) {
         Object key = eo.valueForKeyPath(keyPath());
         updateObjectForKey(eo, key);
     }
 
+    /**
+     * Updates an object in the cache (adding if not present) with the given key if it 
+     * matches the qualifier, or if there is no qualifier. The object can be null, in which 
+     * case is it removed from the cache.  If <code>_qualifier</code> is not null, the object
+     * is removed from the cache if it does not match the qualifier.
+     * @param eo eo the object to update in the cache
+     * @param key the key of the object to update
+     */
     public void updateObjectForKey(T eo, Object key) {
         EOGlobalID gid = NO_GID_MARKER;
         if(eo != null) {
@@ -369,8 +472,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Retrieves an EO that matches the given key or null if no match 
-     * is in the cache.
+     * Retrieves an EO that matches the given key.  If there is no match in the
+     * cache, it attempts to fetch the missing objects.  Null is returned if no matching
+     * object can be fetched. 
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
      * @return the matching object
@@ -380,8 +484,11 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Retrieves an EO that matches the given key or null if no match 
-     * is in the cache.
+     * Retrieves an EO that matches the given key.  If there is no match in the
+     * cache, and <code>handleUnsuccessfulQueryForKey</code> is <code>true</code>,
+     * it attempts to fetch the missing objects.  Null is returned if 
+     * <code>handleUnsuccessfulQueryForKey</code> is <code>false</code> or no matching
+     * object can be fetched. 
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
      * @param handleUnsuccessfulQueryForKey if false, a cache miss returns null rather than fetching
@@ -421,10 +528,11 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Called when a query hasn't found an entry in the cache. This
      * implementation puts a not-found marker in the cache so
-     * the next query will return null. You could override this
-     * method to create an EO with sensible default values and
+     * the next query will return null. If <code>_fetchInitialValues</code> 
+     * is <code>false</code>, it will attempt to fetch the missing object and 
+     * adds it to the cache if it is found.
      * call {@link #addObject(EOEnterpriseObject)} on it.
-     * @param key
+     * @param key the key of the object that was not found in the cache
      */
     protected void handleUnsuccessfullQueryForKey(Object key) {
     	if (!_fetchInitialValues) {
@@ -459,7 +567,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Actually performs a fetch for the given key. Override this method to implement
      * custom fetch rules.
      * 
-     * @param editingContext the editingcontext to fetch in
+     * @param editingContext the editing context to fetch in
      * @param key the key to fetch with
      * @return the fetch objects
      */
@@ -479,7 +587,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Returns the qualifier to use during for fetching.
+     * Returns the qualifier to use during for fetching: the value for keyPath matches key
+     * AND qualifier() (if not null).
      * @param key the key to fetch
      * @return the qualifier to use
      */
