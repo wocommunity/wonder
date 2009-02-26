@@ -144,6 +144,10 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param timeout time to live in milliseconds for an object in this cache
      */
     public ERXEnterpriseObjectCache(String entityName, String keyPath, EOQualifier qualifier, long timeout) {
+    	if ( ! ERXEC.defaultAutomaticLockUnlock()) {
+    		throw new RuntimeException("ERXEnterpriseObjectCache requires automatic locking, set er.extensions.ERXEC.defaultAutomaticLockUnlock or " +
+    				"er.extensions.ERXEC.safeLocking in your Properties file");
+    	}
         _entityName = entityName;
         _keyPath = keyPath;
         _timeout = timeout;
@@ -186,7 +190,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
 	/**
 	 * Returns the editing context that holds object that are in this cache.  If _reuseEditingContext is false, 
-	 * a new editing context instance is returned each time.  The returned editing context is <b>not</b> locked.
+	 * a new editing context instance is returned each time.  The returned editing context is autolocking.
 	 * 
 	 * @return the editing context that holds object that are in this cache
 	 */
@@ -318,7 +322,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             if (_fetchInitialValues) {
 	            ERXEC ec = editingContext();
 	            ec.setCoalesceAutoLocks(false);
-	            ec.lock();
+	            ec.lock();	// Prevents lock churn
 	            try {
 	                NSArray objects = initialObjects(ec);
 	                for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
@@ -327,7 +331,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	                }
 	            } finally {
 	                ec.unlock();
-	                ec.dispose();
+	                if ( ! _reuseEditingContext) {
+	                	ec.dispose();
+	                }
 	            }
             }
             _fetchTime = System.currentTimeMillis();
