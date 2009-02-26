@@ -132,7 +132,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Creates the cache for the given entity, keypath and timeout value in milliseconds.  Only objects
      * that match qualifier are stored in the cache. Note that _resetOnChange (and _fetchInitialValues) are
-     * both <code>false</code> after this constructor.  You will almost certainly want to call
+     * both <code>true</code> after this constructor.  You will almost certainly want to call
      * <code>setResetOnChange(false);</code>.
  	 *
  	 * @see #setResetOnChange(boolean)
@@ -169,7 +169,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 ERXEnterpriseObjectCache.ClearCachesNotification, null);
         
-        if (_timeout > 0) {
+        if (_timeout > 0 && _cache != null) {
         	_cache.startBackgroundExpiration();
         }
 	}
@@ -214,7 +214,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * 
      * @param dict dictionary of key to NSArray<EOEnterpriseObject>
      * @param key key into dict indicating which list to process
-     * @return objects from the list that are of the entity we are caching, or null if there are no matches
+     * @return objects from the list that are of the entity we are caching, or an empty array if there are no matches
      */
     private NSArray<T> relevantChanges(NSDictionary dict, String key) {
     	NSMutableArray<T> releventEOs = null;
@@ -228,7 +228,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             	releventEOs.addObject((T)eo);
             }
         }
-        return releventEOs;
+        return releventEOs != null ? releventEOs : NSArray.EmptyArray;
     }
     
     /**
@@ -249,28 +249,22 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         	NSArray<T> releventsUpdatedEOs = relevantChanges(n.userInfo(), EOEditingContext.UpdatedKey);
         	NSArray<T> releventsDeletedEOs = relevantChanges(n.userInfo(), EOEditingContext.DeletedKey);
         	if (_resetOnChange) {
-        		if ((releventsInsertedEOs != null && releventsInsertedEOs.count() > 0) || (releventsUpdatedEOs != null && releventsUpdatedEOs.count() > 0) || (releventsDeletedEOs != null && releventsDeletedEOs.count() > 0)) {
+        		if (releventsInsertedEOs.count() > 0 || releventsUpdatedEOs.count() > 0 || releventsDeletedEOs.count() > 0) {
         			reset();
         		}
         	}
         	else {
 	        	ERXExpiringCache<Object, EORecord<T>> cache = cache();
 	        	synchronized (cache) { 
-		        	if (releventsInsertedEOs != null) {
-		        		for (T eo : releventsInsertedEOs) {
-		        			addObject(eo);
-		        		}
-		        	}
-		        	if (releventsUpdatedEOs != null) {
-		        		for (T eo : releventsUpdatedEOs) {
-		        			updateObject(eo);
-		        		}
-		        	}
-		        	if (releventsDeletedEOs != null) {
-		        		for (T eo : releventsDeletedEOs) {
-		        			removeObject(eo);
-		        		}
-		        	}
+	        		for (T eo : releventsInsertedEOs) {
+	        			addObject(eo);
+	        		}
+	        		for (T eo : releventsUpdatedEOs) {
+	        			updateObject(eo);
+	        		}
+	        		for (T eo : releventsDeletedEOs) {
+	        			removeObject(eo);
+	        		}
 	        	}
         	}
         }
@@ -368,8 +362,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @return the initial objects for the cache
      */
     protected NSArray<T> initialObjects(EOEditingContext ec) {
-        NSArray objects = EOUtilities.objectsForEntityNamed(ec, entityName());
-        return objects;
+		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(entityName(), qualifier(), null);
+		return ec.objectsWithFetchSpecification(fetchSpec);
     }
 
     /**
@@ -390,7 +384,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param key the key to add the object under
      */
     public void addObjectForKey(T eo, Object key) {
-    	if (_qualifier == null || _qualifier.evaluateWithObject(eo)) {
+    	if (qualifier() == null || qualifier().evaluateWithObject(eo)) {
 	        EOGlobalID gid = NO_GID_MARKER;
 	        if(eo != null) {
 	            gid = eo.editingContext().globalIDForObject(eo);
@@ -433,7 +427,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Updates an object in the cache (adding if not present) with the given key if it 
      * matches the qualifier, or if there is no qualifier. The object can be null, in which 
-     * case is it removed from the cache.  If <code>_qualifier</code> is not null, the object
+     * case is it removed from the cache.  If <code>qualifier()</code> is not null, the object
      * is removed from the cache if it does not match the qualifier.
      * @param eo eo the object to update in the cache
      * @param key the key of the object to update
@@ -458,7 +452,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	        		removeObjectForKey(eo, previousKey);
 	            	addObjectForKey(eo, key);
 	        	}
-	        	else if (_qualifier != null && !_qualifier.evaluateWithObject(eo)) {
+	        	else if (qualifier() != null && !qualifier().evaluateWithObject(eo)) {
 	        		removeObjectForKey(eo, previousKey);
 	        	}
 	        	else {
@@ -594,11 +588,11 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     protected EOQualifier fetchObjectsQualifier(Object key) {
 		EOQualifier qualifier;
-		if (_qualifier == null) {
+		if (qualifier() == null) {
 			qualifier = ERXQ.is(_keyPath, key);
 		}
 		else {
-			qualifier = ERXQ.is(_keyPath, key).and(_qualifier);
+			qualifier = ERXQ.is(_keyPath, key).and(qualifier());
 		}
 		return qualifier;
     }
