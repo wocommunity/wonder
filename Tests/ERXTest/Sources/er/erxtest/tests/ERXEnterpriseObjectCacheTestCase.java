@@ -11,6 +11,10 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEnterpriseObjectCache;
 
 public class ERXEnterpriseObjectCacheTestCase extends TestCase {
+
+    EOEditingContext editingContext;
+    Company c1, c2;
+
   public void testInsert() {
     testInsert(true);
   }
@@ -36,64 +40,52 @@ public class ERXEnterpriseObjectCacheTestCase extends TestCase {
   }
 
   public void testFetchWithFetchInitialValues() {
-    String name = "Company " + UUID.randomUUID().toString();
-    EOEditingContext editingContext = ERXEC.newEditingContext();
-    Company c1 = Company.createCompany(editingContext, name);
-    editingContext.saveChanges();
-
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
-    Company c1Test = cache.objectForKey(editingContext, name);
+    Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertSame(c1, c1Test);
     cache.stop();
   }
 
-  public void testFetchNoFetchInitialValues() {
-    String name = "Company " + UUID.randomUUID().toString();
-    EOEditingContext editingContext = ERXEC.newEditingContext();
-    Company c1 = Company.createCompany(editingContext, name);
-    editingContext.saveChanges();
+  public void testFetchWithFetchInitialValuesAndTimeout() {
+      ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 100000);
+      Company c1Test = cache.objectForKey(editingContext, c1.name());
+      assertSame(c1, c1Test);
+      cache.stop();
+  }
 
+  public void testFetchNoFetchInitialValues() {
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(false);
-    Company c1Test = cache.objectForKey(editingContext, name);
+    Company c1Test = cache.objectForKey(editingContext, c1.name());
+    assertSame(c1, c1Test);
+    cache.stop();
+  }
+
+  public void testFetchNoFetchInitialValuesAndTimeout() {
+
+    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 100000);
+    cache.setFetchInitialValues(false);
+    Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertSame(c1, c1Test);
     cache.stop();
   }
 
   public void testFetchWithQualifier() {
-    String name1 = "Company " + UUID.randomUUID().toString();
-    EOEditingContext editingContext = ERXEC.newEditingContext();
-    Company c1 = Company.createCompany(editingContext, name1);
-    editingContext.saveChanges();
-
-    String name2 = "Company Test " + UUID.randomUUID().toString();
-    Company c2 = Company.createCompany(editingContext, name2);
-    editingContext.saveChanges();
-
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, Company.NAME.contains("Test"), 0);
     cache.setFetchInitialValues(false);
-    Company c1Test = cache.objectForKey(editingContext, name1);
+    Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertNull(c1Test);
-    Company c2Test = cache.objectForKey(editingContext, name2);
+    Company c2Test = cache.objectForKey(editingContext, c2.name());
     assertSame(c2, c2Test);
     cache.stop();
   }
 
   public void testUpdateWithQualifier() {
-    String name1 = "Company " + UUID.randomUUID().toString();
-    EOEditingContext editingContext = ERXEC.newEditingContext();
-    Company c1 = Company.createCompany(editingContext, name1);
-    editingContext.saveChanges();
-
-    String name2 = "Company Test " + UUID.randomUUID().toString();
-    Company c2 = Company.createCompany(editingContext, name2);
-    editingContext.saveChanges();
-
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, Company.NAME.contains("Test"), 0);
     cache.setFetchInitialValues(false);
-    Company c1Test = cache.objectForKey(editingContext, name1);
+    Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertNull(c1Test);
-    Company c2Test = cache.objectForKey(editingContext, name2);
+    Company c2Test = cache.objectForKey(editingContext, c2.name());
     assertSame(c2, c2Test);
 
     String name1Update = "Another Test Company " + UUID.randomUUID().toString();
@@ -116,11 +108,7 @@ public class ERXEnterpriseObjectCacheTestCase extends TestCase {
   public void testInsert(boolean fetchInitialValues) {
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(fetchInitialValues);
-    EOEditingContext editingContext = ERXEC.newEditingContext();
-    String name1 = "Company " + UUID.randomUUID().toString();
-    Company c1 = Company.createCompany(editingContext, name1);
-    editingContext.saveChanges();
-    Company c1Test = cache.objectForKey(editingContext, name1);
+    Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertSame(c1, c1Test);
     cache.stop();
   }
@@ -128,15 +116,13 @@ public class ERXEnterpriseObjectCacheTestCase extends TestCase {
   public void testDelete(boolean fetchInitialValues) {
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(fetchInitialValues);
-    EOEditingContext editingContext = ERXEC.newEditingContext();
-    String name1 = "Company " + UUID.randomUUID().toString();
-    Company c1 = Company.createCompany(editingContext, name1);
-    editingContext.saveChanges();
-    Company c1Test = cache.objectForKey(editingContext, name1);
+    String name = c1.name();
+    Company c1Test = cache.objectForKey(editingContext, name);
     assertSame(c1, c1Test);
     c1.delete();
     editingContext.saveChanges();
-    Company c1DeleteTest = cache.objectForKey(editingContext, name1);
+    c1= null;
+    Company c1DeleteTest = cache.objectForKey(editingContext, name);
     assertNull(c1DeleteTest);
     cache.stop();
   }
@@ -144,10 +130,7 @@ public class ERXEnterpriseObjectCacheTestCase extends TestCase {
   public void testUpdate(boolean fetchInitialValues) {
     ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(fetchInitialValues);
-    EOEditingContext editingContext = ERXEC.newEditingContext();
-    String name1 = "Company " + UUID.randomUUID().toString();
-    Company c1 = Company.createCompany(editingContext, name1);
-    editingContext.saveChanges();
+    String name1 = c1.name();
 
     String name2 = "Company " + UUID.randomUUID().toString();
     c1.setName(name2);
@@ -160,4 +143,24 @@ public class ERXEnterpriseObjectCacheTestCase extends TestCase {
     assertSame(c1, c2UpdateTest);
     cache.stop();
   }
+
+  protected void setUp() throws Exception {
+      String name1 = "Company " + UUID.randomUUID().toString();
+      editingContext = ERXEC.newEditingContext();
+      c1 = Company.createCompany(editingContext, name1);
+      editingContext.saveChanges();
+
+      String name2 = "Company Test " + UUID.randomUUID().toString();
+      c2 = Company.createCompany(editingContext, name2);
+      editingContext.saveChanges();
+  }
+
+  protected void tearDown() throws Exception {
+      if (c1 != null) editingContext.deleteObject(c1);
+      if (c2 != null) editingContext.deleteObject(c2);
+      editingContext.saveChanges();
+      editingContext.dispose();
+      editingContext = null;
+  }
+
 }
