@@ -447,13 +447,20 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         }
         ERXExpiringCache<Object, EORecord<T>> cache = cache();
         synchronized (cache) {
-        	Object previousKey = null;
-        	for (Object entryKey : cache.allKeys()) {
-        		EORecord<T> entryValue = cache.objectForKey(entryKey);
-        		if (entryValue != null && entryValue.gid.equals(gid)) {
-        			previousKey = entryKey;
-        			break;
-        		}
+        	Object previousKey = key;
+        	T previousObject = objectForKey(editingContext(), key, false);
+        	
+        	// If the object does not exist under key, or a different object exists under that key,
+            // the key value may have been changed. Search the entire cache for the object by GID
+        	if (previousObject == null || ! previousObject.editingContext().globalIDForObject(previousObject).equals(gid)) {
+            	previousKey = null;
+            	for (Object entryKey : cache.allKeys()) {
+            		EORecord<T> entryValue = cache.objectForKey(entryKey);
+            		if (entryValue != null && entryValue.gid.equals(gid)) {
+            			previousKey = entryKey;
+            			break;
+            		}
+            	}
         	}
         	if (previousKey != null) {
         		if (!previousKey.equals(key)) {
@@ -464,7 +471,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	        		removeObjectForKey(eo, previousKey);
 	        	}
 	        	else {
-	            	// leave it alone
+	            	// leave it alone, the key value has not changed and EOF will take care of the rest
 	        	}
         	}
         	else {
