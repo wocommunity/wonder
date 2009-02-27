@@ -64,7 +64,7 @@ public class ERXForwardingAdaptorChannel extends EOAdaptorChannel {
     }
     
     @Override
-    public void selectAttributes(NSArray attributes, EOFetchSpecification fetchSpecification, boolean yn, EOEntity entity) {
+    public void selectAttributes(NSArray<EOAttribute> attributes, EOFetchSpecification fetchSpecification, boolean yn, EOEntity entity) {
         _forwardedChannel.selectAttributes(attributes,fetchSpecification, yn, entity);
     }
 

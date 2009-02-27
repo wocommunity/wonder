@@ -42,7 +42,7 @@ public class ERFileCachingAdaptorChannel extends ERXForwardingAdaptorChannel {
     }
 
     @Override
-    public void selectAttributes(NSArray attributes, EOFetchSpecification fetchSpecification, boolean yn, EOEntity entity) {
+    public void selectAttributes(NSArray<EOAttribute> attributes, EOFetchSpecification fetchSpecification, boolean yn, EOEntity entity) {
         _fetchFromAdaptorInParallelAndDebug = ERXProperties.booleanForKeyWithDefault("ERFileCachingAdaptorChannel.doDBFetchesInParallel",false);
         boolean disabled = ERXProperties.booleanForKeyWithDefault("ERFileCachingAdaptor.disabled",false) || _isEntityDisabledForCaching(entity);
         boolean suitable = ERFileCachingAdaptorUtilities.isEntitySuitableForCaching(entity);
