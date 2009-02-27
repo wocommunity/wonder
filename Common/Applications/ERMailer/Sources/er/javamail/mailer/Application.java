@@ -6,27 +6,20 @@
 //
 package er.javamail.mailer;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import java.util.Timer;
 
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+
+import er.corebusinesslogic.ERCMailDelivery;
+import er.corebusinesslogic.ERCMailMessage;
 import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXLogger;
 import er.extensions.ERXProperties;
 import er.extensions.ERXUtilities;
-
-import er.corebusinesslogic.ERCMailDelivery;
-import er.corebusinesslogic.ERCMailMessage;
-
 import er.javamail.ERJavaMail;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import java.util.Enumeration;
 
 public class Application extends ERXApplication {
 

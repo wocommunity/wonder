@@ -23,7 +23,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * /WebObjects/MyApp.woa/wpa/com.foo.SomeActionClass/bar/gee/wiz=neat/actionName
  * This action is treated just like:
  * /WebObjects/MyApp.woa/wpa/com.foo.SomeActionClass/actionName
- * 
+ *
  */
 public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHandler {
 
@@ -48,7 +48,7 @@ public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHan
 
     /**
 	 * Public constructor, just calls super
-	 * 
+	 *
 	 * @param actionClassName
 	 *            action class name
 	 * @param defaultActionName
@@ -78,39 +78,63 @@ public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHan
     /**
 	 * Modified version for getting the request handler path for a given
 	 * request.
-	 * 
+	 *
 	 * @param aRequest
 	 *            a given request
 	 * @return array of request handler paths for a given request, truncates to
 	 *         the first and last component if the number of components is
-	 *         greater than 2.
+	 *         greater than 2, and tries to divine the meaning of paths when there
+     *         are only one or 2 path components.
 	 */
 	public NSArray getRequestHandlerPathForRequest(WORequest aRequest) {
 		NSArray paths = super.getRequestHandlerPathForRequest(aRequest);
 		NSMutableArray temp = new NSMutableArray();
 		if (paths != null) {
-			if (!useClassName && paths.count() > 1 && useActionName) {
-				temp.addObject(paths.lastObject());
-			}
-			else if (useClassName && paths.count() > 2 && useActionName) {
-				temp.addObject(paths.objectAtIndex(0));
-				temp.addObject(paths.lastObject());
-			}
-		}
-		if(actionClassName != null && temp.count() == 0) {
+			int pathCount = paths.count();
+            String firstPathComponent = (String)paths.objectAtIndex(0);
+            String lastPathComponent = (String)paths.lastObject();
+
+            if (pathCount > 2) {
+                if (useClassName && useActionName) {
+                    temp.addObject(firstPathComponent);
+                    temp.addObject(lastPathComponent);
+                } else {
+                    if (!useClassName) {
+                        temp.addObject(lastPathComponent);
+                    } else {
+                        temp.addObject(firstPathComponent);
+                    }
+                }
+            } else if (pathCount == 2) {
+                if (useClassName) {
+                    temp.addObject(firstPathComponent);
+                }
+                if (useActionName) {
+                    temp.addObject(lastPathComponent);
+                }
+            } else if (pathCount == 1) {
+                // If there's just 1 path component it can either be an action name or the name of the action class.
+                if ((useActionName && !lastPathComponent.equals(defaultActionName)) ||
+                    (useClassName && !lastPathComponent.equals(actionClassName))) {
+                    temp.addObject(lastPathComponent);
+                }
+            }
+        }
+		if (actionClassName != null && temp.count() == 0) {
 			temp.addObject(actionClassName);
 		}
 		return temp.immutableClone();
 	}
-	
+
 	/**
 	 * Returns a dictionary similar to the normal request form value dict.
 	 * Translates /cgi-bin/.../wpa/foo/bar=2/baz into {foo = foo; bar = 2;
 	 * baz = baz}
-	 * 
+	 *
 	 * @param request request to parse
 	 * @param useActionClass true if first item should get ignored
 	 * @param useActionName true if last item should get ignored
+     * @return the dictionary of form values
 	 */
 	public static NSDictionary formValuesFromRequest(WORequest request, boolean useActionClass, boolean useActionName) {
 		NSMutableDictionary params = new NSMutableDictionary();

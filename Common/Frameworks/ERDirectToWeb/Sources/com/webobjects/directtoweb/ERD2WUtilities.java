@@ -64,7 +64,9 @@ public class ERD2WUtilities {
                         }
                     }
                 } catch (NSKeyValueCoding.UnknownKeyException e) {
-                    log.warn("keyPath "+keyPath+" is not available for context "+c);
+                    if (log.isDebugEnabled()) {
+                        log.debug("keyPath "+keyPath+" is not available for context "+c);
+                    }
                     return null;
                 }
             }
