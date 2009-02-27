@@ -62,7 +62,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /** Time to live in milliseconds for an object in this cache. */
     private long _timeout;
     
-    /** The time when the objects in this cache were fetched. */
+    /** The time when the objects in this cache were fetched.  Only used if _fetchInitialValues is <code>true</code>. */
     private long _fetchTime;
     
     /** <code>true</code> if this cache should be populated when created, <code>false</code> for lazy population.  */
@@ -305,10 +305,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @return the backing cache
      */
     protected synchronized ERXExpiringCache<Object, EORecord<T>> cache() {
-        long now = System.currentTimeMillis();
-        if(_fetchInitialValues && _timeout > 0L && (now - _timeout) > _fetchTime) {
-            reset();
-        }
         if(_cache == null) {
         	if (_fetchInitialValues) {
                 _cache = new ERXExpiringCache<Object, EORecord<T>>(ERXExpiringCache.NO_TIMEOUT);
@@ -319,25 +315,16 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
                 	_cache.startBackgroundExpiration();
                 }
         	}
-            if (_fetchInitialValues) {
-	            ERXEC ec = editingContext();
-	            ec.setCoalesceAutoLocks(false);
-	            ec.lock();	// Prevents lock churn
-	            try {
-	                NSArray objects = initialObjects(ec);
-	                for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
-	                    T eo = (T) enumeration.nextElement();
-	                    addObject(eo);
-	                }
-	            } finally {
-	                ec.unlock();
-	                if ( ! _reuseEditingContext) {
-	                	ec.dispose();
-	                }
-	            }
-            }
-            _fetchTime = System.currentTimeMillis();
+        	
+            preLoadCacheIfNeeded();
         }
+        
+        // If initial values are fetched, the entire cache expires at the same time
+        long now = System.currentTimeMillis();
+        if(_fetchInitialValues && _timeout > 0L && (now - _timeout) > _fetchTime) {
+            reset();
+        }
+        
         return _cache;
     }
     
@@ -361,15 +348,30 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     	}
     	return record;
     }
-
+    
     /**
-     * Returns the objects to cache initially.
-     * @param ec EOEditingContext to fetch objects into
-     * @return the initial objects for the cache
+     * Loads all relevant objects into the cache if set to fetch initial values.
      */
-    protected NSArray<T> initialObjects(EOEditingContext ec) {
-		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(entityName(), qualifier(), null);
-		return ec.objectsWithFetchSpecification(fetchSpec);
+    protected void preLoadCacheIfNeeded() {
+        if (_fetchInitialValues) {
+            _fetchTime = System.currentTimeMillis();
+            ERXEC ec = editingContext();
+            ec.setCoalesceAutoLocks(false);
+            ec.lock();	// Prevents lock churn
+            try {
+        		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(entityName(), qualifier(), null);
+        		NSArray objects = ec.objectsWithFetchSpecification(fetchSpec);
+                for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
+                    T eo = (T) enumeration.nextElement();
+                    addObject(eo);
+                }
+            } finally {
+                ec.unlock();
+                if ( ! _reuseEditingContext) {
+                	ec.dispose();
+                }
+            }
+        }
     }
 
     /**
@@ -604,12 +606,15 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
 
     /**
-     * Resets the cache by clearing the internal map. When the next value 
-     * is accessed, the objects are refetched.
+     * Resets the cache by clearing the internal map. The values are refreshed right away if 
+     * <code>_fetchInitialValues</code> is <code>true</code>, otherwise they are re-loaded on demand.
+     * 
+     * @see #preLoadCacheIfNeeded()
      */
     public synchronized void reset() {
     	if (_cache != null) {
     		_cache.removeAllObjects();
+    	    preLoadCacheIfNeeded();
     	}
     }
     
