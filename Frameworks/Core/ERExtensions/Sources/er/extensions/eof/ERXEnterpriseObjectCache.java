@@ -533,7 +533,36 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         }
         return eo;
     }
-  
+    
+    /**
+     * Returns a list of all the objects currently in the cache and not yet expired.
+     * @param ec editing context to get the objects into
+     * @return all objects currently in the cache and unexpired
+     */
+    public NSArray<T> allObjects(EOEditingContext ec) {
+    	return allObjects(ec, null);
+    }
+    
+    /**
+     * Returns a list of all the objects currently in the cache and not yet expired which match additionalQualifier.
+     * @param ec editing context to get the objects into
+     * @param additionalQualifier qualifier to restrict which objects are returned from the cache
+     * @return all objects currently in the cache and unexpired
+     */
+    public NSArray<T> allObjects(EOEditingContext ec, EOQualifier additionalQualifier) {
+    	ERXExpiringCache<Object, EORecord<T>> cache = cache();
+    	NSArray allKeys = cache.allKeys();
+    	NSMutableArray allObjects = new NSMutableArray(allKeys.count());
+
+    	for (Object entryKey : allKeys) {
+    		T object = objectForKey(ec, entryKey, false);
+    		if (object != null && (additionalQualifier == null || additionalQualifier.evaluateWithObject(object))) {
+        		allObjects.addObject(object);
+    		}
+    	}
+    	return allObjects;
+    }
+    
     /**
      * Called when a query hasn't found an entry in the cache. This
      * implementation puts a not-found marker in the cache so
