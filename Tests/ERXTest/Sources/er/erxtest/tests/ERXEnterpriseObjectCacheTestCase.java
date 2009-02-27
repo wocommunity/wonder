@@ -5,6 +5,7 @@ import java.util.UUID;
 import junit.framework.TestCase;
 
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.*;
 
 import er.erxtest.model.Company;
 import er.extensions.eof.ERXEC;
@@ -144,6 +145,21 @@ public class ERXEnterpriseObjectCacheTestCase extends TestCase {
     cache.stop();
   }
 
+  public void testAllObjects() {
+      ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
+      cache.setFetchInitialValues(true);
+
+      NSArray allObjects = cache.allObjects(editingContext);
+      assertTrue(allObjects.containsObject(c1));
+      assertTrue(allObjects.containsObject(c2));
+      
+      allObjects = cache.allObjects(editingContext, Company.NAME.contains("Test"));
+      assertFalse(allObjects.containsObject(c1));
+      assertTrue(allObjects.containsObject(c2));
+      
+      cache.stop();
+    }
+  
   protected void setUp() throws Exception {
       String name1 = "Company " + UUID.randomUUID().toString();
       editingContext = ERXEC.newEditingContext();
