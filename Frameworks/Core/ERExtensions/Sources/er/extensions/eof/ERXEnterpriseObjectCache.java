@@ -158,6 +158,36 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
 
     /**
+     * Creates the cache for the given entity, keypath and timeout value in milliseconds.  Only objects
+     * that match qualifier are stored in the cache.
+ 	 *
+ 	 * @see #setResetOnChange(boolean)
+ 	 * @see #setFetchInitialValues(boolean)
+ 	 * @see #setRetainObjects(boolean)
+ 	 * 
+     * @param entityName name of the EOEntity to cache
+     * @param keyPath key path to data uniquely identifying an instance of this entity
+     * @param qualifier EOQualifier restricting which instances are stored in this cache
+     * @param timeout time to live in milliseconds for an object in this cache
+     * @param shouldRetainObjects true if this cache should retain the cached objects, false to keep only the GID
+     * @param shouldFetchInitialValues true if the cache should be fully populated on first access
+     */
+    public ERXEnterpriseObjectCache(String entityName, String keyPath, EOQualifier qualifier, long timeout, boolean shouldRetainObjects, boolean shouldFetchInitialValues) {
+    	if ( ! ERXEC.defaultAutomaticLockUnlock()) {
+    		throw new RuntimeException("ERXEnterpriseObjectCache requires automatic locking, set er.extensions.ERXEC.defaultAutomaticLockUnlock or " +
+    				"er.extensions.ERXEC.safeLocking in your Properties file");
+    	}
+        _entityName = entityName;
+        _keyPath = keyPath;
+        _timeout = timeout;
+        _qualifier = qualifier;
+        setRetainObjects(shouldRetainObjects);
+        setResetOnChange(false);
+        setFetchInitialValues(shouldFetchInitialValues);
+        start();
+    }
+    
+    /**
      * Call this to re-start cache updating after stop() is called.  This is automatically called from the
      * constructor so unless you call stop(), there is no need to ever call this method.
 	 * @see #stop()
@@ -656,7 +686,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * Sets whether or not the initial values should be fetched into
-     * this cache or whether or should lazy load.  If turned off, resetOnChange
+     * this cache or whether it should lazy load.  If turned off, resetOnChange
      * will also be turned off.
      * 
      * @param fetchInitialValues if true, the initial values are fetched into the cache
