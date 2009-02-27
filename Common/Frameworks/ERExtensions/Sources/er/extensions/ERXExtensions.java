@@ -60,6 +60,10 @@ import com.webobjects.jdbcadaptor.JDBCAdaptorException;
  */
 public class ERXExtensions extends ERXFrameworkPrincipal {
     
+    static {
+    	setUpFrameworkPrincipalClass (ERXExtensions.class);
+    }
+
     /** Notification name, posted before object will change in an editing context */
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
     

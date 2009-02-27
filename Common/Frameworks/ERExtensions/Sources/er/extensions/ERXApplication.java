@@ -245,9 +245,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				e.printStackTrace();
 			}
 		}*/
-		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue)); // This would normally done by the loader if it had been ported back.
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
-		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
+		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue)); // This would normally done by the loader if it had been ported back.
 		ERXStats.initStatisticsIfNecessary();
 	}
 
