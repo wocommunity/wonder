@@ -892,7 +892,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                     .append("ERXProperties has found the following Properties files: \n");
             message.append(projectsInfo.componentsJoinedByString("\n"));
             message.append("\n");
-            message.append(NSPropertyListSerialization.stringFromPropertyList(allProperties()));
+            //message.append(NSPropertyListSerialization.stringFromPropertyList(allProperties()));
             log.info(message.toString());
         }
 
