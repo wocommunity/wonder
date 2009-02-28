@@ -390,6 +390,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             ec.lock();	// Prevents lock churn
             try {
         		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(entityName(), qualifier(), null);
+        		fetchSpec.setRefreshesRefetchedObjects(true);
+        		fetchSpec.setIsDeep(true);
         		NSArray objects = ec.objectsWithFetchSpecification(fetchSpec);
                 for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
                     T eo = (T) enumeration.nextElement();
@@ -642,6 +644,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     protected NSArray<T> fetchObjectsForKey(EOEditingContext editingContext, Object key) {
 		EOQualifier qualifier = fetchObjectsQualifier(key);
 		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(_entityName, qualifier, null);
+		fetchSpec.setRefreshesRefetchedObjects(true);
+		fetchSpec.setIsDeep(true);
 		NSArray<T> objects = editingContext.objectsWithFetchSpecification(fetchSpec);
 		return objects;
     }
