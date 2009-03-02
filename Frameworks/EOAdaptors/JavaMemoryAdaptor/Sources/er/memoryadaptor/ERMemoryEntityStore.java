@@ -1,5 +1,8 @@
 package er.memoryadaptor;
 
+import java.util.Enumeration;
+
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -8,6 +11,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -100,7 +104,18 @@ public class ERMemoryEntityStore {
   @SuppressWarnings("unchecked")
   public void insertRow(NSDictionary row, EOEntity entity) {
     try {
-      _rows.addObject(new NSMutableDictionary<String, Object>(row));
+        // AK: it looks like the higher levels sometimes do not add null values correctly,
+        // so we make it up here and put NullValue in the dict
+        NSMutableDictionary<String, Object> mutableRow = new NSMutableDictionary<String, Object>(row);
+        if(entity.attributes().count() != row.allKeys().count()) {
+            for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
+                EOAttribute attribute = (EOAttribute) e.nextElement();
+                if(mutableRow.objectForKey(attribute.name()) == null) {
+                    mutableRow.setObjectForKey(NSKeyValueCoding.NullValue, attribute.name());
+                }
+            }
+        }
+      _rows.addObject(mutableRow);
     }
     catch (EOGeneralAdaptorException e) {
       throw e;
