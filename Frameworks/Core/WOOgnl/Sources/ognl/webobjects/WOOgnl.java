@@ -151,7 +151,7 @@ public class WOOgnl {
 					Class.forName("com.webobjects.appserver._private.WOParser").getMethod("setWOHTMLTemplateParserClassName", String.class).invoke(null, parserClassName);
 				}
 				catch (Exception e1) {
-					throw new RuntimeException("Failed to set the template parser to WOHelperFunctionParser54.", e1);
+					throw new RuntimeException("Failed to set the template parser to WOHelperFunctionParser53.", e1);
 				}
 			}
 			if ("true".equalsIgnoreCase(System.getProperty("ognl.inlineBindings"))) {
