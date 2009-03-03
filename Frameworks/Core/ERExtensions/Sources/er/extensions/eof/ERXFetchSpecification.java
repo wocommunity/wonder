@@ -136,7 +136,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	@Override
 	public Object clone() {
-		return super.clone();
+		return fetchSpec((EOFetchSpecification) super.clone());
 	}
 	
 	/**
