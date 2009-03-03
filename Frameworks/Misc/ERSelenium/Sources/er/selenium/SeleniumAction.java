@@ -29,17 +29,18 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOCookie;
-import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.appserver.ERXDirectAction;
+
 /**
  * Default handler class, gets replaced by the startup process.
  *
  */
-public class SeleniumAction extends WODirectAction {
+public class SeleniumAction extends ERXDirectAction {
 
 	private static final Logger log = Logger.getLogger(SeleniumAction.class);
 
