@@ -31,26 +31,26 @@ import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Basic log4j Mail Message Appender<br>
+ * Basic log4j Mail Message Appender.<br>
  *	Used for logging log events that will eventually be emailed
- *	out. Logs events using {@link com.webobjects.appserver.WOMailDelivery WOMailDelivery}.
- *  Manditory Fields:<br>
- *      TOAddresses - comma seperated list of email addresses to send the log event
- *		message to.
+ *	out. Logs events using {@link com.webobjects.appserver.WOMailDelivery WOMailDelivery}.<br><br>
+ *  Mandatory Fields:<br>
+ *      ToAddresses - comma separated list of email addresses to send the log event
+ *		message to.<br>
  *	FromAddress - Who the message is from, if left blank then DomainName is a
- *		manditory field.
+ *		mandatory field.<br><br>
  *  Optional Fields:<br>
- *	BccAddresses - comma separated list of email address to bcc on the email
- *	CcAddresses - comma separated list of email address to cc on the email
- * 	ReplyTo - reply to address
+ *	BccAddresses - comma separated list of email address to bcc on the email<br>
+ *	CcAddresses - comma separated list of email address to cc on the email<br>
+ * 	ReplyTo - reply to address<br>
  *	DomainName - When generating a from email address, used for the bit after the
- *		"@", ie foo@bar.com, the domain name is 'bar.com'.
+ *		"@", ie foo@bar.com, the domain name is 'bar.com'.<br>
  *	HostName - When generating an email address from, defaults to name of the
- *		localhost.
- *	ExceptionPage - name of the exception page, is unset, 
+ *		localhost.<br>
+ *	ExceptionPage - name of the exception page, is unset, <br>
  *	Title - Title of the email messages, if not specified the title will be a
- *		truncated version of the log message.
- *	Qualifier - qualifier that defines if the event should be logged.
+ *		truncated version of the log message.<br>
+ *	Qualifier - qualifier that defines if the event should be logged.<br>
  */
 
 public class ERXMailAppender extends AppenderSkeleton {
