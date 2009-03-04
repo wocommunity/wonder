@@ -1,0 +1,34 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = title; 
+            name = title; 
+            prototypeName = varcharLarge; 
+        }
+    ); 
+    attributesUsedForLocking = (id, title); 
+    className = "er.restexample.server.ServerForum"; 
+    classProperties = (posts, title, topics); 
+    externalName = ServerForum; 
+    fetchSpecificationDictionary = {}; 
+    name = ServerForum; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ServerPost; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = forumID; sourceAttribute = id; }); 
+            name = posts; 
+        }, 
+        {
+            destination = ServerTopic; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = forumID; sourceAttribute = id; }); 
+            name = topics; 
+        }
+    ); 
+}
