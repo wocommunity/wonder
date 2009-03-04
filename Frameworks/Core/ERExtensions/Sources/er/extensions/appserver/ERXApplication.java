@@ -1130,7 +1130,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * {@link ERXRequest} object that fixes a bug with localization.
 	 */
 	protected WORequest _createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
-
 		// Workaround for #3428067 (Apache Server Side Include module will feed
 		// "INCLUDED" as the HTTP version, which causes a request object not to
 		// be
@@ -1313,8 +1312,34 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	@Override
 	public synchronized void refuseNewSessions(boolean value) {
-		super.refuseNewSessions(value);
-		resetKillTimer( isRefusingNewSessions());
+		boolean success = false;
+		try {
+			Field f = WOApplication.class.getField("_refusingNewClients");
+			f.setAccessible(true);
+			f.set(this, value);
+			success = true;
+		}
+		catch (SecurityException e) {
+			log.error(e, e);
+		}
+		catch (NoSuchFieldException e) {
+			log.error(e, e);
+		}
+		catch (IllegalArgumentException e) {
+			log.error(e, e);
+		}
+		catch (IllegalAccessException e) {
+			log.error(e, e);
+		}
+		if(!success) {
+			super.refuseNewSessions(value);
+		}
+		// #81712. App will terminate immediately if the right conditions are met.
+		if (value && (activeSessionsCount() <= minimumActiveSessionsCount())) {
+			log.info("Refusing new clients and below min active session threshold, about to terminate...");
+			terminate();
+		}
+		resetKillTimer(isRefusingNewSessions());
 	}
 
 	/**
