@@ -106,6 +106,11 @@ import com.webobjects.monitor._private.MSiteConfig;
  * error message</td>
  * <td>sets the number of deaths to 0</td>
  * </tr>
+ * <td>bounce</td>
+ * <td>'OK' or <br>
+ * error message</td>
+ * <td>bounces the application (starts a few instances per hosts, set the rest to refusing sessions and auto-recover)</td>
+ * </tr>
  * </table>
  * </p>
  * <p>
@@ -237,6 +242,7 @@ import com.webobjects.monitor._private.MSiteConfig;
  * </tr>
  * </table>
  * 
+ * @author christian@pekeler.org
  * @author ak
  * 
  */
