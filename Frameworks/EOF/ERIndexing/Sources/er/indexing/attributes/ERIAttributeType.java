@@ -1,5 +1,7 @@
 package er.indexing.attributes;
 
+import java.text.Format;
+
 import com.webobjects.eocontrol.*;
 
 public class ERIAttributeType extends _ERIAttributeType {
@@ -16,5 +18,9 @@ public class ERIAttributeType extends _ERIAttributeType {
 
     public void init(EOEditingContext ec) {
         super.init(ec);
+    }
+
+    public Format formatter() {
+        return valueType().formatterForFormat(format());
     }
 }
