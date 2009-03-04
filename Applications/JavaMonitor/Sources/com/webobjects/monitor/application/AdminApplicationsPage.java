@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -249,7 +250,6 @@ public class AdminApplicationsPage extends ApplicationsPage {
     public WOComponent moveUpClicked() {
         handler().startReading();
         try {
-            WOComponent wocomponent;
             NSMutableArray nsmutablearray = applicationArray();
             int i = nsmutablearray.indexOfObject(currentApplication);
             nsmutablearray.removeObjectAtIndex(i);
@@ -258,8 +258,7 @@ public class AdminApplicationsPage extends ApplicationsPage {
             else
                 nsmutablearray.insertObjectAtIndex(currentApplication, i - 1);
             siteConfig().dataHasChanged();
-            wocomponent = pageWithName("ApplicationsPage");
-            return wocomponent;
+            return AdminApplicationsPage.create(context());
         } finally {
             handler().endReading();
         }
@@ -299,6 +298,6 @@ public class AdminApplicationsPage extends ApplicationsPage {
     
 
     public static WOComponent create(WOContext context) {
-        return (AdminApplicationsPage) context.page().pageWithName(AdminApplicationsPage.class.getName());
+        return (AdminApplicationsPage) WOApplication.application().pageWithName(AdminApplicationsPage.class.getName(), context);
     }
 }
