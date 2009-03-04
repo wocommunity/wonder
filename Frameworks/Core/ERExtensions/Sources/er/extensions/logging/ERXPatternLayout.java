@@ -51,6 +51,7 @@ import er.extensions.foundation.ERXUtilities;
  * t: total memory
  * u: used memory 
  * f: free memory in the current heap size (not max)
+ * m: max memory
  * 
  * </pre>
  * 
@@ -503,12 +504,13 @@ class ERXPatternParser extends PatternParser {
 			_decimalFormatter.setMaximumFractionDigits(2);
 			_templateParser = new ERXSimpleTemplateParser("-");
 			// This will prevent the convert method to get into an infinite loop
-			// when debug level logging is enabled for the perser.
+			// when debug level logging is enabled for the parser.
 			_templateParser.isLoggingDisabled = true;
 			_jvmInfo = new NSMutableDictionary();
 			format = format.replaceFirst("(^|\\W)u(\\W|$)", "$1@@usedMemory@@$2");
 			format = format.replaceFirst("(^|\\W)f(\\W|$)", "$1@@freeMemory@@$2");
 			format = format.replaceFirst("(^|\\W)t(\\W|$)", "$1@@totalMemory@@$2");
+			format = format.replaceFirst("(^|\\W)m(\\W|$)", "$1@@maxMemory@@$2");
 			_template = format;
 		}
 
@@ -531,10 +533,12 @@ class ERXPatternParser extends PatternParser {
 
 			long totalMemory = _runtime.totalMemory();
 			long freeMemory = _runtime.freeMemory();
+			long maxMemory = _runtime.maxMemory();
 			long usedMemory = totalMemory - freeMemory;
 			_jvmInfo.setObjectForKey(_decimalFormatter.format(totalMemory), "totalMemory");
 			_jvmInfo.setObjectForKey(_decimalFormatter.format(freeMemory), "freeMemory");
 			_jvmInfo.setObjectForKey(_decimalFormatter.format(usedMemory), "usedMemory");
+			_jvmInfo.setObjectForKey(_decimalFormatter.format(maxMemory), "maxMemory");
 
 			return _templateParser.parseTemplateWithObject(_template, "@@", _jvmInfo);
 		}
