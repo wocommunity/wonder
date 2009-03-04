@@ -64,6 +64,10 @@ DeleteLink: WOHyperlink {
     action = deleteClicked;
 }
 
+BounceLink: WOHyperlink {
+    action = bounceClicked;
+}
+
 DetailViewButton: WOImage {
     filename = "ButtonDetailView.gif";
     height = "28";

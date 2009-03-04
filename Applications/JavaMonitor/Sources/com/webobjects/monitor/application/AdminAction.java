@@ -1,9 +1,9 @@
 package com.webobjects.monitor.application;
 
+import java.security.AllPermission;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
@@ -11,7 +11,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSet;
-import com.webobjects.foundation._NSUtilities;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MObject;
@@ -252,21 +251,21 @@ public class AdminAction extends WODirectAction {
         }
     }
 
-    protected static NSArray supportedActionNames = new NSArray(new String[] { "running", "stopped", "start", "stop", "forceQuit", "turnAutoRecoverOn", "turnAutoRecoverOff",
+    protected static NSArray supportedActionNames = new NSArray(new String[] { "running", "bounce", "stopped", "start", "stop", "forceQuit", "turnAutoRecoverOn", "turnAutoRecoverOff",
             "turnRefuseNewSessionsOn", "turnRefuseNewSessionsOff", "turnScheduledOn", "turnScheduledOff", "turnAutoRecoverOn", "turnAutoRecoverOff", "clearDeaths", "info" });
-
-    public Application theApplication;
 
     protected AdminApplicationsPage applicationsPage;
 
     protected NSMutableArray instances;
+
+    protected NSMutableArray applications;
 
     private WOTaskdHandler _handler;
 
     public AdminAction(WORequest worequest) {
         super(worequest);
         instances = new NSMutableArray();
-        theApplication = (Application) WOApplication.application();
+        applications = new NSMutableArray();
         _handler = new WOTaskdHandler(mySession());
     }
 
@@ -336,6 +335,10 @@ public class AdminAction extends WODirectAction {
         return woresponse;
     }
 
+    public void bounceAction() {
+        applicationsPage().bounce(applications);
+    }
+
     public void clearDeathsAction() {
         applicationsPage().clearDeaths(instances);
     }
@@ -382,8 +385,10 @@ public class AdminAction extends WODirectAction {
         for (Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
             String s = (String) enumeration.nextElement();
             MApplication mapplication = siteConfig().applicationWithName(s);
-            if (mapplication != null)
+            if (mapplication != null) {
+                applications.addObject(mapplication);
                 addInstancesForApplication(mapplication);
+            }
             else
                 throw new DirectActionException("Unknown application " + s, 404);
         }
@@ -418,9 +423,7 @@ public class AdminAction extends WODirectAction {
     public WOActionResults performMonitorActionNamed(String s) {
         String s1 = (String) context().request().formValueForKey("type");
         if ("all".equalsIgnoreCase(s1)) {
-            for (Enumeration enumeration = siteConfig().applicationArray().objectEnumerator(); enumeration.hasMoreElements();) {
-                addInstancesForApplication((MApplication) enumeration.nextElement());
-            }
+            prepareApplications((NSArray) siteConfig().applicationArray().valueForKey("name"));
         } else {
             NSArray nsarray = context().request().formValuesForKey("name");
             if ("app".equalsIgnoreCase(s1))
@@ -441,12 +444,10 @@ public class AdminAction extends WODirectAction {
     }
 
     private MSiteConfig siteConfig() {
-        return theApplication._siteConfig();
+        return _handler.siteConfig();
     }
 
     public WOActionResults performActionNamed(String s) {
-        if (!supportedActionNames.containsObject(s))
-            return super.performActionNamed(s);
         WOResponse woresponse = new WOResponse();
         if (!siteConfig().isPasswordRequired() || siteConfig().password().equals(context().request().stringFormValueForKey("pw"))) {
             try {
@@ -460,7 +461,7 @@ public class AdminAction extends WODirectAction {
             } catch (DirectActionException directactionexception) {
                 woresponse.setStatus(directactionexception.status);
                 woresponse.setContent(s + " action failed: " + directactionexception.getMessage());
-            } catch (Throwable throwable) {
+            } catch (Exception throwable) {
                 woresponse.setStatus(500);
                 woresponse.setContent(s + " action failed: " + throwable.getMessage() + ". See Monitor's log for a stack trace.");
                 throwable.printStackTrace();
