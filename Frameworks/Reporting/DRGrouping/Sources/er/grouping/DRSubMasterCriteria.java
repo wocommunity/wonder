@@ -500,7 +500,7 @@ public class DRSubMasterCriteria extends Object  {
             try {
                 s = formatter.format(ts);
             } catch(Exception ex) {
-                log.error("Error looup " + ex + ", value=" + aVal + ": " + this);
+                log.warn("Error lookup " + ex + ", value=" + aVal + ": " + this);
                 s = aVal.toString();
             }
         } else {
