@@ -176,20 +176,20 @@ import com.webobjects.monitor._private.MSiteConfig;
  * </tr>
  * <tr>
  * <td>
- * .../JavaMonitor.woa/wa/start?type=app&amp;name=AppleStore&amp;name=MemberSite
+ * .../JavaMonitor.woa/admin/start?type=app&amp;name=AppleStore&amp;name=MemberSite
  * </td>
  * <td>Starts all instances of the AppleStore and the MemberSite applications.
  * Returns error if any of these applications are unknown to Monitor, OK
  * otherwise.</td>
  * </tr>
  * <tr>
- * <td>.../JavaMonitor.woa/wa/turnScheduledOff?type=all</td>
+ * <td>.../JavaMonitor.woa/admin/turnScheduledOff?type=all</td>
  * <td>Turns scheduling off for all instances of all applications, then returns
  * OK.</td>
  * </tr>
  * <tr>
  * <td>
- * .../JavaMonitor.woa/wa/stopped?type=ins&amp;name=AppleStore-4&amp;name=
+ * .../JavaMonitor.woa/admin/stopped?type=ins&amp;name=AppleStore-4&amp;name=
  * MemberSite-8&amp;name=AppleStore-2</td>
  * <td>Returns YES if the instances 2 and 4 of the AppleStore and instance 8 of
  * the MemberSite are all dead. Returns NO if at least one of them has not
@@ -211,7 +211,7 @@ import com.webobjects.monitor._private.MSiteConfig;
         <br>
         # stop application<br>
         result=`curl -s
-        http://bigserver:1086/cgi-bin/WebObjects/JavaMonitor.woa/wa/stop\?type=app\&amp;name=MemberSite`<br>
+        http://bigserver:1086/cgi-bin/WebObjects/JavaMonitor.woa/admin/stop\?type=app\&amp;name=MemberSite`<br>
         [ &quot;$result&quot; = OK ] || { echo $result; exit 1; }<br>
         <br>
         # deploy new application<br>
@@ -220,7 +220,7 @@ import com.webobjects.monitor._private.MSiteConfig;
         <br>
         # start application<br>
         result=`curl -s
-        http://bigserver:1086/cgi-bin/WebObjects/JavaMonitor.woa/wa/start\?type=app\&amp;name=MemberSite`<br>
+        http://bigserver:1086/cgi-bin/WebObjects/JavaMonitor.woa/admin/start\?type=app\&amp;name=MemberSite`<br>
         [ &quot;$result&quot; = OK ] || { echo $result; exit 1; }<br>
         <br>
         echo &quot;deployment completed&quot;</tt><br>
@@ -233,7 +233,7 @@ import com.webobjects.monitor._private.MSiteConfig;
  * <table cellspacing="0" cellpadding="5" border="1">
  * <tr>
  * <td><tt>curl -w " (status: %{http_code})\n"
-        http://bigserver:1086/cgi-bin/WebObjects/JavaMonitor.woa/wa/forceQuit\?type=ins\&name=AppleStore-3
+        http://bigserver:1086/cgi-bin/WebObjects/JavaMonitor.woa/admin/forceQuit\?type=ins\&name=AppleStore-3
  * </td>
  * </tr>
  * </table>
@@ -276,7 +276,7 @@ public class AdminAction extends WODirectAction {
 
     protected AdminApplicationsPage applicationsPage() {
         if (applicationsPage == null)
-            applicationsPage = (AdminApplicationsPage) pageWithName("AdminApplicationsPage");
+            applicationsPage = new AdminApplicationsPage(context());
         return applicationsPage;
     }
 
@@ -288,18 +288,18 @@ public class AdminAction extends WODirectAction {
             MInstance minstance = (MInstance) enumeration.nextElement();
             result += (result.length() == 0 ? "" : ", \n");
             result += "{";
-            result += "\"name\" => \"" + minstance.applicationName() + "\", ";
-            result += "\"id\" => \"" + minstance.id() + "\", ";
-            result += "\"host\" => \"" + minstance.hostName() + "\", ";
-            result += "\"port\" => \"" + minstance.port() + "\", ";
-            result += "\"state\" => \"" + MObject.stateArray[minstance.state] + "\", ";
-            result += "\"deaths\" => \"" + minstance.deathCount() + "\", ";
-            result += "\"refusingNewSessions\" => " + minstance.isRefusingNewSessions() + ", ";
-            result += "\"scheduled\" => " + minstance.isScheduled() + ", ";
-            result += "\"transactions\" => \"" + minstance.transactions() + "\", ";
-            result += "\"activeSessions\" => \"" + minstance.activeSessions() + "\", ";
-            result += "\"averageIdlePeriod\" => \"" + minstance.averageIdlePeriod() + "\", ";
-            result += "\"avgTransactionTime\" => \"" + minstance.avgTransactionTime() + "\"";
+            result += "\"name\": \"" + minstance.applicationName() + "\", ";
+            result += "\"id\": \"" + minstance.id() + "\", ";
+            result += "\"host\": \"" + minstance.hostName() + "\", ";
+            result += "\"port\": \"" + minstance.port() + "\", ";
+            result += "\"state\": \"" + MObject.stateArray[minstance.state] + "\", ";
+            result += "\"deaths\": \"" + minstance.deathCount() + "\", ";
+            result += "\"refusingNewSessions\": " + minstance.isRefusingNewSessions() + ", ";
+            result += "\"scheduled\": " + minstance.isScheduled() + ", ";
+            result += "\"transactions\": \"" + minstance.transactions() + "\", ";
+            result += "\"activeSessions\": \"" + minstance.activeSessions() + "\", ";
+            result += "\"averageIdlePeriod\": \"" + minstance.averageIdlePeriod() + "\", ";
+            result += "\"avgTransactionTime\": \"" + minstance.avgTransactionTime() + "\"";
             result += "}";
         }
         woresponse.appendContentString("[" + result + "]");
@@ -448,7 +448,7 @@ public class AdminAction extends WODirectAction {
         if (!supportedActionNames.containsObject(s))
             return super.performActionNamed(s);
         WOResponse woresponse = new WOResponse();
-        if (!siteConfig().isPasswordRequired() || true) {
+        if (!siteConfig().isPasswordRequired() || siteConfig().password().equals(context().request().stringFormValueForKey("pw"))) {
             try {
                 WOActionResults woactionresults = performMonitorActionNamed(s);
                 if (woactionresults != null && (woactionresults instanceof WOResponse)) {
