@@ -356,8 +356,42 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent deleteInstanceClicked() {
-        InstConfirmDeletePage aPage = (InstConfirmDeletePage) InstConfirmDeletePage.create(context(), currentInstance);
-        return aPage;
+
+        final MInstance instance = currentInstance;
+        
+        return ConfirmationPage.create(context(), new ConfirmationPage.Delegate() {
+
+            public WOComponent cancel() {
+                return AppDetailPage.create(context(), instance.application());
+            }
+
+            public WOComponent confirm() {
+                handler().startWriting();
+                try {
+                    siteConfig().removeInstance_M(instance);
+
+                    if (siteConfig().hostArray().count() != 0) {
+                        handler().sendRemoveInstancesToWotaskds(new NSArray(instance), siteConfig().hostArray());
+                    }
+                } finally {
+                    handler().endWriting();
+                }
+                return AppDetailPage.create(context(), instance.application());
+            }
+
+            public String explaination() {
+                return "Selecting 'Yes' will shutdown any running instances of this application, delete all instance configurations, and remove this application from the Application page.";
+            }
+
+            public int pageType() {
+                return APP_PAGE;
+            }
+
+            public String question() {
+                return "Are you sure you want to delete this instance (" + instance.displayName() + " running on " + instance.hostName() + ")";
+            }
+
+        });
     }
 
     public String linkToWOStats() {
@@ -532,7 +566,89 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent stopAllClicked() {
-        return StopAllConfirmPage.create(context(), myApplication());
+
+        final NSArray instances = selectedInstances().immutableClone();
+        final MApplication application = myApplication();
+
+        return ConfirmationPage.create(context(), new ConfirmationPage.Delegate() {
+
+            public WOComponent cancel() {
+                return AppDetailPage.create(context(), application);
+            }
+
+            public WOComponent confirm() {
+                handler().startReading();
+                try {
+                    if (application.hostArray().count() != 0) {
+                        handler().sendStopInstancesToWotaskds(instances, application.hostArray());
+                    }
+
+                    for (int i = 0; i < instances.count(); i++) {
+                        MInstance anInst = (MInstance) instances.objectAtIndex(i);
+                        if (anInst.state != MObject.DEAD) {
+                            anInst.state = MObject.STOPPING;
+                        }
+                    }
+                } finally {
+                    handler().endReading();
+                }
+                return AppDetailPage.create(context(), application);
+            }
+
+            public String explaination() {
+                return "Selecting 'Yes' will shutdown the selected instances of this application.";
+            }
+
+            public int pageType() {
+                return APP_PAGE;
+            }
+
+            public String question() {
+                return "Are you sure you want to stop the " + instances.count() + " instances of " + application.name() + "?";
+            }
+
+        });
+    }
+
+
+    public WOComponent deleteAllInstancesClicked() {
+
+        final NSArray instances = selectedInstances().immutableClone();
+        final MApplication application = myApplication();
+        
+        return ConfirmationPage.create(context(), new ConfirmationPage.Delegate() {
+
+            public WOComponent cancel() {
+                return AppDetailPage.create(context(), application);
+            }
+
+            public WOComponent confirm() {
+                handler().startWriting();
+                try {
+                    siteConfig().removeInstances_M(application, instances);
+
+                    if (siteConfig().hostArray().count() != 0) {
+                        handler().sendRemoveInstancesToWotaskds(instances, siteConfig().hostArray());
+                    }
+                } finally {
+                    handler().endWriting();
+                }
+                return AppDetailPage.create(context(), application);
+            }
+
+            public String explaination() {
+                return "Selecting 'Yes' will shutdown any shutdown the selected instances of this application, and delete all matching instance configurations.";
+            }
+
+            public int pageType() {
+                return APP_PAGE;
+            }
+
+            public String question() {
+                return "Are you sure you want to delete the selected <i>" + instances.count() + "</i> instances of application " + application.name() + "?";
+            }
+
+        });
     }
 
     public WOComponent autoRecoverEnableAllClicked() {

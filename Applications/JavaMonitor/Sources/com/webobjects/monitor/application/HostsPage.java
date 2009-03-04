@@ -28,6 +28,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.String_Extensions;
@@ -123,7 +125,42 @@ public class HostsPage extends MonitorComponent {
     }
 
     public WOComponent removeHostClicked() {
-        return HostConfirmDeletePage.create(context(), currentHost);
+
+        final MHost host = currentHost;
+
+        return ConfirmationPage.create(context(), new ConfirmationPage.Delegate() {
+
+            public WOComponent cancel() {
+                return HostsPage.create(context());
+            }
+
+            public WOComponent confirm() {
+                handler().startWriting();
+                try {
+                    siteConfig().removeHost_M(host);
+                    NSMutableArray tempHostArray = new NSMutableArray(siteConfig().hostArray());
+                    tempHostArray.addObject(host);
+
+                    handler().sendRemoveHostToWotaskds(host, tempHostArray);
+                } finally {
+                    handler().endWriting();
+                }
+                return HostsPage.create(context());
+            }
+
+            public String explaination() {
+                return "Selecting 'Yes' will shutdown any running instances of this host, and remove those instance configurations.";
+            }
+
+            public int pageType() {
+                return HOST_PAGE;
+            }
+
+            public String question() {
+                return "Are you sure you want to delete the host <I>" + host.name() + "</I>?";
+            }
+
+        });
     }
 
     public WOComponent configureHostClicked() {

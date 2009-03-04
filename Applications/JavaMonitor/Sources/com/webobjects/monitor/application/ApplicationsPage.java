@@ -89,7 +89,42 @@ public class ApplicationsPage extends MonitorComponent {
 	}
 
 	public WOComponent deleteClicked() {
-        return AppConfirmDeletePage.create(context(), currentApplication);
+	    
+	    final MApplication application = currentApplication;
+	    
+	    return ConfirmationPage.create(context(), new ConfirmationPage.Delegate() {
+
+            public WOComponent cancel() {
+                return ApplicationsPage.create(context());
+            }
+
+            public WOComponent confirm() {
+                handler().startWriting();
+                try {
+                    siteConfig().removeApplication_M(application);
+
+                    if (siteConfig().hostArray().count() != 0) {
+                        handler().sendRemoveApplicationToWotaskds(application, siteConfig().hostArray());
+                    }
+                } finally {
+                    handler().endWriting();
+                }
+                return ApplicationsPage.create(context());
+            }
+
+            public String explaination() {
+                return "Selecting 'Yes' will shutdown any running instances of this application, delete all instance configurations, and remove this application from the Application page.";
+            }
+
+            public int pageType() {
+                return APP_PAGE;
+            }
+
+            public String question() {
+                return "Are you sure you want to delete the <I>" + application.name() + "</I> Application?";
+            }
+	        
+	    });
     }
 
     public WOComponent configureClicked() {

@@ -148,6 +148,10 @@ InstDeleteLink: WOHyperlink {
 	action = deleteInstanceClicked;
 }
 
+InstDeleteAllLink: WOHyperlink {
+	action = deleteAllInstancesClicked;
+}
+
 InstIndex: WOString {
 	value = currentInstance.displayName;
 }
