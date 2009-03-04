@@ -268,6 +268,12 @@ public class MSiteConfig extends MObject {
     public void removeInstance_M(MInstance anInstance) {
     	removeInstance_M(anInstance, true);
     }
+    public void removeInstances_M(MApplication application, NSArray<MInstance> instances) {
+        backup("removeInstances-" + application + "-" + instances.count());
+        for (MInstance instance : instances) {
+            removeInstance_M(instance, false);
+        }
+    }
     private void removeInstance_M(MInstance anInstance, boolean doBackup) {
     	if(doBackup) {
     		backup("removeInstance-" + anInstance.displayName());
