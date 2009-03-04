@@ -33,8 +33,6 @@ public class Session extends ERXSession implements ErrorCollector {
     public Session() {
         super();
         _isLoggedIn = false;
-        if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDeployment))
-            NSLog.debug.appendln("\nSystem Properties are: " + System.getProperties() + "\n");
         return;
     }
 

@@ -13,6 +13,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation._NSCollectionReaderWriterLock;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
@@ -271,7 +272,9 @@ public class WOTaskdHandler {
 
             WOResponse[] responses = collector.sendRequest(monitorRequest, wotaskdArray, false);
             NSDictionary[] responseDicts = collector.generateResponseDictionaries(responses);
-            // System.out.println("OUT: " + NSPropertyListSerialization.stringFromPropertyList(monitorRequest) + "\n\nIN: " +  NSPropertyListSerialization.stringFromPropertyList(new NSArray(responseDicts)));
+            if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment)) {
+                NSLog.debug.appendln("OUT: " + NSPropertyListSerialization.stringFromPropertyList(monitorRequest) + "\n\nIN: " +  NSPropertyListSerialization.stringFromPropertyList(new NSArray(responseDicts)));
+            }
             collector.getCommandErrors(responseDicts);
         }
     }
