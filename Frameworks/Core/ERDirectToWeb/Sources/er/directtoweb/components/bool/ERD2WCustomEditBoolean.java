@@ -69,7 +69,8 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
     
     public void setYesNoBoolean(Object newYesNoBoolean) {
     	BooleanProxy proxy = (BooleanProxy)newYesNoBoolean;
-    	object().validateTakeValueForKeyPath(proxy.value(), propertyKey());
+    	Object o = object().validateTakeValueForKeyPath(proxy.value(), propertyKey());
+    	object().takeValueForKeyPath(o, propertyKey());
     }
     public String radioBoxGroupName(){ 
         if (_radioBoxGroupName == null) { 
