@@ -17,30 +17,9 @@ public class ERIAttribute extends _ERIAttribute {
     public static class ERIAttributeClazz extends _ERIAttribute._ERIAttributeClazz {
         /* more clazz methods here */
     }
-
-    private class IdentityFormat extends Format {
-
-        @Override
-        public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-            return toAppendTo.append(obj);
-        }
-
-        @Override
-        public Object parseObject(String source, ParsePosition pos) {
-            if(source != null) {
-                return source.toString();
-            }
-            return null;
-        }
-        
-    }
     
     public interface Key extends _ERIAttribute.Key {}
 
-    /**
-     * Initializes the EO. This is called when an EO is created, not when it is 
-     * inserted into an EC.
-     */
     public void init(EOEditingContext ec) {
         super.init(ec);
     }
@@ -58,7 +37,6 @@ public class ERIAttribute extends _ERIAttribute {
     }
     
     public Format formatter() {
-        // AK: only strings for now
-        return new IdentityFormat();
+        return attributeType().formatter();
     }
 }
