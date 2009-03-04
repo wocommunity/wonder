@@ -1,0 +1,47 @@
+{
+    attributes = (
+        {allowsNull = N; columnName = "forum-id"; name = forumID; prototypeName = id; }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = Y; 
+            columnName = title; 
+            name = title; 
+            prototypeName = varcharLarge; 
+        }, 
+        {allowsNull = N; columnName = "topic-id"; name = topicID; prototypeName = id; }, 
+        {allowsNull = N; columnName = "user-id"; name = userID; prototypeName = id; }
+    ); 
+    attributesUsedForLocking = (forumID, id, title, topicID, userID); 
+    className = "er.restexample.server.ServerPost"; 
+    classProperties = (forum, title, topic, user); 
+    externalName = ServerPost; 
+    fetchSpecificationDictionary = {}; 
+    name = ServerPost; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ServerForum; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = forumID; }); 
+            name = forum; 
+        }, 
+        {
+            destination = ServerTopic; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = topicID; }); 
+            name = topic; 
+        }, 
+        {
+            destination = ServerUser; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = userID; }); 
+            name = user; 
+        }
+    ); 
+}
