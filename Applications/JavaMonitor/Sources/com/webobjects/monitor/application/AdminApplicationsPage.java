@@ -199,6 +199,19 @@ public class AdminApplicationsPage extends ApplicationsPage {
         sendCommandInstancesToWotaskds("START");
     }
 
+    public void bounce(NSArray<MApplication> applications) {
+        for (MApplication application : applications) {
+            AppDetailPage page = AppDetailPage.create(context(), application);
+            page = (AppDetailPage) page.bounceClicked();
+        }
+    }
+
+    public WOComponent bounceClicked() {
+        AppDetailPage page = AppDetailPage.create(context(), currentApplication);
+        page = (AppDetailPage) page.bounceClicked();
+        return page;
+    }
+    
     protected NSArray allInstances() {
         NSMutableArray nsmutablearray = new NSMutableArray();
         for (Enumeration enumeration = applicationArray().objectEnumerator(); enumeration.hasMoreElements(); ) {

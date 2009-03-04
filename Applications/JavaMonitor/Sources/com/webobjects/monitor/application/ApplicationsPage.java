@@ -127,6 +127,13 @@ public class ApplicationsPage extends MonitorComponent {
 	    });
     }
 
+
+    public WOComponent bounceClicked() {
+        AppDetailPage page = AppDetailPage.create(context(), currentApplication);
+        page = (AppDetailPage) page.bounceClicked();
+        return page;
+    }
+
     public WOComponent configureClicked() {
         AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), currentApplication);
         aPage.isNewInstanceSectionVisible = true;
