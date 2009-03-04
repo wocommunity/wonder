@@ -276,7 +276,7 @@ public class WOTaskdHandler {
         }
     }
 
-    private void sendCommandInstancesToWotaskds(String command, NSArray<MInstance> instanceArray,
+    protected void sendCommandInstancesToWotaskds(String command, NSArray<MInstance> instanceArray,
             NSArray<MHost> wotaskdArray) {
         sendCommandInstancesToWotaskds(command, instanceArray, wotaskdArray, this);
     }
