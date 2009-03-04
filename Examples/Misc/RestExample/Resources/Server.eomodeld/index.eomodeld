@@ -1,0 +1,23 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = Memory; 
+    connectionDictionary = {URL = "http://beast.caboo.se"; }; 
+    entities = (
+        {className = "er.restexample.server.ServerForum"; name = ServerForum; }, 
+        {className = "er.restexample.server.ServerPost"; name = ServerPost; }, 
+        {className = "er.restexample.server.ServerTopic"; name = ServerTopic; }, 
+        {className = "er.restexample.server.ServerUser"; name = ServerUser; }
+    ); 
+    userInfo = {
+        "_EntityModeler" = {
+            activeDatabaseConfigName = Default; 
+            databaseConfigs = {
+                Default = {
+                    adaptorName = Memory; 
+                    connectionDictionary = {URL = "http://beast.caboo.se"; }; 
+                    prototypeEntityName = EOMemoryPrototypes; 
+                }; 
+            }; 
+        }; 
+    }; 
+}
