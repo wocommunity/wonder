@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver._private.WOKeyValueAssociation;
+import com.webobjects.appserver.association.WOKeyValueAssociation;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;

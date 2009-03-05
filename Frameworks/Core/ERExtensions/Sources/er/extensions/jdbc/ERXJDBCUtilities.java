@@ -713,7 +713,7 @@ public class ERXJDBCUtilities {
 	@SuppressWarnings("unchecked")
 	public static int executeUpdateScriptFromResourceNamed(EOAdaptorChannel channel, String resourceName, String frameworkName) throws SQLException, IOException {
 		ERXJDBCUtilities.log.info("Executing SQL script '" + resourceName + "' from " + frameworkName + " ...");
-		InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray);
+		InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.<String> emptyArray());
 		if (sqlScript == null) {
 			throw new IllegalArgumentException("There is no resource named '" + resourceName + "'.");
 		}

@@ -10,6 +10,7 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
+import com.webobjects.eocontrol._EOVectorKeyGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -44,8 +45,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	 * objects that it has.  The object in the notification is the name of the EOEntity to discard cache for.
 	 */
     public static String ClearCachesNotification = "ERXEnterpriseObjectCache.ClearCaches";
-    
-    protected static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
+    // WO 5.5 -- no new EOTemporaryGlobalID
+    protected static final EOGlobalID NO_GID_MARKER= new _EOVectorKeyGlobalID("_nogid", new Object[0]);
     
     /** Name of the EOEntity to cache. */
     private String _entityName;
@@ -262,7 +263,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             	releventEOs.addObject((T)eo);
             }
         }
-        return releventEOs != null ? releventEOs : NSArray.EmptyArray;
+        return releventEOs != null ? releventEOs : NSArray.<T>emptyArray();
     }
     
     /**
@@ -646,7 +647,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(_entityName, qualifier, null);
 		fetchSpec.setRefreshesRefetchedObjects(true);
 		fetchSpec.setIsDeep(true);
-		NSArray<T> objects = editingContext.objectsWithFetchSpecification(fetchSpec);
+		NSArray<T> objects = (NSArray<T>)editingContext.objectsWithFetchSpecification(fetchSpec);
 		return objects;
     }
     

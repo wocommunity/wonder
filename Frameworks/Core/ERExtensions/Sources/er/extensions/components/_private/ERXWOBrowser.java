@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -15,6 +14,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOInput;
 import com.webobjects.appserver._private.WOShared;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -79,7 +79,7 @@ public class ERXWOBrowser extends WOInput {
 	private void _slowTakeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
 		if (_selections != null && !disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) {
-			String s = nameInContext(wocontext, wocomponent);
+			String s = nameInContext(wocontext);
 			NSArray nsarray = worequest.formValuesForKey(s);
 			int i = nsarray != null ? nsarray.count() : 0;
 			int size = 0;
@@ -152,7 +152,7 @@ public class ERXWOBrowser extends WOInput {
 	private void _fastTakeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
 		if (_selections != null && !disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) {
-			String s = nameInContext(wocontext, wocomponent);
+			String s = nameInContext(wocontext);
 			NSArray nsarray = worequest.formValuesForKey(s);
 			int i = nsarray != null ? nsarray.count() : 0;
 			NSMutableArray nsmutablearray = new NSMutableArray(i);

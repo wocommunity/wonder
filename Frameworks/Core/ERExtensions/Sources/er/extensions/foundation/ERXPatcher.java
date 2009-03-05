@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
@@ -17,7 +16,6 @@ import com.webobjects.appserver._private.WOActiveImage;
 import com.webobjects.appserver._private.WOBrowser;
 import com.webobjects.appserver._private.WOCheckBox;
 import com.webobjects.appserver._private.WOCheckBoxList;
-import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WOGenericContainer;
 import com.webobjects.appserver._private.WOGenericElement;
 import com.webobjects.appserver._private.WOHiddenField;
@@ -33,6 +31,8 @@ import com.webobjects.appserver._private.WOResetButton;
 import com.webobjects.appserver._private.WOSubmitButton;
 import com.webobjects.appserver._private.WOText;
 import com.webobjects.appserver._private.WOTextField;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -201,7 +201,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 
@@ -251,7 +251,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -340,7 +340,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 
@@ -374,7 +374,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -396,7 +396,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -418,7 +418,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -440,7 +440,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -462,7 +462,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -484,7 +484,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -506,7 +506,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -528,7 +528,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -550,7 +550,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -572,7 +572,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -594,7 +594,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}
@@ -616,7 +616,7 @@ public class ERXPatcher {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
 
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
 				woresponse.appendContentString(newResponse.contentString());
 			}
 		}

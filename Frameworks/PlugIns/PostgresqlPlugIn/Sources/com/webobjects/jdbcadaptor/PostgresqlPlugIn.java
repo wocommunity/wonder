@@ -276,7 +276,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * @return  yes/no
    */
   private boolean isPrimaryKeyGenerationNotSupported(EOEntity entity) {
-    return entity.primaryKeyAttributes().count() > 1 || ((EOAttribute) entity.primaryKeyAttributes().lastObject()).adaptorValueType() != EOAttribute.AdaptorNumberType;
+    return entity.primaryKeyAttributes().count() > 1 || ((EOAttribute) entity.primaryKeyAttributes().lastObject()).adaptorValueType() != EOAttribute.AdaptorValueType.AdaptorNumberType;
   }
 
 }

@@ -127,7 +127,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				if(pk != null && pk.length() > 0) {
 					if ("T".equals(type)) {
 						byte[] bytes = ERXStringUtilities.hexStringToByteArray(pk);
-						gid = EOTemporaryGlobalID._gidForRawBytes(bytes);
+						gid = EOTemporaryGlobalID.gidForRawBytes(bytes);
 						eo = ec.objectForGlobalID(gid);
 					}
 					else {
@@ -186,7 +186,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			EOGlobalID gid = ec.globalIDForObject(eo);
 			if (gid instanceof EOTemporaryGlobalID) {
 				type = "T";
-				byte[] bytes = ((EOTemporaryGlobalID)gid)._rawBytes();
+				byte[] bytes = ((EOTemporaryGlobalID)gid).rawBytes();
 				pkStr = ERXStringUtilities.byteArrayToHexString(bytes);
 			}
 			else {

@@ -1,8 +1,10 @@
 package er.extensions.appserver;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import org.apache.log4j.Logger;
 
@@ -10,9 +12,9 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResourceManager;
+import com.webobjects.appserver._private.WOCGIFormValues;
 import com.webobjects.appserver._private.WODeployedBundle;
 import com.webobjects.appserver._private.WOProjectBundle;
-import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.appserver._private.WOURLValuedElementData;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
@@ -138,7 +140,7 @@ public class ERXResourceManager extends WOResourceManager {
 		return result;
 	}
 
-	public String urlForResourceNamed(String name, String bundleName, NSArray languages, WORequest request) {
+	public String urlForResourceNamed(String name, String bundleName, NSArray<String> languages, WORequest request) {
 		String completeURL = null;
 		if (request == null || request != null && request.isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject()) {
 			completeURL = _cachedURLForResource(name, bundleName, languages, request);
@@ -153,7 +155,13 @@ public class ERXResourceManager extends WOResourceManager {
 				fileURL = url.toString();
 				cacheDataIfNotInCache(fileURL);
 			}
-			String encoded = WOURLEncoder.encode(fileURL);
+			String encoded = fileURL;
+			try {
+				encoded = URLEncoder.encode(fileURL, WOCGIFormValues.getInstance().urlEncoding());
+			}
+			catch (UnsupportedEncodingException e) {
+				log.error("Encoding not found: " + WOCGIFormValues.getInstance().urlEncoding(), e);
+			}
 			WOContext context = null;
 			String key = WOApplication.application().resourceRequestHandlerKey();
 			if (WOApplication.application().isDirectConnectEnabled() && ERXApplication.isWO54()) {

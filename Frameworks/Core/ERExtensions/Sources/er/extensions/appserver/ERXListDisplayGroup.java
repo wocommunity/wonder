@@ -84,8 +84,9 @@ public class ERXListDisplayGroup<T> extends WODisplayGroup {
 	}
 
 	@Override
-	public NSArray<T> displayedObjects() {
-		NSMutableArray<T> displayedObjects = new NSMutableArray<T>(numberOfObjectsPerBatch());
+	// WO 5.5 -- why isn't this <T>?
+	public NSArray<Object> displayedObjects() {
+		NSMutableArray<Object> displayedObjects = new NSMutableArray<Object>(numberOfObjectsPerBatch());
 		if (_displayedObjects == null) {
 			int numberOfObjectsPerBatch = numberOfObjectsPerBatch();
 			int startIndex = (currentBatchIndex() - 1) * numberOfObjectsPerBatch;

@@ -197,10 +197,11 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * @return the objects that should be diplayed.
 	 */
 	@Override
-	public NSArray<T> displayedObjects() {
+	// WO 5.5
+	public NSArray<Object> displayedObjects() {
 		if (isBatching()) {
 			refetchIfNecessary();
-			return _displayedObjects;
+			return (NSArray<Object>)_displayedObjects;
 		}
 		return super.displayedObjects();
 	}
@@ -209,7 +210,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * Overridden to return allObjects() when batching, as we can't qualify in memory.
 	 */
 	@Override
-	public NSArray<T> filteredObjects() {
+	// WO 5.5
+	public NSArray<Object> filteredObjects() {
 		if (isBatching()) {
 			return allObjects();
 		}
@@ -447,7 +449,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		if (isBatching()) {
 			// refetch();
 			NSMutableArray<T> selectedObjects = (NSMutableArray<T>) selectedObjects();
-			NSArray<T> obj = allObjects();
+			// WO 5.5
+			NSArray<Object> obj = allObjects();
 			if (delegate() != null) {
 				_NSDelegate delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
 				if (delegate != null && delegate.respondsTo("displayGroupDisplayArrayForObjects")) {

@@ -575,7 +575,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	public String formTargetJavaScriptUrl() {
 		if (_formTargetJavaScriptUrl == null) {
-			_formTargetJavaScriptUrl = application().resourceManager().urlForResourceNamed("formTarget.js", "ERDirectToWeb", null, context().request());
+			_formTargetJavaScriptUrl = application().resourceManager().urlForResourceNamed("formTarget.js", "ERDirectToWeb", (NSArray<String>)null, context().request());
 		}
 		return _formTargetJavaScriptUrl;
 	}

@@ -183,7 +183,7 @@ public class ERXMigrationDatabase {
 	 * @return the configured default languages for this migration. 
 	 */
 	public NSArray<String> languages() {
-		return _languages == null ? NSArray.EmptyArray : _languages;
+		return _languages == null ? NSArray.<String>emptyArray() : _languages;
 	}
 	
 	/**

@@ -6,9 +6,9 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaFoundation"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaJDBCAdaptor"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
-	<classpathentry exported="true" kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="Libraries/javarebel-1.2.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/wojavarebel-plugin.jar"/>
+	<classpathentry kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

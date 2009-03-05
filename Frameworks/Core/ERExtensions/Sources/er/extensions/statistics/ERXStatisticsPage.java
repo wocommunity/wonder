@@ -6,7 +6,7 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.woextensions.WOStatsPage;
+import com.webobjects.woextensions.statistics.WOStatsPage;
 
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 import er.extensions.statistics.ERXStats.LogEntry;

@@ -177,7 +177,7 @@ public class ERXMigrator {
 			modelNames = NSArray.componentsSeparatedByString(modelNamesStr, ",");
 		}
 		String skipModelNamesStr = ERXProperties.stringForKey("er.migration.skipModelNames");
-		NSArray<String> skipModelNames = NSArray.EmptyArray;
+		NSArray<String> skipModelNames = NSArray.<String>emptyArray();
 		if (skipModelNamesStr != null) {
 			skipModelNames = NSArray.componentsSeparatedByString(skipModelNamesStr, ",");
 		}

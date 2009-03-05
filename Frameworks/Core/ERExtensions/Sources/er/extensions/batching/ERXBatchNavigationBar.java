@@ -202,7 +202,7 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
 
     protected void clearSelection(NSArray selection) {
     	if(booleanValueForBinding("clearSelection", false)) {
-    		displayGroup().setSelectedObjects(NSArray.EmptyArray);
+    		displayGroup().setSelectedObjects(NSArray.<Object>emptyArray());
     	} else {
     		// displayGroup().setSelectedObject(selection);
     	}

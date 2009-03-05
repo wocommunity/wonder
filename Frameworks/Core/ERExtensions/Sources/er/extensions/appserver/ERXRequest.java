@@ -93,49 +93,52 @@ public  class ERXRequest extends WORequest {
     public WOContext context() {
     	return _context();
     }
-    
-    /** Returns a cooked version of the languages the user has set in his Browser.
-     * Adds "Nonlocalized" and {@link ERXLocalizer#defaultLanguage()} if not
-     * already present. Transforms regionalized en_us to English_US as a key.
-     * @return cooked version of user's languages
-     */
-	@Override
-    @SuppressWarnings("unchecked")
-	public NSArray<String> browserLanguages() {
-        if (_browserLanguages == null) {
-        	NSMutableArray<String> languageKeys = new NSMutableArray<String>();
-            NSArray<String> fixedLanguages = null;
-            String string = this.headerForKey("accept-language");
-            if (string != null) {
-                NSArray<String> rawLanguages = NSArray.componentsSeparatedByString(string, ",");
-                fixedLanguages = fixAbbreviationArray(rawLanguages);
-                for (Enumeration<String> e = fixedLanguages.objectEnumerator(); e.hasMoreElements();) {
-					String languageKey = e.nextElement();
-					String language = (String) WOProperties.TheLanguageDictionary.objectForKey(languageKey);
-					if(language == null) {
-						int index = languageKey.indexOf('_');
-						if(index > 0) {
-							String mainLanguageKey = languageKey.substring(0, index);
-							String region = languageKey.substring(index);
-							language = (String) WOProperties.TheLanguageDictionary.objectForKey(mainLanguageKey);
-							if(language != null) {
-								language = language + region.toUpperCase();
-							}
-						}
-					}
-					if(language != null) {
-						languageKeys.addObject(language);
-					}
-				}
-            }
-            languageKeys.addObject("Nonlocalized");
-            if(!languageKeys.containsObject(ERXLocalizer.defaultLanguage())) {
-                languageKeys.addObject(ERXLocalizer.defaultLanguage());
-            }
-            _browserLanguages = languageKeys.immutableClone();
-        }
-        return _browserLanguages;
-    }
+
+// WO 5.5 WORequest now handles regionalized languages.  I don't know what to do about
+// Nonlocalized in this, as I don't use any of this code.  I also don't know what the
+// side-effects will be in people's code when this stuff all changes names.
+//    /** Returns a cooked version of the languages the user has set in his Browser.
+//     * Adds "Nonlocalized" and {@link ERXLocalizer#defaultLanguage()} if not
+//     * already present. Transforms regionalized en_us to English_US as a key.
+//     * @return cooked version of user's languages
+//     */
+//	@Override
+//    @SuppressWarnings("unchecked")
+//	public NSArray<String> browserLanguages() {
+//        if (_browserLanguages == null) {
+//        	NSMutableArray<String> languageKeys = new NSMutableArray<String>();
+//            NSArray<String> fixedLanguages = null;
+//            String string = this.headerForKey("accept-language");
+//            if (string != null) {
+//                NSArray<String> rawLanguages = NSArray.componentsSeparatedByString(string, ",");
+//                fixedLanguages = fixAbbreviationArray(rawLanguages);
+//                for (Enumeration<String> e = fixedLanguages.objectEnumerator(); e.hasMoreElements();) {
+//					String languageKey = e.nextElement();
+//					String language = (String) WOProperties.TheLanguageDictionary.objectForKey(languageKey);
+//					if(language == null) {
+//						int index = languageKey.indexOf('_');
+//						if(index > 0) {
+//							String mainLanguageKey = languageKey.substring(0, index);
+//							String region = languageKey.substring(index);
+//							language = (String) WOProperties.TheLanguageDictionary.objectForKey(mainLanguageKey);
+//							if(language != null) {
+//								language = language + region.toUpperCase();
+//							}
+//						}
+//					}
+//					if(language != null) {
+//						languageKeys.addObject(language);
+//					}
+//				}
+//            }
+//            languageKeys.addObject("Nonlocalized");
+//            if(!languageKeys.containsObject(ERXLocalizer.defaultLanguage())) {
+//                languageKeys.addObject(ERXLocalizer.defaultLanguage());
+//            }
+//            _browserLanguages = languageKeys.immutableClone();
+//        }
+//        return _browserLanguages;
+//    }
     
     @Override
 	public String stringFormValueForKey(String key) {

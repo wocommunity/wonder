@@ -1,7 +1,6 @@
 package er.extensions.components;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -9,6 +8,8 @@ import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOHTMLDynamicElement;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 /**
@@ -52,7 +53,7 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 			}
 			String filename = (String)_filename.valueInComponent(component);
 			WOResourceManager rs = WOApplication.application().resourceManager();
-			href = rs.urlForResourceNamed(filename, framework, null, context.request());
+			href = rs.urlForResourceNamed(filename, framework, (NSArray<String>)null, context.request());
 		}
 		response._appendTagAttributeAndValue("href", href, false);
 		response._appendTagAttributeAndValue("rel", "SHORTCUT ICON", false);

@@ -11,7 +11,7 @@ import java.net.URLDecoder;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver._private.WOURLEncoder;
+import com.webobjects.appserver._private.WOCGIFormValues;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -142,10 +142,11 @@ public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHan
 		for (Enumeration<String> e = NSArray.componentsSeparatedByString(request.uri(), "/").objectEnumerator(); e.hasMoreElements();) {
 			String part = e.nextElement();
 			try {
-				part = URLDecoder.decode(part, WOURLEncoder.WO_URL_ENCODING);
+				// WO 5.5 probably switch to use WOCGIFormValues directly
+				part = URLDecoder.decode(part, WOCGIFormValues.getInstance().urlEncoding());
 			}
 			catch (UnsupportedEncodingException ex) {
-				log.error("Encoding not found: " + WOURLEncoder.WO_URL_ENCODING, ex);
+				log.error("Encoding not found: " + WOCGIFormValues.getInstance().urlEncoding(), ex);
 			}
 			if (foundRequestHandler && (!useActionName || (useActionName && e.hasMoreElements()))) {
 				String[] pair = part.split("=", 2);

@@ -534,7 +534,7 @@ public class ERXFileUtilities {
      * @return the absolutePath method off of the
      *		file object
      */
-    public static String pathForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+    public static String pathForResourceNamed(String fileName, String frameworkName, NSArray<String> languages) {
         String path = null;
         NSBundle bundle = "app".equals(frameworkName) ? NSBundle.mainBundle() : NSBundle.bundleForName(frameworkName);
         if(bundle != null && bundle.isJar()) {
@@ -565,7 +565,7 @@ public class ERXFileUtilities {
      * @return the absolutePath method off of the
      *      file object
      */
-    public static boolean resourceExists(String fileName, String frameworkName, NSArray languages) {
+    public static boolean resourceExists(String fileName, String frameworkName, NSArray<String> languages) {
         URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
         return url != null;
     }
@@ -581,7 +581,7 @@ public class ERXFileUtilities {
      * @return the absolutePath method off of the
      *		file object
      */
-    public static InputStream inputStreamForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+    public static InputStream inputStreamForResourceNamed(String fileName, String frameworkName, NSArray<String> languages) {
         return WOApplication.application().resourceManager().inputStreamForResourceNamed(fileName, frameworkName, languages);
     }
 
@@ -614,7 +614,7 @@ public class ERXFileUtilities {
      * @return the absolutePath method off of the
      *		file object
      */
-    public static URL pathURLForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+    public static URL pathURLForResourceNamed(String fileName, String frameworkName, NSArray<String> languages) {
     	URL url = null;
     	WOApplication application = WOApplication.application();
     	if (application != null) {

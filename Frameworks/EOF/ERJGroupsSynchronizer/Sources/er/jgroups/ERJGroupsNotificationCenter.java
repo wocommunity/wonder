@@ -17,12 +17,11 @@ import org.jgroups.Message;
 import org.jgroups.View;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSNotification;
-import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.RemoteChange;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRemoteNotificationCenter;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer.RefByteArrayOutputStream;
@@ -66,7 +65,7 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
             System.setProperty("bind.address", localBindAddressStr);
         }
 
-        URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
+        URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, (NSArray<String>)null);
         _channel = new JChannel(propertiesUrl);
         _postLocal = ERXProperties.booleanForKeyWithDefault("er.extensions.jgroupsNotificationCenter.postLocal", false);
         _channel.setOpt(Channel.LOCAL, Boolean.FALSE);

@@ -359,7 +359,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       joinToItemRelationship.setName(entity.name());
       joinToItemRelationship.setIsMandatory(true);
       joinToItemRelationship.setToMany(false);
-      joinToItemRelationship.setJoinSemantic(EORelationship.InnerJoin);
+      joinToItemRelationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
       joinEntity.addRelationship(joinToItemRelationship);
       for (EOAttribute itemPrimaryKey : (NSArray<EOAttribute>) entity.primaryKeyAttributes()) {
         EOAttribute itemFKAttribute = new EOAttribute();
@@ -382,7 +382,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       joinToTagRelationship.setName(tagEntity.name());
       joinToTagRelationship.setIsMandatory(true);
       joinToTagRelationship.setToMany(false);
-      joinToTagRelationship.setJoinSemantic(EORelationship.InnerJoin);
+      joinToTagRelationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
       joinEntity.addRelationship(joinToTagRelationship);
       for (EOAttribute tagPrimaryKey : (NSArray<EOAttribute>) tagEntity.primaryKeyAttributes()) {
         EOAttribute tagFKAttribute = new EOAttribute();
@@ -414,7 +414,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
         itemToJoinRelationship.addJoin(inverseJoin);
       }
       itemToJoinRelationship.setDeleteRule(1); // cascade
-      itemToJoinRelationship.setJoinSemantic(EORelationship.InnerJoin);
+      itemToJoinRelationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
       itemToJoinRelationship.setToMany(true);
       itemToJoinRelationship.setPropagatesPrimaryKey(true);
       entity.addRelationship(itemToJoinRelationship);

@@ -299,7 +299,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
                 priKeyAttribute = (EOAttribute) priKeyAttributes.objectAtIndex(0);
                 
                 // Q: Don't create a sequence for non number primary keys
-                if (priKeyAttribute.adaptorValueType() != EOAttribute.AdaptorNumberType) {
+                if (priKeyAttribute.adaptorValueType() != EOAttribute.AdaptorValueType.AdaptorNumberType) {
                 	continue;
                 }
                 String sql;

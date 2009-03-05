@@ -19,27 +19,23 @@ public class ERXAdaptorOpComparator extends EOAdaptorOpComparator {
 	}
 
 	
-    public int compare(Object object1, Object object2)
+    public int compare(EOAdaptorOperation object1, EOAdaptorOperation object2)
     	throws com.webobjects.foundation.NSComparator.ComparisonException {
 
     	if(object1 == null || 
-    	   object2 == null || 
-    	   !(object1 instanceof EOAdaptorOperation) || 
-    	   !(object2 instanceof EOAdaptorOperation)) {
+    	   object2 == null) {
     		throw new com.webobjects.foundation.NSComparator.ComparisonException("Unable to compare objects. Objects should be instance of class EOAdaptorOperation. Comparison was made with " + object1 + " and " + object2 + ".");
     	}
 
-        EOAdaptorOperation a = (EOAdaptorOperation)object1;
-        EOAdaptorOperation b = (EOAdaptorOperation)object2;	
-        int aOpType = a.adaptorOperator();
-        int bOpType = b.adaptorOperator();
+        int aOpType = object1.adaptorOperator();
+        int bOpType = object2.adaptorOperator();
 
         if(aOpType == 4) {
-        	aOpType = decodeAdaptorTypeForEntityAndStoredProcedure(a.entity(), a.storedProcedure());
+        	aOpType = decodeAdaptorTypeForEntityAndStoredProcedure(object1.entity(), object1.storedProcedure());
         }
 
 		if(bOpType == 4) {
-			bOpType = decodeAdaptorTypeForEntityAndStoredProcedure(b.entity(), b.storedProcedure());
+			bOpType = decodeAdaptorTypeForEntityAndStoredProcedure(object2.entity(), object2.storedProcedure());
 		}
 	
 		if(aOpType != bOpType) {
@@ -48,13 +44,13 @@ public class ERXAdaptorOpComparator extends EOAdaptorOpComparator {
 		
         NSArray entityNames = _context;
         
-        String entityNameA = a.entity().name();
-        String entityNameB = b.entity().name();
+        String entityNameA = object1.entity().name();
+        String entityNameB = object2.entity().name();
         
         // Use correct name for flattened attributes
-        if (entityNameA.equals(entityNameB) && a.entity().parentEntity() != null) {
-        	entityNameA = entityNameFromAdaptorOperation(a);
-        	entityNameB = entityNameFromAdaptorOperation(b);
+        if (entityNameA.equals(entityNameB) && object1.entity().parentEntity() != null) {
+        	entityNameA = entityNameFromAdaptorOperation(object1);
+        	entityNameB = entityNameFromAdaptorOperation(object2);
         }
         
         int aPriority = entityNames == null ? 0 : entityNames.indexOfObject(entityNameA);

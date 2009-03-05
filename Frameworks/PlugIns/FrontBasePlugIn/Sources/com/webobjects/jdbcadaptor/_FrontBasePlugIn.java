@@ -1207,7 +1207,8 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		 * @param rightName the table name on the right side of the clause
 		 * @param semantic  the join semantic
 		 */
-		public void addJoinClause(String leftName, String rightName, int semantic) {
+		@Override
+		public void addJoinClause(String leftName, String rightName, EORelationship.JoinSemantics semantic) {
 			assembleJoinClause(leftName, rightName, semantic);
 		}
 
@@ -1220,7 +1221,8 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		 * @param semantic  the join semantic
 		 * @return  the join clause
 		 */
-		public String assembleJoinClause(String leftName, String rightName, int semantic) {
+		@Override
+		public String assembleJoinClause(String leftName, String rightName, EORelationship.JoinSemantics semantic) {
 			// Can't handle this
 			if (!useAliases()) {
 				return super.assembleJoinClause(leftName, rightName, semantic);
@@ -1269,19 +1271,17 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			jc.table1 = leftTable + " " + leftAlias;
 			jc.table2 = rightTable + " " + rightAlias;
 
-			switch (semantic) {
-			case EORelationship.LeftOuterJoin:
+			if (semantic == EORelationship.JoinSemantics.LeftOuterJoin) {
 				jc.op = " LEFT OUTER JOIN ";
-				break;
-			case EORelationship.RightOuterJoin:
+			}
+			else if (semantic == EORelationship.JoinSemantics.RightOuterJoin) {
 				jc.op = " RIGHT OUTER JOIN ";
-				break;
-			case EORelationship.FullOuterJoin:
+			}
+			else if (semantic == EORelationship.JoinSemantics.FullOuterJoin) {
 				jc.op = " FULL OUTER JOIN ";
-				break;
-			case EORelationship.InnerJoin:
+			}
+			else if (semantic == EORelationship.JoinSemantics.InnerJoin) {
 				jc.op = " INNER JOIN ";
-				break;
 			}
 
 			NSArray joins = r.joins();
@@ -1438,12 +1438,12 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			StringBuffer sql = new StringBuffer(column);
 
 			if (sortOrdering == EOSortOrdering.CompareCaseInsensitiveAscending)
-				if (entity()._attributeForPath(attribute).adaptorValueType() == 1)
+				if (entity()._attributeForPath(attribute).adaptorValueType() == EOAttribute.AdaptorValueType.AdaptorCharactersType)
 					sql.append(" COLLATE INFORMATION_SCHEMA.CASE_INSENSITIVE ASC");
 				else
 					sql.append(" ASC");
 			else if (sortOrdering == EOSortOrdering.CompareCaseInsensitiveDescending)
-				if (entity()._attributeForPath(attribute).adaptorValueType() == 1)
+				if (entity()._attributeForPath(attribute).adaptorValueType() == EOAttribute.AdaptorValueType.AdaptorCharactersType)
 					sql.append(" COLLATE INFORMATION_SCHEMA.CASE_INSENSITIVE DESC");
 				else
 					sql.append(" DESC");

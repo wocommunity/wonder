@@ -1,6 +1,6 @@
 package er.sproutcore.views;
 
-import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.association.WOAssociation;
 
 import er.ajax.AjaxOption;
 

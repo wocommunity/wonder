@@ -10,7 +10,7 @@ package er.directtoweb.components;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.woextensions.WOStatsPage;
+import com.webobjects.woextensions.statistics.WOStatsPage;
 
 import er.directtoweb.ERD2WModel;
 import er.directtoweb.ERDirectToWeb;

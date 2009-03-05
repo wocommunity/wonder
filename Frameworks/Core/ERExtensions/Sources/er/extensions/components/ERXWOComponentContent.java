@@ -14,6 +14,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.appserver._private.WOHTMLBareString;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -161,7 +162,7 @@ public class ERXWOComponentContent extends WODynamicElement {
 				// this element that are NOT ERXWOTemplate's, so we don't double-display.  This lets
 				// you use an ERXWOComponentContent and have it just act like a "default" template
 				// that skips all the children that are explicitly wrapped in an ERXWOTemplate.
-				NSMutableArray<WOElement> originalChildrenElements = group.childrenElements();
+				NSArray<WOElement> originalChildrenElements = group.childrenElements();
 				if (originalChildrenElements != null && originalChildrenElements.count() > 0) {
 					NSMutableArray<WOElement> nonTemplateChildrenElements = new NSMutableArray<WOElement>();
 					for (WOElement originalChild : originalChildrenElements) {

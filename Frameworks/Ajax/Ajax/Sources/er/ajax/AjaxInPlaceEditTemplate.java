@@ -1,7 +1,7 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOElement;
-import com.webobjects.appserver._private.WOConstantValueAssociation;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 

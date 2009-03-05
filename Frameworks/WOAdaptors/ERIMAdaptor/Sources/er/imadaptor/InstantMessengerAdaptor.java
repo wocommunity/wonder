@@ -1,5 +1,7 @@
 package er.imadaptor;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,8 +17,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
+import com.webobjects.appserver._private.WOCGIFormValues;
 import com.webobjects.appserver._private.WODynamicURL;
-import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSDictionary;
@@ -276,18 +278,23 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		else {
 			uri.append(requestUrl);
 		}
-		uri.append("?");
-		uri.append(InstantMessengerAdaptor.BUDDY_NAME_KEY);
-		uri.append("=");
-		uri.append(WOURLEncoder.encode(buddyName));
-		uri.append("&");
-		uri.append(InstantMessengerAdaptor.MESSAGE_KEY);
-		uri.append("=");
-		uri.append(WOURLEncoder.encode(message));
-		uri.append("&");
-		uri.append(InstantMessengerAdaptor.RAW_MESSAGE_KEY);
-		uri.append("=");
-		uri.append(WOURLEncoder.encode(rawMessage));
+		try {
+			uri.append("?");
+			uri.append(InstantMessengerAdaptor.BUDDY_NAME_KEY);
+			uri.append("=");
+			uri.append(URLEncoder.encode(buddyName, WOCGIFormValues.getInstance().urlEncoding()));
+			uri.append("&");
+			uri.append(InstantMessengerAdaptor.MESSAGE_KEY);
+			uri.append("=");
+			uri.append(URLEncoder.encode(message, WOCGIFormValues.getInstance().urlEncoding()));
+			uri.append("&");
+			uri.append(InstantMessengerAdaptor.RAW_MESSAGE_KEY);
+			uri.append("=");
+			uri.append(URLEncoder.encode(rawMessage, WOCGIFormValues.getInstance().urlEncoding()));
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new IllegalArgumentException("Unable to encode the instant message using the encoding '" + WOCGIFormValues.getInstance().urlEncoding() + "'.");
+		}
 		String sessionID = conversation.sessionID();
 		if (sessionID != null) {
 			uri.append("&wosid=" + sessionID);

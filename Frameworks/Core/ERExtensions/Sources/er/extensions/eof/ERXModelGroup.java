@@ -97,7 +97,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * <code>er.extensions.ERXModelGroup.modelLoadOrder</code> defines the load order of the models. When you use this property
 	 * the bundle loading will be disregarded. There is no default value.
 	 */
-	protected NSArray<String> _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.EmptyArray);
+	protected NSArray<String> _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.<String>emptyArray());
 	
 	private boolean raiseOnUnmatchingConnectionDictionaries = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries", true);
 	

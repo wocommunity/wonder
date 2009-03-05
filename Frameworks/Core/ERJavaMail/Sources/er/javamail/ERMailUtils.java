@@ -229,7 +229,7 @@ public class ERMailUtils extends Object {
 	@SuppressWarnings("unchecked")
 	public static NSArray<String> convertInternetAddressesToNSArray(Address[] addressesArray) {
 		if (addressesArray == null)
-			return NSArray.EmptyArray;
+			return NSArray.<String>emptyArray();
 		NSMutableArray<String> addresses = new NSMutableArray<String>(addressesArray.length);
 
 		for (int i = 0; i < addressesArray.length; i++) {

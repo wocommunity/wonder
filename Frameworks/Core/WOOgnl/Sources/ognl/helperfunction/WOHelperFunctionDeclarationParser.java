@@ -7,10 +7,10 @@ import java.util.StringTokenizer;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOAssociation;
-import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODeclaration;
 import com.webobjects.appserver._private.WOShared;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
@@ -95,7 +95,7 @@ public class WOHelperFunctionDeclarationParser {
 		catch (NoSuchElementException e) {
 			log.debug("Parsing failed.", e);
 		}
-		return _NSStringUtilities.stringFromBuffer(stringbuffer);
+		return stringbuffer.toString();
 	}
 
 	private String _removeNewStyleCommentsAndQuotedStringsFromString(String declarationsStr) {
@@ -145,7 +145,7 @@ public class WOHelperFunctionDeclarationParser {
 		catch (NoSuchElementException e) {
 			log.debug("Parsing failed.", e);
 		}
-		return _NSStringUtilities.stringFromBuffer(declarationWithoutCommentsBuffer);
+		return declarationWithoutCommentsBuffer.toString();
 	}
 
 	private NSMutableDictionary parseDeclarationsWithoutComments(String declarationWithoutComment) throws WOHelperFunctionDeclarationFormatException {
@@ -294,7 +294,7 @@ public class WOHelperFunctionDeclarationParser {
 					else {
 						tokenizer.nextToken();
 					}
-					String declarationWithoutComment = _NSStringUtilities.stringFromBuffer(declarationWithoutCommentBuffer);
+					String declarationWithoutComment = declarationWithoutCommentBuffer.toString();
 					if (declarationWithoutComment.startsWith(";")) {
 						declarationWithoutComment = declarationWithoutComment.substring(1);
 					}

@@ -342,7 +342,7 @@ public class ERXStringUtilities {
      * @param languages array to search for the key in
      * @return string value of the looked up key
      */    
-    public static String localizedStringForKey(String key, String framework, NSArray languages) {
+    public static String localizedStringForKey(String key, String framework, NSArray<String> languages) {
         languages = languages != null && languages.count() > 0 ? languages : _defaultTargetDisplayLanguages;
         String result = WOApplication.application().resourceManager().stringForKey( key, "Localizable", key, framework, languages);
         return result;

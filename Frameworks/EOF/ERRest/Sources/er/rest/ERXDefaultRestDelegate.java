@@ -257,11 +257,11 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			if (entityDelegateClassName == null) {
 				if (_guessDelegateNames) {
 					entityDelegateClassName = entity.name() + "RestEntityDelegate";
-					entityDelegateClass = _NSUtilities.classWithName(entityDelegateClassName);
+					entityDelegateClass = (Class<IERXRestEntityDelegate>)_NSUtilities.classWithName(entityDelegateClassName);
 				}
 			}
 			else {
-				entityDelegateClass = _NSUtilities.classWithName(entityDelegateClassName);
+				entityDelegateClass = (Class<IERXRestEntityDelegate>)_NSUtilities.classWithName(entityDelegateClassName);
 				if (entityDelegateClass == null) {
 					throw new IllegalArgumentException("There is no entity delegate named '" + entityDelegateClassName + "'.");
 				}

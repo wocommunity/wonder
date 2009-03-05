@@ -7,6 +7,7 @@ import java.net.URL;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver._private.WODefaultAdaptor;
 import com.webobjects.appserver._private.WOProperties;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 
@@ -52,7 +53,7 @@ public class ERXSecureDefaultAdaptor extends ERXDefaultAdaptor {
 		if (s == null) {
 			throw new IllegalStateException("You must create an executable named 'adaptorsslpassphrase' in your Resources folder that can return the passphrase for your KeyStore. As an example, you can create an executable shell script that simply contains:\necho yourpassword");
 		}
-		URL keyStorePath = WOApplication.application().createResourceManager().pathURLForResourceNamed("adaptorssl.key", null, null);
+		URL keyStorePath = WOApplication.application().createResourceManager().pathURLForResourceNamed("adaptorssl.key", null, (NSArray<String>)null);
 		if (keyStorePath == null) {
 			throw new IllegalStateException("You must create a KeyStore named 'adaptorssl.key' in your Resources folder. Run 'keytool -genkey -alias WebObjects -keyalg RSA -keystore /path/to/Resources/adaptorssl.key' and make sure the password matches what 'adaptorsslpassphrase' returns.");
 		}

@@ -48,8 +48,10 @@ import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
+import com.webobjects.appserver._private.WOCGIFormValues;
 import com.webobjects.appserver._private.WOComponentDefinition;
 import com.webobjects.appserver._private.WOProperties;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
@@ -784,12 +786,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public void installPatches() {
 		ERXPatcher.installPatches();
 		if (contextClassName().equals("WOContext")) {
-			if (ERXApplication.isWO54()) {
-				setContextClassName("ERXWOContext54");
-			}
-			else {
-				setContextClassName(ERXWOContext.class.getName());
-			}
+			setContextClassName(ERXWOContext.class.getName());
 		}
 		if (contextClassName().equals("WOServletContext") || contextClassName().equals("com.webobjects.appserver.jspservlet.WOServletContext"))
 			setContextClassName(ERXWOServletContext.class.getName());
@@ -816,7 +813,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// Fix for 3190479 URI encoding should always be UTF8
 		// See http://www.w3.org/International/O-URL-code.html
 		// For WO 5.1.x users, please comment this statement to compile.
-		com.webobjects.appserver._private.WOURLEncoder.WO_URL_ENCODING = "UTF-8";
+		// WO 5.5 this is the default anyway
+		WOCGIFormValues.getInstance().setUrlEncoding(WOCGIFormValues.WOURLDefaultEncoding);
 
 		// WO 5.1 specific patches
 		if (ERXProperties.webObjectsVersionAsDouble() < 5.2d) {
@@ -1845,6 +1843,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public void gracefulTerminate() {
 		terminate();
 	}
+	
+	@Override
+	public boolean lifebeatEnabled() {
+		return (isDevelopmentMode()) ? false : super.lifebeatEnabled();
+	}
 
 	/**
 	 * Logs the warning message if the main method was not called during the
@@ -2330,7 +2333,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			stringbuffer.append('"');
 			aValue = stringbuffer;
 		}
-		if (aDeclarationName.startsWith("_")) {
+		if (aDeclarationName == null) {
+			aDeclarationName = "null";
+		}
+		else if (aDeclarationName.startsWith("_")) {
 			aDeclarationName = "[inline]";
 		}
 
@@ -2365,7 +2371,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			sb.append(valueStr);
 		}
 
-		NSLog.debug.appendln(sb.toString());
+		WOAssociation.declarationLogger.debug(sb.toString());
 	}
 
 	/**

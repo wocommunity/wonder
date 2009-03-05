@@ -1964,7 +1964,7 @@ public class ERXEOAccessUtilities {
 		sourceEntity.addRelationship(relationship);
 		relationship.addJoin(join);
 		relationship.setToMany(toMany);
-		relationship.setJoinSemantic(EORelationship.InnerJoin);
+		relationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
 		relationship.setDeleteRule(deleteRule);
 		relationship.setIsMandatory(isMandatory);
 		relationship.setPropagatesPrimaryKey(shouldPropagatePrimaryKey);

@@ -287,7 +287,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
-		
+
 		boolean disabled = booleanValueForBinding("disabled", false, component);
 		Object stringValue = valueForBinding("string", component);
 		String functionName = (String) valueForBinding("functionName", component);

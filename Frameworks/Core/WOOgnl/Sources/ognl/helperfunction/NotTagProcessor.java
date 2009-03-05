@@ -1,7 +1,7 @@
 package ognl.helperfunction;
 
-import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODeclaration;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**

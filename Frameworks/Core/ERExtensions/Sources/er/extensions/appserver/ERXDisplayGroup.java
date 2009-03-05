@@ -134,9 +134,10 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	 * Returns all objects, filtered by the qualifier().
 	 */
 	@SuppressWarnings("unchecked")
-	public NSArray<T> filteredObjects() {
+	// WO 5.5 -- why isn't this <T>?
+	public NSArray<Object> filteredObjects() {
 		// FIXME AK: need to cache here
-		NSArray<T> result;
+		NSArray<Object> result;
 		EOQualifier q=qualifier();
 		if (q!=null) {
 			result=EOQualifier.filteredArrayWithQualifier(allObjects(),q);
@@ -155,7 +156,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		if(log.isDebugEnabled()) {
 			log.debug("selectedObjects@" + hashCode() +  ":" + super.selectedObjects().count());
 		}
-		return super.selectedObjects();
+		return (NSArray<T>) super.selectedObjects();
 	}
 
 	/**
@@ -260,7 +261,8 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public NSArray<T> allObjects() {
+	// WO 5.5 -- why isn't this <T>?
+	public NSArray<Object> allObjects() {
 		return super.allObjects();
 	}
 	
@@ -278,7 +280,8 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public NSArray<T> displayedObjects() {
+	// WO 5.5 -- why isn't this <T>?
+	public NSArray<Object> displayedObjects() {
 		return super.displayedObjects();
 	}
 	

@@ -22,10 +22,11 @@ import ognl.helperfunction.WOHelperFunctionTagRegistry;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOAssociation;
-import com.webobjects.appserver._private.WOBindingNameAssociation;
-import com.webobjects.appserver._private.WOConstantValueAssociation;
-import com.webobjects.appserver._private.WOKeyValueAssociation;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.appserver.association.WOBindingNameAssociation;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
+import com.webobjects.appserver.association.WOKeyValueAssociation;
+import com.webobjects.appserver.parser.WOComponentTemplateParser;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -37,13 +38,16 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSUtilities;
 
 /**
- * WOOgnl provides a template parser that support WOOgnl associations, Helper Functions, Inline Bindings, and Binding Debugging. 
+ * WOOgnl provides a template parser that support WOOgnl associations, Helper Functions, Inline Bindings, and Binding
+ * Debugging.
  * 
  * @author mschrag
  * @property ognl.active defaults to true, if false ognl support is disabled
  * @property ognl.inlineBindings if true, inline bindings are supported in component templates
- * @property ognl.parseStandardTags if true, you can use inline bindings in regular html tags, but requires well-formed templates
- * @property ognl.debugSupport if true, debug metadata is included in all bindings (but binding debug is not automatically turned on) 
+ * @property ognl.parseStandardTags if true, you can use inline bindings in regular html tags, but requires well-formed
+ *           templates
+ * @property ognl.debugSupport if true, debug metadata is included in all bindings (but binding debug is not
+ *           automatically turned on)
  */
 public class WOOgnl {
 	public static Logger log = Logger.getLogger(WOOgnl.class);
@@ -109,19 +113,6 @@ public class WOOgnl {
 		return h;
 	}
 
-	// Borrowed from ERXApplication, but we can't depend on ERX
-	private boolean isWO54() {
-		boolean isWO54;
-		try {
-			WOApplication.class.getMethod("getWebObjectsVersion", new Class[0]);
-			isWO54 = true;
-		}
-		catch (Exception e) {
-			isWO54 = false;
-		}
-		return isWO54;
-	}
-
 	public void configureWOForOgnl() {
 		// Configure runtime.
 		// Configure foundation classes.
@@ -135,25 +126,8 @@ public class WOOgnl {
 		OgnlRuntime.setElementsAccessor(NSSet.class, e);
 		// Register template parser
 		if (!"false".equals(System.getProperty("ognl.active"))) {
-			String parserClassName;
-			if (isWO54()) {
-				parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionParser54");
-				try {
-					Class.forName("com.webobjects.appserver.parser.WOComponentTemplateParser").getMethod("setWOHTMLTemplateParserClassName", String.class).invoke(null, parserClassName);
-				}
-				catch (Exception e1) {
-					throw new RuntimeException("Failed to set the template parser to WOHelperFunctionParser54.", e1);
-				}
-			}
-			else {
-				parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionParser53");
-				try {
-					Class.forName("com.webobjects.appserver._private.WOParser").getMethod("setWOHTMLTemplateParserClassName", String.class).invoke(null, parserClassName);
-				}
-				catch (Exception e1) {
-					throw new RuntimeException("Failed to set the template parser to WOHelperFunctionParser53.", e1);
-				}
-			}
+			String parserClassName = System.getProperty("ognl.parserClassName", ognl.helperfunction.WOHelperFunctionTemplateParser.class.getName());
+			WOComponentTemplateParser.setWOHTMLTemplateParserClassName(parserClassName);
 			if ("true".equalsIgnoreCase(System.getProperty("ognl.inlineBindings"))) {
 				WOHelperFunctionTagRegistry.setAllowInlineBindings(true);
 			}
@@ -184,7 +158,7 @@ public class WOOgnl {
 			}
 			else if (association instanceof WOBindingNameAssociation) {
 				WOBindingNameAssociation b = (WOBindingNameAssociation) association;
-				// AK: strictly speaking, this is not correct, as we only get the first part of 
+				// AK: strictly speaking, this is not correct, as we only get the first part of
 				// the path. But take a look at WOBindingNameAssociation for a bit of fun...
 				keyPath = "^" + b._parentBindingName;
 			}
@@ -209,9 +183,9 @@ public class WOOgnl {
 					if (ognlExpression.length() > 0) {
 						WOAssociation newAssociation = new WOOgnlAssociation(ognlExpression);
 						NSArray keys = associations.allKeysForObject(association);
-						//if (log.isDebugEnabled())
-						//    log.debug("Constructing Ognl association for binding key(s): "
-						//              + (keys.count() == 1 ? keys.lastObject() : keys) + " expression: " + ognlExpression);
+						// if (log.isDebugEnabled())
+						// log.debug("Constructing Ognl association for binding key(s): "
+						// + (keys.count() == 1 ? keys.lastObject() : keys) + " expression: " + ognlExpression);
 						if (keys.count() == 1) {
 							associations.setObjectForKey(newAssociation, keys.lastObject());
 						}
@@ -235,7 +209,7 @@ public class WOOgnl {
 			String message = ex.getMessage();
 			// MS: This is SUPER SUPER LAME, but I don't see any other way in OGNL to
 			// make keypaths with null components behave like NSKVC (i.e. returning null
-			// vs throwing an exception).  They have something called nullHandlers 
+			// vs throwing an exception). They have something called nullHandlers
 			// in OGNL, but it appears that you have to register it per-class and you
 			// can't override the factory.
 			if (message != null && message.startsWith("source is null for getProperty(null, ")) {

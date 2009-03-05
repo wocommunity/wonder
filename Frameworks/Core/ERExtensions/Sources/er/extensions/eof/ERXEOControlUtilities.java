@@ -113,7 +113,9 @@ public class ERXEOControlUtilities {
         if (array != null && array.count() > 0) {
             EOEnterpriseObject eo = array.objectAtIndex(0);
             dataSource = new EOArrayDataSource(eo.classDescription(), eo.editingContext());
-            dataSource.setArray(array);
+            // WO 5.5
+            //dataSource.setArray(array);
+            dataSource.setArray((NSArray<Object>)array);
         }
         return dataSource;
     }
@@ -551,7 +553,7 @@ public class ERXEOControlUtilities {
     public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
     	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
-        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
+        NSDictionary<String, Object> hints = new NSDictionary<String, Object>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
         clonedFetchSpec.setHints(hints);
         return ec.objectsWithFetchSpecification(clonedFetchSpec);
     }
@@ -575,7 +577,7 @@ public class ERXEOControlUtilities {
         spec.setRawRowKeyPaths(pkNames);
     	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
-        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
+        NSDictionary<String, Object> hints = new NSDictionary<String, Object>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
         clonedFetchSpec.setHints(hints);
         return ec.objectsWithFetchSpecification(clonedFetchSpec);
     }
@@ -1076,7 +1078,7 @@ public class ERXEOControlUtilities {
         }
         
         if(string.trim().length()==0) {
-            return NSDictionary.EmptyDictionary;
+            return NSDictionary.<String, Object>emptyDictionary();
         }
         
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
@@ -1089,7 +1091,7 @@ public class ERXEOControlUtilities {
                 for(Enumeration e = ((NSArray)rawValue).objectEnumerator(); e.hasMoreElements();) {
                     EOAttribute attribute = (EOAttribute)pks.objectAtIndex(index++);
                     Object value = e.nextElement();
-                    if(attribute.adaptorValueType() == EOAttribute.AdaptorDateType && !(value instanceof NSTimestamp)) {
+                    if(attribute.adaptorValueType() == EOAttribute.AdaptorValueType.AdaptorDateType && !(value instanceof NSTimestamp)) {
                         value = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S %Z").parseObject((String)value);
                     }
                     value = attribute.validateValue(value);
@@ -2189,7 +2191,7 @@ public class ERXEOControlUtilities {
 		fs.setUsesDistinct(true);
 		fs.setFetchesRawRows(true);
 		fs.setRawRowKeyPaths(new NSArray<String>(keyPath));
-		NSArray<NSDictionary<String, T>> rawRows = editingContext.objectsWithFetchSpecification(fs);
+		NSArray<NSDictionary<String, T>> rawRows = (NSArray<NSDictionary<String, T>>)editingContext.objectsWithFetchSpecification(fs);
 		NSArray<T> values = (NSArray<T>) rawRows.valueForKeyPath(keyPath);
 		return values;
 	}

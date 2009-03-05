@@ -69,7 +69,7 @@ public class ERXJDBCColumn extends JDBCColumn {
 		if (_rs == null || _column < 1)
 			throw new JDBCAdaptorException(" *** JDBCColumn : trying to fetchValue on a null ResultSet [" + _rs
 					+ "] or unknow col [" + _column + "]!!", null);
-		if (_adaptorValueType == 0) {
+		if (_adaptorValueType == EOAttribute.AdaptorValueType.AdaptorNumberType) {
 			if(_constantClassName == null) {
 				if(_attribute.userInfo() != null) {
 					_constantClassName = (String) _attribute.userInfo().objectForKey("ERXConstantClassName");

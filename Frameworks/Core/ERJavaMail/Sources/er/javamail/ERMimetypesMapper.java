@@ -12,6 +12,7 @@ import javax.activation.MimetypesFileTypeMap;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOResourceManager;
+import com.webobjects.foundation.NSArray;
 
 public class ERMimetypesMapper {
 	private static MimetypesFileTypeMap mimetypesMapper = null;
@@ -19,7 +20,7 @@ public class ERMimetypesMapper {
 	protected static MimetypesFileTypeMap mapper() {
 		if (mimetypesMapper == null) {
 			WOResourceManager resourceManager = WOApplication.application().resourceManager();
-			InputStream is = resourceManager.inputStreamForResourceNamed("mime.types", "ERJavaMail", null);
+			InputStream is = resourceManager.inputStreamForResourceNamed("mime.types", "ERJavaMail", (NSArray<String>) null);
 
 			mimetypesMapper = new MimetypesFileTypeMap(is);
 			is = null;

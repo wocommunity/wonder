@@ -96,7 +96,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@SuppressWarnings("unchecked")
 	public NSArray<String> localesForKey(String key) {
-		NSArray<String> result = NSArray.EmptyArray;
+		NSArray<String> result = NSArray.<String>emptyArray();
 		EOClassDescription cd = classDescription();
 		if (cd instanceof ERXEntityClassDescription) {
 			ERXEntityClassDescription ecd = (ERXEntityClassDescription) cd;

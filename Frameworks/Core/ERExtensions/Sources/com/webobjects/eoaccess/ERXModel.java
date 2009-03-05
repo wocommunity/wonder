@@ -67,8 +67,8 @@ public class ERXModel extends EOModel {
 	 * @see com.webobjects.eoaccess.EOModel#_addEntityWithPropertyList(java.lang.Object)
 	 */
 	@Override
-	public Object _addEntityWithPropertyList(Object propertyList) throws InstantiationException, IllegalAccessException {
-		NSMutableDictionary<String, Object> list = ((NSDictionary<String, Object> )propertyList).mutableClone();
+	public EOEntity _addEntityWithPropertyList(NSDictionary<String, Object> propertyList) throws java.lang.InstantiationException, java.lang.IllegalAccessException {
+		NSMutableDictionary<String, Object> list = propertyList.mutableClone();
 		if (list.objectForKey("entityClass") == null) {
 			String eoEntityClassName = ERXProperties.stringForKey("er.extensions.ERXModel.defaultEOEntityClassName");
 			if (eoEntityClassName == null) {

@@ -6,7 +6,6 @@ import java.text.ParseException;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -14,6 +13,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOInput;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSValidation;
@@ -22,7 +22,6 @@ import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXPatcher;
-import er.extensions.foundation.ERXPatcher.DynamicElementsPatches;
 
 /**
  * Replacement for WOTextField. Provides for localized formatters. 
@@ -71,7 +70,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent component = wocontext.component();
 		if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted()) {
-			String name = nameInContext(wocontext, component);
+			String name = nameInContext(wocontext);
 			if(name != null) {
 				String stringValue;
 				boolean blankIsNull = _blankIsNull == null || _blankIsNull.booleanValueInComponent(component);
@@ -189,7 +188,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
         WOResponse newResponse = new WOResponse();
         super.appendToResponse(newResponse, wocontext);
         
-        ERXPatcher.DynamicElementsPatches.processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+        ERXPatcher.DynamicElementsPatches.processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
         woresponse.appendContentString(newResponse.contentString());
     }
 }

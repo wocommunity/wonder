@@ -9,6 +9,7 @@ package er.directtoweb.components.dates;
 import java.text.Format;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
@@ -122,7 +123,7 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
     public String datePickerJavaScriptUrl() {
         if (_datePickerJavaScriptUrl==null) {
-            _datePickerJavaScriptUrl= application().resourceManager().urlForResourceNamed("date-picker.js", "ERExtensions", null, context().request());
+            _datePickerJavaScriptUrl= application().resourceManager().urlForResourceNamed("date-picker.js", "ERExtensions", (NSArray<String>)null, context().request());
         }
         return _datePickerJavaScriptUrl;
     }

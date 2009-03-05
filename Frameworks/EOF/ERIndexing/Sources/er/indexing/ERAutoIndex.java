@@ -345,7 +345,7 @@ public class ERAutoIndex extends ERIndex {
 
     private static ERXAsyncQueue<Transaction> _queue;
 
-    private NSSet<String> _entities = NSSet.EmptySet;
+    private NSSet<String> _entities = NSSet.<String>emptySet();
 
     private Configuration _configuration = new Configuration();
 

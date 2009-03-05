@@ -391,7 +391,7 @@ public class ERIndex {
 
     private Directory _indexDirectory;
 
-    private NSDictionary<String, IndexAttribute> _attributes = NSDictionary.EmptyDictionary;
+    private NSDictionary<String, IndexAttribute> _attributes = NSDictionary.<String, IndexAttribute>emptyDictionary();
 
     private String _name;
 

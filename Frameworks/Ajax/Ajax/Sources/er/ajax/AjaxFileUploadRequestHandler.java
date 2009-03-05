@@ -58,7 +58,7 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 			String uploadIdentifier = null;
 			String uploadFileName = null;
 			InputStream uploadInputStream = null;
-			int streamLength = -1;
+			long streamLength = -1;
 
 			try {
 				String wosid = request.cookieValueForKey("wosid");

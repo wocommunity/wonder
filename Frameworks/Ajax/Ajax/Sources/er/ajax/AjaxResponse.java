@@ -13,7 +13,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ajax.ERXAjaxApplication.ERXAjaxResponseDelegate;
-import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 /**
  * AjaxResponse provides support for performing an AjaxUpdate in the same response
@@ -58,15 +57,8 @@ public class AjaxResponse extends ERXResponse {
 			String originalSenderID = _context.senderID();
 			_context._setSenderID("");
 			try {
-				CharSequence content;
-				//AK: don't ask...
-				if (((Object)_content) instanceof StringBuffer) {
-					content = (StringBuffer)(Object)_content;
-					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuffer(),  "_content");
-				} else {
-					content = (StringBuilder)(Object) _content;
-					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuilder(),  "_content");
-				}
+				StringBuilder content = _content;
+				_content = new StringBuilder();
 				NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_request);
 				userInfo.setObjectForKey(Boolean.TRUE, AjaxResponse.AJAX_UPDATE_PASS);
 				WOActionResults woactionresults = WOApplication.application().invokeAction(_request, _context);
@@ -78,14 +70,7 @@ public class AjaxResponse extends ERXResponse {
 						responseAppender.appendToResponse(this, _context);
 					}
 				}
-				int length;
-				if (((Object)_content) instanceof StringBuffer) {
-					StringBuffer buffer = (StringBuffer)(Object)_content;
-					length = buffer.length();
-				} else {
-					StringBuilder builder = (StringBuilder)(Object) _content;
-					length = builder.length();
-				}
+				int length = content.length();
 				if (length == 0) {
 				  setStatus(HTTP_STATUS_INTERNAL_ERROR);
 					Ajax.log.warn("You performed an Ajax update, but no response was generated. A common cause of this is that you spelled your updateContainerID wrong.  You specified a container ID '" + AjaxUpdateContainer.updateContainerID(_request) + "'."); 

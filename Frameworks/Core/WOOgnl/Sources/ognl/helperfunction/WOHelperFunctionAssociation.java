@@ -1,7 +1,7 @@
 package ognl.helperfunction;
 
-import com.webobjects.appserver.WOAssociation;
-import com.webobjects.appserver._private.WOReadOnlyKeyValueAssociation;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.appserver.association.WOReadOnlyKeyValueAssociation;
 
 /**
  * Factory methods for creating WOAssociations (ripped from WOAssociation)

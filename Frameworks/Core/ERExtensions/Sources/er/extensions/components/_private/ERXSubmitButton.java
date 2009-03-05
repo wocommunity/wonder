@@ -3,15 +3,15 @@ package er.extensions.components._private;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOInput;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.appserver.ERXApplication;
@@ -205,7 +205,7 @@ public class ERXSubmitButton extends WOInput {
         WOComponent wocomponent = wocontext.component();
         if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted()) {
             if(wocontext._isMultipleSubmitForm()) {
-                if(worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) {
+                if(worequest.formValueForKey(nameInContext(wocontext)) != null) {
                     wocontext._setActionInvoked(true);
                     if(_action != null)
                         obj = (WOActionResults)_action.valueInComponent(wocomponent);

@@ -66,7 +66,7 @@ public class ERXEOGlobalIDUtilities {
 
     	public Info(EOGlobalID gid) {
     		if(gid instanceof EOTemporaryGlobalID) {
-    			_data = ((EOTemporaryGlobalID)gid)._rawBytes();
+    			_data = ((EOTemporaryGlobalID)gid).rawBytes();
     		} else if (gid instanceof EOKeyGlobalID) {
     			EOKeyGlobalID keyGid = (EOKeyGlobalID)gid;
     			Object value = keyGid.keyValues()[0];
@@ -285,7 +285,7 @@ public class ERXEOGlobalIDUtilities {
 		    		EOQualifier qualifier = new EOOrQualifier(qualifiers);
 		    		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
 		    		fetchSpec.setRefreshesRefetchedObjects(refreshesRefetchedObjects);
-		    		NSArray<EOEnterpriseObject> details = ec.objectsWithFetchSpecification(fetchSpec);
+		    		NSArray<EOEnterpriseObject> details = (NSArray<EOEnterpriseObject>)ec.objectsWithFetchSpecification(fetchSpec);
 		    		result.addObjectsFromArray(details);
 	    		}
 	    	}

@@ -1,6 +1,6 @@
 package ognl.helperfunction;
 
-import com.webobjects.appserver._private.WOConstantValueAssociation;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
 
 /**
  * WOHelperFunction version of WOConstantValueAssociation.

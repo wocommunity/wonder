@@ -101,7 +101,7 @@ public class JSONComponent {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends JSONComponent> T componentWithName(String componentClassName, WOContext context) {
-		Class<T> componentClass = _NSUtilities.classWithName(componentClassName);
+		Class<T> componentClass = (Class<T>)_NSUtilities.classWithName(componentClassName);
 		T jsonComponent = (T) _NSUtilities.instantiateObject(componentClass, new Class[] { WOContext.class }, new Object[] { context }, true, false);
 		return jsonComponent;
 	}

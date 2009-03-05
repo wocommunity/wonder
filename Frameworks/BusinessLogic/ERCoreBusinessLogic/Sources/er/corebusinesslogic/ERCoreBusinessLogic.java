@@ -250,7 +250,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         actor.addRelationship(preferencesRelationship);
         preferencesRelationship.addJoin(preferencesJoin);
         preferencesRelationship.setToMany(true);
-        preferencesRelationship.setJoinSemantic(EORelationship.InnerJoin);
+        preferencesRelationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
         preferencesRelationship.setDeleteRule(EOEntityClassDescription.DeleteRuleCascade);
         
         EOJoin userJoin = new EOJoin(preference.attributeNamed("userID"), actor.attributeNamed(attributeNameToJoin) );
@@ -259,7 +259,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         preference.addRelationship(userRelationship);
         userRelationship.addJoin(userJoin);
         userRelationship.setToMany(false);
-        userRelationship.setJoinSemantic(EORelationship.InnerJoin);
+        userRelationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
     }
 
     /**

@@ -84,7 +84,7 @@ public class ERXFetchResultCache {
 	 * Returns a list of entities that should not be cached.
 	 */
 	protected NSArray<String> excludedEntities() {
-		return NSArray.EmptyArray;
+		return NSArray.<String>emptyArray();
 	}
 
 	/**

@@ -621,7 +621,7 @@ public class ERXResponseRewriter {
 				}
 				else {
 					WOResourceManager rm = WOApplication.application().resourceManager();
-					NSArray languages = null;
+					NSArray<String> languages = null;
 					if (context.hasSession()) {
 						languages = context.session().languages();
 					}

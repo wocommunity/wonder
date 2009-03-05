@@ -424,8 +424,8 @@ public class ERXEOEncodingUtilities {
             String currentAttributeName = (String)pkAttributeNames.objectAtIndex( i );
             EOAttribute currentAttribute = entity.attributeNamed( currentAttributeName );
             Object currentValue = values.objectAtIndex( i );
-            switch ( currentAttribute.adaptorValueType() ) {
-                case 3:
+            EOAttribute.AdaptorValueType adaptorValueType = currentAttribute.adaptorValueType();
+            if (adaptorValueType == EOAttribute.AdaptorValueType.AdaptorDateType) {
                     NSTimestampFormatter tsf = new NSTimestampFormatter();
                     try {
                         currentValue = tsf.parseObject( (String) currentValue );    
@@ -433,11 +433,13 @@ public class ERXEOEncodingUtilities {
                         log.error( "Error while trying to parse: "+currentValue );
                         throw new NSForwardException( ex );
                     }
-                    case 1:
+            }
+            else if (adaptorValueType == EOAttribute.AdaptorValueType.AdaptorCharactersType) {
                         if( currentAttribute.valueFactoryMethodName() != null ) {
                             currentValue = currentAttribute.newValueForString( (String) currentValue );
                         }
-                    case 0:
+            }
+            else if (adaptorValueType == EOAttribute.AdaptorValueType.AdaptorNumberType) {
                         currentValue = new java.math.BigDecimal( (String) currentValue );
             }
             result.setObjectForKey( currentValue, currentAttributeName );

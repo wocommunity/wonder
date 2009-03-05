@@ -20,15 +20,13 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.woextensions.WOEventDisplayPage;
-import com.webobjects.woextensions.WOEventSetupPage;
-import com.webobjects.woextensions.WOStatsPage;
+import com.webobjects.woextensions.event.WOEventDisplayPage;
+import com.webobjects.woextensions.event.WOEventSetupPage;
+import com.webobjects.woextensions.statistics.WOStatsPage;
 
 import er.extensions.ERXExtensions;
 import er.extensions.components.ERXStringHolder;
 import er.extensions.eof.ERXEC;
-import er.extensions.eof.ERXEC.DefaultFactory;
-import er.extensions.eof.ERXEC.Factory;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
@@ -137,7 +135,7 @@ public class ERXDirectAction extends WODirectAction {
      */
     public WOActionResults eventsAction() {
         WOEventDisplayPage nextPage = (WOEventDisplayPage) pageWithName("WOEventDisplayPage");
-        nextPage.password = context().request().stringFormValueForKey("pw");
+        nextPage.setPassword(context().request().stringFormValueForKey("pw"));
         nextPage.valueForKey("submit");
         return nextPage;
     }
@@ -149,7 +147,7 @@ public class ERXDirectAction extends WODirectAction {
      */
     public WOActionResults eventsSetupAction() {
         WOEventSetupPage nextPage = (WOEventSetupPage) pageWithName("WOEventSetupPage");
-        nextPage.password = context().request().stringFormValueForKey("pw");
+        nextPage.setPassword(context().request().stringFormValueForKey("pw"));
         nextPage.submit();
         nextPage.selectAll();
         return eventsAction();

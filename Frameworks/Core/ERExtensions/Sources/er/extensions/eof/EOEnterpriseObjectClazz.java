@@ -261,7 +261,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @return array of all the objects for a given entity name.
      */
     public NSArray<T> allObjects(EOEditingContext ec) {
-        return EOUtilities.objectsForEntityNamed(ec, entityName());
+        return (NSArray<T>)EOUtilities.objectsForEntityNamed(ec, entityName());
     }
 
     /**
@@ -325,7 +325,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @return array of objects corresponding to the passed in parameters.
      */
     public NSArray<T> objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {
-        return EOUtilities.objectsWithQualifierFormat(ec, entityName(), qualifier, args);
+        return (NSArray<T>)EOUtilities.objectsWithQualifierFormat(ec, entityName(), qualifier, args);
     }
     
     /**
@@ -338,7 +338,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @return array of objects corresponding to the passed in parameters.
      */
     public NSArray<T> objectsMatchingKeyAndValue(EOEditingContext ec, String key, Object value) {
-        return EOUtilities.objectsMatchingKeyAndValue(ec, entityName(), key, value);
+        return (NSArray<T>)EOUtilities.objectsMatchingKeyAndValue(ec, entityName(), key, value);
     }
     
     public NSArray<T> objectsMatchingQualifier(EOEditingContext ec, EOQualifier qualifier) {
@@ -346,7 +346,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     }
     
     public NSArray<T> objectsMatchingQualifier(EOEditingContext ec, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrdering) {
-        return ec.objectsWithFetchSpecification(new EOFetchSpecification(entityName(), qualifier, sortOrdering));
+        return (NSArray<T>)ec.objectsWithFetchSpecification(new EOFetchSpecification(entityName(), qualifier, sortOrdering));
     }
     
     
@@ -381,7 +381,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @return array of objects fetched using the given fetch specification
      */
     public NSArray<T> objectsWithFetchSpecificationAndBindings(EOEditingContext ec, String name, NSDictionary bindings) {
-        return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, entityName(), name, bindings);
+        return (NSArray<T>)EOUtilities.objectsWithFetchSpecificationAndBindings(ec, entityName(), name, bindings);
     }
 
     /**

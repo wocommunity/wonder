@@ -21,7 +21,7 @@ public class AjaxGridExample extends WOComponent {
 	}
 
 	private NSMutableArray sampleData() {
-		NSData data = new NSData(application().resourceManager().bytesForResourceNamed("AjaxGridExampleTestData.plist", null, NSArray.EmptyArray));
+		NSData data = new NSData(application().resourceManager().bytesForResourceNamed("AjaxGridExampleTestData.plist", null, NSArray.<String>emptyArray()));
 		NSMutableArray sampleData = new NSMutableArray((NSArray) NSPropertyListSerialization.propertyListFromData(data, "UTF-8"));
 		Random random = new Random(new NSTimestamp().getNanos());
 		for (int i = 0; i < sampleData.count(); i++) {
@@ -37,7 +37,7 @@ public class AjaxGridExample extends WOComponent {
 
 	public NSMutableDictionary configData() {
 		if (configData == null) {
-			NSData data = new NSData(application().resourceManager().bytesForResourceNamed("AjaxGridExampleConfiguration.plist", null, NSArray.EmptyArray));
+			NSData data = new NSData(application().resourceManager().bytesForResourceNamed("AjaxGridExampleConfiguration.plist", null, NSArray.<String>emptyArray()));
 			configData = new NSMutableDictionary((NSDictionary) NSPropertyListSerialization.propertyListFromData(data, "UTF-8"));
 		}
 

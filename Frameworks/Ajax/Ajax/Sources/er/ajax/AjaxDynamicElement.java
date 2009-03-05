@@ -11,21 +11,20 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
-
-import er.extensions.appserver.ajax.ERXAjaxApplication;
+import com.webobjects.foundation.NSMutableDictionary;
 
 public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjaxElement {
 	protected Logger log = Logger.getLogger(getClass());
 	private WOElement _children;
-	private NSDictionary _associations;
+	private NSMutableDictionary _associations;
 
 	public AjaxDynamicElement(String name, NSDictionary associations, WOElement children) {
 		super(name, associations, children);
 		_children = children;
-		_associations = associations;
+		_associations = associations.mutableClone();
 	}
 
-	public NSDictionary associations() {
+	public NSMutableDictionary associations() {
 		return _associations;
 	}
 	

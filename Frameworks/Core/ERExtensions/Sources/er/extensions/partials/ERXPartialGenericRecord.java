@@ -33,7 +33,7 @@ public class ERXPartialGenericRecord extends ERXGenericRecord {
 			ERXEntityClassDescription cd = (ERXEntityClassDescription) classDescription();
 			NSArray<Class<ERXPartial>> partialEntityClasses = cd.partialClasses();
 			if (partialEntityClasses == null || partialEntityClasses.count() == 0) {
-				_partials = NSMutableDictionary.EmptyDictionary;
+				_partials = NSMutableDictionary.<Class, ERXPartial>emptyDictionary();
 			}
 			else {
 				NSMutableDictionary<Class, ERXPartial> partials = new NSMutableDictionary<Class, ERXPartial>();
@@ -79,7 +79,7 @@ public class ERXPartialGenericRecord extends ERXGenericRecord {
 	@Override
 	public Object valueForKey(String key) {
 		if (key != null && key.charAt(0) == '@') {
-			return partialForClass(_NSUtilities.classWithName(key.substring(1)));
+			return partialForClass((Class<? extends ERXPartial>)_NSUtilities.classWithName(key.substring(1)));
 		}
 		else {
 			return super.valueForKey(key);

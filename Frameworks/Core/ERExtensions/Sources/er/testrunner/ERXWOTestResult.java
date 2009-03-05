@@ -19,9 +19,11 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.woextensions.WOExceptionParser;
 import com.webobjects.woextensions.WOParsedErrorLine;
+import com.webobjects.woextensions.WOParsedException;
 
 /**
  * WOComponent display of an ERTestResult.<br />
@@ -37,19 +39,23 @@ public class ERXWOTestResult extends WOComponent {
     public Throwable exception;
     public String currentReasonLine;
 
-    public WOExceptionParser error;
+    public NSArray<WOParsedException> exceptions;
     public WOParsedErrorLine errorline;
 
 
     public ERXWOTestResult(WOContext aContext) {
         super(aContext);
     }
+    
+    public WOParsedException error() {
+    	return (exceptions != null && exceptions.count() > 0) ? exceptions.objectAtIndex(0) : null;
+    }
 
     public void setCurrentError(TestFailure value) {
         currentError = value;
         if(currentError != null) {
             exception = currentError.thrownException();
-            error = new WOExceptionParser(exception);
+            exceptions = WOExceptionParser.parseException(exception);
         }
     }
 

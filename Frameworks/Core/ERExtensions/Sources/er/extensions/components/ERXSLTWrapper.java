@@ -93,7 +93,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 			synchronized (cache) {
 				String stylesheet = (String)valueForBinding("stylesheet");
 				String framework = (String)valueForBinding("framework");
-				NSArray languages = session().languages();
+				NSArray<String> languages = session().languages();
 				String key = stylesheet + "-" + framework;
 				transformer = (Transformer) cache.get(key);
 				if(transformer == null || booleanValueForBinding("nocache")) {
@@ -252,10 +252,10 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 					TransformerFactory fac = TransformerFactory.newInstance();
 
 					log.debug("creating template for file " + filename + " in framework " + framework);
-					InputStream is = rm.inputStreamForResourceNamed(filename, framework, null);
+					InputStream is = rm.inputStreamForResourceNamed(filename, framework, (NSArray<String>)null);
 					if (is == null) {
 						log.debug("trying with framework = null");
-						is = rm.inputStreamForResourceNamed(filename, null, null);
+						is = rm.inputStreamForResourceNamed(filename, null, (NSArray<String>)null);
 						if (is == null) { 
 							throw new IllegalArgumentException("inputStream is null"); 
 						}

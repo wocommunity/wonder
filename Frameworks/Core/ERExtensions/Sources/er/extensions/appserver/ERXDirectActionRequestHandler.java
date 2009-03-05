@@ -74,11 +74,13 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
         if (ERXWOResponseCache.sharedInstance().isEnabled()) {
             try {
                 // Caching scheme for 5.2 applications. Will uncomment once we are building 5.2 only ERExtensions
-                Object[] actionClassAndName = getRequestActionClassAndNameForPath(getRequestHandlerPathForRequest(request));
+            	WOActionDescription actionClassAndName = getRequestActionClassAndNameForPath(getRequestHandlerPathForRequest(request));
                 //Object[] actionClassAndName = null;
-                if (actionClassAndName != null && actionClassAndName.length == 3) {
-                    actionName = (String)actionClassAndName[1];
-                    actionClass = (Class)actionClassAndName[2];
+            	// WO 5.5
+                //if (actionClassAndName != null && actionClassAndName.length == 3) {
+                if (actionClassAndName != null && actionClassAndName.actionName() != null && actionClassAndName.actionClassName() != null) {
+                    actionName = actionClassAndName.actionName();
+                    actionClass = actionClassAndName.actionClass();
                     if (ERXWOResponseCache.Cacheable.class.isAssignableFrom(actionClass)) {
                         response = ERXWOResponseCache.sharedInstance().cachedResponseForRequest(actionClass,
                                 actionName,

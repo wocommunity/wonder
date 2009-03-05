@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver._private.WOURLEncoder;
+import com.webobjects.appserver._private.WOCGIFormValues;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -82,9 +82,10 @@ public class ERXPathDirectAction extends WODirectAction {
                 for (Enumeration pathPartEnumerator = pathParts.objectEnumerator();
                      pathPartEnumerator.hasMoreElements();) {
                     try {
-                        temp.addObject(URLDecoder.decode((String)pathPartEnumerator.nextElement(), WOURLEncoder.WO_URL_ENCODING));
+                    	// WO 5.5 probably switch to just use WOCGIFormValues directly
+                        temp.addObject(URLDecoder.decode((String)pathPartEnumerator.nextElement(), WOCGIFormValues.getInstance().urlEncoding()));
                     } catch (UnsupportedEncodingException e) {
-                        log.error("Encoding not found: " + WOURLEncoder.WO_URL_ENCODING, e);
+                        log.error("Encoding not found: " + WOCGIFormValues.getInstance().urlEncoding(), e);
                     }
                 }
                 pathParts = temp;

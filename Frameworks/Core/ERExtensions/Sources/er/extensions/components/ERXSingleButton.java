@@ -6,10 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.association.WOAssociation;
 
 import er.extensions.appserver.ERXSession;
 import er.extensions.components._private.ERXSubmitButton;

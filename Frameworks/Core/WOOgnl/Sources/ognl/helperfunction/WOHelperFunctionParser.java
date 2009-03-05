@@ -1,19 +1,20 @@
 package ognl.helperfunction;
 
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
 
 import ognl.webobjects.WOOgnl;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOElement;
-import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODeclaration;
 import com.webobjects.appserver._private.WOHTMLAttribute;
 import com.webobjects.appserver._private.WOHTMLCommentString;
-import com.webobjects.appserver._private.WOKeyValueAssociation;
-import com.webobjects.foundation.NSArray;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
+import com.webobjects.appserver.association.WOKeyValueAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -30,9 +31,9 @@ public class WOHelperFunctionParser {
 
 	private String _declarationString;
 	private String _HTMLString;
-	private NSArray _languages;
+	private List<Locale> _languages;
 
-	public WOHelperFunctionParser(String htmlString, String declarationString, NSArray languages) {
+	public WOHelperFunctionParser(String htmlString, String declarationString, List<Locale> languages) {
 		_HTMLString = htmlString;
 		_declarationString = declarationString;
 		_languages = languages;

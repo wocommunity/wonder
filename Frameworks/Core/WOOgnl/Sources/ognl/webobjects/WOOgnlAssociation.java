@@ -8,11 +8,12 @@
 /* WOOgnlAssociation.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver._private.WOKeyValueAssociation;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.appserver.association.WOKeyValueAssociation;
 import com.webobjects.eocontrol.EOEventCenter;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSProperties;
@@ -28,7 +29,7 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 	public Object clone() {
 		return new WOOgnlAssociation(keyPath());
 	}
-
+	
 	public Object valueInComponent(WOComponent component) {
 		WOAssociation.Event event = _markStartOfEventIfNeeded("valueForKeyPath", keyPath(), component);
 		Object value = null;
@@ -44,7 +45,7 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 		if (event != null) {
 			EOEventCenter.markEndOfEvent(event);
 		}
-		if (_debugEnabled) {
+		if (declarationLogger.isInfoEnabled()) {
 			_logPullValue(value, component);
 		}
 		return value;
@@ -66,7 +67,7 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 		if (event != null) {
 			EOEventCenter.markEndOfEvent(event);
 		}
-		if (_debugEnabled) {
+		if (declarationLogger.isInfoEnabled()) {
 			_logPushValue(object, component);
 		}
 	}

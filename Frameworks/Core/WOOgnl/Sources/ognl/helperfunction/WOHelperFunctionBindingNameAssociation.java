@@ -1,7 +1,7 @@
 package ognl.helperfunction;
 
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver._private.WOBindingNameAssociation;
+import com.webobjects.appserver.association.WOBindingNameAssociation;
 
 /**
  * WOHelperFunction version of WOBindingNameAssociation that adds support for dynamic debugSupport.

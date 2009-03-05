@@ -1,8 +1,8 @@
 package er.extensions.appserver;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver._private.WOConstantValueAssociation;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
 
 /**
  * ERXProxyAssociation allows you to create a wrapper around an existing

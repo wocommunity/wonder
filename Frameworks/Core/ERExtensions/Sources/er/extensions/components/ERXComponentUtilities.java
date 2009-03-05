@@ -5,12 +5,12 @@ import java.net.URL;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WOConstantValueAssociation;
+import com.webobjects.appserver.association.WOAssociation;
+import com.webobjects.appserver.association.WOConstantValueAssociation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -185,7 +185,7 @@ public class ERXComponentUtilities {
 	 *            the list of languages to use for finding components
 	 * @return the URL to the template (or null if there isn't one)
 	 */
-	public static URL templateUrl(String componentName, String extension, NSArray languages) {
+	public static URL templateUrl(String componentName, String extension, NSArray<String> languages) {
 		String htmlPathName = componentName + ".wo/" + componentName + "." + extension;
 		WOResourceManager resourcemanager = WOApplication.application().resourceManager();
 		URL templateUrl = resourcemanager.pathURLForResourceNamed(htmlPathName, null, languages);

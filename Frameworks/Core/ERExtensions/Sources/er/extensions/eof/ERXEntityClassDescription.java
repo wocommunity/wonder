@@ -953,10 +953,10 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     protected String defaultKey = "default";
 
     public static interface Default {
-        public static final int AdaptorNumberType = 0;
-        public static final int AdaptorCharactersType = 1;
-        public static final int AdaptorBytesType = 2;
-        public static final int AdaptorDateType = 3;
+        public static final EOAttribute.AdaptorValueType AdaptorNumberType = EOAttribute.AdaptorValueType.AdaptorNumberType;
+        public static final EOAttribute.AdaptorValueType AdaptorCharactersType = EOAttribute.AdaptorValueType.AdaptorCharactersType;
+        public static final EOAttribute.AdaptorValueType AdaptorBytesType = EOAttribute.AdaptorValueType.AdaptorBytesType;
+        public static final EOAttribute.AdaptorValueType AdaptorDateType = EOAttribute.AdaptorValueType.AdaptorDateType;
 
         public void setValueInObject(EOEnterpriseObject eo);
     }
@@ -964,7 +964,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public static class AttributeDefault implements Default {
         String key;
         String stringValue;
-        int adaptorType;
+        EOAttribute.AdaptorValueType adaptorType;
         EOAttribute attribute;
         
         public AttributeDefault(EOAttribute attribute, String stringValue) {
@@ -972,7 +972,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             this.attribute = attribute;
         }
         
-        public AttributeDefault(String key, String stringValue, int adaptorType) {
+        public AttributeDefault(String key, String stringValue, EOAttribute.AdaptorValueType adaptorType) {
             this.key = key;
             this.stringValue = stringValue;
             this.adaptorType = adaptorType;
@@ -1014,10 +1014,10 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public static class RelationshipDefault implements Default {
         String key;
         String stringValue;
-        int adaptorType;
+        EOAttribute.AdaptorValueType adaptorType;
         String relationshipEntityName;
 
-        public RelationshipDefault(String key, String stringValue, int adaptorType, String relationshipEntityName) {
+        public RelationshipDefault(String key, String stringValue, EOAttribute.AdaptorValueType adaptorType, String relationshipEntityName) {
             this.key = key;
             this.stringValue = stringValue;
             this.adaptorType = adaptorType;
@@ -1055,7 +1055,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     }
                 }
             } else {
-                if (adaptorType == AdaptorNumberType) {
+                if (adaptorType == EOAttribute.AdaptorValueType.AdaptorNumberType) {
                     defaultValue = new Integer(Integer.parseInt(stringValue));
                 }
                 EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(relationshipEntityName, new Object[] {defaultValue});

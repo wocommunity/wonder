@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
@@ -15,6 +14,7 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOHTMLDynamicElement;
 import com.webobjects.appserver._private.WOStaticURLUtilities;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation._NSStringUtilities;
 
@@ -202,9 +202,9 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 					else if (_framework != null) {
 						framework = (String) _framework.valueInComponent(wocomponent);
 					}
-					java.net.URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(filename, framework, wocontext._languages());
+					java.net.URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(filename, framework, wocontext.locales());
 					if(url == null) {
-						url = wocontext.component()._componentDefinition().pathURLForResourceNamed(filename, framework, wocontext._languages());
+						url = wocontext.component()._componentDefinition().pathURLForResourceNamed(filename, framework, wocontext.locales());
 					}
 					if(url == null) {
 						throw new WODynamicElementCreationException("<" + getClass().getName() + "> : cannot find script file '" + filename + "'");

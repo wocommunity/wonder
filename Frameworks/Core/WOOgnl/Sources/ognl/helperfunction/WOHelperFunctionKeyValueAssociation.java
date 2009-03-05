@@ -1,7 +1,7 @@
 package ognl.helperfunction;
 
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver._private.WOKeyValueAssociation;
+import com.webobjects.appserver.association.WOKeyValueAssociation;
 
 /**
  * WOHelperFunction version of WOKeyValueAssociation that adds support for dynamic debugSupport.

@@ -102,7 +102,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 * @param ec
 	 */
 	public NSArray<T> fetchObjects(EOEditingContext ec) {
-		return ec.objectsWithFetchSpecification(this);
+		return (NSArray<T>)ec.objectsWithFetchSpecification(this);
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 			setFetchesRawRows(true);
 		}
 		try {
-			return ec.objectsWithFetchSpecification(this);
+			return (NSArray<NSDictionary<String, Object>>)ec.objectsWithFetchSpecification(this);
 		} finally {
 			if(!old) {
 				setFetchesRawRows(old);

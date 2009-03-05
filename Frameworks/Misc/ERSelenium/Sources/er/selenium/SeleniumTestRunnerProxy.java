@@ -90,7 +90,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
 		if (cachedFile == null) {
 			cachedFile = new CachedFile();
 
-			URL fileUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(filePath, "ERSelenium", null);
+			URL fileUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(filePath, "ERSelenium", (NSArray<String>)null);
 			if (fileUrl == null) {
 				throw new RuntimeException("Can't find specified resource ('" + filePath + "')");
 			}

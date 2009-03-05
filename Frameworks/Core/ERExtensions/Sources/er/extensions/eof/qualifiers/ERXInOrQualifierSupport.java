@@ -10,6 +10,13 @@ import com.webobjects.eocontrol.EONotQualifier;
 import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierVisitor;
+import com.webobjects.eocontrol.qualifier.EOExceptQualifier;
+import com.webobjects.eocontrol.qualifier.EOInListQualifier;
+import com.webobjects.eocontrol.qualifier.EOInQualifier;
+import com.webobjects.eocontrol.qualifier.EOInSubqueryQualifier;
+import com.webobjects.eocontrol.qualifier.EOIntersectQualifier;
+import com.webobjects.eocontrol.qualifier.EOSelectQualifier;
+import com.webobjects.eocontrol.qualifier.EOUnionQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
@@ -125,6 +132,35 @@ public class ERXInOrQualifierSupport extends _OrQualifierSupport {
 		}
 
 		public void visitUnknownQualifier(EOQualifier qualifier) {
+			_canBeRepresentedAsInSet = false;
+		}
+
+		// WO 5.5 -- we should actually think through these
+		public void visitExceptQualifier(EOExceptQualifier qualifier) {
+			_canBeRepresentedAsInSet = false;
+		}
+
+		public void visitInListQualifier(EOInListQualifier qualifier) {
+			_canBeRepresentedAsInSet = false;
+		}
+
+		public void visitInQualifier(EOInQualifier qualifier) {
+			_canBeRepresentedAsInSet = false;
+		}
+
+		public void visitInSubqueryQualifier(EOInSubqueryQualifier qualifier) {
+			_canBeRepresentedAsInSet = false;
+		}
+
+		public void visitIntersectQualifier(EOIntersectQualifier qualifier) {
+			_canBeRepresentedAsInSet = false;
+		}
+
+		public void visitSelectQualifier(EOSelectQualifier qualifier) {
+			_canBeRepresentedAsInSet = false;
+		}
+
+		public void visitUnionQualifier(EOUnionQualifier qualifier) {
 			_canBeRepresentedAsInSet = false;
 		}
 	}

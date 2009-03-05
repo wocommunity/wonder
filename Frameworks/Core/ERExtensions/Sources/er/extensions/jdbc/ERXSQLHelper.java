@@ -381,7 +381,7 @@ public class ERXSQLHelper {
 	@SuppressWarnings("unchecked")
 	public String createIndexSQLForEntities(NSArray<EOEntity> entities, NSArray<String> externalTypesToIgnore) {
 		if (externalTypesToIgnore == null) {
-			externalTypesToIgnore = NSArray.EmptyArray;
+			externalTypesToIgnore = NSArray.<String>emptyArray();
 		}
 		if (entities == null || entities.count() == 0) {
 			return "";

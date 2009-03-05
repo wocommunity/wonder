@@ -287,7 +287,7 @@ public class ERXThreadStorage {
 	 *            a set of classes to check
 	 */
 	public static void setProblematicTypes(NSSet<Class<?>> problematicTypes) {
-		_problematicTypes = problematicTypes == null ? NSSet.EmptySet : problematicTypes;
+		_problematicTypes = problematicTypes == null ? NSSet.<Class<?>>emptySet() : problematicTypes;
 	}
 
 	/**
@@ -311,7 +311,7 @@ public class ERXThreadStorage {
 	 *            a set of keys to check
 	 */
 	public static void setProblematicKeys(Set<String> problematicKeys) {
-		_problematicKeys = problematicKeys == null ? NSSet.EmptySet : problematicKeys;
+		_problematicKeys = problematicKeys == null ? NSSet.<String>emptySet() : problematicKeys;
 	}
 
 	/**

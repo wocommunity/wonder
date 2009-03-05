@@ -180,9 +180,10 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param rightName the table name on the right side of the clause
      * @param semantic  the join semantic
      */
+    @Override
     public void addJoinClause(String leftName,
                               String rightName,
-                              int semantic) {
+                              EORelationship.JoinSemantics semantic) {
         assembleJoinClause(leftName, rightName, semantic);
     }
     
@@ -195,9 +196,10 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param semantic  the join semantic
      * @return  the join clause
      */
+    @Override
     public String assembleJoinClause(String leftName,
                                      String rightName,
-                                     int semantic) {
+                                     EORelationship.JoinSemantics semantic) {
         if (!useAliases()) {
             return super.assembleJoinClause(leftName, rightName, semantic);
         }
@@ -250,19 +252,17 @@ public class PostgresqlExpression extends JDBCExpression {
         
         jc.table1 = leftTable + " " + leftAlias;
         
-        switch (semantic) {
-            case EORelationship.LeftOuterJoin:
+        if (semantic == EORelationship.JoinSemantics.LeftOuterJoin) {
                 jc.op = " LEFT OUTER JOIN ";
-                break;
-            case EORelationship.RightOuterJoin:
+        }
+        else if (semantic == EORelationship.JoinSemantics.RightOuterJoin) {
                 jc.op = " RIGHT OUTER JOIN ";
-                break;
-            case EORelationship.FullOuterJoin:
+        }
+        else if (semantic == EORelationship.JoinSemantics.FullOuterJoin) {
                 jc.op = " FULL OUTER JOIN ";
-                break;
-            case EORelationship.InnerJoin:
+        }
+        else if (semantic == EORelationship.JoinSemantics.InnerJoin) {
                 jc.op = " INNER JOIN ";
-                break;
         }
         
         jc.table2 = rightTable + " " + rightAlias;
