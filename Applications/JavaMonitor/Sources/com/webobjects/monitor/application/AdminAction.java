@@ -1,6 +1,5 @@
 package com.webobjects.monitor.application;
 
-import java.security.AllPermission;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOActionResults;
@@ -106,10 +105,17 @@ import com.webobjects.monitor._private.MSiteConfig;
  * error message</td>
  * <td>sets the number of deaths to 0</td>
  * </tr>
+ * <tr>
  * <td>bounce</td>
  * <td>'OK' or <br>
  * error message</td>
  * <td>bounces the application (starts a few instances per hosts, set the rest to refusing sessions and auto-recover)</td>
+ * </tr>
+ * <tr>
+ * <td>info</td>
+ * <td>JSON or<br>
+ * error message</td>
+ * <td>returns a JSON encoded list of instances with all the data from the app detail page.</td>
  * </tr>
  * </table>
  * </p>
@@ -450,12 +456,12 @@ public class AdminAction extends WODirectAction {
     }
 
     private MSiteConfig siteConfig() {
-        return _handler.siteConfig();
+        return WOTaskdHandler.siteConfig();
     }
 
     public WOActionResults performActionNamed(String s) {
         WOResponse woresponse = new WOResponse();
-        if (!siteConfig().isPasswordRequired() || siteConfig().password().equals(context().request().stringFormValueForKey("pw"))) {
+        if (!siteConfig().isPasswordRequired() || siteConfig().compareStringWithPassword(context().request().stringFormValueForKey("pw"))) {
             try {
                 WOActionResults woactionresults = performMonitorActionNamed(s);
                 if (woactionresults != null && (woactionresults instanceof WOResponse)) {
