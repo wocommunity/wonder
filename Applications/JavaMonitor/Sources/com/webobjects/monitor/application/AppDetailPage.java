@@ -32,6 +32,8 @@ import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.StatsUtilities;
 import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
+import er.extensions.foundation.ERXArrayUtilities;
+
 public class AppDetailPage extends MonitorComponent {
 	
     public AppDetailPage(WOContext aWocontext) {
@@ -573,7 +575,7 @@ public class AppDetailPage extends MonitorComponent {
         return ConfirmationPage.create(context(), new ConfirmationPage.Delegate() {
 
             public WOComponent cancel() {
-                return AppDetailPage.create(context(), application);
+                return AppDetailPage.create(context(), application, instances);
             }
 
             public WOComponent confirm() {
@@ -592,7 +594,7 @@ public class AppDetailPage extends MonitorComponent {
                 } finally {
                     handler().endReading();
                 }
-                return AppDetailPage.create(context(), application);
+                return AppDetailPage.create(context(), application, instances);
             }
 
             public String explaination() {
@@ -619,7 +621,7 @@ public class AppDetailPage extends MonitorComponent {
         return ConfirmationPage.create(context(), new ConfirmationPage.Delegate() {
 
             public WOComponent cancel() {
-                return AppDetailPage.create(context(), application);
+                return AppDetailPage.create(context(), application, instances);
             }
 
             public WOComponent confirm() {
@@ -633,7 +635,7 @@ public class AppDetailPage extends MonitorComponent {
                 } finally {
                     handler().endWriting();
                 }
-                return AppDetailPage.create(context(), application);
+                return AppDetailPage.create(context(), application, instances);
             }
 
             public String explaination() {
@@ -910,12 +912,12 @@ public class AppDetailPage extends MonitorComponent {
         }
     }
 
-	public static AppDetailPage create(WOContext context, MApplication currentApplication) {
-		AppDetailPage page = (AppDetailPage) WOApplication.application().pageWithName(AppDetailPage.class.getName(), context);
-		page.setMyApplication(currentApplication);
+    public static AppDetailPage create(WOContext context, MApplication currentApplication, NSArray<MInstance> selected) {
+        AppDetailPage page = (AppDetailPage) WOApplication.application().pageWithName(AppDetailPage.class.getName(), context);
+        page.setMyApplication(currentApplication);
         NSArray instancesArray = currentApplication.instanceArray();
         if (instancesArray == null) {
-        	instancesArray = NSArray.EmptyArray;
+            instancesArray = NSArray.EmptyArray;
         }
         NSMutableArray<MInstance> result = new NSMutableArray<MInstance>();
         result.addObjectsFromArray(currentApplication.instanceArray());
@@ -924,10 +926,25 @@ public class AppDetailPage extends MonitorComponent {
         instancesArray = result;
         // AK: the MInstances don't really support equals()...
         if (!page.displayGroup.allObjects().equals(instancesArray)) {
-        	page.displayGroup.setObjectArray(instancesArray);
-        } 
-        page.displayGroup.setSelectedObjects(page.displayGroup.allObjects());
-		return page;
-	}
+            page.displayGroup.setObjectArray(instancesArray);
+        }
+        if(selected != null) {
+            NSMutableArray<MInstance> active = new NSMutableArray<MInstance>();
+            for (MInstance instance : selected) {
+                if(instancesArray.containsObject(instance)) {
+                    active.addObject(instance);
+                }
+            }
+            page.displayGroup.setSelectedObjects(active);
+        } else {
+            page.displayGroup.setSelectedObjects(page.displayGroup.allObjects());
+        }
+        return page;
+    }
+
+    public static AppDetailPage create(WOContext context, MApplication currentApplication) {
+        NSArray selected = (context.page() instanceof AppDetailPage ? ((AppDetailPage)context.page()).selectedInstances() : null);
+        return create(context, currentApplication, selected);
+    }
 
 }
