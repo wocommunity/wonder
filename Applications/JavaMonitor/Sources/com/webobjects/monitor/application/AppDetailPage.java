@@ -32,8 +32,6 @@ import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.StatsUtilities;
 import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
-import er.extensions.foundation.ERXArrayUtilities;
-
 public class AppDetailPage extends MonitorComponent {
 	
     public AppDetailPage(WOContext aWocontext) {
