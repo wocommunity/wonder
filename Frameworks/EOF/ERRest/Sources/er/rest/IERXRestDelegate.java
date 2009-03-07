@@ -8,6 +8,19 @@ import com.webobjects.eoaccess.EOEntity;
  * @author mschrag
  */
 public interface IERXRestDelegate {
+
+	/**
+	 * Views the object defined by the incoming url.
+	 * 
+	 * @param restRequest the incoming viewing request.
+	 * @param context the rest context
+	 * @return the actual result as an ERXRestResult
+	 * @throws ERXRestException if there is a general failure
+	 * @throws ERXRestSecurityException if the user attempts to insert or updates objects that he/she is not permitted to
+	 * @throws ERXRestNotFoundException if one of the requested objects does not exist
+	 */
+	public ERXRestKey view(ERXRestRequest restRequest, ERXRestContext restContext);
+
 	/**
 	 * Inserts or updates the objects defined by the XML document.
 	 * 
@@ -72,5 +85,4 @@ public interface IERXRestDelegate {
 	 * @return the per-entity rest delegate
 	 */
 	public IERXRestEntityDelegate entityDelegate(EOEntity entity);
-	
 }
