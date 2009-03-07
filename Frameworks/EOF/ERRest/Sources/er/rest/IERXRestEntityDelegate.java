@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSArray;
  * 
  * @author mschrag
  */
-public interface IERXRestEntityDelegate {
+public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	/**
 	 * Called by the rest delegate for each entity that gets requested. This is called every time, so your entity
 	 * delegate should manage only executing one time if necessary.
@@ -324,128 +324,6 @@ public interface IERXRestEntityDelegate {
 	public void preprocess(EOEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException;
 
 	/**
-	 * Returns whether or not the caller is allowed to insert a new object of the given entity. This variant is called
-	 * if the caller tries to insert an object without traversing a keypath -- that is, a top level insert. You can
-	 * return false from this without implying that canInsertObject(..., parentObject, parentKey ..) returns false --
-	 * the two are mutually exclusive.
-	 * 
-	 * @param entity
-	 *            the entity of the object to insert
-	 * @param context
-	 *            the rest context
-	 * @return whether or not a new object can be inserted
-	 */
-	public boolean canInsertObject(EOEntity entity, ERXRestContext context);
-
-	/**
-	 * Returns whether or not a new object can be inserted into the specified relationship of an existing object.
-	 * 
-	 * @param parentEntity
-	 *            the entity of the parent
-	 * @param parentObject
-	 *            the parent
-	 * @param parentKey
-	 *            the name of the relationship on the parent
-	 * @param entity
-	 *            the entity of the object to insert
-	 * @param context
-	 *            the rest context
-	 * @return whether or not a new object can be inserted
-	 */
-	public boolean canInsertObject(EOEntity parentEntity, Object parentObject, String parentKey, EOEntity entity, ERXRestContext context);
-
-	/**
-	 * Returns whether or not the given property can be set during an insert. This is only called if canInsertObject has
-	 * returned true.
-	 * 
-	 * @param entity
-	 *            the entity of the object
-	 * @param eo
-	 *            the object
-	 * @param propertyName
-	 *            the property name to check
-	 * @param context
-	 *            the rest context
-	 * @return whether or not the given property can be set during an insert
-	 */
-	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context);
-
-	/**
-	 * Returns whether or not the given object can be updated. This is called prior to calling canUpdateProperty on any
-	 * properties and acts as a first line of defenese to completely cut-off access to an object for update
-	 * 
-	 * @param entity
-	 *            the entity of the object
-	 * @param eo
-	 *            the object to check
-	 * @param context
-	 *            the rest context
-	 * @return whether or not the given object can be updated
-	 */
-	public boolean canUpdateObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context);
-
-	/**
-	 * Returns whether or not the given property can be set during an update. This is only called if canUpdateObject has
-	 * returned true.
-	 * 
-	 * @param entity
-	 *            the entity of the object
-	 * @param eo
-	 *            the object
-	 * @param propertyName
-	 *            the property name to check
-	 * @param context
-	 *            the rest context
-	 * @return whether or not the given property can be set during an update
-	 */
-	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context);
-
-	/**
-	 * Returns whether or not the given object can be deleted. This is called prior to calling canDeleteProperty on any
-	 * properties and acts as a first line of defenese to completely cut-off access to an object for delete. Note that
-	 * the actual meaning of "delete" can be defined in your delete method, so returning true for this does not
-	 * *necessarily* mean the object will be deleted. Instead it just means you will allow access to the delete method.
-	 * 
-	 * @param entity
-	 *            the entity of the object
-	 * @param eo
-	 *            the object to check
-	 * @param context
-	 *            the rest context
-	 * @return whether or not the given object can be deleted
-	 */
-	public boolean canDeleteObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context);
-
-	/**
-	 * Returns whether or not the given object can be seen. This is called prior to calling canViewProperty on any
-	 * properties and acts as a first line of defenese to completely cut-off access to an object.
-	 * 
-	 * @param entity
-	 *            the entity of the object
-	 * @param eo
-	 *            the object to check
-	 * @param context
-	 *            the rest context
-	 * @return whether or not the given object can be seen
-	 */
-	public boolean canViewObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context);
-
-	/**
-	 * Returns whether or not the given property can be seen. This is only called if canViewObject has returned true.
-	 * 
-	 * @param entity
-	 *            the entity of the object
-	 * @param obj
-	 *            the object
-	 * @param propertyName
-	 *            the property name to check
-	 * @param context
-	 *            the rest context
-	 * @return whether or not the given property can be seen
-	 */
-	public boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context);
-
-	/**
 	 * Given an array, this method filters the array based on the callers permission level. This method should never
 	 * return null. To cut off access to the array entirely, return NSArray.EmptyArray. This method is only called after
 	 * having verified access to the specified key on the parent object.
@@ -511,4 +389,10 @@ public interface IERXRestEntityDelegate {
 	 * @return the primary key
 	 */
 	public Object idForEO(EOEntity entity, EOEnterpriseObject eo);
+
+	
+	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+
+	public boolean displayDetails(ERXRestKey key) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+
 }
