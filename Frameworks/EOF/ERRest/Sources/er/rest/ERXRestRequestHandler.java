@@ -441,8 +441,10 @@ public class ERXRestRequestHandler extends WORequestHandler {
 				ERXRestRequest restRequest = requestParser.parseRestRequest(restContext, request, path);
 				String method = request.method();
 				if ("GET".equalsIgnoreCase(method)) {
+					ERXRestKey responseKey = _delegate.view(restRequest, restContext);
+
 					IERXRestResponseWriter restResponseWriter = responseWriterForType(type);
-					restResponseWriter.appendToResponse(restContext, new ERXWOResponseResponseWriter(response), restRequest.key());
+					restResponseWriter.appendToResponse(restContext, new ERXWOResponseResponseWriter(response), responseKey);
 					editingContext.saveChanges();
 				}
 				else if ("DELETE".equalsIgnoreCase(method)) {

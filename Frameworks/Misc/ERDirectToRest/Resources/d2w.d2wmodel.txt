@@ -1,0 +1,16 @@
+(
+    0 : *true* => fetchLimit = 20 [com.webobjects.directtoweb.Assignment],
+    0 : *true* => restCanView = false [com.webobjects.directtoweb.BooleanAssignment],
+    0 : *true* => restCanDelete = false [com.webobjects.directtoweb.BooleanAssignment],
+    0 : *true* => restCanInsert = false [com.webobjects.directtoweb.BooleanAssignment],
+    0 : *true* => restCanUpdate = false [com.webobjects.directtoweb.BooleanAssignment],
+    0 : pageConfiguration like 'RestView*' => task = view [com.webobjects.directtoweb.Assignment],
+    0 : pageConfiguration like 'RestDelete*' => task = delete [com.webobjects.directtoweb.Assignment],
+    0 : pageConfiguration like 'RestInsert*' => task = insert [com.webobjects.directtoweb.Assignment],
+    0 : pageConfiguration like 'RestUpdate*' => task = update [com.webobjects.directtoweb.Assignment],
+    0 : *true* => restPropertyKeys = displayPropertyKeys [er.directtoweb.assignments.ERDKeyValueAssignment],
+    0 : *true* => restEntityAliasName = entity.name [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment],
+    0 : task = 'view' => displayPropertyKeys = defaultPropertyKeysFromEntityWithoutRelationships [com.webobjects.directtoweb.DefaultAssignment],
+    0 : *true* => restEntityDelegate = {"className" = "er.directtorest.ERD2RestDefaultEntityDelegate"; 
+} [er.directtoweb.assignments.delayed.ERDDelayedObjectCreationAssignment]
+)

@@ -4,6 +4,12 @@ package er.restexample.server;
 import er.extensions.appserver.ERXSession;
 
 public class Session extends ERXSession {
+    
 	public Session() {
+	    
+	}
+	
+	public boolean isLoggedIn() {
+	    return true;
 	}
 }

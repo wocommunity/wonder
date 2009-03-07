@@ -104,6 +104,10 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		return restResult;
 	}
 
+	public ERXRestKey view(ERXRestRequest restRequest, ERXRestContext restContext) {
+		return restRequest.key();
+	}
+
 	public ERXRestKey insert(ERXRestRequest insertRequest, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
 		ERXRestKey insertResult;
 

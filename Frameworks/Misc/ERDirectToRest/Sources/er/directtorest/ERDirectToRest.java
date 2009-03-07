@@ -3,11 +3,14 @@ package er.directtorest;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver._private.WODirectActionRequestHandler;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.foundation.ERXThreadStorage;
 
 public class ERDirectToRest extends ERXFrameworkPrincipal {
     
@@ -17,16 +20,21 @@ public class ERDirectToRest extends ERXFrameworkPrincipal {
         setUpFrameworkPrincipalClass(ERDirectToRest.class);
     }
 
+    /**
+     * @return the threads d2w context
+     */
+    public static D2WContext d2wContext() {
+        D2WContext result = (D2WContext) ERXThreadStorage.valueForKey("ERD2Rest.d2wContext");
+        if(result == null) {
+            result = ERD2WContext.newContext();
+            ERXThreadStorage.takeValueForKey(result, "ERD2Rest.d2wContext");
+        }
+        return result;
+    }
+
     @Override
     public void finishInitialization() {
-        WOApplication.application().registerRequestHandler(new WODirectActionRequestHandler() {
-            public NSArray getRequestHandlerPathForRequest(WORequest worequest) {
-                NSArray nsarray = new NSArray(ERD2RestAction.class.getName());
-                return nsarray.arrayByAddingObject(worequest.requestHandlerPath());
-            }
-
-        }, "d2r");
-
+ 
     }
 
 }

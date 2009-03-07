@@ -19,5 +19,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="WOFramework/ERDirectToRest"/>
 	<classpathentry kind="con" path="WOFramework/JavaMemoryAdaptor"/>
+	<classpathentry kind="con" path="WOFramework/ERRest"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
