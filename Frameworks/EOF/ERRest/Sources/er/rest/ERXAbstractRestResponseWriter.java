@@ -176,7 +176,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		if (_filter == null) {
 			String entityName = key.entity().name();
 			EOEntity entity = ERXRestUtils.getEntityNamed(context, entityName);
-			displayDetails = context.delegate().entityDelegate(entity).displayDetails(key);
+			displayDetails = context.delegate().entityDelegate(entity).displayDetails(key, context);
 		}
 		else {
 			ERXKeyFilter filter = _filter;
@@ -210,7 +210,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		if (_filter == null) {
 			String entityName = key.entity().name();
 			EOEntity entity = ERXRestUtils.getEntityNamed(context, entityName);
-			displayProperties = context.delegate().entityDelegate(entity).displayProperties(key, _displayAllProperties, _displayAllToMany);
+			displayProperties = context.delegate().entityDelegate(entity).displayProperties(key, _displayAllProperties, _displayAllToMany, context);
 		}
 		else {
 			ERXKeyFilter filter = _filter;
