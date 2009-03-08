@@ -144,11 +144,11 @@ public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 		return null;
 	}
 
-	public boolean displayDetails(ERXRestKey key) {
+	public boolean displayDetails(ERXRestKey key, ERXRestContext context) {
 		return false;
 	}
 
-	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		return new String[0];
 	}
 }
