@@ -6,5 +6,5 @@
     100 : entity.name = 'ServerUser' => restEntityAliasName = User [com.webobjects.directtoweb.Assignment],
     100 : restEntityAlias = 'Topic' => restEntityName = ServerTopic [com.webobjects.directtoweb.Assignment],
     100 : entity.name = 'ServerForum' => restEntityAliasName = Forum [com.webobjects.directtoweb.Assignment],
-    100 : entity.name = 'ServerTopic' => restEntityAliasName = Topics [com.webobjects.directtoweb.Assignment]
+    100 : entity.name = 'ServerTopic' => restEntityAliasName = Topic [com.webobjects.directtoweb.Assignment]
 )
