@@ -168,7 +168,7 @@ import er.extensions.eof.ERXEC;
  * <h2>Update the title of a bulletin</h2>
  * 
  * <pre>
- * curl -x PUT -d '&lt;Bulletin&gt;&lt;title&gt;Some random Bulletin!&lt;/title&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken
+ * curl -X PUT -d '&lt;Bulletin&gt;&lt;title&gt;Some random Bulletin!&lt;/title&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken
  * </pre>
  * 
  * <pre>
