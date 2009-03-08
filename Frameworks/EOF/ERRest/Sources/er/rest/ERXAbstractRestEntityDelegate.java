@@ -748,13 +748,13 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return displayPropertyNames;
 	}
 	
-	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String[] displayProperties = _displayPropertiesFromProperties(key, allProperties, allToMany);
 		return displayProperties;
 	}
 
 
-	public boolean displayDetails(ERXRestKey key) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public boolean displayDetails(ERXRestKey key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		return _displayDetailsFromProperties(key);
 	}
 

@@ -12,5 +12,6 @@
     0 : *true* => restEntityAliasName = entity.name [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment],
     0 : task = 'view' => displayPropertyKeys = defaultPropertyKeysFromEntityWithoutRelationships [com.webobjects.directtoweb.DefaultAssignment],
     0 : *true* => restEntityDelegate = {"className" = "er.directtorest.ERD2RestDefaultEntityDelegate"; 
-} [er.directtoweb.assignments.delayed.ERDDelayedObjectCreationAssignment]
+} [er.directtoweb.assignments.delayed.ERDDelayedObjectCreationAssignment],
+    1 : task = 'view' => displayPropertyKeys = defaultPropertyKeysFromEntity [com.webobjects.directtoweb.DefaultAssignment]
 )

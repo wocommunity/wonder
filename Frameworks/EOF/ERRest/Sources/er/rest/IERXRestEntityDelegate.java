@@ -391,8 +391,8 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	public Object idForEO(EOEntity entity, EOEnterpriseObject eo);
 
 	
-	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 
-	public boolean displayDetails(ERXRestKey key) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+	public boolean displayDetails(ERXRestKey key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 
 }
