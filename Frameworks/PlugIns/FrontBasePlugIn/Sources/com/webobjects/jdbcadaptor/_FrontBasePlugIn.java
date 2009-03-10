@@ -1280,9 +1280,12 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			else if (semantic == EORelationship.JoinSemantics.FullOuterJoin) {
 				jc.op = " FULL OUTER JOIN ";
 			}
-			else if (semantic == EORelationship.JoinSemantics.InnerJoin) {
+			else if (semantic == EORelationship.JoinSemantics.InnerJoin || semantic == null) {
 				jc.op = " INNER JOIN ";
 			}
+	        else {
+	        	throw new IllegalArgumentException("Unknown join semantic: " + semantic);
+	        }
 
 			NSArray joins = r.joins();
 			int joinsCount = joins.count();
