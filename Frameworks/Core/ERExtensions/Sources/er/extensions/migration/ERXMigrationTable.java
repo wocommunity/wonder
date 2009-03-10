@@ -160,7 +160,7 @@ public class ERXMigrationTable {
 				throw new IllegalStateException("You requested the column named '" + name + "' in the table '" + _name + "', but that column hasn't been created yet.");
 			}
 			try {
-				column = _newColumn(name, 0, 0, 0, 0, false, null, null, false);
+				column = _newColumn(name, Types.OTHER, 0, 0, 0, false, null, null, false);
 			}
 			catch (SQLException e) {
 				throw new IllegalStateException("This should never have executed a database operation.", e);
