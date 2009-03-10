@@ -529,7 +529,7 @@ public class AppDetailPage extends MonitorComponent {
     /** ******* */
 
     public NSArray<MInstance> selectedInstances() {
-        return displayGroup.selectedObjects();
+        return (NSArray<MInstance>)displayGroup.selectedObjects();
         // AK: uncomment for old behaviour
         // return mySession().mApplication.instanceArray();
     }
@@ -724,7 +724,7 @@ public class AppDetailPage extends MonitorComponent {
 
     private WOComponent newDetailPage() {
         AppDetailPage nextPage = (AppDetailPage) AppDetailPage.create(context(), myApplication());
-        nextPage.displayGroup.setSelectedObjects(displayGroup.selectedObjects());
+        nextPage.displayGroup.setSelectedObjects((NSArray<Object>)displayGroup.selectedObjects());
         return nextPage;
     }
 
@@ -933,7 +933,7 @@ public class AppDetailPage extends MonitorComponent {
                     active.addObject(instance);
                 }
             }
-            page.displayGroup.setSelectedObjects(active);
+            page.displayGroup.setSelectedObjects((NSArray)active);
         } else {
             page.displayGroup.setSelectedObjects(page.displayGroup.allObjects());
         }

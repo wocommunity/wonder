@@ -15,6 +15,7 @@ package com.webobjects.monitor.application;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResourceManager;
+import com.webobjects.foundation.NSArray;
 
 public class NavigationPage extends MonitorComponent {
     private static final long serialVersionUID = 338657623393333855L;
@@ -104,7 +105,7 @@ public class NavigationPage extends MonitorComponent {
 
     public String backgroundImageSrc() {
         WOResourceManager aResourceManager = application().resourceManager();
-        return aResourceManager.urlForResourceNamed(backgroundImageName, null, null, context().request());
+        return aResourceManager.urlForResourceNamed(backgroundImageName, null, (NSArray<String>)null, context().request());
     }
 
     public WOComponent ApplicationsPageClicked() {
