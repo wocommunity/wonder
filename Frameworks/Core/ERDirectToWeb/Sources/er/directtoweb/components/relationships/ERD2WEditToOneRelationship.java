@@ -37,7 +37,7 @@ public class ERD2WEditToOneRelationship extends D2WEditToOneRelationship {
         if( restrictedChoiceKey!=null &&  restrictedChoiceKey.length()>0 )
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName=(String)d2wContext().valueForKey("restrictingFetchSpecification");
-        if(fetchSpecName != null && object().editingContext() != null) {
+        if(fetchSpecName != null) {
             EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)object(),
                                                                                         (String)d2wContext().valueForKey("propertyKey"));
             return EOUtilities.objectsWithFetchSpecificationAndBindings(object().editingContext(), relationship.destinationEntity().name(),fetchSpecName,null);
