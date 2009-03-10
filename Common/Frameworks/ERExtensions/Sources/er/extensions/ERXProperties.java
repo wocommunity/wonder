@@ -1541,9 +1541,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		}
 
 		public synchronized void load(File propsFile) throws IOException {
-			_files.push(propsFile.getParentFile());
+			// MS: We pull the canonical path here in case you symlink to a Properties file
+			// that has relative .includeProps paths in it (that you expect to load from the same
+			// folder as the symlink target). It's debatable whether this is actually the desired 
+			// behavior all the time, but until I hear someone who needs the old way, I'm not
+			// going to increase the complexity by adding a config flag that has to propagate all over.
+			File canonicalPropsFile = propsFile.getCanonicalFile();
+			_files.push(canonicalPropsFile.getParentFile());
 			try {
-	            BufferedInputStream is = new BufferedInputStream(new FileInputStream(propsFile));
+	            BufferedInputStream is = new BufferedInputStream(new FileInputStream(canonicalPropsFile));
 	            try {
 	            	load(is);
 	            }
