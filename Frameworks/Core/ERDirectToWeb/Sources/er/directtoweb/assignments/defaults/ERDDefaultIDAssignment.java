@@ -11,18 +11,19 @@ import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * An assignment to auto compute/infer a unique-ish, human-readable DOM ids from the d2wContext for Selenium, CSS, Ajax, Javascript, etc.
- * Providing defaults for the following keys:
+ * An assignment to auto-compute a unique(ish), human-readable DOM ids from the d2wContext for Selenium, CSS, Ajax, Javascript, etc.
+ * For Ajax updates you may also use this assignment to compute an updateContainerID key (by setting it to idForSection, idForPageConfiguration, etc. as required).
+ *
+ * This assignment provids defaults for the following keys:
  * <ul>
  * <li><code>idForProperty</code></li>
  * <li><code>idForSection</code></li>
  * <li><code>idForPageConfiguration</code></li>
  * </ul>
  * 
- * To use: Bind D2W component id binding to d2wContext.id
+ * To use: Bind D2W component id binding to d2wContext.id (or d2wContext.idForProperty or d2wContext.idForSection, etc)
  * 
- * You may also override the auto computed id by setting rules for propertyKeys, sections, entities, etc.
- * For Ajax updates you may also employ (key value) rules for an updateContainerID key and set it to idForSection, etc as required.
+ * You may also override these auto computed id by setting rules for the above keys, if necessary.
  * 
  * @author mendis
  *
@@ -35,8 +36,8 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
     /** holds the array of keys this assignment depends upon */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"propertyKey", "task", "entity.name"}), "idForProperty",
-        new NSArray(new Object[] {"pageConfiguration", "sectionKey"}), "idForSection",
-        new NSArray(new Object[] {"task", "entity.name"}), "idForPageConfiguration",
+        new NSArray(new Object[] {"pageConfiguration", "task", "entity.name", "sectionKey"}), "idForSection",
+        new NSArray(new Object[] {"pageConfiguration", "task", "entity.name"}), "idForPageConfiguration",
     });
 
     /**
@@ -96,7 +97,8 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
      * @return an id representing the <task, entity>
      */
     public Object idForPageConfiguration(D2WContext c) {
-    	return ERXStringUtilities.safeIdentifierName(c.entity().name() + "_" + c.task());
+    	String _idForPageConfiguration = (c.dynamicPage() != null) ? c.dynamicPage() : c.task() + "_" + c.entity().name();
+    	return ERXStringUtilities.safeIdentifierName(_idForPageConfiguration);
     }
     
     /**
@@ -106,6 +108,6 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
      * @return an id representing the section in a tab page
      */
     public Object idForSection(D2WContext c) {
-    	return ERXStringUtilities.safeIdentifierName((String) c.valueForKey("pageConfiguration") + "_" + c.valueForKey("sectionKey"));
+    	return idForPageConfiguration(c) + "_" + ERXStringUtilities.safeIdentifierName((String)c.valueForKey("sectionKey"));
     }
 }
