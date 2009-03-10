@@ -3,32 +3,32 @@ ExceptionNameString: WOString {
     escapeHTML = false;
 }
 
-ReasonRepetition: WORepetition {
-	item = errorline;
-	list = error.stackTrace;
+CurrentExceptionFrames : WORepetition {
+    list = currentException.frames;
+    item = currentExceptionFrame;
 }
 
 filename:  WOString {
-	value = errorline.fileName;
+	value = currentExceptionFrame.fileName;
 }
 
 line: WOString {
-	value = errorline.lineNumber;
+	value = currentExceptionFrame.lineNumber;
 }
 
 methodname: WOHyperlink {
-	disabled = errorline.isDisable;
-	directActionName = "openInProjectBuilder";
-        actionClass = "WOProjectBuilderAction";
-        ?methodName = errorline.methodName;
-        ?line = errorline.lineNumber;
-        ?filename = errorline.fileName;
-        ?errorMessage = errorMessage;
-        ?fullClassName = errorline.packageClassPath;
-	string = errorline.methodName;
+    disabled = currentExceptionFrame.isDisable;
+    directActionName = "openInProjectBuilder";
+    actionClass = "WOProjectBuilderAction";
+    string = currentExceptionFrame.methodName;
+    ?methodName = currentExceptionFrame.methodName;
+    ?line = currentExceptionFrame.lineNumber;
+    ?filename = currentExceptionFrame.fileName;
+    ?errorMessage = errorMessage;
+    ?fullClassName = currentExceptionFrame.packageClassPath;
 }
 
 packagename: WOString {
-	value = errorline.packageName;
+	value = currentExceptionFrame.packageName;
 }
  

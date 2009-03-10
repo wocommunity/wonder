@@ -12,6 +12,7 @@ th {
   <wo:UberPanel id="exception" title="Exception">
   	<p><wo:str value="$exceptionParagraph"/></p>
   	
+    <wo:WORepetition list="$exceptions" item="$currentException">
   	<p><b><webobject name=ExceptionNameString></webobject></b></p>
     <table>
       <tr> 
@@ -21,7 +22,7 @@ th {
         <th>Package</th>
       </tr>
       
-      <webobject name=ReasonRepetition> 
+      <webobject name=CurrentExceptionFrames> 
 	      <tr> 
 	        <td><webobject name=filename></webobject></td>
 	        <td><webobject name=line></webobject></td>
@@ -30,5 +31,6 @@ th {
 	      </tr>
       </webobject> 
     </table>
+    </wo:WORepetition>
     </wo:UberPanel>
 </wo:UberHeaderFooter>
