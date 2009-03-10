@@ -88,13 +88,17 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				row.setObjectForKey(new Integer(1), "updateLock");
 				row.setObjectForKey(lockOwnerName, "lockOwner");
 				EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
-				count = channel.updateValuesInRowsDescribedByQualifier(row, EOQualifier.qualifierWithQualifierFormat("modelName = '" + model.name() + "' and (updateLock = 0 or lockOwner = '" + lockOwnerName + "')", null), dbUpdaterEntity);
-				channel.cancelFetch();
+				try {
+					count = channel.updateValuesInRowsDescribedByQualifier(row, EOQualifier.qualifierWithQualifierFormat("modelName = '" + model.name() + "' and (updateLock = 0 or lockOwner = '" + lockOwnerName + "')", null), dbUpdaterEntity);
+				}
+				finally {
+					channel.cancelFetch();
+				}
 				if (count == 0) {
 					EOFetchSpecification fetchSpec = new EOFetchSpecification(migrationTableName(adaptor), new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
-					channel.selectAttributes(new NSArray<EOAttribute>(dbUpdaterEntity.attributeNamed("updateLock")), fetchSpec, false, dbUpdaterEntity);
 					NSDictionary nextRow;
 					try {
+						channel.selectAttributes(new NSArray<EOAttribute>(dbUpdaterEntity.attributeNamed("updateLock")), fetchSpec, false, dbUpdaterEntity);
 						nextRow = channel.fetchRow();
 					}
 					finally {
@@ -160,8 +164,12 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			row.setObjectForKey(NSKeyValueCoding.NullValue, "lockOwner");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 			channel.adaptorContext().commitTransaction();
-			channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
-			channel.cancelFetch();
+			try {
+				channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
+			}
+			finally {
+				channel.cancelFetch();
+			}
 			channel.adaptorContext().commitTransaction();
 			channel.adaptorContext().beginTransaction();
 		}
@@ -188,16 +196,20 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 			EOFetchSpecification fetchSpec = new EOFetchSpecification(migrationTableName(adaptor), new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
-			channel.selectAttributes(new NSArray<EOAttribute>(dbUpdaterEntity.attributeNamed("version")), fetchSpec, false, dbUpdaterEntity);
-			NSDictionary nextRow = channel.fetchRow();
-			if (nextRow == null) {
-				version = initialVersionForModel(model);
+			try {
+				channel.selectAttributes(new NSArray<EOAttribute>(dbUpdaterEntity.attributeNamed("version")), fetchSpec, false, dbUpdaterEntity);
+				NSDictionary nextRow = channel.fetchRow();
+				if (nextRow == null) {
+					version = initialVersionForModel(model);
+				}
+				else {
+					Integer versionInteger = (Integer) nextRow.objectForKey("version");
+					version = Math.max(versionInteger.intValue(), initialVersionForModel(model));
+				}
 			}
-			else {
-				Integer versionInteger = (Integer) nextRow.objectForKey("version");
-				version = Math.max(versionInteger.intValue(), initialVersionForModel(model));
+			finally {
+				channel.cancelFetch();
 			}
-			channel.cancelFetch();
 		}
 		catch (Exception e) {
 			throw new ERXMigrationFailedException("Failed to get version number from " + migrationTableName(adaptor) + " table.", e);
@@ -223,8 +235,13 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 			row.setObjectForKey(new Integer(versionNumber), "version");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
-			int count = channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
-			channel.cancelFetch();
+			int count;
+			try {
+				count = channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
+			}
+			finally {
+				channel.cancelFetch();
+			}
 			if (count == 0) {
 				throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".");
 			}
@@ -288,6 +305,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			versionAttribute.setName("version");
 			versionAttribute.setColumnName("version");
 			versionAttribute.setClassName("java.lang.Number");
+			versionAttribute.setValueType("i");
 			versionAttribute.setAllowsNull(false);
 			dbUpdaterEntity.addAttribute(versionAttribute);
 
@@ -301,6 +319,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			updateLockAttribute.setName("updateLock");
 			updateLockAttribute.setColumnName("updatelock");
 			updateLockAttribute.setClassName("java.lang.Number");
+			updateLockAttribute.setValueType("i");
 			updateLockAttribute.setAllowsNull(false);
 			dbUpdaterEntity.addAttribute(updateLockAttribute);
 
