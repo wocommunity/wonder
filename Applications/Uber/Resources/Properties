@@ -2,6 +2,7 @@
 dbConnectURLGLOBAL=jdbc:FrontBase://127.0.0.1/Uber
 dbConnectUserGLOBAL=Uber
 dbConnectPasswordGLOBAL=
+dbConnectDriverGLOBAL=
 
 # REST
 ERXRest.allowUnsafeDelegates=true
@@ -17,7 +18,7 @@ ognl.helperFunctions=true
 ognl.inlineBindings=true
 
 # Misc
-er.extensions.stackTrace.cleanup=true
+er.extensions.stackTrace.cleanup=false
 er.extensions.ERXApplication.DefaultEncoding=UTF-8
 er.extensions.ERXApplication.responseCompressionEnabled=true
 
