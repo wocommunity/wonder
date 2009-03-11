@@ -1844,6 +1844,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		terminate();
 	}
 	
+	// MS WO 5.5: I think this is really wrong ... we need to figure out why this was necessary -- is it that I have to have
+	// a WO 5.5 wotaskd?
 	@Override
 	public boolean lifebeatEnabled() {
 		return (isDevelopmentMode()) ? false : super.lifebeatEnabled();

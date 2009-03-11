@@ -99,10 +99,10 @@ public class DataCreator {
 
 	}
 
-	NSMutableArray<Asset> assets = new NSMutableArray();
-	NSMutableArray<AssetGroup> groups = new NSMutableArray();
-	NSMutableArray<Tag> tags = new NSMutableArray();
-	NSArray<Tag> words = new NSArray();
+	NSMutableArray<Asset> assets = new NSMutableArray<Asset>();
+	NSMutableArray<AssetGroup> groups = new NSMutableArray<AssetGroup>();
+	NSMutableArray<Tag> tags = new NSMutableArray<Tag>();
+	NSArray<String> words = new NSArray<String>();
 
 	public void createAll() {
 		createTables();

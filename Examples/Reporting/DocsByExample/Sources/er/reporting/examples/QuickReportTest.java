@@ -21,7 +21,7 @@ public class QuickReportTest extends WOComponent {
 		colors.addObject("b7af4b"); // b7af4b
 		colors.addObject("d5ba27");
 		colors.addObject("ffec00"); //ffec00
-		pathString = application().resourceManager().pathForResourceNamed("TestReportModel.dat", null, null);
+		pathString = application().resourceManager().pathForResourceNamed("TestReportModel.dat", null, (NSArray<String>)null);
 	}
 
 

@@ -22,7 +22,9 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import er.extensions.eof.ERXEOGlobalIDUtilities;
 import er.extensions.eof.ERXFetchSpecification;
 import er.extensions.eof.ERXGuardedObjectInterface;
+import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXQ;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -609,7 +611,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		IERXRestEntityDelegate parentEntityDelegate = context.delegate().entityDelegate(entity);
+		IERXRestSecurityDelegate parentEntityDelegate = context.delegate().entityDelegate(entity);
 		if (parentObject != null && !parentEntityDelegate.canUpdateObject(parentEntity, parentObject, context)) {
 			throw new ERXRestSecurityException("You are not allowed to update this " + entity.name() + " object.");
 		}
@@ -679,6 +681,84 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		updated(entity, parentObject, context);
 	}
 
+
+	public static String cascadingValue(ERXRestKey result, String propertyPrefix, String propertySuffix, String defaultValue) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		// System.out.println("ERXAbstractRestResponseWriter.cascadingValue: Checking " + result);
+		ERXRestKey cascadingKey = result.firstKey();
+		String propertyValue = _cascadingValue(cascadingKey, propertyPrefix, propertySuffix);
+		if (propertyValue == null) {
+			propertyValue = defaultValue;
+		}
+		// System.out.println("ERXAbstractRestResponseWriter.cascadingValue: == " + propertyValue);
+		return propertyValue;
+	}
+
+	public static String _cascadingValue(ERXRestKey cascadingKey, String propertyPrefix, String propertySuffix) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		String propertyValue = null;
+		EOEntity entity = cascadingKey.entity();
+		while (entity != null && propertyValue == null) {
+			ERXRestKey entityCascadingKey = cascadingKey.cloneKeyWithNewEntity(entity, true, true);
+			// System.out.println("ERXAbstractRestResponseWriter._cascadingValue:   keys " + cascadingKey + "vs" +
+			// entityCascadingKey);
+			String keypathWithoutGIDs = entityCascadingKey.path(true);
+			String propertyName = propertyPrefix + keypathWithoutGIDs.replace('/', '.') + propertySuffix;
+			propertyValue = ERXProperties.stringForKey(propertyName);
+			// System.out.println("ERXAbstractRestResponseWriter._cascadingValue:   checking " + entity + " + entity + "
+			// + propertyName + "=>" + propertyValue);
+			if (propertyValue == null) {
+				entity = entity.parentEntity();
+			}
+		}
+		if (propertyValue == null && cascadingKey.nextKey() != null) {
+			propertyValue = _cascadingValue(cascadingKey.nextKey(), propertyPrefix, propertySuffix);
+		}
+		return propertyValue;
+	}
+
+	public static boolean _displayDetailsFromProperties(ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		boolean displayDetails;
+		String displayDetailsStr = cascadingValue(result, IERXRestResponseWriter.REST_PREFIX, IERXRestResponseWriter.DETAILS_PREFIX, null);
+		if (displayDetailsStr == null) {
+			displayDetails = result.previousKey() == null && (result.key() == null || result.isKeyGID());
+		}
+		else {
+			displayDetails = Boolean.valueOf(displayDetailsStr).booleanValue();
+		}
+		return displayDetails;
+	}
+
+	public static String[] _displayPropertiesFromProperties(ERXRestKey result, boolean displayAllProperties, boolean displayAllToMany) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		String[] displayPropertyNames;
+		String displayPropertyNamesStr = cascadingValue(result, IERXRestResponseWriter.REST_PREFIX, IERXRestResponseWriter.DETAILS_PROPERTIES_PREFIX, null);
+		if (displayPropertyNamesStr == null) {
+			if (displayAllProperties) {
+				NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(result.nextEntity(), displayAllToMany);
+				displayPropertyNames = new String[allPropertyNames.count()];
+				for (int propertyNum = 0; propertyNum < displayPropertyNames.length; propertyNum++) {
+					displayPropertyNames[propertyNum] = (String) allPropertyNames.objectAtIndex(propertyNum);
+				}
+			}
+			else {
+				displayPropertyNames = null;
+			}
+		}
+		else {
+			displayPropertyNames = displayPropertyNamesStr.split(",");
+		}
+		return displayPropertyNames;
+	}
+	
+	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		String[] displayProperties = _displayPropertiesFromProperties(key, allProperties, allToMany);
+		return displayProperties;
+	}
+
+
+	public boolean displayDetails(ERXRestKey key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		return _displayDetailsFromProperties(key);
+	}
+
+	
 	/**
 	 * Called after performing the user's requested updates. This provides support for subclasses to extend and perform
 	 * "automatic" updates. For instance, if you wanted to set a last modified date, or a modified-by-user field, you

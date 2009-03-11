@@ -348,7 +348,7 @@ public class ERXRestKey {
 	 * @throws ERXRestException
 	 *             if a general error occurs
 	 */
-	protected EOEntity nextEntity() throws ERXRestException {
+	public EOEntity nextEntity() throws ERXRestException {
 		EOEntity nextEntity = _nextEntity;
 		if (_nextEntity == null) {
 			if (_value instanceof EOEnterpriseObject) {

@@ -168,7 +168,7 @@ import er.extensions.eof.ERXEC;
  * <h2>Update the title of a bulletin</h2>
  * 
  * <pre>
- * curl -x PUT -d '&lt;Bulletin&gt;&lt;title&gt;Some random Bulletin!&lt;/title&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken
+ * curl -X PUT -d '&lt;Bulletin&gt;&lt;title&gt;Some random Bulletin!&lt;/title&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken
  * </pre>
  * 
  * <pre>
@@ -441,8 +441,10 @@ public class ERXRestRequestHandler extends WORequestHandler {
 				ERXRestRequest restRequest = requestParser.parseRestRequest(restContext, request, path);
 				String method = request.method();
 				if ("GET".equalsIgnoreCase(method)) {
+					ERXRestKey responseKey = _delegate.view(restRequest, restContext);
+
 					IERXRestResponseWriter restResponseWriter = responseWriterForType(type);
-					restResponseWriter.appendToResponse(restContext, new ERXWOResponseResponseWriter(response), restRequest.key());
+					restResponseWriter.appendToResponse(restContext, new ERXWOResponseResponseWriter(response), responseKey);
 					editingContext.saveChanges();
 				}
 				else if ("DELETE".equalsIgnoreCase(method)) {

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 
 import er.extensions.appserver.ERXApplication;
 import er.grouping.DRReportModel;
@@ -29,9 +30,9 @@ public static void main(String argv[]) {
         super();
         System.out.println("Welcome to " + this.name() + " !");
         /* ** put your initialization code in here ** */
-        path = resourceManager().pathForResourceNamed("GROUP_BYReportModel.dat", null, null);
+        path = resourceManager().pathForResourceNamed("GROUP_BYReportModel.dat", null, (NSArray<String>)null);
         modelDictString = DRReportModel.stringContentsOfFile(path);
-        path = resourceManager().pathForResourceNamed("SimpleReportModel.dat", null, null);
+        path = resourceManager().pathForResourceNamed("SimpleReportModel.dat", null, (NSArray<String>)null);
         modelDictString2 = DRReportModel.stringContentsOfFile(path);
     }
     

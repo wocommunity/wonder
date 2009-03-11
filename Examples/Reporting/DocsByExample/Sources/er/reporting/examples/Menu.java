@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 
 public class Menu extends WOComponent {
@@ -52,7 +53,7 @@ public class Menu extends WOComponent {
     }
  
     public NSData excelSheetLocation() throws IOException {
-        String path = application().resourceManager().pathForResourceNamed("DynaReporter.ppt", null, null);
+        String path = application().resourceManager().pathForResourceNamed("DynaReporter.ppt", null, (NSArray<String>)null);
 	//System.out.println("excelSheetLocation: path:"+path);
         File file = new File(path);
         NSData data = dataFromFile (file);

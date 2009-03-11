@@ -174,7 +174,9 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	protected boolean displayDetails(ERXRestContext context, ERXRestKey key) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		boolean displayDetails;
 		if (_filter == null) {
-			displayDetails = _displayDetailsFromProperties(key) || ERXProperties.booleanForKey(IERXRestResponseWriter.REST_PREFIX + "details");
+			String entityName = key.entity().name();
+			EOEntity entity = ERXRestUtils.getEntityNamed(context, entityName);
+			displayDetails = context.delegate().entityDelegate(entity).displayDetails(key, context);
 		}
 		else {
 			ERXKeyFilter filter = _filter;
@@ -206,7 +208,9 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	protected String[] displayProperties(ERXRestContext context, ERXRestKey key) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String[] displayProperties;
 		if (_filter == null) {
-			displayProperties = _displayPropertiesFromProperties(key, _displayAllProperties, _displayAllToMany);
+			String entityName = key.entity().name();
+			EOEntity entity = ERXRestUtils.getEntityNamed(context, entityName);
+			displayProperties = context.delegate().entityDelegate(entity).displayProperties(key, _displayAllProperties, _displayAllToMany, context);
 		}
 		else {
 			ERXKeyFilter filter = _filter;
@@ -353,72 +357,6 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		for (int i = 0; i < indent; i++) {
 			response.appendContentString("  ");
 		}
-	}
-
-	public static String cascadingValue(ERXRestKey result, String propertyPrefix, String propertySuffix, String defaultValue) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		// System.out.println("ERXAbstractRestResponseWriter.cascadingValue: Checking " + result);
-		ERXRestKey cascadingKey = result.firstKey();
-		String propertyValue = _cascadingValue(cascadingKey, propertyPrefix, propertySuffix);
-		if (propertyValue == null) {
-			propertyValue = defaultValue;
-		}
-		// System.out.println("ERXAbstractRestResponseWriter.cascadingValue: == " + propertyValue);
-		return propertyValue;
-	}
-
-	public static String _cascadingValue(ERXRestKey cascadingKey, String propertyPrefix, String propertySuffix) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		String propertyValue = null;
-		EOEntity entity = cascadingKey.entity();
-		while (entity != null && propertyValue == null) {
-			ERXRestKey entityCascadingKey = cascadingKey.cloneKeyWithNewEntity(entity, true, true);
-			// System.out.println("ERXAbstractRestResponseWriter._cascadingValue:   keys " + cascadingKey + "vs" +
-			// entityCascadingKey);
-			String keypathWithoutGIDs = entityCascadingKey.path(true);
-			String propertyName = propertyPrefix + keypathWithoutGIDs.replace('/', '.') + propertySuffix;
-			propertyValue = ERXProperties.stringForKey(propertyName);
-			// System.out.println("ERXAbstractRestResponseWriter._cascadingValue:   checking " + entity + " + entity + "
-			// + propertyName + "=>" + propertyValue);
-			if (propertyValue == null) {
-				entity = entity.parentEntity();
-			}
-		}
-		if (propertyValue == null && cascadingKey.nextKey() != null) {
-			propertyValue = _cascadingValue(cascadingKey.nextKey(), propertyPrefix, propertySuffix);
-		}
-		return propertyValue;
-	}
-
-	public static boolean _displayDetailsFromProperties(ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		boolean displayDetails;
-		String displayDetailsStr = cascadingValue(result, IERXRestResponseWriter.REST_PREFIX, IERXRestResponseWriter.DETAILS_PREFIX, null);
-		if (displayDetailsStr == null) {
-			displayDetails = result.previousKey() == null && (result.key() == null || result.isKeyGID());
-		}
-		else {
-			displayDetails = Boolean.valueOf(displayDetailsStr).booleanValue();
-		}
-		return displayDetails;
-	}
-
-	public static String[] _displayPropertiesFromProperties(ERXRestKey result, boolean displayAllProperties, boolean displayAllToMany) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		String[] displayPropertyNames;
-		String displayPropertyNamesStr = cascadingValue(result, IERXRestResponseWriter.REST_PREFIX, IERXRestResponseWriter.DETAILS_PROPERTIES_PREFIX, null);
-		if (displayPropertyNamesStr == null) {
-			if (displayAllProperties) {
-				NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(result.nextEntity(), displayAllToMany);
-				displayPropertyNames = new String[allPropertyNames.count()];
-				for (int propertyNum = 0; propertyNum < displayPropertyNames.length; propertyNum++) {
-					displayPropertyNames[propertyNum] = (String) allPropertyNames.objectAtIndex(propertyNum);
-				}
-			}
-			else {
-				displayPropertyNames = null;
-			}
-		}
-		else {
-			displayPropertyNames = displayPropertyNamesStr.split(",");
-		}
-		return displayPropertyNames;
 	}
 
 	/**

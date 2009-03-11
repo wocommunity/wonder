@@ -143,4 +143,12 @@ public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 	public EOEntity nextEntity(EOEntity entity, String key) {
 		return null;
 	}
+
+	public boolean displayDetails(ERXRestKey key, ERXRestContext context) {
+		return false;
+	}
+
+	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		return new String[0];
+	}
 }

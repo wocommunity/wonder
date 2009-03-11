@@ -188,7 +188,7 @@ public class EOModeler extends WOComponent {
             EOJoin join = new EOJoin(selectedPK, foreignAttribute);
             relationship.addJoin(join);
             relationship.setToMany(isToMany);
-            relationship.setJoinSemantic(EORelationship.InnerJoin);
+            relationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
             
             if(addBack) {
                 relationship = new EORelationship();
@@ -197,7 +197,7 @@ public class EOModeler extends WOComponent {
                 targetEntity.addRelationship(relationship);
                 relationship.addJoin(join);
                 relationship.setToMany(false);
-                relationship.setJoinSemantic(EORelationship.InnerJoin);
+                relationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
             }
         }
         public void addBackRelationship(EOEntity selectedEntity, EOEntity targetEntity, EOAttribute foreignAttribute, boolean isToMany, boolean addBack) {
@@ -215,7 +215,7 @@ public class EOModeler extends WOComponent {
             EOJoin join = new EOJoin(foreignAttribute,selectedPK);
             relationship.addJoin(join);
             relationship.setToMany(isToMany);
-            relationship.setJoinSemantic(EORelationship.InnerJoin);
+            relationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
         }
         public void addRelationship(EOAttribute foreignAttribute, boolean isToMany, boolean addBack) {
             addRelationship(selectedEntity, targetEntity, foreignAttribute, isToMany, addBack);
@@ -249,7 +249,7 @@ public class EOModeler extends WOComponent {
             relationship = new EORelationship();
             relationship.setName(name);
             relationship.setDefinition(path);
-            relationship.setJoinSemantic(EORelationship.InnerJoin);
+            relationship.setJoinSemantic(EORelationship.JoinSemantics.InnerJoin);
             selectedEntity.addRelationship(relationship);
             return relationship;
         }
