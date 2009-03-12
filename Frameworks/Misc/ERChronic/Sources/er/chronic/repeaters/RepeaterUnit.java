@@ -7,17 +7,17 @@ import java.util.regex.Pattern;
 import er.chronic.utils.Token;
 
 public abstract class RepeaterUnit extends Repeater<Object> {
-  private static final Pattern YEAR_PATTERN = Pattern.compile("^years?$");
+  private static final Pattern YEAR_PATTERN = Pattern.compile("^(year|yr)s?$");
   private static final Pattern SEASON_PATTERN = Pattern.compile("^seasons?$");
-  private static final Pattern MONTH_PATTERN = Pattern.compile("^months?$");
+  private static final Pattern MONTH_PATTERN = Pattern.compile("^(month|mon)s?$");
   private static final Pattern FORTNIGHT_PATTERN = Pattern.compile("^fortnights?$");
-  private static final Pattern WEEK_PATTERN = Pattern.compile("^weeks?$");
+  private static final Pattern WEEK_PATTERN = Pattern.compile("^(week|wk)s?$");
   private static final Pattern WEEKEND_PATTERN = Pattern.compile("^weekends?$");
   private static final Pattern WEEKDAY_PATTERN = Pattern.compile("^(week|business)days?$");
   private static final Pattern DAY_PATTERN = Pattern.compile("^days?$");
-  private static final Pattern HOUR_PATTERN = Pattern.compile("^hours?$");
-  private static final Pattern MINUTE_PATTERN = Pattern.compile("^minutes?$");
-  private static final Pattern SECOND_PATTERN = Pattern.compile("^seconds?$");
+  private static final Pattern HOUR_PATTERN = Pattern.compile("^(hour|hr)s?$");
+  private static final Pattern MINUTE_PATTERN = Pattern.compile("^(minute|min)s?$");
+  private static final Pattern SECOND_PATTERN = Pattern.compile("^(second|sec)s?$");
 
   public static enum UnitName {
     YEAR, SEASON, MONTH, FORTNIGHT, WEEK, WEEKEND, WEEKDAY, DAY, HOUR, MINUTE, SECOND
