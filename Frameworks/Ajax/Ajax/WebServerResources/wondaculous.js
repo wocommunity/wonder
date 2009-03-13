@@ -7933,6 +7933,7 @@ Modalbox.Methods = {
 		loadingString: "Please wait. Loading...", // Default loading string message
 		closeString: "Close window", // Default title attribute for close window link
 		closeValue: "&times;", // Default string for close link in the header
+		locked: false, // Use true to supress close window link, prevent Esc key and overlay from closing dialog
 		params: {},
 		method: 'get', // Default Ajax request method
 		autoFocusing: true, // Toggles auto-focusing for form elements. Disable for long text pages.
@@ -7941,6 +7942,10 @@ Modalbox.Methods = {
 	_options: new Object,
 	
 	setOptions: function(options) {
+		// locked implies the overlay is also deactivated
+		if (options.locked) {
+			options.overlayClose = false;
+		}
 		Object.extend(this.options, options || {});
 	},
 	
@@ -7960,9 +7965,10 @@ Modalbox.Methods = {
 				)
 			)
 		);
-		this.MBclose = new Element("a", {id: "MB_close", title: this.options.closeString, href: "#"}).update("<span>" + this.options.closeValue + "</span>");
-		this.MBheader.insert({'bottom':this.MBclose});
-		
+		if ( ! this.options.locked) {
+			this.MBclose = new Element("a", {id: "MB_close", title: this.options.closeString, href: "#"}).update("<span>" + this.options.closeValue + "</span>");
+			this.MBheader.insert({'bottom':this.MBclose});
+		}
 		this.MBcontent = new Element("div", {id: "MB_content"}).update(
 			this.MBloading = new Element("div", {id: "MB_loading"}).update(this.options.loadingString)
 		);
@@ -8224,10 +8230,12 @@ Modalbox.Methods = {
 	activate: function(options){
 		this.setOptions(options);
 		this.active = true;
-		$(this.MBclose).observe("click", this.hideObserver);
+		if ( ! this.options.locked) 
+			$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
-		$(this.MBclose).show();
+		if ( ! this.options.locked) 
+			$(this.MBclose).show();
 		if(this.options.transitions && this.options.inactiveFade)
 			new Effect.Appear(this.MBwindow, {duration: this.options.slideUpDuration});
 	},
@@ -8235,29 +8243,33 @@ Modalbox.Methods = {
 	deactivate: function(options) {
 		this.setOptions(options);
 		this.active = false;
-		$(this.MBclose).stopObserving("click", this.hideObserver);
+		if ( ! this.options.locked) 
+			$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
-		$(this.MBclose).hide();
+		if ( ! this.options.locked) 
+			$(this.MBclose).hide();
 		if(this.options.transitions && this.options.inactiveFade)
 			new Effect.Fade(this.MBwindow, {duration: this.options.slideUpDuration, to: .75});
 	},
 	
 	_initObservers: function(){
-		$(this.MBclose).observe("click", this.hideObserver);
+		if ( ! this.options.locked) 
+			$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.observe(document, "keydown", this.kbdObserver);
 		else
 			Event.observe(document, "keypress", this.kbdObserver);
 	},
 	
 	_removeObservers: function(){
-		$(this.MBclose).stopObserving("click", this.hideObserver);
+		if ( ! this.options.locked) 
+			$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.stopObserving(document, "keydown", this.kbdObserver);
 		else
 			Event.stopObserving(document, "keypress", this.kbdObserver);
@@ -8277,13 +8289,13 @@ Modalbox.Methods = {
 			}) || this.focusableElements.first();
 			this.currFocused = this.focusableElements.toArray().indexOf(firstEl);
 			firstEl.focus(); // Focus on first focusable element except close button
-		} else if($(this.MBclose).visible())
+		} else if(! this.options.locked && $(this.MBclose).visible())
 			$(this.MBclose).focus(); // If no focusable elements exist focus on close button
 	},
 	
-	_findFocusableElements: function(){ // Collect form elements or links from MB content
+	_findFocusableElements: function(){ // Collect form elements or links from MB content, elements with class MB_notFocusable are excluded
 		this.MBcontent.select('input:not([type~=hidden]), select, textarea, button, a[href]').invoke('addClassName', 'MB_focusable');
-		return this.MBcontent.select('.MB_focusable');
+		return this.MBcontent.select('.MB_focusable').reject(function(e) { return e.hasClassName('MB_notFocusable'); });
 	},
 	
 	_kbdHandler: function(event) {
@@ -8315,7 +8327,7 @@ Modalbox.Methods = {
 				}
 				break;			
 			case Event.KEY_ESC:
-				if(this.active) this._hide(event);
+				if(this.active && ! this.options.locked) this._hide(event);
 				break;
 			case 32:
 				this._preventScroll(event);
@@ -8325,6 +8337,12 @@ Modalbox.Methods = {
 				break;
 			case Event.KEY_UP:
 			case Event.KEY_DOWN:
+			    // Allow up and down arrow keys in text boxes in WebKit browsers,
+                // because these keys can move the cursor.
+                if(Prototype.Browser.WebKit && (["textarea","select"].include(node.tagName.toLowerCase()) ||
+                   (node.tagName.toLowerCase() == "input" && ["text", "password"].include(node.type)))) {
+                    break;
+                }
 			case Event.KEY_PAGEDOWN:
 			case Event.KEY_PAGEUP:
 			case Event.KEY_HOME:

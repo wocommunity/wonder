@@ -357,7 +357,7 @@ Modalbox.Methods = {
 			$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.observe(document, "keydown", this.kbdObserver);
 		else
 			Event.observe(document, "keypress", this.kbdObserver);
@@ -368,7 +368,7 @@ Modalbox.Methods = {
 			$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.stopObserving(document, "keydown", this.kbdObserver);
 		else
 			Event.stopObserving(document, "keypress", this.kbdObserver);
@@ -436,6 +436,12 @@ Modalbox.Methods = {
 				break;
 			case Event.KEY_UP:
 			case Event.KEY_DOWN:
+			    // Allow up and down arrow keys in text boxes in WebKit browsers,
+                // because these keys can move the cursor.
+                if(Prototype.Browser.WebKit && (["textarea","select"].include(node.tagName.toLowerCase()) ||
+                   (node.tagName.toLowerCase() == "input" && ["text", "password"].include(node.type)))) {
+                    break;
+                }
 			case Event.KEY_PAGEDOWN:
 			case Event.KEY_PAGEUP:
 			case Event.KEY_HOME:
