@@ -1,0 +1,28 @@
+HasTestContents : WOConditional {
+  condition = testContents;
+}
+
+TestContents : WOString {
+  escapeHTML = false;
+  value = testContents;
+}
+
+HasNoTestContents : WOConditional {
+  condition = testContents;
+  negate = true;
+}
+
+TestFiles : WORepetition {
+  list = testFiles;
+  item = testFile;
+}
+
+TestDirName : WOString {
+  value = testDir.name;
+}
+
+Link : WOHyperlink {
+  target = "testFrame";
+  href = testLink;
+  string = testFile.name;
+}

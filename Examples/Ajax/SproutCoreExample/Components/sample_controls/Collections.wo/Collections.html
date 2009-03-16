@@ -1,0 +1,24 @@
+<label class="list-view-label">Class SC.ListView</label>
+<wo:SCScrollView id="list_scroll_view">
+  <wo:SCListView id="list_view" 
+      contentValueKey = "photoName" 
+      contentIconKey = "icon"
+      contentValueEditable = true
+      canReorderContent = true
+      ?content = "SampleControls.contentController.arrangedObjects" 
+      ?selection = "SampleControls.contentController.selection" 
+      />
+</wo:SCScrollView>
+
+<label class="grid-view-label">Class SC.GridView</label>
+<wo:SCScrollView id="grid_scroll_view" outlet = true>
+  <wo:SCGridView id="grid_view" outlet = true 
+      exampleView = "SC.ImageCellView" 
+      contentValueKey = "photoUrl" 
+      canReorderContent = true
+      rowHeight = 120 
+      columnWidth = 160
+      ?content = "SampleControls.contentController.arrangedObjects" 
+      ?selection = "SampleControls.contentController.selection" 
+      />
+</wo:SCScrollView>

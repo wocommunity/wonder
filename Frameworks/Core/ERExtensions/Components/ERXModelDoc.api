@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERXModelDoc.java" wocomponentcontent="false">
+
+        <binding name="object"/>
+        <validation message="'object' is a required binding.">
+            <unbound name="object"/>
+        </validation>
+    </wo>
+</wodefinitions>

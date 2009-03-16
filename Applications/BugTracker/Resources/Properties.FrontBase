@@ -1,0 +1,10 @@
+dbConnectURLGLOBAL=jdbc:FrontBase://localhost/bug
+dbConnectUserGLOBAL=bug
+dbEOPrototypesEntityGLOBAL=EOJDBCFrontBasePrototypes
+er.javamail.adminEmail=foo@localhost.com
+
+BugTracker.processMail=false
+BugTracker.mailStore=pop3
+BugTracker.server=localhost
+BugTracker.user=ak
+BugTracker.password=

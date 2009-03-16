@@ -1,0 +1,22 @@
+{
+    attributes = ({allowsNull = N; name = id; prototypeName = id; }); 
+    attributesUsedForLocking = (id); 
+    className = "er.erxtest.model.Role"; 
+    classProperties = (employees); 
+    externalName = Role; 
+    fetchSpecificationDictionary = {}; 
+    name = Role; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = EmployeeRole; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = roleId; sourceAttribute = id; }); 
+            name = employeeRoles; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {definition = "employeeRoles.employee"; name = employees; }
+    ); 
+}

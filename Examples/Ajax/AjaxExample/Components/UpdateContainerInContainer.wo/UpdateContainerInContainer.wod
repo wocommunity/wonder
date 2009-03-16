@@ -1,0 +1,31 @@
+AjaxExampleComponent : AjaxExampleComponent {
+  title = "Container in Container";
+}
+
+UpdateOuterLink : AjaxUpdateLink {
+  updateContainerID = "pageContent";
+  onSuccess = "searchUpdateStop";
+}
+
+UpdateInnerLink : AjaxUpdateLink {
+	updateContainerID = "searchUpdate";
+}
+
+AjaxUpdateContainer : AjaxUpdateContainer {
+  id = "pageContent";
+  style = "background: red; padding: 10px; margin: 5px; color:white; ";
+}
+
+AjaxUpdateContainer1 : AjaxUpdateContainer {
+  id = "searchUpdate";
+  frequency = "1";
+  style = "background: yellow; padding: 10px; margin: 5px; color:black; ";
+}
+
+Now : WOString {
+  value = now;
+}
+
+Now1 : WOString {
+  value = now;
+}

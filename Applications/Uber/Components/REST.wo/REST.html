@@ -1,0 +1,45 @@
+<wo:UberHeaderFooter title="REST">
+  <wo:UberPanel title="RESTful Companies">
+  	<p id="lastUpdated">Last updated: Never</p>
+  	
+  	<ul id="companies"></ul>
+  	
+  	<p><a href="javascript:void(0)" onclick="fetchCompanies()">fetch companies</a></p>
+  	
+  	<script language="Javascript">
+  		function fetchEmployees(company) {
+	  		new Ajax.Request('/cgi-bin/WebObjects/Uber.woa/rest/Company/' + company.id + '/employees.json', {
+	  			method: 'get',
+	  			asynchronous: true,
+	  			onSuccess: function(transport, json) {
+						var json = transport.responseText.evalJSON(true);
+						alert(company.name + ' has ' + json.length + ' employees.');
+					}
+				});
+  		}
+  		
+  		function fetchCompanies() {
+	  		new Ajax.Request('/cgi-bin/WebObjects/Uber.woa/rest/Company.json', {
+	  			method: 'get',
+	  			asynchronous: true,
+	  			onSuccess: function(transport, json) {
+						var json = transport.responseText.evalJSON(true);
+						var companiesElement = $('companies');
+						$A(companiesElement.childNodes).each(function(e) { e.remove() });
+						json.each(function(company) {
+							var companyItem = document.createElement('li');
+							var companyLink = document.createElement('a');
+							companyLink.innerHTML = company.name;
+							companyLink.href = "javascript:void(0)";
+							companyLink.onclick = function() { fetchEmployees(company) }
+							companyItem.appendChild(companyLink);
+							companiesElement.appendChild(companyItem);
+						});
+						
+						$('lastUpdated').innerHTML = 'Last updated: ' + new Date();
+					}
+				});
+			}
+  	</script>
+  </wo:UberPanel>
+</wo:UberHeaderFooter>

@@ -1,0 +1,66 @@
+BranchButton: WOSubmitButton {
+	action = nextPageAction;
+	value = branch.branchButtonLabel;
+}
+
+Conditional2: ERXNonNullConditional {
+	condition = message;
+}
+
+HasBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+HasExplanationComponent: WOConditional {
+	condition = showExplanationComponent;
+}
+
+HasNextPage: WOConditional {
+	condition = hasNextPage;
+}
+
+HasNoBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+OKButton: ERXSingleButton {
+	action = nextPageAction;
+	value = d2wContext.okButtonLabel;
+}
+
+OKButton2: ERXSingleButton {
+	action = cancelAction;
+	value = d2wContext.cancelButtonLabel;
+}
+
+Repetition1: WORepetition {
+	item = branch;
+	list = branchChoices;
+}
+
+Message: ERXLocalizedString {
+    escapeHTML = false;
+	templateString = message;
+	object = d2wContext;
+}
+
+SwitchComponent3: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+SwitchComponent4: WOSwitchComponent {
+	WOComponentName = d2wContext.explanationComponentName;
+	dataSource = dataSource;
+	object = object;
+	pageConfiguration = d2wContext.explanationConfigurationName;
+}
+
+Title: ERXLocalizedString {
+	value = title;
+}
+

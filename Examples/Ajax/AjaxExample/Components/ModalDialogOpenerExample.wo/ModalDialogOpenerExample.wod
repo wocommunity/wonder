@@ -1,0 +1,150 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Modal Dialog Openers";
+}
+
+Form : WOForm {
+	name = "EmployeeForm";
+	multipleSubmit = true;
+}
+
+
+ValidationMessageContainer: AjaxUpdateContainer {
+	id = "ValidationMessage";
+}
+
+ValidationMessage: WOString {
+	value = errorMessages;
+	escapeHTML = false;
+}
+
+
+UIUpdater1 : AjaxUpdateContainer {
+	id = "UIUpdater1";
+}
+
+FirstName : WOTextField {
+	value = firstName;
+}
+
+LastName : WOTextField {
+	value = lastName;
+}
+
+CompanyEditorDialog: AjaxModalDialog {
+	title = "Select Company";
+	linkTitle = "Change Company";
+	label = employee.company.name;
+	onOpen = rememberCurrentCompany;
+	overlayClose = false;
+	transitions = false;
+	width = -1;
+	onClose = updatePage;
+}
+
+CompanyName : WOPopUpButton {
+	list = companies;
+	item = aCompany;
+	displayString = aCompany.name;
+	selection = selectedCompany;
+}
+
+CancelSelection: AjaxSubmitButton {
+	onClick = "AMD.close();";
+	value = "Cancel";
+}
+
+SelectCompany: AjaxSubmitButton {
+	action = selectCompany;
+	evalScripts = true;
+	value = "Select";
+}
+ 
+Cancel: WOSubmitButton {
+	action = cancelEdit;
+	evalScripts = true;
+	value = "Cancel";
+	formName = "EmployeeForm";
+}
+
+Save: WOSubmitButton {
+	action = saveEdit;
+	evalScripts = true;
+	value = "Save";
+	formName = "EmployeeForm";
+}
+
+Form2 : WOForm {
+	name = "CompanyForm";
+	multipleSubmit = true;
+}
+
+UIUpdater2 : AjaxUpdateContainer {
+	id = "UIUpdater2";
+}
+
+CompanyEditorDialog2: AjaxModalDialog {
+	title = "Select Company";
+	showOpener = false; 
+	label = employee.company.name; 
+	onOpen = rememberCurrentCompany; 
+	overlayClose = false; 
+	transitions = false; 
+	width = -1; 
+	onClose = updatePage;
+	id = "CompanyEditorDialog2ID";
+}
+
+CompanyEditorDialogOpener: AjaxModalDialogOpener {
+	dialogId = "CompanyEditorDialog2ID";
+	title = "Actually Working Dialog";
+	action = willOpen;
+}
+
+CompanyNameString: WOString {
+	value = employee.company.name; 
+}
+
+CompanyListUpdater : AjaxUpdateContainer {
+	id = "CompanyListUpdater";
+}
+
+CompanyRepetition : WORepetition {
+	list = companies;
+	item = aCompany;
+	index = companyIndex;
+}
+
+EditCompanyOpener: AjaxModalDialogOpener {
+	label = aCompany.name; 
+	dialogId = "EditCompanyDialog";
+	action = selectCompanyToEdit;
+	title = editCompanyTitle;
+}
+
+EditCompanyDialog: AjaxModalDialog {
+	id = "EditCompanyDialog";
+	showOpener = false;
+	transitions = false;
+	locked = true;
+	onClose = cleanupAfterCompanyEdit;
+}
+
+ValidationError: WOString {
+	value = validationMessage;
+	escapeHTML = false;
+};
+
+EditableCompanyName: WOTextField {
+	value = companyToEdit.name;
+}
+
+EditCompany: AjaxSubmitButton {
+	action = saveCompanyChanges;
+	value = "Save";
+}
+
+
+DeleteCompany: AjaxSubmitButton {
+	action = deleteCompany;
+	value = "Delete";
+}

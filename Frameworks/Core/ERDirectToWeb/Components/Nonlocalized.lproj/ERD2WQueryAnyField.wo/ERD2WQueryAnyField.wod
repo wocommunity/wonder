@@ -1,0 +1,10 @@
+AnyField: ERDAnyField {
+	displayGroup = displayGroup;
+	displayKey = relationshipContext.displayNameForProperty;
+	key = relationshipContext.propertyKey;
+	formatter = relationshipContext.formatter;
+	keyList = relationshipContextDisplayAttributesKeys;
+	relationshipKey = relationshipKey;
+	selectedKey = selectedKey;
+	sourceEntityName = entity.name;
+}

@@ -1,0 +1,27 @@
+<webobject name = "NavPage">
+  <span class = "error">
+    <webobject name = "ErrorMsg" />
+  </span>
+  <h1>Configuring Host "<webobject name = "HostName" />"</h1>
+  <webobject name = "HostSettingsForm">
+    The Host Type  determines the Path and OutputPath settings for an instance. The defaults are set at the application level. 
+    Changing the Type of this host will not automatically cause instances to update their Path and OutputPath settings. 
+    The new settings can be pushed from the Applications page.
+    <br />
+    <br />
+    Select the new Host Type:
+    <webobject name = "HostTypePopup" />
+    <br></br>
+    <br></br>
+    <webobject name = "HostConfigureButton" />
+  </webobject>
+  <hr></hr>
+  <h1>Synchronize Host "<webobject name = "HostName" />"</h1>
+   <webobject name = "HostSyncForm">
+    If this host is behaving strangely, it is possible that the host's configuration 
+    information is out of sync with the rest of your site or Monitor. Click the button to try to resync configuration information.
+    <br />
+    <br></br>
+    <webobject name = "HostSyncButton" />
+  </webobject>
+</webobject>

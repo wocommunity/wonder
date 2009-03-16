@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent="false" class="ERCaptcha.java">
+		<binding name = "validated"/>
+		<binding name = "resetText"/>
+	</wo>
+</wodefinitions>

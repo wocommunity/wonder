@@ -1,0 +1,140 @@
+BackLink2: WOHyperlink {
+	action = backAction;
+}
+
+NotIsListEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+IsListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+D2wContextHasPrinterFriendlyVersion: WOConditional {
+	condition = d2wContext.hasPrinterFriendlyVersion;
+}
+
+ERDBannerComponent2: ERDBannerComponent {
+	bannerFileName = d2wContext.bannerFileName;
+	d2wContext = d2wContext;
+	showBanner = d2wContext.showBanner;
+	framework = "JavaDirectToWeb";
+}
+
+ERPrinterButton: ERDPrinterButton {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+	task = "list";
+}
+
+ERXNonNullConditional1: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
+ERXNonNullConditional2: WOConditional {
+	condition = hasBranchChoices;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+Form1: WOForm {
+	multipleSubmit = true;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+HiddenField: WOHiddenField {
+	value = dummy;
+}
+
+HideReturnOnSelect2: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+	negate = true;
+}
+
+ListPageRepetition2: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+NavBar1: WOSwitchComponent {   
+//	bgcolor = "#ff0000"; // backgroundColorForTable;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+//	textColor = d2wContext.textColor;
+        d2wContext = d2wContext;
+	bgcolor = d2wContext.backgroundColorForTable;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+BranchChoices: WORepetition {
+	item = branch;
+	list = branchChoices;
+}
+
+ReturnButton2: WOImage {
+	alt = "Returns to the previous page";
+	border = 0;
+	filename = "ReturnMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	name = "Returns to the previous page";
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+ShowCancel2: WOConditional {
+	condition = showCancel;
+}
+
+ShowCancel3: WOConditional {
+	condition = d2wContext.showActions;
+}
+
+BackActionButton: WOSubmitButton {
+	action = backAction;
+	value = d2wContext.pickButtonLabel;
+}
+
+NextPageButton: WOSubmitButton {
+	action = nextPage;
+	value = "Cancel";
+}
+
+BackActionButton1: WOSubmitButton {
+	action = backAction;
+	value = branch.branchButtonLabel;
+}
+
+SelectAllButton: WOSubmitButton {
+	action = selectAll;
+	value = "Select All";
+}
+
+UnselectAllButton: WOSubmitButton {
+	action = unselectAll;
+	value = "Select None";
+}
+

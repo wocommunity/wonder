@@ -1,0 +1,12 @@
+DirectorEdit: ERXToManyRelationship {
+	destinationDisplayKey = "firstName";
+	destinationSortKey = "firstName";
+	relationshipKey = ^key;
+	sourceEntityName = ^object.entityName;
+	sourceObject = ^object;
+	uiStyle = "browser";
+}
+
+Hyperlink1: WOHyperlink {
+	action = newDirector;
+}

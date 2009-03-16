@@ -1,0 +1,4 @@
+TabName: WOString {
+	value = ^displayNameForTabName;
+}
+

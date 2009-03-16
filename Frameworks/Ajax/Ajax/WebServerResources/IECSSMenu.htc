@@ -1,0 +1,38 @@
+<attach event="onmouseover" handler="ieCssRollOver" />
+<attach event="onmouseout" handler="ieCssRollOff" />
+
+<script type="text/javascript">
+
+//in IE 5.5-, when you apply a width to UL, list-style-position: inside; is forced with its LIs
+if( !document.compatMode && navigator.userAgent.indexOf( 'Win' ) + 1 ) { element.style.marginLeft = -16; }
+
+function ieCssRollOver() {
+	//change the colour
+	element.className += (element.className?' ':'') + 'CSStoHighlight';
+	//change display of child
+	for( var x = 0; element.childNodes[x]; x++ ){
+		if( element.childNodes[x].tagName == 'UL' ) { 
+			element.childNodes[x].className += (element.childNodes[x].className?' ':'') + 'CSStoShow'; 
+//			element.childNodes[x].style.color = "blue";
+		}
+		if( element.childNodes[x].tagName == 'A' ) { 
+			element.childNodes[x].className += (element.childNodes[x].className?' ':'') + 'CSStoHighLink'; 
+		}
+	}
+}
+
+function ieCssRollOff() {
+	//change the colour
+	element.className = element.className.replace(/ ?CSStoHighlight$/,'');
+	//change display of child
+	for( var x = 0; element.childNodes[x]; x++ ){
+		if( element.childNodes[x].tagName == 'UL' ) { 
+			element.childNodes[x].className = element.childNodes[x].className.replace(/ ?CSStoShow$/,''); 
+		}
+		if( element.childNodes[x].tagName == 'A' ) { 
+			element.childNodes[x].className = element.childNodes[x].className.replace(/ ?CSStoHighLink$/,''); 
+		}
+	}
+}
+
+</script>

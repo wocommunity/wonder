@@ -1,0 +1,96 @@
+BranchButton: WOSubmitButton {
+	action = nextPageAction;
+	value = branch.branchButtonLabel; //VALID
+}
+
+DebuggingHelp: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+ERDConfirmMessage: ERDConfirmMessage {
+	confirmMessageManditory = d2wContext.confirmMessageManditory;
+	dataSource = dataSource;
+	object = object;
+	confirmMessageKey = d2wContext.confirmMessageKey;
+	confirmRows = d2wContext.confirmRows;
+	confirmMessageTextfieldSize = d2wContext.confirmMessageTextfieldSize;
+	confirmMessageManditoryErrorMessage = d2wContext.confirmMessageManditoryErrorMessage;
+	confirmMessageExplanation = d2wContext.confirmMessageExplanation;
+	confirmMessageIsTextfield = d2wContext.confirmMessageIsTextfield;
+	confirmMessageTextfieldMaxlength = d2wContext.confirmMessageTextfieldMaxlength;
+}
+
+Errors: ERXErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
+}
+
+ExclamationImage: WOImage {
+	alt = "!";
+	border = "0";
+	filename = "exclamation.gif";
+	framework = "JavaWOExtensions";
+	height = "32";
+	name = "!";
+	width = "32";
+}
+
+Form: WOForm {
+	multipleSubmit = true;
+}
+
+HasBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+HasMessage: ERXNonNullConditional {
+	condition = message;
+}
+
+HasNoBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
+Message: WOString {
+	value = message;
+	escapeHTML = false;
+}
+
+OKButton: ERXSingleButton {
+	action = nextPageAction;
+	value = d2wContext.okButtonLabel;
+}
+
+OKButton2: ERXSingleButton {
+	action = cancelAction;
+	value = d2wContext.cancelButtonLabel;
+}
+
+Repetition1: WORepetition {
+	item = branch;
+	list = branchChoices;
+	checkHashCodes = false;
+}
+
+SwitchComponent3: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+explanationComponentName: WOSwitchComponent {
+	WOComponentName = d2wContext.explanationComponentName;
+	dataSource = dataSource;
+	object = object;
+	pageConfiguration = d2wContext.explanationConfigurationName;
+	settings = settings;
+}
+
+shouldProvideConfirmMessage: WOConditional {
+	condition = d2wContext.shouldProvideConfirmMessage;
+}
+
+showExplanationComponent: WOConditional {
+	condition = showExplanationComponent;
+}

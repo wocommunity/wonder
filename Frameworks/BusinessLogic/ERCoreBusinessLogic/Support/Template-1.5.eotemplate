@@ -1,0 +1,160 @@
+<$comment
+EO Template for use by "eogenerator" based upon MiscMerge engine.
+You may customize this file to modify the templates generated
+by this tool.  See the MiscMerge documentation for a description
+of the parsing language.  The engine gets passed this file and an
+EOEntity to process, so the methods used must be ones that an
+EOEntity can respond to.
+
+BE SURE NOT TO INCLUDE DATES IN THIS FILE.  Since the "eogenerator"
+tool tries to compare the newly generated file with the old file,
+adding dates to this file will guarantee the old file gets
+overridden by the new file, forcing a recompilation of your EO.
+$>// _<$classNameWithoutPackage$>.java
+// 
+// Created by eogenerator
+// DO NOT EDIT.  Make changes to <$classNameWithoutPackage$>.java instead.
+<$foreach package classPackage do$>package <$package$>;<$endforeach do$>
+import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import er.extensions.*;
+import java.util.*;
+import java.math.BigDecimal;
+<$if (javaParentClassName == "EOGenericRecord")$><$
+    if userInfo.superclass.length > 0$><$
+        set parentName = userInfo.superclass$><$
+    else$><$
+        if (coreSuperClass.length > 0)$><$
+    		set parentName = coreSuperClass$><$
+            set clazzName = coreSuperClass$><$
+        else$><$
+    		set parentName = javaParentClassName$><$
+            set clazzName = "EOGenericRecord"$><$
+        endif$><$
+    endif$><$
+else$><$
+    set parentName = javaParentClassName$><$
+    set clazzName = parentEntity.name$><$
+endif$>
+public abstract class _<$classNameWithoutPackage$> extends <$parentName$> {
+
+    public static final String ENTITY = "<$classNameWithoutPackage$>";
+    
+    public interface Key <$if parentName != coreSuperClass $>extends <$parentName$>.Key<$endif$> {<$foreach key classProperties.@reversedArray do$>
+        public static final String <$key.name.uppercaseUnderbarString$> = "<$key.name$>";<$endforeach do
+$>  
+    }
+
+    public static abstract class _<$classNameWithoutPackage$>Clazz extends <$clazzName$>.<$clazzName$>Clazz {
+    
+    	public <$classNameWithoutPackage$> create<$classNameWithoutPackage$>(EOEditingContext editingContext<$foreach Attribute classAttributes.@sortedNameArray do$><$if !Attribute.allowsNull$>, <$Attribute.javaValueClassName$> <$Attribute.name$><$endif$><$endforeach do$><$foreach Attribute parentEntity.classAttributes.@sortedNameArray do$><$if !Attribute.allowsNull$><$set RestrictingQualifierKey = false$><$foreach QualifierKey restrictingQualifier.allQualifierKeys do$><$if Attribute.name = QualifierKey$><$set RestrictingQualifierKey = true$><$endif$><$endforeach do$><$if RestrictingQualifierKey = false$>, <$Attribute.javaValueClassName$> <$Attribute.name$><$endif$><$endif$><$endforeach do$><$foreach ToOneRelationship classToOneRelationships.@sortedNameArray do$><$if ToOneRelationship.isMandatory$>, <$ToOneRelationship.destinationEntity.referenceJavaClassName$> <$ToOneRelationship.name$><$endif$><$endforeach do$><$foreach ToOneRelationship parentEntity.classToOneRelationships.@sortedNameArray do$><$if ToOneRelationship.isMandatory$>, <$ToOneRelationship.destinationEntity.referenceJavaClassName$> <$ToOneRelationship.name$><$endif$><$endforeach do$>) {
+	   		<$classNameWithoutPackage$> eo = (<$classNameWithoutPackage$>)EOUtilities.createAndInsertInstance(editingContext, <$classNameWithoutPackage$>.ENTITY);<$foreach Attribute classAttributes.@sortedNameArray do$><$if !Attribute.allowsNull$>
+	    	eo.set<$Attribute.name.initialCapitalString$>(<$Attribute.name$>);<$endif$><$endforeach do$><$foreach ToOneRelationship classToOneRelationships.@sortedNameArray do$><$if ToOneRelationship.isMandatory$>
+	    	eo.set<$ToOneRelationship.name.initialCapitalString$>(<$ToOneRelationship.name$>);<$endif$><$endforeach do$><$foreach Attribute parentEntity.classAttributes.@sortedNameArray do$><$if !Attribute.allowsNull$><$set RestrictingQualifierKey = false$><$foreach QualifierKey restrictingQualifier.allQualifierKeys do$><$if Attribute.name = QualifierKey$><$set RestrictingQualifierKey = true$><$endif$><$endforeach do$><$if RestrictingQualifierKey = false$>
+	    	eo.set<$Attribute.name.initialCapitalString$>(<$Attribute.name$>);<$endif$><$endif$><$endforeach do$><$foreach ToOneRelationship parentEntity.classToOneRelationships.@sortedNameArray do$><$if ToOneRelationship.isMandatory$>
+	    	eo.set<$ToOneRelationship.name.initialCapitalString$>(<$ToOneRelationship.name$>);<$endif$><$endforeach do$>
+	    	return eo;
+ 		}
+<$foreach FetchSpec javaBeautifiedFetchSpecificationDictionaries.@sortedNameArray do$>
+        public NSArray objectsFor<$FetchSpec.niceName$>(EOEditingContext context<$foreach Binding FetchSpec.bindings.@sortedNameArray do2$>, <$Binding.codeType$><$Binding.name$>Binding<$endforeach do2$>) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("<$FetchSpec.fetchName$>", "<$name$>");
+<$if FetchSpec.bindings.@count > 0$>
+            NSMutableDictionary bindings = new NSMutableDictionary();
+<$foreach Binding FetchSpec.bindings do2$>
+            if (<$Binding.name$>Binding != null)
+                bindings.setObjectForKey(<$Binding.name$>Binding, "<$Binding.name$>");<$endforeach do2$>
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+<$endif$>
+            return context.objectsWithFetchSpecification(spec);
+        }
+<$endforeach do$><$foreach spec specs do$><$if spec.name.isFilterString $>
+        public NSArray <$spec.name.initialLowercaseString$><$if spec.object.qualifier.bindingKeys.count > 0 $>With<$foreach key spec.object.qualifier.bindingKeys do$><$key.initialCapitalString$><$endforeach do$><$endif$>(NSArray array<$foreach key spec.object.qualifier.bindingKeys do$>, Object <$key$><$endforeach do$>) {
+            <$if spec.object.qualifier.bindingKeys.count > 0 
+            $>NSMutableDictionary _dict = new NSMutableDictionary(<$specs.object.qualifier.bindingKeys.count$>);
+            <$foreach key spec.object.qualifier.bindingKeys do$>
+            if(<$key$> != null) _dict.setObjectForKey( <$key$>, "<$key$>");<$endforeach do$>
+            return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, "<$classNameWithoutPackage$>", "<$spec.name$>", _dict);<$else
+            $>return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, "<$classNameWithoutPackage$>", "<$spec.name$>", null);<$endif$>
+        }<$else$>
+        public NSArray <$spec.name.initialLowercaseString$><$if spec.object.qualifier.bindingKeys.count > 0 $>With<$foreach key spec.object.qualifier.bindingKeys do$><$key.initialCapitalString$><$endforeach do$><$endif$>(EOEditingContext ec<$foreach key spec.object.qualifier.bindingKeys do$>, Object <$key$><$endforeach do$>) {
+            <$if spec.object.qualifier.bindingKeys.count > 0 
+            $>NSMutableDictionary _dict = new NSMutableDictionary(<$specs.object.qualifier.bindingKeys.count$>);
+            <$foreach key spec.object.qualifier.bindingKeys do$>
+            if(<$key$> != null) _dict.setObjectForKey( <$key$>, "<$key$>");<$endforeach do$>
+            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "<$classNameWithoutPackage$>", "<$spec.name$>", _dict);<$else
+            $>return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "<$classNameWithoutPackage$>", "<$spec.name$>", null);<$endif$>
+        }<$endif$>
+<$endforeach do$>
+    }
+
+<$foreach attribute classAttributes.@reversedArray do$><$if attribute.javaValueClassName eq 'Boolean' and attribute.valueType eq 'c'$><$if attribute.userInfo.developerCommentString.length > 0 $>
+        /** <$attribute.userInfo.developerCommentString$>
+         */<$endif$>
+    public boolean <$attribute.name$>() {
+        return ((Boolean)storedValueForKey(Key.<$attribute.name.uppercaseUnderbarString$>)).booleanValue();
+    }
+    public void set<$attribute.name.initialCapitalString$>(boolean aValue) {
+        takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.<$attribute.name.uppercaseUnderbarString$>);
+    }
+<$elseif attribute.userInfo.ERXConstantClassName.length > 0$><$if attribute.userInfo.developerCommentString.length > 0 $>
+        /** <$attribute.userInfo.developerCommentString$>
+         */<$endif$>
+    public <$attribute.userInfo.ERXConstantClassName$> <$attribute.name$>() {
+        Number value = (Number)storedValueForKey(Key.<$attribute.name.uppercaseUnderbarString$>);
+        if(!(value instanceof <$attribute.userInfo.ERXConstantClassName$>) && value != null) {
+            System.err.println("Got wrong value: " + value + " in " + toString());
+            value = ERXConstant.constantForClassNamed(value.intValue(), <$attribute.userInfo.ERXConstantClassName$>.class.getName());
+        }
+        return (<$attribute.userInfo.ERXConstantClassName$>)value;
+    }
+    public void set<$attribute.name.initialCapitalString$>(<$attribute.userInfo.ERXConstantClassName$> aValue) {
+        takeStoredValueForKey(aValue, Key.<$attribute.name.uppercaseUnderbarString$>);
+    }
+<$elseif attribute.factoryMethodArgumentType > 0 $><$if attribute.userInfo.developerCommentString.length > 0 $>
+        /** <$attribute.userInfo.developerCommentString$>
+         */<$endif$>
+    public <$attribute.javaValueClassName$> <$attribute.name$>() {
+        <$attribute.javaValueClassName$> value = (<$attribute.javaValueClassName$>)storedValueForKey(Key.<$attribute.name.uppercaseUnderbarString$>);
+        return value;
+    }
+    public void set<$attribute.name.initialCapitalString$>(<$attribute.javaValueClassName$> aValue) {
+        takeStoredValueForKey(aValue, Key.<$attribute.name.uppercaseUnderbarString$>);
+    }
+<$else$><$if attribute.userInfo.developerCommentString.length > 0 $>
+        /** <$attribute.userInfo.developerCommentString$>
+         */<$endif$>
+    public <$attribute.javaValueClassName$> <$attribute.name$>() {
+        return (<$attribute.javaValueClassName$>)storedValueForKey(Key.<$attribute.name.uppercaseUnderbarString$>);
+    }
+    public void set<$attribute.name.initialCapitalString$>(<$attribute.javaValueClassName$> aValue) {
+        takeStoredValueForKey(aValue, Key.<$attribute.name.uppercaseUnderbarString$>);
+    }
+<$endif$><$endforeach do
+$><$foreach ToOneRelationship classToOneRelationships.@reversedArray do$><$if 
+ToOneRelationship.userInfo.developerCommentString.length > 0 $>
+        /** <$ToOneRelationship.userInfo.developerCommentString$>
+         */<$endif$>
+    public <$ToOneRelationship.destinationEntity.referenceJavaClassName$> <$ToOneRelationship.name$>() {
+        return (<$ToOneRelationship.destinationEntity.referenceJavaClassName$>)storedValueForKey(Key.<$ToOneRelationship.name.uppercaseUnderbarString$>);
+    }
+    public void set<$ToOneRelationship.name.initialCapitalString$>(<$ToOneRelationship.destinationEntity.referenceJavaClassName$> object) {
+        takeStoredValueForKey(object, Key.<$ToOneRelationship.name.uppercaseUnderbarString$>);
+    }
+
+<$endforeach do
+$><$foreach ToManyRelationship classToManyRelationships.@reversedArray 
+do$><$if ToManyRelationship.userInfo.developerCommentString.length > 0 $>
+        /** <$ToManyRelationship.userInfo.developerCommentString$>
+         */<$endif$>
+    public NSArray <<$ToManyRelationship.destinationEntity.referenceJavaClassName$>> <$ToManyRelationship.name$>() {
+        return (NSArray<<$ToManyRelationship.destinationEntity.referenceJavaClassName$>>)storedValueForKey(Key.<$ToManyRelationship.name.uppercaseUnderbarString$>);
+    }
+    public void addTo<$ToManyRelationship.name.initialCapitalString$>(<$ToManyRelationship.destinationEntity.referenceJavaClassName$> object) {
+        includeObjectIntoPropertyWithKey(object, Key.<$ToManyRelationship.name.uppercaseUnderbarString$>);
+    }
+    public void removeFrom<$ToManyRelationship.name.initialCapitalString$>(<$ToManyRelationship.destinationEntity.referenceJavaClassName$> object) {
+        excludeObjectFromPropertyWithKey(object, Key.<$ToManyRelationship.name.uppercaseUnderbarString$>);
+    }
+
+<$endforeach do$>}

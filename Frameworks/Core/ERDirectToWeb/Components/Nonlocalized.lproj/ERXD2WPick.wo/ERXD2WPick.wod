@@ -1,0 +1,12 @@
+D2WSwitchComponent: ERD2WSwitchComponent {
+	_dynamicPage = ^pageConfiguration;
+	_entityName = ^entityName;
+	_task = "list";
+	_unroll = YES;
+	dataSource = ^dataSource;
+	displayKeys = ^displayKeys;
+	nextPage = ^nextPage;
+	nextPageDelegate = ^branchDelegate;
+	selectedObjects = ^selectedObjects;
+}
+

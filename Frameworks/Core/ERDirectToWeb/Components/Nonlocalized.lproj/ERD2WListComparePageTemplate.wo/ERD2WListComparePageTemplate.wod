@@ -1,0 +1,122 @@
+AttributeDisplay: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	_componentUnroll = true;
+	_unroll = true;
+	localContext = d2wContext;
+	object = object;
+}
+
+BackLink: WOHyperlink {
+	action = backAction;
+}
+
+BackLink2: WOHyperlink {
+	action = backAction;
+}
+
+Conditional1: WOConditional {
+	condition = d2wContext.hasPrinterFriendlyVersion;
+}
+
+Conditional2: WOConditional {
+	condition = showDisplayProperty;
+}
+
+Conditional3: WOConditional {
+	condition = showDisplayProperty;
+	negate = true;
+}
+
+ERDBannerComponent1: ERDBannerComponent {
+	bannerFileName = d2wContext.bannerFileName;
+	d2wContext = d2wContext;
+	framework = "JavaDirectToWeb";
+	showBanner = d2wContext.showBanner;
+}
+
+ERPrinterButton: ERDPrinterButton {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+	task = "list";
+}
+
+ERXRepeatingTable: ERXRepeatingTable {
+	item = object;
+	list = compareList;
+	repetetions = displayPropertyKeys.count;
+	maxColumns = compareList.count;
+    row=d2wPropertyKeyIndex;
+    col=col;
+    align = "right";
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+HideReturnOnSelect1: WOConditional {
+	_unroll = true;
+	condition = isSelectingNotTopLevel;
+	negate = true;
+}
+
+HideReturnOnSelect2: WOConditional {
+	_unroll = true;
+	condition = isSelectingNotTopLevel;
+	negate = true;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+NavBar: ERXBatchNavigationBar {
+	bgcolor = backgroundColorForTable;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+	textColor = d2wContext.textColor;
+	width = 550;
+        d2wContext = d2wContext;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+ReturnButton: WOImage {
+	alt = "Returns to the previous page";
+	border = "0";
+	filename = "ReturnMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	name = "Returns to the previous page";
+}
+
+ReturnButton2: WOImage {
+	alt = "Returns to the previous page";
+	border = 0;
+	filename = "ReturnMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	name = "Returns to the previous page";
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+ShowCancel2: WOConditional {
+	condition = showCancel;
+}
+
+String1: WOString {
+	value = displayNameForProperty;
+}
+

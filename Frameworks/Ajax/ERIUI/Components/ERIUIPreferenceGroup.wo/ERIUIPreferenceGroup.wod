@@ -1,0 +1,10 @@
+WOComponentContent : WOComponentContent {
+}
+
+HasTitle : ERXWOConditional {
+  condition = ^title;
+}
+
+Title : WOString {
+  value = ^title;
+}

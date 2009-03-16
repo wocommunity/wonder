@@ -1,0 +1,5 @@
+String : WOString {
+    value = value;
+    valueWhenEmpty = ^valueWhenEmpty;
+    escapeHTML = ^escapeHTML;
+}

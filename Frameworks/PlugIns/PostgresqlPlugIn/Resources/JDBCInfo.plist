@@ -1,0 +1,2860 @@
+{
+	"NON_NULLABLE_COLUMNS" = "T";
+	"DRIVER_NAME" = "PostgreSQL Native Driver";
+	"DBMS_NAME" = "PostgreSQL";
+	"typeInfo" = {
+		"attributes" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"key_column_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_path" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_authid" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_text" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_oidvector" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"sql_sizing" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"timetz" = {
+			"defaultJDBCType" = (
+				"TIME"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "6";
+		};
+		"pg_toast_10742" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"sql_sizing_profiles" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_10747" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"timestamptz" = {
+			"defaultJDBCType" = (
+				"TIMESTAMP"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "6";
+		};
+		"pg_stat_database" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_inherits" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"opaque" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"int2" = {
+			"defaultJDBCType" = (
+				"SMALLINT"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_interval" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"int4" = {
+			"defaultJDBCType" = (
+				"INTEGER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_views" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"int8" = {
+			"defaultJDBCType" = (
+				"BIGINT"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_refcursor" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_attrdef" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_auth_members" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"leloguser" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"lelogsourceclass" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"cstring" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_char" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"path" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_group" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_25909" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_10757" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"view_column_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"routine_privileges" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"sql_packages" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"abstime" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"domains" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_shdepend" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"unknown" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"view_routine_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_bit" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_stat_user_indexes" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"record" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_stat_activity" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_cidr" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_attribute" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_amop" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"point" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"bytea" = {
+			"defaultJDBCType" = (
+				"BINARY"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_statio_user_tables" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_timestamptz" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_conversion" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"sql_languages" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_locks" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"tables" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_10752" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_shadow" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"lseg" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"column_privileges" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"views" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"leloglevel" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"routines" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_roles" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_float4" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"varchar" = {
+			"defaultJDBCType" = (
+				"VARCHAR"
+			);
+			"createParams" = "1";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "10485760";
+		};
+		"_float8" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_shdescription" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"character_data" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_macaddr" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_type" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_10767" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"varbit" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "83886080";
+		};
+		"pg_cast" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_index" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"name" = {
+			"defaultJDBCType" = (
+				"VARCHAR"
+			);
+			"createParams" = "1";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_description" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"constraint_table_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"tid" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_point" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"numeric" = {
+			"defaultJDBCType" = (
+				"NUMERIC"
+			);
+			"createParams" = "2";
+			"maxScale" = "1000";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "1000";
+		};
+		"inet" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_25914" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_stat_sys_tables" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_timezone_abbrevs" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"aclitem" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_regprocedure" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_language" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"bpchar" = {
+			"defaultJDBCType" = (
+				"CHAR"
+			);
+			"createParams" = "1";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "10485760";
+		};
+		"pg_toast_10762" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_regproc" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_stats" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_rules" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"box" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_statio_sys_tables" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_numeric" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_25904" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_indexes" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_stat_all_indexes" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"role_usage_grants" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"internal" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"cid" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"regprocedure" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"money" = {
+			"defaultJDBCType" = (
+				"DOUBLE"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_database" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"smgr" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_timezone_names" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"time" = {
+			"defaultJDBCType" = (
+				"TIME"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "6";
+		};
+		"circle" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_date" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_line" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_xid" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_stat_sys_indexes" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_regtype" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_25934" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"lelogrecord" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"enabled_roles" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"check_constraint_routine_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"parameters" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_1255" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"regoper" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_am" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"bool" = {
+			"defaultJDBCType" = (
+				"BIT"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"domain_udt_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_proc" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"table_privileges" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"bigserial" = {
+			"defaultJDBCType" = (
+				"BIGINT"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"leloglogger" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_1260" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_1262" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"column_udt_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_abstime" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"view_table_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_int2" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_int4" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"column_domain_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_int8" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_oid" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_box" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"bit" = {
+			"defaultJDBCType" = (
+				"BIT"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "83886080";
+		};
+		"pg_user" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"timestamp" = {
+			"defaultJDBCType" = (
+				"TIMESTAMP"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "6";
+		};
+		"pg_toast_25929" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_constraint" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"int2vector" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"administrable_role_authorizations" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"applicable_roles" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"text" = {
+			"defaultJDBCType" = (
+				"VARCHAR"
+			);
+			"createParams" = "1";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_amproc" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_class" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_timetz" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_statio_sys_sequences" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_stat_user_tables" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"regoperator" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"tinterval" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"polygon" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"domain_constraints" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"information_schema_catalog_name" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"reltime" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_tablespace" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_rewrite" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"table_constraints" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_stat_all_tables" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_lseg" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"triggered_update_columns" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"sql_identifier" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"leloghost" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"char" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_2609" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"float4" = {
+			"defaultJDBCType" = (
+				"REAL"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_bytea" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"float8" = {
+			"defaultJDBCType" = (
+				"DOUBLE"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_aclitem" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_prepared_xacts" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_statio_all_tables" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"language_handler" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"regclass" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_statio_all_indexes" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"lelogsourcemethod" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_name" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_settings" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_autovacuum" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_25924" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_trigger" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"data_type_privileges" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_inet" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"cidr" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"element_types" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_aggregate" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_regoperator" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_statio_user_sequences" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_varchar" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_2396" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"check_constraints" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_regclass" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_int2vector" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_statistic" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"oidvector" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"sql_features" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"anyelement" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"role_table_grants" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"xid" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"void" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_cursors" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_timestamp" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"role_routine_grants" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_namespace" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_regoper" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"sequences" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_varbit" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_reltime" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_2604" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"refcursor" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_2606" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_time" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_tables" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"date" = {
+			"defaultJDBCType" = (
+				"DATE"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_depend" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"schemata" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"columns" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"trigger" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_tinterval" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"triggers" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_pltemplate" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"sql_implementation_info" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"macaddr" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_money" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_bpchar" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"sql_parts" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_bool" = {
+			"defaultJDBCType" = (
+				"2003"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"oid" = {
+			"defaultJDBCType" = (
+				"INTEGER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_2618" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_2619" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"regtype" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_tid" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"time_stamp" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"any" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"role_column_grants" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_statio_sys_indexes" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_25919" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_circle" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_prepared_statements" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"usage_privileges" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"serial" = {
+			"defaultJDBCType" = (
+				"INTEGER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"constraint_column_usage" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"interval" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "6";
+		};
+		"pg_statio_user_indexes" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"regproc" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"cardinal_number" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_operator" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"anyarray" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_opclass" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_largeobject" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"line" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_toast_10737" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_statio_all_sequences" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"eo_pk_table" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_polygon" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"pg_listener" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"referential_constraints" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+		"_cid" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "0";
+		};
+	};
+	"IDENTIFIER_QUOTE_STRING" = "\"";
+	"ANSI92_CONFORMANCE" = "ANSI92EntryLevel";
+	"DRIVER_VER" = "PostgreSQL 8.2 JDBC3 with SSL (build 507)";
+	"STRING_FUNCTIONS" = "ascii,char,concat,lcase,left,length,ltrim,repeat,rtrim,space,substring,ucase,replace";
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxJSONClient" wocomponentcontent="false">
+	<binding name="callback"/>
+    <binding name="component"/>
+        <binding defaults="Boolean" name="global"/>
+        <binding name="instance"/>
+    </wo>
+</wodefinitions>

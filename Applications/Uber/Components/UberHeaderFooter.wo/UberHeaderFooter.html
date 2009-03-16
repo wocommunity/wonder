@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title><wo:str value="$^title" /></title>
+    <wo:ERXStyleSheet framework="app" filename="uber.css" />
+    <wo:ERXStyleSheet framework="ERExtensions" filename="ERXFlickrBatchNavigation.css"/>
+  </head>
+  <body>
+  
+  <div id="page">
+    <div id="header">
+      <h1><span class="title"><wo:str value="$^title" escapeHTML="$false"/></span> <wo:WOHyperlink actionClass="PageAction" directActionName="Main">&uuml;ber</wo:WOHyperlink></h1>
+    </div>
+  
+  	<div id="content">
+  		<wo:WOComponentContent />
+  	</div>
+
+    <div id="footer">
+    	&nbsp;
+    </div>
+ 	</div>
+
+	<wo:WOLToolBar expanded="$true"/>  
+  </body>
+</html>

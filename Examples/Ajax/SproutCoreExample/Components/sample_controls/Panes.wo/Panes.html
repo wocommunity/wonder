@@ -1,0 +1,49 @@
+<h1>Panes</h1>
+<p>
+    Panes, make it easy to display overlays such as dialogs, popup-menus and
+    pickers.  To use one of the predefined panes shown below in your own 
+    application, you just need to create a new with the :pane property set to 
+    the type of pane you want the view to display in.  You can also create 
+    your own types of panes by subclassing SC.PaneView or any of its children.
+</p>
+<div class="buttons">
+  <wo:SCButtonView title="Show Panel"  action = "SampleControls.paneController.showPanel" />
+  <wo:SCButtonView title="Show Dialog" action = "SampleControls.paneController.showDialog" />
+  <wo:SCButtonView title="Show Picker" action = "SC.page.pickerPane.popup" />
+</div>
+
+<wo:SCView id="dialog_pane" pane="dialog" visible = false width = 400 >
+<h1>Dialog</h1>
+<p>
+  Dialogs should be used for system alert messages that need to block all other interaction with the application such as when the user"s connection to the internet is down or simple OK/Cancel type messages.
+</p>
+<div class="buttons">
+  <wo:SCButtonView
+    title = "Close" 
+    width = 60
+    default = true
+    action = "SampleControls.paneController.hideDialog" />
+</div>
+</wo:SCView>
+
+<wo:SCView id="panel_pane" pane = "panel" visible = false width = 400 >
+<h1>Panel</h1>
+<p>
+  Panels are used to present modal parts of the application such as preferences.  Unlike dialogs, you typically expect the user to interact with the controls on a panel for awhile and then exit.
+</p>
+<div class="buttons">
+  <wo:SCButtonView
+    title = "Close"
+    default = true
+    width = 60
+    action = "SampleControls.paneController.hidePanel"/>
+</div>
+</wo:SCView>
+
+<wo:SCView id="picker_pane" pane = "picker" visible = false width = 300>
+<h1>Pickers</h1>
+<p>
+  Pickers are semi-modal interfaces used to select some content or set some temporary options.  In the web-based UI world, this is often a better way of helping users edit some properties than floating palettes or other "window-like" interfaces.
+</p>
+<p>To close this picker just click anywhere outside of it.</p>
+</wo:SCView>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxPing" wocomponentcontent="true">
+		<binding name="cacheKey"/>
+		<binding name="targetContainerID"/>
+		<binding name="frequency"/>
+	<binding name="onBeforeUpdate"/>
+    <binding name="id"/>
+    <binding defaults="Boolean" name="stop"/>
+    </wo>
+</wodefinitions>

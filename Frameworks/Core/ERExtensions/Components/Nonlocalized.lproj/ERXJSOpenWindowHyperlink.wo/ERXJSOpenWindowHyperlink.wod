@@ -1,0 +1,35 @@
+IsDirectAction: WOConditional {
+	condition = isDirectAction;
+}
+
+IsComponentAction: WOConditional {
+	condition = isDirectAction;
+	negate = true;
+}
+
+ComponentActionContent: WOComponentContent {}
+DirectActionContent: WOComponentContent {}
+
+ComponentActionLink: WOHyperlink {
+	onclick=openWindow;
+	class = ^linkClass;
+	string = ^string;
+	action = action;
+	target = ^target;
+	fragmentIdentifier = ^fragment;
+	disabled = ^disabled;
+	id = ^id;
+}
+
+DirectActionLink: WOHyperlink {
+	class = ^linkClass;
+	onclick=openWindow;
+	string = ^string;
+	target = ^target;
+	actionClass = ^actionClass;
+	queryDictionary = ^queryDictionary;
+	directActionName = ^directActionName;
+	?wosid=false;
+	disabled = ^disabled;
+	id = ^id;
+}

@@ -1,0 +1,56 @@
+
+{
+    attributes = 
+    (
+       
+       {
+           columnName = value;
+           name = id;
+           valueClassName = NSNumber;
+           valueType = c;
+       }, 
+       
+       {
+           columnName = value;
+           name = related;
+           valueClassName = NSNumber;
+           valueType = c;
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       id, 
+       related
+    );
+    className = Record;
+    classProperties = 
+    (
+       value
+    );
+    externalName = ToOneRelation;
+    internalInfo = 
+    {};
+    name = ToOneRelation;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    relationships = 
+    (
+       
+       {
+           destination = ToOneRelation;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = related;
+              }
+           );
+           name = value;
+       }
+    );
+}

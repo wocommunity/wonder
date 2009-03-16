@@ -1,0 +1,22 @@
+<wo:PageWrapper>
+
+<wo:SCJavaScript group="hello_world" framework="app" key="pageJavaScript" />
+<wo:SCStyleSheet group="hello_world" framework="app" key="@content_for_page_styles" />
+
+<div class="sc-welcome">
+  <img class="logo" src="/cgi-bin/WebObjects/SproutCoreExample.woa/_sc_/SproutCore/sproutcore/english.lproj/images/sproutcore-logo.png" />
+  <div class="message">
+  <wo:SCCheckboxView id="clock_checkbox" 
+  	label="Show Clock"
+  	?value = "HelloWorld.appController.isClockShowing"
+  ></wo:SCCheckboxView>
+ <wo:SCButtonView id="clock_button" 
+  	label="Click me"
+  ></wo:SCButtonView>
+  <wo:SCLabelView id="my_label"
+  	tag = "h1"
+  	?value = "HelloWorld.appController.greeting"
+  ></wo:SCLabelView>
+ </div>
+</div>
+</wo:PageWrapper>

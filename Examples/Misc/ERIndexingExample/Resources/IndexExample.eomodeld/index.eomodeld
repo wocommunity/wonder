@@ -1,0 +1,19 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {}; 
+    entities = (
+        {className = "er.indexing.example.eof.Asset"; name = Asset; }, 
+        {className = "er.indexing.example.eof.AssetGroup"; name = AssetGroup; }, 
+        {className = EOGenericRecord; name = AssetTag; }, 
+        {className = "er.indexing.example.eof.Tag"; name = Tag; }
+    ); 
+    userInfo = {
+        "_EntityModeler" = {
+            activeDatabaseConfigName = Default; 
+            databaseConfigs = {
+                Default = {adaptorName = JDBC; prototypeEntityName = EOJDBCPostgresqlPrototypes; }; 
+            }; 
+        }; 
+    }; 
+}

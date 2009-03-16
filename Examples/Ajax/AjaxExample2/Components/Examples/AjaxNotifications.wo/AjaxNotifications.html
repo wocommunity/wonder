@@ -1,0 +1,65 @@
+<ul id = "objectives">
+	<li>AjaxResponseAppender</li>
+	<li>AjaxSubmitButton</li>
+	<li>AjaxUpdateContainer</li>
+	<li>Application.handleException</li>
+	<li>Application.handleSessionRestorationErrorInContext</li>
+</ul>
+
+<wo:AjaxHeaderFooter title = "Ajax Notifications">
+	<h1>Notifications</h1>
+	Often it is the case that you want to be able to check for any error conditions that occurred
+	during an Ajax request and trigger the update of a notification area if there was a problem.  
+	AjaxResponseAppender provides an API to perform these kinds of checks on all ajax requests.
+	
+	<ul>
+		<li>Look at NotificationAjaxResponseAppender to see the response appender.</li>
+		<li>Look at Application's constructor to see how to register it.</li>
+		<li>Look at AjaxHeaderFooter and NotificationsList to see how they are rendered.</li>
+	</ul> 
+
+	<wo:AjaxUpdateContainer id = "notificationContainer">
+		<!-- This will be updated as a test. -->	
+	</wo:AjaxUpdateContainer>
+
+	<wo:form multipleSubmit = "$true">
+		<wo:AjaxSubmitButton action = "$generateNotification" value = "Generate Notification" updateContainerID = "notificationContainer"/>
+	</wo:form>
+	
+	<h1>Exceptions</h1>
+	You want to handle exceptions differently for Ajax than non-Ajax updates.  In an Ajax update,
+	you can't just generate an exception page, because you're typically performing a partial update.  Instead
+	one approach is to just render the exception error message inline with the response, as demonstrated here.
+	
+	<ul>
+		<li>Look at Application.handleException to see how this is implemented.</li>
+	</ul>
+	
+	<wo:AjaxUpdateContainer id = "exceptionContainer" class = "message">
+		<!-- This will be updated as a test. -->	
+	</wo:AjaxUpdateContainer>
+	
+	<wo:form multipleSubmit = "$true">
+		<wo:AjaxSubmitButton action = "$generateException" value = "Generate Exception" updateContainerID = "exceptionContainer"/>
+	</wo:form>
+	
+	<h1>Session Timeouts</h1>
+	Just like exceptions, session notifications should be handled with a different technique.  Rather than
+	render the session timeout page, you can generate a redirect with Javascript in response to a session
+	timeout.
+	
+	<ul>
+		<li>Look at Application.handleSessionRestorationErrorInContext to see how this is implemented.</li>
+	</ul>
+	
+	<wo:AjaxUpdateContainer id = "sessionTimeoutContainer" class = "message">
+	<!-- This will be updated as a test. -->	
+		<wo:if condition = "$session.terminating">
+			Click "Generate Session Timeout" one more time to see how Ajax session timeouts can be handled.
+		</wo:if>
+	</wo:AjaxUpdateContainer>
+	
+	<wo:form multipleSubmit = "$true">
+		<wo:AjaxSubmitButton action = "$generateSessionTimeout" value = "Generate Session Timeout" updateContainerID = "sessionTimeoutContainer"/>
+	</wo:form>
+</wo:AjaxHeaderFooter>

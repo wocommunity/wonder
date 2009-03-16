@@ -1,0 +1,35 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = employeeId; 
+            name = employeeId; 
+            prototypeName = id; 
+        }, 
+        {allowsNull = N; columnName = roleId; name = roleId; prototypeName = id; }
+    ); 
+    attributesUsedForLocking = (employeeId, roleId); 
+    className = EOGenericRecord; 
+    externalName = EmployeeRole; 
+    fetchSpecificationDictionary = {}; 
+    name = EmployeeRole; 
+    primaryKeyAttributes = (employeeId, roleId); 
+    relationships = (
+        {
+            destination = Employee; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = employeeId; }); 
+            name = employee; 
+        }, 
+        {
+            destination = Role; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = roleId; }); 
+            name = role; 
+        }
+    ); 
+}

@@ -1,0 +1,10 @@
+Title : WOString {
+  value = ^title;
+}
+
+HasTitle : WOConditional {
+  condition = ^title;
+}
+
+Content : WOComponentContent {
+}

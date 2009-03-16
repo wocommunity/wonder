@@ -1,0 +1,29 @@
+.tagField {
+}
+
+.tagField .availableTags {
+	font-family: Helvetica, Arial, Geneva;
+	font-size: 0.9em;
+}
+
+.tagField .availableTags a {
+	text-decoration: none;
+	padding: 3px;
+	margin-right: 5px;
+}
+
+.tagField .availableTags.suggestions a {
+	color: rgb(200, 200, 200);
+}
+
+.tagField .availableTags a.used {
+	color: rgb(180, 180, 180);
+}
+
+.tagField .availableTags.suggestions a.used {
+	color: rgb(240, 240, 240);
+}
+
+.tagField .availableTags a.suggested {
+	color: rgb(255, 0, 0);
+}

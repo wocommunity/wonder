@@ -1,0 +1,9 @@
+
+EventPlaceholder: WOSwitchComponent
+{
+	WOComponentName = displayComponentName;
+	object = ^object;
+	event = event;
+	displayMode = displayMode;
+	controller = controller;
+}

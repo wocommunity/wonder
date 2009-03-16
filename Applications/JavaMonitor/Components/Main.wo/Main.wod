@@ -1,0 +1,32 @@
+ErrorMsg: WOString {
+      value = session.message;
+      escapeHTML = NO;
+}
+
+LoginForm: WOForm {}
+
+LoginRequired: WOConditional {
+    condition = loginRequired;
+}
+
+LoginSucceeded: WOConditional {
+    condition = loginRequired;
+    negate = YES;
+}
+
+ApplicationsPage: ApplicationsPage {}
+
+PasswordField: WOPasswordField {
+    value = password;
+}
+
+Refresh: WOMetaRefresh {
+	action = appPageClicked;
+	seconds = 0;
+}
+
+
+SubmitPasswordButton: WOSubmitButton {
+    action = loginClicked;
+    value = "Login";
+}

@@ -1,0 +1,5 @@
+{
+  "rules" = (
+    {"class" = "com.webobjects.directtoweb.Rule"; "author" = "60"; "lhs" = {"class" = "EOKeyValueQualifier"; "key" = "pageConfiguration"; "selectorName" = "isLike:"; "value" = "ListAjax*"; }; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "pageName"; "value" = "AjaxLookListPage"; }; }
+  ); 
+}

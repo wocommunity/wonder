@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxDraggable.java" wocomponentcontent="true">
+    <binding name="id"/>
+    <binding name="draggableID"/>
+    <binding name="elementName"/>
+    <binding name="draggableObject"/>
+    
+    <binding name="starteffect"/>
+    <binding name="reverteffect"/>
+    <binding name="endeffect"/>
+    <binding name="zindex"/>
+    <binding name="keyPress"/>
+    <binding defaults="Boolean" name="revert"/>
+    <binding name="snap"/>
+    <binding name="class"/>
+	<binding name="scroll"/>
+    <binding name="ghosting"/>
+    <binding name="handle"/>
+    </wo>
+</wodefinitions>

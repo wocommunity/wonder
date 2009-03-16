@@ -1,0 +1,38 @@
+ToggleLink : AjaxUpdateLink {
+  insertion = ^insertion;
+  insertionDuration = ^insertionDuration;
+  id = linkID;
+  action = toggle;
+  updateContainerID = id;
+  class = linkClass;
+  accesskey = ^accesskey;
+  elementName = ^elementName;
+}
+
+AjaxUpdateContainer : AjaxUpdateContainer {
+  id = id;
+  class = ^class;
+}
+
+Expanded : WOConditional {
+  condition = expanded;
+}
+
+ToggleLinkString : WOString {
+  value = string;
+}
+
+LinkID : WOString {
+  value = linkID;
+}
+
+ExpandedValue : WOString {
+  value = expanded;
+}
+
+LabelContent : ERXWOComponentContent {
+  templateName = "label";
+}
+
+Content : ERXWOComponentContent {
+}

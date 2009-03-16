@@ -1,0 +1,3 @@
+{
+	"AttachmentExceedsMaximumLengthException" = "The attachment <b>@@recommendedFileName@@</b> exceeds the maximum attachment size of <b>@@maxSize@@ bytes</b>.";
+}

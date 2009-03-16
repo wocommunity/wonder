@@ -1,0 +1,22 @@
+ComponentContent1: WOComponentContent {
+}
+
+Conditional1: WOConditional {
+	condition = ^useContent;
+	negate = true;
+}
+
+Conditional2: WOConditional {
+	condition = ^useContent;
+}
+
+MailContainer: WOGenericContainer {
+	href = href;
+	elementName = "A";
+        class = ^class;
+        style = ^style;
+}
+
+String: WOString {
+	value = ^email;
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="ERXWOComponentContent" wocomponentcontent="true">
+		<binding name="templateName"/>
+	</wo>
+</wodefinitions>

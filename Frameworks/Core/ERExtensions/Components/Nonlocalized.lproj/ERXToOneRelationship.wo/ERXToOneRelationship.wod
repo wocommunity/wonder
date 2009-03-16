@@ -1,0 +1,54 @@
+Browser: WOBrowser {
+	displayString = theCurrentValue;
+	item = theCurrentItem;
+	list = theList;
+	multiple = false;
+	selections = selection;
+	size = ^size;
+    name=^popupName;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
+}
+
+IsBrowserConditional: WOConditional {
+	condition = isBrowser;
+}
+
+IsPopupConditional: WOConditional {
+	condition = isPopup;
+}
+
+IsRadioConditional: WOConditional {
+	condition = isRadio;
+}
+
+PopupList: WOPopUpButton { 
+	displayString = theCurrentValue;
+	item = theCurrentItem;
+	list = theList;
+	selection = selection;
+    name=^popupName;
+	onChange = ^onChange;
+	onBlur = ^onBlur;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
+}
+
+RadioButtonMatrix: ERXRadioButtonMatrix {
+	item = theCurrentItem;
+	list = theList;
+	maxColumns = ^maxColumns;
+	selection = selection;
+	uniqueID = ^uniqueID;
+    goingVertically = ^goingVertically;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
+}
+
+String: WOString {
+	value = theCurrentValue;
+	escapeHTML = false;
+}

@@ -1,0 +1,42 @@
+BrowserList: WOBrowser {
+	displayString = theCurrentValue;
+	item = theCurrentItem;
+	list = theList;
+	multiple = true;
+	selections = selections;
+	size = ^size;
+}
+
+CheckboxLabelString: WOString {
+	value = theCurrentValue;
+}
+
+CheckboxMatrix: ERXCheckboxMatrix {
+	item = theCurrentItem;
+	list = theList;
+	maxColumns = ^maxColumns;
+	width = ^width;
+	selections = selections;
+	goingVertically = ^goingVertically;
+	shouldShowSelectAllButtons = ^shouldShowSelectAllButtons;
+	cellVAlign = "top";
+}
+
+IsBrowserConditional: WOConditional {
+	condition = isBrowser;
+}
+
+IsCheckboxConditional: WOConditional {
+	condition = isCheckBox;
+}
+
+IsJSEditorConditional: WOConditional {
+	condition = isJSEditor;
+}
+
+JSEditor: ERXJSToManyRelationshipEditor {
+	displayString = theCurrentValue;
+	item = theCurrentItem;
+	list = theList;
+	selections = selections;
+}

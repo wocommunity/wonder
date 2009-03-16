@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="ERXOptionalForm" wocomponentcontent="true">
+
+		<binding name="action"/>
+		<binding name="name"/>
+		<binding name="enctype"/>
+		<binding name="directActionName"/>
+		<binding name="actionClass"/>
+		<binding name="multipleSubmit"/>
+    	<binding name="style"/>
+    </wo>
+</wodefinitions>

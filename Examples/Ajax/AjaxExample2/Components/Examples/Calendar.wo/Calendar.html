@@ -1,0 +1,33 @@
+<ul id = "objectives">
+	<li>AjaxUpdateContainer</li>
+	<li>AjaxUpdateLink</li>
+</ul>
+
+<wo:AjaxHeaderFooter title = "Calendar">
+	<wo:AjaxUpdateContainer id = "selectedDay">
+		<wo:if condition = "$selectedDay">
+			<h1><wo:str value = "$selectedDay.startDate" dateformat = "%m/%d/%y"/></h1>
+			<ul class = "events">
+				<li>Event <wo:str value = "$selectedDay.startDate" dateformat = "%m/%d/%y"/> #1</li>
+				<li>Event <wo:str value = "$selectedDay.startDate" dateformat = "%m/%d/%y"/> #2</li>
+				<li>Event <wo:str value = "$selectedDay.startDate" dateformat = "%m/%d/%y"/> #3</li>
+				<li>Event <wo:str value = "$selectedDay.startDate" dateformat = "%m/%d/%y"/> #4</li>
+			</ul>
+		</wo:if>
+		<wo:else>
+			<h1>Select a Day ...</h1>
+		</wo:else>
+	</wo:AjaxUpdateContainer>
+	
+	<table id = "calendar">
+	  <wo:WORepetition list = "$selectedMonth.weekObjects" item = "$repetitionWeek">
+	  	<tr class = "week">
+		    <wo:WORepetition list = "$repetitionWeek.days" item = "$repetitionDay">
+		    	<wo:AjaxUpdateLink elementName = "td" class = "$dayClass" action = "$selectDay" updateContainerID = "selectedDay">
+		    		<wo:str value = "$repetitionDay.day"/>
+		    	</wo:AjaxUpdateLink>
+		    </wo:WORepetition>
+		  </tr>
+	  </wo:WORepetition>
+  </table>
+</wo:AjaxHeaderFooter>

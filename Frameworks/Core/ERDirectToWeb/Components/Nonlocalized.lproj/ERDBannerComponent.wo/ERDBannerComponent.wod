@@ -1,0 +1,10 @@
+Banner: WOImage {
+	border = "0";
+	filename = ^bannerFileName;
+	framework = ^framework;
+}
+
+BannerConditional: WOConditional {
+	_unroll = true;
+	condition = showBanner;
+}

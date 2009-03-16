@@ -1,0 +1,4 @@
+Section: WOString { 
+	value=sectionTitle; 
+	escapeHTML = false;
+}

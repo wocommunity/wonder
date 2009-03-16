@@ -1,0 +1,10 @@
+
+ColorContainer: WOGenericContainer {
+    elementName = "FONT";
+    color = color;
+}
+
+Number: WOString {
+    value = ^value;
+    numberformat = ^numberformat;
+}

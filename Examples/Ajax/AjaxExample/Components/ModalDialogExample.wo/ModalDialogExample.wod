@@ -1,0 +1,167 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Modal Dialog";
+}
+
+WelcomeModalDialog: AjaxModalDialog {
+	id = "WelcomeModalDialog";
+	title = "Welcome";
+	width = 400;
+	overlayOpacity = "0.4";
+	overlayDuration = "0.1";
+	slideDownDuration = "0.2";
+	slideUpDuration = "0.2";
+	open = true;
+	showOpener = false;
+}
+
+ComponentModalDialog: AjaxModalDialog {
+	id = "ComponentModalDialog";
+	linkTitle = "Click to Delete";
+	title = "Confirm Deletion";
+	width = 300;
+	overlayOpacity = "0.3";
+	overlayDuration = "0.1";
+	slideDownDuration = "0.1";
+	slideUpDuration = "0.2";
+}
+
+LinkTemplate: ERXWOTemplate {
+	templateName = "link";
+}
+
+DeleteImage: WOImage {
+	filename = "delete.jpg";
+	framework = "app";
+	height = 100;
+	width = 150;
+}
+
+ModalDialogContents: ModalDialogContents {
+}
+
+SimpleModalDialog: AjaxModalDialog {
+	id = "SimpleModalDialog";
+	title = "Confirm Deletion";
+	label = "Delete Account";
+	width = 300;
+	overlayOpacity = "0.4";
+	overlayDuration = "0.1";
+	slideDownDuration = "0.2";
+	slideUpDuration = "0.2";
+	locked = true;
+}
+
+Yes : AjaxHyperlink {
+	action = deleteIt;
+	onSuccess = "function() { Modalbox.hide(); }";
+}
+
+
+No : WOHyperlink {
+	href = "javascript:void(0);";
+	onClick = "Modalbox.hide();";
+}
+
+UpdatingModalDialog: AjaxModalDialog {
+	id = "UpdatingModalDialog";
+	title = "Confirm Deletion";
+	label = "Delete Account";
+	width = 300;
+	overlayOpacity = "0.5";
+	overlayDuration = "0.3";
+	slideDownDuration = "0.3";
+	slideUpDuration = "0.3";
+}
+
+
+Yes2 : AjaxHyperlink {
+	action = deleteIt2;
+	evalScripts = true;	
+}
+
+ConfirmationMessage: WOString {
+	value = confirmationMessage;
+}
+
+FirstName : WOString {
+	value = employee.firstName;
+}
+
+LastName : WOString {
+	value = employee.lastName;
+}
+
+CompanyName : WOString {
+	value = employee.company.name;
+}
+
+ValidationMessage: WOString {
+	value = errorMessages;
+	escapeHTML = false;
+}
+
+FirstNameInput : WOTextField {
+	value = firstName;
+}
+
+LastNameInput : WOTextField {
+	value = lastName;
+}
+
+CancelEmployeeEdit: AjaxSubmitButton {
+	action = cancelEdit;
+	evalScripts = true;
+	value = "Cancel";
+	formName = "EmployeeForm";
+}
+
+SaveEmployeeEdit: AjaxSubmitButton {
+	action = saveEdit;
+	evalScripts = true;
+	value = "Save";
+	formName = "EmployeeForm";
+}
+
+Form : WOForm {
+	name = "EmployeeForm";
+	multipleSubmit = true;
+}
+
+InlineEditEmployee: AjaxModalDialog {
+	id = "InlineEditEmployeeModalDialog";
+	title = "Edit Employee";
+	label = "edit";
+	width = 300;
+	overlayOpacity = "0.5";
+	overlayDuration = "0.2";
+	slideDownDuration = "0.2";
+	slideUpDuration = "0.2";
+	afterHide = "function() { UIUpdater1Update(); UIUpdater2Update(); }";
+	overlayClose = false;
+}
+
+UIUpdater1 : AjaxUpdateContainer {
+	id = "UIUpdater1";
+}
+
+EditEmployee: AjaxModalDialog {
+	id = "EditEmployeeModalDialog";
+	title = "Edit Employee";
+	action = editEmployee;
+	width = 300;
+	height = -1;
+	overlayOpacity = "0.5";
+	overlayDuration = "0.0";
+	slideDownDuration = "0.0";
+	slideUpDuration = "0.0";
+	afterHide = "function() { UIUpdater1Update(); UIUpdater2Update(); }";
+}
+
+UIUpdater2 : AjaxUpdateContainer {
+	id = "UIUpdater2";
+}
+
+EditEmployeeLink: ERXWOTemplate {
+	templateName = "link";
+}
+

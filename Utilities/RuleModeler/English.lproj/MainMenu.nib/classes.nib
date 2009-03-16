@@ -1,0 +1,38 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                add = id; 
+                duplicate = id; 
+                focus = id; 
+                focusFilter = id; 
+                invertSelection = id; 
+                openInNewWindow = id; 
+                remove = id; 
+                removeDuplicateRules = id; 
+                selectNext = id; 
+                selectPrevious = id; 
+                showDuplicateRules = id; 
+                showRuleModel = id; 
+                showSelectedRule = id; 
+                toggleSourceDrawer = id; 
+                unfocus = id; 
+            }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {createNewModelGroup = id; showPreferences = id; }; 
+            CLASS = RMAppDelegate; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = RMDocumentController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSDocumentController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,5 @@
+String: WOString {
+    valueWhenEmpty = localContext.valueWhenEmpty;
+    value = stringContents;
+    escapeHTML = localContext.escapeHTML;
+}

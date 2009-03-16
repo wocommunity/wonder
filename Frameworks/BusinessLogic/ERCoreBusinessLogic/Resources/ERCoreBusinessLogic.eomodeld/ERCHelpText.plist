@@ -1,0 +1,20 @@
+{
+    attributes = (
+        {columnName = ID; name = id; prototypeName = id; }, 
+        {columnName = "KEY_"; name = key; prototypeName = varchar100; }, 
+        {
+            allowsNull = Y; 
+            columnName = "VALUE_"; 
+            name = value; 
+            prototypeName = varcharLarge; 
+            userInfo = {ERXLanguages = ""; }; 
+        }
+    ); 
+    attributesUsedForLocking = (id, key, value); 
+    className = "er.corebusinesslogic.ERCHelpText"; 
+    classProperties = (key, value); 
+    externalName = "ERCHELP_TEXT"; 
+    fetchSpecificationDictionary = {}; 
+    name = ERCHelpText; 
+    primaryKeyAttributes = (id); 
+}

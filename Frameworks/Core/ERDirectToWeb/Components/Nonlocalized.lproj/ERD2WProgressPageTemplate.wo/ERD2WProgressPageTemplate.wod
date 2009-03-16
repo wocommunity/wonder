@@ -1,0 +1,28 @@
+CompletionBar: WOCompletionBar {
+	value = percentCompleted;
+}
+
+Conditional1: WOConditional {
+	condition = shouldShowProgressBar;
+}
+
+ERD2WDebuggingHelp1: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+ERDActionBar1: ERDActionBar {
+	d2wContext = d2wContext;
+}
+
+ERXLongResponse1: ERXLongResponse {
+	task = longResponseTask;
+}
+
+String1: WOString {
+	escapeHTML = false;
+	value = d2wContext.displayNameForPageConfiguration;
+}
+
+SwitchComponent3: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}

@@ -1,0 +1,4 @@
+RootNavigationMenuItem: ERXModernNavigationMenuItem {
+	navigationItem = rootNode;
+	navigationContext = navigationContext;
+}

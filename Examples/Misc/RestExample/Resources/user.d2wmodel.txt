@@ -1,0 +1,10 @@
+(
+    0 : *true* => fetchLimit = 20 [com.webobjects.directtoweb.Assignment],
+    10 : *true* => restCanView = false [com.webobjects.directtoweb.BooleanAssignment],
+    100 : *true* => look = NeutralLook [com.webobjects.directtoweb.Assignment],
+    100 : entity.name = 'ServerPost' => restEntityAliasName = Post [com.webobjects.directtoweb.Assignment],
+    100 : entity.name = 'ServerUser' => restEntityAliasName = User [com.webobjects.directtoweb.Assignment],
+    100 : restEntityAlias = 'Topic' => restEntityName = ServerTopic [com.webobjects.directtoweb.Assignment],
+    100 : entity.name = 'ServerForum' => restEntityAliasName = Forum [com.webobjects.directtoweb.Assignment],
+    100 : entity.name = 'ServerTopic' => restEntityAliasName = Topic [com.webobjects.directtoweb.Assignment]
+)

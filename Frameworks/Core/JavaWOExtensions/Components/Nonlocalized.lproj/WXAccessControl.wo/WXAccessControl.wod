@@ -1,0 +1,6 @@
+
+Conditional : WOConditional {
+   condition = shouldShow;
+}
+
+Content : WOComponentContent {}

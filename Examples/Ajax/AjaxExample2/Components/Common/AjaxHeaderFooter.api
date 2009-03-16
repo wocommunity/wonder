@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="HeaderFooter.java" wocomponentcontent="true">
+
+        <binding name="title"/>
+        <validation message="'title' is a required binding.">
+            <unbound name="title"/>
+        </validation>
+    </wo>
+</wodefinitions>

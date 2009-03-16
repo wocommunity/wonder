@@ -1,0 +1,110 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = admin; 
+            name = admin; 
+            prototypeName = intBoolean; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = companyID; 
+            name = companyID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = exemptions; 
+            name = exemptions; 
+            prototypeName = intNumber; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = firstName; 
+            name = firstName; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = hireDate; 
+            name = hireDate; 
+            prototypeName = dateTime; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = insured; 
+            name = insured; 
+            prototypeName = boolean; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = lastName; 
+            name = lastName; 
+            prototypeName = varchar255; 
+        }, 
+        {allowsNull = Y; columnName = photoID; name = photoID; prototypeName = id; }, 
+        {
+            allowsNull = Y; 
+            columnName = salary; 
+            name = salary; 
+            prototypeName = currencyAmount; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = status; 
+            name = status; 
+            prototypeName = javaEnum; 
+            valueClassName = "er.uber.model.EmployeeStatus"; 
+        }
+    ); 
+    attributesUsedForLocking = (
+        admin, 
+        companyID, 
+        exemptions, 
+        firstName, 
+        hireDate, 
+        id, 
+        insured, 
+        lastName, 
+        photoID, 
+        salary, 
+        status
+    ); 
+    className = "er.uber.model.Employee"; 
+    classProperties = (
+        admin, 
+        company, 
+        exemptions, 
+        firstName, 
+        hireDate, 
+        insured, 
+        lastName, 
+        photo, 
+        salary, 
+        status
+    ); 
+    externalName = Employee; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_clientClassPropertyNames" = (firstName, lastName); }; 
+    name = Employee; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Company; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = companyID; }); 
+            name = company; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = ERAttachment; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = photoID; }); 
+            name = photo; 
+        }
+    ); 
+}

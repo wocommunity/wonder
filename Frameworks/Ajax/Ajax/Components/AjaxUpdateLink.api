@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxUpdateLink" wocomponentcontent="true">
+    <binding name="updateContainerID"/>
+    <binding name="action"/>
+    <binding name="directActionName"/>
+    <binding defaults="Boolean" name="disabled"/>
+		
+		<binding name="onComplete"/>
+		<binding name="onSuccess"/>
+		<binding name="onFailure"/>
+		<binding name="onException"/>
+		<binding defaults="Boolean" name="evalScripts"/>
+		<binding name="function"/>
+		<binding name="functionName"/>
+		<binding name="elementName"/>
+		<binding name="button"/>
+		<binding defaults="Boolean" name="asynchronous"/>
+		
+		<binding name="insertion"/>
+		<binding name="insertionDuration"/>
+		<binding name="beforeInsertionDuration"/>
+		<binding name="afterInsertionDuration"/>
+
+		<binding name="effect"/>
+		<binding name="beforeEffect"/>
+		<binding name="beforeEffectID"/>
+		<binding name="beforeEffectDuration"/>
+		<binding name="afterEffect"/>
+		<binding name="afterEffectID"/>
+
+		<binding name="onClickBefore"/>
+		<binding name="onClick"/>
+		<binding name="onClickServer"/>
+		
+		<binding name="replaceID"/>
+		<binding defaults="Boolean" name="ignoreActionResponse"/>
+    
+    <validation message="'action' and 'directActionName' cannot both be bound.">
+	    <bound name="action"/>
+	    <bound name="directActionName"/>
+    </validation>
+    
+    <validation message="'effect' and 'onSuccess' cannot both be bound.">
+	    <bound name="effect"/>
+	    <bound name="onSuccess"/>
+    </validation>
+    
+    <validation message="If 'effect' is bound, then 'updateContainerID' must also be bound.">
+	    <bound name="effect"/>
+	    <unbound name="updateContainerID"/>
+    </validation>
+    
+    <validation message="If 'directActionName' is bound, then 'replaceID' must also be bound.">
+	    <bound name="directActionName"/>
+	    <unbound name="replaceID"/>
+    </validation>
+    
+    <validation message="'action' and 'directActionName' cannot both be bound.">
+	    <bound name="action"/>
+	    <bound name="directActionName"/>
+    </validation>
+    
+    <validation message="'updateContainerID', 'action', 'directActionName' must be bound.">
+	    <unbound name="action"/>
+	    <unbound name="directActionName"/>
+	    <unbound name="updateContainerID"/>
+    </validation>
+    
+    <validation message="Only one of 'replaceID' or 'ignoreActionResponse' can be bound.">
+	    <bound name="replaceID"/>
+	    <bound name="ignoreActionResponse"/>
+    </validation>
+    
+    <validation message="Only one of 'directActionName' or 'ignoreActionResponse' can be bound.">
+	    <bound name="directActionName"/>
+	    <bound name="ignoreActionResponse"/>
+    </validation>
+    
+    <validation message="Only one of 'replaceID' or 'updateContainerID' can be bound.">
+	    <bound name="replaceID"/>
+	    <bound name="updateContainerID"/>
+    </validation>
+    
+    <validation message="Only one of 'updateContainerID' or 'ignoreActionResponse' can be bound.">
+	    <bound name="updateContainerID"/>
+	    <bound name="ignoreActionResponse"/>
+    </validation>
+	<binding name="accesskey"/>
+    </wo>
+</wodefinitions>

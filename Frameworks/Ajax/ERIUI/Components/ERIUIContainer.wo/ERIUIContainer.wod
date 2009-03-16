@@ -1,0 +1,47 @@
+RenderContainer : WOConditional {
+	condition = renderContainer;
+}
+
+Title : WOString {
+  value = ^title;
+}
+
+ERIUIViewport : ERIUIViewport {
+}
+
+ToolBar : ERIUIToolBar {
+  title = ^title;
+}
+
+IUIStyleSheet : ERXStyleSheet {
+  framework = "ERIUI";
+  filename = "iui.css";
+}
+
+WonderJavaScript : ERXJavaScript {
+  framework = "Ajax";
+  filename = "wonder.js";
+}
+
+WonderIUIJavaScript : ERXJavaScript {
+  framework = "ERIUI";
+  filename = "wonder_iui.js";
+}
+
+PrototypeJavaScript : ERXJavaScript {
+  framework = "Ajax";
+  filename = "prototype.js";
+}
+
+EffectsJavaScript : ERXJavaScript {
+  framework = "Ajax";
+  filename = "effects.js";
+}
+
+ToolbarContent : ERXWOComponentContent {
+  templateName = "toolbar";
+}
+
+MainContent : ERXWOComponentContent {
+  templateName = "content";
+}

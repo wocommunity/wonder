@@ -1,0 +1,36 @@
+OpenDialogLink : AjaxUpdateLink {
+  class = "button";
+  updateContainerID = "dialog";
+  action = toggleDialog;
+}
+
+Title : WOString {
+  value = ^title;
+  valueWhenEmpty = ^string;
+}
+
+ButtonLabel : WOString {
+  value = ^string;
+}
+
+CancelLabel : WOString {
+	value = ^cancelLabel;
+	valueWhenEmpty = "Cancel";
+}
+
+CloseDialogLink : AjaxUpdateLink {
+  class = "button leftButton";
+  updateContainerID = "dialog";
+  action = toggleDialog;
+}
+
+ComponentContent : WOComponentContent {
+}
+
+DialogVisible : WOConditional {
+  condition = dialogVisible;
+}
+
+DialogContainer : AjaxUpdateContainer {
+  id = "dialog";
+}

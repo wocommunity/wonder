@@ -1,0 +1,11 @@
+EditEO: WOHyperlink {
+	action = inspectObjectAction;
+	title = ^displayNameForInspectConfiguration;
+}
+
+EditImage: WOImage {
+	alt = ^displayNameForInspectConfiguration;
+	border = "0";
+	filename = "magglass-btn.gif";
+	framework = "JavaDirectToWeb";
+}

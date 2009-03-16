@@ -1,0 +1,187 @@
+<wo:SCJavaScript group="sample_controls" framework="app" key="pageJavaScript" />
+
+<wo:SCStyleSheet group="sample_controls" framework="app" key="@content_for_page_styles" />
+<h1>Built-In Buttons & Widgets</h1>
+<p>
+  The widgets below can be created easily using view helpers.  The helper 
+  examples show you the specific options accepted by the view.  Unless the 
+  options is in bold, all options are optional.  Helpers also take the 
+  standard options accepted by all views such as :outlet, :field, :width, 
+  etc.
+</p>
+
+<div class="demo_box">
+<h2>Regular Push Button</h2>
+<p><code>
+  &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :action =&gt; &apos;Appname.someController.methodName&apos;, :default =&gt; true|false, :enabled =&gt; true|false %&gt;
+</code></p>
+  <div class="buttons">
+    <wo:SCButtonView id="preferences" label = "Show Preferences" />
+    <wo:SCButtonView label = "Default" default="$true"/>
+    <wo:SCButtonView label = "Cancel"  enabled="$false" width="$80" />
+    <wo:SCButtonView label = "OK"      enabled="$false" selected="$true" width="$80" />
+  </div>
+  <br />
+
+  <div class="buttons sc-square-theme">
+    <wo:SCButtonView label = "Show Preferences" />
+    <wo:SCButtonView label = "Default" default="$true"/>
+    <wo:SCButtonView label = "Cancel"  enabled="$false" width="80" />
+    <wo:SCButtonView label = "OK"      enabled="$false" selected="$true" width="80" />
+  </div>
+
+</div>
+
+<div class="demo_box">
+<h2>Segments</h2>
+<p><code>
+  &lt;%= segmented_view :segments =&gt; [:one, :two, :three], :enabled =&gt; true|false %&gt;
+</code></p>
+<br />
+<div class="buttons">
+  <wo:SCSegmentedView segments = "$segments" item="$segment" /><br />
+  <wo:SCSegmentedView id="disabled_segment" segments = "$segments" item="$segment" enabled = "$false" />
+  
+</div>
+
+<br />
+<div class="buttons sc-square-theme">
+  <wo:SCSegmentedView segments = "$segments" item="$segment" /><br />
+  <wo:SCSegmentedView id="disabled_square_segment" segments = "$segments" item="$segment" enabled = "$false" />
+</div>
+
+</div>
+
+<div class="demo_box">
+<h2>Checkboxes</h2>
+<p><code>
+  &lt;%= checkbox_view :label =&gt; &apos;Label Name&apos;, :enabled =&gt; true|false, :selected =&gt; true|false|:mixed %&gt;
+</code></p>
+
+  <div class="buttons">
+    <wo:SCCheckboxView label = "Normal Checkbox" />
+    <wo:SCCheckboxView label = "Disabled Checkbox" enabled="$false"/>
+    <wo:SCCheckboxView label = "Selected Checkbox" selected="$true" /><br />
+    No Label:  <wo:SCCheckboxView selected="mixed" />
+    
+  </div>
+</div>
+
+<div class="demo_box">
+<h2>Radio Buttons</h2>
+<p><code>
+  &lt;%= radio_view :label =&gt; &apos;Label Name&apos;, :enabled=&gt; true|false, :selected =&gt; true|false|:mixed %&gt;
+</code></p>
+  <div class="buttons">
+    <wo:SCRadioView label = "Normal Radio Button" outletPath = ".demo_box:1 .buttons:1 a.normal_radio_button:1:1" />
+    <wo:SCRadioView label = "Disabled Radio Button" enabled="$false" />
+    <wo:SCRadioView label = "Selected Radio Button" selected="$true"/><br />
+    No Label: <wo:SCRadioView selected="mixed"/>
+    
+  </div>
+  
+<p><code>
+  &lt;%= radio_group_view :values =&gt; [[:item_1, &apos;First Item&apos;], :item_2, [:item_3, &apos;Last Item&apos;]], :enabled =&gt; true|false, :value =&gt; :item_1, :layout =&gt; :horizontal|:vertical %&gt;
+</code></p>
+
+<div>
+<label>Choose Item:</label> <wo:SCRadioGroupView values = "$values" value = 0 layout ="vertical" />
+</div>
+
+</div>
+
+<div class="demo_box">
+<h2>Slider View</h2>
+<p><code>
+  &lt;%= slider_view :value =&gt; 100, :minimum =&gt; 50, :maximum =&gt; 250, :step =&gt; 10 %&gt;
+</code></p>
+  <div class="buttons">
+    <wo:SCLabelView tag = "label"
+      ?value = "SampleControls.contentController.sliderValue" />
+    <wo:SCSliderView
+      minimum = 50 step = 10
+      maximum = 250
+      ?value = "SampleControls.contentController.sliderValue" 
+     /> 
+  </div>
+    
+  <div class="buttons">
+   <wo:SCLabelView tag = "label"
+      ?value = "SampleControls.contentController.sliderValue" />
+    <wo:SCSliderView
+      minimum = 50 step = 1 width= 200
+      maximum = 250
+      ?value = "SampleControls.contentController.sliderValue" 
+     /> 
+   </div>
+
+</div>
+
+
+<div class="demo_box">
+<h2>Disclosure Triangle</h2>
+<p><code>
+  &lt;%= disclosure_view :label =&gt; &apos;Label Name&apos;, :enabled =&gt; true|false, :value =&gt; true|false %&gt;
+</code></p>
+
+  <div class="buttons">
+    <wo:SCDisclosureView label = "Open Disclosure" value = "$true" /> 
+    <wo:SCDisclosureView label = "Closed Disclosure" value = "$false" /> 
+    <wo:SCDisclosureView label = "Disabled Closed Disclosure" value = "$false" enabled="$false" /> 
+    <wo:SCDisclosureView label = "Disabled Open Disclosure" value = "$true"  enabled="$false" /> 
+    No Label: <wo:SCDisclosureView value = "$true" /> 
+  </div>
+</div>
+
+<div class="demo_box">
+<h2>Square Buttons</h2>
+<p><code>
+  &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :theme =&gt; :square %&gt;
+</code></p>
+  <div class="buttons">
+    <wo:SCButtonView theme="square" label = "Reg" />
+    <wo:SCButtonView theme="square" label = "Dis" enabled="$false" />
+    <wo:SCButtonView theme="square" label = "Sel" selected="$true" />
+    <wo:SCButtonView theme="square" label = "Sel-Dis" selected="$true" enabled="$false"/>
+  </div>
+</div>
+
+<div class="demo_box">
+<h2>Popup and Drop Down Menus Buttons</h2>
+<p><code>
+  &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :theme =&gt; :popup|:dropdown %&gt;
+</code></p>
+  <div class="buttons">
+    <wo:SCButtonView label = "Popup Menu" theme = "popup" />
+    <wo:SCButtonView label = "Dropdown Menu" theme = "dropdown" width = "$150" />
+  </div>
+</div>
+
+
+
+<div class="demo_box">
+<h2>Toggle Buttons</h2>
+<p><code>
+  &lt;%= button_view :label =&gt; &apos;Label Name&apos;, :behavior =&gt; :toggle|:on|:off %&gt;
+</code></p>
+  <div class="buttons">
+    <wo:SCButtonView id="toggle" label="Toggle" behavior="toggle" ?value="Widgets.preferencesController.toggleState" />
+    <wo:SCButtonView id="toggle_on" label="On" behavior="on" ?value="Widgets.preferencesController.toggleState" />
+    <wo:SCButtonView id="toggle_off" label="Off" behavior="off" ?value="Widgets.preferencesController.toggleState" />
+  </div>
+</div>
+
+<h2 style="margin: 25px; margin-top: 0;">Native Widgets</h2>
+<p style="margin-left: 25px; margin-right: 25px;">SproutCore also supports rendering native UI components.  In general these can be bound to SproutCore values, just like the SproutCore widgets above:</p>
+
+<div class="demo_box">
+<h2>Checkbox</h2>
+<p><code>
+  &lt;%= checkbox_field_view :outlet =&gt; true, :label =&gt; &apos;Label Name&apos;, :enabled =&gt; true|false, :selected =&gt; true|false %&gt;
+</code></p>
+  <div class="buttons">
+  	<wo:SCCheckboxFieldView label = "Regular Checkbox" />
+  	<wo:SCCheckboxFieldView label = "Selected Checkbox" value = "$true" />
+  	<wo:SCCheckboxFieldView label = "Disabled Checkbox" enabled = "$false" />
+  </div>
+</div>

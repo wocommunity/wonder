@@ -1,0 +1,34 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = name; 
+            name = name; 
+            prototypeName = varcharLarge; 
+        }
+    ); 
+    attributesUsedForLocking = (id, name); 
+    className = "er.restexample.server.ServerUser"; 
+    classProperties = (name, posts, topics); 
+    externalName = ServerUser; 
+    fetchSpecificationDictionary = {}; 
+    name = ServerUser; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ServerPost; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = userID; sourceAttribute = id; }); 
+            name = posts; 
+        }, 
+        {
+            destination = ServerTopic; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = userID; sourceAttribute = id; }); 
+            name = topics; 
+        }
+    ); 
+}

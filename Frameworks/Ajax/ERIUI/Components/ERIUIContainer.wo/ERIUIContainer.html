@@ -1,0 +1,23 @@
+<html>
+	<head>
+	  <title><webobject name = "Title" /></title>
+	  <webobject name = "RenderContainer">
+	  <webobject name = "ERIUIViewport" />
+		<webobject name = "IUIStyleSheet"/>
+		<webobject name = "PrototypeJavaScript"/>
+		<webobject name = "EffectsJavaScript"/>
+		<!-- webobject name = "IUIJavaScript"/ -->
+		<webobject name = "WonderJavaScript"/>
+		<webobject name = "WonderIUIJavaScript"/>
+		</webobject>
+	</head>
+	<body>
+		<webobject name = "ToolBar"><webobject name = "ToolbarContent"/></webobject>
+	
+	  <div class = "iphone_block"><webobject name = "MainContent"/></div>
+	  
+	  <webobject name = "RenderContainer">
+	  <script>iphoneSlider = new iPhoneSlider([ { rotatorClass: 'iphone_block' }, { rotatorClass: 'toolbarContents', fade: true, slowOut: true } ]);</script>
+	  </webobject>
+	</body>
+</html>

@@ -1,0 +1,72 @@
+{
+    IBClasses = (
+        {CLASS = Assignment; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {"" = id; unfocus = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {CLASS = RMComboBox; LANGUAGE = ObjC; SUPERCLASS = NSComboBox; }, 
+        {
+            ACTIONS = {
+                changeCaseSensitivityOption = id; 
+                changeParsingOption = id; 
+                changeQualifierMatchingOption = id; 
+                changeWordMatchingOption = id; 
+                focus = id; 
+                search = id; 
+                unfocus = id; 
+            }; 
+            CLASS = RMFilteringArrayController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {searchField = NSSearchField; }; 
+            SUPERCLASS = NSArrayController; 
+        }, 
+        {
+            ACTIONS = {assignmentClassNameAction = id; }; 
+            CLASS = RMModel; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {assignmentClassNamesComboBox = NSComboBox; }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {
+            ACTIONS = {
+                focus = id; 
+                remove = id; 
+                removeDuplicateRules = id; 
+                rhsComboBoxAction = id; 
+                showDuplicateRules = id; 
+                showSelectedRule = id; 
+                unfocus = id; 
+            }; 
+            CLASS = RMModelEditor; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                assignmentClassNamesComboBox = NSComboBox; 
+                cornerView = NSView; 
+                detailSplitView = NSSplitView; 
+                filterField = NSSearchField; 
+                filterView = NSView; 
+                lhsFormatCheckbox = NSButton; 
+                lhsSplitView = NSSplitView; 
+                lhsValueTextField = NSTextField; 
+                masterSplitView = NSSplitView; 
+                rhsKeyNamesComboBox = NSComboBox; 
+                rhsValueHelpField = NSTextField; 
+                rhsValueTextView = NSTextView; 
+                rulesController = RMFilteringArrayController; 
+                rulesTableView = NSTableView; 
+                sourceDrawer = NSDrawer; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = RMTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {CLASS = RMTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
+        {CLASS = RMTextFieldCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
+        {CLASS = RMTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
+        {CLASS = Rule; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

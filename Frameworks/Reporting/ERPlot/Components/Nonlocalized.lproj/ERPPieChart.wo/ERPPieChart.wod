@@ -1,0 +1,14 @@
+Image: WOImage {
+	data = imageData;
+	mimeType = imageType;
+	key = imageKey;
+	otherTagString = otherTagString;
+	height = height;
+	width = width;
+	border = 0;
+}
+
+Map: WOString {
+	escapeHTML = false;
+	value = imageMap;
+}

@@ -1,0 +1,40 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = companyID; 
+            name = companyID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = firstName; 
+            name = firstName; 
+            prototypeName = varchar100; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = lastName; 
+            name = lastName; 
+            prototypeName = varchar100; 
+        }
+    ); 
+    attributesUsedForLocking = (companyID, firstName, id, lastName); 
+    className = "er.ajax.example.Employee"; 
+    classProperties = (company, firstName, lastName); 
+    externalName = Employee; 
+    fetchSpecificationDictionary = {}; 
+    name = Employee; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Company; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = companyID; }); 
+            name = company; 
+        }
+    ); 
+}

@@ -1,0 +1,142 @@
+AttributeCell: WOGenericContainer {
+	_unroll = true;
+	align = d2wContext.justification;
+	elementName = "td";
+	valign = "middle";
+	bgcolor = "#ffffff";
+}
+
+AttributeDisplay: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	_componentUnroll = true;
+	_unroll = true;
+	localContext = localContext;
+	object = object;
+}
+
+AttributeRepetition: WORepetition {
+	_unroll = true;
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+AttributeRepetition2: WORepetition {
+	_unroll = true;
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+ColumnLabelRepetition: WORepetition {
+	_unroll = true;
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+EntityName2: ERXPluralString {
+	count = displayGroup.displayedObjects.count;
+	value = d2wContext.displayNameForEntity;
+}
+
+EntityRepetition: WORepetition {
+	item = object;
+	list = sublist;
+}
+
+GenericContainer1: WOGenericContainer {
+	_unroll = "YES";
+	align = d2wContext.justification;
+//	colspan = 2;
+	elementName = "td";
+	valign = "middle";
+}
+
+GenericContainer2: WOGenericContainer {
+	bgcolor = "#999999";
+	colspan = colspanForNavBar;
+	elementName = "TD";
+	height = 1;
+}
+GenericContainer4: WOGenericContainer {
+	colspan = colspanForNavBar;
+	elementName = "TD";
+}
+GenericContainer9: WOGenericContainer {
+	bgcolor = "#999999";
+	colspan = colspanForNavBar;
+	elementName = "TD";
+	height = 1;
+}
+
+GroupingRepetition: ERXGroupingRepetition {
+	item = object;
+	list = displayGroup.displayedObjects;
+	subListSection = sublistSection;
+	subList = sublist;
+	sectionForItem = section;
+	sectionKey = d2wContext.keyWhenGrouping;
+	splitArrays = true;
+	sortKey = d2wContext.groupingOrderKey;
+}
+
+HasHeader: ERXNonNullConditional {
+	condition=d2wContext.headerComponentName;
+}
+
+HasTotal: ERXNonNullConditional {
+	condition=d2wContext.totallingKeys;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	list=displayGroup.displayedObjects;
+}
+
+IsTotallingKey: ERXListContainsItemConditional {
+	item = d2wContext.propertyKey;
+	list = d2wContext.totallingKeys;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+ListTable: WOGenericContainer {
+	_unroll = true;
+	border = 0;
+	cellpadding = 1;
+	cellspacing = 0;
+	elementName = "Table";
+}
+
+ListTableHeaderRow: WOGenericContainer {
+	_unroll = true;
+	bgcolor = "#ffffff";
+	elementName = "tr";
+}
+
+ListTableRow: WOGenericContainer {
+	_unroll = true;
+	elementName = "tr";
+}
+
+PropertyName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForProperty;
+}
+
+SumForSubList: WOString { 
+	value=sumForSublist;
+	numberformat=d2wContext.formatter;
+}
+SwitchComponent1: WOSwitchComponent {
+	WOComponentName = groupingComponentName;
+   	d2wContext = d2wContext;
+	object = sublistSection;
+   	sublist = sublist;
+}
+
+
+Wrapper: WOSwitchComponent {   
+	WOComponentName = d2wContext.pageWrapperName;
+}

@@ -1,0 +1,75 @@
+<webobject name = "NavPage">
+  <span class = "error">
+    <webobject name = "ErrorMsg" />
+  </span>
+  <table border = "1" cellpadding = "10" cellspacing = "1" width = "95%">
+    <tr>
+      <td>
+        <center>
+          <font size = "+1">
+            <b>Monitor Password</b>
+          </font>
+          <br></br>
+          <webobject name = "AdminPasswordIsSet">The password is currently set.</webobject>
+          <br></br>
+          <webobject name = "AdminPasswordIsNotSet">
+            The password is currently
+            <b>NOT</b>
+            set.
+          </webobject>
+          <br></br>
+          <font color = "#FF0000">
+            <webobject name = "ErrorMsg" />
+          </font>
+          <br></br>
+          <webobject name = "PasswordChangeForm">
+            <table border = "1" cellpadding = "2" cellspacing = "2">
+              <tr>
+                <td align = "RIGHT">Enter New Password:</td>
+                <td>
+                  <webobject name = "AdminPassword1" />
+                </td>
+              </tr>
+              <tr>
+                <td align = "RIGHT">Confirm New Password:</td>
+                <td>
+                  <webobject name = "AdminPassword2" />
+                </td>
+              </tr>
+            </table>
+            <br></br>
+            <webobject name = "PasswordChangeFormSubmit" />
+            <webobject name = "PasswordChangeFormSubmit2" />
+            <br></br>
+          </webobject>
+        </center>
+      </td>
+    </tr>
+  </table>
+  <br></br>
+  <table border = "1" cellpadding = "10" cellspacing = "1" width = "95%">
+    <tr>
+      <td>
+        <center>
+          <font size = "+1">
+            <b>Detail View Refesh Settings</b>
+          </font>
+          <br />
+          <br />
+          The Detail View page can be configured to automatically refresh itself in your browser's window.
+          <br></br>
+          <webobject name = "DetailViewForm">
+            <webobject name = "AutoRefreshCheckbox" />
+            Auto-Refresh the Detail View
+            <br></br>
+            <webobject name = "AutoRefreshTimeIntervalField" />
+            second delay before refreshing.
+            <br></br>
+            <br></br>
+            <webobject name = "DetailViewSubmitButton" />
+          </webobject>
+        </center>
+      </td>
+    </tr>
+  </table>
+</webobject>

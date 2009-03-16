@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "true" class = "AjaxTabbedPanel.java">
+        <binding name = "id"/>
+        <binding name = "busyDiv" />
+        <binding name = "onLoad" />
+	</wo>
+	
+	<validation message = "&apos;id&apos; is a required binding">
+        <unbound name = "id"/>
+    </validation>
+</wodefinitions>

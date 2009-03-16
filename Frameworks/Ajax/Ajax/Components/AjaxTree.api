@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
+	<wo class="AjaxTreeNode.java" wocomponentcontent="true">
+		<binding name="root"/>
+		<binding name="item"/>
+		<binding name="itemClass"/>
+		<binding name="rootExpanded"/>
+		<binding name="allExpanded"/>
+		<binding name="parentKeyPath"/>
+		<binding name="childrenKeyPath"/>
+		<binding name="isLeafKeyPath"/>
+		<binding name="id"/>
+		<binding name="class"/>
+		<binding name="treeModel"/>
+		<binding name="collapsedImage"/>
+		<binding name="collapsedImageFramework"/>
+		<binding name="expandedImage"/>
+		<binding name="expandedImageFramework"/>
+		<binding name="leafImage"/>
+		<binding name="leafImageFramework"/>
+		<binding name="delegate"/>
+		<binding name="showRoot"/>
+		<binding defaults="Boolean" name="cache"/>
+
+	    <validation message="'parentKeyPath' and 'childrenKeyPath', or 'delegate' must be bound.">
+	    	<and>
+		    	<or>
+				    <unbound name="parentKeyPath"/>
+				    <unbound name="childrenKeyPath"/>
+				  </or>
+				  <unbound name="delegate"/>
+				</and>
+	    </validation>
+	
+	    <validation message="If you bind 'delegate', you cannot also bind 'parentKeyPath', 'childrenKeyPath', or 'isLeafKeyPath'.">
+	    	<and>
+	    	<or>
+			    <bound name="parentKeyPath"/>
+			    <bound name="childrenKeyPath"/>
+			    <bound name="isLeafKeyPath"/>
+			  </or>
+			  <bound name="delegate"/>
+			  </and>
+	    </validation>
+	
+	    <validation message="One of 'root' or 'treeModel' must be bound.">
+	    	<and>
+			    <unbound name="root"/>
+			    <unbound name="treeModel"/>
+			  </and>
+	    </validation>
+    <binding name="imageLinkClass"/></wo>
+</wodefinitions>

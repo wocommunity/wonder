@@ -1,0 +1,18 @@
+DraggableContainer : WOGenericContainer {
+	elementName = elementName;
+	id = id;
+	class = ^class;
+	style = ^style;
+	draggableID = draggableID;
+}
+
+Content : WOComponentContent {
+}
+
+DraggableContainerID : WOString {
+	value = id;
+}
+
+AjaxOptions : AjaxOptions {
+	options = createAjaxOptions;
+}

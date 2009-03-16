@@ -1,0 +1,18 @@
+HasItems: ERXNonZeroConditional {
+	condition = list.count;
+}
+
+HasNoItems: ERXNonZeroConditional {
+	condition = list.count;
+	negate = true;
+}
+
+ViewLink: WOHyperlink {
+	action = view;
+	disabled = listIsEmpty;
+}
+
+Description: ERXPluralString {
+	count = list.count;
+	value = linkName;
+}

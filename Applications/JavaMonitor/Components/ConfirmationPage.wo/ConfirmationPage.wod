@@ -1,0 +1,21 @@
+Question: WOString {
+    value = delegate.question;
+    escapeHTML = false;
+}
+
+Explaination: WOString {
+    value = delegate.explaination;
+    escapeHTML = false;
+}
+
+CancelClicked: WOHyperlink {
+    action = delegate.cancel;
+}
+
+ConfirmClicked: WOHyperlink {
+    action = delegate.confirm;
+}
+NavPage: NavigationPage {
+	currentPage = delegate.pageType;
+}
+

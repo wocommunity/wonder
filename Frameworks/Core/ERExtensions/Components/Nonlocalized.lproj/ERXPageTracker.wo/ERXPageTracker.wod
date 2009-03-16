@@ -1,0 +1,21 @@
+HasKey : WOConditional {
+	condition = ^key;
+}
+
+Key : WOString {
+	value = ^key;
+}
+
+Href : WOString {
+  value = href;
+  escapeHTML = false;
+}
+
+Server : WOString {
+	value = server;
+	escapeHTML = true;
+}
+
+HasServer : WOConditional {
+  condition = server;
+}

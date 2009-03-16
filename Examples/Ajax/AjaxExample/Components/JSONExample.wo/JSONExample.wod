@@ -1,0 +1,26 @@
+AjaxExampleComponent : AjaxExampleComponent {
+  title = "JSON";
+}
+
+AjaxProxy : AjaxProxy {
+  name = "json";
+  proxyName = "example";
+  proxy = proxy;	
+}
+
+ERXJavaScript : ERXJavaScript {
+  framework = "Ajax";
+  filename = "prototype.js";
+}
+
+AjaxJSONClient : AjaxJSONClient {
+}
+
+GlobalJSONComponent : AjaxJSONClient {
+	component = "ExampleJSONComponent";
+	global = true;
+}
+
+InstanceJSONComponent : AjaxJSONClient {
+	component = "ExampleJSONComponent";
+}

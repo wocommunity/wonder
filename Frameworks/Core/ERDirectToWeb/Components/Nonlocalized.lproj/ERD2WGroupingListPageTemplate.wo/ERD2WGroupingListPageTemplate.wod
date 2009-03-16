@@ -1,0 +1,77 @@
+BackLink: ERXSingleButton {
+	action = backAction;
+	value = d2wContext.returnButtonLabel;
+}
+
+PrinterButton: WOSwitchComponent {
+	WOComponentName = d2wContext.printerButtonComponentName;
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+	task = "list";
+	show = displayGroup.displayedObjects.count;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+ActionBar : ERDActionBar {
+	d2wContext = d2wContext;
+}
+
+MassMofidy : ERDMassModifyButton {
+	d2wContext = localContext;
+	list = displayGroup.displayedObjects;
+}
+Filter : ERDFilterDisplayGroupButton {
+	displayGroup = displayGroup;
+	entityName=d2wContext.entity.name;
+	allowsFiltering = d2wContext.allowsFiltering;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+ListPageRepetition2: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+NavigationBar: WOSwitchComponent {   
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+    d2wContext = d2wContext;
+	bgcolor = d2wContext.backgroundColorForTable;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+
+

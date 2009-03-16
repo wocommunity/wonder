@@ -1,0 +1,37 @@
+<wo:UberHeaderFooter title="WOOGNL">
+  <wo:UberPanel title="Inline Bindings">
+  	<ul>
+  		<li>String Literal (full name): <span class="actual"><wo:WOString value="Hello World"/></span> (Expected: 'Hello World')</li>
+  		<li>String Literal (shortcut): <span class="actual"><wo:str value="Hello World"/></span> (Expected: 'Hello World')</li>
+  		<li>Boolean Literal: <span class="actual"><wo:WOString value="2 &gt; 1" escapeHTML="$true"/></span> (Expected: '2 &amp;gt; 1')</li>
+  		<li>Boolean Literal: <span class="actual"><wo:WOString value="2 &gt; 1" escapeHTML="$false"/></span> (Expected: '2 &gt; 1')</li>
+  		<li>Boolean Literal (coercion): <span class="actual"><wo:WOString value="2 &gt; 1" escapeHTML="false"/></span> (Expected: '2 &gt; 1')</li>
+  		<li>KVC Key: <span class="actual"><wo:str value="$helloWorld"/></span> (Expected: 'Hello World')</li>
+  		<li>KVC Keypath: <span class="actual"><wo:str value="$session.application.name"/></span> (Expected: 'Uber')</li>
+  		<li>Loc Association: <span class="actual"><wo:str loc:value="er.uber.locAssociation"/></span> (Expected: 'Hello World')</li>
+  		<li>Valid Flag: <span class="actual"><wo:str value="$helloWorld // VALID"/></span> (Expected: 'Hello World')</li>
+  	</ul>
+  </wo:UberPanel>
+
+  <wo:UberPanel title="Helper Functions">
+  	<ul>
+  		<li>String: <span class="actual"><wo:WOString value="$helloWorld|reverse"/></span> (Expected: 'dlroW olleH')</li>
+  		<li>Boolean: <span class="actual"><wo:WOString value="$fixedOn|yesNo"/></span> (Expected: 'yes')</li>
+  		<li>Boolean: <span class="actual"><wo:WOString value="$fixedOff|yesNo"/></span> (Expected: 'no')</li>
+  		<li>Params: <span class="actual"><wo:WOString value="$fixedOn|yesNo('on', 'off')"/></span> (Expected: 'on')</li>
+  		<li>Params: <span class="actual"><wo:WOString value="$fixedOff|yesNo('on', 'off')"/></span> (Expected: 'off')</li>
+  		<li>Null: <span class="actual"><wo:WOString value="$nullString|nullTest"/></span> (Expected: 'Replaced Null')</li>
+  		<li>Broken: <span class="actual"><wo:WOString value="$helloWorld|doesNotExist"/></span> (Expected: '')</li>
+  		<li>Valid Flag: <span class="actual"><wo:WOString value="$helloWorld|reverse // VALID"/></span> (Expected: 'dlroW olleH')</li>
+  	</ul>
+  </wo:UberPanel>
+
+  <wo:UberPanel title="Misc">
+  	<ul>
+  		<li>Mixed WOD: <span class="actual"><webobject name="MixedWodEntry"/></span> (Expected: 'WOD Entry')</li>
+  		<li>'wo' Tag: <span class="actual"><wo name="MixedWodEntry"/></span> (Expected: 'WOD Entry')</li>
+  		<li>Closing Tag: <span class="actual"><webobject name="MixedWodEntry"></webobject></span> (Expected: 'WOD Entry')</li>
+  		<li>Closing Inline Tag: <span class="actual"><wo:str value="Hello World"></wo:str></span> (Expected: 'Hello World')</li>
+  	</ul>
+  </wo:UberPanel>
+</wo:UberHeaderFooter>

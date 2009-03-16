@@ -1,0 +1,15 @@
+HasOnBeforeUpdateFunc : WOConditional {
+	condition = ^onBeforeUpdate;
+}
+
+OnBeforeUpdateFunc : WOString {
+	value = ^onBeforeUpdate;
+}
+
+RefreshTargetConditional : WOConditional {
+	condition = refreshTarget;
+}
+
+TargetContainerID : WOString {
+	value = targetContainerID;
+}

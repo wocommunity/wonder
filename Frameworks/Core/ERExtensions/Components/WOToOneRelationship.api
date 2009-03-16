@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="WOToOneRelationship" wocomponentcontent="false">
+
+		<binding name="sourceObject"/>
+		<binding name="isMandatory" defaults="Boolean"/>
+		<binding name="sourceEntityName"/>
+		<binding name="relationshipKey"/>
+		<binding name="destinationEntityName"/>
+		<binding name="possibleChoices"/>
+		<binding name="dataSource"/>
+		<binding name="destinationDisplayKey"/>
+		<binding name="destinationSortKey"/>
+		<binding name="qualifier"/>
+		<binding name="noSelectionString"/>
+		<binding name="uiStyle"/>
+		<binding name="maxColumns"/>
+		<binding name="size"/>
+		<binding name="width"/>
+		<binding name="popupName"/>
+		<binding name="goingVertically" defaults="Boolean"/>
+		<binding name="localizeDisplayKeys" defaults="Boolean"/>
+		<binding name="selection"/>
+		<binding name="item"/>
+		<binding name="displayString"/>
+		<binding name="class"/>
+		<binding name="id"/>
+		<binding name="disabled" defaults="Boolean"/>
+
+		<validation message = "You must bind selection or sourceEntityName, sourceObject, and relationshipKey.">
+			<and>
+				<unbound name = "selection"/>
+				<or>
+					<unbound name="sourceEntityName"/>
+        	<unbound name="relationshipKey"/>
+					<unbound name="sourceObject"/>
+				</or>
+			</and>
+		</validation>
+
+		<validation message="'possibleChoices' and 'qualifier' can not both be bound.">
+			<and>
+				<bound name="possibleChoices"/>
+				<bound name="qualifier"/>
+			</and>
+		</validation>
+	</wo>
+</wodefinitions>

@@ -1,0 +1,39 @@
+<ul id = "objectives">
+	<li>AjaxHighlight</li>
+	<li>AjaxObserveField</li>
+	<li>AjaxUpdateContainer</li>
+</ul>
+
+<wo:AjaxHeaderFooter title = "Ajax Form">
+	<wo:form multipleSubmit = "$true">
+		<wo:AjaxObserveField updateContainerID = "formSummary" action = "$formChanged">
+			<div id = "form">
+				<h1>Personal Info</h1>
+				
+				<label>First Name</label>
+				<div>
+					<wo:WOTextField id = "firstNameField" value = "$firstName" size = "30"/>
+				</div>		
+		
+				<label>Last Name</label>
+				<div>
+					<wo:WOTextField id = "lastNameField" value = "$lastName" size = "30"/>
+				</div>
+				
+				<label>Likes Stuff?</label>
+				<div>
+					<wo:WOCheckBox id = "likesStuff" checked = "$likesStuff"/>
+				</div>
+			</div>
+		</wo:AjaxObserveField>
+	</wo:form>
+	
+	<wo:AjaxUpdateContainer id = "formSummary" style = "display: none">
+		<h1>Form Saved</h1>
+		
+		<div>First Name is '<wo:str value = "$firstName" valueWhenEmpty = "(missing)"/>'</div>
+		<div>Last Name is '<wo:str value = "$lastName" valueWhenEmpty = "(missing)"/>'</div>
+		<div>Likes Stuff? <wo:str value = "$likesStuff|yesNo"/></div>
+		<wo:AjaxHighlight id = "formSummary" value = "formSummary" showEffect = "appear" showDuration = "0.01" hideDelay = "1.0" hideEffect = "fade" hideDuration = "0.50"/>
+	</wo:AjaxUpdateContainer>
+</wo:AjaxHeaderFooter>

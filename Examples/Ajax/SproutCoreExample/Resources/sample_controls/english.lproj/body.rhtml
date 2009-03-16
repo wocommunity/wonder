@@ -1,0 +1,5 @@
+<% content_for('body') do %>
+
+<%= tab_view :control_tabs, :lazy_tabs => true, :segments => [[:welcome, loc(%(Welcome_tab))], [:collections, loc(%(Collections_tab))], [:collections2, loc(%(Collections2_tab))], [:buttons, loc(%(Buttons_tab))], [:panes, loc(%(Panes_tab))], [:forms, loc(%(Forms_tab))], [:icons, loc(%(Icons_tab))]] %>
+
+<% end %>

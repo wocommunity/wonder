@@ -1,0 +1,27 @@
+<ul id="objectives">
+	<li>AjaxModalContainer</li>
+	<li>AjaxSubmitButton</li>
+	<li>AjaxUpdateContainer</li>
+</ul>
+
+<wo:AjaxHeaderFooter title="Modal Editor">
+	<h1>Products</h1>
+	<wo:AjaxUpdateContainer elementName="ul" id="products">
+		<wo:WORepetition list="$products" item="$repetitionProduct">
+			<li>
+				<wo:str value="$repetitionProduct.title"/>
+				<wo:AjaxModalContainer id="$repetitionProduct.id" ajax="$true" label="edit" class="edit">
+					<wo:AjaxUpdateContainer>
+						<wo:form>
+							<b>edit product</b>
+							<p>
+							<wo:WOTextField value="$repetitionProduct.title" size = "30"/>
+							<wo:AjaxSubmitButton action="$save" value="Save" updateContainerID = "_parent" />
+							</p>
+						</wo:form>
+					</wo:AjaxUpdateContainer>
+				</wo:AjaxModalContainer>
+			</li>
+		</wo:WORepetition>
+	</wo:AjaxUpdateContainer>
+</wo:AjaxHeaderFooter>

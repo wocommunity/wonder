@@ -1,0 +1,18 @@
+Image: WOImage {
+    width=16;
+    height=16;
+    border=0;
+    filename=filename;
+    alt = name;
+   	title = name;
+}
+
+
+Name:WOString {
+	value=name;
+}
+
+
+ShowText : WOConditional {
+  condition = showText;
+}

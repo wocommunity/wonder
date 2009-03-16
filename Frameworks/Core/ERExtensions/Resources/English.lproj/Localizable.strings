@@ -1,0 +1,18 @@
+{
+	"Could not save your changes: " = "Could not save your changes: ";
+	"ERXArrayChooser.noneString" = "- none -";
+	"ERXBatchNavigationBar.items_per_page" = "items/page";
+	"ERXBatchNavigationBar.of" = "of";
+	"ERXBatchNavigationBar.page" = "Page";
+	"ERXBatchNavigationBar.show" = "Show";
+	"ERXCheckboxMatrix.deselectAll" = "None";
+	"ERXCheckboxMatrix.selectAll" = "All";
+	"ERXSortOrder.sortBy" = "Click to sort by this column";
+	"WOToOneRelationship.noneString" = "- none -";
+   	"ERXFlickrBatchNavigation.previous" = " Prev";
+   	"ERXFlickrBatchNavigation.next" = "Next ";
+   	"ERXFlickrBatchNavigation.item" = "item";
+	"ERXFlickrBatchNavigation.page" = "per Page";
+	"ERXFlickrBatchNavigation.show" = "Show: ";
+	"ERXFlickrBatchNavigation.all" = "All";
+}

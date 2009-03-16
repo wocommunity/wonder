@@ -1,0 +1,32 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {}; 
+    entities = (
+        {className = "er.indexing.attributes.ERIAttribute"; name = ERIAttribute; }, 
+        {
+            className = "er.indexing.attributes.ERIAttributeGroup"; 
+            name = ERIAttributeGroup; 
+        }, 
+        {
+            className = "er.indexing.attributes.ERIAttributeType"; 
+            name = ERIAttributeType; 
+        }, 
+        {className = EOGenericRecord; name = ERIAttributeValidationRule; }, 
+        {className = "er.indexing.storage.ERIDirectory"; name = ERIDirectory; }, 
+        {className = "er.indexing.storage.ERIFile"; name = ERIFile; }, 
+        {className = "er.indexing.storage.ERIFileContent"; name = ERIFileContent; }, 
+        {
+            className = "er.indexing.attributes.ERIValidationRule"; 
+            name = ERIValidationRule; 
+        }
+    ); 
+    userInfo = {
+        "_EntityModeler" = {
+            activeDatabaseConfigName = Default; 
+            databaseConfigs = {
+                Default = {adaptorName = JDBC; prototypeEntityName = EOJDBCPostgresqlPrototypes; }; 
+            }; 
+        }; 
+    }; 
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="AjaxModalDialogComponent.java" wocomponentcontent="false">
+	    <binding defaults="Actions" name="action"/>
+	    <binding name="label"/>
+	    <binding name="title"/>
+	    <binding name="linkTitle"/>
+	    <binding name="width"/>
+	    <binding name="height"/>
+	    <binding name="open" defaults="Boolean"/>
+	    <binding name="showOpener" defaults="Boolean"/>
+	    <binding name="enabled" defaults="Boolean"/>
+	    <binding defaults="Actions" name="onOpen"/>
+	    <binding defaults="Actions" name="onClose"/>
+	    <binding name="id"/>
+	    <binding name="class"/>
+	    <binding name="style"/>
+	    <binding defaults="Boolean" name="overlayClose"/>
+	    <binding defaults="Boolean" name="locked"/>
+	    <binding name="method"/>
+	    <binding name="params"/>
+	    <binding name="loadingString"/>
+	    <binding name="closeString"/>
+	    <binding name="closeValue"/>
+	    <binding name="overlayOpacity"/>
+	    <binding name="overlayDuration"/>
+	    <binding name="slideDownDuration"/>
+	    <binding name="slideUpDuration"/>
+	    <binding name="resizeDuration"/>
+	    <binding defaults="Boolean" name="inactiveFade"/>
+	    <binding defaults="Boolean" name="transitions"/>
+	    <binding defaults="Boolean" name="autoFocusing"/>
+	    <binding name="beforeLoad"/>
+	    <binding name="afterLoad"/>
+	    <binding name="beforeHide"/>
+	    <binding name="afterHide"/>
+	    <binding name="afterResize"/>
+	    <binding name="onShow"/>
+	    <binding name="onUpdate"/>
+    <binding name="closeUpdateContainerID"/>
+    </wo>
+</wodefinitions>

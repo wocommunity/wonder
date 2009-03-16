@@ -1,0 +1,56 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = contentId; 
+            name = contentId; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = directoryId; 
+            name = directoryId; 
+            prototypeName = id; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = lastModified; 
+            name = lastModified; 
+            prototypeName = dateTime; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = length; 
+            name = length; 
+            prototypeName = longNumber; 
+        }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
+    ); 
+    attributesUsedForLocking = (contentId, directoryId, id, lastModified, length, name); 
+    className = "er.indexing.storage.ERIFile"; 
+    classProperties = (content, directory, lastModified, length, name); 
+    externalName = ERIFile; 
+    fetchSpecificationDictionary = {}; 
+    name = ERIFile; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = ERIFileContent; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = contentId; }); 
+            name = content; 
+        }, 
+        {
+            destination = ERIDirectory; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = directoryId; }); 
+            name = directory; 
+        }
+    ); 
+}

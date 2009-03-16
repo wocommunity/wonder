@@ -1,0 +1,3 @@
+UpdateLink : AjaxFunctionLink {
+	onclick = "opener.exampleAreaUpdate()";
+}

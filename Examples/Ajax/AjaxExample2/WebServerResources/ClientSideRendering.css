@@ -1,0 +1,21 @@
+ul#people {
+	list-style-type: none;
+	margin: 0em;
+	padding: 0em;
+}
+
+ul#people li {
+	font-size: 1.5em;
+	cursor: pointer;
+}
+
+ul#people li span.name {
+	display: inline-table;
+	width: 50%;
+}
+
+ul#people li span.votes {
+	margin-left: 5em;
+	font-weight: bold;
+	color: rgb(150, 150, 150);
+}

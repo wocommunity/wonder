@@ -1,0 +1,35 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = format; 
+            name = format; 
+            prototypeName = varchar100; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }, 
+        {
+            allowsNull = N; 
+            columnName = valueType; 
+            name = valueType; 
+            prototypeName = intNumber; 
+            userInfo = {ERXConstantClassName = "er.indexing.attributes.ERIValueType"; }; 
+        }
+    ); 
+    attributesUsedForLocking = (format, id, name, valueType); 
+    className = "er.indexing.attributes.ERIAttributeType"; 
+    classProperties = (attributes, format, name, valueType); 
+    externalName = ERIAttributeType; 
+    fetchSpecificationDictionary = {}; 
+    name = ERIAttributeType; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ERIAttribute; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = attributeTypeId; sourceAttribute = id; }); 
+            name = attributes; 
+        }
+    ); 
+}

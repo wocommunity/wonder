@@ -1,0 +1,21 @@
+HelpText : WOString {
+	value = helpText.value;
+	valueWhenEmpty = defaultValue;
+	escapeHTML = ^escapeHTML;
+}
+
+ShowCreate : WOConditional {
+	condition = showCreate;
+}
+
+ShowEdit : WOConditional {
+	condition = showEdit;
+}
+
+Create :WOHyperlink {
+	action = createHelpText;
+}
+
+Edit :WOHyperlink {
+	action = editHelpText;
+}

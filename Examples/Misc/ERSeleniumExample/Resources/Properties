@@ -1,0 +1,5 @@
+ERApplicationName = ERSeleniumExample
+
+SeleniumTestsEnabled=true
+
+log4j.logger.dm.selenium = DEBUG

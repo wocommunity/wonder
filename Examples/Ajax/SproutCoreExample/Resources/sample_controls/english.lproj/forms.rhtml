@@ -1,0 +1,68 @@
+<% view :forms_tab do %>
+<h1><%= loc(%(Title_forms)) %></h1>
+<p>
+  SproutCore has built in support for form validation, and for buffering form   
+  input into a controller before it is committed to your backend model.  The 
+  examples below show the built in validators and variety of controls that are 
+  supported.
+</p>
+
+<% form_view :outlet => true, :tag => 'table', :class =>'form' do %>
+  <tr>
+    <td class="label"><%= loc(%(FName_forms)) %>:</td>
+    <td class="value"><%= text_field_view :outlet => true %></td>
+  </tr>
+
+  <tr>
+    <td class="label"><%= loc(%(LName_forms)) %>:</td>
+    <td class="value"><%= text_field_view :outlet => true %></td>
+  </tr>
+
+  <tr>
+    <td class="label"><%= loc(%(Email_forms)) %>:</td>
+    <td class="value"><%= text_field_view :outlet => true %></td>
+  </tr>
+
+  <tr>
+    <td class="label"><%= loc(%(PNumber_forms)) %>:</td>
+    <td class="value"><%= text_field_view :outlet => true %></td>
+  </tr>
+
+  <tr>
+    <td class="label"><%= loc(%(CCard_forms)) %>:</td>
+    <td class="value"><%= text_field_view :outlet => true %></td>
+  </tr>
+
+  <tr><td colspan="2" class="separator"></td></tr>
+
+  <tr>
+    <td class="label"><%= loc(%(Address_forms)) %>:</td>
+    <td class="value"><%= text_field_view :outlet => true %></td>
+  </tr>
+
+  <tr>
+    <td class="label"></td>
+    <td class="value city-state">
+      <%= text_field_view :outlet => true, :class => :city %>
+      <%= popup_button_view :outlet => true, :value => "CA" %>
+    </td>
+  </tr>
+
+  <tr><td colspan="2" class="separator"></td></tr>
+  
+  <tr>
+    <td class="label"><%= loc(%(Crazinnes_forms)) %>:</td>
+    <td><%= slider_view :outlet => true %></td>
+  </tr>
+
+  <tr>
+    <td colspan="2" class="buttons">
+      <%= button_view :outlet => true, :title => loc(%(Cancel_buttom_forms)), :cancel => true %>
+      <%= button_view :outlet => true, :title => loc(%(SChanges_buttom_forms)), :defaut => true %>
+    </td>
+  </tr>
+<% end %>
+
+
+
+<% end %>

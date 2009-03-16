@@ -1,0 +1,67 @@
+ApplicationNameString: WOString {
+    value = application.name;
+    escapeHTML = false;
+}
+
+Conditional1: ERXNonNullConditional {
+	condition = actor;
+}
+
+Conditional2: ERXNonNullConditional {
+	condition = formattedMessage;
+}
+
+ERXStringWithLineBreaks1: ERXStringWithLineBreaks {
+	value = shortErrorMessage;
+}
+
+ERXStringWithLineBreaks2: ERXStringWithLineBreaks {
+	value = formattedMessage;
+}
+ExtraInfoRowRepetition: WODictionaryRepetition {
+    dictionary = extraInfo;
+    key = currentUserInfoKey;
+    item = currentUserInfoValue;
+}
+
+HasExtraInfoDictionary: ERXNonNullConditional {
+	condition = extraInfo;
+}
+
+ReasonRepetition: WORepetition {
+    list = reasonLines;
+    item = currentReasonLine;
+}
+
+ReasonString: WOString {
+    value = currentReasonLine;
+    escapeHTML = true;
+}
+
+String1: WOString {
+	value = actor.userPresentableDescription;
+}
+
+String2: WOString {
+	value = actor.primaryKey; //VALID
+}
+
+String3: WOString {
+	dateformat = "%B %d, %Y - %H:%M:%S";
+	value = now;
+}
+
+String4: WOString {
+	value = hostName;
+}
+
+UserInfoKeyString2: WOString {
+    value = currentUserInfoKey;
+    escapeHTML = false;
+}
+
+UserInfoValueString2: WOString {
+    value = currentUserInfoValue.toString;
+    escapeHTML = true;
+}
+

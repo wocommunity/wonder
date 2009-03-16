@@ -1,0 +1,33 @@
+div#form {
+	border: 1px solid rgb(160, 160, 160);
+	padding: 0.5em;
+	background-color: rgb(240, 240, 240);
+}
+
+h1 {
+	margin: 0em;
+	padding: 0em;
+	font-size: 1.5em;
+	margin-bottom: 0.5em;
+}
+
+div#form h1 {
+}
+
+div#form label {
+	font-weight: bold;
+	margin-top: 1em;
+	display: block;
+}
+
+div#formSummary {
+	border: 1px dashed rgb(160, 160, 160);
+	padding: 0.5em;
+}
+
+div#formSummary h1 {
+}
+
+div#formSummary div {
+	margin-top: 1em;
+}

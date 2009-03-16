@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="ERXFlashMovie" wocomponentcontent="false">    
+    	<binding name="movieUrl"/>
+        <binding name="movieName"/>
+        <binding name="framework"/>
+        <binding name="id"/>
+        <binding name="bgColor"/>
+        <binding name="quality"/>
+        <binding name="width"/>
+        <binding name="height"/>
+        <binding name="allowScriptAccess"/>
+   		<binding name="wmode"/>
+    	<binding defaults="Boolean" name="allowFullScreen"/>
+    </wo>
+</wodefinitions>

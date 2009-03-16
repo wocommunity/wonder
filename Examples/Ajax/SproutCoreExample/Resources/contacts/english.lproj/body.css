@@ -1,0 +1,68 @@
+body {
+ position: absolute ;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ padding: 0;
+ margin: 0;
+ overflow: hidden ;
+}
+
+.workspace .sidebar {
+ position: absolute;
+ left:  0;
+ top:  0;
+ width: 200px;
+ bottom: 0;
+}
+
+.workspace .sidebar .master_list {
+ position: absolute;
+ left:  0;
+ top:  0;
+ right: 0;
+ bottom: 0;
+}
+
+.workspace .sc-split-divider-view {
+ position: absolute;
+ left: 200px;
+ top: 0;
+ bottom: 0;
+}
+
+.workspace .detail_view {
+ position: absolute;
+ left: 205px;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ border: none ;
+ background-color: #aaa;
+}
+
+.workspace .detail_view .card-detail {
+ margin-left: auto;
+ margin-right: auto;
+ top: 100px;
+ position: relative;
+ border: 4px #888 solid;
+ background: #f0f0f0;
+ padding-top: 10px;
+ padding-bottom: 10px;
+}
+
+.workspace .detail_view .card-detail td {
+  padding: 0 10px;
+}
+
+.workspace .detail_view .card-detail .buttons {
+ text-align: right;
+ padding-top: 10px;
+}
+
+.workspace .detail_view .card-detail input {
+ font-size: 14px;
+ width: 300px;
+}

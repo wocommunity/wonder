@@ -1,0 +1,23 @@
+<wo:UberHeaderFooter title="Character Encoding">
+	<wo:UberPanel title="Component Encoding">
+		<p>This should be in Chinese: 汉语/漢語</p>
+	</wo:UberPanel>
+
+	<wo:UberPanel title="Localized Resource Strings">
+		<p>This should be in Chinese: <wo:ERXLocalizedString value="er.uber.chinese"/></p>
+	</wo:UberPanel>
+
+	<wo:UberPanel title="Form Encoding">
+		<p>The value below should be '客家話' (submitted value: <wo:str value="$value"/>)</p> 
+		<wo:form>
+			<wo:WOTextField value="$value"/>
+			<wo:WOSubmitButton action="$testFormSubmit"/>
+		</wo:form>
+	</wo:UberPanel>
+
+	<wo:UberPanel title="Database Encoding">
+		<p>Company name: <wo:str value = "$company.name"/> (should be 汉语/漢語).</p>
+		
+		<p><wo:WOHyperlink action="$testCompany">Save and reload from the Database</wo:WOHyperlink></p>
+	</wo:UberPanel>
+</wo:UberHeaderFooter>

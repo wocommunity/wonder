@@ -1,0 +1,18 @@
+<project name="BuildTaglets" default="compile" basedir=".">
+
+    <target name="compile">
+        <javac srcdir="."
+    	       destdir="../lib"
+    	       debug="on"
+    	       source="1.5"
+    	/>
+    </target>
+	
+    <target name="clean">
+        <delete>
+    	    <fileset dir="../lib" includes="*Taglet.class"/>
+    	</delete>
+    </target>
+
+	
+</project>

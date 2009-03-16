@@ -1,0 +1,8 @@
+PopUpButton1: WOPopUpButton {
+	list = list;
+	selection = displayGroupQueryMatchValue;
+	item = item;
+	noSelectionString = " - none -";
+	displayString = displayString;
+}
+

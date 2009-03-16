@@ -1,0 +1,18 @@
+ClickToOpenURL : WOString {
+	value = clickToOpenUrl;
+	escapeHTML = false;
+}
+
+ClickToDebugURL : WOString {
+	value = clickToDebugUrl;
+	escapeHTML = false;
+}
+
+CanClickToOpen : WOConditional {
+	condition = canClickToOpen;
+}
+
+NoClickToOpen : WOConditional {
+	condition = canClickToOpen;
+	negate = true;
+}

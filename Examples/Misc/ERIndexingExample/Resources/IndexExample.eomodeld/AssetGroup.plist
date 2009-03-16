@@ -1,0 +1,22 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
+    ); 
+    attributesUsedForLocking = (id, name); 
+    className = "er.indexing.example.eof.AssetGroup"; 
+    classProperties = (assets, name); 
+    externalName = AssetGroup; 
+    fetchSpecificationDictionary = {}; 
+    name = AssetGroup; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Asset; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = assetGroupID; sourceAttribute = id; }); 
+            name = assets; 
+        }
+    ); 
+}

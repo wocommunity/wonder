@@ -1,0 +1,79 @@
+BackLink: WOHyperlink {
+	action = returnAction;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+}
+
+ShowList: WOConditional {
+	condition = d2wContext.showListInSamePage;
+}
+
+ShowResults: WOConditional {
+	condition = showResults;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+ListPage: ERXD2WList {
+	dataSource = queryDataSource;
+	entityName = entity;
+	pageConfiguration = d2wContext.listConfigurationName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+QueryForm: WOForm {
+	action = queryAction;
+	name = "QueryForm";
+	multipleSubmit = true;
+}
+
+QueryPageRepetition: ERDQueryPageRepetition {
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+ClearButton: WOSubmitButton {
+	alt = "Clear Form";
+	value = d2wContext.clearButtonLabel;
+	action = clearAction;
+	class = "ClearButton";
+}
+
+QueryButton: WOSubmitButton {
+	action = queryAction;
+	alt = "Find objects matching the query";
+	value = d2wContext.findButtonLabel;
+	class = "QueryButton";
+}
+
+ReturnButton: WOSubmitButton {
+	action = returnAction;
+	alt = "Returns to the previous page";
+	value = d2wContext.returnButtonLabel;
+	class = "ReturnButton";
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+
+ActionBar: WOSwitchComponent {
+	WOComponentName = d2wContext.actionBarComponentName;
+	d2wContext = d2wContext;
+}
+
+Controller: WOSwitchComponent {
+	WOComponentName = d2wContext.controllerButtonComponentName;
+	d2wContext = d2wContext;
+}

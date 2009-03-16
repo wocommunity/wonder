@@ -1,0 +1,18 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {URL = "jdbc:FrontBase://127.0.0.1/PersonTest"; username = PersonTest; }; 
+    entities = ({className = "er.taggable.model.ERTag"; name = ERTag; }); 
+    userInfo = {
+        "_EntityModeler" = {
+            activeDatabaseConfigName = Default; 
+            databaseConfigs = {
+                Default = {
+                    adaptorName = JDBC; 
+                    connectionDictionary = {URL = "jdbc:FrontBase://127.0.0.1/PersonTest"; username = PersonTest; }; 
+                    prototypeEntityName = EOJDBCFrontBasePrototypes; 
+                }; 
+            }; 
+        }; 
+    }; 
+}

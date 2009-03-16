@@ -1,0 +1,13 @@
+WOHiddenField : WOHiddenField {
+  id = id;
+  value = spamCheck;
+  size = "1";
+}
+
+ExpectedSpamCheck : WOString {
+  value = expectedSpamCheck;
+}
+
+Id : WOString {
+  value = id;
+}

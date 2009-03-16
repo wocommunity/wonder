@@ -1,0 +1,88 @@
+body {
+	background-image: url(images/background.png);
+	background-color: rgb(50, 50, 50);
+	font-family: Helvetica;
+	font-size: 14pt;
+}
+
+div#header {
+	background-image: url(images/headerHighlight.png);
+	background-repeat: no-repeat;
+	background-position: top right;
+}
+
+div#header h1 {
+	text-align: right;
+	padding: 0px;
+	margin: 0px;
+	margin-right: 1em;
+}
+
+div#header h1 a {
+	color: rgb(255, 255, 255);
+	text-decoration: none;
+}
+
+div#header h1 span.title {
+	color: rgb(180, 180, 180);
+	text-transform: lowercase;
+	font-size: 0.5em;
+	margin-right: 2em;
+}
+
+div.panel {
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-webkit-box-shadow: 0px 5px 20px rgb(0, 0, 0);
+	background-color: rgb(255, 0, 0);
+	margin: 2em;
+	padding: 0px;
+}
+
+div.panel div.title {
+	background-image: url(images/titleBackground.png);
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	color: rgb(255, 255, 255);
+	background-color: rgb(65, 111, 147);
+	margin: 0px;
+	padding: 0.3em 1em;
+}
+
+div.panel div.content {
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	color: rgb(51, 51, 51);
+	background-color: rgb(255, 255, 255);
+	margin: 0px;
+	padding: 0.3em 1em;
+}
+
+div.panel div.content {
+	color: rgb(51, 51, 51);
+}
+
+div.panel div.content ul {
+	list-style-type: square;
+	margin: 0px;
+	padding-left: 2em;
+	line-height: 1.5em;
+	margin-bottom: 1em;
+}
+
+div.panel div.content ul li {
+	margin: 0px;
+}
+
+a {
+	color: rgb(184, 33, 40);
+	text-decoration: none;
+}
+
+span.actual {
+	color: rgb(184, 33, 40);
+}
+
+div#cssRelativeImage div.content {
+	background-image: url(images/ModernWebObjects.png);
+}

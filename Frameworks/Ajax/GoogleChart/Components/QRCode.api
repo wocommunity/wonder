@@ -1,0 +1,16 @@
+<?xml version = "1.0" encoding = "UTF-8" standalone = "yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "false" class = "GCQRMap">
+		<binding name ="text"/>
+		<binding name ="outputEncoding"/>
+		<binding name ="ecLevel"/>
+		<binding name ="margin"/>
+		<binding name ="size"/>
+		<binding name ="width"/>
+		<binding name ="height"/>
+		<binding name ="custom"/>
+		<binding name ="id"/>
+		<binding name ="class"/>
+		<binding name ="alt"/>
+	</wo>
+</wodefinitions>

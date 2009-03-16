@@ -1,0 +1,162 @@
+AreThereUnits: ERXNonNullConditional {
+	condition = d2wContext.resolvedUnit;
+}
+
+AttributeDisplay: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	_componentUnroll = true;
+	_unroll = true;
+	localContext = d2wContext;
+	object = object;
+}
+
+CELL: WOXMLNode {
+	elementName = "cell";
+	wrap = d2wContext.wrap;
+	width = d2wContext.width;
+}
+
+Conditional1: WOConditional {
+	condition = d2wContext.hasThirdLevel;
+}
+
+Conditional3: WOConditional {
+	condition = d2wContext.showHeader;
+}
+
+ERGroupingRepetition: ERXGroupingRepetition {
+	item = object;
+	list = displayGroup.displayedObjects;
+	sectionForItem = section;
+	sectionKey = "primaryKey";
+	subList = sublist;
+	subListSection = sublistSection;
+}
+
+Generic10: WOGenericContainer {
+	elementName = "cell";
+}
+
+Generic12: WOGenericContainer {
+	elementName = "cell";
+}
+
+Generic2: WOGenericContainer {
+	elementName = "cell";
+}
+
+Generic8: WOGenericContainer {
+	elementName = "cell";
+}
+
+Generic9: WOGenericContainer {
+	elementName = "cell";
+}
+
+IsThereATitle: ERXEqualConditional {
+	negated = true;
+	value1 = d2wContext.title;
+	value2 = "";
+}
+
+IsThereATitle2: ERXEqualConditional {
+	negated = true;
+	value1 = d2wContext.title;
+	value2 = "";
+}
+
+IsThereATitle3: ERXEqualConditional {
+	negated = true;
+	value1 = d2wContext.title;
+	value2 = "";
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+Repetition1: WORepetition {
+	item = object;
+	list = sublist;
+}
+
+Repetition2: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+Repetition3: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+Repetition4: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+String1: WOString {
+	value =d2wContext.resolvedUnit;
+}
+
+String2: WOString {
+	value = valueForGroup;
+}
+
+String3: WOString {
+	value = d2wContext.displayNameForProperty;
+}
+
+String4: WOString {
+	value = displayNameForGroupingKey;
+}
+
+String5: WOString {
+	value = d2wContext.title;
+}
+
+SwitchComponent1: WOSwitchComponent {
+	WOComponentName = componentName;
+	localContext = localContext;
+	object = object;
+}
+
+XMLNode1: WOXMLNode {
+	elementName = "row";
+}
+
+Generic3: WOGenericContainer {
+	elementName = "row";
+	"font-bold" = "true";
+	pattern = 1;
+}
+
+Generic4: WOGenericContainer {
+	elementName = "cell";
+	"font-bold" = "true";
+	"pattern-fg" = "0XEBEBEB";
+	pattern = 1;
+}
+
+Generic5: WOGenericContainer {
+	elementName = "cell";
+	"font-bold" = "true";
+	pattern = 1;
+	"pattern-fg" = "0XEBEBEB";
+}
+
+Generic6: WOGenericContainer {
+	elementName = "row";
+	"font-bold" = "true";
+	pattern = 1;
+	"pattern-bg" = "0X00FF00";
+}
+
+Generic7: WOGenericContainer {
+	elementName = "cell";
+	"font-bold" = "true";
+	"pattern-fg" = "0XEBEBEB";
+	pattern = 1;
+}

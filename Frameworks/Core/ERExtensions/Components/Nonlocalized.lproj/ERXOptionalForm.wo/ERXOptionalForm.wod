@@ -1,0 +1,46 @@
+HasDirectAction: ERXNonNullConditional {
+	condition = ^directActionName;
+}
+
+HasDirectAction2: ERXNonNullConditional {
+	condition = ^directActionName;
+	negate = true;
+}
+
+UseForm: WOConditional {
+        condition=showForm;
+        negate = false;
+}
+
+UseForm2: WOConditional {
+        condition = showForm;
+        negate = true;
+}
+
+content: WOComponentContent {
+}
+
+content2: WOComponentContent {
+}
+
+content3: WOComponentContent {
+}
+
+form: WOForm {
+    multipleSubmit= ^multipleSubmit;
+	name = ^name;
+	enctype = ^enctype;
+	directActionName = ^directActionName;
+	actionClass = ^actionClass;
+	style = ^style;
+	class = ^class;
+}
+
+form2: WOForm {
+    multipleSubmit= ^multipleSubmit;
+	name = ^name;
+	action = ^action;
+	enctype = ^enctype;
+	style = ^style;
+	class = ^class;
+}

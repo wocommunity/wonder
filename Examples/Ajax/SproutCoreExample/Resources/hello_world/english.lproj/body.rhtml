@@ -1,0 +1,10 @@
+<% content_for('body') do %>
+<div class="sc-welcome">
+  <img class="logo" src="<%= static_url('images/sproutcore-logo') %>" />
+  <div class="message">
+<%= checkbox_view :clock_checkbox, :label => "Show Clock", :bind => { :value => 'HelloWorld.appController.isClockShowing' } %>
+<%= button_view :clock_button, :label => "Clock", :bind => { :value => 'HelloWorld.appController.showClock' } %>
+<%= label_view :my_label, :tag => 'h2', :bind => { :value => 'HelloWorld.appController.greeting' } %>
+  </div>
+</div>
+<% end %>

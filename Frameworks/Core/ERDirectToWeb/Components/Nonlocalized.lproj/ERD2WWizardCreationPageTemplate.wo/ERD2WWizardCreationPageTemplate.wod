@@ -1,0 +1,97 @@
+CancelButton: ERXSingleButton {
+	action = cancelAction;
+	alt = "Reverts your changes";
+	value = d2wContext.cancelButtonLabel;
+	class = "CancelButton";
+	dontSubmitForm = true;
+}
+
+ERDBannerComponent: ERDBannerComponent {
+	bannerFileName = d2wContext.bannerFileName;
+	d2wContext = d2wContext;
+	showBanner = d2wContext.showBanner;
+	framework = "JavaDirectToWeb";
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+}
+
+EditForm: WOForm {
+	name = "EditForm";
+    enctype=d2wContext.formEncoding;
+	multipleSubmit = true;
+}
+
+Errors: ERXErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = d2wContext;
+	object = object;
+	displayPropertyKeys = currentTab.keys;
+}
+
+PreviousButton: WOSubmitButton {
+    action = previousStep;
+    alt = "Previous step";
+    value = d2wContext.previousButtonLabel;
+    class = "PreviousButton";
+}
+
+PageWrapper: WOSwitchComponent {
+	_componentUnroll = true;
+	_unroll = true;
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+NextButton: WOSubmitButton {
+    action = nextStep;
+    alt = "Next step";
+    value = d2wContext.nextButtonLabel;
+    class = "NextButton";
+}
+
+ShowCancel: WOConditional {
+    condition=showCancel;
+}
+
+ShowNext: WOConditional {
+    condition=showNext;
+}
+
+ShowPrevious: WOConditional {
+    condition=showPrevious;
+}
+
+ShowSave: WOConditional {
+    condition=showNext;
+    negate=true;
+}
+
+StepName: WOString {
+    value=currentTab.displayName;
+}
+
+Steps: ERXLocalizedString {
+	object = self;
+	templateString = "ERD2WWizardCreationPage.stepsMessage";
+}
+
+SaveButton: WOSubmitButton {
+	action = submitAction;
+	alt = "Saves your changes";
+	value = d2wContext.saveButtonLabel;
+	class = "SaveButton";
+}
+

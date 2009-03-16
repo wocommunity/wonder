@@ -1,0 +1,110 @@
+Banner: WOImage {
+	alt = "Find";
+	border = "0";
+	filename = "FindMetalBan.gif";
+	framework = "JavaDirectToWeb";
+	height = "31";
+	name = "Find";
+	width = "550";
+}
+
+BannerConditional: WOConditional {
+	_unroll = true;
+	condition = showBanner;
+}
+
+Entities: ERXLocalizedString {
+	value = "Search Entities";
+}
+
+EntitiesRepetition: WORepetition {
+	_unroll = true;
+	item = entityName;
+	list = currentSectionKeys;
+}
+
+EntityName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForEntity;
+}
+
+FontContainer: WOGenericContainer {
+	color = d2wContext.textColor;
+	elementName = "font";
+}
+
+HasSectionName: ERXNonZeroConditional {
+	condition = currentSection.name.length;
+}
+
+MoreOptionsImage: WOImage {
+	alt = "More options for this entity";
+	border = "0";
+	filename = "rt-arw.gif";
+	framework = "JavaDirectToWeb";
+	name = "More options for this entity";
+	height = "14";
+	width = "14";
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+QueryAnyField: ERD2WQueryAnyField {
+	_unroll = true;
+	displayGroup = displayGroup;
+	localContext = localContext;
+}
+
+QueryForm: WOForm {
+	action = queryAction;
+	multipleSubmit = true;
+}
+
+QueryRow: WOGenericContainer {
+	_unroll = true;
+	bgcolor = d2wContext.backgroundColorForTable;
+	elementName = "tr";
+}
+
+QueryTable: WOGenericContainer {
+	_unroll = true;
+	border = "0";
+	cellpadding = "0";
+	cellspacing = "0";
+	elementName = "table";
+}
+
+QueryTableHeaderRow: WOGenericContainer {
+	_unroll = true;
+	bgcolor = backgroundColorForTable;
+	elementName = "tr";
+}
+
+RegularQueryHyperlink: WOHyperlink {
+	action = showRegularQueryAction;
+}
+
+Repetition1: WORepetition {
+	list = sectionsContents;
+	item = currentSection;
+}
+
+SearchButtonImage: WOActiveImage {
+	action = queryAction;
+	alt = "Find objects matching the query";
+	border = "0";
+	filename = "magglass-btn.gif";
+	framework = "JavaDirectToWeb";
+	height = "16";
+	name = "Find objects matching the query";
+	width = "16";
+}
+
+SwitchComponent3: WOSwitchComponent {
+	WOComponentName = d2wContext.sectionComponentName;
+	d2wContext = d2wContext;
+}

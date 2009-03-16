@@ -1,0 +1,35 @@
+FirstName : WOTextField {
+	value = firstName;
+}
+
+LastName : WOTextField {
+	value = lastName;
+}
+
+CompanyName : WOString {
+	value = employee.company.name;
+}
+
+Cancel: AjaxSubmitButton {
+	action = cancelEdit;
+	evalScripts = true;
+	value = "Cancel";
+	formName = "EmployeeForm";
+}
+
+Save: AjaxSubmitButton {
+	action = saveEdit;
+	evalScripts = true;
+	value = "Save";
+	formName = "EmployeeForm";
+}
+
+Form : WOForm {
+	name = "EmployeeForm";
+	multipleSubmit = true;
+}
+
+ValidationMessage: WOString {
+	value = errorMessages;
+	escapeHTML = false;
+}

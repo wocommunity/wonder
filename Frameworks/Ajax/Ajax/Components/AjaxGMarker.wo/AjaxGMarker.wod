@@ -1,0 +1,32 @@
+MapID : WOString { 
+	value = ^mapID; 
+}
+
+MarkerID : WOString { 
+	value = id; 
+}
+
+Latitude : WOString { 
+	value = ^lat; 
+}
+
+Longitude : WOString { 
+	value = ^lng; 
+}
+
+Address : WOString { 
+	value = ^address; 
+}
+
+AddressConditional : WOConditional { 
+	condition = ^address; 
+}
+
+LngLatConditional : WOConditional {	
+	condition = ^lng; 
+}
+
+InfoWindowHtml : WOString {	
+	value = ^infoWindowHtml; 
+	escapeHTML = false; 
+}

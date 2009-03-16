@@ -1,0 +1,57 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = assetGroupID; 
+            name = assetGroupID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = content; 
+            name = content; 
+            prototypeName = varchar1000; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = creationDate; 
+            name = creationDate; 
+            prototypeName = dateTime; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = price; name = price; prototypeName = amount; }, 
+        {
+            allowsNull = N; 
+            columnName = userCount; 
+            name = userCount; 
+            prototypeName = longNumber; 
+        }
+    ); 
+    attributesUsedForLocking = (assetGroupID, content, creationDate, id, price, userCount); 
+    className = "er.indexing.example.eof.Asset"; 
+    classProperties = (assetGroup, content, creationDate, price, tags, userCount); 
+    externalName = Asset; 
+    fetchSpecificationDictionary = {}; 
+    name = Asset; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = AssetGroup; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = assetGroupID; }); 
+            name = assetGroup; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = AssetTag; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = assetId; sourceAttribute = id; }); 
+            name = assetTags; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {definition = "assetTags.tag"; name = tags; }
+    ); 
+}

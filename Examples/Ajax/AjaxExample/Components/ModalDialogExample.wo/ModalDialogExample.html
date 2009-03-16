@@ -1,0 +1,164 @@
+<webobject name = "AjaxExampleComponent">
+
+	<webobject name = "WelcomeModalDialog">
+		Welcome to the AjaxModalDialog examples.<br /><br />
+		This dialog demonstrates an automatically opened dialog<br />
+		with no visibile indication on the page.<br /><br />
+	</webobject>
+		
+	<h3>Simple dialog with in-line content</h3>
+	<div>
+		Demonstrates:
+		<ul>
+			<li>dialog content is fully in-line</li>
+			<li>dialog is locked open, only the links or navigating to another page can close it</li>
+			<li>label binding for link contents</li>
+			<li>client side hiding of dialog</li>
+			<li>AjaxHyperlink inside dialog to call method on server</li>
+		</ul>
+		
+		<webobject name = "SimpleModalDialog">
+			Are you sure you want to delete this?<br />
+			<span style="float:left"><webobject name = "Yes">yes</webobject></span>
+			<span style="float:right"><webobject name = "No">no</webobject></span>
+		</webobject>
+
+		<br/><br/>Look in the application log for "deleteIt called".
+	</div><br/>
+	
+	<hr />
+	
+	<h3>Updating dialog with in-line content</h3>
+	<div>
+		Demonstrates: 
+		<ul>
+			<li>dialog content is fully in-line</li>
+			<li>confirmation message is updated, dialog does not close</li>
+			<li>updating the title of the dialog</li>
+			<li>server side hiding of dialog on second confirmation</li>
+			<li>AjaxHyperlink inside dialog to call method on server</li>
+		</ul>
+
+		<webobject name = "UpdatingModalDialog">
+			<webobject name = "ConfirmationMessage"/><br />
+			<span style="float:left"><webobject name = "Yes2">yes</webobject></span>
+			<span style="float:right"><webobject name = "No">no</webobject></span>
+		</webobject>
+		
+		<br/><br/>Look in the application log for "deleteIt2 called".
+	</div><br/>
+
+	<hr />
+	
+	<h3>Updating dialog with external content</h3>
+	<div>
+		Demonstrates the same dialog as above with these changes: 
+		<ul>
+			<li>dialog content is taken from a different WOComponent</li>
+			<li>rich link content (an image)</li>
+			<li>server side hiding of dialog on second confirmation</li>
+			<li>AjaxHyperlink inside dialog to call method on server</li>
+		</ul>
+
+		<webobject name = "ComponentModalDialog">
+			<webobject name = "LinkTemplate"><webobject name = "DeleteImage"></webobject></webobject>
+			<webobject name = "ModalDialogContents" />
+		</webobject>
+	</div><br/>
+		
+	<hr />
+	
+	<h3>Form input dialog with in-line content</h3>
+	<div>
+		Demonstrates: 
+		<ul>
+			<li>form processing in a dialog</li>
+			<li>dialog content is in-line</li>
+			<li>page UI is updated to reflect changes from dialog</li>
+			<li>dialog updates to show validation messages</li>
+			<li>server side handling of Save and Cancel</li>
+			<li>AjaxSubmitButton inside dialog to call method on server</li>
+		</ul>
+		
+		<div style="border: 1px solid black; width: 50%;">
+			<webobject name = "UIUpdater1">
+				<div>
+					<span style="float:left">First Name:</span>
+					<span style="float:right"><webobject name = "FirstName"/></span>
+				</div>
+				<div style="clear:both">
+					<span style="float:left">Last Name:</span>
+					<span style="float:right"><webobject name = "LastName"/></span>
+				</div>
+				<div style="clear:both">
+					<span style="float:left">Company Name:</span>
+					<span style="float:right"><webobject name = "CompanyName"/></span>
+				</div>
+			</webobject name = "UIUpdater1">
+			<div style="clear:both">
+				<span style="float:right">
+					<webobject name = "InlineEditEmployee">
+						<webobject name = "Form">
+							<div style="clear:both; text-align:center; color: red;">
+								<webobject name = "ValidationMessage"/>
+							</div>
+							<div style="clear:both">
+								<span style="float:right">&nbsp;</span>
+							</div>
+							<div>
+								<span style="float:left">First Name:</span>
+								<span style="float:right"><webobject name = "FirstNameInput"/></span>
+							</div>
+							<div style="clear:both">
+								<span style="float:left">Last Name:</span>
+								<span style="float:right"><webobject name = "LastNameInput"/></span>
+							</div>
+							<div style="clear:both">
+								<span style="float:left">Company Name:</span>
+								<span style="float:right"><webobject name = "CompanyName"/></span>
+							</div>
+							<div style="clear:both">
+								<span style="float:right">&nbsp;</span>
+							</div>
+							<div style="clear:both">
+								<span style="float:left"><webobject name = "CancelEmployeeEdit"/></span>
+								<span style="float:right"><webobject name = "SaveEmployeeEdit"/></span>
+							</div>
+						</webobject>
+					</webobject>
+				</span>
+			</div>
+		</div>
+	</div><br/>
+	
+	<hr />
+	
+	<h3>Form input dialog with external content</h3>
+	<div>
+		Demonstrates the same dialog as above, but with these changes: 
+		<ul>
+			<li>external content loaded from an action method</li>
+			<li>ERXWOTemplate to hold link text</li>
+		</ul>
+
+		<div style="border: 1px solid black; width: 50%;">
+			<webobject name = "UIUpdater2">
+				<div>
+					<span style="float:left">First Name:</span>
+					<span style="float:right"><webobject name = "FirstName"/></span>
+				</div>
+				<div style="clear:both">
+					<span style="float:left">Last Name:</span>
+					<span style="float:right"><webobject name = "LastName"/></span>
+				</div>
+				<div style="clear:both">
+					<span style="float:left">Company Name:</span>
+					<span style="float:right"><webobject name = "CompanyName"/></span>
+				</div>
+			</webobject name = "UIUpdater2">
+			<div style="clear:both">
+				<span style="float:right"><webobject name = "EditEmployee"><webobject name = "EditEmployeeLink">edit</webobject></webobject></span>
+			</div>
+		</div>
+	</div><br/>
+</webobject name = "AjaxExampleComponent">

@@ -1,0 +1,28 @@
+{
+    attributes = (
+        {allowsNull = N; columnName = GID; name = gid; prototypeName = globalID; }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = "IS_DELETED"; 
+            name = isDeleted; 
+            prototypeName = intBoolean; 
+        }
+    ); 
+    attributesUsedForLocking = (gid, id, isDeleted); 
+    className = "er.corebusinesslogic.audittrail.ERCAuditTrail"; 
+    classProperties = (entries, gid, isDeleted); 
+    externalName = ERCAuditTrail; 
+    fetchSpecificationDictionary = {}; 
+    name = ERCAuditTrail; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ERCAuditTrailEntry; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = trailId; sourceAttribute = id; }); 
+            name = entries; 
+        }
+    ); 
+}

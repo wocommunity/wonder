@@ -1,0 +1,55 @@
+Show: WOConditional {
+	condition = application.isDevelopmentMode;
+}
+
+Log4J: WOHyperlink {
+	class = ^linkClass;
+	actionClass = "ERXDirectAction";
+	directActionName = "log4j";
+	target = "log4J";
+}
+
+D2W: WOHyperlink {
+	action = toggleD2WInfo;
+	class = ^linkClass;
+}
+
+SQL: WOHyperlink {
+	action = toggleAdaptorLogging;
+	class = ^linkClass;
+}
+
+CSSUrl : WOResourceURL {
+	framework = "ERExtensions";
+	filename = "css-debug.css";
+}
+
+CSS: WOHyperlink {
+	href = "#";
+	onclick = "ERD2WDebugFlags_cssDebug();void(0);";
+	class = ^linkClass;
+}
+
+Clear: WOHyperlink {
+	action = clearD2WRuleCache;
+	class = ^linkClass;
+}
+
+Dump: WOHyperlink {
+	actionClass = "ERXDirectAction";
+	directActionName = "dumpCreatedKeys";
+	class = ^linkClass;
+}
+WOStats: WOHyperlink {
+	action = statisticsPage;
+	class = ^linkClass;
+}
+Localization: WOHyperlink {
+	actionClass = "ERXDirectAction";
+	directActionName = "editLocalizedFiles";
+	class = ^linkClass;
+}
+Test: WOHyperlink {
+	actionClass = "er.selenium.SeleniumStartTesting";
+	class = ^linkClass;
+}

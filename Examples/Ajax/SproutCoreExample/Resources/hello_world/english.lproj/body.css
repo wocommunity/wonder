@@ -1,0 +1,75 @@
+/* Default CSS for welcome page.  Delete this styling and replace it with your own. */
+
+.sc-welcome {
+	position: absolute ;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background-color: white ;
+}
+
+.sc-welcome img.logo {
+	position: absolute ;
+	bottom: 80px;
+	left: 50%;
+	margin-left: -20px;	
+}
+
+/* @group Message */
+
+
+
+.sc-welcome .message {
+	max-width: 800px;
+	margin-left: auto ;
+	margin-right: auto;
+	margin-top: 100px;
+	position: relative;
+}
+
+.sc-welcome h1 {
+	border: none ;
+	padding: 0;
+	margin: 0;
+	letter-spacing: -3px;
+	font: normal 6.4em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+.sc-welcome h3 {
+	margin: 8px 12px;
+	padding: 0;
+	font: 1.5em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: #808080;
+}
+
+/* @end */
+
+/* @group Sticky Note */
+
+.sc-welcome .sticky-note {
+	position: absolute ;
+	right: 0;
+	top: -70px;
+	width: 320px;
+	height: 300px;
+	padding: 60px;
+	padding-right: 20px;
+	background: static_url('sticky-note') no-repeat center center;
+	font: 1.3em "Comic Sans MS", "Comic Sans", Arial, Helvetica, Geneva, sans-serif;
+	color: #5f4700;
+}
+
+.sc-welcome .sticky-note p {
+	font-weight: bold ;
+}
+
+.sc-welcome .sticky-note ul {
+	padding: 0 10px ;
+}
+
+.sc-welcome .sticky-note li {
+	margin: 8px 0 ;
+}
+
+/* @end */

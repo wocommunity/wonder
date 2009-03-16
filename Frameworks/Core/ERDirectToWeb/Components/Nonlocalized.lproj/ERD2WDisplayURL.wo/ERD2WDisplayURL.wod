@@ -1,0 +1,5 @@
+Link: WOHyperlink {
+	href = href;
+	string = objectPropertyValue;
+	target = target;
+}

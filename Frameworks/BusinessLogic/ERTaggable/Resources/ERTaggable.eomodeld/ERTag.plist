@@ -1,0 +1,13 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = Y; columnName = name; name = name; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (id, name); 
+    className = "er.taggable.model.ERTag"; 
+    classProperties = (name); 
+    externalName = ERTag; 
+    fetchSpecificationDictionary = {}; 
+    name = ERTag; 
+    primaryKeyAttributes = (id); 
+}

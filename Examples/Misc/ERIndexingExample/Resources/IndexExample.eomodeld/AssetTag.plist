@@ -1,0 +1,30 @@
+{
+    attributes = (
+        {allowsNull = N; columnName = assetId; name = assetId; prototypeName = id; }, 
+        {allowsNull = N; columnName = tagId; name = tagId; prototypeName = id; }
+    ); 
+    attributesUsedForLocking = (assetId, tagId); 
+    className = EOGenericRecord; 
+    externalName = AssetTag; 
+    fetchSpecificationDictionary = {}; 
+    name = AssetTag; 
+    primaryKeyAttributes = (assetId, tagId); 
+    relationships = (
+        {
+            destination = Asset; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = assetId; }); 
+            name = asset; 
+        }, 
+        {
+            destination = Tag; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = tagId; }); 
+            name = tag; 
+        }
+    ); 
+}

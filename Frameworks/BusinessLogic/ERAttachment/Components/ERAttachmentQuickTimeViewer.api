@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="ERAttachmentQuickTimeViewer.java" wocomponentcontent="true">
+        <binding name="attachment"/>
+        <validation message="'attachment' is a required binding.">
+            <unbound name="attachment"/>
+        </validation>
+        <binding name="class"/>
+        <binding name="configurationName"/>
+        <binding name="emptyAttachmentComponentName"/>
+        <binding name="height"/>
+        <binding name="id"/>
+        <binding name="parameterDictionary"/>
+        <binding name="standby"/>
+        <binding name="title"/>
+        <binding name="width"/>
+    </wo>
+</wodefinitions>

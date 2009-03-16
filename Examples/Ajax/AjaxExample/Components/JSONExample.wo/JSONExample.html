@@ -1,0 +1,120 @@
+<webobject name = "AjaxExampleComponent">
+	<webobject name = "ERXJavaScript"/>
+	
+	<h1>AjaxProxy Example</h1>
+	<webobject name = "AjaxProxy"/>
+	<p id = "ExampleDiv">
+		This is a blank div.
+	</p>
+	<script>
+	function getOnePerson() {
+		var person = json.example.onePerson();
+		
+		$('ExampleDiv').innerHTML = 'Person: ' + person.name + ', Age: ' + person.age;
+	}
+
+	function getPeople() {
+		var people = json.example.people();
+		
+		var ul = document.createElement('ul');
+		ul.id = 'people';
+		people.nsarray.each(function(person, index) {
+			var li = document.createElement('li');
+			li.innerHTML = person ? person.name + ' (' + person.age + ')' : "null";
+			ul.appendChild(li);
+		});
+		$('ExampleDiv').innerHTML = 'People: ';
+		$('ExampleDiv').appendChild(ul);
+	}
+		
+	function testDuplicates() {
+		var data = json.example.simpleData();
+		data.nsarray.each(function(item, index) {
+			if (item == null) {
+				alert('Item #' + index + ' was null! Server=>Client fixups failed.');
+			}
+		});
+		alert("verified? " + json.example.verifySimpleData(data));
+	}
+		
+	function testCircular() {
+		var data = json.example.complexData();
+		data.nsarray.each(function(item, index) {
+			if (item == null) {
+				alert('Item #' + index + ' was null! Server=>Client fixups failed.');
+			}
+		});
+		alert("verified? " + json.example.verifyComplexData(data));
+	}
+		
+	function testEO() {
+		var data = json.example.eoData();
+		data.nsarray.each(function(item, index) {
+			if (item == null) {
+				alert('Item #' + index + ' was null! Server=>Client fixups failed.');
+			}
+		});
+		alert("verified? " + json.example.verifyEOData(data));
+	}
+	</script>
+	<button onclick = "getOnePerson()">Get One Person</button>
+	<button onclick = "getPeople()">Get People</button>
+	<button onclick = "testDuplicates()">Test Duplicates</button>
+	<button onclick = "testCircular()">Test Circular</button>
+	<button onclick = "testEO()">Test EO</button>
+
+	<h1>JSONRequestHandler Example</h1>
+	<p>
+	Check out AjaxExample's Application class to see how this was registered.
+	</p>
+	<script>
+		function printThisString() {
+			<webobject name = "AjaxJSONClient"/>.exampleService.printThisString('hi');
+		}
+
+		function returnMySessionID() {
+			var json = <webobject name = "AjaxJSONClient"/>;
+			var sessionID = json.exampleService.returnMySessionID();
+			alert(sessionID);
+		}
+
+		function returnThisApplicationName() {
+			alert(<webobject name = "AjaxJSONClient"/>.exampleService.returnThisApplicationName());
+		}
+		
+		function complexObject() {
+			var json = <webobject name = "AjaxJSONClient"/>;
+			var people = json.exampleService.somePeople();
+			var firstPerson = people.nsarray[0];
+			json.exampleService.printPerson(firstPerson);
+		}
+	</script>
+	<button onclick = "printThisString()">Print to Console</button>
+	<button onclick = "returnMySessionID()">Alert My Session ID</button>
+	<button onclick = "returnThisApplicationName()">Alert My Application Name</button>
+	<button onclick = "complexObject()">Complex Object (Watch Console)</button>
+	
+	<h1>JSON Component</h1>
+	<p>
+		JSON "Components" act like web-service end points, but provide statefulness similar to
+		WOComponents in the regular WO framework.  You can have components that are shared 
+		for the session or ones that are more transient (maybe it only exists for use on
+		a single page).  You can click the buttons below to see a stateful counter changing
+		as a session global component as well as an instance component.
+	</p>
+	<script>
+		var globalJSONComponent = <webobject name = "GlobalJSONComponent"/>;
+		var instanceJSONComponent = <webobject name = "InstanceJSONComponent"/>;
+		
+		function globalNext() {
+			alert(globalJSONComponent.component.next());
+		}
+		
+		function instanceNext() {
+			alert(instanceJSONComponent.component.next());
+		}
+	</script>
+	<button onclick = "globalNext()">Session Global Next (Leave Page and Come Back)</button>
+	<button onclick = "instanceNext()">Page Next</button>
+	
+</webobject>

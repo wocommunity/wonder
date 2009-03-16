@@ -1,0 +1,12 @@
+Body1: WOBody {
+	onLoad = callback;
+}
+
+Conditional1: WOConditional {
+	condition = errors.length;
+}
+
+String1: WOString {
+	value = errors;
+	escapeHTML = false;
+}

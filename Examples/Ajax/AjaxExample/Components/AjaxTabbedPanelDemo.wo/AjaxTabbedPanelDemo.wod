@@ -1,0 +1,45 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Tabbed Panel";
+}
+
+TabbedPanel: AjaxTabbedPanel {
+	id = "tabbedPanel";
+	busyDiv = "busydiv";
+	onLoad = "alert('Tabbed Panel onLoad event')";
+}
+
+Tab1: AjaxTabbedPanelTab {
+	id = "panel1";
+	name = "Slow Loading Content";
+	isSelected = isSlowLoadingContentSelected;
+}
+
+Tab2: AjaxTabbedPanelTab {
+	name = "Inline Content";
+	isSelected = isInlineContentSelected;
+}
+
+Tab3: AjaxTabbedPanelTab {
+	name = "Refreshing Content";
+	isSelected = isRefreshingContentSelected;
+	refreshOnSelect = true;
+	onLoad = "alert('Refreshing Content tab onLoad event')";
+}
+
+Tab4: AjaxTabbedPanelTab {
+	name = "Invisible";
+	isVisible = false;
+	isSelected = true;  // or false, it does not have any effect
+}
+
+CurrentTime: WOString {
+	value = now;
+}
+	
+SlowLoadingComponent: SlowLoadingComponent {
+}
+
+BusyImage : WOImage {
+  framework = "Ajax";
+  filename = "wait30.gif";
+}

@@ -1,0 +1,10 @@
+Table : ERXTable {
+	list = displayGroup.displayedObjects;
+	item = d2wContext.object;
+	maxColumns = 3;
+}
+
+Display : ERDInspectPageRepetition {
+	object = d2wContext.object;
+	d2wContext = d2wContext;
+}

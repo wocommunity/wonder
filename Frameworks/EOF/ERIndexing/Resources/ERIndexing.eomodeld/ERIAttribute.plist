@@ -1,0 +1,76 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = attributeGroupId; 
+            name = attributeGroupId; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = attributeTypeId; 
+            name = attributeTypeId; 
+            prototypeName = id; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }, 
+        {
+            allowsNull = Y; 
+            columnName = possibleValues; 
+            name = possibleValues; 
+            prototypeName = mutableArray; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = storageType; 
+            name = storageType; 
+            prototypeName = intNumber; 
+            userInfo = {ERXConstantClassName = "er.indexing.attributes.ERIStorageType"; }; 
+        }
+    ); 
+    attributesUsedForLocking = (attributeGroupId, attributeTypeId, id, name, possibleValues, storageType); 
+    className = "er.indexing.attributes.ERIAttribute"; 
+    classProperties = (
+        attributeGroup, 
+        attributeType, 
+        name, 
+        possibleValues, 
+        storageType, 
+        validationRules
+    ); 
+    externalName = ERIAttribute; 
+    fetchSpecificationDictionary = {}; 
+    name = ERIAttribute; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ERIAttributeGroup; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = attributeGroupId; }); 
+            name = attributeGroup; 
+        }, 
+        {
+            destination = ERIAttributeType; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = attributeTypeId; }); 
+            name = attributeType; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = ERIAttributeValidationRule; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = attributeId; sourceAttribute = id; }); 
+            name = attributeValidationRules; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            definition = "attributeValidationRules.validationRule"; 
+            name = validationRules; 
+        }
+    ); 
+}

@@ -1,0 +1,16 @@
+Hyperlink1: WOHyperlink {
+    action = ^action;
+    onClick = confirmMessage;
+    title = ^title;
+    id = ^id;
+    class = ^class;
+    style = ^style;
+    disabled = ^disabled;
+}
+
+String1: WOString {
+    value = ^hyperlinkMessage;
+}
+
+LinkContent : WOComponentContent { }
+

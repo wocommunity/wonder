@@ -1,0 +1,201 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = getAbsolutePath; 
+            externalType = String; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            name = absolutePath; 
+            serverTimeZone = "Europe/Zurich"; 
+            valueClassName = NSString; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = canRead; 
+            externalType = Boolean; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            name = canRead; 
+            serverTimeZone = "Europe/Zurich"; 
+            userInfo = {modificationDate = "2002-08-08 21:03:00 +0200"; }; 
+            valueClassName = Boolean; 
+            valueType = c; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = canWrite; 
+            externalType = Boolean; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            name = canWrite; 
+            serverTimeZone = "Europe/Zurich"; 
+            userInfo = {modificationDate = "2002-08-08 21:02:56 +0200"; }; 
+            valueClassName = Boolean; 
+            valueType = c; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = getCanonicalPath; 
+            externalType = String; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = canonicalPath; 
+            serverTimeZone = "Europe/Zurich"; 
+            valueClassName = NSString; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = content; 
+            externalType = String; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = content; 
+            serverTimeZone = "Europe/Zurich"; 
+            userInfo = {modificationDate = "2002-08-08 09:51:33 +0200"; }; 
+            valueClassName = NSString; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = exists; 
+            externalType = Boolean; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = exists; 
+            serverTimeZone = "Europe/Zurich"; 
+            userInfo = {modificationDate = "2002-08-08 21:02:55 +0200"; }; 
+            valueClassName = Boolean; 
+            valueType = c; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = realFile; 
+            externalType = File; 
+            isReadOnly = Y; 
+            name = file; 
+            serverTimeZone = "Europe/Berlin"; 
+            userInfo = {modificationDate = "2002-08-08 22:16:01 +0200"; }; 
+            valueClassName = "java.io.File"; 
+            valueType = c; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = isAbsolute; 
+            externalType = Boolean; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = isAbsolute; 
+            serverTimeZone = "Europe/Zurich"; 
+            userInfo = {modificationDate = "2002-08-08 21:02:53 +0200"; }; 
+            valueClassName = Boolean; 
+            valueType = c; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = isHidden; 
+            externalType = Boolean; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = isHidden; 
+            serverTimeZone = "Europe/Zurich"; 
+            userInfo = {modificationDate = "2002-08-08 21:02:52 +0200"; }; 
+            valueClassName = Boolean; 
+            valueType = c; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = lastModified; 
+            externalType = Number; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            name = lastModified; 
+            serverTimeZone = "Europe/Zurich"; 
+            userInfo = {modificationDate = "2002-08-08 20:57:12 +0200"; }; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = length; 
+            externalType = Number; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = length; 
+            serverTimeZone = "Europe/Zurich"; 
+            valueClassName = NSNumber; 
+            valueType = d; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = getName; 
+            externalType = String; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = name; 
+            serverTimeZone = "Europe/Zurich"; 
+            valueClassName = NSString; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = getParent; 
+            externalType = String; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = parent; 
+            serverTimeZone = "Europe/Zurich"; 
+            valueClassName = NSString; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = getPath; 
+            externalType = String; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = path; 
+            serverTimeZone = "Europe/Zurich"; 
+            valueClassName = NSString; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = toURL; 
+            externalType = String; 
+            internalInfo = {"_nameInObjectStore" = ""; }; 
+            isReadOnly = Y; 
+            name = url; 
+            serverTimeZone = "Europe/Zurich"; 
+            valueClassName = NSString; 
+        }
+    ); 
+    attributesUsedForLocking = (absolutePath); 
+    className = EOGenericRecord; 
+    classProperties = (
+        canWrite, 
+        canRead, 
+        exists, 
+        absolutePath, 
+        canonicalPath, 
+        name, 
+        path, 
+        isHidden, 
+        lastModified, 
+        length, 
+        url, 
+        parent, 
+        isAbsolute, 
+        parent, 
+        content
+    ); 
+    externalName = FSFile; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_nameInObjectStore" = FSItem; }; 
+    name = FSFile; 
+    parent = FSItem; 
+    primaryKeyAttributes = (absolutePath); 
+    relationships = (
+        {
+            destination = FSDirectory; 
+            internalInfo = {"_nameInObjectStore" = parent; }; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = absolutePath; sourceAttribute = parent; }); 
+            name = parentDirectory; 
+        }
+    ); 
+    userInfo = {modificationDate = "2002-08-08 21:09:38 +0200"; }; 
+}

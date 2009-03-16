@@ -1,0 +1,122 @@
+CancelButton: ERXSingleButton {
+	alt = "Reverts your changes";
+	value = d2wContext.cancelButtonLabel;
+	action = cancelAction;
+	dontSubmitForm = true;
+}
+
+PrinterButton: WOSwitchComponent {
+	WOComponentName = d2wContext.printerButtonComponentName;
+	d2wContext = d2wContext;
+	task = "inspect";
+}
+
+HasChangesMarker: ERDHasChangesMarker {
+	d2wContext = d2wContext;
+}
+
+EditButton: WOSubmitButton {
+	action = editAction;
+	alt = "Edits this object";
+	value = d2wContext.editButtonLabel;
+}
+
+EditingForm: ERXOptionalForm {
+	enctype = d2wContext.formEncoding;
+	hasForm = d2wContext.hasForm;
+	multipleSubmit = true;
+	name = "EditForm";
+}
+
+Errors: ERXErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	displayPropertyKeys = currentTab.keys;
+	d2wContext = localContext;
+	object = object;
+}
+
+ActionBar: WOSwitchComponent {
+	WOComponentName = d2wContext.actionBarComponentName;
+	d2wContext = d2wContext;
+}
+
+Controller: WOSwitchComponent {
+	WOComponentName = d2wContext.controllerButtonComponentName;
+	d2wContext = d2wContext;
+}
+
+IsEditingConditional: WOConditional {
+	_unroll = true;
+	condition = isEditing;
+}
+
+IsNotEditingConditional: WOConditional {
+	_unroll = true;
+	condition = isEditing;
+	negate = true;
+}
+
+IsObjectEditable: WOConditional {
+	condition = isObjectEditable;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+ReturnButton: WOSubmitButton {
+	alt = "Returns to the previous page";
+	action = nextPage;
+	value = d2wContext.returnButtonLabel;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+SubmitChanges: WOSubmitButton {
+	action = submitAction;
+	alt = "Saves your changes";
+	value = d2wContext.saveButtonLabel;
+}
+useFocus: WOConditional {
+	condition = d2wContext.useFocus;
+}
+
+IsEditing: WOKeyValueConditional {
+	key = "task";
+	value = "edit";
+}
+
+Script: WOJavaScript {
+	scriptString = tabScriptString;
+	hideInComment = true;
+}
+
+
+TabPanel : WOSwitchComponent {
+	WOComponentName = tabComponentName;
+	selectedTab = currentTab;
+	submitActionName = switchTabActionName;
+	tabNameKey = "displayName";
+	tabs = tabSectionsContents;
+	useFormSubmit = d2wContext.hasForm;
+}

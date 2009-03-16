@@ -1,0 +1,63 @@
+NavUpdater: AjaxUpdateContainer {
+	id = containerID;
+}
+
+BatchCount: WOString {
+	value = displayGroup.batchCount;
+}
+
+BatchSlider: AjaxSlider {
+	orientation = "horizontal";
+	value = currentBatchIndex;
+	minimum = 1;
+	maximum = displayGroup.batchCount;
+	onChangeServer = updateGridContainer;
+	onSlide = "function(v) { $('currentBatch').innerHTML = Math.round(v) }";
+	onChange = "function(v) { $('currentBatch').innerHTML = Math.round(v) }";
+}
+
+CurrentBatchIndex : WOString {
+	value = displayGroup.currentBatchIndex;
+}
+
+PrevBatch : AjaxUpdateLink {
+	action = previousBatch;
+	updateContainerID = gridContainerID;
+}
+
+NextBatch : AjaxUpdateLink {
+	action = nextBatch;
+	updateContainerID = gridContainerID;
+}
+
+BatchSizes: WOPopUpButton {
+	list      = batchSizes;
+	item      = batchSize;
+	selection = currentBatchSize;
+	onChange  = updateBatchSizeOnChange;
+}
+
+FirstIndex: WOString {
+	value = displayGroup.indexOfFirstDisplayedObject;
+}
+
+
+LastIndex: WOString {
+	value = displayGroup.indexOfLastDisplayedObject;
+}
+
+
+
+TotalCount: WOString {
+	value = displayGroup.allObjects.count;
+}
+
+
+UpdateBatchSize: AjaxUpdateLink {
+	action = batchSizeUpdated;
+	functionName = updateBatchSizeName;
+	updateContainerID = gridContainerID;
+}
+
+
+

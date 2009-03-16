@@ -1,0 +1,71 @@
+ChildrenRepetition: WORepetition {
+	list = children;
+	item = aChildItem;
+}
+
+DisplayNameString: WOString {
+	escapeHTML = false;
+	value = displayName;
+}
+
+DoesNotHaveActionConditional: WOConditional {
+	condition = contextComponentActionURL;
+	negate = true;
+}
+
+HasActionConditional: WOConditional {
+	condition = contextComponentActionURL;
+}
+
+HasActivityAndIsEnabled: WOConditional {
+	condition = hasActivityAndIsEnabled;
+}
+
+HasChildrenConditional: WOConditional {
+	condition = children.count;
+}
+
+IsDisabledConditional: WOConditional {
+	condition = isDisabled;
+}
+
+IsNotDisabledConditional: WOConditional {
+	condition = isDisabled;
+	negate = true;
+}
+
+IsNotRootNodeConditional: WOConditional {
+	condition = navigationItem.isRootNode;
+	negate = true;
+}
+
+IsRootNodeConditional: WOConditional {
+	condition = navigationItem.isRootNode;
+}
+
+ItemShouldDisplayConditional: WOConditional {
+	condition = shouldDisplay;
+}
+
+ListItemTag: WOGenericContainer {
+	elementName = "li";
+	class = itemStyleClass;
+	id = navigationItemID;
+}
+
+MenuItemHyperlink: WOGenericContainer { 
+	elementName = "a";
+	href = contextComponentActionURL;
+	invokeAction = menuItemSelected;
+}
+
+NavigationMenuItem: ERXModernNavigationMenuItem {
+	navigationItem = aChildItem;
+	navigationContext = navigationContext;
+}
+
+NewMarker: WOImage {
+	filename = "NewMarker.gif";
+	framework = "ERExtensions";
+}
+

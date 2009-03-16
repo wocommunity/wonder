@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="ERPPieChart" wocomponentcontent="false">
+
+		<binding name="height"/>
+		<binding name="width"/>
+		<binding name="items"/>
+		<binding name="type"/>
+		<binding name="nameKey"/>
+		<binding name="valueKey"/>
+		<binding name="dataset"/>
+		<binding name="orientation"/>
+		<binding name="showUrls"/>
+		<binding name="showLegends"/>
+		<binding name="showToolTips"/>
+		<binding name="chart"/>
+		<binding name="configuration"/>
+
+		<validation message="Either items, nameKey and valueKey or dataset must be bound">
+			<and>
+				<or>
+					<unbound name="items"/>
+					<unbound name="nameKey"/>
+					<unbound name="valueKey"/>
+				</or>
+				<unbound name="dataset"/>
+			</and>
+		</validation>
+	<binding name="showLabels"/>
+    </wo>
+</wodefinitions>

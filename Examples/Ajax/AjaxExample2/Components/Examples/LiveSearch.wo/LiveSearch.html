@@ -1,0 +1,40 @@
+<ul id = "objectives">
+	<li>AjaxBusyIndicator</li>
+	<li>AjaxObserveField</li>
+	<li>AjaxUpdateContainer</li>
+</ul>
+
+<wo:AjaxHeaderFooter title = "Live Search">
+	
+	<div id = "searchForm">
+		<h1>Live Search</h1>
+		<p>Type in a product to search for.  All of our products have Lorem Ipsum names (i.e. "purus habitasse aenean lorem tincidunt").</p>
+		<wo:WOForm multipleSubmit = "$true">
+			<wo:WOTextField id = "searchField" value = "$searchText" type = "search" size = "50" />
+			<wo:AjaxObserveField observeFieldID = "searchField"  observeFieldFrequency = "0.5" observeDelay = "0.5" updateContainerID = "results"/>
+			<wo:AjaxBusyIndicator watchContainerID = "results" busyImageFramework = "Ajax" busyImage = "wait16.gif" id = "busy" />
+		</wo:WOForm>
+	</div>
+	
+	<wo:AjaxUpdateContainer id = "results">
+		<wo:if condition = "$matchingProducts.count">
+			<h2>
+				Found <wo:str value = "$matchingProducts.count"/> products for your search term '<wo:str value = "$searchText"/>'.
+			</h2>
+			
+			<ul>
+				<wo:WORepetition list = "$matchingProducts" item = "$repetitionProduct">
+					<li><a href = "javascript:void(0)" onclick = "alert('You selected a Product and something cool would happen here.')"><wo:str value = "$repetitionProduct.title"/></a>
+				</wo:WORepetition>
+			</ul>
+		</wo:if>
+		
+		<wo:else>
+			<wo:if condition = "$searchText">
+				<h2>
+					There were no products that matched your search term '<wo:str value = "$searchText"/>'.
+				</h2>
+			</wo:if>	
+		</wo:else>
+	</wo:AjaxUpdateContainer>
+</wo:AjaxHeaderFooter>

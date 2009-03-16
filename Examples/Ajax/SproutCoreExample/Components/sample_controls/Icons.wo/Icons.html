@@ -1,0 +1,36 @@
+<p>SC.ImageView can automatically display sprited icons if you set a CSS class name as the value instead of a URL.  SproutCore also comes with the some default icons built right into the framework.  Just use the class names below.  If you would like to get more icons in this style, you can find them at <a href="http://www.icondrawer.com/" target="_blank">Icon Drawer</a>.</p>
+  
+<label>48-pixel Icons</label>
+<div class="icon-group group-48">
+<wo:WORepetition list="$icons48" item="$item">
+<div class="icon">
+  <div class="inner">
+  <wo:SCImageView value = "$name48" />
+  </div>
+  <label><wo:WOString value = "$name48" /></label>
+</div>
+</wo:WORepetition>
+</div>
+
+<label>24-pixel Icons</label>
+<div class="icon-group group-24">
+<wo:WORepetition list="$icons24" item="$item">
+<div class="icon">
+  <div class="inner">
+  <wo:SCImageView value = "$name24" />
+  </div>
+  <label><wo:WOString value = "$name24" /></label>
+</div>
+</wo:WORepetition>
+</div>
+
+<label>16-pixel Icons</label>
+<wo:WORepetition list="$icons16" item="$item">
+<div class="icon">
+  <div class="inner">
+  <wo:SCImageView value = "$name16" />
+  </div>
+  <label><wo:WOString value = "$name16" /></label>
+</div>
+</wo:WORepetition>
+</div>

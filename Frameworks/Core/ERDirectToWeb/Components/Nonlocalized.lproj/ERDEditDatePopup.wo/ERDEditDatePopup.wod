@@ -1,0 +1,26 @@
+Conditional1: WOConditional {
+	condition = editTime;
+}
+
+TextField1: WOTextField {
+	maxlength = 5;
+	size = 5;
+	value = time;
+}
+
+dayPopup: WOPopUpButton {
+	list = dayList;
+	selection = day;
+}
+
+monthPopup: WOPopUpButton {
+	list = monthList;
+	selection = month;
+	displayString = monthName;
+	item = currentMonth;
+}
+
+yearPopup: WOPopUpButton {
+	list = yearList;
+	selection = year;
+}

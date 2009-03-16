@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="ERAttachmentLink" wocomponentcontent="true">
+		<binding name="attachment"/>
+		<binding name="configurationName"/>
+		<binding name="id"/>
+		<binding name="class"/>
+		<binding name="style"/>
+		
+		<validation message="'attachment' is a required binding.">
+			<unbound name="attachment"/>
+		</validation>
+	<binding defaults="Boolean" name="download"/>
+    </wo>
+</wodefinitions>

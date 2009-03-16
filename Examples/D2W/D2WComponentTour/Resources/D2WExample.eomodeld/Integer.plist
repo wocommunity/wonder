@@ -1,0 +1,38 @@
+
+{
+    attributes = 
+    (
+       
+       {
+           columnName = value;
+           name = id;
+           valueClassName = NSNumber;
+           valueType = c;
+       }, 
+       
+       {
+           columnName = value;
+           name = value;
+           valueClassName = NSNumber;
+           valueType = i;
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       id, 
+       value
+    );
+    className = Record;
+    classProperties = 
+    (
+       value
+    );
+    externalName = Integer;
+    internalInfo = 
+    {};
+    name = Integer;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+}

@@ -1,0 +1,295 @@
+<webobject name = "IsRefreshEnabled">
+  <webobject name = "Refresh"></webobject>
+</webobject>
+<webobject name = "NavPage">
+  <h1>
+    <webobject name = "AppIsRunning">
+      <webobject name = "AppLink">
+        <webobject name = "AppName"></webobject>
+      </webobject>
+    </webobject>
+    <webobject name = "AppIsNOTRunning">
+      <webobject name = "AppName"></webobject>
+    </webobject>
+  </h1>
+  <div>Bouncer: <webobject name = "Bouncer"/></div>
+  <font size = "-1">
+<webobject name = "IsRefreshEnabled">
+    This page automatically updates every
+    <webobject name = "RefreshRate"></webobject>
+    seconds.
+  <br />
+</webobject>
+<webobject name = "RefreshLink">Refresh Now</webobject>
+<webobject name = "ShowDetailStatistics">Detailed Statistics</webobject>
+</font>
+<br />
+<span class="error"><webobject name = "MessageString"></webobject>
+</span>
+<table border = "1" cellpadding = "2" cellspacing = "0" bgcolor = "#E8E8E8">
+  <tr>
+    <th>Selected</th>
+    <th>Name</th>
+    <th>Host: Port</th>
+    <th>Status</th>
+    <th>Start - Stop</th>
+    <th>Auto- Recover</th>
+    <th>Refuse New Sessions</th>
+    <th>Scheduled</th>
+    <th>Next shutdown</th>
+	<th>Deaths</th>
+    <webobject name = "ShowStatistics">
+	    <th>Transactions</th>
+	    <th>Active Sessions</th>
+	    <th>Average Transactions</th>
+	    <th>Average Idle Period</th>
+   </webobject><webobject name = "ShowWOStats">
+ 		<th>WOStats</th>
+	</webobject>
+    <th>Configure</th>
+    <th>Delete</th>
+  </tr>
+  <tr>
+     </tr>
+  <webobject name = "InstanceRepetition">
+    <tr>
+<!-- Selection -->
+<td><webobject name = "SelectOneForm"><webobject name = "Observer"><webobject name = "IsSelected"/></webobject></webobject></td>
+
+<!--       Instance Number       -->
+      <td>
+        <webobject name = "InstanceRunningConditional">
+          <webobject name = "InstAdaptorLink">
+            <webobject name = "InstIndex"></webobject>
+          </webobject>
+        </webobject>
+        <webobject name = "InstanceNOTRunningConditional">
+          <webobject name = "InstIndex"></webobject>
+        </webobject>
+      </td>
+<!--       Host - Port       -->
+      <td>
+        <font size = "-1">
+          <webobject name = "InstanceRunningConditional">
+            <webobject name = "InstDirectLink">
+              <webobject name = "InstRunningOnHost"></webobject>
+            </webobject>
+          </webobject>
+          <webobject name = "InstanceNOTRunningConditional">
+            <webobject name = "InstRunningOnHost"></webobject>
+          </webobject>
+        </font>
+      </td>
+<!--       Status (On/Off/Starting/Stopping)       -->
+      <td>
+        <webobject name = "InstStatusImage"></webobject>
+      </td>
+<!--       Start/Stop Buttons       -->
+      <td>
+        <webobject name = "StartInstanceLink">
+          <webobject name = "StartImage"></webobject>
+        </webobject>
+        <webobject name = "StopInstanceLink">
+          <webobject name = "StopImage"></webobject>
+        </webobject>
+      </td>
+<!--       Auto-Recover       -->
+      <td>
+        <webobject name = "IFSchedulingIsOn">
+          <webobject name = "YellowOnImage"></webobject>
+        </webobject>
+        <webobject name = "IFSchedulingIsOff">
+          <webobject name = "ToggleAutoRecoverLink">
+            <webobject name = "AutoRecoverImage"></webobject>
+          </webobject>
+        </webobject>
+      </td>
+<!--       Refuse New Sessions       -->
+      <td>
+        <webobject name = "IFSchedulingIsOn">
+          <webobject name = "RefuseNewSessionsImage"></webobject>
+        </webobject>
+        <webobject name = "IFSchedulingIsOff">
+          <webobject name = "InstanceRunningConditional">
+            <webobject name = "ToggleRefuseNewSessionsLink">
+              <webobject name = "RefuseNewSessionsImage"></webobject>
+            </webobject>
+          </webobject>
+          <webobject name = "InstanceNOTRunningConditional">
+            <webobject name = "OffImage"></webobject>
+          </webobject>
+        </webobject>
+      </td>
+<!--       Schedule       -->
+      <td>
+        <webobject name = "ToggleSchedulingLink">
+          <webobject name = "SchedulingImage"></webobject>
+        </webobject>
+      </td>
+<!--       Next Scheduled Shutdown       -->
+      <td>
+        <webobject name = "NextShutdown"></webobject>
+      </td>
+      <td>
+        <webobject name = "ShouldDisplayDeathDetailLink">
+          <webobject name = "InstDeathDetailLink">
+            <webobject name = "InstDeathCount"></webobject>
+          </webobject>
+        </webobject>
+        <webobject name = "ShouldNOTDisplayDeathDetailLink">-</webobject>
+      </td>
+<!--       Statistics       -->
+      <webobject name = "ShowStatistics"><td>
+        <webobject name = "InstTransactions"></webobject>
+      </td>
+      <td>
+        <webobject name = "InstActiveSessions"></webobject>
+      </td>
+      <td>
+        <webobject name = "InstAverageTransaction"></webobject>
+      </td>
+      <td>
+        <webobject name = "InstAverageIdle"></webobject>
+      </td>
+    </webobject>
+    <webobject name = "ShowWOStats">
+      <td>
+        <webobject name = "InstanceRunningConditional">
+          <webobject name = "LinkToWOStats">
+            <webobject name = "WOStatsButton"></webobject>
+          </webobject>
+        </webobject>
+        <webobject name = "InstanceNOTRunningConditional">
+          <webobject name = "WOStatsOffButton"></webobject>
+        </webobject>
+      </td>
+      </webobject>
+<!--       Configure       -->
+      <td>
+        <webobject name = "InstConfigureLink">
+          <webobject name = "ConfigButton"></webobject>
+        </webobject>
+      </td>
+<!--       Delete       -->
+      <td>
+        <webobject name = "InstDeleteLink">
+          <webobject name = "DeleteButton"></webobject>
+        </webobject>
+      </td>
+    </tr>
+  </webobject>
+  <webobject name = "HasInstancesConditional">
+    <webobject name = "ShowStatistics">
+    <tr>
+      <td colSpan = "16" bgColor = "#ffffff">&nbsp</td>
+    </tr>
+    </webobject>
+ 	<webobject name = "ShowWOStats">
+    <tr>
+      <td colSpan = "12" bgColor = "#ffffff">&nbsp</td>
+    </tr>
+    </webobject>
+    <tr bgcolor = "#D4D4D4">
+	<td><webobject name = "SelectAllForm">
+	<input type="checkbox" name="selectall" onclick="this.form.submit()" checked="checked">/
+	<input type="checkbox" name="deselectall" onclick="this.form.submit()" value="on" ></webobject></td>
+      <td vAlign = "center" align = "middle" colSpan = "3">
+        <font size = "+1">
+          <b>ALL INSTANCES:</b><br /><webobject name = "SelectRunning">Running</webobject> <webobject name = "SelectNotRunning">Not Running</webobject>
+        </font>
+      </td>
+<!--       Start / Stop All       -->
+      <td>
+        <webobject name = "StartAllLink">
+          <webobject name = "StartImage"></webobject>
+        </webobject>
+        <webobject name = "StopAllLink">
+          <webobject name = "StopImage"></webobject>
+        </webobject>
+      </td>
+<!--       AutoRecover All      -->
+      <td>
+        <webobject name = "AutoRecoverEnableAllLink">
+          <webobject name = "StartImage"></webobject>
+        </webobject>
+        <webobject name = "AutoRecoverDisableAllLink">
+          <webobject name = "StopImage"></webobject>
+        </webobject>
+      </td>
+<!--       Refuse New Sessions All       -->
+      <td>
+        <webobject name = "RefuseNewSessionsAllLink">
+          <webobject name = "StartImage"></webobject>
+        </webobject>
+        <webobject name = "AcceptNewSessionsAllLink">
+          <webobject name = "StopImage"></webobject>
+        </webobject>
+      </td>
+<!--       Scheduling All       -->
+      <td>
+        <webobject name = "SchedulingEnableAllLink">
+          <webobject name = "StartImage"></webobject>
+        </webobject>
+        <webobject name = "SchedulingDisableAllLink">
+          <webobject name = "StopImage"></webobject>
+        </webobject>
+      </td>
+<!--       Next Scheduled Shutdown       -->
+      <td><webobject name = "BounceLink">Bounce</webobject></td>
+      <td>
+        <webobject name = "ClearDeathsLink">
+          Clear
+          <br />
+          Deaths
+        </webobject>
+      </td>
+<!--       Statistics All       -->
+   <webobject name = "ShowStatistics">
+      <td>
+        <webobject name = "TotalTransactions"></webobject>
+      </td>
+      <td>
+        <webobject name = "TotalActiveSessions"></webobject>
+      </td>
+      <td>
+        <webobject name = "TotalAverageTransaction"></webobject>
+      </td>
+      <td>
+        <webobject name = "TotalAverageIdleTime"></webobject>
+      </td>
+    </webobject>
+    <webobject name = "ShowWOStats">
+      <td>
+        <webobject name = "ActualRatePerMinute"></webobject>
+        TPM      </td>
+   </webobject>
+<!--       Configure       -->
+      <td>
+        <webobject name = "ConfigureLink">
+          <webobject name = "ConfigButton"></webobject>
+        </webobject>
+      </td>
+      <td><webobject name = "InstDeleteAllLink">
+          <webobject name = "DeleteButton"></webobject>
+        </webobject>
+       </td>
+    </tr>
+  </webobject>
+</table>
+<hr />
+<webobject name = "AddHasHostsConditional">
+  <webobject name = "AddInstanceForm">
+    <webobject name = "AddInstanceSubmitButton"></webobject>
+    <webobject name = "AddNumInstances"></webobject>
+    instance(s) on host:
+    <webobject name = "AddHostPopUp"></webobject>
+  </webobject>
+</webobject>
+<webobject name = "AddHasNOHostsConditional">
+  There are no hosts configured.
+  <br />
+  <br />
+  Please
+  <webobject name = "AddHostsLink">add hosts</webobject>
+  before adding instances.
+</webobject></webobject>

@@ -1,0 +1,46 @@
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+Errors: ERXErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
+}
+
+HasErrors: WOConditional {
+    condition = errorMessages.allKeys.count;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+ListPageRepetition2: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+NavBar1: WOSwitchComponent {   
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+    d2wContext = d2wContext;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+	width = "100%";
+	id = "innerListHead";
+}
+
+UseNavigation: WOConditional {
+	condition = d2wContext.showBatchNavigation;
+}

@@ -1,0 +1,53 @@
+<ul id = "objectives">
+	<li>AjaxProxy</li>
+	<li>JSONProxy</li>
+	<li>Prototype DOM</li>
+	<li>Prototype Events</li>
+</ul>
+
+<wo:AjaxHeaderFooter title = "Client-side Rendering">
+	<wo:AjaxProxy name = "json" proxyName = "proxy" proxy = "$proxy" />
+	
+	<h1>Click to Vote</h1>
+	
+	<div id = "peopleContainer">
+		
+	</div>
+	
+<script>
+function refreshPeople() {
+	var family = json.proxy.family();
+	var ul = document.createElement('ul');
+	ul.id = 'people';
+	family.nsarray.each(function(person, index) {
+		var li = document.createElement('li');
+		if (person != null) {
+			var nameSpan = document.createElement('span');
+			nameSpan.addClassName('name');
+			nameSpan.innerHTML = person.name;
+			li.appendChild(nameSpan);
+			
+			var votesSpan = document.createElement('span');
+			votesSpan.addClassName('votes');
+			votesSpan.innerHTML = person.votes;
+			li.appendChild(votesSpan);
+		}
+		li.setAttribute('person', person);
+		ul.appendChild(li);
+		li.observe('click', personSelected.bind(this, person));
+	});
+	var previousList = $('people');
+	if (previousList != null) {
+		previousList.remove();
+	}
+	$('peopleContainer').appendChild(ul);
+}
+
+function personSelected(selectedPerson) {
+	json.proxy.voteForPerson(selectedPerson);
+	refreshPeople();
+}
+
+refreshPeople();
+</script>
+</wo:AjaxHeaderFooter>

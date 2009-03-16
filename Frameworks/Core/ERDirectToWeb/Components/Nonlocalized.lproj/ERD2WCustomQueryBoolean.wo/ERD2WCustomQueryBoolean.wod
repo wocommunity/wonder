@@ -1,0 +1,8 @@
+RadioButtonList: WORadioButtonList {
+	displayString = displayString;
+	index = index;
+	item = item;
+	list = queryNumbers;
+	selection = value;
+	suffix = " ";
+}

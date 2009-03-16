@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERPCategoryChart" wocomponentcontent="false">
+
+		<binding name="height"/>
+		<binding name="width"/>
+		<binding name="items"/>
+		<binding name="type"/>
+		<binding name="nameKey"/>
+		<binding name="valueKey"/>
+		<binding name="categoryKey"/>
+		<binding name="dataset"/>
+		<binding name="orientation"/>
+		<binding name="showUrls"/>
+		<binding name="showLegends"/>
+		<binding name="showToolTips"/>
+		<binding name="chart"/>
+		<binding name="configuration"/>
+		
+		<validation message="Either items, nameKey, categoryKey and valueKey or dataset must be bound">
+			<and>
+				<or>
+					<unbound name="items"/>
+					<unbound name="nameKey"/>
+					<unbound name="valueKey"/>
+					<unbound name="categoryKey"/>
+				</or>
+				<unbound name="dataset"/>
+			</and>
+		</validation>
+	</wo>
+</wodefinitions>

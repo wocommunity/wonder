@@ -1,0 +1,7 @@
+# These properties are loaded into the Java system properties for applications linking against this framework
+# These properties will be overridden by properties set by the application
+# The properties listed are only examples, and are not intended to be comprehensive
+# Remove the leading '#' to uncomment a property
+
+# When set to true, make charts look like they looked in jfreechart-0.9.x by default. Default is false.
+#er.plot.useLegacyTheme=false

@@ -1,0 +1,7 @@
+ComponentContent1: WOComponentContent {
+}
+
+Conditional1: WOConditional {
+	condition = displayContent;
+	negate = ^negate;
+}

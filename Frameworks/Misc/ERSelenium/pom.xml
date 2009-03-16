@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>wonder.frameworks</groupId>
+		<artifactId>misc</artifactId>
+		<version>5.0.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>wonder.misc</groupId>
+	<artifactId>ERSelenium</artifactId>
+	<name>ERSelenium Framework</name>
+	<packaging>woframework</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+			<classifier>${woClassifier}</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaXML</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openqa.selenium.client-drivers</groupId>
+			<artifactId>selenium-java-client-driver</artifactId>
+		</dependency>
+	</dependencies>
+	<build>
+		<sourceDirectory>Sources</sourceDirectory>
+	</build>
+	<repositories>
+		<repository>
+			<id>openqa-releases</id>
+			<name>OpenQA Releases</name>
+			<url>http://archiva.openqa.org/repository/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+</project>

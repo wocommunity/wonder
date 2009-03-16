@@ -1,0 +1,22 @@
+<wo:ERIUIContainer title = "Preferences">
+	<wo:ERXWOTemplate templateName = "toolbar">
+		<wo:ERIUIBackButton action = "$main">Back</wo:ERIUIBackButton>
+	</wo:ERXWOTemplate>
+	
+	<wo:ERXWOTemplate templateName = "content">
+		<wo:form class = "panel" multipleSubmit = "$true" selected = "true">
+			<wo:ERIUIPreferenceGroup title = "Playback">
+				<wo:ERIUIPreference label = "Repeat"><wo:ERIUIToggleButton checked = "$repeat"/></wo:ERIUIPreference>
+				<wo:ERIUIPreference label = "Shuffle"><wo:ERIUIToggleButton checked = "$shuffle"/></wo:ERIUIPreference>
+			</wo:ERIUIPreferenceGroup>
+	
+			<wo:ERIUIPreferenceGroup title = "User">
+				<wo:ERIUIPreference label = "Name"><wo:WOTextField value = "$userName"/></wo:ERIUIPreference>
+				<wo:ERIUIPreference label = "Password"><wo:WOPasswordField value = "$password"/></wo:ERIUIPreference>
+				<wo:ERIUIPreference label = "Confirm"><wo:WOPasswordField value = "$passwordConfirm"/></wo:ERIUIPreference>
+			</wo:ERIUIPreferenceGroup>
+			
+			<wo:WOSubmitButton class = "whiteButton" action = "$done" value = "Done"/>
+		</wo:form>
+	</wo:ERXWOTemplate>
+</wo:ERIUIContainer>

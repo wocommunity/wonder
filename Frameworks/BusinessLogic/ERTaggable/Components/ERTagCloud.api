@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="ERTagCloud.java" wocomponentcontent="true">
+		<binding name="entityName"/>	
+		<binding name="tag"/>	
+		<binding name="tagClass"/>	
+		
+	  <validation message="'entityName' and 'tag' are required bindings">
+	    <unbound name="entityName"/>
+	    <unbound name="tag"/>
+	  </validation>
+	<binding name="minimum"/>
+        <binding name="limit"/>
+        <binding name="categories"/>
+        <binding name="categoryCount"/>
+    <binding name="tagClassPrefix"/>
+    <binding name="shouldResetTagCloud"/>
+        <validation message="'shouldResetTagCloud' must be bound to a settable value">
+            <unsettable name="shouldResetTagCloud"/>
+        </validation>
+    </wo>
+</wodefinitions>

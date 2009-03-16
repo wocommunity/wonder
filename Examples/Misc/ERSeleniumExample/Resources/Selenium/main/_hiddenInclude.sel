@@ -1,0 +1,5 @@
+This file can't be used as a standalone test due to '_' prefix
+|open|/|
+|clickAndWait|link=Show|
+|type|//body/div[2]/input[2]|Hidden include|
+|pause|500||

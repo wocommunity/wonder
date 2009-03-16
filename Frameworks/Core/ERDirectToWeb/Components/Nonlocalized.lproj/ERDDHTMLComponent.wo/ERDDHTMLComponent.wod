@@ -1,0 +1,7 @@
+ERXDHTMLComponent1: ERXDHTMLComponent {
+	formName = "EditForm";
+	varName = varName;
+	value = objectPropertyValue;
+	cols = ^length;
+	rows = ^rows;
+}

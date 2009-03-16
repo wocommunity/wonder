@@ -1,0 +1,15 @@
+
+NothingDisplayed: WOConditional {
+    condition = valueIsNonNull;
+    negate=true;
+}
+
+SomethingDisplayed: WOConditional {
+    condition = valueIsNonNull;
+}
+
+String : WOString {
+    value = value;
+    formatter = formatter;
+    escapeHTML = ^escapeHTML;
+}

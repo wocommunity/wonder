@@ -1,0 +1,12 @@
+NavPage: NavigationPage {
+	currentPage = APP_PAGE;
+}
+
+FileBrowser : FileBrowser {
+    startingPath = aPath;
+    host = host;
+    callbackUpdateAction = "updateClicked";
+    callbackSelectionAction = "selectionClicked";
+    showFiles = showFiles;
+}
+

@@ -1,0 +1,40 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = commentId; 
+            name = commentId; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = eRAttachmentId; 
+            name = eRAttachmentId; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (commentId, eRAttachmentId); 
+    className = EOGenericRecord; 
+    externalName = XCommentAttachment; 
+    fetchSpecificationDictionary = {}; 
+    name = XCommentAttachment; 
+    primaryKeyAttributes = (commentId, eRAttachmentId); 
+    relationships = (
+        {
+            destination = Comment; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = commentId; }); 
+            name = comment; 
+        }, 
+        {
+            destination = ERAttachment; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = eRAttachmentId; }); 
+            name = eRAttachment; 
+        }
+    ); 
+}

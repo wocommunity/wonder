@@ -1,0 +1,4 @@
+SectionName: WOString {
+	value = ^displayNameForSectionKey;
+}
+

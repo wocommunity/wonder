@@ -1,0 +1,3 @@
+(
+    60 : (pageConfiguration like 'ListAjax*') => pageName = AjaxLookListPage [com.webobjects.directtoweb.Assignment]
+)

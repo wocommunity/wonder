@@ -1,0 +1,93 @@
+HeaderFooter : AjaxExampleComponent {
+	title = "Toggle Example";
+}
+
+Form : WOForm {
+	multipleSubmit = true;
+}
+
+CheckBox : WOCheckBox {
+	checked = toggleAreaVisible;
+	id = "testCheckBox";
+}
+
+Observer : AjaxObserveField {
+	observeFieldID = "testCheckBox";
+	updateContainerID = "toggleArea";
+	fullSubmit = false;
+	action = toggled1;
+}
+
+ToggleArea : AjaxUpdateContainer {
+	id = "toggleArea";
+}
+
+ToggleAreaConditional : WOConditional {
+	condition = toggleAreaVisible;
+}
+
+TextField : WOTextField {
+	value = text;
+	size = 80;
+}
+
+CheckBox2 : WOCheckBox {
+	checked = toggleAreaVisible2;
+	id = "testCheckBox2";
+}
+
+ToggleArea2 : AjaxUpdateContainer {
+	id = "toggleArea2";
+	observeFieldID = "testCheckBox2";
+	fullSubmit = false;
+}
+
+ToggleArea2Conditional : WOConditional {
+	condition = toggleAreaVisible2;
+}
+
+Observer3 : AjaxObserveField {
+	observeFieldID = "testCheckBox3";
+	updateContainerID = "toggleArea3";
+	fullSubmit = true;
+	action = toggled3;
+}
+
+CheckBox3 : WOCheckBox {
+	checked = toggleAreaVisible3;
+	id = "testCheckBox3";
+}
+
+ToggleArea3 : AjaxUpdateContainer {
+	id = "toggleArea3";
+}
+
+ToggleArea3Conditional : WOConditional {
+	condition = toggleAreaVisible3;
+}
+
+ToggleArea4 : AjaxUpdateContainer {
+  id = "ToggleArea4";
+}
+
+ObserveContainer : AjaxObserveField {
+  updateContainerID = "ToggleArea4";
+  elementName = "ul";
+}
+
+Names : WORepetition {
+  list = names;
+  item = repetitionName;
+}
+
+WOCheckBox : WOCheckBox {
+  checked = nameSelected;
+}
+
+SelectedNames : WOString {
+  value = selectedNames;
+}
+
+RepetitionName : WOString {
+  value = repetitionName;
+}

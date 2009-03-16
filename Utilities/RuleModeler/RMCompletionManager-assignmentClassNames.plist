@@ -1,0 +1,19 @@
+(
+    "com.webobjects.directtoweb.Assignment", 
+    "com.webobjects.directtoweb.KeyValueAssignment", 
+    "com.webobjects.directtoweb.BooleanAssignment", 
+    "com.webobjects.directtoweb.DefaultAssignment",
+    "com.webobjects.directtoweb.EntityAssignment",
+    "com.webobjects.directtoweb.TabDictionaryComputer",
+    "ERDDefaultActionAssignment",
+    "ERDDefaultConfigurationNameAssignment",
+    "ERDDefaultDisplayNameAssignment",
+    "ERDDefaultModelAssignment",
+    "ERDDelayedKeyValueAssignment",
+    "ERDDelayedLocalizedAssignment",
+    "ERDImageNameAssignment",
+    "ERDKeyValueAssignment",
+    "ERDSortedManyToManyAssignment",
+    "ERDTabDictionaryComputer",
+    "ERDUnitResolverAssignment"
+)

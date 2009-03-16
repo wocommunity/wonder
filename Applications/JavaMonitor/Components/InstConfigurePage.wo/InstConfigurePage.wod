@@ -1,0 +1,204 @@
+AdaptorSettingsForm : WOForm {}
+
+AdditionalArguments: WOText {
+    value = myInstance.additionalArgs;
+    cols = "50";
+    rows = "3";
+    wrap = "virtual";
+}
+
+AppConfigureLink: WOHyperlink {
+	action = appConfigLinkClicked;
+}
+
+ArgumentsForm: WOForm {}
+
+Caching: WOCheckBox {
+    checked = myInstance.cachingEnabled;
+}
+
+CheckBox2: WOCheckBox {
+	checked = myInstance.autoOpenInBrowser;
+}
+
+CommandLineString: WOString {
+    value = myInstance.commandLineArguments;
+}
+
+ConnectTimeoutField : WOTextField {
+    value = myInstance.cnctTimeout;
+    size = "4";
+    numberformat = "0";
+}
+
+DebuggingEnabled: WOCheckBox {
+    checked = myInstance.debuggingEnabled;
+}
+
+DetailViewButton: WOImage {
+    filename = "ButtonDetailView.gif";
+    height = "28";
+    width = "66";
+    alt = "Detail View";
+    border = "0";
+}
+
+InstName: WOString {
+    value = myInstance.id;
+    numberformat = "0";
+}
+
+NavPage: NavigationPage {
+	currentPage = APP_PAGE;
+	title = displayName;
+}
+
+Path: WOTextField {
+    value = myInstance.path;
+    size = "50";
+}
+
+PathPickerWizardLink : WOHyperlink {
+    action = pathPickerWizardClicked;
+}
+
+PathPickerWizardLink2 : WOHyperlink {
+    action = pathPickerWizardClickedOutput;
+}
+
+PathWizardImage : WOImage {
+    filename = "PathWizard.gif";
+    height = "24";
+    width = "46";
+    border = "0";
+    align = "ABSMIDDLE";
+}
+
+PathWizardImage2 : WOImage {
+    filename = "PathWizard.gif";
+    height = 24;
+    width = 46;
+    border = 0;
+    align = "ABSMIDDLE";
+}
+
+PoolsizeField : WOTextField {
+    value = myInstance.sendBufSize;
+    size = "4";
+    numberformat = "0";
+}
+
+Port: WOTextField {
+//    value = myInstance.port;
+    value = port;
+    size = "8";
+    numberformat = "0";
+}
+
+ReceiveTimeoutField : WOTextField {
+    value = myInstance.recvTimeout;
+    size = "4";
+    numberformat = "0";
+}
+
+ReturnLink: WOHyperlink {
+    action = returnClicked;
+}
+
+SendTimeoutField : WOTextField {
+    value = myInstance.sendTimeout;
+    size = "4";
+    numberformat = "0";
+}
+
+String1: WOString {
+	value = myInstance.hostName;
+}
+
+InstanceSettingsSubmit: WOSubmitButton {
+    action = startupUpdateClicked;
+    value = "Update Instance Settings";
+}
+
+TextField1: WOTextField {
+	numberformat = "0";
+	value = id;
+}
+
+TextField2: WOTextField {
+	numberformat = "0";
+	value = myInstance.minimumActiveSessionsCount;
+}
+
+TextField3: WOTextField {
+	value = myInstance.lifebeatInterval;
+	numberformat = "0";
+}
+
+TextField4: WOTextField {
+	size = "4";
+	value = myInstance.recvBufSize;
+	numberformat = "0";
+}
+
+UpdateAdaptorButton: WOSubmitButton {
+    action = adaptorSettingsUpdateClicked;
+    value = "Update Adaptor Settings";
+}
+
+WarningMessage: WOString {
+    value = session.message;
+}
+
+OutputPath: WOTextField {
+    value = myInstance.outputPath;
+    size = "50";
+}
+
+isWindowsHost: WOConditional { 
+     condition = isWindowsHost;  
+}
+
+
+pathDiff: WOString {
+    value = pathDiff;
+    escapeHTML = false;
+}
+minDiff: WOString {
+    value = minDiff;
+    escapeHTML = false;
+}
+cachingDiff: WOString {
+    value = cachingDiff;
+    escapeHTML = false;
+}
+outputDiff: WOString {
+    value = outputDiff;
+    escapeHTML = false;
+}
+browserDiff: WOString {
+    value = browserDiff;
+    escapeHTML = false;
+}
+debugDiff: WOString {
+    value = debugDiff;
+    escapeHTML = false;
+}
+lifebeatDiff: WOString {
+    value = lifebeatDiff;
+    escapeHTML = false;
+}
+argsDiff: WOString {
+    value = argsDiff;
+    escapeHTML = false;
+}
+
+
+ForceQuitForm: WOForm {}
+ForceQuitButton: WOSubmitButton {
+    action = forceQuitClicked;
+    value = "Force Quit This Instance";
+}
+lifebeatIntervalString: WOString {
+    value = instanceLifebeatInterval;
+}

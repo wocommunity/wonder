@@ -1,0 +1,9 @@
+(
+    0 : *true* => userPreferences = <computed> [er.corebusinesslogic.ERCUserPreferencesAssignment],
+    15 : pageConfiguration like '*MailMessage*' => entity = ERCMailMessage [com.webobjects.directtoweb.EntityAssignment],
+    50 : (entity.name = 'ERCAuditTrail' and propertyKey = 'entries' and (task = 'edit' or task = 'inspect')) => componentName = ERDList [com.webobjects.directtoweb.Assignment],
+    50 : (entity.name = 'ERCAuditTrail' and (task = 'edit' or task = 'inspect')) => displayPropertyKeys = ("gid.entityName",isDeleted,entries
+) [com.webobjects.directtoweb.Assignment],
+    50 : (entity.name = 'ERCAuditTrailEntry' and task = 'list') => displayPropertyKeys = (created,"user.name","type.name",keyPath,oldValues,newValues
+) [com.webobjects.directtoweb.Assignment]
+)

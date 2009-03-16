@@ -1,0 +1,20 @@
+{
+    openNewDocumentAtStartup = YES;
+    d2wclientConfigurationPaths = (
+        "/System/Library/Frameworks/JavaDirectToWeb.framework/Versions/A/Resources/d2wclientConfiguration.plist", 
+        "/Library/Frameworks/ERDirectToWeb.framework/Resources/d2wclientConfiguration.plist", 
+        "~/Root/ERDirectToWeb.framework/Resources/d2wclientConfiguration.plist");
+    sourceDrawerHeight = 120;
+    modelListDrawerWidth = 200;
+    textualSearchOnly = YES;
+    focusResetsSearch = NO;
+    focusKeepsSelection = YES;
+    useRuleEditorRuleOrdering = NO;
+    formattedQualifier = NO;
+    useParenthesesForComparisonQualifier = NO;
+    defaultRulePriority = 100;
+//    highlightSearchFilterOccurences = YES;
+//    searchFilterHighlightColor = <NSColor as NSData>;
+    restoreOpenDocuments = NO;
+//    restoredDocumentURLs = <NSArray of NSURL as strings>;
+}

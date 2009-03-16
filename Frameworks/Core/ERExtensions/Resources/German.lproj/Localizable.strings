@@ -1,0 +1,18 @@
+{
+	"Could not save your changes: " = "Konnte nicht speichern: ";
+	"ERXArrayChooser.noneString" = "- keine Auswahl -";
+	"ERXBatchNavigationBar.items_per_page" = "pro Seite";
+	"ERXBatchNavigationBar.of" = "von";
+	"ERXBatchNavigationBar.page" = "Seite";
+	"ERXBatchNavigationBar.show" = "Zeige";
+	"ERXCheckboxMatrix.deselectAll" = "Keine";
+	"ERXCheckboxMatrix.selectAll" = "Alle";
+	"ERXSortOrder.sortBy" = "Klicken Sie hier, um nach dieser Spalte zu sortieren";
+	"WOToOneRelationship.noneString" = "- none -";
+	"ERXFlickrBatchNavigation.previous" = " Zur\U00fcck";
+   	"ERXFlickrBatchNavigation.next" = "Weiter ";
+   	"ERXFlickrBatchNavigation.item" = "item";
+	"ERXFlickrBatchNavigation.page" = "pro Seite";
+	"ERXFlickrBatchNavigation.show" = "Zeige: ";
+	"ERXFlickrBatchNavigation.all" = "Alle";
+}

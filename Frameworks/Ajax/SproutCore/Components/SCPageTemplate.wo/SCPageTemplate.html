@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title></title>
+    <!--  wo:SCJavaScript framework="SproutCore" group="sproutcore" name="english.lproj/detect-browser" key="stylesheets_for_client" /-->
+    <wo:ERXPartialMarker key="stylesheets_for_client"/>
+	<wo:ERXPartialMarker key="@content_for_page_styles"/>
+  </head>
+  <wo:WOGenericContainer elementName="body" class="$bodyClass">
+   <script>
+    if (window.SC && SC.setupBodyClassNames) SC.setupBodyClassNames() ;
+   </script>
+
+	<!-- Render Page Views -->
+	<wo:WOComponentContent />
+
+    <!-- Main Page Body -->
+    <wo:WOGenericContainer elementName="textarea" cols="80" rows="40" omitTags="$^isLive">
+      <wo:ERXPartialMarker key="body"/>
+	</wo:WOGenericContainer>
+    <!-- Resources to be removed from DOM on page load -->
+    <div id="resources" style="display:none; visibility: hidden;">
+	    <wo:ERXPartialMarker key="@content_for_resources"/>
+    </div>
+    <!-- Include Site Javascript -->
+	<wo:ERXPartialMarker key="javascripts_for_client"/>
+	<wo:ERXPartialMarker key="pageJavaScript"/>
+
+     <wo:WOGenericContainer elementName="textarea" cols="80" rows="40" omitTags="$^isLive">
+     	<script type="text/javascript">SC.page = <wo:WOString value="$renderTree" escapeHTML="false" /></script>
+	</wo:WOGenericContainer>
+    <!-- Start SproutCore on Page Load -->
+    <script type="text/javascript">window.onload = SC.didLoad;</script>
+  </wo:WOGenericContainer>
+</html>

@@ -1,0 +1,38 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }, 
+        {allowsNull = Y; columnName = parentId; name = parentId; prototypeName = id; }
+    ); 
+    attributesUsedForLocking = (id, name, parentId); 
+    className = "er.indexing.attributes.ERIAttributeGroup"; 
+    classProperties = (attributes, children, name, parent); 
+    externalName = ERIAttributeGroup; 
+    fetchSpecificationDictionary = {}; 
+    name = ERIAttributeGroup; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ERIAttribute; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = attributeGroupId; sourceAttribute = id; }); 
+            name = attributes; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = ERIAttributeGroup; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = parentId; sourceAttribute = id; }); 
+            name = children; 
+        }, 
+        {
+            destination = ERIAttributeGroup; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = parentId; }); 
+            name = parent; 
+        }
+    ); 
+}

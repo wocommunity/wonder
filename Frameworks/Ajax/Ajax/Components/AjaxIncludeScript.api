@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxIncludeScript" wocomponentcontent="false">
+    <binding name="name"/>
+
+    <validation message="'name' is a required binding">
+      <unbound name="name"/>
+    </validation>
+	<binding name="framework"/>
+    </wo>
+</wodefinitions>
