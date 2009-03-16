@@ -559,7 +559,7 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>
-		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder</connection>
-		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder</developerConnection>
+		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/branches/Wonder_for_Maven_experiments/Wonder</connection>
+		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/branches/Wonder_for_Maven_experiments/Wonder</developerConnection>
 	</scm>
 </project>
