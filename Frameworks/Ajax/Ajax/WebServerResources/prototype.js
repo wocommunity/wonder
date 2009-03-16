@@ -3858,7 +3858,7 @@ Event.Methods = (function() {
             && currentTarget.type === 'radio'))
               node = currentTarget;
       }
-      if (node.nodeType == Node.TEXT_NODE) node = node.parentNode;
+      if (node && node.nodeType == Node.TEXT_NODE) node = node.parentNode; // WONDER-248
       return Element.extend(node);
     },
 
