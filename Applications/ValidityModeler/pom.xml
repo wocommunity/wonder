@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.applications</groupId>
 		<artifactId>applications</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
+		<version>5.0.0-r9046</version>
 	</parent>
 	<groupId>wonder.applications</groupId>
 	<artifactId>ValidityModeler</artifactId>
