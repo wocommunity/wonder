@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>plugins</artifactId>
-		<version>5.0.0-r9046</version>
+		<version>5.0.0-r9047-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.plugins</groupId>
 	<artifactId>EROraclePlugIn</artifactId>
