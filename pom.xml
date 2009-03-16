@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder</groupId>
 	<artifactId>wonder</artifactId>
-	<version>5.0.0-SNAPSHOT</version>
+	<version>5.0.0-r9046</version>
 	<packaging>pom</packaging>
 	<name>Project Wonder</name>
 	<url>http://wonder.sf.net/</url>
@@ -559,7 +559,7 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>
-		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/branches/Wonder_for_Maven_experiments/Wonder</connection>
-		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/branches/Wonder_for_Maven_experiments/Wonder</developerConnection>
+		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/tags/wonder-5.0.0-r9046</connection>
+		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/tags/wonder-5.0.0-r9046</developerConnection>
 	</scm>
 </project>
