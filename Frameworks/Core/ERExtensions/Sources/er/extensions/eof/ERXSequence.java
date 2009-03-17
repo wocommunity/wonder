@@ -93,6 +93,8 @@ public class ERXSequence {
 		
 		public NativeDatabaseSequence(EOEditingContext editingContext, String modelName, String name) {
 			super(name);
+		    _editingContext=editingContext;
+		    _modelName=modelName;
 		}
 		
 		public long nextValue(long increment) {
