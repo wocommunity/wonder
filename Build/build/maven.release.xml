@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?><!--ant-->
+<project name="Wonder maven release util" basedir="../.." default="help">
+	
+<!--
+	(ldeck)
+	this is a pseudo maven-release-plugin which performs the following steps
+	a) regex replaces the pom snapshot versions with an scm version.
+		e.g., 5.0.0-SNAPSHOT changed to 5.0.0.8956
+	b) performs the goal provided (e.g., install, deploy, or package) using the specified mvnProfile
+	c) optionally updates the source from scm beforehand (default is true)
+	d) optionally reverts changes afterwards if desired (default is true)
+	
+	Note: if you've got your own modifications - use at your own risk!
+	
+	Note: you only need to supply woversion if you don't want the most recent version for the given mvnProfile
+	or if the default version range in the pom isn't resolving. The usual reason for failure is your
+	~/.m2/settings.xml missing the repository definition for the repo from which you've deployed wo jars.
+	e.g., ~/.m2/repository/com/webobjects/JavaFoundation/maven-metadata-<your-repoid>.xml represents
+	the id of the repo that needs to be defined in your settings.xml file for default resolution.
+-->
+
+	<property name="usage.1" value="-DmvnProfile=[wo54|wo53] [-Dwoversion=x.x.x] package" />
+	<property name="usage.2" value="-DmvnProfile=[wo54|wo53] [-Dwoversion=x.x.x] install" />
+	<property name="usage.3" value="-DmvnProfile=[wo54|wo53] [-Dwoversion=x.x.x] deploy -DmyRepoId=foo -DmyRepoURL='bar' [-DmyRepoLayout=baz]" />
+	<property name="usage.X" value="Additional properties: [-Drevert=false] [-Dupdate=false]" />
+	<property name="usage.description" value="Description: Updates the source, replaces pom versions with the scm version (e.g., 5.0.0-SNAPSHOT to 5.0.0.8979), performs the maven goal (e.g., install or deploy), reverts the source." />
+
+	<property name="usage.message" value="Usage:${line.separator}${usage.1}${line.separator}${usage.2}${line.separator}${usage.3}${line.separator}${line.separator}${usage.X}${line.separator}${line.separator}${usage.description}" />
+	
+	<property name="wonder.dir" value="${basedir}" />
+	<property name="project.scm.version" value="current.scm.version" />
+	<property name="wonder.svninfo.xml" value="${java.io.tmpdir}/wonder.svninfo.xml" />
+	<property name="pom.version.file" value="${java.io.tmpdir}/wonder.pom.version" />
+	
+	<!-- default versions (if mvnProfile, woversion not supplied)-->
+	<property name="mvnProfile" value="wo54" />
+	
+	
+	<!-- =================================
+	      target: clean
+		  depends: \-\-mvn-clean, scm-revert, \-\-revert-versioninfo
+		  description: reverts scm and tmp version files
+	     ================================= -->
+	<target name="clean" depends="--mvn-clean, --revert-versioninfo, scm-revert" />
+	
+	<!-- =================================
+	      target: deploy
+		  depends: \-\-pre-deploy, \-\-mvn-goal
+		  description: essentially performs mvn deploy with relevant
+		 			   properties after having adjusted the version
+		 			  for release, and cleans up afterwards
+	     ================================= -->
+	<target name="deploy" depends="--pre-deploy, --mvn-goal" />
+	
+	<!-- =================================
+	      target: help
+		  description: prints out usage information
+	     ================================= -->
+	<target name="help">
+		<echo message="${usage.message}" />
+	</target>
+	
+	<!-- =================================
+	      target: install
+		  depends: \-\-pre-install, \-\-mvn-goal
+		  description: essentially performs mvn install with relevant
+		 			   properties after having adjusted the version
+		 			  for release, and cleans up afterwards
+	     ================================= -->
+	<target name="install" depends="--pre-install, --mvn-goal" />
+	
+	<!-- =================================
+	      target: package
+		  depends: \-\-pre-package, \-\-mvn-goal
+		  description: essentially performs mvn package with relevant
+		 			   properties after having adjusted the version
+		 			  for release, and cleans up afterwards
+		NOTE: this is useful for a dryRun without installing or deploying
+	     ================================= -->
+	<target name="package" depends="--pre-package, --mvn-goal" />
+	
+	<!-- =================================
+	      target: release-prepare
+		  depends: \-\-setup
+		  description: regex-replaces all pom.xml files version with a release version.
+						i.e., takes the current scm version and replaces 'VERSION-SNAPSHOT' with e.g., 'VERSION.1234'
+	     ================================= -->
+	<target name="release-prepare" depends="--setup">
+		<xmlproperty file="${wonder.dir}/pom.xml" collapseAttributes="true" />
+		<echo message="${project.scm.version}=${project.version}" file="${pom.version.file}" />
+		
+		<replace file="${pom.version.file}" token="-SNAPSHOT" value=".${svn.revision}" />
+		<property file="${pom.version.file}" />
+		
+		<property name="project.version.text" value="&lt;version&gt;${project.version}&lt;/version&gt;" />
+		<property name="install.version.text" value="&lt;version&gt;${current.scm.version}&lt;/version&gt;" />
+		<replaceregexp byline="false">
+			<regexp pattern="${project.version.text}" />
+			<substitution expression="${install.version.text}" />
+			<fileset dir="${wonder.dir}" >
+				<filename name="**/pom.xml" />
+			</fileset>
+		</replaceregexp>
+	</target>
+	
+	<!-- =================================
+	      target: scm-revert
+		  depends: \-\-scm-revert
+		  description: performs recursive svn revert if property revert is not false.
+	     ================================= -->
+	<target name="scm-revert" depends="--scm-revert" if="scm.revert">
+		<fail unless="wonder.dir" message="${usage.message}"/>
+		<exec executable="svn" dir="${wonder.dir}">
+			<arg line="revert --recursive ${wonder.dir}" />
+		</exec>
+	</target>
+	
+	<!-- =================================
+	      target: scm-up
+		  depends: scm-revert, \-\-scm-up
+		  description: performs svn up if property update is not false.
+	     ================================= -->
+	<target name="scm-up" depends="scm-revert, --scm-up" if="scm.update">
+		<fail unless="wonder.dir" message="${usage.message}"/>
+		<exec executable="svn" dir="${wonder.dir}">
+			<arg line="up" />
+		</exec>
+	</target>
+	
+	<!-- =================================
+	      target: \-\-mvn-clean
+		  description: performs mvn clean
+	     ================================= -->
+	<target name="--mvn-clean">
+		<fail unless="wonder.dir" message="${usage.message}"/>
+		<exec executable="mvn" dir="${wonder.dir}">
+			<env key="MAVEN_OPTS" value="-Xmx512m" />
+			<arg line="clean" />
+		</exec>
+	</target>
+	
+	<!-- =================================
+	      target: \-\-mvn-goal
+		  depends: clean, scm-up, \-\-mvn-lifecycle, clean
+		  description: cleans, updates the source and performs the goal (e.g., install, deploy)
+	     ================================= -->
+	<target name="--mvn-goal" depends="clean, scm-up, --mvn-lifecycle, clean" />
+	
+	<!-- =================================
+	      target: \-\-mvn-lifecycle
+		  depends: release-prepare
+		  description: causes version to be updated and the mvn goal performed
+	     ================================= -->
+	<target name="--mvn-lifecycle" depends="release-prepare">
+		<fail unless="wonder.dir" message="${usage.message}"/>
+		<exec executable="mvn" dir="${wonder.dir}" vmlauncher="no">
+			<env key="MAVEN_OPTS" value="-Xmx512m" />
+			<arg line="-P ${mvnProfile} ${mvn.goal} ${fixed_woversion}" />
+		</exec>
+	</target>
+	
+	<!-- =================================
+	      target: \-\-pre-deploy
+		  description: sets up the properties needed for mvn deploy
+	     ================================= -->
+	<target name="--pre-deploy">
+		<fail unless="myRepoId" message="${usage.message}" />
+		<fail unless="myRepoURL" message="${usage.message}" />
+		<property name="myRepoLayout" value="default" />
+		<property name="mvn.goal" value="deploy -DaltDeploymentRepository=${myRepoId}::${myRepoLayout}::${myRepoURL}" />
+	</target>
+	
+	<!-- =================================
+	      target: \-\-pre-install
+		  description: sets up the properties needed for mvn install
+	     ================================= -->
+	<target name="--pre-install">
+		<property name="mvn.goal" value="install" />
+	</target>
+	
+	<!-- =================================
+	      target: \-\-pre-package
+		  description: sets up the properties needed for mvn package
+	     ================================= -->
+	<target name="--pre-package">
+		<property name="mvn.goal" value="package" />
+	</target>
+	
+	<!-- =================================
+	      target: \-\-revert-versioninfo
+		  description: deletes temp files storing version info
+	     ================================= -->
+	<target name="--revert-versioninfo">
+		<delete file="${wonder.svninfo.xml}" quiet="true" />
+		<delete file="${pom.version.file}" quiet="true" />
+	</target>
+	
+	<!-- =================================
+	      target: \-\-scm-revert
+		  description: sets boolean property scm.revert to true unless property revert is false
+	     ================================= -->
+	<target name="--scm-revert">
+		<condition property="scm.revert">
+			<or>
+				<not>
+					<isset property="revert" />
+				</not>
+				<istrue value="${revert}" />
+			</or>
+		</condition>
+	</target>
+	
+	<!-- =================================
+	      target: \-\-scm-up
+		  description: sets boolean property scm.update to true unless property update is false
+	     ================================= -->
+	<target name="--scm-up">
+		<condition property="scm.update">
+			<or>
+				<not>
+					<isset property="update" />
+				</not>
+				<istrue value="${update}" />
+			</or>
+		</condition>
+	</target>
+	
+	<!-- =================================
+	      target: \-\-setup
+		  description: determines property woversion, svn.revision
+	     ================================= -->
+	<target name="--setup">
+		<condition property="fixed_woversion" value="-Dwoversion=${woversion}">
+			<isset property="woversion" />
+		</condition>
+		<property name="fixed_woversion" value="" />
+		
+		<fail unless="wonder.dir" message="${usage.message}" />
+		
+		<exec executable="svn" output="${wonder.svninfo.xml}" dir="${wonder.dir}">
+			<arg line="info --xml"/>
+		</exec>
+		<xmlproperty file="${wonder.svninfo.xml}" collapseattributes="true" />
+		<property name="svn.revision" value="${info.entry.revision}" />
+	</target>
+	
+</project>
