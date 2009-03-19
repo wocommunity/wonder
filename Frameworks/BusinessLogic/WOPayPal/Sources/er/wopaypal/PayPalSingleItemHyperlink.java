@@ -6,14 +6,20 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.io.UnsupportedEncodingException; // for URL encoding of strings
-import java.net.URLEncoder;  // for URL encoding of strings
-import java.text.DecimalFormat; // for number formatting
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Enumeration;
+import java.util.Locale;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
 
 public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
 
@@ -60,7 +66,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      *  @return String
      */
     public String payPalUrlParams() { // this should probably have much more robust error handling
-        DecimalFormat currencyFormatter = new DecimalFormat("##0.00");
+        DecimalFormat currencyFormatter = new DecimalFormat("##0.00", new DecimalFormatSymbols(Locale.US));
 
         StringBuffer sb = new StringBuffer();
         sb.append("&business=" + urlEncode(payPalBusinessName) ); // required!!!
