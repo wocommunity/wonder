@@ -275,7 +275,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		_count = rangeLength;
 	}
 
-	private NSArray(E objects[], int rangeLocation, int rangeLength, boolean checkForNull) {
+	protected NSArray(Object objects[], int rangeLocation, int rangeLength, boolean checkForNull) {
 		_recomputeHashCode = true;
 		initFromObjects(objects, rangeLocation, rangeLength, checkForNull);
 	}
@@ -599,12 +599,12 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 
-	public NSArray subarrayWithRange(NSRange range) {
+	public NSArray<E> subarrayWithRange(NSRange range) {
 		if (range == null) {
 			return EmptyArray;
 		}
 		else {
-			return new NSArray(objectsNoCopy(), range.location(), range.length(), false);
+			return new NSArray<E>(objectsNoCopy(), range.location(), range.length(), false);
 		}
 	}
 
