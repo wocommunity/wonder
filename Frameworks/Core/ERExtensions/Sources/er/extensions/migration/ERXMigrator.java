@@ -324,7 +324,7 @@ public class ERXMigrator {
 
 		Integer migratorVersion = versions.get(modelName);
 		if (migratorVersion == null) {
-			migratorVersion = new Integer(-1);
+			migratorVersion = Integer.valueOf(ERXProperties.intForKeyWithDefault(modelName + ".InitialMigrationVersion", -1));
 		}
 
 		if (migratorVersion.intValue() != ERXMigrator.LATEST_VERSION) {
