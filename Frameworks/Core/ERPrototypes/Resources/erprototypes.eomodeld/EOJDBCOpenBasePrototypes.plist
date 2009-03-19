@@ -46,7 +46,7 @@
         }, 
         {
             columnName = ""; 
-            externalType = decimal; 
+            externalType = money; 
             name = currencyAmount; 
             precision = 38; 
             scale = 4; 
