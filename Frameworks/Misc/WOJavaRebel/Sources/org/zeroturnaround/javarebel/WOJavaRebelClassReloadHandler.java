@@ -133,5 +133,9 @@ public class WOJavaRebelClassReloadHandler {
 				reloaded(clazz);
 			}
 		}
+
+    public int priority() {
+      return 0;
+    }
 	}
 }
