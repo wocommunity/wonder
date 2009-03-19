@@ -40,6 +40,8 @@ import er.extensions.woextensions.WOSortOrder;
  * @binding sortedAscendingImageName
  * @binding sortedDescendingImageName
  * @binding imageFramework
+ * @binding width the width of the image
+ * @binding height the height of the image
  */
 
 public class ERXSortOrder extends WOSortOrder {
@@ -150,6 +152,14 @@ public class ERXSortOrder extends WOSortOrder {
     }
     public String sortedDescendingImageName() {
         return hasBinding("sortedDescendingImageName") ? (String)valueForBinding("sortedDescendingImageName") : "Descending.gif";
+    }
+    
+    public Object width() {
+    	return hasBinding("width") ? valueForBinding("width") : "9";
+    }
+    
+    public Object height() {
+    	return hasBinding("height") ? valueForBinding("height") : "11";
     }
 
     // FIXME: Should post a notification even if d2wContext isn't bound.
