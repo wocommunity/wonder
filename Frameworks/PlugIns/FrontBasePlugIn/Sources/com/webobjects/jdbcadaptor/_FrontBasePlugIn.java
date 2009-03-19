@@ -514,47 +514,48 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	}
 
 	protected static int internalTypeForExternal(String externalType) {
-		if (externalType.equals("BOOLEAN"))
+		String upperExternalType = externalType.toUpperCase();
+		if (upperExternalType.equals("BOOLEAN"))
 			return FB_Boolean;
-		else if (externalType.equals("INTEGER") || externalType.equals("INT"))
+		else if (upperExternalType.equals("INTEGER") || upperExternalType.equals("INT"))
 			return FB_Integer;
-		else if (externalType.equals("SMALLINT"))
+		else if (upperExternalType.equals("SMALLINT"))
 			return FB_SmallInteger;
-		else if (externalType.equals("LONGINT"))
+		else if (upperExternalType.equals("LONGINT"))
 			return FB_LongInteger;
-		else if (externalType.equals("TINYINT"))
+		else if (upperExternalType.equals("TINYINT"))
 			return FB_TinyInteger;
-		else if (externalType.equals("FLOAT"))
+		else if (upperExternalType.equals("FLOAT"))
 			return FB_Float;
-		else if (externalType.equals("REAL"))
+		else if (upperExternalType.equals("REAL"))
 			return FB_Real;
-		else if (externalType.equals("DOUBLE PRECISION"))
+		else if (upperExternalType.equals("DOUBLE PRECISION"))
 			return FB_Double;
-		else if (externalType.equals("NUMERIC"))
+		else if (upperExternalType.equals("NUMERIC"))
 			return FB_Numeric;
-		else if (externalType.equals("DECIMAL"))
+		else if (upperExternalType.equals("DECIMAL"))
 			return FB_Decimal;
-		else if (externalType.equals("CHAR") || externalType.equals("CHARACTER"))
+		else if (upperExternalType.equals("CHAR") || upperExternalType.equals("CHARACTER"))
 			return FB_Character;
-		else if (externalType.equals("VARCHAR") || externalType.equals("CHARACTER VARYING") || externalType.equals("CHAR VARYING"))
+		else if (upperExternalType.equals("VARCHAR") || upperExternalType.equals("CHARACTER VARYING") || upperExternalType.equals("CHAR VARYING"))
 			return FB_VCharacter;
-		else if (externalType.equals("BIT") || externalType.equals("BYTE"))
+		else if (upperExternalType.equals("BIT") || upperExternalType.equals("BYTE"))
 			return FB_Bit;
-		else if (externalType.equals("BIT VARYING") || externalType.equals("BYTE VARYING"))
+		else if (upperExternalType.equals("BIT VARYING") || upperExternalType.equals("BYTE VARYING"))
 			return FB_VBit;
-		else if (externalType.equals("DATE"))
+		else if (upperExternalType.equals("DATE"))
 			return FB_Date;
-		else if (externalType.equals("TIME"))
+		else if (upperExternalType.equals("TIME"))
 			return FB_Time;
-		else if (externalType.equals("TIME WITH TIME ZONE"))
+		else if (upperExternalType.equals("TIME WITH TIME ZONE"))
 			return FB_TimeTZ;
-		else if (externalType.equals("TIMESTAMP"))
+		else if (upperExternalType.equals("TIMESTAMP"))
 			return FB_Timestamp;
-		else if (externalType.equals("TIMESTAMP WITH TIME ZONE"))
+		else if (upperExternalType.equals("TIMESTAMP WITH TIME ZONE"))
 			return FB_TimestampTZ;
-		else if (externalType.equals("BLOB"))
+		else if (upperExternalType.equals("BLOB"))
 			return FB_BLOB;
-		else if (externalType.equals("CLOB"))
+		else if (upperExternalType.equals("CLOB"))
 			return FB_CLOB;
 		else
 			return -1;
