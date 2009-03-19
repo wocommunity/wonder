@@ -103,7 +103,7 @@
         {
             adaptorValueConversionMethodName = toString; 
             columnName = ""; 
-            externalType = bool; 
+            externalType = int; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = intBoolean; 
             valueClassName = NSNumber; 
