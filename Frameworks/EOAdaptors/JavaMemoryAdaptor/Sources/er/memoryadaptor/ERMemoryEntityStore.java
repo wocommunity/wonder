@@ -60,18 +60,26 @@ public class ERMemoryEntityStore {
 
   public NSMutableArray<NSMutableDictionary<String, Object>> fetch(NSArray attributesToFetch, EOFetchSpecification fetchSpecification, boolean shouldLock, EOEntity entity) {
     EOQualifier qualifier = null;
+    int fetchLimit = 0;
+    NSArray sortOrderings = null;
     if (fetchSpecification != null) {
       qualifier = fetchSpecification.qualifier();
+      fetchLimit = fetchSpecification.fetchLimit();
+      sortOrderings = fetchSpecification.sortOrderings();
     }
 
+    int count = 0;
     NSMutableArray<NSMutableDictionary<String, Object>> fetchedRows = new NSMutableArray<NSMutableDictionary<String, Object>>();
     for (NSMutableDictionary<String, Object> row : _rows) {
       if (qualifier == null || qualifier.evaluateWithObject(row)) {
         fetchedRows.addObject(row);
+        count ++;
+      }
+      if (fetchLimit > 0 && count == fetchLimit) {
+        break;
       }
     }
 
-    NSArray sortOrderings = fetchSpecification.sortOrderings();
     if (sortOrderings != null) {
       EOSortOrdering.sortArrayUsingKeyOrderArray(fetchedRows, sortOrderings);
     }
