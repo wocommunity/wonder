@@ -12,6 +12,14 @@ itemTitle: WOString {
 	value = ^itemTitle;
 }
 
+hasAuthor : WOConditional {
+	condition = ^itemAuthor;
+}
+
+itemAuther: WOString {
+	value = ^itemAuther;
+}
+
 feedTitle: WOString {
 	value = ^feedTitle;
 }

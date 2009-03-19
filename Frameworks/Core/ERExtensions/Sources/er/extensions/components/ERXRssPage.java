@@ -18,6 +18,7 @@ import com.webobjects.appserver.WOResponse;
  * @binding itemTitle the title of the current item
  * @binding itemLink the link associated with the current item
  * @binding itemPubDate the publish date of the current item
+ * @binding itemAuthor the author of the item
  * 
  * @author ak
  */
