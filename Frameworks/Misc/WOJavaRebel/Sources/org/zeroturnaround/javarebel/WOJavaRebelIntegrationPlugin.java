@@ -27,10 +27,18 @@ public class WOJavaRebelIntegrationPlugin implements Plugin {
   }
 
   public String getId() {
-    return "WOJR";
+    return "wojavarebel";
   }
 
   public String getName() {
     return "WOJavaRebel";
+  }
+
+  public String getAuthor() {
+    return "Quinton Dolan <qdolan@gmail.com>";
+  }
+
+  public String getWebsite() {
+    return null;
   }
 }
