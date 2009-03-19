@@ -13,8 +13,8 @@ ToggleImage: WOActiveImage {
 	alt = helpString;
 	border = 0;
 	src = customImageSrcForCurrentState;
-	height = 11;
-	width = 9;
+	height = height;
+	width = width;
 }
 
 ToggleImage2: WOActiveImage {
@@ -22,8 +22,8 @@ ToggleImage2: WOActiveImage {
 	align = "ABSMIDDLE";
 	alt = helpString;
 	border = 0;
-	height = 11;
-	width = 9;
+	height = height;
+	width = width;
 	filename = imageNameForCurrentState;
 	framework = frameworkName;
 }
