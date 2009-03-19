@@ -30,7 +30,7 @@ public class ERXSequence {
 	
 	private final String _name;
 	protected long _lastValue;
-	private long _maxValue;
+	protected long _maxValue;
 	
 	public ERXSequence(String name) {
 		_name = name;
@@ -123,6 +123,8 @@ public class ERXSequence {
 			super(name, initialValue);
 			EOModel model = ERXEOAccessUtilities.modelGroup(ec).modelNamed(modelName);
 			_broker = ERXJDBCConnectionBroker.connectionBrokerForModel(model);
+			_lastValue = increasedMaxValue(0);
+			_maxValue = _lastValue;			
 		}
 
 		public DatabaseSequence(EOEditingContext ec, String modelName, String name) {
