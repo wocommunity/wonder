@@ -29,5 +29,6 @@
             <unbound name="itemLink"/>
         </validation>
     <binding name="itemGuid"/>
+    <binding name="itemAuthor"/>
     </wo>
 </wodefinitions>
