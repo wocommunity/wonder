@@ -69,6 +69,7 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXExtensions;
@@ -1773,7 +1774,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		if (responseCompressionEnabled()) {
 			String contentType = response.headerForKey("content-type");
-			if (!"gzip".equals(response.headerForKey("content-encoding")) && (contentType != null) && (contentType.startsWith("text/") || contentType.equals("application/x-javascript"))) {
+			if (!"gzip".equals(response.headerForKey("content-encoding")) && (contentType != null) && (contentType.startsWith("text/") || responseCompressionTypes().containsObject(contentType))) {
 				String acceptEncoding = request.headerForKey("accept-encoding");
 				if ((acceptEncoding != null) && (acceptEncoding.toLowerCase().indexOf("gzip") != -1)) {
 					long start = System.currentTimeMillis();
@@ -2081,6 +2082,22 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			_responseCompressionEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.responseCompressionEnabled", false) ? Boolean.TRUE : Boolean.FALSE;
 		}
 		return _responseCompressionEnabled.booleanValue();
+	}
+	
+	protected NSSet<String> _responseCompressionTypes;
+	
+	/**
+	 * checks the value of
+	 * <code>er.extensions.ERXApplication.responseCompressionTypes</code> for
+	 * mime types that allow response compression in addition to text/* types.
+	 * The default is ("application/x-javascript")
+	 * @return an array of mime type strings
+	 */
+	public NSSet<String> responseCompressionTypes() {
+		if(_responseCompressionTypes == null) {
+			_responseCompressionTypes = new NSSet<String>(ERXProperties.arrayForKeyWithDefault("er.extensions.ERXApplication.responseCompressionTypes", new NSArray<String>("application/x-javascript")));
+		}
+		return _responseCompressionTypes;
 	}
 
 	/**
