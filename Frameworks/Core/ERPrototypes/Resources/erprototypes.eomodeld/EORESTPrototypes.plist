@@ -79,7 +79,7 @@
             externalType = VARCHAR; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = globalID; 
-            valueClassName = ERXKeyGlobalID; 
+            valueClassName = "er.extensions.foundation.ERXKeyGlobalID"; 
             valueFactoryMethodName = fromString; 
             valueType = c; 
             width = 255; 
@@ -115,15 +115,15 @@
             width = 39; 
         }, 
         {
-            adaptorValueConversionMethodName = name;
-            columnName = "";
-            externalType = VARCHAR;
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
-            name = javaEnum;
-            valueClassName = "java.lang.Enum";
-            valueFactoryMethodName = valueOf;
-            width = 50;
-        },
+            adaptorValueConversionMethodName = name; 
+            columnName = ""; 
+            externalType = VARCHAR; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = javaEnum; 
+            valueClassName = "java.lang.Enum"; 
+            valueFactoryMethodName = valueOf; 
+            width = 50; 
+        }, 
         {
             columnName = ""; 
             externalType = VARCHAR; 
@@ -136,7 +136,7 @@
             columnName = ""; 
             externalType = BLOB; 
             name = mutableArray; 
-            valueClassName = ERXMutableArray; 
+            valueClassName = "er.extensions.foundation.ERXMutableArray"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
@@ -144,7 +144,7 @@
             columnName = ""; 
             externalType = BLOB; 
             name = mutableDictionary; 
-            valueClassName = ERXMutableDictionary; 
+            valueClassName = "er.extensions.foundation.ERXMutableDictionary"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
