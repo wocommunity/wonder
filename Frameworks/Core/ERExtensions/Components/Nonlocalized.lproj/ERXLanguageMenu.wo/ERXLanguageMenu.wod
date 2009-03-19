@@ -1,0 +1,15 @@
+LanguagePopup: WOPopUpButton {
+	class = ^class;
+	dir = ^dir;
+	disabled = ^disabled;
+	displayString = displayStringForLanguage;
+	id = ^id;
+	item = languageOption;
+	list = availableLanguages;
+	localizeDisplayStrings = ^localizeDisplayStrings;
+	noSelectionString = ^noSelectionString;
+	size = ^size;
+	selection = ^language;
+	style = ^style;
+	title = ^title;
+}
