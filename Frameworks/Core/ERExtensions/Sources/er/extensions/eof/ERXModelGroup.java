@@ -26,6 +26,7 @@ import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.ERXModel;
 import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -408,141 +409,25 @@ public class ERXModelGroup extends EOModelGroup {
 	 * so you can override things here. Of course EOModeler knows nothing of them, so you may need to copy all
 	 * attributes over to a <code>EOPrototypes</code> entity that is present only once in your model group. <br />
 	 * This class is used by the runtime when the property
-	 * <code>er.extensions.ERXModelGroup.useExtendedPrototypes=true</code>.
+	 * <code>er.extensions.ERXModelGroup.patchModelsOnLoad=true</code>.
+	 * 
+	 * <p>Note: <code>er.extensions.ERXModelGroup.patchModelsOnLoad=true</code> makes the following property
+	 * <code>er.extensions.ERXModel.useExtendedPrototypes=true</code>.
 	 * 
 	 * @author ak
 	 */
-	public static class Model extends EOModel {
+	public static class Model extends ERXModel {
 
 		public Model(URL url) {
 			super(url);
 		}
 
-		@Override
-		public void setModelGroup(EOModelGroup aGroup) {
-			super.setModelGroup(aGroup);
-			if (aGroup != null) {
-				((ERXModelGroup) aGroup).resetConnectionDictionaryInModel(this);
-			}
-		}
-
 		/**
-		 * Utility for getting all names from an array of attributes.
-		 * 
-		 * @param attributes
-		 */
-		private NSArray namesForAttributes(NSArray attributes) {
-			return (NSArray) attributes.valueForKey("name");
-		}
-
-		/**
-		 * Utility for getting all the attributes off an entity. If the entity is null, an empty array is returned.
-		 * 
-		 * @param entity
-		 */
-		private NSArray attributesFromEntity(EOEntity entity) {
-			NSArray result = NSArray.EmptyArray;
-			if (entity != null) {
-				result = entity.attributes();
-				log.info("Attributes from " + entity.name() + ": " + result);
-			}
-			return result;
-		}
-
-		/**
-		 * Utility to add attributes to the prototype cache. As the attributes are chosen by name, replace already
-		 * existing ones.
-		 * 
-		 * @param attributes
-		 */
-		private void addAttributesToPrototypesCache(NSArray attributes) {
-			if (attributes.count() != 0) {
-				NSArray keys = namesForAttributes(attributes);
-				NSDictionary temp = new NSDictionary(attributes, keys);
-				_prototypesByName.addEntriesFromDictionary(temp);
-			}
-		}
-
-		/**
-		 * Utility to add attributes to the prototype cache. As the attributes are chosen by name, replace already
-		 * existing ones.
-		 * 
-		 * @param attributes
-		 */
-		private void addAttributesToPrototypesCache(EOEntity entity) {
-			addAttributesToPrototypesCache(attributesFromEntity(entity));
-		}
-
-		/**
-		 * Create the prototype cache by walking a search order.
-		 * 
-		 */
-		private void createPrototypes() {
-			log.info("Creating prototypes for model: " + name() + "->" + connectionDictionary());
-			synchronized (_EOGlobalModelLock) {
-				_prototypesByName = new NSMutableDictionary();
-				String name = name();
-				NSArray adaptorPrototypes = NSArray.EmptyArray;
-				EOAdaptor adaptor = EOAdaptor.adaptorWithModel(this);
-				try {
-					adaptorPrototypes = adaptor.prototypeAttributes();
-				}
-				catch (Exception e) {
-					log.error(e, e);
-				}
-				addAttributesToPrototypesCache(adaptorPrototypes);
-				NSArray prototypesToHide = attributesFromEntity(_group.entityNamed("EOPrototypesToHide"));
-				_prototypesByName.removeObjectsForKeys(namesForAttributes(prototypesToHide));
-
-				String plugin = null;
-				if (adaptor instanceof JDBCAdaptor && !name().equalsIgnoreCase("erprototypes")) {
-					plugin = (String) connectionDictionary().objectForKey("plugin");
-				}
-
-				addAttributesToPrototypesCache(_group.entityNamed("EOPrototypes"));
-				addAttributesToPrototypesCache(_group.entityNamed("EO" + adaptorName() + "Prototypes"));
-				if (plugin != null) {
-					addAttributesToPrototypesCache(_group.entityNamed("EOJDBC" + plugin + "Prototypes"));
-				}
-
-				addAttributesToPrototypesCache(entityNamed("EOCustomPrototypes"));
-				addAttributesToPrototypesCache(entityNamed("EO" + adaptorName() + "CustomPrototypes"));
-				if (plugin != null) {
-					addAttributesToPrototypesCache(entityNamed("EOJDBC" + plugin + "CustomPrototypes"));
-				}
-
-				addAttributesToPrototypesCache(entityNamed("EO" + name + "Prototypes"));
-				addAttributesToPrototypesCache(entityNamed("EO" + adaptorName() + name + "Prototypes"));
-				if (plugin != null) {
-					addAttributesToPrototypesCache(entityNamed("EOJDBC" + plugin + name + "Prototypes"));
-				}
-			}
-		}
-
-		/**
-		 * Overridden to use our prototype creation method.
+		 * @see com.webobjects.eoaccess.ERXModel#useExtendedPrototypes()
 		 */
 		@Override
-		public EOAttribute prototypeAttributeNamed(String name) {
-			synchronized (_EOGlobalModelLock) {
-				if (_prototypesByName == null) {
-					createPrototypes();
-				}
-			}
-			return super.prototypeAttributeNamed(name);
-		}
-
-		/**
-		 * Overridden to use our prototype creation method.
-		 */
-		@Override
-		public NSArray availablePrototypeAttributeNames() {
-			synchronized (_EOGlobalModelLock) {
-				if (_prototypesByName == null) {
-					createPrototypes();
-				}
-			}
-			return super.availablePrototypeAttributeNames();
+		protected boolean useExtendedPrototypes() {
+			return true;
 		}
 
 	}
