@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERXLanguageMenu.java" wocomponentcontent="false">
+
+        <binding name="class"/>
+        <binding name="dir"/>
+        <binding name="disabled"/>
+        <binding name="id"/>
+        <binding name="language"/>
+        <validation message="'language' is a required binding.">
+            <unbound name="language"/>
+        </validation>
+        <validation message="'language' must be bound to a settable value">
+            <unsettable name="language"/>
+        </validation>
+        <binding defaults="Boolean" name="localizeDisplayStrings"/>
+        <binding name="noSelectionString"/>
+        <binding name="size"/>
+        <binding name="style"/>
+        <binding name="title"/>
+    </wo>
+</wodefinitions>
