@@ -888,6 +888,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator;
 	}
 
+	/**
+	 * Calls the method
+	 * <code>refetchObjectFromDBinEditingContext(EOEditingContext ec)</code> and
+	 * passes the object's Editing Context as Editing Context parameter.
+	 * 
+	 * @return the newly fetched object from the DB.
+	 */
+	public ERXEnterpriseObject refetchObjectFromDB() {
+		return refetchObjectFromDBinEditingContext(editingContext());
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -905,7 +916,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		}
 		return freshObject;
 	}
-
+	
 	private EOKeyGlobalID _permanentGlobalID;
 
 	/**
