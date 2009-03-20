@@ -302,7 +302,7 @@ Modalbox.Methods = {
 						this.MBcontent.show().makePositioned();
 						this.focusableElements = this._findFocusableElements();
 						this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
-						this._setWidthAndPosition();
+						this._setWidthAndPosition(); // CH: Set position (and width) after the content loads so that dialog is centered when width = - 1
 						setTimeout(function(){ // MSIE fix
 							if(callback != undefined)
 								callback(); // Executing internal JS from loaded content
@@ -319,7 +319,7 @@ Modalbox.Methods = {
 				// MS: moved this code inside the setTimeout to compute focusable elements after a delay .. fixes bug in FireFox
 				this.focusableElements = this._findFocusableElements();
 				this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
-				this._setWidthAndPosition();
+				this._setWidthAndPosition(); // CH: Set position (and width) after the content loads so that dialog is centered when width = - 1
 				if(callback != undefined)
 					callback(); // Executing internal JS from loaded content
 				this.event("afterLoad"); // Passing callback
