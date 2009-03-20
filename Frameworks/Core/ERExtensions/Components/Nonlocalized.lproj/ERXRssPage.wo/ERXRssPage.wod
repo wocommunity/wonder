@@ -16,7 +16,7 @@ hasAuthor : WOConditional {
 	condition = ^itemAuthor;
 }
 
-itemAuther: WOString {
+itemAuthor: WOString {
 	value = ^itemAuther;
 }
 
@@ -44,11 +44,11 @@ itemGuid : WOString {
 	value = itemGuid;
 }
 
-HasGuid : WOConditional {
+hasGuid : WOConditional {
 	condition = itemGuid;
 }
 
-HasNoGuid : WOConditional {
+hasNoGuid : WOConditional {
 	condition = itemGuid;
 	negate = true;
 }
