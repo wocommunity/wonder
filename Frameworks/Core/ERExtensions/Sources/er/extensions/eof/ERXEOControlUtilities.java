@@ -178,7 +178,7 @@ public class ERXEOControlUtilities {
      *
      * @return new EO in new editing context
      */
-     public static EOEnterpriseObject editableInstanceOfObject(EOEnterpriseObject eo, 
+     public static <T extends EOEnterpriseObject> T editableInstanceOfObject(T eo, 
      		boolean createNestedContext) {
      	
      	if(eo == null) throw new IllegalArgumentException("EO can't be null");
@@ -194,7 +194,7 @@ public class ERXEOControlUtilities {
             return eo;
         }
 
-        EOEnterpriseObject localObject = eo;
+        T localObject = eo;
         
         // Either we have an already saved object or a new one and create a nested context.
         // Otherwise (new object and a peer) we should probably raise, but simple return the EO
@@ -210,7 +210,7 @@ public class ERXEOControlUtilities {
      	     				|| ec.sharedEditingContext() == null) {
      	     			newEc.setSharedEditingContext(null);
      	     		}
-     	     		localObject = EOUtilities.localInstanceOfObject(newEc, eo);
+     	     		localObject = (T) EOUtilities.localInstanceOfObject(newEc, eo);
      				localObject.willRead();
      			} finally {
      				newEc.unlock();
@@ -231,7 +231,6 @@ public class ERXEOControlUtilities {
      * @param eo object to get a local copy of
      * @return enterprise object local to the passed in editing contex
      */
-    @SuppressWarnings("unchecked")
 	public static <T extends EOEnterpriseObject> T localInstanceOfObject(EOEditingContext ec, T eo) {
         return eo != null && ec != null && eo.editingContext() != null && !ec.equals(eo.editingContext()) ?
         (T)EOUtilities.localInstanceOfObject(ec, eo) : eo;
