@@ -3861,7 +3861,7 @@ Event.Methods = (function() {
             && currentTarget.type === 'radio'))
               node = currentTarget;
       }
-      if (node.nodeType == Node.TEXT_NODE) node = node.parentNode;
+      if (node && node.nodeType == Node.TEXT_NODE) node = node.parentNode; // WONDER-248
       return Element.extend(node);
     },
 
@@ -8203,6 +8203,7 @@ Modalbox.Methods = {
 						this.MBcontent.show().makePositioned();
 						this.focusableElements = this._findFocusableElements();
 						this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
+						this._setWidthAndPosition();
 						setTimeout(function(){ // MSIE fix
 							if(callback != undefined)
 								callback(); // Executing internal JS from loaded content
@@ -8219,7 +8220,7 @@ Modalbox.Methods = {
 				// MS: moved this code inside the setTimeout to compute focusable elements after a delay .. fixes bug in FireFox
 				this.focusableElements = this._findFocusableElements();
 				this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
-				
+				this._setWidthAndPosition();
 				if(callback != undefined)
 					callback(); // Executing internal JS from loaded content
 				this.event("afterLoad"); // Passing callback
