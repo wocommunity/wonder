@@ -82,6 +82,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     private boolean _resetOnChange;
     
+    /** If <code>true</code>, object that have not been saved yet are found by the cache.    */
+    private boolean _returnUnsavedObjects;
     
     /**
      * Creates the cache for the given entity name and the given keypath. No
@@ -173,6 +175,27 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param shouldFetchInitialValues true if the cache should be fully populated on first access
      */
     public ERXEnterpriseObjectCache(String entityName, String keyPath, EOQualifier qualifier, long timeout, boolean shouldRetainObjects, boolean shouldFetchInitialValues) {
+    	this(entityName, keyPath, qualifier, timeout, shouldRetainObjects, shouldFetchInitialValues, false);
+    }
+
+    /**
+     * Creates the cache for the given entity, keypath and timeout value in milliseconds.  Only objects
+     * that match qualifier are stored in the cache.
+ 	 *
+ 	 * @see #setResetOnChange(boolean)
+ 	 * @see #setFetchInitialValues(boolean)
+ 	 * @see #setRetainObjects(boolean)
+ 	 * 
+     * @param entityName name of the EOEntity to cache
+     * @param keyPath key path to data uniquely identifying an instance of this entity
+     * @param qualifier EOQualifier restricting which instances are stored in this cache
+     * @param timeout time to live in milliseconds for an object in this cache
+     * @param shouldRetainObjects true if this cache should retain the cached objects, false to keep only the GID
+     * @param shouldFetchInitialValues true if the cache should be fully populated on first access
+     * @param shouldReturnUnsavedObjects true if unsaved matching objects should be returned, see {@link #unsavedMatchingObject(EOEditingContext, Object)}
+     */
+    public ERXEnterpriseObjectCache(String entityName, String keyPath, EOQualifier qualifier, long timeout, 
+    		                        boolean shouldRetainObjects, boolean shouldFetchInitialValues, boolean shouldReturnUnsavedObjects) {
     	if ( ! ERXEC.defaultAutomaticLockUnlock()) {
     		throw new RuntimeException("ERXEnterpriseObjectCache requires automatic locking, set er.extensions.ERXEC.defaultAutomaticLockUnlock or " +
     				"er.extensions.ERXEC.safeLocking in your Properties file");
@@ -181,6 +204,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         _keyPath = keyPath;
         _timeout = timeout;
         _qualifier = qualifier;
+        _returnUnsavedObjects = shouldReturnUnsavedObjects;
         setRetainObjects(shouldRetainObjects);
         setResetOnChange(false);
         setFetchInitialValues(shouldFetchInitialValues);
@@ -526,7 +550,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * Retrieves an EO that matches the given key.  If there is no match in the
-     * cache, and <code>handleUnsuccessfulQueryForKey</code> is <code>true</code>,
+     * cache, and <code>_returnUnsavedObjects</code> is <code>true</code>,
+     * it attempts to find and return an unsaved object.  If there is still no match
+     * and <code>handleUnsuccessfulQueryForKey</code> is <code>true</code>,
      * it attempts to fetch the missing objects.  Null is returned if 
      * <code>handleUnsuccessfulQueryForKey</code> is <code>false</code> or no matching
      * object can be fetched. 
@@ -539,6 +565,12 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         ERXExpiringCache<Object, EORecord<T>> cache = cache();
         EORecord<T> record = cache.objectForKey(key);
         if (record == null) {
+        	if (_returnUnsavedObjects) {
+        		T unsavedMatchingObject = unsavedMatchingObject(ec, key);
+        		if (unsavedMatchingObject != null) {
+        			return unsavedMatchingObject;
+        		}
+        	}
         	if (handleUnsuccessfulQueryForKey) {
 	            handleUnsuccessfullQueryForKey(key);
 	            record = cache.objectForKey(key);
@@ -550,7 +582,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	            }
         	}
         	else {
-        		return null;
+            	return null;
         	}
         }
         else if (record.gid == NO_GID_MARKER) {
@@ -566,6 +598,24 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         return eo;
     }
     
+    /**
+     * Looks in ec for an newly inserted (unsaved) EO that matches the given key. ONLY ec is examined.
+	 * Null is returned if no matching
+     * 
+     * @param ec editing context to search for unsaved, matching objects
+     * @param key key value to identify the unsaved object
+     * @return the matching object or null if not found
+     */
+    public T unsavedMatchingObject(EOEditingContext ec, Object key) {
+    	NSArray matchingObjects = EOQualifier.filteredArrayWithQualifier(ec.insertedObjects(), ERXQ.equals("entityName", _entityName));
+    	matchingObjects = EOQualifier.filteredArrayWithQualifier(matchingObjects, fetchObjectsQualifier(key));
+
+    	if (matchingObjects.count() > 1) {
+			throw new EOUtilities.MoreThanOneException("There was more than one " + _entityName + " with the key '" + key + "'.");
+    	}
+    	return matchingObjects.count() == 1 ? (T)matchingObjects.lastObject() : null;
+    }
+    	
     /**
      * Returns a list of all the objects currently in the cache and not yet expired.
      * @param ec editing context to get the objects into
