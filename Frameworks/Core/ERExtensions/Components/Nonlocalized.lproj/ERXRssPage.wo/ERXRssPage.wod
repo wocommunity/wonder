@@ -17,7 +17,7 @@ hasAuthor : WOConditional {
 }
 
 itemAuthor: WOString {
-	value = ^itemAuther;
+	value = ^itemAuthor;
 }
 
 feedTitle: WOString {
