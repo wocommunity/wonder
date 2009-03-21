@@ -565,14 +565,13 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         ERXExpiringCache<Object, EORecord<T>> cache = cache();
         EORecord<T> record = cache.objectForKey(key);
         if (record == null) {
-//        	if (_returnUnsavedObjects) {
-//        		T unsavedMatchingObject = unsavedMatchingObject(ec, key);
-//        		if (unsavedMatchingObject != null) {
-//        			return unsavedMatchingObject;
-//        		}
-//        	}
         	if (handleUnsuccessfulQueryForKey) {
-	            handleUnsuccessfullQueryForKey(key);
+            	if (_returnUnsavedObjects) {
+            		T unsavedMatchingObject = unsavedMatchingObject(ec, key);
+            		if (unsavedMatchingObject != null) {
+            			return unsavedMatchingObject;
+            		}
+            	}	            handleUnsuccessfullQueryForKey(key);
 	            record = cache.objectForKey(key);
 	            if (record == null) {
 	            	return null;
