@@ -355,14 +355,14 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
      * Clears the objectsNoCopy too. It's wrong not to clear it.
      */
 
-    public Object replaceObjectAtIndex(E object, int index) {
+    public E replaceObjectAtIndex(E object, int index) {
         if (object == null)
             throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
         if (index >= 0 && index < _count) {
             Object result = _objects[index];
             _objects[index] = object;
             clearCache();
-            return result;
+            return (E) result;
         } else {
             throw new IllegalArgumentException("Index (" + index + ") out of bounds [0, " + (_count - 1) + "]");
         }
