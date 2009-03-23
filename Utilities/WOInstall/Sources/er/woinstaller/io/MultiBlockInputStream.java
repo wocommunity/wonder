@@ -2,19 +2,21 @@ package er.woinstaller.io;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 
 public class MultiBlockInputStream extends InputStream {
 	private final InputStream _inputSource;
-	private final LinkedList<BlockEntry> _blockList;
+	private final List<BlockEntry> _blockList;
 	private InputStream _delegate;
+	private int _blockPosition = 0;
+	private BlockEntry _currentBlock = null;
 	
 	public MultiBlockInputStream(InputStream input, List<BlockEntry> blockList) {
 		_inputSource = input;
-		LinkedList<BlockEntry> newList = new LinkedList<BlockEntry>();
+		List<BlockEntry> newList = new ArrayList<BlockEntry>();
 		newList.addAll(blockList);
 		Collections.sort(newList);
 		_blockList = newList;
@@ -63,17 +65,17 @@ public class MultiBlockInputStream extends InputStream {
 	}
 
 	private InputStream getNextDelegate() throws IOException {
-		BlockEntry currentBlock = _blockList.element();
 		if (_delegate != null) {
 			_delegate = null;
-			_blockList.remove();
+			_blockPosition++;
 		}
-		if (!_blockList.isEmpty()) {
-			BlockEntry newBlock = _blockList.element();
+		if (_blockList.size() > _blockPosition) {
+			BlockEntry newBlock = _blockList.get(_blockPosition);
 			long newOffset = newBlock.offset;
-			if (currentBlock != newBlock) {
-				newOffset -= (currentBlock.offset + currentBlock.length);
+			if (_currentBlock != null && _currentBlock != newBlock) {
+				newOffset -= (_currentBlock.offset + _currentBlock.length);
 			}
+			_currentBlock = newBlock;
 			_delegate = new BoundedInputStream(_inputSource, newOffset, newBlock.length);
 		}
 		return _delegate;

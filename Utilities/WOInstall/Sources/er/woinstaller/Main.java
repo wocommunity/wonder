@@ -79,7 +79,7 @@ public class Main {
   }
 
   private static void showUsage() {
-    System.out.println("usage: java -jar WOInstaller.jar [5.3.3|5.4.3] [destinationFolder]");
+    System.out.println("usage: java -jar WOInstaller.jar [5.3.3|5.4.3|5.5] [destinationFolder]");
     
     System.out.println("\nExample:");
     System.out.println("WO 5.4.3 on Windows");
