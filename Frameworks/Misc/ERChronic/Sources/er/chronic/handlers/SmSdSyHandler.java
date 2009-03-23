@@ -1,6 +1,5 @@
 package er.chronic.handlers;
 
-import java.util.Calendar;
 import java.util.List;
 
 import er.chronic.Options;
@@ -8,7 +7,6 @@ import er.chronic.tags.ScalarDay;
 import er.chronic.tags.ScalarMonth;
 import er.chronic.tags.ScalarYear;
 import er.chronic.utils.Span;
-import er.chronic.utils.Time;
 import er.chronic.utils.Token;
 
 public class SmSdSyHandler implements IHandler {
@@ -17,19 +15,7 @@ public class SmSdSyHandler implements IHandler {
     int month = tokens.get(0).getTag(ScalarMonth.class).getType().intValue();
     int day = tokens.get(1).getTag(ScalarDay.class).getType().intValue();
     int year = tokens.get(2).getTag(ScalarYear.class).getType().intValue();
-
-    Span span;
-    try {
-      List<Token> timeTokens = tokens.subList(3, tokens.size());
-      Calendar dayStart = Time.construct(year, month, day);
-      span = Handler.dayOrTime(dayStart, timeTokens, options);
-    }
-    catch (IllegalArgumentException e) {
-      if (options.isDebug()) {
-        e.printStackTrace(System.out);
-      }
-      span = null;
-    }
+    Span span = Handler.parseTime(tokens, 3, year, month, day, options);
     return span;
   }
 

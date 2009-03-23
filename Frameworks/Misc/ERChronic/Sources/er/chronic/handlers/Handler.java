@@ -364,6 +364,23 @@ public class Handler {
   //def endian_variable_name_for(e)
   //def swap(arr, a, b); arr[a], arr[b] = arr[b], arr[a]; end
 
+  public static Span parseTime(List<Token> tokens, int timeTokenOffset, int year, int month, int day, Options options) {
+    // MS: properly parse time in this format
+    Span span;
+    try {
+      List<Token> timeTokens = tokens.subList(timeTokenOffset, tokens.size());
+      Calendar dayStart = Time.construct(year, month, day);
+      span = Handler.dayOrTime(dayStart, timeTokens, options);
+    }
+    catch (IllegalArgumentException e) {
+      if (options.isDebug()) {
+        e.printStackTrace(System.out);
+      }
+      span = null;
+    }
+    return span;
+  }
+  
   public static Span dayOrTime(Calendar dayStart, List<Token> timeTokens, Options options) {
     Span outerSpan = new Span(dayStart, Time.cloneAndAdd(dayStart, Calendar.DAY_OF_MONTH, 1));
     if (!timeTokens.isEmpty()) {

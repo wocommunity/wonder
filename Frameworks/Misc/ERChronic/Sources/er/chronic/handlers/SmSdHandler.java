@@ -7,7 +7,6 @@ import er.chronic.Options;
 import er.chronic.tags.ScalarDay;
 import er.chronic.tags.ScalarMonth;
 import er.chronic.utils.Span;
-import er.chronic.utils.Time;
 import er.chronic.utils.Token;
 
 public class SmSdHandler implements IHandler {
@@ -16,18 +15,7 @@ public class SmSdHandler implements IHandler {
     int day = tokens.get(1).getTag(ScalarDay.class).getType().intValue();
 
     // MS: properly parse time in this format
-    Span span;
-    try {
-      List<Token> timeTokens = tokens.subList(2, tokens.size());
-      Calendar dayStart = Time.construct(options.getNow().get(Calendar.YEAR), month, day);
-      span = Handler.dayOrTime(dayStart, timeTokens, options);
-    }
-    catch (IllegalArgumentException e) {
-      if (options.isDebug()) {
-        e.printStackTrace(System.out);
-      }
-      span = null;
-    }
+    Span span = Handler.parseTime(tokens, 2, options.getNow().get(Calendar.YEAR), month, day, options);
     return span;
   }
 
