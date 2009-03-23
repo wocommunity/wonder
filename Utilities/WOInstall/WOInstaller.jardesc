@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="MacRoman"?>
 <jardesc>
-<jar path="Wonder/Utilities/WOInstall/woinstall.jar"/>
+<jar path="Wonder/Utilities/WOInstall/WOInstaller.jar"/>
 <options buildIfNeeded="true" compress="true" descriptionLocation="/WOInstall/woinstall.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
 <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
 <selectedProjects/>
@@ -12,7 +12,7 @@
 </manifest>
 <selectedElements exportClassFiles="false" exportJavaFiles="true" exportOutputFolder="true">
 <javaElement handleIdentifier="=WOInstall/Sources"/>
-<file path="/WOInstall/woinstall.jardesc"/>
+<file path="/WOInstall/WOInstaller.jardesc"/>
 </selectedElements>
 <fatjar builder="org.eclipse.jdt.ui.plain_jar_builder" launchConfig=""/>
 </jardesc>
