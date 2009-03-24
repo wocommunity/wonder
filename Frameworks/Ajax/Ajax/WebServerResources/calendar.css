@@ -1,0 +1,67 @@
+/* calendar.js stylesheet */
+
+table#calendar_control {
+  z-index: 10;
+  font-family: Arial;
+  position: absolute;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid silver;
+  cursor: default;
+}
+
+table#calendar_control td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 2px;
+}
+
+td#calendar_prev_month,  td#calendar_next_month,
+td#calendar_prev_year,  td#calendar_next_year {
+  cursor: pointer;
+}
+table#calendar_control td#calendar_prev_month {
+  text-align: left;
+}
+table#calendar_control td#calendar_next_month {
+  text-align: right;
+}
+
+td#calendar_header {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+table#calendar_control td.day_letter {
+  font-size: 10px;
+  background: gainsboro;
+}
+
+table#calendar_control td.day_number {
+  width: 22px;
+  height: 20px;
+  font-size: 12px;
+  color: #333333;
+  text-align: center;
+  border: 1px solid #6487ae;
+  cursor: pointer;
+}
+table#calendar_control td.normal {
+  background: #c4d3ea;
+}
+table#calendar_control td.blank {
+  background: aliceblue;
+  background: #d4e3fa;
+}
+table#calendar_control td.hover {
+  background: #fff799;
+}
+table#calendar_control td.selected {
+  background: #ffcc66;
+}
+table#calendar_control td.weekend {
+  color: blue;
+}
+table#calendar_control td.today {
+  color: red;
+}
