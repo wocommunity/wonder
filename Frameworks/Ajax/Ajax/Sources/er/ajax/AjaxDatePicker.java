@@ -77,14 +77,14 @@ public class AjaxDatePicker extends AjaxComponent {
         // and WO does not expose this path any other way.  Still half thinking I should have changed the JS...
         if (defaultImagesDir == null) {
 			defaultImagesDir = application().resourceManager().urlForResourceNamed("calendar_prev.png", "Ajax", null, context().request()).toString();
-			if (application().resourceManager() instanceof ERXResourceManager) {
-				defaultImagesDir = defaultImagesDir.substring(0, defaultImagesDir.lastIndexOf('/'));
+			int lastSeperator = defaultImagesDir.lastIndexOf("%2F");
+			if (lastSeperator == -1) {
+				lastSeperator = defaultImagesDir.lastIndexOf('/');
 			}
-			else {
-				defaultImagesDir = defaultImagesDir.substring(0, defaultImagesDir.lastIndexOf("%2F"));
-				// Need to pre-populate the cache for WOResourceManager
-				application().resourceManager().urlForResourceNamed("calendar_next.png", "Ajax", null, context().request()).toString();
-			}
+			defaultImagesDir = defaultImagesDir.substring(0, lastSeperator);
+			
+			// Need to pre-populate the cache for WOResourceManager
+			application().resourceManager().urlForResourceNamed("calendar_next.png", "Ajax", null, context().request()).toString();
         }
     }
     
