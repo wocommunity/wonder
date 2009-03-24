@@ -1,0 +1,41 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Date Picker Example";
+}
+
+BareDateInput: AjaxDatePicker {
+	value = someValue;
+}
+
+DateInputWithFormat: AjaxDatePicker {
+	value = someValue;
+	format = "%Y-%m-%d";
+}
+
+DateInputWithFormatter: AjaxDatePicker {
+	value = someValue;
+	formatter = formatter;
+}
+
+FrenchDateInputWithFormatter: AjaxDatePicker {
+	value = someValue;
+	formatter = frenchFormatter;
+	monthNames = frenchMonths;
+	dayNames = frenchDays;
+}
+
+Form: WOForm {
+	
+}
+
+Format: WOTextField {
+	value = customFormat;
+}
+
+CustomDateInput: AjaxDatePicker {
+	format = customFormat;
+	value = customValue;
+}
+
+Update: WOSubmitButton {
+	action = context.page;
+}

@@ -1,0 +1,12 @@
+DateInput : WOTextField {
+  value = ^value;
+  formatter = formatter;
+  id = ^id;
+  class = ^class;
+  style = ^style;
+  size = ^size;
+  maxlength = ^maxlength;
+  name = ^name;
+  onfocus = onFocusScript;
+  onclick = onClickScript;
+}
