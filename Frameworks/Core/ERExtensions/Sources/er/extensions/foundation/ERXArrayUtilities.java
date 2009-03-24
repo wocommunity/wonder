@@ -610,21 +610,11 @@ public class ERXArrayUtilities extends Object {
      *		the second array.
      */
     public static NSArray arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray a1, NSArray a2) {
-        NSArray result=null;
         if (a2.count()==0)
-            result=a1;
-        else {
-            NSMutableArray mutableResult=new NSMutableArray(a1);
-            NSMutableSet resultSet=new NSMutableSet(a1);
-            for (Enumeration e=a2.objectEnumerator(); e.hasMoreElements();) {
-                Object elt=e.nextElement();
-                if (!resultSet.containsObject(elt)) { 
-                	mutableResult.addObject(elt);
-                	resultSet.addObject(elt);
-                }
-            }
-            result=mutableResult;
-        }
+            return a1;
+        
+        NSMutableArray result=new NSMutableArray(a1);
+        addObjectsFromArrayWithoutDuplicates(result, a2);
         return result;
     }
     
@@ -667,9 +657,13 @@ public class ERXArrayUtilities extends Object {
      * @param a2 array to be added to a1
      */
     public static void addObjectsFromArrayWithoutDuplicates(NSMutableArray a1, NSArray a2) {
+        NSMutableSet resultSet=new NSMutableSet(a1);
         for (Enumeration e=a2.objectEnumerator(); e.hasMoreElements();) {
             Object elt=e.nextElement();
-            if (!a1.containsObject(elt)) a1.addObject(elt);
+            if (!resultSet.containsObject(elt)) { 
+            	a1.addObject(elt);
+            	resultSet.addObject(elt);
+            }
         }
     }
 
