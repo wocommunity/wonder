@@ -148,8 +148,20 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         appendTagAttributeToResponse(response, "name", name);
         appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
         appendTagAttributeToResponse(response, "accesskey", valueForBinding("accesskey", component));
-        appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
-
+        
+        // Suppress modal box focus ring if used inside of modal dialog
+        if (AjaxModalDialog.isInDialog(context)) {
+            StringBuilder sb = new StringBuilder("MB_notFocusable ");
+            Object cssClass = valueForBinding("class", component);
+            if (cssClass != null) {
+            	sb.append(cssClass);
+            } 
+            appendTagAttributeToResponse(response, "class", sb.toString());
+        }
+        else {
+        	appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
+        }
+        
         // Force in a default style to control size and border
         StringBuilder sb = new StringBuilder("height:1px; width:1px; border: none; ");
         Object style = valueForBinding("style", component);

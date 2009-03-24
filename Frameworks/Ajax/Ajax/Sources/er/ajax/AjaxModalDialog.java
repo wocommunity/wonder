@@ -269,6 +269,14 @@ public class AjaxModalDialog extends AjaxComponent {
 	}
 
 	/**
+	 * @param context the current WOContext
+	 * @return true if an AjaxModalDialog currently being processed
+	 */
+	public static boolean isInDialog(WOContext context) {
+		return ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName()) != null;
+	}
+	
+	/**
 	 * Start of R-R loop.  awakes the components from action if action is bound.
 	 *
 	 * @see com.webobjects.appserver.WOComponent#awake()
