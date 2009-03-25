@@ -295,7 +295,8 @@ Modalbox.Methods = {
 	
 	_putContent: function(callback){
 		// Prepare and resize modal box for content
-		if(this.options.height == this._options.height) {
+		// MS: check for a -1 height ... I'm only doing this because the "else" tries to make it scrollable
+		if(this.options.height == this._options.height || this.options.height == -1) {
 			setTimeout(function() { // MSIE sometimes doesn't display content correctly
 				Modalbox.resize(0, $(this.MBcontent).getHeight() - $(this.MBwindow).getHeight() + $(this.MBheader).getHeight(), {
 					afterResize: function(){
@@ -396,6 +397,18 @@ Modalbox.Methods = {
 			var firstEl = this.focusableElements.find(function (el){
 				return el.tabIndex == 1;
 			}) || this.focusableElements.first();
+			
+			// MS: try to focus on form field rather than a link ...
+			var inputTagNames = ['input', 'select', 'textarea'];
+			if (firstEl && !inputTagNames.include(firstEl.tagName.toLowerCase())) {
+				var firstInputEl = this.focusableElements.find(function(element) {
+					return inputTagNames.include(element.tagName.toLowerCase());
+    		});
+    		if (firstInputEl) {
+    			firstEl = firstInputEl;
+    		}
+			}
+    	
 			this.currFocused = this.focusableElements.toArray().indexOf(firstEl);
 			firstEl.focus(); // Focus on first focusable element except close button
 		} else if(! this.options.locked && $(this.MBclose).visible())
