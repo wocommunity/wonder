@@ -306,8 +306,7 @@ public class MHost extends MObject {
             final int j = i;
             Runnable work = new Runnable() {
                 public void run() {
-                    responses[j] = ((MHost) finalWotaskdArray.objectAtIndex(j)).sendRequestToWotaskd(aRequest, wc,
-                            false);
+                    responses[j] = ((MHost) finalWotaskdArray.objectAtIndex(j)).sendRequestToWotaskd(aRequest, wc, false);
                 }
             };
             workers[j] = new Thread(work);
@@ -351,8 +350,7 @@ public class MHost extends MObject {
         WOResponse aResponse = null;
 
         try {
-            WOHTTPConnection anHTTPConnection = new WOHTTPConnection(name(), WOApplication.application()
-                    .lifebeatDestinationPort());
+            WOHTTPConnection anHTTPConnection = new WOHTTPConnection(name(), WOApplication.application().lifebeatDestinationPort());
             anHTTPConnection.setReceiveTimeout(10000);
 
             boolean requestSucceeded = anHTTPConnection.sendRequest(aRequest);

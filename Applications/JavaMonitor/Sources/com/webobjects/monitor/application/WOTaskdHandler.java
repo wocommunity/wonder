@@ -22,6 +22,8 @@ import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.MSiteConfig;
 import com.webobjects.monitor._private.String_Extensions;
 
+import er.extensions.foundation.ERXStringUtilities;
+
 public class WOTaskdHandler {
 
     public interface ErrorCollector {
@@ -81,6 +83,39 @@ public class WOTaskdHandler {
 
     public void endWriting() {
         lock().endWriting();
+    }
+    
+
+    public void updateForPage(String aName) {
+        // KH - we should probably set the instance information as we get the
+        // responses, to avoid waiting, then doing it in serial! (not that it's
+        // _that_ slow)
+        MSiteConfig siteConfig = WOTaskdHandler.siteConfig();
+        startReading();
+        try {
+            aName = ERXStringUtilities.lastPropertyKeyInKeyPath(aName);
+            if (siteConfig.hostArray().count() != 0) {
+                if (ApplicationsPage.class.getName().endsWith(aName) && (siteConfig.applicationArray().count() != 0)) {
+
+                    for (Enumeration e = siteConfig.applicationArray().objectEnumerator(); e.hasMoreElements();) {
+                        MApplication anApp = (MApplication) e.nextElement();
+                        anApp.setRunningInstancesCount(0);
+                    }
+                    NSArray<MHost> hostArray = siteConfig.hostArray();
+                    getApplicationStatusForHosts(hostArray);
+                } else if (AppDetailPage.class.getName().endsWith(aName)) {
+                    NSArray<MHost> hostArray = siteConfig.hostArray();
+
+                    getInstanceStatusForHosts(hostArray);
+                } else if (HostsPage.class.getName().endsWith(aName)) {
+                    NSArray<MHost> hostArray = siteConfig.hostArray();
+
+                    getHostStatusForHosts(hostArray);
+                }
+            }
+        } finally {
+            endReading();
+        }
     }
 
     /** ******** Common Functionality ********* */
@@ -613,10 +648,7 @@ public class WOTaskdHandler {
                         Integer runningInstances = (Integer) responseDictionary.valueForKey("runningInstances");
                         MApplication anApplication = siteConfig().applicationWithName(appName);
                         if (anApplication != null) {
-                            // KH - this is massively suboptimal
-                            anApplication.runningInstancesCount = new Integer(anApplication.runningInstancesCount
-                                    .intValue()
-                                    + runningInstances.intValue());
+                            anApplication.setRunningInstancesCount(anApplication.runningInstancesCount() + runningInstances);
                         }
                     }
                 }

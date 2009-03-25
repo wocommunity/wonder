@@ -76,43 +76,6 @@ public class MonitorComponent extends WOComponent {
         return _handler;
     }
 
-    public WOComponent pageWithName(String aName) {
-        handler().startReading();
-        try {
-            _cacheState(aName);
-        } finally {
-            handler().endReading();
-        }
-        return super.pageWithName(aName);
-    }
-
-    // KH - we should probably set the instance information as we get the
-    // responses, to avoid waiting, then doing it in serial! (not that it's
-    // _that_ slow)
-    private void _cacheState(String aName) {
-        MApplication appForDetailPage = myApplication();
-        aName = ERXStringUtilities.lastPropertyKeyInKeyPath(aName);
-        if (siteConfig().hostArray().count() != 0) {
-            if (aName.equals("ApplicationsPage") && (siteConfig().applicationArray().count() != 0)) {
-
-                for (Enumeration e = siteConfig().applicationArray().objectEnumerator(); e.hasMoreElements();) {
-                    MApplication anApp = (MApplication) e.nextElement();
-                    anApp.runningInstancesCount = MObject._zeroInteger;
-                }
-                NSArray<MHost> hostArray = siteConfig().hostArray();
-                handler().getApplicationStatusForHosts(hostArray);
-            } else if (aName.contains("AppDetailPage")) {
-                NSArray<MHost> hostArray = siteConfig().hostArray();
-
-                handler().getInstanceStatusForHosts(hostArray);
-            } else if (aName.equals("HostsPage")) {
-                NSArray<MHost> hostArray = siteConfig().hostArray();
-
-                handler().getHostStatusForHosts(hostArray);
-            }
-        }
-    }
-
 	public final MApplication myApplication() {
 		return myApplication;
 	}
