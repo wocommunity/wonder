@@ -384,6 +384,15 @@ Modalbox.Methods = {
 	_setFocus: function() { 
 		/* Setting focus to the first 'focusable' element which is one with tabindex = 1 or the first in the form loaded. */
 		if(this.focusableElements.length > 0 && this.options.autoFocusing == true) {
+
+			// MS: don't steal focus if there is already an element inside the AMD that is focused
+			var focusedElement = $$('*:focus').first();
+			var alreadyFocused = focusedElement && this.focusableElements.indexOf(focusedElement) != -1;
+			if (alreadyFocused) {
+				return;
+			}
+			// MS: done
+			
 			var firstEl = this.focusableElements.find(function (el){
 				return el.tabIndex == 1;
 			}) || this.focusableElements.first();
