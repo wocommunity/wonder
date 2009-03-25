@@ -1001,6 +1001,10 @@ var AjaxModalDialog = {
 	
 	open: function(id) {
 		eval("openAMD_" + id + "()");
+	},
+	
+	contentUpdated: function() {
+		Modalbox._putContent();
 	}
 };
 var AMD = AjaxModalDialog;
