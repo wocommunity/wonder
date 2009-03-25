@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOHTTPConnection;
 import com.webobjects.appserver.WORequest;
@@ -48,6 +50,9 @@ import er.extensions.foundation.ERXCompressionUtilities;
 
 
 public class MSiteConfig extends MObject {
+    
+    private static final Logger log = Logger.getLogger(MSiteConfig.class);
+    
     /*
     // Site
     String password;
@@ -286,7 +291,7 @@ public class MSiteConfig extends MObject {
             try {
                 plMonitor.stopInstance(anInstance);
             } catch (MonitorException me) {
-                NSLog.err.appendln("Exception in removeInstance_W: " + me.getMessage());
+                log.error("Can't remove", me);
             }
         }
         _removeInstance(anInstance);
@@ -309,7 +314,7 @@ public class MSiteConfig extends MObject {
             messageDigest = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException exc) {
             globalErrorDictionary.takeValueForKey(("Security package does not contain appropriate algorithm"), ("Security package does not contain appropriate algorithm"));
-            NSLog.err.appendln("Security package does not contain appropriate algorithm");
+            log.error("Security package does not contain appropriate algorithm");
             return encrypted_value;
         }
         if (to_be_encrypted != null) {
@@ -475,7 +480,7 @@ public class MSiteConfig extends MObject {
                 aResponse = anHTTPConnection.readResponse();
             }
         } catch(Exception localException) {
-            NSLog.err.appendln("Failed to connect to Host: " + configHostName + " and Port: " + aPort);
+            log.error("Failed to connect to Host: " + configHostName + " and Port: " + aPort);
             throw new MonitorException("Failed to connect to Host: " + configHostName + " and Port: " + aPort);
         }
 
@@ -484,7 +489,7 @@ public class MSiteConfig extends MObject {
             try {
                 xmlDict = (NSDictionary) new _JavaMonitorDecoder().decodeRootObject(aResponse.content());
             } catch (WOXMLException wxe) {
-                NSLog.err.appendln("Got non-parsable data from Host: " + configHostName + " + and Port: " + aPort + ". Data received was: " + aResponse.contentString() + ". It is possible that the Wotaskd on the remote host is of the wrong version");
+                log.error("Got non-parsable data from Host: " + configHostName + " + and Port: " + aPort + ". Data received was: " + aResponse.contentString() + ". It is possible that the Wotaskd on the remote host is of the wrong version");
                 throw new MonitorException("Got non-parsable data from Host: " + configHostName + " + and Port: " + aPort + ". Data received was: " +aResponse.contentString() + ". It is possible that the Wotaskd on the remote host is of the wrong version");
             }
         }
@@ -609,8 +614,8 @@ public class MSiteConfig extends MObject {
 
                 if (localRoot == null) {
                     if (System.getProperties().getProperty("os.name").toLowerCase().startsWith("win")) {
-                        NSLog.err.appendln("WOLocalRootDirectory was not set and the os.name returned something that started "+
-                                           "with 'win' or 'WIN' - guessing that path should be 'C:/Apple/Local'");
+                        log.error("WOLocalRootDirectory was not set and the os.name returned something that started "
+                                + "with 'win' or 'WIN' - guessing that path should be 'C:/Apple/Local'");
                         localRoot = "C:" + _fS + "Apple" + _fS + "Local";
                     } else {
                         localRoot = "";
@@ -630,22 +635,21 @@ public class MSiteConfig extends MObject {
 
             if (!configDir.exists()) {
                 if (!configDir.mkdirs()) {
-                    NSLog.err.appendln("Configuration Directory " + _configDirectoryPath + " does not exist, and cannot be created.");
+                    log.fatal("Configuration Directory " + _configDirectoryPath + " does not exist, and cannot be created.");
                     System.exit(1);
                 }
             } else {
                 if (!configDir.isDirectory()) {
-                    NSLog.err.appendln("Configuration Directory " + _configDirectoryPath + " is not actually a directory.");
+                    log.fatal("Configuration Directory " + _configDirectoryPath + " is not actually a directory.");
                     System.exit(1);
                 }
                 if (!configDir.canRead()) {
-                    NSLog.err.appendln("Don't have permission to read from Configuration Directory " + _configDirectoryPath +
-                          " as this user, please change the permissions or restart " + WOApplication.application().name() + " as another user.");
+                    log.fatal("Don't have permission to read from Configuration Directory " + _configDirectoryPath + " as this user, please change the permissions or restart "
+                            + WOApplication.application().name() + " as another user.");
                     System.exit(1);
                 }
-                if ( (WOApplication.application().name().equals("wotaskd")) && (!configDir.canWrite()) ) {
-                    NSLog.err.appendln("Don't have permission to write to Configuration Directory " + _configDirectoryPath + 
-                                       " as this user; please change the permissions.");
+                if ((WOApplication.application().name().equals("wotaskd")) && (!configDir.canWrite())) {
+                    log.fatal("Don't have permission to write to Configuration Directory " + _configDirectoryPath + " as this user; please change the permissions.");
                     System.exit(1);
                 }
             }
@@ -708,18 +712,18 @@ public class MSiteConfig extends MObject {
                         NSLog.debug.appendln("the SiteConfig is \n" + aConfig.generateSiteConfigXML());
                 } catch (Throwable ex) {
                     if (isWotaskd) {
-                        NSLog.err.appendln("Failed to parse " + pathForSiteConfig() + ". Backing up original SiteConfig and continuing as if empty.");
+                        log.error("Failed to parse " + pathForSiteConfig() + ". Backing up original SiteConfig and continuing as if empty.");
                         backupSiteConfig();
                     } else {
-                        NSLog.err.appendln("Failed to parse " + pathForSiteConfig() + ". Continuing as if empty.");
+                        log.error("Failed to parse " + pathForSiteConfig() + ". Continuing as if empty.");
                     }
                 }
             } else {
-                NSLog.err.appendln("Cannot read from SiteConfig file " + pathForSiteConfig() + ". Possible Permissions Problem.");
+                log.fatal("Cannot read from SiteConfig file " + pathForSiteConfig() + ". Possible Permissions Problem.");
                 System.exit(1);
             }
         } else {
-            NSLog.err.appendln("SiteConfig file " + pathForSiteConfig() + " doesn't exist. Continuing as if empty.");
+            log.error("SiteConfig file " + pathForSiteConfig() + " doesn't exist. Continuing as if empty.");
         }
         if (aConfig == null) aConfig = new MSiteConfig(null);
         return aConfig;
@@ -734,7 +738,7 @@ public class MSiteConfig extends MObject {
                 sc.renameTo(renamedFile);
             }
         } catch (NSForwardException ne) {
-            NSLog.err.appendln("Cannot backup file " + pathForSiteConfig() + ". Possible Permissions Problem.");
+            log.error("Cannot backup file " + pathForSiteConfig() + ". Possible Permissions Problem.");
         }
     }
 
@@ -745,7 +749,7 @@ public class MSiteConfig extends MObject {
     public void saveSiteConfig(File sc, String value, boolean compress) {
         try {
             if ( sc.exists() && !sc.canWrite() ) {
-                NSLog.err.appendln("Don't have permission to write to file " + sc.getAbsolutePath() + " as this user, please change the permissions.");
+                log.error("Don't have permission to write to file " + sc.getAbsolutePath() + " as this user, please change the permissions.");
                 String pre = WOApplication.application().name() + " - " + localHostName;
                 globalErrorDictionary.takeValueForKey(pre + " Don't have permission to write to file " + sc.getAbsolutePath() + " as this user, please change the permissions.", "archiveSiteConfig");
                 return;
@@ -757,7 +761,7 @@ public class MSiteConfig extends MObject {
             _NSStringUtilities.writeToFile(sc, value);
             globalErrorDictionary.takeValueForKey(null, "archiveSiteConfig");
         } catch (NSForwardException ne) {
-            NSLog.err.appendln("Cannot write to file " + sc.getAbsolutePath() + ". Possible Permissions Problem.");
+            log.error("Cannot write to file " + sc.getAbsolutePath() + ". Possible Permissions Problem.");
             String pre = WOApplication.application().name() + " - " + localHostName;
             globalErrorDictionary.takeValueForKey(pre + " Cannot write to file " + sc.getAbsolutePath() + ". Possible Permissions Problem.", "archiveSiteConfig");
         }
@@ -767,7 +771,7 @@ public class MSiteConfig extends MObject {
         try {
             File ac = fileForAdaptorConfig();
             if ( ac.exists() && !ac.canWrite() ) {
-                NSLog.err.appendln("Don't have permission to write to file " + fileForAdaptorConfig() + " as this user, please change the permissions.");
+                log.error("Don't have permission to write to file " + fileForAdaptorConfig() + " as this user, please change the permissions.");
                 String pre = WOApplication.application().name() + " - " + localHostName;
                 globalErrorDictionary.takeValueForKey(pre + " Don't have permission to write to file " + fileForAdaptorConfig() + "as this user, please change the permissions.", "archiveSiteConfig");
                 return;
@@ -775,7 +779,7 @@ public class MSiteConfig extends MObject {
             _NSStringUtilities.writeToFile(fileForAdaptorConfig(), generateAdaptorConfigXML(false, false));
             globalErrorDictionary.takeValueForKey(null, "archiveAdaptorConfig");
         } catch (NSForwardException ne) {
-            NSLog.err.appendln("Cannot write to file " + pathForAdaptorConfig() + ". Possible Permissions Problem.");
+            log.error("Cannot write to file " + pathForAdaptorConfig() + ". Possible Permissions Problem.");
             String pre = WOApplication.application().name() + " - " + localHostName;
             globalErrorDictionary.takeValueForKey(pre + " Cannot write to file " + pathForAdaptorConfig() + ". Possible Permissions Problem.", "archiveAdaptorConfig");
         }
@@ -1154,7 +1158,7 @@ public class MSiteConfig extends MObject {
         int hostArrayCount = _hostArray.count();
         for (int i=0; i<hostArrayCount; i++) {
             MHost aHost = (MHost) _hostArray.objectAtIndex(i);
-            if (aHost.address().equals(anAddress)) {
+            if (anAddress.equals(aHost.address())) {
                 return aHost;
             }
         }
@@ -1185,7 +1189,7 @@ public class MSiteConfig extends MObject {
             Integer anIntPort = new Integer(port);
             return instanceWithHostnameAndPort(hostName, anIntPort);
         } catch (Exception e) {
-            NSLog.err.appendln("Exception getting instance: " + hostName + " + " + port);
+            log.error("Exception getting instance: " + hostName + " + " + port, e);
         }
         return null;
     }
@@ -1214,7 +1218,7 @@ public class MSiteConfig extends MObject {
                 }
             }
         } catch (Exception e) {
-            NSLog.err.appendln("Exception getting instance: " + host + " + " + port);
+            log.error("Exception getting instance: " + host + " + " + port, e);
         }
         return null;
     }
