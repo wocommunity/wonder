@@ -10,7 +10,7 @@ import er.attachment.utils.ERMimeType;
  *  
  * @author mschrag
  */
-public interface IERImageProcessor {
+public interface IERImageProcessor extends IERThumbnailer {
   /**
    * Processes the given image with all of the given configuration settings.
    * 
