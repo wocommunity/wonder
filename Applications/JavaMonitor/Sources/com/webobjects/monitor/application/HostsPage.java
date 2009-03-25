@@ -37,6 +37,7 @@ public class HostsPage extends MonitorComponent {
 
     public HostsPage(WOContext aWocontext) {
         super(aWocontext);
+        handler().updateForPage(name());
     }
 
     /**

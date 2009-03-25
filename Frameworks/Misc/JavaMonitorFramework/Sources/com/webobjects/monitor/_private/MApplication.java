@@ -419,27 +419,39 @@ public class MApplication extends MObject {
     }
 
     // Used for the ApplicationsPage
-    public Integer runningInstancesCount = MObject._zeroInteger;
+    private Integer runningInstancesCount = MObject._zeroInteger;
+    
     public boolean isRunning() {
-        if (runningInstancesCount.intValue() > 0) {
-            return true;
-        }
-        return false;
+        // AK: this one is called from the overview page (may or may not be correct)
+        return runningInstancesCount.intValue() > 0;
+    }
+
+    public int runningInstancesCount() {
+        return runningInstancesCount;
+    }
+
+    public void setRunningInstancesCount(int cnt) {
+        runningInstancesCount = new Integer(cnt);
     }
 
     // Used for the AppDetailPage
     public Integer runningInstancesCount_M() {
-        int runningInstances = 0;
+        int runningInstances = runningInstances_M().count();
+        Integer riInt = new Integer(runningInstances);
+        runningInstancesCount = riInt;
+        return riInt;
+    }
+
+    public NSArray<MInstance> runningInstances_M() {
+        NSMutableArray<MInstance> instances = new NSMutableArray<MInstance>();
         int numInstances = _instanceArray.count();
         for (int i=0; i<numInstances; i++) {
             MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
             if (anInstance.isRunning_M()) {
-                runningInstances++;
+                instances.addObject(anInstance);
             }
         }
-        Integer riInt = new Integer(runningInstances);
-        runningInstancesCount = riInt;
-        return riInt;
+        return instances;
     }
 
     public boolean isRunning_M() {

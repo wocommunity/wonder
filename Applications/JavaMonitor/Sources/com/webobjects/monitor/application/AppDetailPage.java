@@ -36,6 +36,8 @@ public class AppDetailPage extends MonitorComponent {
 	
     public AppDetailPage(WOContext aWocontext) {
         super(aWocontext);
+        handler().updateForPage(name());
+
         displayGroup = new WODisplayGroup();
         displayGroup.setFetchesOnLoad(false);
     }
@@ -530,10 +532,12 @@ public class AppDetailPage extends MonitorComponent {
 
     public NSArray<MInstance> selectedInstances() {
         return displayGroup.selectedObjects();
-        // AK: uncomment for old behaviour
-        // return mySession().mApplication.instanceArray();
     }
 
+    public NSArray<MInstance> runningInstances() {
+        return myApplication().runningInstances_M();
+    }
+    
     /** ******** Group Controls ********* */
     public WOComponent startAllClicked() {
         handler().startReading();

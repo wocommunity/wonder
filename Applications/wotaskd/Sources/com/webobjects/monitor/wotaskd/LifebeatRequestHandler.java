@@ -15,6 +15,8 @@ SUCH DAMAGE.
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
@@ -24,8 +26,13 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.monitor._private.MInstance;
+import com.webobjects.monitor._private.MSiteConfig;
 
 public class LifebeatRequestHandler extends WORequestHandler {
+    
+    private static final Logger log = Logger.getLogger(LifebeatRequestHandler.class);
+    
+    
     InetAddress myInetAddress;
     String myName;
     Application theApplication;
@@ -78,7 +85,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
         NSArray values = NSArray.componentsSeparatedByString(aRequest.queryString(), "&");
         if ( (values == null) || (values.count() != 4) ) {
             theApplication.siteConfig().globalErrorDictionary.takeValueForKey((myName + ": Received bad lifebeat: " + aRequest.queryString()), aRequest.queryString());
-            NSLog.err.appendln(myName + ": Received bad lifebeat: " + aRequest.queryString());
+            log.error(myName + ": Received bad lifebeat: " + aRequest.queryString());
         } else {
             String notificationType = (String)values.objectAtIndex(0);
             String instanceName = (String)values.objectAtIndex(1);
@@ -111,7 +118,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
                 aResponse = null;
             } else {
                 theApplication.siteConfig().globalErrorDictionary.takeValueForKey((myName + ": Received bad lifebeat: " + aRequest.queryString()), aRequest.queryString());
-                NSLog.err.appendln(myName + ": Received bad lifebeat: " + aRequest.queryString());
+                log.error(myName + ": Received bad lifebeat: " + aRequest.queryString());
             }
         }
         if ("HTTP/1.0".equals(aRequest.httpVersion())) {
@@ -121,14 +128,19 @@ public class LifebeatRequestHandler extends WORequestHandler {
         return aResponse;
     }
 
+    private InetAddress addressForName(String name) {
+        try {
+           return InetAddress.getByName(name);
+        } catch (UnknownHostException uhe) {
+            log.error("Unknown host: " + name);
+        }
+        return null;
+    }
 
     private void registerStart(String instanceName, String host, String port) {
         // KH - can we cache this for better speed?
-        InetAddress hostAddress = null;
-        try {
-            hostAddress = InetAddress.getByName(host);
-        } catch (UnknownHostException uhe) {
-        }
+        InetAddress hostAddress = addressForName(host);
+        
 
         theApplication._lock.startReading();
         try {
@@ -147,11 +159,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
 
     private boolean registerLifebeat(String instanceName, String host, String port) {
         // KH - can we cache this for better speed?
-        InetAddress hostAddress = null;
-        try {
-            hostAddress = InetAddress.getByName(host);
-        } catch (UnknownHostException uhe) {
-        }
+        InetAddress hostAddress = addressForName(host);
 
         theApplication._lock.startReading();
         try {
@@ -172,11 +180,8 @@ public class LifebeatRequestHandler extends WORequestHandler {
 
     private void registerStop(String instanceName, String host, String port) {
         // app will stop in a good way - we requested it.
-        InetAddress hostAddress = null;
-        try {
-            hostAddress = InetAddress.getByName(host);
-        } catch (UnknownHostException uhe) {
-        }
+        InetAddress hostAddress = addressForName(host);
+
         theApplication._lock.startReading();
         try {
             MInstance instance = ((Application) WOApplication.application()).siteConfig().instanceWithHostAndPort(instanceName, hostAddress, port);
@@ -191,11 +196,8 @@ public class LifebeatRequestHandler extends WORequestHandler {
 
     private void registerCrash(String instanceName, String host, String port) {
         // app will stop in a bad way - notify if necessary
-        InetAddress hostAddress = null;
-        try {
-            hostAddress = InetAddress.getByName(host);
-        } catch (UnknownHostException uhe) {
-        }
+        InetAddress hostAddress = addressForName(host);
+
         theApplication._lock.startReading();
         try {
             MInstance instance = ((Application) WOApplication.application()).siteConfig().instanceWithHostAndPort(instanceName, hostAddress, port);
