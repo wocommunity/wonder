@@ -52,6 +52,7 @@ public class Application extends ERXApplication {
             }
 
         }, "admin");
+        setAllowsConcurrentRequestHandling(true);
     }
 
     @Override
