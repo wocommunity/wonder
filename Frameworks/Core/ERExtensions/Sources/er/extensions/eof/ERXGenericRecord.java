@@ -89,6 +89,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	public static boolean localizationShouldFallbackToDefaultLanguage() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.localizationShouldFallbackToDefaultLanguage", false);
 	}
+	
+	public ERXGenericRecord(EOClassDescription classDescription) {
+		super(classDescription);
+	}
+	
+	public ERXGenericRecord() {
+		super();
+	}
 
 	/**
 	 * Returns all available ERXLanguages for the given key
