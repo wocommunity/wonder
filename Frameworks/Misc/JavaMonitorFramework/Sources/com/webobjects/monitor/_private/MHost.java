@@ -16,6 +16,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOHTTPConnection;
 import com.webobjects.appserver.WORequest;
@@ -30,6 +32,9 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSThreadsafeMutableArray;
 
 public class MHost extends MObject {
+    
+    private static final Logger log = Logger.getLogger(MHost.class);
+
     /*
      * NSString name; NSString type; // WINDOWS | UNIX | MACOSX
      */
@@ -82,12 +87,23 @@ public class MHost extends MObject {
         _siteConfig = aConfig;
         _instanceArray = new NSMutableArray();
 
-        try {
-            _address = InetAddress.getByName(name());
-        } catch (UnknownHostException anException) {
-            NSLog.err.appendln("Error getting address for Host: " + name());
+        int tries = 0;
+        while(tries++ < 5) {
+            try {
+                _address = InetAddress.getByName(name());
+                break;
+            } catch (UnknownHostException anException) {
+                // AK: From *my* POV, we should check if this is the localhost and exit if it is,
+                // as I had this happen when you set -WOHost something and DNS isn't available.
+                // As it stands now, wotaskd will launch, but not really register and app (or get weirdo exceptions)
+                log.error("Error getting address for Host: " + name());
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    log.error("Interrupted");
+                }
+            }
         }
-
         // This is just for caching purposes
         errorResponse = (new _JavaMonitorCoder()).encodeRootObjectForKey(new NSDictionary<String, NSArray>(new NSArray(
                 "Failed to contact " + name() + "-" + WOApplication.application().lifebeatDestinationPort()),
