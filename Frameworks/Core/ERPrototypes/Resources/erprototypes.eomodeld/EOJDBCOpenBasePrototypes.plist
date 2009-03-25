@@ -101,15 +101,13 @@
             valueType = i; 
         }, 
         {
-            adaptorValueConversionMethodName = toString; 
-            columnName = ""; 
-            externalType = int; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
-            name = intBoolean; 
-            valueClassName = NSNumber; 
-            valueFactoryMethodName = valueOf; 
-            valueType = c; 
-        }, 
+            columnName = "";
+            externalType = int;
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
+            name = intBoolean;
+            valueClassName = NSNumber;
+            valueType = c;
+        },
         {
             columnName = ""; 
             externalType = long; 
