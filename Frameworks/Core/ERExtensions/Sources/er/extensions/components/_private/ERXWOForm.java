@@ -238,11 +238,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		if (ERXApplication.isWO54()) {
 			try {
 				Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, boolean.class, WOContext.class });
+				computeQueryDictionaryInContextMethod.setAccessible(true);
 				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, false, context });
 			}
 			catch (Throwable ex1) {
 				try {
 					Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, WOContext.class });
+					computeQueryDictionaryInContextMethod.setAccessible(true);
 					hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, context });
 				}
 				catch (Throwable e) {
@@ -253,6 +255,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		else {
 			try {
 				Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { WOAssociation.class, WOAssociation.class, WOAssociation.class, boolean.class, NSDictionary.class, WOContext.class });
+				computeQueryDictionaryInContextMethod.setAccessible(true);
 				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { _actionClass, _directActionName, _queryDictionary, Boolean.valueOf(flag), _otherQueryAssociations, context });
 			}
 			catch (Exception e) {
