@@ -8,13 +8,17 @@ Specifically these additions include:
   o Clearing the component definition cache when a WOComponent is modified
   o Adding WOLips IDE Project support to WO 5.3 (already in WO 5.4)
 
-Firstly you must be using JavaRebel, it can be obtained from www.zeroturnaround.com
+Firstly you must be using JavaRebel, it can be obtained from www.zeroturnaround.com, a copy
+of the javarebel.jar can also be found in the framework's Libraries folder.
+
 To use it add the following Java VM arguments to your launch configuration:
     -noverify -javaagent:<pathtojar>/javarebel.jar
 
 Next you must add the WOJavaRebel framework to the application's classpath.
-The easiest way to do this so that the framework isn't also included in your deployment 
-build is by adding the jar version of the framework (eg. WOJavaRebel-5.0.jar) as an 
-external jar to your application's launch configuration using the classpath tab menu.
-Ensure that it appears early in the classpath order, before system frameworks like 
-JavaWebObjects.
+The easiest way to do this is to simply add it as a regular WebObjects framework.
+While it will cause no harm in deployment, if you don't want the framework to be embedded or
+appear in the classpath of your deployment builds an alternative option is to add the jar 
+version of the framework to your application classpath.
+ 
+If you are using WO 5.3 try to ensure that the framework appears early in the classpath 
+order, before system frameworks like JavaWebObjects.
