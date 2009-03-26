@@ -38,6 +38,7 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.crypting.ERXCrypto;
 
 /**
@@ -970,6 +971,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
 
         /** Properties.<userName> -- per-Application-per-User properties */
+        String applicationDeveloperPropertiesPath = ERXProperties.applicationDeveloperProperties();
+        if (applicationDeveloperPropertiesPath != null) {
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-Developer Properties: " + applicationDeveloperPropertiesPath);
+           propertiesPaths.addObject(applicationDeveloperPropertiesPath);
+        }
+
+        /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
         if (applicationUserPropertiesPath != null) {
            projectsInfo.addObject("Application " + mainBundleName + "/Application-User Properties: " + applicationUserPropertiesPath);
@@ -1061,6 +1069,23 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             }
         }
         return path;
+    }
+    
+    /**
+     * Returns the application-specific user properties.
+     */
+    public static String applicationDeveloperProperties() {
+    	String applicationDeveloperPropertiesPath = null;
+    	if (ERXApplication.isDevelopmentModeSafe()) {
+	        String devName = ERXSystem.getProperty("er.extensions.ERXProperties.devPropertiesName", "dev");
+	        if (devName != null  &&  devName.length() > 0) { 
+	        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + devName, "app", null);
+	            if (resourceApplicationUserPropertiesPath != null) {
+	            	applicationDeveloperPropertiesPath = ERXProperties.getActualPath(resourceApplicationUserPropertiesPath);
+	            }
+	        }
+    	}
+        return applicationDeveloperPropertiesPath;
     }
     
     /**
