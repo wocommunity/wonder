@@ -1,14 +1,15 @@
 package org.zeroturnaround.javarebel;
 
+import java.lang.reflect.Field;
 import java.util.Enumeration;
 
-import org.zeroturnaround.javarebel.ClassEventListener;
-import org.zeroturnaround.javarebel.Reloader;
-import org.zeroturnaround.javarebel.ReloaderFactory;
-
+import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WORequestHandler;
+import com.webobjects.appserver._private.WODirectActionRequestHandler;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSNotification;
@@ -27,7 +28,8 @@ public class WOJavaRebelClassReloadHandler {
 	private static boolean initialized = false;
 		
 	private boolean resetKVCCaches = false;
-	private boolean resetComponentCache = false;
+    private boolean resetComponentCache = false;
+    private boolean resetActionClassCache = false;
 
 	private static final WOJavaRebelClassReloadHandler handler = new WOJavaRebelClassReloadHandler();
 
@@ -46,9 +48,14 @@ public class WOJavaRebelClassReloadHandler {
 			NSKeyValueCoding.ValueAccessor._flushCaches();
 		}
 		if (resetComponentCache) {
-			resetComponentCache = false;
-			System.out.println("JavaRebel: Resetting Component Definition cache");
-			WOApplication.application()._removeComponentDefinitionCacheContents();
+		    resetComponentCache = false;
+		    System.out.println("JavaRebel: Resetting Component Definition cache");
+		    WOApplication.application()._removeComponentDefinitionCacheContents();
+		}
+		if(resetActionClassCache) {
+		    resetActionClassCache = false;
+            System.out.println("JavaRebel: Resetting Action class cache");
+		    WOClassCacheAccessor.clearActionClassCache();
 		}
 	}
 
@@ -85,9 +92,12 @@ public class WOJavaRebelClassReloadHandler {
 	@SuppressWarnings("all")
 	public void reloaded(Class clazz) {
 		resetKVCCaches = true;
-		if (WOComponent.class.isAssignableFrom(clazz)) {
-			resetComponentCache = true;
-		}
+        if (WOComponent.class.isAssignableFrom(clazz)) {
+            resetComponentCache = true;
+        }
+        if (WOAction.class.isAssignableFrom(clazz)) {
+            resetActionClassCache = true;
+        }
 		doReset();
 	}
 	
