@@ -2314,7 +2314,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (!sslAdaptorConfigured) {
 				NSMutableDictionary<String, Object> sslAdaptor = new NSMutableDictionary<String, Object>();
 				sslAdaptor.setObjectForKey(ERXSecureDefaultAdaptor.class.getName(), WOProperties._AdaptorKey);
-				sslAdaptor.setObjectForKey(sslHost(), WOProperties._HostKey);
+				String sslHost = sslHost();
+				if (sslHost != null) {
+					sslAdaptor.setObjectForKey(sslHost, WOProperties._HostKey);
+				}
 				sslAdaptor.setObjectForKey(Integer.valueOf(sslPort()), WOProperties._PortKey);
 				additionalAdaptors.addObject(sslAdaptor);
 			}
