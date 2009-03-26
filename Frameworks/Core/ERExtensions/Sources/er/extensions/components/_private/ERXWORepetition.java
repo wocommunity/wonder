@@ -13,7 +13,9 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -220,7 +222,18 @@ public class ERXWORepetition extends WODynamicGroup {
 		}
 		else if (eoSupport(component) && object instanceof EOEnterpriseObject) {
 			EOEnterpriseObject eo = (EOEnterpriseObject)object;
-			hashCode = eo.editingContext().globalIDForObject(eo).hashCode();
+			EOEditingContext editingContext = eo.editingContext();
+			EOGlobalID gid = null;
+			if (editingContext != null) {
+				gid = editingContext.globalIDForObject(eo);
+			}
+			// If the EO isn't in an EC, or it has a null GID, then just fall back to the hash code
+			if (gid == null) {
+				hashCode = Math.abs(System.identityHashCode(object));
+			}
+			else {
+				hashCode = gid.hashCode();
+			}
 		}
 		else {
 			hashCode = Math.abs(System.identityHashCode(object));
