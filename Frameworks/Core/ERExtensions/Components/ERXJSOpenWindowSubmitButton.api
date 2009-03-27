@@ -1,6 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo wocomponentcontent="NO" class="ERXJSOpenWindowSubmitButton">
-
-        </wo>
+        <wo class="ERXJSOpenWindowSubmitButton" wocomponentcontent="NO">
+					<binding defaults="Actions" name="action"/>
+					<binding defaults="Direct Action Classes" name="actionClass"/>
+					<binding defaults="Direct Actions" name="directActionName"/>
+					<binding name="queryDictionary"/>
+					<binding name="target"/>
+					<binding name="width"/>
+					<binding name="height"/>
+					<binding defaults="Boolean" name="scrollbars"/>
+					<binding defaults="Boolean" name="toolbar"/>
+					<binding defaults="Boolean" name="titlebar"/>
+					<binding defaults="Boolean" name="resizable"/>
+					<binding name="linkClass"/>
+					<binding name="id"/>
+					<binding name="fragment"/>
+					<binding name="disabled"/>
+					<binding name="urlParameters"/>
+					<binding defaults="Boolean" name="positionAtCursor"/>
+        <binding name="value"/>
+    </wo>
 </wodefinitions>
