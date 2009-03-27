@@ -471,7 +471,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return _CLASS;
 	}
 	
-	public static NSDictionary emptyDictionary() {
+	public static <K,V> NSDictionary<K,V> emptyDictionary() {
 		return NSDictionary.EmptyDictionary;
 	}
 	
