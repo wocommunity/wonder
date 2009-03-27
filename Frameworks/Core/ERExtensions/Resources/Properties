@@ -519,7 +519,8 @@ dbMinConnectionsGLOBAL=1
 #########################################################################
 ## Define if child threads inherit the variables of the parent or not. Defaults to true.
 # er.extensions.ERXThreadStorage.useInheritableThreadLocal = false
-## Define whether to log potential problems when using certain values inherited by the parent thread. Defaults to true.
+## Define whether to log potential problems when using certain values inherited by the parent thread. 
+## Defaults to true when running in development mode, defaults to false when app is deployed.
 # er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues = false
 
 #########################################################################
