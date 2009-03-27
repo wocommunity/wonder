@@ -69,6 +69,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding raiseOnUnmatchedObject if true, an exception is thrown when the repetition does not find a matching object
  * @binding debugHashCodes if true, prints out hashcodes for each entry in the repetition as it is traversed
  * @binding batchFetch a comma-separated list of keypaths on the "list" array binding to batch fetch
+ * @binding eoSupport try to use globalIDs to determine the hashCode for EOs
  * 
  * @author ak
  */
