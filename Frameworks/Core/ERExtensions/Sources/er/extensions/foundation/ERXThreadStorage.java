@@ -61,7 +61,8 @@ public class ERXThreadStorage {
     	
     	_problematicKeys = new NSSet<String>(
     			new String[] {
-    					ERXWOContext.CONTEXT_DICTIONARY_KEY
+    					// already handled by "_problematcTypes"
+    					// ERXWOContext.CONTEXT_DICTIONARY_KEY
     			}
     	);
     }
@@ -94,7 +95,7 @@ public class ERXThreadStorage {
      * @param key key
      */
     public static void takeValueForKey(Object object, String key) {
-		// log.debug(key+" <- "+object);
+    	// log.debug(key+" <- "+object);
     	Map map = storageMap(true);
     	map.put(key, object);
     	markKeyAddedInCurrentThread(key);
