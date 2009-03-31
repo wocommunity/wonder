@@ -36,6 +36,8 @@ import er.taggable.ERTaggableEntity;
  * @binding categories the tag category names to use (NSArray of Strings)
  * @binding categoryCount the number of categories to split into (default 5)
  * @binding tagClassPrefix the prefix to prepend to the tag cloud class name ("tagCloud" by default)
+ * @binding cache if false, the computation of the tag cloud is not cached (this is EXPENSIVE) 
+ * 
  * @binding shouldResetTagCloud forces recalculation of the tag cloud when the binding evaluates to true. 
  * 			After recalculation, the binding will be set to false again.
  * @author mschrag
@@ -98,7 +100,7 @@ public class ERTagCloud extends ERXComponent {
   }
 
   public NSDictionary<String, String> tagCloud() {
-    if (_tagCloud == null) {
+    if (_tagCloud == null || !booleanValueForBinding("cache", true)) {
       EOEditingContext editingContext = ERXEC.newEditingContext();
       ERTaggableEntity<?> taggableEntity = ERTaggableEntity.taggableEntity(entityName());
       NSDictionary<String, Integer> tagCount;
