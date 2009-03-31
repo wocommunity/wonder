@@ -939,6 +939,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
+	 * Called, for example, when refuse new sessions is enabled and the request contains an expired session.
+	 * If mod_rewrite is being used we don't want the adaptor prefix being part of the redirect.
+	 * @see com.webobjects.appserver.WOApplication#_newLocationForRequest(com.webobjects.appserver.WORequest)
+	 */
+	public String _newLocationForRequest(WORequest aRequest) {
+		return _rewriteURL(super._newLocationForRequest(aRequest));
+	}
+	
+	/**
 	 * Decides whether to use editing context unlocking.
 	 * 
 	 * @return true if ECs should be unlocked after each RR-loop
