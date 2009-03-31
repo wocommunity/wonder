@@ -31,6 +31,7 @@
     "ERD2WWizardCreationPage.stepsMessage" = "Step @@currentStep@@ of Ê@@tabSectionsContents.count@@";
     "ERD2WQueryPage.plainMessage" = "@@displayNameForEntity@@";
     "ERD2WQueryPage.restrictedMessage" = "@@displayNameForEntity@@ (max @@fetchLimit@@)";
+    "ERD2WQueryPage.noValueLabel" = "no&nbsp;value&nbsp;";
     "ERD2W.cancelCreationMessage" = "<b>Are you sure you want to stop creating this @@displayNameForEntity@@?</b><br><br>Clicking confirm will discard all your changes, Clicking Cancel will go back to editing your @@displayNameForEntity@@.";
     "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<B>Are you sure you want to stop creating this @@displayNameForEntity@@?</B><br><br>Clicking confirm will discard all your changes, Clicking Cancel will go back to editing your @@displayNameForEntity@@.";
     "ERDEditListButton.editButtonName" = "Edit @@displayNameForProperty@@ List";
