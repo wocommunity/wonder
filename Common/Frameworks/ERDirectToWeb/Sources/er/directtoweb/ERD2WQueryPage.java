@@ -12,9 +12,9 @@ import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
-import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOAndQualifier;
@@ -24,10 +24,12 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-
 import er.extensions.ERXDisplayGroup;
 import er.extensions.ERXValueUtilities;
+
+import java.util.Enumeration;
 
 /**
  * Superclass for all query pages.<br />
@@ -47,6 +49,9 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     protected EOFetchSpecification fetchSpecification;
     
     protected ERDQueryDataSourceDelegateInterface queryDataSourceDelegate;
+
+    protected NSArray _nullablePropertyKeys;
+    protected NSMutableDictionary keysToQueryForNull = new NSMutableDictionary();
 
     public ERD2WQueryPage(WOContext context) {
         super(context);
@@ -128,6 +133,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         super.takeValuesFromRequest(request, context);
+        substituteValueForNullableQueryKeys();
         saveQueryBindings();
     }
 
@@ -206,13 +212,11 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     protected Boolean showResults = null;
 
     public boolean showResults() {
-        if (showResults == null)
-            return false;
-        return showResults.booleanValue();
+        return Boolean.TRUE.equals(showResults);
     }
 
     public void setShowResults(boolean value) {
-        showResults = value ? Boolean.TRUE : Boolean.FALSE;
+        showResults = value;
     }
 
     public WOComponent queryAction() {
@@ -223,7 +227,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         	nextPage = nextPageFromDelegate();
             if (nextPage == null) {
                 String listConfigurationName = (String) d2wContext().valueForKey("listConfigurationName");
-                ListPageInterface listpageinterface = null;
+                ListPageInterface listpageinterface;
                 if (listConfigurationName != null) {
                     listpageinterface = (ListPageInterface) D2W.factory().pageForConfigurationNamed(listConfigurationName, session());
                 } else {
@@ -344,7 +348,8 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     }
 
     /**
-     * Returns the display group
+     * Gets the display group.
+     * @return the display group
      */
     public WODisplayGroup displayGroup() {
         return displayGroup;
@@ -357,9 +362,9 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     /**
      * Set a search value for the display group query match. When the value is null is gets removed from the 
      * dict, when the operator is null and the value isn't, "=" is chosen.
-     * @param value
-     * @param operator
-     * @param key
+     * @param value to assign to the queryMatch dictionary for the given key
+     * @param operator used for comparing the value
+     * @param key to use
      */
     public void setQueryMatchForKey(Object value, String operator, String key) {
         if(value != null) {
@@ -379,4 +384,77 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         // FIXME not implemented!
         
     }
+
+    /**
+     * Discovers the property keys that can be queried for a NULL value.
+     * @return the array of nullable and/or non-mandatory property keys
+     */
+    public NSArray nullablePropertyKeys() {
+        if (null == _nullablePropertyKeys) {
+            NSMutableArray array = new NSMutableArray();
+            String preKey = propertyKey();
+            D2WContext d2wContext = d2wContext();
+            for (Enumeration keysEnum = displayPropertyKeys().objectEnumerator(); keysEnum.hasMoreElements();) {
+                String key = (String)keysEnum.nextElement();
+                setPropertyKey(key);
+                Object allowsNull = d2wContext.valueForKey("allowsNull");   // allowsNull for attributes
+                Object isMandatory = d2wContext.valueForKey("isMandatory"); // isMandatory for relationships
+                if ((allowsNull != null && ERXValueUtilities.booleanValue(allowsNull)) ||
+                    (isMandatory != null && !ERXValueUtilities.booleanValue(isMandatory))) {
+                    array.addObject(key);
+                }
+            }
+            _nullablePropertyKeys = array;
+            setPropertyKey(preKey); // Restore the property key.
+        }
+        return _nullablePropertyKeys;
+    }
+
+    /**
+     * Determines if the null query checkbox for the current D2W property key should be checked.
+     * @return true if the checkbox should be checked
+     */
+    public boolean isNullQueryCheckedForCurrentProperty() {
+        return Boolean.TRUE.equals(keysToQueryForNull.valueForKey(propertyKey()));
+    }
+
+    /**
+     * Sets the flag denoting a property key is being queried for a null value.
+     * @param value of the checkbox' checked attribute
+     */
+    public void setIsNullQueryCheckedForCurrentProperty(boolean value) {
+        keysToQueryForNull.takeValueForKey(value, propertyKey());
+    }
+
+    /**
+     * Determines if the null query checkbox can be shown for the current D2W property key should be checked.
+     * @return true if the checkbox should be checked
+     */
+    public boolean canQueryCurrentPropertyForNullValue() {
+        boolean enabled = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("enableQueryForNullValues"), false);
+        boolean propertyAllowsQuery = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("canQueryPropertyForNullValues"), true);
+        return (enabled && propertyAllowsQuery && nullablePropertyKeys().containsObject(propertyKey()));
+    }
+
+    /**
+     * When querying for properties with a null value, and the null value checkbox for a property key is checked, this
+     * method substitutes <code>NSKeyValueCoding.NullValue</code> into the display group's query dictionaries for that
+     * property key.
+     */
+    protected void substituteValueForNullableQueryKeys() {
+        WODisplayGroup displayGroup = displayGroup();
+        for(Enumeration nullableKeysEnum = nullablePropertyKeys().objectEnumerator(); nullableKeysEnum.hasMoreElements();) {
+            String key = (String)nullableKeysEnum.nextElement();
+            Boolean value = (Boolean)keysToQueryForNull.objectForKey(key);
+            if (Boolean.TRUE.equals(value)) {
+                displayGroup.queryOperator().takeValueForKey(EOQualifier.stringForOperatorSelector(EOQualifier.QualifierOperatorEqual), key);
+                if (displayGroup.queryBindings().valueForKey(key) != null) {
+                    displayGroup.queryBindings().takeValueForKey(NSKeyValueCoding.NullValue, key);
+                } else {
+                    displayGroup.queryMatch().takeValueForKey(NSKeyValueCoding.NullValue, key);
+                }
+            }
+        }
+    }
+
 }
