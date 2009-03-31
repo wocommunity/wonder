@@ -1,3 +1,8 @@
+GridDiv : WOGenericContainer {
+	elementName = "div";
+	id=gridID;
+}
+
 Wrapper : WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 }

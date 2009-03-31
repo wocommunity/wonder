@@ -28,4 +28,8 @@ public class AjaxLookListPage extends ERD2WListPage {
         YUIUtils.addStylesheetResourceInHead(context, response, "container/assets/container.css");
         YUIUtils.addStylesheetResourceInHead(context, response, "ext/resources/css/grid.css");
     }
+    
+    public String gridID() {
+    	return d2wContext().valueForKey("pageConfiguration") + "Grid";
+    }
 }
