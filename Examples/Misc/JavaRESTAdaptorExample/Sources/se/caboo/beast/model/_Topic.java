@@ -13,35 +13,37 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Topic extends  ERXGenericRecord {
-	public static final String ENTITY_NAME = "Topic";
+  public static final String ENTITY_NAME = "Topic";
 
-	// Attributes
-	public static final String CREATED_AT_KEY = "createdAt";
-	public static final ERXKey<NSTimestamp> CREATED_AT = new ERXKey<NSTimestamp>(CREATED_AT_KEY);
-	public static final String HITS_KEY = "hits";
-	public static final ERXKey<Integer> HITS = new ERXKey<Integer>(HITS_KEY);
-	public static final String LOCKED_KEY = "locked";
-	public static final ERXKey<Boolean> LOCKED = new ERXKey<Boolean>(LOCKED_KEY);
-	public static final String POSTS_COUNT_KEY = "postsCount";
-	public static final ERXKey<Integer> POSTS_COUNT = new ERXKey<Integer>(POSTS_COUNT_KEY);
-	public static final String REPLIED_AT_KEY = "repliedAt";
-	public static final ERXKey<NSTimestamp> REPLIED_AT = new ERXKey<NSTimestamp>(REPLIED_AT_KEY);
-	public static final String STICKY_KEY = "sticky";
-	public static final ERXKey<Integer> STICKY = new ERXKey<Integer>(STICKY_KEY);
-	public static final String TITLE_KEY = "title";
-	public static final ERXKey<String> TITLE = new ERXKey<String>(TITLE_KEY);
-	public static final String UPDATED_AT_KEY = "updatedAt";
-	public static final ERXKey<NSTimestamp> UPDATED_AT = new ERXKey<NSTimestamp>(UPDATED_AT_KEY);
+  // Attribute Keys
+  public static final ERXKey<NSTimestamp> CREATED_AT = new ERXKey<NSTimestamp>("createdAt");
+  public static final ERXKey<Integer> HITS = new ERXKey<Integer>("hits");
+  public static final ERXKey<Boolean> LOCKED = new ERXKey<Boolean>("locked");
+  public static final ERXKey<Integer> POSTS_COUNT = new ERXKey<Integer>("postsCount");
+  public static final ERXKey<NSTimestamp> REPLIED_AT = new ERXKey<NSTimestamp>("repliedAt");
+  public static final ERXKey<Integer> STICKY = new ERXKey<Integer>("sticky");
+  public static final ERXKey<String> TITLE = new ERXKey<String>("title");
+  public static final ERXKey<NSTimestamp> UPDATED_AT = new ERXKey<NSTimestamp>("updatedAt");
+  // Relationship Keys
+  public static final ERXKey<se.caboo.beast.model.Forum> FORUM = new ERXKey<se.caboo.beast.model.Forum>("forum");
+  public static final ERXKey<se.caboo.beast.model.Post> POSTS = new ERXKey<se.caboo.beast.model.Post>("posts");
+  public static final ERXKey<se.caboo.beast.model.User> REPLIED_BY = new ERXKey<se.caboo.beast.model.User>("repliedBy");
+  public static final ERXKey<se.caboo.beast.model.User> USER = new ERXKey<se.caboo.beast.model.User>("user");
 
-	// Relationships
-	public static final String FORUM_KEY = "forum";
-	public static final ERXKey<se.caboo.beast.model.Forum> FORUM = new ERXKey<se.caboo.beast.model.Forum>(FORUM_KEY);
-	public static final String POSTS_KEY = "posts";
-	public static final ERXKey<se.caboo.beast.model.Post> POSTS = new ERXKey<se.caboo.beast.model.Post>(POSTS_KEY);
-	public static final String REPLIED_BY_KEY = "repliedBy";
-	public static final ERXKey<se.caboo.beast.model.User> REPLIED_BY = new ERXKey<se.caboo.beast.model.User>(REPLIED_BY_KEY);
-	public static final String USER_KEY = "user";
-	public static final ERXKey<se.caboo.beast.model.User> USER = new ERXKey<se.caboo.beast.model.User>(USER_KEY);
+  // Attributes
+  public static final String CREATED_AT_KEY = CREATED_AT.key();
+  public static final String HITS_KEY = HITS.key();
+  public static final String LOCKED_KEY = LOCKED.key();
+  public static final String POSTS_COUNT_KEY = POSTS_COUNT.key();
+  public static final String REPLIED_AT_KEY = REPLIED_AT.key();
+  public static final String STICKY_KEY = STICKY.key();
+  public static final String TITLE_KEY = TITLE.key();
+  public static final String UPDATED_AT_KEY = UPDATED_AT.key();
+  // Relationships
+  public static final String FORUM_KEY = FORUM.key();
+  public static final String POSTS_KEY = POSTS.key();
+  public static final String REPLIED_BY_KEY = REPLIED_BY.key();
+  public static final String USER_KEY = USER.key();
 
   private static Logger LOG = Logger.getLogger(_Topic.class);
 

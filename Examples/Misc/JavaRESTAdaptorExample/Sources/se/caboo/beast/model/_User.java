@@ -13,37 +13,39 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _User extends  ERXGenericRecord {
-	public static final String ENTITY_NAME = "User";
+  public static final String ENTITY_NAME = "User";
 
-	// Attributes
-	public static final String BIO_KEY = "bio";
-	public static final ERXKey<String> BIO = new ERXKey<String>(BIO_KEY);
-	public static final String BIO_HTML_KEY = "bioHtml";
-	public static final ERXKey<String> BIO_HTML = new ERXKey<String>(BIO_HTML_KEY);
-	public static final String CREATED_AT_KEY = "createdAt";
-	public static final ERXKey<NSTimestamp> CREATED_AT = new ERXKey<NSTimestamp>(CREATED_AT_KEY);
-	public static final String DISPLAY_NAME_KEY = "displayName";
-	public static final ERXKey<String> DISPLAY_NAME = new ERXKey<String>(DISPLAY_NAME_KEY);
-	public static final String LAST_LOGIN_AT_KEY = "lastLoginAt";
-	public static final ERXKey<NSTimestamp> LAST_LOGIN_AT = new ERXKey<NSTimestamp>(LAST_LOGIN_AT_KEY);
-	public static final String LAST_SEEN_AT_KEY = "lastSeenAt";
-	public static final ERXKey<NSTimestamp> LAST_SEEN_AT = new ERXKey<NSTimestamp>(LAST_SEEN_AT_KEY);
-	public static final String LOGIN_KEY = "login";
-	public static final ERXKey<String> LOGIN = new ERXKey<String>(LOGIN_KEY);
-	public static final String POSTS_COUNT_KEY = "postsCount";
-	public static final ERXKey<Integer> POSTS_COUNT = new ERXKey<Integer>(POSTS_COUNT_KEY);
-	public static final String UPDATED_AT_KEY = "updatedAt";
-	public static final ERXKey<NSTimestamp> UPDATED_AT = new ERXKey<NSTimestamp>(UPDATED_AT_KEY);
-	public static final String WEBSITE_KEY = "website";
-	public static final ERXKey<String> WEBSITE = new ERXKey<String>(WEBSITE_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> BIO = new ERXKey<String>("bio");
+  public static final ERXKey<String> BIO_HTML = new ERXKey<String>("bioHtml");
+  public static final ERXKey<NSTimestamp> CREATED_AT = new ERXKey<NSTimestamp>("createdAt");
+  public static final ERXKey<String> DISPLAY_NAME = new ERXKey<String>("displayName");
+  public static final ERXKey<NSTimestamp> LAST_LOGIN_AT = new ERXKey<NSTimestamp>("lastLoginAt");
+  public static final ERXKey<NSTimestamp> LAST_SEEN_AT = new ERXKey<NSTimestamp>("lastSeenAt");
+  public static final ERXKey<String> LOGIN = new ERXKey<String>("login");
+  public static final ERXKey<Integer> POSTS_COUNT = new ERXKey<Integer>("postsCount");
+  public static final ERXKey<NSTimestamp> UPDATED_AT = new ERXKey<NSTimestamp>("updatedAt");
+  public static final ERXKey<String> WEBSITE = new ERXKey<String>("website");
+  // Relationship Keys
+  public static final ERXKey<se.caboo.beast.model.Post> POSTS = new ERXKey<se.caboo.beast.model.Post>("posts");
+  public static final ERXKey<se.caboo.beast.model.Topic> REPLIED_TO_TOPICS = new ERXKey<se.caboo.beast.model.Topic>("repliedToTopics");
+  public static final ERXKey<se.caboo.beast.model.Topic> TOPICS = new ERXKey<se.caboo.beast.model.Topic>("topics");
 
-	// Relationships
-	public static final String POSTS_KEY = "posts";
-	public static final ERXKey<se.caboo.beast.model.Post> POSTS = new ERXKey<se.caboo.beast.model.Post>(POSTS_KEY);
-	public static final String REPLIED_TO_TOPICS_KEY = "repliedToTopics";
-	public static final ERXKey<se.caboo.beast.model.Topic> REPLIED_TO_TOPICS = new ERXKey<se.caboo.beast.model.Topic>(REPLIED_TO_TOPICS_KEY);
-	public static final String TOPICS_KEY = "topics";
-	public static final ERXKey<se.caboo.beast.model.Topic> TOPICS = new ERXKey<se.caboo.beast.model.Topic>(TOPICS_KEY);
+  // Attributes
+  public static final String BIO_KEY = BIO.key();
+  public static final String BIO_HTML_KEY = BIO_HTML.key();
+  public static final String CREATED_AT_KEY = CREATED_AT.key();
+  public static final String DISPLAY_NAME_KEY = DISPLAY_NAME.key();
+  public static final String LAST_LOGIN_AT_KEY = LAST_LOGIN_AT.key();
+  public static final String LAST_SEEN_AT_KEY = LAST_SEEN_AT.key();
+  public static final String LOGIN_KEY = LOGIN.key();
+  public static final String POSTS_COUNT_KEY = POSTS_COUNT.key();
+  public static final String UPDATED_AT_KEY = UPDATED_AT.key();
+  public static final String WEBSITE_KEY = WEBSITE.key();
+  // Relationships
+  public static final String POSTS_KEY = POSTS.key();
+  public static final String REPLIED_TO_TOPICS_KEY = REPLIED_TO_TOPICS.key();
+  public static final String TOPICS_KEY = TOPICS.key();
 
   private static Logger LOG = Logger.getLogger(_User.class);
 
