@@ -13,25 +13,27 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Post extends  ERXGenericRecord {
-	public static final String ENTITY_NAME = "Post";
+  public static final String ENTITY_NAME = "Post";
 
-	// Attributes
-	public static final String BODY_KEY = "body";
-	public static final ERXKey<String> BODY = new ERXKey<String>(BODY_KEY);
-	public static final String BODY_HTML_KEY = "bodyHtml";
-	public static final ERXKey<String> BODY_HTML = new ERXKey<String>(BODY_HTML_KEY);
-	public static final String CREATED_AT_KEY = "createdAt";
-	public static final ERXKey<NSTimestamp> CREATED_AT = new ERXKey<NSTimestamp>(CREATED_AT_KEY);
-	public static final String UPDATED_AT_KEY = "updatedAt";
-	public static final ERXKey<NSTimestamp> UPDATED_AT = new ERXKey<NSTimestamp>(UPDATED_AT_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> BODY = new ERXKey<String>("body");
+  public static final ERXKey<String> BODY_HTML = new ERXKey<String>("bodyHtml");
+  public static final ERXKey<NSTimestamp> CREATED_AT = new ERXKey<NSTimestamp>("createdAt");
+  public static final ERXKey<NSTimestamp> UPDATED_AT = new ERXKey<NSTimestamp>("updatedAt");
+  // Relationship Keys
+  public static final ERXKey<se.caboo.beast.model.Forum> FORUM = new ERXKey<se.caboo.beast.model.Forum>("forum");
+  public static final ERXKey<se.caboo.beast.model.Topic> TOPIC = new ERXKey<se.caboo.beast.model.Topic>("topic");
+  public static final ERXKey<se.caboo.beast.model.User> USER = new ERXKey<se.caboo.beast.model.User>("user");
 
-	// Relationships
-	public static final String FORUM_KEY = "forum";
-	public static final ERXKey<se.caboo.beast.model.Forum> FORUM = new ERXKey<se.caboo.beast.model.Forum>(FORUM_KEY);
-	public static final String TOPIC_KEY = "topic";
-	public static final ERXKey<se.caboo.beast.model.Topic> TOPIC = new ERXKey<se.caboo.beast.model.Topic>(TOPIC_KEY);
-	public static final String USER_KEY = "user";
-	public static final ERXKey<se.caboo.beast.model.User> USER = new ERXKey<se.caboo.beast.model.User>(USER_KEY);
+  // Attributes
+  public static final String BODY_KEY = BODY.key();
+  public static final String BODY_HTML_KEY = BODY_HTML.key();
+  public static final String CREATED_AT_KEY = CREATED_AT.key();
+  public static final String UPDATED_AT_KEY = UPDATED_AT.key();
+  // Relationships
+  public static final String FORUM_KEY = FORUM.key();
+  public static final String TOPIC_KEY = TOPIC.key();
+  public static final String USER_KEY = USER.key();
 
   private static Logger LOG = Logger.getLogger(_Post.class);
 
