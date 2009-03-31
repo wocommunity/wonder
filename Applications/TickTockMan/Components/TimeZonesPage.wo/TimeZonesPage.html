@@ -20,7 +20,7 @@
 <wo:loop list="$allTimeZones" item="$timeZoneId">
 
 <tr>
-	<td><wo:str value="$timeZoneId" /></td>
+	<td><wo:link action="$timeDisplayNow"><wo:str value="$timeZoneId" /></wo:link></td>
 	<td><wo:str value="$tzDisplayName" /></td>
 	<td><wo:str value="$tzDSTSavings" numberformat="0" /></td>
 	<td><wo:str value="$tzRawOffset" numberformat="0" /></td>

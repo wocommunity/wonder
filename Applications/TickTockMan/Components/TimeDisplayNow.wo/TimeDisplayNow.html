@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>TickTockMan</title>
+</head>
+<body>
+
+<p>
+<strong>Desired TimeZone ID:</strong> - "<wo:str value="$timeZoneID" />
+</p>
+
+<p>
+<strong>System TimeZone:</strong> - "<wo:str value="$systemTimeZone" />"<br/>
+This is the current time zone for the computer that is running this data application. The time zone object has been sent the
+toString method and you are seeing the result.
+</p>
+
+<p>
+<strong>Current Timestamp:</strong> - "<wo:str value="$currentTimestamp" />"<br/>
+This is the current time. The timestamp object has been sent the toString method and you are seeing the result. No matter where
+the computer serving this application is at, the toString method displays the timestamp in GMT. Displaying this time, without
+the time zone visible, will lead users to be confused.
+</p>
+
+
+<p>
+<strong>Desired TimeZone - WO:</strong> - "<wo:str value="$desiredNSTimeZone" />"<br/>
+This is the time zone that you selected in the previous page. The instance of the com.webobjects.foundation.NSTimeZone class was
+created from a call to the static getTimeZoneWithName method with the timezone id as a parameter. Note that if one gets the TimeZone
+instance, gets the name from the getDisplayName method from that, and then uses the name to call the getTimeZoneWithName, the call
+will return null. It would appear that the getTimeZoneWithName method is mis-named.
+</p>
+
+<p>
+<strong>Desired TimeZone - JDK:</strong> - "<wo:str value="$desiredTimeZone" />"<br/>
+This is the time zone that you selected in the previous page. The instance of the java.util.TimeZone class was created from a call
+to the static getTimeZone method with the timezone id as a parameter.
+</p>
+
+<p>
+<strong>Desired Timestamp in Desired TimeZone:</strong> - "<wo:str value="$desiredTimestampInDesiredTimeZone" />"<br/>
+This is the string representation of the time in the desired time zone. This is obtained by creating a NSTimestampFormatter object,
+setting the time zone on that to the desired time zone, and then using the formatter to create a StringBuffer from the timestamp
+object. The fact that the NSTimestampFormatter is completely deprecated is unfortunate, but it works.
+</p>
+
+<p>
+<wo:link pageName="TimeZonesPage">Back to Time Zone List</wo:link> - <wo:link pageName="Main">Back to Main Page</wo:link>
+</p>
+
+</body>
+</html>
