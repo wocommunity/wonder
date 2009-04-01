@@ -25,7 +25,7 @@
          thread_pool.keep_alive_time="30000"
          thread_pool.queue_enabled="true"
          thread_pool.queue_max_size="10"
-         thread_pool.rejection_policy="Run"
+         thread_pool.rejection_policy="Discard"
 
          oob_thread_pool.enabled="true"
          oob_thread_pool.min_threads="1"
@@ -36,23 +36,26 @@
          oob_thread_pool.rejection_policy="Run"/>
 
     <PING timeout="2000"
-            num_initial_members="3"/>
+            num_initial_members="3"
+            num_ping_requests="5"
+            num_initial_srv_members="1"/>
     <MERGE2 max_interval="30000"
             min_interval="10000"/>
     <FD_SOCK/>
     <FD timeout="10000" max_tries="5"   shun="true"/>
     <VERIFY_SUSPECT timeout="1500"  />
     <BARRIER />
-    <pbcast.NAKACK max_xmit_size="60000"
-                   use_mcast_xmit="false" gc_lag="0"
+    <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
                    retransmit_timeout="300,600,1200,2400,4800"
-                   discard_delivered_msgs="true"/>
+                   discard_delivered_msgs="true"
+                   use_stats_for_retransmission="false"
+                   exponential_backoff="150"/>
     <UNICAST timeout="300,600,1200,2400,3600"/>
     <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
-                   max_bytes="400000"/>
+                   max_bytes="1000000"/>
     <VIEW_SYNC avg_send_interval="60000"   />
     <pbcast.GMS print_local_addr="true" join_timeout="3000"
-                join_retry_timeout="2000" shun="false"
+                shun="false"
                 view_bundling="true"/>
     <FC max_credits="20000000"
                     min_threshold="0.10"/>

@@ -18,6 +18,9 @@ import org.jgroups.View;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 import er.extensions.eof.ERXDatabase;
 import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.IChangeListener;
@@ -38,6 +41,9 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
  * @property er.extensions.jgroupsSynchronizer.groupName the JGroups group name to use (defaults to WOApplication.application.name)
  * @property er.extensions.remoteSynchronizer.includeEntities the list of entities to synchronize (all by default)
  * @property er.extensions.remoteSynchronizer.excludeEntities the list of entities to NOT synchronize (none by default)
+ * @property er.extensions.jgroupsSynchronizer.autoReconnect whether to auto reconnect when shunned (defaults to false)
+ * @property er.extensions.jgroupsSynchronizer.applicationWillTerminateNotificationName the name of the NSNotification that is sent when the application is terminating. Leave blank to disable this feature.
+ * @property er.extensions.jgroupsSynchronizer.useShutdownHook whether to register a JVM shutdown hook to clean up the JChannel (defaults to true)
  * 
  * @author mschrag
  */
@@ -66,6 +72,11 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
     URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
     _channel = new JChannel(propertiesUrl);
     _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
+    if (ERXProperties.booleanForKeyWithDefault("er.extensions.jgroupsSynchronizer.autoReconnect", true)) {
+      _channel.setOpt(Channel.AUTO_RECONNECT, Boolean.TRUE);
+    }
+
+    _registerForCleanup();
   }
 
   //@Override
@@ -114,6 +125,15 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
 
   //@Override
   protected void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws ChannelNotConnectedException, ChannelClosedException, IOException {
+    if (!_channel.isConnected()) {
+      if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
+        ERXRemoteSynchronizer.log.info("Channel not connected: Not Sending " + cacheChanges.count() + " changes.");
+      }
+      if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
+        ERXRemoteSynchronizer.log.info("Channel not connected: Changes = " + cacheChanges);
+      }
+      return;
+    }
     RefByteArrayOutputStream baos = new RefByteArrayOutputStream();
     DataOutputStream dos = new DataOutputStream(baos);
     dos.writeInt(cacheChanges.count());
@@ -131,5 +151,55 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
     }
     Message message = new Message(null, null, baos.buffer(), 0, baos.size());
     _channel.send(message);
+  }
+
+  private void _registerForCleanup() {
+    String notificationName = ERXProperties.stringForKey("er.extensions.jgroupsSynchronizer.applicationWillTerminateNotificationName");
+    if (notificationName != null && notificationName.length() > 0) {
+      NSSelector applicationLaunchedNotification = new NSSelector("_applicationWillTerminateNotification", new Class[] { NSNotification.class });
+      NSNotificationCenter.defaultCenter().addObserver(this, applicationLaunchedNotification, notificationName, null);
+    }
+
+    if (ERXProperties.booleanForKeyWithDefault("er.extensions.jgroupsSynchronizer.useShutdownHook", true)) {
+      Runtime.getRuntime().addShutdownHook(new Thread(new JGroupsCleanupTask(_channel), "ERJGroupsCleanupThread"));
+    }
+  }
+
+  private static void cleanUpJChannel(JChannel channel) {
+    try {
+      if (channel == null || !channel.isOpen()) {
+        return;
+      }
+
+      if (channel.isConnected()) {
+        channel.disconnect();
+      }
+
+      channel.close();
+    }
+    catch (Throwable e) {
+      ERXRemoteSynchronizer.log.error("Error closing JChannel: " + channel, e);
+    }
+  }
+
+  public void _applicationWillTerminateNotification(NSNotification notification) {
+    try {
+      cleanUpJChannel(_channel);
+    }
+    catch (Throwable e) {
+      ERXRemoteSynchronizer.log.error("Error cleaning up ERJgroupsSynchronizer JChannel", e);
+    }
+  }
+
+  private static class JGroupsCleanupTask implements Runnable {
+    private final JChannel channel;
+
+    public JGroupsCleanupTask(JChannel channel) {
+      this.channel = channel;
+    }
+
+    public void run() {
+      cleanUpJChannel(channel);
+    }
   }
 }
