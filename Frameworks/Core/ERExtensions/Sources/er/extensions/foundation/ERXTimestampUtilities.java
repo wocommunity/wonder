@@ -6,6 +6,8 @@
 //
 package er.extensions.foundation;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -310,5 +312,101 @@ public class ERXTimestampUtilities extends Object {
         long seconds = 0;
         seconds = ts.getTime() - epoch().getTime();
         return (new Integer((int)((seconds-60*60)/1000L)));
-    }    
+    }
+    
+    /**
+     * Returns the SimpleDateFormat pattern given an NSTimestampFormatter pattern. Note that these are not
+     * 100% compatible -- SimpleDateFormat properly implements DST and TimeZones whereas NSTimestampFormatter
+     * is ... kind of whacked, so you may notice your dates are off by a DST amount.
+     * 
+     * @param timestampFormatterPattern the NSTimestampFormatter pattern
+     * @return a SimpleDateFormat pattern
+     */
+    public static String simpleDateFormatForNSTimestampFormat(String timestampFormatterPattern) {
+    	StringBuffer dateFormat = new StringBuffer(timestampFormatterPattern.length());
+    	int length = timestampFormatterPattern.length();
+    	for (int i = 0; i < length; i ++) {
+    		char ch = timestampFormatterPattern.charAt(i);
+    		if (ch == '%') {
+    			char nextCh = timestampFormatterPattern.charAt(++ i);
+    			switch (nextCh) {
+    			case '%':
+    				dateFormat.append('%');
+    				break;
+    			case 'a':
+    				dateFormat.append("EEE");
+    				break;
+    			case 'A':
+    				dateFormat.append("EEEEE");
+    				break;
+    			case 'b':
+    				dateFormat.append("MMM");
+    				break;
+    			case 'B':
+    				dateFormat.append("MMMMM");
+    				break;
+    			case 'c':
+    				dateFormat.append(((SimpleDateFormat)SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)).toPattern());
+    				break;
+    			case 'd':
+    				dateFormat.append("dd");
+    				break;
+    			case 'e':
+    				dateFormat.append("d");
+    				break;
+    			case 'F':
+    				dateFormat.append("SSS");
+    				break;
+    			case 'H':
+    				dateFormat.append("HH");
+    				break;
+    			case 'I':
+    				dateFormat.append("hh");
+    				break;
+    			case 'j':
+    				dateFormat.append("DDD");
+    				break;
+    			case 'm':
+    				dateFormat.append("MM");
+    				break;
+    			case 'M':
+    				dateFormat.append("mm");
+    				break;
+    			case 'p':
+    				dateFormat.append("aa");
+    				break;
+    			case 'S':
+    				dateFormat.append("ss");
+    				break;
+    			case 'w':
+    				dateFormat.append("EEE"); // ???
+    				break;
+    			case 'x':
+    				dateFormat.append(((SimpleDateFormat)SimpleDateFormat.getDateInstance(DateFormat.SHORT)).toPattern());
+    				break;
+    			case 'X':
+    				dateFormat.append(((SimpleDateFormat)SimpleDateFormat.getTimeInstance(DateFormat.SHORT)).toPattern());
+    				break;
+    			case 'y':
+    				dateFormat.append("yy");
+    				break;
+    			case 'Y':
+    				dateFormat.append("yyyy");
+    				break;
+    			case 'z':
+    				dateFormat.append("Z");
+    				break;
+    			case 'Z':
+    				dateFormat.append("z");
+    				break;
+    			default:
+    				dateFormat.append("%"); // (this is what NSTimstampFormatter did)
+    			}
+    		}
+    		else {
+    			dateFormat.append(ch);
+    		}
+    	}
+    	return dateFormat.toString();
+    }
 }
