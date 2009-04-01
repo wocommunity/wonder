@@ -99,7 +99,7 @@ public class ERDDeletionDelegate implements NextPageDelegate {
             } catch (EOGeneralAdaptorException e) {
             	NSDictionary userInfo = e.userInfo();
             	if(userInfo != null) {
-            		EODatabaseOperation op = (EODatabaseOperation)userInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+            		EODatabaseOperation op = (EODatabaseOperation)userInfo.objectForKey(EODatabaseContext.Implementation.FailedDatabaseOperationKey);
             		if(op.databaseOperator() == EODatabaseOperation.DatabaseDeleteOperator) {
             			exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
             		}

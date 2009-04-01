@@ -9,6 +9,7 @@ package er.extensions.eof;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -33,10 +34,7 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.eof.ERXDatabase.CacheChange;
-import er.extensions.eof.ERXDatabase.SnapshotDeleted;
-import er.extensions.eof.ERXDatabase.SnapshotInserted;
-import er.extensions.eof.ERXDatabase.SnapshotUpdated;
-import er.extensions.eof.ERXDatabase.ToManySnapshotUpdated;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 
 /**
@@ -294,9 +292,9 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			@Override
 			public void processRelationship(EODatabase database, EOGlobalID sourceGID, EORelationship sourceRelationship, EOGlobalID destGID, EORelationship inverseRelationship, Object context, SynchronizerSettings settings) {
 				String inverseRelationshipName = inverseRelationship.name();
-				NSArray inverseRelationshipGIDs = database.snapshotForSourceGlobalID(destGID, inverseRelationshipName);
+				List<EOGlobalID> inverseRelationshipGIDs = database.snapshotForSourceGlobalID(destGID, inverseRelationshipName);
 				if (inverseRelationshipGIDs != null) {
-					database.recordSnapshotForSourceGlobalID(inverseRelationshipGIDs.arrayByAddingObject(sourceGID), destGID, inverseRelationshipName);
+					database.recordSnapshotForSourceGlobalID(ERXArrayUtilities.listByAddingObject(inverseRelationshipGIDs, sourceGID), destGID, inverseRelationshipName);
 				}
 			}
 
@@ -359,7 +357,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			public void processCacheChange(EODatabaseContext dbc, EODatabase database, CacheChange cacheChange) {
 				ERXDatabase.SnapshotUpdated updateChange = (ERXDatabase.SnapshotUpdated) cacheChange;
 				EOGlobalID gid = updateChange.gid();
-				NSDictionary snapshot = database.snapshotForGlobalID(gid);
+				Map<String, Object> snapshot = database.snapshotForGlobalID(gid);
 				if (snapshot != null) {
 					ERXObjectStoreCoordinatorSynchronizer.setProcessingRemoteNotifications(true);
 					try {
@@ -490,7 +488,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 					snapshotsByGlobalID.setObjectForKey(snapshot, globalID);
 				}
 				if (snapshotsByGlobalID.count() > 0) {
-					EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
+					//EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
 					dbc.lock();
 					try {
 						processor.processSnapshots(dbc, database, snapshotsByGlobalID, settings);

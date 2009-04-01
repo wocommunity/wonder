@@ -186,7 +186,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable {
             EOQualifier qual = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(subqualifier, destEntity);
             EOFetchSpecification fetchSpecification = new EOFetchSpecification(destEntity.name(), qual, null, false, true, null);
 
-            EODatabaseContext context = EODatabaseContext.registeredDatabaseContextForModel(destEntity.model(), EOObjectStoreCoordinator.defaultCoordinator());
+            EODatabaseContext context = EODatabaseContext.Factory.registeredDatabaseContextForModel(destEntity.model(), EOObjectStoreCoordinator.defaultCoordinator());
             EOSQLExpressionFactory factory = context.database().adaptor().expressionFactory();
 
             EOSQLExpression subExpression = factory.expressionForEntity(destEntity);

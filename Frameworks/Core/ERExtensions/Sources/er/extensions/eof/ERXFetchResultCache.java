@@ -1,5 +1,7 @@
 package er.extensions.eof;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EODatabase;
@@ -10,7 +12,6 @@ import com.webobjects.eocontrol.EOFaultHandler;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.foundation.ERXExpiringCache;
@@ -60,7 +61,7 @@ public class ERXFetchResultCache {
 				NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>(gids.count());
 				EODatabase database = dbc.database();
 				for (EOGlobalID gid : gids) {
-					NSDictionary snapshotForGlobalID = database.snapshotForGlobalID(gid);
+					Map<String, Object> snapshotForGlobalID = database.snapshotForGlobalID(gid);
 					if(snapshotForGlobalID == null || dbc.snapshotForGlobalID(gid, ec.fetchTimestamp()) == null) {
 						// not found with recent timestamp
 						return null;

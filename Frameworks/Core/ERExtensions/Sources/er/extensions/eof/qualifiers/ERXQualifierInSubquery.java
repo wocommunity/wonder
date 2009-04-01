@@ -190,7 +190,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 		// EOAdaptor.adaptorWithModel(e.entity().model()).expressionFactory();
 		// as this creates a
 		//
-		EODatabaseContext context = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), EOObjectStoreCoordinator.defaultCoordinator());
+		EODatabaseContext context = EODatabaseContext.Factory.registeredDatabaseContextForModel(entity.model(), EOObjectStoreCoordinator.defaultCoordinator());
 		EOSQLExpressionFactory factory = context.database().adaptor().expressionFactory();
 
 		NSArray subAttributes = destinationAttName != null ? new NSArray(entity.attributeNamed(destinationAttName)) : entity.primaryKeyAttributes();

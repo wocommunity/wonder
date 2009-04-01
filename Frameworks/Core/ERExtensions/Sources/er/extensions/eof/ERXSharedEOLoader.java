@@ -74,7 +74,7 @@ public class ERXSharedEOLoader {
     // EOF's sharedObjectLoading via a call to EODatabaseContext.
     public static void patchSharedEOLoading() {
         if (_defaultLoader == null) {
-            EODatabaseContext.setSharedObjectLoadingEnabled(false);
+            EODatabaseContext.SharedObjectLoader.setSharedObjectLoadingEnabled(false);
             _defaultLoader = new ERXSharedEOLoader();
             ERXRetainer.retain(_defaultLoader); // Needs to be retained on the objC side to recieve notifications.
             log.debug("Shared EO loading patch installed.");

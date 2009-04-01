@@ -137,7 +137,7 @@ public class ERXSQLHelper {
 		}
 
 		if (dbc == null) {
-			dbc = (EODatabaseContext) _NSUtilities.instantiateObject(EODatabaseContext.contextClassToRegister(), new Class[] { com.webobjects.eoaccess.EODatabase.class }, new Object[] { new EODatabase(model) }, true, false);
+			dbc = _NSUtilities.instantiateObject(EODatabaseContext.Factory.contextClassToRegister(), new Class[] { com.webobjects.eoaccess.EODatabase.class }, new Object[] { EODatabase.Factory.newDatabaseForModel(model) }, true, false);
 			coordinator.addCooperatingObjectStore(dbc);
 		}
 		return dbc;

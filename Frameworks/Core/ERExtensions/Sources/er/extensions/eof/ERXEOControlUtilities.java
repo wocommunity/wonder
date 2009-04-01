@@ -385,7 +385,7 @@ public class ERXEOControlUtilities {
         EOEditingContext ec = eo.editingContext();
         EOModel model = EOUtilities.entityForObject(ec, eo).model();
         EOGlobalID gid = ec.globalIDForObject(eo);
-        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        EODatabaseContext dbc = EODatabaseContext.Factory.registeredDatabaseContextForModel(model, ec);
         EODatabase database = dbc.database();
         ERXEOControlUtilities.clearSnapshotForRelationshipNamedInDatabase(eo, relationshipName, database);
     }
@@ -630,7 +630,7 @@ public class ERXEOControlUtilities {
     public static Object _aggregateFunctionWithQualifierAndAggregateAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute aggregateAttribute) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         EOModel model = entity.model();
-        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        EODatabaseContext dbc = EODatabaseContext.Factory.registeredDatabaseContextForModel(model, ec);
         Object aggregateValue = null;
         
         dbc.lock();
@@ -638,7 +638,7 @@ public class ERXEOControlUtilities {
             aggregateValue = __aggregateFunctionWithQualifierAndAggregateAttribute(dbc, ec, entityName, qualifier, aggregateAttribute);
         }
         catch (Exception localException) {
-            if (dbc._isDroppedConnectionException(localException)) {
+            if (dbc.database().adaptor().isDroppedConnectionException(localException)) {
                 try {
                     dbc.database().handleDroppedConnection();
                     aggregateValue = __aggregateFunctionWithQualifierAndAggregateAttribute(dbc, ec, entityName, qualifier, aggregateAttribute);
@@ -830,7 +830,7 @@ public class ERXEOControlUtilities {
         NSArray sharedEos = (NSArray)sharedEC.objectsByEntityName().objectForKey(entityName);
         if (sharedEos == null) { //call registeredDatabaseContextForModel() to trigger loading the model's shared EOs (if set to happen automatically), then try again
             EOEntity entity = ERXEOAccessUtilities.entityNamed(sharedEC, entityName);
-            EODatabaseContext.registeredDatabaseContextForModel(entity.model(), sharedEC);
+            EODatabaseContext.Factory.registeredDatabaseContextForModel(entity.model(), sharedEC);
             sharedEos = (NSArray)sharedEC.objectsByEntityName().objectForKey(entityName);
         }
 
@@ -980,7 +980,7 @@ public class ERXEOControlUtilities {
     @SuppressWarnings("unchecked")
 	public static NSDictionary<String, Object> newPrimaryKeyDictionaryForEntityNamed(EOEditingContext ec, String entityName) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-        EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+        EODatabaseContext dbContext = EODatabaseContext.Factory.registeredDatabaseContextForModel(entity.model(), ec);
         NSDictionary<String, Object> primaryKey = null;
         try {
             dbContext.lock();
@@ -1002,7 +1002,7 @@ public class ERXEOControlUtilities {
 	            }
 	            catch (Exception localException) {
 	            	if (willRetryAfterHandlingDroppedConnection && 
-	            			dbContext._isDroppedConnectionException(localException)) {
+	            			dbContext.database().adaptor().isDroppedConnectionException(localException)) {
 	                    try {
 	                    	dbContext.database().handleDroppedConnection();
 	                        

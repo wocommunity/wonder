@@ -9,6 +9,9 @@ package er.extensions.foundation;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.eocontrol.EOKeyValueCoding;
@@ -193,25 +196,24 @@ public class ERXDictionaryUtilities extends Object {
       * @param dict1 the first dictionary
       * @param dict2 the second dictionary
       */
-     public static void removeMatchingEntries(NSMutableDictionary dict1, NSMutableDictionary dict2) {
+     public static <K, V> void removeMatchingEntries(Map<K, V> dict1, Map<K, V> dict2) {
          ERXDictionaryUtilities._removeMatchingEntries(dict1, dict2, true);
      }
 
-     public static void _removeMatchingEntries(NSMutableDictionary snapshot1, NSMutableDictionary snapshot2, boolean removeInverse) {
-         Enumeration keys1Enum = snapshot1.allKeys().immutableClone().objectEnumerator();
-         while (keys1Enum.hasMoreElements()) {
-             String key = (String)keys1Enum.nextElement();
-             Object value1 = snapshot1.objectForKey(key);
-             Object value2 = snapshot2.objectForKey(key);
+     public static <K, V> void _removeMatchingEntries(Map<K, V> snapshot1, Map<K, V> snapshot2, boolean removeInverse) {
+    	 Set<K> keys = new HashSet<K>(snapshot1.keySet());
+    	 for (K key : keys) {
+    		 V value1 = snapshot1.get(key);
+             V value2 = snapshot2.get(key);
              boolean value1IsNull = (value1 == null || value1 == EOKeyValueCoding.NullValue || value1 == NSKeyValueCoding.NullValue);
              boolean value2IsNull = (value2 == null || value2 == EOKeyValueCoding.NullValue || value2 == NSKeyValueCoding.NullValue);
              if (value1IsNull && value2IsNull) {
-                 snapshot1.removeObjectForKey(key);
-                 snapshot2.removeObjectForKey(key);
+                 snapshot1.remove(key);
+                 snapshot2.remove(key);
              }
              else if (value1 != null && value1.equals(value2)) {
-                 snapshot1.removeObjectForKey(key);
-                 snapshot2.removeObjectForKey(key);
+                 snapshot1.remove(key);
+                 snapshot2.remove(key);
              }
          }
          // flip around the comparison and remove again

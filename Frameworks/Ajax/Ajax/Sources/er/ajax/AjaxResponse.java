@@ -1,5 +1,6 @@
 package er.ajax;
 
+import java.io.IOException;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOActionResults;
@@ -57,12 +58,13 @@ public class AjaxResponse extends ERXResponse {
 			String originalSenderID = _context.senderID();
 			_context._setSenderID("");
 			try {
-				StringBuilder content = _content;
-				_content = new StringBuilder();
+				String originalContent = contentString();
+				_initContent();
+				//_content = new WOCharacterMessageBuilder();
 				NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_request);
 				userInfo.setObjectForKey(Boolean.TRUE, AjaxResponse.AJAX_UPDATE_PASS);
 				WOActionResults woactionresults = WOApplication.application().invokeAction(_request, _context);
-				_content.append(content);
+				appendContentString(originalContent);
 				if (_responseAppenders != null) {
 					Enumeration responseAppendersEnum = _responseAppenders.objectEnumerator();
 					while (responseAppendersEnum.hasMoreElements()) {
@@ -70,7 +72,7 @@ public class AjaxResponse extends ERXResponse {
 						responseAppender.appendToResponse(this, _context);
 					}
 				}
-				int length = content.length();
+				long length = contentLength();
 				if (length == 0) {
 				  setStatus(HTTP_STATUS_INTERNAL_ERROR);
 					Ajax.log.warn("You performed an Ajax update, but no response was generated. A common cause of this is that you spelled your updateContainerID wrong.  You specified a container ID '" + AjaxUpdateContainer.updateContainerID(_request) + "'."); 

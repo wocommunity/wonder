@@ -4,8 +4,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -568,6 +571,19 @@ public class ERXArrayUtilities extends Object {
         return result;
     }
 
+    @SuppressWarnings("cast")
+	public static <T> List<T> listByAddingObject(List<T> list, T obj) {
+    	try {
+	    	List<T> newList = (List<T>)list.getClass().newInstance();
+	    	newList.addAll(list);
+	    	newList.add(obj);
+	    	return newList;
+    	}
+    	catch (Throwable t) {
+    		throw new RuntimeException("Failed to extend the given list (" + list.getClass().getName() + ") with the object '" + obj + "'.", t);
+    	}
+    }
+    
     /**
      * Subtracts the contents of one array from another.
      * The order of the array should be preseved.
@@ -576,12 +592,30 @@ public class ERXArrayUtilities extends Object {
      * @param minus array of values to remove from the main array
      * @return array after performing subtraction.
      */
-    public static NSArray arrayMinusArray(NSArray main, NSArray minus) {
-		NSSet minusSet = new NSSet(minus);
-		NSMutableArray mutableResult = new NSMutableArray(main.count()); 
-		Enumeration e = main.objectEnumerator();
+    public static <T> List<T> listMinusList(List<T> main, List<T> minus) {
+		Set<T> minusSet = new HashSet<T>(minus);
+		List<T> mutableResult = new ArrayList<T>(main.size());
+		for (T obj : main) {
+			if (! minusSet.contains(obj)) 
+				mutableResult.add(obj);
+		}
+		return mutableResult;
+    }
+
+    /**
+     * Subtracts the contents of one array from another.
+     * The order of the array should be preseved.
+     * 
+     * @param main array to have values removed from it.
+     * @param minus array of values to remove from the main array
+     * @return array after performing subtraction.
+     */
+    public static <T> NSArray<T> arrayMinusArray(NSArray<T> main, NSArray<T> minus) {
+		NSSet<T> minusSet = new NSSet<T>(minus);
+		NSMutableArray mutableResult = new NSMutableArray<T>(main.count()); 
+		Enumeration<T> e = main.objectEnumerator();
 		while (e.hasMoreElements()) {
-			Object obj = e.nextElement();
+			T obj = e.nextElement();
 			if (! minusSet.containsObject(obj)) 
 				mutableResult.addObject(obj);
 		}

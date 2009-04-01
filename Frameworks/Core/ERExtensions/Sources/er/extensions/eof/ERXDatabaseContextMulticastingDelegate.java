@@ -1,6 +1,7 @@
 package er.extensions.eof;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabase;
@@ -15,7 +16,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXMulticastingDelegate;
 
 
@@ -69,20 +69,20 @@ public class ERXDatabaseContextMulticastingDelegate extends ERXMulticastingDeleg
      */
     public static void addDefaultDelegate(Object newDelegate) {
         ERXDatabaseContextMulticastingDelegate multiDelegate;
-         if (EODatabaseContext.defaultDelegate() == null) {
+         if (EODatabaseContext.Factory.defaultDelegate() == null) {
              multiDelegate = new ERXDatabaseContextMulticastingDelegate();
          }
          else {
-             if (EODatabaseContext.defaultDelegate() instanceof ERXDatabaseContextMulticastingDelegate) {
-                    multiDelegate = (ERXDatabaseContextMulticastingDelegate)EODatabaseContext.defaultDelegate();
+             if (EODatabaseContext.Factory.defaultDelegate() instanceof ERXDatabaseContextMulticastingDelegate) {
+                    multiDelegate = (ERXDatabaseContextMulticastingDelegate)EODatabaseContext.Factory.defaultDelegate();
              }
              else {
                  multiDelegate = new ERXDatabaseContextMulticastingDelegate();
-                 multiDelegate.addDelegate(EODatabaseContext.defaultDelegate());
+                 multiDelegate.addDelegate(EODatabaseContext.Factory.defaultDelegate());
              }
          }
          multiDelegate.addDelegate(newDelegate);
-         EODatabaseContext.setDefaultDelegate(multiDelegate);
+         EODatabaseContext.Factory.setDefaultDelegate(multiDelegate);
     }
 
 
@@ -204,7 +204,7 @@ public class ERXDatabaseContextMulticastingDelegate extends ERXMulticastingDeleg
 		 	
 		 	// Get the snapshot if it has not expired.  cachedSnapshot will be null if it has expired
 		 	// If not null, it should be the same as the existingSnapshot parameter
-		 	NSDictionary cachedSnapshot = dbCtxt.database().snapshotForGlobalID(gid, ec.fetchTimestamp());
+		 	Map<String, Object> cachedSnapshot = dbCtxt.database().snapshotForGlobalID(gid, ec.fetchTimestamp());
 		
 		 	// If we are refreshing or the snapshot in the cache has timed out, but the fetched row 
 		 	// matches the cached snapshot, reset the time stamp by recording the existing snapshot again.

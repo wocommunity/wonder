@@ -6,6 +6,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -68,20 +70,18 @@ public abstract class ERXRemoteSynchronizer {
 	private static final int STRING_TYPE = 6;
 
 	private IChangeListener _listener;
-	private NSSet _includeEntityNames;
-	private NSSet _excludeEntityNames;
+	private NSSet<String> _includeEntityNames;
+	private NSSet<String> _excludeEntityNames;
 
 	public ERXRemoteSynchronizer(IChangeListener listener) {
 		_listener = listener;
 		String includeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.includeEntities");
-		NSArray includeEntityNamesArray = null;
 		if (includeEntityNames != null) {
-			_includeEntityNames = new NSSet(NSArray.componentsSeparatedByString(includeEntityNames, ",").toArray());
+			_includeEntityNames = new NSSet<String>(NSArray.componentsSeparatedByString(includeEntityNames, ","));
 		}
-		NSArray excludeEntityNamesArray = null;
 		String excludeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.excludeEntities");
 		if (excludeEntityNames != null) {
-			_excludeEntityNames = new NSSet(NSArray.componentsSeparatedByString(excludeEntityNames, ",").toArray());
+			_excludeEntityNames = new NSSet<String>(NSArray.componentsSeparatedByString(excludeEntityNames, ","));
 		}
 	}
 
@@ -89,7 +89,7 @@ public abstract class ERXRemoteSynchronizer {
 		int messageType = dis.readByte();
 		if (messageType == ERXRemoteSynchronizer.INSERT) {
 			EOGlobalID gid = readGID(dis);
-			ERXDatabase.SnapshotInserted change = new ERXDatabase.SnapshotInserted(gid, NSDictionary.EmptyDictionary);
+			ERXDatabase.SnapshotInserted change = new ERXDatabase.SnapshotInserted(gid, new HashMap<String, Object>());
 			if (log.isDebugEnabled()) {
 				log.info("Remote instance (" + remoteChange.identifier() + ") inserted " + change);
 			}
@@ -97,7 +97,7 @@ public abstract class ERXRemoteSynchronizer {
 		}
 		else if (messageType == ERXRemoteSynchronizer.UPDATE) {
 			EOGlobalID gid = readGID(dis);
-			ERXDatabase.SnapshotUpdated change = new ERXDatabase.SnapshotUpdated(gid, NSDictionary.EmptyDictionary);
+			ERXDatabase.SnapshotUpdated change = new ERXDatabase.SnapshotUpdated(gid, new HashMap<String, Object>());
 			if (log.isDebugEnabled()) {
 				log.info("Remote instance (" + remoteChange.identifier() + ") updated " + change);
 			}
@@ -105,7 +105,7 @@ public abstract class ERXRemoteSynchronizer {
 		}
 		else if (messageType == ERXRemoteSynchronizer.DELETE) {
 			EOGlobalID gid = readGID(dis);
-			ERXDatabase.SnapshotDeleted change = new ERXDatabase.SnapshotDeleted(gid, NSDictionary.EmptyDictionary);
+			ERXDatabase.SnapshotDeleted change = new ERXDatabase.SnapshotDeleted(gid, new HashMap<String, Object>());
 			if (log.isDebugEnabled()) {
 				log.info("Remote instance (" + remoteChange.identifier() + ") deleted " + change);
 			}
@@ -148,8 +148,8 @@ public abstract class ERXRemoteSynchronizer {
 		else if (cacheChange instanceof ERXDatabase.ToManySnapshotUpdated) {
 			dos.writeByte(ERXRemoteSynchronizer.TO_MANY_UPDATE);
 			ERXDatabase.ToManySnapshotUpdated toManyChange = (ERXDatabase.ToManySnapshotUpdated) cacheChange;
-			NSArray addedGIDs = toManyChange.addedGIDs();
-			NSArray removedGIDs = toManyChange.removedGIDs();
+			List<EOGlobalID> addedGIDs = toManyChange.addedGIDs();
+			List<EOGlobalID> removedGIDs = toManyChange.removedGIDs();
 			writeGID(dos, toManyChange.gid());
 			dos.writeUTF(toManyChange.name());
 			writeGIDs(dos, addedGIDs);
@@ -168,12 +168,11 @@ public abstract class ERXRemoteSynchronizer {
 		writeGID(dos, cacheChange.gid());
 	}
 
-	protected void writeGIDs(DataOutputStream dos, NSArray gids) throws IOException {
-		int count = (gids == null) ? 0 : gids.count();
+	protected void writeGIDs(DataOutputStream dos, List<EOGlobalID> gids) throws IOException {
+		int count = (gids == null) ? 0 : gids.size();
 		dos.writeByte(count);
-		if (count > 0) {
-			for (Enumeration gidsEnum = gids.objectEnumerator(); gidsEnum.hasMoreElements();) {
-				EOGlobalID gid = (EOGlobalID) gidsEnum.nextElement();
+		if (count > 0 && gids != null) {
+			for (EOGlobalID gid : gids) {
 				writeGID(dos, gid);
 			}
 		}

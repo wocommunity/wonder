@@ -5,10 +5,8 @@ import java.util.Map;
 import java.util.Stack;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableData;
 import com.webobjects.foundation.NSRange;
 
@@ -31,16 +29,7 @@ public class ERXResponse extends WOResponse {
 	}
 
 	private LinkedHashMap<String, Integer> marks;
-	private Stack<Object> _contentStack;
-	
-	protected void __setContent(Object appendable) {
-		try {
-			WOMessage.class.getDeclaredField("_content").set(this, appendable);
-		}
-		catch (Throwable e) {
-			throw new NSForwardException(e);
-		}
-	}
+	private Stack<String> _contentStack;
 	
 	/**
 	 * Pushes a new _content onto the stack, so you can write to this response and capture the 
@@ -48,17 +37,10 @@ public class ERXResponse extends WOResponse {
 	 */
 	public void pushContent() {
 		if (_contentStack == null) {
-			_contentStack = new Stack<Object>();
+			_contentStack = new Stack<String>();
 		}
-		_contentStack.push(_content);
-		Object newContent;
-		try {
-			newContent = _content.getClass().newInstance();
-		}
-		catch (Throwable e) {
-			throw new NSForwardException(e);
-		}
-		__setContent(newContent);
+		_contentStack.push(contentString());
+		_initContent();
 	}
 
 	/**
@@ -70,11 +52,12 @@ public class ERXResponse extends WOResponse {
 		if (_contentStack == null || _contentStack.size() == 0) {
 			throw new IllegalStateException("You attempted to popContent off of an empty stack.");
 		}
-		Object oldAppendable = _content;
-		Object appendable = _contentStack.pop();
-		__setContent(appendable);
+		String oldAppendable = contentString();
+		String appendable = _contentStack.pop();
+		_initContent();
+		appendContentString(appendable);
 		if (append) {
-			appendContentString(oldAppendable.toString());
+			appendContentString(oldAppendable);
 		}
 	}
 

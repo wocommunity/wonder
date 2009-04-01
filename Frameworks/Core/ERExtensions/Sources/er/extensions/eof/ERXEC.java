@@ -631,10 +631,10 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	/** Overriden to support autoLocking. */
-	public void recordObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid) {
+	public EOEnterpriseObject recordObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid) {
 		boolean wasAutoLocked = autoLock("recordObject");
 		try {
-			super.recordObject(eoenterpriseobject, eoglobalid);
+			return super.recordObject(eoenterpriseobject, eoglobalid);
 		}
 		finally {
 			autoUnlock(wasAutoLocked);

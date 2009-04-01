@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 
-public class ERXDatabaseContext extends EODatabaseContext {
+public class ERXDatabaseContext extends EODatabaseContext.Implementation {
 	private static ThreadLocal _fetching = new ThreadLocal();
 
 	public ERXDatabaseContext(EODatabase database) {
@@ -30,6 +30,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 		_fetching.set(Boolean.valueOf(fetching));
 	}
 
+	@Override
 	public NSArray objectsForSourceGlobalID(EOGlobalID gid, String name, EOEditingContext context) {
 		NSArray results;
 		boolean fetching = isFetching();
@@ -47,6 +48,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 		return results;
 	}
 
+	@Override
 	public NSArray _objectsWithFetchSpecificationEditingContext(EOFetchSpecification fetchSpec, EOEditingContext context) {
 		NSArray results;
 		boolean fetching = isFetching();
@@ -65,6 +67,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 	}
 	
 
+	@Override
 	public void _verifyNoChangesToReadonlyEntity(EODatabaseOperation dbOp) {
 		EOEntity entity = dbOp.entity();
 		if(entity.isReadOnly()) {

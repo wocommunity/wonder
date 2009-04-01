@@ -9,12 +9,12 @@ import java.net.URLDecoder;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODeployedBundle;
-import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSNotificationCenter;

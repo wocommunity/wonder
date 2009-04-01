@@ -8,6 +8,7 @@ import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EODatabaseOperation;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -43,6 +44,7 @@ public class ERXAdaptorOperationWrapper implements Serializable {
     transient EOAdaptorOperation operation;
     String                       entityName;
     private int                  operator;
+    private EODatabaseOperation  databaseOperation;
     private NSArray              attributes;
     private NSDictionary         changedValues;
     private EOQualifier          qualifier;
@@ -52,6 +54,7 @@ public class ERXAdaptorOperationWrapper implements Serializable {
         operation = aop;
         entityName = aop.entity().name();
         operator = aop.adaptorOperator();
+        databaseOperation = aop.databaseOperation();
         attributes = aop.attributes();
         changedValues = aop.changedValues();
         qualifier = aop.qualifier();
@@ -60,7 +63,7 @@ public class ERXAdaptorOperationWrapper implements Serializable {
     public EOAdaptorOperation operation() {
         if (operation == null) {
             EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
-            operation = new EOAdaptorOperation(entity);
+            operation = EOAdaptorOperation.Factory.newAdaptorOperation(entity, databaseOperation);
             operation.setAdaptorOperator(operator);
             operation.setAttributes(attributes);
             operation.setChangedValues(changedValues);

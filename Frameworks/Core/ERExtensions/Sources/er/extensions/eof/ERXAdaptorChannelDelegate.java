@@ -115,7 +115,7 @@ public class ERXAdaptorChannelDelegate {
 	public void dataBaseChannelNeeded(NSNotification n) {
 		if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.enabled", false)) {
 			EODatabaseContext context = (EODatabaseContext) n.object();
-			EODatabaseChannel channel = new EODatabaseChannel(context);
+			EODatabaseChannel channel = EODatabaseChannel.Factory.newDatabaseChannel(context);
 			context.registerChannel(channel);
 			channel.adaptorChannel().setDelegate(this);
 		}

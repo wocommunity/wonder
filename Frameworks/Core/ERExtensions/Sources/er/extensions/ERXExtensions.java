@@ -194,7 +194,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		}            
     		ERXExtensions.configureAdaptorContextRapidTurnAround(this);
     		ERXJDBCAdaptor.registerJDBCAdaptor();
-    		EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+    		EODatabaseContext.Factory.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
     		ERXAdaptorChannelDelegate.setupDelegate();
     		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sharedEditingContextWasInitialized", ERXConstant.NotificationClassArray), EOSharedEditingContext.DefaultSharedEditingContextWasInitializedNotification, null);
 
@@ -258,7 +258,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	if(c == null) {
         		throw new IllegalStateException("er.extensions.ERXDatabaseContext.className not found: " + className);
         	}
-        	EODatabaseContext.setContextClassToRegister(c);
+        	EODatabaseContext.Factory.setContextClassToRegister(c);
         }
 		ERXObjectStoreCoordinatorPool.initializeIfNecessary();
     }

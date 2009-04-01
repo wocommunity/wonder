@@ -69,9 +69,9 @@ public class ERXRuntimeUtilities {
 				Object value;
 				// this one is a little bit heavyweight...
 				// value = NSPropertyListSerialization.stringFromPropertyList(dict);
-				value = dict.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+				value = dict.objectForKey(EODatabaseContext.Implementation.FailedDatabaseOperationKey);
 				if (value != null) {
-					extraInfo.setObjectForKey(value.toString(), EODatabaseContext.FailedDatabaseOperationKey);
+					extraInfo.setObjectForKey(value.toString(), EODatabaseContext.Implementation.FailedDatabaseOperationKey);
 				}
 				value = dict.objectForKey(EOAdaptorChannel.AdaptorFailureKey);
 				if (value != null) {

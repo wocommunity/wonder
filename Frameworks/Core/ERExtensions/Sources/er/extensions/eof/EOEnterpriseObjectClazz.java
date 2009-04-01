@@ -244,7 +244,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      */
     public NSArray newPrimaryKeys(EOEditingContext ec, int i) {
         EOEntity entity = entity(ec);
-        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+        EODatabaseContext dbc = EODatabaseContext.Factory.registeredDatabaseContextForModel(entity.model(), ec);
         dbc.lock();
         try {
         	return dbc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity);

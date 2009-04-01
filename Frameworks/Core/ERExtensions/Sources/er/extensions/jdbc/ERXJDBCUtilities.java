@@ -816,7 +816,7 @@ public class ERXJDBCUtilities {
 	 *         "PostgreSQL")
 	 */
 	public static String databaseProductName(EOModel model) {
-		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
+		EODatabaseContext databaseContext = EODatabaseContext.Factory.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
 		EOAdaptor adaptor = databaseContext.database().adaptor();
 		String databaseProductName;
 		if (adaptor instanceof JDBCAdaptor) {

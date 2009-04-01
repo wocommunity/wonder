@@ -431,8 +431,8 @@ public class ERXModelGroup extends EOModelGroup {
 		 * 
 		 * @param attributes
 		 */
-		private NSArray namesForAttributes(NSArray attributes) {
-			return (NSArray) attributes.valueForKey("name");
+		private NSArray<String> namesForAttributes(NSArray attributes) {
+			return (NSArray<String>) attributes.valueForKey("name");
 		}
 
 		/**
@@ -459,7 +459,7 @@ public class ERXModelGroup extends EOModelGroup {
 			if (attributes.count() != 0) {
 				NSArray keys = namesForAttributes(attributes);
 				NSDictionary temp = new NSDictionary(attributes, keys);
-				_prototypesByName.addEntriesFromDictionary(temp);
+				_prototypesByName.putAll(temp);
 			}
 		}
 
@@ -492,7 +492,9 @@ public class ERXModelGroup extends EOModelGroup {
 				}
 				addAttributesToPrototypesCache(adaptorPrototypes);
 				NSArray prototypesToHide = attributesFromEntity(_group.entityNamed("EOPrototypesToHide"));
-				_prototypesByName.removeObjectsForKeys(namesForAttributes(prototypesToHide));
+				for (String key : namesForAttributes(prototypesToHide)) {
+					_prototypesByName.remove(key);
+				}
 
 				String plugin = null;
 				if (adaptor instanceof JDBCAdaptor && !name().equalsIgnoreCase("erprototypes")) {

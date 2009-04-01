@@ -8,8 +8,10 @@ package er.extensions.eof;
 
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Level;
@@ -250,7 +252,7 @@ public class ERXEOAccessUtilities {
     // as to execute
     // sql in a non-blocking fashion.
     public static void evaluateSQLWithEntity(EOEditingContext ec, EOEntity entity, String exp) {
-        EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+        EODatabaseContext dbContext = EODatabaseContext.Factory.registeredDatabaseContextForModel(entity.model(), ec);
         dbContext.lock();
         try {
 	        EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
@@ -317,14 +319,14 @@ public class ERXEOAccessUtilities {
      */
     public static NSArray rawRowsForSQLExpression(EOEditingContext ec, EOModel model, EOSQLExpression expression, NSArray<EOAttribute> attributes) {
         NSArray results = NSArray.EmptyArray;
-        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        EODatabaseContext dbc = EODatabaseContext.Factory.registeredDatabaseContextForModel(model, ec);
         
         dbc.lock();
         try {
             results = _rawRowsForSQLExpression(dbc, expression, attributes);
         } 
         catch (Exception localException) {
-            if (dbc._isDroppedConnectionException(localException)) {
+            if (dbc.database().adaptor().isDroppedConnectionException(localException)) {
                 try {
                     dbc.database().handleDroppedConnection();
                     results = _rawRowsForSQLExpression(dbc, expression, attributes);
@@ -391,7 +393,7 @@ public class ERXEOAccessUtilities {
     	EOSQLExpression expression = null;
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
         EOModel model = entity.model();
-        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        EODatabaseContext dbc = EODatabaseContext.Factory.registeredDatabaseContextForModel(model, ec);
         dbc.lock();
         try {
         	ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
@@ -422,7 +424,7 @@ public class ERXEOAccessUtilities {
     	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
     	EOModel model = entity.model();
 
-    	EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+    	EODatabaseContext dbc = EODatabaseContext.Factory.registeredDatabaseContextForModel(model, ec);
     	int results = 0;
 
     	dbc.lock();
@@ -430,7 +432,7 @@ public class ERXEOAccessUtilities {
     		results = ERXSQLHelper.newSQLHelper(ec, model.name()).rowCountForFetchSpecification(ec, spec);
     	}
     	catch (Exception localException) {
-    		if (dbc._isDroppedConnectionException(localException)) {
+    		if (dbc.database().adaptor().isDroppedConnectionException(localException)) {
     			try {
     				dbc.database().handleDroppedConnection();
     				results = ERXSQLHelper.newSQLHelper(ec, model.name()).rowCountForFetchSpecification(ec, spec);
@@ -802,7 +804,7 @@ public class ERXEOAccessUtilities {
             String eType = (String)userInfo.objectForKey(EOAdaptorChannel.AdaptorFailureKey);
             if (EOAdaptorChannel.AdaptorOptimisticLockingFailure.equals(eType)) {
                 EOAdaptorOperation adaptorOp = (EOAdaptorOperation) userInfo.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
-                EODatabaseOperation databaseOp = (EODatabaseOperation) userInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+                EODatabaseOperation databaseOp = (EODatabaseOperation) userInfo.objectForKey(EODatabaseContext.Implementation.FailedDatabaseOperationKey);
                 wasHandled = (adaptorOp != null && databaseOp != null);
             } else {
                 log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey in " + e + ": " + userInfo);
@@ -856,7 +858,7 @@ public class ERXEOAccessUtilities {
      */
     public static NSDictionary primaryKeyDictionaryForEntity(EOEditingContext ec, String entityName) {
     	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-    	EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+    	EODatabaseContext dbContext = EODatabaseContext.Factory.registeredDatabaseContextForModel(entity.model(), ec);
     	NSDictionary primaryKey = null;
     	dbContext.lock();
     	try {
@@ -976,7 +978,7 @@ public class ERXEOAccessUtilities {
      */
     public static EODatabaseContext databaseContextForEntityNamed(EOObjectStoreCoordinator osc, String entityName) {
         EOModel model = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model();
-        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, osc);
+        EODatabaseContext dbc = EODatabaseContext.Factory.registeredDatabaseContextForModel(model, osc);
         return dbc;
     }
 
@@ -1345,7 +1347,7 @@ public class ERXEOAccessUtilities {
 
     public static EOEnterpriseObject refetchFailedObject(EOEditingContext ec, EOGeneralAdaptorException e) {
         EOAdaptorOperation adaptorOp = (EOAdaptorOperation) e.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
-        EODatabaseOperation databaseOp = (EODatabaseOperation) e.userInfo().objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+        EODatabaseOperation databaseOp = (EODatabaseOperation) e.userInfo().objectForKey(EODatabaseContext.Implementation.FailedDatabaseOperationKey);
         NSDictionary dbSnapshot = databaseOp.dbSnapshot();
         EOEntity entity = adaptorOp.entity();
         String entityName = entity.name();
@@ -1791,7 +1793,7 @@ public class ERXEOAccessUtilities {
  			EOModel model = (EOModel) modelsEnum.nextElement();
  			EODatabaseContext databaseContext = null;
  			try {
- 				databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, editingContext);
+ 				databaseContext = EODatabaseContext.Factory.registeredDatabaseContextForModel(model, editingContext);
  			}
  			catch (IllegalStateException e) {
  				log.warn("Model " + model.name() + " failed: " + e.getMessage());
@@ -1801,21 +1803,19 @@ public class ERXEOAccessUtilities {
  				try {
  					EODatabase database = databaseContext.database();
  					if (!verifiedDatabases.containsObject(database)) {
- 						Enumeration gidEnum = database.snapshots().keyEnumerator();
- 						while (gidEnum.hasMoreElements()) {
- 							EOGlobalID gid = (EOGlobalID) gidEnum.nextElement();
+ 						for (EOGlobalID gid : database.snapshots().keySet()) {
  							if (gid instanceof EOKeyGlobalID) {
  								EOEnterpriseObject eo = null;
  								EOKeyGlobalID keyGID = (EOKeyGlobalID) gid;
  								String entityName = keyGID.entityName();
  								EOEntity entity = modelGroup.entityNamed(entityName);
- 								NSDictionary snapshot = database.snapshotForGlobalID(gid);
+ 								Map<String, Object> snapshot = database.snapshotForGlobalID(gid);
  								if (snapshot != null) {
  									EOQualifier gidQualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(gid));
  									EOFetchSpecification gidFetchSpec = new EOFetchSpecification(entityName, gidQualifier, null);
 
  									NSMutableDictionary databaseSnapshotClone;
- 									NSMutableDictionary memorySnapshotClone = snapshot.mutableClone();
+ 									Map<String, Object> memorySnapshotClone = new HashMap<String, Object>(snapshot);
  									EOAdaptorContext context;
  									EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
  									channel.openChannel();
@@ -1836,7 +1836,7 @@ public class ERXEOAccessUtilities {
  										// NSMutableDictionary refreshedSnapshotClone =
  										// database.snapshotForGlobalID(gid).mutableClone();
  										ERXDictionaryUtilities.removeMatchingEntries(memorySnapshotClone, databaseSnapshotClone);
- 										if (databaseSnapshotClone.count() > 0 || memorySnapshotClone.count() > 0) {
+ 										if (databaseSnapshotClone.count() > 0 || memorySnapshotClone.size() > 0) {
  											mismatches.addObject(gid + " doesn't match the database: original = " + memorySnapshotClone + "; database = " + databaseSnapshotClone);
  										}
  										eo = (EOEnterpriseObject) editingContext.objectsWithFetchSpecification(gidFetchSpec).objectAtIndex(0);
@@ -1848,10 +1848,10 @@ public class ERXEOAccessUtilities {
  									while (relationshipsEnum.hasMoreElements()) {
  										EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
  										String relationshipName = relationship.name();
- 										NSArray originalDestinationGIDs = database.snapshotForSourceGlobalID(keyGID, relationshipName);
+ 										List<EOGlobalID> originalDestinationGIDs = database.snapshotForSourceGlobalID(keyGID, relationshipName);
  										if (originalDestinationGIDs != null) {
  											NSMutableArray newDestinationGIDs = new NSMutableArray();
- 											EOQualifier qualifier = relationship.qualifierWithSourceRow(database.snapshotForGlobalID(keyGID));
+ 											EOQualifier qualifier = relationship.qualifierWithSourceRow(new NSDictionary<String, Object>(database.snapshotForGlobalID(keyGID)));
  											EOFetchSpecification relationshipFetchSpec = new EOFetchSpecification(entityName, qualifier, null);
  											EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
  											channel.openChannel();
@@ -1875,12 +1875,12 @@ public class ERXEOAccessUtilities {
  												channel.cancelFetch();
  											}
 
- 											NSArray objectsNotInDatabase = ERXArrayUtilities.arrayMinusArray(originalDestinationGIDs, newDestinationGIDs);
- 											if (objectsNotInDatabase.count() > 0) {
+ 											List<EOGlobalID> objectsNotInDatabase = ERXArrayUtilities.listMinusList(originalDestinationGIDs, newDestinationGIDs);
+ 											if (objectsNotInDatabase.size() > 0) {
  												mismatches.addObject(gid + "." + relationshipName + " has entries not in the database: " + objectsNotInDatabase);
  											}
- 											NSArray objectsNotInMemory = ERXArrayUtilities.arrayMinusArray(newDestinationGIDs, originalDestinationGIDs);
- 											if (objectsNotInMemory.count() > 0) {
+ 											List<EOGlobalID> objectsNotInMemory = ERXArrayUtilities.listMinusList(newDestinationGIDs, originalDestinationGIDs);
+ 											if (objectsNotInMemory.size() > 0) {
  												mismatches.addObject(gid + "." + relationshipName + " is missing entries in the database: " + objectsNotInMemory);
  											}
  										}
