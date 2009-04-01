@@ -530,6 +530,9 @@ public class ERXQ {
 	 * @return an EOQualifier
 	 */
 	public static ERXOrQualifier in(String key, NSArray<?> values) {
+		if(values.count() == 0) {
+			return new ERXOrQualifier(new NSArray<EOQualifier>(EOQualifier.qualifierWithQualifierFormat("0=1", null))); 
+		}
 		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {
