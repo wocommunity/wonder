@@ -78,7 +78,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 
 
     /**
-     * Looks through the child components to local the AjaxTabbedPanelTabs that are controlled by this panel.
+     * Looks through the child components to locate the AjaxTabbedPanelTabs that are controlled by this panel.
      * Tabs without an explicit id attributed are assigned a calculated one.
      *
      * @param template the graph of elements passed to the constructor.
