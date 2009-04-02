@@ -54,7 +54,6 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
         }
     }
 
-
     /**
      * Creates the panes.
      */
@@ -76,8 +75,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 
             // The selected pane needs to have its content rendered when the page is first rendered.  After that
             // it is controlled by the user clicking tabs
-            if (isSelected(component) && content != null)
-            {
+            if (isSelected(component) && content != null) {
             	content.appendToResponse(aResponse, aContext);
             }
 
@@ -85,15 +83,34 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 
             // The selected pane needs to have its onLoad fired when the page is first rendered.  After that
             // it is fired by the user clicking tabs
-            if (isSelected(component) && content != null)
-            {
+            if (isSelected(component) && content != null) {
             	aResponse.appendContentString("<script>AjaxTabbedPanel.onLoad('");
             	aResponse.appendContentString((String)id().valueInComponent(component) + "_panel");
             	aResponse.appendContentString("');</script>\n");
             }
     	}
     }
-
+    
+    /** 
+     * Do nothing if not visible. 
+     */
+    public void takeValuesFromRequest(WORequest request, WOContext context)
+    {
+    	if (isVisble(context.component())) {
+    		super.takeChildrenValuesFromRequest(request, context);
+    	}
+    }
+    
+    /** 
+     * Do nothing if not visible. 
+     */
+    public WOActionResults invokeAction(WORequest request, WOContext context)
+    {
+    	if (isVisble(context.component())) {
+    		return super.invokeAction(request, context);
+    	}
+    	return null;
+    }
 
     /**
      *
@@ -103,8 +120,6 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     public boolean isSelected(WOComponent component) {
         return (isSelected != null) ? ((Boolean)isSelected.valueInComponent(component)).booleanValue() : false;
     }
-
-
 
     /**
      * If present and settable, sets the isSelected association to true for this tab when it selected and
@@ -119,11 +134,8 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     	}
     }
 
-
-
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 	}
-
 
 	/**
 	 * The pane content is rendered when an Ajax request is received.
@@ -146,7 +158,6 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 
 		return response;
 	}
-
 
 	/**
 	 * @param context WOContext response is being returned in
