@@ -245,14 +245,11 @@ public class AjaxDatePicker extends AjaxComponent {
      */
 	protected void addRequiredWebResources(WOResponse response) {
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "prototype.js");
-//		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "wonder.js");
-//		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "effects.js");
 		ERXResponseRewriter.addStylesheetResourceInHead(response, context(), "Ajax", "calendar.css");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "calendar.js");
-//		addStylesheetResourceInHead(response, "Ajax", "calendar.css");
-//		addScriptResourceInHead(response, "Ajax", "calendar.js");
+		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "date.js");
 	}
-
+	
 	/**
 	 * No action so nothing for us to handle.
 	 */

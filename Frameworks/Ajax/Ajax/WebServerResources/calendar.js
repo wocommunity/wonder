@@ -128,35 +128,22 @@ function date_to_string(date, format) {
   return result;
 }
 
+// CH this method is a total rewrite for Wonder
 /*
   Convert input date string to date (or undefined if not a date string).
-  The following date formats are supported:
-
-  - ISO date format: yyyy-mm-dd, for example '2001-12-25'
-  - d[ mmm[ yy[yy]]]: examples: '22', '22 feb', '22 feb 2003', '22 feb 03', '22 February 2003'
-  - d[/m/[yy[yy]]]: examples: '21', '21/7', '21/7/07', '21/7/2007'
-
+  All variations of format are supported.
 */
 function string_to_date(s) {
-  var result = undefined;
-  var today = new Date;
-  if (mo = s.match(/^\s*(\d{4})-(\d{1,2})-(\d{1,2})\s*$/)) {
-    // ISO date format 'yyyy-mm-dd'.
-    result = new Date(mo[1], Number(mo[2])-1, mo[3]);
-  }
-  else if (mo = s.match(/^\s*(\d{1,2})(?:(?:\s+|-)([a-zA-Z]{3,9})(?:(?:\s+|-)(\d{2}(?:\d{2})?))?)?\s*$/)) {
-    // 'd mmmm yyyy' format and abbreviations.
-    mo[2] = mo[2] ? calendar.month_numbers[mo[2].substr(0,3).toLowerCase()] : today.getMonth();
-    mo[3] = mo[3] || today.getFullYear();
-    result = new Date(mo[3], mo[2], mo[1]);
-  }
-  else if (mo = s.match(/^\s*(\d{1,2})(?:(?:\/)(\d{1,2})(?:(?:\/)(\d{2}(?:\d{2})?))?)?\s*$/)) {
-    // 'd/m/yyyy' format and abbreviations.
-    mo[2] = mo[2] ? Number(mo[2])-1 : today.getMonth();
-    mo[3] = mo[3] || today.getFullYear();
-    mo[3] = Number(mo[3]);
-    if (mo[3] < 99) mo[3] += 2000;
-    result = new Date(mo[3], mo[2], mo[1]);
+  var dateOrder = calendar.format;
+  if (!dateOrder) dateOrder = '%d %b %Y';  // Set default format.
+
+  dateOrder = dateOrder.replace(/%[ed]/,'D');
+  dateOrder = dateOrder.replace(/%[mbB]/,'M');
+  dateOrder = dateOrder.replace(/%[yY]/,'Y');
+
+  var result = Date.fromString(s, {order: dateOrder});
+  if (result == 'Invalid Date') {
+  	result = undefined;
   }
   return result;
 }
