@@ -95,6 +95,7 @@ PageWrapper: WOSwitchComponent {
 
 PropertyHasNullValueCheckBox: WOCheckBox {
     checked = isNullQueryCheckedForCurrentProperty;
+    onclick = "ERD2WQueryPage.toggleFormFieldsCorrespondingToNullQueryCheckbox(event);"
 }
 
 QueryForm: WOForm {
@@ -128,7 +129,7 @@ QueryTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 0;
 	cellspacing = 5;
-	elementName = "Table";
+	elementName = "table";
 }
 
 QueryTableHeaderRow: WOGenericContainer {
