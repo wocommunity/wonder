@@ -425,13 +425,15 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public static void configureAdaptorContext() {
         Boolean targetState = null;
-        if (adaptorLogger.isDebugEnabled() && !adaptorEnabled.booleanValue()) {
-            targetState = Boolean.TRUE;
-        } else if (!adaptorLogger.isDebugEnabled() && adaptorEnabled.booleanValue()) {
-            targetState = Boolean.FALSE;
-        }
-        if (targetState != null) {
-        	setAdaptorLogging(targetState.booleanValue());
+        if (adaptorLogger != null) {
+	        if (adaptorLogger.isDebugEnabled() && !adaptorEnabled.booleanValue()) {
+	            targetState = Boolean.TRUE;
+	        } else if (!adaptorLogger.isDebugEnabled() && adaptorEnabled.booleanValue()) {
+	            targetState = Boolean.FALSE;
+	        }
+	        if (targetState != null) {
+	        	setAdaptorLogging(targetState.booleanValue());
+	        }
         }
     }
 
@@ -455,11 +457,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     			NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
     		}
     	}
-    	if (targetState.booleanValue()) {
-    		adaptorLogger.info("Adaptor debug on");
-    	} else {
-    		adaptorLogger.info("Adaptor debug off");
-    	}
+    	if (adaptorLogger != null) {
+	    	if (targetState.booleanValue()) {
+	    		adaptorLogger.info("Adaptor debug on");
+	    	} else {
+	    		adaptorLogger.info("Adaptor debug off");
+	    	}
+    	}	
     	adaptorEnabled = targetState;
    }
 
