@@ -449,7 +449,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     @Override
     public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
       String clause = _columnCreationClauseForAttribute(attribute);
-      return new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add " + clause));
+      return new NSArray(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add " + clause));
     }
 
 /*
