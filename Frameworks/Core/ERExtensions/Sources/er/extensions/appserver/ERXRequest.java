@@ -145,8 +145,10 @@ public  class ERXRequest extends WORequest {
     		String requestHandlerKey = (String)valueForKeyPath("_uriDecomposed.requestHandlerKey");
     		if (WOApplication.application().resourceRequestHandlerKey().equals(requestHandlerKey)) {
     			String requestHandlerPath = (String)valueForKeyPath("_uriDecomposed.requestHandlerPath");
-        		requestHandlerPath = "file:/" +  requestHandlerPath.substring("wodata=/".length());
-    			result = requestHandlerPath.replace('+', ' ');
+    			if(requestHandlerPath != null) {
+    				requestHandlerPath = "file:/" +  requestHandlerPath.substring("wodata=/".length());
+    				result = requestHandlerPath.replace('+', ' ');
+    			}
     		}
     	}
 
