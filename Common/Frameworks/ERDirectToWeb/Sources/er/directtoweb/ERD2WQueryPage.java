@@ -28,6 +28,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.ERXDisplayGroup;
 import er.extensions.ERXValueUtilities;
+import er.extensions.ERXResponseRewriter;
 
 import java.util.Enumeration;
 
@@ -137,9 +138,13 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         saveQueryBindings();
     }
 
-    public void appendToResponse(WOResponse arg0, WOContext arg1) {
+    public void appendToResponse(WOResponse response, WOContext context) {
         loadQueryBindings();
-        super.appendToResponse(arg0, arg1);
+        super.appendToResponse(response, context);
+        
+        if (ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("enableQueryForNullValues"), false)) {
+            ERXResponseRewriter.addScriptResourceInHead(response, context, "ERDirectToWeb", "ERD2WQueryPage.js");
+        }
     }
 
     protected void saveQueryBindings() {
@@ -397,10 +402,9 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
             for (Enumeration keysEnum = displayPropertyKeys().objectEnumerator(); keysEnum.hasMoreElements();) {
                 String key = (String)keysEnum.nextElement();
                 setPropertyKey(key);
-                Object allowsNull = d2wContext.valueForKey("allowsNull");   // allowsNull for attributes
-                Object isMandatory = d2wContext.valueForKey("isMandatory"); // isMandatory for relationships
-                if ((allowsNull != null && ERXValueUtilities.booleanValue(allowsNull)) ||
-                    (isMandatory != null && !ERXValueUtilities.booleanValue(isMandatory))) {
+
+                Object isMandatory = d2wContext.valueForKey("isMandatory");
+                if (isMandatory != null && !ERXValueUtilities.booleanValue(isMandatory)) {
                     array.addObject(key);
                 }
             }
