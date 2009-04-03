@@ -710,7 +710,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 			catch (IOException e) {
 				// AK AK TODO: Auto-generated catch block
-				log.error(e, e);
+				log.error("Error in processing jar: "+ jar, e);
 			}
 		}
 
