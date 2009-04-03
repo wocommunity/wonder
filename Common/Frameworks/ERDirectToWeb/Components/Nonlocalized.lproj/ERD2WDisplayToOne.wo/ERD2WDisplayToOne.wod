@@ -1,6 +1,6 @@
 String: WOHyperlink {
 	action = toOneAction;
-	disabled = d2wContext.disabled;
+	disabled = disabled;
 	string = toOneDescription;
 	target = target;
 }

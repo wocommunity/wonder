@@ -8,19 +8,25 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayToOne;
-import com.webobjects.directtoweb.D2WContext;
+
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXLocalizer;
 
 /**
  * Same as original except allows display of noSelectionString if relationship is null.<br />
- * 
+ * Also, links are disabled if no object exists.
  */
 
 public class ERD2WDisplayToOne extends D2WDisplayToOne {
 
     public ERD2WDisplayToOne(WOContext context) { super(context); }
-    
+
     public Object toOneDescription() {
         Object description = super.toOneDescription();
-        return description != null ? description : d2wContext().valueForKey("noSelectionString");
+        return description != null ? description : ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault((String) d2wContext().valueForKey("noSelectionString"));
+    }
+
+    public boolean isDisabled() {
+        return objectPropertyValue() == null || ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("disabled"), false);
     }
 }
