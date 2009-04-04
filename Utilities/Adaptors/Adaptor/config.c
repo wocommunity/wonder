@@ -176,8 +176,8 @@ int init_adaptor(struct _strtbl *options)
     /* Ignore SIGPIPE. */
 #ifndef WIN32
     {
-       void *oldHandler = (void *)signal(SIGPIPE, SIG_IGN);
-       if (oldHandler != (void *)SIG_DFL)
+       void (*oldHandler)(int) = signal(SIGPIPE, SIG_IGN);
+       if (oldHandler != SIG_DFL)
        {
           WOLog(WO_DBG, "init_adaptor(): someone installed a SIGPIPE handler");
           signal(SIGPIPE, oldHandler);

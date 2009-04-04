@@ -118,7 +118,7 @@ typedef struct _WOAppStruct {
    int urlVersion;				/* Use 4.0/4.5 URLs format */
    char redirect_url[WA_MAX_URL_LENGTH];	/* in case of error */
 
-   char additionalArgs[WA_MAX_ADDITIONAL_ARGS_LENGTH];	/* config info specified with "additionalArgs" attribute in xml config, if any */
+   char additionalArgs[WA_MAX_ADDITIONAL_ARGS_LENGTH+1];	/* config info specified with "additionalArgs" attribute in xml config, if any */
 
    char loadBalancingInfo[WA_APP_LB_INFO_SIZE];	/* reserved for use by load balancing routine */
 } _WOApp;
@@ -169,7 +169,7 @@ typedef struct _WOInstanceStruct {
 
    char loadBalancingInfo[WA_INST_LB_INFO_SIZE];	/* reserved for use by load balancing routine */
 
-   char additionalArgs[WA_MAX_ADDITIONAL_ARGS_LENGTH];	/* config info specified with "additionalArgs" attribute in xml config, if any */
+   char additionalArgs[WA_MAX_ADDITIONAL_ARGS_LENGTH+1];	/* config info specified with "additionalArgs" attribute in xml config, if any */
 
 } _WOInstance;
 

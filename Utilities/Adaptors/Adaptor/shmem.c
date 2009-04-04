@@ -456,8 +456,8 @@ void *sha_setLocalDataForKey(ShmemArray *array, unsigned int elementNumber, cons
       {
          if (!array->elements[elementNumber].localDataCleanupCallbacks)
             array->elements[elementNumber].localDataCleanupCallbacks = wolist_new(1);
-         if (wolist_indexOf(array->elements[elementNumber].localDataCleanupCallbacks, clearCallback) == wolist_elementNotFound)
-            wolist_add(array->elements[elementNumber].localDataCleanupCallbacks, clearCallback);
+         if (wolist_indexOf(array->elements[elementNumber].localDataCleanupCallbacks, (void *)clearCallback) == wolist_elementNotFound)
+            wolist_add(array->elements[elementNumber].localDataCleanupCallbacks, (void *)clearCallback);
       }
    }
    return oldValue;
@@ -479,7 +479,7 @@ void sha_clearLocalData(ShmemArray *array, unsigned int elementNumber)
          {
             for (i=wolist_count(array->elements[elementNumber].localDataCleanupCallbacks)-1; i>=0; i--)
             {
-               sha_clearLocalDataCallback clear_func = wolist_elementAt(array->elements[elementNumber].localDataCleanupCallbacks, i);
+               sha_clearLocalDataCallback clear_func = (sha_clearLocalDataCallback) wolist_elementAt(array->elements[elementNumber].localDataCleanupCallbacks, i);
                if (clear_func)
                   clear_func(array, elementNumber);
                wolist_removeAt(array->elements[elementNumber].localDataCleanupCallbacks, i);

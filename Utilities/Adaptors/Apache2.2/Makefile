@@ -6,7 +6,7 @@ SHELL = /bin/sh
 INCLUDES = -I${APACHEINCLUDE_DIR} -I../Adaptor
 
 # Common compiler and linker flags
-CFLAGS = -O2 -Wall ${INCLUDES} ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT} 
+CFLAGS = -O2 ${INCLUDES} ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT} 
 
 APXSFLAGS = -c -S CC=${CC} -Wc,"${CFLAGS}" -Wl,"${LDFLAGS}"
 
@@ -16,7 +16,7 @@ ifeq "MACOS" "${OS}"
 export MACOSX_DEPLOYMENT_TARGET = 10.5
 
 # These are the default settings for OSX.
-CFLAGS += ${RC_CFLAGS}
+CFLAGS += -Wall ${RC_CFLAGS}
 LDARCHS = $(patsubst %, -arch %, ${RC_ARCHS})
 LDFLAGS +=${OPENSSL_LIB_FLAGS} ${LDARCHS}  -macosx_version_min 10.5 -lm -module
 STRIP_FLAGS = -S
@@ -44,8 +44,8 @@ all: mod_WebObjects.so
 
 # The objects target compiles all the .c files, except mod_WebObjects.c, which we want
 # libtool (through apxs or otherwise) to take care of.
-$(COMMON_OBJFILES) : %.o : ../Adaptor/%.c
-	$(CC) $(CFLAGS) -c $<
+#$(COMMON_OBJFILES) : %.o : ../Adaptor/%.c
+#	$(CC) $(CFLAGS) -c $<
 
 mod_WebObjects.so : mod_WebObjects.c ${COMMON_SRCFILES}
 	${APXS2.2} ${APXSFLAGS} mod_WebObjects.c ${COMMON_SRCFILES}

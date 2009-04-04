@@ -172,7 +172,7 @@ static hostent_t copyhostent(hostent_t host)
    intptr_t alias_ct = 0, addr_ct = 0;
    char **l, **a;
    hostent_t h;
-   void *m;
+   char *m;
 
    /*
     *	get enough space for struct + data
@@ -208,11 +208,11 @@ static hostent_t copyhostent(hostent_t host)
     *	placing the struct first allows it to be the argument to free()
     *	to get rid of the whole thing
     */
-   h = m;
+   h = (hostent_t) m;
    h->h_addrtype = host->h_addrtype;
    h->h_length = host->h_length;
 
-   m += ROUND_UP(sizeof(struct hostent), sizeof(void *));
+   m += ROUND_UP(sizeof(struct hostent), sizeof(char *));
    h->h_aliases = (char **)m;
    m += (alias_ct+1) * sizeof(char *);
    h->h_addr_list = (char **)m;
