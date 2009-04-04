@@ -372,31 +372,33 @@ function calendar_open(input_element, options) {
 /*
   Build calendar table.
 */
-document.write('<table id="calendar_control" style="display:none; z-index: 10000;">');// CH add z-index so this overlays AMD
-// Header row.
-document.write('<tr>');
-document.write('<td id="calendar_prev_year" title="Previous year"></td>');
-document.write('<td id="calendar_prev_month" title="Previous month"></td>');
-document.write('<td id="calendar_header" colspan="3"></td>');
-document.write('<td id="calendar_next_month" title="Next month"></td>');
-document.write('<td id="calendar_next_year" title="Next year"></td>');
-
-document.write('</tr>');
-// Day letters row.
-document.write('<tr>');
-for (var i=0; i < 7; i++) {
-  document.write('<td class="day_letter"></td>');
+if (get_element('calendar_control') == null) {  // CH only do this once per page or FireFox gets confused
+	document.write('<table id="calendar_control" style="display:none; z-index: 10000;">');// CH add z-index so this overlays AMD
+	// Header row.
+	document.write('<tr>');
+	document.write('<td id="calendar_prev_year" title="Previous year"></td>');
+	document.write('<td id="calendar_prev_month" title="Previous month"></td>');
+	document.write('<td id="calendar_header" colspan="3"></td>');
+	document.write('<td id="calendar_next_month" title="Next month"></td>');
+	document.write('<td id="calendar_next_year" title="Next year"></td>');
+	
+	document.write('</tr>');
+	// Day letters row.
+	document.write('<tr>');
+	for (var i=0; i < 7; i++) {
+	  document.write('<td class="day_letter"></td>');
+	}
+	document.write('</tr>');
+	// Day numbers rows.
+	for(var n=1, i=0; i<6 ;i++) {
+	  document.write('<tr>');
+	  for(var j=0; j<7; j++,n++) {
+	    document.write('<td id="calendar_day_' + n + '" class="day_number normal"></td>');
+	  }
+	  document.write('</tr>');
+	}
+	document.write('</table>');
 }
-document.write('</tr>');
-// Day numbers rows.
-for(var n=1, i=0; i<6 ;i++) {
-  document.write('<tr>');
-  for(var j=0; j<7; j++,n++) {
-    document.write('<td id="calendar_day_' + n + '" class="day_number normal"></td>');
-  }
-  document.write('</tr>');
-}
-document.write('</table>');
 
 /*
   Namespace globals.
