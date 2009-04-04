@@ -2,7 +2,7 @@ include ../make.config
 include ../Adaptor/make.preamble
 
 # Common compiler and linker flags
-CFLAGS = -O2 -Wall -I../Adaptor ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT}
+CFLAGS = -O2 -I../Adaptor ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT}
 
 # MacOS X
 ifeq "MACOS" "${OS}"
@@ -11,7 +11,7 @@ ENABLE_SSL_SUPPORT = -DAPACHE_SECURITY_ENABLED
 # These should be set to point at the ssl include and lib directories, respectively.
 OPENSSL_INCL_FLAGS = -I/usr/local/include/openssl
 OPENSSL_LIB_FLAGS = -L/usr/lib -lcrypto -lssl
-CFLAGS += ${RC_CFLAGS}
+CFLAGS += -Wall ${RC_CFLAGS}
 LDARCHS = $(patsubst %, -arch %, ${RC_ARCHS})
 LDFLAGS +=${OPENSSL_LIB_FLAGS} ${LDARCHS}
 STRIP_FLAGS = -S

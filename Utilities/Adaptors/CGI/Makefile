@@ -2,7 +2,7 @@
 include ../make.config
 include ../Adaptor/make.preamble
 
-CFLAGS = -O2 -Wall -I../Adaptor $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DCGI
+CFLAGS = -O2 -I../Adaptor $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DCGI
 
 
 ifeq "MACOS" "$(OS)"
