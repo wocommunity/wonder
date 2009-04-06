@@ -7,7 +7,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
 /**
- * Simple RSS feed provider.
+ * Simple RSS feed provider. The actual item goes into the component content.
  * 
  * @binding feedTitle the title of the RSS feed
  * @binding feedUrl the URL of the website associated with the RSS feed
