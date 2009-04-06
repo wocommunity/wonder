@@ -61,6 +61,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	
 	protected int _rowCount = -1;
 	
+	protected boolean _shouldRememberRowCount = false;
+	
 	/**
 	 * Creates a new ERXBatchingDisplayGroup.
 	 */
@@ -130,18 +132,6 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	public void setDataSource(EODataSource eodatasource) {
 		_isBatching = (eodatasource instanceof EODatabaseDataSource) ? Boolean.TRUE : Boolean.FALSE;
 		super.setDataSource(eodatasource);
-	}
-	
-	/**
-	 * Override the number of rows of results (if you can
-	 * provide a better estimate than the default behavior).  If you
-	 * guess too low, you will never get more than what you set, but
-	 * if you guess too high, it will adjust.
-	 *  
-	 * @param rowCount the number of rows of results 
-	 */
-	public void setRowCount(int rowCount) {
-		_rowCount = rowCount;
 	}
 	
 	/**
@@ -223,6 +213,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	public void setQualifier(EOQualifier aEoqualifier) {
 		super.setQualifier(aEoqualifier);
 		_displayedObjects = null;
+		setRowCount(-1);
 	}
 
 	/**
@@ -289,10 +280,45 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		int rowCount = _rowCount;
 		if (rowCount == -1) {
 			rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, spec);
+			if (shouldRememberRowCount()) {
+				_rowCount = rowCount;
+			}
 		}
 		return rowCount;
 	}
+	
+	/**
+	 * Override the number of rows of results (if you can
+	 * provide a better estimate than the default behavior).  If you
+	 * guess too low, you will never get more than what you set, but
+	 * if you guess too high, it will adjust. Call with -1 to have the rows
+	 * counted again.
+	 *  
+	 * @param rowCount the number of rows of results 
+	 */
+	public void setRowCount(int rowCount) {
+		_rowCount = rowCount;
+	}
+	
+	/**
+	 * @return <code>true</code> if the rowCount() should be remembered after being determined
+	 * or <code>false</code> if rowCount() should be re-calculated when the batch changes
+	 */
+	public boolean shouldRememberRowCount() {
+		return _shouldRememberRowCount;
+	}
 
+	/**
+	 * Set to <code>true</code> to retain the rowCount() after it is determined once for a particular
+	 * qualifier.  Set to <code>false</code> to have rowCount() re-calculated when the batch changes.
+	 * The default is <code>false</code> for compatibility with older code.
+	 *
+	 * @param shouldRememberRowCount the shouldRememberRowCount to set
+	 */
+	public void setShouldRememberRowCount(boolean shouldRememberRowCount) {
+		_shouldRememberRowCount = shouldRememberRowCount;
+	}
+	
 	/**
 	 * Utility to fetch the object in a given range.
 	 * @param start
@@ -507,4 +533,5 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			}
 		}
 	}
+
 }
