@@ -148,7 +148,7 @@ public abstract class ERXAjaxApplication extends WOApplication {
 	 */
 	public static boolean isAjaxRequest(WORequest request) {
 		String requestedWith = request.headerForKey("x-requested-with");
-		return "XMLHttpRequest".equals(requestedWith) || "ja".equals(request.requestHandlerKey());
+		return "XMLHttpRequest".equals(requestedWith);
 	}
 
 	/**
