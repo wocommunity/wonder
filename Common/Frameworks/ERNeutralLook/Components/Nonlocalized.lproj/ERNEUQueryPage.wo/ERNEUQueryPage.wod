@@ -95,7 +95,7 @@ PageWrapper: WOSwitchComponent {
 
 PropertyHasNullValueCheckBox: WOCheckBox {
     checked = isNullQueryCheckedForCurrentProperty;
-    onclick = "ERD2WQueryPage.toggleFormFieldsCorrespondingToNullQueryCheckbox(event);"
+    onclick = "ERD2WQueryPage.toggleFormFieldsCorrespondingToNullQueryCheckbox(event);";
 }
 
 QueryForm: WOForm {
