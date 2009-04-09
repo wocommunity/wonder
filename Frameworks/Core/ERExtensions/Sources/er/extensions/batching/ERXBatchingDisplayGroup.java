@@ -141,7 +141,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	public int batchCount() {
 		if (isBatching()) {
 			if (_displayedObjects == null) {
-				refetch();
+				updateBatchCount();
 			}
 			return _batchCount;
 		}
@@ -381,7 +381,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 */
 	protected void refetch() {
 		int rowCount = rowCount();
-
+		
 		int start = (currentBatchIndex() - 1) * numberOfObjectsPerBatch();
 		int end = start + numberOfObjectsPerBatch();
 
@@ -424,7 +424,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			_batchCount = 1;
 		}
 		else {
-			_batchCount = (allObjects().count() - 1) / numberOfObjectsPerBatch() + 1;
+			_batchCount = (rowCount() - 1) / numberOfObjectsPerBatch() + 1;
 		}
 	}
 
