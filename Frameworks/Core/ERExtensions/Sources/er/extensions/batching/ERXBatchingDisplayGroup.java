@@ -11,6 +11,7 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -274,12 +275,14 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * Utility to get at the number of rows when batching.
 	 */
 	protected int rowCount() {
-		EOEditingContext ec = dataSource().editingContext();
-		EOFetchSpecification spec = fetchSpecification();
-
 		int rowCount = _rowCount;
 		if (rowCount == -1) {
-			rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, spec);
+			if (dataSource() instanceof EODatabaseDataSource) {
+				rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(dataSource().editingContext(), fetchSpecification());
+			}
+			else {
+				rowCount = dataSource().fetchObjects().count();
+			}
 			if (shouldRememberRowCount()) {
 				_rowCount = rowCount;
 			}
