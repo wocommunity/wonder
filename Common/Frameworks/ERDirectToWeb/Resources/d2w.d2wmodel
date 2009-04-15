@@ -196,7 +196,7 @@
     {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "nextButtonName"; "value" = "Next"; }; }, 
     {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "er.directtoweb.ERDDelayedLocalizedAssignment"; "keyPath" = "noButtonLabel"; "value" = "ERD2W.noButtonLabel"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "noChoiceAvailableMessage"; "value" = ""; }; }, 
-    {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "noSelectionString"; "value" = "- none -"; }; }, 
+    {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "noSelectionString"; "value" = "ERD2W.noSelectionString"; }; }, 
     {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "er.directtoweb.ERDDelayedLocalizedAssignment"; "keyPath" = "objectUnsetMessage"; "value" = "ERDInspect.objectUnsetMessage"; }; }, 
     {"author" = "20"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "EOKeyValueQualifier"; "key" = "targetOutput"; "selectorName" = "isEqualTo:"; "value" = "xml"; }; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "offset"; "value" = "0"; }; }, 
     {"author" = "10"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "er.directtoweb.ERDDelayedLocalizedAssignment"; "keyPath" = "okButtonLabel"; "value" = "ERD2W.okButtonLabel"; }; }, 

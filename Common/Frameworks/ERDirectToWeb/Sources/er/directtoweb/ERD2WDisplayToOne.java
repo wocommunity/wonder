@@ -23,7 +23,15 @@ public class ERD2WDisplayToOne extends D2WDisplayToOne {
 
     public Object toOneDescription() {
         Object description = super.toOneDescription();
-        return description != null ? description : ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault((String) d2wContext().valueForKey("noSelectionString"));
+        if (description == null) {
+            String noSelection = (String) d2wContext().valueForKey("noSelectionString");
+            if (noSelection != null && noSelection.trim().length() > 0) {
+                description = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(noSelection);
+            } else { // noSelection is null or the empty string
+                description = noSelection;
+            }
+        }
+        return description;
     }
 
     public boolean isDisabled() {
