@@ -176,6 +176,29 @@ public class ERXTimestampUtilities extends Object {
         return new ERXTimestamp(ts);
     }
 
+    private volatile static long cacheExpiration;
+    private volatile static long cacheFirstGood;
+    private volatile static NSTimestamp today;
+    private volatile static NSTimestamp tomorrow;
+    private volatile static NSTimestamp yesterday;
+    private static final Object cacheLock = new Object();
+
+    private static void _calculateMidnightTimes() {
+        long nowMillis = System.currentTimeMillis();
+        if( nowMillis >= cacheExpiration || nowMillis < cacheFirstGood || today == null ) {
+            synchronized(cacheLock)  {
+                if( nowMillis >= cacheExpiration || nowMillis < cacheFirstGood || today == null ) { //cacheFirstGood is checked in case the clock gets reset backward
+                    ERXTimestamp now = getInstance();
+                    today = now.ts.timestampByAddingGregorianUnits(0, 0, 0, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+                    tomorrow = today.timestampByAddingGregorianUnits(0, 0, 1, 0, 0, 0);
+                    yesterday = today.timestampByAddingGregorianUnits(0, 0, -1, 0, 0, 0);
+                    cacheExpiration = tomorrow.getTime();
+                    cacheFirstGood = today.getTime();
+                }
+            }
+        }
+    }
+
     /**
      * Timestamp representing today (12:00 AM). Implementation
      * wise this method subtracts the current hours, minutes and
@@ -183,8 +206,8 @@ public class ERXTimestampUtilities extends Object {
      * @return timestamp for today.
      */    
     public static NSTimestamp today() {
-        ERXTimestamp now = getInstance();
-        return now.ts.timestampByAddingGregorianUnits(0, 0, 0, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+        _calculateMidnightTimes();
+        return today;
     }
 
     /**
@@ -194,8 +217,8 @@ public class ERXTimestampUtilities extends Object {
      * @return timestamp for tomorrow.
      */    
     public static NSTimestamp tomorrow() {
-        ERXTimestamp now = getInstance();
-        return now.ts.timestampByAddingGregorianUnits(0, 0, 1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+        _calculateMidnightTimes();
+        return tomorrow;
     }
     
     /**
@@ -205,8 +228,8 @@ public class ERXTimestampUtilities extends Object {
      * @return timestamp for yesterday.
      */    
     public static NSTimestamp yesterday() {
-        ERXTimestamp now = getInstance();
-        return now.ts.timestampByAddingGregorianUnits(0, 0, -1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
+        _calculateMidnightTimes();
+        return yesterday;
     }
 
     /**
