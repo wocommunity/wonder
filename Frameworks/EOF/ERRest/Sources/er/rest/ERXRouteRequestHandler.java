@@ -1,7 +1,5 @@
 package er.rest;
 
-import java.lang.reflect.Constructor;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOAction;
@@ -133,19 +131,13 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 	@Override
 	public WOAction getActionInstance(Class class1, Class[] aclass, Object[] aobj) {
-		try {
-			@SuppressWarnings("unchecked") Class<? extends ERXRouteDirectAction> actionClass = class1.asSubclass(ERXRouteDirectAction.class);
-			Constructor<? extends ERXRouteDirectAction> constructor = actionClass.getConstructor(WORequest.class, ERXRoute.class, NSDictionary.class);
-			WORequest request = (WORequest) aobj[0];
-			ERXRoute route = (ERXRoute) request.userInfo().objectForKey(ERXRouteRequestHandler.RouteKey);
-			@SuppressWarnings("unchecked") NSDictionary<ERXRoute.Key, Object> keys = (NSDictionary<ERXRoute.Key, Object>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
-			ERXRouteDirectAction action = constructor.newInstance(request, route, keys);
-			return action;
-		}
-		catch (Throwable t) {
-			throw new RuntimeException("Failed to create the action instance for the class '" + class1 + "'.", t);
-		}
-
+		ERXRouteDirectAction actionInstance = (ERXRouteDirectAction)super.getActionInstance(class1, aclass, aobj);
+		WORequest request = (WORequest) aobj[0];
+		ERXRoute route = (ERXRoute) request.userInfo().objectForKey(ERXRouteRequestHandler.RouteKey);
+		actionInstance.setRoute(route);
+		@SuppressWarnings("unchecked") NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
+		actionInstance.setKeys(keys);
+		return actionInstance;
 	}
 
 	/**

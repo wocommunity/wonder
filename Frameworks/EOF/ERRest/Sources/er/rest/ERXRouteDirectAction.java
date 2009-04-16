@@ -21,14 +21,20 @@ public class ERXRouteDirectAction extends WODirectAction {
 	private ERXRoute _route;
 	private NSDictionary<ERXRoute.Key, String> _keys;
 
-	public ERXRouteDirectAction(WORequest request, ERXRoute route, NSDictionary<ERXRoute.Key, String> keys) {
+	public ERXRouteDirectAction(WORequest request) {
 		super(request);
+	}
+	
+	public void setRoute(ERXRoute route) {
 		_route = route;
-		_keys = keys;
 	}
 
 	public ERXRoute route() {
 		return _route;
+	}
+	
+	public void setKeys(NSDictionary<ERXRoute.Key, String> keys) {
+		_keys = keys;
 	}
 
 	public NSDictionary<ERXRoute.Key, String> keys() {
