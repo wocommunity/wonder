@@ -100,6 +100,9 @@ public class ERXRoute {
 		Matcher keyMatcher = Pattern.compile("\\{([^}]+)\\}").matcher(urlPattern);
 		_keys = new NSMutableArray<ERXRoute.Key>();
 		StringBuffer routeRegex = new StringBuffer();
+		if (!urlPattern.startsWith("^")) {
+			routeRegex.append("^");
+		}
 		while (keyMatcher.find()) {
 			String keyStr = keyMatcher.group(1);
 			ERXRoute.Key key = new ERXRoute.Key();
@@ -121,6 +124,12 @@ public class ERXRoute {
 			keyMatcher.appendReplacement(routeRegex, "([^/]+)");
 		}
 		keyMatcher.appendTail(routeRegex);
+		if (!urlPattern.endsWith("$")) {
+			if (routeRegex.lastIndexOf(".") == -1) {
+				routeRegex.append("/{0,1}(\\..*|)");
+			}
+			routeRegex.append("$");
+		}
 		_routePattern = Pattern.compile(routeRegex.toString());
 	}
 
@@ -146,7 +155,7 @@ public class ERXRoute {
 			}
 
 			if (!keys.containsKey(ERXRoute.ControllerKey) && _controller != null) {
-				keys.setObjectForKey(_controller.getClass().getName(), ERXRoute.ControllerKey);
+				keys.setObjectForKey(_controller.getName(), ERXRoute.ControllerKey);
 			}
 
 			if (!keys.containsKey(ERXRoute.ActionKey) && _action != null) {
