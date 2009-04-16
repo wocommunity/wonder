@@ -8,6 +8,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXKeyFilter;
 
 /**
  * Miscellaneous rest-related utility methods.
@@ -42,6 +43,22 @@ public class ERXRestUtils {
 		 */
 		public IERXRestResponseWriter defaultWriter() throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 			return _writerClass.getConstructor(boolean.class, boolean.class).newInstance(Boolean.TRUE, Boolean.TRUE);
+		}
+
+		/**
+		 * Returns a rest response writer using the "true, true" constructor.
+		 * 
+		 * @param filter a key filter
+		 * @return a rest response writer
+		 * @throws IllegalArgumentException
+		 * @throws SecurityException
+		 * @throws InstantiationException
+		 * @throws IllegalAccessException
+		 * @throws InvocationTargetException
+		 * @throws NoSuchMethodException
+		 */
+		public IERXRestResponseWriter defaultWriter(ERXKeyFilter filter) throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+			return _writerClass.getConstructor(ERXKeyFilter.class).newInstance(filter);
 		}
 
 		/**
