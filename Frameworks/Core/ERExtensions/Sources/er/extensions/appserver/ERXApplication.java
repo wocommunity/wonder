@@ -1314,17 +1314,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
-	 * Overridden to install/uninstall a timer that will terminate the
-	 * application in <code>ERTimeToKill</code> seconds from the time this
-	 * method is called. The timer will get uninstalled if you allow new
-	 * sessions again during that time span.
+	 * Overridden to fix that direct connect apps can't refuse new sessions.
 	 */
 
 	@Override
 	public synchronized void refuseNewSessions(boolean value) {
 		boolean success = false;
 		try {
-			Field f = WOApplication.class.getField("_refusingNewClients");
+			Field f = WOApplication.class.getDeclaredField("_refusingNewClients");
 			f.setAccessible(true);
 			f.set(this, value);
 			success = true;
