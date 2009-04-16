@@ -277,7 +277,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	protected int rowCount() {
 		int rowCount = _rowCount;
 		if (rowCount == -1) {
-			if (dataSource() instanceof EODatabaseDataSource) {
+			if (isBatching()) {
 				rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(dataSource().editingContext(), fetchSpecification());
 			}
 			else {
