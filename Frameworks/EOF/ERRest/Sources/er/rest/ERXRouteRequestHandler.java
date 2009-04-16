@@ -18,15 +18,15 @@ import er.extensions.appserver.ERXRequest;
  * <b>EXPERIMENTAL</b>
  * 
  * in Application:
- * <code>
+ * <pre>
  * ERXRouteRequestHandler routeRequestHandler = new ERXRouteRequestHandler();
  * routeRequestHandler.addRoute(new ERXRoute("/reminders/{action}", RemindersController.class.getName()));
  * routeRequestHandler.addRoute(new ERXRoute("/reminder/{reminder:Reminder}", RemindersController.class.getName(), "view"));
  * ERXRouteRequestHandler.register(routeRequestHandler);
- * </code>
+ * </pre>
  * 
  * in RemindersController:
- * <code>
+ * <pre>
  * public class RemindersController extends ERXRouteDirectAction {
  *   public RemindersController(WORequest request) {
  *     super(request);
@@ -45,16 +45,16 @@ import er.extensions.appserver.ERXRequest;
  *     return response(ERXKeyFilter.attributes(), editingContext, Reminder.ENTITY_NAME, reminders);
  *   }
  * }
- * </code>
+ * </pre>
  * 
  * in browser:
- * <code>
+ * <pre>
  * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list.xml
  * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list.json
  * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list.plist
  * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list
  * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminder/100.json
- * </code>
+ * </pre>
  * 
  * @author mschrag
  */
