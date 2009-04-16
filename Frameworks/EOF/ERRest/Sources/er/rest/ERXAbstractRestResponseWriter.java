@@ -6,14 +6,15 @@ import java.util.Enumeration;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
+import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
-import er.extensions.foundation.ERXProperties;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -518,5 +519,19 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 */
 	public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, entity, values);
+	}
+
+	/**
+	 * Returns a String form of the given objects using the unsafe delegate.
+	 * 
+	 * @param values the values to write
+	 * @return a string form of the value using the given writer
+	 * @throws ERXRestException
+	 * @throws ERXRestSecurityException
+	 * @throws ERXRestNotFoundException
+	 * @throws ParseException
+	 */
+	public String toString(EOEditingContext editingContext, String entityName, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, ERXEOAccessUtilities.entityNamed(editingContext, entityName), values);
 	}
 }

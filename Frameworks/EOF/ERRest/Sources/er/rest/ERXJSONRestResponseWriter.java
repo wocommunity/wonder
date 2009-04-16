@@ -7,9 +7,12 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXKeyFilter;
 
 /**
@@ -97,5 +100,19 @@ public class ERXJSONRestResponseWriter implements IERXRestResponseWriter {
 	 */
 	public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, entity, values);
+	}
+
+	/**
+	 * Returns a String form of the given objects using the unsafe delegate.
+	 * 
+	 * @param values the values to write
+	 * @return a string form of the value using the given writer
+	 * @throws ERXRestException
+	 * @throws ERXRestSecurityException
+	 * @throws ERXRestNotFoundException
+	 * @throws ParseException
+	 */
+	public String toString(EOEditingContext editingContext, String entityName, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, ERXEOAccessUtilities.entityNamed(editingContext, entityName), values);
 	}
 }
