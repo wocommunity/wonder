@@ -10,6 +10,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
@@ -29,7 +30,7 @@ public class ERXRoute {
 
 	private Pattern _routePattern;
 	private NSMutableArray<ERXRoute.Key> _keys;
-	private String _controller;
+	private Class<? extends ERXRouteDirectAction> _controller;
 	private String _action;
 
 	/**
@@ -39,7 +40,7 @@ public class ERXRoute {
 	 *            the url pattern to use
 	 */
 	public ERXRoute(String urlPattern) {
-		this(urlPattern, null, null);
+		this(urlPattern, (Class<? extends ERXRouteDirectAction>) null, null);
 	}
 
 	/**
@@ -50,7 +51,20 @@ public class ERXRoute {
 	 * @param controller
 	 *            the default controller class name
 	 */
+	@SuppressWarnings("unchecked")
 	public ERXRoute(String urlPattern, String controller) {
+		this(urlPattern, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), null);
+	}
+
+	/**
+	 * Constructs a new route with the given URL pattern.
+	 * 
+	 * @param urlPattern
+	 *            the url pattern to use
+	 * @param controller
+	 *            the default controller class
+	 */
+	public ERXRoute(String urlPattern, Class<? extends ERXRouteDirectAction> controller) {
 		this(urlPattern, controller, null);
 	}
 
@@ -64,7 +78,22 @@ public class ERXRoute {
 	 * @param action
 	 *            the action name
 	 */
+	@SuppressWarnings("unchecked")
 	public ERXRoute(String urlPattern, String controller, String action) {
+		this(urlPattern, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), action);
+	}
+
+	/**
+	 * Constructs a new route with the given URL pattern.
+	 * 
+	 * @param urlPattern
+	 *            the url pattern to use
+	 * @param controller
+	 *            the default controller class
+	 * @param action
+	 *            the action name
+	 */
+	public ERXRoute(String urlPattern, Class<? extends ERXRouteDirectAction> controller, String action) {
 		_controller = controller;
 		_action = action;
 
@@ -117,7 +146,7 @@ public class ERXRoute {
 			}
 
 			if (!keys.containsKey(ERXRoute.ControllerKey) && _controller != null) {
-				keys.setObjectForKey(_controller, ERXRoute.ControllerKey);
+				keys.setObjectForKey(_controller.getClass().getName(), ERXRoute.ControllerKey);
 			}
 
 			if (!keys.containsKey(ERXRoute.ActionKey) && _action != null) {
@@ -246,7 +275,7 @@ public class ERXRoute {
 		else if (editingContext != null) {
 			EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, key._valueType);
 			if (entity != null) {
-				Object pkValue = ((EOAttribute)entity.primaryKeyAttributes().objectAtIndex(0)).validateValue(obj);
+				Object pkValue = ((EOAttribute) entity.primaryKeyAttributes().objectAtIndex(0)).validateValue(obj);
 				value = ERXEOControlUtilities.objectWithPrimaryKeyValue(editingContext, entity.name(), pkValue, null, false);
 			}
 			else {
@@ -279,11 +308,11 @@ public class ERXRoute {
 			_key = key;
 			_valueType = valueType;
 		}
-		
+
 		public String key() {
 			return _key;
 		}
-		
+
 		public String valueType() {
 			return _valueType;
 		}
@@ -297,7 +326,7 @@ public class ERXRoute {
 		public boolean equals(Object obj) {
 			return obj instanceof ERXRoute.Key && ((ERXRoute.Key) obj)._key.equals(_key);
 		}
-		
+
 		@Override
 		public String toString() {
 			return "[ERXRoute.Key: " + _key + "]";
