@@ -28,8 +28,8 @@ import er.extensions.appserver.ERXRequest;
  * in RemindersController:
  * <code>
  * public class RemindersController extends ERXRouteDirectAction {
- *   public RemindersController(WORequest request, ERXRoute route, NSDictionary<Key, String> keys) {
- *     super(request, route, keys);
+ *   public RemindersController(WORequest request) {
+ *     super(request);
  *   }
  *   
  *   public WOActionResults viewAction() {
