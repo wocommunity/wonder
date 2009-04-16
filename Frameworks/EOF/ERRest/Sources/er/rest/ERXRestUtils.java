@@ -113,7 +113,9 @@ public class ERXRestUtils {
 	 */
 	public static String toString(ERXRestContext context, IERXRestResponseWriter writer, EOEnterpriseObject value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		ERXStringBufferResponseWriter responseWriter = new ERXStringBufferResponseWriter();
-		writer.appendToResponse(context, responseWriter, new ERXRestKey(context, ERXEOAccessUtilities.entityForEo(value), null, value));
+		if (value != null) {
+			writer.appendToResponse(context, responseWriter, new ERXRestKey(context, ERXEOAccessUtilities.entityForEo(value), null, value));
+		}
 		return responseWriter.toString();
 	}
 
