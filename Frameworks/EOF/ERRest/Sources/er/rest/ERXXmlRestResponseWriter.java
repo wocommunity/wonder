@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.eof.ERXKeyFilter;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -59,6 +60,14 @@ public class ERXXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
 	public ERXXmlRestResponseWriter(boolean displayAllProperties, boolean displayAllToMany) {
 		super(displayAllProperties, displayAllToMany);
 	}
+	
+	/**
+	 * Constructs an ERXXmlRestResponseWriter.
+	 */
+	public ERXXmlRestResponseWriter(ERXKeyFilter filter) {
+		super(filter);
+	}
+
 
 	@Override
 	public void appendToResponse(ERXRestContext context, IERXResponseWriter response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
