@@ -17,7 +17,46 @@ import com.webobjects.foundation._NSUtilities;
 import er.extensions.appserver.ERXRequest;
 
 /**
- * EXPERIMENTAL
+ * <b>EXPERIMENTAL</b>
+ * 
+ * in Application:
+ * <code>
+ * ERXRouteRequestHandler routeRequestHandler = new ERXRouteRequestHandler();
+ * routeRequestHandler.addRoute(new ERXRoute("/reminders/{action}", RemindersController.class.getName()));
+ * routeRequestHandler.addRoute(new ERXRoute("/reminder/{reminder:Reminder}", RemindersController.class.getName(), "view"));
+ * ERXRouteRequestHandler.register(routeRequestHandler);
+ * </code>
+ * 
+ * in RemindersController:
+ * <code>
+ * public class RemindersController extends ERXRouteDirectAction {
+ *   public RemindersController(WORequest request, ERXRoute route, NSDictionary<Key, String> keys) {
+ *     super(request, route, keys);
+ *   }
+ *   
+ *   public WOActionResults viewAction() {
+ *     Reminder reminder = (Reminder) objects(ERXEC.newEditingContext()).objectForKey("reminder");
+ *     return response(ERXKeyFilter.attributes(), reminder);
+ *   }
+ *   
+ *   public WOActionResults listAction() throws Exception {
+ *     Day day = Day.todayDay();
+ *     EOQualifier qualifier = day.qualifier(Reminder.CREATION_DATE_KEY);
+ *     EOEditingContext editingContext = ERXEC.newEditingContext();
+ *     NSArray<Reminder> reminders = Reminder.fetchReminders(editingContext, qualifier, EOSort.descs(Reminder.CREATION_DATE_KEY));
+ *     return response(ERXKeyFilter.attributes(), editingContext, Reminder.ENTITY_NAME, reminders);
+ *   }
+ * }
+ * </code>
+ * 
+ * in browser:
+ * <code>
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list.xml
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list.plist
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminder/100.json
+ * </code>
  * 
  * @author mschrag
  */
