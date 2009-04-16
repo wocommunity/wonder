@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSDictionary;
@@ -245,7 +246,7 @@ public class ERXRoute {
 		else if (editingContext != null) {
 			EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, key._valueType);
 			if (entity != null) {
-				Object pkValue = obj;
+				Object pkValue = ((EOAttribute)entity.primaryKeyAttributes().objectAtIndex(0)).validateValue(obj);
 				value = ERXEOControlUtilities.objectWithPrimaryKeyValue(editingContext, entity.name(), pkValue, null, false);
 			}
 			else {
