@@ -13,6 +13,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.appserver.ERXRequest;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * <b>EXPERIMENTAL</b>
@@ -77,6 +79,29 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		_routes.addObject(route);
 	}
 
+	/**
+	 * Adds list and view routes for the given entity. For instance, if you provide the
+	 * entity name "Reminder" you will get the routes:
+	 * 
+	 * <pre>
+	 * /reminders
+	 * /reminders/{action}
+	 * /reminder/{reminder:Reminder}
+	 * /reminder/{reminder:Reminder}/{action}
+	 * </pre>
+	 * 
+	 * @param entityName
+	 * @param controllerClass
+	 */
+	public void addDefaultRoutes(String entityName, Class<? extends ERXRouteDirectAction> controllerClass) {
+		String singularEntityName = ERXStringUtilities.uncapitalize(entityName);
+		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(singularEntityName, 2);
+	    addRoute(new ERXRoute("/" + pluralEntityName, controllerClass, "list"));
+	    addRoute(new ERXRoute("/" + pluralEntityName + "/{action}", controllerClass));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", controllerClass, "view"));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", controllerClass));
+	}
+	
 	@Override
 	public NSArray getRequestHandlerPathForRequest(WORequest request) {
 		NSMutableArray<Object> requestHandlerPath = new NSMutableArray<Object>();
@@ -118,7 +143,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		catch (Throwable t) {
 			throw new RuntimeException("Failed to compute request handler path.", t);
 		}
-
+		
 		return requestHandlerPath;
 	}
 
