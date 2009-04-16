@@ -1,0 +1,121 @@
+package er.rest;
+
+import java.lang.reflect.Constructor;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOAction;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver._private.WODirectActionRequestHandler;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation._NSUtilities;
+
+import er.extensions.appserver.ERXRequest;
+
+/**
+ * EXPERIMENTAL
+ * 
+ * @author mschrag
+ */
+public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
+	public static final Logger log = Logger.getLogger(ERXRouteRequestHandler.class);
+
+	public static final String Key = "ra";
+	public static final String TypeKey = "ERXRouteRequestHandler.type";
+	public static final String PathKey = "ERXRouteRequestHandler.path";
+	public static final String RouteKey = "ERXRouteRequestHandler.route";
+	public static final String KeysKey = "ERXRouteRequestHandler.keys";
+
+	private NSMutableArray<ERXRoute> _routes;
+
+	public ERXRouteRequestHandler() {
+		_routes = new NSMutableArray<ERXRoute>();
+	}
+
+	public void addRoute(ERXRoute route) {
+		_routes.addObject(route);
+	}
+
+	@Override
+	public NSArray getRequestHandlerPathForRequest(WORequest request) {
+		NSMutableArray<Object> requestHandlerPath = new NSMutableArray<Object>();
+
+		try {
+			String path = request._uriDecomposed().requestHandlerPath();
+			if (!path.startsWith("/")) {
+				path = "/" + path;
+			}
+			int dotIndex = path.lastIndexOf('.');
+			String type = "xml";
+			if (dotIndex >= 0) {
+				type = path.substring(dotIndex + 1);
+				path = path.substring(0, dotIndex);
+			}
+			@SuppressWarnings("unchecked") NSMutableDictionary<String, Object> userInfo = ((ERXRequest) request).mutableUserInfo();
+			userInfo.setObjectForKey(type, ERXRouteRequestHandler.TypeKey);
+			userInfo.setObjectForKey(path, ERXRouteRequestHandler.PathKey);
+
+			ERXRoute matchingRoute = null;
+			NSDictionary<ERXRoute.Key, String> keys = null;
+			for (ERXRoute route : _routes) {
+				keys = route.keys(path);
+				if (keys != null) {
+					matchingRoute = route;
+					break;
+				}
+			}
+
+			if (matchingRoute != null) {
+				String controller = keys.objectForKey(ERXRoute.ControllerKey);
+				String actionName = keys.objectForKey(ERXRoute.ActionKey);
+				requestHandlerPath.addObject(controller);
+				requestHandlerPath.addObject(actionName);
+				userInfo.setObjectForKey(matchingRoute, ERXRouteRequestHandler.RouteKey);
+				userInfo.setObjectForKey(keys, ERXRouteRequestHandler.KeysKey);
+			}
+		}
+		catch (Throwable t) {
+			throw new RuntimeException("Failed to compute request handler path.", t);
+		}
+
+		return requestHandlerPath;
+	}
+
+	@Override
+	public Object[] getRequestActionClassAndNameForPath(NSArray requestHandlerPath) {
+		String requestActionClassName = (String) requestHandlerPath.objectAtIndex(0);
+		String requestActionName = (String) requestHandlerPath.objectAtIndex(1);
+		return new Object[] { requestActionClassName, requestActionName, _NSUtilities.classWithName(requestActionClassName) };
+	}
+
+	@Override
+	public WOAction getActionInstance(Class class1, Class[] aclass, Object[] aobj) {
+		try {
+			@SuppressWarnings("unchecked") Class<? extends ERXRouteDirectAction> actionClass = class1.asSubclass(ERXRouteDirectAction.class);
+			Constructor<? extends ERXRouteDirectAction> constructor = actionClass.getConstructor(WORequest.class, ERXRoute.class, NSDictionary.class);
+			WORequest request = (WORequest) aobj[0];
+			ERXRoute route = (ERXRoute) request.userInfo().objectForKey(ERXRouteRequestHandler.RouteKey);
+			@SuppressWarnings("unchecked") NSDictionary<ERXRoute.Key, Object> keys = (NSDictionary<ERXRoute.Key, Object>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
+			ERXRouteDirectAction action = constructor.newInstance(request, route, keys);
+			return action;
+		}
+		catch (Throwable t) {
+			throw new RuntimeException("Failed to create the action instance for the class '" + class1 + "'.", t);
+		}
+
+	}
+
+	/**
+	 * Registers an ERXRestRequestHandler with the WOApplication for the handler key "rest".
+	 * 
+	 * @param requestHandler
+	 *            the rest request handler to register
+	 */
+	public static void register(ERXRouteRequestHandler requestHandler) {
+		WOApplication.application().registerRequestHandler(requestHandler, ERXRouteRequestHandler.Key);
+	}
+}
