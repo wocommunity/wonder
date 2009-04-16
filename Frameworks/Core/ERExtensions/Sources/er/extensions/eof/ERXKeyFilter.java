@@ -60,6 +60,38 @@ public class ERXKeyFilter {
 		_includes = new NSMutableDictionary<ERXKey, ERXKeyFilter>();
 		_excludes = new NSMutableSet<ERXKey>();
 	}
+	
+	/**
+	 * Shortcut to return a new ERXKeyFilter(None)
+	 * @return a new ERXKeyFilter(None)
+	 */
+	public static ERXKeyFilter none() {
+		return new ERXKeyFilter(ERXKeyFilter.Base.None);
+	}
+	
+	/**
+	 * Shortcut to return a new ERXKeyFilter(Attributes)
+	 * @return a new ERXKeyFilter(Attributes)
+	 */
+	public static ERXKeyFilter attributes() {
+		return new ERXKeyFilter(ERXKeyFilter.Base.Attributes);
+	}
+	
+	/**
+	 * Shortcut to return a new ERXKeyFilter(AttributesAndToOneRelationships)
+	 * @return a new ERXKeyFilter(AttributesAndToOneRelationships)
+	 */
+	public static ERXKeyFilter attributesAndToOneRelationships() {
+		return new ERXKeyFilter(ERXKeyFilter.Base.AttributesAndToOneRelationships);
+	}
+	
+	/**
+	 * Shortcut to return a new ERXKeyFilter(All)
+	 * @return a new ERXKeyFilter(All)
+	 */
+	public static ERXKeyFilter all() {
+		return new ERXKeyFilter(ERXKeyFilter.Base.All);
+	}
 
 	/**
 	 * Returns the base rule for this filter.
