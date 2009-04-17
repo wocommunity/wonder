@@ -87,6 +87,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		_routes.addObject(route);
 	}
 
+	@SuppressWarnings("unchecked")
+	public void addDefaultRoutes(String entityName) {
+		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(entityName, 2);
+		addDefaultRoutes(entityName, _NSUtilities.classWithName(pluralEntityName + "Controller").asSubclass(ERXRouteDirectAction.class));
+	}
+
 	/**
 	 * Adds list and view routes for the given entity. For instance, if you provide the
 	 * entity name "Reminder" you will get the routes:
