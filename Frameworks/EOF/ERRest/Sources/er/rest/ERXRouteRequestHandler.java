@@ -22,8 +22,16 @@ import er.extensions.localization.ERXLocalizer;
  * in Application:
  * <pre>
  * ERXRouteRequestHandler routeRequestHandler = new ERXRouteRequestHandler();
- * routeRequestHandler.addRoute(new ERXRoute("/reminders/{action}", RemindersController.class.getName()));
- * routeRequestHandler.addRoute(new ERXRoute("/reminder/{reminder:Reminder}", RemindersController.class.getName(), "view"));
+ * routeRequestHandler.addRoute(new ERXRoute("/reminders/{action}", RemindersController.class));
+ * routeRequestHandler.addRoute(new ERXRoute("/reminder/{reminder:Reminder}", RemindersController.class, "view"));
+ * ERXRouteRequestHandler.register(routeRequestHandler);
+ * </pre>
+ * 
+ * or
+ * 
+ * <pre>
+ * ERXRouteRequestHandler routeRequestHandler = new ERXRouteRequestHandler();
+ * routeRequestHandler.addDefaultRoutes(Reminder.ENTITY_NAME, RemindersController.class);
  * ERXRouteRequestHandler.register(routeRequestHandler);
  * </pre>
  * 
@@ -34,12 +42,12 @@ import er.extensions.localization.ERXLocalizer;
  *     super(request);
  *   }
  *   
- *   public WOActionResults viewAction() {
+ *   public WOActionResults showAction() {
  *     Reminder reminder = (Reminder) objects(ERXEC.newEditingContext()).objectForKey("reminder");
  *     return response(ERXKeyFilter.attributes(), reminder);
  *   }
  *   
- *   public WOActionResults listAction() throws Exception {
+ *   public WOActionResults indexAction() throws Exception {
  *     Day day = Day.todayDay();
  *     EOQualifier qualifier = day.qualifier(Reminder.CREATION_DATE_KEY);
  *     EOEditingContext editingContext = ERXEC.newEditingContext();
@@ -51,11 +59,11 @@ import er.extensions.localization.ERXLocalizer;
  * 
  * in browser:
  * <pre>
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list.xml
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list.json
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list.plist
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/list
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminder/100.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders.xml
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders.plist
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/100.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/100/edit.json
  * </pre>
  * 
  * @author mschrag
