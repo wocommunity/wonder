@@ -111,10 +111,13 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	    addRoute(new ERXRoute("/" + pluralEntityName + "/new", ERXRoute.Method.All, controllerClass, "new"));
 	    
 	    addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
 	    addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
 	    addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
-	    
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
 	    addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", ERXRoute.Method.All, controllerClass));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", ERXRoute.Method.All, controllerClass));
 	}
 	
 	@Override
