@@ -7,9 +7,9 @@ package com.webobjects.monitor.application;
 
  In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple’s copyrights in this original Apple software (the “Apple Software”), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
 
- The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS. 
+ The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
 
- IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
+ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF
  SUCH DAMAGE.
  */
 import java.util.Enumeration;
@@ -33,7 +33,7 @@ import com.webobjects.monitor._private.StatsUtilities;
 import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
 public class AppDetailPage extends MonitorComponent {
-	
+
     public AppDetailPage(WOContext aWocontext) {
         super(aWocontext);
         handler().updateForPage(name());
@@ -70,7 +70,7 @@ public class AppDetailPage extends MonitorComponent {
      * old instances die in due time and then restart when the sessions stop.
      * You may or may not need to set ERKillTimer to prevent totally
      * long-running sessions to keep the app from dying.
-     * 
+     *
      * @author ak
      */
     public static class Bouncer extends Thread implements ErrorCollector {
@@ -137,10 +137,10 @@ public class AppDetailPage extends MonitorComponent {
                     NSArray<MInstance> inactiveInstances = inactiveInstancesByHost.objectForKey(host);
                     if (inactiveInstances.count() >= i) {
                         MInstance instance = inactiveInstances.objectAtIndex(i);
-                        log("Adding instance " + instance + " on host " + host);
+                        log("Adding instance " + instance.displayName() + " on host " + host.addressAsString());
                         startingInstances.addObject(instance);
                     } else {
-                        log("Not enough instances on host: " + host);
+                        log("Not enough instances on host: " + host.addressAsString());
                     }
                 }
             }
@@ -216,7 +216,7 @@ public class AppDetailPage extends MonitorComponent {
             }
             handler().sendUpdateInstancesToWotaskds(restarting, activeHosts.allObjects());
             log("Started scheduling again: " + restarting);
-            
+
             handler().startReading();
             try {
                 handler().getInstanceStatusForHosts(activeHosts.allObjects());
@@ -255,6 +255,10 @@ public class AppDetailPage extends MonitorComponent {
         @Override
         public String toString() {
             return "Bouncer: " + _app.name() + "->" + _status;
+        }
+
+        public String status() {
+            return _status;
         }
     }
 
@@ -360,7 +364,7 @@ public class AppDetailPage extends MonitorComponent {
     public WOComponent deleteInstanceClicked() {
 
         final MInstance instance = currentInstance;
-        
+
         return ConfirmationPage.create(context(), new ConfirmationPage.Delegate() {
 
             public WOComponent cancel() {
@@ -537,7 +541,7 @@ public class AppDetailPage extends MonitorComponent {
     public NSArray<MInstance> runningInstances() {
         return myApplication().runningInstances_M();
     }
-    
+
     /** ******** Group Controls ********* */
     public WOComponent startAllClicked() {
         handler().startReading();
@@ -619,7 +623,7 @@ public class AppDetailPage extends MonitorComponent {
 
         final NSArray instances = selectedInstances().immutableClone();
         final MApplication application = myApplication();
-        
+
         return ConfirmationPage.create(context(), new ConfirmationPage.Delegate() {
 
             public WOComponent cancel() {
