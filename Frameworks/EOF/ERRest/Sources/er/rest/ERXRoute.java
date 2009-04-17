@@ -25,10 +25,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author mschrag
  */
 public class ERXRoute {
+	public static enum Method { All, Get, Put, Post, Delete }
+	
 	public static final ERXRoute.Key ControllerKey = new ERXRoute.Key("controller");
 	public static final ERXRoute.Key ActionKey = new ERXRoute.Key("action");
 
 	private Pattern _routePattern;
+	private ERXRoute.Method _method;
 	private NSMutableArray<ERXRoute.Key> _keys;
 	private Class<? extends ERXRouteDirectAction> _controller;
 	private String _action;
@@ -39,8 +42,18 @@ public class ERXRoute {
 	 * @param urlPattern
 	 *            the url pattern to use
 	 */
+	public ERXRoute(String urlPattern, ERXRoute.Method method) {
+		this(urlPattern, method, (Class<? extends ERXRouteDirectAction>) null, null);
+	}
+
+	/**
+	 * Constructs a new route with the given URL pattern.
+	 * 
+	 * @param urlPattern
+	 *            the url pattern to use
+	 */
 	public ERXRoute(String urlPattern) {
-		this(urlPattern, (Class<? extends ERXRouteDirectAction>) null, null);
+		this(urlPattern, ERXRoute.Method.All, (Class<? extends ERXRouteDirectAction>) null, null);
 	}
 
 	/**
@@ -53,7 +66,20 @@ public class ERXRoute {
 	 */
 	@SuppressWarnings("unchecked")
 	public ERXRoute(String urlPattern, String controller) {
-		this(urlPattern, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), null);
+		this(urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), null);
+	}
+
+	/**
+	 * Constructs a new route with the given URL pattern.
+	 * 
+	 * @param urlPattern
+	 *            the url pattern to use
+	 * @param controller
+	 *            the default controller class name
+	 */
+	@SuppressWarnings("unchecked")
+	public ERXRoute(String urlPattern, ERXRoute.Method method, String controller) {
+		this(urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), null);
 	}
 
 	/**
@@ -65,7 +91,19 @@ public class ERXRoute {
 	 *            the default controller class
 	 */
 	public ERXRoute(String urlPattern, Class<? extends ERXRouteDirectAction> controller) {
-		this(urlPattern, controller, null);
+		this(urlPattern, ERXRoute.Method.All, controller, null);
+	}
+
+	/**
+	 * Constructs a new route with the given URL pattern.
+	 * 
+	 * @param urlPattern
+	 *            the url pattern to use
+	 * @param controller
+	 *            the default controller class
+	 */
+	public ERXRoute(String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteDirectAction> controller) {
+		this(urlPattern, method, controller, null);
 	}
 
 	/**
@@ -80,7 +118,22 @@ public class ERXRoute {
 	 */
 	@SuppressWarnings("unchecked")
 	public ERXRoute(String urlPattern, String controller, String action) {
-		this(urlPattern, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), action);
+		this(urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), action);
+	}
+
+	/**
+	 * Constructs a new route with the given URL pattern.
+	 * 
+	 * @param urlPattern
+	 *            the url pattern to use
+	 * @param controller
+	 *            the default controller class name
+	 * @param action
+	 *            the action name
+	 */
+	@SuppressWarnings("unchecked")
+	public ERXRoute(String urlPattern, ERXRoute.Method method, String controller, String action) {
+		this(urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), action);
 	}
 
 	/**
@@ -94,6 +147,21 @@ public class ERXRoute {
 	 *            the action name
 	 */
 	public ERXRoute(String urlPattern, Class<? extends ERXRouteDirectAction> controller, String action) {
+		this(urlPattern, ERXRoute.Method.All, controller, action);
+	}
+	
+	/**
+	 * Constructs a new route with the given URL pattern.
+	 * 
+	 * @param urlPattern
+	 *            the url pattern to use
+	 * @param controller
+	 *            the default controller class
+	 * @param action
+	 *            the action name
+	 */
+	public ERXRoute(String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteDirectAction> controller, String action) {
+		_method = method;
 		_controller = controller;
 		_action = action;
 
@@ -132,6 +200,24 @@ public class ERXRoute {
 		}
 		_routePattern = Pattern.compile(routeRegex.toString());
 	}
+	
+	/**
+	 * Returns the method of this request.
+	 * 
+	 * @return the method of this request
+	 */
+	public ERXRoute.Method method() {
+		return _method;
+	}
+	
+	/**
+	 * Sets the method of this request.
+	 * 
+	 * @param method the method of this request
+	 */
+	public void setMethod(ERXRoute.Method method) {
+		_method = method;
+	}
 
 	/**
 	 * Returns the route keys for the given URL.
@@ -140,26 +226,28 @@ public class ERXRoute {
 	 *            the URL to parse
 	 * @return
 	 */
-	public NSDictionary<ERXRoute.Key, String> keys(String url) {
+	public NSDictionary<ERXRoute.Key, String> keys(String url, ERXRoute.Method method) {
 		NSMutableDictionary<ERXRoute.Key, String> keys = null;
 
-		Matcher routeMatcher = _routePattern.matcher(url);
-		if (routeMatcher.matches()) {
-			keys = new NSMutableDictionary<ERXRoute.Key, String>();
-			int groupCount = routeMatcher.groupCount();
-			int keyCount = _keys.count();
-			for (int keyNum = 0; keyNum < keyCount; keyNum++) {
-				ERXRoute.Key key = _keys.objectAtIndex(keyNum);
-				String value = routeMatcher.group(keyNum + 1);
-				keys.setObjectForKey(value, key);
-			}
-
-			if (!keys.containsKey(ERXRoute.ControllerKey) && _controller != null) {
-				keys.setObjectForKey(_controller.getName(), ERXRoute.ControllerKey);
-			}
-
-			if (!keys.containsKey(ERXRoute.ActionKey) && _action != null) {
-				keys.setObjectForKey(_action, ERXRoute.ActionKey);
+		if (_method == ERXRoute.Method.All || _method == null || method == null || method.equals(_method)) {
+			Matcher routeMatcher = _routePattern.matcher(url);
+			if (routeMatcher.matches()) {
+				keys = new NSMutableDictionary<ERXRoute.Key, String>();
+				int groupCount = routeMatcher.groupCount();
+				int keyCount = _keys.count();
+				for (int keyNum = 0; keyNum < keyCount; keyNum++) {
+					ERXRoute.Key key = _keys.objectAtIndex(keyNum);
+					String value = routeMatcher.group(keyNum + 1);
+					keys.setObjectForKey(value, key);
+				}
+	
+				if (!keys.containsKey(ERXRoute.ControllerKey) && _controller != null) {
+					keys.setObjectForKey(_controller.getName(), ERXRoute.ControllerKey);
+				}
+	
+				if (!keys.containsKey(ERXRoute.ActionKey) && _action != null) {
+					keys.setObjectForKey(_action, ERXRoute.ActionKey);
+				}
 			}
 		}
 
@@ -175,8 +263,8 @@ public class ERXRoute {
 	 *            the editing context to fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's keys to their resolved objects
 	 */
-	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(String url, EOEditingContext editingContext) {
-		return keysWithObjects(keys(url), editingContext);
+	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(String url, ERXRoute.Method method, EOEditingContext editingContext) {
+		return keysWithObjects(keys(url, method), editingContext);
 	}
 
 	/**
@@ -188,8 +276,8 @@ public class ERXRoute {
 	 *            the editing context to fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's key names to their resolved objects
 	 */
-	public NSDictionary<String, Object> objects(String url, EOEditingContext editingContext) {
-		return objects(keys(url), editingContext);
+	public NSDictionary<String, Object> objects(String url, ERXRoute.Method method, EOEditingContext editingContext) {
+		return objects(keys(url, method), editingContext);
 	}
 
 	/**

@@ -96,10 +96,13 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public void addDefaultRoutes(String entityName, Class<? extends ERXRouteDirectAction> controllerClass) {
 		String singularEntityName = ERXStringUtilities.uncapitalize(entityName);
 		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(singularEntityName, 2);
-	    addRoute(new ERXRoute("/" + pluralEntityName, controllerClass, "list"));
-	    addRoute(new ERXRoute("/" + pluralEntityName + "/{action}", controllerClass));
-	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", controllerClass, "view"));
-	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", controllerClass));
+	    addRoute(new ERXRoute("/" + pluralEntityName, ERXRoute.Method.All, controllerClass, "list"));
+	    addRoute(new ERXRoute("/" + pluralEntityName + "/{action}", ERXRoute.Method.All, controllerClass));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Post, controllerClass, "create"));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "delete"));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.All, controllerClass, "view"));
+	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", ERXRoute.Method.All, controllerClass));
 	}
 	
 	@Override
@@ -124,7 +127,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			ERXRoute matchingRoute = null;
 			NSDictionary<ERXRoute.Key, String> keys = null;
 			for (ERXRoute route : _routes) {
-				keys = route.keys(path);
+				keys = route.keys(path, ERXRoute.Method.valueOf(ERXStringUtilities.capitalize(request.method().toLowerCase())));
 				if (keys != null) {
 					matchingRoute = route;
 					break;
