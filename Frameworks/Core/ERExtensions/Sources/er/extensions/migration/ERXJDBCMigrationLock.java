@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOSchemaGeneration;
@@ -108,7 +109,17 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 						if (createIfMissing()) {
 							row.setObjectForKey(new Integer(initialVersionForModel(model)), "version");
 							row.setObjectForKey(model.name(), "modelName");
-							channel.insertRow(row, dbUpdaterEntity);
+							try {
+								channel.insertRow(row, dbUpdaterEntity);
+							}
+							catch (EOGeneralAdaptorException e) {
+								// Assume this is the unique constraint on modelName that failed
+								if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
+									ERXJDBCMigrationLock.log.info("Exception creating row for model '" + model.name() + 
+											", assuming another process has already added this and has the lock.", e);
+								}
+								return false;
+							}
 							count = 1;
 						}
 						else {
@@ -139,6 +150,8 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				try {
 					log.warn("Locking failed, but this might be OK if this is the first time you are running migrations.  If things keep running, it probably worked fine.  The original reason for the failure: ", e);
 					ERXJDBCUtilities.executeUpdateScript(channel, createTableStatement);
+					String uniqueModelNameIndex = ERXSQLHelper.newSQLHelper(model).sqlForCreateUniqueIndex("unique_model", migrationTableName(adaptor), "modelname");
+					ERXJDBCUtilities.executeUpdateScript(channel, uniqueModelNameIndex);
 					return _tryLock(channel, model, lockOwnerName, false);
 				}
 				catch (Throwable t) {
