@@ -685,6 +685,7 @@ public class ERXModelGroup extends EOModelGroup {
 		String userName = getProperty(modelName + ".username", "JNDI.global.username");
 		String password = decryptProperty(modelName + ".password", "JNDI.global.password");
 		String authenticationMethod = getProperty(modelName + ".authenticationMethod", "JNDI.global.authenticationMethod");
+		String plugin = getProperty(modelName + ".plugin", "JNDI.global.plugin");
 		
 		NSDictionary<String, Object> connectionDictionary = model.connectionDictionary();
 		if (connectionDictionary == null) {
@@ -705,6 +706,9 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 		if (authenticationMethod != null) {
 			newConnectionDictionary.setObjectForKey(authenticationMethod, "authenticationMethod");
+		}
+		if (plugin != null) {
+			newConnectionDictionary.setObjectForKey(plugin, "plugInClassName");
 		}
 
 		model.setConnectionDictionary(newConnectionDictionary);
