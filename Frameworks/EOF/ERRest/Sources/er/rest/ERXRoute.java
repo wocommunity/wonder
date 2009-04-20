@@ -4,17 +4,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.webobjects.eoaccess.EOAttribute;
-import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
-
-import er.extensions.eof.ERXEOAccessUtilities;
-import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * ERXRoute encapsulates a URL path with matching values inside of it. For instance, the route
@@ -33,7 +27,7 @@ public class ERXRoute {
 	private Pattern _routePattern;
 	private ERXRoute.Method _method;
 	private NSMutableArray<ERXRoute.Key> _keys;
-	private Class<? extends ERXRouteDirectAction> _controller;
+	private Class<? extends ERXRouteController> _controller;
 	private String _action;
 
 	/**
@@ -43,7 +37,7 @@ public class ERXRoute {
 	 *            the url pattern to use
 	 */
 	public ERXRoute(String urlPattern, ERXRoute.Method method) {
-		this(urlPattern, method, (Class<? extends ERXRouteDirectAction>) null, null);
+		this(urlPattern, method, (Class<? extends ERXRouteController>) null, null);
 	}
 
 	/**
@@ -53,7 +47,7 @@ public class ERXRoute {
 	 *            the url pattern to use
 	 */
 	public ERXRoute(String urlPattern) {
-		this(urlPattern, ERXRoute.Method.All, (Class<? extends ERXRouteDirectAction>) null, null);
+		this(urlPattern, ERXRoute.Method.All, (Class<? extends ERXRouteController>) null, null);
 	}
 
 	/**
@@ -66,7 +60,7 @@ public class ERXRoute {
 	 */
 	@SuppressWarnings("unchecked")
 	public ERXRoute(String urlPattern, String controller) {
-		this(urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), null);
+		this(urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), null);
 	}
 
 	/**
@@ -79,7 +73,7 @@ public class ERXRoute {
 	 */
 	@SuppressWarnings("unchecked")
 	public ERXRoute(String urlPattern, ERXRoute.Method method, String controller) {
-		this(urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), null);
+		this(urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), null);
 	}
 
 	/**
@@ -90,7 +84,7 @@ public class ERXRoute {
 	 * @param controller
 	 *            the default controller class
 	 */
-	public ERXRoute(String urlPattern, Class<? extends ERXRouteDirectAction> controller) {
+	public ERXRoute(String urlPattern, Class<? extends ERXRouteController> controller) {
 		this(urlPattern, ERXRoute.Method.All, controller, null);
 	}
 
@@ -102,7 +96,7 @@ public class ERXRoute {
 	 * @param controller
 	 *            the default controller class
 	 */
-	public ERXRoute(String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteDirectAction> controller) {
+	public ERXRoute(String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteController> controller) {
 		this(urlPattern, method, controller, null);
 	}
 
@@ -118,7 +112,7 @@ public class ERXRoute {
 	 */
 	@SuppressWarnings("unchecked")
 	public ERXRoute(String urlPattern, String controller, String action) {
-		this(urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), action);
+		this(urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), action);
 	}
 
 	/**
@@ -133,7 +127,7 @@ public class ERXRoute {
 	 */
 	@SuppressWarnings("unchecked")
 	public ERXRoute(String urlPattern, ERXRoute.Method method, String controller, String action) {
-		this(urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteDirectAction.class), action);
+		this(urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), action);
 	}
 
 	/**
@@ -146,7 +140,7 @@ public class ERXRoute {
 	 * @param action
 	 *            the action name
 	 */
-	public ERXRoute(String urlPattern, Class<? extends ERXRouteDirectAction> controller, String action) {
+	public ERXRoute(String urlPattern, Class<? extends ERXRouteController> controller, String action) {
 		this(urlPattern, ERXRoute.Method.All, controller, action);
 	}
 	
@@ -160,7 +154,7 @@ public class ERXRoute {
 	 * @param action
 	 *            the action name
 	 */
-	public ERXRoute(String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteDirectAction> controller, String action) {
+	public ERXRoute(String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteController> controller, String action) {
 		_method = method;
 		_controller = controller;
 		_action = action;
@@ -296,7 +290,7 @@ public class ERXRoute {
 			for (Map.Entry<ERXRoute.Key, String> entry : keys.entrySet()) {
 				ERXRoute.Key key = entry.getKey();
 				String valueStr = entry.getValue();
-				Object value = objectValue(valueStr, key, editingContext);
+				Object value = ERXRestUtils.coerceValueType(valueStr, key.valueType(), editingContext);
 				objects.setObjectForKey(value, key);
 			}
 		}
@@ -319,70 +313,11 @@ public class ERXRoute {
 			for (Map.Entry<ERXRoute.Key, String> entry : keys.entrySet()) {
 				ERXRoute.Key key = entry.getKey();
 				String valueStr = entry.getValue();
-				Object value = objectValue(valueStr, key, editingContext);
+				Object value = ERXRestUtils.coerceValueType(valueStr, key.valueType(), editingContext);
 				objects.setObjectForKey(value, key._key);
 			}
 		}
 		return objects;
-	}
-
-	/**
-	 * Returns the given object coerced into the desired value as defined by the value type of the given route key.
-	 * 
-	 * @param obj
-	 *            the object to convert
-	 * @param key
-	 *            the ERXRoute.Key to convert with
-	 * @param editingContext
-	 *            the editing context to fault EO's in from (or null to not fault EO's)
-	 * @return the coerced value
-	 */
-	public Object objectValue(Object obj, ERXRoute.Key key, EOEditingContext editingContext) {
-		Object value;
-		if (ERXValueUtilities.isNull(obj)) {
-			value = null;
-		}
-		else if ("String".equals(key._valueType) || java.lang.String.class.getName().equals(key._valueType)) {
-			value = obj.toString();
-		}
-		else if ("Boolean".equals(key._valueType) || java.lang.Boolean.class.getName().equals(key._valueType)) {
-			value = ERXValueUtilities.BooleanValueWithDefault(obj, null);
-		}
-		// else if ("Byte".equals(valueType) || java.lang.Byte.class.getName().equals(valueType)) {
-		// value = ERXValueUtilities.ByteValueWithDefault(obj, null);
-		// }
-		// else if ("Short".equals(valueType) || java.lang.Short.class.getName().equals(valueType)) {
-		// value = ERXValueUtilities.ShortValueWithDefault(obj, null);
-		// }
-		else if ("Integer".equals(key._valueType) || java.lang.Integer.class.getName().equals(key._valueType)) {
-			value = ERXValueUtilities.IntegerValueWithDefault(obj, null);
-		}
-		else if ("Long".equals(key._valueType) || java.lang.Long.class.getName().equals(key._valueType)) {
-			value = ERXValueUtilities.LongValueWithDefault(obj, null);
-		}
-		else if ("Float".equals(key._valueType) || java.lang.Float.class.getName().equals(key._valueType)) {
-			value = ERXValueUtilities.FloatValueWithDefault(obj, null);
-		}
-		else if ("Double".equals(key._valueType) || java.lang.Double.class.getName().equals(key._valueType)) {
-			value = ERXValueUtilities.DoubleValueWithDefault(obj, null);
-		}
-		else if ("BigDecimal".equals(key._valueType) || java.math.BigDecimal.class.getName().equals(key._valueType)) {
-			value = ERXValueUtilities.DoubleValueWithDefault(obj, null);
-		}
-		else if (editingContext != null) {
-			EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, key._valueType);
-			if (entity != null) {
-				Object pkValue = ((EOAttribute) entity.primaryKeyAttributes().objectAtIndex(0)).validateValue(obj);
-				value = ERXEOControlUtilities.objectWithPrimaryKeyValue(editingContext, entity.name(), pkValue, null, false);
-			}
-			else {
-				throw new IllegalArgumentException("Unknown value type '" + key._valueType + "'.");
-			}
-		}
-		else {
-			value = obj;
-		}
-		return value;
 	}
 
 	/**
