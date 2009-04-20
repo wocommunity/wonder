@@ -704,7 +704,7 @@ public class ERXKey<T> {
 	 *            the object to set the value on
 	 */
 	public void takeValueInObject(T value, Object obj) {
-		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(value, obj, _key);
+		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(obj, value, _key);
 	}
 
 	@Override
