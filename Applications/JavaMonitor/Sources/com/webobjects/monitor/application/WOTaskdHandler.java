@@ -211,7 +211,7 @@ public class WOTaskdHandler {
     /** ******* */
 
     /** ******** CONFIGURE (UPDATE) ********* */
-    protected void sendUpdateInstancesToWotaskds(NSArray<MInstance> changedInstanceArray, NSArray wotaskdArray) {
+    public void sendUpdateInstancesToWotaskds(NSArray<MInstance> changedInstanceArray, NSArray wotaskdArray) {
         if (wotaskdArray.count() != 0 && changedInstanceArray.count() != 0) {
             WOResponse[] responses = sendRequest(createUpdateRequestDictionary(null, null, null, changedInstanceArray,
                     "configure"), wotaskdArray, true);
@@ -220,7 +220,7 @@ public class WOTaskdHandler {
         }
     }
 
-    protected void sendUpdateApplicationToWotaskds(MApplication changedApplication, NSArray wotaskdArray) {
+    public void sendUpdateApplicationToWotaskds(MApplication changedApplication, NSArray wotaskdArray) {
         if (wotaskdArray.count() != 0) {
             WOResponse[] responses = sendRequest(createUpdateRequestDictionary(null, null, changedApplication, null,
                     "configure"), wotaskdArray, true);
@@ -319,23 +319,23 @@ public class WOTaskdHandler {
         sendCommandInstancesToWotaskds(command, instanceArray, wotaskdArray, this);
     }
 
-    protected void sendQuitInstancesToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray) {
+    public void sendQuitInstancesToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray) {
         sendCommandInstancesToWotaskds("QUIT", instanceArray, wotaskdArray, this);
     }
 
-    protected void sendStartInstancesToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray) {
+    public void sendStartInstancesToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray) {
         sendCommandInstancesToWotaskds("START", instanceArray, wotaskdArray, this);
     }
 
-    protected void sendClearDeathsToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray) {
+    public void sendClearDeathsToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray) {
         sendCommandInstancesToWotaskds("CLEAR", instanceArray, wotaskdArray, this);
     }
 
-    protected void sendStopInstancesToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray) {
+    public void sendStopInstancesToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray) {
         sendCommandInstancesToWotaskds("STOP", instanceArray, wotaskdArray, this);
     }
 
-    protected void sendRefuseSessionToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray,
+    public void sendRefuseSessionToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray,
             boolean doRefuse) {
         for (MInstance instance : instanceArray) {
             instance.setRefusingNewSessions(doRefuse);

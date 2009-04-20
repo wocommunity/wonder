@@ -21,16 +21,16 @@ import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
 import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.StatsUtilities;
-import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
+import com.webobjects.monitor.application.starter.ApplicationStarter;
+import com.webobjects.monitor.application.starter.GracefulBouncer;
+import com.webobjects.monitor.application.starter.ShutdownBouncer;
 
 public class AppDetailPage extends MonitorComponent {
 
@@ -61,218 +61,21 @@ public class AppDetailPage extends MonitorComponent {
         return newDetailPage();
     }
 
-    /**
-     * Bounces an application. It does so by staring at least one new instance
-     * per active host (or 10 % of the total active instance count), waiting
-     * until they have started, then refusing sessions for all old instances and
-     * turning scheduling on for all but the number of instances we started
-     * originally. The next effect should be that the new users get the new app,
-     * old instances die in due time and then restart when the sessions stop.
-     * You may or may not need to set ERKillTimer to prevent totally
-     * long-running sessions to keep the app from dying.
-     *
-     * @author ak
-     */
-    public static class Bouncer extends Thread implements ErrorCollector {
-
-        private MApplication _app;
-
-        private WOTaskdHandler _handler;
-
-        private NSMutableSet<String> _errors;
-
-        private String _status;
-
-        public Bouncer(MApplication app) {
-            _app = app;
-            _handler = new WOTaskdHandler(this);
-            setName("Bouncer: " + app.name());
-        }
-
-        private void bounce() throws InterruptedException {
-
-            _errors = new NSMutableSet<String>();
-
-            NSArray<MInstance> instances = _app.instanceArray().immutableClone();
-            NSMutableArray<MInstance> runningInstances = new NSMutableArray<MInstance>();
-            NSMutableSet<MHost> activeHosts = new NSMutableSet<MHost>();
-            NSMutableDictionary<MHost, NSMutableArray<MInstance>> inactiveInstancesByHost = new NSMutableDictionary<MHost, NSMutableArray<MInstance>>();
-            NSMutableDictionary<MHost, NSMutableArray<MInstance>> activeInstancesByHost = new NSMutableDictionary<MHost, NSMutableArray<MInstance>>();
-            for (MInstance instance : instances) {
-                MHost host = instance.host();
-                if (instance.isRunning_M()) {
-                    runningInstances.addObject(instance);
-                    activeHosts.addObject(host);
-                    NSMutableArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
-                    if (currentInstances == null) {
-                        currentInstances = new NSMutableArray<MInstance>();
-                        activeInstancesByHost.setObjectForKey(currentInstances, host);
-                    }
-                    currentInstances.addObject(instance);
-                } else {
-                    NSMutableArray<MInstance> currentInstances = inactiveInstancesByHost.objectForKey(host);
-                    if (currentInstances == null) {
-                        currentInstances = new NSMutableArray<MInstance>();
-                        inactiveInstancesByHost.setObjectForKey(currentInstances, host);
-                    }
-                    currentInstances.addObject(instance);
-                }
-            }
-            int numToStartPerHost = 1;
-            if (activeHosts.count() > 0) {
-                numToStartPerHost = (int) (runningInstances.count() / activeHosts.count() * .1);
-            }
-            if (numToStartPerHost < 1) {
-                numToStartPerHost = 1;
-            }
-            boolean useScheduling = true;
-
-            for (MInstance instance : runningInstances) {
-                useScheduling &= instance.schedulingEnabled() != null && instance.schedulingEnabled().booleanValue();
-            }
-
-            NSMutableArray<MInstance> startingInstances = new NSMutableArray<MInstance>();
-            for (int i = 0; i < numToStartPerHost; i++) {
-                for (MHost host : activeHosts) {
-                    NSArray<MInstance> inactiveInstances = inactiveInstancesByHost.objectForKey(host);
-                    if (inactiveInstances.count() >= i) {
-                        MInstance instance = inactiveInstances.objectAtIndex(i);
-                        log("Adding instance " + instance.displayName() + " on host " + host.addressAsString());
-                        startingInstances.addObject(instance);
-                    } else {
-                        log("Not enough instances on host: " + host.addressAsString());
-                    }
-                }
-            }
-            for (MInstance instance : startingInstances) {
-                if (useScheduling) {
-                    instance.setSchedulingEnabled(Boolean.TRUE);
-                } else {
-                    instance.setAutoRecover(Boolean.TRUE);
-                }
-            }
-            handler().sendUpdateInstancesToWotaskds(startingInstances, activeHosts.allObjects());
-            handler().sendStartInstancesToWotaskds(startingInstances, activeHosts.allObjects());
-            boolean waiting = true;
-
-            // wait until apps have started
-            while (waiting) {
-                handler().startReading();
-                try {
-                    log("Checking for started instances");
-                    handler().getInstanceStatusForHosts(activeHosts.allObjects());
-                    boolean allStarted = true;
-                    for (MInstance instance : startingInstances) {
-                        allStarted &= instance.isRunning_M();
-                    }
-                    if (allStarted) {
-                        waiting = false;
-                    } else {
-                        sleep(10 * 1000);
-                    }
-                } finally {
-                    handler().endReading();
-                }
-            }
-            log("Started instances sucessfully");
-
-            // turn scheduling off
-            for (MHost host : activeHosts) {
-                NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
-                for (MInstance instance : currentInstances) {
-                    if (useScheduling) {
-                        instance.setSchedulingEnabled(Boolean.FALSE);
-                    } else {
-                        instance.setAutoRecover(Boolean.FALSE);
-                    }
-                }
-            }
-
-            handler().sendUpdateInstancesToWotaskds(runningInstances, activeHosts.allObjects());
-
-            // then start to refuse new sessions
-            for (MHost host : activeHosts) {
-                NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
-                for (MInstance instance : currentInstances) {
-                    instance.setRefusingNewSessions(true);
-                }
-            }
-            handler().sendRefuseSessionToWotaskds(runningInstances, activeHosts.allObjects(), true);
-            log("Refused new sessions: " + runningInstances);
-
-            // turn scheduling on again, but only
-            NSMutableArray<MInstance> restarting = new NSMutableArray<MInstance>();
-            for (MHost host : activeHosts) {
-                NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
-                for (int i = 0; i < currentInstances.count() - numToStartPerHost; i++) {
-                    MInstance instance = currentInstances.objectAtIndex(i);
-                    if (useScheduling) {
-                        instance.setSchedulingEnabled(Boolean.TRUE);
-                    } else {
-                        instance.setAutoRecover(Boolean.TRUE);
-                    }
-                    restarting.addObject(instance);
-                }
-            }
-            handler().sendUpdateInstancesToWotaskds(restarting, activeHosts.allObjects());
-            log("Started scheduling again: " + restarting);
-
-            handler().startReading();
-            try {
-                handler().getInstanceStatusForHosts(activeHosts.allObjects());
-                log("Finished");
-            } finally {
-                handler().endReading();
-            }
-        }
-
-        private void log(Object msg) {
-            NSLog.out.appendln(msg);
-            _status = msg != null ? msg.toString() : "No status";
-        }
-
-        public WOTaskdHandler handler() {
-            return _handler;
-        }
-
-        @Override
-        public void run() {
-            try {
-                bounce();
-            } catch (InterruptedException e) {
-                log(e);
-            }
-        }
-
-        public void addObjectsFromArrayIfAbsentToErrorMessageArray(NSArray<String> aErrors) {
-            _errors.addObjectsFromArray(aErrors);
-        }
-
-        public NSArray<String> errors() {
-            return _errors.allObjects();
-        }
-
-        @Override
-        public String toString() {
-            return "Bouncer: " + _app.name() + "->" + _status;
-        }
-
-        public String status() {
-            return _status;
-        }
+    private String bouncerName() {
+        return "Bouncer." + myApplication().name();
     }
 
-    public Bouncer currentBouncer() {
-        return (Bouncer) session().objectForKey("Bouncer." + myApplication().name());
+    public ApplicationStarter currentBouncer() {
+        return (ApplicationStarter) session().objectForKey(bouncerName());
     }
 
     public WOComponent bounceClicked() {
-        Bouncer old = currentBouncer();
+        ApplicationStarter old = currentBouncer();
         if (old != null) {
             old.interrupt();
         }
-        Bouncer bouncer = new Bouncer(myApplication());
-        session().setObjectForKey(bouncer, "Bouncer." + myApplication().name());
+        ApplicationStarter bouncer = new GracefulBouncer(myApplication());
+        session().setObjectForKey(bouncer, bouncerName());
         bouncer.start();
         return newDetailPage();
     }
@@ -459,8 +262,7 @@ public class AppDetailPage extends MonitorComponent {
         handler().startReading();
         try {
             if (myApplication().hostArray().count() != 0) {
-                handler().sendClearDeathsToWotaskds(myApplication().instanceArray(),
-                        myApplication().hostArray());
+                handler().sendClearDeathsToWotaskds(myApplication().instanceArray(), myApplication().hostArray());
             }
         } finally {
             handler().endReading();
@@ -473,8 +275,8 @@ public class AppDetailPage extends MonitorComponent {
 
     /** ******** Individual Controls ********* */
     public WOComponent startInstance() {
-        if ((currentInstance.state == MObject.DEAD) || (currentInstance.state == MObject.STOPPING)
-                || (currentInstance.state == MObject.CRASHING) || (currentInstance.state == MObject.UNKNOWN)) {
+        if ((currentInstance.state == MObject.DEAD) || (currentInstance.state == MObject.STOPPING) || (currentInstance.state == MObject.CRASHING)
+                || (currentInstance.state == MObject.UNKNOWN)) {
             handler().sendStartInstancesToWotaskds(new NSArray(currentInstance), new NSArray(currentInstance.host()));
             currentInstance.state = MObject.STARTING;
         }
@@ -515,8 +317,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent toggleRefuseNewSessions() {
-        handler().sendRefuseSessionToWotaskds(new NSArray(currentInstance), new NSArray(currentInstance.host()),
-                !currentInstance.isRefusingNewSessions());
+        handler().sendRefuseSessionToWotaskds(new NSArray(currentInstance), new NSArray(currentInstance.host()), !currentInstance.isRefusingNewSessions());
 
         return newDetailPage();
     }
@@ -557,8 +358,8 @@ public class AppDetailPage extends MonitorComponent {
     private void startInstances(NSArray<MInstance> possibleInstances) {
         NSMutableArray<MInstance> instances = new NSMutableArray<MInstance>();
         for (MInstance currentInstance : possibleInstances) {
-            if ((currentInstance.state == MObject.DEAD) || (currentInstance.state == MObject.STOPPING)
-                    || (currentInstance.state == MObject.CRASHING) || (currentInstance.state == MObject.UNKNOWN)) {
+            if ((currentInstance.state == MObject.DEAD) || (currentInstance.state == MObject.STOPPING) || (currentInstance.state == MObject.CRASHING)
+                    || (currentInstance.state == MObject.UNKNOWN)) {
 
                 instances.addObject(currentInstance);
             }
@@ -617,7 +418,6 @@ public class AppDetailPage extends MonitorComponent {
 
         });
     }
-
 
     public WOComponent deleteAllInstancesClicked() {
 
@@ -896,7 +696,7 @@ public class AppDetailPage extends MonitorComponent {
 
         handler().startWriting();
         try {
-            NSMutableArray newInstanceArray = siteConfig().addInstances_M(selectedHost,  myApplication(), numberToAdd);
+            NSMutableArray newInstanceArray = siteConfig().addInstances_M(selectedHost, myApplication(), numberToAdd);
 
             if (allHosts().count() != 0) {
                 handler().sendAddInstancesToWotaskds(newInstanceArray, allHosts());
@@ -927,17 +727,17 @@ public class AppDetailPage extends MonitorComponent {
         }
         NSMutableArray<MInstance> result = new NSMutableArray<MInstance>();
         result.addObjectsFromArray(currentApplication.instanceArray());
-        EOSortOrdering order= new EOSortOrdering("displayName", EOSortOrdering.CompareAscending);
+        EOSortOrdering order = new EOSortOrdering("displayName", EOSortOrdering.CompareAscending);
         EOSortOrdering.sortArrayUsingKeyOrderArray(result, new NSArray(order));
         instancesArray = result;
         // AK: the MInstances don't really support equals()...
         if (!page.displayGroup.allObjects().equals(instancesArray)) {
             page.displayGroup.setObjectArray(instancesArray);
         }
-        if(selected != null) {
+        if (selected != null) {
             NSMutableArray<MInstance> active = new NSMutableArray<MInstance>();
             for (MInstance instance : selected) {
-                if(instancesArray.containsObject(instance)) {
+                if (instancesArray.containsObject(instance)) {
                     active.addObject(instance);
                 }
             }
@@ -949,7 +749,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public static AppDetailPage create(WOContext context, MApplication currentApplication) {
-        NSArray selected = (context.page() instanceof AppDetailPage ? ((AppDetailPage)context.page()).selectedInstances() : null);
+        NSArray selected = (context.page() instanceof AppDetailPage ? ((AppDetailPage) context.page()).selectedInstances() : null);
         return create(context, currentApplication, selected);
     }
 
