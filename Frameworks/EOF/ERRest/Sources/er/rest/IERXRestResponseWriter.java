@@ -7,8 +7,6 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.eof.ERXEOAccessUtilities;
-
 /**
  * IERXRestResponseWriter provides the interface for generating the output of a restful request.
  * 
