@@ -37,9 +37,12 @@ public class ERXRestUtils {
 	/**
 	 * Returns a String form of the given object using the given delegate.
 	 * 
-	 * @param context the context to write within
-	 * @param writer the writer to write with
-	 * @param value the value to write
+	 * @param context
+	 *            the context to write within
+	 * @param writer
+	 *            the writer to write with
+	 * @param value
+	 *            the value to write
 	 * @return a string form of the value using the given writer
 	 * @throws ERXRestException
 	 * @throws ERXRestSecurityException
@@ -57,9 +60,12 @@ public class ERXRestUtils {
 	/**
 	 * Returns a String form of the given objects using the given delegate.
 	 * 
-	 * @param context the context to write within
-	 * @param writer the writer to write with
-	 * @param values the values to write
+	 * @param context
+	 *            the context to write within
+	 * @param writer
+	 *            the writer to write with
+	 * @param values
+	 *            the values to write
 	 * @return a string form of the value using the given writer
 	 * @throws ERXRestException
 	 * @throws ERXRestSecurityException
@@ -75,8 +81,10 @@ public class ERXRestUtils {
 	/**
 	 * Returns a String form of the given object using the unsafe delegate.
 	 * 
-	 * @param writer the writer to write with
-	 * @param value the value to write
+	 * @param writer
+	 *            the writer to write with
+	 * @param value
+	 *            the value to write
 	 * @return a string form of the value using the given writer
 	 * @throws ERXRestException
 	 * @throws ERXRestSecurityException
@@ -90,8 +98,10 @@ public class ERXRestUtils {
 	/**
 	 * Returns a String form of the given objects using the unsafe delegate.
 	 * 
-	 * @param writer the writer to write with
-	 * @param values the values to write
+	 * @param writer
+	 *            the writer to write with
+	 * @param values
+	 *            the values to write
 	 * @return a string form of the value using the given writer
 	 * @throws ERXRestException
 	 * @throws ERXRestSecurityException
@@ -101,7 +111,11 @@ public class ERXRestUtils {
 	public static String toString(IERXRestResponseWriter writer, EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		return ERXRestUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), writer, entity, values);
 	}
-	
+
+	public static boolean isPrimitive(Object obj) {
+		return obj == null || (obj instanceof Class) ? ERXRestUtils.isPrimitive((Class) obj) : ERXRestUtils.isPrimitive(obj.getClass());
+	}
+
 	public static boolean isPrimitive(Class valueType) {
 		boolean primitive = false;
 		if (String.class.isAssignableFrom(valueType)) {
@@ -145,11 +159,10 @@ public class ERXRestUtils {
 		}
 		return primitive;
 	}
-	
 
 	/**
-	 * Returns the given object coerced into the desired value as defined by the value type of the given route key -- this should 
-	 * be merged with the method below ...
+	 * Returns the given object coerced into the desired value as defined by the value type of the given route key --
+	 * this should be merged with the method below ...
 	 * 
 	 * @param obj
 	 *            the object to convert

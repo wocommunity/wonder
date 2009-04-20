@@ -230,10 +230,10 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		if (id == null) {
 			ERXRestRequestNode idNode = attributeNode.childNamed("id");
 			if (idNode != null) {
-				id = idNode.value();
+				id = String.valueOf(idNode.value());
 			}
 			else {
-				id = attributeNode.value();
+				id = String.valueOf(attributeNode.value());
 			}
 		}
 		if (id != null && id.length() == 0) {
@@ -496,7 +496,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 					_updateRelationshipFromDocument(entity, eo, relationship, attributeNode, context);
 				}
 				else {
-					String attributeValue = attributeNode.value();
+					String attributeValue = (String) attributeNode.value(); // MS: This cast is totally wrong in the general case, but I don't want to fix everything at the moment
 					try {
 						takeValueForKey(entity, eo, attributeName, attributeValue, context);
 					}
