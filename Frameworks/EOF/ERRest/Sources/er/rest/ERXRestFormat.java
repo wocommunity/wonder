@@ -16,7 +16,7 @@ import er.extensions.eof.ERXKeyFilter;
  * @author mschrag
  */
 public enum ERXRestFormat {
-	XML(ERXXmlRestResponseWriter.class, ERXXmlRestRequestParser.class), JSON(ERXJSONRestResponseWriter.class, null), PLIST(ERXPListRestResponseWriter.class, null);
+	XML(ERXXmlRestResponseWriter.class, ERXXmlRestRequestParser.class), JSON(ERXJSONRestResponseWriter.class, ERXJSONRestRequestParser.class), PLIST(ERXPListRestResponseWriter.class, null);
 
 	private Class<? extends IERXRestResponseWriter> _writerClass;
 	private Class<? extends IERXRestRequestParser> _parserClass;
@@ -28,6 +28,9 @@ public enum ERXRestFormat {
 
 	public IERXRestRequestParser parser() {
 		try {
+			if (_parserClass == null) {
+				throw new IllegalArgumentException("There is no parser for the format '" + name() + "'.");
+			}
 			return _parserClass.newInstance();
 		}
 		catch (Exception e) {
