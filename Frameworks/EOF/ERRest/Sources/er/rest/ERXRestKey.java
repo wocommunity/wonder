@@ -501,6 +501,14 @@ public class ERXRestKey {
 		return "[ERXRestKey: entity = " + _entity + "; key = " + _key + "]";
 	}
 
+	public static ERXRestKey parse(ERXRestContext context, ERXRestRequestNode node, String path) throws ERXRestException, ERXRestNotFoundException {
+		if (path == null && node != null) {
+			path = node.name();
+			path = ERXLocalizer.currentLocalizer().singularifiedString(path);
+		}
+		return ERXRestKey.parse(context, path);
+	}
+	
 	/**
 	 * Parse the given URL path and return an ERXRestKey that represents it.
 	 * 

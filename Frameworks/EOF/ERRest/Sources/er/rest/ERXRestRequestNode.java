@@ -1,11 +1,31 @@
 package er.rest;
 
+import java.text.ParseException;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation._NSUtilities;
+
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXKey;
+import er.extensions.eof.ERXKeyFilter;
 
 /**
  * ERXRestRequestNode provides a model of a REST request. Because the incoming document format can vary (XML, JSON,
@@ -30,6 +50,11 @@ public class ERXRestRequestNode {
 		_name = name;
 		_attributes = new NSMutableDictionary<String, String>();
 		_children = new NSMutableArray<ERXRestRequestNode>();
+	}
+
+	public ERXRestRequestNode(String name, String value) {
+		this(name);
+		_value = value;
 	}
 
 	/**
@@ -146,5 +171,190 @@ public class ERXRestRequestNode {
 	 */
 	public NSArray<ERXRestRequestNode> children() {
 		return _children;
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		toString(sb, 0);
+		return sb.toString();
+	}
+
+	public void toString(StringBuffer sb, int depth) {
+		for (int i = 0; i < depth; i++) {
+			sb.append("  ");
+		}
+		sb.append("[");
+		sb.append(_name);
+		if (!_attributes.isEmpty()) {
+			sb.append(" ");
+			sb.append(_attributes);
+		}
+		if (_value != null) {
+			sb.append("=");
+			sb.append(_value);
+		}
+		if (!_children.isEmpty()) {
+			sb.append("\n");
+			for (ERXRestRequestNode child : _children) {
+				child.toString(sb, depth + 1);
+			}
+			for (int i = 0; i < depth; i++) {
+				sb.append("  ");
+			}
+		}
+		sb.append("]");
+		sb.append("\n");
+	}
+
+	public Object createObjectWithFilter(String name, ERXKeyFilter keyFilter, ERXRestRequestNode.Delegate delegate) throws ParseException, ERXRestException {
+		Object obj = delegate.createObjectNamed(name);
+		applyToObjectWithFilter(obj, keyFilter, delegate);
+		return obj;
+	}
+	
+	public void applyToObjectWithFilter(Object obj, ERXKeyFilter keyFilter, ERXRestRequestNode.Delegate delegate) throws ParseException, ERXRestException {
+		if (obj == null) {
+			return;
+		}
+
+		for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
+			ERXKey<Object> key = keyFilter.keyMap(new ERXKey<Object>(attribute.getKey()));
+			if (keyFilter.matches(key, ERXKey.Type.Attribute) && delegate.isClassProperty(obj, key.key())) {
+				Object value = ERXRestUtils.coerceValueType(null, obj, key.key(), attribute.getValue());
+				key.takeValueInObject(value, obj);
+			}
+		}
+
+		for (ERXRestRequestNode childNode : _children) {
+			ERXKey<Object> key = keyFilter.keyMap(new ERXKey<Object>(childNode.name()));
+			if (delegate.isClassProperty(obj, key.key())) {
+				NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(obj, key.key());
+				Class valueType = binding.valueType();
+				if (List.class.isAssignableFrom(valueType) && keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
+					@SuppressWarnings("unchecked")
+					List<Object> existingValues = (List<Object>) NSKeyValueCoding.DefaultImplementation.valueForKey(obj, key.key());
+	
+					Set<Object> removedValues = new HashSet<Object>(existingValues);
+					List<Object> newValues = new LinkedList<Object>();
+					List<Object> allValues = new LinkedList<Object>();
+					for (ERXRestRequestNode toManyNode : childNode.children()) {
+						Object childObj = delegate.objectForRequestNode(toManyNode, obj, key.key());
+						toManyNode.applyToObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
+						if (!existingValues.contains(childObj)) {
+							newValues.add(childObj);
+						}
+						allValues.add(childObj);
+						removedValues.remove(childObj);
+					}
+	
+					if (obj instanceof EOEnterpriseObject) {
+						for (Object removedValue : removedValues) {
+							((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) removedValue, key.key());
+						}
+						for (Object newValue : newValues) {
+							((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) newValue, key.key());
+						}
+					}
+					else {
+						key.takeValueInObject(allValues, obj);
+					}
+				}
+				else if (ERXRestUtils.isPrimitive(valueType) && keyFilter.matches(key, ERXKey.Type.Attribute)) {
+					Object value = ERXRestUtils.coerceValueType(null, obj, key.key(), childNode.value());
+					key.takeValueInObject(value, obj);
+				}
+				else if (keyFilter.matches(key, ERXKey.Type.ToOneRelationship)) {
+					Object childObj = delegate.objectForRequestNode(childNode, obj, key.key());
+					childNode.applyToObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
+					if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
+						((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, key.key());
+					}
+					else {
+						key.takeValueInObject(childObj, obj);
+					}
+				}
+			}
+		}
+	}
+
+	public static interface Delegate {
+		public Object createObjectNamed(String name);
+		public Object objectForRequestNode(ERXRestRequestNode node, Object parent, String key);
+		public boolean isClassProperty(Object object, String key);
+	}
+
+	public static class EODelegate implements Delegate {
+		private EOEditingContext _editingContext;
+
+		public EODelegate(EOEditingContext editingContext) {
+			_editingContext = editingContext;
+		}
+
+		public String idAttributeName(EOEntity entity) {
+			return "id";
+		}
+
+		public boolean isClassProperty(Object object, String key) {
+			boolean isClassProperty = true;
+			if (object instanceof EOEnterpriseObject) {
+				EOEnterpriseObject eoParent = (EOEnterpriseObject)object;
+				EOEntity entity = ERXEOAccessUtilities.entityForEo(eoParent);
+				EOAttribute attribute = entity.attributeNamed(key);
+				if (attribute != null) {
+					isClassProperty = entity.classProperties().containsObject(attribute);
+				}
+				else {
+					EORelationship relationship = entity.relationshipNamed(key);
+					if (relationship != null) {
+						isClassProperty = entity.classProperties().containsObject(relationship);
+					}
+				}
+			}
+			return isClassProperty;
+		}
+		
+		public Object createObjectNamed(String name) {
+			Object obj;
+			EOEntity entity = ERXEOAccessUtilities.entityNamed(_editingContext, name);
+			if (entity == null) {
+				try {
+					obj = _NSUtilities.classWithName(name).newInstance();
+				}
+				catch (Exception e) {
+					throw NSForwardException._runtimeExceptionForThrowable(e);
+				}
+			}
+			else {
+				obj = EOUtilities.createAndInsertInstance(_editingContext, name);
+			}
+			return obj;
+		}
+		
+		public Object objectForRequestNode(ERXRestRequestNode node, Object parent, String key) {
+			EOEnterpriseObject eoParent = (EOEnterpriseObject)parent;
+			EOEntity parentEntity = ERXEOAccessUtilities.entityForEo(eoParent);
+			EORelationship relationship = parentEntity.relationshipNamed(key);
+			EOEntity destinationEntity = relationship.destinationEntity();
+			String idKey = idAttributeName(destinationEntity);
+			String id = node.attributeForKey(idKey);
+			if (id == null) {
+				ERXRestRequestNode idNode = node.childNamed(idKey);
+				if (idNode != null) {
+					id = idNode.value();
+				}
+			}
+			
+			Object obj;
+			if (id == null) {
+				obj = createObjectNamed(destinationEntity.name());
+			}
+			else {
+				Object pkValue = ((EOAttribute) destinationEntity.primaryKeyAttributes().objectAtIndex(0)).validateValue(id);
+				obj = ERXEOControlUtilities.objectWithPrimaryKeyValue(_editingContext, destinationEntity.name(), pkValue, null, false);
+			}
+						
+			return obj;
+		}
 	}
 }

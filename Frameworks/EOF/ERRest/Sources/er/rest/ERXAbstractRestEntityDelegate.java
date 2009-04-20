@@ -1,6 +1,5 @@
 package er.rest;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Enumeration;
 
@@ -22,7 +21,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import er.extensions.eof.ERXEOGlobalIDUtilities;
 import er.extensions.eof.ERXFetchSpecification;
 import er.extensions.eof.ERXGuardedObjectInterface;
-import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXQ;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
@@ -360,106 +358,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return formattedValue;
 	}
 
-	/**
-	 * Parses the given String and returns an object.
-	 * 
-	 * @param entity
-	 *            the entity
-	 * @param object
-	 *            the object
-	 * @param attributeName
-	 *            the name of the property
-	 * @param attributeValue
-	 *            the value of the property
-	 * @return a parsed version of the String
-	 * @throws ParseException
-	 *             if a parse failure occurs
-	 * @throws ERXRestException
-	 *             if a general failure occurs
-	 */
 	public Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
-		try {
-			NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(object, attributeName);
-			Class valueType = binding.valueType();
-
-			Object parsedValue;
-			if (attributeValue == null || attributeValue.length() == 0) {
-				EOAttribute attribute = entity.attributeNamed(attributeName);
-				if (attribute != null && !attribute.allowsNull() && String.class.isAssignableFrom(valueType)) {
-					parsedValue = "";
-				}
-				else {
-					parsedValue = EOKeyValueCoding.NullValue;
-				}
-			}
-			else {
-				if (String.class.isAssignableFrom(valueType)) {
-					parsedValue = attributeValue;
-				}
-				else if (Boolean.class.isAssignableFrom(valueType)) {
-					parsedValue = Boolean.valueOf(attributeValue);
-				}
-				else if (Character.class.isAssignableFrom(valueType)) {
-					parsedValue = new Character(attributeValue.charAt(0));
-				}
-				else if (Byte.class.isAssignableFrom(valueType)) {
-					parsedValue = Byte.valueOf(attributeValue);
-				}
-				else if (BigDecimal.class.isAssignableFrom(valueType)) {
-					parsedValue = new BigDecimal(attributeValue);
-				}
-				else if (Integer.class.isAssignableFrom(valueType)) {
-					parsedValue = Integer.valueOf(attributeValue);
-				}
-				else if (Short.class.isAssignableFrom(valueType)) {
-					parsedValue = Short.valueOf(attributeValue);
-				}
-				else if (Long.class.isAssignableFrom(valueType)) {
-					parsedValue = Long.valueOf(attributeValue);
-				}
-				else if (Float.class.isAssignableFrom(valueType)) {
-					parsedValue = Float.valueOf(attributeValue);
-				}
-				else if (Double.class.isAssignableFrom(valueType)) {
-					parsedValue = Double.valueOf(attributeValue);
-				}
-				else if (NSTimestamp.class.isAssignableFrom(valueType)) {
-					NSTimestampFormatter formatter = null;
-					try {
-						if (attributeValue.indexOf(' ') == -1) {
-							formatter = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ");
-						}
-						else {
-							formatter = new NSTimestampFormatter();
-						}
-						parsedValue = formatter.parseObject(attributeValue);
-					}
-					catch (Throwable t) {
-						String msg = "Failed to parse '" + attributeValue + "' as a timestamp";
-						if (formatter != null) {
-							msg += " (example: " + formatter.format(new NSTimestamp()) + ")";
-						}
-						msg += ".";
-						throw new ERXRestException(msg);
-					}
-				}
-				else if (Enum.class.isAssignableFrom(valueType)) {
-					try {
-						parsedValue = valueType.getMethod("valueOf", String.class).invoke(null, attributeValue);
-					}
-					catch (Throwable e) {
-						throw new ERXRestException("Failed to parse " + attributeValue + " as enum member of " + valueType);
-					}
-				}
-				else {
-					throw new ERXRestException("Unable to parse the value '" + attributeValue + "' into a " + valueType.getName() + ".");
-				}
-			}
-			return parsedValue;
-		}
-		catch (Throwable e) {
-			throw new ERXRestException("Failed to parse attribute " + attributeName + " for entity " + entity.name(), e);
-		}
+		return ERXRestUtils.coerceValueType(entity, object, attributeName, attributeValue);
 	}
 
 	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {

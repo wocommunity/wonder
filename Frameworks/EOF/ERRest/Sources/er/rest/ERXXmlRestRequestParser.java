@@ -15,8 +15,6 @@ import org.xml.sax.InputSource;
 
 import com.webobjects.appserver.WORequest;
 
-import er.extensions.localization.ERXLocalizer;
-
 /**
  * ERXXmlRestRequestParser is an implementation of the IERXRestRequestParser interface that supports XML document
  * requests.
@@ -66,12 +64,11 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 		return requestNode;
 	}
 
-	public ERXRestRequest parseRestRequest(ERXRestContext context, WORequest request, String requestPath) throws ERXRestException, ERXRestNotFoundException {
-		return parseRestRequest(context, request.contentString(), requestPath);
+	public ERXRestRequestNode parseRestRequest(WORequest request) throws ERXRestException {
+		return parseRestRequest(request.contentString());
 	}
 
-	public ERXRestRequest parseRestRequest(ERXRestContext context, String contentStr, String requestPath) throws ERXRestException, ERXRestNotFoundException {
-
+	public ERXRestRequestNode parseRestRequest(String contentStr) throws ERXRestException {
 		ERXRestRequestNode rootRequestNode = null;
 
 		if (contentStr != null && contentStr.length() > 0) {
@@ -86,19 +83,13 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 				document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
 				document.normalize();
 				Element rootElement = document.getDocumentElement();
-				if (requestPath == null) {
-					requestPath = rootElement.getNodeName();
-					requestPath = ERXLocalizer.currentLocalizer().singularifiedString(requestPath);
-				}
 				rootRequestNode = createRequestNodeForElement(rootElement);
 			}
 			catch (Exception e) {
 				throw new ERXRestException("Failed to parse request document.", e);
 			}
 		}
-
-		ERXRestKey requestKey = ERXRestKey.parse(context, requestPath);
-		ERXRestRequest restRequest = new ERXRestRequest(requestKey, rootRequestNode);
-		return restRequest;
+		
+		return rootRequestNode;
 	}
 }

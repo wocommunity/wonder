@@ -20,10 +20,11 @@ import er.extensions.localization.ERXLocalizer;
  * <b>EXPERIMENTAL</b>
  * 
  * in Application:
+ * 
  * <pre>
  * ERXRouteRequestHandler routeRequestHandler = new ERXRouteRequestHandler();
- * routeRequestHandler.addRoute(new ERXRoute("/reminders/{action}", RemindersController.class));
- * routeRequestHandler.addRoute(new ERXRoute("/reminder/{reminder:Reminder}", RemindersController.class, "view"));
+ * routeRequestHandler.addRoute(new ERXRoute(&quot;/people/{action}&quot;, PeopleController.class));
+ * routeRequestHandler.addRoute(new ERXRoute(&quot;/person/{person:Person}&quot;, PeopleController.class, &quot;view&quot;));
  * ERXRouteRequestHandler.register(routeRequestHandler);
  * </pre>
  * 
@@ -31,39 +32,64 @@ import er.extensions.localization.ERXLocalizer;
  * 
  * <pre>
  * ERXRouteRequestHandler routeRequestHandler = new ERXRouteRequestHandler();
- * routeRequestHandler.addDefaultRoutes(Reminder.ENTITY_NAME, RemindersController.class);
+ * routeRequestHandler.addDefaultRoutes(Person.ENTITY_NAME);
  * ERXRouteRequestHandler.register(routeRequestHandler);
  * </pre>
  * 
- * in RemindersController:
+ * in PeopleController:
+ * 
  * <pre>
- * public class RemindersController extends ERXRouteDirectAction {
- *   public RemindersController(WORequest request) {
- *     super(request);
- *   }
- *   
- *   public WOActionResults showAction() {
- *     Reminder reminder = (Reminder) objects(ERXEC.newEditingContext()).objectForKey("reminder");
- *     return response(ERXKeyFilter.attributes(), reminder);
- *   }
- *   
- *   public WOActionResults indexAction() throws Exception {
- *     Day day = Day.todayDay();
- *     EOQualifier qualifier = day.qualifier(Reminder.CREATION_DATE_KEY);
- *     EOEditingContext editingContext = ERXEC.newEditingContext();
- *     NSArray<Reminder> reminders = Reminder.fetchReminders(editingContext, qualifier, EOSort.descs(Reminder.CREATION_DATE_KEY));
- *     return response(ERXKeyFilter.attributes(), editingContext, Reminder.ENTITY_NAME, reminders);
- *   }
+ * public class PeopleController extends ERXRouteDirectAction {
+ * 	public PeopleController(WORequest request) {
+ * 		super(request);
+ * 	}
+ * 
+ * 	public Person person() {
+ * 		Person person = (Person) objects().objectForKey(&quot;person&quot;);
+ * 		return person;
+ * 	}
+ * 
+ * 	public ERXKeyFilter personFilter() {
+ * 		ERXKeyFilter filter = ERXKeyFilter.attributes();
+ * 		filter.include(Person.PREFERENCE_GROUPS).includeAttributes();
+ * 		return filter;
+ * 	}
+ * 
+ * 	public WOActionResults createAction() throws Exception {
+ * 		ERXKeyFilter personFilter = personFilter();
+ * 		personFilter.include(Person.COMPANY);
+ * 		Person person = (Person) create(Person.ENTITY_NAME, personFilter);
+ * 		editingContext().saveChanges();
+ * 		return response(personFilter(), person);
+ * 	}
+ * 
+ * 	public WOActionResults updateAction() throws Exception {
+ * 		Person person = person();
+ * 		update(person, personFilter());
+ * 		editingContext().saveChanges();
+ * 		return response(personFilter(), person);
+ * 	}
+ * 
+ * 	public WOActionResults showAction() {
+ * 		Person person = person();
+ * 		return response(personFilter(), person);
+ * 	}
+ * 
+ * 	public WOActionResults indexAction() throws Exception {
+ * 		NSArray&lt;Person&gt; people = Person.fetchPersons(editingContext(), null, Person.LAST_NAME.asc().then(Person.FIRST_NAME.asc()));
+ * 		return response(personFilter(), editingContext(), Person.ENTITY_NAME, people);
+ * 	}
  * }
  * </pre>
  * 
  * in browser:
+ * 
  * <pre>
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders.xml
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders.json
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders.plist
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/100.json
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/reminders/100/edit.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/people.xml
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/people.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/people.plist
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/person/100.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/person/100/edit.json
  * </pre>
  * 
  * @author mschrag
@@ -79,23 +105,44 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 	private NSMutableArray<ERXRoute> _routes;
 
+	/**
+	 * Constructs a new ERXRouteRequestHandler.
+	 */
 	public ERXRouteRequestHandler() {
 		_routes = new NSMutableArray<ERXRoute>();
 	}
 
+	/**
+	 * Adds a new route to this request handler.
+	 * 
+	 * @param route
+	 *            the route to add
+	 */
 	public void addRoute(ERXRoute route) {
 		_routes.addObject(route);
 	}
 
+	/**
+	 * Adds default routes and maps them to a controller named "[plural entity name]Controller". For instance, if the
+	 * entity name is "Person" it would make a controller named "PeopleController".
+	 * 
+	 * @param entityName
+	 *            the name of the entity to create routes for
+	 */
 	@SuppressWarnings("unchecked")
 	public void addDefaultRoutes(String entityName) {
 		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(entityName, 2);
-		addDefaultRoutes(entityName, _NSUtilities.classWithName(pluralEntityName + "Controller").asSubclass(ERXRouteDirectAction.class));
+		String controllerName = pluralEntityName + "Controller";
+		Class controllerClass = _NSUtilities.classWithName(controllerName);
+		if (controllerClass == null) {
+			throw new IllegalArgumentException("There is controller named '" + controllerName + "'.");
+		}
+		addDefaultRoutes(entityName, controllerClass.asSubclass(ERXRouteController.class));
 	}
 
 	/**
-	 * Adds list and view routes for the given entity. For instance, if you provide the
-	 * entity name "Reminder" you will get the routes:
+	 * Adds list and view routes for the given entity. For instance, if you provide the entity name "Reminder" you will
+	 * get the routes:
 	 * 
 	 * <pre>
 	 * /reminders
@@ -104,28 +151,29 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * /reminder/{reminder:Reminder}/{action}
 	 * </pre>
 	 * 
-	 * @param entityName
-	 * @param controllerClass
+	 * @param entityName the entity name to route with
+	 * @param controllerClass the controller class
 	 */
-	public void addDefaultRoutes(String entityName, Class<? extends ERXRouteDirectAction> controllerClass) {
+	public void addDefaultRoutes(String entityName, Class<? extends ERXRouteController> controllerClass) {
 		String singularEntityName = ERXStringUtilities.uncapitalize(entityName);
 		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(singularEntityName, 2);
-		
-	    addRoute(new ERXRoute("/" + pluralEntityName, ERXRoute.Method.Post, controllerClass, "create"));
-	    addRoute(new ERXRoute("/" + pluralEntityName, ERXRoute.Method.All, controllerClass, "index"));
-	    
-	    addRoute(new ERXRoute("/" + pluralEntityName + "/new", ERXRoute.Method.All, controllerClass, "new"));
-	    
-	    addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
-	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
-	    addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
-	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
-	    addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
-	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
-	    addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", ERXRoute.Method.All, controllerClass));
-	    addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", ERXRoute.Method.All, controllerClass));
+
+		addRoute(new ERXRoute("/" + pluralEntityName, ERXRoute.Method.Post, controllerClass, "create"));
+		addRoute(new ERXRoute("/" + singularEntityName, ERXRoute.Method.Post, controllerClass, "create"));
+		addRoute(new ERXRoute("/" + pluralEntityName, ERXRoute.Method.All, controllerClass, "index"));
+
+		addRoute(new ERXRoute("/" + pluralEntityName + "/new", ERXRoute.Method.All, controllerClass, "new"));
+
+		addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
+		addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
+		addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+		addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+		addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
+		addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
+		addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", ERXRoute.Method.All, controllerClass));
+		addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", ERXRoute.Method.All, controllerClass));
 	}
-	
+
 	@Override
 	public NSArray getRequestHandlerPathForRequest(WORequest request) {
 		NSMutableArray<Object> requestHandlerPath = new NSMutableArray<Object>();
@@ -141,7 +189,8 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 				type = path.substring(dotIndex + 1);
 				path = path.substring(0, dotIndex);
 			}
-			@SuppressWarnings("unchecked") NSMutableDictionary<String, Object> userInfo = ((ERXRequest) request).mutableUserInfo();
+			@SuppressWarnings("unchecked")
+			NSMutableDictionary<String, Object> userInfo = ((ERXRequest) request).mutableUserInfo();
 			userInfo.setObjectForKey(type, ERXRouteRequestHandler.TypeKey);
 			userInfo.setObjectForKey(path, ERXRouteRequestHandler.PathKey);
 
@@ -167,7 +216,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		catch (Throwable t) {
 			throw new RuntimeException("Failed to compute request handler path.", t);
 		}
-		
+
 		return requestHandlerPath;
 	}
 
@@ -180,12 +229,13 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 	@Override
 	public WOAction getActionInstance(Class class1, Class[] aclass, Object[] aobj) {
-		ERXRouteDirectAction actionInstance = (ERXRouteDirectAction)super.getActionInstance(class1, aclass, aobj);
+		ERXRouteController actionInstance = (ERXRouteController) super.getActionInstance(class1, aclass, aobj);
 		WORequest request = (WORequest) aobj[0];
 		ERXRoute route = (ERXRoute) request.userInfo().objectForKey(ERXRouteRequestHandler.RouteKey);
-		actionInstance.setRoute(route);
-		@SuppressWarnings("unchecked") NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
-		actionInstance.setKeys(keys);
+		actionInstance._setRoute(route);
+		@SuppressWarnings("unchecked")
+		NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
+		actionInstance._setKeys(keys);
 		return actionInstance;
 	}
 

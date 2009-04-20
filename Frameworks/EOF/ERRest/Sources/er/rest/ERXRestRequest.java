@@ -9,6 +9,11 @@ public class ERXRestRequest {
 	private ERXRestKey _key;
 	private ERXRestRequestNode _rootNode;
 
+	public ERXRestRequest(ERXRestContext context, ERXRestRequestNode rootNode, String requestPath) throws ERXRestException, ERXRestNotFoundException {
+		_key = ERXRestKey.parse(context, rootNode, requestPath);
+		_rootNode = rootNode;
+	}
+	
 	/**
 	 * Constructs a new REST request.
 	 * 
