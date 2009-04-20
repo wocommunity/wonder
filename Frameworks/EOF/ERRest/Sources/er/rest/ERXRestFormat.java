@@ -16,7 +16,7 @@ import er.extensions.eof.ERXKeyFilter;
  * @author mschrag
  */
 public enum ERXRestFormat {
-	XML(ERXXmlRestResponseWriter.class, ERXXmlRestRequestParser.class), JSON(ERXJSONRestResponseWriter.class, ERXJSONRestRequestParser.class), PLIST(ERXPListRestResponseWriter.class, null);
+	XML(ERXXmlRestResponseWriter.class, ERXXmlRestRequestParser.class), JSON(ERXJSONRestResponseWriter.class, ERXJSONRestRequestParser.class), PLIST(ERXPListRestResponseWriter.class, ERXPListRestRequestParser.class);
 
 	private Class<? extends IERXRestResponseWriter> _writerClass;
 	private Class<? extends IERXRestRequestParser> _parserClass;
