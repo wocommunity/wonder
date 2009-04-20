@@ -7,7 +7,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
- * ERXJSONRestRequestParser is an implementation of the IERXRestRequestParser interface that supports JSON document
+ * ERXPListRestRequestParser is an implementation of the IERXRestRequestParser interface that supports plist document
  * requests.
  * 
  * @author mschrag
