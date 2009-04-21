@@ -300,28 +300,13 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 		}
 
 		@Override
-		public synchronized void setObjectForKey(Object object, Object key) {
-			super.setObjectForKey(object, key);
+		public synchronized Object setObjectForKey(Object object, Object key) {
+			return super.setObjectForKey(object, key);
 		}
 
 		@Override
 		public synchronized void takeValueForKey(Object value, String key) {
 			super.takeValueForKey(value, key);
-		}
-
-		@Override
-		protected synchronized void _clearDeletionsAndCollisions() {
-			super._clearDeletionsAndCollisions();
-		}
-
-		@Override
-		protected synchronized void _ensureCapacity(int capacity) {
-			super._ensureCapacity(capacity);
-		}
-
-		@Override
-		protected synchronized void _initializeDictionary() {
-			super._initializeDictionary();
 		}
 
 		@Override
@@ -364,17 +349,17 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 			return super.hashCode();
 		}
 
-		@Override
-		public synchronized HashMap hashMap() {
-			Object keys[] = keysNoCopy();
-			int c = keys.length;
-			HashMap map = new HashMap(c <= 0 ? 1 : c);
-			for (int i = 0; i < c; i++) {
-				map.put(keys[i], objectForKey(keys[i]));
-			}
-
-			return map;
-		}
+//		@Override
+//		public synchronized HashMap hashMap() {
+//			Object keys[] = keysNoCopy();
+//			int c = keys.length;
+//			HashMap map = new HashMap(c <= 0 ? 1 : c);
+//			for (int i = 0; i < c; i++) {
+//				map.put(keys[i], objectForKey(keys[i]));
+//			}
+//
+//			return map;
+//		}
 
 		@Override
 		public synchronized Hashtable hashtable() {
@@ -391,10 +376,10 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 			return super.keyEnumerator();
 		}
 
-		@Override
-		protected synchronized Object[] keysNoCopy() {
-			return super.keysNoCopy();
-		}
+//		@Override
+//		protected synchronized Object[] keysNoCopy() {
+//			return super.keysNoCopy();
+//		}
 
 		@Override
 		public synchronized Enumeration objectEnumerator() {
@@ -411,10 +396,10 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 			return super.objectsForKeys(keys, notFoundMarker);
 		}
 
-		@Override
-		protected synchronized Object[] objectsNoCopy() {
-			return super.objectsNoCopy();
-		}
+//		@Override
+//		protected synchronized Object[] objectsNoCopy() {
+//			return super.objectsNoCopy();
+//		}
 
 		@Override
 		public synchronized void takeValueForKeyPath(Object value, String keyPath) {

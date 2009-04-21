@@ -3,7 +3,6 @@ package er.extensions.components;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -11,6 +10,7 @@ import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOGenericContainer;
 import com.webobjects.appserver._private.WOURLValuedElementData;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;

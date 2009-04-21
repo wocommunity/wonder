@@ -1,8 +1,8 @@
 package er.extensions.components.conditionals;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.woextensions.WOKeyValueConditional;

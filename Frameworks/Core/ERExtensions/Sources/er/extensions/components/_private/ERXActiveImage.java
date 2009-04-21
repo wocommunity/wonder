@@ -1,13 +1,11 @@
 package er.extensions.components._private;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.foundation.ERXPatcher;
-import er.extensions.foundation.ERXPatcher.DynamicElementsPatches;
 import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.ActiveImage;
 /**
  * Active image that allows for a tooltip as a binding. Gets patched into the runtime 

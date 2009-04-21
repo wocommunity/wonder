@@ -8,7 +8,6 @@ import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EODataSource;
@@ -197,11 +196,10 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * @return the objects that should be diplayed.
 	 */
 	@Override
-	// WO 5.5
-	public NSArray<Object> displayedObjects() {
+	public NSArray<T> displayedObjects() {
 		if (isBatching()) {
 			refetchIfNecessary();
-			return (NSArray<Object>)_displayedObjects;
+			return _displayedObjects;
 		}
 		return super.displayedObjects();
 	}
@@ -210,8 +208,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * Overridden to return allObjects() when batching, as we can't qualify in memory.
 	 */
 	@Override
-	// WO 5.5
-	public NSArray<Object> filteredObjects() {
+	public NSArray<T> filteredObjects() {
 		if (isBatching()) {
 			return allObjects();
 		}
@@ -449,8 +446,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		if (isBatching()) {
 			// refetch();
 			NSMutableArray<T> selectedObjects = (NSMutableArray<T>) selectedObjects();
-			// WO 5.5
-			NSArray<Object> obj = allObjects();
+			NSArray<T> obj = allObjects();
 			if (delegate() != null) {
 				_NSDelegate delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
 				if (delegate != null && delegate.respondsTo("displayGroupDisplayArrayForObjects")) {

@@ -1,7 +1,7 @@
 package er.extensions.appserver;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 import er.extensions.foundation.ERXStringUtilities;

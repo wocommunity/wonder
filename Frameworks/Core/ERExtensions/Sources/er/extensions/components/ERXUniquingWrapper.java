@@ -3,7 +3,6 @@ package er.extensions.components;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -11,6 +10,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 

@@ -1,8 +1,8 @@
 package er.iui.components;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver._private.WOHyperlink;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 

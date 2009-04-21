@@ -134,10 +134,9 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	 * Returns all objects, filtered by the qualifier().
 	 */
 	@SuppressWarnings("unchecked")
-	// WO 5.5 -- why isn't this <T>?
-	public NSArray<Object> filteredObjects() {
+	public NSArray<T> filteredObjects() {
 		// FIXME AK: need to cache here
-		NSArray<Object> result;
+		NSArray<T> result;
 		EOQualifier q=qualifier();
 		if (q!=null) {
 			result=EOQualifier.filteredArrayWithQualifier(allObjects(),q);
@@ -156,7 +155,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		if(log.isDebugEnabled()) {
 			log.debug("selectedObjects@" + hashCode() +  ":" + super.selectedObjects().count());
 		}
-		return (NSArray<T>) super.selectedObjects();
+		return super.selectedObjects();
 	}
 
 	/**
@@ -252,54 +251,5 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	public void clearExtraQualifiers() {
 		_extraQualifiers.removeAllObjects();
-	}
-	
-	/* Generified methods */
-	
-	/**
-	 * Overridden to return generic types
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	// WO 5.5 -- why isn't this <T>?
-	public NSArray<Object> allObjects() {
-		return super.allObjects();
-	}
-	
-	/**
-	 * Overridden to return generic types
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	public NSArray<String> allQualifierOperators() {
-		return super.allQualifierOperators();
-	}
-	
-	/**
-	 * Overridden to return generic types
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	// WO 5.5 -- why isn't this <T>?
-	public NSArray<Object> displayedObjects() {
-		return super.displayedObjects();
-	}
-	
-	/**
-	 * Overridden to return generic types
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	public T selectedObject() {
-		return (T) super.selectedObject();
-	}
-	
-	/**
-	 * Overridden to return generic types
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	public NSArray<EOSortOrdering> sortOrderings() {
-		return super.sortOrderings();
 	}
 }

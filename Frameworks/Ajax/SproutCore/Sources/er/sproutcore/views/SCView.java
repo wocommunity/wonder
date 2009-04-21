@@ -6,12 +6,12 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;

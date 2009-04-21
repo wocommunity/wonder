@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.association.WOAssociation;
 
 /**
  * Utilities for binding debug support.
