@@ -204,6 +204,33 @@ public class ERXRestUtils {
 		else if ("BigDecimal".equals(valueType) || java.math.BigDecimal.class.getName().equals(valueType)) {
 			value = ERXValueUtilities.DoubleValueWithDefault(obj, null);
 		}
+		else if ("Date".equals(valueType) || "NSTimestamp".equals(valueType) || Date.class.getName().equals(valueType) || NSTimestamp.class.getName().equals(valueType)) {
+			if (obj instanceof Date) {
+				value = obj;
+			}
+			else {
+				// MS: the copy-and-pasteness of this whole method disgusts me ... I'll resolve it, just give me a little bit
+				String strValue = (String)obj;
+				NSTimestampFormatter formatter = null;
+				try {
+					if (strValue.indexOf(' ') == -1) {
+						formatter = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ");
+					}
+					else {
+						formatter = new NSTimestampFormatter();
+					}
+					value = formatter.parseObject(strValue);
+				}
+				catch (Throwable t) {
+					String msg = "Failed to parse '" + strValue + "' as a timestamp";
+					if (formatter != null) {
+						msg += " (example: " + formatter.format(new NSTimestamp()) + ")";
+					}
+					msg += ".";
+					throw new IllegalArgumentException(msg);
+				}
+			}
+		}
 		else if (editingContext != null) {
 			EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, valueType);
 			if (entity != null) {
