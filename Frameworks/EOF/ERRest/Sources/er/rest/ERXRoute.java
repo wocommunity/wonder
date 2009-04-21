@@ -167,6 +167,7 @@ public class ERXRoute {
 		}
 		while (keyMatcher.find()) {
 			String keyStr = keyMatcher.group(1);
+			String replacement = "([^/]+)";
 			ERXRoute.Key key = new ERXRoute.Key();
 			int colonIndex = keyStr.indexOf(':');
 			if (colonIndex == -1) {
@@ -182,13 +183,19 @@ public class ERXRoute {
 				key._key = keyStr.substring(0, colonIndex);
 				key._valueType = keyStr.substring(colonIndex + 1);
 			}
+			
+			if ("identifier".equals(key._valueType)) {
+				key._valueType = String.class.getName();
+				replacement = "(\\\\D[^/-]*)";
+			}
+			
 			_keys.addObject(key);
-			keyMatcher.appendReplacement(routeRegex, "([^/]+)");
+			keyMatcher.appendReplacement(routeRegex, replacement);
 		}
 		keyMatcher.appendTail(routeRegex);
 		if (!urlPattern.endsWith("$")) {
 			if (routeRegex.lastIndexOf(".") == -1) {
-				routeRegex.append("/{0,1}(\\..*|)");
+				routeRegex.append("/?(\\..*)?");
 			}
 			routeRegex.append("$");
 		}
@@ -318,6 +325,11 @@ public class ERXRoute {
 			}
 		}
 		return objects;
+	}
+	
+	@Override
+	public String toString() {
+		return "[ERXRoute: pattern=" + _routePattern + "]";
 	}
 
 	/**
