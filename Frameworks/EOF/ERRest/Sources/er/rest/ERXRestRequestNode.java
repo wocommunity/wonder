@@ -34,7 +34,7 @@ import er.extensions.eof.ERXKeyFilter;
  * 
  * @author mschrag
  */
-public class ERXRestRequestNode {
+public class ERXRestRequestNode implements NSKeyValueCoding {
 	private String _name;
 	private Object _value;
 	private NSMutableDictionary<String, String> _attributes;
@@ -55,6 +55,44 @@ public class ERXRestRequestNode {
 	public ERXRestRequestNode(String name, Object value) {
 		this(name);
 		_value = value;
+	}
+	
+	public void takeValueForKey(Object value, String key) {
+		if (_attributes.containsKey(key)) {
+			_attributes.setObjectForKey((String)value, key);
+		}
+		else {
+			ERXRestRequestNode child = childNamed(key);
+			if (child == null) {
+				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key + "' on this node.", this, key);
+			}
+			else if (child.children().size() == 0) {
+				child.setValue(value);
+			}
+			else {
+				throw new IllegalArgumentException("Unable to set the value of '" + key + "' to " + value + ".");
+			}
+		}
+	}
+	
+	public Object valueForKey(String key) {
+		Object value;
+		if (_attributes.containsKey(key)) {
+			value = _attributes.objectForKey(key);
+		}
+		else {
+			ERXRestRequestNode child = childNamed(key);
+			if (child == null) {
+				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key + "' on this node.", this, key);
+			}
+			else if (child.children().size() == 0) {
+				value = child.value();
+			}
+			else {
+				value = child;
+			}
+		}
+		return value;
 	}
 
 	/**
