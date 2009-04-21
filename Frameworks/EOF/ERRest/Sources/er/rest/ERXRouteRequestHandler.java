@@ -113,6 +113,15 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	/**
+	 * Inserts a route at the beginning of the route list.
+	 * 
+	 * @param route the route to insert
+	 */
+	public void insertRoute(ERXRoute route) {
+		_routes.insertObjectAtIndex(route, 0);
+	}
+	
+	/**
 	 * Adds a new route to this request handler.
 	 * 
 	 * @param route
@@ -155,6 +164,25 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @param controllerClass the controller class
 	 */
 	public void addDefaultRoutes(String entityName, Class<? extends ERXRouteController> controllerClass) {
+		addDefaultRoutes(entityName, true, controllerClass);
+	}
+	
+	/**
+	 * Adds list and view routes for the given entity. For instance, if you provide the entity name "Reminder" you will
+	 * get the routes:
+	 * 
+	 * <pre>
+	 * /reminders
+	 * /reminders/{action}
+	 * /reminder/{reminder:Reminder}
+	 * /reminder/{reminder:Reminder}/{action}
+	 * </pre>
+	 * 
+	 * @param entityName the entity name to route with
+	 * @param numericPKs if true, routes can assume numeric PK's and add some extra convenience routes
+	 * @param controllerClass the controller class
+	 */
+	public void addDefaultRoutes(String entityName, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
 		String singularEntityName = ERXStringUtilities.uncapitalize(entityName);
 		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(singularEntityName, 2);
 
@@ -162,7 +190,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		addRoute(new ERXRoute("/" + singularEntityName, ERXRoute.Method.Post, controllerClass, "create"));
 		addRoute(new ERXRoute("/" + pluralEntityName, ERXRoute.Method.All, controllerClass, "index"));
 
-		addRoute(new ERXRoute("/" + pluralEntityName + "/new", ERXRoute.Method.All, controllerClass, "new"));
+		if (numericPKs) {
+			addRoute(new ERXRoute("/" + pluralEntityName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS: this only works with numeric ids
+		}
+		else {
+			addRoute(new ERXRoute("/" + pluralEntityName + "/new", ERXRoute.Method.All, controllerClass, "new"));
+		}
 
 		addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
 		addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
@@ -170,8 +203,8 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
 		addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
 		addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
-		addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", ERXRoute.Method.All, controllerClass));
-		addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action}", ERXRoute.Method.All, controllerClass));
+		addRoute(new ERXRoute("/" + pluralEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
+		addRoute(new ERXRoute("/" + singularEntityName + "/{" + singularEntityName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
 	}
 
 	@Override
