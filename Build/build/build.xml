@@ -14,6 +14,8 @@
     <property name="frameworks.wonder.core"  value="${frameworks.wonder.jars}/ERExtensions/JavaWOExtensions" />
     <property name="frameworks.wonder.d2w"   value="${frameworks.wonder.core}/ERDirectToWeb" />
     <property name="frameworks.wonder.logic" value="${frameworks.wonder.d2w}/ERPrototypes/ERCoreBusinessLogic" />
+    <property name="frameworks.system.core" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML/JavaDirectToWeb/JavaEOProject/JavaDTWGeneration" />    
+    <property name="frameworks.system.d2w" value="${frameworks.system.core}/JavaDirectToWeb/JavaEOProject/JavaDTWGeneration" />    
     
     <target name="ERJars.all">
         <antcall target="global.framework.${build.action}" >
@@ -37,7 +39,7 @@
             <param name="project.name" value="WOOgnl" />
             <param name="project.dir" value="Frameworks/Core/WOOgnl" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.jars}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.jars}" />
         </antcall>
     </target>
 
@@ -54,7 +56,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERCaptcha" />
             <param name="project.dir" value="Frameworks/Misc/ERCaptcha" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
@@ -63,7 +65,7 @@
             <param name="project.principal.class" value="er.selenium.ERSelenium" />
             <param name="project.name" value="ERSelenium" />
             <param name="project.dir" value="Frameworks/Misc/ERSelenium" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
@@ -72,7 +74,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERRest" />
             <param name="project.dir" value="Frameworks/EOF/ERRest" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
             
@@ -81,7 +83,7 @@
             <param name="project.principal.class" value="er.attachment.ERAttachmentPrincipal" />
             <param name="project.name" value="ERAttachment" />
             <param name="project.dir" value="Frameworks/BusinessLogic/ERAttachment" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
        </antcall>
     </target>
 
@@ -90,7 +92,7 @@
             <param name="project.principal.class" value="er.taggable.ERTaggablePrincipal" />
             <param name="project.name" value="ERTaggable" />
             <param name="project.dir" value="Frameworks/BusinessLogic/ERTaggable" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
   
@@ -99,7 +101,7 @@
           <param name="project.principal.class" value="er.iui.ERIUI" />
           <param name="project.name" value="ERIUI" />
           <param name="project.dir" value="Frameworks/Ajax/ERIUI" />
-          <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+          <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
      </antcall>
   </target>
 
@@ -108,7 +110,7 @@
           <param name="project.principal.class" value="er.googlechart.GCGoogleChart" />
           <param name="project.name" value="GoogleChart" />
           <param name="project.dir" value="Frameworks/Ajax/GoogleChart" />
-          <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+          <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
      </antcall>
   </target>
 
@@ -117,7 +119,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="EROpenID" />
             <param name="project.dir" value="Frameworks/Misc/EROpenID" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
@@ -126,7 +128,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERJGroupsSynchronizer" />
             <param name="project.dir" value="Frameworks/EOF/ERJGroupsSynchronizer" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
@@ -135,7 +137,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="WOLips" />
             <param name="project.dir" value="Frameworks/Misc/WOLips" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
        </antcall>
     </target>
 
@@ -144,7 +146,7 @@
             <param name="project.principal.class" value="org.zeroturnaround.javarebel.WOJavaRebel" />
             <param name="project.name" value="WOJavaRebel" />
             <param name="project.dir" value="Frameworks/Misc/WOJavaRebel" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
@@ -157,7 +159,7 @@
             <param name="classes.exclude.0" value="${erx.class.exclude.0}" />
             <param name="classes.exclude.1" value="${erx.class.exclude.1}" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.jars}/JavaWOExtensions" />
         </antcall>
     </target>
     
@@ -167,8 +169,8 @@
             <param name="project.name" value="ERDirectToWeb" />
             <param name="project.dir" value="Frameworks/Core/ERDirectToWeb" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
         </antcall>
     </target>
     
@@ -178,7 +180,7 @@
             <param name="project.name" value="ERPrototypes" />
             <param name="project.dir" value="Frameworks/Core/ERPrototypes" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
@@ -187,7 +189,7 @@
             <param name="project.principal.class" value="er.javamail.ERJavaMail" />
             <param name="project.name" value="ERJavaMail" />
             <param name="project.dir" value="Frameworks/Core/ERJavaMail" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
@@ -196,7 +198,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERChronic" />
             <param name="project.dir" value="Frameworks/Misc/ERChronic" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
@@ -205,7 +207,7 @@
             <param name="project.principal.class" value="er.caching.ERCaching" />
             <param name="project.name" value="ERCaching" />
             <param name="project.dir" value="Frameworks/EOF/ERCaching" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
@@ -214,7 +216,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERIndexing" />
             <param name="project.dir" value="Frameworks/EOF/ERIndexing" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/ERPrototypes" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes" />
        </antcall>
     </target>
     
@@ -223,8 +225,8 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERIndexingExample" />
             <param name="project.dir" value="Examples/Misc/ERIndexingExample" />
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}/ERPrototypes/ERIndexing" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERPrototypes/ERIndexing" />
        </antcall>
     </target>
 
@@ -233,7 +235,7 @@
             <param name="project.principal.class" value="er.plot.ERPlot" />
             <param name="project.name" value="ERPlot" />
             <param name="project.dir" value="Frameworks/Reporting/ERPlot" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
     
@@ -242,8 +244,8 @@
             <param name="project.principal.class" value="er.directtoweb.excel.ERExcelLook" />
             <param name="project.name" value="ERExcelLook" />
             <param name="project.dir" value="Frameworks/Excel/ERExcelLook" />
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
        </antcall>
     </target>
     
@@ -253,8 +255,8 @@
             <param name="project.name" value="ERCoreBusinessLogic" />
             <param name="project.dir" value="Frameworks/BusinessLogic/ERCoreBusinessLogic" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}/ERJavaMail" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERJavaMail" />
         </antcall>
     </target>
     
@@ -263,7 +265,7 @@
             <param name="project.principal.class" value="er.changenotification.ERCNNotificationCoordinator" />
             <param name="project.name" value="ERChangeNotificationJMS" />
             <param name="project.dir" value="Frameworks/EOF/ERChangeNotificationJMS" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
@@ -273,8 +275,8 @@
             <param name="project.name" value="ERNeutralLook" />
             <param name="project.dir" value="Frameworks/Core/ERNeutralLook" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.logic}" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}" />
         </antcall>
     </target>
 
@@ -283,9 +285,9 @@
             <param name="project.principal.class" value="er.bugtracker.BTBusinessLogic" />
             <param name="project.name" value="BTBusinessLogic" />
             <param name="project.dir" value="Frameworks/BusinessLogic/BTBusinessLogic" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
 
-            <param name="use.webobjects.d2w" value="true" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
         </antcall>
     </target>
 
@@ -296,8 +298,8 @@
             <param name="project.name" value="BugTracker" />
             <param name="project.dir" value="Applications/BugTracker" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook/ERCaching" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook/ERCaching" />
         </antcall>
     </target>
 
@@ -308,8 +310,8 @@
             <param name="project.name" value="ERMailer" />
             <param name="project.dir" value="Applications/ERMailer" />
  
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.logic}/ERJavaMail" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/ERJavaMail" />
        </antcall>
     </target>
 
@@ -320,7 +322,7 @@
             <param name="project.name" value="ERSeleniumExample" />
             <param name="project.dir" value="Examples/Misc/ERSeleniumExample" />
  
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/ERSelenium" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERSelenium" />
        </antcall>
     </target>
 
@@ -330,7 +332,7 @@
             <param name="project.principal.class" value="er.ticktock.Application" />
             <param name="project.name" value="TickTockMan" />
             <param name="project.dir" value="Applications/TickTockMan" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/WOOgnl" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl" />
         </antcall>
     </target>
 
@@ -340,9 +342,9 @@
             <param name="project.principal.class" value="er.examples.movies.Application" />
             <param name="project.name" value="ERMovies" />
             <param name="project.dir" value="Examples/D2W/ERMovies" />
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn" />
-            <param name="use.movies" value="true" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn" />
+            <param name="wo.local.root.bundles" value="JavaBusinessLogic" />
        </antcall>
     </target>
 
@@ -353,8 +355,8 @@
             <param name="project.name" value="D2WComponentTour" />
             <param name="project.dir" value="Examples/D2W/D2WComponentTour" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
          </antcall>
     </target>
     
@@ -371,7 +373,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="DRGrouping" />
             <param name="project.dir" value="Frameworks/Reporting/DRGrouping" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/WOOgnl" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl" />
         </antcall>
     </target>
 
@@ -380,7 +382,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="WRReporting" />
             <param name="project.dir" value="Frameworks/Reporting/WRReporting" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/WOOgnl/DRGrouping" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/DRGrouping" />
         </antcall>
     </target>
 
@@ -391,9 +393,9 @@
             <param name="project.name" value="DocsByExample" />
             <param name="project.dir" value="Examples/Reporting/DocsByExample" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting" />
-            <param name="use.movies" value="true" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn" />
+            <param name="wo.local.root.bundles" value="JavaBusinessLogic" />
         </antcall>
     </target>
 
@@ -404,9 +406,9 @@
             <param name="project.name" value="DynaReporter" />
             <param name="project.dir" value="Examples/Reporting/DynaReporter" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting" />
-            <param name="use.movies" value="true" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn" />
+            <param name="wo.local.root.bundles" value="JavaBusinessLogic" />
         </antcall>
     </target>
 
@@ -417,9 +419,9 @@
             <param name="project.name" value="DRGroupingTest" />
             <param name="project.dir" value="Examples/Reporting/DRGroupingTest" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting" />
-            <param name="use.movies" value="true" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn" />
+            <param name="wo.local.root.bundles" value="JavaBusinessLogic" />
         </antcall>
     </target>
 
@@ -444,7 +446,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ValidityModeler" />
             <param name="project.dir" value="Applications/ValidityModeler" />
-            <param name="wonder.lib.root.bundles" value="Validity" />
+            <param name="wo.external.root.bundles" value="Validity" />
         </antcall>
     </target>
 
@@ -455,7 +457,7 @@
             <param name="project.name" value="ValidityExample" />
             <param name="project.dir" value="Examples/Misc/ValidityExample" />
 
-            <param name="wonder.lib.root.bundles" value="Validity" />
+            <param name="wo.external.root.bundles" value="Validity" />
         </antcall>
     </target>
 	
@@ -466,8 +468,8 @@
             <param name="project.name" value="DevStudio" />
             <param name="project.dir" value="Examples/Misc/DevStudio" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
          </antcall>
     </target>
 
@@ -485,7 +487,7 @@
             <param name="project.name" value="ExcelGenerator" />
             <param name="project.dir" value="Frameworks/Excel/ExcelGenerator" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
@@ -496,7 +498,7 @@
             <param name="project.name" value="ExcelGeneratorExample" />
             <param name="project.dir" value="Examples/Misc/ExcelGeneratorExample" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/ExcelGenerator" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ExcelGenerator" />
         </antcall>
     </target>
     <target name="EROpenIDExample.all">
@@ -506,7 +508,7 @@
             <param name="project.name" value="EROpenIDExample" />
             <param name="project.dir" value="Examples/Misc/EROpenIDExample" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/EROpenID" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/EROpenID" />
         </antcall>
     </target>
     <target name="JavaRESTAdaptorExample.all">
@@ -516,7 +518,7 @@
             <param name="project.name" value="JavaRESTAdaptorExample" />
             <param name="project.dir" value="Examples/Misc/JavaRESTAdaptorExample" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/JavaRESTAdaptor" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/JavaRESTAdaptor" />
         </antcall>
     </target>
     <target name="AjaxExample.all">
@@ -526,7 +528,7 @@
             <param name="project.name" value="AjaxExample" />
             <param name="project.dir" value="Examples/Ajax/AjaxExample" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
         </antcall>
     </target>
 	  <target name="AjaxExample2.all">
@@ -536,7 +538,7 @@
 	          <param name="project.name" value="AjaxExample2" />
 	          <param name="project.dir" value="Examples/Ajax/AjaxExample2" />
 	
-	          <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+	          <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
 	      </antcall>
 	  </target>
   <target name="ERIUIExample.all">
@@ -546,7 +548,7 @@
           <param name="project.name" value="ERIUIExample" />
           <param name="project.dir" value="Examples/Ajax/ERIUIExample" />
 
-          <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+          <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
       </antcall>
   </target>
     <target name="Ajax.all">
@@ -557,7 +559,7 @@
             <param name="project.principal.class" value="er.ajax.Ajax" />
             <param name="project.name" value="Ajax" />
             <param name="project.dir" value="Frameworks/Ajax/Ajax" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
     <target name="YUIExample.all">
@@ -567,7 +569,7 @@
             <param name="project.name" value="YUIExample" />
             <param name="project.dir" value="Examples/Ajax/YUIExample" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax/YUI" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/YUI" />
         </antcall>
     </target>
     <target name="YUI.all">
@@ -577,7 +579,7 @@
             <param name="project.name" value="YUI" />
             <param name="project.dir" value="Frameworks/Ajax/YUI" />
  
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
         </antcall>
     </target>
     <target name="SproutCoreExample.all">
@@ -587,7 +589,7 @@
             <param name="project.name" value="SproutCoreExample" />
             <param name="project.dir" value="Examples/Ajax/SproutCoreExample" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Ajax/SproutCore" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Ajax/SproutCore" />
         </antcall>
     </target>
     <target name="SproutCore.all">
@@ -597,7 +599,7 @@
             <param name="project.name" value="SproutCore" />
             <param name="project.dir" value="Frameworks/Ajax/SproutCore" />
  
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
         </antcall>
     </target>
     
@@ -608,8 +610,8 @@
             <param name="project.name" value="AjaxLookExample" />
             <param name="project.dir" value="Examples/Ajax/AjaxLookExample" />
 
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}/Ajax/YUI/YUILook" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/YUI/YUILook" />
         </antcall>
     </target>
     <target name="AjaxLook.all">
@@ -617,8 +619,8 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="AjaxLook" />
             <param name="project.dir" value="Frameworks/Ajax/AjaxLook" />
-            <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.d2w}/Ajax/YUI" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/YUI" />
         </antcall>
     </target>
 
@@ -630,7 +632,7 @@
             <param name = "compiler.target" value = "1.5" />
             <param name = "compiler.source" value = "1.5" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
@@ -643,7 +645,7 @@
             <param name = "compiler.target" value = "1.5" />
             <param name = "compiler.source" value = "1.5" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
@@ -656,7 +658,7 @@
             <param name = "compiler.target" value = "1.5" />
             <param name = "compiler.source" value = "1.5" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
@@ -669,7 +671,7 @@
             <param name = "compiler.target" value = "1.5" />
             <param name = "compiler.source" value = "1.5" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
@@ -679,7 +681,7 @@
             <param name="project.name" value="ERWorkerChannel" />
             <param name="project.dir" value="Frameworks/Misc/ERWorkerChannel" />
 
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
     <target name="PostgresqlPlugIn.all">
@@ -715,9 +717,9 @@
             <param name="project.principal.class" value="com.webobjects.monitor.application.Application" />
             <param name="project.name" value="JavaMonitor" />
             <param name="project.dir" value="Applications/JavaMonitor" />
-      		<param name="wonder.lib.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework/Ajax" />
-      		<param name="wonder.lib.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
-      		<param name="wo.frameworks.bundles.embed" value="${wonder.deployment.embed.jars}" />
+      		<param name="wo.external.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework/Ajax" />
+      		<param name="wo.external.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
+      		<param name="wo.system.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
         </antcall>
     </target>
 
@@ -728,9 +730,9 @@
             <param name="project.principal.class" value="com.webobjects.monitor.wotaskd.Application" />
             <param name="project.name" value="wotaskd" />
             <param name="project.dir" value="Applications/wotaskd" />
-      		<param name="wonder.lib.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework" />
-      		<param name="wonder.lib.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
-      		<param name="wo.frameworks.bundles.embed" value="${wonder.deployment.embed.jars}" />
+      		<param name="wo.external.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework" />
+      		<param name="wo.external.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
+      		<param name="wo.system.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
         </antcall>
     </target>
 
@@ -740,7 +742,7 @@
             <param name="project.name" value="JavaMonitorFramework" />
             <param name="project.dir" value="Frameworks/Misc/JavaMonitorFramework" />
  
-            <param name="wonder.lib.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
    
