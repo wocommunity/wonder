@@ -85,6 +85,9 @@ There are many ways to use this script:
         <antcall target="generic.all" />
     </target>
     <target name="generic.all">
+        <condition property="project.principal.class" value="${principalClass}">
+            <and><isset property="principalClass" /><not><isset property="project.principal.class" /></not></and>
+        </condition>
         <antcall target="global.${project.type}.build" >
             <param name="project.principal.class" value="${project.principal.class}" />
             <param name="project.name" value="${project.name}" />
