@@ -1,9 +1,0 @@
-{
-    prefetchVideoMovie = {
-        class = EOFetchSpecification; 
-        entityName = Unit; 
-        fetchLimit = 0; 
-        isDeep = YES; 
-        prefetchingRelationshipKeyPaths = (video, "video.movie", rentals); 
-    }; 
-}
