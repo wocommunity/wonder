@@ -16,7 +16,7 @@ import er.extensions.appserver.navigation.ERXNavigationManager;
 import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
-import er.rest.ERXRestRequestHandler;
+import er.rest.entityDelegates.ERXRestRequestHandler;
 
 public class Application extends ERXApplication {
 

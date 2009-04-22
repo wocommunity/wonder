@@ -1,11 +1,7 @@
 package er.directtorest;
 
-import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver._private.WODirectActionRequestHandler;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.ERD2WContext;
-import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.ERXExtensions;

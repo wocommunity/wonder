@@ -1,21 +1,18 @@
 package er.directtorest;
 
 import com.webobjects.directtoweb.D2WContext;
-import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.foundation.ERXMutableDictionary;
 import er.extensions.foundation.ERXThreadStorage;
-import er.rest.ERXDefaultRestDelegate;
-import er.rest.ERXDenyRestEntityDelegate;
-import er.rest.ERXRestContext;
 import er.rest.ERXRestException;
-import er.rest.ERXRestKey;
-import er.rest.ERXRestNotFoundException;
-import er.rest.ERXRestRequest;
-import er.rest.ERXRestSecurityException;
-import er.rest.IERXRestEntityDelegate;
+import er.rest.entityDelegates.ERXDefaultRestDelegate;
+import er.rest.entityDelegates.ERXDenyRestEntityDelegate;
+import er.rest.entityDelegates.ERXRestContext;
+import er.rest.entityDelegates.ERXRestKey;
+import er.rest.entityDelegates.ERXRestNotFoundException;
+import er.rest.entityDelegates.ERXRestRequest;
+import er.rest.entityDelegates.ERXRestSecurityException;
+import er.rest.entityDelegates.IERXRestEntityDelegate;
 
 public class ERD2RestDelegate extends ERXDefaultRestDelegate {
     
@@ -29,6 +26,7 @@ public class ERD2RestDelegate extends ERXDefaultRestDelegate {
         _defaultDelegate = new ERXDenyRestEntityDelegate();
     }
     
+    @Override
     public String entityNameForAlias(String entityAlias) {
         d2wContext().takeValueForKey(entityAlias, "restEntityAlias"); 
         String entityName = (String) d2wContext().valueForKeyPath("restEntityName");
@@ -38,7 +36,6 @@ public class ERD2RestDelegate extends ERXDefaultRestDelegate {
         return entityName;
     }
 
-    @SuppressWarnings("unchecked")
     public IERXRestEntityDelegate entityDelegate(EOEntity entity) {
         String entityName = entity.name();
         IERXRestEntityDelegate entityDelegate = (IERXRestEntityDelegate) ERXThreadStorage.valueForKey("restEntityDelegate." + entityName);
@@ -62,6 +59,7 @@ public class ERD2RestDelegate extends ERXDefaultRestDelegate {
      * @param entityName
      *            the entity name to associate the delegate with
      */
+    @Override
     public void addDelegateForEntityNamed(IERXRestEntityDelegate entityDelegate, String entityName) {
         throw new IllegalStateException("Can't addDelegateForEntityNamed, is handled by d2wContext.");
     }
@@ -72,6 +70,7 @@ public class ERD2RestDelegate extends ERXDefaultRestDelegate {
      * @param entityName
      *            the name of the entity
      */
+    @Override
     public void removeDelegateForEntityNamed(String entityName) {
         throw new IllegalStateException("Can't removeDelegateForEntityNamed, is handled by d2wContext.");
     }
