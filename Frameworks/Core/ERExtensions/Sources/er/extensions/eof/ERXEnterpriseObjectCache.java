@@ -146,10 +146,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param timeout time to live in milliseconds for an object in this cache
      */
     public ERXEnterpriseObjectCache(String entityName, String keyPath, EOQualifier qualifier, long timeout) {
-    	if ( ! ERXEC.defaultAutomaticLockUnlock()) {
-    		throw new RuntimeException("ERXEnterpriseObjectCache requires automatic locking, set er.extensions.ERXEC.defaultAutomaticLockUnlock or " +
-    				"er.extensions.ERXEC.safeLocking in your Properties file");
-    	}
         _entityName = entityName;
         _keyPath = keyPath;
         _timeout = timeout;
@@ -196,10 +192,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     public ERXEnterpriseObjectCache(String entityName, String keyPath, EOQualifier qualifier, long timeout, 
     		                        boolean shouldRetainObjects, boolean shouldFetchInitialValues, boolean shouldReturnUnsavedObjects) {
-    	if ( ! ERXEC.defaultAutomaticLockUnlock()) {
-    		throw new RuntimeException("ERXEnterpriseObjectCache requires automatic locking, set er.extensions.ERXEC.defaultAutomaticLockUnlock or " +
-    				"er.extensions.ERXEC.safeLocking in your Properties file");
-    	}
         _entityName = entityName;
         _keyPath = keyPath;
         _timeout = timeout;
@@ -770,6 +762,11 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param retainObjects if true, the EO's are retained
      */
     public void setRetainObjects(boolean retainObjects) {
+    	if (retainObjects && ! ERXEC.defaultAutomaticLockUnlock()) {
+    		throw new RuntimeException("ERXEnterpriseObjectCache requires automatic locking when objects are retained. " + 
+    				"Set er.extensions.ERXEC.defaultAutomaticLockUnlock or " +
+    				"er.extensions.ERXEC.safeLocking in your Properties file");
+    	}
 		_retainObjects = retainObjects;
 		setReuseEditingContext(true);
 	}
