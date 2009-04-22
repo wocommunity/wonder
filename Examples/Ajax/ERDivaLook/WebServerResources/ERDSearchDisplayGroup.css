@@ -1,0 +1,11 @@
+button#quick_search_submit {
+	display: none;
+}
+
+ul.ERDSearchDisplayGroup label:after {
+	content: ":";
+}
+
+ul.ERDSearchDisplayGroup li {
+	float: right;
+}

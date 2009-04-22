@@ -1,0 +1,32 @@
+ul.ERDSearchDisplayGroup label {
+	font-size: 9pt;
+	color: #777777;
+	position: absolute;
+	margin-top: 4px;
+	margin-left: 4px;
+}
+
+ul.ERDSearchDisplayGroup input.quick_serach_field {
+	border-width: 0;
+	border-width: expression("1px");
+	-moz-border-radius-bottomright: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-topleft: 8px;
+	-webkit-border-top-right-radius: 8px;
+	-webkit-border-top-left-radius: 8px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	height: 14px;
+	text-indent: 25px;
+	vertical-align: middle;
+	margin-top: 2px;
+	background-image: url(http://ist.hq.k.grp/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/magglass-btn.png);
+	background-repeat: no-repeat;
+	background-position: 99% 50%;
+	width: 200px;
+}

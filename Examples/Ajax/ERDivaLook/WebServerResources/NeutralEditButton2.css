@@ -1,0 +1,12 @@
+/* The following are styles for the ERDEditButton2 */
+
+a.ERDEditButton2 {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/write-btn.png) no-repeat;
+	width: 18px;
+	height: 16px;
+	text-indent: -5000px;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+}
+

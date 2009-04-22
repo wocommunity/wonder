@@ -1,0 +1,18 @@
+legend.expansion, h3.expansion  {
+	padding-left: 12px;
+}
+
+legend.expansion, h3.expansion {
+	background-image: url(/WebObjects/Frameworks/ERExtensions.framework/WebServerResources/ERRightTriangle.gif);
+	background-position: 0 0;
+}
+
+legend.expanded, h3.expanded {
+	background-image: url(/WebObjects/Frameworks/ERExtensions.framework/WebServerResources/ERDownTriangle.gif);
+	background-position: 0 5px;
+}
+
+legend.expansion, h3.expansion {
+	cursor: pointer;
+	background-repeat: no-repeat;
+}

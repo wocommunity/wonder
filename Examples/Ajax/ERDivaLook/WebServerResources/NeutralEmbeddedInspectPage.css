@@ -1,0 +1,14 @@
+@import url("ERDIVInspectPage.css");
+@import url("NeutralInspect.css");
+
+tr.detail h1.task {
+	display: none;
+}
+
+tr.detail div.button {
+	display: none;
+}
+
+tr.detail {
+	background-color: rgb(238, 238, 238);
+}

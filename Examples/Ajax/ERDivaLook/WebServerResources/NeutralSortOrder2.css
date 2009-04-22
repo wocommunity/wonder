@@ -1,0 +1,22 @@
+@import url("ERXSortOrder2.css");
+
+.ERXSortOrder2_None, .ERXSortOrder2_Down, .ERXSortOrder2_Up {
+	width: 9px;
+	height: 11px;
+	text-indent: -5000px;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+}
+
+.ERXSortOrder2_None {
+	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/Unsorted.gif) no-repeat;
+}
+
+.ERXSortOrder2_Down {
+	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/Ascending.gif) no-repeat;
+}
+
+.ERXSortOrder2_Up {
+	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/Descending.gif) no-repeat;
+}

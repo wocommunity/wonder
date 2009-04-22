@@ -1,0 +1,3 @@
+div#a div.accordion-toggle {
+	width: expression(document.getElementById('a').offsetWidth + "px");
+}
