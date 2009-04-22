@@ -1,6 +1,8 @@
 package er.ajax;
 
 import com.webobjects.appserver.*;
+
+import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -10,7 +12,6 @@ import er.extensions.foundation.ERXProperties;
  *
  */
 public abstract class AjaxLightWindow extends WOComponent {
-	protected static final String _ajaxRequestHandlerKey = WOApplication.application().ajaxRequestHandlerKey();
 	public AjaxLightWindow(WOContext context) {
 		super(context);
 	}

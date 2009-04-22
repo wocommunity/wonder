@@ -3,6 +3,8 @@ package er.ajax._private;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
+import er.extensions.appserver.ERXWOContext;
+
 
 /**
  * Encapsulation of http://www.wildbit.com/labs/modalbox/ (a re-implementation of AjaxModalDialog)  
@@ -44,7 +46,7 @@ public class AjaxModalBoxLink extends AjaxModalBox {
     	if (hasBinding(Bindings.href))
     		return (String) valueForBinding(Bindings.href);
     	else if (hasBinding(Bindings.action) || hasBinding(Bindings.pageName))
-    		return (String) context().componentActionURL(_ajaxRequestHandlerKey);
+    		return (String) ERXWOContext.ajaxActionUrl(context());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
     		NSDictionary<String, Object> queryDictionary = (NSDictionary<String, Object>) valueForBinding(Bindings.queryDictionary);

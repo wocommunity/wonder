@@ -25,7 +25,7 @@ public class ERDSearchDisplayGroup extends ERDCustomQueryComponent {
     // accessors    
     public String searchKey() {
     	String searchKey = (String) d2wContext().valueForKey("searchKey");
-    	return (searchKey != null) ? searchKey : dataSource().entity().classProperties().objectAtIndex(0).name();
+    	return (searchKey != null) ? searchKey : (String) dataSource().entity().classPropertyNames().objectAtIndex(0);
     }
     
     private EODatabaseDataSource dataSource() {

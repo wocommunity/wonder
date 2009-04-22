@@ -10,6 +10,9 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXWOContext;
+
 
 /**
  * Encapsulation of http://www.wildbit.com/labs/modalbox/ (a re-implementation of AjaxModalDialog)
@@ -84,7 +87,7 @@ public class AjaxModalBoxButton extends AjaxModalBox {
     
     public String href() {
     	if (hasBinding(Bindings.action))
-    		return (String) context().componentActionURL(WOApplication.application().ajaxRequestHandlerKey());
+    		return (String) ERXWOContext.ajaxActionUrl(context());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
     		NSDictionary queryDictionary = (NSDictionary) valueForBinding(Bindings.queryDictionary);

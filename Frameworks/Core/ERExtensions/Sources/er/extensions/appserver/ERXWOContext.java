@@ -666,5 +666,15 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	public String safeElementID() {
 		return ERXStringUtilities.safeIdentifierName(elementID());
 	}
+
+	/**
+	 * Workaround for missing componentActionUrl(String) in 5.3.
+	 * @param context
+	 * @return ajax action url
+	 */
+	public static String ajaxActionUrl(WOContext context) {
+		String url = context.componentActionURL().replaceFirst( "/" + WOApplication.application().componentRequestHandlerKey() + "/", "/" +ERXApplication.erAjaxRequestHandlerKey() + "/");
+		return url;
+	}
 	
 }

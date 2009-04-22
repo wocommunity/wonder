@@ -4,6 +4,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 import er.ajax.AjaxLightWindowLink.Bindings;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * Encapsulates http://www.stickmanlabs.com/lightwindow 2.0
@@ -57,7 +58,7 @@ public class AjaxLightWindowButton extends AjaxLightWindow {
     
     public String href() {
     	if (hasBinding(Bindings.action))
-    		return (String) context().componentActionURL(_ajaxRequestHandlerKey);
+    		return ERXWOContext.ajaxActionUrl(context());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
     		NSDictionary queryDictionary = (NSDictionary) valueForBinding(Bindings.queryDictionary);

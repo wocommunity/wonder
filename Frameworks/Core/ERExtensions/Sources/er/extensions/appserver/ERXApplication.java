@@ -2455,4 +2455,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public void clearDebugEnabledForAllComponents() {
 		_debugComponents.removeAllObjects();
 	}
+	
+	/**
+	 * Workaround for method missing in 5.3. Misnamed because static methods can't override client methods. 
+	 * @return the request handler key for ajax.
+	 */
+	public static String erAjaxRequestHandlerKey() {
+		return ERXApplication.isWO54() ? "ja": "ajax";
+	}
 }
