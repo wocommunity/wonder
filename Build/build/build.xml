@@ -89,7 +89,7 @@
 
     <target name="ERMoviesLogic.all">
         <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="webobjectsexamples.businesslogic.ERMoviesLogic" />
             <param name="project.name" value="ERMoviesLogic" />
             <param name="project.dir" value="Frameworks/BusinessLogic/ERMoviesLogic" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
