@@ -20,7 +20,6 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSRange;
-import com.webobjects.foundation.NSMutableArray;
 
 /**
  * The goal of the fetch specification batch iterator is to have the ability to
@@ -357,7 +356,13 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             batchFS.setRawRowKeyPaths(fetchSpecification.rawRowKeyPaths());
             nextBatch = ec.objectsWithFetchSpecification(batchFS);
 
-            log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + batchFS);
+            if (log.isDebugEnabled()) {
+                log.debug("Actually fetched: " + nextBatch.count() + " with fetch specification: " + batchFS);
+                if (primaryKeysToFetch.count() > nextBatch.count()) {
+                    NSArray missedKeys = ERXArrayUtilities.arrayMinusArray(primaryKeysToFetch, (NSArray)nextBatch.valueForKey(primaryKeyAttributeName));
+                    log.debug("Primary Keys that were not found for this batch: " + missedKeys);
+                }
+            }
 
             if (shouldFilterBatches) {
                 EOQualifier originalQualifier = fetchSpecification.qualifier();
