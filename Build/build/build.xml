@@ -619,6 +619,7 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/YUI/YUILook" />
         </antcall>
     </target>
+
     <target name="AjaxLook.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -628,6 +629,39 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/YUI" />
         </antcall>
     </target>
+    
+    <target name="WO2.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="WO2" />
+            <param name="project.dir" value="Frameworks/Ajax/WO2" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax" />
+        </antcall>
+    </target>
+    
+    <target name="ERDivaLook.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERDivaLook" />
+            <param name="project.dir" value="Frameworks/Ajax/ERDivaLook" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERAttachment" />
+        </antcall>
+    </target>
+    
+        <target name="ERDivaLookExample.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="Application" />
+            <param name="project.name" value="ERDivaLookExample" />
+            <param name="project.dir" value="Examples/Ajax/ERDivaLookExample" />
+
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook" />
+        </antcall>
+    </target>
+    
 
     <target name="ERIMAdaptor.all">
         <antcall target="global.framework.${build.action}" >
@@ -775,8 +809,8 @@
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
     <target name="excelgeneration.examples.all" depends="ExcelGeneratorExample.all" />
     
-    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, SproutCore.all, ERIUI.all, GoogleChart.all" />
-    <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, SproutCoreExample.all, ERIUIExample.all" />
+    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, SproutCore.all, ERIUI.all, GoogleChart.all, WO2.all, ERDivaLook.all" />
+    <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, SproutCoreExample.all, ERIUIExample.all, ERDivaLookExample.all" />
     
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all" />
 
@@ -793,7 +827,7 @@
      
      <target name="frameworks.all">
         <!-- AK: need to remove when 54 is default -->
-        <property name="wonder.patch" value="53" />
+        <property name="wonder.patch" value="54" />
         <antcall target="_frameworks.all" ></antcall>
      </target>
    
@@ -859,7 +893,7 @@
 
     <target name="build">
         <!-- AK: need to remove when 54 is default -->
-        <property name="wonder.patch" value="53" />
+        <property name="wonder.patch" value="54" />
         <antcall target="patch.${wonder.patch}" ></antcall>
     </target>
 
