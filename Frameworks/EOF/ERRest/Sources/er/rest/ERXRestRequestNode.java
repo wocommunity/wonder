@@ -55,11 +55,13 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 		_name = name;
 		_attributes = new NSMutableDictionary<String, String>();
 		_children = new NSMutableArray<ERXRestRequestNode>();
+		guessNull();
 	}
 
 	public ERXRestRequestNode(String name, Object value) {
 		this(name);
 		_value = value;
+		guessNull();
 	}
 
 	public Object toCollection() {
@@ -201,6 +203,10 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 		return attributeForKey(ERXRestRequestNode.TYPE_KEY);
 	}
 
+	protected void guessNull() {
+		setNull(_value == null && _children.size() == 0 && attributeForKey("id") == null);
+	}
+	
 	public void setNull(boolean isNull) {
 		if (isNull) {
 			setAttributeForKey("true", "nil");
@@ -245,7 +251,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 */
 	public void setValue(Object value) {
 		_value = value;
-		setNull(_value == null);
+		guessNull();
 	}
 
 	/**
@@ -258,6 +264,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 */
 	public void setAttributeForKey(String attribute, String key) {
 		_attributes.setObjectForKey(attribute, key);
+		guessNull();
 	}
 
 	/**
@@ -288,6 +295,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 */
 	public void addChild(ERXRestRequestNode child) {
 		_children.addObject(child);
+		guessNull();
 	}
 
 	/**
