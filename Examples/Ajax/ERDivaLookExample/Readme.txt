@@ -17,6 +17,7 @@ Troubleshooting
 ===============
 
 1. If there appears to be data problems restore the db from OBMovies_ASCIIBackup.bck
+2. If you don't see any images check to see that your web server is running and that JavaDirectToWeb.framework has been installed
 
 Features (Demo-ed)
 ========
