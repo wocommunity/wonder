@@ -117,15 +117,21 @@ There are many ways to use this script:
         <!-- default values. can be overridden by *.properties files or -D options. -->
         <property name="before.compile" value="global.dummy" />
         <property name="after.compile" value="global.dummy" />
+        <property name="before.build" value="global.dummy" />
+        <property name="after.build" value="global.dummy" />
         <property name="project.customInfo.plist" value="" />
+
+        <condition property="build.root" value="${wo.external.root}" else="${user.home}/Roots">
+            <isset property="wo.external.root" />
+        </condition>
         
-        <property name="build.root" value="${user.home}/Roots" />
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
         <property name="wo.system.root" value="/System" />
         <property name="wo.system.frameworks" value="${wo.system.root}/Library/Frameworks" />
         <property name="wo.local.root" value="/" />
         <property name="wo.local.frameworks" value="${wo.local.root}/Library/Frameworks" />
         <property name="wo.external.root" value="${build.root}" />
+        <property name="wo.external.frameworks" value="${wo.external.root}" />
         <property name="wo.system.root.bundles" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML" />
         <property name="wo.system.root.bundles.embed" value="false" />
         <property name="wo.external.root.bundles.embed" value="false" />
@@ -272,6 +278,7 @@ There are many ways to use this script:
             <classpath refid="ant.classpath"/>
         </taskdef>
 
+       <antcall target="${before.build}" />
         <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}" customInfoPListContent="${project.customInfo.plist}">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
@@ -314,6 +321,7 @@ There are many ways to use this script:
             <fileset dir="${build.root}/${project.name}.framework/" includes="Resources/**/*" excludes="**/*.jar"/>
             <fileset dir="${build.root}/${project.name}.framework/" includes="WebServerResources/**/*"/>
         </jar>
+       <antcall target="${after.build}" />
 
         <echo message="-------------------------------------" />
         <echo message="${project.name}.framework done" />
@@ -326,6 +334,7 @@ There are many ways to use this script:
             <classpath refid="ant.classpath"/>
         </taskdef>
 
+       <antcall target="${before.build}" />
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
@@ -362,11 +371,12 @@ There are many ways to use this script:
            <frameworks root="System"   if="wo.system.root.bundles" bundles="${wo.system.root.bundles}" embed="${wo.system.root.bundles.embed}" deploymentDir="${wonder.system.deployment.dir}"/>
         </woapplication>
         <exec dir="${build.root}/${project.name}.woa" executable="/bin/chmod" os="Mac OS X">
-            <arg line="a+x ${project.name}" />
+            <arg line="a+rx ${project.name}" />
         </exec>
         <exec dir="${build.root}/${project.name}.woa/Contents/MacOS" executable="/bin/chmod" os="Mac OS X">
-            <arg line="a+x ${project.name}" />
+            <arg line="a+rx ${project.name}" />
         </exec>
+       <antcall target="${after.build}" />
     </target>
 
     <target name="global.framework.install" depends="global.properties">

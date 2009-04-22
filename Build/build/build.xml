@@ -531,7 +531,7 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
         </antcall>
     </target>
-	  <target name="AjaxExample2.all">
+    <target name="AjaxExample2.all">
 	      <antcall target="global.application.${build.action}" >
 	          <param name="project.type" value="application" />
 	          <param name="project.principal.class" value="er.ajax.example2.Application" />
@@ -541,25 +541,30 @@
 	          <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
 	      </antcall>
 	  </target>
-  <target name="ERIUIExample.all">
+    <target name="ERIUIExample.all">
       <antcall target="global.application.${build.action}" >
           <param name="project.type" value="application" />
           <param name="project.principal.class" value="er.iui.example.Application" />
           <param name="project.name" value="ERIUIExample" />
           <param name="project.dir" value="Examples/Ajax/ERIUIExample" />
-
+    
           <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
       </antcall>
-  </target>
-    <target name="Ajax.all">
+    </target>
+
+    <target name="Ajax.post.build">
       	<exec dir="Frameworks/Ajax/Ajax/Support" executable="/bin/sh" os="Mac OS X" >
-					<arg line="compress.sh" />
-				</exec>
+            <arg line="compress.sh" />
+        </exec>
+    </target>
+    
+    <target name="Ajax.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.ajax.Ajax" />
             <param name="project.name" value="Ajax" />
             <param name="project.dir" value="Frameworks/Ajax/Ajax" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+      		<param name="after.build" value="Ajax.post.build" />
         </antcall>
     </target>
     <target name="YUIExample.all">
@@ -722,6 +727,12 @@
       		<param name="wo.system.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
         </antcall>
     </target>
+    
+     <target name="wotaskd.post.build">
+        <exec dir="${build.root}/${project.name}.woa/Contents/Resources" executable="/bin/chmod" os="Mac OS X">
+            <arg line="a+rx SpawnOfWotaskd.sh javawoservice.sh" />
+        </exec>
+    </target>
 
     <target name="wotaskd.all" depends="deployment.embed.check">
         <property name="wonder.deployment.embed.jars" value="false" />
@@ -733,6 +744,7 @@
       		<param name="wo.external.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
+      		<param name="after.build" value="wotaskd.post.build" />
         </antcall>
     </target>
 
