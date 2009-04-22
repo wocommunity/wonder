@@ -131,7 +131,13 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
         
         EOQualifier qualifier = this.fetchSpecification.qualifier();
         if (qualifier != null) {
-            this.fetchSpecification.setQualifier(entity.schemaBasedQualifier(qualifier));
+        	ec.rootObjectStore().lock();
+        	try {
+        		this.fetchSpecification.setQualifier(entity.schemaBasedQualifier(qualifier));
+        	}
+        	finally {
+        		ec.rootObjectStore().unlock();
+        	}
         }
     }
 
