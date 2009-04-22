@@ -827,7 +827,7 @@
      
      <target name="frameworks.all">
         <!-- AK: need to remove when 54 is default -->
-        <property name="wonder.patch" value="54" />
+        <property name="wonder.patch" value="53" />
         <antcall target="_frameworks.all" ></antcall>
      </target>
    
@@ -893,7 +893,7 @@
 
     <target name="build">
         <!-- AK: need to remove when 54 is default -->
-        <property name="wonder.patch" value="54" />
+        <property name="wonder.patch" value="53" />
         <antcall target="patch.${wonder.patch}" ></antcall>
     </target>
 
