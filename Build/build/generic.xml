@@ -122,7 +122,9 @@ There are many ways to use this script:
         <property name="build.root" value="${user.home}/Roots" />
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
         <property name="wo.system.root" value="/System" />
+        <property name="wo.system.frameworks" value="${wo.system.root}/Library/Frameworks" />
         <property name="wo.local.root" value="/" />
+        <property name="wo.local.frameworks" value="${wo.local.root}/Library/Frameworks" />
         <property name="wo.external.root" value="${build.root}" />
         <property name="wo.system.root.bundles" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML" />
         <property name="wo.system.root.bundles.embed" value="false" />
@@ -323,7 +325,6 @@ There are many ways to use this script:
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="ant.classpath"/>
         </taskdef>
-        <echo message ="wo.system.root.bundles ${wo.system.root.bundles} ${wo.system.root}" />
 
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}">
             <classes dir="${build.classes}">
