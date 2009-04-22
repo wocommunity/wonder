@@ -846,8 +846,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || _loader == null)) {
 			_displayMainMethodWarning();
 		}
-		if (_loader == null || !_loader.didLoad()) {
-			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + _loader.allFrameworks + "\nClasspath: " + System.getProperty("java.class.path"));
+		if (_loader == null) {
+			System.out.println("No loader: " + System.getProperty("java.class.path"));
+		} else if (!_loader.didLoad()) {
+			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + (_loader == null ? "none" : _loader.allFrameworks) + "\nClasspath: " + System.getProperty("java.class.path"));
 		}
 		if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
 			throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");
@@ -861,8 +863,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				app.activateOptions();
 			}
 		}
-		_loader._checker.reportErrors();
-
+		if(_loader != null) {
+			_loader._checker.reportErrors();
+		}
 		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ApplicationDidCreateNotification, this));
 		installPatches();
 		lowMemBufferSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXApplication.lowMemBufferSize", 0);
