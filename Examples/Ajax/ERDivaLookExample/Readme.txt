@@ -13,6 +13,11 @@ Installation
 2. Import and build the two frameworks WO2 and ERDivaLook and the example ERDivaLookExample in Eclipse.
 3. Run ERDivaLookExample (Choose Application.java from the WO Explorer, control/right-click and select Run As...WOApplication)
 
+Troubleshooting
+===============
+
+1. If there appears to be data problems restore the db from OBMovies_ASCIIBackup.bck
+
 Features (Demo-ed)
 ========
 
