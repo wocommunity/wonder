@@ -1,0 +1,22 @@
+@import url("ERDIVListPage.css");
+@import url("NeutralList.css");
+@import url("ERDList2.css");
+
+div.ERDList2 table thead tr th {
+	background-color: rgb(51, 102, 153);
+	color: white;
+	border: solid rgb(238, 238, 238) 1px;
+}
+
+/* the following are custom settings for the batch nav bar - when embedded */
+
+div.ERDList2 fieldset.batch_nav_bar h3 {
+	font-size: 10px;
+	color: grey;
+	font-style: italic;
+	padding-right: 4px;
+}
+
+div.ERDList2 fieldset.batch_nav_bar h3 span.count {
+	padding-right: 2px;
+}

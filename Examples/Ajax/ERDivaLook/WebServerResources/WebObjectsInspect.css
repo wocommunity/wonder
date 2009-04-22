@@ -1,0 +1,9 @@
+div#a li.attribute {
+	line-height: 27px;
+}
+
+div#a div.accordion-content ul li.attribute div.content {
+	margin-top: -27px;
+	padding-left: 5px;
+	min-height: 27px;
+}

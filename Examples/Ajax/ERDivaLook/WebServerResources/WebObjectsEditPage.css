@@ -1,0 +1,77 @@
+@import url("WebObjects.css");
+@import url("ERDIVEditPage.css");
+@import url("WebObjectsEditToOneFault.css");
+@import url("WebObjectsEditToManyFault.css");
+@import url("WebObjectsCalendarDateSelect.css");
+
+/* The following are styles for the edit page */
+
+div#a form h1.edit {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/edit-ban.gif);
+	background-repeat: no-repeat;
+	text-indent: -5000px;
+	width: 550px;
+	height: 34px;
+}
+
+div#a h2.entity {
+	min-width: expression(document.getElementById('section').offsetWidth + "px");
+}
+
+div#a form fieldset.button ul li button {
+	text-indent: -5000px;
+	display: block;
+	height:27px;
+	border: 0px;
+	cursor: pointer;
+	width: 100px;
+}
+
+div#a form fieldset.button ul li button.cancel {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/cancel-btn.gif);
+}
+
+div#a form fieldset.button ul li button.save {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/save-btn.gif);
+}
+
+div#a div.accordion-content ul li.attribute legend.propertyKey {
+	font-size: 10pt;
+	margin-left: -128px; /*width of left column*/
+	color: white;
+}
+
+div#a form fieldset.attribute {
+	padding-left: 12em; /*width of left column*/
+}
+
+div#a div.accordion-content ul li.attribute div.content {
+	border-left: solid #333333 1px;
+	padding-left: 4px;
+	margin-top: -27px;
+	min-height: 27px;
+}
+
+div#a div.accordion-content ul li.attribute {
+	line-height: 27px;
+}
+
+div#a fieldset.button {
+	width: expression(document.getElementById('section').offsetWidth + "px");
+	margin-top: 3px;
+	width: 100%;
+}
+
+div#a fieldset.button ul {
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 200px;
+	margin-bottom: 10px;
+}
+
+/* The following are styles for WebObjects Look specific D2W components */
+
+div.D2WEditToOneFault2, li.D2WEditToManyFault2 {
+	background-color: #333333;
+}

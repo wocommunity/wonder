@@ -1,0 +1,71 @@
+@import url("WebObjects.css");
+@import url("ERDIVQueryPage.css");
+@import url("ERD2WQueryDateRange2.css");
+@import url("WebObjectsCalendarDateSelect.css");
+
+/* The following are styles for the search page */
+
+div#a h1.query {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/find-ban.gif);
+	background-repeat: no-repeat;
+	text-indent: -5000px;
+	width: 550px;
+	height: 34px;
+}
+
+div#a h2.entity {
+	min-width: expression(document.getElementById('QueryList').offsetWidth + "px");
+}
+
+div#a form fieldset.button ul li button.search {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/searchdb-btn.gif) no-repeat;
+	width: 177px;
+	height: 27px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+div#a form fieldset.button ul li button {
+	text-indent: -5000px;
+	display: block;
+	height:22px;
+	border: 0px;
+	cursor: pointer;
+	padding-left: auto;
+	padding-right: auto;
+}
+
+div#a {
+	width: expression(document.getElementById('QueryList').offsetWidth + "px");
+}
+
+div#a form fieldset.attribute ul li.attribute {
+	line-height: 30px;
+}
+
+div#a form fieldset.attribute ul li fieldset legend {
+	margin-left: -130px; /*width of left column*/
+	font-size: 13px;
+	color: white;
+}
+
+div#a form fieldset.attribute ul li fieldset {
+	padding-left: 130px; /*width of left column*/
+}
+
+div#a form fieldset.attribute ul li fieldset div.content {
+	margin-top: -30px;
+	border-left: solid #333333 1px;
+	padding-left: 5px;
+	min-height: 30px;
+}
+
+div#a form fieldset.attribute ul li.attribute div.content *, div#a form fieldset.attribute ul li.attribute legend * {
+	padding: 1px;
+}
+
+div#a form fieldset.attribute ul li.attribute div.content select, div#a form fieldset.attribute ul li.attribute div.content option {
+	padding: 0;
+}

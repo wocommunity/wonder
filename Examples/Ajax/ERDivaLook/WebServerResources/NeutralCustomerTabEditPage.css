@@ -1,0 +1,10 @@
+@import url("NeutralTabEditPage.css");
+
+div#a div.accordion-content {
+	max-height: 113px;
+}
+
+div#a div.accordion {
+	max-height: 165px;
+	overflow: hidden;
+}

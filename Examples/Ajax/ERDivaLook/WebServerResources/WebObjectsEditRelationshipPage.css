@@ -1,0 +1,38 @@
+body {
+	min-width: 0;
+}
+
+div#a {
+	height: auto;
+	width: auto;
+	min-height: 0;
+}
+
+h1.ERDIVEditRelationshipPage {
+	display: none;
+}
+
+ul#ERDIVEditRelationshipPage_Buttons li {
+	float: left;
+	padding: 2px;
+}
+
+div#ERDIVEditRelationshipPage_Select h1.task {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/choose-ban.gif);
+	height: 34px;
+}
+
+a.ERDIVListPage_SelectButton {
+	text-indent: -5000px;
+	height:17px;
+	border: 0px;
+	display: block;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/add-sm-btn.gif);
+	width: 46px;
+}
+
+/* hide the side bar and divider on the modal page */
+
+div#c, div#b, div#vertical_divider  {
+	display: none;
+}
