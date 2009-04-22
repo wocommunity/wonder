@@ -84,7 +84,12 @@ There are many ways to use this script:
     <target name="generic">
         <antcall target="generic.all" />
     </target>
+    
     <target name="generic.all">
+        <antcall target="generic.build" />
+    </target>
+    
+    <target name="generic.build">
         <condition property="project.principal.class" value="${principalClass}">
             <and><isset property="principalClass" /><not><isset property="project.principal.class" /></not></and>
         </condition>
