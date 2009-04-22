@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="ERXBatchNavigationBar2" wocomponentcontent="true">    <binding name="id"/>
+    <binding name="displayGroup"/>
+        <validation message="'displayGroup' is a required binding.">
+            <unbound name="displayGroup"/>
+        </validation>
+        <binding name="objectName"/>
+        <binding name="d2wContext"/>
+    </wo>
+</wodefinitions>

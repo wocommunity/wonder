@@ -1,0 +1,26 @@
+Conditional1: WOConditional {
+	condition = extraErrorMessage.length;
+}
+
+DictionaryRepetition: WORepetition { 	
+	list = errorKeys;
+	//key = errorKey;
+	//item = errorMessageItem;
+	//dictionary = errorMessages;
+	item = errorKey;
+}
+
+ErrorPanel4: WOConditional {
+	condition = hasErrors;
+}
+
+String1: WOString {
+	value = errorMessageItem;
+        escapeHTML=false;
+}
+
+String2: WOString {
+	value = extraErrorMessage;
+        escapeHTML=false;
+}
+

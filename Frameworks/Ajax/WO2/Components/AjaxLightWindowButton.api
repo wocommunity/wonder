@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="AjaxLightWindowButton.java" wocomponentcontent="true">
+
+        <binding name="class"/>
+        <binding name="id"/>
+    <binding defaults="Actions" name="action"/>
+        <binding defaults="Direct Actions" name="directActionName"/>
+        <binding defaults="Direct Action Classes" name="actionClass"/>
+    <binding name="height"/>
+        <binding name="width"/>
+    </wo>
+</wodefinitions>

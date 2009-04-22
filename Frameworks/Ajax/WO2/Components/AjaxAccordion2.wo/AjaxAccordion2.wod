@@ -1,0 +1,25 @@
+Contents: WOComponentContent {
+}
+
+Accordion: WOGenericContainer {
+	elementName = elementName;
+	id = accordionID;
+	class = "accordion";
+}
+
+HiddenImage: WOImage {
+	filename = "bg.png";
+	framework = "Ajax";
+	onload = onLoad;
+	style = "display:none; visibility: none;";
+	alt = "";
+}
+
+Enabled: WOConditional {
+	condition = ^disabled;
+	negate = true;	
+}
+
+JavaScript: WOJavaScript {
+	scriptString = scriptString;
+}

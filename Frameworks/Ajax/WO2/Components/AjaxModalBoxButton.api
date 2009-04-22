@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="AjaxModalBoxButton.java" wocomponentcontent="true">
+
+        <binding defaults="Actions" name="action"/>
+        <binding defaults="Direct Actions" name="directActionName"/>
+        <binding defaults="Direct Action Classes" name="actionClass"/>
+    <binding name="id"/>
+    <binding name="class"/>
+    <binding name="formID"/>
+        <validation message="'formID' is a required binding.">
+            <unbound name="formID"/>
+        </validation>
+    <binding name="value"/>
+        <validation message="'value' is a required binding.">
+            <unbound name="value"/>
+        </validation>
+    <binding name="method"/>
+        <binding defaults="Boolean" name="serializeForm"/>
+    </wo>
+</wodefinitions>
