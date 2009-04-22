@@ -8,6 +8,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXApplication;
 
 /**
  * Encapsulation of http://www.wildbit.com/labs/modalbox/ (a re-implementation of AjaxModalDialog)  
@@ -16,7 +17,6 @@ import er.ajax.AjaxUtils;
  *
  */
 public abstract class AjaxModalBox extends WOComponent {
-	protected static final String _ajaxRequestHandlerKey = WOApplication.application().ajaxRequestHandlerKey();
 	
     /*
      * API or bindings common to light window subcomponents
