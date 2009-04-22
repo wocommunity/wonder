@@ -1,0 +1,48 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {
+        "LC_ALL" = "iso_1"; 
+        URL = "jdbc:derby:movies"; 
+        databaseEncoding = "ISO Latin-1"; 
+        driver = "org.apache.derby.jdbc.EmbeddedDriver"; 
+    }; 
+    entities = (
+        {
+            className = "webobjectsexamples.businesslogic.rentals.common.CreditCard"; 
+            name = CreditCard; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.rentals.common.Customer"; 
+            name = Customer; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.rentals.common.Fee"; 
+            name = Fee; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.rentals.common.FeeType"; 
+            name = FeeType; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.rentals.common.Rental"; 
+            name = Rental; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.rentals.common.RentalTerms"; 
+            name = RentalTerms; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.rentals.common.Unit"; 
+            name = Unit; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.rentals.common.User"; 
+            name = User; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.rentals.common.Video"; 
+            name = Video; 
+        }
+    ); 
+}

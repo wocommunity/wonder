@@ -1,0 +1,67 @@
+{
+    attributes = (
+        {
+            columnName = "CHECK_OUT_LENGTH"; 
+            externalType = integer; 
+            name = checkOutLength; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = COST; 
+            externalType = decimal; 
+            name = cost; 
+            precision = 10; 
+            scale = 2; 
+            valueClassName = NSDecimalNumber; 
+            valueType = B; 
+        }, 
+        {
+            columnName = "DEPOSIT_AMOUNT"; 
+            externalType = decimal; 
+            name = depositAmount; 
+            precision = 10; 
+            scale = 2; 
+            valueClassName = NSDecimalNumber; 
+            valueType = B; 
+        }, 
+        {
+            columnName = NAME; 
+            externalType = char; 
+            name = name; 
+            valueClassName = NSString;
+            valueType = c; 
+            width = 20; 
+        }, 
+        {
+            columnName = "RENTAL_TERM_ID"; 
+            externalType = integer; 
+            name = rentalTermsID; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (rentalTermsID, name, cost, checkOutLength, depositAmount); 
+    className = "webobjectsexamples.businesslogic.rentals.common.RentalTerms"; 
+    classProperties = (name, cost, checkOutLength, depositAmount); 
+    externalName = rentalterms; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (cost, checkOutLength, depositAmount, name); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.rentals.common.RentalTerms"; 
+        "_nameInObjectStore" = "RENTAL_TERMS"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = RentalTerms; 
+    primaryKeyAttributes = (rentalTermsID); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleDeny; 
+            destination = Video; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = rentalTermsID; sourceAttribute = rentalTermsID; }); 
+            name = videos; 
+        }
+    ); 
+}

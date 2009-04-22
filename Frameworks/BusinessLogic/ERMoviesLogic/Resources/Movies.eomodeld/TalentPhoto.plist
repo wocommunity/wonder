@@ -1,0 +1,41 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = PHOTO; 
+            externalType = blob; 
+            name = photo; 
+            valueClassName = NSData; 
+        }, 
+        {
+            columnName = "TALENT_ID"; 
+            externalType = integer; 
+            name = talentID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (talentID); 
+    className = "webobjectsexamples.businesslogic.movies.common.TalentPhoto"; 
+    classProperties = (photo, talent); 
+    externalName = talentphoto; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (photo, talent); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.movies.common.TalentPhoto"; 
+        "_nameInObjectStore" = "TALENT_PHOTO"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = TalentPhoto; 
+    primaryKeyAttributes = (talentID); 
+    relationships = (
+        {
+            destination = Talent; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = talent; 
+        }
+    ); 
+}

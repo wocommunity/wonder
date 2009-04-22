@@ -1,0 +1,77 @@
+{
+    attributes = (
+        {
+            columnName = "CUSTOMER_ID"; 
+            externalType = integer; 
+            name = customerID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "DATE_OUT"; 
+            externalType = timestamp; 
+            name = dateOut; 
+            valueClassName = NSCalendarDate; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "DATE_RETURNED"; 
+            externalType = timestamp; 
+            name = dateReturned; 
+            valueClassName = NSCalendarDate; 
+        }, 
+        {
+            columnName = "RENTAL_ID"; 
+            externalType = integer; 
+            name = rentalID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "UNIT_ID"; 
+            externalType = integer; 
+            name = unitID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (rentalID, customerID, unitID, dateOut, dateReturned); 
+    className = "webobjectsexamples.businesslogic.rentals.common.Rental"; 
+    classProperties = (dateOut, dateReturned, fees, unit, customer); 
+    externalName = rental; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (dateOut, fees, unit, customer, dateReturned); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.rentals.common.Rental"; 
+        "_nameInObjectStore" = RENTAL; 
+    }; 
+    name = Rental; 
+    primaryKeyAttributes = (rentalID); 
+    relationships = (
+        {
+            destination = Customer; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = customerID; sourceAttribute = customerID; }); 
+            name = customer; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = Fee; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = rentalID; sourceAttribute = rentalID; }); 
+            name = fees; 
+            ownsDestination = Y; 
+        }, 
+        {
+            destination = Unit; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = unitID; sourceAttribute = unitID; }); 
+            name = unit; 
+        }
+    ); 
+}

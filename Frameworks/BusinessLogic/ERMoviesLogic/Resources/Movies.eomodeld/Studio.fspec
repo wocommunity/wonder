@@ -1,0 +1,11 @@
+{
+    RawFetchAllStudios = {
+        class = EOFetchSpecification; 
+        entityName = Studio; 
+        fetchLimit = 0; 
+        hints = {
+            EOCustomQueryExpressionHintKey = "SELECT NAME, STUDIO_ID FROM STUDIO ORDER BY NAME asc"; 
+        }; 
+        rawRowKeyPaths = (name, studioID); 
+    }; 
+}

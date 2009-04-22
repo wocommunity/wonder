@@ -1,0 +1,44 @@
+{
+    attributes = (
+        {
+            columnName = "MOVIE_ID"; 
+            externalType = integer; 
+            name = movieID; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "TALENT_ID"; 
+            externalType = integer; 
+            name = talentID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (movieID, talentID); 
+    className = EOGenericRecord; 
+    externalName = director; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_clientClassPropertyNames" = (); "_nameInObjectStore" = DIRECTOR; }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = Director; 
+    primaryKeyAttributes = (movieID, talentID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = toMovie; 
+        }, 
+        {
+            destination = Talent; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = toTalent; 
+        }
+    ); 
+}

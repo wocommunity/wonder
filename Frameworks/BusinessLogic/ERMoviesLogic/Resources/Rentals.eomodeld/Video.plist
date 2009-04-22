@@ -1,0 +1,64 @@
+{
+    attributes = (
+        {
+            columnName = "MOVIE_ID"; 
+            externalType = integer; 
+            name = movieID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "RENTAL_TERMS_ID"; 
+            externalType = integer; 
+            name = rentalTermsID; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "VIDEO_ID"; 
+            externalType = integer; 
+            name = videoID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (videoID, rentalTermsID, movieID); 
+    className = "webobjectsexamples.businesslogic.rentals.common.Video"; 
+    classProperties = (movie, rentalTerms, units); 
+    externalName = video; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (movie, rentalTerms, units); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.rentals.common.Video"; 
+        "_nameInObjectStore" = VIDEO; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 20; 
+    name = Video; 
+    primaryKeyAttributes = (videoID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }, 
+        {
+            destination = RentalTerms; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = rentalTermsID; sourceAttribute = rentalTermsID; }); 
+            name = rentalTerms; 
+        }, 
+        {
+            deleteRule = EODeleteRuleDeny; 
+            destination = Unit; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = videoID; sourceAttribute = videoID; }); 
+            name = units; 
+        }
+    ); 
+}
