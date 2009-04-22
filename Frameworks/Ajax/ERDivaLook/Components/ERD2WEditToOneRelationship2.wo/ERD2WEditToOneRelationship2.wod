@@ -1,0 +1,44 @@
+EditToOneRelationship: ERXToOneRelationship2 {
+        destinationDisplayKey = keyWhenRelationship;
+        possibleChoices = restrictedChoiceList;
+        destinationSortKey = d2wContext.sortKey;
+        // isMandatory = d2wContext.isMandatory;
+        relationshipKey = d2wContext.propertyKey;
+        size = d2wContext.size;
+        sourceEntityName = object.entityName;
+        sourceObject = object;
+        uiStyle = d2wContext.toOneUIStyle;
+	noSelectionString = d2wContext.noSelectionString;
+	popupName = d2wContext.popupName;
+	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+	destinationEntityName = d2wContext.destinationEntityName;
+    sortCaseInsensitive = d2wContext.sortCaseInsensitive;
+    id = d2wContext.id;
+    title = d2wContext.title;
+}
+
+Observer: AjaxObserveField {
+	updateContainerID = d2wContext.updateContainerID;
+	observeFieldID = d2wContext.id;
+	fullSubmit = true;
+}
+
+IsAjax: WOConditional {
+	condition = d2wContext.isAjax;
+}
+
+NewButton: AjaxLightWindowButton {
+	value = "New...";
+	action = newAction;
+	title = "New...";
+	height = d2wContext.height;
+	width = d2wContext.width;
+	top = d2wContext.top;
+	left = d2wContext.left;
+	class = "ERD2WEditToOneRelationship_New";
+	formID = "EditForm";		// FIXME: RM: need to get from d2w context or something
+}
+
+IsEditable: WOConditional {
+	condition = isEntityEditable;
+}

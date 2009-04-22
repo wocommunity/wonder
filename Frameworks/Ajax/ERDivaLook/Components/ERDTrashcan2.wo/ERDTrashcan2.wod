@@ -1,0 +1,22 @@
+DeleteEO2: AjaxUpdateLink {
+	onClickBefore = onClickBefore;
+	class = "ERDTrashcan2";
+	action = deleteObject;
+	onSuccess = onSuccess;
+}
+
+HasError: WOConditional {
+	condition = canDelete;
+		negate = true;
+}
+
+CanDelete: WOConditional {
+	condition = canDelete;
+}
+
+Error: WOGenericContainer {
+	elementName = "a";
+	href = "javascript:void(0);";
+	onclick = onClick;
+	class = "ERDTrashcan2";
+}

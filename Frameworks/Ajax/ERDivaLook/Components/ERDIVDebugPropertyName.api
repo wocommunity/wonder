@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERDIVDebugPropertyName.java" wocomponentcontent="false">
+
+        <binding name="d2wContext"/>
+        <validation message="'d2wContext' is a required binding.">
+            <unbound name="d2wContext"/>
+        </validation>
+        <binding defaults="Boolean" name="isDebug"/>
+    <validation message="'isDebug' is a required binding.">
+            <unbound name="isDebug"/>
+        </validation>
+    </wo>
+</wodefinitions>
