@@ -1,0 +1,56 @@
+{
+    attributes = (
+        {
+            columnName = "MOVIE_ID"; 
+            externalType = integer; 
+            name = movieID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "ROLE_NAME"; 
+            externalType = char; 
+            name = roleName; 
+            valueClassName = NSString; 
+            width = 30; 
+        }, 
+        {
+            columnName = "TALENT_ID"; 
+            externalType = integer; 
+            name = talentID; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (talentID, movieID, roleName); 
+    className = "webobjectsexamples.businesslogic.movies.common.MovieRole"; 
+    classProperties = (roleName, movie, talent); 
+    externalName = movierole; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (roleName, movie, talent); 
+        "_nameInObjectStore" = "MOVIE_ROLE"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = MovieRole; 
+    primaryKeyAttributes = (movieID, talentID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }, 
+        {
+            destination = Talent; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = talent; 
+        }
+    ); 
+}

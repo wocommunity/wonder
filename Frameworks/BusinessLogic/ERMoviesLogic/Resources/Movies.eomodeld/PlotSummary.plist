@@ -1,0 +1,41 @@
+{
+    attributes = (
+        {
+            columnName = "MOVIE_ID"; 
+            externalType = integer; 
+            name = movieID; 
+            precision = 9; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = SUMMARY; 
+            externalType = varchar; 
+            name = summary; 
+            valueClassName = NSString; 
+        }
+    ); 
+    attributesUsedForLocking = (movieID); 
+    className = EOGenericRecord; 
+    classProperties = (summary, movie); 
+    externalName = plotsummary; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (summary, movie); 
+        "_nameInObjectStore" = "PLOT_SUMMARY"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = PlotSummary; 
+    primaryKeyAttributes = (movieID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }
+    ); 
+}

@@ -1,0 +1,55 @@
+{
+    attributes = (
+        {
+            columnName = "MOVIE_ID"; 
+            externalType = integer; 
+            name = movieID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = REVIEW; 
+            externalType = blob; 
+            name = review; 
+            valueClassName = NSString; 
+        }, 
+        {
+            columnName = "REVIEW_ID"; 
+            externalType = integer; 
+            name = reviewID; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = REVIEWER; 
+            externalType = char; 
+            name = reviewer; 
+            valueClassName = NSString;
+            valueType = c; 
+            width = 50; 
+        }
+    ); 
+    attributesUsedForLocking = (reviewID, movieID, reviewer); 
+    className = EOGenericRecord; 
+    classProperties = (reviewer, review, movie); 
+    externalName = review; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (reviewer, review, movie); 
+        "_nameInObjectStore" = REVIEW; 
+    }; 
+    name = Review; 
+    primaryKeyAttributes = (reviewID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }
+    ); 
+}
