@@ -1,0 +1,22 @@
+HasAttachment: WOConditional {
+	condition = objectPropertyValueIsNonNull;
+}
+
+NoAttachment: WOConditional {
+	condition = objectPropertyValueIsNonNull;
+	negate = true;
+}
+
+DisplayAttachmentDownloadLink: ERAttachmentLink {
+	attachment = objectPropertyValue;
+	class = "D2WDisplayAttachment download";
+}
+
+FileName: WOString {
+	value = objectPropertyValue.originalFileName;
+}
+
+Icon: ERAttachmentIcon {
+	attachment = objectPropertyValue;
+	size = d2wContext.size;
+}

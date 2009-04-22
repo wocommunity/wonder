@@ -1,0 +1,39 @@
+<webobject name = "PageWrapper">
+  <webobject name = "Help" />
+  
+  <h1 class="task query"><span>Search</span></h1>
+  <h2 class="entity"><webobject name = "EntityName" /></h2>
+    <webobject name = "FetchLimitConditional">
+      <p class="fetch_limit"><webobject name = "FetchLimit" />&nbsp;max</p>
+    </webobject>
+  
+  <webobject name = "QueryForm">     
+        <fieldset class="attribute">
+      	<ul id="QueryList">
+            <webobject name = "ResourceRepetition">
+          	  <webobject name = "AttributeContainer">
+          		<fieldset>
+	            	<legend><webobject name = "SwitchComponent1" /><webobject name = "DebugPropertyName" /></legend>
+	            	<div class="content"><webobject name = "DebugComponentName" /><webobject name = "ResourceInputRepresentation" /></div>
+            	</fieldset>
+              </webobject>
+            </webobject>
+         </ul>
+         </fieldset>
+
+        <fieldset class="button">
+		<ul>
+          <webobject name = "ShowCancel">
+            <li><webobject name = "BackLink"><span>Return</span></webobject></li>
+          </webobject>
+          <li><webobject name = "QuerySubmitButton" /></li>
+        </ul>
+        </fieldset>
+          
+  </webobject>
+  <webobject name = "Conditional1">
+    <webobject name = "Conditional2">
+      <webobject name = "ListPage" />
+    </webobject>
+  </webobject>
+</webobject>

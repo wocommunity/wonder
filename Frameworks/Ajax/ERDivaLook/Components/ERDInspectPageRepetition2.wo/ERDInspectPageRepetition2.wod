@@ -1,0 +1,59 @@
+AttributeRepetition: WORepetition {
+	_unroll = true;
+	item = propertyKey;
+	list = currentSectionKeys;
+}
+
+AttributeValue: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
+	object = object;
+}
+
+HasSectionName: ERXNonZeroConditional {
+	condition = currentSection.name.trim.length;
+}
+
+PropertyName: WOString {
+    value = d2wContext.displayNameForProperty;
+}
+
+Section: WOString {
+	value = d2wContext.displayNameForSectionKey;
+}
+
+Sections: WORepetition {
+    list=sectionsContents;
+    item=currentSection;
+}
+
+DebugPropertyName: ERDIVDebugPropertyName {
+	d2wContext = d2wContext;
+	isDebug = d2wComponentNameDebuggingEnabled;
+}
+
+DebugComponentName: ERDIVDebugComponentName {
+	d2wContext = d2wContext;
+	isDebug = d2wComponentNameDebuggingEnabled;
+}
+
+Accordion: AjaxAccordion2 {
+	id = "Inspect_Accordion";
+	disabled = disabled;
+}
+
+ContentClass: WOGenericContainer {
+	elementName = "div";
+	class = contentClassString;
+}
+
+ListContainer: WOGenericContainer {
+	elementName = "li";
+	class = attributeClassString;
+}
+
+SectionContainer: WOGenericContainer {
+	elementName = "div";
+	class = "accordion-content";
+	id = d2wContext.idForSection;
+}

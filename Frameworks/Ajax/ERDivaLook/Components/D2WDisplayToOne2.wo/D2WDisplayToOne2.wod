@@ -1,0 +1,13 @@
+Link: WOHyperlink {
+	action = toOneAction;
+	disabled = d2wContext.disabled;
+}
+
+Span: WOGenericContainer {
+	elementName = "span";
+	class = classString;
+}
+
+String: WOString {
+	value = toOneDescription;
+}

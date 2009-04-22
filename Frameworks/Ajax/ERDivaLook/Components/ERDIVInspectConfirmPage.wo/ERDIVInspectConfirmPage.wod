@@ -1,0 +1,26 @@
+EntityName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForEntity;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+ReturnLink: WOHyperlink {
+	action = okAction;
+	class = "ok";
+}
+
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	displayPropertyKeys = d2wContext.displayPropertyKeys;
+	d2wContext = localContext;
+	object = object;
+}

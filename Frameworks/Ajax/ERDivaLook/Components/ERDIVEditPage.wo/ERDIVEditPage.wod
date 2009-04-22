@@ -1,0 +1,115 @@
+EditingForm:ERXOptionalForm {
+	enctype = d2wContext.formEncoding;
+	multipleSubmit = true;
+	name = "EditForm";
+}
+
+EntityName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForEntity;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+SubmitButton6: WOSubmitButton {
+	action = cancelAction;
+	value = "Cancel";
+	class = "cancel";
+	disabled = disableCancel;
+}
+
+SubmitChanges: WOSubmitButton {
+	action = submitAction;
+	value = "Save";
+	class = "save";
+}
+
+SubmitChanges1: AjaxSubmitButton {
+	action = submitAction;
+	value = "Save";
+	class = "save";
+	onComplete = "function(x){ parent.window.location.reload(); parent.myLightWindow.deactivate(); }";
+}
+
+NotModal: WOConditional {
+	condition = d2wContext.isModal;
+	negate = true;
+}
+
+Modal: WOConditional {
+	condition = d2wContext.isModal;
+}
+
+Errors: ERXErrorDictionaryPanel2 {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	errorKeyOrder = errorKeyOrder;
+}
+
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	displayPropertyKeys = d2wContext.displayPropertyKeys;
+	d2wContext = localContext;
+	object = object;
+}
+
+InspectPageRepetition1: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	displayPropertyKeys = currentTab.keys;
+	d2wContext = localContext;
+	object = object;
+}
+
+TabPanel : WOSwitchComponent {
+	WOComponentName = tabComponentName;
+	selectedTab = currentTab;
+	submitActionName = switchTabActionName;
+	tabNameKey = "displayName";
+	tabs = tabSectionsContents;
+	useFormSubmit = d2wContext.hasForm;
+}
+
+IsTab: WOKeyValueConditional {
+	key = "d2wContext.subTask";
+	value = "tab";
+}
+
+IsNotTab: WOKeyValueConditional {
+	key = "d2wContext.subTask";
+	value = "tab";
+	negate = true;
+}
+
+HeaderContainer: WOGenericContainer {
+	class = headerClassString;
+	elementName = "h1";
+}
+
+ShowConfirmation: WOConditional {
+	condition = showConfirmationPanel;
+}
+
+DialogOnLoad: AjaxOnLoadModalBox {
+	showID = "$('confirmation_panel')";
+	title = d2wContext.displayNameForEntity;
+	left = d2wContext.left;
+}
+
+ConfirmInspectPanel: ERXD2WInspect {
+	pageConfiguration = d2wContext.inspectConfirmConfigurationName;
+	entityName = d2wContext.entity.name;
+	object = object;
+}
+
+NoConfirmation: WOConditional {
+	condition = showConfirmationPanel;
+	negate = true;
+}

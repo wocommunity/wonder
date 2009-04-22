@@ -1,0 +1,4 @@
+{
+	"ERDTrashcan.confirmDeletionMessage" = "Are you sure you want to delete the following @@displayNameForEntity@@?";
+	"ERD2WInspect.alreadyAborted" = "You already aborted this operation. Please hit cancel and try again from the first step";
+}

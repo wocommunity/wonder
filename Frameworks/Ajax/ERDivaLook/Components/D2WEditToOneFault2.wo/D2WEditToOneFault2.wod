@@ -1,0 +1,48 @@
+ChangeImage: AjaxLightWindowButton {
+	action = editRelationship;
+	class = "D2WEditToOneFault2_Add";
+	formID = "EditForm";		// FIXME: RM: need to get from d2w context or something
+	width = d2wContext.width;
+	height = d2wContext.height;
+	top = d2wContext.top;
+	left = d2wContext.left;	
+}
+
+RemoveButton: AjaxSubmitButton {
+	action = removeFromToOneRelationshipAction;
+	value = "x";
+	onSuccess = onSuccess;
+	class = "D2WEditToOneFault2_Delete";
+}
+
+ValueDisplay: WOString {
+	value = toOneDescription;
+}
+
+EditObject: WOHyperlink {
+	action = toOneAction;
+	disabled = d2wContext.disabled;
+	string = toOneDescription;
+	target = target;
+}
+
+HasProperty: WOConditional {
+	condition = hasObjectPropertyValue;
+}
+
+HasNoProperty: WOConditional {
+	condition = hasObjectPropertyValue;
+	negate = true;
+}
+
+AddBox: WOGenericContainer {
+	elementName = "div";
+	id = addBoxID;
+	style = displayStyle;
+}
+
+RemoveBox: WOGenericContainer {
+	elementName = "div";
+	id = removeBoxID;
+	class = "D2WEditToOneFault2";
+}
