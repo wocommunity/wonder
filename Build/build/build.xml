@@ -16,7 +16,7 @@
     <property name="frameworks.wonder.logic" value="${frameworks.wonder.d2w}/ERPrototypes/ERCoreBusinessLogic" />
     <property name="frameworks.system.core" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML/JavaDirectToWeb/JavaEOProject/JavaDTWGeneration" />    
     <property name="frameworks.system.d2w" value="${frameworks.system.core}/JavaDirectToWeb/JavaEOProject/JavaDTWGeneration" />    
-    
+
     <target name="ERJars.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
