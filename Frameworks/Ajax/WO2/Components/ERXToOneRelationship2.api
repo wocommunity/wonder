@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERXToOneRelationship2.java" wocomponentcontent="false">
+
+        <binding name="id"/>
+        
+    </wo>
+</wodefinitions>

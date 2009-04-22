@@ -1,0 +1,18 @@
+Title : WOString {
+	value = ^title;
+}
+
+ContentDiv : WOGenericContainer {
+	elementName = "div";
+	id = contentID;
+	class = "accordion-content";
+}
+
+TitleBarDiv : WOGenericContainer {
+	elementName = "div";
+	id = headerID;
+	class = "accordion-toggle";
+}
+
+Content : WOComponentContent {
+}

@@ -1,0 +1,11 @@
+Link: WOHyperlink {
+	href = href;
+	class = ^class;
+	id = ^id;
+	string = ^string;
+	onclick = onClick;
+	title = ^title;
+}
+
+Content: WOComponentContent {
+}

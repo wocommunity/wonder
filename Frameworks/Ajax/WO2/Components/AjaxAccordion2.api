@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="AjaxAccordion2.java" wocomponentcontent="true">
+
+        <binding name="id"/>
+    <binding name="elementName"/>
+    
+    <binding defaults="Boolean" name="disabled"/>
+    </wo>
+</wodefinitions>

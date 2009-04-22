@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="AjaxModalBoxLink.java" wocomponentcontent="true">
+
+        <binding name="href"/>
+        <binding defaults="Page Names" name="pageName"/>
+        <binding defaults="Actions" name="action"/>
+        <binding defaults="Direct Actions" name="directActionName"/>
+        <binding defaults="Direct Action Classes" name="actionClass"/>
+    <binding name="id"/>
+        <binding name="class"/>
+    <binding name="title"/>
+    <binding name="width"/>
+    </wo>
+</wodefinitions>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="AjaxModalWindow" wocomponentcontent="true">    <binding defaults="Actions" name="action"/>
+        <binding defaults="Page Names" name="pageName"/>
+        <binding defaults="Direct Actions" name="directActionName"/>
+        <binding defaults="Direct Action Classes" name="actionClass"/>
+        <binding name="id"/>
+        <binding name="class"/>
+        <binding name="string"/>
+        <binding name="href"/>
+        <binding name="queryDictionary"/>
+    <binding name="formID"/>
+    <binding name="type"/>
+    </wo>
+</wodefinitions>

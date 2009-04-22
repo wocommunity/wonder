@@ -1,0 +1,9 @@
+SubmitButton: WOSubmitButton {
+	id = ^id;
+	onclick = onClick;
+	class = ^class;
+	value = ^value;
+}
+
+Content: WOComponentContent {
+}

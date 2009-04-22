@@ -1,0 +1,17 @@
+.accordion {
+	position: relative; /* required for bounding */
+}
+
+div.accordion-toggle{
+    position: relative; /* required for effect */
+    z-index: 10;		/* required for effect */
+    cursor: pointer;
+}
+
+div.accordion-content{
+    overflow: hidden;	/* required for effect */
+}
+
+div.accordion-toggle-active {
+	cursor: default;
+}
