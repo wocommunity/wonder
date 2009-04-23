@@ -325,7 +325,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		if (filteredObjs.count() == 0) {
 			throw new ERXRestNotFoundException("There is no " + entityAliasForEntityNamed(entity.name()) + " in this relationship with the id '" + key + "'.");
 		}
-		EOEnterpriseObject obj = (EOEnterpriseObject) objs.objectAtIndex(0);
+		EOEnterpriseObject obj = filteredObjs.objectAtIndex(0);
 		if (!canViewObject(entity, obj, context)) {
 			throw new ERXRestSecurityException("You are not allowed to view the " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
 		}
