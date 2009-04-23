@@ -393,6 +393,7 @@ There are many ways to use this script:
         </copy>
         <copy todir="${wonder.jar.install.root}/">
             <fileset file="${build.root}/${project.name}-${project.version}.jar" />
+            <fileset file="${project.dir}/Libraries/*.jar" />
         </copy>
     </target>
 
