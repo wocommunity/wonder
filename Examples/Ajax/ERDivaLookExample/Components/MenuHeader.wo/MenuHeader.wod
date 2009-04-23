@@ -1,11 +1,3 @@
-CustomizeLink: WOHyperlink {
-	action = showWebAssistant;
-}
-
-EntitiesForm: WOForm {
-	directActionName = "default";
-}
-
 EntitiesRepetition: WORepetition {
 	item = manipulatedEntityName;
 	list = visibleEntityNames;
@@ -27,10 +19,6 @@ FindButton1: WOHyperlink {
 	class = "text";
 	string = manipulatedEntityName;
 	title = "Search";
-}
-
-EntityName: WOString {
-	value = manipulatedEntityName;
 }
 
 HasValidSession: WOConditional {

@@ -15,7 +15,7 @@ public class MenuHeader extends WOComponent {
     public String manipulatedEntityName() {
         if (_manipulatedEntityName == null) {
             WOComponent currentPage = context().page();
-            _manipulatedEntityName = D2W.factory().entityNameFromPage(currentPage);
+            _manipulatedEntityName = D2W.entityNameFromPage(currentPage);
         }
         return _manipulatedEntityName;
     }
@@ -24,7 +24,8 @@ public class MenuHeader extends WOComponent {
         _manipulatedEntityName = newValue;
     }
 
-    public NSArray visibleEntityNames() {
+    @SuppressWarnings("unchecked")
+	public NSArray visibleEntityNames() {
         return D2W.factory().visibleEntityNames(session());
     }
 
