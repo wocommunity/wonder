@@ -15,10 +15,6 @@ RemoveButton: AjaxSubmitButton {
 	class = "D2WEditToOneFault2_Delete";
 }
 
-ValueDisplay: WOString {
-	value = toOneDescription;
-}
-
 EditObject: WOHyperlink {
 	action = toOneAction;
 	disabled = d2wContext.disabled;
@@ -28,11 +24,6 @@ EditObject: WOHyperlink {
 
 HasProperty: WOConditional {
 	condition = hasObjectPropertyValue;
-}
-
-HasNoProperty: WOConditional {
-	condition = hasObjectPropertyValue;
-	negate = true;
 }
 
 AddBox: WOGenericContainer {

@@ -9,7 +9,6 @@ import com.webobjects.foundation.NSDictionary;
 import er.ajax.AjaxUtils;
 import er.directtoweb.pages.ERD2WListPage;
 import er.diva.ERDIVPageInterface;
-import er.diva.ERDIVPageInterface.Keys;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXStringUtilities;
@@ -92,7 +91,8 @@ public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
     	return rowID() + "_detail";
     }
     
-    public NSDictionary settings() {
+    @SuppressWarnings("unchecked")
+	public NSDictionary settings() {
         String pc = d2wContext().dynamicPage();
         if (pc != null) {
             return new NSDictionary(pc, "parentPageConfiguration");

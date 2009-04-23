@@ -3,7 +3,6 @@ package er.directtoweb.components._xhtml;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EODatabaseDataSource;
-import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSSelector;
@@ -39,8 +38,6 @@ public class ERDSearchDisplayGroup extends ERDCustomQueryComponent {
     
     // actions
     public WOActionResults search() {
-		EOFetchSpecification fetchSpec = dataSource().fetchSpecification();
-		
     	if (value != null) {
     		EOQualifier _qualifier = new EOKeyValueQualifier(searchKey(), selector, "*" + value + "*");
     		dataSource().setAuxiliaryQualifier(_qualifier);

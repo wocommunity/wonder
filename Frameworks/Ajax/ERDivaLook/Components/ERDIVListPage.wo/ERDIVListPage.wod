@@ -48,16 +48,6 @@ EntityRepetition: WORepetition {
 	index = index;
 }
 
-FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
-	d2wContext = d2wContext;
-	displayGroup = displayGroup;
-}
-
-FilterDisplayGroupButton2: ERDFilterDisplayGroupButton {
-	d2wContext = d2wContext;
-	displayGroup = displayGroup;
-}
-
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
@@ -239,11 +229,6 @@ DetailRow: WOGenericContainer {
 DetailCell: WOGenericContainer {
 	elementName = "td";
 	colspan = detailColspan;
-}
-
-ButtonCell: WOGenericContainer {
-	elementName = "td";
-	colspan = colspan;
 }
 
 InspectDetail: ERXD2WInspect {

@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
     <wo class="ERDSearchDisplayGroup" wocomponentcontent="false">    <binding name="displayGroup"/>
-    
-    
-    
         <validation message="'displayGroup' is a required binding.">
             <unbound name="displayGroup"/>
         </validation>
-    <validation message="'searchKey' is a required binding.">
-            
-        </validation>
-    
     <binding name="d2wContext"/>
         <validation message="'d2wContext' is a required binding.">
             <unbound name="d2wContext"/>

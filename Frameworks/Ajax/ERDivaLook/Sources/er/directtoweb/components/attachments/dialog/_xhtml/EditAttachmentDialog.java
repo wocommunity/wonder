@@ -3,7 +3,6 @@ package er.directtoweb.components.attachments.dialog._xhtml;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 

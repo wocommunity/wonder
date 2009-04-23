@@ -6,7 +6,6 @@ import com.webobjects.appserver.WOResponse;
 import er.ajax.AjaxUtils;
 import er.directtoweb.pages.ERD2WTabInspectPage;
 import er.diva.ERDIVPageInterface;
-import er.diva.ERDIVPageInterface.Keys;
 
 
 /**

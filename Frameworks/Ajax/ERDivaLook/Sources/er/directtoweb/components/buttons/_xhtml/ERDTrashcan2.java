@@ -106,7 +106,7 @@ public class ERDTrashcan2 extends ERDTrashcan {
             } catch (EOObjectNotAvailableException e) {
                 exception = ERXValidationFactory.defaultFactory().createCustomException(object(), "EOObjectNotAvailableException");
             } catch (EOGeneralAdaptorException e) {
-            	NSDictionary userInfo = e.userInfo();
+            	@SuppressWarnings("unchecked") NSDictionary userInfo = e.userInfo();
             	if(userInfo != null) {
             		EODatabaseOperation op = (EODatabaseOperation)userInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
             		if(op.databaseOperator() == EODatabaseOperation.DatabaseDeleteOperator) {

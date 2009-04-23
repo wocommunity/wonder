@@ -13,7 +13,7 @@ DisplayAttachmentDownloadLink: ERAttachmentLink {
 }
 
 FileName: WOString {
-	value = objectPropertyValue.originalFileName;
+	value = objectPropertyValue.originalFileName;//VALID
 }
 
 Icon: ERAttachmentIcon {
