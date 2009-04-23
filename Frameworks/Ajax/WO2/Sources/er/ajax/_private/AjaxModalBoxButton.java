@@ -87,7 +87,7 @@ public class AjaxModalBoxButton extends AjaxModalBox {
     		return (String) ERXWOContext.ajaxActionUrl(context());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
-    		@SuppressWarnings("unchecked") NSDictionary queryDictionary = (NSDictionary) valueForBinding(Bindings.queryDictionary);
+    		@SuppressWarnings("unchecked")  NSDictionary<String, Object> queryDictionary = (NSDictionary<String, Object>) valueForBinding(Bindings.queryDictionary);
     		
     		return context().directActionURLForActionNamed(directActionName, queryDictionary);
     	} else return null;
