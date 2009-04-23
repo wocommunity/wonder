@@ -39,8 +39,8 @@ public class AjaxAccordion2 extends AjaxAccordion {
     	return booleanValueForBinding("disabled", false);
     }
     
-    @Override
-    public NSDictionary createAjaxOptions() { return null; }
+	@Override
+    public NSDictionary<?,?> createAjaxOptions() { return null; }
     
     // R&R
     @Override

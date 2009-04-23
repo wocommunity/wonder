@@ -1,16 +1,13 @@
 package er.ajax._private;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXWOContext;
 
 
@@ -90,7 +87,7 @@ public class AjaxModalBoxButton extends AjaxModalBox {
     		return (String) ERXWOContext.ajaxActionUrl(context());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
-    		NSDictionary queryDictionary = (NSDictionary) valueForBinding(Bindings.queryDictionary);
+    		NSDictionary<?,?> queryDictionary = (NSDictionary<?,?>) valueForBinding(Bindings.queryDictionary);
     		
     		return context().directActionURLForActionNamed(directActionName, queryDictionary);
     	} else return null;

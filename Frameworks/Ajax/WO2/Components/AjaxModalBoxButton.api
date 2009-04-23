@@ -8,9 +8,7 @@
     <binding name="id"/>
     <binding name="class"/>
     <binding name="formID"/>
-        <validation message="'formID' is a required binding.">
-            <unbound name="formID"/>
-        </validation>
+        
     <binding name="value"/>
         <validation message="'value' is a required binding.">
             <unbound name="value"/>

@@ -2,7 +2,6 @@ package er.ajax;
 
 import com.webobjects.appserver.*;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXProperties;
 
 /**
