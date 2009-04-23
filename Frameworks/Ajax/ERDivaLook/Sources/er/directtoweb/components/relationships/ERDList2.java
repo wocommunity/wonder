@@ -36,7 +36,8 @@ public class ERDList2 extends ERDList {
     	} return detailDataSource;
     }
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public NSDictionary settings() {
     	NSMutableDictionary settings = super.settings().mutableClone();
     	settings.setObjectForKey(object(), "object");

@@ -1,7 +1,3 @@
-AllowsCollapsing: WOConditional {
-	condition = d2wContext.isPropertyCollapsible;
-}
-
 EditLink: WOHyperlink {
 	action = editAction;
 	class = "edit";

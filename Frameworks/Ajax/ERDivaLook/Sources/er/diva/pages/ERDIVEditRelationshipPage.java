@@ -3,12 +3,10 @@ package er.diva.pages;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.eoaccess.EODatabaseDataSource;
 
 import er.ajax.AjaxUtils;
 import er.directtoweb.pages.ERD2WEditRelationshipPage;
 import er.diva.ERDIVPageInterface;
-import er.diva.ERDIVPageInterface.Keys;
 import er.extensions.foundation.ERXValueUtilities;
 
 

@@ -11,7 +11,6 @@ import com.webobjects.eoaccess.EOModelGroup;
 import er.ajax.AjaxUtils;
 import er.directtoweb.components.relationships.ERD2WEditToOneRelationship;
 import er.diva.ERDIVPageInterface;
-import er.diva.pages.ERDIVEditRelationshipPage.Keys;
 import er.extensions.foundation.ERXValueUtilities;
 
 public class ERD2WEditToOneRelationship2 extends ERD2WEditToOneRelationship {
