@@ -8,13 +8,12 @@ import com.webobjects.foundation.NSMutableArray;
 import er.directtorest.ERD2RestDelegate;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
-import er.rest.ERXDefaultRestDelegate;
-import er.rest.ERXJSONRestResponseWriter;
-import er.rest.ERXRestContext;
-import er.rest.ERXRestRequestHandler;
-import er.rest.ERXXmlRestRequestParser;
-import er.rest.ERXXmlRestResponseWriter;
-import er.rest.IERXRestAuthenticationDelegate;
+import er.rest.entityDelegates.ERXDefaultRestDelegate;
+import er.rest.entityDelegates.ERXRestContext;
+import er.rest.entityDelegates.ERXRestRequestHandler;
+import er.rest.entityDelegates.ERXXmlRestResponseWriter;
+import er.rest.entityDelegates.IERXRestAuthenticationDelegate;
+import er.rest.format.ERXXmlRestParser;
 
 public class Application extends ERXApplication {
     public static void main(String argv[]) {
@@ -25,11 +24,11 @@ public class Application extends ERXApplication {
 
         EOEditingContext ec;
 
-        NSMutableArray<ServerUser> users = new NSMutableArray();
+        NSMutableArray<ServerUser> users = new NSMutableArray<ServerUser>();
 
-        NSMutableArray<ServerForum> forums = new NSMutableArray();
+        NSMutableArray<ServerForum> forums = new NSMutableArray<ServerForum>();
 
-        NSMutableArray<ServerTopic> topics = new NSMutableArray();
+        NSMutableArray<ServerTopic> topics = new NSMutableArray<ServerTopic>();
 
         public void run(EOEditingContext value) {
             ec = value;
@@ -87,7 +86,8 @@ public class Application extends ERXApplication {
             
         };
         //registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate, new ERXJSONRestResponseWriter(), new ERXXmlRestRequestParser()), "json");
-        registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate, new ERXXmlRestResponseWriter(), new ERXXmlRestRequestParser()), "rest");
+        //registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate, new ERXXmlRestResponseWriter(), new ERXXmlRestRequestParser()), "rest");
+        registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate, new ERXXmlRestResponseWriter(), new ERXXmlRestParser()), "rest");
 
     }
 }
