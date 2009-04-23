@@ -29,12 +29,12 @@
             columnName = NAME; 
             externalType = char; 
             name = name; 
-            valueClassName = NSString;
+            valueClassName = NSString; 
             valueType = c; 
             width = 20; 
         }, 
         {
-            columnName = "RENTAL_TERM_ID"; 
+            columnName = "RENTAL_TERMS_ID"; 
             externalType = integer; 
             name = rentalTermsID; 
             valueClassName = NSNumber; 

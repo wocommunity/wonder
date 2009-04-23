@@ -19,21 +19,21 @@
         {
             columnName = "FEE_ID"; 
             externalType = integer; 
-            name = feeID;  
+            name = feeID; 
             valueClassName = NSNumber; 
             valueType = i; 
         }, 
         {
             columnName = "FEE_TYPE_ID"; 
             externalType = integer; 
-            name = feeTypeID;  
+            name = feeTypeID; 
             valueClassName = NSNumber; 
             valueType = i; 
         }, 
         {
             columnName = "RENTAL_ID"; 
             externalType = integer; 
-            name = rentalID;  
+            name = rentalID; 
             valueClassName = NSNumber; 
             valueType = i; 
         }
@@ -61,6 +61,7 @@
         }, 
         {
             destination = Rental; 
+            isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = rentalID; sourceAttribute = rentalID; }); 
