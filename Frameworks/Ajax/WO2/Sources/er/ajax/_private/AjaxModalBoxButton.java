@@ -82,12 +82,12 @@ public class AjaxModalBoxButton extends AjaxModalBox {
     	return (hasBinding(Bindings.formID)) ? "'" + formID() + "'" : "this.form";
     }
     
-    public String href() {
+	public String href() {
     	if (hasBinding(Bindings.action))
     		return (String) ERXWOContext.ajaxActionUrl(context());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
-    		NSDictionary<?,?> queryDictionary = (NSDictionary<?,?>) valueForBinding(Bindings.queryDictionary);
+    		@SuppressWarnings("unchecked") NSDictionary queryDictionary = (NSDictionary) valueForBinding(Bindings.queryDictionary);
     		
     		return context().directActionURLForActionNamed(directActionName, queryDictionary);
     	} else return null;
