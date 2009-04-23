@@ -264,7 +264,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 */
 	public void setAttributeForKey(String attribute, String key) {
 		_attributes.setObjectForKey(attribute, key);
-		guessNull();
+		if (!"nil".equals(key)) {
+			guessNull();
+		}
 	}
 
 	/**
