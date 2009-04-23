@@ -280,13 +280,21 @@ There are many ways to use this script:
         <antcall target="${after.compile}" />
     </target>
 
-    <target name="global.framework.build" depends="global.properties,global.compile">
+    <target name="global.unjar" if="bundle.jars">
+        <unzip dest="${build.classes}">
+            <fileset dir="${project.dir}/Libraries">
+                <include name="*.jar"/>
+            </fileset>
+        </unzip>
+    </target>
+
+    <target name="global.framework.build" depends="global.properties,global.compile,global.unjar">
         <mkdir dir="${build.framework.dir}" />
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
             <classpath refid="ant.classpath"/>
         </taskdef>
 
-       <antcall target="${before.build}" />
+        <antcall target="${before.build}" />
         <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}" customInfoPListContent="${project.customInfo.plist}">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
@@ -319,7 +327,6 @@ There are many ways to use this script:
                 <include name="**/*" />
             </wsresources>
         </woframework>
-        
         <jar destfile="${build.root}/${project.name}-${project.version}.jar" manifest="${manifest.mf}">
             <fileset dir="${build.classes}">
                     <exclude name="${classes.exclude.0}" />
@@ -336,13 +343,13 @@ There are many ways to use this script:
         <echo message="-------------------------------------" />
     </target>
 
-    <target name="global.application.build" depends="global.properties,global.compile" >
+    <target name="global.application.build" depends="global.properties,global.compile,global.unjar" >
 
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="ant.classpath"/>
         </taskdef>
 
-       <antcall target="${before.build}" />
+        <antcall target="${before.build}" />
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
