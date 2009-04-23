@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
-	<classpathentry kind="lib" path="Libraries/derby.jar"/>
-	<classpathentry kind="lib" path="Libraries/derbytools.jar"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/DerbyPlugIn"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/ERMoviesLogic"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERDirectToWeb"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/WOOgnl"/>
