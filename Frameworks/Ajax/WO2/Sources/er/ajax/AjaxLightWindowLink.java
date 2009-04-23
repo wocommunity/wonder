@@ -43,7 +43,8 @@ public class AjaxLightWindowLink extends AjaxLightWindow {
     	return "lightwindow" + classString;
     }
     
-    public String href() {
+    @SuppressWarnings("unchecked")
+	public String href() {
     	if (hasBinding(Bindings.href))
     		return (String) valueForBinding(Bindings.href);
     	else if (hasBinding(Bindings.action) || hasBinding(Bindings.pageName))

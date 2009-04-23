@@ -1,6 +1,5 @@
 package er.ajax._private;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -8,7 +7,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.ajax.AjaxUtils;
-import er.extensions.appserver.ERXApplication;
 
 /**
  * Encapsulation of http://www.wildbit.com/labs/modalbox/ (a re-implementation of AjaxModalDialog)  

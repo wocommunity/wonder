@@ -72,7 +72,8 @@ public abstract class ERXSortOrder2 extends WOSortOrder {
     }
     
     // FIXME: Should post a notification even if d2wContext isn't bound.
-    public WOComponent toggleClicked() {
+    @SuppressWarnings("unchecked")
+	public WOComponent toggleClicked() {
         super.toggleClicked();
         if (log.isDebugEnabled()) log.debug("toggleClicked "+valueForBinding("d2wContext"));
         if (valueForBinding("d2wContext") != null) {
@@ -90,7 +91,8 @@ public abstract class ERXSortOrder2 extends WOSortOrder {
     }
 
     // These come right out of WOSortOrder, but have protected access instead of private.
-    protected EOSortOrdering _primarySortOrdering() {
+    @SuppressWarnings("unchecked")
+	protected EOSortOrdering _primarySortOrdering() {
         NSArray nsarray = displayGroup().sortOrderings();
         if (nsarray != null && nsarray.count() > 0) {
             EOSortOrdering eosortordering = (EOSortOrdering)nsarray.objectAtIndex(0);

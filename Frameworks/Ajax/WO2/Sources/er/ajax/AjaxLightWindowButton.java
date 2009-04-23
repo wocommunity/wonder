@@ -3,7 +3,6 @@ package er.ajax;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
-import er.ajax.AjaxLightWindowLink.Bindings;
 import er.extensions.appserver.ERXWOContext;
 
 /**
@@ -56,7 +55,8 @@ public class AjaxLightWindowButton extends AjaxLightWindow {
     	return _options().componentsJoinedByString(",");
     }
     
-    public String href() {
+    @SuppressWarnings("unchecked")
+	public String href() {
     	if (hasBinding(Bindings.action))
     		return ERXWOContext.ajaxActionUrl(context());
     	else if (hasBinding(Bindings.directActionName)) {

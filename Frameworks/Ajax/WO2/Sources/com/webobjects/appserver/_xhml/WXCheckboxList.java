@@ -50,7 +50,8 @@ public class WXCheckboxList extends WOComponent {
 	}
     
     // accesors
-    private NSArray<Object> selections() {
+    @SuppressWarnings("unchecked")
+	private NSArray<Object> selections() {
     	return (NSArray<Object>) valueForBinding(Bindings.selections);
     }
     
