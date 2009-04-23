@@ -115,4 +115,8 @@ public class AjaxModalBoxButton extends AjaxModalBox {
     	super.sleep();
     	context()._setFormSubmitted(false);
     }
+
+	public WOActionResults dummy() {
+		return null;
+	}
 }

@@ -4,6 +4,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.appserver.ERXWOContext;
+import com.webobjects.appserver.WOActionResults;
 
 /**
  * Encapsulates http://www.stickmanlabs.com/lightwindow 2.0
@@ -89,4 +90,8 @@ public class AjaxLightWindowButton extends AjaxLightWindow {
     	super.sleep();
     	context()._setFormSubmitted(false);
     }
+
+	public WOActionResults dummy() {
+		return null;
+	}
 }

@@ -3,6 +3,7 @@ SubmitButton: WOSubmitButton {
 	onclick = onClick;
 	class = ^class;
 	value = ^value;
+	action = dummy;
 }
 
 Content: WOComponentContent {
