@@ -2225,7 +2225,12 @@ public class ERXEOControlUtilities {
 			for(String entityName : counts.allKeys()) {
 				Integer count = oldCounts.objectForKey(entityName);
 				if(count != null) {
-					counts.setObjectForKey(counts.objectForKey(entityName) - count, entityName);
+					int changes = counts.objectForKey(entityName) - count;
+					if(changes == 0) {
+						counts.removeObjectForKey(entityName);
+					} else {
+						counts.setObjectForKey(changes, entityName);
+					}
 				}
 			}
 		}
