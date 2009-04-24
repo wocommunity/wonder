@@ -2193,4 +2193,42 @@ public class ERXEOControlUtilities {
 		return values;
 	}
 
+	/**
+	 * Returns the count of registered objects in the EC grouped by entity name, which is useful for memory debugging. 
+	 * Put this in a log on session.sleep() for example.
+	 * @param ec editing context to get count of
+	 * @return dictionary of counts
+	 */
+	public static NSDictionary<String, Integer> registeredObjectCount(EOEditingContext ec) {
+		NSMutableDictionary<String, Integer> counts = new NSMutableDictionary<String, Integer>();
+		for(EOEnterpriseObject eo : (NSArray<EOEnterpriseObject>)ec.registeredObjects()) {
+			String entityName = eo.entityName();
+			Integer count = counts.objectForKey(entityName);
+			if(count == null) {
+				count = new Integer(0);
+				counts.setObjectForKey(count, entityName);
+			}
+			counts.setObjectForKey(count+1, entityName);
+		}
+		return counts;
+	}
+
+	/**
+	 * Returns the changes in count registered objects in the EC grouped by entity name, which is useful for memory debugging.
+	 * @param currentCounts current count of objects
+	 * @param oldCounts previous count of objects
+	 * @return dictionary of counts
+	 */
+	public static NSDictionary<String, Integer> changedRegisteredObjectCount(NSDictionary<String, Integer> currentCounts, NSDictionary<String, Integer> oldCounts) {
+		NSMutableDictionary<String, Integer> counts = currentCounts.mutableClone();
+		if(oldCounts != null) {
+			for(String entityName : counts.allKeys()) {
+				Integer count = oldCounts.objectForKey(entityName);
+				if(count != null) {
+					counts.setObjectForKey(counts.objectForKey(entityName) - count, entityName);
+				}
+			}
+		}
+		return counts;
+	}
 }
