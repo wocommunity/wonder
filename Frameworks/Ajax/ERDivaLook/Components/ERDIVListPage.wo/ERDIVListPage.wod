@@ -214,16 +214,15 @@ HeaderCell: WOGenericContainer {
 
 CollapseLink: AjaxToggleLink {
 	toggleID = tbodyID;
-	effect = "appear";
+	effect = "slide";
 	class = "ERDIVDetailListPage_detail";
 	duration = "0.8";
 }
 
-DetailRow: WOGenericContainer {
-	elementName = "tr";
+DetailDiv: WOGenericContainer {
+	elementName = "div";
 	id = tbodyID;
 	style = "display:none;";
-	class = "detail";
 }
 
 DetailCell: WOGenericContainer {
