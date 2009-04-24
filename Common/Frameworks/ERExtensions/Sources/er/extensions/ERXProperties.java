@@ -24,6 +24,8 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects._ideservices._IDEProject;
+import com.webobjects._ideservices._WOProject;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.appserver._private.WOProperties;
@@ -761,11 +763,21 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             
             // Check if the framework project is opened from PBX
             WOProjectBundle bundle = WOProjectBundle.projectBundleForProject(frameworkName, true);
-            if (bundle != null) 
+            if (bundle != null) { 
                 projectPath = bundle.projectPath();
+                if (projectPath == null || projectPath.length() == 0) {
+                	_WOProject woProject = bundle._woProject();
+                	if (woProject != null) {
+                		_IDEProject ideProject = woProject.ideProject();
+                		if (ideProject != null) {
+                			projectPath = ideProject.projectDir();
+                		}
+                	}
+                }
+            }
             else 
                 projectPath = ERXSystem.getProperty("projects." + frameworkName);
-            
+
             if (projectPath != null) {
                 aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
                 if (aPropertiesPath != null) {
