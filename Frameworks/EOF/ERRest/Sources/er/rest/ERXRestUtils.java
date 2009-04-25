@@ -24,7 +24,7 @@ import er.rest.routes.model.IERXEntity;
  */
 public class ERXRestUtils {
 	public static boolean isPrimitive(Object obj) {
-		return obj == null || (obj instanceof Class) ? ERXRestUtils.isPrimitive((Class) obj) : ERXRestUtils.isPrimitive(obj.getClass());
+		return obj == null || ((obj instanceof Class) ? ERXRestUtils.isPrimitive((Class) obj) : ERXRestUtils.isPrimitive(obj.getClass()));
 	}
 
 	public static boolean isPrimitive(Class valueType) {
