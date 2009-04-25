@@ -205,6 +205,15 @@ public class ERXRoute {
 	}
 	
 	/**
+	 * Returns the Pattern used to match this route.
+	 * 
+	 * @return the Pattern used to match this route
+	 */
+	public Pattern routePattern() {
+		return _routePattern;
+	}
+	
+	/**
 	 * Returns the method of this request.
 	 * 
 	 * @return the method of this request
