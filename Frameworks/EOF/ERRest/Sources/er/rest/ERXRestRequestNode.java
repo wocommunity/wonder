@@ -114,6 +114,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 
 	public void setArray(boolean array) {
 		_array = array;
+		guessNull();
 	}
 
 	public boolean isArray() {
@@ -204,7 +205,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	}
 
 	protected void guessNull() {
-		setNull(_value == null && _children.size() == 0 && attributeForKey("id") == null);
+		setNull(_value == null && _children.size() == 0 && attributeForKey("id") == null && !isArray());
 	}
 	
 	public void setNull(boolean isNull) {
@@ -345,13 +346,17 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 
 	public Object objectWithFilter(String entityName, ERXKeyFilter keyFilter, ERXRestRequestNode.Delegate delegate) throws ParseException, ERXRestException {
 		Object obj = delegate.objectOfEntityNamedWithRequestNode(entityName, this);
-		// updateObjectWithFilter(obj, keyFilter, delegate);
+		if (keyFilter != null) {
+			updateObjectWithFilter(obj, keyFilter, delegate);
+		}
 		return obj;
 	}
 
 	public Object createObjectWithFilter(String entityName, ERXKeyFilter keyFilter, ERXRestRequestNode.Delegate delegate) throws ParseException, ERXRestException {
 		Object obj = delegate.createObjectOfEntityNamed(entityName);
-		updateObjectWithFilter(obj, keyFilter, delegate);
+		if (keyFilter != null) {
+			updateObjectWithFilter(obj, keyFilter, delegate);
+		}
 		return obj;
 	}
 
@@ -374,7 +379,10 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 			}
 			setAssociatedObject(obj);
 			setAttributeForKey(entity.name(), ERXRestRequestNode.TYPE_KEY);
-			setAttributeForKey(String.valueOf(entity.primaryKeyValue(obj)), ERXRestRequestNode.ID_KEY);
+			Object pkValue = entity.primaryKeyValue(obj);
+			if (pkValue != null) {
+				setAttributeForKey(String.valueOf(pkValue), ERXRestRequestNode.ID_KEY);
+			}
 			if (!visitedObjects.contains(obj)) {
 				visitedObjects.add(obj);
 
@@ -433,12 +441,17 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	}
 
 	public static ERXRestRequestNode requestNodeWithObjectAndFilter(Object obj, ERXKeyFilter keyFilter) {
-		String shortName = IERXEntity.Factory.entityForObject(obj).shortName();
+		String shortName = (obj != null) ? IERXEntity.Factory.entityForObject(obj).shortName() : null;
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(shortName);
-		if (!(obj instanceof List)) {
-			requestNode.setType(shortName);
+		if (ERXRestUtils.isPrimitive(obj)) {
+			requestNode.setValue(obj);
 		}
-		requestNode._fillInWithObjectAndFilter(obj, keyFilter, new HashSet<Object>());
+		else {
+			if (!(obj instanceof List)) {
+				requestNode.setType(shortName);
+			}
+			requestNode._fillInWithObjectAndFilter(obj, keyFilter, new HashSet<Object>());
+		}
 		return requestNode;
 	}
 
