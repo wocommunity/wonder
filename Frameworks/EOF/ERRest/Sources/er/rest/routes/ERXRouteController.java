@@ -52,6 +52,16 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
+	 * Override to provide custom security checks. It is not necessary to call
+	 * super on this method.
+	 * 
+	 * @throws SecurityException
+	 *             if the security check fails
+	 */
+	protected void checkAccess() throws SecurityException {
+	}
+
+	/**
 	 * The controller maintains an editing context for the duration of the request. The first time you call this method,
 	 * you will get a new EOEditingContext. Subsequent calls will return the same instance. This makes it a little more
 	 * convenient when you're using update, create, etc methods.
@@ -268,7 +278,12 @@ public class ERXRouteController extends WODirectAction {
 	@Override
 	public WOActionResults performActionNamed(String s) {
 		try {
-			return super.performActionNamed(s);
+			checkAccess();
+			WOActionResults results = super.performActionNamed(s);
+			if (results == null) {
+				results = response(ERXKeyFilter.filterWithAttributes(), null);
+			}
+			return results;
 		}
 		catch (ObjectNotAvailableException e) {
 			return errorResponse(e, WOResponse.HTTP_STATUS_NOT_FOUND);
