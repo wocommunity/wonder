@@ -342,8 +342,9 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Iterator<E> iterator() {
-		return new _NSJavaSetIterator<E>((E[]) objectsNoCopy());
+		return new _NSJavaSetIterator(objectsNoCopy());
 	}
 
 	public E member(Object object) {
@@ -354,8 +355,9 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return new NSMutableSet<E>(this);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Enumeration<E> objectEnumerator() {
-		return new _NSCollectionEnumerator<E>((E[]) _objects, _flags, _count);
+		return new _NSCollectionEnumerator(_objects, _flags, _count);
 	}
 
 	protected Object[] objectsNoCopy() {
