@@ -68,7 +68,10 @@ public interface IERXEntity {
 
 		public static IERXEntity entityForObject(Object obj) {
 			IERXEntity entity;
-			if (obj instanceof EOEnterpriseObject) {
+			if (obj == null) {
+				entity = null;
+			}
+			else if (obj instanceof EOEnterpriseObject) {
 				entity = new EOEntityProxy(ERXEOAccessUtilities.entityForEo((EOEnterpriseObject) obj));
 			}
 			else {
