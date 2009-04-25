@@ -33,18 +33,18 @@ import com.webobjects.foundation.NSComparator.ComparisonException;
  * NSMutableArray does not. Therefore you can't use NULL objects. The
  * ERPrototype name is <code>mutableArray</code>
  */
-public class ERXMutableArray extends NSMutableArray implements List {
+public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 	public static final long serialVersionUID = -6581075256974648875L;
 
 	public ERXMutableArray() {
 		super();
 	}
 
-	public ERXMutableArray(Collection c) {
-		super(c.toArray());
+	public ERXMutableArray(Collection<? extends E> c) {
+		super((E[])c.toArray());
 	}
 
-	public ERXMutableArray(NSArray array) {
+	public ERXMutableArray(NSArray<? extends E> array) {
 		super(array);
 	}
 
@@ -52,23 +52,23 @@ public class ERXMutableArray extends NSMutableArray implements List {
 		super(i);
 	}
 
-	public ERXMutableArray(Object obj) {
+	public ERXMutableArray(E obj) {
 		super(obj);
 	}
 
-	public ERXMutableArray(Object aobj[]) {
+	public ERXMutableArray(E aobj[]) {
 		super(aobj);
 	}
 
-	public ERXMutableArray(Object objects[], NSRange range) {
+	public ERXMutableArray(E objects[], NSRange range) {
 		super(objects, range);
 	}
 
-	public ERXMutableArray(Vector vector, NSRange range, boolean flag) {
+	public ERXMutableArray(Vector<? extends E> vector, NSRange range, boolean flag) {
 		super(vector, range, flag);
 	}
 
-	public static NSData toBlob(NSArray d) {
+	public static NSData toBlob(NSArray<?> d) {
 		try {
 			ByteArrayOutputStream bout = new ByteArrayOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(bout);
@@ -82,15 +82,16 @@ public class ERXMutableArray extends NSMutableArray implements List {
 		}
 	}
 
-	public static NSData toBlob(NSMutableArray d) {
-		return toBlob((NSArray)d);
+	public static NSData toBlob(NSMutableArray<?> d) {
+		return toBlob(d);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static NSArray fromBlob(NSData d) {
 		try {
 			ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
 			ObjectInputStream ois = new ERXMappingObjectStream(bis);
-			NSArray dd = (NSArray) ois.readObject();
+			NSArray<?> dd = (NSArray<?>) ois.readObject();
 			ois.close();
 			return dd;
 		} catch (IOException e) {
@@ -102,12 +103,13 @@ public class ERXMutableArray extends NSMutableArray implements List {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static NSArray fromPropertyList(String arrayAsString) {
-		NSArray a = (NSArray) NSPropertyListSerialization.propertyListFromString(arrayAsString);
-		return new ERXMutableArray(a);
+		NSArray<?> a = (NSArray<?>) NSPropertyListSerialization.propertyListFromString(arrayAsString);
+		return new ERXMutableArray<Object>(a);
 	}
 
-	public static String toPropertyList(NSArray array) {
+	public static String toPropertyList(NSArray<?> array) {
 		return NSPropertyListSerialization.stringFromPropertyList(array);
 	}
 
@@ -119,8 +121,9 @@ public class ERXMutableArray extends NSMutableArray implements List {
 		return toPropertyList(this);
 	}
 
-	public NSMutableArray mutableClone() {
-		return new ERXMutableArray((NSArray) this);
+	@Override
+	public ERXMutableArray<E> mutableClone() {
+		return new ERXMutableArray<E>(this);
 	}
 
 	public String[] toStringArray() {
@@ -135,259 +138,322 @@ public class ERXMutableArray extends NSMutableArray implements List {
 	 * @author ak
 	 * 
 	 */
-	public static class ThreadSafeArray extends ERXMutableArray {
+	public static class ThreadSafeArray<V> extends ERXMutableArray<V> {
 
-		public ThreadSafeArray(NSArray array) {
-			super((NSMutableArray) array);
+		public ThreadSafeArray(NSArray<? extends V> array) {
+			super(array);
 		}
 
+		@Override
 		public synchronized void _moveObjectAtIndexToIndex(int sourceIndex, int destIndex) {
 			super._moveObjectAtIndexToIndex(sourceIndex, destIndex);
 		}
 
-		public synchronized void addObject(Object object) {
+		@Override
+		public synchronized void addObject(V object) {
 			super.addObject(object);
 		}
 
-		public synchronized void addObjects(Object[] objects) {
+		@Override
+		public synchronized void addObjects(V[] objects) {
 			super.addObjects(objects);
 		}
 
-		public synchronized void addObjectsFromArray(NSArray otherArray) {
+		@Override
+		public synchronized void addObjectsFromArray(NSArray<? extends V> otherArray) {
 			super.addObjectsFromArray(otherArray);
 		}
 
+		@Override
 		public synchronized Object clone() {
-			return super.clone();
+			return new ThreadSafeArray<V>(this);
 		}
 
-		public synchronized NSArray immutableClone() {
+		@Override
+		public synchronized NSArray<V> immutableClone() {
 			return super.immutableClone();
 		}
 
-		public synchronized void insertObjectAtIndex(Object object, int index) {
+		@Override
+		public synchronized void insertObjectAtIndex(V object, int index) {
 			super.insertObjectAtIndex(object, index);
 		}
 
+		@Override
 		public synchronized void removeAllObjects() {
 			super.removeAllObjects();
 		}
 
+		@Override
 		public synchronized boolean removeIdenticalObject(Object object, NSRange range) {
 			return super.removeIdenticalObject(object, range);
 		}
 
+		@Override
 		public synchronized boolean removeIdenticalObject(Object object) {
 			return super.removeIdenticalObject(object);
 		}
 
-		public synchronized Object removeLastObject() {
+		@Override
+		public synchronized V removeLastObject() {
 			return super.removeLastObject();
 		}
 
+		@Override
 		public synchronized boolean removeObject(Object object, NSRange range) {
 			return super.removeObject(object, range);
 		}
 
+		@Override
 		public synchronized boolean removeObject(Object object) {
 			return super.removeObject(object);
 		}
 
-		public synchronized Object removeObjectAtIndex(int index) {
+		@Override
+		public synchronized V removeObjectAtIndex(int index) {
 			return super.removeObjectAtIndex(index);
 		}
 
+		@Override
 		public synchronized void removeObjects(Object[] objects) {
 			super.removeObjects(objects);
 		}
 
-		public synchronized void removeObjectsInArray(NSArray otherArray) {
+		@Override
+		public synchronized void removeObjectsInArray(NSArray<?> otherArray) {
 			super.removeObjectsInArray(otherArray);
 		}
 
+		@Override
 		public synchronized void removeObjectsInRange(NSRange range) {
 			super.removeObjectsInRange(range);
 		}
 
-		public synchronized Object replaceObjectAtIndex(Object object, int index) {
+		@Override
+		public synchronized V replaceObjectAtIndex(V object, int index) {
 			return super.replaceObjectAtIndex(object, index);
 		}
 
-		public synchronized void replaceObjectsInRange(NSRange range, NSArray otherArray, NSRange otherRange) {
+		@Override
+		public synchronized void replaceObjectsInRange(NSRange range, NSArray<? extends V> otherArray, NSRange otherRange) {
 			super.replaceObjectsInRange(range, otherArray, otherRange);
 		}
 
-		public synchronized void setArray(NSArray otherArray) {
+		@Override
+		public synchronized void setArray(NSArray<? extends V> otherArray) {
 			super.setArray(otherArray);
 		}
 
+		@Override
 		public synchronized void sortUsingComparator(NSComparator comparator) throws ComparisonException {
 			super.sortUsingComparator(comparator);
 		}
 
+		@Override
 		protected synchronized void _ensureCapacity(int capacity) {
 			super._ensureCapacity(capacity);
 		}
 
+		@Override
 		protected synchronized void _initializeWithCapacity(int capacity) {
 			super._initializeWithCapacity(capacity);
 		}
 
+		@Override
 		protected synchronized boolean _mustRecomputeHash() {
 			return super._mustRecomputeHash();
 		}
 
+		@Override
 		protected synchronized void _setMustRecomputeHash(boolean change) {
 			super._setMustRecomputeHash(change);
 		}
 
+		@Override
 		public synchronized int _shallowHashCode() {
 			return super._shallowHashCode();
 		}
 
-		public synchronized NSArray arrayByAddingObject(Object object) {
+		@Override
+		public synchronized NSArray<V> arrayByAddingObject(V object) {
 			return super.arrayByAddingObject(object);
 		}
 
-		public synchronized NSArray arrayByAddingObjectsFromArray(NSArray otherArray) {
+		@Override
+		public synchronized NSArray<V> arrayByAddingObjectsFromArray(NSArray<? extends V> otherArray) {
 			return super.arrayByAddingObjectsFromArray(otherArray);
 		}
 
-		public synchronized ArrayList arrayList() {
-			Object objects[] = objectsNoCopy();
-			ArrayList list = new ArrayList(objects.length);
+		@Override
+		public synchronized ArrayList<V> arrayList() {
+			V[] objects = (V[]) objectsNoCopy();
+			ArrayList<V> list = new ArrayList<V>(objects.length);
 			for(int i = 0; i < objects.length; i++) {
 				list.add(objects[i]);
 			}
 			return list;
 		}
 
+		@Override
+		@SuppressWarnings("unchecked")
 		public synchronized Class classForCoder() {
 			return super.classForCoder();
 		}
 
+		@Override
 		public synchronized String componentsJoinedByString(String separator) {
 			return super.componentsJoinedByString(separator);
 		}
 
+		@Override
 		public synchronized boolean containsObject(Object object) {
 			return super.containsObject(object);
 		}
 
+		@Override
 		public synchronized int count() {
 			return super.count();
 		}
 
+		@Override
 		public synchronized void encodeWithCoder(NSCoder coder) {
 			super.encodeWithCoder(coder);
 		}
 
+		@Override
 		public synchronized boolean equals(Object object) {
 			return super.equals(object);
 		}
 
-		public synchronized Object firstObjectCommonWithArray(NSArray otherArray) {
+		@Override
+		public synchronized V firstObjectCommonWithArray(NSArray<? extends V> otherArray) {
 			return super.firstObjectCommonWithArray(otherArray);
 		}
 
+		@Override
 		public synchronized int hashCode() {
 			return super.hashCode();
 		}
 
+		@Override
 		public synchronized int indexOfIdenticalObject(Object object) {
 			return super.indexOfIdenticalObject(object);
 		}
 
+		@Override
 		public synchronized int indexOfIdenticalObject(Object object, NSRange range) {
 			return super.indexOfIdenticalObject(object, range);
 		}
 
+		@Override
 		public synchronized int indexOfObject(Object object) {
 			return super.indexOfObject(object);
 		}
 
+		@Override
 		public synchronized int indexOfObject(Object object, NSRange range) {
 			return super.indexOfObject(object, range);
 		}
 
-		public synchronized boolean isEqualToArray(NSArray otherArray) {
+		@Override
+		public synchronized boolean isEqualToArray(NSArray<?> otherArray) {
 			return super.isEqualToArray(otherArray);
 		}
 
-		public synchronized Object lastObject() {
+		@Override
+		public synchronized V lastObject() {
 			return super.lastObject();
 		}
 
+		@Override
 		public synchronized void makeObjectsPerformSelector(NSSelector selector, Object[] parameters) {
 			super.makeObjectsPerformSelector(selector, parameters);
 		}
 
-		public synchronized Object objectAtIndex(int index) {
+		@Override
+		public synchronized V objectAtIndex(int index) {
 			return super.objectAtIndex(index);
 		}
 
-		public synchronized Enumeration objectEnumerator() {
+		@Override
+		public synchronized Enumeration<V> objectEnumerator() {
 			return super.objectEnumerator();
 		}
 
+		@Override
 		public synchronized Object[] objects() {
 			return super.objects();
 		}
 
+		@Override
 		public synchronized Object[] objects(NSRange range) {
 			return super.objects(range);
 		}
 
+		@Override
 		protected synchronized Object[] objectsNoCopy() {
 			return super.objectsNoCopy();
 		}
 
-		public synchronized Enumeration reverseObjectEnumerator() {
+		@Override
+		public synchronized Enumeration<V> reverseObjectEnumerator() {
 			return super.reverseObjectEnumerator();
 		}
 
-		public synchronized NSArray sortedArrayUsingComparator(NSComparator comparator) throws ComparisonException {
+		@Override
+		public synchronized NSArray<V> sortedArrayUsingComparator(NSComparator comparator) throws ComparisonException {
 			return super.sortedArrayUsingComparator(comparator);
 		}
 
-		public synchronized NSArray subarrayWithRange(NSRange range) {
+		@Override
+		public synchronized NSArray<V> subarrayWithRange(NSRange range) {
 			return super.subarrayWithRange(range);
 		}
 
+		@Override
 		public synchronized void takeValueForKey(Object value, String key) {
 			super.takeValueForKey(value, key);
 		}
 
+		@Override
 		public synchronized void takeValueForKeyPath(Object value, String keyPath) {
 			super.takeValueForKeyPath(value, keyPath);
 		}
 
+		@Override
 		public synchronized String toString() {
 			return super.toString();
 		}
 
+		@Override
 		public synchronized Object valueForKey(String key) {
 			return super.valueForKey(key);
 		}
 
+		@Override
 		public synchronized Object valueForKeyPath(String keyPath) {
 			return super.valueForKeyPath(keyPath);
 		}
 
-		public synchronized Vector vector() {
+		@Override
+		public synchronized Vector<V> vector() {
 			return super.vector();
 		}
 	}
 	
-	public static NSArray synchronizedArray() {
-		return new ThreadSafeArray(new ERXMutableArray());
+	public static <T> NSMutableArray<T> synchronizedArray() {
+		return new ThreadSafeArray<T>(new ERXMutableArray<T>());
 	}
 	
-	public static NSArray synchronizedArray(NSArray array) {
+	public static <T> NSArray<T> synchronizedArray(NSArray<T> array) {
 		if(!(array instanceof NSMutableArray)) {
 			return array;
 		}
 		return new ThreadSafeArray((NSMutableArray)array);
+	}
+
+	public static <T> NSMutableArray<T> synchronizedArray(NSMutableArray<T> array) {
+		return new ThreadSafeArray<T>(array);
 	}
 
 }
