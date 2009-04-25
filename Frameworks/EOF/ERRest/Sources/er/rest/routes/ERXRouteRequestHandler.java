@@ -133,6 +133,24 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public void addRoute(ERXRoute route) {
 		_routes.addObject(route);
 	}
+	
+	/**
+	 * Removes the given route from this request handler.
+	 * 
+	 * @param route the route to remove
+	 */
+	public void removeRoute(ERXRoute route) {
+		_routes.removeObject(route);
+	}
+	
+	/**
+	 * Returns the routes for this request handler.
+	 * 
+	 * @return the routes for this request handler.
+	 */
+	public NSArray<ERXRoute> routes() {
+		return _routes.immutableClone();
+	}
 
 	/**
 	 * Adds default routes and maps them to a controller named "[plural entity name]Controller". For instance, if the
