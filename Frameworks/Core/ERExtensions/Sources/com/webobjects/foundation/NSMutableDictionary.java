@@ -39,7 +39,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		super(object, key);
 	}
 
-	public NSMutableDictionary(V objects[], K keys[]) {
+	public NSMutableDictionary(V[] objects, K[] keys) {
 		super(objects, keys);
 	}
 
@@ -125,19 +125,19 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 
 	public void addEntriesFromDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		if (otherDictionary != null) {
-			Object keys[] = otherDictionary.keysNoCopy();
+			Object[] keys = otherDictionary.keysNoCopy();
 			for (int i = 0; i < keys.length; i++) {
-				setObjectForKey(otherDictionary.objectForKey((K) keys[i]), (K) keys[i]);
+				setObjectForKey(otherDictionary.objectForKey(keys[i]), (K)keys[i]);
 			}
 
 		}
 	}
 
-	public void removeObjectsForKeys(NSArray keys) {
+	public void removeObjectsForKeys(NSArray<?> keys) {
 		if (keys != null) {
-			Object keysArray[] = keys.objectsNoCopy();
+			Object[] keysArray = keys.objectsNoCopy();
 			for (int i = 0; i < keysArray.length; i++) {
-				removeObjectForKey((K) keysArray[i]);
+				removeObjectForKey(keysArray[i]);
 			}
 
 		}
@@ -149,7 +149,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 			setObjectForKey((V) value, (K) key);
 		}
 		else {
-			removeObjectForKey((K) key);
+			removeObjectForKey(key);
 		}
 	}
 
@@ -203,8 +203,8 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	 */
 	@Override
 	public V remove(Object key) {
-		V temp = objectForKey((K) key);
-		removeObjectForKey((K) key);
+		V temp = objectForKey(key);
+		removeObjectForKey(key);
 
 		return temp;
 	}
@@ -217,7 +217,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	 */
 	@Override
 	public void putAll(Map<? extends K, ? extends V> m) {
-		addEntriesFromDictionary(new NSDictionary(m, true));
+		addEntriesFromDictionary(new NSDictionary(m, IgnoreNull));
 	}
 
 	/**

@@ -20,26 +20,22 @@ import java.util.Collection;
 //TODO iterator.remove() throws unimplemented
 
 public class NSMutableSet<E> extends NSSet<E> {
-
 	public NSMutableSet() {
 	}
 
 	public NSMutableSet(int capacity) {
-		this();
 		if (capacity < 0) {
 			throw new IllegalArgumentException("Capacity cannot be less than 0");
 		}
-		else {
-			_ensureCapacity(capacity);
-			return;
-		}
+		
+		_ensureCapacity(capacity);
 	}
 
 	public NSMutableSet(E object) {
 		super(object);
 	}
 
-	public NSMutableSet(E objects[]) {
+	public NSMutableSet(E[] objects) {
 		super(objects);
 	}
 
@@ -96,7 +92,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		if (otherSet != this) {
 			removeAllObjects();
 			if (otherSet != null) {
-				E objects[] = (E[])otherSet.objectsNoCopy();
+				E[] objects = (E[])otherSet.objectsNoCopy();
 				for (int i = 0; i < objects.length; i++) {
 					addObject(objects[i]);
 				}
@@ -107,7 +103,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	public void addObjectsFromArray(NSArray<? extends E> array) {
 		if (array != null) {
-			E objects[] = (E[])array.objectsNoCopy();
+			E[] objects = (E[])array.objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				addObject(objects[i]);
 			}
@@ -121,7 +117,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 				removeAllObjects();
 				return;
 			}
-			E objects[] = (E[])objectsNoCopy();
+			E[] objects = (E[])objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				if (otherSet.member(objects[i]) == null) {
 					removeObject(objects[i]);
@@ -139,7 +135,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 			removeAllObjects();
 			return;
 		}
-		Object objects[] = otherSet.objectsNoCopy();
+		Object[] objects = otherSet.objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			if (member(objects[i]) != null) {
 				removeObject(objects[i]);
@@ -152,7 +148,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		if (otherSet == null || otherSet.count() == 0 || otherSet == this) {
 			return;
 		}
-		E objects[] = (E[])otherSet.objectsNoCopy();
+		E[] objects = (E[])otherSet.objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			addObject(objects[i]);
 		}
@@ -171,6 +167,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return (NSMutableSet<E>) clone();
 	}
 
+	@SuppressWarnings({ "hiding", "unchecked" })
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
 	static final long serialVersionUID = -6054074706096120227L;
 
@@ -240,7 +237,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 	 * @return true if this set was modified; false otherwise.
 	 */
 	public boolean retainAll(Collection<?> c) {
-		NSMutableSet s = new NSMutableSet();
+		NSMutableSet<Object> s = new NSMutableSet<Object>();
 		boolean updated = false;
 		for (Object o : c) {
 			s.add(o);
@@ -265,7 +262,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 	 * @return true if this set was modified; false otherwise.
 	 */
 	public boolean removeAll(Collection<?> c) {
-		NSMutableSet s = new NSMutableSet();
+		NSMutableSet<Object> s = new NSMutableSet<Object>();
 		boolean updated = false;
 		for (Object o : c) {
 			s.add(o);

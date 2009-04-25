@@ -26,24 +26,21 @@ import java.util.Set;
  */
 public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundationCollection, Set<E> {
 
-	public static final Class _CLASS;
+	@SuppressWarnings("unchecked")
+	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSSet");
 
-	protected static int _NSSetClassHashCode;
+	protected static int _NSSetClassHashCode = _CLASS.hashCode();
 
+	@SuppressWarnings("unchecked")
 	public static final NSSet EmptySet = new NSSet();
 
-	private static final ObjectStreamField serialPersistentFields[];
+	private static final String SerializationValuesFieldKey = "objects";
+	private static final ObjectStreamField[] serialPersistentFields = (new ObjectStreamField[] { new ObjectStreamField(SerializationValuesFieldKey, ((Object) (_NSUtilities._NoObjectArray)).getClass()) });;
 
 	static final long serialVersionUID = -8833684352747517048L;
 
-	static {
-		_CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSSet");
-		_NSSetClassHashCode = _CLASS.hashCode();
-		serialPersistentFields = (new ObjectStreamField[] { new ObjectStreamField("objects", ((Object) (_NSUtilities._NoObjectArray)).getClass()) });
-	}
-
 	public static Object decodeObject(NSCoder coder) {
-		return new NSSet(coder.decodeObjects());
+		return new NSSet<Object>(coder.decodeObjects());
 	}
 
 	protected transient int _capacity;
@@ -52,7 +49,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	protected transient int _deletionLimit;
 
-	protected transient byte _flags[];
+	protected transient byte[] _flags;
 
 	protected transient int _hashCache;
 
@@ -78,11 +75,9 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		if (set == null) {
 			throw new IllegalArgumentException("Set cannot be null");
 		}
-		else {
-			Object aSet[] = set.toArray();
-			initFromObjects(aSet, ignoreNull);
-			return;
-		}
+
+		Object[] aSet = set.toArray();
+		initFromObjects(aSet, ignoreNull);
 	}
 
 	public NSSet(E object) {
@@ -96,17 +91,17 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		}
 	}
 
-	public NSSet(E objects[]) {
+	public NSSet(E[] objects) {
 		this(objects, true);
 	}
 
-	private NSSet(E objects[], boolean checkForNull) {
+	private NSSet(E[] objects, boolean checkForNull) {
 		initFromObjects(objects, checkForNull);
 	}
 
 	public Object[] _allObjects() {
 		int count = count();
-		Object objects[] = new Object[count];
+		Object[] objects = new Object[count];
 		if (count > 0) {
 			System.arraycopy(objectsNoCopy(), 0, objects, 0, count);
 		}
@@ -117,10 +112,9 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		int size = _hashtableBuckets;
 		if (_count == 0) {
 			_flags = new byte[size];
-		}
-		else {
-			Object oldObjects[] = _objects;
-			byte oldFlags[] = _flags;
+		} else {
+			Object[] oldObjects = _objects;
+			byte[] oldFlags = _flags;
 			_objects = new Object[size];
 			_flags = new byte[size];
 			for (int i = 0; i < size; i++) {
@@ -145,10 +139,9 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 				if (newSize == 0) {
 					_objects = null;
 					_flags = null;
-				}
-				else {
-					Object oldObjects[] = _objects;
-					byte oldFlags[] = _flags;
+				} else {
+					Object[] oldObjects = _objects;
+					byte[] oldFlags = _flags;
 					_objects = new Object[newSize];
 					_flags = new byte[newSize];
 					for (int i = 0; i < oldSize; i++) {
@@ -168,7 +161,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		if (count != otherSet.count()) {
 			return false;
 		}
-		Object objects[] = objectsNoCopy();
+		Object[] objects = objectsNoCopy();
 		for (int i = 0; i < count; i++) {
 			if (otherSet.member(objects[i]) == null) {
 				return false;
@@ -206,6 +199,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return count() <= 0 ? null : (E)objectsNoCopy()[0];
 	}
 
+	@SuppressWarnings("unchecked")
 	public Class classForCoder() {
 		return _CLASS;
 	}
@@ -226,7 +220,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		if (c == null) {
 			throw new NullPointerException("Collection passed into containsAll() cannot be null");
 		}
-		Object objects[] = c.toArray();
+		Object[] objects = c.toArray();
 		if (objects.length > 0) {
 			for (int i = 0; i < objects.length; i++) {
 				if (objects[i] == null) {
@@ -258,19 +252,19 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 			return true;
 		}
 		if (object instanceof NSSet) {
-			return _equalsSet((NSSet) object);
+			return _equalsSet((NSSet<?>) object);
 		}
-		else {
-			return false;
-		}
+		
+		return false;
 	}
-
+	
+	@Override
 	public int hashCode() {
 		return _NSSetClassHashCode ^ count();
 	}
 
 	public HashSet<E> hashSet() {
-		E objects[] = (E[])objectsNoCopy();
+		E[] objects = (E[])objectsNoCopy();
 		HashSet<E> set = new HashSet<E>(objects.length);
 		for (int i = 0; i < objects.length; i++) {
 			set.add(objects[i]);
@@ -283,7 +277,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return this;
 	}
 
-	private void initFromObjects(Object objects[], boolean checkForNull) {
+	private void initFromObjects(Object[] objects, boolean checkForNull) {
 		if (checkForNull) {
 			for (int i = 0; i < objects.length; i++) {
 				if (objects[i] == null) {
@@ -304,7 +298,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	public boolean intersectsSet(NSSet<?> otherSet) {
 		if (count() != 0 && otherSet != null && otherSet.count() != 0) {
-			Object objects[] = objectsNoCopy();
+			Object[] objects = objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				if (otherSet.member(objects[i]) != null) {
 					return true;
@@ -326,9 +320,8 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		if (otherSet == this) {
 			return true;
 		}
-		else {
-			return _equalsSet(otherSet);
-		}
+
+		return _equalsSet(otherSet);
 	}
 
 	public boolean isSubsetOfSet(NSSet<?> otherSet) {
@@ -339,7 +332,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		if (count == 0) {
 			return true;
 		}
-		Object objects[] = objectsNoCopy();
+		Object[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			if (otherSet.member(objects[i]) == null) {
 				return false;
@@ -350,7 +343,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	public Iterator<E> iterator() {
-		return new _NSJavaSetIterator(objectsNoCopy());
+		return new _NSJavaSetIterator<E>((E[]) objectsNoCopy());
 	}
 
 	public E member(Object object) {
@@ -362,7 +355,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	public Enumeration<E> objectEnumerator() {
-		return new _NSCollectionEnumerator(_objects, _flags, _count);
+		return new _NSCollectionEnumerator<E>((E[]) _objects, _flags, _count);
 	}
 
 	protected Object[] objectsNoCopy() {
@@ -374,17 +367,17 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
 		java.io.ObjectInputStream.GetField fields = null;
 		fields = s.readFields();
-		Object keys[] = (Object[]) fields.get("objects", ((_NSUtilities._NoObjectArray)));
+		Object[] keys = (Object[]) fields.get(SerializationValuesFieldKey, ((_NSUtilities._NoObjectArray)));
 		keys = keys != null ? keys : _NSUtilities._NoObjectArray;
 		initFromObjects(keys, true);
 	}
+	@SuppressWarnings("unused")
 	private Object readResolve() throws ObjectStreamException {
 		if (getClass() == _CLASS && count() == 0) {
 			return EmptySet;
 		}
-		else {
-			return this;
-		}
+
+		return this;
 	}
 	public boolean remove(Object o) {
 		throw new UnsupportedOperationException("remove is not a supported operation in com.webobjects.foundation.NSSet");
@@ -414,18 +407,18 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return _count;
 	}
 	public Object[] toArray() {
-		Object currObjects[] = objectsNoCopy();
-		Object objects[] = new Object[currObjects.length];
+		Object[] currObjects = objectsNoCopy();
+		Object[] objects = new Object[currObjects.length];
 		if (currObjects.length > 0) {
 			System.arraycopy(currObjects, 0, objects, 0, currObjects.length);
 		}
 		return objects;
 	}
-	public <T> T[] toArray(T objects[]) {
+	public <T> T[] toArray(T[] objects) {
 		if (objects == null) {
 			throw new NullPointerException("Cannot pass null as parameter");
 		}
-		Object currObjects[] = objectsNoCopy();
+		Object[] currObjects = objectsNoCopy();
 		if (objects.length < currObjects.length) {
 			objects = (T[]) java.lang.reflect.Array.newInstance(objects.getClass().getComponentType(), currObjects.length);
 		}
@@ -436,7 +429,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	public String toString() {
 		StringBuffer buffer = new StringBuffer(128);
 		buffer.append("(");
-		Object objects[] = objectsNoCopy();
+		Object[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			Object object = objects[i];
 			if (i > 0) {
@@ -462,7 +455,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	private void writeObject(ObjectOutputStream s) throws IOException {
 		java.io.ObjectOutputStream.PutField fields = s.putFields();
-		fields.put("objects", ((_allObjects())));
+		fields.put(SerializationValuesFieldKey, ((_allObjects())));
 		s.writeFields();
 	}
 }
