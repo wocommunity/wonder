@@ -46,6 +46,9 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 			response.appendContentString(">");
 			response.appendContentString("\n");
 		}
+		else if (indent == 0) {
+			response.appendContentString("<null/>");
+		}
 	}
 
 	protected void appendAttribtuesToResponse(ERXRestRequestNode node, IERXRestResponse response) {
