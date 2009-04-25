@@ -419,9 +419,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 						else if (!relationship.isToMany() && keyFilter.matches(key, ERXKey.Type.ToOneRelationship)) {
 							Object value = key.valueInObject(obj);
 							if (value != null) {
-                ERXRestRequestNode toOneRelationshipNode = new ERXRestRequestNode(keyFilter.keyMap(key).key());
-  							toOneRelationshipNode._fillInWithObjectAndFilter(value, keyFilter._filterForKey(key), visitedObjects);
-  							addChild(toOneRelationshipNode);
+								ERXRestRequestNode toOneRelationshipNode = new ERXRestRequestNode(keyFilter.keyMap(key).key());
+								toOneRelationshipNode._fillInWithObjectAndFilter(value, keyFilter._filterForKey(key), visitedObjects);
+								addChild(toOneRelationshipNode);
 							}
 						}
 					}
