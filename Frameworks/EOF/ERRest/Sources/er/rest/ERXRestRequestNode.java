@@ -22,6 +22,7 @@ import er.extensions.eof.ERXKeyFilter;
 import er.extensions.localization.ERXLocalizer;
 import er.rest.format.ERXStringBufferRestResponse;
 import er.rest.format.IERXRestWriter;
+import er.rest.routes.model.EOEntityProxy;
 import er.rest.routes.model.IERXAttribute;
 import er.rest.routes.model.IERXEntity;
 import er.rest.routes.model.IERXRelationship;
@@ -207,7 +208,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	protected void guessNull() {
 		setNull(_value == null && _children.size() == 0 && attributeForKey("id") == null && !isArray());
 	}
-	
+
 	public void setNull(boolean isNull) {
 		if (isNull) {
 			setAttributeForKey("true", "nil");
@@ -462,22 +463,38 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 
 		for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
 			ERXKey<Object> key = keyFilter.keyMap(new ERXKey<Object>(attribute.getKey()));
-			if (keyFilter.matches(key, ERXKey.Type.Attribute) && delegate.isClassProperty(obj, key.key())) {
-				Object value = ERXRestUtils.coerceValueToAttributeType(attribute.getValue(), null, obj, key.key());
+			String keyName = key.key();
+			if (keyFilter.matches(key, ERXKey.Type.Attribute) && delegate.isClassProperty(obj, keyName)) {
+				Object value = ERXRestUtils.coerceValueToAttributeType(attribute.getValue(), null, obj, keyName);
 				key.takeValueInObject(value, obj);
 			}
 		}
 
 		for (ERXRestRequestNode childNode : _children) {
 			ERXKey<Object> key = keyFilter.keyMap(new ERXKey<Object>(childNode.name()));
-			if (delegate.isClassProperty(obj, key.key())) {
-				NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(obj, key.key());
+			String keyName = key.key();
+			if (delegate.isClassProperty(obj, keyName)) {
+				IERXEntity entity = IERXEntity.Factory.entityForObject(obj);
+				IERXRelationship relationship = entity.relationshipNamed(keyName);
+				IERXAttribute attribute = entity.attributeNamed(keyName);
+
+				NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(obj, keyName);
 				Class valueType = binding.valueType();
+
 				if (List.class.isAssignableFrom(valueType) && keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
-					IERXEntity destinationEntity = IERXEntity.Factory.entityForObject(obj).relationshipNamed(key.key()).destinationEntity();
+					// this is sort of expensive, but we want to support non-eomodel to-many relationships on EO's, so
+					// we fallback and lookup the class entity ...
+					if (relationship == null && entity instanceof EOEntityProxy) {
+						IERXEntity classEntity = IERXEntity.Factory.entityForObject(obj.getClass());
+						relationship = classEntity.relationshipNamed(keyName);
+						if (relationship == null) {
+							throw new IllegalArgumentException("There is no to-many relationship named '" + key.key() + "' on '" + entity.name() + "'.");
+						}
+					}
+					IERXEntity destinationEntity = relationship.destinationEntity();
 
 					@SuppressWarnings("unchecked")
-					List<Object> existingValues = (List<Object>) NSKeyValueCoding.DefaultImplementation.valueForKey(obj, key.key());
+					List<Object> existingValues = (List<Object>) NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
 
 					Set<Object> removedValues = new HashSet<Object>(existingValues);
 					List<Object> newValues = new LinkedList<Object>();
@@ -494,33 +511,45 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 
 					if (obj instanceof EOEnterpriseObject) {
 						for (Object removedValue : removedValues) {
-							((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) removedValue, key.key());
+							((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) removedValue, keyName);
 						}
 						for (Object newValue : newValues) {
-							((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) newValue, key.key());
+							((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) newValue, keyName);
 						}
 					}
 					else {
 						key.takeValueInObject(allValues, obj);
 					}
 				}
-				else if (ERXRestUtils.isPrimitive(valueType) && keyFilter.matches(key, ERXKey.Type.Attribute)) {
-					Object value = childNode.value();
-					if (value instanceof String) {
-						value = ERXRestUtils.coerceValueToAttributeType(value, null, obj, key.key());
+				else if (!ERXRestUtils.isPrimitive(valueType) && keyFilter.matches(key, ERXKey.Type.ToOneRelationship)) {
+					// this is sort of expensive, but we want to support non-eomodel to-one relationships on EO's, so
+					// we fallback and lookup the class entity ...
+					if (relationship == null && entity instanceof EOEntityProxy) {
+						IERXEntity classEntity = IERXEntity.Factory.entityForObject(obj.getClass());
+						relationship = classEntity.relationshipNamed(keyName);
+						if (relationship == null) {
+							throw new IllegalArgumentException("There is no to-one relationship named '" + key.key() + "' on '" + entity.name() + "'.");
+						}
 					}
-					key.takeValueInObject(value, obj);
-				}
-				else if (keyFilter.matches(key, ERXKey.Type.ToOneRelationship)) {
-					IERXEntity destinationEntity = IERXEntity.Factory.entityForObject(obj).relationshipNamed(key.key()).destinationEntity();
+					IERXEntity destinationEntity = relationship.destinationEntity();
 					Object childObj = delegate.objectOfEntityWithRequestNode(destinationEntity, childNode);
 					childNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
 					if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
-						((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, key.key());
+						((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, keyName);
 					}
 					else {
 						key.takeValueInObject(childObj, obj);
 					}
+				}
+				else if (/* entity.attributeNamed(keyName) != null && */keyFilter.matches(key, ERXKey.Type.Attribute)) {
+					Object value = childNode.value();
+					if (value instanceof String) {
+						value = ERXRestUtils.coerceValueToAttributeType(value, null, obj, keyName);
+					}
+					key.takeValueInObject(value, obj);
+				}
+				else {
+					// ignore key
 				}
 			}
 		}
