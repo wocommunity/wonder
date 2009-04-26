@@ -12,6 +12,7 @@ public class ERXRestFormat {
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 
 	public static ERXRestFormat JSON = ERXRestFormat.registerFormatNamed(ERXJSONRestParser.class, ERXJSONRestWriter.class, "json");
+	public static ERXRestFormat JS = ERXRestFormat.registerFormatNamed(ERXJSONRestParser.class, ERXJSONRestWriter.class, "js");
 	public static ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(ERXPListRestParser.class, ERXPListRestWriter.class, "plist");
 	public static ERXRestFormat XML = ERXRestFormat.registerFormatNamed(ERXXmlRestParser.class, ERXXmlRestWriter.class, "xml");
 	public static ERXRestFormat HTML = ERXRestFormat.registerFormatNamed(null, null, "html");
