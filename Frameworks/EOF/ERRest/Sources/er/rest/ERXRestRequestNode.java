@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -19,7 +20,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.localization.ERXLocalizer;
-import er.rest.format.ERXStringBufferRestResponse;
+import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestWriter;
 import er.rest.routes.model.EOEntityProxy;
 import er.rest.routes.model.IERXAttribute;
@@ -588,9 +589,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 * @return a string representation of this request node using the given IERXRestWriter
 	 */
 	public String toString(IERXRestWriter writer) {
-		ERXStringBufferRestResponse response = new ERXStringBufferRestResponse();
-		writer.appendToResponse(this, response);
-		return response.toString();
+		WOResponse response = new WOResponse();
+		writer.appendToResponse(this, new ERXWORestResponse(response));
+		return response.contentString();
 	}
 
 	protected boolean isClassProperty(IERXEntity entity, String key) {

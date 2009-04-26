@@ -39,12 +39,12 @@ public class ERXRestFormat {
 		return _writer;
 	}
 
-	public String toString(Object obj) {
-		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, ERXKeyFilter.filterWithAttributes()).toString(writer());
+	public String toString(Object obj, ERXKeyFilter filter) {
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter).toString(writer());
 	}
 
-	public String toString(IERXEntity entity, List<?> list) {
-		return ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, list, ERXKeyFilter.filterWithAttributes()).toString(writer());
+	public String toString(IERXEntity entity, List<?> list, ERXKeyFilter filter) {
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, list, filter).toString(writer());
 	}
 
 	@Override
