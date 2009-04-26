@@ -11,20 +11,20 @@ import er.rest.routes.model.IERXEntity;
 public class ERXRestFormat {
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 
-	public static ERXRestFormat JSON = ERXRestFormat.registerFormatNamed(ERXJSONRestParser.class, ERXJSONRestWriter.class, "json");
-	public static ERXRestFormat JS = ERXRestFormat.registerFormatNamed(ERXJSONRestParser.class, ERXJSONRestWriter.class, "js");
-	public static ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(ERXPListRestParser.class, ERXPListRestWriter.class, "plist");
-	public static ERXRestFormat XML = ERXRestFormat.registerFormatNamed(ERXXmlRestParser.class, ERXXmlRestWriter.class, "xml");
+	public static ERXRestFormat JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), "json");
+	public static ERXRestFormat JS = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), "js");
+	public static ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), "plist");
+	public static ERXRestFormat XML = ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), "xml");
 	public static ERXRestFormat HTML = ERXRestFormat.registerFormatNamed(null, null, "html");
 
 	private String _name;
-	private Class<? extends IERXRestParser> _parserClass;
-	private Class<? extends IERXRestWriter> _writerClass;
+	private IERXRestParser _parser;
+	private IERXRestWriter _writer;
 
-	public ERXRestFormat(String name, Class<? extends IERXRestParser> parserClass, Class<? extends IERXRestWriter> writerClass) {
+	public ERXRestFormat(String name, IERXRestParser parser, IERXRestWriter writer) {
 		_name = name;
-		_parserClass = parserClass;
-		_writerClass = writerClass;
+		_parser = parser;
+		_writer = writer;
 	}
 
 	public String name() {
@@ -32,21 +32,11 @@ public class ERXRestFormat {
 	}
 
 	public IERXRestParser parser() {
-		try {
-			return _parserClass.newInstance();
-		}
-		catch (Exception e) {
-			throw new IllegalArgumentException("Unable to create parser '" + _parserClass + "'.");
-		}
+		return _parser;
 	}
 
 	public IERXRestWriter writer() {
-		try {
-			return _writerClass.newInstance();
-		}
-		catch (Exception e) {
-			throw new IllegalArgumentException("Unable to create writer '" + _writerClass + "'.");
-		}
+		return _writer;
 	}
 
 	public String toString(Object obj) {
@@ -70,8 +60,8 @@ public class ERXRestFormat {
 		return format;
 	}
 
-	public static ERXRestFormat registerFormatNamed(Class<? extends IERXRestParser> parserClass, Class<? extends IERXRestWriter> writerClass, String name) {
-		ERXRestFormat format = new ERXRestFormat(name, parserClass, writerClass);
+	public static ERXRestFormat registerFormatNamed(IERXRestParser parser, IERXRestWriter writer, String name) {
+		ERXRestFormat format = new ERXRestFormat(name, parser, writer);
 		ERXRestFormat.registerFormatNamed(format, name);
 		return format;
 	}
