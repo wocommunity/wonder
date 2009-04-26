@@ -19,7 +19,8 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * <b>EXPERIMENTAL</b>
+ * ERXRouteRequestHandler is the request handler that can process rails-style route mappings and convert them to
+ * ERXRestController action methods.
  * 
  * in Application:
  * 
@@ -47,7 +48,7 @@ import er.extensions.localization.ERXLocalizer;
  * 	}
  * 
  * 	public Person person() {
- * 		Person person = (Person) objectForKey(&quot;person&quot;);
+ * 		Person person = (Person) routeObjectForKey(&quot;person&quot;);
  * 		return person;
  * 	}
  * 
@@ -63,26 +64,26 @@ import er.extensions.localization.ERXLocalizer;
  * 		return filter;
  * 	}
  * 
- * 	public WOActionResults createAction() throws Exception {
+ * 	public WOActionResults createAction() {
  * 		Person person = (Person) create(Person.ENTITY_NAME, updateFilter());
  * 		editingContext().saveChanges();
- * 		return response(showFilter(), person);
+ * 		return response(person, showFilter());
  * 	}
  * 
- * 	public WOActionResults updateAction() throws Exception {
+ * 	public WOActionResults updateAction() {
  * 		Person person = person();
  * 		update(person, updateFilter());
  * 		editingContext().saveChanges();
- * 		return response(showFilter(), person);
+ * 		return response(person, showFilter());
  * 	}
  * 
  * 	public WOActionResults showAction() {
- * 		return response(showFilter(), person());
+ * 		return response(person(), showFilter());
  * 	}
  * 
- * 	public WOActionResults indexAction() throws Exception {
+ * 	public WOActionResults indexAction() {
  * 		NSArray&lt;Person&gt; people = Person.fetchPersons(editingContext(), null, Person.LAST_NAME.asc().then(Person.FIRST_NAME.asc()));
- * 		return response(showFilter(), editingContext(), Person.ENTITY_NAME, people);
+ * 		return response(editingContext(), Person.ENTITY_NAME, people, showFilter());
  * 	}
  * }
  * </pre>
@@ -136,16 +137,17 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public void addRoute(ERXRoute route) {
 		_routes.addObject(route);
 	}
-	
+
 	/**
 	 * Removes the given route from this request handler.
 	 * 
-	 * @param route the route to remove
+	 * @param route
+	 *            the route to remove
 	 */
 	public void removeRoute(ERXRoute route) {
 		_routes.removeObject(route);
 	}
-	
+
 	/**
 	 * Returns the routes for this request handler.
 	 * 
@@ -306,7 +308,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		actionInstance._setRoute(route);
 		@SuppressWarnings("unchecked")
 		NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
-		actionInstance._setKeys(keys);
+		actionInstance._setRouteKeys(keys);
 		return actionInstance;
 	}
 

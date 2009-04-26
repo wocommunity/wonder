@@ -1,7 +1,6 @@
 package er.rest;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,10 +22,22 @@ import er.rest.routes.model.IERXEntity;
  * @author mschrag
  */
 public class ERXRestUtils {
+	/**
+	 * Returns whether or not the given object represents a primitive in REST.
+	 * 
+	 * @param obj the object to check
+	 * @return whether or not the given object represents a primitive in REST
+	 */
 	public static boolean isPrimitive(Object obj) {
 		return obj == null || ((obj instanceof Class) ? ERXRestUtils.isPrimitive((Class) obj) : ERXRestUtils.isPrimitive(obj.getClass()));
 	}
 
+	/**
+	 * Returns whether or not the given class represents a primitive in REST.
+	 * 
+	 * @param valueType the class to check
+	 * @return whether or not the given class represents a primitive in REST
+	 */
 	public static boolean isPrimitive(Class valueType) {
 		boolean primitive = false;
 		if (String.class.isAssignableFrom(valueType)) {
@@ -71,6 +82,12 @@ public class ERXRestUtils {
 		return primitive;
 	}
 
+	/**
+	 * Convert the given object to a String (using REST formats).
+	 * 
+	 * @param value the value to convert
+	 * @return the REST-formatted string
+	 */
 	public static String coerceValueToString(Object value) {
 		String formattedValue;
 		if (value == null) {
@@ -210,12 +227,8 @@ public class ERXRestUtils {
 	 * @param parentObject
 	 *            the parent object
 	 * @return a parsed version of the String
-	 * @throws ParseException
-	 *             if a parse failure occurs
-	 * @throws ERXRestException
-	 *             if a general failure occurs
 	 */
-	public static Object coerceValueToAttributeType(Object value, IERXEntity parentEntity, Object parentObject, String attributeName) throws ParseException, ERXRestException {
+	public static Object coerceValueToAttributeType(Object value, IERXEntity parentEntity, Object parentObject, String attributeName) {
 		NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(parentObject, attributeName);
 		Class valueType = binding.valueType();
 
@@ -241,7 +254,7 @@ public class ERXRestUtils {
 			return parsedValue;
 		}
 		catch (Throwable e) {
-			throw new ERXRestException("Failed to parse attribute " + attributeName + " for entity " + ((parentEntity == null) ? "unknown" : parentEntity.name()), e);
+			throw new IllegalArgumentException("Failed to parse attribute " + attributeName + " for entity " + ((parentEntity == null) ? "unknown" : parentEntity.name()), e);
 		}
 	}
 }
