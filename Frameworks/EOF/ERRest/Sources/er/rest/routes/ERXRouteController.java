@@ -18,6 +18,7 @@ import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.foundation.ERXExceptionUtilities;
 import er.rest.ERXRestRequestNode;
 import er.rest.format.ERXRestFormat;
+import er.rest.format.ERXWORestResponse;
 import er.rest.routes.model.IERXEntity;
 
 /**
@@ -547,7 +548,9 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a WOResponse in the given format
 	 */
 	public WOResponse response(ERXRestFormat format, IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
-		return stringResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter).toString(format.writer()));
+		WOResponse response = WOApplication.application().createResponseInContext(context());
+		format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter), new ERXWORestResponse(response));
+		return response;
 	}
 
 	/**
@@ -615,7 +618,9 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public WOResponse response(ERXRestFormat format, Object value, ERXKeyFilter filter) {
 		try {
-			return stringResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter).toString(format.writer()));
+			WOResponse response = WOApplication.application().createResponseInContext(context());
+			format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter), new ERXWORestResponse(response));
+			return response;
 		}
 		catch (ObjectNotAvailableException e) {
 			return errorResponse(e, WOResponse.HTTP_STATUS_NOT_FOUND);
