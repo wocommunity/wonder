@@ -87,7 +87,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 				for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
 					String key = attribute.getKey();
 					String value = attribute.getValue();
-					if (value != null && !ERXRestRequestNode.NIL_KEY.equals(key) && !ERXRestRequestNode.TYPE_KEY.equals(key)) {
+					//if (value != null && !ERXRestRequestNode.NIL_KEY.equals(key) && !ERXRestRequestNode.TYPE_KEY.equals(key)) {
+					if (value != null) {
 						dict.put(key, value);
 					}
 				}
