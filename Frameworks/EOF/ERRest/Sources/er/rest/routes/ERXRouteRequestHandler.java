@@ -47,39 +47,42 @@ import er.extensions.localization.ERXLocalizer;
  * 	}
  * 
  * 	public Person person() {
- * 		Person person = (Person) objects().objectForKey(&quot;person&quot;);
+ * 		Person person = (Person) objectForKey(&quot;person&quot;);
  * 		return person;
  * 	}
  * 
- * 	public ERXKeyFilter personFilter() {
+ * 	public ERXKeyFilter showFilter() {
  * 		ERXKeyFilter filter = ERXKeyFilter.attributes();
- * 		filter.include(Person.PREFERENCE_GROUPS).includeAttributes();
+ * 		filter.include(Person.COMPANY).includeAttributes();
+ * 		return filter;
+ * 	}
+ * 
+ * 	public ERXKeyFilter updateFilter() {
+ * 		ERXKeyFilter filter = ERXKeyFilter.attributes();
+ * 		filter.include(Person.COMPANY);
  * 		return filter;
  * 	}
  * 
  * 	public WOActionResults createAction() throws Exception {
- * 		ERXKeyFilter personFilter = personFilter();
- * 		personFilter.include(Person.COMPANY);
- * 		Person person = (Person) create(Person.ENTITY_NAME, personFilter);
+ * 		Person person = (Person) create(Person.ENTITY_NAME, updateFilter());
  * 		editingContext().saveChanges();
- * 		return response(personFilter(), person);
+ * 		return response(showFilter(), person);
  * 	}
  * 
  * 	public WOActionResults updateAction() throws Exception {
  * 		Person person = person();
- * 		update(person, personFilter());
+ * 		update(person, updateFilter());
  * 		editingContext().saveChanges();
- * 		return response(personFilter(), person);
+ * 		return response(showFilter(), person);
  * 	}
  * 
  * 	public WOActionResults showAction() {
- * 		Person person = person();
- * 		return response(personFilter(), person);
+ * 		return response(showFilter(), person());
  * 	}
  * 
  * 	public WOActionResults indexAction() throws Exception {
  * 		NSArray&lt;Person&gt; people = Person.fetchPersons(editingContext(), null, Person.LAST_NAME.asc().then(Person.FIRST_NAME.asc()));
- * 		return response(personFilter(), editingContext(), Person.ENTITY_NAME, people);
+ * 		return response(showFilter(), editingContext(), Person.ENTITY_NAME, people);
  * 	}
  * }
  * </pre>
