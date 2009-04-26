@@ -113,6 +113,18 @@ public class ERXRouteController extends WODirectAction {
 		return _keys;
 	}
 
+	public String stringForKey(String key) {
+		return _keys.objectForKey(new ERXRoute.Key(key));
+	}
+	
+	public boolean hasKey(String key) {
+		return _keys.containsKey(new ERXRoute.Key(key));
+	}
+	
+	public Object objectForKey(String key) {
+		return objects().objectForKey(key);
+	}
+	
 	public NSDictionary<String, Object> objects() {
 		return objects(editingContext());
 	}
