@@ -15,7 +15,6 @@ import org.xml.sax.InputSource;
 
 import com.webobjects.appserver.WORequest;
 
-import er.rest.ERXRestException;
 import er.rest.ERXRestRequestNode;
 
 /**
@@ -76,11 +75,11 @@ public class ERXXmlRestParser implements IERXRestParser {
 		return requestNode;
 	}
 
-	public ERXRestRequestNode parseRestRequest(WORequest request) throws ERXRestException {
+	public ERXRestRequestNode parseRestRequest(WORequest request) {
 		return parseRestRequest(request.contentString());
 	}
 
-	public ERXRestRequestNode parseRestRequest(String contentStr) throws ERXRestException {
+	public ERXRestRequestNode parseRestRequest(String contentStr) {
 		ERXRestRequestNode rootRequestNode = null;
 
 		if (contentStr != null && contentStr.length() > 0) {
@@ -98,7 +97,7 @@ public class ERXXmlRestParser implements IERXRestParser {
 				rootRequestNode = createRequestNodeForElement(rootElement);
 			}
 			catch (Exception e) {
-				throw new ERXRestException("Failed to parse request document.", e);
+				throw new IllegalArgumentException("Failed to parse request document.", e);
 			}
 		}
 		

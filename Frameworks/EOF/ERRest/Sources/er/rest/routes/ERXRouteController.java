@@ -1,7 +1,5 @@
 package er.rest.routes;
 
-import java.text.ParseException;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -18,14 +16,11 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.foundation.ERXExceptionUtilities;
-import er.rest.ERXRestException;
 import er.rest.ERXRestRequestNode;
 import er.rest.format.ERXRestFormat;
 import er.rest.routes.model.IERXEntity;
 
 /**
- * EXPERIMENTAL
- * 
  * ERXRouteController is equivalent to a Rails controller class. It's actually a direct action, and has the same naming
  * rules as a direct action, so your controller action methods must end in the name "Action". There are several utility
  * methods for manipulating restful requests and responses (update(..), create(..), requestNode(), response(..), etc) ,
@@ -37,7 +32,8 @@ public class ERXRouteController extends WODirectAction {
 	protected static Logger log = Logger.getLogger(ERXRouteController.class);
 
 	private ERXRoute _route;
-	private NSDictionary<ERXRoute.Key, String> _keys;
+	private NSDictionary<ERXRoute.Key, String> _routeKeys;
+	private NSDictionary<ERXRoute.Key, Object> _objects;
 	private EOEditingContext _editingContext;
 	private ERXRestRequestNode _requestNode;
 
@@ -52,8 +48,7 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
-	 * Override to provide custom security checks. It is not necessary to call
-	 * super on this method.
+	 * Override to provide custom security checks. It is not necessary to call super on this method.
 	 * 
 	 * @throws SecurityException
 	 *             if the security check fails
@@ -95,58 +90,111 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
-	 * Sets the parsed keys from the route.
+	 * Sets the unprocessed keys from the route.
 	 * 
-	 * @param keys
+	 * @param routeKeys
 	 *            the parsed keys from the route
 	 */
-	public void _setKeys(NSDictionary<ERXRoute.Key, String> keys) {
-		_keys = keys;
+	public void _setRouteKeys(NSDictionary<ERXRoute.Key, String> routeKeys) {
+		_routeKeys = routeKeys;
 	}
 
 	/**
-	 * Returns the parsed keys from the route.
+	 * Returns the unprocessed keys from the route (the values are the original value from the URL).
 	 * 
-	 * @return the parsed keys from the route
+	 * @return the unprocessed keys from the route
 	 */
-	public NSDictionary<ERXRoute.Key, String> keys() {
-		return _keys;
+	public NSDictionary<ERXRoute.Key, String> routeKeys() {
+		return _routeKeys;
 	}
 
-	public String stringForKey(String key) {
-		return _keys.objectForKey(new ERXRoute.Key(key));
-	}
-	
-	public boolean hasKey(String key) {
-		return _keys.containsKey(new ERXRoute.Key(key));
-	}
-	
-	public Object objectForKey(String key) {
-		return objects().objectForKey(key);
-	}
-	
-	public NSDictionary<String, Object> objects() {
-		return objects(editingContext());
+	/**
+	 * Returns the unprocessed value from the route with the given key name.
+	 * 
+	 * @param key
+	 *            the key name to lookup
+	 * @return the unprocessed value from the route with the given key name
+	 */
+	public String routeStringForKey(String key) {
+		return _routeKeys.objectForKey(new ERXRoute.Key(key));
 	}
 
-	public NSDictionary<String, Object> objects(EOEditingContext editingContext) {
-		return _route.objects(_keys, editingContext);
+	/**
+	 * Returns whether or not there is a route key with the given name.
+	 * 
+	 * @param key
+	 *            the key name to lookup
+	 * @return whether or not there is a route key with the given name
+	 */
+	public boolean containsRouteKey(String key) {
+		return _routeKeys.containsKey(new ERXRoute.Key(key));
 	}
 
-	public NSDictionary<ERXRoute.Key, Object> keysWithObjects() {
-		return keysWithObjects(editingContext());
+	/**
+	 * Returns the processed object from the route keys with the given name. For instance, if your route specifies that
+	 * you have a {person:Person}, routeObjectForKey("person") will return a Person object.
+	 * 
+	 * @param key
+	 *            the key name to lookup
+	 * @return the processed object from the route keys with the given name
+	 */
+	public Object routeObjectForKey(String key) {
+		return routeObjects().objectForKey(new ERXRoute.Key(key));
 	}
 
-	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(EOEditingContext editingContext) {
-		return _route.keysWithObjects(_keys, editingContext);
+	/**
+	 * Returns all the processed objects from the route keys. For instance, if your route specifies that you have a
+	 * {person:Person}, routeObjectForKey("person") will return a Person object.
+	 * 
+	 * @return the processed objects from the route keys
+	 */
+	public NSDictionary<ERXRoute.Key, Object> routeObjects() {
+		if (_objects == null) {
+			_objects = _route.keysWithObjects(_routeKeys, editingContext());
+		}
+		return _objects;
 	}
 
+	/**
+	 * Returns all the processed objects from the route keys. For instance, if your route specifies that you have a
+	 * {person:Person}, routeObjectForKey("person") will return a Person object. This method does NOT cache the results.
+	 * 
+	 * @parmam editingContext the editing context to fetch with
+	 * @return the processed objects from the route keys
+	 */
+	public NSDictionary<ERXRoute.Key, Object> routeObjects(EOEditingContext editingContext) {
+		_objects = _route.keysWithObjects(_routeKeys, editingContext);
+		return _objects;
+	}
+
+	/**
+	 * Returns the format that the user requested (usually based on the request file extension).
+	 * 
+	 * @return the format that the user requested
+	 */
 	public ERXRestFormat format() {
 		String typeKey = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
 		ERXRestFormat format = ERXRestFormat.formatNamed(typeKey);
 		return format;
 	}
 
+	/**
+	 * Returns the default rest delegate for this controller (an ERXRestRequestNode.EODelegate using the editing context
+	 * returned from editingContext()). Override this method to provide a custom delegate implementation for this
+	 * controller.
+	 * 
+	 * @return a default rest delegate
+	 */
+	protected ERXRestRequestNode.Delegate delegate() {
+		return new ERXRestRequestNode.EODelegate(editingContext());
+	}
+
+	/**
+	 * Returns the request data in the form of an ERXRestRequestNode (which is a format-independent wrapper around
+	 * hierarchical data).
+	 * 
+	 * @return the request data as an ERXRestRequestNode
+	 */
 	public ERXRestRequestNode requestNode() {
 		if (_requestNode == null) {
 			try {
@@ -159,85 +207,413 @@ public class ERXRouteController extends WODirectAction {
 		return _requestNode;
 	}
 
+	/**
+	 * Returns the object from the request data that is of the given entity name and is filtered with the given filter.
+	 * This will use the delegate returned from this controller's delegate() method.
+	 * 
+	 * @param entityName
+	 *            the entity name of the object in the request
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to not update)
+	 * @return the object from the request data
+	 */
+	public Object object(String entityName, ERXKeyFilter filter) {
+		return object(entityName, filter, delegate());
+	}
+
+	/**
+	 * Returns the object from the request data that is of the given entity name and is filtered with the given filter.
+	 * 
+	 * @param entityName
+	 *            the entity name of the object in the request
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to not update)
+	 * @param delegate
+	 *            the delegate to use
+	 * @return the object from the request data
+	 */
+	public Object object(String entityName, ERXKeyFilter filter, ERXRestRequestNode.Delegate delegate) {
+		return requestNode().objectWithFilter(entityName, filter, delegate);
+	}
+
+	/**
+	 * Creates a new object from the request data that is of the given entity name and is filtered with the given
+	 * filter. This will use the delegate returned from this controller's delegate() method.
+	 * 
+	 * @param entityName
+	 *            the entity name of the object in the request
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
+	 * @return the object from the request data
+	 */
+	public Object create(String entityName, ERXKeyFilter filter) {
+		return create(entityName, filter, delegate());
+	}
+
+	/**
+	 * Creates a new object from the request data that is of the given entity name and is filtered with the given
+	 * filter.
+	 * 
+	 * @param entityName
+	 *            the entity name of the object in the request
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
+	 * @param delegate
+	 *            the delegate to use
+	 * @return the object from the request data
+	 */
+	public Object create(String entityName, ERXKeyFilter filter, ERXRestRequestNode.Delegate delegate) {
+		return requestNode().createObjectWithFilter(entityName, filter, delegate);
+	}
+
+	/**
+	 * Updates the given object from the request data with the given filter. This will use the delegate returned from
+	 * this controller's delegate() method.
+	 * 
+	 * @param obj
+	 *            the object to update
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to not update)
+	 * @return the object from the request data
+	 */
+	public void update(Object obj, ERXKeyFilter filter) {
+		update(obj, filter, delegate());
+	}
+
+	/**
+	 * Updates the given object from the request data with the given filter.
+	 * 
+	 * @param obj
+	 *            the object to update
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to not update)
+	 * @param delegate
+	 *            the delegate to use
+	 * @return the object from the request data
+	 */
+	public void update(Object obj, ERXKeyFilter filter, ERXRestRequestNode.Delegate delegate) {
+		requestNode().updateObjectWithFilter(obj, filter, delegate);
+	}
+
+	/**
+	 * Returns the given string wrapped in a WOResponse.
+	 * 
+	 * @param str
+	 *            the string to return
+	 * @return a WOResponse
+	 */
 	public WOResponse stringResponse(String str) {
 		WOResponse response = WOApplication.application().createResponseInContext(context());
 		response.appendContentString(str);
 		return response;
 	}
 
-	public WOResponse json(ERXKeyFilter filter, String entityName, NSArray<?> values) {
-		return response(filter, editingContext(), entityName, values, ERXRestFormat.JSON);
+	/**
+	 * Returns the given array as a JSON response. This uses the editing context returned by editingContext().
+	 * 
+	 * @param entityName
+	 *            the name of the entities in the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a JSON WOResponse
+	 */
+	public WOResponse json(String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(ERXRestFormat.JSON, editingContext(), entityName, values, filter);
 	}
 
-	public WOResponse json(ERXKeyFilter filter, EOEditingContext editingContext, String entityName, NSArray<?> values) {
-		return response(filter, editingContext, entityName, values, ERXRestFormat.JSON);
+	/**
+	 * Returns the given array as a JSON response.
+	 * 
+	 * @param editingContext
+	 *            the editing context to use
+	 * @param entityName
+	 *            the name of the entities in the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a JSON WOResponse
+	 */
+	public WOResponse json(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(ERXRestFormat.JSON, editingContext, entityName, values, filter);
 	}
 
-	public WOResponse json(ERXKeyFilter filter, IERXEntity entity, NSArray<?> values) {
-		return response(filter, entity, values, ERXRestFormat.JSON);
+	/**
+	 * Returns the given array as a JSON response.
+	 * 
+	 * @param entity
+	 *            the entity type of the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a JSON WOResponse
+	 */
+	public WOResponse json(IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
+		return response(ERXRestFormat.JSON, entity, values, filter);
 	}
 
-	public WOResponse plist(ERXKeyFilter filter, String entityName, NSArray<?> values) {
-		return response(filter, editingContext(), entityName, values, ERXRestFormat.PLIST);
+	/**
+	 * Returns the given array as a PList response. This uses the editing context returned by editingContext().
+	 * 
+	 * @param entityName
+	 *            the name of the entities in the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a PList WOResponse
+	 */
+	public WOResponse plist(String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(ERXRestFormat.PLIST, editingContext(), entityName, values, filter);
 	}
 
-	public WOResponse plist(ERXKeyFilter filter, IERXEntity entity, NSArray<?> values) {
-		return response(filter, entity, values, ERXRestFormat.PLIST);
+	/**
+	 * Returns the given array as a JSON response.
+	 * 
+	 * @param editingContext
+	 *            the editing context to use
+	 * @param entityName
+	 *            the name of the entities in the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a JSON WOResponse
+	 */
+	public WOResponse plist(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(ERXRestFormat.PLIST, editingContext, entityName, values, filter);
 	}
 
-	public WOResponse plist(ERXKeyFilter filter, EOEditingContext editingContext, String entityName, NSArray<?> values) {
-		return response(filter, editingContext, entityName, values, ERXRestFormat.PLIST);
+	/**
+	 * Returns the given array as a JSON response.
+	 * 
+	 * @param entity
+	 *            the entity type of the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a JSON WOResponse
+	 */
+	public WOResponse plist(IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
+		return response(ERXRestFormat.PLIST, entity, values, filter);
 	}
 
-	public WOResponse xml(ERXKeyFilter filter, String entityName, NSArray<?> values) {
-		return response(filter, editingContext(), entityName, values, ERXRestFormat.XML);
+	/**
+	 * Returns the given array as an XML response. This uses the editing context returned by editingContext().
+	 * 
+	 * @param entityName
+	 *            the name of the entities in the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return an XML WOResponse
+	 */
+	public WOResponse xml(String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(ERXRestFormat.XML, editingContext(), entityName, values, filter);
 	}
 
-	public WOResponse xml(ERXKeyFilter filter, IERXEntity entity, NSArray<?> values) {
-		return response(filter, entity, values, ERXRestFormat.XML);
+	/**
+	 * Returns the given array as an XML response.
+	 * 
+	 * @param editingContext
+	 *            the editing context to use
+	 * @param entityName
+	 *            the name of the entities in the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return an XML WOResponse
+	 */
+	public WOResponse xml(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(ERXRestFormat.XML, editingContext, entityName, values, filter);
 	}
 
-	public WOResponse xml(ERXKeyFilter filter, EOEditingContext editingContext, String entityName, NSArray<?> values) {
-		return response(filter, editingContext, entityName, values, ERXRestFormat.XML);
+	/**
+	 * Returns the given array as an XML response.
+	 * 
+	 * @param entity
+	 *            the entity type of the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return an XML WOResponse
+	 */
+	public WOResponse xml(IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
+		return response(ERXRestFormat.XML, entity, values, filter);
 	}
 
-	public WOResponse response(ERXKeyFilter filter, String entityName, NSArray<?> values) {
-		return response(filter, editingContext(), entityName, values, format());
+	/**
+	 * Returns the given array as an response in the format returned from the format() method. This uses the editing
+	 * context returned by editingContext().
+	 * 
+	 * @param entityName
+	 *            the name of the entities in the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a WOResponse of the format returned from the format() method
+	 */
+	public WOResponse response(String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(format(), editingContext(), entityName, values, filter);
 	}
 
-	public WOResponse response(ERXKeyFilter filter, EOEditingContext editingContext, String entityName, NSArray<?> values) {
-		return response(filter, editingContext, entityName, values, format());
+	/**
+	 * Returns the given array as an response in the format returned from the format() method.
+	 * 
+	 * @param editingContext
+	 *            the editing context to use
+	 * @param entityName
+	 *            the name of the entities in the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a WOResponse of the format returned from the format() method
+	 */
+	public WOResponse response(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(format(), editingContext, entityName, values, filter);
 	}
 
-	public WOResponse response(ERXKeyFilter filter, String entityName, NSArray<?> values, ERXRestFormat format) {
-		return response(filter, editingContext(), entityName, values, format);
+	/**
+	 * Returns the given array as an response in the format returned from the format() method.
+	 * 
+	 * @param entity
+	 *            the entity type of the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a WOResponse of the format returned from the format() method
+	 */
+	public WOResponse response(IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
+		return response(format(), entity, values, filter);
 	}
 
-	public WOResponse response(ERXKeyFilter filter, EOEditingContext editingContext, String entityName, NSArray<?> values, ERXRestFormat format) {
-		return response(filter, IERXEntity.Factory.entityNamed(editingContext, entityName), values, format);
+	/**
+	 * Returns the given array as a response in the given format.
+	 * 
+	 * @param format
+	 *            the format to use
+	 * @param entity
+	 *            the entity type of the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a WOResponse in the given format
+	 */
+	public WOResponse response(ERXRestFormat format, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(format, editingContext(), entityName, values, filter);
 	}
 
-	public WOResponse response(ERXKeyFilter filter, IERXEntity entity, NSArray<?> values, ERXRestFormat format) {
+	/**
+	 * Returns the given array as a response in the given format.
+	 * 
+	 * @param format
+	 *            the format to use
+	 * @param editingContext
+	 *            the editing context to use
+	 * @param entityName
+	 *            the name of the entities in the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a WOResponse in the given format
+	 */
+	public WOResponse response(ERXRestFormat format, EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+		return response(format, IERXEntity.Factory.entityNamed(editingContext, entityName), values, filter);
+	}
+
+	/**
+	 * Returns the given array as a response in the given format.
+	 * 
+	 * @param format
+	 *            the format to use
+	 * @param entity
+	 *            the entity type of the array
+	 * @param values
+	 *            the values in the array
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a WOResponse in the given format
+	 */
+	public WOResponse response(ERXRestFormat format, IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
 		return stringResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter).toString(format.writer()));
 	}
 
-	public WOResponse json(ERXKeyFilter filter, Object value) {
-		return response(filter, value, ERXRestFormat.JSON);
+	/**
+	 * Returns the given object as a JSON response.
+	 * 
+	 * @param value
+	 *            the value to return
+	 * @param filter
+	 *            the filter to apply
+	 * @return a WOResponse in JSON format
+	 */
+	public WOResponse json(Object value, ERXKeyFilter filter) {
+		return response(ERXRestFormat.JSON, value, filter);
 	}
 
-	public WOResponse plist(ERXKeyFilter filter, Object value) {
-		return response(filter, value, ERXRestFormat.PLIST);
+	/**
+	 * Returns the given object as a PList response.
+	 * 
+	 * @param value
+	 *            the value to return
+	 * @param filter
+	 *            the filter to apply
+	 * @return a WOResponse in PList format
+	 */
+	public WOResponse plist(Object value, ERXKeyFilter filter) {
+		return response(ERXRestFormat.PLIST, value, filter);
 	}
 
-	public WOResponse xml(ERXKeyFilter filter, Object value) {
-		return response(filter, value, ERXRestFormat.XML);
+	/**
+	 * Returns the given object as an XML response.
+	 * 
+	 * @param value
+	 *            the value to return
+	 * @param filter
+	 *            the filter to apply
+	 * @return a WOResponse in XML format
+	 */
+	public WOResponse xml(Object value, ERXKeyFilter filter) {
+		return response(ERXRestFormat.XML, value, filter);
 	}
 
-	public WOResponse response(ERXKeyFilter filter, Object value) {
-		return response(filter, value, format());
+	/**
+	 * Returns the given object as a response in the format returned from the format() method.
+	 * 
+	 * @param value
+	 *            the value to return
+	 * @param filter
+	 *            the filter to apply
+	 * @return a WOResponse in the format returned from the format() method.
+	 */
+	public WOResponse response(Object value, ERXKeyFilter filter) {
+		return response(format(), value, filter);
 	}
 
-	public WOResponse response(ERXKeyFilter filter, Object value, ERXRestFormat format) {
+	/**
+	 * Returns the given object as a WOResponse in the given format.
+	 * 
+	 * @param format
+	 *            the format to use
+	 * @param value
+	 *            the value to return
+	 * @param filter
+	 *            the filter to apply
+	 * @return a WOResponse in the given format
+	 */
+	public WOResponse response(ERXRestFormat format, Object value, ERXKeyFilter filter) {
 		try {
 			return stringResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter).toString(format.writer()));
 		}
@@ -252,6 +628,15 @@ public class ERXRouteController extends WODirectAction {
 		}
 	}
 
+	/**
+	 * Returns an error response with the given HTTP status.
+	 * 
+	 * @param t
+	 *            the exception
+	 * @param status
+	 *            the HTTP status code
+	 * @return an error WOResponse
+	 */
 	public WOResponse errorResponse(Throwable t, int status) {
 		WOResponse response = stringResponse(ERXExceptionUtilities.toParagraph(t));
 		response.setStatus(status);
@@ -259,32 +644,20 @@ public class ERXRouteController extends WODirectAction {
 		return response;
 	}
 
-	public Object object(String entityName, ERXKeyFilter filter) throws ParseException, ERXRestException {
-		return object(entityName, filter, delegate());
-	}
-
-	public Object object(String entityName, ERXKeyFilter filter, ERXRestRequestNode.Delegate delegeate) throws ParseException, ERXRestException {
-		return requestNode().objectWithFilter(entityName, filter, delegeate);
-	}
-
-	public Object create(String entityName, ERXKeyFilter filter) throws ParseException, ERXRestException {
-		return create(entityName, filter, delegate());
-	}
-
-	public Object create(String entityName, ERXKeyFilter filter, ERXRestRequestNode.Delegate delegeate) throws ParseException, ERXRestException {
-		return requestNode().createObjectWithFilter(entityName, filter, delegeate);
-	}
-
-	public void update(Object obj, ERXKeyFilter filter) throws ParseException, ERXRestException {
-		update(obj, filter, delegate());
-	}
-
-	public void update(Object obj, ERXKeyFilter filter, ERXRestRequestNode.Delegate delegate) throws ParseException, ERXRestException {
-		requestNode().updateObjectWithFilter(obj, filter, delegate);
-	}
-
-	protected ERXRestRequestNode.Delegate delegate() {
-		return new ERXRestRequestNode.EODelegate(editingContext());
+	/**
+	 * Returns an error response with the given HTTP status.
+	 * 
+	 * @param errorMessage
+	 *            the error message
+	 * @param status
+	 *            the HTTP status code
+	 * @return an error WOResponse
+	 */
+	public WOResponse errorResponse(String errorMessage, int status) {
+		WOResponse response = stringResponse(errorMessage);
+		response.setStatus(status);
+		log.error("Request failed: " + request().uri() + ", " + errorMessage);
+		return response;
 	}
 
 	@Override
@@ -308,6 +681,15 @@ public class ERXRouteController extends WODirectAction {
 		}
 	}
 
+	/**
+	 * Calls pageWithName.
+	 * 
+	 * @param <T>
+	 *            the type of component to
+	 * @param componentClass
+	 *            the component class to lookup
+	 * @return the created component
+	 */
 	@SuppressWarnings("unchecked")
 	public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
 		return (T) super.pageWithName(componentClass.getName());

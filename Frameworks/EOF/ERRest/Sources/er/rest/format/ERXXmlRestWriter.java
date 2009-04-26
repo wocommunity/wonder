@@ -18,6 +18,10 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		appendNodeToResponse(node, response, 0);
 	}
 
+	protected String coerceValueToString(Object value) {
+		return ERXRestUtils.coerceValueToString(value);
+	}
+	
 	public void appendNodeToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent) {
 		if (node.value() != null || node.isNull()) {
 			appendValueToResponse(node.name(), node.value(), response, indent);
@@ -31,7 +35,7 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 	}
 
 	protected void appendValueToResponse(String name, Object value, IERXRestResponse response, int indent) {
-		String formattedValue = ERXRestUtils.coerceValueToString(value);
+		String formattedValue = coerceValueToString(value);
 		if (formattedValue != null) {
 			indent(response, indent);
 			response.appendContentString("<");
@@ -54,7 +58,7 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 	protected void appendAttribtuesToResponse(ERXRestRequestNode node, IERXRestResponse response) {
 		for (Map.Entry<String, String> attribute : node.attributes().entrySet()) {
 			String key = attribute.getKey();
-			String formattedValue = ERXRestUtils.coerceValueToString(attribute.getValue());
+			String formattedValue = coerceValueToString(attribute.getValue());
 			if (formattedValue != null && !ERXRestRequestNode.TYPE_KEY.equals(key)) {
 				response.appendContentString(" ");
 				response.appendContentString(key);

@@ -8,7 +8,6 @@ import net.sf.json.JSONSerializer;
 
 import com.webobjects.appserver.WORequest;
 
-import er.rest.ERXRestException;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
@@ -57,11 +56,11 @@ public class ERXJSONRestParser implements IERXRestParser {
 		return requestNode;
 	}
 
-	public ERXRestRequestNode parseRestRequest(WORequest request) throws ERXRestException {
+	public ERXRestRequestNode parseRestRequest(WORequest request) {
 		return parseRestRequest(request.contentString());
 	}
 
-	public ERXRestRequestNode parseRestRequest(String contentStr) throws ERXRestException {
+	public ERXRestRequestNode parseRestRequest(String contentStr) {
 		ERXRestRequestNode rootRequestNode = null;
 
 		if (contentStr != null && contentStr.length() > 0) {
