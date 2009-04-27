@@ -465,13 +465,17 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     }
 
     public E remove(int index) {
-        E result = removeObjectAtIndex(index);
-        return result;
+        return removeObjectAtIndex(index);
     }
 
     public boolean remove(Object o) {
-        boolean present = removeObject(o);
-        return present;
+    	boolean modified = false;
+    	int index = indexOf(o);
+    	if (index != NotFound) {
+    		removeObjectAtIndex(index);
+    		modified = true;
+    	}
+    	return modified;
     }
 
     public void clear() {
@@ -514,7 +518,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     private class Itr implements Iterator<E> {
         int cursor = 0;
 
-        int lastRet = -1;
+        int lastRet = NotFound;
 
         int expectedModCount = modCount;
 
@@ -537,7 +541,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         }
 
         public void remove() {
-            if (lastRet == -1)
+            if (lastRet == NotFound)
                 throw new IllegalStateException();
             checkForComodification();
 
@@ -545,7 +549,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
                 NSMutableArray.this.remove(lastRet);
                 if (lastRet < cursor)
                     cursor--;
-                lastRet = -1;
+                lastRet = NotFound;
                 expectedModCount = modCount;
             } catch (IndexOutOfBoundsException e) {
                 throw new ConcurrentModificationException();
@@ -589,7 +593,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         }
 
         public void set(Object o) {
-            if (lastRet == -1)
+            if (lastRet == NotFound)
                 throw new IllegalStateException();
             checkForComodification();
 
@@ -606,7 +610,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
             try {
                 NSMutableArray.this.add(cursor++, (E)o);
-                lastRet = -1;
+                lastRet = NotFound;
                 expectedModCount = modCount;
             } catch (IndexOutOfBoundsException e) {
                 throw new ConcurrentModificationException();
