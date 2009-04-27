@@ -1855,18 +1855,18 @@ public class ERXArrayUtilities extends Object {
      * @return an array which is a subset of the <code>array</code> where each object in the result is
      *         an instance of <code>aClass</code>.
      */
-    public static <T> NSArray<T> arrayBySelectingInstancesOfClass(final NSArray<T> array, final Class<?> aClass) {
+    public static <T> NSArray<T> arrayBySelectingInstancesOfClass(final NSArray<?> array, final Class<T> aClass) {
         NSArray<T> result = null;
 
         if ( array != null && array.count() > 0 ) {
             final NSMutableArray<T> a = new NSMutableArray<T>();
-            final Enumeration<T> e = array.objectEnumerator();
+            final Enumeration<?> e = array.objectEnumerator();
 
             while ( e.hasMoreElements() ) {
-                final T theObject = e.nextElement();
+                final Object theObject = e.nextElement();
 
                 if ( aClass == null || aClass.isInstance(theObject) )
-                    a.addObject(theObject);
+                    a.addObject((T)theObject);
             }
 
             if ( a.count() > 0 )
