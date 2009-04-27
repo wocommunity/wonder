@@ -89,7 +89,6 @@
             name = globalID; 
             valueClassName = "er.extensions.eof.ERXKeyGlobalID"; 
             valueFactoryMethodName = fromString; 
-            valueType = c; 
             width = 255; 
         }, 
         {
@@ -101,13 +100,13 @@
             valueType = i; 
         }, 
         {
-            columnName = "";
-            externalType = int;
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
-            name = intBoolean;
-            valueClassName = NSNumber;
-            valueType = c;
-        },
+            columnName = ""; 
+            externalType = int; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = intBoolean; 
+            valueClassName = NSNumber; 
+            valueType = c; 
+        }, 
         {
             columnName = ""; 
             externalType = long; 
