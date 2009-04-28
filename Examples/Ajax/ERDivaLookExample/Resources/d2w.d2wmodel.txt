@@ -21,12 +21,12 @@
     100 : entity.name = 'MovieRole' => isEntityEditable = 1 [com.webobjects.directtoweb.BooleanAssignment],
     100 : (entity.name = 'Customer' and task = 'list') => subTask = detail [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Movie' and propertyKey = 'studio') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment],
+    100 : (entity.name = 'Movie' and session.theme = 'Neutral') => allowsFiltering = true [com.webobjects.directtoweb.BooleanAssignment],
     100 : (entity.name = 'Movie' and task = 'edit' and propertyKey = 'studio') => toOneUIStyle = popup [com.webobjects.directtoweb.Assignment],
     100 : *true* => visibleEntityNames = (Movie,Studio,Talent,CreditCard,Customer,Video,Rental,FeeType
 ) [com.webobjects.directtoweb.Assignment],
     100 : pageConfiguration = 'EditEditRelationshipTalent' => displayPropertyKeys = (firstName,lastName
 ) [com.webobjects.directtoweb.Assignment],
-    100 : (entity.name = 'Movie' and session.isWebObjectsTheme = 'false') => allowsFiltering = true [com.webobjects.directtoweb.BooleanAssignment],
     100 : (entity.name = 'Talent' and task = 'list') => displayPropertyKeys = (firstName,lastName,isDirector
 ) [com.webobjects.directtoweb.Assignment],
     100 : (task = 'edit' and entity.name = 'Rental') => inspectConfirmConfigurationName = InspectConfirmRental [com.webobjects.directtoweb.Assignment],
@@ -36,6 +36,8 @@
     100 : (entity.name = 'Movie' and task = 'edit' and propertyKey = 'title') => componentName = ERD2WEditString2 [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Talent' and task = 'query' and propertyKey = 'moviesDirected') => multiple = true [com.webobjects.directtoweb.BooleanAssignment],
     100 : (entity.name = 'FeeType' and task = 'edit' and propertyKey = 'enabled') => componentName = D2WEditBoolean [com.webobjects.directtoweb.Assignment],
+    100 : (entity.name = 'Rental' and task = 'query') => displayPropertyKeys = (customer,dateOut,dateReturned,fees
+) [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Talent' and task = 'query') => displayPropertyKeys = (firstName,lastName,roles,moviesDirected
 ) [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Studio' and (task = 'inspect' or task = 'edit')) => displayPropertyKeys = (name,budget,movies
@@ -53,18 +55,18 @@
     100 : (pageConfiguration = 'InspectConfirmRental' and propertyKey = 'confirmationText') => confirmationText = Your data has been saved [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Rental' and (task = 'inspect' or task = 'edit') and propertyKey = 'unit') => keyWhenRelationship = video.movie.title [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'FeeType' and (task = 'inspect' or task = 'list') and propertyKey = 'enabled') => componentName = ERD2WDisplayString2 [com.webobjects.directtoweb.Assignment],
+    100 : (entity.name = 'Customer' and task = 'list' and session.theme = 'Neutral') => displayPropertyKeys = (firstName,lastName,memberSince
+) [com.webobjects.directtoweb.Assignment],
     100 : (pageConfiguration = 'ListEmbeddedMovie' and parentPageConfiguration like '*Studio') => displayPropertyKeys = (title,category,rated
 ) [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Movie' and task = 'query') => displayPropertyKeys = (title,category,dateReleased,rated,revenue,directors,studio,roles
 ) [com.webobjects.directtoweb.Assignment],
     100 : pageConfiguration = 'InspectConfirmRental' => displayPropertyKeys = (confirmationText,"customer.lastName","unit.video.movie.title",dateOut
 ) [com.webobjects.directtoweb.Assignment],
-    100 : (entity.name = 'Customer' and task = 'list' and session.isWebObjectsTheme = 'false') => displayPropertyKeys = (firstName,lastName,memberSince
+    100 : (entity.name = 'Customer' and task = 'list' and session.theme = 'WebObjects') => displayPropertyKeys = (firstName,lastName,phone,memberSince
 ) [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'FeeType' and (task = 'inspect' or task = 'list') and propertyKey = 'enabled') => class = object.enabled [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment],
-    100 : (entity.name = 'Customer' and task = 'list' and session.isWebObjectsTheme = 'true') => displayPropertyKeys = (firstName,lastName,phone,memberSince
-) [com.webobjects.directtoweb.Assignment],
-    100 : (entity.name = 'Studio' and (task = 'edit' or task = 'inspect') and propertyKey = 'movies' and session.isWebObjectsTheme = 'false') => componentName = ERDList2 [com.webobjects.directtoweb.Assignment],
+    100 : (entity.name = 'Studio' and (task = 'edit' or task = 'inspect') and propertyKey = 'movies' and session.theme = 'Neutral') => componentName = ERDList2 [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Customer' and (task = 'inspect' or task = 'edit') and subTask = 'tab') => displayPropertyKeys = ("[Info]",firstName,lastName,memberSince,"[Contact]","(Address)",streetAddress,city,state,zip,"(Telephone)",phone,"[CreditCard]",creditCard
 ) [com.webobjects.directtoweb.Assignment],
     105 : pageConfiguration = 'InspectEmbeddedCustomer' => displayPropertyKeys = (streetAddress,city,state,zip
