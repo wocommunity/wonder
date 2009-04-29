@@ -19,6 +19,7 @@ var AjaxTabbedPanel = {
           }
       });
       selectedTab.removeClassName('ajaxTabbedPanelTab-unselected').addClassName('ajaxTabbedPanelTab-selected');
+      AjaxTabbedPanel.runOnSelect($(tabControlID)); 
     },
 
     // Change which panel appears
@@ -38,13 +39,13 @@ var AjaxTabbedPanel = {
         };
       });
 
-      // Select the new tab and ntify the app of the selected tab
+      // Select the new tab and notify the app of the selected tab
       selectedPane.removeClassName('ajaxTabbedPanelPane-unselected').addClassName('ajaxTabbedPanelPane-selected');
-       new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
+      new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
     },
 
     // Loads the panel contents if not already loaded
-    loadPanel : function(paneID, busyDivID, shouldReload) {
+    loadPanel : function(tabControlID, paneID, busyDivID, shouldReload) {
 
       // Determine what to show if the panel takes a while to  load
       var busyContent = 'Loading, please wait...';
@@ -57,10 +58,11 @@ var AjaxTabbedPanel = {
          pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=busyContent; pe.stop()}, 0.25);
          new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: 1, 
          														 evalScripts: true, 
-         														 onSuccess: function(a, b) {pe.stop(); AjaxTabbedPanel.runOnLoad(pane); }});
+         														 onComplete: function(a, b) {pe.stop(); 
+         														                             AjaxTabbedPanel.runOnLoad(pane); 
+         														                             AjaxTabbedPanel.runOnSelect($(tabControlID)); }});
       }
     },
-
 
     runOnLoad : function(element) {
     	var onLoadScript = element.getAttribute('onLoad');
@@ -69,7 +71,13 @@ var AjaxTabbedPanel = {
 		}
     },
     
-    
+    runOnSelect : function(element) {
+    	var onSelectScript = element.getAttribute('onSelect');
+		if (onSelectScript) {
+			eval(onSelectScript);	
+		}
+    },
+        
     // Returns an element's children that have a specific tag name as an array
     getChildrenByTagName : function(element, tag_name) {
         child_array      = new Array();
