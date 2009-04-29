@@ -176,6 +176,10 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 	            response.appendContentString(idString);
 	            response.appendContentString("', '");
 	            response.appendContentString(tabID);
+	            response.appendContentString("', '");
+	            response.appendContentString(panelID);
+	            response.appendContentString("', '");
+	            response.appendContentString((busyDiv != null) ? (String)busyDiv.valueInComponent(component) : "");
 	            response.appendContentString("'); ");
 	            
 	            response.appendContentString("\">");
