@@ -490,7 +490,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 					snapshotsByGlobalID.setObjectForKey(snapshot, globalID);
 				}
 				if (snapshotsByGlobalID.count() > 0) {
-					EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
 					dbc.lock();
 					try {
 						processor.processSnapshots(dbc, database, snapshotsByGlobalID, settings);
