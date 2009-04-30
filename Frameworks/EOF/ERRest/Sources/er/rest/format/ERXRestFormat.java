@@ -16,6 +16,7 @@ public class ERXRestFormat {
 	public static ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), "plist");
 	public static ERXRestFormat XML = ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), "xml");
 	public static ERXRestFormat HTML = ERXRestFormat.registerFormatNamed(null, null, "html");
+	public static ERXRestFormat GIANDUIA = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(), "gnd");
 
 	private String _name;
 	private IERXRestParser _parser;

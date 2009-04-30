@@ -20,6 +20,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.localization.ERXLocalizer;
+import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestWriter;
 import er.rest.routes.model.EOEntityProxy;
@@ -92,12 +93,15 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	protected Object toJava(Map<Object, Object> associatedObjects) {
 		Object result = associatedObjects.get(_associatedObject);
 		if (result == null) {
-			if (_array) {
+			if (isArray()) {
 				List<Object> array = new LinkedList<Object>();
 				for (ERXRestRequestNode child : _children) {
 					array.add(child.toJava(associatedObjects));
 				}
 				result = array;
+			}
+			else if (isNull()) {
+				result = null;
 			}
 			else if (_value != null) {
 				result = _value;
@@ -107,18 +111,16 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 				for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
 					String key = attribute.getKey();
 					String value = attribute.getValue();
-					// if (value != null && !ERXRestRequestNode.NIL_KEY.equals(key) &&
-					// !ERXRestRequestNode.TYPE_KEY.equals(key)) {
-					if (value != null) {
-						dict.put(key, value);
-					}
+					// if (value != null) {
+					dict.put(key, value);
+					// }
 				}
 				for (ERXRestRequestNode child : _children) {
 					String name = child.name();
 					Object value = child.toJava(associatedObjects);
-					if (value != null) {
-						dict.put(name, value);
-					}
+					// if (value != null) {
+					dict.put(name, value);
+					// }
 				}
 				if (dict.isEmpty()) {
 					result = null;
@@ -252,7 +254,14 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 * @return the type of this node
 	 */
 	public String type() {
-		return attributeForKey(ERXRestRequestNode.TYPE_KEY);
+		String type = attributeForKey(ERXRestRequestNode.TYPE_KEY);
+		if (type == null) {
+			ERXRestRequestNode typeNode = childNamed(ERXRestRequestNode.TYPE_KEY);
+			if (typeNode != null) {
+				type = (String) typeNode.value();
+			}
+		}
+		return type;
 	}
 
 	/**
@@ -274,7 +283,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	}
 
 	protected void guessNull() {
-		setNull(_value == null && _children.size() == 0 && id() == null && !isArray());
+		setNull(_value == null && _children.size() == 0 && id() == null && !isArray() && _associatedObject == null);
 	}
 
 	/**
@@ -569,7 +578,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 				_name = entity.name();
 			}
 			setAssociatedObject(obj);
-			setAttributeForKey(entity.name(), ERXRestRequestNode.TYPE_KEY);
+			setType(entity.name());
 			Object pkValue = entity.primaryKeyValue(obj);
 			if (pkValue != null) {
 				setAttributeForKey(String.valueOf(pkValue), ERXRestRequestNode.ID_KEY);
@@ -579,6 +588,17 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 				_addAttributesAndRelationshipsForObjectOfEntity(obj, entity, keyFilter, visitedObjects);
 			}
 		}
+	}
+
+	/**
+	 * Returns a string representation of this request node using the given format.
+	 * 
+	 * @param format
+	 *            the format to use
+	 * @return a string representation of this request node using the given format
+	 */
+	public String toString(ERXRestFormat format) {
+		return toString(format.writer());
 	}
 
 	/**
@@ -624,7 +644,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 			return;
 		}
 
-    IERXEntity entity = IERXEntity.Factory.entityForObject(obj);
+		IERXEntity entity = IERXEntity.Factory.entityForObject(obj);
 		for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
 			ERXKey<Object> key = keyFilter.keyMap(new ERXKey<Object>(attribute.getKey()));
 			String keyName = key.key();

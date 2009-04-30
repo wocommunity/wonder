@@ -217,6 +217,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		String singularEntityName = ERXStringUtilities.uncapitalize(entityName);
 		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(singularEntityName, 2);
 
+		addRoute(new ERXRoute(".*", ERXRoute.Method.Head, controllerClass, "head"));
 		addRoute(new ERXRoute("/" + pluralEntityName, ERXRoute.Method.Post, controllerClass, "create"));
 		addRoute(new ERXRoute("/" + singularEntityName, ERXRoute.Method.Post, controllerClass, "create"));
 		addRoute(new ERXRoute("/" + pluralEntityName, ERXRoute.Method.All, controllerClass, "index"));

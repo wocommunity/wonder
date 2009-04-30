@@ -664,6 +664,17 @@ public class ERXRouteController extends WODirectAction {
 		log.error("Request failed: " + request().uri() + ", " + errorMessage);
 		return response;
 	}
+	
+	/**
+	 * Returns the response from a HEAD call to this controller.
+	 * 
+	 * @return a head response
+	 */
+	public WOActionResults headAction() {
+		WOResponse response = WOApplication.application().createResponseInContext(context());
+		format().writer().appendHeadersToResponse(null, new ERXWORestResponse(response));
+		return response;
+	}
 
 	@Override
 	public WOActionResults performActionNamed(String s) {
