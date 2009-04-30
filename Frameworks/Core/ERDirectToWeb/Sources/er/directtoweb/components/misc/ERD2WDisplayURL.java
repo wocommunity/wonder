@@ -28,6 +28,16 @@ public class ERD2WDisplayURL extends D2WDisplayString {
         }
         return href;
     }
+    
+    /**
+     * Gets the string from the 
+     * D2W key <propertyKey>
+     * @return the display string of the hyperlink
+     */
+    public String string() {
+    	String string = (String) d2wContext().valueForKey(propertyKey());
+    	return string != null ? string : (String) objectPropertyValue();
+    }
 
     /**
      * Gets the target for the displayed hyperlink.  The target defaults to "_blank", but can be overridden
