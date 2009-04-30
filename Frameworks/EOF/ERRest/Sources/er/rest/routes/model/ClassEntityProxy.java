@@ -68,7 +68,8 @@ public class ClassEntityProxy implements IERXEntity {
 	}
 
 	public Object primaryKeyValue(Object obj) {
-		throw new UnsupportedOperationException("No idea how to give you a primary key for a java object.");
+		//throw new UnsupportedOperationException("No idea how to give you a primary key for a java object.");
+		return null;
 	}
 	
 	public Object objectWithPrimaryKeyValue(EOEditingContext editingContext, Object pkValue) {
