@@ -33,6 +33,7 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void appendObjectToResponse(Object object, IERXRestResponse response) {
 		if (object == null) {
 			response.appendContentString("undefined");
