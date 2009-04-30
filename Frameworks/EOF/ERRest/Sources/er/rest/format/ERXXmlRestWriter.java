@@ -12,8 +12,12 @@ import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
 public class ERXXmlRestWriter implements IERXRestWriter {
-	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response) {
+	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response) {
 		response.setHeader("text/xml", "Content-Type");
+	}
+	
+	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response) {
+		appendHeadersToResponse(node, response);
 		response.appendContentString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		appendNodeToResponse(node, response, 0);
 	}
