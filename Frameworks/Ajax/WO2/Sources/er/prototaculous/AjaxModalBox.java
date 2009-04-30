@@ -1,4 +1,4 @@
-package er.ajax._private;
+package er.prototaculous;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
