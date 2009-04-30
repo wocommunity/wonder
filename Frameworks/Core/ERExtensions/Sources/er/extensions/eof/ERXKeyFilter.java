@@ -58,8 +58,18 @@ public class ERXKeyFilter {
 	 * @param base the base rule to apply
 	 */
 	public ERXKeyFilter(ERXKeyFilter.Base base) {
+		this(base, ERXKeyFilter.Base.None);
+	}
+
+	/**
+	 * Creates a new ERXKeyFilter.
+	 * 
+	 * @param base the base rule to apply
+	 * @param nextBase the next base rule to apply
+	 */
+	public ERXKeyFilter(ERXKeyFilter.Base base, ERXKeyFilter.Base nextBase) {
 		_base = base;
-		_nextBase = ERXKeyFilter.Base.None;
+		_nextBase = nextBase;
 		_includes = new NSMutableDictionary<ERXKey, ERXKeyFilter>();
 		_excludes = new NSMutableSet<ERXKey>();
 		_map = new NSMutableDictionary<ERXKey, ERXKey>();
@@ -120,6 +130,14 @@ public class ERXKeyFilter {
 	 */
 	public static ERXKeyFilter filterWithAll() {
 		return new ERXKeyFilter(ERXKeyFilter.Base.All);
+	}
+	
+	/**
+	 * Shortcut to return a new ERXKeyFilter(All, All)
+	 * @return a new ERXKeyFilter(All, All)
+	 */
+	public static ERXKeyFilter filterWithAllRecursive() {
+		return new ERXKeyFilter(ERXKeyFilter.Base.All, ERXKeyFilter.Base.All);
 	}
 
 	/**
