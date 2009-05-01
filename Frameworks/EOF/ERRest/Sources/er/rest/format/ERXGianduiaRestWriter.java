@@ -107,7 +107,7 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response) {
 		appendHeadersToResponse(node, response);
-		Object object = node.toJava();
+		Object object = node.toJavaCollection();
 		appendObjectToResponse(object, response);
 	}
 }

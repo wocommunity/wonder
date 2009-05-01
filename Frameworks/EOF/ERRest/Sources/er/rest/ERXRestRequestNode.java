@@ -79,8 +79,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 * 
 	 * @return the Java object that corresponds to this node hierarchy
 	 */
-	public Object toJava() {
-		return toJava(new HashMap<Object, Object>());
+	public Object toJavaCollection() {
+		return toJavaCollection(new HashMap<Object, Object>());
 	}
 
 	/**
@@ -90,13 +90,13 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 *            associatedObjects map (to prevent infinite loops)
 	 * @return the Java object that corresponds to this node hierarchy
 	 */
-	protected Object toJava(Map<Object, Object> associatedObjects) {
+	protected Object toJavaCollection(Map<Object, Object> associatedObjects) {
 		Object result = associatedObjects.get(_associatedObject);
 		if (result == null) {
 			if (isArray()) {
 				List<Object> array = new LinkedList<Object>();
 				for (ERXRestRequestNode child : _children) {
-					array.add(child.toJava(associatedObjects));
+					array.add(child.toJavaCollection(associatedObjects));
 				}
 				result = array;
 			}
@@ -117,13 +117,79 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 				}
 				for (ERXRestRequestNode child : _children) {
 					String name = child.name();
-					Object value = child.toJava(associatedObjects);
+					Object value = child.toJavaCollection(associatedObjects);
 					// if (value != null) {
 					dict.put(name, value);
 					// }
 				}
 				if (dict.isEmpty()) {
 					result = null;
+				}
+				else {
+					result = dict;
+				}
+			}
+
+			if (_associatedObject != null) {
+				associatedObjects.put(_associatedObject, result);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the NSCollection/Java object that corresponds to this node hierarchy.
+	 * 
+	 * @return the NSCollection/Java object that corresponds to this node hierarchy
+	 */
+	public Object toNSCollection() {
+		return toNSCollection(new NSMutableDictionary<Object, Object>());
+	}
+
+	/**
+	 * Returns the NSCollection/Java object that corresponds to this node hierarchy.
+	 * 
+	 * @param the
+	 *            associatedObjects map (to prevent infinite loops)
+	 * @return the NSCollection/Java object that corresponds to this node hierarchy
+	 */
+	protected Object toNSCollection(NSMutableDictionary<Object, Object> associatedObjects) {
+		Object result = associatedObjects.get(_associatedObject);
+		if (result == null) {
+			if (isArray()) {
+				NSMutableArray<Object> array = new NSMutableArray<Object>();
+				for (ERXRestRequestNode child : _children) {
+					array.add(child.toNSCollection(associatedObjects));
+				}
+				result = array;
+			}
+			else if (isNull()) {
+				result = NSKeyValueCoding.NullValue;
+			}
+			else if (_value != null) {
+				result = _value;
+			}
+			else {
+				NSMutableDictionary<Object, Object> dict = new NSMutableDictionary<Object, Object>();
+				for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
+					String key = attribute.getKey();
+					Object value = attribute.getValue();
+					if (value == null) {
+						value = NSKeyValueCoding.NullValue;
+					}
+					// if (value != null) {
+					dict.put(key, value);
+					// }
+				}
+				for (ERXRestRequestNode child : _children) {
+					String name = child.name();
+					Object value = child.toNSCollection(associatedObjects);
+					// if (value != null) {
+					dict.put(name, value);
+					// }
+				}
+				if (dict.isEmpty()) {
+					result = NSKeyValueCoding.NullValue;
 				}
 				else {
 					result = dict;
