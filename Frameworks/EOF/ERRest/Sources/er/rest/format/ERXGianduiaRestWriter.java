@@ -25,7 +25,7 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 				_persistentStoreName = "ERRest";
 			}
 			else {
-				persistentStoreName = application.name();
+				_persistentStoreName = application.name();
 			}
 		}
 		else {
@@ -85,11 +85,15 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 			response.appendContentString("this.objectWithURIRepresentation(\"x-coredata://" + _persistentStoreName + "/" + type + "/" + id + "\",");
 		}
 		response.appendContentString("{");
-		for (Map.Entry<Object, Object> entry : map.entrySet()) {
+		Iterator<Map.Entry<Object, Object>> mapIter = map.entrySet().iterator();
+		while (mapIter.hasNext()) {
+			Map.Entry<Object, Object> entry = mapIter.next();
 			response.appendContentString(String.valueOf(entry.getKey()));
 			response.appendContentString(":");
 			appendObjectToResponse(entry.getValue(), response);
-			response.appendContentString("; ");
+			if (mapIter.hasNext()) {
+				response.appendContentString(", ");
+			}
 		}
 		response.appendContentString("}");
 		if (entity) {
