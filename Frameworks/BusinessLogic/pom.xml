@@ -13,6 +13,7 @@
 		<module>BTBusinessLogic</module>
 		<module>ERAttachment</module>
 		<module>ERCoreBusinessLogic</module>
+		<module>ERMoviesLogic</module>
 		<module>ERTaggable</module>
 		<module>WOPayPal</module>
 	</modules>
