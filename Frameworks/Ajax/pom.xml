@@ -12,9 +12,11 @@
 	<modules>
 		<module>Ajax</module>
 		<module>AjaxLook</module>
+		<module>ERDivaLook</module>
 		<module>ERIUI</module>
 		<module>GoogleChart</module>
 		<module>SproutCore</module>
+		<module>WO2</module>
 		<module>YUI</module>
 	</modules>
 </project>

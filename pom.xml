@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder</groupId>
 	<artifactId>wonder</artifactId>
@@ -146,7 +147,10 @@
 				<artifactId>ERExtensions</artifactId>
 				<version>${pom.version}</version>
 				<classifier>${woClassifier}</classifier>
-				<!-- Using the provided scope to avoid problems with profiles and variables substitution -->
+				<!--
+					Using the provided scope to avoid problems with profiles and
+					variables substitution
+				-->
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -169,7 +173,10 @@
 				<artifactId>WOOgnl</artifactId>
 				<version>${pom.version}</version>
 				<classifier>${woClassifier}</classifier>
-				<!-- Using the provided scope to avoid problems with profiles and variables substitution -->
+				<!--
+					Using the provided scope to avoid problems with profiles and
+					variables substitution
+				-->
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -260,6 +267,11 @@
 			<dependency>
 				<groupId>wonder.misc</groupId>
 				<artifactId>JavaMonitorFramework</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.misc</groupId>
+				<artifactId>ERDirectToRest</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>
@@ -495,6 +507,16 @@
 				<artifactId>json-lib</artifactId>
 				<version>2.2.2</version>
 				<classifier>jdk15</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.zeroturnaround</groupId>
+				<artifactId>javarebel-sdk</artifactId>
+				<version>2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.zeroturnaround</groupId>
+				<artifactId>javarebel-utils</artifactId>
+				<version>2.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

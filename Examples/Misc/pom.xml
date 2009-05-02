@@ -16,6 +16,7 @@
 		<module>ERSeleniumExample</module>
 		<module>ExcelGeneratorExample</module>
 		<module>JavaRESTAdaptorExample</module>
+		<module>RestExample</module>
 		<module>ValidityExample</module>
 	</modules>
 </project>
