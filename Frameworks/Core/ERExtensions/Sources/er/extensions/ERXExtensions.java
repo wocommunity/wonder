@@ -78,6 +78,8 @@ import er.extensions.jdbc.ERXJDBCAdaptor;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.logging.ERXLogger;
 import er.extensions.partials.ERXPartialInitializer;
+import er.extensions.qualifiers.ERXFalseQualifier;
+import er.extensions.qualifiers.ERXFalseQualifierSupport;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 import er.extensions.validation.ERXValidationFactory;
 
@@ -249,6 +251,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
                 EOQualifierSQLGeneration.Support.supportForClass(ERXFullTextQualifier.class));
 
 		EOQualifierSQLGeneration.Support.setSupportForClass(new ERXFullTextQualifierSupport(), ERXFullTextQualifier.class);
+		EOQualifierSQLGeneration.Support.setSupportForClass(new ERXFalseQualifierSupport(), ERXFalseQualifier.class);
 
 		// ERXObjectStoreCoordinatorPool has a static initializer, so just load the class if
 		// the configuration setting exists
