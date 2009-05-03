@@ -1,4 +1,4 @@
-// $LastChangedRevision: 7719 $ DO NOT EDIT.  Make changes to ERIAttributeType.java instead.
+// $LastChangedRevision: 7683 $ DO NOT EDIT.  Make changes to ERIAttributeType.java instead.
 package er.indexing.attributes;
 
 import er.extensions.foundation.*;
@@ -43,11 +43,11 @@ public abstract class _ERIAttributeType extends ERXGenericRecord {
     takeStoredValueForKey(value, Key.NAME);
   }
 
-  public ERIValueType valueType() {
+  public er.indexing.attributes.ERIValueType valueType() {
     Number value = (Number)storedValueForKey(Key.VALUE_TYPE);
-    return (ERIValueType)value;
+    return (er.indexing.attributes.ERIValueType)value;
   }
-  public void setValueType(ERIValueType value) {
+  public void setValueType(er.indexing.attributes.ERIValueType value) {
     takeStoredValueForKey(value, Key.VALUE_TYPE);
   }
 
