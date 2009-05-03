@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Enumeration;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableSet;
@@ -14,7 +15,6 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.rest.ERXRestException;
 import er.rest.format.IERXRestResponse;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * <p>
@@ -140,7 +140,7 @@ public class ERXXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
 	}
 
 	@Override
-	protected void appendVisitedToResponse(ERXRestContext context, IERXRestResponse response, IERXEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
+	protected void appendVisitedToResponse(ERXRestContext context, IERXRestResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		indent(response, indent);
 		response.appendContentString("<");
 		response.appendContentString(objectName);
@@ -160,7 +160,7 @@ public class ERXXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
 	}
 
 	@Override
-	protected void appendNoDetailsToResponse(ERXRestContext context, IERXRestResponse response, IERXEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
+	protected void appendNoDetailsToResponse(ERXRestContext context, IERXRestResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		indent(response, indent);
 		response.appendContentString("<");
 		response.appendContentString(objectName);
@@ -208,7 +208,7 @@ public class ERXXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
 	}
 
 	@Override
-	protected void appendDetailsToResponse(ERXRestContext context, IERXRestResponse response, IERXEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendDetailsToResponse(ERXRestContext context, IERXRestResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		indent(response, indent);
 		response.appendContentString("<");
 		response.appendContentString(objectName);

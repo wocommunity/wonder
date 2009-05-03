@@ -17,19 +17,18 @@ import er.rest.entityDelegates.ERXRestKey;
 import er.rest.entityDelegates.ERXRestNotFoundException;
 import er.rest.entityDelegates.ERXRestSecurityException;
 import er.rest.entityDelegates.IERXRestSecurityDelegate;
-import er.rest.routes.model.IERXEntity;
 
 public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate {
     
     private IERXRestSecurityDelegate _securityHandler = new ERD2RestAllowSecurityDelegate();
 
     @Override
-    public void inserted(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+    public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
         // nothing
     }
 
     @Override
-    public void updated(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+    public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
         // nothing
     }
 
@@ -73,7 +72,7 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
      * @return propertyAlias
      */
     @Override
-    public String propertyNameForPropertyAlias(IERXEntity entity, String propertyAlias) {
+    public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
 //        if(entity.classPropertyNames().containsObject(propertyAlias)) {
 //            return propertyAlias;
 //        }
@@ -86,11 +85,11 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
      * @return propertyName
      */
     @Override
-    public String propertyAliasForPropertyNamed(IERXEntity entity, String propertyName) {
+    public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
         return propertyName;
     }
 
-    public IERXEntity nextEntity(IERXEntity entity, String key) {
+    public EOEntity nextEntity(EOEntity entity, String key) {
         return null;
     }
     
@@ -102,14 +101,14 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
         return ERDirectToRest.d2wContext();
     }
 
-    public NSArray objectsForEntity(IERXEntity entity, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+    public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
         EOFetchSpecification fs = new ERXFetchSpecification<EOEnterpriseObject>(entity.name(), null, null);
         fs.setFetchLimit(intValue("fetchLimit", 0));
         NSArray objects = context.editingContext().objectsWithFetchSpecification(fs);
         return objects;
     }
 
-    public NSArray visibleObjects(IERXEntity parentEntity, Object parentObject, String parentKey, IERXEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException,
+    public NSArray visibleObjects(EOEntity parentEntity, Object parentObject, String parentKey, EOEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException,
             ERXRestSecurityException, ERXRestNotFoundException {
         return objects;
     }
@@ -118,35 +117,35 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
         return _securityHandler;
     }
 
-    public boolean canDeleteObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+    public boolean canDeleteObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
         return securityHandler().canDeleteObject(entity, eo, context);
     }
 
-    public final boolean canInsertObject(IERXEntity entity, ERXRestContext context) {
+    public final boolean canInsertObject(EOEntity entity, ERXRestContext context) {
         return securityHandler().canInsertObject(entity, context);
     }
 
-    public final boolean canInsertObject(IERXEntity parentEntity, Object parentObject, String parentKey, IERXEntity entity, ERXRestContext context) {
+    public final boolean canInsertObject(EOEntity parentEntity, Object parentObject, String parentKey, EOEntity entity, ERXRestContext context) {
         return securityHandler().canInsertObject(parentEntity, parentObject, parentKey, entity, context);
     }
 
-    public final boolean canInsertProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+    public final boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
         return securityHandler().canInsertProperty(entity, eo, propertyName, context);
     }
 
-    public final boolean canUpdateObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+    public final boolean canUpdateObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
         return securityHandler().canUpdateObject(entity, eo, context);
     }
 
-    public final boolean canUpdateProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+    public final boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
         return securityHandler().canUpdateProperty(entity, eo, propertyName, context);
     }
 
-    public boolean canViewObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+    public boolean canViewObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
         return securityHandler().canViewObject(entity, eo, context);
     }
 
-    public boolean canViewProperty(IERXEntity entity, Object obj, String propertyName, ERXRestContext context) {
+    public boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
         return securityHandler().canViewProperty(entity, obj, propertyName, context);
     }
 

@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.webobjects.eocontrol.EOClassDescription;
+
+import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
+import er.rest.IERXRestDelegate;
+import er.rest.ERXEORestDelegate;
 import er.rest.ERXRestRequestNode;
-import er.rest.routes.model.IERXEntity;
 
 public class ERXRestFormat {
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
@@ -41,11 +45,19 @@ public class ERXRestFormat {
 	}
 
 	public String toString(Object obj, ERXKeyFilter filter) {
-		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter).toString(writer());
+		return toString(obj, filter, new ERXEORestDelegate(ERXEC.newEditingContext()));
 	}
 
-	public String toString(IERXEntity entity, List<?> list, ERXKeyFilter filter) {
-		return ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, list, filter).toString(writer());
+	public String toString(EOClassDescription classDescription, List<?> list, ERXKeyFilter filter) {
+		return toString(classDescription, list, filter, new ERXEORestDelegate(ERXEC.newEditingContext()));
+	}
+
+	public String toString(Object obj, ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter, delegate).toString(writer());
+	}
+
+	public String toString(EOClassDescription classDescription, List<?> list, ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(classDescription, list, filter, delegate).toString(writer());
 	}
 
 	@Override

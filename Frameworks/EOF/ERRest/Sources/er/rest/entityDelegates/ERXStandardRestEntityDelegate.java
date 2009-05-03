@@ -1,5 +1,6 @@
 package er.rest.entityDelegates;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
@@ -11,7 +12,6 @@ import com.webobjects.foundation.NSSelector;
 import er.extensions.eof.ERXSortOrdering;
 import er.extensions.foundation.ERXProperties;
 import er.rest.ERXRestException;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * <p>
@@ -210,7 +210,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	@Override
-	protected String idAttributeName(IERXEntity entity) {
+	protected String idAttributeName(EOEntity entity) {
 		String idAttributeName = ERXProperties.stringForKey(IERXRestResponseWriter.REST_PREFIX + entity.name() + ".id");
 		if (idAttributeName == null) {
 			idAttributeName = defaultIDAttributeName();
@@ -246,7 +246,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @return the property alias
 	 */
 	@Override
-	public String propertyAliasForPropertyNamed(IERXEntity entity, String propertyName) {
+	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
 		String propertyAlias = _propertyAliasForPropertyName.objectForKey(entity.name() + "." + propertyName);
 		if (propertyAlias == null) {
 			propertyAlias = super.propertyAliasForPropertyNamed(entity, propertyName);
@@ -265,7 +265,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @return the property name
 	 */
 	@Override
-	public String propertyNameForPropertyAlias(IERXEntity entity, String propertyAlias) {
+	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
 		String propertyName = _propertyNameForPropertyAlias.objectForKey(entity.name() + "." + propertyAlias);
 		if (propertyName == null) {
 			propertyName = super.propertyNameForPropertyAlias(entity, propertyAlias);
@@ -412,7 +412,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 *            the rest context
 	 * @return true if propertyName is declared as an insert property
 	 */
-	public boolean canInsertProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return _insertPropertyNames.containsObject(entity.name() + "." + propertyName);
 	}
 
@@ -429,7 +429,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 *            the rest context
 	 * @return true if propertyName is declared as an update property
 	 */
-	public boolean canUpdateProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return _updatePropertyNames.containsObject(entity.name() + "." + propertyName);
 	}
 
@@ -446,7 +446,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 *            the rest context
 	 * @return true if propertyName is declared as a view property
 	 */
-	public boolean canViewProperty(IERXEntity entity, Object obj, String propertyName, ERXRestContext context) {
+	public boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return _viewPropertyNames.containsObject(entity.name() + "." + propertyName);
 	}
 
@@ -474,7 +474,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 *             if a security exception occurs
 	 */
 	@Override
-	public void inserted(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+	public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		// DO NOTHING
 	}
 
@@ -493,7 +493,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 *             if a security exception occurs
 	 */
 	@Override
-	public void updated(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		// DO NOTHING
 	}
 
@@ -506,11 +506,11 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @param key
 	 *            the key of the entity to return an entity definition for
 	 */
-	public IERXEntity nextEntity(IERXEntity entity, String key) {
-		IERXEntity nextEntity = null;
+	public EOEntity nextEntity(EOEntity entity, String key) {
+		EOEntity nextEntity = null;
 		String nextEntityName = ERXProperties.stringForKey(IERXRestResponseWriter.REST_PREFIX + entity.name() + "." + key + ".nextEntity");
 		if (nextEntityName != null) {
-			nextEntity = IERXEntity.Factory.entityNamed(entity, nextEntityName);
+			nextEntity = entity.model().modelGroup().entityNamed(nextEntityName); 
 		}
 		return nextEntity;
 	}

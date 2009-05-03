@@ -2,6 +2,7 @@ package er.rest.entityDelegates;
 
 import java.util.Enumeration;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -12,7 +13,6 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRestException;
 import er.rest.ERXRestRequestNode;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * ERXDefaultRestDelegate is the default implementation of the IERXRestDelegate interface. It provides support for
@@ -76,7 +76,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		ERXRestKey restResult;
 
 		ERXRestKey lastKey = restRequest.key();
-		IERXEntity entity = lastKey.entity();
+		EOEntity entity = lastKey.entity();
 		IERXRestEntityDelegate entityDelegate = entityDelegate(entity);
 		if (lastKey.isKeyGID()) {
 			EOEnterpriseObject eo = entityDelegate.processObjectFromDocument(entity, restRequest.rootNode(), context);
@@ -91,7 +91,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 				// <Superclass>
 				// <superclass>
 				// <subclass>
-				IERXEntity arrayEntity = ERXRestEntityDelegateUtils.getEntityNamed(context, context.delegate().entityNameForAlias(node.name()));
+				EOEntity arrayEntity = ERXRestEntityDelegateUtils.requiredEntityNamed(context, context.delegate().entityNameForAlias(node.name()));
 				EOEnterpriseObject eo = entityDelegate.processObjectFromDocument(arrayEntity, node, context);
 				if (eo != null) {
 					eos.addObject(eo);
@@ -115,7 +115,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 
 		ERXRestKey lastKey = insertRequest.key();
 		if (lastKey.isKeyAll()) {
-			IERXEntity lastEntity = lastKey.entity();
+			EOEntity lastEntity = lastKey.entity();
 			insertResult = insertInto(lastEntity, insertRequest, null, null, null, context);
 		}
 		else if (lastKey.isKeyGID()) {
@@ -126,7 +126,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			Object nextToLastValue = previousKey.value();
 			if (nextToLastValue instanceof EOEnterpriseObject) {
 				EOEnterpriseObject nextToLastEO = (EOEnterpriseObject) nextToLastValue;
-				IERXEntity nextEntity = lastKey.nextEntity();
+				EOEntity nextEntity = lastKey.nextEntity();
 				insertResult = insertInto(nextEntity, insertRequest, previousKey.entity(), nextToLastEO, lastKey.key(), context);
 			}
 			else {
@@ -137,7 +137,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		return insertResult;
 	}
 
-	protected ERXRestKey insertInto(IERXEntity entity, ERXRestRequest insertRequest, IERXEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	protected ERXRestKey insertInto(EOEntity entity, ERXRestRequest insertRequest, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		ERXRestKey insertResult;
 		ERXRestRequestNode insertRootNode = insertRequest.rootNode();
 		IERXRestEntityDelegate entityDelegate = entityDelegate(entity);
@@ -176,7 +176,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			throw new ERXRestSecurityException("You are not allowed to update all " + entityDelegate(lastKey.entity()).entityAliasForEntityNamed(lastKey.entity().name()) + " objects.");
 		}
 
-		IERXEntity lastEntity = lastKey.entity();
+		EOEntity lastEntity = lastKey.entity();
 		Object lastValue = lastKey.value();
 		if (lastValue instanceof EOEnterpriseObject) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) lastValue;
@@ -187,7 +187,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			ERXRestKey nextToLastKey = lastKey.previousKey();
 			Object nextToLastValue = nextToLastKey.value();
 			if (nextToLastValue instanceof EOEnterpriseObject) {
-				IERXEntity previousEntity = nextToLastKey.entity();
+				EOEntity previousEntity = nextToLastKey.entity();
 				EOEnterpriseObject eo = (EOEnterpriseObject) nextToLastValue;
 
 				NSArray currentObjects = (NSArray) lastValue;
@@ -208,7 +208,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		else {
 			ERXRestKey nextToLastKey = lastKey.previousKey();
 			Object nextToLastValue = nextToLastKey.value();
-			IERXEntity nextToLastEntity = nextToLastKey.entity();
+			EOEntity nextToLastEntity = nextToLastKey.entity();
 			if (nextToLastValue instanceof EOEnterpriseObject) {
 				ERXRestRequestNode reformedEORequestNode = new ERXRestRequestNode(entityDelegate(nextToLastEntity).entityAliasForEntityNamed(nextToLastEntity.name()));
 				ERXRestRequestNode reformedPrimitiveRequestNode = new ERXRestRequestNode(lastKey.keyAlias());
@@ -230,7 +230,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			throw new ERXRestException("You are not allowed to delete all the objects for any entity.");
 		}
 
-		IERXEntity entity = lastKey.entity();
+		EOEntity entity = lastKey.entity();
 		IERXRestEntityDelegate entityDelegate = entityDelegate(entity);
 		Object value = lastKey.value();
 		if (value instanceof NSArray) {
@@ -255,7 +255,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	}
 
 	@SuppressWarnings("unchecked")
-	public IERXRestEntityDelegate entityDelegate(IERXEntity entity) {
+	public IERXRestEntityDelegate entityDelegate(EOEntity entity) {
 		IERXRestEntityDelegate entityDelegate = _entityDelegates.objectForKey(entity.name());
 		if (entityDelegate == null) {
 			String entityDelegateClassName = ERXProperties.stringForKey("ERXRest." + entity.name() + ".delegate");

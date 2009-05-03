@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
 import er.rest.ERXRestUtils;
+import er.rest.IERXRestDelegate;
 
 /**
  * ERXRoute encapsulates a URL path with matching values inside of it. For instance, the route
@@ -271,12 +271,12 @@ public class ERXRoute {
 	 * 
 	 * @param url
 	 *            the URL to process
-	 * @param editingContext
-	 *            the editing context to fault EO's with (or null to not fault EO's)
+	 * @param delegate
+	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's keys to their resolved objects
 	 */
-	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(String url, ERXRoute.Method method, EOEditingContext editingContext) {
-		return keysWithObjects(keys(url, method), editingContext);
+	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(String url, ERXRoute.Method method, IERXRestDelegate delegate) {
+		return keysWithObjects(keys(url, method), delegate);
 	}
 
 	/**
@@ -284,12 +284,12 @@ public class ERXRoute {
 	 * 
 	 * @param url
 	 *            the URL to process
-	 * @param editingContext
-	 *            the editing context to fault EO's with (or null to not fault EO's)
+	 * @param delegate
+	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's key names to their resolved objects
 	 */
-	public NSDictionary<String, Object> objects(String url, ERXRoute.Method method, EOEditingContext editingContext) {
-		return objects(keys(url, method), editingContext);
+	public NSDictionary<String, Object> objects(String url, ERXRoute.Method method, IERXRestDelegate delegate) {
+		return objects(keys(url, method), delegate);
 	}
 
 	/**
@@ -297,18 +297,18 @@ public class ERXRoute {
 	 * 
 	 * @param keys
 	 *            the parsed keys to process
-	 * @param editingContext
-	 *            the editing context to fault EO's with (or null to not fault EO's)
+	 * @param delegate
+	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's keys to their resolved objects
 	 */
-	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(NSDictionary<ERXRoute.Key, String> keys, EOEditingContext editingContext) {
+	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(NSDictionary<ERXRoute.Key, String> keys, IERXRestDelegate delegate) {
 		NSMutableDictionary<ERXRoute.Key, Object> objects = null;
 		if (keys != null) {
 			objects = new NSMutableDictionary<ERXRoute.Key, Object>();
 			for (Map.Entry<ERXRoute.Key, String> entry : keys.entrySet()) {
 				ERXRoute.Key key = entry.getKey();
 				String valueStr = entry.getValue();
-				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), editingContext);
+				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), delegate);
 				objects.setObjectForKey(value, key);
 			}
 		}
@@ -320,18 +320,18 @@ public class ERXRoute {
 	 * 
 	 * @param keys
 	 *            the parsed keys to process
-	 * @param editingContext
-	 *            the editing context to fault EO's with (or null to not fault EO's)
+	 * @param delegate
+	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's key names to their resolved objects
 	 */
-	public NSDictionary<String, Object> objects(NSDictionary<ERXRoute.Key, String> keys, EOEditingContext editingContext) {
+	public NSDictionary<String, Object> objects(NSDictionary<ERXRoute.Key, String> keys, IERXRestDelegate delegate) {
 		NSMutableDictionary<String, Object> objects = null;
 		if (keys != null) {
 			objects = new NSMutableDictionary<String, Object>();
 			for (Map.Entry<ERXRoute.Key, String> entry : keys.entrySet()) {
 				ERXRoute.Key key = entry.getKey();
 				String valueStr = entry.getValue();
-				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), editingContext);
+				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), delegate);
 				objects.setObjectForKey(value, key._key);
 			}
 		}

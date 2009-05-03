@@ -2,12 +2,12 @@ package er.rest.entityDelegates;
 
 import java.text.ParseException;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
 import er.rest.ERXRestException;
 import er.rest.format.IERXRestResponse;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * IERXRestResponseWriter provides the interface for generating the output of a restful request.
@@ -61,7 +61,7 @@ public interface IERXRestResponseWriter {
 	 * @throws ERXRestNotFoundException
 	 * @throws ParseException
 	 */
-	public String toString(IERXEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+	public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
 
 	/**
 	 * Returns a String form of the given objects using the unsafe delegate.

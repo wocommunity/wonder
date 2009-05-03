@@ -2,12 +2,12 @@ package er.rest.entityDelegates;
 
 import java.text.ParseException;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 import er.rest.ERXRestException;
 import er.rest.ERXRestRequestNode;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * ERXDenyRestEntityDelegate is the safe default entity delegate (and is used by default
@@ -25,15 +25,15 @@ public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 		return entityName;
 	}
 
-	public String propertyNameForPropertyAlias(IERXEntity entity, String propertyAlias) {
+	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
 		return propertyAlias;
 	}
 
-	public String propertyAliasForPropertyNamed(IERXEntity entity, String propertyName) {
+	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
 		return propertyName;
 	}
 	
-	public Object idForEO(IERXEntity entity, EOEnterpriseObject eo) {
+	public Object idForEO(EOEntity entity, EOEnterpriseObject eo) {
 		return null;
 	}
 	
@@ -41,109 +41,109 @@ public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 		return false;
 	}
 	
-	public String stringIDForEO(IERXEntity entity, EOEnterpriseObject eo) {
+	public String stringIDForEO(EOEntity entity, EOEnterpriseObject eo) {
 		return null;
 	}
 	
-	public EOEnterpriseObject processObjectFromDocument(IERXEntity entity, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	public EOEnterpriseObject processObjectFromDocument(EOEntity entity, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		return null;
 	}
 
-	public EOEnterpriseObject objectWithKey(IERXEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to access the " + entity.name() + " with the id '" + key + "'.");
 	}
 	
-	public EOEnterpriseObject objectForNode(IERXEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public EOEnterpriseObject objectForNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to access the requested " + entity.name() + ".");
 	}
 	
-	public EOEnterpriseObject objectFromNode(IERXEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public EOEnterpriseObject objectFromNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to access the specified " + entity.name() + ".");
 	}
 
-	public EOEnterpriseObject objectWithKey(IERXEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
 		throw new ERXRestSecurityException("You are not allowed to access the " + entity.name() + " with the id '" + key + "'.");
 	}
 
-	public EOEnterpriseObject insertObjectFromDocument(IERXEntity entity, ERXRestRequestNode insertNode, IERXEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		return null;
 	}
 
-	public void updateArrayFromDocument(IERXEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, IERXEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 	}
 
-	public void updateObjectFromDocument(IERXEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 	}
 
-	public String formatAttributeValue(IERXEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException {
+	public String formatAttributeValue(EOEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException {
 		return null;
 	}
 
-	public void takeValueForKey(IERXEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException {
+	public void takeValueForKey(EOEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException {
 		// DO NOTHING
 	}
 
-	public Object valueForKey(IERXEntity entity, Object obj, String propertyName, ERXRestContext context) {
+	public Object valueForKey(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return null;
 	}
 
-	public void delete(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
+	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
 		// DO NOTHING
 	}
 
-	public void updated(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
+	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
 		// DO NOTHING
 	}
 
-	public void inserted(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
+	public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
 		// DO NOTHING
 	}
 
-	public boolean canInsertProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canUpdateProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return false;
 	}
 
-	public NSArray objectsForEntity(IERXEntity entity, ERXRestContext context) {
+	public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) {
 		return NSArray.EmptyArray;
 	}
 
-	public boolean canInsertObject(IERXEntity entity, ERXRestContext context) {
+	public boolean canInsertObject(EOEntity entity, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canInsertObject(IERXEntity parentEntity, Object parentObject, String parentKey, IERXEntity entity, ERXRestContext context) {
+	public boolean canInsertObject(EOEntity parentEntity, Object parentObject, String parentKey, EOEntity entity, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canDeleteObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+	public boolean canDeleteObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canUpdateObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+	public boolean canUpdateObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canViewObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+	public boolean canViewObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canViewProperty(IERXEntity entity, Object obj, String propertyName, ERXRestContext context) {
+	public boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return false;
 	}
 
-	public NSArray visibleObjects(IERXEntity parentEntity, Object parent, String key, IERXEntity entity, NSArray objects, ERXRestContext context) {
+	public NSArray visibleObjects(EOEntity parentEntity, Object parent, String key, EOEntity entity, NSArray objects, ERXRestContext context) {
 		return NSArray.EmptyArray;
 	}
 
-	public void preprocess(IERXEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException {
+	public void preprocess(EOEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException {
 		// DO NOTHING
 	}
 
-	public IERXEntity nextEntity(IERXEntity entity, String key) {
+	public EOEntity nextEntity(EOEntity entity, String key) {
 		return null;
 	}
 
