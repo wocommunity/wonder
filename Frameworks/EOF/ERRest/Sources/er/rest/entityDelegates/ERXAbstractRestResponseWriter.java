@@ -3,6 +3,9 @@ package er.rest.entityDelegates;
 import java.text.ParseException;
 import java.util.Enumeration;
 
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -14,9 +17,6 @@ import er.extensions.eof.ERXKeyFilter;
 import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRestException;
 import er.rest.format.IERXRestResponse;
-import er.rest.routes.model.IERXAttribute;
-import er.rest.routes.model.IERXEntity;
-import er.rest.routes.model.IERXRelationship;
 
 /**
  * <p>
@@ -177,7 +177,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		boolean displayDetails;
 		if (_filter == null) {
 			String entityName = key.entity().name();
-			IERXEntity entity = ERXRestEntityDelegateUtils.getEntityNamed(context, entityName);
+			EOEntity entity = ERXRestEntityDelegateUtils.requiredEntityNamed(context, entityName);
 			displayDetails = context.delegate().entityDelegate(entity).displayDetails(key, context);
 		}
 		else {
@@ -211,7 +211,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		String[] displayProperties;
 		if (_filter == null) {
 			String entityName = key.entity().name();
-			IERXEntity entity = ERXRestEntityDelegateUtils.getEntityNamed(context, entityName);
+			EOEntity entity = ERXRestEntityDelegateUtils.requiredEntityNamed(context, entityName);
 			displayProperties = context.delegate().entityDelegate(entity).displayProperties(key, _displayAllProperties, _displayAllToMany, context);
 		}
 		else {
@@ -223,19 +223,19 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 			}
 
 			NSMutableSet<String> displayPropertySet = new NSMutableSet<String>();
-			IERXEntity entity = key.nextEntity();
+			EOEntity entity = key.nextEntity();
 			Enumeration attributesEnum = entity.attributes().objectEnumerator();
 			while (attributesEnum.hasMoreElements()) {
-				IERXAttribute attribute = (IERXAttribute) attributesEnum.nextElement();
-				if (attribute.isClassProperty() && filter.matches(new ERXKey(attribute.name()), ERXKey.Type.Attribute)) {
+				EOAttribute attribute = (EOAttribute) attributesEnum.nextElement();
+				if (entity.classProperties().containsObject(attribute) && filter.matches(new ERXKey(attribute.name()), ERXKey.Type.Attribute)) {
 					displayPropertySet.addObject(attribute.name());
 				}
 			}
 
 			Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
 			while (relationshipsEnum.hasMoreElements()) {
-				IERXRelationship relationship = (IERXRelationship) relationshipsEnum.nextElement();
-				if (relationship.isClassProperty() && filter.matches(new ERXKey(relationship.name()), relationship.isToMany() ? ERXKey.Type.ToManyRelationship : ERXKey.Type.ToOneRelationship)) {
+				EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
+				if (entity.classProperties().containsObject(relationship) && filter.matches(new ERXKey(relationship.name()), relationship.isToMany() ? ERXKey.Type.ToManyRelationship : ERXKey.Type.ToOneRelationship)) {
 					displayPropertySet.addObject(relationship.name());
 				}
 			}
@@ -254,7 +254,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	}
 
 	protected void appendArrayToResponse(ERXRestContext context, IERXRestResponse response, ERXRestKey result, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
-		IERXEntity entity = result.nextEntity();
+		EOEntity entity = result.nextEntity();
 		IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 		if (!(entityDelegate instanceof ERXDenyRestEntityDelegate)) {
 			String arrayName;
@@ -293,7 +293,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		}
 		else if (value instanceof EOEnterpriseObject) {
 			String entityName = ((EOEnterpriseObject) value).entityName();
-			IERXEntity entity = ERXRestEntityDelegateUtils.getEntityNamed(context, entityName);
+			EOEntity entity = ERXRestEntityDelegateUtils.requiredEntityNamed(context, entityName);
 			// EOEntity entity = result.nextEntity();
 			IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 			String entityAlias = entityDelegate.entityAliasForEntityNamed(entity.name());
@@ -413,7 +413,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @param indent
 	 *            the indent level
 	 */
-	protected abstract void appendVisitedToResponse(ERXRestContext context, IERXRestResponse response, IERXEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
+	protected abstract void appendVisitedToResponse(ERXRestContext context, IERXRestResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
 
 	/**
 	 * Write an object to the response without showing its details. This is typically similar to
@@ -437,7 +437,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @param indent
 	 *            the indent level
 	 */
-	protected abstract void appendNoDetailsToResponse(ERXRestContext context, IERXRestResponse response, IERXEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
+	protected abstract void appendNoDetailsToResponse(ERXRestContext context, IERXRestResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
 
 	/**
 	 * Writes the visible details of an object to the response. Permissions have already been checked by the time this
@@ -472,7 +472,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @throws ParseException
 	 *             if a parse error occurs
 	 */
-	protected abstract void appendDetailsToResponse(ERXRestContext context, IERXRestResponse response, IERXEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+	protected abstract void appendDetailsToResponse(ERXRestContext context, IERXRestResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
 
 	/**
 	 * Writes the bare primitive out to the response. Permissions have already been checked by the time this method is
@@ -517,7 +517,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @throws ERXRestNotFoundException
 	 * @throws ParseException
 	 */
-	public String toString(IERXEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, entity, values);
 	}
 
@@ -532,6 +532,6 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @throws ParseException
 	 */
 	public String toString(EOEditingContext editingContext, String entityName, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
-		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, IERXEntity.Factory.entityNamed(editingContext, entityName), values);
+		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, ERXRestEntityDelegateUtils.requiredEntityNamed(editingContext, entityName), values);
 	}
 }

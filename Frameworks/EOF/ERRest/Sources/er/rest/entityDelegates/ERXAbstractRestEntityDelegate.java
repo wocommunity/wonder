@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
@@ -25,8 +27,6 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.rest.ERXRestException;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
-import er.rest.routes.model.IERXEntity;
-import er.rest.routes.model.IERXRelationship;
 
 /**
  * Provides default implementations of many of the common entity delegate behaviors.
@@ -55,7 +55,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	 * 
 	 * @return propertyAlias
 	 */
-	public String propertyNameForPropertyAlias(IERXEntity entity, String propertyAlias) {
+	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
 		return propertyAlias;
 	}
 
@@ -64,21 +64,21 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	 * 
 	 * @return propertyName
 	 */
-	public String propertyAliasForPropertyNamed(IERXEntity entity, String propertyName) {
+	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
 		return propertyName;
 	}
 
 	/**
 	 * Returns the value for the given property name.
 	 */
-	public Object valueForKey(IERXEntity entity, Object obj, String propertyName, ERXRestContext context) {
+	public Object valueForKey(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return NSKeyValueCoding.Utility.valueForKey(obj, propertyName);
 	}
 
 	/**
 	 * Parses the attribute with parseAttributeValue and sets it on the object.
 	 */
-	public void takeValueForKey(IERXEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException {
+	public void takeValueForKey(EOEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException {
 		Object parsedAttributeValue = parseAttributeValue(entity, obj, propertyName, value);
 		EOKeyValueCoding.Utility.takeStoredValueForKey(obj, parsedAttributeValue, propertyName);
 	}
@@ -86,7 +86,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	/**
 	 * Does nothing.
 	 */
-	public void preprocess(IERXEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException {
+	public void preprocess(EOEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException {
 		// Enumeration displayPropertiesEnum = displayProperties(entity).objectEnumerator();
 		// while (displayPropertiesEnum.hasMoreElements()) {
 		// EOProperty displayProperty = (EOProperty) displayPropertiesEnum.nextElement();
@@ -97,13 +97,14 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		// }
 	}
 
-	protected NSArray<String> allPossiblePropertyNamesOnEarth(IERXEntity entity) {
-		NSArray<String> propertyNames = entity.propertyNames();
-		NSArray<IERXEntity> subEntities = entity.subEntities();
+	@SuppressWarnings("unchecked")
+	protected NSArray<String> allPossiblePropertyNamesOnEarth(EOEntity entity) {
+		NSArray<String> propertyNames = entity._propertyNames();
+		NSArray<EOEntity> subEntities = entity.subEntities();
 		if (subEntities.count() > 0) {
 			NSMutableSet<String> mutablePropertyNames = new NSMutableSet<String>(propertyNames);
-			for (IERXEntity subEntity : subEntities) {
-				mutablePropertyNames.addObjectsFromArray(subEntity.propertyNames());
+			for (EOEntity subEntity : subEntities) {
+				mutablePropertyNames.addObjectsFromArray(subEntity._propertyNames());
 			}
 			propertyNames = mutablePropertyNames.allObjects();
 		}
@@ -123,7 +124,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		boolean isID = false;
 		String key = restKey.key();
 		if (key != null) {
-			IERXEntity entity = restKey.entity();
+			EOEntity entity = restKey.entity();
 			if (_isEOID(entity, key)) {
 				isID = true;
 			}
@@ -166,11 +167,11 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return isID;
 	}
 
-	protected String idAttributeName(IERXEntity entity) {
+	protected String idAttributeName(EOEntity entity) {
 		return null;
 	}
 
-	protected boolean _isEOID(IERXEntity entity, String key) {
+	protected boolean _isEOID(EOEntity entity, String key) {
 		boolean isID = !allPossiblePropertyNamesOnEarth(entity).containsObject(key);
 		return isID;
 	}
@@ -182,7 +183,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	 *            the EO to get a primary key for
 	 * @return the primary key
 	 */
-	public String stringIDForEO(IERXEntity entity, EOEnterpriseObject eo) {
+	public String stringIDForEO(EOEntity entity, EOEnterpriseObject eo) {
 		Object id = idForEO(entity, eo);
 		String idStr;
 		if (id instanceof Object[]) {
@@ -201,7 +202,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	 *            the EO to get a primary key for
 	 * @return the primary key
 	 */
-	public Object idForEO(IERXEntity entity, EOEnterpriseObject eo) {
+	public Object idForEO(EOEntity entity, EOEnterpriseObject eo) {
 		String idAttributeName = idAttributeName(entity);
 		Object id;
 		if (idAttributeName != null) {
@@ -244,7 +245,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return id;
 	}
 
-	public EOEnterpriseObject objectForNode(IERXEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public EOEnterpriseObject objectForNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String idForNode = idForNode(node);
 		EOEnterpriseObject eo;
 		if (node.isNull()) {
@@ -264,7 +265,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return eo;
 	}
 
-	public EOEnterpriseObject objectWithKey(IERXEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		EOEnterpriseObject obj = _objectWithKey(entity, key, context);
 		if (obj == null) {
 			throw new ERXRestNotFoundException("There is no " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
@@ -275,7 +276,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return obj;
 	}
 
-	protected EOEnterpriseObject _objectWithKey(IERXEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	protected EOEnterpriseObject _objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		EOEnterpriseObject obj;
 		String idAttributeName = idAttributeName(entity);
 		if (idAttributeName == null) {
@@ -313,7 +314,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return obj;
 	}
 
-	public EOEnterpriseObject objectWithKey(IERXEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
 		NSMutableArray<EOEnterpriseObject> filteredObjs = new NSMutableArray<EOEnterpriseObject>();
 		Enumeration objsEnum = objs.objectEnumerator();
 		while (objsEnum.hasMoreElements()) {
@@ -332,7 +333,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return obj;
 	}
 
-	public void delete(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		if (!canDeleteObject(entity, eo, context)) {
 			throw new ERXRestSecurityException("You are not allowed to delete the given " + entityAliasForEntityNamed(entity.name()) + " object.");
 		}
@@ -345,7 +346,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		}
 	}
 
-	public String formatAttributeValue(IERXEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException {
+	public String formatAttributeValue(EOEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException {
 		String formattedValue;
 		if (attributeValue == null) {
 			formattedValue = null;
@@ -360,11 +361,11 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return formattedValue;
 	}
 
-	public Object parseAttributeValue(IERXEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
-		return ERXRestUtils.coerceValueToAttributeType(attributeValue, entity, object, attributeName);
+	public Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
+		return ERXRestUtils.coerceValueToAttributeType(attributeValue, entity.classDescriptionForInstances(), object, attributeName);
 	}
 
-	public EOEnterpriseObject insertObjectFromDocument(IERXEntity entity, ERXRestRequestNode insertNode, IERXEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		boolean canInsert;
 		if (parentObject == null) {
 			canInsert = canInsertObject(entity, context);
@@ -385,7 +386,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return eo;
 	}
 
-	public EOEnterpriseObject processObjectFromDocument(IERXEntity entity, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	public EOEnterpriseObject processObjectFromDocument(EOEntity entity, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		IERXRestEntityDelegate delegate = context.delegate().entityDelegate(entity);
 		EOEnterpriseObject eo;
 		try {
@@ -403,7 +404,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return eo;
 	}
 
-	public void updateObjectFromDocument(IERXEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		if (!canUpdateObject(entity, eo, context)) {
 			throw new ERXRestSecurityException("You are not allowed to update this " + entityAliasForEntityNamed(entity.name()) + " object.");
 		}
@@ -411,14 +412,14 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		_updatePropertiesFromDocument(false, entity, eo, eoNode, context);
 	}
 
-	public void _updateRelationshipFromDocument(IERXEntity entity, EOEnterpriseObject eo, IERXRelationship relationship, ERXRestRequestNode relationshipNode, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public void _updateRelationshipFromDocument(EOEntity entity, EOEnterpriseObject eo, EORelationship relationship, ERXRestRequestNode relationshipNode, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String relationshipName = relationship.name();
 		String typeName = relationshipNode.type();
 		if (typeName == null) {
-			IERXEntity destinationEntity = relationship.destinationEntity();
+			EOEntity destinationEntity = relationship.destinationEntity();
 			typeName = destinationEntity.name();
 		}
-		IERXEntity destinationEntity = ERXRestEntityDelegateUtils.getEntityNamed(context, typeName);
+		EOEntity destinationEntity = ERXRestEntityDelegateUtils.requiredEntityNamed(context, typeName);
 		IERXRestEntityDelegate destinationEntityDelegate = context.delegate().entityDelegate(destinationEntity);
 		if (!relationship.isToMany()) {
 			EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, relationship.name(), context);
@@ -464,8 +465,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		}
 	}
 
-	public void _updatePropertiesFromDocument(boolean inserting, IERXEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		entity = ERXRestEntityDelegateUtils.getEntityNamed(context, eo.entityName());
+	public void _updatePropertiesFromDocument(boolean inserting, EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+		entity = ERXRestEntityDelegateUtils.requiredEntityNamed(context, eo.entityName());
 		String entityAlias = entityAliasForEntityNamed(eo.entityName());
 		String type = eoNode.type();
 		if (!entityAlias.equals(type)) {
@@ -493,7 +494,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 					throw new ERXRestSecurityException("You are not allowed to update the property '" + attributeName + "' on " + entityAlias + ".");
 				}
 
-				IERXRelationship relationship = entity.relationshipNamed(attributeName);
+				EORelationship relationship = entity.relationshipNamed(attributeName);
 				if (relationship != null) {
 					_updateRelationshipFromDocument(entity, eo, relationship, attributeNode, context);
 				}
@@ -512,7 +513,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		updated(entity, eo, context);
 	}
 
-	public void updateArrayFromDocument(IERXEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, IERXEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		IERXRestSecurityDelegate parentEntityDelegate = context.delegate().entityDelegate(entity);
 		if (parentObject != null && !parentEntityDelegate.canUpdateObject(parentEntity, parentObject, context)) {
 			throw new ERXRestSecurityException("You are not allowed to update this " + entity.name() + " object.");
@@ -523,7 +524,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		_updateArrayFromDocument(parentEntity, parentObject, attributeName, entity, currentObjects, toManyNodes, context);
 	}
 
-	protected void _updateArrayFromDocument(IERXEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, IERXEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	protected void _updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		NSMutableArray<EOEnterpriseObject> keepObjects = new NSMutableArray<EOEnterpriseObject>();
 		NSMutableArray<EOEnterpriseObject> addObjects = new NSMutableArray<EOEnterpriseObject>();
 		NSMutableArray<EOEnterpriseObject> removeObjects = new NSMutableArray<EOEnterpriseObject>();
@@ -533,7 +534,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		while (toManyNodesEnum.hasMoreElements()) {
 			ERXRestRequestNode toManyNode = (ERXRestRequestNode) toManyNodesEnum.nextElement();
 			String toManyNodeName = toManyNode.name();
-			entity = ERXRestEntityDelegateUtils.getEntityNamed(context, toManyNodeName);
+			entity = ERXRestEntityDelegateUtils.requiredEntityNamed(context, toManyNodeName);
 			if (!entityAliasForEntityNamed(entity.name()).equals(toManyNodeName)) {
 				throw new ERXRestException("You attempted to put a " + toManyNodeName + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
 			}
@@ -597,7 +598,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 
 	public static String _cascadingValue(ERXRestKey cascadingKey, String propertyPrefix, String propertySuffix) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String propertyValue = null;
-		IERXEntity entity = cascadingKey.entity();
+		EOEntity entity = cascadingKey.entity();
 		while (entity != null && propertyValue == null) {
 			ERXRestKey entityCascadingKey = cascadingKey.cloneKeyWithNewEntity(entity, true, true);
 			// System.out.println("ERXAbstractRestResponseWriter._cascadingValue:   keys " + cascadingKey + "vs" +
@@ -677,7 +678,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	 * @throws ERXRestSecurityException
 	 *             if a security error occurs
 	 */
-	public abstract void updated(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
+	public abstract void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 	/**
 	 * Called after performing the user's requested insert. This provides support for subclasses to extend and set
@@ -695,6 +696,6 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	 * @throws ERXRestSecurityException
 	 *             if a security error occurs
 	 */
-	public abstract void inserted(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
+	public abstract void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 }

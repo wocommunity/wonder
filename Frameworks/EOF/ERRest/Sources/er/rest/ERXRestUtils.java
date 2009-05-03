@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSTimestamp;
@@ -13,8 +15,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.foundation.ERXValueUtilities;
-import er.rest.routes.model.IERXAttribute;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * Miscellaneous rest-related utility methods.
@@ -109,7 +109,7 @@ public class ERXRestUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Object coerceValueToTypeNamed(Object value, String valueTypeName, EOEditingContext editingContext) {
+	public static Object coerceValueToTypeNamed(Object value, String valueTypeName, IERXRestDelegate delegate) {
 		Object parsedValue;
 		Class<?> valueType = _NSUtilities.classWithName(valueTypeName);
 		if (ERXValueUtilities.isNull(value)) {
@@ -200,10 +200,10 @@ public class ERXRestUtils {
 		else if (valueType != null && Enum.class.isAssignableFrom(valueType)) {
 			parsedValue = ERXValueUtilities.enumValueWithDefault(value, (Class<? extends Enum>) valueType, null);
 		}
-		else if (editingContext != null) {
-			IERXEntity entity = IERXEntity.Factory.entityNamed(editingContext, valueTypeName);
+		else if (delegate != null) {
+			EOClassDescription entity = ERXRestClassDescriptionFactory.classDescriptionForEntityName(valueTypeName);
 			if (entity != null) {
-				parsedValue = entity.objectWithPrimaryKeyValue(editingContext, value);
+			  parsedValue = delegate.objectOfEntityWithID(entity, value);
 			}
 			else {
 				throw new IllegalArgumentException("Unknown value type '" + valueTypeName + "'.");
@@ -228,7 +228,7 @@ public class ERXRestUtils {
 	 *            the parent object
 	 * @return a parsed version of the String
 	 */
-	public static Object coerceValueToAttributeType(Object value, IERXEntity parentEntity, Object parentObject, String attributeName) {
+	public static Object coerceValueToAttributeType(Object value, EOClassDescription parentEntity, Object parentObject, String attributeName) {
 		NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(parentObject, attributeName);
 		Class valueType = binding.valueType();
 
@@ -236,12 +236,17 @@ public class ERXRestUtils {
 			Object parsedValue;
 			if (value == null || ERXValueUtilities.isNull(value) || (value instanceof String && ((String) value).length() == 0)) {
 				if (parentEntity != null) {
-					IERXAttribute attribute = parentEntity.attributeNamed(attributeName);
-					if (attribute != null && !attribute.allowsNull() && String.class.isAssignableFrom(valueType)) {
-						parsedValue = "";
+					if (parentEntity instanceof EOEntityClassDescription) {
+						EOAttribute attribute = ((EOEntityClassDescription)parentEntity).entity().attributeNamed(attributeName);
+						if (attribute != null && !attribute.allowsNull() && String.class.isAssignableFrom(valueType)) {
+							parsedValue = "";
+						}
+						else {
+							parsedValue = EOKeyValueCoding.NullValue;
+						}
 					}
 					else {
-						parsedValue = EOKeyValueCoding.NullValue;
+						parsedValue = NSKeyValueCoding.NullValue;
 					}
 				}
 				else {
@@ -254,7 +259,7 @@ public class ERXRestUtils {
 			return parsedValue;
 		}
 		catch (Throwable e) {
-			throw new IllegalArgumentException("Failed to parse attribute " + attributeName + " for entity " + ((parentEntity == null) ? "unknown" : parentEntity.name()), e);
+			throw new IllegalArgumentException("Failed to parse attribute " + attributeName + " for entity " + ((parentEntity == null) ? "unknown" : parentEntity.entityName()), e);
 		}
 	}
 }

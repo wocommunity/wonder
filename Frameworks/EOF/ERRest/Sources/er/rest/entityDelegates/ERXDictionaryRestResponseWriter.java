@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.Stack;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -13,7 +14,6 @@ import com.webobjects.foundation.NSMutableSet;
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXRestException;
 import er.rest.format.IERXRestResponse;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * Provides the common output methods for generating a dictionary response, which can be used by several other writers
@@ -97,7 +97,7 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 	}
 
 	@Override
-	protected void appendVisitedToResponse(ERXRestContext context, IERXRestResponse response, IERXEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
+	protected void appendVisitedToResponse(ERXRestContext context, IERXRestResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		NSMutableDictionary<String, Object> value = new NSMutableDictionary<String, Object>();
 		value.setObjectForKey(entityName, "_type");
 		value.setObjectForKey(String.valueOf(id), "id");
@@ -105,7 +105,7 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 	}
 
 	@Override
-	protected void appendNoDetailsToResponse(ERXRestContext context, IERXRestResponse response, IERXEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
+	protected void appendNoDetailsToResponse(ERXRestContext context, IERXRestResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		NSMutableDictionary<String, Object> value = new NSMutableDictionary<String, Object>();
 		value.setObjectForKey(entityName, "_type");
 		value.setObjectForKey(String.valueOf(id), "id");
@@ -113,7 +113,7 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 	}
 
 	@Override
-	protected void appendDetailsToResponse(ERXRestContext context, IERXRestResponse response, IERXEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendDetailsToResponse(ERXRestContext context, IERXRestResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet<Object> visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		NSMutableDictionary<String, Object> value = new NSMutableDictionary<String, Object>();
 		value.setObjectForKey(entityName, "_type");
 		value.setObjectForKey(String.valueOf(id), "id");

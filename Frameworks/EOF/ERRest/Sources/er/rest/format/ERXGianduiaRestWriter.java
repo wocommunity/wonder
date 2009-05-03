@@ -82,7 +82,7 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 		String id = (String) map.remove(ERXRestRequestNode.ID_KEY);
 		boolean entity = (type != null && id != null);
 		if (entity) {
-			response.appendContentString("this.objectWithURIRepresentation(\"x-coredata://" + _persistentStoreName + "/" + type + "/" + id + "\",");
+			response.appendContentString("this.objectWithURIRepresentation(\"x-coredata://" + _persistentStoreName + "/" + type + "/p" + id + "\",");
 		}
 		response.appendContentString("{");
 		Iterator<Map.Entry<Object, Object>> mapIter = map.entrySet().iterator();

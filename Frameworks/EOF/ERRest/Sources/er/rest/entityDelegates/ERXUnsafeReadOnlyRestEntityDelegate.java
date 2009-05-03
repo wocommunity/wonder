@@ -2,6 +2,7 @@ package er.rest.entityDelegates;
 
 import java.util.Enumeration;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
@@ -9,7 +10,6 @@ import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.eof.ERXEC;
 import er.rest.ERXRestException;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * ERXUnsafeRestEntityDelegate should probably never be used in production. This is an entity delegate implementation
@@ -30,7 +30,7 @@ public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDe
 	public void initializeEntityNamed(String entityName) {
 		if (!_initializedEntityNames.containsObject(entityName)) {
 			super.initializeEntityNamed(entityName);
-			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(ERXRestEntityDelegateUtils.getEntityNamed(new ERXRestContext(null, ERXEC.newEditingContext(), null), entityName), true);
+			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(ERXRestEntityDelegateUtils.requiredEntityNamed(new ERXRestContext(null, ERXEC.newEditingContext(), null), entityName), true);
 			Enumeration allPropertyNamesEnum = allPropertyNames.objectEnumerator();
 			while (allPropertyNamesEnum.hasMoreElements()) {
 				String propertyName = (String) allPropertyNamesEnum.nextElement();
@@ -41,62 +41,62 @@ public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDe
 	}
 
 	@Override
-	public void delete(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to delete objects for the entity '" + entity.name() + ".");
 	}
 
 	@Override
-	public void updated(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to update objects for the entity '" + entity.name() + ".");
 	}
 
 	@Override
-	public void inserted(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+	public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to insert objects for the entity '" + entity.name() + ".");
 	}
 
 	@Override
-	public boolean canInsertProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return false;
 	}
 
 	@Override
-	public boolean canUpdateProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return false;
 	}
 
-	public NSArray objectsForEntity(IERXEntity entity, ERXRestContext context) {
+	public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) {
 		EOFetchSpecification entityFetchSpec = new EOFetchSpecification(entity.name(), null, null);
 		NSArray objects = context.editingContext().objectsWithFetchSpecification(entityFetchSpec);
 		return objects;
 	}
 
-	public boolean canInsertObject(IERXEntity entity, ERXRestContext context) {
+	public boolean canInsertObject(EOEntity entity, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canInsertObject(IERXEntity parentEntity, Object parentObject, String parentKey, IERXEntity entity, ERXRestContext context) {
+	public boolean canInsertObject(EOEntity parentEntity, Object parentObject, String parentKey, EOEntity entity, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canDeleteObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+	public boolean canDeleteObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canUpdateObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+	public boolean canUpdateObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		return false;
 	}
 
-	public boolean canViewObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+	public boolean canViewObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		return true;
 	}
 
 	@Override
-	public boolean canViewProperty(IERXEntity entity, Object obj, String propertyName, ERXRestContext context) {
+	public boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return true;
 	}
 
-	public NSArray visibleObjects(IERXEntity parentEntity, Object parent, String key, IERXEntity entity, NSArray objects, ERXRestContext context) {
+	public NSArray visibleObjects(EOEntity parentEntity, Object parent, String key, EOEntity entity, NSArray objects, ERXRestContext context) {
 		return objects;
 	}
 }

@@ -6,13 +6,14 @@ import java.util.List;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXRestException;
 import er.rest.format.IERXRestResponse;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * Provides the output methods for generating JSON responses to a REST request.
@@ -97,7 +98,7 @@ public class ERXJSONRestResponseWriter implements IERXRestResponseWriter {
 	 * @throws ERXRestNotFoundException
 	 * @throws ParseException
 	 */
-	public String toString(IERXEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, entity, values);
 	}
 
@@ -112,6 +113,6 @@ public class ERXJSONRestResponseWriter implements IERXRestResponseWriter {
 	 * @throws ParseException
 	 */
 	public String toString(EOEditingContext editingContext, String entityName, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
-		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, IERXEntity.Factory.entityNamed(editingContext, entityName), values);
+		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, EOUtilities.entityNamed(editingContext, entityName), values);
 	}
 }

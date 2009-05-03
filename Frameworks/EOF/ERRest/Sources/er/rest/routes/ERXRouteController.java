@@ -8,6 +8,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -16,10 +17,12 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.foundation.ERXExceptionUtilities;
+import er.rest.ERXEORestDelegate;
+import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestRequestNode;
+import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * ERXRouteController is equivalent to a Rails controller class. It's actually a direct action, and has the same naming
@@ -151,7 +154,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public NSDictionary<ERXRoute.Key, Object> routeObjects() {
 		if (_objects == null) {
-			_objects = _route.keysWithObjects(_routeKeys, editingContext());
+			_objects = _route.keysWithObjects(_routeKeys, delegate());
 		}
 		return _objects;
 	}
@@ -160,11 +163,11 @@ public class ERXRouteController extends WODirectAction {
 	 * Returns all the processed objects from the route keys. For instance, if your route specifies that you have a
 	 * {person:Person}, routeObjectForKey("person") will return a Person object. This method does NOT cache the results.
 	 * 
-	 * @parmam editingContext the editing context to fetch with
+	 * @parmam delegate the delegate to fetch with
 	 * @return the processed objects from the route keys
 	 */
-	public NSDictionary<ERXRoute.Key, Object> routeObjects(EOEditingContext editingContext) {
-		_objects = _route.keysWithObjects(_routeKeys, editingContext);
+	public NSDictionary<ERXRoute.Key, Object> routeObjects(IERXRestDelegate delegate) {
+		_objects = _route.keysWithObjects(_routeKeys, delegate);
 		return _objects;
 	}
 
@@ -186,8 +189,8 @@ public class ERXRouteController extends WODirectAction {
 	 * 
 	 * @return a default rest delegate
 	 */
-	protected ERXRestRequestNode.Delegate delegate() {
-		return new ERXRestRequestNode.EODelegate(editingContext());
+	protected IERXRestDelegate delegate() {
+		return new ERXEORestDelegate(editingContext());
 	}
 
 	/**
@@ -233,7 +236,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
-	public Object object(String entityName, ERXKeyFilter filter, ERXRestRequestNode.Delegate delegate) {
+	public Object object(String entityName, ERXKeyFilter filter, IERXRestDelegate delegate) {
 		return requestNode().objectWithFilter(entityName, filter, delegate);
 	}
 
@@ -263,7 +266,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
-	public Object create(String entityName, ERXKeyFilter filter, ERXRestRequestNode.Delegate delegate) {
+	public Object create(String entityName, ERXKeyFilter filter, IERXRestDelegate delegate) {
 		return requestNode().createObjectWithFilter(entityName, filter, delegate);
 	}
 
@@ -292,7 +295,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
-	public void update(Object obj, ERXKeyFilter filter, ERXRestRequestNode.Delegate delegate) {
+	public void update(Object obj, ERXKeyFilter filter, IERXRestDelegate delegate) {
 		requestNode().updateObjectWithFilter(obj, filter, delegate);
 	}
 
@@ -352,7 +355,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a JSON WOResponse
 	 */
-	public WOResponse json(IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
+	public WOResponse json(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.JSON, entity, values, filter);
 	}
 
@@ -399,7 +402,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a JSON WOResponse
 	 */
-	public WOResponse plist(IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
+	public WOResponse plist(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.PLIST, entity, values, filter);
 	}
 
@@ -446,7 +449,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return an XML WOResponse
 	 */
-	public WOResponse xml(IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
+	public WOResponse xml(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.XML, entity, values, filter);
 	}
 
@@ -494,7 +497,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a WOResponse of the format returned from the format() method
 	 */
-	public WOResponse response(IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
+	public WOResponse response(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		return response(format(), entity, values, filter);
 	}
 
@@ -531,7 +534,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a WOResponse in the given format
 	 */
 	public WOResponse response(ERXRestFormat format, EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
-		return response(format, IERXEntity.Factory.entityNamed(editingContext, entityName), values, filter);
+		return response(format, ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName), values, filter);
 	}
 
 	/**
@@ -547,9 +550,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a WOResponse in the given format
 	 */
-	public WOResponse response(ERXRestFormat format, IERXEntity entity, NSArray<?> values, ERXKeyFilter filter) {
+	public WOResponse response(ERXRestFormat format, EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		WOResponse response = WOApplication.application().createResponseInContext(context());
-		format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter), new ERXWORestResponse(response));
+		format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate()), new ERXWORestResponse(response));
 		return response;
 	}
 
@@ -619,7 +622,7 @@ public class ERXRouteController extends WODirectAction {
 	public WOResponse response(ERXRestFormat format, Object value, ERXKeyFilter filter) {
 		try {
 			WOResponse response = WOApplication.application().createResponseInContext(context());
-			format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter), new ERXWORestResponse(response));
+			format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate()), new ERXWORestResponse(response));
 			return response;
 		}
 		catch (ObjectNotAvailableException e) {

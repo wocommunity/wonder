@@ -2,11 +2,14 @@ package er.rest.entityDelegates;
 
 import java.text.ParseException;
 
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 import er.rest.ERXRestException;
 import er.rest.format.ERXStringBufferRestResponse;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * Miscellaneous rest-related utility methods.
@@ -14,13 +17,16 @@ import er.rest.routes.model.IERXEntity;
  * @author mschrag
  */
 public class ERXRestEntityDelegateUtils {
-	// MS: Yes, this is wrong, but I'll fix it later ...
-	public static IERXEntity getEntityNamed(ERXRestContext context, String name) {
-		IERXEntity e = IERXEntity.Factory.entityNamed(context.editingContext(), name);
-		if (e == null) {
+	public static EOEntity requiredEntityNamed(EOEditingContext editingContext, String name) {
+		EOEntity entity = EOUtilities.entityNamed(editingContext, name);
+		if (entity == null) {
 			throw new RuntimeException("Could not find the entity named '" + name + "'");
 		}
-		return e;
+		return entity;
+	}
+	
+	public static EOEntity requiredEntityNamed(ERXRestContext context, String name) {
+		return ERXRestEntityDelegateUtils.requiredEntityNamed(context.editingContext(), name);
 	}
 
 	/**
@@ -41,7 +47,7 @@ public class ERXRestEntityDelegateUtils {
 	public static String toString(ERXRestContext context, IERXRestResponseWriter writer, Object value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		ERXStringBufferRestResponse responseWriter = new ERXStringBufferRestResponse();
 		if (value != null) {
-			writer.appendToResponse(context, responseWriter, new ERXRestKey(context, IERXEntity.Factory.entityForObject(value), null, value));
+			writer.appendToResponse(context, responseWriter, new ERXRestKey(context, ERXRestEntityDelegateUtils.requiredEntityNamed(context, ((EOEnterpriseObject)value).entityName()), null, value));
 		}
 		return responseWriter.toString();
 	}
@@ -61,7 +67,7 @@ public class ERXRestEntityDelegateUtils {
 	 * @throws ERXRestNotFoundException
 	 * @throws ParseException
 	 */
-	public static String toString(ERXRestContext context, IERXRestResponseWriter writer, IERXEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	public static String toString(ERXRestContext context, IERXRestResponseWriter writer, EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		ERXStringBufferRestResponse responseWriter = new ERXStringBufferRestResponse();
 		writer.appendToResponse(context, responseWriter, new ERXRestKey(context, entity, null, values));
 		return responseWriter.toString();
@@ -97,7 +103,7 @@ public class ERXRestEntityDelegateUtils {
 	 * @throws ERXRestNotFoundException
 	 * @throws ParseException
 	 */
-	public static String toString(IERXRestResponseWriter writer, IERXEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	public static String toString(IERXRestResponseWriter writer, EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), writer, entity, values);
 	}
 }

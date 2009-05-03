@@ -1,5 +1,7 @@
 package er.rest.entityDelegates;
 
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
@@ -7,8 +9,6 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRestException;
 import er.rest.ERXRestRequestNode;
-import er.rest.routes.model.IERXEntity;
-import er.rest.routes.model.IERXRelationship;
 
 /**
  * ERXRestKey represents the keypath that was embodied in the request URL. This differs from a normal keypath in that it
@@ -19,13 +19,13 @@ import er.rest.routes.model.IERXRelationship;
 public class ERXRestKey {
 	private ERXRestContext _context;
 	private ERXRestKey _previousKey;
-	private IERXEntity _entity;
+	private EOEntity _entity;
 	private String _keyAlias;
 	private String _key;
 	private Object _value;
 	private boolean _valueFetched;
 
-	private IERXEntity _nextEntity;
+	private EOEntity _nextEntity;
 	private ERXRestKey _nextKey;
 
 	protected ERXRestKey() {
@@ -42,7 +42,7 @@ public class ERXRestKey {
 	 *            the alias of the key
 	 * @throws ERXRestException
 	 */
-	public ERXRestKey(ERXRestContext context, IERXEntity entity, String keyAlias) throws ERXRestException {
+	public ERXRestKey(ERXRestContext context, EOEntity entity, String keyAlias) throws ERXRestException {
 		if (entity == null) {
 			throw new ERXRestException("Unable to evaluate the key '" + _key + "' without an entity.");
 		}
@@ -65,7 +65,7 @@ public class ERXRestKey {
 	 *            the cached value of the key at this point in the path
 	 * @throws ERXRestException
 	 */
-	public ERXRestKey(ERXRestContext context, IERXEntity entity, String keyAlias, Object value) throws ERXRestException {
+	public ERXRestKey(ERXRestContext context, EOEntity entity, String keyAlias, Object value) throws ERXRestException {
 		this(context, entity, keyAlias);
 		_value = value;
 		_valueFetched = true;
@@ -112,7 +112,7 @@ public class ERXRestKey {
 	 * @throws ERXRestException
 	 *             if a general exception occurs
 	 */
-	protected ERXRestKey cloneKeyWithNewEntity(IERXEntity entity, boolean clonePrevious, boolean cloneNext) throws ERXRestException {
+	protected ERXRestKey cloneKeyWithNewEntity(EOEntity entity, boolean clonePrevious, boolean cloneNext) throws ERXRestException {
 		ERXRestKey clonedKey = cloneKey(clonePrevious, cloneNext);
 		clonedKey._entity = entity;
 		return clonedKey;
@@ -243,7 +243,7 @@ public class ERXRestKey {
 	 * 
 	 * @return the entity
 	 */
-	public IERXEntity entity() {
+	public EOEntity entity() {
 		return _entity;
 	}
 
@@ -349,12 +349,12 @@ public class ERXRestKey {
 	 * @throws ERXRestException
 	 *             if a general error occurs
 	 */
-	public IERXEntity nextEntity() throws ERXRestException {
-		IERXEntity nextEntity = _nextEntity;
+	public EOEntity nextEntity() throws ERXRestException {
+		EOEntity nextEntity = _nextEntity;
 		if (_nextEntity == null) {
 			if (_value instanceof EOEnterpriseObject) {
 				EOEnterpriseObject eo = (EOEnterpriseObject) _value;
-				nextEntity = IERXEntity.Factory.entityNamed(eo.editingContext(), eo.entityName());
+				nextEntity = _entity.model().modelGroup().entityNamed(eo.entityName());
 			}
 			else if (isKeyAll()) {
 				nextEntity = _entity;
@@ -363,7 +363,7 @@ public class ERXRestKey {
 				nextEntity = _entity;
 			}
 			else {
-				IERXRelationship relationship = _entity.relationshipNamed(_key);
+				EORelationship relationship = _entity.relationshipNamed(_key);
 				if (relationship != null) {
 					nextEntity = relationship.destinationEntity();
 				}
@@ -447,7 +447,7 @@ public class ERXRestKey {
 						throw new ERXRestSecurityException("You are not allowed to view the key '" + _key + "' on the entity '" + _entity.name() + "'.");
 					}
 					value = entityDelegate.valueForKey(_entity, previousValue, _key, _context);
-					IERXEntity nextEntity = nextEntity();
+					EOEntity nextEntity = nextEntity();
 					if (value instanceof NSArray) {
 						value = _context.delegate().entityDelegate(nextEntity).visibleObjects(_entity, previousValue, _key, nextEntity, (NSArray) value, _context);
 					}
@@ -528,11 +528,11 @@ public class ERXRestKey {
 		String[] paths = path.split("/");
 		if (paths.length > 0) {
 			String entityName = context.delegate().entityNameForAlias(paths[0]);
-			IERXEntity entity = ERXRestEntityDelegateUtils.getEntityNamed(context, entityName);
+			EOEntity entity = ERXRestEntityDelegateUtils.requiredEntityNamed(context, entityName);
 			if (entity == null) {
 				String railsyEntityName = ERXStringUtilities.capitalize(ERXLocalizer.currentLocalizer().singularifiedString(entityName));
 				if (!railsyEntityName.equals(entityName)) {
-					entity = ERXRestEntityDelegateUtils.getEntityNamed(context, railsyEntityName);
+					entity = ERXRestEntityDelegateUtils.requiredEntityNamed(context, railsyEntityName);
 				}
 				if (entity == null) {
 					throw new ERXRestNotFoundException("There is no entity named '" + entityName + "' or '" + railsyEntityName + "'.");

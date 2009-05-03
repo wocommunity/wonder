@@ -2,6 +2,7 @@ package er.rest.entityDelegates;
 
 import java.text.ParseException;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
@@ -9,7 +10,6 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXRestException;
 import er.rest.format.IERXRestResponse;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * Provides the output methods for generating PList responses to a REST request.
@@ -89,7 +89,7 @@ public class ERXPListRestResponseWriter implements IERXRestResponseWriter {
 	 * @throws ERXRestNotFoundException
 	 * @throws ParseException
 	 */
-	public String toString(IERXEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	public String toString(EOEntity entity, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, entity, values);
 	}
 
@@ -105,6 +105,6 @@ public class ERXPListRestResponseWriter implements IERXRestResponseWriter {
 	 * @throws ParseException
 	 */
 	public String toString(EOEditingContext editingContext, String entityName, NSArray values) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
-		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, IERXEntity.Factory.entityNamed(editingContext, entityName), values);
+		return ERXRestEntityDelegateUtils.toString(new ERXRestContext(new ERXUnsafeRestEntityDelegate(true)), this, ERXRestEntityDelegateUtils.requiredEntityNamed(editingContext, entityName), values);
 	}
 }

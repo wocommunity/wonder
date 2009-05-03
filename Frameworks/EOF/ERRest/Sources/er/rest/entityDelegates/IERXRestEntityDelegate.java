@@ -2,12 +2,12 @@ package er.rest.entityDelegates;
 
 import java.text.ParseException;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 import er.rest.ERXRestException;
 import er.rest.ERXRestRequestNode;
-import er.rest.routes.model.IERXEntity;
 
 /**
  * IERXRestEntityDelegate provides the interface for the applications to hook into the rest process on a per-entity
@@ -55,7 +55,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 *            the property name
 	 * @return the alias for the given property name
 	 */
-	public String propertyAliasForPropertyNamed(IERXEntity entity, String propertyName);
+	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName);
 
 	/**
 	 * The inverse of propertyAliasForPropertyNamed. Entity names are known, but property names aren't. So the inverse
@@ -69,7 +69,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 *            the alias to lookup
 	 * @return the original property names for the given alias
 	 */
-	public String propertyNameForPropertyAlias(IERXEntity entity, String propertyAlias);
+	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias);
 
 	/**
 	 * Returns the object that has the given key. In all of the provided implementations, key is interpreted to be an
@@ -89,7 +89,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestSecurityException
 	 *             if the caller is not permitted to view the requested object
 	 */
-	public EOEnterpriseObject objectWithKey(IERXEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 
 	/**
 	 * Returns the object that has the given key from the provided array. This is just like objectWithKey except limited
@@ -112,7 +112,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestSecurityException
 	 *             if the caller is not permitted to view the requested object
 	 */
-	public EOEnterpriseObject objectWithKey(IERXEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
+	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
 
 	/**
 	 * Returns the object that is associated with the given node.
@@ -131,7 +131,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestSecurityException
 	 *             if the caller is not permitted to view the requested object
 	 */
-	public EOEnterpriseObject objectForNode(IERXEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+	public EOEnterpriseObject objectForNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 
 	/**
 	 * Returns the value for the specified property name on the given object. This method does not need to deal with
@@ -147,7 +147,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 *            the rest context
 	 * @return the value for the given property
 	 */
-	public Object valueForKey(IERXEntity entity, Object obj, String propertyName, ERXRestContext context);
+	public Object valueForKey(EOEntity entity, Object obj, String propertyName, ERXRestContext context);
 
 	/**
 	 * Sets the value for the specified property name on the given object. Notice that the value is a String. You will
@@ -169,7 +169,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestException
 	 *             if a general failure occurs.
 	 */
-	public void takeValueForKey(IERXEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException;
+	public void takeValueForKey(EOEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException;
 
 	/**
 	 * Deletes the given object.
@@ -185,7 +185,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestSecurityException
 	 *             if a security failure occurs
 	 */
-	public void delete(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
+	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 	/**
 	 * Inserts or updates an object of the given type.
@@ -204,7 +204,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestNotFoundException
 	 *             if a related object cannot be found
 	 */
-	public EOEnterpriseObject processObjectFromDocument(IERXEntity entity, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
+	public EOEnterpriseObject processObjectFromDocument(EOEntity entity, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
 
 	/**
 	 * Insert a new object of the given type into a parent object's keypath from an XML document.
@@ -229,7 +229,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestNotFoundException
 	 *             if a related object cannot be found
 	 */
-	public EOEnterpriseObject insertObjectFromDocument(IERXEntity entity, ERXRestRequestNode insertNode, IERXEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
+	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
 
 	/**
 	 * Updates an array of objects for a to-many relationship from an XML document. This method is responsible for
@@ -256,7 +256,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestNotFoundException
 	 *             if a related object cannot be found
 	 */
-	public void updateArrayFromDocument(IERXEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, IERXEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 
 	/**
 	 * Updates an existing object from an XML document.
@@ -276,7 +276,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestNotFoundException
 	 *             if a related object cannot be found
 	 */
-	public void updateObjectFromDocument(IERXEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
+	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
 
 	/**
 	 * Coerce the given value into a String for use in the restful response. This may move to the RestResponseWriter at
@@ -296,7 +296,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestException
 	 *             if a general error occurs
 	 */
-	public String formatAttributeValue(IERXEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException;
+	public String formatAttributeValue(EOEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException;
 
 	/**
 	 * Returns an array of all of the EOs visible to the user for the given entity.
@@ -311,7 +311,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestSecurityException
 	 *             if the user requests objects that he/she is not permitted to see
 	 */
-	public NSArray objectsForEntity(IERXEntity entity, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
+	public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 	/**
 	 * Called before enumerating the given array of objects for display. This provides an opportunity to prefetch any of
@@ -324,7 +324,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestException
 	 *             if there is a general failure
 	 */
-	public void preprocess(IERXEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException;
+	public void preprocess(EOEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException;
 
 	/**
 	 * Given an array, this method filters the array based on the callers permission level. This method should never
@@ -352,7 +352,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @throws ERXRestNotFoundException
 	 *             if an object cannot be found
 	 */
-	public NSArray visibleObjects(IERXEntity parentEntity, Object parentObject, String parentKey, IERXEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
+	public NSArray visibleObjects(EOEntity parentEntity, Object parentObject, String parentKey, EOEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
 
 	/**
 	 * Returns the destination entity for the given key on the specified entity. If the key is a non-entity, you can
@@ -364,7 +364,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 *            the key to return the entity for
 	 * @return the destination entity for the given key (or null if there isn't one)
 	 */
-	public IERXEntity nextEntity(IERXEntity entity, String key);
+	public EOEntity nextEntity(EOEntity entity, String key);
 	
 	/**
 	 * Returns whether or not the given key value is the primary key of
@@ -383,7 +383,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @param eo the EO to get a primary key for
 	 * @return the primary key
 	 */
-	public String stringIDForEO(IERXEntity entity, EOEnterpriseObject eo);
+	public String stringIDForEO(EOEntity entity, EOEnterpriseObject eo);
 	
 	/**
 	 * Returns the primary key of the given EO.
@@ -391,7 +391,7 @@ public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	 * @param eo the EO to get a primary key for
 	 * @return the primary key
 	 */
-	public Object idForEO(IERXEntity entity, EOEnterpriseObject eo);
+	public Object idForEO(EOEntity entity, EOEnterpriseObject eo);
 
 	
 	public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;

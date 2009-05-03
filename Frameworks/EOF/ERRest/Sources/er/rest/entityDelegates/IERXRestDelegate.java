@@ -1,7 +1,8 @@
 package er.rest.entityDelegates;
 
+import com.webobjects.eoaccess.EOEntity;
+
 import er.rest.ERXRestException;
-import er.rest.routes.model.IERXEntity;
 
 
 /**
@@ -86,5 +87,5 @@ public interface IERXRestDelegate {
 	 * @param entity the entity
 	 * @return the per-entity rest delegate
 	 */
-	public IERXRestEntityDelegate entityDelegate(IERXEntity entity);
+	public IERXRestEntityDelegate entityDelegate(EOEntity entity);
 }

@@ -1,8 +1,7 @@
 package er.rest.entityDelegates;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-
-import er.rest.routes.model.IERXEntity;
 
 /**
  * Handles allowed actions.
@@ -22,7 +21,7 @@ public interface IERXRestSecurityDelegate {
 	 *            the rest context
 	 * @return whether or not a new object can be inserted
 	 */
-	public abstract boolean canInsertObject(IERXEntity entity, ERXRestContext context);
+	public abstract boolean canInsertObject(EOEntity entity, ERXRestContext context);
 
 	/**
 	 * Returns whether or not a new object can be inserted into the specified relationship of an existing object.
@@ -39,7 +38,7 @@ public interface IERXRestSecurityDelegate {
 	 *            the rest context
 	 * @return whether or not a new object can be inserted
 	 */
-	public abstract boolean canInsertObject(IERXEntity parentEntity, Object parentObject, String parentKey, IERXEntity entity, ERXRestContext context);
+	public abstract boolean canInsertObject(EOEntity parentEntity, Object parentObject, String parentKey, EOEntity entity, ERXRestContext context);
 
 	/**
 	 * Returns whether or not the given property can be set during an insert. This is only called if canInsertObject has
@@ -55,7 +54,7 @@ public interface IERXRestSecurityDelegate {
 	 *            the rest context
 	 * @return whether or not the given property can be set during an insert
 	 */
-	public abstract boolean canInsertProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context);
+	public abstract boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context);
 
 	/**
 	 * Returns whether or not the given object can be updated. This is called prior to calling canUpdateProperty on any
@@ -69,7 +68,7 @@ public interface IERXRestSecurityDelegate {
 	 *            the rest context
 	 * @return whether or not the given object can be updated
 	 */
-	public abstract boolean canUpdateObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context);
+	public abstract boolean canUpdateObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context);
 
 	/**
 	 * Returns whether or not the given property can be set during an update. This is only called if canUpdateObject has
@@ -85,7 +84,7 @@ public interface IERXRestSecurityDelegate {
 	 *            the rest context
 	 * @return whether or not the given property can be set during an update
 	 */
-	public abstract boolean canUpdateProperty(IERXEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context);
+	public abstract boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context);
 
 	/**
 	 * Returns whether or not the given object can be deleted. This is called prior to calling canDeleteProperty on any
@@ -101,7 +100,7 @@ public interface IERXRestSecurityDelegate {
 	 *            the rest context
 	 * @return whether or not the given object can be deleted
 	 */
-	public abstract boolean canDeleteObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context);
+	public abstract boolean canDeleteObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context);
 
 	/**
 	 * Returns whether or not the given object can be seen. This is called prior to calling canViewProperty on any
@@ -115,7 +114,7 @@ public interface IERXRestSecurityDelegate {
 	 *            the rest context
 	 * @return whether or not the given object can be seen
 	 */
-	public abstract boolean canViewObject(IERXEntity entity, EOEnterpriseObject eo, ERXRestContext context);
+	public abstract boolean canViewObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context);
 
 	/**
 	 * Returns whether or not the given property can be seen. This is only called if canViewObject has returned true.
@@ -130,6 +129,6 @@ public interface IERXRestSecurityDelegate {
 	 *            the rest context
 	 * @return whether or not the given property can be seen
 	 */
-	public abstract boolean canViewProperty(IERXEntity entity, Object obj, String propertyName, ERXRestContext context);
+	public abstract boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context);
 
 }
