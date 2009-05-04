@@ -395,9 +395,9 @@ There are many ways to use this script:
     </target>
 
     <target name="global.framework.install" depends="global.properties">
-        <copy todir="${wonder.framework.install.root}/${project.name}.framework">
+        <sync todir="${wonder.framework.install.root}/${project.name}.framework">
             <fileset dir="${build.root}/${project.name}.framework" />
-        </copy>
+        </sync>
         <copy todir="${wonder.jar.install.root}/">
             <fileset file="${build.root}/${project.name}-${project.version}.jar" />
             <fileset file="${project.dir}/Libraries/*.jar" />
@@ -406,9 +406,9 @@ There are many ways to use this script:
 
     <target name="global.application.install" depends="global.properties">
          <mkdir dir="${wonder.application.install.root}" />
-         <copy todir="${wonder.application.install.root}/${project.name}.woa">
+         <sync todir="${wonder.application.install.root}/${project.name}.woa">
             <fileset dir="${build.root}/${project.name}.woa" />
-        </copy>
+        </sync>
         <exec dir="${wonder.application.install.root}/${project.name}.woa" executable="/bin/chmod" os="Mac OS X">
             <arg line="a+x ${project.name}" />
         </exec>
@@ -423,17 +423,17 @@ There are many ways to use this script:
     
     <target name="global.framework.web" depends="global.properties">
         <mkdir dir="${web.framework.install.root}/${project.name}.framework" />
-        <copy todir="${web.framework.install.root}/${project.name}.framework/WebServerResources">
+        <sync todir="${web.framework.install.root}/${project.name}.framework/WebServerResources">
             <fileset dir="${build.root}/${project.name}.framework/WebServerResources" />
-        </copy>
+        </sync>
     </target>
 	
     <target name="global.application.web" depends="global.properties">
         <mkdir dir="${web.application.install.root}/${project.name}.woa" />
         <mkdir dir="${web.application.install.root}/${project.name}.woa/Contents" />
-        <copy todir="${web.application.install.root}/${project.name}.woa/Contents/WebServerResources">
+        <sync todir="${web.application.install.root}/${project.name}.woa/Contents/WebServerResources">
             <fileset dir="${build.root}/${project.name}.woa/Contents/WebServerResources" />
-        </copy>
+        </sync>
     </target>
 	
     <target name="global.framework.clean" depends="global.properties">
