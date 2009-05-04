@@ -24,7 +24,7 @@ import er.rest.ERXRestRequestNode;
  * @author mschrag
  */
 public class ERXXmlRestParser implements IERXRestParser {
-	protected ERXRestRequestNode createRequestNodeForElement(Element element) {
+	protected ERXRestRequestNode createRequestNodeForElement(Element element, ERXRestFormat.Delegate delegate) {
 		String name = element.getTagName();
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name);
 
@@ -40,7 +40,7 @@ public class ERXXmlRestParser implements IERXRestParser {
 			Node childNode = childNodes.item(childNodeNum);
 			if (childNode instanceof Element) {
 				Element childElement = (Element) childNode;
-				ERXRestRequestNode childRequestNode = createRequestNodeForElement(childElement);
+				ERXRestRequestNode childRequestNode = createRequestNodeForElement(childElement, delegate);
 				if (childRequestNode != null) {
 					String childRequestNodeName = childRequestNode.name();
 					// MS: this is a huge hack, but it turns out that it's surprinsingly tricky to
@@ -72,14 +72,16 @@ public class ERXXmlRestParser implements IERXRestParser {
 
 		requestNode.setValue(value);
 
+		delegate.nodeDidParse(requestNode);
+
 		return requestNode;
 	}
 
-	public ERXRestRequestNode parseRestRequest(WORequest request) {
-		return parseRestRequest(request.contentString());
+	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
+		return parseRestRequest(request.contentString(), delegate);
 	}
 
-	public ERXRestRequestNode parseRestRequest(String contentStr) {
+	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode rootRequestNode = null;
 
 		if (contentStr != null && contentStr.length() > 0) {
@@ -94,13 +96,21 @@ public class ERXXmlRestParser implements IERXRestParser {
 				document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
 				document.normalize();
 				Element rootElement = document.getDocumentElement();
-				rootRequestNode = createRequestNodeForElement(rootElement);
+				rootRequestNode = createRequestNodeForElement(rootElement, delegate);
 			}
 			catch (Exception e) {
 				throw new IllegalArgumentException("Failed to parse request document.", e);
 			}
 		}
-		
+
 		return rootRequestNode;
+	}
+
+	public static void main(String[] args) {
+		String str = "<Company><id>100</id><type>Company</type><name>mDT</name><firstName nil=\"true\"/><employees><Employee id=\"101\" type=\"Employee\"/><Employee id=\"102\"><name>Mike</name></Employee></employees></Company>";
+		ERXRestRequestNode n = new ERXXmlRestParser().parseRestRequest(str, new ERXRestFormat.DefaultDelegate());
+		ERXStringBufferRestResponse response = new ERXStringBufferRestResponse();
+		new ERXXmlRestWriter().appendToResponse(n, response, new ERXRestFormat.DefaultDelegate());
+		System.out.println("ERXXmlRestParser.main: " + response);
 	}
 }

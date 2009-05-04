@@ -26,5 +26,5 @@ public interface IERXRestWriter {
 	 * @param response
 	 *            the response to write into
 	 */
-	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response);
+	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate);
 }

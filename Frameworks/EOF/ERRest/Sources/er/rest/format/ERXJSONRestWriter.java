@@ -47,9 +47,9 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 		response.setHeader("application/json", "Content-Type");
 	}
 	
-	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response) {
+	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate) {
 		appendHeadersToResponse(node, response);
-		Object object = node.toJavaCollection();
+		Object object = node.toJavaCollection(delegate);
 		if (object == null) {
 			response.appendContentString("undefined");
 		}

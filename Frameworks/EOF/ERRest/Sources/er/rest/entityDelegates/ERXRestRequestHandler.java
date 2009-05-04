@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
 import er.rest.ERXRestRequestNode;
+import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.ERXXmlRestParser;
 import er.rest.format.IERXRestParser;
@@ -442,7 +443,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 				}
 
 				IERXRestParser requestParser = requestParserForType(type);
-				ERXRestRequestNode rootNode = requestParser.parseRestRequest(request);
+				ERXRestRequestNode rootNode = requestParser.parseRestRequest(request, new ERXRestFormat.DefaultDelegate());
 				ERXRestRequest restRequest = new ERXRestRequest(restContext, rootNode, path);
 				String method = request.method();
 				if ("GET".equalsIgnoreCase(method)) {

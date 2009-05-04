@@ -78,8 +78,8 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 	}
 
 	protected void appendMapToResponse(Map<Object, Object> map, IERXRestResponse response) {
-		String type = (String) map.remove(ERXRestRequestNode.TYPE_KEY);
-		String id = (String) map.remove(ERXRestRequestNode.ID_KEY);
+		String type = (String) map.remove(ERXRestFormat.DefaultDelegate.TYPE_KEY);
+		String id = (String) map.remove(ERXRestFormat.DefaultDelegate.ID_KEY);
 		boolean entity = (type != null && id != null);
 		if (entity) {
 			response.appendContentString("this.objectWithURIRepresentation(\"x-coredata://" + _persistentStoreName + "/" + type + "/p" + id + "\",");
@@ -105,9 +105,9 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 		response.setHeader("application/json", "Content-Type");
 	}
 
-	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response) {
+	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate) {
 		appendHeadersToResponse(node, response);
-		Object object = node.toJavaCollection();
+		Object object = node.toJavaCollection(delegate);
 		appendObjectToResponse(object, response);
 	}
 }

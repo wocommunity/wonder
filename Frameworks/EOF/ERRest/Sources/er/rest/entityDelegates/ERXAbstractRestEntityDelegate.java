@@ -229,17 +229,9 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	protected String idForNode(ERXRestRequestNode attributeNode) {
-		String id = attributeNode.attributeForKey("id");
-		if (id == null) {
-			ERXRestRequestNode idNode = attributeNode.childNamed("id");
-			if (idNode != null) {
-				id = String.valueOf(idNode.value());
-			}
-			else {
-				id = String.valueOf(attributeNode.value());
-			}
-		}
-		if (id != null && id.length() == 0) {
+		Object idObj = attributeNode.id();
+		String id = String.valueOf(idObj);
+		if (idObj != null && id.length() == 0) {
 			id = null;
 		}
 		return id;

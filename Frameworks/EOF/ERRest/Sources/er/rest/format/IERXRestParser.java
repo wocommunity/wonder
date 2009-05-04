@@ -5,7 +5,7 @@ import com.webobjects.appserver.WORequest;
 import er.rest.ERXRestRequestNode;
 
 public interface IERXRestParser {
-	public ERXRestRequestNode parseRestRequest(WORequest request);
+	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate);
 
-	public ERXRestRequestNode parseRestRequest(String contentStr);
+	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate);
 }

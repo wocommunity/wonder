@@ -18,7 +18,7 @@ import er.rest.ERXRestUtils;
  * @author mschrag
  */
 public class ERXJSONRestParser implements IERXRestParser {
-	protected ERXRestRequestNode createRequestNodeForJSON(String name, JSON json) {
+	protected ERXRestRequestNode createRequestNodeForJSON(String name, JSON json, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name);
 
 		if (json instanceof JSONNull) {
@@ -32,7 +32,7 @@ public class ERXJSONRestParser implements IERXRestParser {
 					requestNode.addChild(new ERXRestRequestNode(null, obj));
 				}
 				else {
-					requestNode.addChild(createRequestNodeForJSON(null, (JSON) obj));
+					requestNode.addChild(createRequestNodeForJSON(null, (JSON) obj, delegate));
 				}
 			}
 		}
@@ -45,7 +45,7 @@ public class ERXJSONRestParser implements IERXRestParser {
 					requestNode.addChild(new ERXRestRequestNode(strKey, value));
 				}
 				else {
-					requestNode.addChild(createRequestNodeForJSON(strKey, (JSON) value));
+					requestNode.addChild(createRequestNodeForJSON(strKey, (JSON) value, delegate));
 				}
 			}
 		}
@@ -53,14 +53,16 @@ public class ERXJSONRestParser implements IERXRestParser {
 			throw new IllegalArgumentException("Unknown JSON value '" + json + "'.");
 		}
 
+		delegate.nodeDidParse(requestNode);
+
 		return requestNode;
 	}
 
-	public ERXRestRequestNode parseRestRequest(WORequest request) {
-		return parseRestRequest(request.contentString());
+	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
+		return parseRestRequest(request.contentString(), delegate);
 	}
 
-	public ERXRestRequestNode parseRestRequest(String contentStr) {
+	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode rootRequestNode = null;
 
 		if (contentStr != null && contentStr.length() > 0) {
@@ -71,7 +73,7 @@ public class ERXJSONRestParser implements IERXRestParser {
 			// }
 
 			JSON rootJSON = JSONSerializer.toJSON(contentStr, ERXJSONRestWriter._config);
-			rootRequestNode = createRequestNodeForJSON(null, rootJSON);
+			rootRequestNode = createRequestNodeForJSON(null, rootJSON, delegate);
 		}
 
 		return rootRequestNode;
