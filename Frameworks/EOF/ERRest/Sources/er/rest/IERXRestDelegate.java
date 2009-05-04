@@ -9,7 +9,7 @@ import com.webobjects.eocontrol.EOClassDescription;
  */
 public interface IERXRestDelegate {
 	public Object primaryKeyForObject(Object obj);
-	
+
 	/**
 	 * Creates a new instance of the entity with the given name.
 	 * 

@@ -16,7 +16,7 @@ import er.rest.ERXRestUtils;
  * @author mschrag
  */
 public class ERXPListRestParser implements IERXRestParser {
-	protected ERXRestRequestNode createRequestNodeForObject(String name, Object object) {
+	protected ERXRestRequestNode createRequestNodeForObject(String name, Object object, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name);
 
 		if (object == null) {
@@ -30,7 +30,7 @@ public class ERXPListRestParser implements IERXRestParser {
 					requestNode.addChild(new ERXRestRequestNode(null, obj));
 				}
 				else {
-					requestNode.addChild(createRequestNodeForObject(null, obj));
+					requestNode.addChild(createRequestNodeForObject(null, obj, delegate));
 				}
 			}
 		}
@@ -43,7 +43,7 @@ public class ERXPListRestParser implements IERXRestParser {
 					requestNode.addChild(new ERXRestRequestNode(strKey, value));
 				}
 				else {
-					requestNode.addChild(createRequestNodeForObject(strKey, value));
+					requestNode.addChild(createRequestNodeForObject(strKey, value, delegate));
 				}
 			}
 		}
@@ -51,14 +51,16 @@ public class ERXPListRestParser implements IERXRestParser {
 			throw new IllegalArgumentException("Unknown JSON value '" + object + "'.");
 		}
 
+		delegate.nodeDidParse(requestNode);
+
 		return requestNode;
 	}
 
-	public ERXRestRequestNode parseRestRequest(WORequest request) {
-		return parseRestRequest(request.contentString());
+	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
+		return parseRestRequest(request.contentString(), delegate);
 	}
 
-	public ERXRestRequestNode parseRestRequest(String contentStr) {
+	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode rootRequestNode = null;
 
 		if (contentStr != null && contentStr.length() > 0) {
@@ -69,7 +71,7 @@ public class ERXPListRestParser implements IERXRestParser {
 			// }
 
 			Object rootObj = NSPropertyListSerialization.propertyListFromString(contentStr);
-			rootRequestNode = createRequestNodeForObject(null, rootObj);
+			rootRequestNode = createRequestNodeForObject(null, rootObj, delegate);
 		}
 
 		return rootRequestNode;

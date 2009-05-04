@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.appserver.ERXRequest;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -214,7 +215,8 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the controller class
 	 */
 	public void addDefaultRoutes(String entityName, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
-		String singularEntityName = ERXStringUtilities.uncapitalize(entityName);
+		boolean lowercaseEntityNames = ERXProperties.booleanForKeyWithDefault("ERXRest.lowercaseEntityNames", true);
+		String singularEntityName = lowercaseEntityNames ? entityName : ERXStringUtilities.uncapitalize(entityName);
 		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(singularEntityName, 2);
 
 		addRoute(new ERXRoute(".*", ERXRoute.Method.Head, controllerClass, "head"));
@@ -224,12 +226,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 		if (numericPKs) {
 			addRoute(new ERXRoute("/" + pluralEntityName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS:
-			// this
-			// only
-			// works
-			// with
-			// numeric
-			// ids
+			// this only works with numeric ids
 		}
 		else {
 			addRoute(new ERXRoute("/" + pluralEntityName + "/new", ERXRoute.Method.All, controllerClass, "new"));

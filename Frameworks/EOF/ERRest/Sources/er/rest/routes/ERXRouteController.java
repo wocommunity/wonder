@@ -202,7 +202,7 @@ public class ERXRouteController extends WODirectAction {
 	public ERXRestRequestNode requestNode() {
 		if (_requestNode == null) {
 			try {
-				_requestNode = format().parser().parseRestRequest(request());
+				_requestNode = format().parser().parseRestRequest(request(), format().delegate());
 			}
 			catch (Throwable t) {
 				throw new RuntimeException("Failed to parse a " + format() + " request.", t);
@@ -552,7 +552,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public WOResponse response(ERXRestFormat format, EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		WOResponse response = WOApplication.application().createResponseInContext(context());
-		format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate()), new ERXWORestResponse(response));
+		format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate()), new ERXWORestResponse(response), format.delegate());
 		return response;
 	}
 
@@ -622,7 +622,7 @@ public class ERXRouteController extends WODirectAction {
 	public WOResponse response(ERXRestFormat format, Object value, ERXKeyFilter filter) {
 		try {
 			WOResponse response = WOApplication.application().createResponseInContext(context());
-			format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate()), new ERXWORestResponse(response));
+			format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate()), new ERXWORestResponse(response), format.delegate());
 			return response;
 		}
 		catch (ObjectNotAvailableException e) {

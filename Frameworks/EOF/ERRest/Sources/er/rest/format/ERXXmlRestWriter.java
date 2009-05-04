@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXExtensions;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.rest.ERXRestRequestNode;
@@ -15,40 +14,51 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response) {
 		response.setHeader("text/xml", "Content-Type");
 	}
-	
-	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response) {
+
+	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate) {
 		appendHeadersToResponse(node, response);
 		response.appendContentString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		appendNodeToResponse(node, response, 0);
+		appendNodeToResponse(node, response, 0, delegate);
 	}
 
 	protected String coerceValueToString(Object value) {
 		return ERXRestUtils.coerceValueToString(value);
 	}
-	
-	public void appendNodeToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent) {
+
+	protected void appendNodeToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate) {
+		delegate.nodeWillWrite(node);
 		if (node.value() != null || node.isNull()) {
-			appendValueToResponse(node.name(), node.value(), response, indent);
+			appendValueToResponse(node, response, indent);
 		}
 		else if (node.isArray()) {
-			appendArrayToResponse(node, response, indent);
+			appendArrayToResponse(node, response, indent, delegate);
 		}
 		else {
-			appendDictionaryToResponse(node, response, indent);
+			appendDictionaryToResponse(node, response, indent, delegate);
 		}
 	}
 
-	protected void appendValueToResponse(String name, Object value, IERXRestResponse response, int indent) {
+	protected void appendValueToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent) {
+		String name = node.name();
+		Object value = node.value();
 		String formattedValue = coerceValueToString(value);
-		if (formattedValue != null) {
+		if (formattedValue == null) {
 			indent(response, indent);
 			response.appendContentString("<");
 			response.appendContentString(name);
-			appendTypeToResponse(value, response);
+			appendAttributesToResponse(node, response);
+			response.appendContentString("/>");
+			response.appendContentString("\n");
+		}
+		else if (formattedValue != null) {
+			indent(response, indent);
+			response.appendContentString("<");
+			response.appendContentString(name);
+			appendAttributesToResponse(node, response);
 			response.appendContentString(">");
-	
+
 			response.appendContentString(ERXStringUtilities.escapeNonXMLChars(formattedValue));
-	
+
 			response.appendContentString("</");
 			response.appendContentString(name);
 			response.appendContentString(">");
@@ -59,11 +69,11 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		}
 	}
 
-	protected void appendAttribtuesToResponse(ERXRestRequestNode node, IERXRestResponse response) {
+	protected void appendAttributesToResponse(ERXRestRequestNode node, IERXRestResponse response) {
 		for (Map.Entry<String, String> attribute : node.attributes().entrySet()) {
 			String key = attribute.getKey();
 			String formattedValue = coerceValueToString(attribute.getValue());
-			if (formattedValue != null && !ERXRestRequestNode.TYPE_KEY.equals(key)) {
+			if (formattedValue != null) {
 				response.appendContentString(" ");
 				response.appendContentString(key);
 				response.appendContentString("=\"");
@@ -72,43 +82,31 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 			}
 		}
 	}
-	
-	protected void appendDictionaryToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent) {
+
+	protected void appendDictionaryToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate) {
 		String objectName = node.name();
-		String type = node.type();
 		if (objectName == null) {
-			objectName = type;
+			objectName = node.type();
 		}
 
 		indent(response, indent);
 		response.appendContentString("<");
 		response.appendContentString(objectName);
 
-		if (type != null && ERXExtensions.safeDifferent(objectName, type) && node.attributeForKey("type") == null) {
-			response.appendContentString(" type=\"");
-			response.appendContentString(type);
-			response.appendContentString("\"");
-		}
-		
-		appendAttribtuesToResponse(node, response);
-		
-		String id = null;
-		if (id == null && node.children().size() == 0) {
+		appendAttributesToResponse(node, response);
+
+		if (node.children().size() == 0) {
 			response.appendContentString("/>");
 			response.appendContentString("\n");
 		}
 		else {
 			response.appendContentString(">");
 			response.appendContentString("\n");
-	
-			if (id != null) {
-				appendValueToResponse("id", id, response, indent + 1);
-			}
-			
+
 			for (ERXRestRequestNode child : node.children()) {
-				appendNodeToResponse(child, response, indent + 1);
+				appendNodeToResponse(child, response, indent + 1, delegate);
 			}
-	
+
 			indent(response, indent);
 			response.appendContentString("</");
 			response.appendContentString(objectName);
@@ -152,26 +150,19 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		}
 	}
 
-	protected void appendArrayToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent) {
-		indent(response, indent);
+	protected void appendArrayToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate) {
+		indent(response, indent);	
 		String arrayName = node.name();
 		response.appendContentString("<");
 		response.appendContentString(arrayName);
 
-		String type = node.type();
-		if (type != null) {
-			response.appendContentString(" type = \"");
-			response.appendContentString(type);
-			response.appendContentString("\"");
-		}
-
-		appendAttribtuesToResponse(node, response);
+		appendAttributesToResponse(node, response);
 
 		response.appendContentString(">");
 		response.appendContentString("\n");
 
 		for (ERXRestRequestNode child : node.children()) {
-			appendNodeToResponse(child, response, indent + 1);
+			appendNodeToResponse(child, response, indent + 1, delegate);
 		}
 
 		indent(response, indent);

@@ -8,15 +8,15 @@ public abstract class ERXDefaultRouteController extends ERXRouteController {
 		super(request);
 	}
 	
-	public abstract WOActionResults newAction();
+	public abstract WOActionResults newAction() throws Throwable;
 
-	public abstract WOActionResults updateAction();
+	public abstract WOActionResults updateAction() throws Throwable;
 
-	public abstract WOActionResults destroyAction();
+	public abstract WOActionResults destroyAction() throws Throwable;
 
-	public abstract WOActionResults showAction();
+	public abstract WOActionResults showAction() throws Throwable;
 
-	public abstract WOActionResults createAction();
+	public abstract WOActionResults createAction() throws Throwable;
 
-	public abstract WOActionResults indexAction();
+	public abstract WOActionResults indexAction() throws Throwable;
 }
