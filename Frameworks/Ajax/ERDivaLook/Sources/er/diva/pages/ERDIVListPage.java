@@ -12,6 +12,7 @@ import er.diva.ERDIVPageInterface;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * An XHTML version of ERD2WListPage
@@ -57,9 +58,14 @@ public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
     		if (!isEntityReadOnly() && isEntityEditable()) colspan++;
     		if (isEntityInspectable()) colspan++;
     		if (isDetailPage()) colspan++;
+    		if (isEntityDeletable()) colspan++;
     		return colspan;
     	}
     }
+    
+	public boolean isEntityDeletable() {
+		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityDeletable"), false);
+	}
     
     // FIXME: turn into rule
     public String rowID() {
