@@ -709,9 +709,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 * @return a string representation of this request node using the given IERXRestWriter
 	 */
 	public String toString(IERXRestWriter writer, ERXRestFormat.Delegate delegate) {
-		WOResponse response = new WOResponse();
-		writer.appendToResponse(this, new ERXWORestResponse(response), delegate);
-		return response.contentString();
+		WOResponse octopusHair = new WOResponse();
+		writer.appendToResponse(this, new ERXWORestResponse(octopusHair), delegate);
+		return octopusHair.contentString();
 	}
 
 	protected boolean isClassProperty(EOClassDescription classDescription, String key) {
