@@ -23,7 +23,7 @@ var AjaxTabbedPanel = {
       // Only call runOnSelect if the panel contents have previously been loaded.
       // If the panel contents are getting loaded the loadPanel function will call this
       var pane = $(paneID);
-      if (pane.innerHTML!='' && pane.innerHTML!=busyContent(busyDivID))
+      if (pane.innerHTML!='' && pane.innerHTML!=this.busyContent(busyDivID))
           AjaxTabbedPanel.runOnSelect($(tabControlID)); 
     },
 
@@ -52,7 +52,7 @@ var AjaxTabbedPanel = {
     // Loads the panel contents if not already loaded
     loadPanel : function(tabControlID, paneID, busyDivID, shouldReload) {
       var pane = $(paneID);
-      if (pane.innerHTML=='' || pane.innerHTML==busyContent(busyDivID) || shouldReload) {
+      if (pane.innerHTML=='' || pane.innerHTML==this.busyContent(busyDivID) || shouldReload) {
          pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=busyContent(busyDivID); pe.stop()}, 0.25);
          new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: 1, 
          														 evalScripts: true, 
