@@ -396,8 +396,33 @@ class ERXPatternParser extends PatternParser {
 			// when debug level logging is enabled for the perser.
 			_templateParser.isLoggingDisabled = true;
 			_appInfo = new NSMutableDictionary();
-			// work in progress; this is the fixed template.
 			_template = "@@appName@@[@@pid@@:@@portNumber@@ @@sessionCount@@]";
+			if(format != null && format.length() > 0) {
+				StringBuffer buffer = new StringBuffer();
+				for (int i = 0; i < format.length(); i++) {
+					char c = format.charAt(i);
+					
+					switch (c) {
+					case 's':
+						buffer.append("@@sessionCount@@");
+						break;
+					case 'n':
+						buffer.append("@@appName@@");
+						break;
+					case 'p':
+						buffer.append("@@portNumber@@");
+						break;
+					case 'i':
+						buffer.append("@@pid@@");
+						break;
+					default:
+						buffer.append(c);
+						break;
+					}
+				}
+				_template = buffer.toString();
+			}
+			
 		}
 
 		/**
