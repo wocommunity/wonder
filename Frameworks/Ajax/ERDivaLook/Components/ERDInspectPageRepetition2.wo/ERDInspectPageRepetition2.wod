@@ -38,7 +38,7 @@ DebugComponentName: ERDIVDebugComponentName {
 }
 
 Accordion: AjaxAccordion2 {
-	id = "Inspect_Accordion";
+	id = accordionID;
 	disabled = disabled;
 }
 
@@ -55,5 +55,5 @@ ListContainer: WOGenericContainer {
 SectionContainer: WOGenericContainer {
 	elementName = "div";
 	class = "accordion-content";
-	id = d2wContext.idForSection;
+	id = sectionID;
 }
