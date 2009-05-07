@@ -58,7 +58,6 @@ public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
     		if (!isEntityReadOnly() && isEntityEditable()) colspan++;
     		if (isEntityInspectable()) colspan++;
     		if (isDetailPage()) colspan++;
-    		if (isEntityDeletable()) colspan++;
     		return colspan;
     	}
     }
@@ -90,6 +89,7 @@ public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
     
     public int detailColspan() {
     	Integer count = (Integer) valueForKeyPath("d2wContext.displayPropertyKeys.count");
+		if (isEntityDeletable()) count++;
     	return colspan() + count;
     }
     
