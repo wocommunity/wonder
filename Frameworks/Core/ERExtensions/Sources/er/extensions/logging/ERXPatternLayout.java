@@ -398,31 +398,13 @@ class ERXPatternParser extends PatternParser {
 			_appInfo = new NSMutableDictionary();
 			_template = "@@appName@@[@@pid@@:@@portNumber@@ @@sessionCount@@]";
 			if(format != null && format.length() > 0) {
-				StringBuffer buffer = new StringBuffer();
-				for (int i = 0; i < format.length(); i++) {
-					char c = format.charAt(i);
-					
-					switch (c) {
-					case 's':
-						buffer.append("@@sessionCount@@");
-						break;
-					case 'n':
-						buffer.append("@@appName@@");
-						break;
-					case 'p':
-						buffer.append("@@portNumber@@");
-						break;
-					case 'i':
-						buffer.append("@@pid@@");
-						break;
-					default:
-						buffer.append(c);
-						break;
-					}
-				}
-				_template = buffer.toString();
+				format = format.replaceFirst("(^|\\W)s(\\W|$)", "$1@@sessionCount@@$2");
+				format = format.replaceFirst("(^|\\W)n(\\W|$)", "$1@@appName@@$2");
+				format = format.replaceFirst("(^|\\W)p(\\W|$)", "$1@@portNumber@@$2");
+				format = format.replaceFirst("(^|\\W)i(\\W|$)", "$1@@pid@@$2");
+				_template = format;
 			}
-			
+
 		}
 
 		/**
