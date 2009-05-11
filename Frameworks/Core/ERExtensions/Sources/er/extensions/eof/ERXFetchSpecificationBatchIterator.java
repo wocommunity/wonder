@@ -74,10 +74,10 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * specification with the default batch size. Note you will have to
      * set an editingContext on the iterator before calling the
      * nextBatch method.
-     * @param fetchSpecication to iterate through
+     * @param fetchSpecification to iterate through
      */
-    public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecication) {
-        this(fetchSpecication, null);
+    public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecification) {
+        this(fetchSpecification, null);
     }
 
     /**
@@ -102,7 +102,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * @param batchSize number of objects to fetch in a given batch
      */
     public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecification, EOEditingContext ec, int batchSize) {
-        this(fetchSpecification,(NSArray)null,ec,batchSize);
+        this(fetchSpecification, null, ec, batchSize);
     }    
 
     /**
@@ -134,12 +134,12 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
         
         EOQualifier qualifier = this.fetchSpecification.qualifier();
         if (qualifier != null) {
-        	ec.rootObjectStore().lock();
+            // The ec may be null when the iterator was created using the single-arg constructor.
+            if (ec != null) { ec.rootObjectStore().lock(); }
         	try {
         		this.fetchSpecification.setQualifier(entity.schemaBasedQualifier(qualifier));
-        	}
-        	finally {
-        		ec.rootObjectStore().unlock();
+        	} finally {
+                if (ec != null) { ec.rootObjectStore().unlock(); }
         	}
         }
     }
@@ -224,7 +224,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * @param newValue whether batches should be re-filtered
      */
     public void setFiltersBatches(boolean newValue) {
-        if(newValue == false && shouldFilterBatches == true && cachedBatch != null) {
+        if(!newValue && shouldFilterBatches && cachedBatch != null) {
             //NOTE: This could be made to work "as expected", if we cached un-filtered batches, and only filtered when we're about to return something; but, probably not worth it
             log.warn("Setting filtersBatches from true to false while there is a cached batch--some objects may already have been discarded!");
         }
@@ -267,7 +267,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * context that is set will be used to fetch against.
      * You can swap out a different editing context before
      * calling this method to reduce memory consumption.
-     * (However, if you are mixing calls to {@link #nextBatch()}
+     * (However, if you are mixing calls to this method 
      * with calls to {@link #next()} or {@link #nextElement()},
      * this method may return a partial batch of already-cached
      * objects, in the editing context which was in place at the
