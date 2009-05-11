@@ -110,7 +110,8 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * an optional set of pre-fetched primary keys
      * and a batch size. All objects will be
      * fetched from the given editing context. Note that you can switch
-     * out different editing contexts between calls to <b>nextBatch</b>
+     * out different editing contexts between calls to <b>nextBatch</b>.
+     * <p>Note: if no ec is supplied a new one is initialized.</p>
      * @param fetchSpecification to iterate through
      * @param pkeys primary keys to iterate through
      * @param ec editing context to fetch against
@@ -121,26 +122,25 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
 
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, fetchSpecification.entityName());
         NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
-        if ( primaryKeyAttributes.count() > 1) {
+        if (primaryKeyAttributes.count() > 1) {
             throw new RuntimeException("ERXFetchSpecificationBatchIterator: Currently only single primary key entities are supported.");
         }
 
         this.primaryKeyAttributeName = ((EOAttribute)primaryKeyAttributes.lastObject()).name();
         this.fetchSpecification = (EOFetchSpecification) fetchSpecification.clone();
         this.primaryKeys = pkeys;
-        setEditingContext(ec);
+        setEditingContext(ec != null ? ec : ERXEC.newEditingContext());
         setBatchSize(batchSize);
         setFiltersBatches(false);
         
         EOQualifier qualifier = this.fetchSpecification.qualifier();
         if (qualifier != null) {
-            // The ec may be null when the iterator was created using the single-arg constructor.
-            if (ec != null) { ec.rootObjectStore().lock(); }
-        	try {
-        		this.fetchSpecification.setQualifier(entity.schemaBasedQualifier(qualifier));
-        	} finally {
-                if (ec != null) { ec.rootObjectStore().unlock(); }
-        	}
+            editingContext().rootObjectStore().lock();
+            try {
+                this.fetchSpecification.setQualifier(entity.schemaBasedQualifier(qualifier));
+            } finally {
+                editingContext().rootObjectStore().unlock();
+            }
         }
     }
 
