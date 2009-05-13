@@ -39,6 +39,7 @@ public class ERD2WEditToOneRelationship2 extends ERD2WEditToOneRelationship {
     	D2WContext subContext = new D2WContext(session());
     	EOEntity destinationEntity = EOModelGroup.defaultGroup().entityNamed(destinationEntityName());
     	subContext.setEntity(destinationEntity);
+    	subContext.setTask("editRelationship");
     	
     	return ERXValueUtilities.booleanValueWithDefault(subContext.valueForKey("isEntityEditable"), !super.isEntityReadOnly(destinationEntity));
     }
