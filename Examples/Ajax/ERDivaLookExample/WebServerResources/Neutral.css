@@ -64,6 +64,30 @@ body {
 	display: none;
 }
 
+#busy {
+	position: absolute; 
+	min-height: 1200px;
+	width: 100%; 
+	height: 100%; 
+	top: 0px; 
+	left: 0px; 
+	z-index: 9999;
+	opacity: 0.7; 
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+	filter: alpha(opacity=70);
+	background: url(/WebObjects/Frameworks/WO2.framework/WebServerResources/images/black.png) repeat;
+}
+
+#busy div {
+	text-indent: -5000px;
+	background: url(/WebObjects/Frameworks/Ajax.framework/WebServerResources/busyBigSpinner.gif) no-repeat;
+	width: 128px;
+	height: 128px;
+	top: 40%;
+	left: 45%;
+	position: absolute;
+}
+
 /* globals */
 
 ul, ol {
