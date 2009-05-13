@@ -42,16 +42,16 @@ Features (Demo-ed)
 14. Embedded lists (via ERDList2). See Studio movies on Inspect/Edit pages. (Neutral look only).
 15. Google-style "quick Search" feature on Movies List page. (Neutral look only).
 16. Modal confirmation panel (ajax) on Rental edit page (on save).
+17. Property level ajax updates set via the d2wRule "isAjax" for some components. See Edit Movie.studio for a (contrived) example.
 
 Features (Not demo-ed)
 ========
 
 1. Support for ERAttachments
-2. Property level ajax updates set via the d2wRule "isAjax" for some components: e.g: Edit to one/many relationships
-3. Global "loading..." that may be styled as a busy spinner (for ajax updates).
-4. Error page/alert panel.
-5. Excel/report function added to list page. Hidden via CSS.
-6. Old school tooltips set via D2W key "title".
+2. Global "loading..." that may be styled as a busy spinner (for ajax updates).
+3. Error page/alert panel.
+4. Excel/report function added to list page. Hidden via CSS.
+5. Old school tooltips set via D2W key "title".
 
 Notes on XHTML, CSS and D2W
 ===========================
