@@ -16,3 +16,12 @@ DraggableContainerID : WOString {
 AjaxOptions : AjaxOptions {
 	options = createAjaxOptions;
 }
+
+OmitContainer : WOConditional {
+  condition = ^omitContainer;
+}
+
+IncludeContainer : WOConditional {
+  condition = ^omitContainer;
+  negate = true;
+}
