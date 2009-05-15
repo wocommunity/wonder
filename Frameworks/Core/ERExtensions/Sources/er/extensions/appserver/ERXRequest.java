@@ -1,5 +1,6 @@
 package er.extensions.appserver;
 import java.util.Enumeration;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -452,14 +453,14 @@ public  class ERXRequest extends WORequest {
 		NSMutableDictionary mutableUserInfo;
 		if (userInfo == null) {
 			mutableUserInfo = new NSMutableDictionary();
-			setUserInfo(mutableUserInfo);
+			_userInfo = mutableUserInfo;
 		}
 		else if (userInfo instanceof NSMutableDictionary) {
 			mutableUserInfo = (NSMutableDictionary) userInfo;
 		}
 		else {
 			mutableUserInfo = userInfo.mutableClone();
-			setUserInfo(mutableUserInfo);
+			_userInfo = mutableUserInfo;
 		}
 		return mutableUserInfo;
 	}
