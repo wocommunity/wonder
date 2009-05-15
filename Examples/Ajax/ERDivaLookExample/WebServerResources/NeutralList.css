@@ -1,0 +1,27 @@
+@import url("NeutralSortOrder2.css");
+@import url("NeutralEditButton2.css");
+@import url("NeutralTrashcan2.css");
+@import url("NeutralInspectButton2.css");
+
+div#a table.list tbody tr:hover {
+  background-color: #336699;
+  color: white;
+}
+
+div#a table.list tbody tr {
+	line-height: 30px;	
+}
+
+div#a table.list tbody tr td {
+	border-bottom: solid white 3px;
+}
+
+button.ERDIVListPage_Add {
+	text-indent: -5000px;
+	cursor: pointer;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
+	height: 13px;
+	width: 42px;
+	border:0;
+	display: block;
+}

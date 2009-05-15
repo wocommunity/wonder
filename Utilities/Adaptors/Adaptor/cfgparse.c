@@ -192,4 +192,7 @@ static int conf_parseConfiguration(char *buf, int len)
    list_dealloc(l);
    return 0;
 }
+#else
+/* Dummy declaration to avoid empty translation unit */
+int _cfgparse;
 #endif

@@ -6,7 +6,7 @@ SHELL = /bin/sh
 INCLUDES = -I${APACHEINCLUDE_DIR} -I../Adaptor
 
 # Common compiler and linker flags
-CFLAGS = -O2 -Wall ${INCLUDES} ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT} 
+CFLAGS = -O2 ${INCLUDES} ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT} 
 
 APXSFLAGS = -c -S CC=${CC} -Wc,"${CFLAGS}" -Wl,"${LDFLAGS}"
 
@@ -21,7 +21,7 @@ ENABLE_SSL_SUPPORT = -DAPACHE_SECURITY_ENABLED
 # These should be set to point at the ssl include and lib directories, respectively.
 OPENSSL_INCL_FLAGS = -I/usr/include/openssl
 OPENSSL_LIB_FLAGS = -L/usr/lib -lcrypto -lssl
-CFLAGS += ${RC_CFLAGS}
+CFLAGS += -Wall ${RC_CFLAGS}
 LDARCHS = $(patsubst %, -arch %, ${RC_ARCHS})
 LDFLAGS +=${OPENSSL_LIB_FLAGS} ${LDARCHS}  -macosx_version_min 10.5 -lm -module
 STRIP_FLAGS = -S
@@ -56,8 +56,8 @@ all: mod_WebObjects.so
 
 # The objects target compiles all the .c files, except mod_WebObjects.c, which we want
 # libtool (through apxs or otherwise) to take care of.
-$(COMMON_OBJFILES) : %.o : ../Adaptor/%.c
-	$(CC) $(CFLAGS) -c $<
+#$(COMMON_OBJFILES) : %.o : ../Adaptor/%.c
+#	$(CC) $(CFLAGS) -c $<
 
 
 # MacOS X Build

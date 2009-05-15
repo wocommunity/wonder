@@ -1,0 +1,55 @@
+{
+    attributes = (
+        {
+            columnName = ENABLED; 
+            externalType = integer; 
+            name = enabled; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "FEE_TYPE"; 
+            externalType = char; 
+            name = feeType; 
+            valueClassName = NSString;
+            valueType = c; 
+            width = 15; 
+        }, 
+        {
+            columnName = "FEE_TYPE_ID"; 
+            externalType = integer; 
+            name = feeTypeID; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "ORDER_BY"; 
+            externalType = integer; 
+            name = orderBy; 
+            precision = 9; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (feeTypeID, feeType, enabled, orderBy); 
+    className = "webobjectsexamples.businesslogic.rentals.common.FeeType"; 
+    classProperties = (feeType, enabled, orderBy); 
+    externalName = feetype; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (feeType, enabled, orderBy); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.rentals.common.FeeType"; 
+        "_nameInObjectStore" = "FEE_TYPE"; 
+    }; 
+    name = FeeType; 
+    primaryKeyAttributes = (feeTypeID); 
+    relationships = (
+        {
+            destination = Fee; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = feeTypeID; sourceAttribute = feeTypeID; }); 
+            name = fees; 
+        }
+    ); 
+}

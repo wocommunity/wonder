@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 
 import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERXAjaxApplication is the part of ERXApplication that handles Ajax requests.
@@ -51,7 +52,7 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		// MS: Note that if results == context.page() something probably went
 		// wrong
 		if (ERXAjaxApplication.shouldNotStorePage(context)) {
-			if (results == context.page()) {
+			if (results == context.page() && !allowContextPageResponse()) {
 				NSLog.out.appendln("ERXAjaxApplication.invokeAction: An Ajax response returned context.page(), which is almost certainly an error.");
 				results = null;
 			}
@@ -72,6 +73,18 @@ public abstract class ERXAjaxApplication extends WOApplication {
 			}
 		}
 		return results;
+	}
+	
+	/**
+	 * Allow for context.page() as a result to an ajax call. Currently for debugging.
+	 */
+	// AK: REMOVEME if WOGWT doesn't work out...
+	private Boolean _allowContextPageResponse;
+	private boolean allowContextPageResponse() {
+		if(_allowContextPageResponse == null) {
+			_allowContextPageResponse = ERXProperties.booleanForKey("er.extensions.ERXAjaxApplication.allowContextPageResponse");
+		}
+		return _allowContextPageResponse;
 	}
 
 	public static void setForceStorePage(WOMessage message) {

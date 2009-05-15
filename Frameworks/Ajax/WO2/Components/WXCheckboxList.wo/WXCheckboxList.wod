@@ -1,0 +1,22 @@
+Repetition: WORepetition {
+	list = ^list;
+	item = ^item;
+	index = index;
+}
+
+Checkbox: WOCheckBox {
+	class = ^class;
+	id = id;
+	name = elementName;
+	checked = checked;
+	disabled = ^disabled;
+}
+
+Label: WOGenericContainer {
+	elementName = "label";
+	for = id;
+}
+
+DisplayString: WOString {
+	value = ^displayString;
+}

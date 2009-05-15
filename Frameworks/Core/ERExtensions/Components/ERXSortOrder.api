@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
 	<wo class="ERXSortOrder" wocomponentcontent="false">
 
@@ -13,5 +13,7 @@
 		<binding name="sortedAscendingImageName"/>
 		<binding name="sortedDescendingImageName"/>
 		<binding name="imageFramework"/>
-	</wo>
+	<binding name="height"/>
+        <binding name="width"/>
+    </wo>
 </wodefinitions>

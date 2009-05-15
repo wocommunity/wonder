@@ -11,6 +11,7 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -60,6 +61,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	protected NSArray<String> _prefetchingRelationshipKeyPaths;
 	
 	protected int _rowCount = -1;
+	
+	protected boolean _shouldRememberRowCount = false;
 	
 	/**
 	 * Creates a new ERXBatchingDisplayGroup.
@@ -133,25 +136,13 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	}
 	
 	/**
-	 * Override the number of rows of results (if you can
-	 * provide a better estimate than the default behavior).  If you
-	 * guess too low, you will never get more than what you set, but
-	 * if you guess too high, it will adjust.
-	 *  
-	 * @param rowCount the number of rows of results 
-	 */
-	public void setRowCount(int rowCount) {
-		_rowCount = rowCount;
-	}
-	
-	/**
 	 * Overridden to return the pre-calculated number of batches
 	 */
 	@Override
 	public int batchCount() {
 		if (isBatching()) {
 			if (_displayedObjects == null) {
-				refetch();
+				updateBatchCount();
 			}
 			return _batchCount;
 		}
@@ -225,6 +216,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	public void setQualifier(EOQualifier aEoqualifier) {
 		super.setQualifier(aEoqualifier);
 		_displayedObjects = null;
+		setRowCount(-1);
 	}
 
 	/**
@@ -285,16 +277,53 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * Utility to get at the number of rows when batching.
 	 */
 	protected int rowCount() {
-		EOEditingContext ec = dataSource().editingContext();
-		EOFetchSpecification spec = fetchSpecification();
-
 		int rowCount = _rowCount;
 		if (rowCount == -1) {
-			rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, spec);
+			if (isBatching()) {
+				rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(dataSource().editingContext(), fetchSpecification());
+			}
+			else {
+				rowCount = dataSource().fetchObjects().count();
+			}
+			if (shouldRememberRowCount()) {
+				_rowCount = rowCount;
+			}
 		}
 		return rowCount;
 	}
+	
+	/**
+	 * Override the number of rows of results (if you can
+	 * provide a better estimate than the default behavior).  If you
+	 * guess too low, you will never get more than what you set, but
+	 * if you guess too high, it will adjust. Call with -1 to have the rows
+	 * counted again.
+	 *  
+	 * @param rowCount the number of rows of results 
+	 */
+	public void setRowCount(int rowCount) {
+		_rowCount = rowCount;
+	}
+	
+	/**
+	 * @return <code>true</code> if the rowCount() should be remembered after being determined
+	 * or <code>false</code> if rowCount() should be re-calculated when the batch changes
+	 */
+	public boolean shouldRememberRowCount() {
+		return _shouldRememberRowCount;
+	}
 
+	/**
+	 * Set to <code>true</code> to retain the rowCount() after it is determined once for a particular
+	 * qualifier.  Set to <code>false</code> to have rowCount() re-calculated when the batch changes.
+	 * The default is <code>false</code> for compatibility with older code.
+	 *
+	 * @param shouldRememberRowCount the shouldRememberRowCount to set
+	 */
+	public void setShouldRememberRowCount(boolean shouldRememberRowCount) {
+		_shouldRememberRowCount = shouldRememberRowCount;
+	}
+	
 	/**
 	 * Utility to fetch the object in a given range.
 	 * @param start
@@ -357,7 +386,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 */
 	protected void refetch() {
 		int rowCount = rowCount();
-
+		
 		int start = (currentBatchIndex() - 1) * numberOfObjectsPerBatch();
 		int end = start + numberOfObjectsPerBatch();
 
@@ -400,7 +429,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			_batchCount = 1;
 		}
 		else {
-			_batchCount = (allObjects().count() - 1) / numberOfObjectsPerBatch() + 1;
+			_batchCount = (rowCount() - 1) / numberOfObjectsPerBatch() + 1;
 		}
 	}
 
@@ -510,4 +539,5 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			}
 		}
 	}
+
 }

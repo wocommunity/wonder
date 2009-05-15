@@ -92,4 +92,10 @@ public class TimeZonesPage extends WOComponent {
 	public Integer tzRawOffset() {
 		return (Integer)((NSDictionary)zones.valueForKey(timeZoneId)).valueForKey(OFF_KEY);
 	}
+
+	public WOComponent timeDisplayNow() {
+		WOComponent nextPage = this.pageWithName("TimeDisplayNow");
+		nextPage.takeValueForKey(timeZoneId, "timeZoneID");
+		return nextPage;
+	}
 }

@@ -92,6 +92,15 @@ TableRow: WOGenericContainer {
 	style = rowStyle;
 }
 
+CanSelectRows: WOConditional {
+	condition = showRowSelector;
+}
+
+CantSelectRows: WOConditional {
+	condition = showRowSelector;
+	negate = true;
+}
+
 ToggleRowSelection: AjaxUpdateLink {
 	action = toggleRowSelection;
 	updateContainerID = configurationData.updateContainerID; // VALID

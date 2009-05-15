@@ -71,6 +71,7 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXExtensions;
@@ -711,7 +712,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 			catch (IOException e) {
 				// AK AK TODO: Auto-generated catch block
-				log.error(e, e);
+				log.error("Error in processing jar: "+ jar, e);
 			}
 		}
 
@@ -843,8 +844,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || _loader == null)) {
 			_displayMainMethodWarning();
 		}
-		if (_loader == null || !_loader.didLoad()) {
-			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + _loader.allFrameworks + "\nClasspath: " + System.getProperty("java.class.path"));
+		if (_loader == null) {
+			System.out.println("No loader: " + System.getProperty("java.class.path"));
+		} else if (!_loader.didLoad()) {
+			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + (_loader == null ? "none" : _loader.allFrameworks) + "\nClasspath: " + System.getProperty("java.class.path"));
 		}
 		if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
 			throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");
@@ -858,8 +861,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				app.activateOptions();
 			}
 		}
-		_loader._checker.reportErrors();
-
+		if(_loader != null) {
+			_loader._checker.reportErrors();
+		}
 		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ApplicationDidCreateNotification, this));
 		installPatches();
 		lowMemBufferSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXApplication.lowMemBufferSize", 0);
@@ -935,6 +939,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	    }
 	}
 
+	/**
+	 * Called, for example, when refuse new sessions is enabled and the request contains an expired session.
+	 * If mod_rewrite is being used we don't want the adaptor prefix being part of the redirect.
+	 * @see com.webobjects.appserver.WOApplication#_newLocationForRequest(com.webobjects.appserver.WORequest)
+	 */
+	public String _newLocationForRequest(WORequest aRequest) {
+		return _rewriteURL(super._newLocationForRequest(aRequest));
+	}
+	
 	/**
 	 * Decides whether to use editing context unlocking.
 	 * 
@@ -1302,17 +1315,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
-	 * Overridden to install/uninstall a timer that will terminate the
-	 * application in <code>ERTimeToKill</code> seconds from the time this
-	 * method is called. The timer will get uninstalled if you allow new
-	 * sessions again during that time span.
+	 * Overridden to fix that direct connect apps can't refuse new sessions.
 	 */
 
 	@Override
 	public synchronized void refuseNewSessions(boolean value) {
 		boolean success = false;
 		try {
-			Field f = WOApplication.class.getField("_refusingNewClients");
+			Field f = WOApplication.class.getDeclaredField("_refusingNewClients");
 			f.setAccessible(true);
 			f.set(this, value);
 			success = true;
@@ -1771,7 +1781,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		if (responseCompressionEnabled()) {
 			String contentType = response.headerForKey("content-type");
-			if (!"gzip".equals(response.headerForKey("content-encoding")) && (contentType != null) && (contentType.startsWith("text/") || contentType.equals("application/x-javascript"))) {
+			if (!"gzip".equals(response.headerForKey("content-encoding")) && (contentType != null) && (contentType.startsWith("text/") || responseCompressionTypes().containsObject(contentType))) {
 				String acceptEncoding = request.headerForKey("accept-encoding");
 				if ((acceptEncoding != null) && (acceptEncoding.toLowerCase().indexOf("gzip") != -1)) {
 					long start = System.currentTimeMillis();
@@ -2087,6 +2097,22 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		return _responseCompressionEnabled.booleanValue();
 	}
+	
+	protected NSSet<String> _responseCompressionTypes;
+	
+	/**
+	 * checks the value of
+	 * <code>er.extensions.ERXApplication.responseCompressionTypes</code> for
+	 * mime types that allow response compression in addition to text/* types.
+	 * The default is ("application/x-javascript")
+	 * @return an array of mime type strings
+	 */
+	public NSSet<String> responseCompressionTypes() {
+		if(_responseCompressionTypes == null) {
+			_responseCompressionTypes = new NSSet<String>(ERXProperties.arrayForKeyWithDefault("er.extensions.ERXApplication.responseCompressionTypes", new NSArray<String>("application/x-javascript")));
+		}
+		return _responseCompressionTypes;
+	}
 
 	/**
 	 * Returns an ERXMigrator with the lock owner name "appname-instancenumber".
@@ -2302,7 +2328,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (!sslAdaptorConfigured) {
 				NSMutableDictionary<String, Object> sslAdaptor = new NSMutableDictionary<String, Object>();
 				sslAdaptor.setObjectForKey(ERXSecureDefaultAdaptor.class.getName(), WOProperties._AdaptorKey);
-				sslAdaptor.setObjectForKey(sslHost(), WOProperties._HostKey);
+				String sslHost = sslHost();
+				if (sslHost != null) {
+					sslAdaptor.setObjectForKey(sslHost, WOProperties._HostKey);
+				}
 				sslAdaptor.setObjectForKey(Integer.valueOf(sslPort()), WOProperties._PortKey);
 				additionalAdaptors.addObject(sslAdaptor);
 			}
@@ -2436,5 +2465,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public void clearDebugEnabledForAllComponents() {
 		_debugComponents.removeAllObjects();
+	}
+	
+	/**
+	 * Workaround for method missing in 5.3. Misnamed because static methods can't override client methods. 
+	 * @return the request handler key for ajax.
+	 */
+	public static String erAjaxRequestHandlerKey() {
+		return ERXApplication.isWO54() ? "ja": "ajax";
 	}
 }

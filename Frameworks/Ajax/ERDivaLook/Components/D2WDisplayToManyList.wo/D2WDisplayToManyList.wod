@@ -1,0 +1,20 @@
+HasItems: WOConditional {
+	condition = hasItems;
+}
+
+HasNoItems: WOConditional {
+	condition = hasItems;
+	negate = true;
+}
+
+Inspect: WOHyperlink {
+	action = inspectAction;
+	disabled = d2wContext.disabled;
+	string = stringForItem;
+	target = target;
+}
+
+ItemRepetition: WORepetition {
+	list = list;
+	item = item;
+}

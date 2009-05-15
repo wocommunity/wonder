@@ -13,6 +13,64 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+/**
+ * AjaxDraggable makes HTML elements draggable. Use in conjunction with
+ * {@link AjaxDroppable}.
+ * 
+ * When omitContainer is false (default), the contents nested inside of the
+ * AjaxDraggable will be made draggable. Otherwise an existing DOM element with
+ * the id specified via the id binding will be made draggable.
+ * 
+ * For the scriptaculous options see
+ * http://wiki.github.com/madrobby/scriptaculous/draggable
+ * 
+ * @binding id the id of the element to drag. When omitContainer is false, this
+ *          is the id of the container surrounding the component content. When
+ *          unspecified, a unique id will be generated.
+ * @binding omitContainer if set to true, the container element will be omitted.
+ *          The DOM id of the object to be made draggable must be specified with
+ *          the id binding. Defaults to false.
+ * @binding elementName the element to use for the container. defaults to "div".
+ * @binding class the css class of the container
+ * @binding style the css styles of the container
+ * @binding draggableObject a java object which is passed to the AjaxDroppable
+ *          when this draggable is dropped onto it.
+ * @binding draggableID
+ * @binding starteffect Effect, defaults to Effect.Opacity. Defines the effect
+ *          to use when the draggable starts being dragged
+ * @binding reverteffect Effect, default to Effect.Move. Defines the effect to
+ *          use when the draggable reverts back to its starting position
+ * @binding endeffect Effect, defaults to Effect.Opacity. Defines the effect to
+ *          use when the draggable stops being dragged
+ * @binding zindex integer value, defaults to 1000. The css z-index of the
+ *          draggable item
+ * @binding revert boolean or function reference, defaults to false. If set to
+ *          true, the element returns to its original position when the drags
+ *          ends. Revert can also be an arbitrary function reference, called
+ *          when the drag ends. Specifying 'failure' will instruct the draggable
+ *          not to revert if successfully dropped in a droppable.
+ * @binding snap set to false no snapping occurs. Otherwise takes one of the
+ *          following forms – Δi: one delta value for both horizontal and
+ *          vertical snap, [Δx, Δy]: delta values for horizontal and vertical
+ *          snap, function(x, y, draggable_object) { return [x, y]; }: a
+ *          function that receives the proposed new top left coordinate pair and
+ *          returns the coordinate pair to actually be used.
+ * @binding ghosting boolean, defaults to false. Clones the element and drags
+ *          the clone, leaving the original in place until the clone is dropped
+ * @binding handle string or DOM reference, not set by default. Sets whether the
+ *          element should only be draggable by an embedded handle. The value
+ *          must be an element reference or element id. The value may also be a
+ *          string referencing a CSS class value. The first
+ *          child/grandchild/etc. element found within the element that has this
+ *          CSS class value will be used as the handle.
+ * @binding change Called just as onDrag (which is the preferred callback). Gets
+ *          the Draggable instance as its parameter.
+ * @binding keyPress
+ * @binding scroll can be either a dom ID or a dom reference. In case of a dom
+ *          reference the value must not be quoted. Set binding to "window" to
+ *          scroll the window when the draggable reaches the window boundary.
+ *          Set binding to "'someID'" to scroll the element with ID "someID"
+ */
 public class AjaxDraggable extends AjaxComponent {
   private static final String COMPONENT_DRAGGABLES_MAP_KEY = "AjaxComponentDraggablesMap";
   private String _id;
@@ -88,23 +146,27 @@ public class AjaxDraggable extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("handle", AjaxOption.DEFAULT));
     ajaxOptionsArray.addObject(new AjaxOption("change", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("keyPress", AjaxOption.SCRIPT));
-    // scroll can be either a dom ID or a dom reference. In case of a dom reference the value must not be quoted.
-    // set binding to "window" to scroll the window when the draggable reaches the window boundary.
-    // set binding to "'someID'" to scroll the element with ID "someID"
     ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
   }
 
   public String id() {
-      if(_id == null) {
-          _id = canGetValueForBinding("id") && valueForBinding("id") != null ? (String)valueForBinding("id") : safeElementID();
-          if(canSetValueForBinding("id")) {
-              setValueForBinding(_id, "id");
-          }
-      }
-      return _id;
-  }
+		if (_id == null) {
+			if (canGetValueForBinding("id") && valueForBinding("id") != null) {
+				_id = (String) valueForBinding("id");
+			}
+			else {
+				// only try to set the id binding if the id is auto-generated.
+				// canSetValueForBinding will report true for all OGNL expressions
+				_id = safeElementID();
+				if (canSetValueForBinding("id")) {
+					setValueForBinding(_id, "id");
+				}
+			}
+		}
+		return _id;
+	}
 
   public String elementName() {
     return (String) valueForBinding("elementName", "div");

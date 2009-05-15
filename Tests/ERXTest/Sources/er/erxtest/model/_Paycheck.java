@@ -16,7 +16,7 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
   public static final String ENTITY_NAME = "Paycheck";
 
   // Attribute Keys
-  public static final ERXKey<BigDecimal> AMOUNT = new ERXKey<BigDecimal>("amount");
+  public static final ERXKey<java.math.BigDecimal> AMOUNT = new ERXKey<java.math.BigDecimal>("amount");
   public static final ERXKey<Boolean> CASHED = new ERXKey<Boolean>("cashed");
   public static final ERXKey<NSTimestamp> PAYMENT_DATE = new ERXKey<NSTimestamp>("paymentDate");
   // Relationship Keys
@@ -39,11 +39,11 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
     return localInstance;
   }
 
-  public BigDecimal amount() {
-    return (BigDecimal) storedValueForKey("amount");
+  public java.math.BigDecimal amount() {
+    return (java.math.BigDecimal) storedValueForKey("amount");
   }
 
-  public void setAmount(BigDecimal value) {
+  public void setAmount(java.math.BigDecimal value) {
     if (_Paycheck.LOG.isDebugEnabled()) {
     	_Paycheck.LOG.debug( "updating amount from " + amount() + " to " + value);
     }
@@ -98,7 +98,7 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
   }
   
 
-  public static Paycheck createPaycheck(EOEditingContext editingContext, BigDecimal amount
+  public static Paycheck createPaycheck(EOEditingContext editingContext, java.math.BigDecimal amount
 , Boolean cashed
 , NSTimestamp paymentDate
 , er.erxtest.model.Employee employee) {

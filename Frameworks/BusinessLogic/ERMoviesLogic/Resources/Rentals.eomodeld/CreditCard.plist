@@ -1,0 +1,91 @@
+{
+    attributes = (
+        {
+            columnName = "AUTHORIZATION_DATE"; 
+            externalType = timestamp; 
+            name = authorizationDate; 
+            valueClassName = NSCalendarDate;
+            valueType = T;
+        }, 
+        {
+            columnName = "AUTHORIZATION_NUM"; 
+            externalType = char; 
+            name = authorizationNum; 
+            valueClassName = NSString;
+            valueType = c;
+            width = 10; 
+        }, 
+        {
+            columnName = "CARD_NUMBER"; 
+            externalType = char; 
+            name = cardNumber; 
+            valueClassName = NSString; 
+            width = 25; 
+        }, 
+        {
+            columnName = "CUSTOMER_ID"; 
+            externalType = integer; 
+            name = customerID; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "EXPIRATION_DATE"; 
+            externalType = timestamp; 
+            name = expirationDate; 
+            valueClassName = NSCalendarDate; 
+        }, 
+        {
+            columnName = CLIMIT; 
+            externalType = decimal; 
+            name = limit; 
+            precision = 10; 
+            scale = 2; 
+            valueClassName = NSDecimalNumber; 
+            valueType = B; 
+        }
+    ); 
+    attributesUsedForLocking = (
+        cardNumber, 
+        expirationDate, 
+        authorizationNum, 
+        authorizationDate, 
+        limit, 
+        customerID
+    ); 
+    className = "webobjectsexamples.businesslogic.rentals.common.CreditCard"; 
+    classProperties = (
+        cardNumber, 
+        expirationDate, 
+        authorizationNum, 
+        authorizationDate, 
+        limit, 
+        customer
+    ); 
+    externalName = creditcard; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (
+            expirationDate, 
+            authorizationNum, 
+            authorizationDate, 
+            limit, 
+            customer, 
+            cardNumber
+        ); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.rentals.common.CreditCard"; 
+        "_nameInObjectStore" = "CREDIT_CARD"; 
+    }; 
+    name = CreditCard; 
+    primaryKeyAttributes = (customerID); 
+    relationships = (
+        {
+            destination = Customer; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = customerID; sourceAttribute = customerID; }); 
+            name = customer; 
+        }
+    ); 
+}

@@ -1,7 +1,5 @@
 package er.extensions.components.partials;
 
-import org.slf4j.Marker;
-
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;

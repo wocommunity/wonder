@@ -6,8 +6,8 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.directtorest.ERDirectToRest;
 import er.extensions.foundation.ERXValueUtilities;
-import er.rest.ERXRestContext;
-import er.rest.IERXRestSecurityDelegate;
+import er.rest.entityDelegates.ERXRestContext;
+import er.rest.entityDelegates.IERXRestSecurityDelegate;
 
 public class ERD2RestDefaultSecurityDelegate implements IERXRestSecurityDelegate {
 

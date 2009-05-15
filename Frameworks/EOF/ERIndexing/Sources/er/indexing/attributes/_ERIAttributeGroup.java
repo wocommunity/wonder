@@ -1,4 +1,4 @@
-// $LastChangedRevision: 7719 $ DO NOT EDIT.  Make changes to ERIAttributeGroup.java instead.
+// $LastChangedRevision: 7683 $ DO NOT EDIT.  Make changes to ERIAttributeGroup.java instead.
 package er.indexing.attributes;
 
 import er.extensions.foundation.*;

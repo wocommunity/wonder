@@ -1,0 +1,63 @@
+{
+    attributes = (
+        {
+            columnName = "DATE_ACQUIRED"; 
+            externalType = timestamp; 
+            name = dateAcquired; 
+            valueClassName = NSCalendarDate; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = NOTES; 
+            externalType = char; 
+            name = notes; 
+            valueClassName = NSString; 
+            width = 100; 
+        }, 
+        {
+            columnName = "UNIT_ID"; 
+            externalType = integer; 
+            name = unitID; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "VIDEO_ID"; 
+            externalType = integer; 
+            name = videoID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (unitID, videoID, notes, dateAcquired); 
+    className = "webobjectsexamples.businesslogic.rentals.common.Unit"; 
+    classProperties = (notes, dateAcquired, rentals, unitID, video); 
+    externalName = unit; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (notes, dateAcquired, rentals, video, unitID); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.rentals.common.Unit"; 
+        "_nameInObjectStore" = UNIT; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 5; 
+    name = Unit; 
+    primaryKeyAttributes = (unitID); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleDeny; 
+            destination = Rental; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = unitID; sourceAttribute = unitID; }); 
+            name = rentals; 
+            numberOfToManyFaultsToBatchFetch = 20; 
+        }, 
+        {
+            destination = Video; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = videoID; sourceAttribute = videoID; }); 
+            name = video; 
+        }
+    ); 
+}

@@ -7,17 +7,16 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 
 import er.directtorest.security.ERD2RestAllowSecurityDelegate;
-import er.directtorest.security.ERD2RestDenySecurityDelegate;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXFetchSpecification;
 import er.extensions.foundation.ERXValueUtilities;
-import er.rest.ERXAbstractRestEntityDelegate;
-import er.rest.ERXRestContext;
 import er.rest.ERXRestException;
-import er.rest.ERXRestKey;
-import er.rest.ERXRestNotFoundException;
-import er.rest.ERXRestSecurityException;
-import er.rest.IERXRestSecurityDelegate;
+import er.rest.entityDelegates.ERXAbstractRestEntityDelegate;
+import er.rest.entityDelegates.ERXRestContext;
+import er.rest.entityDelegates.ERXRestKey;
+import er.rest.entityDelegates.ERXRestNotFoundException;
+import er.rest.entityDelegates.ERXRestSecurityException;
+import er.rest.entityDelegates.IERXRestSecurityDelegate;
 
 public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate {
     
@@ -33,8 +32,9 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
         // nothing
     }
 
+    @Override
     public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-        NSArray<String> props = (NSArray<String>) d2wContext().valueForKey("displayPropertyKeys");
+      @SuppressWarnings("unchecked") NSArray<String> props = (NSArray<String>) d2wContext().valueForKey("displayPropertyKeys");
         if(props != null) {
             return props.toArray(new String[0]);
         }
@@ -42,6 +42,7 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
     }
 
 
+    @Override
     public boolean displayDetails(ERXRestKey key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
         EOEntity entity = d2wContext().entity();
         return key.previousKey() == null;
@@ -53,6 +54,7 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
      * 
      * @return entityName
      */
+    @Override
     public String entityAliasForEntityNamed(String entityName) {
         EOEntity old = d2wContext().entity();
         d2wContext().setEntity(ERXEOAccessUtilities.entityNamed(null, entityName));
@@ -69,10 +71,11 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
      * 
      * @return propertyAlias
      */
+    @Override
     public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
-        if(entity.classPropertyNames().containsObject(propertyAlias)) {
-            return propertyAlias;
-        }
+//        if(entity.classPropertyNames().containsObject(propertyAlias)) {
+//            return propertyAlias;
+//        }
         return propertyAlias;
     }
 
@@ -81,10 +84,10 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
      * 
      * @return propertyName
      */
+    @Override
     public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
         return propertyName;
     }
-
 
     public EOEntity nextEntity(EOEntity entity, String key) {
         return null;

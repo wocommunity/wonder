@@ -586,7 +586,10 @@ var AjaxDroppable = Class.create({
 			this.onbeforedrop(element, droppableElement);
 		}
 
-    	var data = this.draggableKeyName + '=' + element.getAttribute('draggableID');
+		var draggableID = element.getAttribute('draggableID');
+		if(draggableID == null)
+			draggableID = element.getAttribute('id');
+    	var data = this.draggableKeyName + '=' + draggableID;
     	
 			if (this.updateContainerID == null) {
 				if (this.form) {
@@ -1001,6 +1004,10 @@ var AjaxModalDialog = {
 	
 	open: function(id) {
 		eval("openAMD_" + id + "()");
+	},
+	
+	contentUpdated: function() {
+		Modalbox._putContent();
 	}
 };
 var AMD = AjaxModalDialog;

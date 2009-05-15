@@ -1,0 +1,34 @@
+@import url("ERDIVDebug.css");
+@import url("AjaxExpansion.css");
+@import url("D2WDisplayBoolean2.css");
+
+div#a div.button ul li {
+	float: left;
+}
+
+/* The following are styles for the tab inspect page */
+
+div#a div.accordion-content ul li.attribute h4.propertyKey {
+	margin-left: -10em; /*width of left column*/
+	display: inline;
+} 
+
+div#a div.accordion-content ul li.attribute {
+	padding-left: 10em; /*width of left column*/
+}
+
+div#a div.accordion-content ul li.attribute div.content {
+	margin-top: -1em;
+}
+
+div#a .accordion-toggle {
+	max-width: 100%;
+	padding-top:4px;
+	padding-bottom: 4px;
+	font-weight: bold;
+	min-width: expression(document.getElementById('section').offsetWidth + "px");
+}
+
+div#a div.button {
+	width: 100%;
+}

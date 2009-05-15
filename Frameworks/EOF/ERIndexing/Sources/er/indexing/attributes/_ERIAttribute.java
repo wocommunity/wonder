@@ -1,4 +1,4 @@
-// $LastChangedRevision: 7719 $ DO NOT EDIT.  Make changes to ERIAttribute.java instead.
+// $LastChangedRevision: 7683 $ DO NOT EDIT.  Make changes to ERIAttribute.java instead.
 package er.indexing.attributes;
 
 import er.extensions.foundation.*;
@@ -38,18 +38,18 @@ public abstract class _ERIAttribute extends ERXGenericRecord {
     takeStoredValueForKey(value, Key.NAME);
   }
 
-  public ERXMutableArray possibleValues() {
-    return (ERXMutableArray) storedValueForKey(Key.POSSIBLE_VALUES);
+  public er.extensions.foundation.ERXMutableArray possibleValues() {
+    return (er.extensions.foundation.ERXMutableArray) storedValueForKey(Key.POSSIBLE_VALUES);
   }
-  public void setPossibleValues(ERXMutableArray value) {
+  public void setPossibleValues(er.extensions.foundation.ERXMutableArray value) {
     takeStoredValueForKey(value, Key.POSSIBLE_VALUES);
   }
 
-  public ERIStorageType storageType() {
+  public er.indexing.attributes.ERIStorageType storageType() {
     Number value = (Number)storedValueForKey(Key.STORAGE_TYPE);
-    return (ERIStorageType)value;
+    return (er.indexing.attributes.ERIStorageType)value;
   }
-  public void setStorageType(ERIStorageType value) {
+  public void setStorageType(er.indexing.attributes.ERIStorageType value) {
     takeStoredValueForKey(value, Key.STORAGE_TYPE);
   }
 

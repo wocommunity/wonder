@@ -1,0 +1,36 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {
+        "LC_ALL" = "iso_1"; 
+        URL = "jdbc:derby:movies"; 
+        databaseEncoding = "ISO Latin-1"; 
+        driver = "org.apache.derby.jdbc.EmbeddedDriver"; 
+    }; 
+    entities = (
+        {className = EOGenericRecord; name = Director; }, 
+        {className = EOGenericRecord; name = Movie; }, 
+        {
+            className = "webobjectsexamples.businesslogic.movies.common.MovieRole"; 
+            name = MovieRole; 
+        }, 
+        {className = EOGenericRecord; name = PlotSummary; }, 
+        {className = EOGenericRecord; name = Review; }, 
+        {
+            className = "webobjectsexamples.businesslogic.movies.server.Studio"; 
+            name = Studio; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.movies.common.Talent"; 
+            name = Talent; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.movies.common.TalentPhoto"; 
+            name = TalentPhoto; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.movies.common.Voting"; 
+            name = Voting; 
+        }
+    ); 
+}

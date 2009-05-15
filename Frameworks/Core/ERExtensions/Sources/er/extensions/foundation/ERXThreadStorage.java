@@ -20,6 +20,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSSet;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.concurrency.ERXCloneableThreadLocal;
 import er.extensions.eof.ERXEOControlUtilities;
@@ -31,6 +32,10 @@ import er.extensions.eof.ERXEOControlUtilities;
  * The system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> 
  * defines if the thread storage can be either inherited by client threads (default)
  * or get used only by the current thread. 
+ * The usage of some types of objects inherited from the parent thread can cause problems.
+ * The system property <code>er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues</code>
+ * defines, if potential problems should be logged. This defaults to true when running in development mode
+ * and to false when running a deployed app.
  */
 public class ERXThreadStorage {
 	private static final Logger log = Logger.getLogger(ERXThreadStorage.class);
@@ -61,7 +66,8 @@ public class ERXThreadStorage {
     	
     	_problematicKeys = new NSSet<String>(
     			new String[] {
-    					ERXWOContext.CONTEXT_DICTIONARY_KEY
+    					// already handled by "_problematcTypes"
+    					// ERXWOContext.CONTEXT_DICTIONARY_KEY
     			}
     	);
     }
@@ -82,7 +88,8 @@ public class ERXThreadStorage {
      * @return true if set (default)
      */
 	private static boolean logUsageOfProblematicInheritedValues() {
-		return useInheritableThreadLocal() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues", true);
+		boolean devMode = ERXApplication.isDevelopmentModeSafe();
+		return useInheritableThreadLocal() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues", devMode);
 	}
     
     /** Holds the default initialization value of the hash map. */
@@ -94,7 +101,7 @@ public class ERXThreadStorage {
      * @param key key
      */
     public static void takeValueForKey(Object object, String key) {
-		// log.debug(key+" <- "+object);
+    	// log.debug(key+" <- "+object);
     	Map map = storageMap(true);
     	map.put(key, object);
     	markKeyAddedInCurrentThread(key);

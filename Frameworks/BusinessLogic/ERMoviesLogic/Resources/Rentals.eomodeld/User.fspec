@@ -1,0 +1,25 @@
+{
+    login = {
+        class = EOFetchSpecification; 
+        entityName = User; 
+        fetchLimit = 0; 
+        isDeep = YES; 
+        qualifier = {
+            class = EOAndQualifier; 
+            qualifiers = (
+                {
+                    class = EOKeyValueQualifier; 
+                    key = username; 
+                    selectorName = "isEqualTo:"; 
+                    value = {"_key" = user; class = EOQualifierVariable; }; 
+                }, 
+                {
+                    class = EOKeyValueQualifier; 
+                    key = password; 
+                    selectorName = "isEqualTo:"; 
+                    value = {"_key" = password; class = EOQualifierVariable; }; 
+                }
+            ); 
+        }; 
+    }; 
+}

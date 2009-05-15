@@ -22,6 +22,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSRange;
 
 import er.extensions.eof.qualifiers.ERXInQualifier;
+import er.extensions.foundation.ERXArrayUtilities;
 
 /**
  * The goal of the fetch specification batch iterator is to have the ability to
@@ -73,10 +74,10 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * specification with the default batch size. Note you will have to
      * set an editingContext on the iterator before calling the
      * nextBatch method.
-     * @param fetchSpecication to iterate through
+     * @param fetchSpecification to iterate through
      */
-    public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecication) {
-        this(fetchSpecication, null);
+    public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecification) {
+        this(fetchSpecification, null);
     }
 
     /**
@@ -101,7 +102,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * @param batchSize number of objects to fetch in a given batch
      */
     public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecification, EOEditingContext ec, int batchSize) {
-        this(fetchSpecification,(NSArray)null,ec,batchSize);
+        this(fetchSpecification, null, ec, batchSize);
     }    
 
     /**
@@ -109,7 +110,8 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * an optional set of pre-fetched primary keys
      * and a batch size. All objects will be
      * fetched from the given editing context. Note that you can switch
-     * out different editing contexts between calls to <b>nextBatch</b>
+     * out different editing contexts between calls to <b>nextBatch</b>.
+     * <p>Note: if no ec is supplied a new one is initialized.</p>
      * @param fetchSpecification to iterate through
      * @param pkeys primary keys to iterate through
      * @param ec editing context to fetch against
@@ -120,20 +122,25 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
 
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, fetchSpecification.entityName());
         NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
-        if ( primaryKeyAttributes.count() > 1) {
+        if (primaryKeyAttributes.count() > 1) {
             throw new RuntimeException("ERXFetchSpecificationBatchIterator: Currently only single primary key entities are supported.");
         }
 
         this.primaryKeyAttributeName = ((EOAttribute)primaryKeyAttributes.lastObject()).name();
         this.fetchSpecification = (EOFetchSpecification) fetchSpecification.clone();
         this.primaryKeys = pkeys;
-        setEditingContext(ec);
+        setEditingContext(ec != null ? ec : ERXEC.newEditingContext());
         setBatchSize(batchSize);
         setFiltersBatches(false);
         
         EOQualifier qualifier = this.fetchSpecification.qualifier();
         if (qualifier != null) {
-            this.fetchSpecification.setQualifier(entity.schemaBasedQualifier(qualifier));
+            editingContext().rootObjectStore().lock();
+            try {
+                this.fetchSpecification.setQualifier(entity.schemaBasedQualifier(qualifier));
+            } finally {
+                editingContext().rootObjectStore().unlock();
+            }
         }
     }
 
@@ -217,7 +224,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * @param newValue whether batches should be re-filtered
      */
     public void setFiltersBatches(boolean newValue) {
-        if(newValue == false && shouldFilterBatches == true && cachedBatch != null) {
+        if(!newValue && shouldFilterBatches && cachedBatch != null) {
             //NOTE: This could be made to work "as expected", if we cached un-filtered batches, and only filtered when we're about to return something; but, probably not worth it
             log.warn("Setting filtersBatches from true to false while there is a cached batch--some objects may already have been discarded!");
         }
@@ -260,7 +267,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * context that is set will be used to fetch against.
      * You can swap out a different editing context before
      * calling this method to reduce memory consumption.
-     * (However, if you are mixing calls to {@link #nextBatch()}
+     * (However, if you are mixing calls to this method 
      * with calls to {@link #next()} or {@link #nextElement()},
      * this method may return a partial batch of already-cached
      * objects, in the editing context which was in place at the
@@ -358,7 +365,13 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             batchFS.setRawRowKeyPaths(fetchSpecification.rawRowKeyPaths());
             nextBatch = ec.objectsWithFetchSpecification(batchFS);
 
-            log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + batchFS);
+            if (log.isDebugEnabled()) {
+                log.debug("Actually fetched: " + nextBatch.count() + " with fetch specification: " + batchFS);
+                if (primaryKeysToFetch.count() > nextBatch.count()) {
+                    NSArray missedKeys = ERXArrayUtilities.arrayMinusArray(primaryKeysToFetch, (NSArray)nextBatch.valueForKey(primaryKeyAttributeName));
+                    log.debug("Primary Keys that were not found for this batch: " + missedKeys);
+                }
+            }
 
             if (shouldFilterBatches) {
                 EOQualifier originalQualifier = fetchSpecification.qualifier();

@@ -3,8 +3,8 @@ package er.directtorest.security;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.rest.ERXRestContext;
-import er.rest.IERXRestSecurityDelegate;
+import er.rest.entityDelegates.ERXRestContext;
+import er.rest.entityDelegates.IERXRestSecurityDelegate;
 
 public class ERD2RestDenySecurityDelegate implements IERXRestSecurityDelegate {
 

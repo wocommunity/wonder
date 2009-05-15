@@ -100,7 +100,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
 			}
 			
 			try {
-				cachedFile.data = new NSData(ERXFileUtilities.bytesFromFile(new File(fileUrl.getPath())));
+				cachedFile.data = new NSData(ERXFileUtilities.bytesFromInputStream(fileUrl.openStream()));
 			} catch (Exception e) {
 				throw new RuntimeException("Error reading file '" + fileUrl.getPath() + "'", e);
 			}

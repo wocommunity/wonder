@@ -208,6 +208,14 @@ public class AjaxFileUpload extends WOComponent {
 		return startingText;
 	}
 
+	public String cancelText() {
+		String cancelText = (String) valueForBinding("cancelText");
+		if (cancelText == null) {
+			cancelText = "cancel";
+		}
+		return cancelText;
+	}
+
 	public String cancelingText() {
 		String cancelingText = (String) valueForBinding("cancelingText");
 		if (cancelingText == null) {

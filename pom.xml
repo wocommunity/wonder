@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder</groupId>
 	<artifactId>wonder</artifactId>
@@ -146,7 +147,10 @@
 				<artifactId>ERExtensions</artifactId>
 				<version>${pom.version}</version>
 				<classifier>${woClassifier}</classifier>
-				<!-- Using the provided scope to avoid problems with profiles and variables substitution -->
+				<!--
+					Using the provided scope to avoid problems with profiles and
+					variables substitution
+				-->
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -169,7 +173,10 @@
 				<artifactId>WOOgnl</artifactId>
 				<version>${pom.version}</version>
 				<classifier>${woClassifier}</classifier>
-				<!-- Using the provided scope to avoid problems with profiles and variables substitution -->
+				<!--
+					Using the provided scope to avoid problems with profiles and
+					variables substitution
+				-->
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -260,6 +267,11 @@
 			<dependency>
 				<groupId>wonder.misc</groupId>
 				<artifactId>JavaMonitorFramework</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.misc</groupId>
+				<artifactId>ERDirectToRest</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>
@@ -496,13 +508,23 @@
 				<version>2.2.2</version>
 				<classifier>jdk15</classifier>
 			</dependency>
+			<dependency>
+				<groupId>org.zeroturnaround</groupId>
+				<artifactId>javarebel-sdk</artifactId>
+				<version>2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.zeroturnaround</groupId>
+				<artifactId>javarebel-utils</artifactId>
+				<version>2.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<repositories>
 		<repository>
-			<id>webobjects.mdimension.com/releases</id>
-			<name>mdimension maven 2 releases repo</name>
-			<url>http://webobjects.mdimension.com/maven2/releases</url>
+			<id>wocommunity.releases</id>
+			<name>WOCommunity Maven 2 Releases Repository</name>
+			<url>http://maven.wocommunity.org/content/groups/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -511,9 +533,9 @@
 			</releases>
 		</repository>
 		<repository>
-			<id>webobjects.mdimension.com/snapshots</id>
-			<name>mdimension maven 2 snapshots repo</name>
-			<url>http://webobjects.mdimension.com/maven2/snapshots</url>
+			<id>wocommunity.snapshots</id>
+			<name>WOCommunity Maven 2 Snapshots Repository</name>
+			<url>http://maven.wocommunity.org/content/groups/public-snapshots</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -524,9 +546,9 @@
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>webobjects.mdimension.com/plugin/releases</id>
-			<name>mdimension maven 2 releases repo</name>
-			<url>http://webobjects.mdimension.com/maven2/releases</url>
+			<id>wocommunity.releases</id>
+			<name>WOCommunity Maven 2 Releases Repository</name>
+			<url>http://maven.wocommunity.org/content/groups/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -535,9 +557,9 @@
 			</releases>
 		</pluginRepository>
 		<pluginRepository>
-			<id>webobjects.mdimension.com/plugin/snapshots</id>
-			<name>mdimension maven 2 snapshot repo</name>
-			<url>http://webobjects.mdimension.com/maven2/snapshots</url>
+			<id>wocommunity.snapshots</id>
+			<name>WOCommunity Maven 2 Snapshots Repository</name>
+			<url>http://maven.wocommunity.org/content/groups/public-snapshots</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -548,14 +570,14 @@
 	</pluginRepositories>
 	<distributionManagement>
 		<repository>
-			<id>webobjects.mdimension.com/dist/releases</id>
-			<name>mdimension Maven2 Release Repository</name>
-			<url>scp://webobjects.mdimension.com/Library/WebServer/BuildServer/maven2/releases</url>
+			<id>wocommunity.deployment</id>
+			<name>WOCommunity Maven2 Releases Repository</name>
+			<url>http://maven.wocommunity.org/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>webobjects.mdimension.com/dist/snapshots</id>
-			<name>mdimension Maven2 Snapshot Repository</name>
-			<url>scp://webobjects.mdimension.com/Library/WebServer/BuildServer/maven2/snapshots</url>
+			<id>wocommunity.deployment</id>
+			<name>WOCommunity Maven2 Snapshots Repository</name>
+			<url>http://maven.wocommunity.org/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -37,6 +38,7 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.crypting.ERXCrypto;
 
 /**
@@ -969,6 +971,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
 
         /** Properties.<userName> -- per-Application-per-User properties */
+        String applicationDeveloperPropertiesPath = ERXProperties.applicationDeveloperProperties();
+        if (applicationDeveloperPropertiesPath != null) {
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-Developer Properties: " + applicationDeveloperPropertiesPath);
+           propertiesPaths.addObject(applicationDeveloperPropertiesPath);
+        }
+
+        /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
         if (applicationUserPropertiesPath != null) {
            projectsInfo.addObject("Application " + mainBundleName + "/Application-User Properties: " + applicationUserPropertiesPath);
@@ -976,19 +985,43 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
         
         /* *** Report the result *** */ 
-        if (reportLoggingEnabled  &&  projectsInfo.count() > 0) {
+        if (reportLoggingEnabled  &&  projectsInfo.count() > 0 && log.isInfoEnabled()) {
             StringBuffer message = new StringBuffer();
             message.append("\n\n")
                     .append("ERXProperties has found the following Properties files: \n");
             message.append(projectsInfo.componentsJoinedByString("\n"));
             message.append("\n");
-            message.append(NSPropertyListSerialization.stringFromPropertyList(allProperties()));
+            message.append("ERXProperties loaded the following Properties: \n");
+            Map<String, String> properties = ERXProperties.allPropertiesMap(true);
+            for (Map.Entry<String, String> entry : properties.entrySet()) {
+            	message.append("  " + entry.getKey() + "=" + entry.getValue() + "\n");
+            }
             log.info(message.toString());
         }
 
         return propertiesPaths.immutableClone();
     }
 
+    /**
+     * Returns all of the properties in the system mapped to their evaluated values, sorted by key.
+     * 
+     * @param protectValues if true, keys with the word "password" in them will have their values removed 
+     * @return all of the properties in the system mapped to their evaluated values, sorted by key
+     */
+    public static Map<String, String> allPropertiesMap(boolean protectValues) {
+    	Map<String, String> props = new TreeMap<String, String>();
+    	for (Enumeration e = ERXSystem.getProperties().keys(); e.hasMoreElements();) {
+    		String key = (String) e.nextElement();
+    		if (protectValues && key.toLowerCase().contains("password")) {
+    			props.put(key, "<deleted for log>");
+    		}
+    		else {
+    			props.put(key, String.valueOf(ERXSystem.getProperty(key)));
+    		}
+    	}
+    	return props;
+    }
+    
     public static class Property {
     	public String key, value;
     	public Property(String key, String value) {
@@ -1000,7 +1033,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	}
     }
 
-    public static NSArray allProperties() {
+    public static NSArray<Property> allProperties() {
     	NSMutableArray props = new NSMutableArray();
     	for (Enumeration e = ERXSystem.getProperties().keys(); e.hasMoreElements();) {
     		String key = (String) e.nextElement();
@@ -1036,6 +1069,23 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             }
         }
         return path;
+    }
+    
+    /**
+     * Returns the application-specific user properties.
+     */
+    public static String applicationDeveloperProperties() {
+    	String applicationDeveloperPropertiesPath = null;
+    	if (ERXApplication.isDevelopmentModeSafe()) {
+	        String devName = ERXSystem.getProperty("er.extensions.ERXProperties.devPropertiesName", "dev");
+	        if (devName != null  &&  devName.length() > 0) { 
+	        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + devName, "app", null);
+	            if (resourceApplicationUserPropertiesPath != null) {
+	            	applicationDeveloperPropertiesPath = ERXProperties.getActualPath(resourceApplicationUserPropertiesPath);
+	            }
+	        }
+    	}
+        return applicationDeveloperPropertiesPath;
     }
     
     /**

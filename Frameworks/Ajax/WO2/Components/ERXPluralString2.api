@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERXPluralString2.java" wocomponentcontent="false">
+
+        <binding name="count"/>
+        <binding name="value"/>
+    <validation message="'count' is a required binding.">
+            <unbound name="count"/>
+        </validation>
+    </wo>
+</wodefinitions>

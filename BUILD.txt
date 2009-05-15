@@ -88,8 +88,11 @@ you can experience the following problem:
    No versions are present in the repository for the artifact with a range [5.4,5.5)
      com.webobjects:JavaFoundation:jar:null
 
-That problem is usually caused by some wrong Maven metadata in your local repository.
-To avoid that problem, you can force the WebObjects version using the 'woversion' property, i.e.:
+This problem usually occurs when your ~/.m2/settings.xml is missing the repository definition
+relevant for where you've previously deployed/retrieved the webobjects jars. It can also be
+caused by some wrong Maven metadata in your local repository.
+
+To avoid this problem, you can force the WebObjects version using the 'woversion' property, i.e.:
 
   mvn clean install -P wo53 -Dwoversion=5.3.3
 
@@ -101,6 +104,21 @@ NOTE: Make sure you have your settings.xml properly configured.
 See the step 2 of Maven Quick Start Tutorial for more information:
 
 	http://wiki.objectstyle.org/confluence/display/WOL/Quick+Start
+
+Deploying Releases with Maven:
+==============================
+
+It's naturally highly beneficial to build your own products against a fixed version / release of Wonder
+rather than a snapshot. The following script can automate these steps:
+- svn revert
+- svn up
+- substituting the pom's version with the svn version (e.g., 5.0.0-SNAPSHOT becomes 5.0.0.1234),
+- mvn clean [package | install | deploy ] with relevant properties / profile
+- clean
+- svn revert
+
+  See:
+  ant -f Build/build/maven.release.xml help
 
 Building with Eclipse:
 =========================

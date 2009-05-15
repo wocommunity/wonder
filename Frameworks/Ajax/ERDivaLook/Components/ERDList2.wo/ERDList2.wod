@@ -1,0 +1,17 @@
+Content2: WOComponentContent {}
+
+List1: ERXD2WList { 	
+	pageConfiguration = ^listConfigurationName;
+	dataSource = detailDataSource;
+	entityName = ^destinationEntityName;
+	settings = settings;
+}
+
+Select: WOSubmitButton {
+	action = createObjectAction;
+	value = ^createButtonLabel;
+}
+
+ShowActions: WOConditional {
+	condition = ^showActions;
+}

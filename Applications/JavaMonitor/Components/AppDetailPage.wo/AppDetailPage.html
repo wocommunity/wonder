@@ -12,7 +12,7 @@
       <webobject name = "AppName"></webobject>
     </webobject>
   </h1>
-  <div>Bouncer: <webobject name = "Bouncer"/></div>
+  <div>Bouncer: <webobject name = "HasBouncer"><webobject name = "Bouncer"/></webobject></div>
   <font size = "-1">
 <webobject name = "IsRefreshEnabled">
     This page automatically updates every
@@ -85,16 +85,13 @@
         <webobject name = "InstStatusImage"></webobject>
       </td>
 <!--       Start/Stop Buttons       -->
-      <td>
-        <webobject name = "StartInstanceLink">
-          <webobject name = "StartImage"></webobject>
-        </webobject>
-        <webobject name = "StopInstanceLink">
-          <webobject name = "StopImage"></webobject>
-        </webobject>
+      <td align="center">
+        <webobject name = "StartInstanceLink"><webobject name = "StartImage"></webobject></webobject>
+        &nbsp;
+        <webobject name = "StopInstanceLink"><webobject name = "StopImage"></webobject></webobject>
       </td>
 <!--       Auto-Recover       -->
-      <td>
+      <td align="center">
         <webobject name = "IFSchedulingIsOn">
           <webobject name = "YellowOnImage"></webobject>
         </webobject>
@@ -105,7 +102,7 @@
         </webobject>
       </td>
 <!--       Refuse New Sessions       -->
-      <td>
+      <td align="center">
         <webobject name = "IFSchedulingIsOn">
           <webobject name = "RefuseNewSessionsImage"></webobject>
         </webobject>
@@ -121,7 +118,7 @@
         </webobject>
       </td>
 <!--       Schedule       -->
-      <td>
+      <td align="center">
         <webobject name = "ToggleSchedulingLink">
           <webobject name = "SchedulingImage"></webobject>
         </webobject>
@@ -186,53 +183,39 @@
     </webobject>
  	<webobject name = "ShowWOStats">
     <tr>
-      <td colSpan = "12" bgColor = "#ffffff">&nbsp</td>
+      <td colSpan = "13" bgColor = "#ffffff">&nbsp</td>
     </tr>
     </webobject>
     <tr bgcolor = "#D4D4D4">
 	<td><webobject name = "SelectAllForm">
-	<input type="checkbox" name="selectall" onclick="this.form.submit()" checked="checked">/
+	<input type="checkbox" name="selectall" onclick="this.form.submit()" checked="checked"> /
 	<input type="checkbox" name="deselectall" onclick="this.form.submit()" value="on" ></webobject></td>
       <td vAlign = "center" align = "middle" colSpan = "3">
-        <font size = "+1">
-          <b>ALL INSTANCES:</b><br /><webobject name = "SelectRunning">Running</webobject> <webobject name = "SelectNotRunning">Not Running</webobject>
-        </font>
+         <b>Select all instances that are:</b><br /><webobject name = "SelectRunning">Running</webobject> <webobject name = "SelectNotRunning">Not Running</webobject>
       </td>
 <!--       Start / Stop All       -->
-      <td>
-        <webobject name = "StartAllLink">
-          <webobject name = "StartImage"></webobject>
-        </webobject>
-        <webobject name = "StopAllLink">
-          <webobject name = "StopImage"></webobject>
-        </webobject>
+      <td align="center">
+        <webobject name = "StartAllLink"><webobject name = "StartImage"/></webobject>
+        &nbsp;
+        <webobject name = "StopAllLink"><webobject name = "StopImage"/></webobject>
       </td>
 <!--       AutoRecover All      -->
-      <td>
-        <webobject name = "AutoRecoverEnableAllLink">
-          <webobject name = "StartImage"></webobject>
-        </webobject>
-        <webobject name = "AutoRecoverDisableAllLink">
-          <webobject name = "StopImage"></webobject>
-        </webobject>
+      <td align="center">
+        <webobject name = "AutoRecoverEnableAllLink"><webobject name = "StartImage"/></webobject>
+        &nbsp;
+        <webobject name = "AutoRecoverDisableAllLink"><webobject name = "StopImage"/></webobject>
       </td>
 <!--       Refuse New Sessions All       -->
-      <td>
-        <webobject name = "RefuseNewSessionsAllLink">
-          <webobject name = "StartImage"></webobject>
-        </webobject>
-        <webobject name = "AcceptNewSessionsAllLink">
-          <webobject name = "StopImage"></webobject>
-        </webobject>
+      <td align="center">
+        <webobject name = "RefuseNewSessionsAllLink"><webobject name = "StartImage"/></webobject>
+        &nbsp;
+        <webobject name = "AcceptNewSessionsAllLink"><webobject name = "StopImage"/></webobject>
       </td>
 <!--       Scheduling All       -->
-      <td>
-        <webobject name = "SchedulingEnableAllLink">
-          <webobject name = "StartImage"></webobject>
-        </webobject>
-        <webobject name = "SchedulingDisableAllLink">
-          <webobject name = "StopImage"></webobject>
-        </webobject>
+      <td align="center">
+        <webobject name = "SchedulingEnableAllLink"><webobject name = "StartImage"/></webobject>
+        &nbsp;
+        <webobject name = "SchedulingDisableAllLink"><webobject name = "StopImage"/></webobject>
       </td>
 <!--       Next Scheduled Shutdown       -->
       <td><webobject name = "BounceLink">Bounce</webobject></td>

@@ -1,0 +1,9 @@
+button.ERD2WEditToOneRelationship_New {
+	border: 0;
+	background-color: transparent;
+	padding: 0;
+}
+
+button.ERD2WEditToOneRelationship_New:hover {
+	text-decoration: underline;
+}

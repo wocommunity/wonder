@@ -1,0 +1,43 @@
+button.D2WEditToManyFault2_Add {
+	text-indent: -5000px;
+	cursor: pointer;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
+	height: 13px;
+	width: 42px;
+	border:0;
+	display: block;
+}
+
+button.D2WEditToManyFault2_Delete {
+	color: transparent;
+	margin-top: -24px;
+	font-size: 10pt;
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+li.D2WEditToManyFault2:hover button.D2WEditToManyFault2_Delete {
+	color: blue;
+}
+
+li.D2WEditToManyFault2:hover button.D2WEditToManyFault2_Delete:hover {
+	color: white;
+}
+
+li.D2WEditToManyFault2 a, button.D2WEditToManyFault2_Delete {
+	padding-top: 1px;
+	padding-bottom: 2px;
+	vertical-align: 0%;
+}
+
+button.D2WEditToManyFault2_Delete:hover {
+	background-color: #336699;
+	color: white;
+}
+
+li.D2WEditToManyFault2 a {
+	margin-right: 2px;
+}
+
+	

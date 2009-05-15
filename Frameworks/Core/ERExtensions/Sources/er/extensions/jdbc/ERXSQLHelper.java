@@ -863,7 +863,8 @@ public class ERXSQLHelper {
 	 * @return a SQL expression
 	 */
 	public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
-		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating unique index expressions.");
+		NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+		return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\")";
 	}
 
 	/**
@@ -1803,7 +1804,7 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") INITIALLY IMMEDIATE NOT DEFERRABLE";
+			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") DEFERRABLE INITIALLY DEFERRED";
 		}
 
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {

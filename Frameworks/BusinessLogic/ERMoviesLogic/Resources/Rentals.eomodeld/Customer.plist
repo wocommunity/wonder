@@ -1,0 +1,156 @@
+{
+    attributes = (
+        {
+            columnName = CITY; 
+            externalType = char; 
+            name = city; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 20; 
+        }, 
+        {
+            columnName = "CUSTOMER_ID"; 
+            externalType = integer; 
+            name = customerID; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "FIRST_NAME"; 
+            externalType = char; 
+            name = firstName; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 20; 
+        }, 
+        {
+            columnName = "LAST_NAME"; 
+            externalType = char; 
+            name = lastName; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 30; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "MEMBER_SINCE"; 
+            externalType = timestamp; 
+            name = memberSince; 
+            valueClassName = NSCalendarDate; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = PHONE; 
+            externalType = char; 
+            name = phone; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 10; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = STATE; 
+            externalType = char; 
+            name = state; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 2; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "STREET_ADDRESS"; 
+            externalType = char; 
+            name = streetAddress; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 50; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ZIP; 
+            externalType = char; 
+            name = zip; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 10; 
+        }
+    ); 
+    attributesUsedForLocking = (
+        customerID, 
+        streetAddress, 
+        city, 
+        state, 
+        zip, 
+        phone, 
+        memberSince, 
+        firstName, 
+        lastName
+    ); 
+    className = "webobjectsexamples.businesslogic.rentals.common.Customer"; 
+    classProperties = (
+        city, 
+        memberSince, 
+        phone, 
+        state, 
+        streetAddress, 
+        zip, 
+        rentals, 
+        firstName, 
+        lastName, 
+        creditCard
+    ); 
+    externalName = customer; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (
+            city, 
+            memberSince, 
+            phone, 
+            state, 
+            streetAddress, 
+            zip, 
+            rentals, 
+            lastName, 
+            creditCard, 
+            firstName
+        ); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.rentals.common.Customer"; 
+        "_nameInObjectStore" = CUSTOMER; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 20; 
+    name = Customer; 
+    primaryKeyAttributes = (customerID); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = CreditCard; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = customerID; sourceAttribute = customerID; }); 
+            name = creditCard; 
+            ownsDestination = Y; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleDeny; 
+            destination = Rental; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = customerID; sourceAttribute = customerID; }); 
+            name = outRentals; 
+            numberOfToManyFaultsToBatchFetch = 5; 
+        }, 
+        {
+            deleteRule = EODeleteRuleDeny; 
+            destination = Rental; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = customerID; sourceAttribute = customerID; }); 
+            name = rentals; 
+            numberOfToManyFaultsToBatchFetch = 5; 
+            ownsDestination = Y; 
+        }, 
+        {definition = "rentals.fees"; joinSemantic = EOInnerJoin; name = unpaidFees; }
+    ); 
+}

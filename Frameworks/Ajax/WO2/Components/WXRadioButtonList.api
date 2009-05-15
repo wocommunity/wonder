@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="WXRadioButtonList.java" wocomponentcontent="false">
+
+        <binding name="list"/>
+        <validation message="'list' is a required binding.">
+            <unbound name="list"/>
+        </validation>
+        <binding name="item"/>
+        <validation message="'item' is a required binding.">
+            <unbound name="item"/>
+        </validation>
+        <binding name="displayString"/>
+        <binding name="suffix"/>
+        <binding name="index"/>
+        <binding name="selection"/>
+        <binding name="prefix"/>
+        <validation message="'selection' is a required binding.">
+            <unbound name="selection"/>
+        </validation>
+    <binding name="name"/>
+    <validation message="'displayString' is a required binding.">
+            <unbound name="displayString"/>
+        </validation>
+        <validation message="'item' must be bound to a settable value">
+            <unsettable name="item"/>
+        </validation>
+        <validation message="'selection' must be bound to a settable value">
+            <unsettable name="selection"/>
+        </validation>
+        <validation message="'index' must be bound to a settable value">
+            <unsettable name="index"/>
+        </validation>
+    </wo>
+</wodefinitions>

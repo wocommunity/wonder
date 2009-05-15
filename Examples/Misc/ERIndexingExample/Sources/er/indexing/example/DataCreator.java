@@ -139,12 +139,12 @@ public class DataCreator {
 		return new Random().nextInt(max);
 	}
 
-	private Object randomObject(NSArray array) {
+	private <T> T randomObject(NSArray<T> array) {
 		return array.objectAtIndex(randomInt(array.count()));
 	}
 
 	private String randomWord() {
-		return (String) randomObject(words);
+		return randomObject(words);
 	}
 
 	private String randomText(int max) {
@@ -161,11 +161,11 @@ public class DataCreator {
 	}
 
 	private Tag randomTag() {
-		return (Tag) randomObject(tags);
+		return randomObject(tags);
 	}
 
 	private AssetGroup randomAssetGroup() {
-		return (AssetGroup) randomObject(groups);
+		return randomObject(groups);
 	}
 
 	private BigDecimal randomPrice() {

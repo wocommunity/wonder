@@ -1,0 +1,36 @@
+HasAttachment: WOConditional {
+	condition = objectPropertyValueIsNonNull;
+}
+
+NoAttachment: WOConditional {
+	condition = objectPropertyValueIsNonNull;
+	negate = true;
+}
+
+AddAttachment: AjaxModalBoxButton {
+	action = addAttachment;
+	value = "Attach a file...";
+	class = "D2WEditAttachment";
+	title = "File Upload";
+}
+
+DisplayAttachmentDownloadLink: ERAttachmentLink {
+	attachment = attachment;
+	class = "D2WDisplayAttachment download";
+}
+
+FileName: WOString {
+	value = attachment.originalFileName;
+}
+
+Icon: ERAttachmentIcon {
+	attachment = objectPropertyValue;
+	size = d2wContext.size;
+}
+
+DeleteButton: WOSubmitButton {
+	action = removeAttachment;
+	class = "delete";
+	value = "x";
+	title = "Delete";
+}

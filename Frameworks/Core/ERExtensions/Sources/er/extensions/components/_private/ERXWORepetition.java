@@ -13,7 +13,9 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -67,6 +69,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding raiseOnUnmatchedObject if true, an exception is thrown when the repetition does not find a matching object
  * @binding debugHashCodes if true, prints out hashcodes for each entry in the repetition as it is traversed
  * @binding batchFetch a comma-separated list of keypaths on the "list" array binding to batch fetch
+ * @binding eoSupport try to use globalIDs to determine the hashCode for EOs
  * 
  * @author ak
  */
@@ -220,7 +223,18 @@ public class ERXWORepetition extends WODynamicGroup {
 		}
 		else if (eoSupport(component) && object instanceof EOEnterpriseObject) {
 			EOEnterpriseObject eo = (EOEnterpriseObject)object;
-			hashCode = eo.editingContext().globalIDForObject(eo).hashCode();
+			EOEditingContext editingContext = eo.editingContext();
+			EOGlobalID gid = null;
+			if (editingContext != null) {
+				gid = editingContext.globalIDForObject(eo);
+			}
+			// If the EO isn't in an EC, or it has a null GID, then just fall back to the hash code
+			if (gid == null) {
+				hashCode = Math.abs(System.identityHashCode(object));
+			}
+			else {
+				hashCode = gid.hashCode();
+			}
 		}
 		else {
 			hashCode = Math.abs(System.identityHashCode(object));

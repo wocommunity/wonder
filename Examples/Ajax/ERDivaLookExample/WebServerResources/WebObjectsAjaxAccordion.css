@@ -1,0 +1,7 @@
+div#a div.tab_panel .accordion-toggle {
+	background-color: #333333;
+}
+
+div#a div.accordion-toggle {
+	text-indent: 3px;
+}

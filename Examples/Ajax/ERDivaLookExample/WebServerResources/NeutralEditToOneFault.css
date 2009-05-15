@@ -1,0 +1,41 @@
+button.D2WEditToOneFault2_Add {
+	text-indent: -5000px;
+	cursor: pointer;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
+	height: 13px;
+	width: 42px;
+	border:0;
+	display: block;
+}
+
+button.D2WEditToOneFault2_Delete {
+	color: transparent;
+	margin-top: -24px;
+	font-size: 10pt;
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+button.D2WEditToOneFault2_Delete:hover {
+	background-color: #336699;
+	color: white;
+}
+
+div.D2WEditToOneFault2:hover button.D2WEditToOneFault2_Delete {
+	color: blue;
+}
+
+div.D2WEditToOneFault2:hover button.D2WEditToOneFault2_Delete:hover {
+	color: white;
+}
+
+div.D2WEditToOneFault2 a, button.D2WEditToOneFault2_Delete {
+	padding-top: 1px;
+	padding-bottom: 2px;
+	vertical-align: 0%;
+}
+
+div.D2WEditToOneFault2 a {
+	margin-right: 2px;
+}

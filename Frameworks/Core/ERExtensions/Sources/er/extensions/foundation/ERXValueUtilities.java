@@ -36,6 +36,10 @@ public class ERXValueUtilities {
 	}
 	
     /**
+     * @param binding the binding to parse
+     * @param component the component to evaluate the binding on
+     * @param def the default value if the binding value is null
+     * @return the boolean value of the binding
      * @deprecated use ERXComponentUtilities.booleanValueForBinding(component, binding, def)
      */
     public static boolean booleanValueForBindingOnComponentWithDefault(String binding, WOComponent component, boolean def) {
@@ -679,5 +683,67 @@ public class ERXValueUtilities {
 	 */
 	public static int compare(final int int1, final int int2) {
 		return int1 > int2 ? 1 : (int1 < int2 ? -1 : 0);
+	}
+
+	/**
+	 * Basic utility method for reading Enum values.
+	 * 
+	 * @param <T>
+	 * 		Enum type evaluated
+	 * @param obj
+	 * 		object to evaluate
+	 * @param enumType
+	 * 		The desired enum class
+	 * @return
+	 * 		Enum evaluation of the given object or the default
+	 */
+	public static <T extends Enum<T>> T enumValue(Object obj, Class<T> enumType) {
+		return ERXValueUtilities.enumValueWithDefault(obj, enumType, null);
+	}
+	
+	/**
+	 * Basic utility method for reading Enum values.
+	 * 
+	 * @param obj 
+	 * 				object to be evaluated
+	 * @param def 
+	 * 				default value returned if object is null. If this value is null,
+	 * 				the method throws a NullPointerException
+	 * @param <T> 
+	 * 				enum type evaluated
+	 * @return Enum evaluation of the given object
+	 */
+	public static <T extends Enum<T>> T enumValueWithRequiredDefault(Object obj, T def) {
+		return ERXValueUtilities.enumValueWithDefault(obj, (Class<T>)def.getClass(), def);
+	}
+	
+	/**
+	 * Basic utility method for reading Enum values.
+	 * 
+	 * @param <T>
+	 * 		Enum type evaluated
+	 * @param obj
+	 * 		object to evaluate
+	 * @param enumType
+	 * 		The desired enum class
+	 * @param def
+	 * 		default value returned if obj is null.
+	 * @return
+	 * 		Enum evaluation of the given object or the default
+	 */
+	public static <T extends Enum<T>> T enumValueWithDefault(Object obj, Class<T> enumType, T def) {
+		T result = def;
+		if(!ERXValueUtilities.isNull(obj)) {
+			if(obj instanceof Enum) {
+				result = (T)obj;
+			}
+			else if (obj instanceof String) {
+				result = Enum.valueOf(enumType, (String)obj);
+			}
+			else {
+				throw new IllegalArgumentException("Failed to parse an enum from the value '" + obj + "'.");
+			}
+		}
+		return result;
 	}
 }

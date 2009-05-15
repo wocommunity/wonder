@@ -1,0 +1,4 @@
+er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
+er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag=true
+er.extensions.ERXResponseRewriter.javascriptTypeAttribute=true
+er.extensions.ERXWOForm.useIdInsteadOfNameTag=true

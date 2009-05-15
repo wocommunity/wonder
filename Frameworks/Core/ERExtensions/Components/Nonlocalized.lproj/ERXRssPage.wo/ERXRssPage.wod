@@ -12,6 +12,14 @@ itemTitle: WOString {
 	value = ^itemTitle;
 }
 
+hasAuthor : WOConditional {
+	condition = ^itemAuthor;
+}
+
+itemAuthor: WOString {
+	value = ^itemAuthor;
+}
+
 feedTitle: WOString {
 	value = ^feedTitle;
 }
@@ -36,11 +44,11 @@ itemGuid : WOString {
 	value = itemGuid;
 }
 
-HasGuid : WOConditional {
+hasGuid : WOConditional {
 	condition = itemGuid;
 }
 
-HasNoGuid : WOConditional {
+hasNoGuid : WOConditional {
 	condition = itemGuid;
 	negate = true;
 }

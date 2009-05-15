@@ -46,7 +46,7 @@
         }, 
         {
             columnName = ""; 
-            externalType = decimal; 
+            externalType = money; 
             name = currencyAmount; 
             precision = 38; 
             scale = 4; 
@@ -87,9 +87,8 @@
             externalType = varchar; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = globalID; 
-            valueClassName = ERXKeyGlobalID; 
+            valueClassName = "er.extensions.eof.ERXKeyGlobalID"; 
             valueFactoryMethodName = fromString; 
-            valueType = c; 
             width = 255; 
         }, 
         {
@@ -101,13 +100,11 @@
             valueType = i; 
         }, 
         {
-            adaptorValueConversionMethodName = toString; 
             columnName = ""; 
-            externalType = bool; 
+            externalType = int; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = intBoolean; 
             valueClassName = NSNumber; 
-            valueFactoryMethodName = valueOf; 
             valueType = c; 
         }, 
         {
@@ -154,7 +151,7 @@
             columnName = ""; 
             externalType = object; 
             name = mutableArray; 
-            valueClassName = ERXMutableArray; 
+            valueClassName = "er.extensions.foundation.ERXMutableArray"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
@@ -162,7 +159,7 @@
             columnName = ""; 
             externalType = object; 
             name = mutableDictionary; 
-            valueClassName = ERXMutableDictionary; 
+            valueClassName = "er.extensions.foundation.ERXMutableDictionary"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {

@@ -1,6 +1,6 @@
 ERAttachment.MigrationClassPrefix=er.attachment.migrations.ERAttachment
 
-er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,image/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/css,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime
+er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,application/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/css,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime
 
 er.attachment.mimeType.video/quicktime.viewer=er.attachment.components.viewers.ERAttachmentQuickTimeViewer
 er.attachment.mimeType.image/*.viewer=er.attachment.components.viewers.ERAttachmentImageViewer
@@ -27,10 +27,10 @@ er.attachment.mimeType.image/jpeg.name=JPEG
 er.attachment.mimeType.image/jpeg.uti=public.jpeg
 er.attachment.mimeType.image/jpeg.extensions=jpg,jpeg
 
-er.attachment.mimeType.image/pdf.name=PDF
-er.attachment.mimeType.image/pdf.uti=public.pdf
-er.attachment.mimeType.image/pdf.extensions=pdf
-er.attachment.mimeType.image/pdf.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
+er.attachment.mimeType.application/pdf.name=PDF
+er.attachment.mimeType.application/pdf.uti=public.pdf
+er.attachment.mimeType.application/pdf.extensions=pdf
+er.attachment.mimeType.application/pdf.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
 
 er.attachment.mimeType.image/pict.name=PICT
 er.attachment.mimeType.image/pict.uti=com.apple.pict

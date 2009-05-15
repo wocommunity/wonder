@@ -1,0 +1,14 @@
+span.true, span.false {
+	text-indent: -5000px;
+	display: block;
+	width: 16px;
+	height: 16px;
+}
+
+span.true {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/CheckboxOn.gif);
+}
+
+span.false {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/CheckboxOff.gif);
+}

@@ -13,6 +13,7 @@ import er.extensions.eof.qualifiers.ERXInQualifier;
 import er.extensions.eof.qualifiers.ERXRegExQualifier;
 import er.extensions.eof.qualifiers.ERXToManyQualifier;
 import er.extensions.qualifiers.ERXAndQualifier;
+import er.extensions.qualifiers.ERXFalseQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.qualifiers.ERXNotQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
@@ -530,6 +531,9 @@ public class ERXQ {
 	 * @return an EOQualifier
 	 */
 	public static ERXOrQualifier in(String key, NSArray<?> values) {
+		if(values.count() == 0) {
+			return new ERXOrQualifier(new NSArray<EOQualifier>(new ERXFalseQualifier())); 
+		}
 		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {

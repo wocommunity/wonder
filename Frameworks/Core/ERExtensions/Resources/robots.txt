@@ -46,6 +46,7 @@ boitho\-dc
 bordermanager
 borg\-bot
 boris
+botonparade
 brightnet
 bruinbot
 bspider
@@ -193,12 +194,14 @@ joebot
 jubii
 jumpstation
 justview
+jyxobot
 kapsi
 katipo
 kilroy
 knowledge
 ko_yappo_robot
 krugle
+kybluptimemonitor
 labelgrabber\.txt
 larbin
 leechget
@@ -340,6 +343,7 @@ shopwiki
 shoutcast
 sift
 simbot
+similarpages
 sitecheck
 site\-valet
 sitetech
@@ -353,6 +357,7 @@ snooper
 sohu\-search
 solbot
 speedy
+spider\/
 spider_monkey
 spiderbot
 spiderline
@@ -449,6 +454,7 @@ yacybot
 yahoo\-verticalcrawler
 yahooseeker
 yandex
+yanga
 yeti
 yottacars
 zealbot

@@ -78,6 +78,8 @@ import er.extensions.jdbc.ERXJDBCAdaptor;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.logging.ERXLogger;
 import er.extensions.partials.ERXPartialInitializer;
+import er.extensions.qualifiers.ERXFalseQualifier;
+import er.extensions.qualifiers.ERXFalseQualifierSupport;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 import er.extensions.validation.ERXValidationFactory;
 
@@ -249,6 +251,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
                 EOQualifierSQLGeneration.Support.supportForClass(ERXFullTextQualifier.class));
 
 		EOQualifierSQLGeneration.Support.setSupportForClass(new ERXFullTextQualifierSupport(), ERXFullTextQualifier.class);
+		EOQualifierSQLGeneration.Support.setSupportForClass(new ERXFalseQualifierSupport(), ERXFalseQualifier.class);
 
 		// ERXObjectStoreCoordinatorPool has a static initializer, so just load the class if
 		// the configuration setting exists
@@ -425,13 +428,15 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public static void configureAdaptorContext() {
         Boolean targetState = null;
-        if (adaptorLogger.isDebugEnabled() && !adaptorEnabled.booleanValue()) {
-            targetState = Boolean.TRUE;
-        } else if (!adaptorLogger.isDebugEnabled() && adaptorEnabled.booleanValue()) {
-            targetState = Boolean.FALSE;
-        }
-        if (targetState != null) {
-        	setAdaptorLogging(targetState.booleanValue());
+        if (adaptorLogger != null) {
+	        if (adaptorLogger.isDebugEnabled() && !adaptorEnabled.booleanValue()) {
+	            targetState = Boolean.TRUE;
+	        } else if (!adaptorLogger.isDebugEnabled() && adaptorEnabled.booleanValue()) {
+	            targetState = Boolean.FALSE;
+	        }
+	        if (targetState != null) {
+	        	setAdaptorLogging(targetState.booleanValue());
+	        }
         }
     }
 
@@ -455,11 +460,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     			NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
     		}
     	}
-    	if (targetState.booleanValue()) {
-    		adaptorLogger.info("Adaptor debug on");
-    	} else {
-    		adaptorLogger.info("Adaptor debug off");
-    	}
+    	if (adaptorLogger != null) {
+	    	if (targetState.booleanValue()) {
+	    		adaptorLogger.info("Adaptor debug on");
+	    	} else {
+	    		adaptorLogger.info("Adaptor debug off");
+	    	}
+    	}	
     	adaptorEnabled = targetState;
    }
 

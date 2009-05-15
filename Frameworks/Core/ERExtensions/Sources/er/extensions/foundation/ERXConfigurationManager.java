@@ -271,6 +271,11 @@ public class ERXConfigurationManager {
     		additionalConfigurationFiles.addObject(applicationMachinePropertiesPath);
     	}
 
+    	String applicationDeveloperPropertiesPath = ERXProperties.applicationDeveloperProperties();
+    	if (applicationDeveloperPropertiesPath != null) {
+    		additionalConfigurationFiles.addObject(applicationDeveloperPropertiesPath);
+    	}
+
     	String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
     	if (applicationUserPropertiesPath != null) {
     		additionalConfigurationFiles.addObject(applicationUserPropertiesPath);

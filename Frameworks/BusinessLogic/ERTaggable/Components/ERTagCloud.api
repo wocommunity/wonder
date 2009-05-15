@@ -18,5 +18,6 @@
         <validation message="'shouldResetTagCloud' must be bound to a settable value">
             <unsettable name="shouldResetTagCloud"/>
         </validation>
+    <binding defaults="Boolean" name="cache"/>
     </wo>
 </wodefinitions>

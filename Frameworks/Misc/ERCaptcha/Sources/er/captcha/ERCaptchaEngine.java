@@ -16,8 +16,7 @@ import com.octo.captcha.component.image.textpaster.textdecorator.BaffleTextDecor
 import com.octo.captcha.component.image.textpaster.textdecorator.TextDecorator;
 import com.octo.captcha.component.image.wordtoimage.DeformedComposedWordToImage;
 import com.octo.captcha.component.image.wordtoimage.WordToImage;
-import com.octo.captcha.component.word.FileDictionary;
-import com.octo.captcha.component.word.wordgenerator.ComposeDictionaryWordGenerator;
+import com.octo.captcha.component.word.wordgenerator.RandomWordGenerator;
 import com.octo.captcha.component.word.wordgenerator.WordGenerator;
 import com.octo.captcha.engine.image.ListImageCaptchaEngine;
 import com.octo.captcha.image.gimpy.GimpyFactory;
@@ -49,7 +48,7 @@ public class ERCaptchaEngine extends ListImageCaptchaEngine {
 		ImageDeformation postDef = new ImageDeformationByFilters(new ImageFilter[] { water });
 		WordToImage word2image = new DeformedComposedWordToImage(shearedFont, back, randomPaster, backDef, textDef, postDef);
 
-		WordGenerator dictionaryWords = new ComposeDictionaryWordGenerator(new FileDictionary("toddlist"));
+		WordGenerator dictionaryWords = new RandomWordGenerator("BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz2346789");
 		addFactory(new GimpyFactory(dictionaryWords, word2image));
 	}
 }

@@ -35,6 +35,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSValidation;
 
+import er.extensions.ERXExtensions;
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
@@ -87,6 +88,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	public static boolean localizationShouldFallbackToDefaultLanguage() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.localizationShouldFallbackToDefaultLanguage", false);
+	}
+	
+	public ERXGenericRecord(EOClassDescription classDescription) {
+		super(classDescription);
+	}
+	
+	public ERXGenericRecord() {
+		super();
 	}
 
 	/**
@@ -878,6 +887,57 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	public NSDictionary changesFromCommittedSnapshot() {
 		return changesFromSnapshot(committedSnapshot());
 	}
+	
+	/**
+	 * Returns whether or not the given key has changed when compared to the committed snapshot.
+	 * 
+	 * @param key The key that you wish to check has changed from the committed snapshot
+	 * @return true if it has changed
+	 */
+	public boolean hasKeyChangedFromCommittedSnapshot(String key) {
+		NSDictionary d = changesFromCommittedSnapshot();
+		return d.containsKey(key);
+	}
+
+	/**
+	 * Returns whether or not the given key has changed from the given committed value.
+
+	 * @param key The key that you wish to check has changed from the committed snapshot
+	 * @param oldValue The value you wish to see if the key has changed from EG. Has 'status' changed from
+	 *            STATUS.PENDING_STATUS
+	 * @return true if the specified key value has changed from the specified value
+	 */
+	public boolean hasKeyChangedFromCommittedSnapshotFromValue(String key, Object oldValue) {
+		NSDictionary d = changesFromCommittedSnapshot();
+		return d.containsKey(key) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
+	}
+
+	/**
+	 * Returns whether or not the given key has changed from the given previous value to the new value since the committed value.
+	 * 
+	 * @param key The key that you wish to check has changed from the committed snapshot
+	 * @param oldValue The value you wish to see if the key has changed from
+	 * @param newValue The value you wish to see if the key has changed to EG. Has 'status' changed from
+	 *            STATUS.PENDING_STATUS to STATUS.CONFIRMED_STATUS
+	 * @return true if the specified key value has changed from the specified value
+	 */
+	public boolean hasKeyChangedFromCommittedSnapshotFromValueToNewValue(String key, Object oldValue, Object newValue) {
+		NSDictionary d = changesFromCommittedSnapshot();
+		return d.containsKey(key) && ERXExtensions.safeEquals(newValue, d.objectForKey(key)) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
+	}
+
+	/**
+	 * Returns whether or not the given key has changed to the new value since the committed value.
+	 * 
+	 * @param key The key that you wish to check has changed from the committed snapshot
+	 * @param newValue The value you wish to see if the key has changed to EG. Has 'status' changed to
+	 *            STATUS.CANCELLED_STATUS
+	 * @return true if the specified key value has changed to the specified value
+	 */
+	public boolean hasKeyChangedFromCommittedSnapshotToValue(String key, Object newValue) {
+		NSDictionary d = changesFromCommittedSnapshot();
+		return d.containsKey(key) && ERXExtensions.safeEquals(newValue, d.objectForKey(key));
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -886,6 +946,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean parentObjectStoreIsObjectStoreCoordinator() {
 		return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator;
+	}
+
+	/**
+	 * Calls the method
+	 * <code>refetchObjectFromDBinEditingContext(EOEditingContext ec)</code> and
+	 * passes the object's Editing Context as Editing Context parameter.
+	 * 
+	 * @return the newly fetched object from the DB.
+	 */
+	public ERXEnterpriseObject refetchObjectFromDB() {
+		return refetchObjectFromDBinEditingContext(editingContext());
 	}
 
 	/*
@@ -905,7 +976,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		}
 		return freshObject;
 	}
-
+	
 	private EOKeyGlobalID _permanentGlobalID;
 
 	/**

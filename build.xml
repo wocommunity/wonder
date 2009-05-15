@@ -37,6 +37,18 @@
         </ant>
     </target>
     
+    <!-- Build just the JavaMonitor.woa and wotaskd.woa applications  -->
+    <target name="deployment.tools">
+        <ant antFile="Build/build/build.xml" target="wotaskd.all">
+            <property name="build.action" value="build" />
+            <property name="wonder.development" value="false" />
+        </ant>
+        <ant antFile="Build/build/build.xml" target="JavaMonitor.all">
+            <property name="build.action" value="build" />
+            <property name="wonder.development" value="false" />
+        </ant>
+    </target>
+    
     <target name="examples">
         <ant antFile="Build/build/build.xml" target="examples.all">
             <property name="build.action" value="build" />

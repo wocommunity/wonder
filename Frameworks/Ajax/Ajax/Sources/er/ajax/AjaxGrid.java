@@ -55,6 +55,7 @@ import er.extensions.foundation.ERXValueUtilities;
  *        oddRowCSSClass = &quot;greyBackground&quot;;          // CSS class attribute on odd rows, optional
  *        evenRowCSSStyle = &quot;background:lightyellow;&quot; // CSS style attribute on even rows, optional
  *        oddRowCSSStyle = &quot;background:lightgrey;&quot;;   // CSS style attribute on odd rows, optional
+ *        showRowSelector = true;                               // Optional, defaults to true, if false no UI is shown to select a row - the cell has only &amp;nbsp;
  *        selectedRowCSSClass = &quot;yellowBackground&quot;;   // Secondary CSS class attribute on selected rows, optional
  *        unselectedRowCSSClass = &quot;greyBackground&quot;;   // Secondary CSS class attribute on unselected rows, optional
  *        selectedRowCSSStyle = &quot;background:lightyellow;&quot;; // Secondary CSS style attribute on selected rows, optional
@@ -277,7 +278,8 @@ public class AjaxGrid extends WOComponent {
 	private NSMutableDictionary columnsByKeypath; // optimization
 	private NSMutableDictionary sortOrdersByKeypath; // optimization
 	private NSMutableDictionary formattersByKeypath; // optimization
-
+	private Boolean showRowSelector; // optimization
+	
 	private NSKeyValueCodingAdditions row; // local binding
 	private NSDictionary currentColumn; // local binding
 	private int rowIndex; // local binding
@@ -304,6 +306,7 @@ public class AjaxGrid extends WOComponent {
 	public static final String ODD_ROW_CSS_CLASS = "oddRowCSSClass";
 	public static final String EVEN_ROW_CSS_STYLE = "evenRowCSSStyle";
 	public static final String ODD_ROW_CSS_STYLE = "oddRowCSSStyle";
+	public static final String SHOW_ROW_SELECTOR = "showRowSelector";
 	public static final String SELECTED_ROW_CSS_CLASS = "selectedRowCSSClass";
 	public static final String UNSELECTED_ROW_CSS_CLASS = "unselectedRowCSSClass";
 	public static final String SELECTED_ROW_CSS_STYLE = "selectedRowCSSStyle";
@@ -477,6 +480,7 @@ public class AjaxGrid extends WOComponent {
 		columnsByKeypath = null;
 		sortOrdersByKeypath = null;
 		formattersByKeypath = null;
+		showRowSelector = null;
 	}
 
 	/**
@@ -805,6 +809,19 @@ public class AjaxGrid extends WOComponent {
 		return componentName != null ? componentName : "WOString";
 	}
 
+	/**
+	 * @return value of SHOW_ROW_SELECTOR from the configuration data, or <code>true</code> if unset
+	 */
+	public boolean showRowSelector() {
+		if (showRowSelector == null) {
+			showRowSelector = Boolean.TRUE;
+			if (configurationData().valueForKey(SHOW_ROW_SELECTOR) != null) {
+				showRowSelector = Boolean.valueOf((String) configurationData().valueForKey(SHOW_ROW_SELECTOR));
+			}
+		}
+		return showRowSelector.booleanValue();
+	}
+	
 	/**
 	 * This list is implemented by AjaxGrid and is not based on the display
 	 * group's selected objects. The list of selected objects is maintained

@@ -1,0 +1,22 @@
+
+Conditional2: ERXNonNullConditional {
+	condition = message;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+Message: ERXLocalizedString {
+    escapeHTML = false;
+	templateString = message;
+	object = d2wContext;
+}
+
+SwitchComponent3: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+Title: ERXLocalizedString {
+	value = title;
+}

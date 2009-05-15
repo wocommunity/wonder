@@ -93,7 +93,19 @@ public class AjaxObserveField extends AjaxDynamicElement {
 			if (elementName == null) {
 				elementName = "div";
 			}
-			response.appendContentString("<" + elementName + " id = \"" + observeFieldID + "\">");
+			response.appendContentString("<" + elementName + " id = \"" + observeFieldID + "\"");
+
+			String className = stringValueForBinding("class", component);
+			if (className != null && className.length() > 0) {
+				response.appendContentString(" class=\"" + className + "\"");
+			}
+
+			String style = stringValueForBinding("style", component);
+			if (style != null && style.length() > 0) {
+				response.appendContentString(" style=\"" + style + "\"");
+			}
+			
+			response.appendContentString(">");
 			if (hasChildrenElements()) {
 				appendChildrenToResponse(response, context);
 			}
@@ -113,7 +125,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		}
 		AjaxSubmitButton.fillInAjaxOptions(element, component, submitButtonName, observerOptions);
 
-		Object observeFieldFrequency = options.removeObjectForKey("observeFieldFrequency");
+		Object observeFieldFrequency = observerOptions.removeObjectForKey("observeFieldFrequency");
 		if (observeDescendentFields) {
 			response.appendContentString("ASB.observeDescendentFields");
 		}
@@ -121,7 +133,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 			response.appendContentString("ASB.observeField");
 		}
 
-		Object observeDelay = options.removeObjectForKey("observeDelay");		
+		Object observeDelay = observerOptions.removeObjectForKey("observeDelay");		
 		response.appendContentString("(" + AjaxUtils.quote(updateContainerID) + ", " + AjaxUtils.quote(observeFieldID) + ", " + observeFieldFrequency + ", " + (!fullSubmit) + ", " + observeDelay + ", ");
 		AjaxOptions.appendToResponse(observerOptions, response, context);
 		response.appendContentString(");");

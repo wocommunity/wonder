@@ -1,0 +1,17 @@
+LoginButton: WOSubmitButton {
+	action = defaultPage;
+	value = "Login";
+	id = "username";
+}
+
+LoginForm: WOForm {
+}
+
+PasswordField: WOPasswordField {
+	value = password;
+	id = "password";
+}
+
+UsernameField: WOTextField {
+	value = username;
+}

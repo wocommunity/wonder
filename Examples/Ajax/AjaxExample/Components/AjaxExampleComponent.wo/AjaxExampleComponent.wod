@@ -141,6 +141,10 @@ Browser : WOHyperlink {
 	pageName = "AjaxBrowserExample";
 }
 
+AjaxDatePicker: WOHyperlink {
+	pageName = "AjaxDatePickerExample";
+}
+
 JSONExample : WOHyperlink {
 	pageName = "JSONExample";
 }

@@ -1,0 +1,78 @@
+@import url("Neutral.css");
+@import url("ERDIVQueryPage.css");
+@import url("ERD2WQueryDateRange2.css");
+@import url("NeutralCalendarDateSelect.css");
+
+/* The following are styles for the search page */
+
+div#a h1.query {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/SearchMetalBan.gif) no-repeat;
+	text-indent: -5000px;
+}
+
+div#a h2.entity, div#a form fieldset.button {
+	background-color: #eeeeee;
+	height: 31px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+div#a h2.entity {
+	-moz-border-radius-topright: 3px;
+	-moz-border-radius-topleft: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-webkit-border-top-left-radius: 3px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	min-width: expression(document.getElementById('QueryList').offsetWidth + "px");
+}
+
+div#a form fieldset.button {
+	-moz-border-radius-bottomright: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+div#a form fieldset.button ul {
+	min-width: expression(document.getElementById('QueryList').offsetWidth + "px");
+}
+
+div#a form fieldset.button ul li button.search {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/SearchDBMetalBtn.gif);
+	width: 88px;
+}
+
+div#a form fieldset.button ul li button {
+	text-indent: -5000px;
+	display: block;
+	height:31px;
+	border: 0px;
+	cursor: pointer;
+}
+
+div#a form fieldset.button {
+	padding: 1px;
+}
+
+div#a form fieldset.attribute ul li.attribute {
+	background-color: #eeeeee;
+	line-height: 1.5em;
+	border-top: solid white 2px;
+}
+
+div#a form fieldset.attribute ul li.attribute div.content {
+	border-left: solid white 2px;
+	padding-left: 2px;
+	height: 100%;
+}
+
+div#a form fieldset.attribute ul li.attribute div.content *, div#a form fieldset.attribute ul li.attribute legend * {
+	padding: 2px;
+}
+
+div#a form fieldset.attribute ul li.attribute div.content select, div#a form fieldset.attribute ul li.attribute div.content option {
+	padding: 1px;
+}

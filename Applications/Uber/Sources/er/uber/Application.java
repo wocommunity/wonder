@@ -3,8 +3,8 @@ package er.uber;
 import ognl.webobjects.WOOgnl;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.localization.ERXLocalizerAssociation;
-import er.rest.ERXRestRequestHandler;
-import er.rest.ERXUnsafeRestAuthenticationDelegate;
+import er.rest.entityDelegates.ERXRestRequestHandler;
+import er.rest.entityDelegates.ERXUnsafeRestAuthenticationDelegate;
 import er.taggable.ERTaggableEntity;
 import er.uber.model.Employee;
 

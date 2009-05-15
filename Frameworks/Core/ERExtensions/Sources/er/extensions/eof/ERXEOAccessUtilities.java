@@ -147,11 +147,11 @@ public class ERXEOAccessUtilities {
                 	{
                     	// Prefer the parent entity as long as it is using the same table
                         EOEntity root = entity;
-                        while (root != null && root.parentEntity() != null && 
+                        while (root.parentEntity() != null && 
                         	   lowercaseTableName.equals(root.parentEntity().externalName().toLowerCase()))
                             root = root.parentEntity();
-                        if ( ! possibleEntities.containsObject(entity))
-                        	possibleEntities.addObject(entity);
+                        if (! possibleEntities.containsObject(root))
+                        	possibleEntities.addObject(root);
                 	}
             	}
             }
@@ -383,7 +383,6 @@ public class ERXEOAccessUtilities {
      *            start of rows to fetch
      * @param end
      *            end of rows to fetch (-1 if not used)
-     * @deprecated
      * 
      * @return the EOSQLExpression which the EOFetchSpecification would use
      */
@@ -416,7 +415,6 @@ public class ERXEOAccessUtilities {
      * @param spec
      *            the EOFetchSpecification in question
      * @return the number of rows
-     * @deprecated
      */
     public static int rowCountForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
     	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());

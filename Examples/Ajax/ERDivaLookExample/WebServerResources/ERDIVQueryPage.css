@@ -1,0 +1,16 @@
+@import url("ERDIVDebug.css");
+@import url("WXRadioButtonList.css");
+@import url("WXCheckboxList.css");
+
+div#a form fieldset.attribute ul li fieldset legend {
+	margin-left: -10em; /*width of left column*/
+	display: inline-block;
+}
+
+div#a form fieldset.attribute ul li fieldset {
+	padding-left: 10em; /*width of left column*/
+}
+
+div#a form fieldset.attribute ul li fieldset div.content {
+	margin-top: -1.5em;
+}

@@ -13,27 +13,29 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Forum extends  ERXGenericRecord {
-	public static final String ENTITY_NAME = "Forum";
+  public static final String ENTITY_NAME = "Forum";
 
-	// Attributes
-	public static final String DESCRIPTION_KEY = "description";
-	public static final ERXKey<String> DESCRIPTION = new ERXKey<String>(DESCRIPTION_KEY);
-	public static final String DESCRIPTION_HTML_KEY = "descriptionHtml";
-	public static final ERXKey<String> DESCRIPTION_HTML = new ERXKey<String>(DESCRIPTION_HTML_KEY);
-	public static final String NAME_KEY = "name";
-	public static final ERXKey<String> NAME = new ERXKey<String>(NAME_KEY);
-	public static final String POSITION_KEY = "position";
-	public static final ERXKey<Integer> POSITION = new ERXKey<Integer>(POSITION_KEY);
-	public static final String POSTS_COUNT_KEY = "postsCount";
-	public static final ERXKey<Integer> POSTS_COUNT = new ERXKey<Integer>(POSTS_COUNT_KEY);
-	public static final String TOPICS_COUNT_KEY = "topicsCount";
-	public static final ERXKey<Integer> TOPICS_COUNT = new ERXKey<Integer>(TOPICS_COUNT_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> DESCRIPTION = new ERXKey<String>("description");
+  public static final ERXKey<String> DESCRIPTION_HTML = new ERXKey<String>("descriptionHtml");
+  public static final ERXKey<String> NAME = new ERXKey<String>("name");
+  public static final ERXKey<Integer> POSITION = new ERXKey<Integer>("position");
+  public static final ERXKey<Integer> POSTS_COUNT = new ERXKey<Integer>("postsCount");
+  public static final ERXKey<Integer> TOPICS_COUNT = new ERXKey<Integer>("topicsCount");
+  // Relationship Keys
+  public static final ERXKey<se.caboo.beast.model.Post> POSTS = new ERXKey<se.caboo.beast.model.Post>("posts");
+  public static final ERXKey<se.caboo.beast.model.Topic> TOPICS = new ERXKey<se.caboo.beast.model.Topic>("topics");
 
-	// Relationships
-	public static final String POSTS_KEY = "posts";
-	public static final ERXKey<se.caboo.beast.model.Post> POSTS = new ERXKey<se.caboo.beast.model.Post>(POSTS_KEY);
-	public static final String TOPICS_KEY = "topics";
-	public static final ERXKey<se.caboo.beast.model.Topic> TOPICS = new ERXKey<se.caboo.beast.model.Topic>(TOPICS_KEY);
+  // Attributes
+  public static final String DESCRIPTION_KEY = DESCRIPTION.key();
+  public static final String DESCRIPTION_HTML_KEY = DESCRIPTION_HTML.key();
+  public static final String NAME_KEY = NAME.key();
+  public static final String POSITION_KEY = POSITION.key();
+  public static final String POSTS_COUNT_KEY = POSTS_COUNT.key();
+  public static final String TOPICS_COUNT_KEY = TOPICS_COUNT.key();
+  // Relationships
+  public static final String POSTS_KEY = POSTS.key();
+  public static final String TOPICS_KEY = TOPICS.key();
 
   private static Logger LOG = Logger.getLogger(_Forum.class);
 

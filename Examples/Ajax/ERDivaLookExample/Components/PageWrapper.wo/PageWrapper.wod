@@ -1,0 +1,30 @@
+Content: WOComponentContent {
+	_unroll = YES;
+}
+
+Head: D2WHead {
+}
+
+Header: MenuHeader {
+}
+
+ERD2WDebugFlags : ERD2WDebugFlags {
+	context = d2wContext;
+}
+
+IsDebug :WOConditional {
+	condition = application.isDevelopmentMode;
+}
+
+Divider: AjaxHyperlink {
+	elementName = "div";
+	id = "vertical_divider";
+	onComplete = "function() { Effect.toggle('b', 'slide', { scaleX: true, scaleY: false}); return false; }";
+	action = session.toggleMenubar;
+}
+
+B: WOGenericContainer {
+	elementName = "div";
+	id = "b";
+	style = style;
+}

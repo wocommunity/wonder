@@ -1,0 +1,12 @@
+div#a div.accordion-content ul li.attribute h4.propertyKey {
+	font-size: 10pt;
+}
+
+div#a li.attribute {
+	line-height: 1.5em;
+}
+
+div#a div.accordion-content ul li.attribute div.content {
+	margin-top: -1.5em;
+	padding-left: 2px;
+}

@@ -1,0 +1,48 @@
+{
+    attributes = (
+        {
+            columnName = BUDGET; 
+            externalType = decimal; 
+            name = budget; 
+            precision = 15; 
+            scale = 2; 
+            valueClassName = NSDecimalNumber; 
+            valueType = B; 
+        }, 
+        {
+            columnName = NAME; 
+            externalType = char; 
+            name = name; 
+            valueClassName = NSString;
+            valueType = c; 
+            width = 40; 
+        }, 
+        {
+            columnName = "STUDIO_ID"; 
+            externalType = integer; 
+            name = studioID;  
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (budget, name, studioID); 
+    className = "webobjectsexamples.businesslogic.movies.server.Studio"; 
+    classProperties = (budget, name, movies); 
+    externalName = studio; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (budget, name, movies); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.movies.client.Studio"; 
+        "_nameInObjectStore" = STUDIO; 
+    }; 
+    name = Studio; 
+    primaryKeyAttributes = (studioID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = studioID; sourceAttribute = studioID; }); 
+            name = movies; 
+        }
+    ); 
+}

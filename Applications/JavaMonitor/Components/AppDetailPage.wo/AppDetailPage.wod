@@ -421,8 +421,11 @@ ShowDetailStatistics : WOHyperlink {
 BounceLink : WOHyperlink {
 	action = bounceClicked;
 }
+HasBouncer: WOConditional {
+	condition = currentBouncer;
+}
 Bouncer : WOString {
-  value = currentBouncer;
+  value = currentBouncer.status;
 }
 
 Observer : AjaxObserveField {

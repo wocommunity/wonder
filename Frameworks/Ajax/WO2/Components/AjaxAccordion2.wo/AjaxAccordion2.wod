@@ -1,0 +1,8 @@
+Contents: WOComponentContent {
+}
+
+Accordion: WOGenericContainer {
+	elementName = elementName;
+	id = accordionID;
+	class = "accordion";
+}
