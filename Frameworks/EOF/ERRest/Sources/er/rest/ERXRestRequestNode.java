@@ -750,6 +750,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 			String keyName = key.key();
 			if (keyFilter.matches(key, ERXKey.Type.Attribute) && isClassProperty(classDescription, keyName)) {
 				Object value = ERXRestUtils.coerceValueToAttributeType(attribute.getValue(), null, obj, keyName);
+				if (value instanceof NSKeyValueCoding.Null) {
+					value = null;
+				}
 				key.takeValueInObject(value, obj);
 			}
 		}
@@ -831,6 +834,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 					Object value = childNode.value();
 					if (value instanceof String) {
 						value = ERXRestUtils.coerceValueToAttributeType(value, null, obj, keyName);
+					}
+					if (value instanceof NSKeyValueCoding.Null) {
+						value = null;
 					}
 					key.takeValueInObject(value, obj);
 				}
