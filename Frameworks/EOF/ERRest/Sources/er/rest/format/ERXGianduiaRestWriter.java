@@ -1,5 +1,6 @@
 package er.rest.format;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,12 +14,14 @@ import er.rest.ERXRestUtils;
 
 public class ERXGianduiaRestWriter implements IERXRestWriter {
 	private String _persistentStoreName;
+	private boolean _persistentStoreFormat;
 
-	public ERXGianduiaRestWriter() {
-		this(ERXProperties.stringForKeyWithDefault("ERXRest.gianduia.persistentStoreName", null));
+	public ERXGianduiaRestWriter(boolean persistentStoreFormat) {
+		this(persistentStoreFormat, ERXProperties.stringForKeyWithDefault("ERXRest.gianduia.persistentStoreName", null));
 	}
 
-	public ERXGianduiaRestWriter(String persistentStoreName) {
+	public ERXGianduiaRestWriter(boolean persistentStoreFormat, String persistentStoreName) {
+		_persistentStoreFormat = persistentStoreFormat;
 		if (persistentStoreName == null) {
 			WOApplication application = WOApplication.application();
 			if (application == null) {
@@ -56,6 +59,9 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 		if (value instanceof Number) {
 			response.appendContentString(String.valueOf(value));
 		}
+		else if (value instanceof Date) {
+			response.appendContentString("new Date(" + ((Date)value).getTime() + ")");
+		}
 		else if (value instanceof String) {
 			response.appendContentString("\"" + ERXStringUtilities.escape(new char[] { '"' }, '\\', (String) value) + "\"");
 		}
@@ -78,11 +84,14 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 	}
 
 	protected void appendMapToResponse(Map<Object, Object> map, IERXRestResponse response) {
-		String type = (String) map.remove(ERXRestFormat.DefaultDelegate.TYPE_KEY);
-		String id = (String) map.remove(ERXRestFormat.DefaultDelegate.ID_KEY);
-		boolean entity = (type != null && id != null);
-		if (entity) {
-			response.appendContentString("this.objectWithURIRepresentation(\"x-coredata://" + _persistentStoreName + "/" + type + "/p" + id + "\",");
+		boolean persistentStoreFormat = false;
+		if (_persistentStoreFormat) {
+			String type = (String) map.remove(ERXRestFormat.DefaultDelegate.TYPE_KEY);
+			String id = (String) map.remove(ERXRestFormat.DefaultDelegate.ID_KEY);
+			persistentStoreFormat = (type != null && id != null);
+			if (persistentStoreFormat) {
+				response.appendContentString("this.objectWithURIRepresentation(\"x-coredata://" + _persistentStoreName + "/" + type + "/p" + id + "\",");
+			}
 		}
 		response.appendContentString("{");
 		Iterator<Map.Entry<Object, Object>> mapIter = map.entrySet().iterator();
@@ -96,7 +105,7 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 			}
 		}
 		response.appendContentString("}");
-		if (entity) {
+		if (persistentStoreFormat) {
 			response.appendContentString(")");
 		}
 	}

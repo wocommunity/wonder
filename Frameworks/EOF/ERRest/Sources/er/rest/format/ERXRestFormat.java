@@ -20,7 +20,8 @@ public class ERXRestFormat {
 	public static ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), new ERXRestFormat.DefaultDelegate(), "plist");
 	public static ERXRestFormat XML = ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormat.DefaultDelegate(), "xml");
 	public static ERXRestFormat HTML = ERXRestFormat.registerFormatNamed(null, null, new ERXRestFormat.DefaultDelegate(), "html");
-	public static ERXRestFormat GIANDUIA = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(), new ERXRestFormat.DefaultDelegate(), "gnd");
+	public static ERXRestFormat GIANDUIA_JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(false), new ERXRestFormat.DefaultDelegate(), "gndj");
+	public static ERXRestFormat GIANDUIA_PERSISTENT_STORE = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(true), new ERXRestFormat.DefaultDelegate(), "gndp");
 	public static ERXRestFormat SPROUTCORE = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormat.DefaultDelegate("guid", "type", "nil", true), "sc");
 
 	private String _name;
