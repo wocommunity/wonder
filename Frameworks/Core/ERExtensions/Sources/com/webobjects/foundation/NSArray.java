@@ -272,7 +272,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		initFromObjects(objects, rangeLocation, rangeLength, checkForNull);
 	}
 
-	public NSArray(E[] objects) {
+	public NSArray(E... objects) {
 		this(objects, 0, objects == null ? 0 : objects.length, true);
 	}
 
@@ -802,7 +802,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		coder.encodeObjects(objectsNoCopy());
 	}
 
-	public void makeObjectsPerformSelector(NSSelector selector, Object[] parameters) {
+	public void makeObjectsPerformSelector(NSSelector selector, Object... parameters) {
 		if (selector == null) {
 			throw new IllegalArgumentException("Selector cannot be null");
 		}
