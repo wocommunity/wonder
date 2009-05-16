@@ -1,6 +1,7 @@
 package com.webobjects.foundation;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * NSSet reimplementation to support JDK 1.5 templates. Use with
@@ -35,7 +36,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		super(object);
 	}
 
-	public NSMutableSet(E[] objects) {
+	public NSMutableSet(E... objects) {
 		super(objects);
 	}
 
@@ -45,6 +46,10 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	public NSMutableSet(NSSet<? extends E> otherSet) {
 		super(otherSet);
+	}
+	
+	public NSMutableSet(Set<? extends E> set, boolean ignoreNull) {
+		super(set, ignoreNull);
 	}
 
 	public void addObject(E object) {

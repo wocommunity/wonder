@@ -107,7 +107,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         clearCache();
     }
 
-    public void addObjects(E[] objects) {
+    public void addObjects(E... objects) {
         if (objects != null && objects.length > 0) {
             for (int i = 0; i < objects.length; i++)
                 if (objects[i] == null)
@@ -375,7 +375,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
      * Much faster implementation of the remove method for larger arrays.
      */
 
-    public void removeObjects(Object[] otherObjects) {
+    public void removeObjects(Object... otherObjects) {
         if (otherObjects != null) {
             int count = count();
             if(count > 0) {

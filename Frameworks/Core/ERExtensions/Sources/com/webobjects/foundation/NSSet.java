@@ -35,7 +35,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	public static final NSSet EmptySet = new NSSet();
 
 	private static final String SerializationValuesFieldKey = "objects";
-	private static final ObjectStreamField[] serialPersistentFields = (new ObjectStreamField[] { new ObjectStreamField(SerializationValuesFieldKey, ((Object) (_NSUtilities._NoObjectArray)).getClass()) });;
+	private static final ObjectStreamField[] serialPersistentFields = (new ObjectStreamField[] { new ObjectStreamField(SerializationValuesFieldKey, ((Object) (_NSUtilities._NoObjectArray)).getClass()) });
 
 	static final long serialVersionUID = -8833684352747517048L;
 
@@ -91,7 +91,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		}
 	}
 
-	public NSSet(E[] objects) {
+	public NSSet(E... objects) {
 		this(objects, true);
 	}
 
@@ -245,6 +245,11 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	public void encodeWithCoder(NSCoder coder) {
 		coder.encodeObjects(objectsNoCopy());
+	}
+	
+	@SuppressWarnings("cast")
+	public static <T> NSSet<T> emptySet() {
+		return (NSSet<T>) EmptySet;
 	}
 
 	public boolean equals(Object object) {
