@@ -423,6 +423,7 @@ There are many ways to use this script:
     
     <target name="global.framework.web" depends="global.properties">
         <mkdir dir="${web.framework.install.root}/${project.name}.framework" />
+        <mkdir dir="${build.root}/${project.name}.framework/WebServerResources" />
         <sync todir="${web.framework.install.root}/${project.name}.framework/WebServerResources">
             <fileset dir="${build.root}/${project.name}.framework/WebServerResources" />
         </sync>
