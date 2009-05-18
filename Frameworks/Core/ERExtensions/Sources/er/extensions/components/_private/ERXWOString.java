@@ -12,6 +12,7 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
@@ -85,6 +86,9 @@ public class ERXWOString extends WODynamicElement {
                             format = ERXNumberFormatter.numberFormatterForPattern(formatString);
                         }
                     }
+                }
+                if(valueInComponent == NSKeyValueCoding.NullValue) {
+                	valueInComponent = null;
                 }
                 if (format != null) {
                 	if (valueInComponent == null) {
