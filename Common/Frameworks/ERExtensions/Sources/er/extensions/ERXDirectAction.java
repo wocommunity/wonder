@@ -186,6 +186,7 @@ public class ERXDirectAction extends WODirectAction {
 
         if (canPerformActionWithPasswordKey("er.extensions.ERXEOAdaptorDebuggingPassword")) {
             String message;
+            boolean currentState = ERXExtensions.adaptorLogging();
             int instance = request().applicationNumber();
             if (instance == -1) {
                 log.info("EOAdaptorDebuggingAction requested without a specific instance.");
@@ -195,15 +196,15 @@ public class ERXDirectAction extends WODirectAction {
                 String debugParam = request().stringFormValueForKey("debug");
                 log.debug("EOAdaptorDebuggingAction requested with 'debug' param:" + debugParam);
                 if (debugParam == null || debugParam.trim().length() == 0) {
-                    log.info("EOAdaptorDebuggingAction requested with null 'debug' param.");
-                    message = ("<p>You must provide the 'debug' parameter to this action, e.g.: <code>...eoAdaptorDebugging?debug=on&pw=secret</code></p>");
+                    message = "<p>EOAdaptorDebugging is currently <strong>" + (currentState ? "ON" : "OFF") + "</strong> for instance <strong>" + instance + "</strong>.</p>";
+                    message += "<p>To change the setting, provide the 'debug' parameter to this action, e.g.: <code>...eoAdaptorDebugging?debug=on&pw=secret</code></p>";
                 } else {
                     if (debugParam.trim().equalsIgnoreCase("on")) {
                         debugParam = "true";
                     } else if (debugParam.trim().equalsIgnoreCase("off")) {
                         debugParam = "false";
                     }
-                    boolean currentState = ERXExtensions.adaptorLogging();
+
                     boolean desiredState = ERXValueUtilities.booleanValueWithDefault(debugParam, false);
                     log.debug("EOAdaptorDebuggingAction requested 'debug' state change to: '" + desiredState + "' for instance: " + instance + ".");
                     if (currentState != desiredState) {
