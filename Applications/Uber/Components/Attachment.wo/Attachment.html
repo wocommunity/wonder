@@ -7,17 +7,24 @@
       </wo:WORepetition>
     </ul>
     <wo:ERXFlickrBatchNavigation displayGroup="$companies" />
+    <p>
+    	<wo:WOHyperlink action="$newCompany">new company</wo:WOHyperlink>
+    </p>
   </wo:UberPanel>
 
 	<wo:if condition="$selectedCompany">
 	  <wo:UberPanel title="$selectedCompany.name">
 	  	<wo:form enctype="multipart/form-data">
 	  		<p>
-	  		<wo:ERAttachmentViewer attachment="$selectedCompany.logo" class="logo"/>
+		  		<wo:WOTextField value="$selectedCompany.name"/>
 	  		<p/>
-	    	<wo:ERAttachmentUpload editingContext="$selectedCompany.editingContext" attachment="$selectedCompany.logo" width="50" height="50" />
+	  		<p>
+		  		<wo:ERAttachmentViewer attachment="$selectedCompany.logo" class="logo"/>
+		    	<wo:WOSubmitButton action="$clearAttachment" value="clear logo"/>
+		    	<wo:ERAttachmentUpload editingContext="$selectedCompany.editingContext" attachment="$selectedCompany.logo" width="50" height="50" />
+	    	</p>
+	    	
 	    	<wo:WOSubmitButton action="$save" value="save"/>
-	    	<wo:WOSubmitButton action="$clearAttachment" value="clear"/>
     	</wo:form>
 	  </wo:UberPanel>
 	</wo:if>
