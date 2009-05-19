@@ -14,7 +14,6 @@ public class ERCStatic extends _ERCStatic {
     // Class methods go here
     
     public static class ERCStaticClazz extends _ERCStaticClazz {
-
         private NSMutableDictionary _staticsPerKey = new NSMutableDictionary();
 
         public ERCStatic objectMatchingKey(EOEditingContext ec, String key) {
@@ -25,14 +24,35 @@ public class ERCStatic extends _ERCStatic {
             // If noCache is true we always go to the database
             Object result = noCache ? null : _staticsPerKey.objectForKey(key);
             if (result == null) {
-                NSArray arr = preferencesWithKey(ec, key);
+            	NSArray arr;
+            	EOEditingContext privateEditingContext = privateEditingContext();
+            	privateEditingContext.lock();
+            	try {
+            		arr = preferencesWithKey(privateEditingContext, key);
+            	}
+            	finally {
+            		privateEditingContext.unlock();
+            	}
                 if (arr.count() > 1)
                     throw new IllegalStateException("Found " + arr.count() + " rows for key " + key);
                 result = arr.count() == 1 ? arr.objectAtIndex(0) : NSKeyValueCoding.NullValue;
                 _staticsPerKey.setObjectForKey(result, key);
                 result = result == NSKeyValueCoding.NullValue ? null : result;
             }
-            result = result != null && !result.equals(NSKeyValueCoding.NullValue) ? ERXEOControlUtilities.localInstanceOfObject(ec, (ERCStatic)result) : null;
+            if (result != null && !result.equals(NSKeyValueCoding.NullValue)) {
+            	ERCStatic staticResult = (ERCStatic)result;
+            	EOEditingContext editingContext = staticResult.editingContext();
+            	editingContext.lock();
+            	try {
+            		result = ERXEOControlUtilities.localInstanceOfObject(ec, staticResult);
+            	}
+            	finally {
+            		editingContext.unlock();
+            	}
+            }
+            else {
+            	result = null;
+            }
             return (ERCStatic)result;
         }
 
