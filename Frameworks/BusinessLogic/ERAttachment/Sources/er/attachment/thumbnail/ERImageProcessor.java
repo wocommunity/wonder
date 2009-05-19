@@ -74,6 +74,21 @@ public abstract class ERImageProcessor implements IERImageProcessor {
    */
   public void thumbnail(int resizeWidth, int resizeHeight, File inputFile, File outputFile) throws IOException {
     ERMimeType outputMimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForFile(outputFile, true);
+    thumbnail(resizeWidth, resizeHeight, inputFile, outputFile, outputMimeType);
+  }
+  
+  /**
+   * Provides a shortcut to thumbnailing an image using some default values that produce
+   * decent quality thumbnail outputs.
+   * 
+   * @param resizeWidth the maximum resize width
+   * @param resizeHeight the maximum resize height
+   * @param inputFile the input file to thumbnail
+   * @param outputFile the output file to write the thumbnail into
+   * @param outputMimeType the output mime type
+   * @throws IOException if the thumbnailing fails
+   */
+  public void thumbnail(int resizeWidth, int resizeHeight, File inputFile, File outputFile, ERMimeType outputMimeType) throws IOException {
     processImage(resizeWidth, resizeHeight, null, -1, 2.5f, 0.35f, 0.0f, -1, -1, -1, -1, null, false, 0.9f, null, inputFile, outputFile, outputMimeType);
   }
 }

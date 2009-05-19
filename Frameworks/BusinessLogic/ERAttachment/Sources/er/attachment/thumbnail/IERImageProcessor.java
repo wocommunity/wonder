@@ -10,7 +10,7 @@ import er.attachment.utils.ERMimeType;
  *  
  * @author mschrag
  */
-public interface IERImageProcessor extends IERThumbnailer {
+public interface IERImageProcessor {
   /**
    * Processes the given image with all of the given configuration settings.
    * 
@@ -49,6 +49,19 @@ public interface IERImageProcessor extends IERThumbnailer {
    * @throws IOException if the thumbnailing fails
    */
   public void thumbnail(int resizeWidth, int resizeHeight, File inputFile, File outputFile) throws IOException;
+
+  /**
+   * Provides a shortcut to thumbnailing an image using some default values that produce
+   * decent quality thumbnail outputs.
+   * 
+   * @param resizeWidth the maximum resize width
+   * @param resizeHeight the maximum resize height
+   * @param inputFile the input file to thumbnail
+   * @param outputFile the output file to write the thumbnail into
+   * @param outputMimeType the output mime type
+   * @throws IOException if the thumbnailing fails
+   */
+  public void thumbnail(int resizeWidth, int resizeHeight, File inputFile, File outputFile, ERMimeType outputMimeType) throws IOException;
 
   /**
    * Quality is an enumerated type used to specify the resize quality.
