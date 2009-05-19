@@ -17,6 +17,8 @@ import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.model.ERFileAttachment;
 import er.attachment.model.ERPendingAttachment;
 import er.attachment.model.ERS3Attachment;
+import er.attachment.thumbnail.ERThumbnailer;
+import er.attachment.thumbnail.IERThumbnailer;
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
 import er.extensions.crypting.ERXCrypto;
@@ -251,6 +253,26 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType, String configurationName, String ownerID) throws IOException {
     return process(editingContext, new ERPendingAttachment(uploadedFile, recommendedFilePath, mimeType, configurationName, ownerID));
   }
+
+  /**
+   * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that
+   * represents it.  uploadedFile will be deleted after the import process is complete.
+   * 
+   * @param editingContext the EOEditingContext to create the ERAttachment in
+   * @param uploadedFile the uploaded temporary file (which will be deleted at the end)
+   * @param recommendedFilePath the filename recommended by the user during import
+   * @param mimeType the mimeType to use (null = guess based on file extension)
+   * @param configurationName the name of the configuration settings to use for this processor (see top level docs) 
+   * @param ownerID an arbitrary string that represents the ID of the "owner" of this thumbnail (Person.primaryKey, for instance)
+   * @param width the desired width of the attachment 
+   * @param height the desired height of the attachment 
+   * @return an ERAttachment that represents the file
+   * @throws IOException if the processing fails
+   */
+  public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType, int width, int height, String configurationName, String ownerID) throws IOException {
+    return process(editingContext, new ERPendingAttachment(uploadedFile, recommendedFilePath, mimeType, width, height, configurationName, ownerID));
+  }
+
   /**
    * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that
    * represents it.  uploadedFile will be deleted after the import process is complete.
@@ -276,7 +298,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       ERXAttachmentExceedsLengthException maxSizeExceededException = new ERXAttachmentExceedsLengthException("AttachmentExceedsMaximumLengthException", uploadedFile, "size", maxSize, recommendedFileName);
       throw maxSizeExceededException;
     }
-
+    
     String suggestedMimeType = pendingAttachment.mimeType();
     if (suggestedMimeType != null) {
       ERMimeType erMimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForMimeTypeString(suggestedMimeType, false);
@@ -295,6 +317,18 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       if (suggestedMimeType == null) {
         suggestedMimeType = "application/x-octet-stream";
       }
+    }
+
+    int width = pendingAttachment.width();
+    int height = pendingAttachment.height();
+    if (width != -1 || height != -1) {
+  		ERMimeType mimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForMimeTypeString(suggestedMimeType, false);
+  		if (mimeType != null) {
+      	IERThumbnailer thumbnailer = ERThumbnailer.thumbnailer(mimeType);
+      	if (thumbnailer != null) {
+    			thumbnailer.thumbnail(width, height, uploadedFile, uploadedFile, mimeType);
+      	}
+  		}
     }
 
     String ownerID = pendingAttachment.ownerID();

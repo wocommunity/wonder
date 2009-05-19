@@ -18,7 +18,7 @@ public class ImageIOImageProcessor extends ERImageProcessor {
   static {
     System.loadLibrary("ImageIOImageProcessor");
   }
-
+  
   public void processImage(int resizeWidth, int resizeHeight, Quality resizeQuality, int dpi, float sharpenRadius, float sharpenIntensity, float gamma, int cropX, int cropY, int cropWidth, int cropHeight, File watermarkFile, boolean tileWatermark, float compressionQuality, File colorProfileFile, File inputFile, File outputFile, ERMimeType outputMimeType) throws IOException {
     String watermarkPath = null;
     if (watermarkFile != null) {
@@ -28,6 +28,7 @@ public class ImageIOImageProcessor extends ERImageProcessor {
     if (colorProfileFile != null) {
       colorProfilePath = colorProfileFile.getAbsolutePath();
     }
+    System.out.println(resizeWidth + "," + resizeHeight);
     if (!processImage2(resizeWidth, resizeHeight, dpi, sharpenRadius, sharpenIntensity, gamma, cropX, cropY, cropWidth, cropHeight, watermarkPath, tileWatermark, compressionQuality, colorProfilePath, inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), outputMimeType == null ? null : outputMimeType.uti())) {
       throw new IOException("Failed to process image '" + inputFile + "' into '" + outputFile + "'.");
     }

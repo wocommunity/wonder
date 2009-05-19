@@ -14,7 +14,7 @@ public interface IERAttachmentProcessorDelegate {
    * @param processor the attachment processor
    * @param attachment the attachment
    */
-  public void attachmentCreated(ERAttachmentProcessor processor, ERAttachment attachment);
+  public void attachmentCreated(ERAttachmentProcessor<?> processor, ERAttachment attachment);
   
   /**
    * Called when an attachment is made available.
@@ -22,7 +22,7 @@ public interface IERAttachmentProcessorDelegate {
    * @param processor the attachment processor
    * @param attachment the attachment
    */
-  public void attachmentAvailable(ERAttachmentProcessor processor, ERAttachment attachment);
+  public void attachmentAvailable(ERAttachmentProcessor<?> processor, ERAttachment attachment);
 
   /**
    * Called when an attachment is determined to be unavailable.  This provides the opportunity to clean up
@@ -35,5 +35,5 @@ public interface IERAttachmentProcessorDelegate {
    * @param attachment the attachment
    * @param failureReason the reason why the attachment is not available
    */
-  public void attachmentNotAvailable(ERAttachmentProcessor processor, ERAttachment attachment, String failureReason);
+  public void attachmentNotAvailable(ERAttachmentProcessor<?> processor, ERAttachment attachment, String failureReason);
 }

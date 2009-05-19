@@ -113,6 +113,9 @@ There are some properties that apply to all attachment types.
 	<dd>(optional) When using the ERAttachmentUpload component, this sets the default storage type to use for the attachment.  Examples
 	are "s3", "db", or "file".  The default is "db".</dd>
 	
+	<dt>er.attachment.width / er.attachment.[configurationName].width and er.attachment.height / er.attachment.[configurationName].height</dt>
+	<dd>(optional) When using the ERAttachmentUpload component, this sets the width and/or height of the attachment. Currently this will resize the original attachment (i.e. the original is lost). Later versions will support generating thumbnails in addition to the original image.</dd>
+	
 	<dt>er.attachment.proxyAsAttachment / er.attachment.[configurationName].proxyAsAttachment</dt>
 	<dd>(optional) When using the proxy request handler, this sets whether or not the request handler returns an attachment and 
 	Content-Disposition header.  This will typically cause the browser to download the attachment versus displaying inline. Defaults false.</dd>
