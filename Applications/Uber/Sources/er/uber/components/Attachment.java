@@ -5,11 +5,11 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eocontrol.EOEditingContext;
 
-import er.attachment.model.ERAttachment;
 import er.extensions.eof.ERXEC;
 import er.uber.model.Company;
 
 public class Attachment extends UberComponent {
+	private EOEditingContext _editingContext;
 	public WODisplayGroup _companies;
 	public Company _company;
 
@@ -21,23 +21,28 @@ public class Attachment extends UberComponent {
 		return (Company) _companies.selectedObject();
 	}
 
+	public WOActionResults newCompany() {
+		_editingContext = ERXEC.newEditingContext();
+		_companies.setSelectedObject(Company.createCompany(_editingContext, "New Company"));
+		return null;
+	}
+
 	public WOActionResults selectCompany() {
-		_companies.setSelectedObject(_company);
+		_editingContext = ERXEC.newEditingContext();
+		_companies.setSelectedObject(_company.localInstanceIn(_editingContext));
 		return null;
 	}
 
 	public WOActionResults clearAttachment() {
-		EOEditingContext editingContext = ERXEC.newEditingContext();
-		Company localCompany = selectedCompany().localInstanceIn(editingContext);
-		ERAttachment attachment = localCompany.logo();
-		attachment.delete();
-		localCompany.setLogo(null);
-		editingContext.saveChanges();
+		Company selectedCompany = selectedCompany();
+		selectedCompany.setLogo(null);
 		return null;
 	}
 
 	public WOActionResults save() {
-		editingContext().saveChanges();
+		_editingContext.saveChanges();
+		_companies.setSelectedObject(null);
+		_companies.fetch();
 		return null;
 	}
 }
