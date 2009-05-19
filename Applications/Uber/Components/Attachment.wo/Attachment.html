@@ -15,8 +15,9 @@
 	  		<p>
 	  		<wo:ERAttachmentViewer attachment="$selectedCompany.logo" class="logo"/>
 	  		<p/>
-	    	<wo:ERAttachmentUpload editingContext="$selectedCompany.editingContext" attachment="$selectedCompany.logo"/>
+	    	<wo:ERAttachmentUpload editingContext="$selectedCompany.editingContext" attachment="$selectedCompany.logo" width="50" height="50" />
 	    	<wo:WOSubmitButton action="$save" value="save"/>
+	    	<wo:WOSubmitButton action="$clearAttachment" value="clear"/>
     	</wo:form>
 	  </wo:UberPanel>
 	</wo:if>
