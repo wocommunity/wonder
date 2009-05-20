@@ -50,7 +50,9 @@ public class ERXSwitchComponent extends WODynamicElement {
 	}
 
 	public String toString() {
-		return "<WOSwitchComponent  componentName: " + ((this.componentName != null) ? this.componentName.toString() : "null") + " componentAttributes: " + ((this.componentAttributes != null) ? this.componentAttributes.toString() : "null") + " componentCache: " + ((this.componentCache != null) ? this.componentCache.toString() : "null") + " children: " + ((this.template != null) ? this.template.toString() : "null") + ">";
+		return "<ERXSwitchComponent  componentName: " + componentName 
+		+ " componentAttributes: " + componentAttributes 
+		+ " componentCache: " + componentCache + " children: " + template + ">";
 	}
 
 	private static NSMutableDictionary<String, String> _namesByID = new NSMutableDictionary<String, String>();
