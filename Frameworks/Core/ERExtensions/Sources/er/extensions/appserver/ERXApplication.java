@@ -1116,6 +1116,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			throw t;
 		}
 	}
+	
+	@Override
+	public boolean useLifebeatCompatibilityMode() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.useLifebeatCompatibilityMode", true);
+	}
 
 	/**
 	 * Creates the request object for this loop. Calls _createRequest(). For WO
