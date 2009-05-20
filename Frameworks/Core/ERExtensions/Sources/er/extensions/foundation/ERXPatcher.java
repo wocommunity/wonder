@@ -43,6 +43,7 @@ import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components._private.ERXHyperlink;
+import er.extensions.components._private.ERXSwitchComponent;
 import er.extensions.components._private.ERXWOFileUpload;
 import er.extensions.components.conditionals.ERXWOConditional;
 import er.extensions.woextensions.WOToManyRelationship;
@@ -114,6 +115,7 @@ public class ERXPatcher {
 		ERXPatcher.setClassForName(WOToOneRelationship.class, "WOToOneRelationship");
 
 		ERXPatcher.setClassForName(ERXHyperlink.class, "WOHyperlink");
+		ERXPatcher.setClassForName(ERXSwitchComponent.class, "WOSwitchComponent");
 		if (!ERXApplication.isWO54() || ERXProperties.booleanForKey("er.extensions.WOConditional.patch")) {
 			ERXPatcher.setClassForName(ERXWOConditional.class, "WOConditional");
 		}
