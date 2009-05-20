@@ -416,13 +416,22 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
                                                                                                       fetchSpecification.sortOrderings(),
                                                                                                       null);
             pkFetchSpec.setFetchLimit(fetchSpecification.fetchLimit());
-            pkFetchSpec.setUsesDistinct(fetchSpecification.usesDistinct());
+            boolean postProcessDistinct = false;
+            if (fetchSpecification.usesDistinct() && fetchSpecification.sortOrderings() != null && fetchSpecification.sortOrderings().count() > 0) {
+            	postProcessDistinct = true;
+            }
+            else {
+            	pkFetchSpec.setUsesDistinct(fetchSpecification.usesDistinct());
+            }
             log.debug("Fetching primary keys.");
             NSArray primaryKeyDictionaries = editingContext().objectsWithFetchSpecification(pkFetchSpec);
 
             String pkAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
             primaryKeys = (NSArray)primaryKeyDictionaries.valueForKey(pkAttributeName);
-       }
+            if (postProcessDistinct) {
+            	primaryKeys = ERXArrayUtilities.arrayWithoutDuplicates(primaryKeys);
+            }
+        }
         return primaryKeys;
     }
     
