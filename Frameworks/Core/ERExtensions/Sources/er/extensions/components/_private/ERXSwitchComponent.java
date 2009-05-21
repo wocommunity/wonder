@@ -55,8 +55,8 @@ public class ERXSwitchComponent extends WODynamicElement {
 		+ " componentCache: " + componentCache + " children: " + template + ">";
 	}
 
-	private static NSMutableDictionary<String, String> _namesByID = new NSMutableDictionary<String, String>();
-	private static NSMutableDictionary<String, String> _idsByName = new NSMutableDictionary<String, String>();
+	private NSMutableDictionary<String, String> _namesByID = new NSMutableDictionary<String, String>();
+	private NSMutableDictionary<String, String> _idsByName = new NSMutableDictionary<String, String>();
 
 	public String _elementNameInContext(WOContext paramWOContext) {
 		WOComponent localWOComponent = paramWOContext.component();
@@ -68,7 +68,7 @@ public class ERXSwitchComponent extends WODynamicElement {
 		if ((name == null) || (name.length() == 0)) {
 			throw new IllegalStateException("<" + getClass().getName() + "> : componentName not specified or componentName association evaluated to null.");
 		}
-		synchronized (_namesByID) {
+		synchronized (this) {
 			String id = _idsByName.objectForKey(name);
 			if (id == null) {
 				id = _namesByID.count() + "";
@@ -82,10 +82,8 @@ public class ERXSwitchComponent extends WODynamicElement {
 
 	public WOElement _realComponentWithName(String paramString, WOContext paramWOContext) {
 		WOElement localWOElement;
-		synchronized (_namesByID) {
-			paramString = _namesByID.objectForKey(paramString);
-		}
 		synchronized (this) {
+			paramString = _namesByID.objectForKey(paramString);
 			localWOElement = (WOElement) this.componentCache.objectForKey(paramString);
 
 			if (localWOElement == null) {
