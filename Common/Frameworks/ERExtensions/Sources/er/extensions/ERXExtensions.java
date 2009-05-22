@@ -62,6 +62,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     
     /** Notification name, posted before object will change in an editing context */
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
+
+    /** Notification name, posted before EOAdaptor debug logging will change its setting. */
+    public final static String eoAdaptorLoggingWillChangeNotification = "EOAdaptorLoggingWillChange";
     
     /** logging support */
     private static Logger _log;
@@ -435,6 +438,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     public static void setAdaptorLogging(boolean onOff) {
     	Boolean targetState = onOff ? Boolean.TRUE : Boolean.FALSE;
     	if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) != targetState.booleanValue()) {
+            // Post a notification to give us a hook to perform other operations necessary to get logging going, e.g. change Logger settings, etc.
+            NSNotificationCenter.defaultCenter().postNotification(new NSNotification(eoAdaptorLoggingWillChangeNotification, targetState));
     		if (targetState.booleanValue()) {
     			NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
     		} else {
@@ -1228,7 +1233,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * not need to call this method if you already called initApp.  This is lighter-weight than 
      * initApp, and tries to just get enough configured to make EOF work properly.
      * 
-     * @param mainBundleFile the folder of your main bundle
+     * @param mainBundleFolder the folder of your main bundle
      * @param args the commandline arguments for your application
      */
     public static void initEOF(File mainBundleFolder, String[] args) {
