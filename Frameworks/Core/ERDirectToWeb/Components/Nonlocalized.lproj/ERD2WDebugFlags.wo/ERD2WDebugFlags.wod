@@ -1,5 +1,5 @@
 Show: WOConditional {
-	condition = application.isDevelopmentMode;
+	condition = shouldShow;
 }
 
 Log4J: WOHyperlink {
@@ -40,15 +40,18 @@ Dump: WOHyperlink {
 	directActionName = "dumpCreatedKeys";
 	class = ^linkClass;
 }
+
 WOStats: WOHyperlink {
 	action = statisticsPage;
 	class = ^linkClass;
 }
+
 Localization: WOHyperlink {
 	actionClass = "ERXDirectAction";
 	directActionName = "editLocalizedFiles";
 	class = ^linkClass;
 }
+
 Test: WOHyperlink {
 	actionClass = "er.selenium.SeleniumStartTesting";
 	class = ^linkClass;
