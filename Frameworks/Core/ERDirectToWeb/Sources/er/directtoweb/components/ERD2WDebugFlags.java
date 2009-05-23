@@ -15,6 +15,8 @@ import com.webobjects.woextensions.WOStatsPage;
 import er.directtoweb.ERD2WModel;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.ERXExtensions;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,4 +59,14 @@ public class ERD2WDebugFlags extends WOComponent {
         ERD2WModel.erDefaultModel().clearD2WRuleCache();
         return null;
     }
+
+    /**
+     * Allow users to override when the debug flags show.  Defaults to showing when the application is running in
+     * {@link ERXApplication#isDevelopmentMode development mode}, i.e. is not deployed to production.
+     * @return true when the debug flags should be displayed
+     */
+    public boolean shouldShow() {
+        return ERXComponentUtilities.booleanValueForBinding(this, "shouldShow", ERXApplication.erxApplication().isDevelopmentMode());
+    }
+
 }
