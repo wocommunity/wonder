@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo class="AjaxDefaultSubmitButton" wocomponentcontent="true">
+	<wo class="AjaxDefaultSubmitButton" wocomponentcontent="false">
 		<binding name="name"/>
 		<binding name="value"/>
 		<binding name="action"/>
@@ -42,8 +42,4 @@
 	    <unbound name="updateContainerID"/>
     </validation>
     </wo>
-</wodefinitions>
-<?xml version = "1.0" encoding = "UTF-8" standalone = "yes"?>
-<wodefinitions>
-    <wo wocomponentcontent = "false" class = "AjaxDefaultSubmitButton">    </wo>
 </wodefinitions>
