@@ -496,6 +496,14 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 		}
 		sb.append("[");
 		sb.append(_name);
+		if (_id != null || _type != null) {
+			if (_id != null) {
+				sb.append(" id=" + _id);
+			}
+			if (_type != null) {
+				sb.append(" type=" + _type);
+			}
+		}
 		if (!_attributes.isEmpty()) {
 			sb.append(" ");
 			sb.append(_attributes);
@@ -830,7 +838,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 						key.takeValueInObject(childObj, obj);
 					}
 				}
-				else if (/* entity.attributeNamed(keyName) != null && */keyFilter.matches(key, ERXKey.Type.Attribute)) {
+				else if (/* entity.attributeNamed(keyName) != null && */ERXRestUtils.isPrimitive(valueType) && keyFilter.matches(key, ERXKey.Type.Attribute)) {
 					Object value = childNode.value();
 					if (value instanceof String) {
 						value = ERXRestUtils.coerceValueToAttributeType(value, null, obj, keyName);
