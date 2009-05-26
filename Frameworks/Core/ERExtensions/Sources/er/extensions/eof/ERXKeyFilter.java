@@ -378,4 +378,18 @@ public class ERXKeyFilter {
 		}
 		return matches;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[ERXKeyFilter: base=" + _base);
+		if (!_includes.isEmpty()) {
+			sb.append("; includes=" + _includes + "");
+		}
+		if (!_excludes.isEmpty()) {
+			sb.append("; excludes=" + _excludes);
+		}
+		sb.append("]");
+		return sb.toString();
+	}
 }
