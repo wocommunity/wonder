@@ -317,6 +317,14 @@ public class WOToOneRelationship extends WOComponent {
 ////////////////////////////////////
 //  Accessed through HTML and WOD
 ////////////////////////////////////
+	public void setSelections(List<? extends Object> array) {
+		this.setSelection(array);
+	}
+
+	public List<Object> selections() {
+		Object selection = this.selection();
+		return (selection instanceof List ? (List<Object> ) selection : new NSArray<Object>(selection));	
+	}
 
 /*
  *  -selection and -setSelection: are called by WOF when
