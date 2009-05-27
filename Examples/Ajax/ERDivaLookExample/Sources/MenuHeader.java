@@ -33,6 +33,7 @@ public class MenuHeader extends WOComponent {
     	return "Query" + _manipulatedEntityName;
     }
     
+    @Deprecated
     public WOComponent findEntityAction() {
         QueryPageInterface newQueryPage = D2W.factory().queryPageForEntityNamed(_manipulatedEntityName, session());
         return (WOComponent) newQueryPage;
@@ -42,6 +43,7 @@ public class MenuHeader extends WOComponent {
     	return "Create" + _manipulatedEntityName;
     }
 
+    @Deprecated
     public WOComponent newObjectAction() {
         WOComponent nextPage = null;
         try {

@@ -2,6 +2,7 @@
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2W;
 
 import er.directtoweb.ERD2WDirectAction;
 
@@ -21,18 +22,8 @@ public class DirectAction extends ERD2WDirectAction {
     protected boolean allowPageConfiguration(String pageConfiguration) {
         return true;
     }
-
-    public WOActionResults defaultAction() {
-        return pageWithName(Main.class.getName());
+    
+    public WOActionResults homeAction() {
+        return D2W.factory().defaultPage(session());
     }
-    
-    public WOActionResults QueryAction() {
-    	String entityName = this.request().stringFormValueForKey("entityName");
-        return this.performActionNamed("Query" + entityName);
-    } 
-    
-    public WOActionResults NewAction() {
-    	String entityName = this.request().stringFormValueForKey("entityName");
-        return this.performActionNamed("Create" + entityName);
-    } 
 }

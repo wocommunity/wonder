@@ -4,7 +4,7 @@ EntitiesRepetition: WORepetition {
 }
 
 FindButton: WOHyperlink {
-	action = findEntityAction;
+	directActionName = queryActionName;
 	class = "box_query";
 	title = "Search";
 }
@@ -15,7 +15,7 @@ FindString: WOString {
 }
 
 FindButton1: WOHyperlink {
-	action = findEntityAction;
+	directActionName = queryActionName;
 	class = "text";
 	string = manipulatedEntityName;
 	title = "Search";
@@ -26,12 +26,12 @@ HasValidSession: WOConditional {
 }
 
 HomeLink: WOHyperlink {
-	action = homeAction;
+	directActionName = "home";
 	id = "home_link";
 }
 
 NewButton: WOHyperlink{
-	action = newObjectAction;
+	directActionName = newActionName;
 	string = "+";
 	class = "box_add";
 	title = "New...";
