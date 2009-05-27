@@ -252,6 +252,10 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	private void initFromObjects(Object[] objects, int rangeLocation, int rangeLength, boolean checkForNull) {
+		initFromObjects(objects, rangeLocation, rangeLength, 0, checkForNull);
+	}
+	
+	private void initFromObjects(Object[] objects, int rangeLocation, int rangeLength, int offset, boolean checkForNull) {
 		if (checkForNull) {
 			int maxRange = rangeLocation + rangeLength;
 			for (int i = rangeLocation; i < maxRange; i++) {
@@ -261,19 +265,24 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			}
 
 		}
-		_initializeWithCapacity(rangeLength);
+		_initializeWithCapacity(rangeLength + offset);
 		if (rangeLength > 0) {
-			System.arraycopy(objects, rangeLocation, _objects, 0, rangeLength);
+			System.arraycopy(objects, rangeLocation, _objects, offset, rangeLength);
 		}
-		_count = rangeLength;
+		_count = rangeLength + offset;
 	}
 
 	protected NSArray(Object[] objects, int rangeLocation, int rangeLength, boolean checkForNull) {
 		initFromObjects(objects, rangeLocation, rangeLength, checkForNull);
 	}
 
-	public NSArray(E... objects) {
+	public NSArray(E[] objects) {
 		this(objects, 0, objects == null ? 0 : objects.length, true);
+	}
+	
+	public NSArray(E object, E... objects) {
+		initFromObjects(objects, 0, objects == null ? 0 : objects.length, 1, true);
+		_objects[0] = object;
 	}
 
 	public NSArray(E[] objects, NSRange range) {
@@ -717,7 +726,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 				objects.addObject(string.substring(start, index));
 				start = index + separatorLength;
 			}
-			if (start < index) {
+			if (start <= index) {
 				objects.addObject(string.substring(start, index));
 			} else {
 				objects.addObject("");

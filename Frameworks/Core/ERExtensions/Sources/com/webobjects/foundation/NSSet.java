@@ -91,8 +91,16 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		}
 	}
 
-	public NSSet(E... objects) {
+	public NSSet(E[] objects) {
 		this(objects, true);
+	}
+	
+	public NSSet(E object, E... objects) {
+		this(objects, true);
+		_ensureCapacity(_count + 1);
+		if (_NSCollectionPrimitives.addValueToSet(object, _objects, _flags)) {
+			_count++;
+		}
 	}
 
 	private NSSet(E[] objects, boolean checkForNull) {

@@ -36,10 +36,14 @@ public class NSMutableSet<E> extends NSSet<E> {
 		super(object);
 	}
 
-	public NSMutableSet(E... objects) {
+	public NSMutableSet(E[] objects) {
 		super(objects);
 	}
 
+	public NSMutableSet(E object, E... objects) {
+		super(object, objects);
+	}
+	
 	public NSMutableSet(NSArray<? extends E> objects) {
 		super(objects);
 	}
