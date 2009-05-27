@@ -14,7 +14,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 /**
  * NSDictionary reimplementation to support JDK 1.5 templates. Use with

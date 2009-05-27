@@ -51,10 +51,14 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         super(object);
     }
 
-    public NSMutableArray(E... objects) {
+    public NSMutableArray(E[] objects) {
         super(objects);
     }
 
+    public NSMutableArray(E object, E... objects) {
+        super(object, objects);
+    }
+    
     public NSMutableArray(E[] objects, NSRange range) {
         super(objects, range);
     }
