@@ -4,7 +4,7 @@ Browser: WOBrowser {
 	item = theCurrentItem;
 	list = theList;
 	multiple = false;
-	selections = selection;
+	selections = selections;
 	size = ^size;
 }
 
