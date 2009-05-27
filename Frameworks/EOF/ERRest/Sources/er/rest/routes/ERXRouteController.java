@@ -685,7 +685,7 @@ public class ERXRouteController extends WODirectAction {
 			checkAccess();
 			WOActionResults results = super.performActionNamed(s);
 			if (results == null) {
-				results = response(ERXKeyFilter.filterWithAttributes(), null);
+				results = response(null, ERXKeyFilter.filterWithAttributes());
 			}
 			return results;
 		}
