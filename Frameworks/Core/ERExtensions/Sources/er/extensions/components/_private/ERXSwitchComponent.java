@@ -83,7 +83,7 @@ public class ERXSwitchComponent extends WODynamicElement {
 				localWOElement = WOApplication.application().dynamicElementWithName(name, componentAttributes, template, paramWOContext._languages());
 
 				if (localWOElement == null) {
-					throw new WODynamicElementCreationException("<" + getClass().getName() + "> : cannot find component or dynamic element named " + elementID);
+					throw new WODynamicElementCreationException("<" + getClass().getName() + "> : cannot find component or dynamic element named " + name);
 				}
 
 				componentCache.setObjectForKey(localWOElement, elementID);
