@@ -60,7 +60,8 @@ import er.extensions.foundation.ERXValueUtilities;
  *        unselectedRowCSSClass = &quot;greyBackground&quot;;   // Secondary CSS class attribute on unselected rows, optional
  *        selectedRowCSSStyle = &quot;background:lightyellow;&quot;; // Secondary CSS style attribute on selected rows, optional
  *        unselectedRowCSSStyle = &quot;background:lightgrey;&quot;;// Secondary CSS style attribute on unselected rows, optional
- *        canReorder = true;                                    // Enables (or disables) drag and drop reordering of columns
+ *        canReorder = true;                                    // Optional, defaults to true, Enables (or disables) drag and drop reordering of columns
+ *        canResort = true;                                     // Optional, defaults to true, Enables (or disables) sorting by clicking the column titles
  *        dragHeaderOnly = true;                                // Optional, defaults to false, true if only the title/header cells can
  *                                                              // be dragged to re-order columns
  *        batchSize = 10;                                       // Controls size of batch in display group, use zero for no batching
@@ -297,6 +298,7 @@ public class AjaxGrid extends WOComponent {
 	public static final String TABLE_ID = "tableID";
 	public static final String ROW_IDENTIFIER = "rowIdentifier";
 	public static final String CAN_REORDER = "canReorder";
+	public static final String CAN_RESORT = "canResort";
 	public static final String DRAG_HEADER_ONLY = "dragHeaderOnly";
 	public static final String SOURCE_COLUMN_FORM_VALUE = "sourceColumn";
 	public static final String DESTINATION_COLUMN_FORM_VALUE = "destinationColumn";
@@ -361,7 +363,7 @@ public class AjaxGrid extends WOComponent {
 	 */
 	public void sortOrderUpdated() {
 		// Columns without a key path or sort path can't be sorted
-		if (currentSortPath() == null) {
+		if (currentSortPath() == null || ! canResort()) {
 			return;
 		}
 
@@ -387,9 +389,11 @@ public class AjaxGrid extends WOComponent {
 	 * Updates configurationData() and displayGroup().
 	 */
 	public void removeSorting() {
-		configurationData().setObjectForKey(new NSMutableArray(), SORT_ORDER);
-		clearCachedConfiguration();
-		updateDisplayGroupSort();
+		if (canResort()) {
+			configurationData().setObjectForKey(new NSMutableArray(), SORT_ORDER);
+			clearCachedConfiguration();
+			updateDisplayGroupSort();
+		}
 	}
 	
 	/**
@@ -484,14 +488,25 @@ public class AjaxGrid extends WOComponent {
 	}
 
 	/**
-	 * Returns CAN_REORDER value from configurationData()
+	 * Returns CAN_REORDER value from configurationData(), or <code>true</code> if not
+	 * configured.
 	 * 
 	 * @return <code>true</code> if column re-ordering is enabled
 	 */
 	public boolean canReorder() {
-		return Boolean.valueOf((String) configurationData().valueForKey(CAN_REORDER)).booleanValue();
+		return configurationData().valueForKey(CAN_REORDER) != null ? Boolean.valueOf((String) configurationData().valueForKey(CAN_REORDER)).booleanValue() : true;
 	}
 
+	/**
+	 * Returns CAN_RESORT value from configurationData(), or <code>true</code> if not
+	 * configured.
+	 * 
+	 * @return <code>true</code> if data sorting is enabled
+	 */
+	public boolean canResort() {
+		return configurationData().valueForKey(CAN_RESORT) != null ? Boolean.valueOf((String) configurationData().valueForKey(CAN_RESORT)).booleanValue() : true;
+	}
+	
 	/**
 	 * Returns TABLE_ID value from configurationData()
 	 * 
