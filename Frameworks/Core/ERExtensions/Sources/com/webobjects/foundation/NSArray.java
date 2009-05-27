@@ -726,7 +726,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 				objects.addObject(string.substring(start, index));
 				start = index + separatorLength;
 			}
-			if (start <= index) {
+			if (start < index) {
 				objects.addObject(string.substring(start, index));
 			} else {
 				objects.addObject("");
