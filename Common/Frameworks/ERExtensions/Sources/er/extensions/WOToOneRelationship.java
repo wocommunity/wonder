@@ -24,11 +24,22 @@
 package er.extensions;
 //package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
 import java.util.Enumeration;
+import java.util.List;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * (Back port from WO 5 WOExtensions)<br />
@@ -347,7 +358,15 @@ public class WOToOneRelationship extends WOComponent {
 ////////////////////////////////////
 //  Accessed through HTML and WOD
 ////////////////////////////////////
-    
+	public void setSelections(List<? extends Object> array) {
+		this.setSelection(array);
+	}
+
+	public List<Object> selections() {
+		Object selection = this.selection();
+		return (selection instanceof List ? (List<Object> ) selection : new NSArray<Object>(selection));	
+	}
+
 /*
  *  -selection and -setSelection: are called by WOF when
  * syncing up the contents of this component.  These are
