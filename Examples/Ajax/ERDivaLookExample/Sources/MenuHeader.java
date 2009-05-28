@@ -86,7 +86,7 @@ public class MenuHeader extends AjaxComponent {
      */
 	@Override
 	protected void addRequiredWebResources(WOResponse res) {
-        addScriptResourceInHead(res, "WO2", "calendar_date_select.js");
+        //addScriptResourceInHead(res, "WO2", "calendar_date_select.js");
     }
 
 	@Override

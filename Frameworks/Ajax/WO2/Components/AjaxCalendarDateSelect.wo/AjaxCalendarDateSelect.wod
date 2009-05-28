@@ -7,3 +7,17 @@ Textfield: WOTextField {
 	class = "AjaxCalendarDateSelect";
 	size = ^size;
 }
+
+CalendarScript: WOJavaScript {
+	scriptFile = "calendar_date_select.js";
+	framework = "WO2";
+}
+
+FormatterScript: WOJavaScript {
+	scriptFile = dateFormatScript;
+	frameworks = "WO2";
+}
+
+HasFormatterScript: WOConditional {
+	condition = dateFormatScript;
+}
