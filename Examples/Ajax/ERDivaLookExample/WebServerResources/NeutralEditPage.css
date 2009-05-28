@@ -8,16 +8,16 @@
 
 /* The following are styles for the edit page */
 
-div#a form h1.edit {
+div#a #EditForm h1.edit {
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/EditMetalBan.gif) no-repeat;
 	text-indent: -5000px;
 }
 
-div#a form h2.entity, div#a form fieldset.button {
+div#a #EditForm h2.entity, div#a #EditForm fieldset.button {
 	background-color: #eeeeee;
 }
 
-div#a form fieldset.button ul li button {
+div#a #EditForm fieldset.button ul li button {
 	text-indent: -5000px;
 	display: block;
 	height:31px;
@@ -26,45 +26,45 @@ div#a form fieldset.button ul li button {
 	width: 88px;
 }
 
-div#a form fieldset.button ul li button.cancel {
+div#a #EditForm fieldset.button ul li button.cancel {
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/CancelMetalBtn.gif);
 }
 
-div#a form fieldset.button ul li button.save {
+div#a #EditForm fieldset.button ul li button.save {
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/SaveMetalBtn.gif);
 }
 
-div#a form fieldset li.attribute {
+div#a #EditForm fieldset li.attribute {
 	background-color: #eeeeee;
 	min-width: expression(document.getElementById('section').offsetWidth + "px");
 }
 
-div#a form .accordion-toggle {
+div#a #EditForm .accordion-toggle {
 	background-color: rgb(203, 206, 211);
 }
 
-div#a div.accordion-content ul li.attribute div.content {
+div#a #EditForm div.accordion-content ul li.attribute div.content {
 	border-left: solid white 2px;
 	padding-left: 2px;
 	margin-top: -1.5em;
 	min-height: 1.5em;
 }
 
-div#a div.accordion-content ul li.attribute legend.propertyKey {
+div#a #EditForm div.accordion-content ul li.attribute legend.propertyKey {
 	font-size: 10pt;
 	margin-left: -160px; /*width of left column*/
 }
 
-div#a div.accordion-content ul li.attribute {
+div#a #EditForm div.accordion-content ul li.attribute {
 	line-height: 1.5em;
 	border-top: solid white 2px;
 }
 
-div#a div.accordion-content ul {
+div#a #EditForm div.accordion-content ul {
 	margin-bottom: 5px;
 }
 
-div#a fieldset.button {
+div#a #EditForm fieldset.button {
 	height:31px;
 	-moz-border-radius-bottomright: 3px;
 	-moz-border-radius-bottomleft: 3px;

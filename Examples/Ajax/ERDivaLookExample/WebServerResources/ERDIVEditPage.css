@@ -4,20 +4,20 @@
 @import url("AjaxCalendarDateSelect.css");
 @import url("ERD2WEditToOneRelationship2.css");
 
-div#a form fieldset.button ul li {
+div#a #EditForm fieldset.button ul li {
 	float: left;
 }
 
-div#a form fieldset.attribute legend {
+div#a #EditForm fieldset.attribute legend {
 	margin-left: -10em; /*width of left column*/
 	display: inline-block;
 }
 
-div#a form fieldset.attribute {
+div#a #EditForm fieldset.attribute {
 	padding-left: 10em; /*width of left column*/
 }
 
-div#a form fieldset.attribute div.content {
+div#a #EditForm fieldset.attribute div.content {
 	margin-top: -1em;
 }
 
