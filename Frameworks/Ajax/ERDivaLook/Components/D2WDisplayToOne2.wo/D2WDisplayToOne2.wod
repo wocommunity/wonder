@@ -9,6 +9,7 @@ Span: WOGenericContainer {
 }
 
 String: WOString {
+	valueWhenEmpty = d2wContext.valueWhenEmpty;
 	value = toOneDescription;
 	escapeHTML = false;
 }

@@ -16,10 +16,4 @@ public class D2WDisplayToOne2 extends D2WDisplayToOne {
     	String classString = (String) d2wContext().valueForKey("class");
     	return classString != null ? ERXStringUtilities.safeIdentifierName(classString) : null;
     }
-    
-    @Override
-    public Object toOneDescription() {
-        Object description = super.toOneDescription();
-        return description != null ? description : ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault((String) d2wContext().valueForKey("noSelectionString"));
-    }
 }
