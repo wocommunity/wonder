@@ -76,7 +76,7 @@ public class AjaxCalendarDateSelect extends WOComponent {
     	} return DateFormats.natural;
     }
     
-    private Object dateFormatScript() {
+    public Object dateFormatScript() {
     	return _scriptsDict.objectForKey(dateFormat());
     }
 	
@@ -85,10 +85,10 @@ public class AjaxCalendarDateSelect extends WOComponent {
 	public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
         AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-        AjaxUtils.addScriptResourceInHead(context, response, "WO2", "calendar_date_select.js");
+        //AjaxUtils.addScriptResourceInHead(context, response, "WO2", "calendar_date_select.js");
         AjaxUtils.addStylesheetResourceInHead(context, response, "WO2", "AjaxCalendarDateSelect.css");
         
         // date format script
-        if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) AjaxUtils.addScriptResourceInHead(context, response, "WO2", (String) dateFormatScript());
+        //if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) AjaxUtils.addScriptResourceInHead(context, response, "WO2", (String) dateFormatScript());
     }
 }
