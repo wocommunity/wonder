@@ -28,3 +28,8 @@ B: WOGenericContainer {
 	id = "b";
 	style = style;
 }
+
+A: AjaxUpdateContainer {
+	elementName = "div";
+	id = "a";
+}

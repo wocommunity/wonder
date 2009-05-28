@@ -67,9 +67,9 @@ log4j.logger.er.directtoweb.ERD2WDebugEnabled.propertyKey = FATAL
 
 log4j.logger.er.directtoweb.rules.ERD2WTraceRuleFiringEnabled = FATAL
 
-log4j.logger.er.directtoweb.rules.inspectConfirmConfigurationName.fire = DEBUG
-log4j.logger.er.directtoweb.rules.inspectConfirmConfigurationName.candidates = DEBUG
-log4j.logger.er.directtoweb.rules.inspectConfirmConfigurationName.cache = DEBUG
+log4j.logger.er.directtoweb.rules.subTask.fire = DEBUG
+log4j.logger.er.directtoweb.rules.subTask.candidates = DEBUG
+log4j.logger.er.directtoweb.rules.subTask.cache = DEBUG
 
 er.extensions.ERXRaiseOnMissingEditingContextDelegate=false
 
