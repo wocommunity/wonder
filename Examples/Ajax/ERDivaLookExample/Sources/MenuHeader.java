@@ -30,7 +30,7 @@ public class MenuHeader extends WOComponent {
     }
 
     public String queryActionName() {
-    	return "Query" + _manipulatedEntityName;
+    	return "AjaxQuery" + _manipulatedEntityName;
     }
     
     @Deprecated
@@ -40,7 +40,7 @@ public class MenuHeader extends WOComponent {
     }
     
     public String newActionName() {
-    	return "Create" + _manipulatedEntityName;
+    	return "AjaxCreate" + _manipulatedEntityName;
     }
 
     @Deprecated
