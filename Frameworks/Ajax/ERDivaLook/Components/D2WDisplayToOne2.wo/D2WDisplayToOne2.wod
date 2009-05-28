@@ -10,4 +10,5 @@ Span: WOGenericContainer {
 
 String: WOString {
 	value = toOneDescription;
+	escapeHTML = false;
 }
