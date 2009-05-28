@@ -40,7 +40,7 @@ Features (Demo-ed)
 12. Use of CSS to display batch navigation on top and/or bottom as demoed in WebObjects/Neutral look.
 13. "Detail" Customer list page (or use of embedded inspect page on D2W list).
 14. Embedded lists (via ERDList2). See Studio movies on Inspect/Edit pages. (Neutral look only).
-15. Google-style "quick Search" feature on Movies List page. (Neutral look only).
+15. Google-style "quick Search" feature on Movies List page. (Neutral look only). Turn on via D2w key allowsFiltering.
 16. Modal confirmation panel (ajax) on Rental edit page (on save).
 17. Property level ajax updates set via the d2wRule "isAjax" for some components. See Edit Movie.studio for a (contrived) example.
 
