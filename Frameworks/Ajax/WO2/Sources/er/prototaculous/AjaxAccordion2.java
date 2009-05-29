@@ -23,7 +23,7 @@ public class AjaxAccordion2 extends AjaxAccordion {
     
     // accessors
     private String _script() {
-    	return "document.observe('dom:loaded', function() { if (null == " + accordionVar() + ") { var " + accordionVar() + " = new Accordion(\"" + accordionID() + "\", 1); } })";
+    	return "if (null == " + accordionVar() + ") { var " + accordionVar() + " = new Accordion(\"" + accordionID() + "\", 1); }";
     }
     
     private String accordionVar() {
