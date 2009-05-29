@@ -109,11 +109,6 @@ public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
-
-    	// add page style sheet
-    	if (stylesheet() != null) {
-    		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
-    	}
     	
     	// prototype events
 	    AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");

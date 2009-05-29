@@ -51,15 +51,4 @@ public class ERDIVEditPage extends ERD2WTabInspectPage implements ERDIVPageInter
         	return super.nextPage(false);
         } 
     }
-    
-    // R/R
-    @Override
-	public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);
-
-    	// add page style sheet
-    	if (stylesheet() != null) {
-    		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
-    	}
-    }
 }

@@ -92,3 +92,16 @@ AttributeContainer: WOGenericContainer {
 	elementName = "li";
 	class = attributeClassString;
 }
+
+Stylesheet: ERXStyleSheet {
+	filename = stylesheet;
+	inline = true;
+}
+
+HasStylesheet: ERXNonNullConditional {
+	condition = stylesheet;
+}
+
+Watcher: AjaxBusyIndicator {
+	watchContainerID = "a";
+}

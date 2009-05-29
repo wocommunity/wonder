@@ -113,3 +113,16 @@ NoConfirmation: WOConditional {
 	condition = showConfirmationPanel;
 	negate = true;
 }
+
+Stylesheet: ERXStyleSheet {
+	filename = stylesheet;
+	inline = true;
+}
+
+HasStylesheet: ERXNonNullConditional {
+	condition = stylesheet;
+}
+
+Watcher: AjaxBusyIndicator {
+	watchContainerID = "a";
+}

@@ -23,6 +23,7 @@ public class ERDIVQueryPage extends ERD2WQueryPage implements ERDIVPageInterface
 		return "attribute " + ERXStringUtilities.safeIdentifierName(propertyKey());
 	}
     
+	/*
     // R/R
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -32,5 +33,5 @@ public class ERDIVQueryPage extends ERD2WQueryPage implements ERDIVPageInterface
     	if (stylesheet() != null) {
     		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
     	}
-    }
+    } */
 }

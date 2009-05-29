@@ -33,9 +33,13 @@ public class MenuHeader extends WOComponent {
 	public NSArray visibleEntityNames() {
         return D2W.factory().visibleEntityNames(session());
     }
+    
+    public String ajaxQueryActionName() {
+    	return "AjaxQuery" + _manipulatedEntityName;
+    }
 
     public String queryActionName() {
-    	return "AjaxQuery" + _manipulatedEntityName;
+    	return "Query" + _manipulatedEntityName;
     }
     
     @Deprecated
@@ -45,6 +49,10 @@ public class MenuHeader extends WOComponent {
     }
     
     public String newActionName() {
+    	return "Create" + _manipulatedEntityName;
+    }
+    
+    public String ajaxNewActionName() {
     	return "AjaxCreate" + _manipulatedEntityName;
     }
 

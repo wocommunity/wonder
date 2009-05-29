@@ -1,2 +1,6 @@
 PageWrapper: PageWrapper {
 }
+
+Watcher: AjaxBusyIndicator {
+	watchContainerID = "a";
+}
