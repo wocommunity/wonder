@@ -250,26 +250,6 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		protected synchronized void _ensureCapacity(int capacity) {
-			super._ensureCapacity(capacity);
-		}
-
-		@Override
-		protected synchronized void _initializeWithCapacity(int capacity) {
-			super._initializeWithCapacity(capacity);
-		}
-
-		@Override
-		protected synchronized boolean _mustRecomputeHash() {
-			return super._mustRecomputeHash();
-		}
-
-		@Override
-		protected synchronized void _setMustRecomputeHash(boolean change) {
-			super._setMustRecomputeHash(change);
-		}
-
-		@Override
 		public synchronized int _shallowHashCode() {
 			return super._shallowHashCode();
 		}
