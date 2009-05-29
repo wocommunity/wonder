@@ -547,7 +547,7 @@ public class ERXEOControlUtilities {
      *
      * @return objects in the given range
      */
-    public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+    public static <T extends EOEnterpriseObject> NSArray<T> objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
     	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
         NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
