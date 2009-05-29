@@ -31,7 +31,12 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     static final long serialVersionUID = -3909373569895711876L;
 
     public static final Object ERX_MARKER = "Wonder";
-    
+
+    protected transient int modCount = 0;
+	protected transient int _capacity;
+	protected transient Object[] _objectsCache;
+	protected transient int _count;
+
     public NSMutableArray() {
     }
     
@@ -75,6 +80,33 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
       super(list, range, ignoreNull);
     }
 
+	protected void _initializeWithCapacity(int capacity) {
+		_capacity = capacity;
+		_objectsCache = null;
+		super._initializeWithCapacity(capacity);
+	}
+	
+	protected void _ensureCapacity(int capacity) {
+		if (capacity > _capacity) {
+			if (capacity == 0) {
+				_setObjects(null);
+			} else {
+				if (capacity < 4) {
+					capacity = 4;
+				} else {
+					int testCapacity = 2 * _capacity;
+					if (testCapacity > capacity) {
+						capacity = testCapacity;
+					}
+				}
+				Object[] objs = _objects();
+				objs = objs != null ? _NSCollectionPrimitives.copyArray(objs, capacity) : new Object[capacity];
+				_setObjects(objs);
+			}
+			_capacity = capacity;
+		}
+	}
+
     public void ensureCapacity(int capacity) {
     	_ensureCapacity(capacity);
     }
@@ -83,31 +115,59 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     	// no op
     }
     
+    protected void _setCount(int count) {
+    	_count = count;
+    }
+        
     public void setArray(NSArray<? extends E> otherArray) {
         if (otherArray != this) {
             if (otherArray == null) {
-                _count = 0;
+            	_setCount(0);
             } else {
                 Object[] objects = otherArray.objectsNoCopy();
                 _ensureCapacity(objects.length);
+                int count = count();
+                Object[] objs = _objects();
                 if (objects.length > 0)
-                    System.arraycopy(objects, 0, _objects, 0, objects.length);
-                for (int i = objects.length; i < _count; i++)
-                    _objects[i] = null;
-
-                _count = objects.length;
+                    System.arraycopy(objects, 0, objs, 0, objects.length);
+                for (int i = objects.length; i < count; i++)
+                	objs[i] = null;
+                _setCount(objects.length);
             }
             clearCache();
         }
     }
+    
+    @Override
+ 	protected Object[] objectsNoCopy() {
+		if (_objectsCache == null) {
+			int count = count();
+			if (count == 0) {
+				_objectsCache = _NSCollectionPrimitives.EmptyArray;
+			}
+			else if (_count == _capacity) {
+				_objectsCache = _objects();
+			}
+			else {
+				_objectsCache = _NSCollectionPrimitives.copyArray(_objects(), count);
+			}
+		}
+		return _objectsCache;
+ 	}
 
+    @Override
+    public int count() {
+    	return _count;
+    }
+    
     public void addObject(E object) {
         if (object == null) {
             throw new IllegalArgumentException("Attempt to insert null into an " + getClass().getName() + ".");
         }
-        
-        _ensureCapacity(_count + 1);
-        _objects[_count++] = object;
+        int count = count();
+        _ensureCapacity(count+1);
+        _objects()[count] = object;
+        _setCount(count+1);
         clearCache();
     }
 
@@ -116,10 +176,10 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
             for (int i = 0; i < objects.length; i++)
                 if (objects[i] == null)
                     throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
-
-            _ensureCapacity(_count + objects.length);
-            System.arraycopy(objects, 0, _objects, _count, objects.length);
-            _count += objects.length;
+            int count = count();
+            _ensureCapacity(count + objects.length);
+            System.arraycopy(objects, 0, _objects(), count, objects.length);
+            _setCount(count + objects.length);
             clearCache();
         }
     }
@@ -135,39 +195,44 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     public void insertObjectAtIndex(E object, int index) {
         if (object == null)
             throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
-        if (index >= 0 && index <= _count) {
-            _ensureCapacity(_count + 1);
-            if (index < _count)
-                System.arraycopy(_objects, index, _objects, index + 1, _count - index);
-            _objects[index] = object;
-            _count++;
+        int count = count();
+        if (index >= 0 && index <= count) {
+            _ensureCapacity(count + 1);
+            Object[] objs = _objects();
+            if (index < count)
+                System.arraycopy(objs, index, objs, index + 1, count - index);
+            objs[index] = object;
+            _setCount(count+1);
             clearCache();
             return;
         }
         
-        throw new IndexOutOfBoundsException("Index (" + index + ") out of bounds [0, " + (_count - 1) + "]");
+        throw new IndexOutOfBoundsException("Index (" + index + ") out of bounds [0, " + (count - 1) + "]");
     }
 
     public E removeObjectAtIndex(int index) {
-        if (index >= 0 && index < _count) {
-            _count--;
-            Object result = _objects[index];
-            if (index < _count)
-                System.arraycopy(_objects, index + 1, _objects, index, _count - index);
-            _objects[_count] = null;
+        int count = count();
+        if (index >= 0 && index < count) {
+            count--;
+            Object[] objs = _objects();
+            Object result = objs[index];
+            if (index < count)
+                System.arraycopy(objs, index + 1, objs, index, count - index);
+            objs[count] = null;
+            _setCount(count);
             clearCache();
             return (E) result;
         }
-        if (_count == 0)
+        if (count == 0)
             throw new IndexOutOfBoundsException("Array is empty");
 
-        throw new IndexOutOfBoundsException("Index (" + index + ") out of bounds [0, " + (_count - 1) + "]");
+        throw new IndexOutOfBoundsException("Index (" + index + ") out of bounds [0, " + (count - 1) + "]");
     }
 
     public void removeAllObjects() {
-        if (_count > 0) {
-            _objects = new Object[_capacity];
-            _count = 0;
+        if (count() > 0) {
+			_setObjects(new Object[_capacity]);
+            _setCount(0);
             clearCache();
         }
     }
@@ -175,11 +240,12 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     public void sortUsingComparator(NSComparator comparator) throws NSComparator.ComparisonException {
         if (comparator == null)
             throw new IllegalArgumentException("Comparator not specified");
-        if (_count < 2) {
+        int count = count();
+        if (count < 2) {
             return;
         }
 
-        _NSCollectionPrimitives.K2SortArray(_objects, _count, comparator);
+        _NSCollectionPrimitives.K2SortArray(_objects(), count, comparator);
         clearCache();
     }
 
@@ -265,7 +331,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
             int rangeLength = range.length();
             if (rangeLocation + rangeLength > count || rangeLocation >= count)
                 throw new IllegalArgumentException("Range [" + rangeLocation + "; " + rangeLength
-                        + "] out of bounds [0, " + (_count - 1) + "]");
+                        + "] out of bounds [0, " + (count - 1) + "]");
             wasRemoved = _removeObject(object, rangeLocation, rangeLength, false);
         }
         return wasRemoved;
@@ -282,7 +348,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
             int rangeLength = range.length();
             if (rangeLocation + rangeLength > count || rangeLocation >= count) {
                 throw new IllegalArgumentException("Range [" + rangeLocation + "; " + rangeLength
-                        + "] out of bounds [0, " + (_count - 1) + "]");
+                        + "] out of bounds [0, " + (count - 1) + "]");
             }
             return _removeObject(object, rangeLocation, rangeLength, true);
         }
@@ -302,7 +368,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
             int rangeLength = range.length();
             if (rangeLocation + rangeLength > count || rangeLocation >= count)
                 throw new IllegalArgumentException("Range [" + rangeLocation + "; " + rangeLength
-                        + "] out of bounds [0, " + (_count - 1) + "]");
+                        + "] out of bounds [0, " + (count - 1) + "]");
             while (rangeLength-- > 0)
                 removeObjectAtIndex(rangeLocation);
         }
@@ -323,13 +389,14 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     public void _moveObjectAtIndexToIndex(int sourceIndex, int destIndex) {
         if (sourceIndex == destIndex)
             return;
-        if (sourceIndex < 0 || sourceIndex >= _count || destIndex < 0 || destIndex >= _count)
-            throw new IllegalArgumentException("Either source(" + sourceIndex + ") or destination(" + destIndex
-                    + ") is illegal.");
-        Object temp = _objects[sourceIndex];
-        int boundary;
-        int index;
-        int direction;
+        int count = count();
+        if (sourceIndex < 0 || sourceIndex >= count || destIndex < 0 || destIndex >= count)
+			throw new IllegalArgumentException("Either source(" + sourceIndex + ") or destination(" + destIndex + ") is illegal.");
+        Object objs[] = _objects();
+        Object temp = objs[sourceIndex];
+		int boundary;
+		int index;
+		int direction;
         if (sourceIndex < destIndex) {
             index = destIndex;
             boundary = sourceIndex;
@@ -340,9 +407,9 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
             direction = -1;
         }
         for (; index != boundary; index += direction)
-            _objects[index] = _objects[index + direction];
+        	objs[index] = objs[index + direction];
 
-        _objects[destIndex] = temp;
+        objs[destIndex] = temp;
         _objectsCache = null;
     }
     
@@ -364,15 +431,16 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         if (object == null) {
             throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
         }
-        
-        if (index >= 0 && index < _count) {
-            Object result = _objects[index];
-            _objects[index] = object;
+        int count = count();
+        if (index >= 0 && index < count) {
+            Object[] objs = _objects();
+            Object result = objs[index];
+            objs[index] = object;
             clearCache();
             return (E) result;
         }
         
-        throw new IllegalArgumentException("Index (" + index + ") out of bounds [0, " + (_count - 1) + "]");
+        throw new IllegalArgumentException("Index (" + index + ") out of bounds [0, " + (count - 1) + "]");
     }
 
     /**
@@ -394,14 +462,15 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
                             }
                         }
                         int offset = 0;
+                        Object[] objs = _objects();
                         for(int i = 0; i < count; i++) {
-                            Object o = _objects[i];
-                            _objects[i] = null;
+                            Object o = objs[i];
+                            objs[i] = null;
                             if (!table.containsObject(o)) {
-                                _objects[offset++] = o;
+                            	objs[offset++] = o;
                             }
                         }
-                        _count = offset;
+                        _setCount(offset);
                         clearCache();
                     }
                 } else {
@@ -635,10 +704,6 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
             it.remove();
         }
     }
-
-    protected transient int modCount = 0;
-
-
 }
 
 class SubList<E> extends NSMutableArray<E> {
