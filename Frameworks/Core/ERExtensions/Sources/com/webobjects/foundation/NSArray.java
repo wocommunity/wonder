@@ -354,7 +354,8 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	protected Object[] objectsNoCopy() {
-		return _objects();
+		Object[] objs = _objects();
+		return objs != null ? objs : _NSCollectionPrimitives.EmptyArray;
 	}
 
 	public int count() {
@@ -815,9 +816,8 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		if (_mustRecomputeHash()) {
 			int hash = 0;
 			int max = count() <= 16 ? count() : 16;
-			Object[] objects = _objects();
 			for (int i = 0; i < max; i++) {
-				Object element = objects[i];
+				Object element = objectAtIndex(i);
 				if (element instanceof _NSFoundationCollection) {
 					hash ^= ((_NSFoundationCollection) element)._shallowHashCode();
 				} else {
