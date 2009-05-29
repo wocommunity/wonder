@@ -9,13 +9,5 @@ public class Home extends D2WPage {
     public Home(WOContext context) {
         super(context);
     }
-    
-    // R/R
-    @Override
-	public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);
-		if (((Session) session()).isWebObjectsTheme()) { 
-			AjaxUtils.addStylesheetResourceInHead(context, response, "app", "WebObjects.css");
-		} else AjaxUtils.addStylesheetResourceInHead(context, response, "app", "Neutral.css");
-    }
+
 }

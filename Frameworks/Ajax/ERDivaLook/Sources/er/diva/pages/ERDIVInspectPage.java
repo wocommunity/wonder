@@ -23,15 +23,4 @@ public class ERDIVInspectPage extends ERD2WTabInspectPage implements ERDIVPageIn
     public String stylesheet() {
     	return (String) d2wContext().valueForKey(ERDIVPageInterface.Keys.Stylesheet);
     }
-    
-    // R/R
-    @Override
-	public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);
-
-    	// add page style sheet
-    	if (stylesheet() != null) {
-    		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
-    	}
-    }
 }

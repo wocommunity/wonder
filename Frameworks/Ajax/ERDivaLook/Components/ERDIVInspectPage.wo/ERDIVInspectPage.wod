@@ -18,6 +18,20 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
+Stylesheet: ERXStyleSheet {
+	filename = stylesheet;
+	inline = true;
+}
+
+HasStylesheet: ERXNonNullConditional {
+	condition = stylesheet;
+}
+
+Watcher: AjaxBusyIndicator {
+	watchContainerID = "a";
+}
+
+
 ReturnLink: WOHyperlink {
 	action = nextPage;
 	class = "return";

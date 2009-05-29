@@ -3,13 +3,10 @@ EntitiesRepetition: WORepetition {
 	list = visibleEntityNames;
 }
 
-FindButton: AjaxUpdateLink {
+FindButton: WOHyperlink {
 	directActionName = queryActionName;
 	class = "box_query";
 	title = "Search";
-	updateContainerID = "a";
-	insertion = "Effect.appear";
-	insertionDuration = "0.5";
 }
 
 FindString: WOString {
@@ -18,13 +15,13 @@ FindString: WOString {
 }
 
 FindButton1: AjaxUpdateLink {
-	directActionName = queryActionName;
+	directActionName = ajaxQueryActionName;
 	class = "text";
 	string = manipulatedEntityName;
 	title = "Search";
 	updateContainerID = "a";
 	insertion = "Effect.appear";
-	insertionDuration = "0.5";
+	insertionDuration = "0.2";	
 }
 
 HasValidSession: WOConditional {
@@ -37,13 +34,13 @@ HomeLink: WOHyperlink {
 }
 
 NewButton: AjaxUpdateLink {
-	directActionName = newActionName;
+	directActionName = ajaxNewActionName;
 	string = "+";
 	class = "box_add";
 	title = "New...";
 	updateContainerID = "a";
 	insertion = "Effect.appear";
-	insertionDuration = "0.5";
+	insertionDuration = "0.2";
 }
 
 ToggleLookLink: WOHyperlink {
