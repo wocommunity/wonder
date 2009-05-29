@@ -83,8 +83,6 @@ div#a h2.entity {
 	top: 0px; 
 	left: 0px; 
 	z-index: 9999;
-	opacity: 0.5; 
-	background: url(/WebObjects/Frameworks/WO2.framework/WebServerResources/images/black.png) repeat;
 }
 
 #busy div {
