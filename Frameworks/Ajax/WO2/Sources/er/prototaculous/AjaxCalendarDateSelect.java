@@ -1,14 +1,12 @@
 package er.prototaculous;
 
-import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.ajax.AjaxComponent;
 import er.ajax.AjaxUtils;
 import er.extensions.foundation.ERXProperties;
 
@@ -29,7 +27,7 @@ import er.extensions.foundation.ERXProperties;
  * @property er.prototaculous.AjaxCalendarDateSelect.Scripts.euro24hYmd		Script file for EU date format
  *
  */
-public class AjaxCalendarDateSelect extends AjaxComponent {
+public class AjaxCalendarDateSelect extends WOComponent {
 	
 	/*
 	 * WO date formats 
@@ -91,17 +89,13 @@ public class AjaxCalendarDateSelect extends AjaxComponent {
 	
 	// R/R
 	@Override
-	protected void addRequiredWebResources(WOResponse response) {
-        addScriptResourceInHead(response, "prototype.js");
-        addScriptResourceInHead(response, "WO2", "calendar_date_select.js");
-        addStylesheetResourceInHead(response, "WO2", "AjaxCalendarDateSelect.css");
+	public void appendToResponse(WOResponse response, WOContext context) {
+        AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+        AjaxUtils.addScriptResourceInHead(context, response, "WO2", "calendar_date_select.js");
+        AjaxUtils.addStylesheetResourceInHead(context, response, "WO2", "AjaxCalendarDateSelect.css");
         
         // date format script
-        if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) addScriptResourceInHead(response, "WO2", (String) dateFormatScript());	
-	}
-
-	@Override
-	public WOActionResults handleRequest(WORequest request, WOContext context) {
-		return null;
+        if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) AjaxUtils.addScriptResourceInHead(context, response, "WO2", (String) dateFormatScript());	
+        super.appendToResponse(response, context);
 	}
 }
