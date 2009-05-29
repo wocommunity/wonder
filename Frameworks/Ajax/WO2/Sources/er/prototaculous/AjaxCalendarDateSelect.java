@@ -1,12 +1,14 @@
 package er.prototaculous;
 
-import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 
+import er.ajax.AjaxComponent;
 import er.ajax.AjaxUtils;
 import er.extensions.foundation.ERXProperties;
 
@@ -18,9 +20,16 @@ import er.extensions.foundation.ERXProperties;
  * So optionally you may produce your own variants of the client-side date format javascripts and set the properties to use them
  * 
  * @author mendis
+ * 
+ * @property er.prototaculous.AjaxCalendarDateSelect.DateFormats.natural 	Default date format
+ * @property er.prototaculous.AjaxCalendarDateSelect.DateFormats.american 	US date format
+ * @property er.prototaculous.AjaxCalendarDateSelect.DateFormats.euro24hYmd		EU date format
+ * 
+ * @property er.prototaculous.AjaxCalendarDateSelect.Scripts.american	Script file for US date format
+ * @property er.prototaculous.AjaxCalendarDateSelect.Scripts.euro24hYmd		Script file for EU date format
  *
  */
-public class AjaxCalendarDateSelect extends WOComponent {
+public class AjaxCalendarDateSelect extends AjaxComponent {
 	
 	/*
 	 * WO date formats 
@@ -81,14 +90,18 @@ public class AjaxCalendarDateSelect extends WOComponent {
     }
 	
 	// R/R
-    @Override
-	public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);
-        AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-        //AjaxUtils.addScriptResourceInHead(context, response, "WO2", "calendar_date_select.js");
-        AjaxUtils.addStylesheetResourceInHead(context, response, "WO2", "AjaxCalendarDateSelect.css");
+	@Override
+	protected void addRequiredWebResources(WOResponse response) {
+        addScriptResourceInHead(response, "prototype.js");
+        addScriptResourceInHead(response, "WO2", "calendar_date_select.js");
+        addStylesheetResourceInHead(response, "WO2", "AjaxCalendarDateSelect.css");
         
         // date format script
-        //if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) AjaxUtils.addScriptResourceInHead(context, response, "WO2", (String) dateFormatScript());
-    }
+        if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) addScriptResourceInHead(response, "WO2", (String) dateFormatScript());	
+	}
+
+	@Override
+	public WOActionResults handleRequest(WORequest request, WOContext context) {
+		return null;
+	}
 }
