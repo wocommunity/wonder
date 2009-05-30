@@ -1,6 +1,8 @@
 package er.extensions.eof;
 
 import java.lang.ref.WeakReference;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -15,7 +17,7 @@ import com.webobjects.foundation.NSArray;
  *
  * @param <T>
  */
-public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray {
+public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 	
 	private EOEditingContext _editingContext;
 	private EOGlobalID[] _array;
@@ -74,6 +76,58 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray {
 		return _array != null ? _array.length : 0;
 	}
 
+	@Override
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+			int index = 0;
+			public boolean hasNext() {
+				return index < count();
+			}
+
+			public T next() {
+				return objectAtIndex(index++);
+			}
+
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+			
+		};
+	}
+	
+	@Override
+	public Enumeration objectEnumerator() {
+		return new Enumeration<T>() {
+			
+			int index = 0;
+
+			public boolean hasMoreElements() {
+				return index < count();
+			}
+
+			public T nextElement() {
+				return objectAtIndex(index++);
+			}
+			
+		};
+	}
+	
+	@Override
+	public Enumeration<T> reverseObjectEnumerator() {
+	return new Enumeration<T>() {
+			
+			int index = count();
+
+			public boolean hasMoreElements() {
+				return index > 0;
+			}
+
+			public T nextElement() {
+				return objectAtIndex(--index);
+			}
+		};
+	}
+	
 	@Override
 	protected Object[] _objects() {
 		Object[] result = new Object[count()];
