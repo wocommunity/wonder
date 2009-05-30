@@ -73,7 +73,7 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 	
 	@Override
 	public int count() {
-		return _array != null ? _array.length : 0;
+		return _array.length;
 	}
 
 	@Override
