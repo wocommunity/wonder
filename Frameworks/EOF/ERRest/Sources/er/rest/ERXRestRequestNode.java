@@ -829,13 +829,27 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 					else {
 						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
 					}
-					Object childObj = delegate.objectOfEntityWithID(destinationClassDescription, childNode.id());
-					childNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
-					if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
-						((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, keyName);
+					
+					if (childNode.isNull()) {
+						Object childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
+						if (childObj != null) {
+							if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
+								((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, keyName);
+							}
+							else {
+								key.takeValueInObject(childObj, obj);
+							}
+						}
 					}
 					else {
-						key.takeValueInObject(childObj, obj);
+						Object childObj = delegate.objectOfEntityWithID(destinationClassDescription, childNode.id());
+						childNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
+						if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
+							((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, keyName);
+						}
+						else {
+							key.takeValueInObject(childObj, obj);
+						}
 					}
 				}
 				else if (/* entity.attributeNamed(keyName) != null && */ERXRestUtils.isPrimitive(valueType) && keyFilter.matches(key, ERXKey.Type.Attribute)) {
