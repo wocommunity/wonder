@@ -37,3 +37,13 @@ A: AjaxUpdateContainer {
 CSS: ERXStyleSheet {
 	filename = stylesheet;
 }
+
+Prototype: ERXJavaScript {
+	filename = "prototype.js";
+	framework = "Ajax";
+}
+
+CalendarDateSelect: ERXJavaScript {
+	filename = "calendar_date_select.js";
+	framework = "WO2";
+}

@@ -23,13 +23,4 @@ public abstract class ERDIVPageWrapper extends WOComponent {
 		}
     	return null;
     }
-    
-    // R/R
-    @Override
-	public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);	
-		// add prototype effects 
-	    AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-	    AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
-    }
 }

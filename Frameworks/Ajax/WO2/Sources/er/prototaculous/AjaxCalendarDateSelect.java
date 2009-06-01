@@ -25,9 +25,13 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @property er.prototaculous.AjaxCalendarDateSelect.Scripts.american	Script file for US date format
  * @property er.prototaculous.AjaxCalendarDateSelect.Scripts.euro24hYmd		Script file for EU date format
+ * 
+ * @property er.prototculous.useUnobtrusively	If you want the component to include its JavaScripts and CSS set to false. (This is the default).
+ * 												This is to support Unobtrusive Javascript programming.
  *
  */
 public class AjaxCalendarDateSelect extends WOComponent {
+	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototculous.useUnobtrusively", false);
 	
 	/*
 	 * WO date formats 
@@ -90,12 +94,15 @@ public class AjaxCalendarDateSelect extends WOComponent {
 	// R/R
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-        AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-        AjaxUtils.addScriptResourceInHead(context, response, "WO2", "calendar_date_select.js");
-        AjaxUtils.addStylesheetResourceInHead(context, response, "WO2", "AjaxCalendarDateSelect.css");
-        
-        // date format script
-        if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) AjaxUtils.addScriptResourceInHead(context, response, "WO2", (String) dateFormatScript());	
-        super.appendToResponse(response, context);
+		AjaxUtils.addStylesheetResourceInHead(context, response, "WO2", "AjaxCalendarDateSelect.css");
+
+		// include javascripts if not being used unobtrusively
+		if (!useUnobtrusively) {
+			AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+			AjaxUtils.addScriptResourceInHead(context, response, "WO2", "calendar_date_select.js");
+
+			// date format script
+			if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) AjaxUtils.addScriptResourceInHead(context, response, "WO2", (String) dateFormatScript());	
+		} super.appendToResponse(response, context);
 	}
 }
