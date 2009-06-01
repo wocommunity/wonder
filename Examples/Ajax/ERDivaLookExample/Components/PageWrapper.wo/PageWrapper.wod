@@ -2,7 +2,7 @@ Content: WOComponentContent {
 	_unroll = YES;
 }
 
-Head: D2WHead {
+Head: ERD2WHead {
 }
 
 Header: MenuHeader {
@@ -32,4 +32,8 @@ B: WOGenericContainer {
 A: AjaxUpdateContainer {
 	elementName = "div";
 	id = "a";
+}
+
+CSS: ERXStyleSheet {
+	filename = stylesheet;
 }
