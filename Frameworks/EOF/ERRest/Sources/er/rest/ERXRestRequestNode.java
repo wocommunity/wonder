@@ -830,6 +830,10 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
 					}
 					
+					if (childNode.isArray()) {
+						throw new IllegalArgumentException("You attempted to pass an array of values for the key '" + key + "'.");
+					}
+					
 					if (childNode.isNull()) {
 						Object childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
 						if (childObj != null) {
