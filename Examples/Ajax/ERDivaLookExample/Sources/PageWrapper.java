@@ -17,12 +17,7 @@ public class PageWrapper extends ERDIVPageWrapper {
     	return ((Session) session()).showMenubar == true ? "" : "display: none; ";
     }
     
-    // R/R
-    @Override
-	public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);
-		if (((Session) session()).isWebObjectsTheme()) { 
-			AjaxUtils.addStylesheetResourceInHead(context, response, "app", "WebObjects.css");
-		} else AjaxUtils.addStylesheetResourceInHead(context, response, "app", "Neutral.css");
+    public String stylesheet() {
+    	return ((Session) session()).isWebObjectsTheme() ? "WebObjects.css" : "Neutral.css";
     }
 }

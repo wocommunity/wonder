@@ -18,6 +18,7 @@
     100 : entity.name = 'Studio' => isEntityEditable = 1 [com.webobjects.directtoweb.BooleanAssignment],
     100 : entity.name = 'Rental' => isEntityDeletable = 1 [com.webobjects.directtoweb.BooleanAssignment],
     100 : entity.name = 'FeeType' => isEntityEditable = 1 [com.webobjects.directtoweb.BooleanAssignment],
+    100 : task = 'home' => displayNameForPageConfiguration = Home [com.webobjects.directtoweb.Assignment],
     100 : entity.name = 'Customer' => isEntityEditable = 1 [com.webobjects.directtoweb.BooleanAssignment],
     100 : entity.name = 'MovieRole' => isEntityEditable = 1 [com.webobjects.directtoweb.BooleanAssignment],
     100 : (entity.name = 'Customer' and task = 'list') => subTask = detail [com.webobjects.directtoweb.Assignment],
