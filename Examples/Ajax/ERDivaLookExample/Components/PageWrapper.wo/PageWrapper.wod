@@ -32,6 +32,7 @@ B: WOGenericContainer {
 A: AjaxUpdateContainer {
 	elementName = "div";
 	id = "a";
+	evalScripts = true;
 }
 
 CSS: ERXStyleSheet {
@@ -43,7 +44,18 @@ Prototype: ERXJavaScript {
 	framework = "Ajax";
 }
 
-CalendarDateSelect: ERXJavaScript {
+Scriptaculous: ERXJavaScript {
+	filename = "scriptaculous.js";
+	framework = "Ajax";
+}
+
+CalendarDateSelectScript: ERXJavaScript {
 	filename = "calendar_date_select.js";
 	framework = "WO2";
 }
+
+AccordionScript: ERXJavaScript {
+	filename = "accordion.js";
+	framework = "WO2";
+}
+

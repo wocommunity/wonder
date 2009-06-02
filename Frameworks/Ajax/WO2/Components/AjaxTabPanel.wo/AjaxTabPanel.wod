@@ -49,4 +49,5 @@ TabRepetition: WORepetition {
 AjaxContainer : AjaxUpdateContainer {
 	id = containerID;
 	class = "tab_panel";
+	evalScripts = true;
 }
