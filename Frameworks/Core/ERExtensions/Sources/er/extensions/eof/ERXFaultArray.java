@@ -73,7 +73,7 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 	
 	@Override
 	public int count() {
-		return _array.length;
+		return _array != null ? _array.length : 0;
 	}
 
 	@Override
@@ -139,6 +139,13 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 	
 	public EOEditingContext editingContext() {
 		return _editingContext;
+	}
+	
+	@Override
+	public Object clone() {
+		ERXFaultArray other = new ERXFaultArray(_editingContext, NSArray.EmptyArray);
+		other._array = _array;
+		return other;
 	}
 	
 	public void setEditingContext(EOEditingContext ec) {
