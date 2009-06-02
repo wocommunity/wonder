@@ -57,8 +57,15 @@ QueryComponent: D2WQuery {
 	pageConfiguration = queryPageConfiguration;
 }
 
-
 NewLink: WOHyperlink {
 	action = newObjectAction;
 	id = "ERDIVEditRelationshipPage_NewButton";
+}
+
+Stylesheet: ERXStyleSheet {
+	filename = stylesheet;
+}
+
+HasStylesheet: ERXNonNullConditional {
+	condition = stylesheet;
 }

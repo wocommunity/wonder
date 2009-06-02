@@ -14,14 +14,11 @@ FindString: WOString {
 	escapeHTML = false;
 }
 
-FindButton1: AjaxUpdateLink {
-	directActionName = ajaxQueryActionName;
+FindButton1: WOHyperlink {
+	directActionName = queryActionName;
 	class = "text";
 	string = manipulatedEntityName;
 	title = "Search";
-	updateContainerID = "a";
-	insertion = "Effect.appear";
-	insertionDuration = "0.2";	
 }
 
 HasValidSession: WOConditional {
@@ -33,14 +30,11 @@ HomeLink: WOHyperlink {
 	id = "home_link";
 }
 
-NewButton: AjaxUpdateLink {
-	directActionName = ajaxNewActionName;
+NewButton: WOHyperlink {
+	directActionName = newActionName;
 	string = "+";
 	class = "box_add";
 	title = "New...";
-	updateContainerID = "a";
-	insertion = "Effect.appear";
-	insertionDuration = "0.2";
 }
 
 ToggleLookLink: WOHyperlink {
