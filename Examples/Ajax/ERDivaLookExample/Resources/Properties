@@ -81,3 +81,4 @@ ERDivaLook pref
 #################
 
 er.extensions.ERXLocalizer.frameworkSearchPath = (app,ERDivaLook,ERDirectToWeb,ERExtensions)
+er.prototculous.useUnobtrusively=true

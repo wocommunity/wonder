@@ -5,6 +5,7 @@ import com.webobjects.foundation.*;
 
 import er.ajax.AjaxAccordion;
 import er.ajax.AjaxUtils;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * WAS: Encapsulation of http://www.stickmanlabs.com/accordion
@@ -13,10 +14,15 @@ import er.ajax.AjaxUtils;
  * Extends the api of AjaxAccordion. i.e:
  * @see er.ajax.AjaxAccordion
  * 
+ * @property er.prototculous.useUnobtrusively	If you want the component to include its JavaScripts and CSS set to false. (This is the default).
+ * 												This is to support Unobtrusive Javascript programming.
+ * 
  * @author mendis
  *
  */
 public class AjaxAccordion2 extends AjaxAccordion {
+	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototculous.useUnobtrusively", false);
+	
     public AjaxAccordion2(WOContext context) {
         super(context);
     }
@@ -45,10 +51,12 @@ public class AjaxAccordion2 extends AjaxAccordion {
     // R&R
     @Override
     protected void addRequiredWebResources(WOResponse response) {
-        addScriptResourceInHead(response, "prototype.js");
-        addScriptResourceInHead(response, "scriptaculous.js");
-        addScriptResourceInHead(response, "WO2", "accordion.js");
-        addStylesheetResourceInHead(response, "WO2", "AjaxAccordion2.css");
+		// include javascripts if not being used unobtrusively
+    	if (!useUnobtrusively) {
+    		addScriptResourceInHead(response, "prototype.js");
+    		addScriptResourceInHead(response, "scriptaculous.js");
+    		addScriptResourceInHead(response, "WO2", "accordion.js");
+    	} addStylesheetResourceInHead(response, "WO2", "AjaxAccordion2.css");
     }
     
     @Override
