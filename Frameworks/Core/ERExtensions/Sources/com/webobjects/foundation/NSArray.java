@@ -215,7 +215,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	public NSArray() {
-		this(null, 0, 0, false);
+		this(null, 0, 0, false, false);
 	}
 
 	public NSArray(E object) {
@@ -228,78 +228,97 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 
 	}
 
-	private void initFromObjects(Object[] objects, int rangeLocation, int rangeLength, boolean checkForNull) {
-		initFromObjects(objects, rangeLocation, rangeLength, 0, checkForNull);
+	private void initFromObjects(Object[] objects, int rangeLocation, int rangeLength, boolean checkForNull, boolean ignoreNull) {
+		initFromObjects(objects, rangeLocation, rangeLength, 0, checkForNull, ignoreNull);
 	}
 	
-	private void initFromObjects(Object[] objects, int rangeLocation, int rangeLength, int offset, boolean checkForNull) {
+	private void initFromObjects(Object[] objects, int rangeLocation, int rangeLength, int offset, boolean checkForNull, boolean ignoreNull) {
 		if (checkForNull) {
 			int maxRange = rangeLocation + rangeLength;
+			int validCount = 0;
+			Object[] validObjects = new Object[maxRange];
 			for (int i = rangeLocation; i < maxRange; i++) {
-				if (objects[i] == null) {
-					throw new IllegalArgumentException("Attempt to insert null into an " + getClass().getName() + ".");
+				Object o = objects[i];
+				if (o != null) {
+					validObjects[validCount++] = o;
+					continue;
 				}
+				if (!ignoreNull)
+					throw new IllegalArgumentException("Attempt to insert null into an " + getClass().getName() + ".");
+			}
+			_initializeWithCapacity(validCount + offset);
+
+			if (validCount > 0) {
+				System.arraycopy(validObjects, 0, _objects(), offset, validCount);				
+			}
+			_setCount(validCount + offset);
+		} else {
+			_initializeWithCapacity(rangeLength + offset);
+			if (rangeLength > 0) {
+				System.arraycopy(objects, rangeLocation, _objects(), offset, rangeLength);
+			}
+			_setCount(rangeLength + offset);
+		}
+	}
+	
+	private void initFromList(List<? extends E> list, int rangeLocation, int rangeLength, int offset, boolean checkForNull, boolean ignoreNull) {
+		int maxRange = rangeLocation + rangeLength;
+		if (checkForNull) {
+			int validCount = 0;
+			Object[] validObjects = new Object[maxRange];
+			for (int i = rangeLocation; i < maxRange; i++) {
+				Object o = list.get(i);
+				if (o != null) {
+					validObjects[validCount++] = o;
+					continue;
+				}
+				if (!ignoreNull)
+					throw new IllegalArgumentException("Attempt to insert null into an " + getClass().getName() + ".");
 			}
 
+			_initializeWithCapacity(validCount + offset);
+
+			if (validCount > 0) {
+				System.arraycopy(validObjects, 0, _objects(), offset, validCount);				
+			}
+			_setCount(validCount + offset);
+		} else {
+			_initializeWithCapacity(rangeLength + offset);
+			Object[] objects = _objects();
+			int count = offset;
+			for (int i = rangeLocation; i < maxRange; i++) {
+				objects[count++] = list.get(i);
+			}
+			_setCount(count);
 		}
-		_initializeWithCapacity(rangeLength + offset);
-		if (rangeLength > 0) {
-			System.arraycopy(objects, rangeLocation, _objects(), offset, rangeLength);
-		}
-		_setCount(rangeLength + offset);
 	}
 
-	protected NSArray(Object[] objects, int rangeLocation, int rangeLength, boolean checkForNull) {
-		initFromObjects(objects, rangeLocation, rangeLength, checkForNull);
+	protected NSArray(Object[] objects, int rangeLocation, int rangeLength, boolean checkForNull, boolean ignoreNull) {
+		initFromObjects(objects, rangeLocation, rangeLength, checkForNull, ignoreNull);
 	}
 
 	public NSArray(E[] objects) {
-		this(objects, 0, objects == null ? 0 : objects.length, true);
+		this(objects, 0, objects == null ? 0 : objects.length, true, true);
 	}
 	
 	public NSArray(E object, E... objects) {
-		initFromObjects(objects, 0, objects == null ? 0 : objects.length, 1, true);
+		initFromObjects(objects, 0, objects == null ? 0 : objects.length, 1, true, true);
 		_objects()[0] = object;
 	}
 
 	public NSArray(E[] objects, NSRange range) {
-		this(objects, range == null ? 0 : range.location(), range == null ? 0 : range.length(), true);
+		this(objects, range == null ? 0 : range.location(), range == null ? 0 : range.length(), true, true);
 	}
 
 	public NSArray(NSArray<? extends E> otherArray) {
-		this(otherArray == null ? null : (E[])otherArray.objectsNoCopy(), 0, otherArray == null ? 0 : otherArray.count(), false);
+		this(otherArray == null ? null : (E[])otherArray.objectsNoCopy(), 0, otherArray == null ? 0 : otherArray.count(), false, false);
 	}
 
 	public NSArray(List<? extends E> list, boolean checkForNull) {
 		if (list == null) {
-			throw new IllegalArgumentException("List cannot be null");
+			throw new NullPointerException("List cannot be null");
 		}
-		Object[] aList = list.toArray();
-		initFromObjects(aList, 0, aList.length, checkForNull);
-	}
-
-	public NSArray(Vector<? extends E> vector, NSRange range, boolean ignoreNull) {
-		if (range != null) {
-			if (vector == null) {
-				throw new IllegalArgumentException("Vector cannot be null");
-			}
-			int count = vector.size();
-			int rangeLocation = range.location();
-			int rangeLength = range.length();
-			_initializeWithCapacity(count);
-			Object[] objs = _objects();
-			for (int i = 0; i < rangeLength; i++) {
-				Object object = vector.elementAt(i + rangeLocation);
-				if (object != null) {
-					objs[i] = object;
-					continue;
-				}
-				if (!ignoreNull) {
-					throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
-				}
-			}
-			_setCount(count);
-		}
+		initFromList(list, 0, list.size(), 0, checkForNull, false);
 	}
 
 	public NSArray(Collection<? extends E> collection, boolean checkForNull) {
@@ -308,7 +327,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 		
 		Object[] anArray = collection.toArray();
-		initFromObjects(anArray, 0, anArray.length, checkForNull);
+		initFromObjects(anArray, 0, anArray.length, checkForNull, false);
 	}
 
 	public NSArray(Collection<? extends E> collection) {
@@ -316,27 +335,14 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
     public NSArray(List<? extends E> list, NSRange range, boolean ignoreNull) {
-    	if (range != null) {
-    		if (list == null) {
-    			throw new IllegalArgumentException("Vector cannot be null");
-    		}
-
-    		int count = list.size();
-    		int rangeLocation = range.location();
-    		int rangeLength = range.length();
-
-    		_initializeWithCapacity(count);
-			Object[] objs = _objects();
-    		for (int i = 0; i < rangeLength; ++i) {
-    			Object object = list.get(i + rangeLocation);
-    			if (object != null) {
-    				objs[i] = object;
-    			} else if (!ignoreNull) {
-    				throw new IllegalArgumentException("Attempt to insert null into an  " + super.getClass().getName() + ".");
-    			}
-    		}
-			_setCount(count);
+    	if (list == null) {
+    		throw new IllegalArgumentException("List cannot be null");
     	}
+    	initFromList(list, range != null ? range.location() : 0, range != null ? range.length() : 0, 0, true, ignoreNull);
+    }
+
+    public NSArray(Vector<? extends E> vector, NSRange range, boolean ignoreNull) {
+    	this((List<E>)vector, range, ignoreNull);
     }
 
     protected void _setCount(int count) {
@@ -381,7 +387,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		Object[] objects = new Object[count + 1];
 		System.arraycopy(objectsNoCopy(), 0, objects, 0, count);
 		objects[count] = object;
-		return new NSArray<E>(objects, 0, count + 1, false);
+		return new NSArray<E>(objects, 0, count + 1, false, false);
 	}
 
 	public NSArray<E> arrayByAddingObjectsFromArray(NSArray<? extends E> otherArray) {
@@ -397,7 +403,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			Object[] objects = new Object[count + otherCount];
 			System.arraycopy(objectsNoCopy(), 0, objects, 0, count);
 			System.arraycopy(otherArray.objectsNoCopy(), 0, objects, count, otherCount);
-			return new NSArray<E>(objects, 0, count + otherCount, false);
+			return new NSArray<E>(objects, 0, count + otherCount, false, false);
 		}
 		return immutableClone();
 	}
@@ -554,7 +560,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		if (range == null) {
 			return EmptyArray;
 		}
-		return new NSArray<E>(objectsNoCopy(), range.location(), range.length(), false);
+		return new NSArray<E>(objectsNoCopy(), range.location(), range.length(), false, false);
 	}
 
 	public E lastObject() {
@@ -685,9 +691,6 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 				}
 			}
 			if (parseData[end] == charSeparator) {
-				if (start < end) {
-					objects.addObject(string.substring(start, end));
-				}
 				objects.addObject("");
 			} else {
 				objects.addObject(string.substring(start, stringLength));
@@ -711,10 +714,8 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 				objects.addObject(string.substring(start, index));
 				start = index + separatorLength;
 			}
-			if (start < index) {
+			if (start <= index) {
 				objects.addObject(string.substring(start, index));
-			} else {
-				objects.addObject("");
 			}
 
 			objects.addObject("");
@@ -893,7 +894,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		fields = s.readFields();
 		Object[] values = (Object[]) fields.get(SerializationValuesFieldKey, _NSUtilities._NoObjectArray);
 		values = values != null ? values : _NSUtilities._NoObjectArray;
-		initFromObjects(values, 0, values.length, true);
+		initFromObjects(values, 0, values.length, true, false);
 	}
 
 	@SuppressWarnings("unused")
@@ -922,7 +923,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 
 	public boolean contains(Object element) {
 		if (element == null) {
-			return false;
+			throw new NullPointerException("NSArray does not support null values");
 		}
 		return containsObject(element);
 	}
