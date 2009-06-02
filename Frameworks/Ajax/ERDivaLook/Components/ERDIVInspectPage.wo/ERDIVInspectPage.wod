@@ -20,7 +20,6 @@ PageWrapper: WOSwitchComponent {
 
 Stylesheet: ERXStyleSheet {
 	filename = stylesheet;
-	inline = true;
 }
 
 HasStylesheet: ERXNonNullConditional {

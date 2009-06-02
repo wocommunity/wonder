@@ -257,7 +257,6 @@ ReportLink: WOHyperlink {
 
 Stylesheet: ERXStyleSheet {
 	filename = stylesheet;
-	inline = true;
 }
 
 HasStylesheet: ERXNonNullConditional {

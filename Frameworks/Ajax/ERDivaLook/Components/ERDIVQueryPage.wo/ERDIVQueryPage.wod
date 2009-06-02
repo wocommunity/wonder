@@ -95,7 +95,6 @@ AttributeContainer: WOGenericContainer {
 
 Stylesheet: ERXStyleSheet {
 	filename = stylesheet;
-	inline = true;
 }
 
 HasStylesheet: ERXNonNullConditional {

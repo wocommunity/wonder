@@ -116,7 +116,6 @@ NoConfirmation: WOConditional {
 
 Stylesheet: ERXStyleSheet {
 	filename = stylesheet;
-	inline = true;
 }
 
 HasStylesheet: ERXNonNullConditional {
