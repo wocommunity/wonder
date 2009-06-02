@@ -31,6 +31,10 @@ public class NSMutableSet<E> extends NSSet<E> {
 		
 		_ensureCapacity(capacity);
 	}
+	
+	public NSMutableSet(Collection<? extends E> collection) {
+		super(collection);
+	}
 
 	public NSMutableSet(E object) {
 		super(object);

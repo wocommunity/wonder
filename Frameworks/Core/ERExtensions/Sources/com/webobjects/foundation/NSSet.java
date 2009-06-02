@@ -63,6 +63,11 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		_initializeSet();
 	}
 
+	public NSSet(Collection<? extends E> collection) {
+		Object[] objects = collection.toArray();
+		initFromObjects(objects, true);
+	}
+	
 	public NSSet(NSArray<? extends E> objects) {
 		this(objects == null ? null : (E[])objects.objectsNoCopy(), false);
 	}
@@ -76,8 +81,12 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 			throw new IllegalArgumentException("Set cannot be null");
 		}
 
+		if (!ignoreNull && set.contains(null)) {
+			throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
+		}
+		
 		Object[] aSet = set.toArray();
-		initFromObjects(aSet, ignoreNull);
+		initFromObjects(aSet, !ignoreNull);
 	}
 
 	public NSSet(E object) {
@@ -291,19 +300,16 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	private void initFromObjects(Object[] objects, boolean checkForNull) {
-		if (checkForNull) {
-			for (int i = 0; i < objects.length; i++) {
-				if (objects[i] == null) {
-					throw new IllegalArgumentException("Attempt to insert null object into an  " + getClass().getName() + ".");
-				}
-			}
-
-		}
 		_initializeSet();
 		_ensureCapacity(objects.length);
 		for (int i = 0; i < objects.length; i++) {
-			if (_NSCollectionPrimitives.addValueToSet(objects[i], _objects, _flags)) {
-				_count++;
+			if (objects[i] == null) {
+				if (checkForNull)
+					throw new IllegalArgumentException("Attempt to insert null object into an  " + getClass().getName() + ".");
+			} else {
+				if (_NSCollectionPrimitives.addValueToSet(objects[i], _objects, _flags)) {
+					_count++;
+				}
 			}
 		}
 
