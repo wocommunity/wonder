@@ -742,6 +742,11 @@ class SubList<E> extends NSMutableArray<E> {
         checkForComodification();
         return size;
     }
+    
+    public boolean add(E element) {
+    	add(size(), element);
+    	return true;
+    }
 
     public void add(int index, E element) {
         if (index < 0 || index > size)
@@ -751,6 +756,27 @@ class SubList<E> extends NSMutableArray<E> {
         expectedModCount = l.modCount;
         size++;
         modCount++;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+    	Iterator<E> e = iterator();
+    	if (o==null) {
+    		while (e.hasNext()) {
+    			if (e.next()==null) {
+    				e.remove();
+    				return true;
+    			}
+    		}
+    	} else {
+    		while (e.hasNext()) {
+    			if (o.equals(e.next())) {
+    				e.remove();
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
     }
 
     public E remove(int index) {
