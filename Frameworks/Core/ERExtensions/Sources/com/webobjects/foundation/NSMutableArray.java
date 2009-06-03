@@ -761,19 +761,10 @@ class SubList<E> extends NSMutableArray<E> {
     @Override
     public boolean remove(Object o) {
     	Iterator<E> e = iterator();
-    	if (o==null) {
-    		while (e.hasNext()) {
-    			if (e.next()==null) {
-    				e.remove();
-    				return true;
-    			}
-    		}
-    	} else {
-    		while (e.hasNext()) {
-    			if (o.equals(e.next())) {
-    				e.remove();
-    				return true;
-    			}
+    	while (e.hasNext()) {
+    		if (o.equals(e.next())) {
+    			e.remove();
+    			return true;
     		}
     	}
     	return false;
