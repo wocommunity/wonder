@@ -1,6 +1,5 @@
 Show: WOConditional {
-	condition = application.isCachingEnabled;
-	negate = true;
+	condition = shouldShow;
 }
 
 Log4J: WOHyperlink {
@@ -41,11 +40,13 @@ Dump: WOHyperlink {
 	directActionName = "dumpCreatedKeys";
 	class = ^linkClass;
 }
+
 Edit: WOHyperlink {
 	actionClass = "er.extensions.ERXDirectAction";
 	directActionName = "editLocalizedFiles";
 	class = ^linkClass;
 }
+
 Test: WOHyperlink {
 	actionClass = "er.selenium.SeleniumStartTesting";
 	class = ^linkClass;

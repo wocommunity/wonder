@@ -13,6 +13,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
 import java.util.Enumeration;
+import java.util.List;
 
 public class WOToOneRelationship extends WOComponent {
     // ** passed-in (required)
