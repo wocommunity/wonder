@@ -60,8 +60,16 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 			}
 			if(result == null) {
 				EOGlobalID gid = _array[index];
-				result = (T)editingContext().faultForGlobalID(gid, editingContext());
+				result = (T)editingContext().objectForGlobalID(gid);
+				if(result == null) {
+					result = (T)editingContext().faultForGlobalID(gid, editingContext());
+					// System.out.println("fault: " + result.isFault());
+				} else {
+					// System.out.println("object: " + result.isFault());
+				}
 				_refs[index] = new WeakReference<T>(result);
+			} else {
+				// System.out.println("no fault");
 			}
 			return result;
 		}
@@ -69,6 +77,38 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 			throw new IllegalArgumentException("Array is empty");
 		}
 		throw new IllegalArgumentException("Index (" + index + ") out of bounds [0, " + (count() - 1) + "]");
+	}
+	
+	@Override
+	public boolean containsObject(Object object) {
+		if (object instanceof EOEnterpriseObject) {
+			EOEnterpriseObject eo = (EOEnterpriseObject) object;
+			EOGlobalID gid = editingContext().globalIDForObject(eo);
+			for (int i = 0; i < count(); i++) {
+				EOGlobalID current = _array[i];
+				if(current.equals(gid)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return super.containsObject(object);
+	}
+	
+	@Override
+	public int indexOfObject(Object object) {
+		if (object instanceof EOEnterpriseObject) {
+			EOEnterpriseObject eo = (EOEnterpriseObject) object;
+			EOGlobalID gid = editingContext().globalIDForObject(eo);
+			for (int i = 0; i < count(); i++) {
+				EOGlobalID current = _array[i];
+				if(current.equals(gid)) {
+					return i;
+				}
+			}
+			return NotFound;
+		}
+		return super.indexOfObject(object);
 	}
 	
 	@Override
