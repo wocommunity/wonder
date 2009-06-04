@@ -364,7 +364,10 @@ public class WOToOneRelationship extends WOComponent {
 
 	public List<Object> selections() {
 		Object selection = this.selection();
-		return (selection instanceof List ? (List<Object> ) selection : new NSArray<Object>(selection));	
+		if (selection == null) {
+			return NSArray.emptyArray();
+		}
+		return (selection instanceof List ? (List<Object>) selection : new NSArray<Object>(selection));
 	}
 
 /*
