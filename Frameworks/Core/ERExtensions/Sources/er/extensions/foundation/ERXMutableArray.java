@@ -83,7 +83,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 	}
 
 	public static NSData toBlob(NSMutableArray<?> d) {
-		return toBlob(d);
+		return toBlob((NSArray<?>) d);
 	}
 	
 	@SuppressWarnings("unchecked")
