@@ -132,6 +132,15 @@
        </antcall>
     </target>
 
+    <target name="ERPDFGeneration.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERPDFGeneration" />
+            <param name="project.dir" value="Frameworks/Misc/ERPDFGeneration" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+       </antcall>
+    </target>
+
     <target name="ERJGroupsSynchronizer.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -802,7 +811,7 @@
         to add your own, add a target definition above and choose the correct group below 
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, WOLips.all, WOJavaRebel.all, ERMoviesLogic.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, WOLips.all, WOJavaRebel.all, ERMoviesLogic.all" />
     
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, TickTockMan.all" />
 
