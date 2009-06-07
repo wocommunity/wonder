@@ -1860,7 +1860,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	@Override
 	public WOResponse createResponseInContext(WOContext context) {
-		WOResponse response = new ERXResponse();
+		WOResponse response = new ERXResponse(context);
 		return response;
 	}
 
