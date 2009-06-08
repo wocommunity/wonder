@@ -397,15 +397,6 @@ public class ERXDirectAction extends WODirectAction {
     }
 
     public WOActionResults performActionNamed(String actionName) {
-    	// set the current localizer
-		if (existingSession() == null 
-				&& context() != null 
-				&& context().request() != null 
-				&& context().request().browserLanguages() != null) {
-			
-			ERXLocalizer.setCurrentLocalizer(ERXLocalizer.localizerForLanguages(this.context().request().browserLanguages()));
-		}
-		
         WOActionResults actionResult = super.performActionNamed(actionName);
         if (browser != null) 
             ERXBrowserFactory.factory().releaseBrowser(browser);

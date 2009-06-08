@@ -167,7 +167,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	public void addDefaultRoutes(String entityName) {
-		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(entityName, 2);
+		String pluralEntityName = ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2);
 		String controllerName = pluralEntityName + "Controller";
 		Class controllerClass = _NSUtilities.classWithName(controllerName);
 		if (controllerClass == null) {
@@ -217,7 +217,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public void addDefaultRoutes(String entityName, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
 		boolean lowercaseEntityNames = ERXProperties.booleanForKeyWithDefault("ERXRest.lowercaseEntityNames", true);
 		String singularEntityName = lowercaseEntityNames ? ERXStringUtilities.uncapitalize(entityName) : entityName;
-		String pluralEntityName = ERXLocalizer.defaultLocalizer().plurifiedString(singularEntityName, 2);
+		String pluralEntityName = ERXLocalizer.englishLocalizer().plurifiedString(singularEntityName, 2);
 
 		addRoute(new ERXRoute(".*", ERXRoute.Method.Head, controllerClass, "head"));
 		addRoute(new ERXRoute("/" + pluralEntityName, ERXRoute.Method.Post, controllerClass, "create"));
