@@ -92,11 +92,11 @@ import er.extensions.localization.ERXLocalizer;
  * in browser:
  * 
  * <pre>
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/people.xml
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/people.json
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/people.plist
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/person/100.json
- * http://localhost/cgi-bin/WebObjects/YourApp.woa/person/100/edit.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/ra/people.xml
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/ra/people.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/ra/people.plist
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/ra/person/100.json
+ * http://localhost/cgi-bin/WebObjects/YourApp.woa/ra/person/100/edit.json
  * </pre>
  * 
  * @author mschrag
