@@ -23,6 +23,7 @@ import com.webobjects.foundation.NSRange;
 
 import er.extensions.eof.qualifiers.ERXInQualifier;
 import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * The goal of the fetch specification batch iterator is to have the ability to
@@ -416,11 +417,8 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
                                                                                                       fetchSpecification.sortOrderings(),
                                                                                                       null);
             pkFetchSpec.setFetchLimit(fetchSpecification.fetchLimit());
-            boolean postProcessDistinct = false;
-            if (fetchSpecification.usesDistinct() && fetchSpecification.sortOrderings() != null && fetchSpecification.sortOrderings().count() > 0) {
-            	postProcessDistinct = true;
-            }
-            else {
+            boolean performDistinctInMemory = ERXSQLHelper.newSQLHelper(entity).shouldPerformDistinctInMemory(pkFetchSpec);
+            if (!performDistinctInMemory) {
             	pkFetchSpec.setUsesDistinct(fetchSpecification.usesDistinct());
             }
             log.debug("Fetching primary keys.");
@@ -428,7 +426,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
 
             String pkAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
             primaryKeys = (NSArray)primaryKeyDictionaries.valueForKey(pkAttributeName);
-            if (postProcessDistinct) {
+            if (performDistinctInMemory) {
             	primaryKeys = ERXArrayUtilities.arrayWithoutDuplicates(primaryKeys);
             }
         }
