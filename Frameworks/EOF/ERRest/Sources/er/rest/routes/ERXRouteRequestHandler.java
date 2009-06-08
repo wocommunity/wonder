@@ -43,7 +43,7 @@ import er.extensions.localization.ERXLocalizer;
  * in PeopleController:
  * 
  * <pre>
- * public class PeopleController extends ERXRouteDirectAction {
+ * public class PeopleController extends ERXRouteController {
  * 	public PeopleController(WORequest request) {
  * 		super(request);
  * 	}
@@ -54,13 +54,13 @@ import er.extensions.localization.ERXLocalizer;
  * 	}
  * 
  * 	public ERXKeyFilter showFilter() {
- * 		ERXKeyFilter filter = ERXKeyFilter.attributes();
+ * 		ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
  * 		filter.include(Person.COMPANY).includeAttributes();
  * 		return filter;
  * 	}
  * 
  * 	public ERXKeyFilter updateFilter() {
- * 		ERXKeyFilter filter = ERXKeyFilter.attributes();
+ * 		ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
  * 		filter.include(Person.COMPANY);
  * 		return filter;
  * 	}
