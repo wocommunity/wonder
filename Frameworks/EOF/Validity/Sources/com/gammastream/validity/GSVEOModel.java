@@ -1,10 +1,13 @@
 package com.gammastream.validity;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPathUtilities;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class GSVEOModel {
 

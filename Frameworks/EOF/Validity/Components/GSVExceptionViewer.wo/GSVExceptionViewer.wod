@@ -49,14 +49,6 @@ Generic12: WOGenericContainer {
 	elementName = "UL";
 }
 
-Generic13: WOGenericContainer {
-	elementName = "LI";
-}
-
-Generic14: WOGenericContainer {
-	elementName = "LI";
-}
-
 Generic2: WOGenericContainer {
 	elementName = "LI";
 }

@@ -1,9 +1,6 @@
 package com.gammastream.validity;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.NSDictionary;
 
 
 public class GSVEOAttribute {

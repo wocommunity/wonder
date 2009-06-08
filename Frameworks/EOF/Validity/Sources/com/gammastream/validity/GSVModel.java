@@ -1,12 +1,23 @@
 package com.gammastream.validity;
 //javadoc *.java -author -package com.gammastream.validity -d api
 
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.Enumeration;
+
+import com.webobjects.appserver.xml.WOXMLCoder;
+import com.webobjects.appserver.xml.WOXMLCoding;
+import com.webobjects.appserver.xml.WOXMLDecoder;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPathUtilities;
 
 /**
  *	GSVModel used for the mapping validation rules to an entities' attributes.<BR>

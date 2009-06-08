@@ -1,11 +1,10 @@
 package com.gammastream.validity;
 
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-
-import java.lang.*;
-import java.net.*;
-import java.math.*;
+import com.webobjects.appserver.xml.WOXMLCoder;
+import com.webobjects.appserver.xml.WOXMLCoding;
+import com.webobjects.appserver.xml.WOXMLDecoder;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  *	This structure stores the various information which defines each rule.

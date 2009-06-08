@@ -1,14 +1,19 @@
 package com.gammastream.validity;
 
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.lang.*;
-import java.util.*;
-import java.net.*;
-import java.math.*;
+import java.util.Enumeration;
+
+import com.webobjects.appserver.xml.WOXMLCoder;
+import com.webobjects.appserver.xml.WOXMLCoding;
+import com.webobjects.appserver.xml.WOXMLDecoder;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  *	GSVEntity is the data structure associated with a paritcular table or EOEntity in an EOModel.
