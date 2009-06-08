@@ -1,11 +1,13 @@
-import com.gammastream.validity.*;
+import java.io.File;
+import java.io.IOException;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.io.*;
+import com.gammastream.validity.GSVEOModel;
+import com.gammastream.validity.GSVModel;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.xml.WOXMLDecoder;
+import com.webobjects.foundation.NSPathUtilities;
 
 
 public class Main extends WOComponent {
@@ -18,7 +20,13 @@ public class Main extends WOComponent {
     protected String password = "";
     protected boolean error = false;
 
-    public void awake(){
+    
+    public Main(WOContext arg0) {
+		super(arg0);
+	}
+
+	@Override
+	public void awake(){
         super.awake();
         error=false;
     }

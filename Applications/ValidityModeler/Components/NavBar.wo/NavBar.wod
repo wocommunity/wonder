@@ -7,14 +7,14 @@ ActiveImage2: WOActiveImage {
 
 ActiveImage3: WOActiveImage {
 	framework = "ValidityModeler";
-	filename = "graphics/help.gif";
+	filename = "graphics/menu/help.gif";
 	border = 0;
 	href = helpDirRootPath;
 	target = "help";
 }
 
 ActiveImage4: WOActiveImage {
-	filename = "graphics/preferences.gif";
+	filename = "graphics/menu/preferences.gif";
 	action = openConfiguration;
 	border = 0;
 }

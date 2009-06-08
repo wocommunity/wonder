@@ -1,9 +1,10 @@
-import com.gammastream.validity.*;
-import com.webobjects.appserver.*;
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.gammastream.validity.GSVEOModel;
+import com.gammastream.validity.GSVModel;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 
 public class Session extends WOSession {
     public GSVEOModel gsveomodel = null;

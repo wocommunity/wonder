@@ -1,9 +1,6 @@
 ComponentContent1: WOComponentContent {
 }
 
-ComponentContent2: WOComponentContent {
-}
-
 Image1: WOImage {
 	filename = "graphics/header.gif";
 	framework = "app";
@@ -12,7 +9,7 @@ Image1: WOImage {
 WBString1: WBString {
 	face = application.fontList;
 	size = 2;
-	value = "Copyright © 2001";
+	value = "Copyright (c) 2001";
 }
 
 WBString2: WBString {
@@ -28,5 +25,3 @@ WBString3: WBString {
 }
 
 
-WBString4: WBString {
-}

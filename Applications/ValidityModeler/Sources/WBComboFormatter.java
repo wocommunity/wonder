@@ -1,6 +1,9 @@
-import com.webobjects.foundation.*;
-import com.gammastream.gammacore.gammatext.*;
-import java.text.*;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
+
+import com.gammastream.gammacore.gammatext.GSTextConstants;
+import com.gammastream.gammacore.gammatext.GSTextUtilities;
 
 /**
  * WBComboFormatter is a formatter that can truncate a string, strip out the HTML in a string, <BR>

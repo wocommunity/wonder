@@ -1,8 +1,10 @@
-import com.webobjects.appserver.*;
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 public class Layout extends WOComponent {
+
+	public Layout(WOContext arg0) {
+		super(arg0);
+		// TODO Auto-generated constructor stub
+	}
 
 }

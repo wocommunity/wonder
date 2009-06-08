@@ -1,12 +1,12 @@
 ActiveImage1: WOActiveImage {
 	action = checkPasswordAction;
-	filename = "graphics/login.gif";
+	filename = "graphics/buttons/login.gif";
 	framework = "app";
 }
 
 ActiveImage2: WOActiveImage {
 	action = loadEOModelAction;
-	filename = "graphics/open.gif";
+	filename = "graphics/buttons/open.gif";
 	framework = "app";
 	valign = "absmiddle";
 	border = 0;

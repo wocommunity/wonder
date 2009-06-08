@@ -1,11 +1,14 @@
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class WBString extends WOComponent {
 
-    public boolean synchronizesVariablesWithBindings(){
+    public WBString(WOContext arg0) {
+		super(arg0);
+	}
+
+	@Override
+	public boolean synchronizesVariablesWithBindings(){
         return false;
     }
 

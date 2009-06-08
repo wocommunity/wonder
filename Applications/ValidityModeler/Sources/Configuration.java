@@ -1,11 +1,9 @@
-import com.gammastream.validity.*;
-import com.webobjects.appserver.*;
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.io.*;
-//import org.xml.sax.InputSource.*;
+import com.gammastream.validity.GSVRule;
+import com.webobjects.appserver.xml.WOXMLCoder;
+import com.webobjects.appserver.xml.WOXMLCoding;
+import com.webobjects.appserver.xml.WOXMLDecoder;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
 public final class Configuration extends Object implements WOXMLCoding {
 
