@@ -6,6 +6,7 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.ajax.AjaxAccordion;
 import er.ajax.AjaxUtils;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -50,9 +51,11 @@ public class AjaxAccordion2 extends AjaxAccordion {
     	return booleanValueForBinding("disabled", false);
     }
     
+    /*
+     * Checks the existance of the header 'x-requested-with'
+     */
     public boolean isAjaxRequest() {
-		String requestedWith = context().request().headerForKey("x-requested-with");
-		return "XMLHttpRequest".equals(requestedWith);
+		return ERXAjaxApplication.isAjaxRequest(context().request());		
     }
     
 	@Override
