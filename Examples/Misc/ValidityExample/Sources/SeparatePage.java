@@ -5,11 +5,12 @@
 // Created by msacket on Mon Jun 11 2001
 //
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.gammastream.validity.*;
+import com.gammastream.validity.GSVEngine;
+import com.gammastream.validity.GSVExceptionableComponent;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.foundation.NSValidation;
 public class SeparatePage extends GSVExceptionableComponent {
 
     EOClassDescription description;

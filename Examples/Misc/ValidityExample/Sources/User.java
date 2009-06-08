@@ -1,9 +1,7 @@
 // User.java
 // Created on Sun Jun 03 17:00:06 US/Central 2001 by Apple EOModeler Version 5.0
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.gammastream.validity.*;
+import com.gammastream.validity.GSVGenericRecord;
 public class User extends GSVGenericRecord {
 
     public User() {
