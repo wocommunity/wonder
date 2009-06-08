@@ -927,6 +927,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         sharedEC.lock();
         try {
             EOEntity entity = ERXEOAccessUtilities.entityNamed(sharedEC, entityName);
+            if( entity == null ) {
+                _log.warn("Attempting to refresh a non-existent (or not accessible) EO: " + entityName);
+                return;
+            }
 
             //if entity caches objects, clear out the cache
             if( entity.cachesObjects() ) {
