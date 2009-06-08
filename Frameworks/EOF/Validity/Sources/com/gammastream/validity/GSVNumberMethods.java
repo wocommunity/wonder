@@ -1,10 +1,9 @@
 package com.gammastream.validity;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import java.math.BigDecimal;
+
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
 
 /**
  *	This class provides a set of predefined rules for performing
