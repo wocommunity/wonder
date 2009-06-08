@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -168,7 +169,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	/**
 	 * Returns the current localizer for the current thread. Note that the localizer for a given session is pushed onto
-	 * the thread when a session awakes and is nulled out when a session sleeps.
+	 * the thread when a session awakes and is nulled out when a session sleeps. In case there is no localizer set, it tries to
+	 * pull it from the current WOContext or the default language.
 	 * 
 	 * @return the current localizer that has been pushed into thread storage.
 	 */
@@ -178,7 +180,14 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			if (!isInitialized) {
 				initialize();
 			}
-			current = defaultLocalizer();
+			WOContext context = ERXWOContext.currentContext();
+			// set the current localizer
+			if (context != null && context.request() != null && context.request().browserLanguages() != null) {
+				ERXLocalizer.setCurrentLocalizer(ERXLocalizer.localizerForLanguages(context.request().browserLanguages()));
+			}
+			else {
+				current = defaultLocalizer();
+			}
 		}
 		return current;
 	}
@@ -195,11 +204,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	/**
 	 * Gets the localizer for the default language.
-	 * 
-	 * @return localizer for the default language.
 	 */
 	public static ERXLocalizer defaultLocalizer() {
 		return localizerForLanguage(defaultLanguage());
+	}
+	
+	public static ERXLocalizer englishLocalizer() {
+		return localizerForLanguage("English");
 	}
 
 	public static ERXLocalizer localizerForRequest(WORequest request) {
