@@ -1,20 +1,17 @@
 package org.zeroturnaround.javarebel;
 
-import java.lang.reflect.Field;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WORequestHandler;
-import com.webobjects.appserver._private.WODirectActionRequestHandler;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation._NSUtilities;
 
 /**
  * WOJavaRebelClassReloadHandler manages the clearing of KVC, component definition and class caches
@@ -91,14 +88,14 @@ public class WOJavaRebelClassReloadHandler {
 
 	@SuppressWarnings("all")
 	public void reloaded(Class clazz) {
-		resetKVCCaches = true;
-        if (WOComponent.class.isAssignableFrom(clazz)) {
-            resetComponentCache = true;
-        }
-        if (WOAction.class.isAssignableFrom(clazz)) {
-            resetActionClassCache = true;
-        }
-		doReset();
+	  resetKVCCaches = true;
+	  if (WOComponent.class.isAssignableFrom(clazz)) {
+	    resetComponentCache = true;
+	  }
+	  if (WOAction.class.isAssignableFrom(clazz)) {
+	    resetActionClassCache = true;
+	  }
+	  doReset();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -126,6 +123,10 @@ public class WOJavaRebelClassReloadHandler {
 
 			if (clazz == null || clazz.equals(unknownClass)) {
 				WOClassCacheAccessor.removeClassForName(className);
+				if ((clazz = _NSUtilities.classWithName(className)) != null) {
+				  reloaded(clazz);
+				}
+				continue;
 			}
 			reloader.checkAndReload(clazz);
 		}

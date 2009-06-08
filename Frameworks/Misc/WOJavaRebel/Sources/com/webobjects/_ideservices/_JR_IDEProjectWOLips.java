@@ -12,9 +12,9 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPathUtilities;
 
-public class _IDEProjectWOLips implements _IDEProject {
+public class _JR_IDEProjectWOLips implements _IDEProject {
   private static final String LANGUAGE_RESOURCE_SEPARATOR = "_";
-  private volatile _WOLipsProject _wolipsProject;
+  private volatile _JR_WOLipsProject _wolipsProject;
 
   private String _languageFromKey(String s) {
 
@@ -43,9 +43,9 @@ public class _IDEProjectWOLips implements _IDEProject {
     return s1;
   }
 
-  public static _WOLipsProject wolipsProjectFromEclipseProject(String bundlePath) {
+  public static _JR_WOLipsProject wolipsProjectFromEclipseProject(String bundlePath) {
     try {
-      _WOLipsProject project = null;
+      _JR_WOLipsProject project = null;
 
       File bundleFolder = new File(bundlePath);
       File buildFolder = bundleFolder.getParentFile();
@@ -54,7 +54,7 @@ public class _IDEProjectWOLips implements _IDEProject {
         if (projectFolder != null && projectFolder.exists()) {
           File eclipseProjectFile = new File(projectFolder, ".project");
           if (eclipseProjectFile.exists()) {
-            project = new _WOLipsProject(bundleFolder);
+            project = new _JR_WOLipsProject(bundleFolder);
 
             String bundleName = bundleFolder.getName();
 //            project.setAppHelpFileForOSType(bundlePath, i);
@@ -91,7 +91,7 @@ public class _IDEProjectWOLips implements _IDEProject {
     }
   }
 
-  public static _IDEProjectWOLips wolipsProjectAtPath(String bundlePath) {
+  public static _JR_IDEProjectWOLips wolipsProjectAtPath(String bundlePath) {
 	if (bundlePath == null)
 		return null;
 	
@@ -101,17 +101,17 @@ public class _IDEProjectWOLips implements _IDEProject {
 		return null;
 	}
 	  
-    _WOLipsProject project = _IDEProjectWOLips.wolipsProjectFromEclipseProject(bundlePath);
+    _JR_WOLipsProject project = _JR_IDEProjectWOLips.wolipsProjectFromEclipseProject(bundlePath);
 
-    _IDEProjectWOLips ideProjectWOLips = null;
+    _JR_IDEProjectWOLips ideProjectWOLips = null;
     if (project != null) {
-      ideProjectWOLips = new _IDEProjectWOLips(project);
+      ideProjectWOLips = new _JR_IDEProjectWOLips(project);
     }
     
     return ideProjectWOLips;
   }
 
-  public _IDEProjectWOLips(_WOLipsProject wolipsProject) {
+  public _JR_IDEProjectWOLips(_JR_WOLipsProject wolipsProject) {
     _wolipsProject = wolipsProject;
   }
 
@@ -181,7 +181,7 @@ public class _IDEProjectWOLips implements _IDEProject {
 
   public void addFileKey(String s, String s1) {
 
-    _WOLipsProject _lpbproject = _wolipsProject;
+    _JR_WOLipsProject _lpbproject = _wolipsProject;
     String s2 = NSPathUtilities.lastPathComponent(_lpbproject.projectDir());
 
     String s3 = s1;
@@ -205,14 +205,14 @@ public class _IDEProjectWOLips implements _IDEProject {
       s3 = "CLASSES";
     }
 
-    _WOLipsProject _tmp = _lpbproject;
-    _WOLipsProject.addFileToPBBucket(s2, s, s3);
+    _JR_WOLipsProject _tmp = _lpbproject;
+    _JR_WOLipsProject.addFileToPBBucket(s2, s, s3);
   }
 
   public void openFile(String s, int i, String s1) {
 
-    _WOLipsProject _tmp = _wolipsProject;
-    _WOLipsProject.openFile(s, i, s1);
+    _JR_WOLipsProject _tmp = _wolipsProject;
+    _JR_WOLipsProject.openFile(s, i, s1);
   }
 
   public void extractFilesIntoWOProject(_WOProject _pwoproject) {
@@ -220,7 +220,7 @@ public class _IDEProjectWOLips implements _IDEProject {
     extractFilesFromProjectIntoWOProject(_wolipsProject, _pwoproject);
   }
 
-  public void extractFilesFromProjectIntoWOProject(_WOLipsProject _ppbproject, _WOProject _pwoproject) {
+  public void extractFilesFromProjectIntoWOProject(_JR_WOLipsProject _ppbproject, _WOProject _pwoproject) {
 
     if (_ppbproject == null) {
       return;
@@ -244,13 +244,13 @@ public class _IDEProjectWOLips implements _IDEProject {
       int i = 0;
       for (int j = nsarray.count(); i < j; i++) {
 
-        _WOLipsProject _lpbproject = (_WOLipsProject) nsarray.objectAtIndex(i);
+        _JR_WOLipsProject _lpbproject = (_JR_WOLipsProject) nsarray.objectAtIndex(i);
         extractFilesFromProjectIntoWOProject(_lpbproject, _pwoproject);
       }
     }
   }
 
-  public void extractFrameworksFromProjectIntoWOProject(_WOLipsProject _ppbproject, _WOProject _pwoproject) {
+  public void extractFrameworksFromProjectIntoWOProject(_JR_WOLipsProject _ppbproject, _WOProject _pwoproject) {
     NSMutableArray nsmutablearray = _ppbproject.fileListForKey("FRAMEWORKS", false);
 
     if (nsmutablearray != null) {
@@ -262,7 +262,7 @@ public class _IDEProjectWOLips implements _IDEProject {
     }
   }
 
-  public void extractEOModelsFromProjectIntoWOProject(_WOLipsProject _ppbproject, _WOProject _pwoproject) {
+  public void extractEOModelsFromProjectIntoWOProject(_JR_WOLipsProject _ppbproject, _WOProject _pwoproject) {
     String as[] = { "OTHER_RESOURCES", "WOAPP_RESOURCES", null };
     for (int i = 0; as[i] != null; i++) {
 
@@ -283,7 +283,7 @@ public class _IDEProjectWOLips implements _IDEProject {
     }
   }
 
-  public void extractResourcesFromProjectIntoWOProject(_WOLipsProject _ppbproject, _WOProject _pwoproject) {
+  public void extractResourcesFromProjectIntoWOProject(_JR_WOLipsProject _ppbproject, _WOProject _pwoproject) {
 
     //System.out.println("_IDEProjectPB.extractResourcesFromProjectIntoWOProject: " + _ppbproject + ", " + _ppbproject.projectName());
     NSDictionary nsdictionary = _ppbproject.filesTable();
@@ -301,7 +301,7 @@ public class _IDEProjectWOLips implements _IDEProject {
     }
   }
 
-  public void extractResourcesFromProjectWithKeyIntoWOProject(_WOLipsProject _ppbproject, String s, _WOProject _pwoproject) {
+  public void extractResourcesFromProjectWithKeyIntoWOProject(_JR_WOLipsProject _ppbproject, String s, _WOProject _pwoproject) {
     String basePath;
     if ("WEBSERVER_RESOURCES".equals(s)) {
       basePath = _ppbproject.contentsFolder().getAbsolutePath() + File.separator + "WebServerResources";
@@ -349,7 +349,7 @@ public class _IDEProjectWOLips implements _IDEProject {
     }
   }
 
-  public void extractFilesForKeyFromProjectIntoWOProject(String s, _WOLipsProject _ppbproject, _WOProject _pwoproject) {
+  public void extractFilesForKeyFromProjectIntoWOProject(String s, _JR_WOLipsProject _ppbproject, _WOProject _pwoproject) {
 
     NSMutableArray nsmutablearray = _ppbproject.fileListForKey(s, false);
     if (nsmutablearray != null) {

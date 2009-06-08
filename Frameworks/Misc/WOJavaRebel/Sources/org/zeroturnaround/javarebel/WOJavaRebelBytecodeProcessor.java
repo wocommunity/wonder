@@ -16,11 +16,11 @@ import org.zeroturnaround.javarebel.integration.support.JavassistClassBytecodePr
  */
 public class WOJavaRebelBytecodeProcessor extends JavassistClassBytecodeProcessor {
 	public static final String IDEPATCH_CLASS = "com.webobjects._ideservices._WOProject";
-	public static final String IDESUPPORT_CLASS = "com.webobjects._ideservices._IDEProjectWOLips";
+  public static final String IDESUPPORT_CLASS = "com.webobjects._ideservices._IDEProjectWOLips";
 	public static final String IDEPATCH_METHODNAME = "ideProjectAtPath";
 	public static final String IDEPATCH_SIGNATURE = "(Ljava/lang/String;)Lcom/webobjects/_ideservices/_IDEProject;";
 	public static final String IDEPATCH_CODE = 
-		"Object obj = com.webobjects._ideservices._IDEProjectWOLips.wolipsProjectAtPath($1);" +
+		"Object obj = com.webobjects._ideservices._JR_IDEProjectWOLips.wolipsProjectAtPath($1);" +
 		"if (obj != null) {" +
 		"  if (com.webobjects.foundation.NSLog.debugLoggingAllowedForLevelAndGroups(2, 32L)) {" +
 		"    com.webobjects.foundation.NSLog.debug.appendln(\"*****Found WOLips project at \" + $1);" +
