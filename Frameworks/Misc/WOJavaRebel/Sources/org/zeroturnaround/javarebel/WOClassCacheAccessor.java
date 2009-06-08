@@ -48,8 +48,8 @@ public class WOClassCacheAccessor {
 			f.setAccessible(true);
 			classesByPartialName = (_NSThreadsafeMutableDictionary) f.get(null);
 			f = WOAction.class.getDeclaredField("_actionClasses");
-            f.setAccessible(true);
-            actionClassCache = (_NSThreadsafeMutableDictionary) f.get(null);
+			f.setAccessible(true);
+			actionClassCache = (_NSThreadsafeMutableDictionary) f.get(null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

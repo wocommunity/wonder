@@ -5,13 +5,13 @@ import java.io.File;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-public class _WOLipsProject extends _PBProject {
+public class _JR_WOLipsProject extends _PBProject {
   private File _bundleFolder;
   private File _contentsFolder;
   private File _versionFile;
   private long _lastModified;
 
-  public _WOLipsProject(File bundleFolder) {
+  public _JR_WOLipsProject(File bundleFolder) {
     _bundleFolder = bundleFolder;
     if (bundleFolder.getName().endsWith(".framework")) {
       _contentsFolder = _bundleFolder;
