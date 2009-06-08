@@ -27,8 +27,7 @@ import er.extensions.localization.ERXLocalizer;
  * 
  * <pre>
  * ERXRouteRequestHandler routeRequestHandler = new ERXRouteRequestHandler();
- * routeRequestHandler.addRoute(new ERXRoute(&quot;/people/{action}&quot;, PeopleController.class));
- * routeRequestHandler.addRoute(new ERXRoute(&quot;/person/{person:Person}&quot;, PeopleController.class, &quot;view&quot;));
+ * routeRequestHandler.addDefaultRoutes(Person.ENTITY_NAME);
  * ERXRouteRequestHandler.register(routeRequestHandler);
  * </pre>
  * 
@@ -36,9 +35,14 @@ import er.extensions.localization.ERXLocalizer;
  * 
  * <pre>
  * ERXRouteRequestHandler routeRequestHandler = new ERXRouteRequestHandler();
- * routeRequestHandler.addDefaultRoutes(Person.ENTITY_NAME);
+ * routeRequestHandler.addRoute(new ERXRoute(&quot;/people/{action}&quot;, PeopleController.class));
+ * routeRequestHandler.addRoute(new ERXRoute(&quot;/person/{person:Person}&quot;, PeopleController.class, &quot;show&quot;));
+ * ...
  * ERXRouteRequestHandler.register(routeRequestHandler);
  * </pre>
+ * 
+ * Note that addDefaultRoutes sets up many routes automatically (not just the 2 that are shown above), and for most cases
+ * should be your starting point for adding new entities rather than manually adding them.
  * 
  * in PeopleController:
  * 
