@@ -5,9 +5,10 @@
 // Created by msacket on Mon Jun 11 2001
 //
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 
 public class Session extends WOSession {
 

@@ -55,7 +55,7 @@ TextField6: WOTextField {
 	value = verifyPassword;
 }
 
-com.gammastream.validity.GSVExceptionViewer1: com.gammastream.validity.GSVExceptionViewer {
+GSVExceptionViewer1: GSVExceptionViewer {
 	face = "Arial, Helvetica";
 	showAllErrors = true;
 	color = "#FF0000";

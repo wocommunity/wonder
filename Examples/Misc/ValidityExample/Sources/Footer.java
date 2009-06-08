@@ -5,10 +5,8 @@
 // Created by msacket on Mon Jun 11 2001
 //
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class Footer extends WOComponent {
 

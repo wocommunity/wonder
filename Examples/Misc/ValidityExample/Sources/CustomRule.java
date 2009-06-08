@@ -5,9 +5,8 @@
 // Created by msacket on Mon Jun 11 2001
 //
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 public class CustomRule {
 
