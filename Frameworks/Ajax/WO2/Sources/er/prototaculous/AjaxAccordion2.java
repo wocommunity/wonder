@@ -1,7 +1,8 @@
 package er.prototaculous;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
 
 import er.ajax.AjaxAccordion;
 import er.ajax.AjaxUtils;
@@ -28,6 +29,10 @@ public class AjaxAccordion2 extends AjaxAccordion {
     }
     
     // accessors
+    private String script() {
+    	return isAjaxRequest() ? _script() : "document.observe(\"dom:loaded\", function() {" + _script() + "});";
+    }
+    
     private String _script() {
     	return "if (null == " + accordionVar() + ") { var " + accordionVar() + " = new Accordion(\"" + accordionID() + "\"); }";
     }
@@ -43,6 +48,11 @@ public class AjaxAccordion2 extends AjaxAccordion {
     
     public boolean disabled() {
     	return booleanValueForBinding("disabled", false);
+    }
+    
+    public boolean isAjaxRequest() {
+		String requestedWith = context().request().headerForKey("x-requested-with");
+		return "XMLHttpRequest".equals(requestedWith);
     }
     
 	@Override
@@ -63,6 +73,6 @@ public class AjaxAccordion2 extends AjaxAccordion {
     public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
         if (!disabled()) 
-        	AjaxUtils.addScriptCodeInHead(response, context, _script());	
+        	AjaxUtils.addScriptCodeInHead(response, context, script());	
     }
 }
