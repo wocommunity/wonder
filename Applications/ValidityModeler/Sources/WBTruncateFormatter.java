@@ -1,6 +1,6 @@
-import com.webobjects.foundation.*;
-import com.gammastream.gammacore.gammatext.*;
-import java.text.*;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
 
 /**
  * WBTruncateFormatter is a formatter that truncates a string. Unlike the truncation performed with the
