@@ -42,8 +42,8 @@ import er.rest.ERXRestNameRegistry;
  * ERXRouteRequestHandler.register(routeRequestHandler);
  * </pre>
  * 
- * Note that addDefaultRoutes sets up many routes automatically (not just the 2 that are shown above), and for most cases
- * should be your starting point for adding new entities rather than manually adding them.
+ * Note that addDefaultRoutes sets up many routes automatically (not just the 2 that are shown above), and for most
+ * cases should be your starting point for adding new entities rather than manually adding them.
  * 
  * in PeopleController:
  * 
@@ -221,34 +221,34 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 */
 	public void addDefaultRoutes(String entityName, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
 		boolean lowercaseEntityNames = ERXProperties.booleanForKeyWithDefault("ERXRest.lowercaseEntityNames", true);
-		
-		String singularEntityName = lowercaseEntityNames ? ERXStringUtilities.uncapitalize(entityName) : entityName;
-		
-		String displayName = ERXRestNameRegistry.registry().displayNameForActualName(entityName);
-		String singularDisplayName = lowercaseEntityNames ? ERXStringUtilities.uncapitalize(displayName) : displayName;
-		String pluralDisplayName = ERXLocalizer.englishLocalizer().plurifiedString(singularDisplayName, 2);
+
+		String singularInternalName = lowercaseEntityNames ? ERXStringUtilities.uncapitalize(entityName) : entityName;
+
+		String externalName = ERXRestNameRegistry.registry().externalNameForInternalName(entityName);
+		String singularExternalName = lowercaseEntityNames ? ERXStringUtilities.uncapitalize(externalName) : externalName;
+		String pluralExternalName = ERXLocalizer.englishLocalizer().plurifiedString(singularExternalName, 2);
 
 		addRoute(new ERXRoute(".*", ERXRoute.Method.Head, controllerClass, "head"));
-		addRoute(new ERXRoute("/" + pluralDisplayName, ERXRoute.Method.Post, controllerClass, "create"));
-		addRoute(new ERXRoute("/" + singularDisplayName, ERXRoute.Method.Post, controllerClass, "create"));
-		addRoute(new ERXRoute("/" + pluralDisplayName, ERXRoute.Method.All, controllerClass, "index"));
+		addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.Post, controllerClass, "create"));
+		addRoute(new ERXRoute("/" + singularExternalName, ERXRoute.Method.Post, controllerClass, "create"));
+		addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.All, controllerClass, "index"));
 
 		if (numericPKs) {
-			addRoute(new ERXRoute("/" + pluralDisplayName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS:
+			addRoute(new ERXRoute("/" + pluralExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS:
 			// this only works with numeric ids
 		}
 		else {
-			addRoute(new ERXRoute("/" + pluralDisplayName + "/new", ERXRoute.Method.All, controllerClass, "new"));
+			addRoute(new ERXRoute("/" + pluralExternalName + "/new", ERXRoute.Method.All, controllerClass, "new"));
 		}
 
-		addRoute(new ERXRoute("/" + pluralDisplayName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
-		addRoute(new ERXRoute("/" + singularDisplayName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
-		addRoute(new ERXRoute("/" + pluralDisplayName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
-		addRoute(new ERXRoute("/" + singularDisplayName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
-		addRoute(new ERXRoute("/" + pluralDisplayName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
-		addRoute(new ERXRoute("/" + singularDisplayName + "/{" + singularEntityName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
-		addRoute(new ERXRoute("/" + pluralDisplayName + "/{" + singularEntityName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
-		addRoute(new ERXRoute("/" + singularDisplayName + "/{" + singularEntityName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
+		addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
+		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
+		addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+		addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
+		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
+		addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
+		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
 	}
 
 	@Override

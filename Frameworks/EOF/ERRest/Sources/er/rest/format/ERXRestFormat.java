@@ -9,21 +9,20 @@ import com.webobjects.eocontrol.EOClassDescription;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXEORestDelegate;
-import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
 
 public class ERXRestFormat {
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 
-	public static ERXRestFormat JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormat.DefaultDelegate(), "json");
-	public static ERXRestFormat JS = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormat.DefaultDelegate(), "js");
-	public static ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), new ERXRestFormat.DefaultDelegate(), "plist");
-	public static ERXRestFormat XML = ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormat.DefaultDelegate(), "xml");
-	public static ERXRestFormat HTML = ERXRestFormat.registerFormatNamed(null, null, new ERXRestFormat.DefaultDelegate(), "html");
-	public static ERXRestFormat GIANDUIA_JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(false), new ERXRestFormat.DefaultDelegate(), "gndj");
-	public static ERXRestFormat GIANDUIA_PERSISTENT_STORE = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(true), new ERXRestFormat.DefaultDelegate(), "gndp");
-	public static ERXRestFormat SPROUTCORE = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormat.DefaultDelegate("guid", "type", "nil", true), "sc");
+	public static ERXRestFormat JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), "json");
+	public static ERXRestFormat JS = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), "js");
+	public static ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), new ERXRestFormatDelegate(), "plist");
+	public static ERXRestFormat XML = ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate(), "xml");
+	public static ERXRestFormat HTML = ERXRestFormat.registerFormatNamed(null, null, new ERXRestFormatDelegate(), "html");
+	public static ERXRestFormat GIANDUIA_JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(false), new ERXRestFormatDelegate(), "gndj");
+	public static ERXRestFormat GIANDUIA_PERSISTENT_STORE = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(true), new ERXRestFormatDelegate(), "gndp");
+	public static ERXRestFormat SPROUTCORE = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true), "sc");
 
 	private String _name;
 	private IERXRestParser _parser;
@@ -106,59 +105,6 @@ public class ERXRestFormat {
 
 		public void nodeWillWrite(ERXRestRequestNode node) {
 			// DO NOTHING
-		}
-	}
-
-	public static class DefaultDelegate implements Delegate {
-		public static final String ID_KEY = "id";
-		public static final String TYPE_KEY = "type";
-		public static final String NIL_KEY = "nil";
-
-		private String _idKey;
-		private String _typeKey;
-		private String _nilKey;
-		private boolean _writeNilKey;
-
-		public DefaultDelegate() {
-			this(DefaultDelegate.ID_KEY, DefaultDelegate.TYPE_KEY, DefaultDelegate.NIL_KEY, true);
-		}
-
-		public DefaultDelegate(String idKey, String typeKey, String nilKey, boolean writeNilKey) {
-			_idKey = idKey;
-			_typeKey = typeKey;
-			_nilKey = nilKey;
-			_writeNilKey = writeNilKey;
-		}
-
-		public void nodeDidParse(ERXRestRequestNode node) {
-			Object id = node.removeAttributeOrChildNodeNamed(_idKey);
-			node.setID(id);
-
-			String displayType = (String) node.removeAttributeOrChildNodeNamed(_typeKey);
-			String actualType = ERXRestNameRegistry.registry().actualNameForDisplayName(displayType);
-			node.setType(actualType);
-
-			Object nil = node.removeAttributeOrChildNodeNamed(_nilKey);
-			if (nil != null) {
-				node.setNull("true".equals(nil) || Boolean.TRUE.equals(nil));
-			}
-		}
-
-		public void nodeWillWrite(ERXRestRequestNode node) {
-			Object id = node.id();
-			if (id != null) {
-				node.setAttributeForKey(String.valueOf(id), _idKey);
-			}
-
-			String actualType = node.type();
-			if (actualType != null) {
-				String displayType = ERXRestNameRegistry.registry().displayNameForActualName(actualType);
-				node.setAttributeForKey(displayType, _typeKey);
-			}
-
-			if (node.isNull() && _writeNilKey) {
-				node.setAttributeForKey("true", _nilKey);
-			}
 		}
 	}
 }

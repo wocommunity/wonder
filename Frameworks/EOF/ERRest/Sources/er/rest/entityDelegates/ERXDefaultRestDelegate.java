@@ -210,8 +210,8 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			Object nextToLastValue = nextToLastKey.value();
 			EOEntity nextToLastEntity = nextToLastKey.entity();
 			if (nextToLastValue instanceof EOEnterpriseObject) {
-				ERXRestRequestNode reformedEORequestNode = new ERXRestRequestNode(entityDelegate(nextToLastEntity).entityAliasForEntityNamed(nextToLastEntity.name()));
-				ERXRestRequestNode reformedPrimitiveRequestNode = new ERXRestRequestNode(lastKey.keyAlias());
+				ERXRestRequestNode reformedEORequestNode = new ERXRestRequestNode(entityDelegate(nextToLastEntity).entityAliasForEntityNamed(nextToLastEntity.name()), true);
+				ERXRestRequestNode reformedPrimitiveRequestNode = new ERXRestRequestNode(lastKey.keyAlias(), false);
 				ERXRestRequestNode updateNode = updateRequest.rootNode();
 				reformedPrimitiveRequestNode.setValue(updateNode.value());
 				reformedEORequestNode.addChild(reformedPrimitiveRequestNode);

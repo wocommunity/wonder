@@ -16,8 +16,8 @@ import er.rest.ERXRestUtils;
  * @author mschrag
  */
 public class ERXPListRestParser implements IERXRestParser {
-	protected ERXRestRequestNode createRequestNodeForObject(String name, Object object, ERXRestFormat.Delegate delegate) {
-		ERXRestRequestNode requestNode = new ERXRestRequestNode(name);
+	protected ERXRestRequestNode createRequestNodeForObject(String name, Object object, boolean rootNode, ERXRestFormat.Delegate delegate) {
+		ERXRestRequestNode requestNode = new ERXRestRequestNode(name, rootNode);
 
 		if (object == null) {
 			// just leave the value null
@@ -27,10 +27,10 @@ public class ERXPListRestParser implements IERXRestParser {
 			List list = (List) object;
 			for (Object obj : list) {
 				if (ERXRestUtils.isPrimitive(obj)) {
-					requestNode.addChild(new ERXRestRequestNode(null, obj));
+					requestNode.addChild(new ERXRestRequestNode(null, obj, false));
 				}
 				else {
-					requestNode.addChild(createRequestNodeForObject(null, obj, delegate));
+					requestNode.addChild(createRequestNodeForObject(null, obj, true, delegate));
 				}
 			}
 		}
@@ -40,10 +40,10 @@ public class ERXPListRestParser implements IERXRestParser {
 				String strKey = (String) key;
 				Object value = map.get(key);
 				if (ERXRestUtils.isPrimitive(value)) {
-					requestNode.addChild(new ERXRestRequestNode(strKey, value));
+					requestNode.addChild(new ERXRestRequestNode(strKey, value, false));
 				}
 				else {
-					requestNode.addChild(createRequestNodeForObject(strKey, value, delegate));
+					requestNode.addChild(createRequestNodeForObject(strKey, value, false, delegate));
 				}
 			}
 		}
@@ -71,7 +71,7 @@ public class ERXPListRestParser implements IERXRestParser {
 			// }
 
 			Object rootObj = NSPropertyListSerialization.propertyListFromString(contentStr);
-			rootRequestNode = createRequestNodeForObject(null, rootObj, delegate);
+			rootRequestNode = createRequestNodeForObject(null, rootObj, true, delegate);
 		}
 
 		return rootRequestNode;
