@@ -104,7 +104,8 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     }
 
     public NSMutableDictionary currentErrorDictionary() {
-        Object key = d2wContext().valueForKeyPath("object.hashCode");
+        int hashCode = object() != null ? object().hashCode() : 0;
+        Object key = ERXConstant.integerForInt(hashCode);
         if (errorMessagesDictionaries().objectForKey(key) == null) {
             errorMessagesDictionaries().setObjectForKey(new NSMutableDictionary(), key);
         }
