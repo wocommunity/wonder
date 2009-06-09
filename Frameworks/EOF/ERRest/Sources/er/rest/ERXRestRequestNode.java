@@ -681,7 +681,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 				classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj);
 			}
 			if (_name == null) {
-				_name = classDescription.entityName();
+				_name = ERXRestNameRegistry.registry().displayNameForActualName(classDescription.entityName());
 			}
 			setAssociatedObject(obj);
 			setType(classDescription.entityName());
@@ -886,7 +886,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 */
 	public static ERXRestRequestNode requestNodeWithObjectAndFilter(EOClassDescription classDescription, List<?> objects, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
 		String entityName = classDescription.entityName();
-		ERXRestRequestNode requestNode = new ERXRestRequestNode(ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2));
+		ERXRestRequestNode requestNode = new ERXRestRequestNode(ERXLocalizer.englishLocalizer().plurifiedString(ERXRestNameRegistry.registry().displayNameForActualName(entityName), 2));
 		requestNode.setType(entityName);
 		requestNode._fillInWithObjectAndFilter(objects, classDescription, keyFilter, delegate, new HashSet<Object>());
 		return requestNode;
@@ -908,7 +908,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 			classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj);
 			shortName = classDescription.entityName();
 		}
-		ERXRestRequestNode requestNode = new ERXRestRequestNode(shortName);
+		ERXRestRequestNode requestNode = new ERXRestRequestNode(ERXRestNameRegistry.registry().displayNameForActualName(shortName));
 		if (ERXRestUtils.isPrimitive(obj)) {
 			requestNode.setValue(obj);
 		}

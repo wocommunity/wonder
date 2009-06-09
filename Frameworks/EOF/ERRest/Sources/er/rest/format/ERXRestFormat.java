@@ -9,6 +9,7 @@ import com.webobjects.eocontrol.EOClassDescription;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXEORestDelegate;
+import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
 
@@ -133,8 +134,9 @@ public class ERXRestFormat {
 			Object id = node.removeAttributeOrChildNodeNamed(_idKey);
 			node.setID(id);
 
-			String type = (String) node.removeAttributeOrChildNodeNamed(_typeKey);
-			node.setType(type);
+			String displayType = (String) node.removeAttributeOrChildNodeNamed(_typeKey);
+			String actualType = ERXRestNameRegistry.registry().actualNameForDisplayName(displayType);
+			node.setType(actualType);
 
 			Object nil = node.removeAttributeOrChildNodeNamed(_nilKey);
 			if (nil != null) {
@@ -148,9 +150,10 @@ public class ERXRestFormat {
 				node.setAttributeForKey(String.valueOf(id), _idKey);
 			}
 
-			String type = node.type();
-			if (type != null) {
-				node.setAttributeForKey(type, _typeKey);
+			String actualType = node.type();
+			if (actualType != null) {
+				String displayType = ERXRestNameRegistry.registry().displayNameForActualName(actualType);
+				node.setAttributeForKey(displayType, _typeKey);
 			}
 
 			if (node.isNull() && _writeNilKey) {
