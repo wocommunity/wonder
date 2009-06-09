@@ -35,6 +35,7 @@ import er.rest.format.IERXRestWriter;
 public class ERXRestRequestNode implements NSKeyValueCoding {
 	private boolean _array;
 	private String _name;
+	private boolean _rootNode;
 	private Object _value;
 	private NSMutableDictionary<String, String> _attributes;
 	private NSMutableArray<ERXRestRequestNode> _children;
@@ -49,9 +50,12 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 * 
 	 * @param name
 	 *            the name of this node
+	 * @param rootNode
+	 *            if true, the node is the root of a graph
 	 */
-	public ERXRestRequestNode(String name) {
+	public ERXRestRequestNode(String name, boolean rootNode) {
 		_name = name;
+		_rootNode = rootNode;
 		_attributes = new NSMutableDictionary<String, String>();
 		_children = new NSMutableArray<ERXRestRequestNode>();
 		guessNull();
@@ -62,17 +66,24 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 * 
 	 * @param name
 	 *            the name of this node
+	 * @param rootNode
+	 *            if true, the node is the root of a graph
 	 * @param value
 	 *            the value of this node
 	 */
-	public ERXRestRequestNode(String name, Object value) {
-		this(name);
+	public ERXRestRequestNode(String name, Object value, boolean rootNode) {
+		this(name, rootNode);
 		_value = value;
 		guessNull();
 	}
 
+	/**
+	 * Clones this node.
+	 * 
+	 * @return a clone of this node
+	 */
 	public ERXRestRequestNode cloneNode() {
-		ERXRestRequestNode cloneNode = new ERXRestRequestNode(_name);
+		ERXRestRequestNode cloneNode = new ERXRestRequestNode(_name, _rootNode);
 		cloneNode._attributes.addEntriesFromDictionary(_attributes);
 		cloneNode._children.addObjectsFromArray(_children);
 		cloneNode._value = _value;
@@ -82,6 +93,27 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 		cloneNode._id = _id;
 		cloneNode._null = _null;
 		return cloneNode;
+	}
+
+	/**
+	 * Sets whether or not this is a root node (a root node is one that would typically have a node name that is an
+	 * entity name -- the actual root, or elements in an array, for instance).
+	 * 
+	 * @param rootNode
+	 *            whether or not this is a root node
+	 */
+	public void setRootNode(boolean rootNode) {
+		_rootNode = rootNode;
+	}
+
+	/**
+	 * Returns whether or not this is a root node (a root node is one that would typically have a node name that is an
+	 * entity name -- the actual root, or elements in an array, for instance).
+	 * 
+	 * @return whether or not this is a root node
+	 */
+	public boolean isRootNode() {
+		return _rootNode;
 	}
 
 	/**
@@ -313,6 +345,13 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 		return matchingChildNode;
 	}
 
+	/**
+	 * Removes the child name that has the given name.
+	 * 
+	 * @param name
+	 *            the name of the node to remove
+	 * @return the node that was removed
+	 */
 	public ERXRestRequestNode removeChildNamed(String name) {
 		ERXRestRequestNode node = childNamed(name);
 		if (node != null) {
@@ -331,19 +370,42 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 		_type = type;
 	}
 
+	/**
+	 * Returns the type of this node (type as in the Class that it represents).
+	 * 
+	 * @return the type of this node
+	 */
 	public String type() {
 		return _type;
 	}
 
+	/**
+	 * Sets the ID associated with this node.
+	 * 
+	 * @param id
+	 *            the ID associated with this node
+	 */
 	public void setID(Object id) {
 		_id = id;
 		guessNull();
 	}
 
+	/**
+	 * Returns the ID associated with this node.
+	 * 
+	 * @return the ID associated with this node
+	 */
 	public Object id() {
 		return _id;
 	}
 
+	/**
+	 * Removes the attribute or child node that has the given name (and returns it).
+	 * 
+	 * @param name
+	 *            the name of the attribute or node to remove
+	 * @return the removed attribute value
+	 */
 	public Object removeAttributeOrChildNodeNamed(String name) {
 		Object value = removeAttributeForKey(name);
 		if (value == null) {
@@ -404,6 +466,16 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	}
 
 	/**
+	 * Sets the name of this node.
+	 * 
+	 * @param name
+	 *            the name of this node
+	 */
+	public void setName(String name) {
+		_name = name;
+	}
+
+	/**
 	 * Returns the value for this node (or null if it doesn't exist).
 	 * 
 	 * @return the name of this node
@@ -438,6 +510,13 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 		// }
 	}
 
+	/**
+	 * Removes the attribute that has the given name.
+	 * 
+	 * @param key
+	 *            the name of the attribute to remove
+	 * @return the attribute value
+	 */
 	public String removeAttributeForKey(String key) {
 		String attribute = _attributes.removeObjectForKey(key);
 		return attribute;
@@ -564,20 +643,20 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	}
 
 	protected void _addAttributeNodeForKeyInObject(ERXKey<?> key, Object obj, ERXKeyFilter keyFilter) {
-		ERXRestRequestNode attributeNode = new ERXRestRequestNode(keyFilter.keyMap(key).key());
+		ERXRestRequestNode attributeNode = new ERXRestRequestNode(keyFilter.keyMap(key).key(), false);
 		attributeNode.setValue(key.valueInObject(obj));
 		addChild(attributeNode);
 	}
 
 	protected void _addToManyRelationshipNodeForKeyOfEntityInObject(ERXKey<?> key, EOClassDescription destinationEntity, Object obj, ERXKeyFilter keyFilter, IERXRestDelegate delegate, Set<Object> visitedObjects) {
-		ERXRestRequestNode toManyRelationshipNode = new ERXRestRequestNode(keyFilter.keyMap(key).key());
+		ERXRestRequestNode toManyRelationshipNode = new ERXRestRequestNode(keyFilter.keyMap(key).key(), false);
 		toManyRelationshipNode.setArray(true);
 		toManyRelationshipNode.setType(destinationEntity.entityName());
 
 		List childrenObjects = (List) key.valueInObject(obj);
 		ERXKeyFilter childFilter = keyFilter._filterForKey(key);
 		for (Object childObj : childrenObjects) {
-			ERXRestRequestNode childNode = new ERXRestRequestNode(null);
+			ERXRestRequestNode childNode = new ERXRestRequestNode(null, false);
 			childNode._fillInWithObjectAndFilter(childObj, destinationEntity, childFilter, delegate, visitedObjects);
 			toManyRelationshipNode.addChild(childNode);
 		}
@@ -588,11 +667,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 
 	protected void _addToOneRelationshipNodeForKeyInObject(ERXKey<?> key, Object obj, EOClassDescription destinationEntity, ERXKeyFilter keyFilter, IERXRestDelegate delegate, Set<Object> visitedObjects) {
 		Object value = key.valueInObject(obj);
-		//if (value != null) {
-			ERXRestRequestNode toOneRelationshipNode = new ERXRestRequestNode(keyFilter.keyMap(key).key());
-			toOneRelationshipNode._fillInWithObjectAndFilter(value, destinationEntity, keyFilter._filterForKey(key), delegate, visitedObjects);
-			addChild(toOneRelationshipNode);
-		//}
+		// if (value != null) {
+		ERXRestRequestNode toOneRelationshipNode = new ERXRestRequestNode(keyFilter.keyMap(key).key(), false);
+		toOneRelationshipNode._fillInWithObjectAndFilter(value, destinationEntity, keyFilter._filterForKey(key), delegate, visitedObjects);
+		addChild(toOneRelationshipNode);
+		// }
 	}
 
 	@SuppressWarnings("unchecked")
@@ -670,7 +749,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 			setArray(true);
 
 			for (Object childObj : (List) obj) {
-				ERXRestRequestNode childNode = new ERXRestRequestNode(null);
+				ERXRestRequestNode childNode = new ERXRestRequestNode(null, false);
 				childNode._fillInWithObjectAndFilter(childObj, classDescription, keyFilter, delegate, visitedObjects);
 				addChild(childNode);
 			}
@@ -681,7 +760,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 				classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj);
 			}
 			if (_name == null) {
-				_name = ERXRestNameRegistry.registry().displayNameForActualName(classDescription.entityName());
+				_name = classDescription.entityName();
+				_rootNode = true;
 			}
 			setAssociatedObject(obj);
 			setType(classDescription.entityName());
@@ -829,11 +909,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 					else {
 						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
 					}
-					
+
 					if (childNode.isArray()) {
 						throw new IllegalArgumentException("You attempted to pass an array of values for the key '" + key + "'.");
 					}
-					
+
 					if (childNode.isNull()) {
 						Object childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
 						if (childObj != null) {
@@ -886,7 +966,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 */
 	public static ERXRestRequestNode requestNodeWithObjectAndFilter(EOClassDescription classDescription, List<?> objects, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
 		String entityName = classDescription.entityName();
-		ERXRestRequestNode requestNode = new ERXRestRequestNode(ERXLocalizer.englishLocalizer().plurifiedString(ERXRestNameRegistry.registry().displayNameForActualName(entityName), 2));
+		ERXRestRequestNode requestNode = new ERXRestRequestNode(ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2), true);
 		requestNode.setType(entityName);
 		requestNode._fillInWithObjectAndFilter(objects, classDescription, keyFilter, delegate, new HashSet<Object>());
 		return requestNode;
@@ -908,7 +988,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 			classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj);
 			shortName = classDescription.entityName();
 		}
-		ERXRestRequestNode requestNode = new ERXRestRequestNode(ERXRestNameRegistry.registry().displayNameForActualName(shortName));
+		ERXRestRequestNode requestNode = new ERXRestRequestNode(shortName, true);
 		if (ERXRestUtils.isPrimitive(obj)) {
 			requestNode.setValue(obj);
 		}
