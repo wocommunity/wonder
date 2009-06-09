@@ -183,7 +183,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			WOContext context = ERXWOContext.currentContext();
 			// set the current localizer
 			if (context != null && context.request() != null && context.request().browserLanguages() != null) {
-				ERXLocalizer.setCurrentLocalizer(ERXLocalizer.localizerForLanguages(context.request().browserLanguages()));
+				current = ERXLocalizer.localizerForLanguages(context.request().browserLanguages());
+				ERXLocalizer.setCurrentLocalizer(current);
 			}
 			else {
 				current = defaultLocalizer();
