@@ -26,7 +26,7 @@ public class IMTextAction extends IMAction {
 		WOComponent component = context.component();
 		String message = InstantMessengerAdaptor.message(request);
 		boolean allowBlanks = (_allowBlanks != null && ((Boolean) _allowBlanks.valueInComponent(component)).booleanValue());
-		if (allowBlanks || (message != null || message.trim().length() > 0)) {
+		if (allowBlanks || (message != null && message.trim().length() > 0)) {
 			_value.setValue(message, component);
 		}
 		else {
