@@ -40,7 +40,9 @@ public class ERXModel extends EOModel {
 	 * @param entity
 	 */
 	private static void addAttributesToPrototypesCache(EOEntity entity) {
-		addAttributesToPrototypesCache(entity.model(), attributesFromEntity(entity));
+		if (entity != null) {
+			addAttributesToPrototypesCache(entity.model(), attributesFromEntity(entity));
+		}
 	}
 
 	/**
@@ -188,7 +190,7 @@ public class ERXModel extends EOModel {
 	
 	/**
 	 * Overridden to use our prototype creation method if
-	 * <code>er.extensions.ERXModelGroup.useExtendedPrototypes=true</code>.
+	 * <code>er.extensions.ERXModel.useExtendedPrototypes=true</code>.
 	 */
 	@Override
 	public NSArray availablePrototypeAttributeNames() {
