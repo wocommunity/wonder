@@ -48,6 +48,7 @@ div#a form fieldset.attribute ul li fieldset legend {
 	margin-left: -130px; /*width of left column*/
 	font-size: 13px;
 	color: white;
+	-webkit-transform: translate(0, 30px);
 }
 
 div#a form fieldset.attribute ul li fieldset {

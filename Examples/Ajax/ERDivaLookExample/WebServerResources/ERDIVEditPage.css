@@ -11,6 +11,7 @@ div#a #EditForm fieldset.button ul li {
 div#a #EditForm fieldset.attribute legend {
 	margin-left: -10em; /*width of left column*/
 	display: inline-block;
+	-webkit-transform: translate(0, 1.75em);
 }
 
 div#a #EditForm fieldset.attribute {

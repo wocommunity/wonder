@@ -5,6 +5,7 @@
 div#a form fieldset.attribute ul li fieldset legend {
 	margin-left: -10em; /*width of left column*/
 	display: inline-block;
+	-webkit-transform: translate(0, 1.5em);
 }
 
 div#a form fieldset.attribute ul li fieldset {
