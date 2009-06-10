@@ -3,8 +3,9 @@ package er.pdf;
 import java.util.Map;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
-import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
@@ -13,6 +14,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXResourceManager;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * ERPDFWrapper will render the containing component content as a PDF document.
@@ -34,9 +36,9 @@ public class ERPDFWrapper extends WODynamicGroup implements WOActionResults {
   protected WOAssociation _secure;
   protected WOAssociation _enabled;
   protected WOAssociation _filename;
-  protected WOComponent _component;
+  protected WOElement _component;
 
-  public ERPDFWrapper(String name, NSDictionary<String, WOAssociation> someAssociations, WOComponent component) {
+  public ERPDFWrapper(String name, NSDictionary<String, WOAssociation> someAssociations, WOElement component) {
     super(name, someAssociations, component);
     _associations = someAssociations.mutableClone();
     _secure = _associations.removeObjectForKey("secure");
@@ -78,8 +80,19 @@ public class ERPDFWrapper extends WODynamicGroup implements WOActionResults {
   }
 
   public WOResponse generateResponse() {
-    WOResponse response = _component.generateResponse();
-    responseAsPdf(response, _component.context());
+    WOResponse response;
+    if (_component instanceof WOActionResults) {
+      response = ((WOActionResults)_component).generateResponse();
+      responseAsPdf(response, ERXWOContext.currentContext());
+    } else {
+      WOContext context = ERXWOContext.currentContext();
+      response = WOApplication.application().createResponseInContext(context);
+
+      WOElement currentElement = context._pageElement();
+      context._setPageElement(_component);
+      appendToResponse(response, context);
+      context._setPageElement(currentElement);
+    }
     return response;
   }
 }
