@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
-import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -24,13 +24,13 @@ public class ERPDFUtilities {
    * wocomponent as a PDF when response generation is invoked. Note that the
    * output of the passed component needs to be valid XHTML.
    * 
-   * @param element
+   * @param component
    *          the component you want to render as a PDF
    * @return an element that wraps the passed component and renders the output
    *         as a PDF
    */
-  public static WOActionResults pageAsPdf(WOElement element) {
-    return pageAsPdf(element, null);
+  public static WOActionResults pageAsPdf(WOComponent component) {
+    return pageAsPdf(component, null);
   }
 
   /**
@@ -38,7 +38,7 @@ public class ERPDFUtilities {
    * passed component as a PDF when appendToResponse() is called. Note that the
    * output of the passed component needs to be valid XHTML.
    * 
-   * @param element
+   * @param component
    *          the component you want to render as a PDF
    * @param config
    *          a dictionary of binding values to use to configure the PDFWrapper
@@ -47,14 +47,14 @@ public class ERPDFUtilities {
    * @return a component that wraps the passed element and renders the output as
    *         a PDF
    */
-  public static WOActionResults pageAsPdf(WOElement element, NSDictionary<String, Object> config) {
+  public static WOActionResults pageAsPdf(WOComponent component, NSDictionary<String, Object> config) {
     NSMutableDictionary<String, WOAssociation> associations = new NSMutableDictionary<String, WOAssociation>();
     if (config != null) {
       for (Map.Entry<String, Object> entry : config.entrySet()) {
         associations.setObjectForKey(WOAssociation.associationWithValue(entry.getValue()), entry.getKey());
       }
     }
-    ERPDFWrapper wrapper = new ERPDFWrapper("PDFWrapper", associations, element);
+    ERPDFWrapper wrapper = new ERPDFWrapper("PDFWrapper", associations, component);
     return wrapper;
   }
 
