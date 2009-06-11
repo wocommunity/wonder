@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSDictionary;
 import er.directtoweb.assignments.ERDAssignment;
 import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * An assignment to auto-compute a unique(ish), human-readable DOM class strings from the d2wContext for Selenium, CSS, Ajax, Javascript, etc.
@@ -33,6 +34,7 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
     /** holds the array of keys this assignment depends upon */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"task", "subTask"}), "classForTask",
+        new NSArray(new Object[] {"propertyKey"}), "classForAttribute",
     });
 
     /**
@@ -77,12 +79,24 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
      * A DOM class based on the task and subTask
      * 
      * @param c d2w context
-     * @return an id representing the section in a tab page
+     * @return a class string representing the task
      */
     public Object classForTask(D2WContext c) {
     	String classForTask = "task";
     	classForTask += (c.task() != null) ? " " + c.task() : "";
     	classForTask += (c.valueForKey("subTask") != null) ? " " + c.valueForKey("subTask") : "";
     	return classForTask;
+    }
+    
+    /**
+     * A DOM class based on the propertyKey
+     * 
+     * @param c d2w context
+     * @return a class string representing the propertyKey
+     */
+    public Object classForProperty(D2WContext c) {
+    	String classForProperty = "attribute";
+    	classForProperty += (c.propertyKey() != null) ? " " + ERXStringUtilities.safeIdentifierName(c.propertyKey()) : "";
+    	return classForProperty;
     }
 }
