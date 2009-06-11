@@ -19,10 +19,6 @@ public class ERDIVQueryPage extends ERD2WQueryPage implements ERDIVPageInterface
     	return (String) d2wContext().valueForKey(ERDIVPageInterface.Keys.Stylesheet);
     }
     
-	public String attributeClassString() {
-		return "attribute " + ERXStringUtilities.safeIdentifierName(propertyKey());
-	}
-    
 	/*
     // R/R
     @Override

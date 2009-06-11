@@ -90,7 +90,7 @@ DebugComponentName: ERDIVDebugComponentName {
 
 AttributeContainer: WOGenericContainer {
 	elementName = "li";
-	class = attributeClassString;
+	class = d2wContext.class;
 }
 
 Stylesheet: ERXStyleSheet {
