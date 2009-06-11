@@ -104,6 +104,11 @@ public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
     	
     	// prototype events
 	    AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+	    
+    	// add page style sheet
+    	if (stylesheet() != null) {
+    		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
+    	}
     }
     
     // actions
