@@ -18,14 +18,6 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-Stylesheet: ERXStyleSheet {
-	filename = stylesheet;
-}
-
-HasStylesheet: ERXNonNullConditional {
-	condition = stylesheet;
-}
-
 Watcher: AjaxBusyIndicator {
 	watchContainerID = "a";
 }

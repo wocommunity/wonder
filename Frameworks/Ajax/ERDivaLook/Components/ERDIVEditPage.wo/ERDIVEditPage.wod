@@ -114,14 +114,6 @@ NoConfirmation: WOConditional {
 	negate = true;
 }
 
-Stylesheet: ERXStyleSheet {
-	filename = stylesheet;
-}
-
-HasStylesheet: ERXNonNullConditional {
-	condition = stylesheet;
-}
-
 Watcher: AjaxBusyIndicator {
 	watchContainerID = "a";
 }

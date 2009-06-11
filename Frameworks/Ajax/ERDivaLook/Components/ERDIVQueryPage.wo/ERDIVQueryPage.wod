@@ -93,14 +93,6 @@ AttributeContainer: WOGenericContainer {
 	class = d2wContext.class;
 }
 
-Stylesheet: ERXStyleSheet {
-	filename = stylesheet;
-}
-
-HasStylesheet: ERXNonNullConditional {
-	condition = stylesheet;
-}
-
 Watcher: AjaxBusyIndicator {
 	watchContainerID = "a";
 }

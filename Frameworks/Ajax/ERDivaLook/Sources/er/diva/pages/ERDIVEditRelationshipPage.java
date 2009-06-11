@@ -96,4 +96,15 @@ public class ERDIVEditRelationshipPage extends ERD2WEditRelationshipPage impleme
         
         return flag;
     }
+    
+    // R/R
+    @Override
+	public void appendToResponse(WOResponse response, WOContext context) {
+    	super.appendToResponse(response, context);
+
+    	// add page style sheet
+    	if (stylesheet() != null) {
+    		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
+    	}
+    }
 }

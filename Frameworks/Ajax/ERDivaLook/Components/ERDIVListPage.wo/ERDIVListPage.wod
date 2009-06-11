@@ -254,11 +254,3 @@ ReportLink: WOHyperlink {
 	action = reportListAction;
 	class = "export";
 }
-
-Stylesheet: ERXStyleSheet {
-	filename = stylesheet;
-}
-
-HasStylesheet: ERXNonNullConditional {
-	condition = stylesheet;
-}
