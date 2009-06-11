@@ -39,14 +39,6 @@ public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
     	return isEvenRow() ? null : "odd";
     }
     
-    // FIXME: turn into rule
-    public String colClass() {
-    	String colClass = ERXStringUtilities.safeIdentifierName(propertyKey());
-    	try { colClass += " " + d2wContext().componentName(); 
-    	} catch (Exception e) {  log.error("Couldn't identify componentName for: " + d2wContext()); 
-    	} return colClass;
-    }
-    
     private boolean isEvenRow() {
     	return (index % 2 == 0);
     }
