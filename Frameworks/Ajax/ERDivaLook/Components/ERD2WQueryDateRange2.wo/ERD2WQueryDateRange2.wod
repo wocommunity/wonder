@@ -2,12 +2,14 @@ DateMaxField: AjaxCalendarDateSelect {
 	dateformat = formatter;
 	size = length;
 	value = maxValue;
+	name = maxName;
 }
 
 DateMinField: AjaxCalendarDateSelect {
 	dateformat = formatter;
 	size = length;
 	value = minValue;
+	name = minName;
 }
 
 DateReadableDescription: WOString {

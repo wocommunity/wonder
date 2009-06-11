@@ -19,6 +19,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * <ul>
  * <li><code>classForTask</code></li>
  * <li><code>classForProperty</code></li>
+ * <li><code>classForColumn</code></li>
  * </ul>
  * 
  * To use: Bind D2W component class binding to d2wContext.class (or d2wContext.classForTask, etc)
@@ -34,7 +35,7 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"task", "subTask"}), "classForTask",
         new NSArray(new Object[] {"propertyKey"}), "classForAttribute",
-        new NSArray(new Object[] {"propertyKey", "componentName", "task"}), "classForColumn",
+        new NSArray(new Object[] {"propertyKey", "componentName"}), "classForColumn",
     });
 
     /**

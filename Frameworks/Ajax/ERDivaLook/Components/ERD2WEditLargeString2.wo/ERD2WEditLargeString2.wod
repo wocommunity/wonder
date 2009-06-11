@@ -5,5 +5,5 @@ EditString: WOText {
 	disabled = d2wContext.disabled;
 	id = d2wContext.id;
 	title = d2wContext.title;
-	name = d2wContext.id;
+	name = d2wContext.name;
 }
