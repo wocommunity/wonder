@@ -24,10 +24,6 @@ public class ERDIVEditPage extends ERD2WTabInspectPage implements ERDIVPageInter
     	return (String) d2wContext().valueForKey(ERDIVPageInterface.Keys.Stylesheet);
     }
     
-    public String headerClassString() {
-    	return "task " + d2wContext().task() + " " + d2wContext().valueForKey("subTask");
-    }
-    
     // actions
     @Override
     public WOComponent cancelAction() {

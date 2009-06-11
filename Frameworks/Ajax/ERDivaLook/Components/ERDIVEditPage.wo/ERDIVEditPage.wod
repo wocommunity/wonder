@@ -89,7 +89,7 @@ IsNotTab: WOKeyValueConditional {
 }
 
 HeaderContainer: WOGenericContainer {
-	class = headerClassString;
+	class = d2wContext.class;
 	elementName = "h1";
 }
 
