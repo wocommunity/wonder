@@ -6,4 +6,5 @@ KeyToQueryWith: WOString {
 ToManyTextField: WOTextField {
 	size = 25;
 	value = value;
+	name = d2wContext.name;
 }

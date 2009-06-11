@@ -9,4 +9,13 @@ public class ERD2WQueryDateRange2 extends ERD2WQueryDateRange {
     public ERD2WQueryDateRange2(WOContext context) {
         super(context);
     }
+    
+    // accessors
+    public String minName() {
+    	return d2wContext().valueForKey("name") + "_min";
+    }
+    
+    public String maxName() {
+    	return d2wContext().valueForKey("name") + "_max";
+    }
 }

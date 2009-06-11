@@ -7,6 +7,7 @@ BrowserList: WOBrowser {
 	size = ^size;
 	id = ^id;
 	title = ^title;
+	name = ^name;
 }
 
 CheckboxMatrix: WXCheckboxList {

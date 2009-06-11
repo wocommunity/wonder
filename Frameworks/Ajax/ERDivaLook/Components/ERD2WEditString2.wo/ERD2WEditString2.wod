@@ -4,5 +4,5 @@ EditString: WOTextField {
 	maxlength = d2wContext.maxLength;
 	id = d2wContext.id;
 	title = d2wContext.title;
-	name = d2wContext.id;
+	name = d2wContext.name;
 }
