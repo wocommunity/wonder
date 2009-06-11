@@ -18,11 +18,10 @@ import er.extensions.foundation.ERXStringUtilities;
  * This assignment provides defaults for the following keys:
  * <ul>
  * <li><code>classForTask</code></li>
+ * <li><code>classForProperty</code></li>
  * </ul>
  * 
- * To use: Bind D2W component class binding to d2wContext.class (or d2wContext.classForTask)
- * 
- * You may also override these auto computed id by setting rules for the above keys, if necessary.
+ * To use: Bind D2W component class binding to d2wContext.class (or d2wContext.classForTask, etc)
  * 
  * @author mendis
  *
@@ -35,6 +34,7 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"task", "subTask"}), "classForTask",
         new NSArray(new Object[] {"propertyKey"}), "classForAttribute",
+        new NSArray(new Object[] {"propertyKey", "componentName", "task"}), "classForColumn",
     });
 
     /**
@@ -98,5 +98,17 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
     	String classForProperty = "attribute";
     	classForProperty += (c.propertyKey() != null) ? " " + ERXStringUtilities.safeIdentifierName(c.propertyKey()) : "";
     	return classForProperty;
+    }
+    
+    /**
+     * A DOM class based on the propertyKey and componentName
+     * 
+     * @param c d2w context
+     * @return a class string representing the propertyKey and componentName
+     */
+    public Object classForColumn(D2WContext c) {
+    	String classForColumn = (c.propertyKey() != null) ? ERXStringUtilities.safeIdentifierName(c.propertyKey()) : "";
+    	classForColumn += (c.componentName() != null) ? " " + c.componentName() : "";
+    	return classForColumn;
     }
 }
