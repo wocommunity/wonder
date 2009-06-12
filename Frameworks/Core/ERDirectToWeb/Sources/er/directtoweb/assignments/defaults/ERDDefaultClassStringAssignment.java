@@ -34,7 +34,7 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
     /** holds the array of keys this assignment depends upon */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"task", "subTask"}), "classForTask",
-        new NSArray(new Object[] {"propertyKey"}), "classForAttribute",
+        new NSArray(new Object[] {"propertyKey"}), "classForProperty",
         new NSArray(new Object[] {"propertyKey", "componentName"}), "classForColumn",
     });
 
