@@ -13,21 +13,12 @@ APXSFLAGS = -c -S CC=${CC} -Wc,"${CFLAGS}" -Wl,"${LDFLAGS}"
 
 ifeq "MACOS" "${OS}"
 
-export MACOSX_DEPLOYMENT_TARGET = 10.5
-
 # These are the default settings for OSX.
 CFLAGS += -Wall ${RC_CFLAGS}
 LDARCHS = $(patsubst %, -arch %, ${RC_ARCHS})
-LDFLAGS +=${OPENSSL_LIB_FLAGS} ${LDARCHS}  -macosx_version_min 10.5 -lm -module
+LDFLAGS += ${OPENSSL_LIB_FLAGS} ${LDARCHS} -macosx_version_min 10.5 -lm -module
 STRIP_FLAGS = -S
 endif
-
-#ifeq "MACOS" "$(OS)"
-#INCLUDES += ${OPENSSL_INCL_FLAGS}
-#LDFLAGS += ${OPENSSL_LIB_FLAGS} -lm -module
-
-#STRIP_FLAGS = -S
-#endif
 # End MacOS X Specific Settings
 
 
