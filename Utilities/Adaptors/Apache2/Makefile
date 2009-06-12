@@ -13,8 +13,6 @@ APXSFLAGS = -c -S CC=${CC} -Wc,"${CFLAGS}" -Wl,"${LDFLAGS}"
 
 ifeq "MACOS" "${OS}"
 
-export MACOSX_DEPLOYMENT_TARGET = 10.5
-
 # These are the default settings for OSX.
 # Flags for use when enabling mod_ssl support
 ENABLE_SSL_SUPPORT = -DAPACHE_SECURITY_ENABLED
@@ -27,19 +25,6 @@ LDFLAGS +=${OPENSSL_LIB_FLAGS} ${LDARCHS}  -macosx_version_min 10.5 -lm -module
 STRIP_FLAGS = -S
 endif
 
-#ifeq "MACOS" "$(OS)"
-# Flags for use when enabling mod_ssl support (on by default)
-#ENABLE_SSL_SUPPORT =
-#ENABLE_SSL_SUPPORT = -DAPACHE_SECURITY_ENABLED
-# These should be set to point at the ssl include and lib directories, respectively.
-#OPENSSL_INCL_FLAGS = -I/usr/include/openssl
-#OPENSSL_LIB_FLAGS = -L/usr/lib -lcrypto -lssl
-
-#INCLUDES += ${OPENSSL_INCL_FLAGS}
-#LDFLAGS += ${OPENSSL_LIB_FLAGS} -lm -module
-
-#STRIP_FLAGS = -S
-#endif
 # End MacOS X Specific Settings
 
 
@@ -59,14 +44,10 @@ all: mod_WebObjects.so
 #$(COMMON_OBJFILES) : %.o : ../Adaptor/%.c
 #	$(CC) $(CFLAGS) -c $<
 
-
-# MacOS X Build
-
 mod_WebObjects.so : mod_WebObjects.c ${COMMON_SRCFILES}
 	${APXS} ${APXSFLAGS} mod_WebObjects.c ${COMMON_SRCFILES}
 #	${APXS} -i -A -n WebObjects mod_WebObjects.la #auto-install module into libexec dir
 	cp .libs/mod_WebObjects.so .  #extra copy to put mod_WebObjects.so in traditional location
-#end MacOS
 
 
 clean:
