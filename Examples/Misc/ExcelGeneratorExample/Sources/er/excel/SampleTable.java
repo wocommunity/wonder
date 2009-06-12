@@ -17,7 +17,8 @@ import com.webobjects.appserver.WOContext;
 public class SampleTable extends WOComponent {
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(SampleTable.class);
+    @SuppressWarnings("unused")
+	private static final Logger log = Logger.getLogger(SampleTable.class);
     
 	public boolean enabled = false;
     

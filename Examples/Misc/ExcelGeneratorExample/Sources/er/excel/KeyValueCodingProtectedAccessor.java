@@ -8,30 +8,35 @@ import com.webobjects.foundation.NSKeyValueCoding;
 public class KeyValueCodingProtectedAccessor
 extends NSKeyValueCoding.ValueAccessor
 {
-    public Object fieldValue(Object object, Field field)
+    @Override
+	public Object fieldValue(Object object, Field field)
     throws IllegalArgumentException, IllegalAccessException {
         return field.get(object);
     }
 
-    public void setFieldValue(Object object, Field field, Object object0)
+    @Override
+	public void setFieldValue(Object object, Field field, Object object0)
     throws IllegalArgumentException, IllegalAccessException {
         field.set(object, object0);
     }
 
-    public Object methodValue(Object object, Method method)
+    @Override
+	public Object methodValue(Object object, Method method)
     throws IllegalArgumentException, IllegalAccessException,
     InvocationTargetException {
-        return method.invoke(object, null);
+        return method.invoke(object, (Object[]) null);
     }
 
-    public void setMethodValue
+    @Override
+	public void setMethodValue
     (Object object, Method method, Object object1)
     throws IllegalArgumentException, IllegalAccessException,
     InvocationTargetException {
         method.invoke(object, new Object[] { object1 });
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return "KeyValueCodingProtectedAccessor";
     }
 }

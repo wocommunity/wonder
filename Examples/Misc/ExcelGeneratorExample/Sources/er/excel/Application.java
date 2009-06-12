@@ -22,8 +22,8 @@ public class Application extends ERXApplication {
         ERXApplication.main(argv, Application.class);
     }
     
-    public NSDictionary data() {
-    	NSDictionary dict = ERXDictionaryUtilities.dictionaryFromPropertyList("Styles", NSBundle.mainBundle());
+    public NSDictionary<?,?> data() {
+    	NSDictionary<?,?> dict = ERXDictionaryUtilities.dictionaryFromPropertyList("Styles", NSBundle.mainBundle());
     	return dict;
     }
 

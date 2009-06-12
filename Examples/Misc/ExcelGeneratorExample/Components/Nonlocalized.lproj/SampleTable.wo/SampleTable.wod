@@ -1,5 +1,5 @@
 EGWrapper: EGWrapper {
 	enabled = enabled;
-	styles = application.data.Styles;
-	fonts = application.data.Fonts;
+	styles = application.data.Styles; //VALID
+	fonts = application.data.Fonts; //VALID
 }
