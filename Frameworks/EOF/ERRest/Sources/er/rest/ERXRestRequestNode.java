@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.localization.ERXLocalizer;
@@ -866,6 +867,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 					else {
 						destinationEntity = classDescription.classDescriptionForDestinationKey(keyName);
 					}
+					boolean lockedRelationship = keyFilter.lockedRelationship(key);
 
 					@SuppressWarnings("unchecked")
 					List<Object> existingValues = (List<Object>) NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
@@ -874,25 +876,50 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 					List<Object> newValues = new LinkedList<Object>();
 					List<Object> allValues = new LinkedList<Object>();
 					for (ERXRestRequestNode toManyNode : childNode.children()) {
-						Object childObj = delegate.objectOfEntityWithID(destinationEntity, toManyNode.id());
-						toManyNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
-						if (!existingValues.contains(childObj)) {
-							newValues.add(childObj);
+						Object id = toManyNode.id();
+						
+						Object childObj;
+						if (id == null) {
+							if (lockedRelationship) {
+								childObj = null;
+							}
+							else {
+								childObj = delegate.createObjectOfEntity(destinationEntity);
+							}
 						}
-						allValues.add(childObj);
-						removedValues.remove(childObj);
+						else {
+							childObj = delegate.objectOfEntityWithID(destinationEntity, id);
+						}
+						
+						if (childObj != null) {
+							boolean newMemberOfRelationship = !existingValues.contains(childObj);
+							if (newMemberOfRelationship) {
+								if (!lockedRelationship) {
+									toManyNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
+									newValues.add(childObj);
+									allValues.add(childObj);
+								}
+							}
+							else {
+								toManyNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
+								allValues.add(childObj);
+							}
+							removedValues.remove(childObj);
+						}
 					}
 
-					if (obj instanceof EOEnterpriseObject) {
-						for (Object removedValue : removedValues) {
-							((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) removedValue, keyName);
+					if (!lockedRelationship) {
+						if (obj instanceof EOEnterpriseObject) {
+							for (Object removedValue : removedValues) {
+								((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) removedValue, keyName);
+							}
+							for (Object newValue : newValues) {
+								((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) newValue, keyName);
+							}
 						}
-						for (Object newValue : newValues) {
-							((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) newValue, keyName);
+						else {
+							key.takeValueInObject(allValues, obj);
 						}
-					}
-					else {
-						key.takeValueInObject(allValues, obj);
 					}
 				}
 				else if (!ERXRestUtils.isPrimitive(valueType) && keyFilter.matches(key, ERXKey.Type.ToOneRelationship)) {
@@ -909,30 +936,61 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 					else {
 						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
 					}
+					boolean lockedRelationship = keyFilter.lockedRelationship(key);
 
 					if (childNode.isArray()) {
 						throw new IllegalArgumentException("You attempted to pass an array of values for the key '" + key + "'.");
 					}
 
 					if (childNode.isNull()) {
-						Object childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
-						if (childObj != null) {
-							if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
-								((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, keyName);
+						Object previousChildObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
+						if (previousChildObj != null && !lockedRelationship) {
+							if (obj instanceof EOEnterpriseObject && previousChildObj instanceof EOEnterpriseObject) {
+								((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) previousChildObj, keyName);
 							}
 							else {
-								key.takeValueInObject(childObj, obj);
+								key.takeValueInObject(null, obj);
 							}
 						}
 					}
 					else {
-						Object childObj = delegate.objectOfEntityWithID(destinationClassDescription, childNode.id());
-						childNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
-						if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
-							((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, keyName);
+						Object id = childNode.id();
+						
+						Object childObj;
+						if (id == null) {
+							if (lockedRelationship) {
+								childObj = null;
+							}
+							else {
+								childObj = delegate.createObjectOfEntity(destinationClassDescription);
+							}
 						}
 						else {
-							key.takeValueInObject(childObj, obj);
+							childObj = delegate.objectOfEntityWithID(destinationClassDescription, id);
+						}
+						
+						boolean updateChildObj;
+						if (childObj == null) {
+							updateChildObj = false;
+						}
+						else if (lockedRelationship) {
+							Object previousChildObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
+							updateChildObj = ERXExtensions.safeEquals(previousChildObj, childObj);
+						}
+						else {
+							updateChildObj = true;
+						}
+						
+						if (updateChildObj) {
+							childNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
+							if (!lockedRelationship) {
+								if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
+									((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, keyName);
+								}
+								else {
+									key.takeValueInObject(childObj, obj);
+								}
+							}
 						}
 					}
 				}
