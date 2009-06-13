@@ -49,6 +49,7 @@ public class ERXKeyFilter {
 	private ERXKeyFilter.Base _base;
 	private NSMutableDictionary<ERXKey, ERXKeyFilter> _includes;
 	private NSMutableSet<ERXKey> _excludes;
+	private NSMutableSet<ERXKey> _lockedRelationships;
 	private NSMutableDictionary<ERXKey, ERXKey> _map;
 	private ERXKeyFilter.Base _nextBase;
 
@@ -72,6 +73,7 @@ public class ERXKeyFilter {
 		_nextBase = nextBase;
 		_includes = new NSMutableDictionary<ERXKey, ERXKeyFilter>();
 		_excludes = new NSMutableSet<ERXKey>();
+		_lockedRelationships = new NSMutableSet<ERXKey>();
 		_map = new NSMutableDictionary<ERXKey, ERXKey>();
 	}
 	
@@ -242,6 +244,15 @@ public class ERXKeyFilter {
 	}
 
 	/**
+	 * Returns the set of relationships that are locked (i.e. cannot be replaced).
+	 * 
+	 * @return the set of relationships that are locked (i.e. cannot be replaced)
+	 */
+	public NSSet<ERXKey> lockedRelationships() {
+		return _lockedRelationships;
+	}
+
+	/**
 	 * Includes the given set of keys in this filter.
 	 * 
 	 * @param keys the keys to include
@@ -296,6 +307,36 @@ public class ERXKeyFilter {
 	 */
 	public boolean excludes(ERXKey key) {
 		return _excludes.contains(key);
+	}
+
+	/**
+	 * Returns whether or not the given relationship is locked (i.e. value's attributes can be updated but not the relationship cannot be changed). 
+	 * 
+	 * @param key the key to lookup
+	 * @return whether or not the given relationship is locked
+	 */
+	public boolean lockedRelationship(ERXKey key) {
+		return _lockedRelationships.contains(key);
+	}
+
+	/**
+	 * Locks the given relationship on this filter.
+	 * 
+	 * @param keys the relationships to lock
+	 */
+	public void lockRelationship(ERXKey... keys) {
+		for (ERXKey key : keys) {
+			String keyPath = key.key();
+			int dotIndex = keyPath.indexOf('.');
+			if (dotIndex == -1) {
+				_lockedRelationships.addObject(key);
+				//_includes.removeObjectForKey(key);
+			}
+			else {
+				ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)));
+				subFilter.lockRelationship(new ERXKey(keyPath.substring(dotIndex + 1)));
+			}
+		}
 	}
 
 	/**
@@ -388,6 +429,9 @@ public class ERXKeyFilter {
 		}
 		if (!_excludes.isEmpty()) {
 			sb.append("; excludes=" + _excludes);
+		}
+		if (!_lockedRelationships.isEmpty()) {
+			sb.append("; excludesReplacement=" + _lockedRelationships);
 		}
 		sb.append("]");
 		return sb.toString();
