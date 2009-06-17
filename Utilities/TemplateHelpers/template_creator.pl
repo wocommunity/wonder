@@ -53,7 +53,7 @@ $cmd = "find $pathToERDirectToWeb -name \\*$Suffix -type d |grep -v CVS";
 @files = `$cmd`;
 
 foreach $file (@files) {
-    if($file =~ m|(.*?)/([A-Za-z0-9_]+).wo|) {
+    if($file =~ m|(.*?)/([A-Za-z0-9_]+)\.wo|) {
         ($source, $class) = ($1, $2);
         if($class =~ m|$pattern|) {
             $typeName = "$1";
