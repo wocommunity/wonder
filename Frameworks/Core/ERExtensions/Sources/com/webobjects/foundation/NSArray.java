@@ -342,9 +342,9 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
     }
 
     protected void _setCount(int count) {
-    	if(count != count() && count != 0) {
-    		throw new IllegalStateException();
-    	}
+//    	if(count != count() && count != 0) {
+//    		throw new IllegalStateException();
+//    	}
     }
      
 	protected Object[] _objects() {
