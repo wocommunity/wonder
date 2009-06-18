@@ -58,12 +58,16 @@ public abstract class ERXMulticastingDelegate {
      * @param delegate Object to add as one of the delegates called
      */
     public void addDelegate(Object delegate) {
-        NSMutableArray delegateList = delegates().mutableClone();
-        _NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
-        delegateList.addObject(delegateObject);
-        setDelegateOrder(delegateList);
+    	synchronized (delegates) {
+        	if (hasDelegate(delegate)) {
+        		throw new IllegalArgumentException("Delegate is already included");
+        	}
+        	
+            _NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
+            delegates.addObject(delegateObject);
+        }
     }
-
+    
 
     /**
      * Adds <code>delegate</code> at the start of the chain.  It becomes the first delegate called.
@@ -71,13 +75,60 @@ public abstract class ERXMulticastingDelegate {
      * @param delegate Object to add as one of the delegates called
      */
     public void addDelegateAtStart(Object delegate) {
-        NSMutableArray delegateList = delegates().mutableClone();
-        _NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
-        delegateList.insertObjectAtIndex(delegateObject, 0);
-        setDelegateOrder(delegateList);
+    	synchronized (delegates) {
+        	if (hasDelegate(delegate)) {
+        		throw new IllegalArgumentException("Delegate is already included");
+        	}
+        	
+        	_NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
+	        delegates.insertObjectAtIndex(delegateObject, 0);
+    	}
     }
+    
+    
+    /**
+     * Removes <code>delegate</code> from the delegates called.
+     *
+     * @param delegate Object to remove as one of the delegates called
+     */
+    public void removeDelegate(Object delegate) {
+    	synchronized (delegates) {
+        	if ( ! hasDelegate(delegate)) {
+        		throw new IllegalArgumentException("Delegate is not present");
+        	}
+        	
+	        for (int i = 0; i < delegates.count(); i++) {
+	        	_NSDelegate delegateObject = (_NSDelegate)delegates.objectAtIndex(i);
+	        	if (delegateObject.delegate().equals(delegate))
+	        	{
+	        		delegates.removeObjectAtIndex(i);
+	        		break;
+	        	}
+	        }
+        }
+    }
+    
 
-
+    /**
+     * Returns <code>true</code> if delegate is represented in delegates().
+     *
+     * @param delegate Object to test for membership in delegates()
+     * @return <code>true</code> if delegate is represented in delegates()
+     */
+    public boolean hasDelegate(Object delegate) {
+    	synchronized (delegates) {
+	        for (int i = 0; i < delegates.count(); i++) {
+	        	_NSDelegate delegateObject = (_NSDelegate)delegates.objectAtIndex(i);
+	        	if (delegateObject.delegate().equals(delegate))
+	        	{
+	        		return true;
+	        	}
+	        }
+	        return false;
+    	}
+    }
+    
+    
     /**
      * This method returns an array of <code>com.webobjects.foundation._NSDelegate</code>, <b>not</b>
      * the delegate objects originally added by calling addDelegate...  Call <code>delegate()</code>
@@ -86,9 +137,11 @@ public abstract class ERXMulticastingDelegate {
      * @return the delegates in the order they will be called
      */
     public NSArray delegates() {
-        return delegates.immutableClone();
+    	synchronized (delegates) {
+    		return delegates.immutableClone();
+    	}
     }
-
+    
 
     /**
      * Use this to set the delegate order if the addDelegate... methods are not sufficient.
@@ -97,14 +150,15 @@ public abstract class ERXMulticastingDelegate {
      * @param orderedDelegates array of <code>com.webobjects.foundation._NSDelegate</code> in the order in which delegates should be called
      */
     public void setDelegateOrder(NSArray orderedDelegates) {
-
-        for (int i = 0; i < orderedDelegates.count(); i++) {
-            if ( ! (orderedDelegates.objectAtIndex(i) instanceof _NSDelegate)) {
-                throw new IllegalArgumentException("Object of class " + orderedDelegates.objectAtIndex(i).getClass().getName() +
-                        " must be instanceof _NSDelegate");
-            }
-        }
-        delegates = orderedDelegates.mutableClone();
+    	synchronized (delegates) {
+	        for (int i = 0; i < orderedDelegates.count(); i++) {
+	            if ( ! (orderedDelegates.objectAtIndex(i) instanceof _NSDelegate)) {
+	                throw new IllegalArgumentException("Object of class " + orderedDelegates.objectAtIndex(i).getClass().getName() +
+	                        " must be instanceof _NSDelegate");
+	            }
+	        }
+	        delegates = orderedDelegates.mutableClone();
+    	}
     }
 
 
@@ -119,12 +173,14 @@ public abstract class ERXMulticastingDelegate {
      */
     protected Object perform(String methodName, Object args[], Object defaultResult) {
         Object result = null;
-        for (int i = 0; (result == null || result.equals(defaultResult)) && i < delegates().count(); i++) {
-            _NSDelegate delegate = (_NSDelegate) delegates().objectAtIndex(i);
-            if (delegate.respondsTo(methodName)) {
-                result = delegate.perform(methodName, args);
+    	synchronized (delegates) {
+            for (int i = 0; (result == null || result.equals(defaultResult)) && i < delegates.count(); i++) {
+                _NSDelegate delegate = (_NSDelegate) delegates.objectAtIndex(i);
+                if (delegate.respondsTo(methodName)) {
+                    result = delegate.perform(methodName, args);
+                }
             }
-        }
+    	}
 
         return result == null ? defaultResult : result;
     }
