@@ -258,6 +258,9 @@ public class ERXEOAccessUtilities {
 	        	adaptorChannel.openChannel();
 	        }
 	        EOSQLExpressionFactory factory = adaptorChannel.adaptorContext().adaptor().expressionFactory();
+			if (ERXEOAccessUtilities.log.isInfoEnabled()) {
+				ERXEOAccessUtilities.log.info("Executing " + exp);
+			}
 	        adaptorChannel.evaluateExpression(factory.expressionForString(exp));        
 	     }
         finally {
