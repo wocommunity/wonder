@@ -580,6 +580,20 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * Returns the decrypted value for the given property name using the default crypter. This is
+     * slightly different than decryptedStringWithKeyWithDefault in that it does not require  the .encrypted
+     * property to be set.
+     *  
+     * @param propertyName the name of the property to decrypt
+     * @param defaultValue the default encrypted value
+     * @return the decrypted value
+     */
+    public static String decryptedStringForKeyWithEncryptedDefault(String propertyName, String defaultValue) {
+    	String encryptedPassword = ERXProperties.stringForKeyWithDefault(propertyName, defaultValue);
+    	return ERXCrypto.defaultCrypter().decrypt(encryptedPassword);
+    }
+
+    /**
      * Returns an array of strings separated with the given separator string.
      * 
      * @param key the key to lookup
