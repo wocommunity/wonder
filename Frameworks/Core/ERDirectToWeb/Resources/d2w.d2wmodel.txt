@@ -146,7 +146,6 @@
     10 : pageConfiguration like 'Select*' => task = select [com.webobjects.directtoweb.Assignment],
     10 : *true* => hasPrinterFriendlyVersion = false [com.webobjects.directtoweb.BooleanAssignment],
     10 : propertyKey = '-----' => componentName = ERDSpacer [com.webobjects.directtoweb.Assignment],
-    10 : propertyKey = '-----' => componentName = ERDSpacer [com.webobjects.directtoweb.Assignment],
     10 : propertyKey = '-----' => displayNameForProperty =  [com.webobjects.directtoweb.Assignment],
     10 : subTask = 'pickType' => choiceDisplayKey = toString [com.webobjects.directtoweb.Assignment],
     10 : propertyKey = '-----' => displayNameForProperty =   [com.webobjects.directtoweb.Assignment],
