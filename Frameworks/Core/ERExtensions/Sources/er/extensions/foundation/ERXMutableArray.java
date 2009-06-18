@@ -155,7 +155,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized void addObjects(V[] objects) {
+		public synchronized void addObjects(V... objects) {
 			super.addObjects(objects);
 		}
 
@@ -215,7 +215,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized void removeObjects(Object[] objects) {
+		public synchronized void removeObjects(Object... objects) {
 			super.removeObjects(objects);
 		}
 
@@ -346,7 +346,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized void makeObjectsPerformSelector(NSSelector selector, Object[] parameters) {
+		public synchronized void makeObjectsPerformSelector(NSSelector selector, Object... parameters) {
 			super.makeObjectsPerformSelector(selector, parameters);
 		}
 
@@ -429,7 +429,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		if(!(array instanceof NSMutableArray)) {
 			return array;
 		}
-		return new ThreadSafeArray((NSMutableArray)array);
+		return new ThreadSafeArray(array);
 	}
 
 	public static <T> NSMutableArray<T> synchronizedArray(NSMutableArray<T> array) {
