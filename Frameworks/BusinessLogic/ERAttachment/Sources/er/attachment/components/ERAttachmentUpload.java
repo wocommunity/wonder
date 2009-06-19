@@ -33,6 +33,13 @@ import er.extensions.validation.ERXValidation;
  * ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, fileUploadFinalFilePath, fileUploadFilePath, mimeType, configurationName, ownerID);
  * </code>
  *
+ * <p>
+ * Note that for the attachment binding, you do not create the attachment instance and
+ * pass it in. The attachment processor inside of ERAttachmentUpload creates an appropriate 
+ * attachment instance for you (using the editing context you provide) and simply binds it 
+ * back to you when the upload is complete.
+ * </p>
+ * 
  * @author mschrag
  * @binding attachment the binding to store the newly created attachment in
  * @binding editingContext the editing context to create the attachment in
