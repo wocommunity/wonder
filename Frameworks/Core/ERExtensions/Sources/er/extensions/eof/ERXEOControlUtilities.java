@@ -664,6 +664,19 @@ public class ERXEOControlUtilities {
         EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
         fetchSpec.setFetchesRawRows(true);
 
+        if (sqlFactory == null) {
+        	/* if there is no expression factory we have no choice but to fetch */
+        	NSArray<?> array = ec.objectsWithFetchSpecification(fetchSpec);
+        	if (aggregateAttribute == EOEnterpriseObjectClazz.objectCountAttribute()) {
+        		return array.count();
+        	}
+        	if (aggregateAttribute.name().startsWith("p_objectCountUnique")) {
+        		String attributeName = aggregateAttribute.name().substring("p_objectCountUnique".length());
+        		return ERXArrayUtilities.arrayWithoutDuplicateKeyValue(array, attributeName).count();
+        	}
+        	throw new UnsupportedOperationException("Unable to perform aggregate function for attribute " + aggregateAttribute.name());
+        }
+        
         EOSQLExpression sqlExpr = sqlFactory.expressionForEntity(entity);
         sqlExpr.prepareSelectExpressionWithAttributes(new NSArray<EOAttribute>(aggregateAttribute), false, fetchSpec);
 
