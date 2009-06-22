@@ -157,6 +157,8 @@ public class AjaxObserveField extends AjaxDynamicElement {
 				result = handleRequest(worequest, wocontext);
 			}
 			AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
+		} else {
+			result = invokeChildrenAction(worequest, wocontext);
 		}
 		return result;
 	}
