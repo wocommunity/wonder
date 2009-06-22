@@ -298,8 +298,12 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 	
 	public NSArray(E object, E... objects) {
-		initFromObjects(objects, 0, objects == null ? 0 : objects.length, 1, true, true);
-		_objects()[0] = object;
+		if (object == null) {
+			initFromObjects(objects, 0, objects == null ? 0 : objects.length, 0, true, true);
+		} else {
+			initFromObjects(objects, 0, objects == null ? 0 : objects.length, 1, true, true);
+			_objects()[0] = object;
+		}
 	}
 
 	public NSArray(E[] objects, NSRange range) {
