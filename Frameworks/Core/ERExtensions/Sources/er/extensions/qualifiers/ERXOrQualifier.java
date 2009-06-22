@@ -13,9 +13,8 @@ import er.extensions.eof.ERXQ;
  * @author mschrag
  */
 public class ERXOrQualifier extends EOOrQualifier implements IERXChainableQualifier {
-	@SuppressWarnings("cast")
 	public ERXOrQualifier(NSArray<? extends EOQualifier> qualifiers) {
-		super((NSArray) qualifiers);
+		super((NSArray<EOQualifier>) qualifiers);
 	}
 
 	public ERXAndQualifier and(EOQualifier... qualifiers) {

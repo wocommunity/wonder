@@ -220,6 +220,17 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXOrQualifier(new NSArray(qualifiersArray).
+	 * 
+	 * @param qualifiers
+	 *            the NSArray of qualifiers to or
+	 * @return an ERXOrQualifier
+	 */
+	public static ERXOrQualifier or(NSArray<? extends EOQualifier> qualifiers) {
+		return new ERXOrQualifier(qualifiers);
+	}
+	
+	/**
 	 * Equivalent to new ERXAndQualifier(new NSArray(qualifiersArray). Nulls are
 	 * skipped.
 	 * 
@@ -234,6 +245,17 @@ public class ERXQ {
 				qualifiers.addObject(qualifier);
 			}
 		}
+		return new ERXAndQualifier(qualifiers);
+	}
+	
+	/**
+	 * Equivalent to new ERXAndQualifier(new NSArray(qualifiersArray).
+	 * 
+	 * @param qualifiers
+	 *            the NSArray of qualifiers to and
+	 * @return an ERXAndQualifier
+	 */
+	public static ERXAndQualifier and(NSArray<? extends EOQualifier> qualifiers) {
 		return new ERXAndQualifier(qualifiers);
 	}
 
