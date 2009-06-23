@@ -503,7 +503,7 @@ public class AjaxModalDialog extends AjaxComponent {
 			}
 			
 			// This script can also be called directly by other code to show the modal dialog
-			response.appendContentString("<script>\n");
+			AjaxUtils.appendScriptHeader(response);
 			response.appendContentString(openDialogFunctionName(id()));
 			response.appendContentString(" = function(titleBarText) {\n");
 			appendOpenModalDialogFunction(response, context);
@@ -514,7 +514,7 @@ public class AjaxModalDialog extends AjaxComponent {
 				response.appendContentString(openDialogFunctionName(id()));
 				response.appendContentString("();\n");
 			}
-			response.appendContentString("</script>");
+			AjaxUtils.appendScriptFooter(response);
 			
 			// normally this would be done in super, but we're not always calling super here
 			addRequiredWebResources(response);
