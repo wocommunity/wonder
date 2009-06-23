@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
 	<wo class="AjaxSubmitButton" wocomponentcontent="true">
 		<binding name="name"/>
@@ -46,5 +46,6 @@
 	    <bound name="effect"/>
 	    <unbound name="updateContainerID"/>
     </validation>
+    <binding name="title"/>
     </wo>
 </wodefinitions>
