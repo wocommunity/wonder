@@ -51,6 +51,7 @@ import er.extensions.foundation.ERXFileUtilities;
  * @binding keepTempFile if true, don't delete the temp file that AjaxFileUpload creates
  * @binding uploadLabel the label to display on the Upload button ("Upload" by default)
  * @binding uploadFunctionName the upload button will instead be a function with the given name
+ * @binding progressOfText the text to display for the word "of" in the "[size] of [totalsize]" string during upload
  * 
  * @author mschrag
  */
