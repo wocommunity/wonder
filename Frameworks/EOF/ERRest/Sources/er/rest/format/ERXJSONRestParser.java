@@ -18,7 +18,7 @@ import er.rest.ERXRestUtils;
  * @author mschrag
  */
 public class ERXJSONRestParser implements IERXRestParser {
-	protected ERXRestRequestNode createRequestNodeForJSON(String name, JSON json, boolean rootNode, ERXRestFormat.Delegate delegate) {
+	protected static ERXRestRequestNode createRequestNodeForJSON(String name, JSON json, boolean rootNode, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name, rootNode);
 
 		if (json instanceof JSONNull) {
@@ -32,7 +32,7 @@ public class ERXJSONRestParser implements IERXRestParser {
 					requestNode.addChild(new ERXRestRequestNode(null, obj, false));
 				}
 				else {
-					requestNode.addChild(createRequestNodeForJSON(null, (JSON) obj, true, delegate));
+					requestNode.addChild(ERXJSONRestParser.createRequestNodeForJSON(null, (JSON) obj, true, delegate));
 				}
 			}
 		}
@@ -45,7 +45,7 @@ public class ERXJSONRestParser implements IERXRestParser {
 					requestNode.addChild(new ERXRestRequestNode(strKey, value, false));
 				}
 				else {
-					requestNode.addChild(createRequestNodeForJSON(strKey, (JSON) value, false, delegate));
+					requestNode.addChild(ERXJSONRestParser.createRequestNodeForJSON(strKey, (JSON) value, false, delegate));
 				}
 			}
 		}

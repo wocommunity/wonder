@@ -43,11 +43,16 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 		}
 	}
 
+	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
+		return node;
+	}
+
 	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response) {
 		response.setHeader("application/json", "Content-Type");
 	}
-	
+
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate) {
+		node = processNode(node);
 		appendHeadersToResponse(node, response);
 		Object object = node.toJavaCollection(delegate);
 		if (object == null) {
