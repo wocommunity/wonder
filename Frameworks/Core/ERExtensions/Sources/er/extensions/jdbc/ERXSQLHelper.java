@@ -1228,7 +1228,7 @@ public class ERXSQLHelper {
 			sqlName = e.sqlStringForAttribute(attribute);
 		}
 
-		int maxPerQuery = 256;
+		int maxPerQuery = maximumElementPerInClause();
 
 		// Need to wrap this SQL in parens if there are multiple grougps
 		if (valueArray.count() > maxPerQuery) {
@@ -1269,6 +1269,16 @@ public class ERXSQLHelper {
 		return sb.toString();
 	}
 
+	/**
+	 * The database specific limit, or or most efficient number, of elements in an IN clause in a statement.  If there
+	 * are more that this number of elements, additional IN clauses will be generated, ORed to the others.
+	 * 
+	 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
+	 */
+	protected int maximumElementPerInClause() {
+		return 256;
+	}
+	
 	protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
 		return expression.sqlStringForValue(value, key);
 	}
@@ -1932,6 +1942,25 @@ public class ERXSQLHelper {
 
 			return "\"" + columnName.substring(0, i) + "\".\"" + columnName.substring(i + 1, columnName.length()) + "\"";
 		}
+		
+		/**
+		 * FrontBase is exceedingly inefficient in processing OR clauses.   A query like this:<br/>
+		 * SELECT * FROM "Foo" t0 WHERE ( t0."oid" IN (431, 437, ...) OR t0."oid" IN (1479, 1480, 1481,...)...<br/>
+		 * Completely KILLS FrontBase (30+ seconds of 100%+ CPU usage). The same query rendered as:<br/>
+		 * SELECT * FROM "Foo" t0 WHERE t0."oid" IN (431, 437, ...) UNION SELECT * FROM "Foo" t0 WHERE t0."oid" IN (1479, 1480, 1481, ...)...
+		 * executes in less than a tenth of the time with less high CPU load.  Collapse all the ORs and INs into one and it is faster
+		 * still.  This has been tested with over 17,000 elements, so 15,000 seemed like a safe maximum.  I don't know what the actual
+		 * theoretical maximum is.
+		 * 
+		 * @see ERXSQLHelper#maximumElementPerInClause()
+		 * 
+		 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
+		 */
+		@Override
+		protected int maximumElementPerInClause() {
+			return 15000;
+		}
+		
 	}
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {
