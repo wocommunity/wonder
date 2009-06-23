@@ -17,13 +17,13 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 /**
  * AjaxObserveField allows you to perform an Ajax submit (and optional update) based
- * on the state of a form field changing.  If you specify an observeFieldID, that
- * single field will be observed for changes.  If you also specify an updateContainerID,
- * the given container will be refreshed after the field changes.  If you do NOT specify
+ * on the state of a form field changing. If you specify an observeFieldID, that
+ * single field will be observed for changes. If you also specify an updateContainerID,
+ * the given container will be refreshed after the field changes. If you do NOT specify
  * an observeFieldID, all of the form fields contained within this component will be
- * observed for changes instead.  The list of form fields to observe is obtained on 
+ * observed for changes instead. The list of form fields to observe is obtained on 
  * the client side, so you should not put AjaxUpdateContainers INSIDE of this component
- * or any fields inside of the container will no be observed after an update.  Instead,
+ * or any fields inside of the container will no be observed after an update. Instead,
  * AjaxObserveFields should be surrounded by a container.
  * 
  * If you leave of observeFieldID, AjaxObserveField must generate an HTML container, so
@@ -31,13 +31,22 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
  * side.
  * 
  * @binding id the ID of the observe field container (only useful if you leave off observeFieldID).
- * @binding elementName the name of the html tag to generate with observeFieldID if it is null, uses <code>div</code> by default.
+ * @binding elementName element to use for the observe field container. Defaults to <code>div</code>. 
+ * 			(Only used if you leave off observeFieldID)
  * @binding observeFieldID the ID of the field to observe
- * @binding updateContainerID the ID of the container to update
+ * @binding updateContainerID the ID of the container to update. Specify "_parent" to use the nearest one.
  * @binding action the action to call when the observer fires
  * @binding onBeforeSubmit called prior to submitting the observed content; return false to deny the submit
  * @binding observeFieldFrequency the polling observe frequency (in seconds)
  * @binding observeDelay the minimum time between submits (in seconds)
+ * @binding fullSubmit When false, only the value of the field that changed is sent to the server (partial submit), 
+ * 			when true, the whole form is sent. Defaults to false. 
+ * 			Caution: Partial submit doesn't work correctly if you manually set the name on your inputs.
+ * @binding class CSS class to use on the container. (Only used if you leave off observeFieldID)
+ * @binding style CSS style to use on the container. (Only used if you leave off observeFieldID)
+ * @binding onCreate Takes a JavaScript function which is called after the form has been serialized, 
+ * 			but befor the Ajax request is sent to the server. Useful e.g. if you want to disable the 
+ * 			form while the ajax request is running. 
  */
 public class AjaxObserveField extends AjaxDynamicElement {
 	public AjaxObserveField(String name, NSDictionary associations, WOElement children) {
