@@ -37,11 +37,12 @@ public class ERXModel extends EOModel {
 	 * Utility to add attributes to the prototype cache. As the attributes are chosen by name, replace already
 	 * existing ones.
 	 * 
-	 * @param entity
+	 * @param model - the model to which the prototype attributes will be cached
+	 * @param prototypesEntity - the entity from which to copy the prototype attributes
 	 */
-	private static void addAttributesToPrototypesCache(EOEntity entity) {
-		if (entity != null) {
-			addAttributesToPrototypesCache(entity.model(), attributesFromEntity(entity));
+	private static void addAttributesToPrototypesCache(EOModel model, EOEntity prototypesEntity) {
+		if (model != null && prototypesEntity != null) {
+			addAttributesToPrototypesCache(model, attributesFromEntity(prototypesEntity));
 		}
 	}
 
@@ -49,13 +50,13 @@ public class ERXModel extends EOModel {
 	 * Utility to add attributes to the prototype cache for a given model. As the attributes are chosen by name, replace already
 	 * existing ones.
 	 * 
-	 * @param model
-	 * @param attributes
+	 * @param model - the model to which the prototype attributes will be cached
+	 * @param prototypeAttributes - the prototype attributes to add to the model
 	 */
-	private static void addAttributesToPrototypesCache(EOModel model, NSArray<? extends EOAttribute> attributes) {
-		if (attributes.count() != 0) {
-			NSArray keys = namesForAttributes(attributes);
-			NSDictionary temp = new NSDictionary(attributes, keys);
+	private static void addAttributesToPrototypesCache(EOModel model, NSArray<? extends EOAttribute> prototypeAttributes) {
+		if (model != null && prototypeAttributes.count() != 0) {
+			NSArray keys = namesForAttributes(prototypeAttributes);
+			NSDictionary temp = new NSDictionary(prototypeAttributes, keys);
 			model._prototypesByName.addEntriesFromDictionary(temp);
 		}
 	}
@@ -101,22 +102,22 @@ public class ERXModel extends EOModel {
 				plugin = (String) model.connectionDictionary().objectForKey("plugin");
 			}
 
-			addAttributesToPrototypesCache(model._group.entityNamed("EOPrototypes"));
-			addAttributesToPrototypesCache(model._group.entityNamed("EO" + model.adaptorName() + "Prototypes"));
+			addAttributesToPrototypesCache(model, model._group.entityNamed("EOPrototypes"));
+			addAttributesToPrototypesCache(model, model._group.entityNamed("EO" + model.adaptorName() + "Prototypes"));
 			if (plugin != null) {
-				addAttributesToPrototypesCache(model._group.entityNamed("EOJDBC" + plugin + "Prototypes"));
+				addAttributesToPrototypesCache(model, model._group.entityNamed("EOJDBC" + plugin + "Prototypes"));
 			}
 
-			addAttributesToPrototypesCache(model._group.entityNamed("EOCustomPrototypes"));
-			addAttributesToPrototypesCache(model._group.entityNamed("EO" + model.adaptorName() + "CustomPrototypes"));
+			addAttributesToPrototypesCache(model, model._group.entityNamed("EOCustomPrototypes"));
+			addAttributesToPrototypesCache(model, model._group.entityNamed("EO" + model.adaptorName() + "CustomPrototypes"));
 			if (plugin != null) {
-				addAttributesToPrototypesCache(model._group.entityNamed("EOJDBC" + plugin + "CustomPrototypes"));
+				addAttributesToPrototypesCache(model, model._group.entityNamed("EOJDBC" + plugin + "CustomPrototypes"));
 			}
 
-			addAttributesToPrototypesCache(model._group.entityNamed("EO" + name + "Prototypes"));
-			addAttributesToPrototypesCache(model._group.entityNamed("EO" + model.adaptorName() + name + "Prototypes"));
+			addAttributesToPrototypesCache(model, model._group.entityNamed("EO" + name + "Prototypes"));
+			addAttributesToPrototypesCache(model, model._group.entityNamed("EO" + model.adaptorName() + name + "Prototypes"));
 			if (plugin != null) {
-				addAttributesToPrototypesCache(model._group.entityNamed("EOJDBC" + plugin + name + "Prototypes"));
+				addAttributesToPrototypesCache(model, model._group.entityNamed("EOJDBC" + plugin + name + "Prototypes"));
 			}
 		}
 	}
