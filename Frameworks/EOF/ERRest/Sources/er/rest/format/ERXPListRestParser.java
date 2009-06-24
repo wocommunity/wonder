@@ -27,7 +27,9 @@ public class ERXPListRestParser implements IERXRestParser {
 			List list = (List) object;
 			for (Object obj : list) {
 				if (ERXRestUtils.isPrimitive(obj)) {
-					requestNode.addChild(new ERXRestRequestNode(null, obj, false));
+					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(null, object, false);
+					requestNode.addChild(primitiveChild);
+					delegate.nodeDidParse(primitiveChild);
 				}
 				else {
 					requestNode.addChild(createRequestNodeForObject(null, obj, true, delegate));
@@ -40,7 +42,9 @@ public class ERXPListRestParser implements IERXRestParser {
 				String strKey = (String) key;
 				Object value = map.get(key);
 				if (ERXRestUtils.isPrimitive(value)) {
-					requestNode.addChild(new ERXRestRequestNode(strKey, value, false));
+					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(strKey, value, false);
+					requestNode.addChild(primitiveChild);
+					delegate.nodeDidParse(primitiveChild);
 				}
 				else {
 					requestNode.addChild(createRequestNodeForObject(strKey, value, false, delegate));

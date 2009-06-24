@@ -1,5 +1,6 @@
 package er.rest.format;
 
+import er.extensions.foundation.ERXStringUtilities;
 import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;
 
@@ -17,16 +18,18 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 	private String _typeKey;
 	private String _nilKey;
 	private boolean _writeNilKey;
+	private boolean _underscoreNames;
 
 	public ERXRestFormatDelegate() {
-		this(ERXRestFormatDelegate.ID_KEY, ERXRestFormatDelegate.TYPE_KEY, ERXRestFormatDelegate.NIL_KEY, true);
+		this(ERXRestFormatDelegate.ID_KEY, ERXRestFormatDelegate.TYPE_KEY, ERXRestFormatDelegate.NIL_KEY, true, false);
 	}
 
-	public ERXRestFormatDelegate(String idKey, String typeKey, String nilKey, boolean writeNilKey) {
+	public ERXRestFormatDelegate(String idKey, String typeKey, String nilKey, boolean writeNilKey, boolean underscoreNames) {
 		_idKey = idKey;
 		_typeKey = typeKey;
 		_nilKey = nilKey;
 		_writeNilKey = writeNilKey;
+		_underscoreNames = underscoreNames;
 	}
 
 	public void nodeDidParse(ERXRestRequestNode node) {
@@ -46,6 +49,14 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 		if (nil != null) {
 			node.setNull("true".equals(nil) || Boolean.TRUE.equals(nil));
 		}
+		
+		if (_underscoreNames) {
+			String name = node.name();
+			if (name != null) {
+				name = ERXStringUtilities.underscoreToCamelCase(name, node.isRootNode());
+				node.setName(name);
+			}
+		}
 	}
 
 	public void nodeWillWrite(ERXRestRequestNode node) {
@@ -55,7 +66,7 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 
 		Object id = node.id();
 		if (id != null) {
-			node.setAttributeForKey(String.valueOf(id), _idKey);
+			node.setAttributeForKey(id, _idKey);
 		}
 
 		String internalType = node.type();
@@ -65,6 +76,14 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 
 		if (node.isNull() && _writeNilKey) {
 			node.setAttributeForKey("true", _nilKey);
+		}
+		
+		if (_underscoreNames) {
+			String name = node.name();
+			if (name != null) {
+				name = ERXStringUtilities.camelCaseToUnderscore(name, true);
+				node.setName(name);
+			}
 		}
 	}
 }
