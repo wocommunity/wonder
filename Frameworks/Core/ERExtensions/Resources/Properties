@@ -533,6 +533,20 @@ dbMinConnectionsGLOBAL=1
 ## that point to the same URL and have the same username
 # er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries=true
 
+## Enable Wonder's "extended prototypes" feature.
+## Allows for prototypes with naming conventions as follows and with prototype attributes
+## chosen in the following priority order where the same attibute name appears in
+## multiple prototype entities:
+## EOJDBC<pluginName><modelName>Prototypes, EO<adaptorName><modelName>Prototypes, EO<modelname>Prototypes, EOJDBC<pluginName>CustomPrototypes,
+##    EO<adaptorname>CustomPrototypes, EOCustomPrototypes, EOJDBC<pluginName>Prototypes, EO<adaptorname>Prototypes, EOPrototypes.
+##
+## Note that Wonder's erprototypes generally have the "EOJDBC<pluginName>Prototypes" convention for JDBC adaptor prototypes
+## so you can override Wonder's prototypes for your own project by having prototype entities with names such as
+## EOJDBCMySQLCustomPrototypes and even override that with model specific variations using sth like EOJDBCMoviesPrototypes
+## if your model name was 'Movies'.
+# er.extensions.ERXModelGroup.modelClassName = com.webobjects.eoaccess.ERXModel
+# er.extensions.ERXModel.useExtendedPrototypes = true
+
 #########################################################################
 # ERXMigrator 
 #########################################################################
