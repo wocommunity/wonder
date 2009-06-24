@@ -314,6 +314,7 @@ function calendar_update() {
   See calendar_example.html for example usage.
 */
 function calendar_open(input_element, options) {
+  build_calendar(input_element);  // CH: added this, see method below
   calendar.input_element = input_element;
   options = options || {};
   calendar.format = options.format;
@@ -370,42 +371,46 @@ function calendar_open(input_element, options) {
 
 
 /*
-  Build calendar table.
-*/
-if (get_element('calendar_control') == null) {  // CH only do this once per page or FireFox gets confused
-	document.write('<table id="calendar_control" style="display:none; z-index: 10000;">');// CH add z-index so this overlays AMD
-	// Header row.
-	document.write('<tr>');
-	document.write('<td id="calendar_prev_year" title="Previous year"></td>');
-	document.write('<td id="calendar_prev_month" title="Previous month"></td>');
-	document.write('<td id="calendar_header" colspan="3"></td>');
-	document.write('<td id="calendar_next_month" title="Next month"></td>');
-	document.write('<td id="calendar_next_year" title="Next year"></td>');
-	
-	document.write('</tr>');
-	// Day letters row.
-	document.write('<tr>');
-	for (var i=0; i < 7; i++) {
-	  document.write('<td class="day_letter"></td>');
+ * Adds the calendar table after the BODY when the calendar is first opened.
+ * This is a total re-write / conversion of static block to function to better support using this inside an AjaxModalDialog.
+ */
+function build_calendar(input_element) {
+	if (get_element('calendar_control') == null) {  // CH only do this once per page or FireFox gets confused
+		var firstRow;
+		var calendarControl = new Element("table", {id: "calendar_control", style: "position: absolute; display:none; z-index: 10001;"}).update(
+          firstRow = new Element("tr", {}));
+		firstRow.appendChild(new Element("td", {id: "calendar_prev_year", title: "Previous year"}));
+		firstRow.appendChild(new Element("td", {id: "calendar_prev_month", title: "Previous month"}));
+		firstRow.appendChild(new Element("td", {id: "calendar_header", colspan: "3"}));
+		firstRow.appendChild(new Element("td", {id: "calendar_next_month", title: "Next month"}));
+		firstRow.appendChild(new Element("td", {id: "calendar_next_year", title: "Next year"}));
+
+		var secondRow = new Element("tr", {});
+		calendarControl.appendChild(secondRow);
+		for (var i=0; i < 7; i++) {
+	  	  secondRow.appendChild(new Element("td", {'class': "day_letter"}));
+		}
+
+		for(var n=1, i=0; i<6 ;i++) {
+		  var dayRow = new Element("tr", {});
+		  calendarControl.appendChild(dayRow);
+		  for(var j=0; j<7; j++,n++) {
+	  		dayRow.appendChild(new Element("td", {id: "calendar_day_" + n, 'class': "day_number normal"}));
+		  }
+		}
+
+   		document.body.insert({'top': calendarControl});
+		calendar.element = get_element('calendar_control');
 	}
-	document.write('</tr>');
-	// Day numbers rows.
-	for(var n=1, i=0; i<6 ;i++) {
-	  document.write('<tr>');
-	  for(var j=0; j<7; j++,n++) {
-	    document.write('<td id="calendar_day_' + n + '" class="day_number normal"></td>');
-	  }
-	  document.write('</tr>');
-	}
-	document.write('</table>');
 }
+
 
 /*
   Namespace globals.
 */
 calendar = {                        // Calendar properties.
   dates: new Array(6*7),            // Date values for each calendar day.
-  element: get_element('calendar_control'),
+  element: undefined,				// The calendar table.  CH: lazy init
   input_element: undefined,         // Calendar input element, set by calendar_show().
   input_date: undefined,            // Date value of input element, set by calendar_show().
   month_date: undefined,            // First day of calendar month.

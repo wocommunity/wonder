@@ -28,5 +28,7 @@
     <binding name="maxlength"/>
     <binding name="size"/>
     <binding name="name"/>
+    <binding name="calendarCSS"/>
+    <binding name="calendarCSSFramework"/>
    </wo>
 </wodefinitions>
