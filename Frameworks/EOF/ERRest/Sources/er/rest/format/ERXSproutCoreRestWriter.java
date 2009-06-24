@@ -5,17 +5,33 @@ import er.rest.ERXRestRequestNode;
 public class ERXSproutCoreRestWriter extends ERXJSONRestWriter {
 	@Override
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
-		ERXRestRequestNode resultsDictNode = new ERXRestRequestNode(null, true);
+		ERXRestRequestNode rootNode = new ERXRestRequestNode(null, true);
+
+		ERXRestRequestNode recordsNode = new ERXRestRequestNode("records", false);
+		recordsNode.setArray(true);
+		rootNode.addChild(recordsNode);
+
 		if (node.isArray()) {
-			node.setName("results");
-			resultsDictNode.addChild(node);
+			for (ERXRestRequestNode child : node.children()) {
+				recordsNode.addChild(child);
+			}
 		}
 		else {
-			ERXRestRequestNode resultsArrayNode = new ERXRestRequestNode("results", false);
-			resultsArrayNode.setArray(true);
-			resultsArrayNode.addChild(node);
-			resultsDictNode.addChild(resultsArrayNode);
+			recordsNode.addChild(node);
 		}
-		return resultsDictNode;
+
+		ERXRestRequestNode idsNode = new ERXRestRequestNode("ids", false);
+		idsNode.setArray(true);
+		rootNode.addChild(idsNode);
+
+		for (ERXRestRequestNode child : recordsNode.children()) {
+			Object id = child.id();
+			idsNode.addChild(new ERXRestRequestNode(null, id, false));
+		}
+
+		ERXRestRequestNode countNode = new ERXRestRequestNode("count", Integer.valueOf(recordsNode.children().size()), false);
+		rootNode.addChild(countNode);
+
+		return rootNode;
 	}
 }
