@@ -768,7 +768,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     				"er.extensions.ERXEC.safeLocking in your Properties file");
     	}
 		_retainObjects = retainObjects;
-		setReuseEditingContext(true);
+		setReuseEditingContext(retainObjects);
 	}
     
     /**
