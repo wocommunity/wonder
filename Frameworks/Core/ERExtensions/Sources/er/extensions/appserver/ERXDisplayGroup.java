@@ -301,6 +301,17 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	}
 	
 	/**
+	 * Overridden to return correct result when no objects are displayed
+	 */
+	
+	@Override
+	public int indexOfFirstDisplayedObject() {
+		if (currentBatchIndex() == 1 && displayedObjects().count() == 0)
+			return 0;
+		return super.indexOfFirstDisplayedObject();
+	}
+
+	/**
 	 * Overridden to return correct index if the number of filtered objects
 	 * is not a multiple of <code>numberOfObjectsPerBatch</code> and we are
 	 * on the last batch index. The superclass incorrectly uses allObjects
