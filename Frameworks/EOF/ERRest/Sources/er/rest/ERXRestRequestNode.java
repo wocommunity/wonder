@@ -3,6 +3,7 @@ package er.rest;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -152,7 +153,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 				result = _value;
 			}
 			else {
-				Map<Object, Object> dict = new HashMap<Object, Object>();
+				Map<Object, Object> dict = new LinkedHashMap<Object, Object>();
 				for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
 					String key = attribute.getKey();
 					String value = attribute.getValue();
