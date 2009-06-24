@@ -39,7 +39,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	private String _name;
 	private boolean _rootNode;
 	private Object _value;
-	private NSMutableDictionary<String, String> _attributes;
+	private NSMutableDictionary<String, Object> _attributes;
 	private NSMutableArray<ERXRestRequestNode> _children;
 	private Object _associatedObject;
 
@@ -58,7 +58,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	public ERXRestRequestNode(String name, boolean rootNode) {
 		_name = name;
 		_rootNode = rootNode;
-		_attributes = new NSMutableDictionary<String, String>();
+		_attributes = new NSMutableDictionary<String, Object>();
 		_children = new NSMutableArray<ERXRestRequestNode>();
 		guessNull();
 	}
@@ -154,16 +154,17 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 			}
 			else {
 				Map<Object, Object> dict = new LinkedHashMap<Object, Object>();
-				for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
+				for (Map.Entry<String, Object> attribute : _attributes.entrySet()) {
 					String key = attribute.getKey();
-					String value = attribute.getValue();
+					Object value = attribute.getValue();
 					// if (value != null) {
 					dict.put(key, value);
 					// }
 				}
 				for (ERXRestRequestNode child : _children) {
-					String name = child.name();
 					Object value = child.toJavaCollection(delegate, associatedObjects);
+					// MS: name has to be after toJavaCollection, because the naming delegate could rename it ... little sketchy, i know
+					String name = child.name();
 					// if (value != null) {
 					dict.put(name, value);
 					// }
@@ -219,7 +220,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 			}
 			else {
 				NSMutableDictionary<Object, Object> dict = new NSMutableDictionary<Object, Object>();
-				for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
+				for (Map.Entry<String, Object> attribute : _attributes.entrySet()) {
 					String key = attribute.getKey();
 					Object value = attribute.getValue();
 					if (value == null) {
@@ -292,7 +293,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 
 	public void takeValueForKey(Object value, String key) {
 		if (_attributes.containsKey(key)) {
-			_attributes.setObjectForKey((String) value, key);
+			_attributes.setObjectForKey(value, key);
 		}
 		else {
 			ERXRestRequestNode child = childNamed(key);
@@ -505,7 +506,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 * @param key
 	 *            the key
 	 */
-	public void setAttributeForKey(String attribute, String key) {
+	public void setAttributeForKey(Object attribute, String key) {
 		_attributes.setObjectForKey(attribute, key);
 		// if (!"nil".equals(key)) {
 		guessNull();
@@ -519,8 +520,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 *            the name of the attribute to remove
 	 * @return the attribute value
 	 */
-	public String removeAttributeForKey(String key) {
-		String attribute = _attributes.removeObjectForKey(key);
+	public Object removeAttributeForKey(String key) {
+		Object attribute = _attributes.removeObjectForKey(key);
 		return attribute;
 	}
 
@@ -531,7 +532,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 *            the key
 	 * @return the attribute value
 	 */
-	public String attributeForKey(String key) {
+	public Object attributeForKey(String key) {
 		return _attributes.objectForKey(key);
 	}
 
@@ -540,7 +541,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 	 * 
 	 * @return the attributes dictionary
 	 */
-	public NSDictionary<String, String> attributes() {
+	public NSDictionary<String, Object> attributes() {
 		return _attributes;
 	}
 
@@ -835,7 +836,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 		}
 
 		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj);
-		for (Map.Entry<String, String> attribute : _attributes.entrySet()) {
+		for (Map.Entry<String, Object> attribute : _attributes.entrySet()) {
 			ERXKey<Object> key = keyFilter.keyMap(new ERXKey<Object>(attribute.getKey()));
 			String keyName = key.key();
 			if (keyFilter.matches(key, ERXKey.Type.Attribute) && isClassProperty(classDescription, keyName)) {

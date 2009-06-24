@@ -70,7 +70,7 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 	}
 
 	protected void appendAttributesToResponse(ERXRestRequestNode node, IERXRestResponse response) {
-		for (Map.Entry<String, String> attribute : node.attributes().entrySet()) {
+		for (Map.Entry<String, Object> attribute : node.attributes().entrySet()) {
 			String key = attribute.getKey();
 			String formattedValue = coerceValueToString(attribute.getValue());
 			if (formattedValue != null) {

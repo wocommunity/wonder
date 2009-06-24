@@ -29,7 +29,9 @@ public class ERXJSONRestParser implements IERXRestParser {
 			JSONArray jsonArray = (JSONArray) json;
 			for (Object obj : jsonArray) {
 				if (ERXRestUtils.isPrimitive(obj)) {
-					requestNode.addChild(new ERXRestRequestNode(null, obj, false));
+					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(null, obj, false);
+					requestNode.addChild(primitiveChild);
+					delegate.nodeDidParse(primitiveChild);
 				}
 				else {
 					requestNode.addChild(ERXJSONRestParser.createRequestNodeForJSON(null, (JSON) obj, true, delegate));
@@ -42,7 +44,9 @@ public class ERXJSONRestParser implements IERXRestParser {
 				String strKey = (String) key;
 				Object value = jsonObject.get(key);
 				if (ERXRestUtils.isPrimitive(value)) {
-					requestNode.addChild(new ERXRestRequestNode(strKey, value, false));
+					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(strKey, value, false);
+					requestNode.addChild(primitiveChild);
+					delegate.nodeDidParse(primitiveChild);
 				}
 				else {
 					requestNode.addChild(ERXJSONRestParser.createRequestNodeForJSON(strKey, (JSON) value, false, delegate));
