@@ -1,7 +1,7 @@
 /* calendar.js stylesheet */
 
 table#calendar_control {
-  z-index: 10;
+  z-index: 10001;
   font-family: Arial;
   position: absolute;
   border-collapse: collapse;

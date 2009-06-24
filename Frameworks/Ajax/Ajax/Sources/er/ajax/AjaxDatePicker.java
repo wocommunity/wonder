@@ -53,6 +53,9 @@ import er.extensions.appserver.ERXResponseRewriter;
  * @binding monthNames optional list of month names for localization, English is the default
  * @binding imagesDir optional directory to take images from, takes them from Ajax.framework by default
  *
+ * @binding calendarCSS optional name of CSS resource with classed for calendar, defaults to "calendar.css"
+ * @binding calendarCSSFramework optional name of framework (null for application) containing calendarCSS resource, defaults to "Ajax"
+ *
  * @see java.text.SimpleDateFormat
  * @see com.webobjects.foundation.NSTimestampFormatter
  * 
@@ -160,11 +163,7 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onFocus binding of HTML input
      */
     public String onFocusScript() {
-    	StringBuffer script = new StringBuffer(200);
-    	script.append("this.select(); calendar_open(this, ");
-    	AjaxOptions.appendToBuffer(options(), script, context());
-    	script.append(");");
-        return script.toString();
+        return showCalendarScript();
     }
     
     /**
@@ -172,12 +171,28 @@ public class AjaxDatePicker extends AjaxComponent {
      */
     public String onClickScript() {
         	StringBuffer script = new StringBuffer(200);
-        	script.append("event.cancelBubble=true; this.select(); calendar_open(this,");
-        	AjaxOptions.appendToBuffer(options(), script, context());
-        	script.append(");");
+           	script.append("event.cancelBubble=true; ");
+         	script.append(showCalendarScript());
             return script.toString();
     }
     
+    /**
+     * @return JavaScript to load CSS and show calendar display
+     */
+    public String showCalendarScript() {
+    	StringBuffer script = new StringBuffer(200);
+    	// Load the CSS like this to avoid odd race conditions when this is used in an AjaxModalDialog: at times
+    	// the CSS does not appear to be available and the calendar appears in the background
+    	script.append("AOD.loadCSS('");
+    	script.append(application().resourceManager().urlForResourceNamed((String)valueForBinding("calendarCSS", "calendar.css"), 
+    			                                                          (String)valueForBinding("calendarCSSFramework", "Ajax"), null, context().request()).toString());
+    	script.append("'); ");
+    	script.append("this.select(); calendar_open(this, ");
+    	AjaxOptions.appendToBuffer(options(), script, context());
+    	script.append(");");
+        return script.toString();
+    }
+
     /**
      * Quick and rude translation of formatting symbols from SimpleDateFormat to the symbols
      * that this component uses.
@@ -244,7 +259,7 @@ public class AjaxDatePicker extends AjaxComponent {
      */
 	protected void addRequiredWebResources(WOResponse response) {
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "prototype.js");
-		ERXResponseRewriter.addStylesheetResourceInHead(response, context(), "Ajax", "calendar.css");
+		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "wonder.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "calendar.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "date.js");
 	}
