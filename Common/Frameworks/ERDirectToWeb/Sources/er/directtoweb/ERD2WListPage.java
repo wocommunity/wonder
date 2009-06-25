@@ -50,6 +50,7 @@ import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXLocalizer;
+import er.extensions.ERXProperties;
 import er.extensions.ERXValueUtilities;
 
 /**
@@ -327,40 +328,65 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		return !"printerFriendly".equals(d2wContext().valueForKey("subTask"));
 	}
 
+	/**
+	 * Returns whether or not sort orderings should be validated (based on the checkSortOrderingKeys rule).
+	 * @return whether or not sort orderings should be validated
+	 */
 	public boolean checkSortOrderingKeys() {
 		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("checkSortOrderingKeys"), false);
 	}
 
+	/**
+	 * Validates the given sort key (is it a display key, an attribute, or a valid attribute path). 
+	 * 
+	 * @param displayPropertyKeys the current display properties
+	 * @param sortKey the sort key to validate
+	 * @return true if the sort key is valid, false if not
+	 */
+	protected boolean isValidSortKey(NSArray displayPropertyKeys, String sortKey) {
+		boolean validSortOrdering = false;
+		try {
+			if (displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
+				validSortOrdering = true;
+			}
+		}
+		catch (IllegalArgumentException e) {
+			// MS: ERXEOAccessUtilities.attributePathForKeyPath throws IllegalArgumentException for a bogus key path
+			validSortOrdering = false;
+		}
+		
+		if (!validSortOrdering) {
+			log.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths for the entity '" + entity().name() + "'.");
+			validSortOrdering = false;
+		}
+		return validSortOrdering;
+	}
+	
 	public NSArray sortOrderings() {
 		NSArray sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
 			sortOrderings = (NSArray) userPreferencesValueForPageConfigurationKey("sortOrdering");
-			if (log.isDebugEnabled())
+			if (log.isDebugEnabled()) {
 				log.debug("Found sort Orderings in user prefs " + sortOrderings);
+			}
 		}
 		if (sortOrderings == null) {
 			NSArray sortOrderingDefinition = (NSArray) d2wContext().valueForKey("defaultSortOrdering");
 			if (sortOrderingDefinition != null) {
-				NSMutableArray so = new NSMutableArray();
+				NSMutableArray validatedSortOrderings = new NSMutableArray();
 				NSArray displayPropertyKeys = (NSArray) d2wContext().valueForKey("displayPropertyKeys");
 				for (int i = 0; i < sortOrderingDefinition.count();) {
 					String sortKey = (String) sortOrderingDefinition.objectAtIndex(i++);
 					String sortSelectorKey = (String) sortOrderingDefinition.objectAtIndex(i++);
-					if (checkSortOrderingKeys()) {
-						if (displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
-							EOSortOrdering sortOrdering = new EOSortOrdering(sortKey, ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
-							so.addObject(sortOrdering);
-						} else {
-							log.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths");
-						}
-					} else {
+					if (!checkSortOrderingKeys() || isValidSortKey(displayPropertyKeys, sortKey)) {
 						EOSortOrdering sortOrdering = new EOSortOrdering(sortKey, ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
-						so.addObject(sortOrdering);
+						validatedSortOrderings.addObject(sortOrdering);
 					}
 				}
-				sortOrderings = so;
-				if (log.isDebugEnabled())
+				sortOrderings = validatedSortOrderings;
+				if (log.isDebugEnabled()) {
 					log.debug("Found sort Orderings in rules " + sortOrderings);
+				}
 			}
 		}
 		return sortOrderings;
