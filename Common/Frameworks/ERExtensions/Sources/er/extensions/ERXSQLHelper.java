@@ -1404,6 +1404,40 @@ public class ERXSQLHelper {
 	public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 		return true;
 	}
+	/**
+	 * Returns whether or not this database can always perform the a distinct operation
+	 * when sort orderings are applied. Oracle, for instance, will fail if you try to
+	 * sort on a key that isn't in the list of fetched keys.
+	 * 
+	 * @return whether or not this database can always perform the a distinct operation
+	 * when sort orderings are applied
+	 */
+	protected boolean canReliablyPerformDistinctWithSortOrderings() {
+		return true;
+	}
+	
+	/**
+	 * Returns whether or not this database should perform the distinct portion of the
+	 * given fetch spec in memory or not.
+	 * 
+	 * @param fetchSpecification the fetch spec to check
+	 * @return whether or not this database should perform the distinct portion of the
+	 * given fetch spec in memory or not
+	 */
+	public boolean shouldPerformDistinctInMemory(EOFetchSpecification fetchSpecification) {
+		boolean shouldPerformDistinctInMemory = false;
+		if (!canReliablyPerformDistinctWithSortOrderings()) {
+			NSArray sortOrderings = fetchSpecification.sortOrderings();
+		        if (fetchSpecification.usesDistinct() && sortOrderings != null && sortOrderings.count() > 0) {
+	        		shouldPerformDistinctInMemory = true;
+	        		// MS: We might be able to restrict this check further at some point ...
+//	        		for (EOSortOrdering sortOrdering : sortOrderings) {
+//	        			sortOrdering.key();
+//	        		}
+	        	}
+		}
+	        return shouldPerformDistinctInMemory;
+	}
 
 	public static ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
 		// This is REALLY hacky.
@@ -1421,14 +1455,15 @@ public class ERXSQLHelper {
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOEditingContext ec, String modelName) {
-		ec.lock();
-		try {
-			EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
-			return ERXSQLHelper.newSQLHelper(databaseContext);
-		}
-		finally {
-			ec.unlock();
-		}
+		return ERXSQLHelper.newSQLHelper(EOUtilities.databaseContextForModelNamed(ec, modelName));
+	}
+
+	public static ERXSQLHelper newSQLHelper(EOEditingContext ec, EOEntity entity) {
+		return ERXSQLHelper.newSQLHelper(EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec));
+	}
+
+	public static ERXSQLHelper newSQLHelper(EOEditingContext ec, EOModel model) {
+		return ERXSQLHelper.newSQLHelper(EODatabaseContext.registeredDatabaseContextForModel(model, ec));
 	}
 
 	public static ERXSQLHelper newSQLHelper(EODatabaseContext databaseContext) {
@@ -1454,6 +1489,10 @@ public class ERXSQLHelper {
 	public static ERXSQLHelper newSQLHelper(JDBCPlugIn plugin) {
 		String databaseProductName = plugin.databaseProductName();
 		return ERXSQLHelper.newSQLHelper(databaseProductName);
+	}
+
+	public static ERXSQLHelper newSQLHelper(EOEntity entity) {
+		return ERXSQLHelper.newSQLHelper(entity.model());
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOModel model) {
@@ -1694,6 +1733,10 @@ public class ERXSQLHelper {
 		}
 		
 		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
+			return false;
+		}
+
+		protected boolean canReliablyPerformDistinctWithSortOrderings() {
 			return false;
 		}
 	}

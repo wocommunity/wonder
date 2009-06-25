@@ -413,9 +413,9 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
                                                                                                       fetchSpecification.sortOrderings(),
                                                                                                       null);
             pkFetchSpec.setFetchLimit(fetchSpecification.fetchLimit());
-            boolean postProcessDistinct = false;
-            if (fetchSpecification.usesDistinct() && fetchSpecification.sortOrderings() != null && fetchSpecification.sortOrderings().count() > 0) {
-            	postProcessDistinct = true;
+            boolean shouldPerformDistinctInMemory = false;
+            if (ERXSQLHelper.newSQLHelper(editingContext(), entity).shouldPerformDistinctInMemory(pkFetchSpec)) {
+            	shouldPerformDistinctInMemory = true;
             }
             else {
             	pkFetchSpec.setUsesDistinct(fetchSpecification.usesDistinct());
@@ -425,7 +425,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
 
             String pkAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
             primaryKeys = (NSArray)primaryKeyDictionaries.valueForKey(pkAttributeName);
-            if (postProcessDistinct) {
+            if (shouldPerformDistinctInMemory) {
             	primaryKeys = ERXArrayUtilities.arrayWithoutDuplicates(primaryKeys);
             }
        }
