@@ -378,7 +378,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		NSArray sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
 			sortOrderings = (NSArray) userPreferencesValueForPageConfigurationKey("sortOrdering");
-			sortOrderings = new NSMutableArray(new EOSortOrdering("FAKEKEY", EOSortOrdering.CompareAscending));
 			if (sortOrderings != null && checkUserPreferenceSortOrderingKeys()) {
 				NSMutableArray validatedSortOrderings = new NSMutableArray();
 				NSArray displayPropertyKeys = (NSArray) d2wContext().valueForKey("displayPropertyKeys");
