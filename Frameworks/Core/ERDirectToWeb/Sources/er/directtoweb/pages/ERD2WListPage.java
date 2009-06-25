@@ -331,17 +331,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	public boolean checkSortOrderingKeys() {
 		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("checkSortOrderingKeys"), false);
 	}
-	/**
-	 * Returns whether or not user preference sort orderings should be validated (based on the checkUserPreferenceSortOrderingKeys rule). This
-	 * key was introduced and defaulted to true because defaultSortOrderings are rule-controlled and therefore unlikely to need checking (which
-	 * is controlled by the checkSortOrderingKeys rule), whereas user preference sort orderings are persistent and can become out of 
-	 * date and are much more likely to require checking (and cleansing). This rule allows you to control checking just for user preference
-	 * values without taking the performance hit of checking default sort keys every time.
-	 * @return whether or not user preference sort orderings should be validated
-	 */
-	public boolean checkUserPreferenceSortOrderingKeys() {
-	  return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("checkUserPreferenceSortOrderingKeys"), true);
-	}
 	
 	/**
 	 * Validates the given sort key (is it a display key, an attribute, or a valid attribute path). 
@@ -376,16 +365,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		NSArray<EOSortOrdering> sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
 			sortOrderings = (NSArray<EOSortOrdering>) userPreferencesValueForPageConfigurationKey("sortOrdering");
-			if (sortOrderings != null && checkUserPreferenceSortOrderingKeys()) {
-			  NSMutableArray<EOSortOrdering> validatedSortOrderings = new NSMutableArray<EOSortOrdering>();
-			  NSArray<String> displayPropertyKeys = (NSArray<String>) d2wContext().valueForKey("displayPropertyKeys");
-			  for (EOSortOrdering sortOrdering : sortOrderings) {
-			    if (isValidSortKey(displayPropertyKeys, sortOrdering.key())) {
-			      validatedSortOrderings.addObject(sortOrdering);
-			    }
-			  }
-			  sortOrderings = validatedSortOrderings;
-			}
 			if (log.isDebugEnabled()) {
 			  log.debug("Found sort Orderings in user prefs " + sortOrderings);
 			}
@@ -424,12 +403,14 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	public WOActionResults invokeAction(WORequest r, WOContext c) {
 		setupPhase();
+/*
 		if (_hasToUpdate) {
 			willUpdate();
 			displayGroup().fetch();
 			_hasToUpdate = false;
 			didUpdate();
 		}
+*/
 		return super.invokeAction(r, c);
 	}
 
@@ -508,8 +489,9 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 					setSortOrderingsOnDisplayGroup(sortOrderings, dg);
 				}
 				dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-				// Disabling to prevent double fetching
+				// Disabling to prevent double fetching (... soon)
 				//dg.fetch();
+				dg.fetch();
 				dg.updateDisplayedObjects();
 				_hasBeenInitialized = true;
 				_hasToUpdate = false;
