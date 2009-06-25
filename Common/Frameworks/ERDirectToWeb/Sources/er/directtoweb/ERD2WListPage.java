@@ -337,18 +337,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	/**
-	 * Returns whether or not user preference sort orderings should be validated (based on the checkUserPreferenceSortOrderingKeys rule). This
-	 * key was introduced and defaulted to true because defaultSortOrderings are rule-controlled and therefore unlikely to need checking (which
-	 * is controlled by the checkSortOrderingKeys rule), whereas user preference sort orderings are persistent and can become out of 
-	 * date and are much more likely to require checking (and cleansing). This rule allows you to control checking just for user preference
-	 * values without taking the performance hit of checking default sort keys every time.
-	 * @return whether or not user preference sort orderings should be validated
-	 */
-	public boolean checkUserPreferenceSortOrderingKeys() {
-		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("checkUserPreferenceSortOrderingKeys"), true);
-	}
-
-	/**
 	 * Validates the given sort key (is it a display key, an attribute, or a valid attribute path). 
 	 * 
 	 * @param displayPropertyKeys the current display properties
@@ -378,17 +366,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		NSArray sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
 			sortOrderings = (NSArray) userPreferencesValueForPageConfigurationKey("sortOrdering");
-			if (sortOrderings != null && checkUserPreferenceSortOrderingKeys()) {
-				NSMutableArray validatedSortOrderings = new NSMutableArray();
-				NSArray displayPropertyKeys = (NSArray) d2wContext().valueForKey("displayPropertyKeys");
-				for (int i = 0; i < sortOrderings.count(); i ++) {
-					EOSortOrdering sortOrdering = (EOSortOrdering)sortOrderings.objectAtIndex(i);
-					if (isValidSortKey(displayPropertyKeys, sortOrdering.key())) {
-						validatedSortOrderings.addObject(sortOrdering);
-					}
-				}
-				sortOrderings = validatedSortOrderings;
-			}
 			if (log.isDebugEnabled()) {
 				log.debug("Found sort Orderings in user prefs " + sortOrderings);
 			}
@@ -412,7 +389,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 				}
 			}
 		}
-		System.out.println("ERD2WListPage.sortOrderings: " + sortOrderings);
 		return sortOrderings;
 	}
 
