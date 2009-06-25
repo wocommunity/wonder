@@ -414,12 +414,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	public WOActionResults invokeAction(WORequest r, WOContext c) {
 		setupPhase();
-		if (_hasToUpdate) {
-			willUpdate();
-			displayGroup().fetch();
-			_hasToUpdate = false;
-			didUpdate();
-		}
 		return super.invokeAction(r, c);
 	}
 
@@ -498,8 +492,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 					setSortOrderingsOnDisplayGroup(sortOrderings, dg);
 				}
 				dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-				// Disabling to prevent double fetching
-				//dg.fetch();
+				dg.fetch();
 				dg.updateDisplayedObjects();
 				_hasBeenInitialized = true;
 				_hasToUpdate = false;
