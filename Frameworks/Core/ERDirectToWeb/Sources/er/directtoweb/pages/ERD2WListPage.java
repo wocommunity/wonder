@@ -350,16 +350,26 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * @param sortKey the sort key to validate
 	 * @return true if the sort key is valid, false if not
 	 */
-	protected boolean isValidSortKey(NSArray<String> displayPropertyKeys, String sortKey) {
-	  boolean validSortOrdering;
-	  if (displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
-	    validSortOrdering = true;
-	  } else {
+	protected boolean isValidSortKey(NSArray displayPropertyKeys, String sortKey) {
+	  boolean validSortOrdering = false;
+	  
+	  try {
+	    if (displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
+	      validSortOrdering = true;
+	    }
+	  }
+	  catch (IllegalArgumentException e) {
+	    // MS: ERXEOAccessUtilities.attributePathForKeyPath throws IllegalArgumentException for a bogus key path
+	    validSortOrdering = false;
+	  }
+	  
+	  if (!validSortOrdering) {
 	    log.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths for the entity '" + entity().name() + "'.");
 	    validSortOrdering = false;
 	  }
+	  
 	  return validSortOrdering;
-	}
+  }
 
 	@SuppressWarnings("unchecked")
   public NSArray<EOSortOrdering> sortOrderings() {
@@ -414,6 +424,12 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	public WOActionResults invokeAction(WORequest r, WOContext c) {
 		setupPhase();
+		if (_hasToUpdate) {
+			willUpdate();
+			displayGroup().fetch();
+			_hasToUpdate = false;
+			didUpdate();
+		}
 		return super.invokeAction(r, c);
 	}
 
@@ -492,7 +508,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 					setSortOrderingsOnDisplayGroup(sortOrderings, dg);
 				}
 				dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-				dg.fetch();
+				// Disabling to prevent double fetching
+				//dg.fetch();
 				dg.updateDisplayedObjects();
 				_hasBeenInitialized = true;
 				_hasToUpdate = false;
