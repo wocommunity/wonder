@@ -843,6 +843,17 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public ERXApplication() {
 		super();
 
+		// WOFrameworksBaseURL and WOApplicationBaseURL properties are broken in 5.4.  
+    	// This is the workaround.
+		frameworksBaseURL();
+		applicationBaseURL();
+		if (System.getProperty("WOFrameworksBaseURL") != null) {
+			setFrameworksBaseURL(System.getProperty("WOFrameworksBaseURL"));
+		}
+		if (System.getProperty("WOApplicationBaseURL") != null) {
+			setApplicationBaseURL(System.getProperty("WOApplicationBaseURL"));
+		}
+
 		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || _loader == null)) {
 			_displayMainMethodWarning();
 		}
