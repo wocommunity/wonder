@@ -1228,7 +1228,7 @@ public class ERXSQLHelper {
 			sqlName = e.sqlStringForAttribute(attribute);
 		}
 
-		int maxPerQuery = maximumElementPerInClause();
+		int maxPerQuery = maximumElementPerInClause(e.entity());
 
 		// Need to wrap this SQL in parens if there are multiple grougps
 		if (valueArray.count() > maxPerQuery) {
@@ -1273,9 +1273,10 @@ public class ERXSQLHelper {
 	 * The database specific limit, or or most efficient number, of elements in an IN clause in a statement.  If there
 	 * are more that this number of elements, additional IN clauses will be generated, ORed to the others.
 	 * 
+	 * @param entity EOEntity that can be used to fine-tune the result
 	 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
 	 */
-	protected int maximumElementPerInClause() {
+	protected int maximumElementPerInClause(EOEntity entity) {
 		return 256;
 	}
 	
@@ -1952,15 +1953,21 @@ public class ERXSQLHelper {
 		 * still.  This has been tested with over 17,000 elements, so 15,000 seemed like a safe maximum.  I don't know what the actual
 		 * theoretical maximum is.
 		 * 
+		 * But... It looks to like the query optimizer will choose to NOT use an index if the number of elements in the IN gets close to, 
+		 * or exceeds, the number of rows (as in the case of a select based on FK with a large number of keys that don't match any rows).  In 
+		 * this case it seems to fall back to table scanning (or something dreadfully slow).  This only seems to have an impact when the number
+		 * of elements in the IN is greater than 1,000.  For larger sizes, the correct number for this method to return seems to depend on the
+		 * number of rows in the tables.  1/5th of the table size may be a good place to start looking for the upper bound.
+		 * 
 		 * @see ERXSQLHelper#maximumElementPerInClause()
 		 * 
+		 * @param entity EOEntity that can be used to fine-tune the result
 		 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
 		 */
 		@Override
-		protected int maximumElementPerInClause() {
+		protected int maximumElementPerInClause(EOEntity entity) {
 			return 15000;
 		}
-		
 	}
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {
