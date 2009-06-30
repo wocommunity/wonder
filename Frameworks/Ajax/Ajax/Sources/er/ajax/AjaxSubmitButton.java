@@ -26,7 +26,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding title the HTML title of this submit button
  * @binding onClick arbitrary Javascript to execute when the client clicks the button
  * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs. 
- * @binding onServerClick if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
+ * @binding onClickServer if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
  * @binding onComplete JavaScript function to evaluate when the request has finished.
  * @binding onSuccess javascript to execute in response to the Ajax onSuccess event
  * @binding onFailure javascript to execute in response to the Ajax onFailure event
