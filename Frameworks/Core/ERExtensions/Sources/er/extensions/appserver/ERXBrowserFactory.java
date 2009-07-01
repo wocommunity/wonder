@@ -366,13 +366,16 @@ public class ERXBrowserFactory {
 				String strings = ERXStringUtilities.stringFromResource("robots", "txt", NSBundle.bundleForName("ERExtensions"));
 				for (Enumeration iter = NSArray.componentsSeparatedByString(strings, "\n").objectEnumerator(); iter.hasMoreElements();) {
 					String item = (String) iter.nextElement();
-					robotExpressions.addObject(Pattern.compile(item));
+					if(item.trim().length() > 0 && item.charAt(0) != '#') {
+						robotExpressions.addObject(Pattern.compile(item));
+					}
 				}
 			}
 			userAgent = userAgent.toLowerCase();
 			for (Enumeration iter = robotExpressions.objectEnumerator(); iter.hasMoreElements();) {
 				Pattern pattern = (Pattern) iter.nextElement();
 				if(pattern.matcher(userAgent).find()) {
+					log.debug(pattern + " matches  " + userAgent);
 					return true;
 				}
 			}
