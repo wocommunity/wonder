@@ -28,7 +28,15 @@ public class ERMailDeliveryPlainText extends ERMailDelivery {
     /** Pre-processes the mail before it gets sent.
         @see ERMailDelivery#prepareMail */
     protected DataHandler prepareMail () throws MessagingException {
-        return new DataHandler (textContent, "text/plain; charset=\""  + charset () + "\"");
+    	String charset = charset();
+    	DataHandler dataHandler;
+    	if (charset != null) {
+        	dataHandler = new DataHandler (textContent, "text/plain; charset=\""  + charset () + "\"");
+    	}
+    	else {
+        	dataHandler = new DataHandler (textContent, "text/plain");
+    	}
+    	return dataHandler;
     }
 
 }

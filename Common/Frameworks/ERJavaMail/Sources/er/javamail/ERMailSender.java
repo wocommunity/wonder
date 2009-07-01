@@ -40,7 +40,7 @@ public class ERMailSender extends Thread {
 
     // Holds sending messages. The queue size can be set by
     // er.javamail.senderQueue.size property
-    private ERQueue messages;
+    private ERQueue<ERMessage> messages;
     // For thread management
     private boolean threadSuspended = false;
     private int milliSecondsWaitRunLoop = 5000;
@@ -58,7 +58,7 @@ public class ERMailSender extends Thread {
         stats = new Stats ();
         messages = new ERQueue (ERJavaMail.sharedInstance ().senderQueueSize ());
 
-        if (WOApplication.application ().isDebuggingEnabled ())
+        if (WOApplication.application () == null || WOApplication.application ().isDebuggingEnabled ())
             milliSecondsWaitRunLoop = 2000;
 
         if (log.isDebugEnabled())
@@ -114,7 +114,7 @@ public class ERMailSender extends Thread {
     /** Sends a message immediately.<br>
         This means that the thread could be blocked if the message takes time to be delivered. */
     public void sendMessageNow (ERMessage message) {
-        Transport transport = this._connectedTransportForSession (ERJavaMail.sharedInstance ().defaultSession ());
+        Transport transport = this._connectedTransportForSession(ERJavaMail.sharedInstance().sessionForMessage(message));
 
         try {
             this._sendMessageNow (message, transport);
@@ -219,7 +219,7 @@ public class ERMailSender extends Thread {
     protected Transport _connectedTransportForSession (javax.mail.Session session) {
         Transport transport = null;
         try {
-            transport = session.getTransport ("smtp");
+            transport = session.getTransport (ERXProperties.stringForKeyWithDefault("mail.smtp.protocol", "smtp"));
             if (!transport.isConnected())
                 transport.connect();
         } catch (MessagingException e) {
@@ -249,25 +249,32 @@ public class ERMailSender extends Thread {
 
             // If there are still messages pending ...
             if (!messages.empty ()) {
-                Session session     = null;
-                Transport transport = null;
-                session   = ERJavaMail.sharedInstance ().newSession ();
-                transport = this._connectedTransportForSession (session);
-
-                try {
-                    if (!transport.isConnected ()) {
-                        transport.connect();
-                    }
-                } catch (MessagingException e) {
-                    // Notify error in logs
-                    log.error ("Unable to connect transport.", e);
-
-                    // Exit run loop
-                    throw new RuntimeException ("Unable to connect transport.");
-                }
+            	Map<String, Transport> transports = new HashMap<String, Transport>();
 
                 while (!messages.empty ()) {
-                    ERMessage message = (ERMessage)messages.pop();
+                    ERMessage message = messages.pop();
+                    String contextString = message.contextString();
+                    if (contextString == null) {
+                    	contextString = "___DEFAULT___";
+                    }
+                    Transport transport = transports.get(contextString);
+                    if (transport == null) {
+                    	Session session = ERJavaMail.sharedInstance().newSessionForMessage(message);
+                    	transport = this._connectedTransportForSession(session);
+                    	transports.put(contextString, transport);
+                    }
+                    try {
+                        if (!transport.isConnected ()) {
+                            transport.connect();
+                        }
+                    } catch (MessagingException e) {
+                        // Notify error in logs
+                        log.error ("Unable to connect transport.", e);
+
+                        // Exit run loop
+                        throw new RuntimeException ("Unable to connect transport.");
+                    }
+
                     try {
                         this._sendMessageNow (message, transport);
 //                        if (useSenderDelay) {
@@ -284,17 +291,24 @@ public class ERMailSender extends Thread {
                         return;
                     }*/
                 }
-
-                try {
-                    if (transport != null)
-                        transport.close ();
-                } catch (MessagingException e) /* once again ... */ {
-                    log.warn ("Unable to close transport.  Perhaps it has already been closed?", e);
+                
+                for (Transport transport : transports.values()) {
+	                try {
+	                    if (transport != null) {
+	                        transport.close ();
+	                    }
+	                } catch (MessagingException e) /* once again ... */ {
+	                    log.warn ("Unable to close transport.  Perhaps it has already been closed?", e);
+	                }
                 }
             }
 
             threadSuspended = true;
         }
+    }
+    
+    public ERQueue<ERMessage> messages() {
+    	return messages;
     }
 
     /** Executes the callback method to notify the calling application of

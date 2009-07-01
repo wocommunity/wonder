@@ -44,6 +44,14 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
     public void setContentGzipped(Boolean aValue) {
         takeStoredValueForKey(aValue, "contentGzipped");
     }
+    
+    public String contextString() {
+        return (String)storedValueForKey("contextString");
+    }
+
+    public void setContextString(String contextString) {
+        takeStoredValueForKey(contextString, "contextString");
+    }
 
     public Boolean shouldArchiveSentMail() {
         return (Boolean)storedValueForKey("shouldArchiveSentMail");

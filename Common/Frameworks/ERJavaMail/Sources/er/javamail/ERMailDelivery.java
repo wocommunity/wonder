@@ -75,12 +75,22 @@ public abstract class ERMailDelivery {
 
     /** callbackObject to refer to in the calling program */
     public Object _callbackObject = null;
+    
+    private String _contextString;
 
     /** Sets the callback class and method name */
     public static void setCallBackClassWithMethod (String className, String methodName) {
         callBackClassName = className;
         callBackMethodName = methodName;
     }
+    
+    public void setContextString(String contextString) {
+		_contextString = contextString;
+	}
+    
+    public String contextString() {
+		return _contextString;
+	}
 
     public String charset () {
         return _charset;
@@ -267,6 +277,7 @@ public abstract class ERMailDelivery {
         ERMessage message = new ERMessage ();
         message.setMimeMessage (this.mimeMessage ());
         message.setCallbackObject (this.callbackObject ());
+        message.setContextString(this.contextString());
         return message;
     }
 
@@ -315,8 +326,7 @@ public abstract class ERMailDelivery {
                             // Here, we make the assumption that
                             // the current thread is the one that
                             // feeds the ERMailSender.
-                            Thread.currentThread ().sleep
-                                (ERJavaMail.sharedInstance ().milliSecondsWaitIfSenderOverflowed ());
+                            Thread.sleep(ERJavaMail.sharedInstance ().milliSecondsWaitIfSenderOverflowed ());
                         } catch (InterruptedException ie) {
                             log.warn ("Caught InterruptedException.", ie);
                         }
@@ -332,7 +342,7 @@ public abstract class ERMailDelivery {
     }
 
     protected void finishMessagePreparation () throws MessagingException {
-        DataHandler messageDataHandler = messageDataHandler = this.prepareMail ();
+        DataHandler messageDataHandler = this.prepareMail ();
 
         // Add all the attachements to the javamail message
         if (this.attachments ().count () > 0) {

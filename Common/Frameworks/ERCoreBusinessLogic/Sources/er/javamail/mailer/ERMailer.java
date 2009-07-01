@@ -274,6 +274,8 @@ public class ERMailer {
         mail.setSubject(messageTitlePrefix() + message.title());
         mail.setHTMLContent(message.text());
         
+        mail.setContextString(message.contextString());
+        
         if (message.plainText() != null)
             mail.setHiddenPlainTextContent(message.plainText());
 
