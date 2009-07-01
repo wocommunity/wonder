@@ -112,6 +112,31 @@ public class ERCMailDelivery {
                                        String title,
                                        String message,
                                        EOEditingContext ec) {
+    	return composeEmail(null, from, to, cc, bcc, title, message, ec);
+    }
+    
+    /**
+     * Composes a mail message.
+     *
+     * @param contextString the message context 
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param message text of the message
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
+    public ERCMailMessage composeEmail(String contextString,
+    		                           String from,
+                                       NSArray to,
+                                       NSArray cc,
+                                       NSArray bcc,
+                                       String title,
+                                       String message,
+                                       EOEditingContext ec) {
         ERCMailMessage mailMessage = null;
 
         if (log.isDebugEnabled()) {
@@ -158,7 +183,34 @@ public class ERCMailDelivery {
                                                        String message,
                                                        NSArray filePaths,
                                                        EOEditingContext ec) {
-        ERCMailMessage mailMessage = this.composeEmail(from, to, cc, bcc, title, message, ec);
+    	return composeEmailWithAttachments(null, from, to, cc, bcc, title, message, filePaths, ec);
+    }
+    
+    /**
+     * Composes a mail message with attachments.
+     *
+     * @param contextString the message context 
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param message text of the message
+     * @param filePaths array of file paths to attach
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
+    public ERCMailMessage composeEmailWithAttachments (String contextString,
+                                                       String from,
+                                                       NSArray to,
+                                                       NSArray cc,
+                                                       NSArray bcc,
+                                                       String title,
+                                                       String message,
+                                                       NSArray filePaths,
+                                                       EOEditingContext ec) {
+        ERCMailMessage mailMessage = this.composeEmail(contextString, from, to, cc, bcc, title, message, ec);
 
         for (Enumeration filePathEnumerator = filePaths.objectEnumerator();
              filePathEnumerator.hasMoreElements();) {
@@ -190,6 +242,31 @@ public class ERCMailDelivery {
                                                  String title,
                                                  WOComponent component,
                                                  EOEditingContext ec) {
+    	return composeComponentEmail(null, from, to, cc, bcc, title, component, ec);
+    }
+    
+    /**
+     * Composes a mail message from a given component.
+     *
+     * @param contextString the message context 
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param component to render to get the message
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
+    public ERCMailMessage composeComponentEmail (String contextString,
+                                                 String from,
+                                                 NSArray to,
+                                                 NSArray cc,
+                                                 NSArray bcc,
+                                                 String title,
+                                                 WOComponent component,
+                                                 EOEditingContext ec) {
         String message = null;
         if (component == null) {
             throw new IllegalStateException("Attempting to send a component email with a null component! From: "
@@ -200,7 +277,7 @@ public class ERCMailDelivery {
             context._generateCompleteURLs ();
             message = component.generateResponse().contentString();
         }
-        return composeEmail(from, to, cc, bcc, title, message, ec);
+        return composeEmail(contextString, from, to, cc, bcc, title, message, ec);
     }
 
     /**
@@ -224,6 +301,32 @@ public class ERCMailDelivery {
                                                  String componentName,
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
+    	return composeComponentEmail(null, from, to, cc, bcc, title, componentName, bindings, ec);
+    }
+    
+    /**
+     * Composes a mail message from a given component.
+     *
+     * @param contextString the message context 
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param componentName name of the component to render
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
+    public ERCMailMessage composeComponentEmail (String contextString,
+                                                 String from,
+                                                 NSArray to,
+                                                 NSArray cc,
+                                                 NSArray bcc,
+                                                 String title,
+                                                 String componentName,
+                                                 NSDictionary bindings,
+                                                 EOEditingContext ec) {
         WOComponent component = ERXApplication.instantiatePage(componentName);
         if (component == null) {
             log.warn("Created null component for name \"" + componentName + "\"");
@@ -235,7 +338,7 @@ public class ERCMailDelivery {
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
 
         }
-        return composeComponentEmail(from, to, cc, bcc, title, component, ec);
+        return composeComponentEmail(contextString, from, to, cc, bcc, title, component, ec);
     }
 
     /**
@@ -262,7 +365,36 @@ public class ERCMailDelivery {
                                                  String plainTextComponentName,
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
-        ERCMailMessage result = composeComponentEmail(from, to , cc, bcc, title, componentName, bindings, ec);
+    	return composeComponentEmail(null, to, cc, bcc, title, componentName, plainTextComponentName, bindings, ec);
+    }
+    
+    /**
+     * Composes a mail message from a given component.
+     *
+     * @param contextString the message context 
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param componentName name of the component to render
+     * @param plainTextComponentName name of the component to render
+     * @param bindings bindings dictionary to use for the components that are instantiated
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
+    public ERCMailMessage composeComponentEmail (String contextString,
+                                                 String from,
+                                                 NSArray to,
+                                                 NSArray cc,
+                                                 NSArray bcc,
+                                                 String title,
+                                                 String componentName,
+                                                 String plainTextComponentName,
+                                                 NSDictionary bindings,
+                                                 EOEditingContext ec) {
+        ERCMailMessage result = composeComponentEmail(contextString, from, to , cc, bcc, title, componentName, bindings, ec);
         WOComponent plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
         try{
             plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
@@ -300,7 +432,34 @@ public class ERCMailDelivery {
                                                  WOComponent component,
                                                  WOComponent plainTextComponent,
                                                  EOEditingContext ec) {
-        ERCMailMessage result = composeComponentEmail(from, to, cc, bcc, title, component, ec);
+    	 return composeComponentEmail(null, from, to, cc, bcc, title, component, plainTextComponent, ec);
+     }
+     
+    /**
+     * Composes a mail message from previously instantiated components.
+     *
+     * @param contextString the message context 
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param component component to render
+     * @param plainTextComponent plain-text component to render
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
+     public ERCMailMessage composeComponentEmail (String contextString,
+                                                 String from,
+                                                 NSArray to,
+                                                 NSArray cc,
+                                                 NSArray bcc,
+                                                 String title,
+                                                 WOComponent component,
+                                                 WOComponent plainTextComponent,
+                                                 EOEditingContext ec) {
+        ERCMailMessage result = composeComponentEmail(contextString, from, to, cc, bcc, title, component, ec);
         
         if ( plainTextComponent != null ) {
             WOContext context = plainTextComponent.context();

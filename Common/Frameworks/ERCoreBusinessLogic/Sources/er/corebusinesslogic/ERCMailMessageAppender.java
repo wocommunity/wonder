@@ -94,7 +94,8 @@ public class ERCMailMessageAppender extends ERXMailAppender {
         } else {
             String title = composeTitle(event);
             String content = composeMessage(event);
-            ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(computedFromAddress(),
+            ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(contextString(),
+                                                                                   computedFromAddress(),
                                                                                    toAddressesAsArray(),
                                                                                    toAddressesAsArray(),
                                                                                    bccAddressesAsArray(),
