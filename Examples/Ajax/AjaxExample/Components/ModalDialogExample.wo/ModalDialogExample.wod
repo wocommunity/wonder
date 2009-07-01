@@ -1,3 +1,5 @@
+
+
 AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Modal Dialog";
 }
@@ -125,6 +127,10 @@ SaveEmployeeEdit: AjaxSubmitButton {
 Form : WOForm {
 	name = "EmployeeForm";
 	multipleSubmit = true;
+}
+
+DefaultButton: AjaxDefaultSubmitButton {
+	action = saveEdit;
 }
 
 InlineEditEmployee: AjaxModalDialog {
