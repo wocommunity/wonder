@@ -36,6 +36,7 @@ import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -50,7 +51,6 @@ import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXLocalizer;
-import er.extensions.ERXProperties;
 import er.extensions.ERXValueUtilities;
 
 /**
@@ -402,26 +402,41 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		super.takeValuesFromRequest(r, c);
 	}
 
-	public WOActionResults invokeAction(WORequest r, WOContext c) {
-		setupPhase();
+	protected void _fetchDisplayGroup(WODisplayGroup dg) {
+		try {
+			dg.fetch();
+		}
+		catch (NSKeyValueCoding.UnknownKeyException e) {
+			if (dg.sortOrderings() != null && dg.sortOrderings().count() > 0) {
+				log.error("Fetching display group failed. Resetting potentially bogus sort orderings and trying again.", e);
+				dg.setSortOrderings(null);
+				dg.fetch();
+			}
+			else {
+				throw e;
+			}
+		}
+	}
+
+	protected void fetchIfNecessary() {
 		if (_hasToUpdate) {
 			willUpdate();
-			displayGroup().fetch();
+			_fetchDisplayGroup(displayGroup());
 			_hasToUpdate = false;
 			didUpdate();
 		}
+	}
+	
+	public WOActionResults invokeAction(WORequest r, WOContext c) {
+		setupPhase();
+		fetchIfNecessary();
 		return super.invokeAction(r, c);
 	}
 
 	public void appendToResponse(WOResponse r, WOContext c) {
 		setupPhase();
 		_rowFlip = true;
-		if (_hasToUpdate) {
-			willUpdate();
-			displayGroup().fetch();
-			_hasToUpdate = false;
-			didUpdate();
-		}
+		fetchIfNecessary();
 
 		// GN: reset the displayed batch if it is out of range
 		if (this.displayGroup() != null && this.displayGroup().currentBatchIndex() > this.displayGroup().batchCount()) {
@@ -488,7 +503,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 					setSortOrderingsOnDisplayGroup(sortOrderings, dg);
 				}
 				dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-				dg.fetch();
+				_fetchDisplayGroup(dg);
 				dg.updateDisplayedObjects();
 				_hasBeenInitialized = true;
 				_hasToUpdate = false;
