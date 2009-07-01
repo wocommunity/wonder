@@ -25,15 +25,16 @@ public class ERXResponseComponent extends ERXStatelessComponent {
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if (_component == null) {
 			super.takeValuesFromRequest(request, context);
-		}
-		context._setCurrentComponent(_component);
-		_component.ensureAwakeInContext(context);
-		try {
-			_component.takeValuesFromRequest(request, context);
-		}
-		finally {
-			_component._sleepInContext(context);
-			context._setCurrentComponent(null);
+		} else {
+			context._setCurrentComponent(_component);
+			_component.ensureAwakeInContext(context);
+			try {
+				_component.takeValuesFromRequest(request, context);
+			}
+			finally {
+				_component._sleepInContext(context);
+				context._setCurrentComponent(null);
+			}
 		}
 	}
 
