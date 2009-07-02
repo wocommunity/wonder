@@ -33,7 +33,7 @@ public class ERMailSenderTest extends TestCase {
 			if (relay.contextString == null) {
 				System.setProperty("er.javamail.smtpHost", relay.host);
 			} else {
-				System.setProperty("er.javamail." + relay.contextString + ".smtpHost", relay.host);
+				System.setProperty("er.javamail.smtpHost." + relay.contextString, relay.host);
 			}
 		}
 		ERXProperties.setStringForKey("smtptest", "mail.smtp.protocol");

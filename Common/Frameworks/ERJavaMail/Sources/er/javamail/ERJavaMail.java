@@ -280,7 +280,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
     	else {
 			Properties sessionProperties = new Properties();
 			sessionProperties.putAll(System.getProperties());
-			sessionProperties.setProperty("mail.smtp.host", ERXProperties.stringForKeyWithDefault("er.javamail." + contextString + ".smtpHost", sessionProperties.getProperty("er.javamail.smtpHost")));
+			sessionProperties.setProperty("mail.smtp.host", ERXProperties.stringForKeyWithDefault("er.javamail.smtpHost." + contextString, sessionProperties.getProperty("er.javamail.smtpHost")));
 			session = newSession(sessionProperties);
     	}
 		return session;
