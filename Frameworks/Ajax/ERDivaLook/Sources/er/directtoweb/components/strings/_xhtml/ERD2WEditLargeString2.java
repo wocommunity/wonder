@@ -10,7 +10,9 @@ import er.directtoweb.components.strings.ERD2WEditLargeString;
  * @See ERDEditLargeString
  * @author mendis
  *
+ * @deprecated in favour of parent (with added bindings)
  */
+@Deprecated
 public class ERD2WEditLargeString2 extends ERD2WEditLargeString {
     public ERD2WEditLargeString2(WOContext context) {
         super(context);
