@@ -1,6 +1,6 @@
 Span: WOGenericContainer {
 	elementName = "span";
-	class = classString;
+	class = d2wContext.class;
 }
 
 String: WOString {

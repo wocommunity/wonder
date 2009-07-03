@@ -35,6 +35,7 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"task", "subTask"}), "classForTask",
         new NSArray(new Object[] {"propertyKey"}), "classForProperty",
+        new NSArray(new Object[] {"propertyKey"}), "classForAttribute",
         new NSArray(new Object[] {"propertyKey", "componentName"}), "classForColumn",
     });
 
@@ -96,9 +97,19 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
      * @return a class string representing the propertyKey
      */
     public Object classForProperty(D2WContext c) {
-    	String classForProperty = "attribute";
-    	classForProperty += (c.propertyKey() != null) ? " " + ERXStringUtilities.safeIdentifierName(c.propertyKey()) : "";
-    	return classForProperty;
+    	return (c.propertyKey() != null) ? ERXStringUtilities.safeIdentifierName(c.propertyKey()) : "";
+    }
+    
+    /**
+     * A DOM class based on the propertyKey
+     * 
+     * @param c d2w context
+     * @return a class string representing the propertyKey along with a class 'attribute'
+     */
+    public Object classForAttribute(D2WContext c) {
+    	String classForAttribute = "attribute";
+    	classForAttribute += (c.propertyKey() != null) ? " " + classForProperty(c) : "";
+    	return classForAttribute;
     }
     
     /**

@@ -176,7 +176,7 @@ ButtonHeader: WOGenericContainer {
 
 ValueCell: WOGenericContainer {
 	elementName = "td";
-	class = d2wContext.class;
+	class = d2wContext.classForColumn;
 }
 
 UpdateContainer: AjaxUpdateContainer {
@@ -208,7 +208,7 @@ AddButton: AjaxSubmitButton {
 HeaderCell: WOGenericContainer {
 	elementName = "th";
 	scope = "col";
-	class = d2wContext.class;
+	class = d2wContext.classForColumn;
 }
 
 
