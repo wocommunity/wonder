@@ -10,7 +10,9 @@ import er.directtoweb.components.strings.ERD2WEditString;
  * @See ERDEditString
  * @author mendis
  *
+ * @deprecated in favour of parent component
  */
+@Deprecated
 public class ERD2WEditString2 extends ERD2WEditString {
     public ERD2WEditString2(WOContext context) {
         super(context);
