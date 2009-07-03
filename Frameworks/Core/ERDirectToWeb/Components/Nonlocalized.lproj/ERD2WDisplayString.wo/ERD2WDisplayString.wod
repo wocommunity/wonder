@@ -4,3 +4,7 @@ String: WOString {
 	escapeHTML = localContext.escapeHTML;
 }
 
+Span: WOGenericContainer {
+	elementName = "span";
+	class = d2wContext.class;
+}
