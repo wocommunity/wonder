@@ -59,7 +59,7 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 					return WOApplication.application().pageWithName(pageName, context);
 				}
 				else if (_action != null) {
-					return (WOActionResults) _pageName.valueInComponent(component);
+					return (WOActionResults) _action.valueInComponent(component);
 				} else {
 					WOResponse response = new WOResponse();
 					//AK: we might want to be able to set this...
