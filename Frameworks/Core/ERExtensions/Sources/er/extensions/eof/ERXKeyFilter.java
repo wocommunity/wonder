@@ -52,6 +52,7 @@ public class ERXKeyFilter {
 	private NSMutableSet<ERXKey> _lockedRelationships;
 	private NSMutableDictionary<ERXKey, ERXKey> _map;
 	private ERXKeyFilter.Base _nextBase;
+	private ERXKeyFilter.Delegate _delegate;
 
 	/**
 	 * Creates a new ERXKeyFilter.
@@ -75,6 +76,24 @@ public class ERXKeyFilter {
 		_excludes = new NSMutableSet<ERXKey>();
 		_lockedRelationships = new NSMutableSet<ERXKey>();
 		_map = new NSMutableDictionary<ERXKey, ERXKey>();
+	}
+	
+	/**
+	 * Associate a filter delegate with this filter.
+	 * 
+	 * @param delegate the delegate to associate
+	 */
+	public void setDelegate(ERXKeyFilter.Delegate delegate) {
+		_delegate = delegate;
+	}
+	
+	/**
+	 * Returns the filter delegate for this filter.
+	 * 
+	 * @return the delegate
+	 */
+	public ERXKeyFilter.Delegate delegate() {
+		return _delegate;
 	}
 	
 	/**
@@ -220,6 +239,7 @@ public class ERXKeyFilter {
 		ERXKeyFilter filter = _includes.objectForKey(key);
 		if (filter == null) {
 			filter = new ERXKeyFilter(_nextBase);
+			filter.setDelegate(_delegate);
 			filter.setNextBase(_nextBase);
 		}
 		return filter;
@@ -287,6 +307,7 @@ public class ERXKeyFilter {
 			filter = _includes.objectForKey(key);
 			if (filter == null) {
 				filter = new ERXKeyFilter(_nextBase);
+				filter.setDelegate(_delegate);
 				filter.setNextBase(_nextBase);
 				_includes.setObjectForKey(filter, key);
 				_excludes.removeObject(key);
@@ -435,5 +456,47 @@ public class ERXKeyFilter {
 		}
 		sb.append("]");
 		return sb.toString();
+	}
+	
+	/**
+	 * ERXKeyFilter.Delegate defines an interface for receiving notifications when your
+	 * filter is applied to an object graph. This gives you the opportunity to do some
+	 * validation and security checks for more complex scenarios.
+	 *  
+	 * @author mschrag
+	 */
+	public interface Delegate {
+		/**
+		 * Called prior to pushing the given value into obj.key.
+		 *  
+		 * @param target the target object
+		 * @param value the value it will be set on
+		 * @param key the key that will be set
+		 * @throws SecurityException if you shouldn't be doing this
+		 */
+		public void willTakeValueForKey(Object target, Object value, String key) throws SecurityException;
+		
+		/**
+		 * Called after pushing the given value into obj.key. Most filters will be applied
+		 * to EO's inside an editing context, and it may be more convenient to do security validation
+		 * after the fact (before commit) than enforcing it in willTakeValue. This is your chance.
+		 * 
+		 * @param target the target object 
+		 * @param value the value that was set
+		 * @param key the key that was set
+		 * @throws SecurityException if someone was naughty
+		 */
+		public void didTakeValueForKey(Object target, Object value, String key) throws SecurityException;
+		
+		/**
+		 * Called after skipping a key. You chould choose to enforce more strict security and
+		 * throw an exception in this case (rather than a silent skip default behavior).
+		 * 
+		 * @param target the target object 
+		 * @param value the value that was skipped
+		 * @param key the key that was skipped
+		 * @throws SecurityException if someone was naughty
+		 */
+		public void didSkipValueForKey(Object target, Object value, String key) throws SecurityException;
 	}
 }

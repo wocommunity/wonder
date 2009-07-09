@@ -820,6 +820,27 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 		return isClassProperty;
 	}
 
+	protected void _safeWillTakeValueForKey(ERXKeyFilter keyFilter, Object target, Object value, String key) {
+		ERXKeyFilter.Delegate delegate = keyFilter.delegate();
+		if (delegate != null) {
+			delegate.willTakeValueForKey(target, value, key);
+		}
+	}
+
+	protected void _safeDidTakeValueForKey(ERXKeyFilter keyFilter, Object target, Object value, String key) {
+		ERXKeyFilter.Delegate delegate = keyFilter.delegate();
+		if (delegate != null) {
+			delegate.didTakeValueForKey(target, value, key);
+		}
+	}
+
+	protected void _safeDidSkipValueForKey(ERXKeyFilter keyFilter, Object target, Object value, String key) {
+		ERXKeyFilter.Delegate delegate = keyFilter.delegate();
+		if (delegate != null) {
+			delegate.didSkipValueForKey(target, value, key);
+		}
+	}
+	
 	/**
 	 * Updates the given object based on this request node.
 	 * 
@@ -844,7 +865,12 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 				if (value instanceof NSKeyValueCoding.Null) {
 					value = null;
 				}
+				_safeWillTakeValueForKey(keyFilter, obj, value, keyName);
 				key.takeValueInObject(value, obj);
+				_safeDidTakeValueForKey(keyFilter, obj, value, keyName);
+			}
+			else {
+				_safeDidSkipValueForKey(keyFilter, obj, attribute.getValue(), keyName); // MS: we didn't coerce the value .. i think that's ok
 			}
 		}
 
@@ -911,6 +937,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 					}
 
 					if (!lockedRelationship) {
+						_safeWillTakeValueForKey(keyFilter, obj, allValues, keyName);
 						if (obj instanceof EOEnterpriseObject) {
 							for (Object removedValue : removedValues) {
 								((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) removedValue, keyName);
@@ -922,6 +949,10 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 						else {
 							key.takeValueInObject(allValues, obj);
 						}
+						_safeDidTakeValueForKey(keyFilter, obj, allValues, keyName);
+					}
+					else {
+						_safeDidSkipValueForKey(keyFilter, obj, allValues, keyName);
 					}
 				}
 				else if (!ERXRestUtils.isPrimitive(valueType) && keyFilter.matches(key, ERXKey.Type.ToOneRelationship)) {
@@ -947,12 +978,17 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 					if (childNode.isNull()) {
 						Object previousChildObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
 						if (previousChildObj != null && !lockedRelationship) {
+							_safeWillTakeValueForKey(keyFilter, obj, null, keyName);
 							if (obj instanceof EOEnterpriseObject && previousChildObj instanceof EOEnterpriseObject) {
 								((EOEnterpriseObject) obj).removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject) previousChildObj, keyName);
 							}
 							else {
 								key.takeValueInObject(null, obj);
 							}
+							_safeDidTakeValueForKey(keyFilter, obj, null, keyName);
+						}
+						else if (lockedRelationship) {
+							_safeDidSkipValueForKey(keyFilter, obj, null, keyName);
 						}
 					}
 					else {
@@ -986,12 +1022,17 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 						if (updateChildObj) {
 							childNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
 							if (!lockedRelationship) {
+								_safeWillTakeValueForKey(keyFilter, obj, childObj, keyName);
 								if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
 									((EOEnterpriseObject) obj).addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject) childObj, keyName);
 								}
 								else {
 									key.takeValueInObject(childObj, obj);
 								}
+								_safeDidTakeValueForKey(keyFilter, obj, childObj, keyName);
+							}
+							else {
+								_safeDidSkipValueForKey(keyFilter, obj, childObj, keyName);
 							}
 						}
 					}
@@ -1004,10 +1045,13 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 					if (value instanceof NSKeyValueCoding.Null) {
 						value = null;
 					}
+					_safeWillTakeValueForKey(keyFilter, obj, value, keyName);
 					key.takeValueInObject(value, obj);
+					_safeDidTakeValueForKey(keyFilter, obj, value, keyName);
 				}
 				else {
 					// ignore key
+					_safeDidSkipValueForKey(keyFilter, obj, childNode, keyName); // MS: what is the value here?  i'm just hanging in the node ...
 				}
 			}
 		}
