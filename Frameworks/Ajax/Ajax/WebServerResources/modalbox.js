@@ -451,6 +451,17 @@ Modalbox.Methods = {
 				}
 				break;			
 			case Event.KEY_ESC:
+				// CH: Add Esc key handling start
+				if (this.options.clickOnEscId) {
+					var target = $(this.options.clickOnEscId);
+					if (target && this._isClickable(target)) {
+						target.onclick();
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+				// CH: done
 				if(this.active && ! this.options.locked) this._hide(event);
 				break;
 			case 32:
@@ -483,6 +494,7 @@ Modalbox.Methods = {
 					var target = $(this.options.clickOnReturnId);
 					// Don't trigger this for clickable elements or text areas
 					if (target && this._isClickable(target) &&  ! (this._isClickable(node) || ["textarea"].include(node.type)) ) {
+						target.onclick();
 						target.click();
 						event.stop();
 					}

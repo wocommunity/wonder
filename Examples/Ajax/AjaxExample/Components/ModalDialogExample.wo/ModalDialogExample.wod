@@ -51,17 +51,21 @@ SimpleModalDialog: AjaxModalDialog {
 	slideDownDuration = "0.2";
 	slideUpDuration = "0.2";
 	locked = true;
+	clickOnReturnId = "SimpleModalDialogYesLink";
+	clickOnEscId = "SimpleModalDialogNoLink";
 }
 
 Yes : AjaxHyperlink {
 	action = deleteIt;
 	onSuccess = "function() { Modalbox.hide(); }";
+	id = "SimpleModalDialogYesLink";
 }
 
 
 No : WOHyperlink {
 	href = "javascript:void(0);";
 	onClick = "Modalbox.hide();";
+	id = "SimpleModalDialogNoLink";
 }
 
 UpdatingModalDialog: AjaxModalDialog {
@@ -115,6 +119,7 @@ CancelEmployeeEdit: AjaxSubmitButton {
 	evalScripts = true;
 	value = "Cancel";
 	formName = "EmployeeForm";
+	id = "CancelEmployeeEdit";
 }
 
 SaveEmployeeEdit: AjaxSubmitButton {
@@ -122,15 +127,12 @@ SaveEmployeeEdit: AjaxSubmitButton {
 	evalScripts = true;
 	value = "Save";
 	formName = "EmployeeForm";
+	id = "SaveEmployeeEdit";
 }
 
 Form : WOForm {
 	name = "EmployeeForm";
 	multipleSubmit = true;
-}
-
-DefaultButton: AjaxDefaultSubmitButton {
-	action = saveEdit;
 }
 
 InlineEditEmployee: AjaxModalDialog {
@@ -144,6 +146,8 @@ InlineEditEmployee: AjaxModalDialog {
 	slideUpDuration = "0.2";
 	afterHide = "function() { UIUpdater1Update(); UIUpdater2Update(); }";
 	overlayClose = false;
+	clickOnReturnId = "SaveEmployeeEdit";
+	clickOnEscId = "CancelEmployeeEdit";
 }
 
 UIUpdater1 : AjaxUpdateContainer {
