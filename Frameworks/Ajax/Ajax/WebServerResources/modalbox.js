@@ -474,11 +474,29 @@ Modalbox.Methods = {
 				// Safari operates in slightly different way. This realization is still buggy in Safari.
 				if(Prototype.Browser.WebKit && !["textarea", "select"].include(node.tagName.toLowerCase()))
 					event.stop();
-				else if( (node.tagName.toLowerCase() == "input" && ["submit", "button"].include(node.type)) || (node.tagName.toLowerCase() == "a") )
+				else if( this._isClickable(node) )  // CH: change to use _isClickable
 					event.stop();
 				break;
+			// CH: Add Return key handling start
+			case Event.KEY_RETURN:
+				if (this.options.clickOnReturnId) {
+					var target = $(this.options.clickOnReturnId);
+					// Don't trigger this for clickable elements or text areas
+					if (target && this._isClickable(target) &&  ! (this._isClickable(node) || ["textarea"].include(node.type)) ) {
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+			// CH: done
 		}
 	},
+	
+	// CH: add _isClickable
+	_isClickable: function(element) {
+		return (["input", "button"].include(element.tagName.toLowerCase()) && ["submit", "button"].include(element.type)) || (element.tagName.toLowerCase() == "a")
+	},
+	// CH: done
 	
 	_preventScroll: function(event) { // Disabling scrolling by "space" key
 		if(!["input", "textarea", "select", "button"].include(event.element().tagName.toLowerCase())) 
