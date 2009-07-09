@@ -1,5 +1,5 @@
 AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
-    localContext = d2wContext;
+	localContext = d2wContext;
 	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
@@ -10,12 +10,13 @@ AttributeCell: WOGenericContainer {
 	valign = "middle";
 }
 
-AttributeDisplay: WOSwitchComponent { 
+AttributeDisplay: ERXTimedSwitchComponent { 
+	localContext = d2wContext;
+	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-	localContext = d2wContext;
-	object = object;
 }
 
 AttributeRepetition: WORepetition {
@@ -52,6 +53,10 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 CheckBox2: WOSwitchComponent {
     WOComponentName = selectionWidgetName;
 	checked = checked;
+}
+
+ColSpanNumber: WOString {
+	value = colSpan;
 }
 
 ColumnLabelRepetition: WORepetition {
@@ -144,6 +149,11 @@ HideReturnOnSelect3: WOConditional {
 	negate = true;
 }
 
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
+}
+
 InspectImage: WOImage {
 	alt = "Inspect that Object";
 	border = "0";
@@ -207,6 +217,10 @@ ListTableRow: WOGenericContainer {
 	elementName = "tr";
 }
 
+MetricsDurationForCurrentPropertyKey: WOString {
+	value = durationOfAllEventsForCurrentPropertyKey;
+}
+
 NavBar: WOSwitchComponent {
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
@@ -230,6 +244,10 @@ NumberOfItems: WOString {
 	value = listSize;
 }
 
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
+}
+
 PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 }
@@ -245,6 +263,14 @@ ReturnButton2: WOImage {
 	filename = "ReturnMetalBtn.gif";
 	framework = "JavaDirectToWeb";
 	name = "Returns to the previous page";
+}
+
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
 }
 
 ShowBatchNavigationConditional: WOConditional {

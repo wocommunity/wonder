@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -39,9 +37,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
-import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSSelector;
-
 import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXBatchingDisplayGroup;
 import er.extensions.ERXComponentActionRedirector;
@@ -51,7 +46,10 @@ import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXLocalizer;
+import er.extensions.ERXMetrics;
+import er.extensions.ERXMetricsEvent;
 import er.extensions.ERXValueUtilities;
+import org.apache.log4j.Logger;
 
 /**
  * Reimplementation of the D2WListPage. Descends from ERD2WPage instead of
@@ -68,7 +66,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	/**
 	 * Public constructor. Registers for
-	 * {@link EOEditingContext.EditingContextDidSaveChangesNotification} so that
+	 * {@link EOEditingContext#EditingContextDidSaveChangesNotification} so that
 	 * component stays informed when objects are deleted and added.
 	 * 
 	 * @param c
@@ -76,7 +74,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 */
 	public ERD2WListPage(WOContext c) {
 		super(c);
-		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
+		//NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 
 	/* Not necessary -- NSNotificationCenter uses weak references
@@ -128,7 +126,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	/**
-	 * Called when an {@link EOditingContext} has changed. Sets
+	 * Called when an {@link EOEditingContext} has changed. Sets
 	 * {@link #_hasToUpdate} which in turn lets the group refetch on the next
 	 * display.
 	 */
@@ -421,7 +419,9 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	protected void fetchIfNecessary() {
 		if (_hasToUpdate) {
 			willUpdate();
+			ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.DBFetch, timingEventUserInfo());
 			_fetchDisplayGroup(displayGroup());
+			ERXMetrics.markEndOfEvent(event);
 			_hasToUpdate = false;
 			didUpdate();
 		}
@@ -503,7 +503,9 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 					setSortOrderingsOnDisplayGroup(sortOrderings, dg);
 				}
 				dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
+				ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.DBFetch, timingEventUserInfo());
 				_fetchDisplayGroup(dg);
+				ERXMetrics.markEndOfEvent(event);
 				dg.updateDisplayedObjects();
 				_hasBeenInitialized = true;
 				_hasToUpdate = false;

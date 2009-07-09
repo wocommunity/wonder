@@ -48,6 +48,7 @@ import er.extensions.ERXProperties;
 import er.extensions.ERXValueUtilities;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXWOContext;
+import er.extensions.ERXSession;
 
 /**
  * Principle class of the ERDirectToWeb framework.
@@ -69,6 +70,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     public final static String D2WDEBUGGING_ENABLED_KEY = "ERDirectToWeb_d2wDebuggingEnabled";
     public final static String D2WDISPLAY_COMPONENTNAMES_KEY = "ERDirectToWeb_displayComponentNames";
     public final static String D2WDISPLAY_PROPERTYKEYS_KEY = "ERDirectToWeb_displayPropertyKeys";
+    public final static String D2WDISPLAY_DETAILED_PAGE_METRICS_KEY = "ERDirectToWeb_displayDetailedPageMetrics";
     public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
     public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
     public final static Logger propertyKeyLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
@@ -163,6 +165,14 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(s,
                                                                   D2WDISPLAY_PROPERTYKEYS_KEY,
                                                                   propertyKeyLog.isDebugEnabled());
+    }
+
+    public static boolean detailedPageMetricsEnabled() {
+        return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(ERXSession.session(), D2WDISPLAY_DETAILED_PAGE_METRICS_KEY, false);
+    }
+
+    public static void setDetailedPageMetricsEnabled(boolean value) {
+        ERXExtensions.setBooleanFlagOnSessionForKey(ERXSession.session(), D2WDISPLAY_DETAILED_PAGE_METRICS_KEY, value);
     }
     
     public static String resolveUnit(String userInfoUnitString,

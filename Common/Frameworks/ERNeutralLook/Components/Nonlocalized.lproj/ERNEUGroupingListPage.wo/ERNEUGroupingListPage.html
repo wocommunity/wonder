@@ -47,6 +47,9 @@
 								</tr>
 							</table>
 						</th>
+						<webobject name="ShouldDisplayDetailedPageMetrics">
+						<th scope="col" class="InlineMetrics">&nbsp;</th>
+						</webobject>
 					<td width="1">&nbsp;</td>
 				</webobject>
 				<th bgcolor="#999999">&nbsp;</th>
@@ -57,6 +60,7 @@
 				<webobject name="GenericContainer3">
 					<img alt="" height="1" src="/nsi/s.gif" />
 				</webobject>
+				<webobject name="ShouldDisplayDetailedPageMetrics"><td bgcolor="#ffffff"><img border="0" height="2" width="1" /></td></webobject>
 			</tr>
 			<webobject name="ListTableRow">
 				<td bgcolor="#ffffff">
@@ -83,6 +87,11 @@
 				<webobject name="AttributeCell">
 					<font size="-1"><webobject name="AttributeDisplay"></webobject></font>
 				</webobject>
+				<webobject name="ShouldDisplayDetailedPageMetrics">
+				<td class="InlineMetrics">
+					<font size="-1"><webobject name="InlineMetricsForPropertyKey"></webobject></font>
+				</td>
+				</webobject>
 				<td width="1"></td>
 				</webobject>
 				<td>
@@ -92,6 +101,16 @@
 						</webobject>
 					</webobject>
 				</td>
+			</webobject>
+			<webobject name="ShouldDisplayDetailedPageMetrics">
+				<tr class="MetricsSummary">
+					<td>&nbsp;</td>
+					<webobject name="AttributeRepetition">
+					<td>&nbsp;</td>
+					<td class="InlineMetrics"><webobject name="MetricsDurationForCurrentPropertyKey"></webobject></td>
+					</webobject>
+					<td>&nbsp;</td>
+				</tr>
 			</webobject>
 		</webobject>
 		
@@ -142,5 +161,11 @@
 	</webobject>
 
 	<webobject name="BelowDisplayPropertyKeys"></webobject>
+	
+	<webobject name="ShouldDisplayMetricsSummary">
+	<div class="PageMetricsSummary">
+		<webobject name="PageMetricsSummary"></webobject>
+	</div>
+	</webobject>
 
 </webobject>

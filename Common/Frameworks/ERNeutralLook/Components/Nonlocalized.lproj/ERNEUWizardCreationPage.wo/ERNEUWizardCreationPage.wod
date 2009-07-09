@@ -9,12 +9,13 @@ AttributeRepetition: WORepetition {
 	list = currentSection.keys;
 }
 
-AttributeValue1: WOSwitchComponent { 
+AttributeValue1: ERXTimedSwitchComponent { 
+	localContext = localContext;
+	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-	localContext = localContext;
-	object = object;
 }
 
 AttributeValue2: WOSwitchComponent { 
@@ -122,6 +123,11 @@ Image3: WOImage {
 	width = 250;
 }
 
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
+}
+
 InspectTable: WOGenericContainer {
 	_unroll = "YES";
 	border = 0;
@@ -163,6 +169,10 @@ NoSectionHelp: ERXNonNullConditional {
 NotUsingMatrixLayout: WOConditional {
 	condition = d2wContext.useMatrixLayout;
 	negate = true;
+}
+
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -213,6 +223,14 @@ SectionNameString: WOString {
 Sections: WORepetition {
     list=sectionsForCurrentTab;
     item=currentSection;
+}
+
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
 }
 
 ShowCancel: WOConditional {

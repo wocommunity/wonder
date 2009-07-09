@@ -34,6 +34,11 @@
 							</tr>
 						</table>
 					</th>
+					<webobject name="ShouldDisplayDetailedPageMetrics">
+					<th scope="col" class="InlineMetrics">
+						&nbsp;
+					</th>
+					</webobject>
 					</webobject>
 					<th valign="bottom">Select</th>
 				</webobject>
@@ -51,14 +56,29 @@
 					<webobject name="AttributeCell">
 						<webobject name="AttributeDisplay"></webobject>
 					</webobject>
+					<webobject name="ShouldDisplayDetailedPageMetrics">
+					<td class="InlineMetrics">
+						<webobject name="InlineMetricsForPropertyKey"></webobject>
+					</td>
+					</webobject>
 					</webobject>
 					<td>
 						<webobject name="CheckBox2"></webobject>
 					</td>
 				</webobject>
 				<tr>
-					<td colspan="50" bgcolor="#ffffff"><img border="0" height="2" width="1" /></td>
+					<td colspan='<webobject name="ColSpanNumber"></webobject>' bgcolor="#ffffff"><img border="0" height="2" width="1" /></td>
 				</tr>
+				<webobject name="ShouldDisplayDetailedPageMetrics">
+					<tr class="MetricsSummary">
+						<td>&nbsp;</td>
+						<webobject name="AttributeRepetition">
+						<td>&nbsp;</td>
+						<td class="InlineMetrics"><webobject name="MetricsDurationForCurrentPropertyKey"></webobject></td>
+						</webobject>
+						<td>&nbsp;</td>
+					</tr>
+				</webobject>
 				</webobject>
 			</webobject><br />
 			
@@ -105,5 +125,11 @@
 	</webobject>
 	
 	<webobject name="BelowDisplayPropertyKeys"></webobject>
+	
+	<webobject name="ShouldDisplayMetricsSummary">
+	<div class="PageMetricsSummary">
+		<webobject name="PageMetricsSummary"></webobject>
+	</div>
+	</webobject>
 	
 </webobject>
