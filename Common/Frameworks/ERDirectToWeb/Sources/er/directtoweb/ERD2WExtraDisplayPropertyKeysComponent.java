@@ -14,9 +14,14 @@ import er.extensions.ERXValueUtilities;
 
 
 /**
- * A component to encapsulate the repetition over "extra" display property keys.  The property keys
+ * <p>A component to encapsulate the repetition over "extra" display property keys.  The property keys
  * are used to resolve the names of components that are to be displayed.  The common examples are
- * <code>aboveDisplayPropertyKeys</code> and <code>belowDisplayPropertyKeys</code>.
+ * <code>aboveDisplayPropertyKeys</code> and <code>belowDisplayPropertyKeys</code>.</p>
+ *
+ * <p>Note that using this component in a D2W page that does not have its object set (such as an inspect page) will
+ * require that each of your components be custom components that do not depend on <code>objectPropertyValue</code> to
+ * resolve their display values.</p>
+ *
  * @binding extraPropertiesKey - the property key property key to use when asking the D2W context 
  * which extra property keys to display
  * @author Travis Cripps
