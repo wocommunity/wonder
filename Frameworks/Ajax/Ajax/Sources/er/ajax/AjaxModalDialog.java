@@ -74,6 +74,8 @@ import er.extensions.components._private.ERXWOForm;
  * @binding onClose server side method that runs before the dialog is closed, the return value is discarded.
  *                  This will be executed if the page is reloaded, but not if the user navigates elsewhere.
  * @binding closeUpdateContainerID the update container to refresh when onClose is called
+ * @binding clickOnReturnId optional, ID of clickable HTML element to click when the Return key is pressed.  This is ignored
+ * 					if a clickable element has the focus
  * 
  * @binding id HTML id for the link activating the modal dialog
  * @binding class CSS class for the link activating the modal dialog
@@ -637,6 +639,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("inactiveFade", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("transitions", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("autoFocusing", AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxOption("clickOnReturnId", AjaxOption.STRING));
 		
 		// IMPORTANT NOTICE. Each callback gets removed from options of the ModalBox after execution
 		ajaxOptionsArray.addObject(new AjaxOption("beforeLoad", AjaxOption.SCRIPT));

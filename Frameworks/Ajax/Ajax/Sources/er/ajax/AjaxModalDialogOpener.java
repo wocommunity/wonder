@@ -6,7 +6,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
 import er.extensions.appserver.ERXWOContext;
-import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * <p>Generates a link to open a specific AjaxModalDialog.  This is useful when you want to physically separate the modal dialog from what
