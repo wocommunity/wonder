@@ -76,14 +76,16 @@ import er.extensions.components._private.ERXWOForm;
  * @binding closeUpdateContainerID the update container to refresh when onClose is called
  * @binding clickOnReturnId optional, ID of clickable HTML element to click when the Return key is pressed.  This is ignored
  * 					if a clickable element has the focus
- * 
+ * @binding clickOnEscId optional, ID of clickable HTML element to click when the Esc key is pressed.  This is ignored
+ * 					if a clickable element has the focus but overrides the locked setting
+ *  
  * @binding id HTML id for the link activating the modal dialog
  * @binding class CSS class for the link activating the modal dialog
  * @binding style CSS style for the link activating the modal dialog
  *
  * @binding overlayClose true | false Close modal box by clicking on overlay. Default is true.
  * @binding locked if true, suppresses the close window link, prevents Esc key and overlay from closing dialog.  Default is false,
- *          true implies overlayClose false
+ *          true implies overlayClose false.  If clickOnEscId is bound, this allows Esc to do something regardless of the locked binding
  * @binding method get | post. Method of passing variables to a server. Default is 'get'.
  * @binding params {} Collection of parameters to pass on AJAX request. Should be URL-encoded. See PassingFormValues for details.
  * 
@@ -640,6 +642,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("transitions", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("autoFocusing", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("clickOnReturnId", AjaxOption.STRING));
+		ajaxOptionsArray.addObject(new AjaxOption("clickOnEscId", AjaxOption.STRING));
 		
 		// IMPORTANT NOTICE. Each callback gets removed from options of the ModalBox after execution
 		ajaxOptionsArray.addObject(new AjaxOption("beforeLoad", AjaxOption.SCRIPT));
