@@ -176,6 +176,42 @@ public class ERXTimestampUtilities extends Object {
         return new ERXTimestamp(ts);
     }
 
+    public static NSTimestamp timestampForMidnightAddingDays(NSTimestamp time, final int days) {
+        // clear out nanoseconds
+        if (time.getNanos() != 0)
+            time = new NSTimestamp(time.getTime(), 0);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+
+        // if it is already midnight and we have no adjustments to make, avoid allocating another timestamp
+        if(days == 0 && isMidnight(cal))
+            return time;
+
+        // clear out hour, min, sec, and millisec
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
+
+        // apply offset
+        if (days != 0)
+            cal.add(Calendar.DATE, days);
+
+        return new NSTimestamp(cal.getTimeInMillis());
+    }
+
+    public static boolean isMidnight(NSTimestamp time) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        return isMidnight(cal);
+    }
+
+    public static boolean isMidnight(Calendar cal) {
+        return cal.get(Calendar.HOUR_OF_DAY) == 0 && cal.get(Calendar.MINUTE) == 0 && cal.get(Calendar.SECOND) == 0 && cal.get(Calendar.MILLISECOND) == 0;
+    }
+
+
     private volatile static long cacheExpiration;
     private volatile static long cacheFirstGood;
     private volatile static NSTimestamp today;
@@ -189,9 +225,9 @@ public class ERXTimestampUtilities extends Object {
             synchronized(cacheLock)  {
                 if( nowMillis >= cacheExpiration || nowMillis < cacheFirstGood || today == null ) { //cacheFirstGood is checked in case the clock gets reset backward
                     ERXTimestamp now = getInstance();
-                    today = now.ts.timestampByAddingGregorianUnits(0, 0, 0, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
-                    tomorrow = today.timestampByAddingGregorianUnits(0, 0, 1, 0, 0, 0);
-                    yesterday = today.timestampByAddingGregorianUnits(0, 0, -1, 0, 0, 0);
+                    today = timestampForMidnightAddingDays(now.ts, 0);
+                    tomorrow = timestampForMidnightAddingDays(now.ts, 1);
+                    yesterday = timestampForMidnightAddingDays(now.ts, -1);
                     cacheExpiration = tomorrow.getTime();
                     cacheFirstGood = today.getTime();
                 }
