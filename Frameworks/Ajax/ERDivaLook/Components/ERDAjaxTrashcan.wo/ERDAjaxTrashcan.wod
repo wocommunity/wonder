@@ -1,6 +1,6 @@
 DeleteEO2: AjaxUpdateLink {
 	onClickBefore = onClickBefore;
-	class = "ERDTrashcan2";
+	class = "ERDAjaxTrashcan";
 	action = deleteObject;
 	onSuccess = onSuccess;
 }
@@ -18,5 +18,5 @@ Error: WOGenericContainer {
 	elementName = "a";
 	href = "javascript:void(0);";
 	onclick = onClick;
-	class = "ERDTrashcan2";
+	class = "ERDAjaxTrashcan";
 }
