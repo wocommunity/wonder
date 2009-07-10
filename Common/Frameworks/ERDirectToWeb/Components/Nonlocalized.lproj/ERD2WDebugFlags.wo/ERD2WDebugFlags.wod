@@ -4,7 +4,7 @@ Show: WOConditional {
 
 Log4J: WOHyperlink {
 	class = ^linkClass;
-	actionClass = "er.extensions.ERXDirectAction";
+	actionClass = "ERXDirectAction";
 	directActionName = "log4j";
 	target = "log4J";
 }
@@ -45,13 +45,18 @@ Clear: WOHyperlink {
 }
 
 Dump: WOHyperlink {
-	actionClass = "er.extensions.ERXDirectAction";
+	actionClass = "ERXDirectAction";
 	directActionName = "dumpCreatedKeys";
 	class = ^linkClass;
 }
 
-Edit: WOHyperlink {
-	actionClass = "er.extensions.ERXDirectAction";
+WOStats: WOHyperlink {
+	action = statisticsPage;
+	class = ^linkClass;
+}
+
+Localization: WOHyperlink {
+	actionClass = "ERXDirectAction";
 	directActionName = "editLocalizedFiles";
 	class = ^linkClass;
 }
