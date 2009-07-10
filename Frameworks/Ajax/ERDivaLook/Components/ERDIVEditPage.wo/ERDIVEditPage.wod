@@ -97,7 +97,7 @@ ShowConfirmation: WOConditional {
 	condition = showConfirmationPanel;
 }
 
-DialogOnLoad: AjaxOnLoadModalBox {
+DialogOnLoad: ModalBoxOnLoad {
 	showID = "$('confirmation_panel')";
 	title = d2wContext.displayNameForEntity;
 	left = d2wContext.left;

@@ -4,23 +4,25 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.prototaculous.widgets.ModalBoxLink;
+
 /**
  * An on DOM load variant of the AjaxModalBox
  * 
- * @see AjaxModalBoxLink for api
+ * @see ModalBoxLink for api
  * 
  * @author mendis
  *
  */
-public class AjaxOnLoadModalBox extends AjaxModalBoxLink {
-    public AjaxOnLoadModalBox(WOContext context) {
+public class ModalBoxOnLoad extends ModalBoxLink {
+    public ModalBoxOnLoad(WOContext context) {
         super(context);
     }
     
     /*
      * API or bindings
      */
-    public static interface Bindings extends AjaxModalBoxLink.Bindings {
+    public static interface Bindings extends ModalBoxLink.Bindings {
     	public static final String showID = "showID";
     }
     

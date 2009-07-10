@@ -7,7 +7,7 @@ NoAttachment: WOConditional {
 	negate = true;
 }
 
-AddAttachment: AjaxModalBoxButton {
+AddAttachment: ModalBoxButton {
 	action = addAttachment;
 	value = "Attach a file...";
 	class = "D2WEditAttachment";
