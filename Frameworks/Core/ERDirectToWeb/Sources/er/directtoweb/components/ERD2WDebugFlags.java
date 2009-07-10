@@ -18,6 +18,7 @@ import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.statistics.ERXMetrics;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // This component can be used in the wrapper of a D2W app to provide convenient development time 
@@ -50,14 +51,52 @@ public class ERD2WDebugFlags extends WOComponent {
     }
 
     public WOComponent toggleAdaptorLogging() {
-        boolean currentState=ERXExtensions.adaptorLogging();
+        boolean currentState = adaptorLoggingEnabled();
         ERXExtensions.setAdaptorLogging(!currentState);
         return null;
+    }
+
+    public boolean adaptorLoggingEnabled() {
+        return ERXExtensions.adaptorLogging();
     }
 
     public WOComponent clearD2WRuleCache() {
         ERD2WModel.erDefaultModel().clearD2WRuleCache();
         return null;
+    }
+
+    /**
+     * Toggles the display of page metrics.
+     * @return the current page
+     */
+    public WOComponent togglePageMetrics() {
+        ERXMetrics.setMetricsEnabled(!metricsEnabled());
+        return null;
+    }
+
+    /**
+     * Determines if detailed page metrics should be displayed.
+     * @return true if they should be displayed
+     */
+    public boolean metricsEnabled() {
+        return ERXMetrics.metricsEnabled();
+    }
+
+    /**
+     * Toggles the display of detailed page metrics.
+     * @return the current page
+     */
+    public WOComponent toggleDetailedPageMetrics() {
+        ERDirectToWeb.setDetailedPageMetricsEnabled(!detailedMetricsEnabled());
+        return null;
+    }
+
+    /**
+     * Determines if detailed page metrics should be displayed.
+     * @return true if they should be displayed
+     */
+    public boolean detailedMetricsEnabled() {
+        return ERDirectToWeb.detailedPageMetricsEnabled();
     }
 
     /**

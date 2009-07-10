@@ -27,6 +27,14 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
+CanQueryForNullValues: WOConditional {
+    condition = d2wContext.enableQueryForNullValues;
+}
+
+CanQueryPropertyForNullValue: WOConditional {
+    condition = canQueryCurrentPropertyForNullValue;
+}
+
 Conditional1: WOConditional {
 	condition = d2wContext.showListInSamePage;
 }
@@ -71,7 +79,12 @@ MainTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 5;
 	cellspacing = 5;
-	elementName = "Table";
+	elementName = "table";
+}
+
+NoValueString: ERXLocalizedString {
+    value = "ERD2WQueryPage.noValueLabel";
+    escapeHTML = false;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -80,9 +93,14 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
+PropertyHasNullValueCheckBox: WOCheckBox {
+    checked = isNullQueryCheckedForCurrentProperty;
+    onclick = "ERD2WQueryPage.toggleFormFieldsCorrespondingToNullQueryCheckbox(event);";
+}
+
 QueryForm: WOForm {
 	action = queryAction;
-	name = "EditForm";
+	name = "QueryForm";
 	multipleSubmit = true;
 }
 
@@ -111,7 +129,7 @@ QueryTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 0;
 	cellspacing = 5;
-	elementName = "Table";
+	elementName = "table";
 }
 
 QueryTableHeaderRow: WOGenericContainer {

@@ -9,12 +9,13 @@ AttributeRepetition: WORepetition {
 	list = currentSection.keys;
 }
 
-AttributeValue1: WOSwitchComponent { 
+AttributeValue1: ERXTimedSwitchComponent { 
+	localContext = localContext;
+	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-	localContext = localContext;
-	object = object;
 }
 
 AttributeValue2: WOSwitchComponent { 
@@ -33,7 +34,7 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 Border: ERXTableWithBorder {
 	color = "#999999";
 	bgcolor = "#CCCCCC";
-	renderBorder = session.browser.willRenderNestedTablesFast; // VALID
+	renderBorder = session.browser.willRenderNestedTablesFast;
 }
 
 CancelButton: WOImage {
@@ -50,6 +51,10 @@ CancelLink: WOHyperlink {
 
 Conditional1: WOConditional {
 	condition = showBanner;
+}
+
+Conditional2: WOConditional {
+	condition = d2wContext.useFocus;
 }
 
 Conditional3: WOConditional {
@@ -91,7 +96,7 @@ Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = true;
 }
 
-HasSectionHelp2: ERXNonNullConditional {
+HasSectionHelp: ERXNonNullConditional {
 	condition = d2wContext.sectionHelp;
 }
 
@@ -117,6 +122,11 @@ Image3: WOImage {
 	framework = "JavaWOExtensions";
 	height = 9;
 	width = 250;
+}
+
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
 }
 
 InspectTable: WOGenericContainer {
@@ -157,6 +167,10 @@ NotUsingMatrixLayout: WOConditional {
 	negate = true;
 }
 
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
+}
+
 PageWrapper: WOSwitchComponent {
 	_componentUnroll = true;
 	_unroll = true;
@@ -184,7 +198,8 @@ RightArrow: WOImageButton {
     framework = "ERExtensions";
 }
 
-Script: WOJavaScript{	scriptString = tabScriptString;
+Script: WOJavaScript{
+	scriptString = tabScriptString;
 	hideInComment = true;
 }
 
@@ -201,6 +216,14 @@ SectionNameString: WOString {
 Sections: WORepetition {
     list=sectionsForCurrentTab;
     item=currentSection;
+}
+
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
 }
 
 ShowCancel: WOConditional {
@@ -237,12 +260,7 @@ SubmitChanges: WOImageButton {
 	framework = "JavaDirectToWeb";
 }
 
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
-}
-
-SwitchComponent2: WOSwitchComponent {
+SwitchComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
 }
