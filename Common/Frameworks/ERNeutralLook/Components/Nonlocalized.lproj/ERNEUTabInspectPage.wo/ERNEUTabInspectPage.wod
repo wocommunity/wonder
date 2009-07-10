@@ -26,12 +26,12 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 Border: ERXTableWithBorder {
 	color="#999999";
 	bgcolor="#CCCCCC";
-	renderBorder=session.browser.willRenderNestedTablesFast;
+	renderBorder=session.browser.willRenderNestedTablesFast; // VALID
 	doNotRenderTop = true;
 }
 
 BorderWasRendered: WOConditional {
-	condition = session.browser.willRenderNestedTablesFast;
+	condition = session.browser.willRenderNestedTablesFast; // VALID
 	negate = true;
 }
 
@@ -338,7 +338,8 @@ ReturnLink: WOHyperlink {
 	action = nextPage;
 }
 
-Script: WOJavaScript{	scriptString = tabScriptString;
+Script: WOJavaScript {
+	scriptString = tabScriptString;
 	hideInComment = true;
 }
 

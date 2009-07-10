@@ -67,7 +67,7 @@ DetailedPageMetrics: WOHyperlink {
 }
 
 IfDetailedMetricsEnabled: WOConditional {
-    condition = detailedMetricsEnabled
+    condition = detailedMetricsEnabled;
 }
 
 IfNotDetailedMetricsEnabled: WOConditional {
