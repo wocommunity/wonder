@@ -122,7 +122,7 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-SelectEO: ERDSelectButton2 {
+SelectEO: ERDAjaxSelectButton {
 	d2wContext = d2wContext;
 	object = object;
 }

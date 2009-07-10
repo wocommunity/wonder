@@ -1,5 +1,5 @@
 SelectEO: AjaxHyperlink {
 	action = selectObjectAction;
-	class = "ERDIVListPage_SelectButton";		// TODO: Change to ERDselectButton2
+	class = "ERDIVListPage_SelectButton";		// TODO: Change to ERDAjaxSelectButton
 	onComplete = "function(x){ parent.window.location.reload(); parent.myLightWindow.deactivate(); }";
 }
