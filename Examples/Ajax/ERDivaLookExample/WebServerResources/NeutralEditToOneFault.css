@@ -1,4 +1,4 @@
-button.D2WEditToOneFault2_Add {
+button.D2WAjaxEditToOneFault_Add {
 	text-indent: -5000px;
 	cursor: pointer;
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
@@ -8,7 +8,7 @@ button.D2WEditToOneFault2_Add {
 	display: block;
 }
 
-button.D2WEditToOneFault2_Delete {
+button.D2WAjaxEditToOneFault_Delete {
 	color: transparent;
 	margin-top: -24px;
 	font-size: 10pt;
@@ -17,25 +17,25 @@ button.D2WEditToOneFault2_Delete {
 	padding-right: 5px;
 }
 
-button.D2WEditToOneFault2_Delete:hover {
+button.D2WAjaxEditToOneFault_Delete:hover {
 	background-color: #336699;
 	color: white;
 }
 
-div.D2WEditToOneFault2:hover button.D2WEditToOneFault2_Delete {
+div.D2WAjaxEditToOneFault:hover button.D2WAjaxEditToOneFault_Delete {
 	color: blue;
 }
 
-div.D2WEditToOneFault2:hover button.D2WEditToOneFault2_Delete:hover {
+div.D2WAjaxEditToOneFault:hover button.D2WAjaxEditToOneFault_Delete:hover {
 	color: white;
 }
 
-div.D2WEditToOneFault2 a, button.D2WEditToOneFault2_Delete {
+div.D2WAjaxEditToOneFault a, button.D2WAjaxEditToOneFault_Delete {
 	padding-top: 1px;
 	padding-bottom: 2px;
 	vertical-align: 0%;
 }
 
-div.D2WEditToOneFault2 a {
+div.D2WAjaxEditToOneFault a {
 	margin-right: 2px;
 }
