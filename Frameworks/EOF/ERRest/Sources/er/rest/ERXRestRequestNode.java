@@ -725,16 +725,41 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 						if (nonModelClassDescription.attributeKeys().containsObject(keyName)) {
 							_addAttributeNodeForKeyInObject(remainingKey, obj, keyFilter);
 						}
+						else if (nonModelClassDescription.toManyRelationshipKeys().containsObject(keyName)) {
+							_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, nonModelClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, delegate, visitedObjects);
+						}
+						else if (nonModelClassDescription.toOneRelationshipKeys().containsObject(keyName)) {
+							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, nonModelClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, delegate, visitedObjects);
+						}
+						else if (nonModelClassDescription instanceof BeanInfoClassDescription && ((BeanInfoClassDescription)nonModelClassDescription).isAttributeMethod(keyName)) {
+							_addAttributeNodeForKeyInObject(remainingKey, obj, keyFilter);
+						}
+						else if (nonModelClassDescription instanceof BeanInfoClassDescription && ((BeanInfoClassDescription)nonModelClassDescription).isToManyMethod(keyName)) {
+							_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, nonModelClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, delegate, visitedObjects);
+						}
+						else if (nonModelClassDescription instanceof BeanInfoClassDescription && ((BeanInfoClassDescription)nonModelClassDescription).isToOneMethod(keyName)) {
+							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, nonModelClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, delegate, visitedObjects);
+						}
 						else {
-							if (nonModelClassDescription.toManyRelationshipKeys().containsObject(keyName)) {
-								_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, nonModelClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, delegate, visitedObjects);
-							}
-							else if (nonModelClassDescription.toOneRelationshipKeys().containsObject(keyName)) {
-								_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, nonModelClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, delegate, visitedObjects);
-							}
-							else {
-								throw new IllegalArgumentException("This key filter specified that the key '" + keyName + "' should be included on '" + nonModelClassDescription.entityName() + "', but it does not exist.");
-							}
+							throw new IllegalArgumentException("This key filter specified that the key '" + keyName + "' should be included on '" + nonModelClassDescription.entityName() + "', but it does not exist.");
+						}
+					}
+				}
+				else if (classDescription instanceof BeanInfoClassDescription) {
+					BeanInfoClassDescription beanInfoClassDescription = (BeanInfoClassDescription)classDescription;
+					for (ERXKey<?> remainingKey : remainingKeys) {
+						String keyName = remainingKey.key();
+						if (beanInfoClassDescription.isAttributeMethod(keyName)) {
+							_addAttributeNodeForKeyInObject(remainingKey, obj, keyFilter);
+						}
+						else if (beanInfoClassDescription.isToManyMethod(keyName)) {
+							_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, beanInfoClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, delegate, visitedObjects);
+						}
+						else if (beanInfoClassDescription.isToOneMethod(keyName)) {
+							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, beanInfoClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, delegate, visitedObjects);
+						}
+						else {
+							throw new IllegalArgumentException("This key filter specified that the key '" + keyName + "' should be included on '" + beanInfoClassDescription.entityName() + "', but it does not exist.");
 						}
 					}
 				}

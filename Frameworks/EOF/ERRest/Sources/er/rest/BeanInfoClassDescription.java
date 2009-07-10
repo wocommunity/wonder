@@ -3,7 +3,9 @@ package er.rest;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
+import java.beans.MethodDescriptor;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import com.webobjects.eocontrol.EOClassDescription;
@@ -32,11 +34,52 @@ public class BeanInfoClassDescription extends EOClassDescription {
 	}
 
 	protected boolean isAttribute(PropertyDescriptor descriptor) {
-		return ERXRestUtils.isPrimitive(descriptor.getPropertyType());
+		return isAttribute(descriptor.getPropertyType());
+	}
+
+	protected boolean isAttribute(Class type) {
+		return ERXRestUtils.isPrimitive(type);
 	}
 
 	protected boolean isToMany(PropertyDescriptor descriptor) {
-		return List.class.isAssignableFrom(descriptor.getPropertyType());
+		return isToMany(descriptor.getPropertyType());
+	}
+
+	protected boolean isToMany(Class type) {
+		return List.class.isAssignableFrom(type);
+	}
+
+	public boolean isAttributeMethod(String methodName) {
+		for (MethodDescriptor descriptor : _beanInfo.getMethodDescriptors()) {
+			Method descriptorMethod = descriptor.getMethod();
+			Class descriptorReturnType = descriptorMethod.getReturnType();
+			if (descriptor.getName().equals(methodName) && descriptorReturnType != void.class && descriptorMethod.getParameterTypes().length == 0 && isAttribute(descriptorReturnType)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isToOneMethod(String methodName) {
+		for (MethodDescriptor descriptor : _beanInfo.getMethodDescriptors()) {
+			Method descriptorMethod = descriptor.getMethod();
+			Class descriptorReturnType = descriptorMethod.getReturnType();
+			if (descriptor.getName().equals(methodName) && descriptorReturnType != void.class && descriptorMethod.getParameterTypes().length == 0 && !isAttribute(descriptorReturnType) && !isToMany(descriptorReturnType)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isToManyMethod(String methodName) {
+		for (MethodDescriptor descriptor : _beanInfo.getMethodDescriptors()) {
+			Method descriptorMethod = descriptor.getMethod();
+			Class descriptorReturnType = descriptorMethod.getReturnType();
+			if (descriptor.getName().equals(methodName) && descriptorReturnType != void.class && descriptorMethod.getParameterTypes().length == 0 && isToMany(descriptorReturnType)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
