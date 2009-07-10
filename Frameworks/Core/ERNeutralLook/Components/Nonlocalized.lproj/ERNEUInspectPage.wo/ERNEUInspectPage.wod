@@ -9,12 +9,13 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-AttributeValue: WOSwitchComponent {
+AttributeValue: ERXTimedSwitchComponent {
+	localContext = localContext;
+	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-	localContext = localContext;
-	object = object;
 }
 
 Banner: WOImage {
@@ -33,6 +34,10 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
+BrowserIsIEConditional: WOConditional {
+	condition = session.browser.isIE;
+}
+
 CancelButton: WOImage {
 	alt = "Reverts your changes";
 	border = "0";
@@ -47,44 +52,9 @@ CancelLink: WOHyperlink {
 	action = cancelAction;
 }
 
-Conditional1: WOConditional {
-	condition = session.browser.isIE;
-	negate = true;
-}
-
-Conditional10: WOConditional {
-	condition = session.browser.isIE;
-	negate = true;
-}
-
-Conditional11: WOConditional {
-	condition = session.browser.isIE;
-}
-
-Conditional12: WOConditional {
-	condition = session.browser.isIE;
-}
-
-Conditional2: WOConditional {
-	condition = session.browser.isIE;
-	negate = true;
-}
-
-Conditional3: WOConditional {
-	condition = session.browser.isIE;
-}
-
-Conditional5: WOConditional {
-	condition = d2wContext.useFocus;
-}
-
-Conditional8: WOConditional {
-	condition = session.browser.isIE;
-	negate = true;
-}
-
-Conditional9: WOConditional {
-	condition = session.browser.isIE;
+CancelSubmitButton: WOSubmitButton {
+	action = cancelAction;
+	value = "Cancel";
 }
 
 DeleteButton: WOImage {
@@ -99,6 +69,11 @@ DeleteButton: WOImage {
 
 DeleteLink: WOHyperlink {
 	action = deleteAction;
+}
+
+DeleteSubmitButton: WOSubmitButton {
+	action = deleteAction;
+	value = "Delete";
 }
 
 EditImage: WOImage {
@@ -135,13 +110,24 @@ Errors: ERXErrorDictionaryPanel {
 	errorKeyOrder = errorKeyOrder;
 }
 
-FontContainer: WOGenericContainer {
-	color = d2wContext.textColor;
-	elementName = "font";
+FocusScript: WOJavaScript{
+	scriptString = tabScriptString;
+	hideInComment = true;
 }
 
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
+}
+
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
+}
+
+InspectRow: WOGenericContainer {
+	_unroll = true;
+	bgcolor = d2wContext.backgroundColorForTable;
+	elementName = "tr";
 }
 
 InspectTable: WOGenericContainer {
@@ -149,7 +135,7 @@ InspectTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 2;
 	cellspacing = 1;
-	elementName = "Table";
+	elementName = "table";
 }
 
 InspectTableHeaderRow: WOGenericContainer {
@@ -163,25 +149,19 @@ IsEditingConditional: WOConditional {
 	condition = isEditing;
 }
 
-IsEditingConditional2: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-}
-
-IsEditingConditional5: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-}
-
 IsEntityWritable: WOConditional {
 	_unroll = true;
 	condition = d2wContext.isEntityDeletable;
 }
 
-IsEntityWritable2: WOConditional {
+IsEntityNotWritable: WOConditional {
 	_unroll = true;
 	condition = isEntityReadOnly;
 	negate = true;
+}
+
+IsIEConditional: WOConditional {
+	condition = session.browser.isIE;
 }
 
 IsNotEditingConditional: WOConditional {
@@ -190,9 +170,8 @@ IsNotEditingConditional: WOConditional {
 	negate = true;
 }
 
-IsNotEditingConditional2: WOConditional {
-	_unroll = true;
-	condition = isEditing;
+IsNotIEConditional: WOConditional {
+	condition = session.browser.isIE;
 	negate = true;
 }
 
@@ -201,7 +180,11 @@ MainTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 5;
 	cellspacing = 5;
-	elementName = "Table";
+	elementName = "table";
+}
+
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -210,15 +193,9 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ProprtyKeyComponentGenericContainer: WOGenericContainer {
+PropertyKeyComponentGenericContainer: WOGenericContainer {
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
-}
-
-QueryRow: WOGenericContainer {
-	_unroll = true;
-	bgcolor = d2wContext.backgroundColorForTable;
-	elementName = "tr";
 }
 
 ReturnButton: WOImage {
@@ -235,36 +212,32 @@ ReturnLink: WOHyperlink {
 	action = nextPage;
 }
 
-Script: WOJavaScript{	scriptString = tabScriptString;
-	hideInComment = true;
+SaveSubmitButton: WOSubmitButton {
+	action = submitAction;
+	value = "Save";
 }
 
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
+}
 
 ShowCancel: WOConditional {
 	condition = showCancel;
 }
 
-SubmitButton1: WOSubmitButton {
-	action = cancelAction;
-	value = "Cancel";
+ShowDelete: WOConditional {
+    condition = shouldShowActionButtons;
 }
 
-SubmitButton2: WOSubmitButton {
-	action = submitAction;
-	value = "Save";
+ShowSubmit: WOConditional {
+	condition = shouldShowSubmitButton;
 }
 
-SubmitButton5: WOSubmitButton {
-	action = deleteAction;
-	value = "Delete";
-}
-
-SubmitButton6: WOSubmitButton {
-	action = cancelAction;
-	value = "Cancel";
-}
-
-SubmitChanges: WOImageButton {
+SubmitChangesButton: WOImageButton {
 	action = submitAction;
 	alt = "Saves your changes";
 	border = "0";
@@ -275,18 +248,11 @@ SubmitChanges: WOImageButton {
 	width = "88";
 }
 
-SubmitChanges2: WOImageButton {
-	action = submitAction;
-	border = 0;
-	filename = "SaveMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	height = 1;
-	name = "Saves your changes";
-	width = 1;
-}
-
 SwitchComponent1: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
 }
 
+UseFocusConditional: WOConditional {
+	condition = d2wContext.useFocus;
+}

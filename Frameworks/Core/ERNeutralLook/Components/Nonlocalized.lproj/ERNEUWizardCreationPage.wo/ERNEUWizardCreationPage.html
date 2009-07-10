@@ -1,9 +1,10 @@
 <WEBOBJECT NAME=PageWrapper>
-    <WEBOBJECT NAME=Help></WEBOBJECT>
+	<WEBOBJECT NAME=Help></WEBOBJECT>
     
-    <webobject name="AboveDisplayPropertyKeys"></webobject>
+	<webobject name="AboveDisplayPropertyKeys"></webobject>
     
-    <WEBOBJECT NAME=EditForm><WEBOBJECT NAME=Conditional1>
+	<WEBOBJECT NAME=EditForm>
+		<WEBOBJECT NAME=Conditional1>
 			<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=3>
 				<WEBOBJECT NAME=InspectTableHeaderRow>
 					<TD ALIGN=LEFT CLASS=BannerText VALIGN=middle><WEBOBJECT NAME=StepName></WEBOBJECT></TD>
@@ -17,7 +18,7 @@
 						<TR>
 							<TD HEIGHT=26 BGCOLOR=#FFFFFF VALIGN=middle COLSPAN=4><WEBOBJECT NAME=UseSectionImagesConditional><WEBOBJECT NAME=SectionImage></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=DoNotUseSectionImagesConditional><H3><WEBOBJECT NAME=SectionNameString></WEBOBJECT></H3></WEBOBJECT></TD>
 						</TR>
-						<WEBOBJECT NAME=HasSectionHelp2>
+						<WEBOBJECT NAME=HasSectionHelp>
 							<TR HEIGHT=6>
 								<TD COLSPAN=4><WEBOBJECT NAME=Image3></WEBOBJECT></TD>
 							</TR>
@@ -27,17 +28,27 @@
 						</TR>
 					</WEBOBJECT><WEBOBJECT NAME=NotUsingMatrixLayout><WEBOBJECT NAME=AttributeRepetition>
 							<TR>
-								<TD ALIGN=LEFT VALIGN=TOP><WEBOBJECT NAME=SwitchComponent1></WEBOBJECT></TD>
-								<TD ALIGN=left VALIGN=top COLSPAN=3><WEBOBJECT NAME=AttributeValue2></WEBOBJECT></TD>
+								<TD ALIGN=LEFT VALIGN=TOP><WEBOBJECT NAME=SwitchComponent></WEBOBJECT></TD>
+								<TD ALIGN=left VALIGN=top COLSPAN=3><WEBOBJECT NAME="AttributeValue"></WEBOBJECT></TD>
+								<webobject name="ShouldDisplayDetailedPageMetrics">
+								<td class="InlineMetrics">
+									<webobject name="InlineMetricsForPropertyKey"></webobject>
+								</td>
+								</webobject>
 							</TR>
 						</WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=Conditional4>
 						<TR>
 							<TD COLSPAN=4><WEBOBJECT NAME=ERTable1>
 									<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=0>
 										<TR>
-											<TD ALIGN=LEFT WIDTH=120 VALIGN=TOP><WEBOBJECT NAME=SwitchComponent2></WEBOBJECT></TD>
+											<TD ALIGN=LEFT WIDTH=120 VALIGN=TOP><WEBOBJECT NAME=SwitchComponent></WEBOBJECT></TD>
 											<TD WIDTH=10>&nbsp;</TD>
-											<TD WIDTH=120 VALIGN=TOP><WEBOBJECT NAME=AttributeValue1></WEBOBJECT></TD>
+											<TD WIDTH=120 VALIGN=TOP><WEBOBJECT NAME="AttributeValue"></WEBOBJECT></TD>
+											<webobject name="ShouldDisplayDetailedPageMetrics">
+											<td class="InlineMetrics">
+												<webobject name="InlineMetricsForPropertyKey"></webobject>
+											</td>
+											</webobject>
 										</TR>
 									</TABLE>
 								</WEBOBJECT></TD>
@@ -64,8 +75,21 @@
 						</TABLE>
 					</TD>
 				</TR>
-			</WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=Conditional5><WEBOBJECT NAME=IsEditing><WEBOBJECT NAME=Script></WEBOBJECT></WEBOBJECT></WEBOBJECT></WEBOBJECT>
+			</WEBOBJECT>
+	    </WEBOBJECT>
+	    
+		<WEBOBJECT NAME=Conditional5>
+			<WEBOBJECT NAME=IsEditing><WEBOBJECT NAME=Script></WEBOBJECT></WEBOBJECT>
+		</WEBOBJECT>
+	
+	</WEBOBJECT>
 
-    <webobject name="BelowDisplayPropertyKeys"></webobject>
+	<webobject name="BelowDisplayPropertyKeys"></webobject>
+
+	<webobject name="ShouldDisplayMetricsSummary">
+	<div class="PageMetricsSummary">
+		<webobject name="PageMetricsSummary"></webobject>
+	</div>
+	</webobject>
 
 </WEBOBJECT>

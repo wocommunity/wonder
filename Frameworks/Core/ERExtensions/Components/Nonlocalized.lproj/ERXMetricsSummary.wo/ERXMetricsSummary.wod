@@ -1,0 +1,16 @@
+Duration: WOString {
+    value = aggregateDurationForMetricsType;
+}
+
+EventType: WOString {
+    value = currentType;
+}
+
+EventTypeRepetition: WORepetition {
+    item = currentType;
+    list = eventTypes;
+}
+
+IfMetricsEnabled: WOConditional {
+    condition = metricsEnabled;
+}

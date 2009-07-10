@@ -3,10 +3,6 @@ AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
-AreThereBackgroundColors: ERXNonNullConditional {
-	condition = d2wContext.referenceRelationshipForBackgroupColor;
-}
-
 AreThereReferenceEO: ERXNonNullConditional {
 	condition = referenceEOs;
 }
@@ -19,17 +15,23 @@ AttributeCell: WOGenericContainer {
 	align = d2wContext.justification;
 	elementName = "td";
 	valign = "middle";
+	width = d2wContext.width;
 }
 
-AttributeDisplay: WOSwitchComponent {
- 	WOComponentName = d2wContext.componentName;
+AttributeDisplay: ERXTimedSwitchComponent {
  	localContext = localContext;
  	object = object;
+	userInfo = timingEventUserInfo;
+	WOComponentName = d2wContext.componentName;
 }
 
 AttributeRepetition: WORepetition {
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
+}
+
+BackButton: WOHyperlink {
+	action = backAction;
 }
 
 BackLink: WOHyperlink {
@@ -38,6 +40,10 @@ BackLink: WOHyperlink {
 
 BackLink2: WOHyperlink {
 	action = backAction;
+}
+
+BackgroundColor: WOString {
+	value = d2wContext.backgroundColorForTable;
 }
 
 Banner: WOImage {
@@ -64,6 +70,16 @@ ColumnLabelRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
+ComponentsToAppendRepetition: WORepetition {
+	item = aComponentName;
+	list = componentsToDisplayBelow;
+}
+
+ComponentToAppendSwitchComponent: WOSwitchComponent {
+	WOComponentName = aComponentName;
+	localContext = d2wContext;
+}
+
 Conditional1: WOConditional {
 	condition = isEntityEditable;
 }
@@ -86,9 +102,9 @@ EditButton: ERDEditButton {
 	object = object;
 }
 
-EntityName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForEntity;
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
 }
 
 EntityRepetition: WORepetition {
@@ -96,14 +112,16 @@ EntityRepetition: WORepetition {
 	list = displayGroup.displayedObjects;
 }
 
-ExclamationImage: WOImage {
-	alt = "!";
-	border = "0";
-	filename = "exclamation.gif";
-	framework = "JavaDirectToWeb";
-	height = "32";
-	name = "!";
-	width = "32";
+ExcelExportButton: WOSwitchComponent {
+	WOComponentName = d2wContext.excelExportButtonComponentName;
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
+}
+
+ExcelExportButton2: WOSwitchComponent {
+	WOComponentName = d2wContext.excelExportButtonComponentName;
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
 }
 
 FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
@@ -116,23 +134,29 @@ FilterDisplayGroupButton2: ERDFilterDisplayGroupButton {
 	displayGroup = displayGroup;
 }
 
-FontContainer: WOGenericContainer {
-	color = d2wContext.textColor;
-	elementName = "font";
-}
-
 Generic1: WOGenericContainer {
-	BGCOLOR = referenceEO.backgroundColor; //VALID
+	BGCOLOR = referenceEO.backgroundColor;
 	elementName = "td";
 }
 
 Generic2: WOGenericContainer {
-	BGCOLOR = referenceEO.backgroundColor; //VALID
+	BGCOLOR = referenceEO.backgroundColor;
 	elementName = "td";
 }
 
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
+}
+
+HideReturnOnSelect3: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+	negate = true;
+}
+
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
 }
 
 InspectButton: ERDInspectButton {
@@ -154,6 +178,14 @@ IsEntityWritable: WOConditional {
 IsEntityWritable2: WOConditional {
 	_unroll = true;
 	condition = d2wContext.isEntityDeletable;
+}
+
+IsGenericExportButtonKnown: WOConditional {
+	condition = d2wContext.excelExportButtonComponentName;
+}
+
+IsGenericExportButtonKnown2: WOConditional {
+	condition = d2wContext.excelExportButtonComponentName;
 }
 
 IsListing: WOConditional {
@@ -193,7 +225,7 @@ ListTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 1;
 	cellspacing = 0;
-	elementName = "Table";
+	elementName = "table";
 }
 
 ListTableHeaderRow: WOGenericContainer {
@@ -206,6 +238,10 @@ ListTableRow: WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
 	BGCOLOR = colorForRow;
+}
+
+MetricsDurationForCurrentPropertyKey: WOString {
+	value = durationOfAllEventsForCurrentPropertyKey;
 }
 
 NavBar: WOSwitchComponent {
@@ -225,6 +261,14 @@ NavBar2: WOSwitchComponent {
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
        	 d2wContext = d2wContext;
+}
+
+NumberOfItems: WOString {
+	value = listSize;
+}
+
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -277,6 +321,18 @@ SelectImage: WOImage {
 	width = "51";
 }
 
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
+}
+
+ShowBatchNavigationConditional: WOConditional {
+	condition = shouldShowBatchNavigation;
+}
+
 ShowCancel: WOConditional {
 	condition = showCancel;
 }
@@ -293,11 +349,11 @@ SortOrder: ERXSortOrder {
 }
 
 String1: WOString {
-	value = referenceEO.name; // VALID
+	value = referenceEO.name;
 }
 
 String2: WOString {
-	value = referenceEO.name; // VALID
+	value = referenceEO.name;
 }
 
 SwitchComponent1: WOSwitchComponent {
@@ -316,4 +372,3 @@ Trash: ERDTrashcan {
 	dataSource = dataSource;
 	object = object;
 }
-

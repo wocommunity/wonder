@@ -12,6 +12,7 @@ import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eoaccess.EODatabaseDataSource;
@@ -23,12 +24,16 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.directtoweb.delegates.ERDQueryDataSourceDelegateInterface;
 import er.directtoweb.interfaces.ERDQueryPageInterface;
 import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXValueUtilities;
+
+import java.util.Enumeration;
 
 /**
  * Superclass for all query pages.<br />
@@ -48,6 +53,9 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     protected EOFetchSpecification fetchSpecification;
     
     protected ERDQueryDataSourceDelegateInterface queryDataSourceDelegate;
+
+    protected NSArray _nullablePropertyKeys;
+    protected NSMutableDictionary keysToQueryForNull = new NSMutableDictionary();
 
     public ERD2WQueryPage(WOContext context) {
         super(context);
@@ -129,12 +137,17 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         super.takeValuesFromRequest(request, context);
+        substituteValueForNullableQueryKeys();
         saveQueryBindings();
     }
 
-    public void appendToResponse(WOResponse arg0, WOContext arg1) {
+    public void appendToResponse(WOResponse response, WOContext context) {
         loadQueryBindings();
-        super.appendToResponse(arg0, arg1);
+        super.appendToResponse(response, context);
+        
+        if (ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("enableQueryForNullValues"), false)) {
+            ERXResponseRewriter.addScriptResourceInHead(response, context, "ERDirectToWeb", "ERD2WQueryPage.js");
+        }
     }
 
     protected void saveQueryBindings() {
@@ -207,13 +220,11 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     protected Boolean showResults = null;
 
     public boolean showResults() {
-        if (showResults == null)
-            return false;
-        return showResults.booleanValue();
+        return Boolean.TRUE.equals(showResults);
     }
 
     public void setShowResults(boolean value) {
-        showResults = value ? Boolean.TRUE : Boolean.FALSE;
+        showResults = value;
     }
 
     public WOComponent queryAction() {
@@ -224,7 +235,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         	nextPage = nextPageFromDelegate();
             if (nextPage == null) {
                 String listConfigurationName = (String) d2wContext().valueForKey("listConfigurationName");
-                ListPageInterface listpageinterface = null;
+                ListPageInterface listpageinterface;
                 if (listConfigurationName != null) {
                     listpageinterface = (ListPageInterface) D2W.factory().pageForConfigurationNamed(listConfigurationName, session());
                 } else {
@@ -267,7 +278,12 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         return nextPage() != null;
     }
 
-    
+    /**
+     * Assembles the data source for the search results page, configured for the current query.  If a
+     * {@link #queryDataSourceDelegate()} is defined, the delegate's implementation is invoked. Otherwise,
+     * the {@link #defaultQueryDataSource()} is returned.
+     * @return the prepared data source
+     */
     public EODataSource queryDataSource() {
         if (_wasCancelled) {
             return null;
@@ -281,10 +297,19 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         }
     }
 
+    /**
+     * Sets the query data source.
+     * @param datasource to be used as the query data source
+     */
     public void setQueryDataSource(EODataSource datasource) {
         setDataSource(datasource);
     }
     
+    /**
+     * Default implementation of which assembles the data source for the search results page, configured
+     * for the current query.
+     * @return the prepared data source
+     */
     public EODataSource defaultQueryDataSource() {
         EODataSource ds = dataSource();
         if (ds == null || !(ds instanceof EODatabaseDataSource)) {
@@ -311,6 +336,10 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         return ds;
     }
     
+    /**
+     * Gets the query data source delegate.
+     * @return the query data source delegate
+     */
     public ERDQueryDataSourceDelegateInterface queryDataSourceDelegate() {
         if (queryDataSourceDelegate == null) {
             queryDataSourceDelegate = (ERDQueryDataSourceDelegateInterface)d2wContext().valueForKey("queryDataSourceDelegate");
@@ -318,12 +347,17 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         return queryDataSourceDelegate;
     }
     
+    /**
+     * Sets the query data source delegate.
+     * @param delegate to use as the query data source delegate
+     */
     public void setQueryDataSourceDelegate(ERDQueryDataSourceDelegateInterface delegate) {
         queryDataSourceDelegate = delegate;
     }
 
     /**
-     * Returns the display group
+     * Gets the display group.
+     * @return the display group
      */
     public WODisplayGroup displayGroup() {
         return displayGroup;
@@ -336,9 +370,9 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     /**
      * Set a search value for the display group query match. When the value is null is gets removed from the 
      * dict, when the operator is null and the value isn't, "=" is chosen.
-     * @param value
-     * @param operator
-     * @param key
+     * @param value to assign to the queryMatch dictionary for the given key
+     * @param operator used for comparing the value
+     * @param key to use
      */
     public void setQueryMatchForKey(Object value, String operator, String key) {
         if(value != null) {
@@ -358,4 +392,76 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         // FIXME not implemented!
         
     }
+
+    /**
+     * Discovers the property keys that can be queried for a NULL value.
+     * @return the array of nullable and/or non-mandatory property keys
+     */
+    public NSArray nullablePropertyKeys() {
+        if (null == _nullablePropertyKeys) {
+            NSMutableArray array = new NSMutableArray();
+            String preKey = propertyKey();
+            D2WContext d2wContext = d2wContext();
+            for (Enumeration keysEnum = displayPropertyKeys().objectEnumerator(); keysEnum.hasMoreElements();) {
+                String key = (String)keysEnum.nextElement();
+                setPropertyKey(key);
+
+                Object isMandatory = d2wContext.valueForKey("isMandatory");
+                if (isMandatory != null && !ERXValueUtilities.booleanValue(isMandatory)) {
+                    array.addObject(key);
+                }
+            }
+            _nullablePropertyKeys = array;
+            setPropertyKey(preKey); // Restore the property key.
+        }
+        return _nullablePropertyKeys;
+    }
+
+    /**
+     * Determines if the null query checkbox for the current D2W property key should be checked.
+     * @return true if the checkbox should be checked
+     */
+    public boolean isNullQueryCheckedForCurrentProperty() {
+        return Boolean.TRUE.equals(keysToQueryForNull.valueForKey(propertyKey()));
+    }
+
+    /**
+     * Sets the flag denoting a property key is being queried for a null value.
+     * @param value of the checkbox' checked attribute
+     */
+    public void setIsNullQueryCheckedForCurrentProperty(boolean value) {
+        keysToQueryForNull.takeValueForKey(value, propertyKey());
+    }
+
+    /**
+     * Determines if the null query checkbox can be shown for the current D2W property key should be checked.
+     * @return true if the checkbox should be checked
+     */
+    public boolean canQueryCurrentPropertyForNullValue() {
+        boolean enabled = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("enableQueryForNullValues"), false);
+        boolean propertyAllowsQuery = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("canQueryPropertyForNullValues"), true);
+        return (enabled && propertyAllowsQuery && nullablePropertyKeys().containsObject(propertyKey()));
+    }
+
+    /**
+     * When querying for properties with a null value, and the null value checkbox for a property key is checked, this
+     * method substitutes <code>NSKeyValueCoding.NullValue</code> into the display group's query dictionaries for that
+     * property key.
+     */
+    protected void substituteValueForNullableQueryKeys() {
+        WODisplayGroup displayGroup = displayGroup();
+        for(Enumeration nullableKeysEnum = nullablePropertyKeys().objectEnumerator(); nullableKeysEnum.hasMoreElements();) {
+            String key = (String)nullableKeysEnum.nextElement();
+            Boolean value = (Boolean)keysToQueryForNull.objectForKey(key);
+            if (Boolean.TRUE.equals(value)) {
+                displayGroup.queryOperator().takeValueForKey(EOQualifier.stringForOperatorSelector(EOQualifier.QualifierOperatorEqual), key);
+                if (displayGroup.queryBindings().valueForKey(key) != null) {
+                    displayGroup.queryBindings().takeValueForKey(NSKeyValueCoding.NullValue, key);
+                } else {
+                    displayGroup.queryMatch().takeValueForKey(NSKeyValueCoding.NullValue, key);
+                }
+            }
+        }
+    }
+
 }

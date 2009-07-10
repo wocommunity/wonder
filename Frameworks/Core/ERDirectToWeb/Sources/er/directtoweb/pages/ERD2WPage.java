@@ -18,6 +18,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WModel;
 import com.webobjects.directtoweb.D2WPage;
@@ -26,12 +27,18 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.directtoweb.ERD2WContainer;
@@ -43,11 +50,15 @@ import er.directtoweb.delegates.ERDBranchInterface;
 import er.directtoweb.interfaces.ERDUserInfoInterface;
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXComponentActionRedirector;
+import er.extensions.appserver.ERXSession;
 import er.extensions.components.ERXClickToOpenSupport;
 import er.extensions.components.ERXComponentUtilities;
+import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXGuardedObjectInterface;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
+import er.extensions.statistics.ERXMetrics;
+import er.extensions.statistics.ERXMetricsEvent;
 import er.extensions.validation.ERXExceptionHolder;
 import er.extensions.validation.ERXValidation;
 import er.extensions.validation.ERXValidationException;
@@ -126,6 +137,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
 		// The propertyKey whose form widget gets the focus upon loading an edit page.
 		public static final String firstResponderKey = "firstResponderKey";
+
+        public static final String showPageMetrics = "showPageMetrics";
+           
     }
 
     /** logging support */
@@ -141,6 +155,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      */
     public ERD2WPage(WOContext c) {
         super(c);
+        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("handleSessionRestored", ERXConstant.NotificationClassArray), WOSession.SessionDidRestoreNotification, null);
     }
 
     /**
@@ -197,6 +212,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         if (_context != null) {
             _context.unlock();
         }
+        // Make sure the property key is cleared out.  In some embedded page configurations, invoking an action in the embedded component 
+        // interrupts the repetition over the property keys, preventing the nullification of the value at the end of the repetition.  This causes
+        // weird stuff to happen.
+        d2wContext().takeValueForKey(null, "propertyKey");
         super.sleep();
     }
 
@@ -237,7 +256,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /**
-     * Implementation of the {@link ERXComponentActionRedirector$Restorable}
+     * Implementation of the {@link ERXComponentActionRedirector.Restorable}
      * interface. This implementation creates an URL with the name of the
      * current pageConfiguration as a direct action, which assumes a
      * {@link ERD2WDirectAction} as the default direct action. Subclasses need
@@ -771,7 +790,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
             if (tabSectionContentsFromRule == null)
                 throw new RuntimeException("Could not find tabSectionsContents in " + d2wContext());
+
+            ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent("ComputeTabSectionsContents", timingEventUserInfo());
             _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
+            ERXMetrics.markEndOfEvent(event);
+            
             d2wContext().takeValueForKey(tabSectionContentsFromRule, "tabSectionsContents");
             // Once calculated we then determine any displayNameForTabKey
             String currentTabKey = (String) d2wContext().valueForKey(Keys.tabKey);
@@ -984,7 +1007,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public ERDBranchDelegateInterface pageController() {
         if (_pageController == null) {
             _pageController = (ERDBranchDelegateInterface) d2wContext().valueForKey("pageController");
-            ;
         }
         return _pageController;
     }
@@ -1038,4 +1060,124 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
         return (T) super.pageWithName(componentClass.getName());
     }
+
+    public boolean isTopLevelPage() {
+        return this == topLevelPage();
+    }
+
+    /**
+     * Gets the top level D2WPage.
+     * @return the page
+     */
+    private ERD2WPage topLevelPage() {
+        ERD2WPage page = this;
+        boolean hasParentPage = true;
+        while (hasParentPage) {
+            WOComponent component = page.parent();
+            // Try to get the next ERD2WPage up the chain.
+            while (component != null && !(component instanceof ERD2WPage)) {
+                component = component.parent();
+            }
+
+            if (null == component) {
+                hasParentPage = false;
+            } else {
+                page = (ERD2WPage)component;
+            }
+        }
+        return page;
+    }
+
+    /**
+     * Determines whether the component should display the page metrics by looking at the D2W context for
+     * <code>showPageMetrics</code>, defaulting to the value returned by {@link ERXMetrics#metricsEnabled()}.
+     * @return true if should show metrics
+     */
+    public boolean shouldDisplayDetailedPageMetrics() {
+        return ERXMetrics.metricsEnabled() && ERDirectToWeb.detailedPageMetricsEnabled();
+    }
+
+    /**
+     * Determines whether the component should display the page metrics summary.  On display the summary for the
+     * top-level page by default, and for all pages when showing detailed metrics.
+     * @return true if should show metrics summary
+     */
+    public boolean shouldDisplayPageMetricsSummary() {
+        boolean metricsEnabled = ERXMetrics.metricsEnabled();
+        return isTopLevelPage() ? metricsEnabled : (metricsEnabled && shouldDisplayDetailedPageMetrics());
+    }
+
+    /**
+     * Gathers contextual information for a {@link ERXMetricsEvent metrics event}.
+     * @return the contextual information
+     */
+    public NSMutableDictionary timingEventUserInfo() {
+        NSMutableDictionary result = new NSMutableDictionary();
+        result.takeValueForKey(name(), "componentName");
+        result.takeValueForKey(entityName(), "entityName");
+        String pageConfiguration = (String)d2wContext().valueForKey(Keys.pageConfiguration);
+        result.takeValueForKey((pageConfiguration != null ? pageConfiguration : "none"), Keys.pageConfiguration);
+        result.takeValueForKey((propertyKey() != null ? propertyKey() : "none"), Keys.propertyKey);
+        result.takeValueForKey((task() != null ? task() : "none"), "task");
+        result.takeValueForKey(this, "page");
+        return result;
+    }
+
+    /**
+     * Gets the latest metrics event for the current property key.
+     * @return the event
+     */
+    public ERXMetricsEvent latestEventForCurrentPropertyKey() {
+        EOKeyValueQualifier entityQual = new EOKeyValueQualifier("entityName", EOQualifier.QualifierOperatorEqual, entityName());
+        String propertyKey = (propertyKey() != null ? propertyKey() : "none");
+        EOKeyValueQualifier keyQual = new EOKeyValueQualifier("propertyKey", EOQualifier.QualifierOperatorEqual, propertyKey);
+        EOKeyValueQualifier pageQual = new EOKeyValueQualifier("page", EOQualifier.QualifierOperatorEqual, this);
+        EOAndQualifier andQual = new EOAndQualifier(new NSArray(new EOQualifier[] { entityQual, keyQual, pageQual }));
+        return ERXMetrics.latestEventMatchingQualifier(andQual);
+    }
+
+    /**
+     * Gets the aggregate duration of events sharing the current property key.
+     * @return the duration
+     */
+    public long durationOfAllEventsForCurrentPropertyKey() {
+        EOKeyValueQualifier entityQual = new EOKeyValueQualifier("entityName", EOQualifier.QualifierOperatorEqual, entityName());
+        String propertyKey = (propertyKey() != null ? propertyKey() : "none");
+        EOKeyValueQualifier keyQual = new EOKeyValueQualifier(Keys.propertyKey, EOQualifier.QualifierOperatorEqual, propertyKey);
+        EOKeyValueQualifier pageQual = new EOKeyValueQualifier("page", EOQualifier.QualifierOperatorEqual, this);
+        EOAndQualifier andQual = new EOAndQualifier(new NSArray(new EOQualifier[] { entityQual, keyQual, pageQual }));
+        NSArray events = ERXMetrics.eventsMatchingQualifier(andQual);
+        long duration = 0L;
+        for (Enumeration eventsEnum = events.objectEnumerator(); eventsEnum.hasMoreElements();) {
+            ERXMetricsEvent event = (ERXMetricsEvent)eventsEnum.nextElement();
+            duration += event.duration();
+        }
+        return duration;
+    }
+
+    /**
+     * Gets the aggregate event information for the current page.
+     * @return the aggregate event information
+     */
+    public NSDictionary aggregateEventInfoForPage() {
+        NSMutableDictionary result = new NSMutableDictionary();
+        EOKeyValueQualifier entityQual = new EOKeyValueQualifier("entityName", EOQualifier.QualifierOperatorEqual, entityName());
+        String pageConfiguration = (String)d2wContext().valueForKey(Keys.pageConfiguration);
+        result.takeValueForKey((pageConfiguration != null ? pageConfiguration : "none"), Keys.pageConfiguration);
+        EOKeyValueQualifier pageQual = new EOKeyValueQualifier("page", EOQualifier.QualifierOperatorEqual, this);
+        EOAndQualifier andQual = new EOAndQualifier(new NSArray(new EOQualifier[] { entityQual, pageQual }));
+        return ERXMetrics.aggregateEventInfoByTypeForEventsMatchingQualifier(andQual);
+    }
+
+    /**
+     * Resets the page metrics upon restoration of the session.
+     * @param notification to handle
+     */
+    public void handleSessionRestored(NSNotification notification) {
+        WOSession session = (WOSession)notification.object();
+        if (session != null && session.equals(ERXSession.session())) {
+            ERXMetrics.reset();
+        }
+    }
+
 }

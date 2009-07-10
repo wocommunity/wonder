@@ -10,12 +10,13 @@ AttributeCell: WOGenericContainer {
 	valign = "middle";
 }
 
-AttributeDisplay: WOSwitchComponent { 
+AttributeDisplay: ERXTimedSwitchComponent { 
+	localContext = d2wContext;
+	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-	localContext = d2wContext;
-	object = object;
 }
 
 AttributeRepetition: WORepetition {
@@ -31,8 +32,17 @@ AttributeSorter: ERXSortOrder {
         d2wContext = d2wContext;
 }
 
+BackButton: WOHyperlink {
+	action = backAction;
+}
+
 BackLink2: WOHyperlink {
 	action = backAction;
+}
+
+BackgroundColor: WOString {
+	_unroll = true;
+	value = d2wContext.backgroundColorForTable;
 }
 
 BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
@@ -43,6 +53,10 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 CheckBox2: WOSwitchComponent {
     WOComponentName = selectionWidgetName;
 	checked = checked;
+}
+
+ColSpanNumber: WOString {
+	value = colSpan;
 }
 
 ColumnLabelRepetition: WORepetition {
@@ -89,6 +103,28 @@ EntityRepetition: WORepetition {
 	list = displayGroup.displayedObjects;
 }
 
+ExcelExportButton: WOSwitchComponent {
+	WOComponentName = d2wContext.excelExportButtonComponentName;
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
+}
+
+ExcelExportButton2: WOSwitchComponent {
+	WOComponentName = d2wContext.excelExportButtonComponentName;
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
+}
+
+FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
+FilterDisplayGroupButton2: ERDFilterDisplayGroupButton {
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
 Form1: WOForm {
 	multipleSubmit = true;
 }
@@ -105,6 +141,17 @@ HideReturnOnSelect2: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
 	negate = true;
+}
+
+HideReturnOnSelect3: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+	negate = true;
+}
+
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
 }
 
 InspectImage: WOImage {
@@ -128,6 +175,14 @@ IsEntityWritableConditional: WOConditional {
 	condition = isEntityEditable;
 }
 
+IsGenericExportButtonKnown: WOConditional {
+	condition = d2wContext.excelExportButtonComponentName;
+}
+
+IsGenericExportButtonKnown2: WOConditional {
+	condition = d2wContext.excelExportButtonComponentName;
+}
+
 IsPropertySortable: WOConditional {
 	_unroll = true;
 	condition = d2wContext.propertyIsSortable;
@@ -148,7 +203,7 @@ ListTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 1;
 	cellspacing = 0;
-	elementName = "Table";
+	elementName = "table";
 }
 
 ListTableHeaderRow: WOGenericContainer {
@@ -162,7 +217,12 @@ ListTableRow: WOGenericContainer {
 	elementName = "tr";
 }
 
-NavBar: ERXBatchNavigationBarInForm {
+MetricsDurationForCurrentPropertyKey: WOString {
+	value = durationOfAllEventsForCurrentPropertyKey;
+}
+
+NavBar: WOSwitchComponent {
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
@@ -171,12 +231,21 @@ NavBar: ERXBatchNavigationBarInForm {
         d2wContext = d2wContext;
 }
 
-NavBar2: ERXBatchNavigationBarInForm {
+NavBar2: WOSwitchComponent {
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
         d2wContext = d2wContext;
+}
+
+NumberOfItems: WOString {
+	value = listSize;
+}
+
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -194,6 +263,18 @@ ReturnButton2: WOImage {
 	filename = "ReturnMetalBtn.gif";
 	framework = "JavaDirectToWeb";
 	name = "Returns to the previous page";
+}
+
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
+}
+
+ShowBatchNavigationConditional: WOConditional {
+	condition = shouldShowBatchNavigation;
 }
 
 ShowCancel: WOConditional {
@@ -240,4 +321,3 @@ SwitchComponent1: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
 }
-
