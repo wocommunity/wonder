@@ -146,7 +146,7 @@ SwitchComponent2: WOSwitchComponent {
 	object = object;
 }
 
-Trash: ERDTrashcan2 {
+Trash: ERDAjaxTrashcan {
 	d2wContext = d2wContext;
 	dataSource = dataSource;
 	object = object;
