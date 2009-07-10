@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo class="AjaxLightWindowButton.java" wocomponentcontent="true">
+        <wo class="LightWindowButton.java" wocomponentcontent="true">
 
         <binding name="class"/>
         <binding name="id"/>

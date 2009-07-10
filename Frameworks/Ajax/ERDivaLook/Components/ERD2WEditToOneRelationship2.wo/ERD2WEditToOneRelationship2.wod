@@ -27,7 +27,7 @@ IsAjax: WOConditional {
 	condition = d2wContext.isAjax;
 }
 
-NewButton: AjaxLightWindowButton {
+NewButton: LightWindowButton {
 	value = "New...";
 	action = newAction;
 	title = "New...";

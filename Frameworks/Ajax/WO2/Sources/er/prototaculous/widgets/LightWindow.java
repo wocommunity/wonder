@@ -1,4 +1,4 @@
-package er.prototaculous;
+package er.prototaculous.widgets;
 
 import com.webobjects.appserver.*;
 
@@ -11,8 +11,8 @@ import er.extensions.foundation.ERXProperties;
  * @author mendis
  *
  */
-public abstract class AjaxLightWindow extends WOComponent {
-	public AjaxLightWindow(WOContext context) {
+public abstract class LightWindow extends WOComponent {
+	public LightWindow(WOContext context) {
 		super(context);
 	}
 
