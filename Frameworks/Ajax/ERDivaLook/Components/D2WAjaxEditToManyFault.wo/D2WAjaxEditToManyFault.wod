@@ -9,7 +9,7 @@ ItemRepetition: WORepetition {
 
 AddButton: LightWindowButton {
 	action = editValues;
-	class = "D2WEditToManyFault2_Add";
+	class = "D2WAjaxEditToManyFault_Add";
 	formID = "EditForm";
 	width = d2wContext.width;
 	height = d2wContext.height;
@@ -25,7 +25,7 @@ AddBox: WOGenericContainer {
 RemoveBox: WOGenericContainer {
 	elementName = "li";
 	id = removeBoxID;
-	class = "D2WEditToManyFault2";
+	class = "D2WAjaxEditToManyFault";
 }
 
 ToOneLink: WOHyperlink {
@@ -39,5 +39,5 @@ DeleteButton: AjaxSubmitButton {
 	action = removeFromToManyRelationshipAction;
 	value = "x";
 	onSuccess = onSuccess;
-	class = "D2WEditToManyFault2_Delete";
+	class = "D2WAjaxEditToManyFault_Delete";
 }
