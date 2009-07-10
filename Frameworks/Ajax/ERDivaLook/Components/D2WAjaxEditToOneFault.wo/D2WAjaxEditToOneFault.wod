@@ -1,6 +1,6 @@
 ChangeImage: LightWindowButton {
 	action = editRelationship;
-	class = "D2WEditToOneFault2_Add";
+	class = "D2WAjaxEditToOneFault_Add";
 	formID = "EditForm";		// FIXME: RM: need to get from d2w context or something
 	width = d2wContext.width;
 	height = d2wContext.height;
@@ -12,7 +12,7 @@ RemoveButton: AjaxSubmitButton {
 	action = removeFromToOneRelationshipAction;
 	value = "x";
 	onSuccess = onSuccess;
-	class = "D2WEditToOneFault2_Delete";
+	class = "D2WAjaxEditToOneFault_Delete";
 }
 
 EditObject: WOHyperlink {
@@ -35,5 +35,5 @@ AddBox: WOGenericContainer {
 RemoveBox: WOGenericContainer {
 	elementName = "div";
 	id = removeBoxID;
-	class = "D2WEditToOneFault2";
+	class = "D2WAjaxEditToOneFault";
 }

@@ -71,6 +71,6 @@ div#a #EditForm fieldset.button ul {
 
 /* The following are styles for WebObjects Look specific D2W components */
 
-div.D2WEditToOneFault2, li.D2WEditToManyFault2 {
+div.D2WAjaxEditToOneFault, li.D2WEditToManyFault2 {
 	background-color: #333333;
 }

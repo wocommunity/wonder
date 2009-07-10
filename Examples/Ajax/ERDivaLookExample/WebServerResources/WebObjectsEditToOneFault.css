@@ -1,17 +1,17 @@
-div.D2WEditToOneFault2 {
+div.D2WAjaxEditToOneFault {
 	background-color: #333333;
 }
 
-div.D2WEditToOneFault2 a {
+div.D2WAjaxEditToOneFault a {
 	display: block;
 }
 
-button.D2WEditToOneFault2_Delete {
+button.D2WAjaxEditToOneFault_Delete {
 	color: white;
 	float: right;
 }
 
-button.D2WEditToOneFault2_Add {
+button.D2WAjaxEditToOneFault_Add {
 	text-indent: -5000px;
 	cursor: pointer;
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/add-sm-btn.gif);
@@ -21,7 +21,7 @@ button.D2WEditToOneFault2_Add {
 	display: block;
 }
 
-button.D2WEditToOneFault2_Delete {
+button.D2WAjaxEditToOneFault_Delete {
 	margin-top: -27px;
 	height: 27px;
 	width: 27px;
@@ -29,12 +29,12 @@ button.D2WEditToOneFault2_Delete {
 	text-align: center;
 }
 
-button.D2WEditToOneFault2_Delete:hover {
+button.D2WAjaxEditToOneFault_Delete:hover {
 	text-decoration: none;
 	background-color: #202020;	
 	font-weight: bold;
 }
 
-div.D2WEditToOneFault2 {
+div.D2WAjaxEditToOneFault {
 	width: 20em;
 }
