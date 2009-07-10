@@ -1,4 +1,4 @@
-EditDateJavascript: AjaxCalendarDateSelect {
+EditDateJavascript: CalendarDateSelect {
 	value = objectPropertyValue;
 	dateformat = formatter;//VALID
 	name = d2wContext.name;

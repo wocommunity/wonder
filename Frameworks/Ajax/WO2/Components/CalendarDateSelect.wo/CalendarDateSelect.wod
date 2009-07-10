@@ -4,6 +4,6 @@ Textfield: WOTextField {
 	name = ^name;
 	dateformat = dateFormat;
 	onclick = onClick;
-	class = "AjaxCalendarDateSelect";
+	class = "CalendarDateSelect";
 	size = ^size;
 }

@@ -1,11 +1,11 @@
-DateMaxField: AjaxCalendarDateSelect {
+DateMaxField: CalendarDateSelect {
 	dateformat = formatter;
 	size = length;
 	value = maxValue;
 	name = maxName;
 }
 
-DateMinField: AjaxCalendarDateSelect {
+DateMinField: CalendarDateSelect {
 	dateformat = formatter;
 	size = length;
 	value = minValue;
