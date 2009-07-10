@@ -350,7 +350,7 @@ function calendar_open(input_element, options) {
   images[2].src = images_dir + '/' + NEXT_MONTH_IMAGE;
   images[3].src = images_dir + '/' + NEXT_YEAR_IMAGE;
   add_event('click', calendar_hide_check);
-  input_element.onkeypress = input_keypress;
+  input_element.onkeydown = input_keypress;  // CH use onkeydown instead of onkeypress to trap Tab key too
   // Position calendar by input element.
   calendar.element.style.left = left(input_element) + 'px';
   calendar.element.style.top = (top(input_element) + input_element.offsetHeight) + 'px';
