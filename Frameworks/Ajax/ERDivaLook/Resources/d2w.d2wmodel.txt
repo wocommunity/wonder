@@ -45,7 +45,7 @@
     10 : *true* => classForAttribute = <ERDDefaultClassStringAssignment> [er.directtoweb.assignments.defaults.ERDDefaultClassStringAssignment],
     10 : *true* => nameForProperty = <ERDDefaultFormControlNameAssignment> [er.directtoweb.assignments.defaults.ERDDefaultFormControlNameAssignment],
     11 : (task = 'query' and smartRelationship.isToMany = 1) => componentName = ERD2WQueryToManyField2 [com.webobjects.directtoweb.Assignment],
-    11 : (task = 'query' and smartAttribute.className = 'com.webobjects.foundation.NSTimestamp') => componentName = ERD2WQueryDateRange2 [com.webobjects.directtoweb.Assignment],
+    11 : (task = 'query' and smartAttribute.className = 'com.webobjects.foundation.NSTimestamp') => componentName = ERD2WAjaxQueryDateRange [com.webobjects.directtoweb.Assignment],
     11 : ((task = 'list' or task = 'select' or task = 'inspect') and smartAttribute.valueType = 'c') => componentName = ERD2WDisplayString [com.webobjects.directtoweb.Assignment],
     11 : (propertyType = 'r' and smartRelationship.destinationEntity.name = 'ERAttachment' and (task = 'list' or task = 'select')) => propertyIsSortable = false [com.webobjects.directtoweb.BooleanAssignment],
     11 : (task = 'edit' and session.javaScriptEnabled = 1 and smartAttribute.className = 'com.webobjects.foundation.NSTimestamp') => componentName = ERDAjaxEditDateJavascript [com.webobjects.directtoweb.Assignment],
