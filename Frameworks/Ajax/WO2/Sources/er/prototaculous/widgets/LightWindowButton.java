@@ -1,9 +1,11 @@
-package er.prototaculous;
+package er.prototaculous.widgets;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.appserver.ERXWOContext;
+import er.prototaculous.widgets.LightWindow.Bindings;
+
 import com.webobjects.appserver.WOActionResults;
 
 /**
@@ -15,9 +17,9 @@ import com.webobjects.appserver.WOActionResults;
  * @author mendis
  */
 
-public class AjaxLightWindowButton extends AjaxLightWindow {
+public class LightWindowButton extends LightWindow {
 
-    public AjaxLightWindowButton(WOContext context) {
+    public LightWindowButton(WOContext context) {
         super(context);
     }
     

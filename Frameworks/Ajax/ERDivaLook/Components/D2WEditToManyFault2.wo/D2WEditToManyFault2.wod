@@ -7,7 +7,7 @@ ItemRepetition: WORepetition {
 	item = browserItem;
 }
 
-AddButton: AjaxLightWindowButton {
+AddButton: LightWindowButton {
 	action = editValues;
 	class = "D2WEditToManyFault2_Add";
 	formID = "EditForm";

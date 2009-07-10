@@ -1,4 +1,4 @@
-ChangeImage: AjaxLightWindowButton {
+ChangeImage: LightWindowButton {
 	action = editRelationship;
 	class = "D2WEditToOneFault2_Add";
 	formID = "EditForm";		// FIXME: RM: need to get from d2w context or something

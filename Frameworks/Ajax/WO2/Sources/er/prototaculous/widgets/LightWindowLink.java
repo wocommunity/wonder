@@ -1,4 +1,4 @@
-package er.prototaculous;
+package er.prototaculous.widgets;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
@@ -14,15 +14,15 @@ import er.extensions.appserver.ERXWOContext;
  * 
  * @author mendis
  */
-public class AjaxLightWindowLink extends AjaxLightWindow {	
-    public AjaxLightWindowLink(WOContext context) {
+public class LightWindowLink extends LightWindow {	
+    public LightWindowLink(WOContext context) {
         super(context);
     }
     
     /*
      * API or bindings
      */
-    public static interface Bindings extends AjaxLightWindow.Bindings {
+    public static interface Bindings extends LightWindow.Bindings {
     	public static final String href = "href";
     	public static final String pageName = "pageName";
     }
