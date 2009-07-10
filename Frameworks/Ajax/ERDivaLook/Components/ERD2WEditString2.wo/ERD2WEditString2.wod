@@ -1,8 +1,0 @@
-EditString: WOTextField {
-    size = length;
-    value = value;
-	maxlength = d2wContext.maxLength;
-	id = d2wContext.id;
-	title = d2wContext.title;
-	name = d2wContext.name;
-}
