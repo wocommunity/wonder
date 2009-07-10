@@ -87,7 +87,7 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 		boolean persistentStoreFormat = false;
 		if (_persistentStoreFormat) {
 			String type = (String) map.remove(ERXRestFormatDelegate.TYPE_KEY);
-			String id = (String) map.remove(ERXRestFormatDelegate.ID_KEY);
+			Object id = map.remove(ERXRestFormatDelegate.ID_KEY);
 			persistentStoreFormat = (type != null && id != null);
 			if (persistentStoreFormat) {
 				response.appendContentString("this.objectWithURIRepresentation(\"x-coredata://" + _persistentStoreName + "/" + type + "/p" + id + "\",");
