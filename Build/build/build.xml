@@ -382,6 +382,7 @@
             <param name="project.principal.class" value="er.wopaypal.WOPayPal" />
             <param name="project.name" value="WOPayPal" />
             <param name="project.dir" value="Frameworks/BusinessLogic/WOPayPal" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
