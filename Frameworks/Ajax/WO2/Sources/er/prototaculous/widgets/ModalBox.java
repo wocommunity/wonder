@@ -1,4 +1,4 @@
-package er.prototaculous;
+package er.prototaculous.widgets;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -14,7 +14,7 @@ import er.ajax.AjaxUtils;
  * @author mendis
  *
  */
-public abstract class AjaxModalBox extends WOComponent {
+public abstract class ModalBox extends WOComponent {
 	
     /*
      * API or bindings common to light window subcomponents
@@ -29,7 +29,7 @@ public abstract class AjaxModalBox extends WOComponent {
     	public static final String left = "left";
     }
     
-    public AjaxModalBox(WOContext context) {
+    public ModalBox(WOContext context) {
 		super(context);
 	}
     

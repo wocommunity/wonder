@@ -1,4 +1,4 @@
-package er.prototaculous;
+package er.prototaculous.widgets;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -9,6 +9,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXWOContext;
+import er.prototaculous.widgets.ModalBox.Bindings;
 
 
 /**
@@ -24,10 +25,10 @@ import er.extensions.appserver.ERXWOContext;
  * 								Default is true
  *
  */
-public class AjaxModalBoxButton extends AjaxModalBox {
+public class ModalBoxButton extends ModalBox {
 	private static boolean _serializeForm = true;
 	
-    public AjaxModalBoxButton(WOContext context) {
+    public ModalBoxButton(WOContext context) {
         super(context);
     }
     
@@ -39,7 +40,7 @@ public class AjaxModalBoxButton extends AjaxModalBox {
     /*
      * API or bindings
      */
-    public static interface Bindings extends AjaxModalBox.Bindings {
+    public static interface Bindings extends ModalBox.Bindings {
     	public static final String formID = "formID";
     	public static final String method = "method";
     	public static final String serializeForm = "serializeForm";

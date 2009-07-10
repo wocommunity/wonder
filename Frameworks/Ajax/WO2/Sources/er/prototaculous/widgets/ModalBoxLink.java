@@ -1,4 +1,4 @@
-package er.prototaculous;
+package er.prototaculous.widgets;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
@@ -14,15 +14,15 @@ import er.extensions.appserver.ERXWOContext;
  * @author mendis
  *
  */
-public class AjaxModalBoxLink extends AjaxModalBox {
-    public AjaxModalBoxLink(WOContext context) {
+public class ModalBoxLink extends ModalBox {
+    public ModalBoxLink(WOContext context) {
         super(context);
     }
     
     /*
      * API or bindings common to light window subcomponents
      */
-    public static interface Bindings extends AjaxModalBox.Bindings {
+    public static interface Bindings extends ModalBox.Bindings {
     	public static final String href = "href";
     	public static final String pageName = "pageName";
     }
