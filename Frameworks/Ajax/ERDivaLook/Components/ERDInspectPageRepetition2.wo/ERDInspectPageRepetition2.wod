@@ -37,7 +37,7 @@ DebugComponentName: ERDIVDebugComponentName {
 	isDebug = d2wComponentNameDebuggingEnabled;
 }
 
-Accordion: AjaxAccordion2 {
+Accordion: Accordion {
 	id = accordionID;
 	disabled = disabled;
 }

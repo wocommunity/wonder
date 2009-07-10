@@ -1,4 +1,4 @@
-package er.prototaculous;
+package er.prototaculous.widgets;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -22,10 +22,10 @@ import er.extensions.foundation.ERXProperties;
  * @author mendis
  *
  */
-public class AjaxAccordion2 extends AjaxAccordion {
+public class Accordion extends AjaxAccordion {
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototculous.useUnobtrusively", false);
 	
-    public AjaxAccordion2(WOContext context) {
+    public Accordion(WOContext context) {
         super(context);
     }
     
@@ -69,7 +69,7 @@ public class AjaxAccordion2 extends AjaxAccordion {
     		addScriptResourceInHead(response, "prototype.js");
     		addScriptResourceInHead(response, "scriptaculous.js");
     		addScriptResourceInHead(response, "WO2", "accordion.js");
-    	} addStylesheetResourceInHead(response, "WO2", "AjaxAccordion2.css");
+    	} addStylesheetResourceInHead(response, "WO2", "Accordion.css");
     }
     
     @Override
