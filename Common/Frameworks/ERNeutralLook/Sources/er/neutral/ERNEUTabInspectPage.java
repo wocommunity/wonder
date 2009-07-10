@@ -7,13 +7,15 @@
 
 package er.neutral;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.directtoweb.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSArray;
+
+import er.directtoweb.ERD2WFactory;
+import er.directtoweb.ERD2WTabInspectPage;
+import er.extensions.ERXValueUtilities;
 
 public class ERNEUTabInspectPage extends ERD2WTabInspectPage {
 

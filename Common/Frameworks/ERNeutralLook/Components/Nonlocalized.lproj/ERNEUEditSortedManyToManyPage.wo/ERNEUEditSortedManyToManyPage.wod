@@ -112,12 +112,6 @@ Hyperlink1: WOHyperlink {
 	action = removeAllFromToManyRelationship;
 }
 
-Hyperlink2: WOHyperlink {
-}
-
-Hyperlink3: WOHyperlink {
-}
-
 InspectComponent: D2WEdit {
 	action = saveAction;
 	entityName = destinationEntity.name;
@@ -145,7 +139,7 @@ IsEntityWritable2: WOConditional {
 	negate = true;
 }
 
-ListComponent: D2WSelect {
+ListComponent: ERXD2WSelect {
 	action = selectAction;
 	dataSource = selectDataSource;
 	entityName = destinationEntity.name;
@@ -189,7 +183,7 @@ QueryButton: WOImage {
 QueryComponent: D2WQuery {
 	action = queryAction;
 	entityName = destinationEntity.name;
-	queryDataSource = queryDataSource;
+	queryDataSource = selectDataSource;
 }
 
 QueryLink: WOHyperlink {

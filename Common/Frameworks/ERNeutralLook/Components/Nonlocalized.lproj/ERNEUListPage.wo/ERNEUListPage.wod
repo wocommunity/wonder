@@ -19,8 +19,8 @@ AttributeCell: WOGenericContainer {
 }
 
 AttributeDisplay: ERXTimedSwitchComponent {
-	localContext = localContext;
-	object = object;
+ 	localContext = localContext;
+ 	object = object;
 	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 }
@@ -245,22 +245,22 @@ MetricsDurationForCurrentPropertyKey: WOString {
 }
 
 NavBar: WOSwitchComponent {
-	WOComponentName = d2wContext.batchNavigationBarComponentName;
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
-	d2wContext = d2wContext;
+       	 d2wContext = d2wContext;
 }
 
 NavBar2: WOSwitchComponent {
-	WOComponentName = d2wContext.batchNavigationBarComponentName;
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
-	d2wContext = d2wContext;
+       	 d2wContext = d2wContext;
 }
 
 NumberOfItems: WOString {

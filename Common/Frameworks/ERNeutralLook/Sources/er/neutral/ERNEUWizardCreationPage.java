@@ -7,17 +7,18 @@
 
 package er.neutral;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+
+import er.directtoweb.ERD2WWizardCreationPage;
 
 public class ERNEUWizardCreationPage extends ERD2WWizardCreationPage {
 
     public ERNEUWizardCreationPage(WOContext context) {
         super(context);
+    }
+
+    public String currentSectionImageName() {
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     public String defaultRowspan() {

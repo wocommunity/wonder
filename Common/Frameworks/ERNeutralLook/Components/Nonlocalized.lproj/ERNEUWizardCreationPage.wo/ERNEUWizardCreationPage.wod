@@ -90,12 +90,13 @@ EditForm: ERXOptionalForm {
 
 Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
+	errorKeyOrder = errorKeyOrder;
 	extraErrorMessage = errorMessage;
 	shouldShowNewLineAbove = true;
 	shouldShowNewLineBelow = true;
 }
 
-HasSectionHelp2: ERXNonNullConditional {
+HasSectionHelp: ERXNonNullConditional {
 	condition = d2wContext.sectionHelp;
 }
 
@@ -144,11 +145,6 @@ InspectTableHeaderRow: WOGenericContainer {
 }
 
 IsEditing: WOKeyValueConditional {
-	key = "task";
-	value = "edit";
-}
-
-IsEditing2: WOKeyValueConditional {
 	key = "task";
 	value = "edit";
 }
@@ -202,11 +198,8 @@ RightArrow: WOImageButton {
     framework = "ERExtensions";
 }
 
-Script: WOJavaScript{	scriptString = tabScriptString;
-	hideInComment = true;
-}
-
-Script2: WOJavaScript{	scriptString = tabScriptString;
+Script: WOJavaScript{
+	scriptString = tabScriptString;
 	hideInComment = true;
 }
 
@@ -267,12 +260,7 @@ SubmitChanges: WOImageButton {
 	framework = "JavaDirectToWeb";
 }
 
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
-}
-
-SwitchComponent2: WOSwitchComponent {
+SwitchComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
 }

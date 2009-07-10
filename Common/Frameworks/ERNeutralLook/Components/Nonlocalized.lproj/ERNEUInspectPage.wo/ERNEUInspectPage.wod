@@ -107,6 +107,7 @@ Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = true;
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
+	errorKeyOrder = errorKeyOrder;
 }
 
 FocusScript: WOJavaScript{

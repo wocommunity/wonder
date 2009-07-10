@@ -30,10 +30,10 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
 import er.extensions.ERXClickToOpenSupport;
 import er.extensions.ERXComponentActionRedirector;
 import er.extensions.ERXComponentUtilities;
@@ -48,6 +48,7 @@ import er.extensions.ERXValueUtilities;
 import er.extensions.ERXMetricsEvent;
 import er.extensions.ERXConstant;
 import er.extensions.ERXSession;
+import er.extensions.ERXArrayUtilities;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
@@ -799,7 +800,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                     c.displayName = c.name;
             }
             d2wContext().takeValueForKey(currentTabKey, Keys.tabKey);
-
         }
         return _tabSectionsContents;
     }

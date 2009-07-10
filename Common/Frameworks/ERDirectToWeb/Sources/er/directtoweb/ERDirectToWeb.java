@@ -382,14 +382,6 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Checks the system property <code>er.directtoweb.ERDirectToWeb.shouldRaiseExceptions</code>.
-     * @param defaultValue
-     */
-    public static boolean shouldRaiseException(boolean defaultValue) {
-        return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", defaultValue);
-    }
-
-    /**
      * Gathers D2W-related information from the current context.  This is mainly useful for debugging.
      * @param context the current context
      * @return a dictionary of D2W-related keys to describe the D2W state of the context.
@@ -481,6 +473,14 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
 
         }
         return info;
+    }
+    
+    /**
+     * Checks the system property <code>er.directtoweb.ERDirectToWeb.shouldRaiseExceptions</code>.
+     * @param defaultValue
+     */
+    public static boolean shouldRaiseException(boolean defaultValue) {
+        return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", defaultValue);
     }
     
     public static synchronized String displayNameForPropertyKey(String key, String entityName) {

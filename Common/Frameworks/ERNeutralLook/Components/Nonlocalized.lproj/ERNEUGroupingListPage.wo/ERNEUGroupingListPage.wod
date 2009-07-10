@@ -49,7 +49,7 @@ Conditional1: WOConditional {
 }
 
 DisplayBottomBatchNavigationConditional: WOConditional {
-	condition = d2WContext.displayBottomBatchNavigation;
+	condition = d2wContext.displayBottomBatchNavigation; 
 }
 
 ERPrinterButton: ERDPrinterButton {
@@ -114,9 +114,18 @@ GenericContainer3: WOGenericContainer {
 	height = 1;
 }
 
+HasHeadComponentConditional: ERXNonNullConditional {
+	condition = d2wContext.headComponentName;
+}
+
 HasPrinterFriendlyVersionConditional2: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 	negate = true;
+}
+
+HeadComponentSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.headComponentName;
+	d2wContext = d2wContext;
 }
 
 Help: ERDDebuggingHelp {

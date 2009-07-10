@@ -50,6 +50,7 @@ Errors: ERXErrorDictionaryPanel {
 	extraErrorMessage = errorMessage;
 	shouldShowNewLineAbove = true;
 	shouldShowNewLineBelow = true;
+	errorKeyOrder = errorKeyOrder;
 }
 
 Form1: WOForm {
