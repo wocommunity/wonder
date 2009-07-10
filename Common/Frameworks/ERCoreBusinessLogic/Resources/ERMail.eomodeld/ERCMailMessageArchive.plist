@@ -17,6 +17,12 @@
             name = contentGzipped; 
             prototypeName = intBoolean; 
         }, 
+        {
+            allowsNull = Y; 
+            columnName = "CONTEXT_STRING"; 
+            name = contextString; 
+            prototypeName = varchar1000; 
+        }, 
         {columnName = CREATED; name = created; prototypeName = dateTime; }, 
         {
             allowsNull = Y; 
@@ -64,6 +70,7 @@
     attributesUsedForLocking = (
         bccAddresses, 
         contentGzipped, 
+        contextString, 
         exceptionReason, 
         fromAddress, 
         id, 
@@ -94,7 +101,8 @@
         toAddresses, 
         xMailer, 
         attachments, 
-        state
+        state, 
+        contextString
     ); 
     externalName = "ERCMAIL_MESSAG_ARCHIVE"; 
     fetchSpecificationDictionary = {}; 

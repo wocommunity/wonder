@@ -7,13 +7,9 @@
 
 package er.neutral;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.directtoweb.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+
+import er.directtoweb.ERD2WQueryPage;
 
 public class ERNEUQueryPage extends ERD2WQueryPage {
 

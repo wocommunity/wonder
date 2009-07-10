@@ -17,6 +17,12 @@
             name = contentGzipped; 
             prototypeName = intBoolean; 
         }, 
+        {
+            allowsNull = Y; 
+            columnName = "CONTEXT_STRING"; 
+            name = contextString; 
+            prototypeName = varchar1000; 
+        }, 
         {columnName = CREATED; name = created; prototypeName = dateTime; }, 
         {
             allowsNull = Y; 
@@ -87,7 +93,8 @@
         title, 
         xMailer, 
         contentGzipped, 
-        shouldArchiveSentMail
+        shouldArchiveSentMail, 
+        contextString
     ); 
     className = "er.corebusinesslogic.ERCMailMessage"; 
     classProperties = (
@@ -109,7 +116,8 @@
         contentGzipped, 
         shouldArchiveSentMail, 
         plainTextCompressed, 
-        textCompressed
+        textCompressed, 
+        contextString
     ); 
     externalName = "ERCMAIL_MESSAG"; 
     name = ERCMailMessage; 

@@ -1,5 +1,5 @@
 AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
-    localContext = d2wContext;
+	localContext = d2wContext;
 	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
@@ -9,12 +9,13 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-AttributeValue: WOSwitchComponent {
+AttributeValue: ERXTimedSwitchComponent {
+	localContext = localContext;
+	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-	localContext = localContext;
-	object = object;
 }
 
 Banner: WOImage {
@@ -106,6 +107,7 @@ Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = true;
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
+	errorKeyOrder = errorKeyOrder;
 }
 
 FocusScript: WOJavaScript{
@@ -115,6 +117,11 @@ FocusScript: WOJavaScript{
 
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
+}
+
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
 }
 
 InspectRow: WOGenericContainer {
@@ -176,6 +183,10 @@ MainTable: WOGenericContainer {
 	elementName = "table";
 }
 
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
+}
+
 PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
@@ -204,6 +215,14 @@ ReturnLink: WOHyperlink {
 SaveSubmitButton: WOSubmitButton {
 	action = submitAction;
 	value = "Save";
+}
+
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
 }
 
 ShowCancel: WOConditional {

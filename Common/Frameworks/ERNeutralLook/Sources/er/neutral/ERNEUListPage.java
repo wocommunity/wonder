@@ -7,18 +7,20 @@
 
 package er.neutral;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+
+import er.directtoweb.ERD2WListPage;
 
 public class ERNEUListPage extends ERD2WListPage {
 
     public ERNEUListPage(WOContext context) { super(context); }
 
     public int colSpan() {
-        return ((NSArray)d2wContext().valueForKey("displayPropertyKeys")).count() + 2;
+        int multiplier = 1;
+        if (shouldDisplayDetailedPageMetrics()) {
+            multiplier = 2;
+        }
+        return (((NSArray)d2wContext().valueForKey("displayPropertyKeys")).count() * multiplier) + 2;
     }
 }

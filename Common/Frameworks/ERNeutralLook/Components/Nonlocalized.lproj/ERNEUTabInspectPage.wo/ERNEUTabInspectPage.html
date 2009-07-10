@@ -1,13 +1,13 @@
 <WEBOBJECT NAME=PageWrapper>
-    <WEBOBJECT NAME=Help></WEBOBJECT>
-    <WEBOBJECT NAME=Errors></WEBOBJECT>
+	<WEBOBJECT NAME=Help></WEBOBJECT>
+	<WEBOBJECT NAME=Errors></WEBOBJECT>
     
-    <webobject name="AboveDisplayPropertyKeys"></webobject>
+	<webobject name="AboveDisplayPropertyKeys"></webobject>
     
-    <WEBOBJECT NAME=EditForm>
-        <WEBOBJECT NAME=SubmitChanges2></WEBOBJECT>
-        <WEBOBJECT NAME=SwitchComponent3>
-            <WEBOBJECT NAME=Border>
+	<WEBOBJECT NAME=EditForm>
+		<WEBOBJECT NAME=SubmitChanges2></WEBOBJECT>
+		<WEBOBJECT NAME=SwitchComponent3>
+			<WEBOBJECT NAME=Border>
 					<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 BGCOLOR=#ebebeb>
 						<WEBOBJECT NAME=BorderWasRendered>
 							<TR BGCOLOR=#CCCCCC>
@@ -32,7 +32,12 @@
 													</WEBOBJECT><WEBOBJECT NAME=DoNotFlush>
 														<TD>&nbsp;</TD>
 													</WEBOBJECT>
-													<webobject name="PropertyKeyComponentGenericContainer"><WEBOBJECT NAME=AttributeValue2></WEBOBJECT></webobject>
+													<webobject name="PropertyKeyComponentGenericContainer"><WEBOBJECT NAME="AttributeValue"></WEBOBJECT></webobject>
+													<webobject name="ShouldDisplayDetailedPageMetrics">
+													<td class="InlineMetrics">
+														<webobject name="InlineMetricsForPropertyKey"></webobject>
+													</td>
+													</webobject>
 												</TR>
 											</WEBOBJECT>
 										</TABLE>
@@ -41,7 +46,12 @@
 												<TR>
 													<TD ALIGN=LEFT WIDTH=120 VALIGN=TOP><WEBOBJECT NAME=SwitchComponent2></WEBOBJECT></TD>
 													<TD WIDTH=10>&nbsp;</TD>
-													<webobject name="PropertyKeyComponentGenericContainer2"><WEBOBJECT NAME=AttributeValue1></WEBOBJECT></webobject>
+													<webobject name="PropertyKeyComponentGenericContainer2"><WEBOBJECT NAME=AttributeValue></WEBOBJECT></webobject>
+													<webobject name="ShouldDisplayDetailedPageMetrics">
+													<td class="InlineMetrics">
+														<webobject name="InlineMetricsForPropertyKey"></webobject>
+													</td>
+													</webobject>
 												</TR>
 											</TABLE>
 										</WEBOBJECT></WEBOBJECT></TD>
@@ -83,6 +93,12 @@
 		    <WEBOBJECT NAME=IsEditing><WEBOBJECT NAME=Script></WEBOBJECT></WEBOBJECT>
 		</WEBOBJECT>
 		
-		<webobject name="BelowDisplayPropertyKeys"></webobject>
+	<webobject name="BelowDisplayPropertyKeys"></webobject>
+	
+	<webobject name="ShouldDisplayMetricsSummary">
+	<div class="PageMetricsSummary">
+		<webobject name="PageMetricsSummary"></webobject>
+	</div>
+	</webobject>
 		
 </WEBOBJECT>

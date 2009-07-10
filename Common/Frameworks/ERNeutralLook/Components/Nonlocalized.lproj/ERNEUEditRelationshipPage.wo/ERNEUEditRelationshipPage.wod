@@ -94,7 +94,7 @@ IsToOne: WOConditional {
 	negate = true;
 }
 
-ListComponent: D2WSelect {
+ListComponent: ERXD2WSelect {
 	action = selectAction;
 	dataSource = selectDataSource;
 	entityName = entity.name;

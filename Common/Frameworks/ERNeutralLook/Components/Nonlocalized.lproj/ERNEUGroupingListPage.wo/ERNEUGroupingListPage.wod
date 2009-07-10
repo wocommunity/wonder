@@ -1,22 +1,23 @@
 AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
-    localContext = d2wContext;
+	localContext = d2wContext;
 	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
 AttributeCell: WOGenericContainer {
 	_unroll = "YES";
 	align = d2wContext.justification;
-	elementName = "TD";
+	elementName = "td";
 	valign = "middle";
 	bgcolor = "#ffffff";
 }
 
-AttributeDisplay: WOSwitchComponent { 
+AttributeDisplay: ERXTimedSwitchComponent { 
+	localContext = d2wContext;
+	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-	localContext = d2wContext;
-	object = object;
 }
 
 AttributeRepetition: WORepetition {
@@ -48,7 +49,7 @@ Conditional1: WOConditional {
 }
 
 DisplayBottomBatchNavigationConditional: WOConditional {
-	condition = d2WContext.displayBottomBatchNavigation;
+	condition = d2wContext.displayBottomBatchNavigation; 
 }
 
 ERPrinterButton: ERDPrinterButton {
@@ -98,24 +99,33 @@ EntityRepetition: WORepetition {
 
 GenericContainer1: WOGenericContainer {
 	bgcolor = "#ebebeb"; //backgroundColorForTable;
-	elementName = "TR";
+	elementName = "tr";
 }
 
 GenericContainer2: WOGenericContainer {
 	colspan = colspanForNavBar;
-	elementName = "TD";
+	elementName = "td";
 }
 
 GenericContainer3: WOGenericContainer {
 	bgcolor = "#999999";
 	colspan = colspanForNavBar;
-	elementName = "TD";
+	elementName = "td";
 	height = 1;
+}
+
+HasHeadComponentConditional: ERXNonNullConditional {
+	condition = d2wContext.headComponentName;
 }
 
 HasPrinterFriendlyVersionConditional2: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 	negate = true;
+}
+
+HeadComponentSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.headComponentName;
+	d2wContext = d2wContext;
 }
 
 Help: ERDDebuggingHelp {
@@ -132,6 +142,11 @@ HideReturnOnSelect2: WOConditional {
 	_unroll = true;
 	condition = isSelectingNotTopLevel;
 	negate = true;
+}
+
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
 }
 
 InspectEO: WOHyperlink {
@@ -199,7 +214,7 @@ ListTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 0;
 	cellspacing = 0;
-	elementName = "TABLE";
+	elementName = "table";
 }
 
 ListTableHeaderRow: WOGenericContainer {
@@ -210,9 +225,13 @@ ListTableHeaderRow: WOGenericContainer {
 
 ListTableRow: WOGenericContainer {
 	_unroll = "YES";
-	elementName = "TR";
+	elementName = "tr";
 //	bgcolor = backgroundColorForRow;
 	bgcolor = "#ffffff";
+}
+
+MetricsDurationForCurrentPropertyKey: WOString {
+	value = durationOfAllEventsForCurrentPropertyKey;
 }
 
 NavBar1: WOSwitchComponent {   
@@ -235,6 +254,10 @@ NavBar2: WOSwitchComponent {
     d2wContext = d2wContext;
 	bgcolor = d2wContext.backgroundColorForTable;
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
+}
+
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -269,6 +292,14 @@ SelectImage: WOImage {
 	framework = "JavaDirectToWeb";
 }
 
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
+}
+
 ShowBatchNavigationConditional: WOConditional {
 	condition = shouldShowBatchNavigation;
 }
@@ -288,5 +319,5 @@ TableCellForBottomBatchNavigationGenericContainer: WOGenericContainer {
 
 TableRowForBottomBatchNavigationGenericContainer: WOGenericContainer {
 	bgcolor = "#ebebeb"; //backgroundColorForTable;
-	elementName = "TR";
+	elementName = "tr";
 }

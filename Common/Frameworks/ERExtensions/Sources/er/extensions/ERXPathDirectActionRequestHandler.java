@@ -91,7 +91,7 @@ public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHan
 		NSMutableArray temp = new NSMutableArray();
 		if (paths != null) {
 			int pathCount = paths.count();
-            String firstPathComponent = (String)paths.objectAtIndex(0);
+            String firstPathComponent = pathCount > 0 ? (String)paths.objectAtIndex(0) : null;
             String lastPathComponent = (String)paths.lastObject();
 
             if (pathCount > 2) {

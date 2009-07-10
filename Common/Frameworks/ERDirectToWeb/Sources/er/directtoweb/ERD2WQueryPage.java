@@ -303,7 +303,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     }
     
     /**
-     * Default implementation of whicha assembles the data source for the search results page, configured
+     * Default implementation of which assembles the data source for the search results page, configured
      * for the current query.
      * @return the prepared data source
      */

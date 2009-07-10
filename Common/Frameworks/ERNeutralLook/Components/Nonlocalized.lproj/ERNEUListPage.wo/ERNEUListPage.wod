@@ -1,5 +1,5 @@
 AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
-    localContext = d2wContext;
+	localContext = d2wContext;
 	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
@@ -18,10 +18,11 @@ AttributeCell: WOGenericContainer {
 	width = d2wContext.width;
 }
 
-AttributeDisplay: WOSwitchComponent {
+AttributeDisplay: ERXTimedSwitchComponent {
+ 	localContext = localContext;
+ 	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
-	localContext = localContext;
-	object = object;
 }
 
 AttributeRepetition: WORepetition {
@@ -153,6 +154,11 @@ HideReturnOnSelect3: WOConditional {
 	negate = true;
 }
 
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
+}
+
 InspectButton: ERDInspectButton {
 	d2wContext = d2wContext;
 	object = object;
@@ -219,7 +225,7 @@ ListTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 1;
 	cellspacing = 0;
-	elementName = "Table";
+	elementName = "table";
 }
 
 ListTableHeaderRow: WOGenericContainer {
@@ -234,27 +240,35 @@ ListTableRow: WOGenericContainer {
 	BGCOLOR = colorForRow;
 }
 
+MetricsDurationForCurrentPropertyKey: WOString {
+	value = durationOfAllEventsForCurrentPropertyKey;
+}
+
 NavBar: WOSwitchComponent {
-	WOComponentName = d2wContext.batchNavigationBarComponentName;
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
-	d2wContext = d2wContext;
+       	 d2wContext = d2wContext;
 }
 
 NavBar2: WOSwitchComponent {
-	WOComponentName = d2wContext.batchNavigationBarComponentName;
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
-	d2wContext = d2wContext;
+       	 d2wContext = d2wContext;
 }
 
 NumberOfItems: WOString {
 	value = listSize;
+}
+
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -305,6 +319,14 @@ SelectImage: WOImage {
 	height = "21";
 	name = "Select that Object";
 	width = "51";
+}
+
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
 }
 
 ShowBatchNavigationConditional: WOConditional {

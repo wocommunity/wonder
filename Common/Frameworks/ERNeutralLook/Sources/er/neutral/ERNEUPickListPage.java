@@ -6,13 +6,23 @@
 //
 package er.neutral;
 
-import com.webobjects.appserver.*;
-import er.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+
+import er.directtoweb.ERD2WPickListPage;
 
 public class ERNEUPickListPage extends ERD2WPickListPage {
 
     public ERNEUPickListPage(WOContext context) {
         super(context);
+    }
+
+    public int colSpan() {
+        int multiplier = 1;
+        if (shouldDisplayDetailedPageMetrics()) {
+            multiplier = 2;
+        }
+        return (((NSArray)d2wContext().valueForKey("displayPropertyKeys")).count() * multiplier) + 3;
     }
 
 }

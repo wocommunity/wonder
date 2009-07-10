@@ -11,10 +11,9 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 public class ERMessage extends Object {
-
     private MimeMessage message;
     private Object anObject;
-
+    private String _contextString;
 
     public void setMimeMessage (MimeMessage m) {
         message = m;
@@ -31,6 +30,14 @@ public class ERMessage extends Object {
     public Object callbackObject () {
         return anObject;
     }
+    
+    public void setContextString(String contextString) {
+		_contextString = contextString;
+	}
+    
+    public String contextString() {
+		return _contextString;
+	}
 
     public boolean shouldSendMessage() {
         Address to[] = null;

@@ -311,7 +311,8 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 
                         String hostName = ERXConfigurationManager.defaultManager().hostName();
 
-                        ERCMailDelivery.sharedInstance().composeEmail(WOApplication.application().name()+"-"+hostName+"@"+problemEmailDomain(),
+                        ERCMailDelivery.sharedInstance().composeEmail(null,
+                                                                      WOApplication.application().name()+"-"+hostName+"@"+problemEmailDomain(),
                                                                       emailsForProblemRecipients(),
                                                                       null,
                                                                       null,

@@ -43,18 +43,6 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-KeyName: WOString {
-	value = d2wContext.displayNameForProperty;
-}
-
-MainTable: WOGenericContainer {
-	_unroll = true;
-	border = 0;
-	cellpadding = 5;
-	cellspacing = 5;
-	elementName = "Table";
-}
-
 MoreOptionsImage: WOImage {
 	alt = "More options for this entity";
 	border = "0";
@@ -99,11 +87,6 @@ QueryTable: WOGenericContainer {
 QueryTableHeaderRow: WOGenericContainer {
 	_unroll = true;
 	bgcolor = backgroundColorForTable;
-	elementName = "tr";
-}
-
-QueryTableRow: WOGenericContainer {
-	_unroll = true;
 	elementName = "tr";
 }
 

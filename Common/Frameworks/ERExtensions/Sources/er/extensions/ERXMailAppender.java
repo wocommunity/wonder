@@ -41,7 +41,8 @@ import org.apache.log4j.helpers.LogLog;
  */
 
 public class ERXMailAppender extends AppenderSkeleton {
-
+    protected String contextString;
+    
     /** holds the from address */
     protected String fromAddress;
 
@@ -138,6 +139,14 @@ public class ERXMailAppender extends AppenderSkeleton {
         }
         return realQualifier;
     }
+    
+    public void setContextString(String contextString) {
+		this.contextString = contextString;
+	}
+    
+    public String contextString() {
+		return contextString;
+	}
 
     /**
      * Gets the from address set by the user.

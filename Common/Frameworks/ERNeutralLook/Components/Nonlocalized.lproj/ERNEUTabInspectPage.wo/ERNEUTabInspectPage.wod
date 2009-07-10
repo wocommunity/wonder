@@ -1,5 +1,5 @@
 AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
-    localContext = d2wContext;
+	localContext = d2wContext;
 	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
@@ -9,20 +9,13 @@ AttributeRepetition: WORepetition {
 	list = currentSectionKeys;
 }
 
-AttributeValue1: WOSwitchComponent { 
+AttributeValue: ERXTimedSwitchComponent { 
+	localContext = localContext;
+	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-	localContext = localContext;
-	object = object;
-}
-
-AttributeValue2: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
-	localContext = localContext;
-	object = object;
 }
 
 BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
@@ -31,15 +24,15 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 }
 
 Border: ERXTableWithBorder {
-    color="#999999";
-    bgcolor="#CCCCCC";
-    renderBorder=session.browser.willRenderNestedTablesFast;
-    doNotRenderTop = true;
+	color="#999999";
+	bgcolor="#CCCCCC";
+	renderBorder=session.browser.willRenderNestedTablesFast; // VALID
+	doNotRenderTop = true;
 }
 
 BorderWasRendered: WOConditional {
-condition=session.browser.willRenderNestedTablesFast;
-negate=true;
+	condition = session.browser.willRenderNestedTablesFast; // VALID
+	negate = true;
 }
 
 CancelButton: WOImage {
@@ -201,10 +194,11 @@ Errors: ERXErrorDictionaryPanel {
 	extraErrorMessage = errorMessage;
 	shouldShowNewLineAbove = true;
 	shouldShowNewLineBelow = true;
+	errorKeyOrder = errorKeyOrder;
 }
 
 HasDisplayNameForProperty: ERXNonZeroConditional {
-condition=displayNameForProperty.length;
+	condition = displayNameForProperty.length;
 }
 
 HasSectionName: ERXNonZeroConditional {
@@ -227,6 +221,11 @@ ImageSpacer: WOImage {
 	framework = "ERExtensions";
 	height = 20;
 	width = 1;
+}
+
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
 }
 
 IsEditing: WOKeyValueConditional {
@@ -253,8 +252,6 @@ IsEntityWritable2: WOConditional {
 IsNotEditingConditional: WOConditional {
 	_unroll = true;
 	condition = isEditing;
-
-
 	negate = true;
 }
 
@@ -282,6 +279,10 @@ NonNullConditional2: ERXNonNullConditional {
 NotUsingMatrixLayout: WOConditional {
 	condition = d2wContext.useMatrixLayout;
 	negate = true;
+}
+
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -337,7 +338,8 @@ ReturnLink: WOHyperlink {
 	action = nextPage;
 }
 
-Script: WOJavaScript{	scriptString = tabScriptString;
+Script: WOJavaScript {
+	scriptString = tabScriptString;
 	hideInComment = true;
 }
 
@@ -354,6 +356,14 @@ SectionNameString: WOString {
 Sections: WORepetition {
     list=sectionsForCurrentTab;
     item=currentSection;
+}
+
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
 }
 
 ShowCancel2: WOConditional {

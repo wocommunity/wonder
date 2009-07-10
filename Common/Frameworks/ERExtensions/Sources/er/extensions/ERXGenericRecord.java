@@ -700,7 +700,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * Method that will make sure to fetch an eo from the Database and
      * place it in the editingContext provided
      * as an argument
-     * @param the editing context in which the result will be placed
+     * @param ec the editing context in which the result will be placed
      * @return a fresh instance of an EO fetched from the DB and placed in the editing context argument
      */
     public ERXGenericRecord refetchObjectFromDBinEditingContext(EOEditingContext ec){

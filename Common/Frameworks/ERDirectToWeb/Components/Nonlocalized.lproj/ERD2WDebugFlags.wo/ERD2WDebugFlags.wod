@@ -4,7 +4,7 @@ Show: WOConditional {
 
 Log4J: WOHyperlink {
 	class = ^linkClass;
-	actionClass = "er.extensions.ERXDirectAction";
+	actionClass = "ERXDirectAction";
 	directActionName = "log4j";
 	target = "log4J";
 }
@@ -17,6 +17,15 @@ D2W: WOHyperlink {
 SQL: WOHyperlink {
 	action = toggleAdaptorLogging;
 	class = ^linkClass;
+}
+
+SQLEnabled: WOConditional {
+    condition = adaptorLoggingEnabled;
+}
+
+SQLNotEnabled: WOConditional {
+    condition = adaptorLoggingEnabled;
+    negate = true;
 }
 
 CSSUrl : WOResourceURL {
@@ -36,14 +45,47 @@ Clear: WOHyperlink {
 }
 
 Dump: WOHyperlink {
-	actionClass = "er.extensions.ERXDirectAction";
+	actionClass = "ERXDirectAction";
 	directActionName = "dumpCreatedKeys";
 	class = ^linkClass;
 }
 
-Edit: WOHyperlink {
-	actionClass = "er.extensions.ERXDirectAction";
+WOStats: WOHyperlink {
+	action = statisticsPage;
+	class = ^linkClass;
+}
+
+Localization: WOHyperlink {
+	actionClass = "ERXDirectAction";
 	directActionName = "editLocalizedFiles";
+	class = ^linkClass;
+}
+
+DetailedPageMetrics: WOHyperlink {
+	action = toggleDetailedPageMetrics;
+	class = ^linkClass;
+}
+
+IfDetailedMetricsEnabled: WOConditional {
+    condition = detailedMetricsEnabled;
+}
+
+IfNotDetailedMetricsEnabled: WOConditional {
+    condition = detailedMetricsEnabled;
+    negate = true;
+}
+
+IfMetricsEnabled: WOConditional {
+    condition = metricsEnabled;
+}
+
+IfNotMetricsEnabled: WOConditional {
+    condition = metricsEnabled;
+    negate = true;
+}
+
+PageMetrics: WOHyperlink {
+	action = togglePageMetrics;
 	class = ^linkClass;
 }
 

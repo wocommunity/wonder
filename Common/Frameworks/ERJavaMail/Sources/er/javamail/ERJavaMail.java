@@ -1,20 +1,25 @@
 package er.javamail;
 
+import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.eocontrol.EOOrQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.ERXLogger;
-import er.extensions.ERXProperties;
-import er.extensions.ERXValidationFactory;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
-import java.util.Enumeration;
+
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOOrQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.ERXLogger;
+import er.extensions.ERXProperties;
+import er.extensions.ERXValidationFactory;
 
 /**
  * <code>ERJavaMail</code> is the prinicpal class for the ERJavaMail framework.
@@ -66,7 +71,13 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * pattern.
      */
     protected Pattern _pattern = null;
-
+    
+    private Delegate _delegate;
+    
+    public void setDelegate(Delegate delegate) {
+		_delegate = delegate;
+	}
+    
     /**
      * Specialized implementation of the method from
      * ERXPrincipalClass.
@@ -96,10 +107,15 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * observer will call this method whenever appropriate.
      */
     public void initializeFrameworkFromSystemProperties () {
+        // Centralize mails ?
+        boolean centralize = ERXProperties.booleanForKey ("er.javamail.centralize");
+        this.setCentralize (centralize);
+        log.debug ("er.javamail.centralize: " + centralize);
+
         // Admin Email
         String adminEmail = System.getProperty ("er.javamail.adminEmail");
-        if ((adminEmail == null) || (adminEmail.length () == 0))
-            throw new RuntimeException ("ERJavaMail: the property er.javamail.adminEmail is not specified!");
+        if (centralize && ((adminEmail == null) || (adminEmail.length () == 0)))
+            throw new RuntimeException ("ERJavaMail: the property er.javamail.centralize is true, but er.javamail.adminEmail is not specified!");
         this.setAdminEmail (adminEmail);
         log.debug ("er.javamail.adminEmail: " + _adminEmail);
 
@@ -107,11 +123,6 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
         this.setDebugEnabled (debug);
         log.debug ("er.javamail.debugEnabled: " + debug);
-
-        // Centralize mails ?
-        boolean centralize = ERXProperties.booleanForKey ("er.javamail.centralize");
-        this.setCentralize (centralize);
-        log.debug ("er.javamail.centralize: " + centralize);
 
          // Number of messages that the sender queue can hold at a time
         int queueSize = ERXProperties.intForKey ("er.javamail.senderQueue.size");
@@ -162,10 +173,17 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
                 if ((smtpHost == null) || (smtpHost.length () == 0)) {
                     throw new RuntimeException ("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
                 }
-            } else
+                // ... and then maybe actually do what the docs say this method is supposed to do
+                System.setProperty ("mail.smtp.host", smtpHost);
                 System.setProperty ("er.javamail.smtpHost", smtpHost);
-        } else
+            }
+            else {
+                System.setProperty ("er.javamail.smtpHost", smtpHost);
+            }
+        }
+        else {
             System.setProperty ("mail.smtp.host", smtpHost);
+        }
 
         log.debug ("er.javamail.smtpHost: " + smtpHost);
     }
@@ -176,6 +194,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * their own JavaMail session.
      */
     protected javax.mail.Session _defaultSession;
+    
+    private Map<String, javax.mail.Session> _sessions = new ConcurrentHashMap<String, javax.mail.Session>();
 
     /**
      * Sets the default JavaMail session to a particular value.  This
@@ -198,7 +218,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      *
      * @return the default <code>javax.mail.Session</code> instance
      */
-    public javax.mail.Session defaultSession () {
+    public javax.mail.Session defaultSession() {
         return _defaultSession;
     }
 
@@ -209,8 +229,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * @return a <code>javax.mail.Session</code> value initialized
      * from the given properties
      */
-    public javax.mail.Session newSession (Properties props) {
+    public javax.mail.Session newSession(Properties props) {
         javax.mail.Session session = javax.mail.Session.getInstance (props);
+        if (_delegate != null) {
+        	_delegate.didCreateSession(session);
+        }
         session.setDebug (this.debugEnabled ());
         return session;
     }
@@ -220,10 +243,69 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * Properties
      * @return a <code>javax.mail.Session</code> value
      */
-    public javax.mail.Session newSession () {
-        return javax.mail.Session.getInstance (System.getProperties ());
+    public javax.mail.Session newSession() {
+        return newSession(System.getProperties());
     }
 
+    /**
+     * Returns a newly allocated Session object for the given message.
+     * 
+     * @param message the message
+     * @return a new <code>javax.mail.Session</code> value
+     */
+    public javax.mail.Session newSessionForMessage(ERMessage message) {
+    	return newSessionForContext(message.contextString());
+    }
+
+    /**
+     * Returns the Session object that is appropriate for the given message.
+     * 
+     * @return a <code>javax.mail.Session</code> value
+     */
+    public javax.mail.Session sessionForMessage(ERMessage message) {
+    	return sessionForContext(message.contextString());
+    }
+
+    /**
+     * Returns a new Session object that is appropriate for the given context.
+     * 
+     * @param contextString the message context
+     * @return a new <code>javax.mail.Session</code> value
+     */
+    protected javax.mail.Session newSessionForContext(String contextString) {
+    	javax.mail.Session session;
+    	if (contextString == null || contextString.length() == 0) {
+    		session = newSession(System.getProperties());
+    	}
+    	else {
+			Properties sessionProperties = new Properties();
+			sessionProperties.putAll(System.getProperties());
+			sessionProperties.setProperty("mail.smtp.host", ERXProperties.stringForKeyWithDefault("er.javamail.smtpHost." + contextString, sessionProperties.getProperty("er.javamail.smtpHost")));
+			session = newSession(sessionProperties);
+    	}
+		return session;
+    }
+    
+    /**
+     * Returns the Session object that is appropriate for the given context.
+     * 
+     * @param contextString the message context
+     * @return a <code>javax.mail.Session</code> value
+     */
+    protected javax.mail.Session sessionForContext(String contextString) {
+    	javax.mail.Session session;
+    	if (contextString == null || contextString.length() == 0) {
+    		session = defaultSession();
+    	}
+    	else {
+	    	session = _sessions.get(contextString);
+	    	if (session == null) {
+	    		session = newSessionForContext(contextString);
+	    		_sessions.put(contextString, session);
+	    	}
+    	}
+    	return session;
+    }
 
     /**
      * email address used when centralizeMails == true <BR>
@@ -546,5 +628,9 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         return (filteredAddresses != null) ?
             filteredAddresses.immutableClone () :
             emailAddresses;
+    }
+    
+    public static interface Delegate {
+    	public void didCreateSession(javax.mail.Session session);
     }
 }

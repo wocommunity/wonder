@@ -7,9 +7,7 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 import com.webobjects.directtoweb.*;
-import com.webobjects.directtoweb.ERD2WUtilities;
 import er.extensions.ERXLogger;
 
 // This works around the following bug: if you switch the pageConfiguration and refresh the page,

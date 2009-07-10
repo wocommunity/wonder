@@ -48,6 +48,7 @@ import er.extensions.ERXProperties;
 import er.extensions.ERXValueUtilities;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXWOContext;
+import er.extensions.ERXSession;
 
 /**
  * Principle class of the ERDirectToWeb framework.
@@ -69,6 +70,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     public final static String D2WDEBUGGING_ENABLED_KEY = "ERDirectToWeb_d2wDebuggingEnabled";
     public final static String D2WDISPLAY_COMPONENTNAMES_KEY = "ERDirectToWeb_displayComponentNames";
     public final static String D2WDISPLAY_PROPERTYKEYS_KEY = "ERDirectToWeb_displayPropertyKeys";
+    public final static String D2WDISPLAY_DETAILED_PAGE_METRICS_KEY = "ERDirectToWeb_displayDetailedPageMetrics";
     public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
     public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
     public final static Logger propertyKeyLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
@@ -163,6 +165,14 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(s,
                                                                   D2WDISPLAY_PROPERTYKEYS_KEY,
                                                                   propertyKeyLog.isDebugEnabled());
+    }
+
+    public static boolean detailedPageMetricsEnabled() {
+        return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(ERXSession.session(), D2WDISPLAY_DETAILED_PAGE_METRICS_KEY, false);
+    }
+
+    public static void setDetailedPageMetricsEnabled(boolean value) {
+        ERXExtensions.setBooleanFlagOnSessionForKey(ERXSession.session(), D2WDISPLAY_DETAILED_PAGE_METRICS_KEY, value);
     }
     
     public static String resolveUnit(String userInfoUnitString,
@@ -372,14 +382,6 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Checks the system property <code>er.directtoweb.ERDirectToWeb.shouldRaiseExceptions</code>.
-     * @param defaultValue
-     */
-    public static boolean shouldRaiseException(boolean defaultValue) {
-        return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", defaultValue);
-    }
-
-    /**
      * Gathers D2W-related information from the current context.  This is mainly useful for debugging.
      * @param context the current context
      * @return a dictionary of D2W-related keys to describe the D2W state of the context.
@@ -471,6 +473,14 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
 
         }
         return info;
+    }
+    
+    /**
+     * Checks the system property <code>er.directtoweb.ERDirectToWeb.shouldRaiseExceptions</code>.
+     * @param defaultValue
+     */
+    public static boolean shouldRaiseException(boolean defaultValue) {
+        return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", defaultValue);
     }
     
     public static synchronized String displayNameForPropertyKey(String key, String entityName) {
