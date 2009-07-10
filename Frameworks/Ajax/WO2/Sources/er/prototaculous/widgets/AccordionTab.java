@@ -1,4 +1,4 @@
-package er.prototaculous;
+package er.prototaculous.widgets;
 
 import com.webobjects.appserver.*;
 
@@ -12,8 +12,8 @@ import er.ajax.AjaxAccordionTab;
  * @author mendis
  *
  */
-public class AjaxAccordionTab2 extends AjaxAccordionTab {
-    public AjaxAccordionTab2(WOContext context) {
+public class AccordionTab extends AjaxAccordionTab {
+    public AccordionTab(WOContext context) {
         super(context);
     }
 }

@@ -52,7 +52,7 @@ DebugComponentName: ERDIVDebugComponentName {
 	isDebug = d2wComponentNameDebuggingEnabled;
 }
 
-Accordion: AjaxAccordion2 {
+Accordion: Accordion {
 	id = d2wContext.idForPageConfiguration;
 	disabled = disabled;
 }
