@@ -1,4 +1,4 @@
-button.D2WEditToManyFault2_Add {
+button.D2WAjaxEditToManyFault_Add {
 	text-indent: -5000px;
 	cursor: pointer;
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
@@ -8,7 +8,7 @@ button.D2WEditToManyFault2_Add {
 	display: block;
 }
 
-button.D2WEditToManyFault2_Delete {
+button.D2WAjaxEditToManyFault_Delete {
 	color: transparent;
 	margin-top: -24px;
 	font-size: 10pt;
@@ -17,26 +17,26 @@ button.D2WEditToManyFault2_Delete {
 	padding-right: 5px;
 }
 
-li.D2WEditToManyFault2:hover button.D2WEditToManyFault2_Delete {
+li.D2WAjaxEditToManyFault:hover button.D2WAjaxEditToManyFault_Delete {
 	color: blue;
 }
 
-li.D2WEditToManyFault2:hover button.D2WEditToManyFault2_Delete:hover {
+li.D2WAjaxEditToManyFault:hover button.D2WAjaxEditToManyFault_Delete:hover {
 	color: white;
 }
 
-li.D2WEditToManyFault2 a, button.D2WEditToManyFault2_Delete {
+li.D2WAjaxEditToManyFault a, button.D2WAjaxEditToManyFault_Delete {
 	padding-top: 1px;
 	padding-bottom: 2px;
 	vertical-align: 0%;
 }
 
-button.D2WEditToManyFault2_Delete:hover {
+button.D2WAjaxEditToManyFault_Delete:hover {
 	background-color: #336699;
 	color: white;
 }
 
-li.D2WEditToManyFault2 a {
+li.D2WAjaxEditToManyFault a {
 	margin-right: 2px;
 }
 
