@@ -146,9 +146,12 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 			
 			String path = sb.toString();
 			try {
-				path = path.replace('+', ' ');
 				path = path.replaceAll("\\?.*", "");
-				path = URLDecoder.decode(path, "UTF-8");
+				if (!request.userInfo().containsKey("HttpServletRequest")) {
+					/* PATH_INFO is already decoded by the servlet container */
+					path = path.replace('+', ' ');
+					path = URLDecoder.decode(path, "UTF-8");
+				}
 				file = new File(path);
 				length = (int) file.length();
 				is = new FileInputStream(file);
