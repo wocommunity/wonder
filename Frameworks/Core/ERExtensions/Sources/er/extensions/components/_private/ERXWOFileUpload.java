@@ -67,6 +67,7 @@ public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpl
         checkEnctype(context);
         /* Fix for lame Safari upload bug.  - CH
          * For more details, see
+         * http://lists.macosforge.org/pipermail/webkit-unassigned/2007-January/026203.html
          * http://lists.apple.com/archives/macnetworkprog/2006/Dec/msg00021.html
 		 * https://bugs.webkit.org/show_bug.cgi?id=5760
 		 * http://www.webmasterworld.com/macintosh_webmaster/3300569.htm
