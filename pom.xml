@@ -216,6 +216,11 @@
 			</dependency>
 			<dependency>
 				<groupId>wonder.ajax</groupId>
+				<artifactId>ERDivaLook</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>wonder.ajax</groupId>
 				<artifactId>ERIUI</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
@@ -518,6 +523,21 @@
 				<artifactId>javarebel-utils</artifactId>
 				<version>2.0</version>
 			</dependency>
+			<dependency>
+				<groupId>org.xhtmlrenderer</groupId>
+				<artifactId>core-renderer</artifactId>
+				<version>R8pre2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.lowagie</groupId>
+				<artifactId>itext</artifactId>
+				<version>2.0.8</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.ujac</groupId>
+				<artifactId>ujac</artifactId>
+				<version>1.0.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<repositories>
@@ -535,7 +555,8 @@
 		<repository>
 			<id>wocommunity.snapshots</id>
 			<name>WOCommunity Maven 2 Snapshots Repository</name>
-			<url>http://maven.wocommunity.org/content/groups/public-snapshots</url>
+			<url>http://maven.wocommunity.org/content/groups/public-snapshots
+			</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -559,7 +580,8 @@
 		<pluginRepository>
 			<id>wocommunity.snapshots</id>
 			<name>WOCommunity Maven 2 Snapshots Repository</name>
-			<url>http://maven.wocommunity.org/content/groups/public-snapshots</url>
+			<url>http://maven.wocommunity.org/content/groups/public-snapshots
+			</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -577,11 +599,14 @@
 		<snapshotRepository>
 			<id>wocommunity.deployment</id>
 			<name>WOCommunity Maven2 Snapshots Repository</name>
-			<url>http://maven.wocommunity.org/content/repositories/snapshots/</url>
+			<url>http://maven.wocommunity.org/content/repositories/snapshots/
+			</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>
-		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder</connection>
-		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder</developerConnection>
+		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder
+		</connection>
+		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder
+		</developerConnection>
 	</scm>
 </project>
