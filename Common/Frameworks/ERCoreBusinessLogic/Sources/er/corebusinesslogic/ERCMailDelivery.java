@@ -365,7 +365,7 @@ public class ERCMailDelivery {
                                                  String plainTextComponentName,
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
-    	return composeComponentEmail(null, to, cc, bcc, title, componentName, plainTextComponentName, bindings, ec);
+    	return composeComponentEmail(null, from, to, cc, bcc, title, componentName, plainTextComponentName, bindings, ec);
     }
     
     /**
@@ -394,7 +394,7 @@ public class ERCMailDelivery {
                                                  String plainTextComponentName,
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
-        ERCMailMessage result = composeComponentEmail(contextString, from, to , cc, bcc, title, componentName, bindings, ec);
+        ERCMailMessage result = composeComponentEmail(contextString, from, to, cc, bcc, title, componentName, bindings, ec);
         WOComponent plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
         try{
             plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
