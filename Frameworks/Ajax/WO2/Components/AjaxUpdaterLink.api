@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERXAjaxHyperlink.java" wocomponentcontent="true">
+
+        <binding name="container"/>
+    <binding defaults="Actions" name="action"/>
+    <validation message="'updateContainerID' is a required binding.">
+            <unbound name="container"/>
+        </validation>
+    <binding name="class"/>
+        <binding name="id"/>
+        
+    <binding defaults="Direct Actions" name="directActionName"/>
+    <binding name="queryDictionary"/>
+    <binding defaults="Boolean" name="evalScripts"/>
+    <binding name="string"/>
+    <binding name="confirmMessage"/>
+    <binding name="onSuccess"/>
+    <binding name="onException"/>
+    </wo>
+</wodefinitions>

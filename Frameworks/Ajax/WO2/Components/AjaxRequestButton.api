@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="AjaxRequestButton.java" wocomponentcontent="true">
+
+        <binding name="id"/>
+        <binding name="class"/>
+        <binding name="style"/>
+    <binding defaults="Actions" name="action"/>
+    <binding name="onComplete"/>
+        <binding name="onSuccess"/>
+        <binding name="onCreate"/>
+    </wo>
+</wodefinitions>

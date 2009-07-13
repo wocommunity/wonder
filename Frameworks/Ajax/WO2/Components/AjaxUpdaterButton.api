@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="AjaxUpdaterButton.java" wocomponentcontent="true">
+
+        <binding name="id"/>
+        <binding name="class"/>
+        <binding name="style"/>
+    <binding name="container"/>
+    <validation message="'container' is a required binding.">
+            <unbound name="container"/>
+        </validation>
+    <binding name="onComplete"/>
+    <binding name="value"/>
+        
+    <binding name="name"/>
+        
+    <binding defaults="Boolean" name="evalScripts"/>
+    <binding name="method"/>
+    </wo>
+</wodefinitions>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="AjaxRequestLink.java" wocomponentcontent="true">
+
+        <binding defaults="Actions" name="action"/>
+        <binding defaults="Direct Actions" name="directActionName"/>
+    <binding name="id"/>
+        <binding name="class"/>
+        <binding name="style"/>
+        <binding name="onComplete"/>
+        <binding name="onSuccess"/>
+        <binding name="onCreate"/>
+    <binding name="string"/>
+    </wo>
+</wodefinitions>

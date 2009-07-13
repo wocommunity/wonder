@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="AjaxUpdaterForm.java" wocomponentcontent="true">
+
+        <binding name="method"/>
+        <binding name="container"/>
+        
+        <binding defaults="Actions" name="action"/>
+    <binding name="id"/>
+        <binding name="class"/>
+        <binding name="style"/>
+        <binding name="enctype"/>
+    <binding defaults="Boolean" name="showForm"/>
+    </wo>
+</wodefinitions>
