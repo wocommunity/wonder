@@ -1,10 +1,9 @@
-package er.prototaculous;
+package er.prototaculous.widgets;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.prototaculous.widgets.ModalBoxLink;
 
 /**
  * An on DOM load variant of the AjaxModalBox
