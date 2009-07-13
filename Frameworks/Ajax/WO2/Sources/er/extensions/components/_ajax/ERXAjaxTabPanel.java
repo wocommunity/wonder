@@ -1,4 +1,4 @@
-package er.ajax._xhtml;
+package er.extensions.components._ajax;
 
 import com.webobjects.appserver.*;
 
@@ -15,10 +15,10 @@ import er.extensions.components.ERXTabPanel;
  * @binding selectedTab: contains the selected tab
  * @binding submitActionName: if this binding is non null, tabs will contain a submit button instead of a regular hyperlink and the action pointed to by the binding will be called
  */
-public class AjaxTabPanel extends ERXTabPanel {
+public class ERXAjaxTabPanel extends ERXTabPanel {
 	public String containerID;
 
-    public AjaxTabPanel(WOContext context) {
+    public ERXAjaxTabPanel(WOContext context) {
         super(context);
     }
     
