@@ -12,6 +12,10 @@ Building with Ant:
 
 Ant should be found in /Developer/Java/Ant/bin
 
+0. Prerequisites:
+   ant 1.7: execute 'ant --version' to confirm that ant is properly installed
+            and that it is at version 1.7 or later.
+
 1. Open a terminal and cd into the Wonder root directory.
 
 2. A servlet.jar file needs to be available for some parts of Wonder. On Mac OS X, the
