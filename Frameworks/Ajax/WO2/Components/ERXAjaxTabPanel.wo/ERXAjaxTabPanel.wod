@@ -1,4 +1,3 @@
-
 Content: WOComponentContent {
 }
 
@@ -20,21 +19,22 @@ SelectedTabConditional: WOConditional {
 	negate = true;
 }
 
-TabLink: AjaxUpdateLink {
+TabLink: AjaxUpdaterLink {
 	action = switchTab;
-	updateContainerID = containerID;
-	onComplete = ^onComplete;
+	container = containerID;
+	evalScripts = true;
+	method = "get";
+	container = ^container;
 }
 
 TabName: WOString {
 	value = currentTabName;
 }
 
-TabName2: AjaxSubmitButton {
-	value = currentTabName;
+TabName2: AjaxUpdaterButton {
 	action = switchSubmitTab;
-	updateContainerID = containerID;
-	onComplete = ^onComplete;
+	container = ^container;
+	evalScripts = true;
 }
 
 TabName3: WOString {
@@ -46,8 +46,8 @@ TabRepetition: WORepetition {
 	list = tabs;
 }
 
-AjaxContainer : AjaxUpdateContainer {
+AjaxContainer : WOGenericContainer {
 	id = containerID;
 	class = "tab_panel";
-	evalScripts = true;
+	elementName = "div";
 }

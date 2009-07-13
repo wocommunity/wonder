@@ -12,16 +12,7 @@ public class ERDIVEditPageRepetition extends ERDInspectPageRepetition {
         super(context);
     }
     
-    // accessors
-	public String componentName() {
-		return isAjax() ? "AjaxUpdateContainer" : "WOGenericContainer";
-	}
-	
-	public boolean isAjax() {
-		Object b = d2wContext().valueForKey("isAjax");
-		return b != null ? ERXValueUtilities.booleanValue(b) : false;
-	}
-	
+    // accessors	
 	public String propertyClassString() {
 		return isManadatory() ? "propertyKey mandatory" : "propertyKey";
 	}
@@ -50,5 +41,9 @@ public class ERDIVEditPageRepetition extends ERDInspectPageRepetition {
 	
 	private boolean hasTitle() {
 		return (title() != null && !title().equals(""));
+	}
+	
+	public String contentContainerID() {
+		return d2wContext().valueForKey("id") + "_container";
 	}
 }

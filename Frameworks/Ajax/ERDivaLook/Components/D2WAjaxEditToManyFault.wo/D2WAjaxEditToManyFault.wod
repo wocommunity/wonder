@@ -7,14 +7,10 @@ ItemRepetition: WORepetition {
 	item = browserItem;
 }
 
-AddButton: LightWindowButton {
+AddButton: AjaxUpdaterButton {
 	action = editValues;
 	class = "D2WAjaxEditToManyFault_Add";
-	formID = "EditForm";
-	width = d2wContext.width;
-	height = d2wContext.height;
-	top = d2wContext.top;
-	left = d2wContext.left;	
+	container = d2wContext.container;
 }
 
 AddBox: WOGenericContainer {
@@ -28,14 +24,14 @@ RemoveBox: WOGenericContainer {
 	class = "D2WAjaxEditToManyFault";
 }
 
-ToOneLink: WOHyperlink {
+ToOneLink: AjaxUpdaterLink {
 	action = toOneAction;
 	disabled = d2wContext.disabled;
 	string = toOneDescription;
-	target = target;
+	container = d2wContext.container;
 }
 
-DeleteButton: AjaxSubmitButton {
+DeleteButton: AjaxRequestButton {
 	action = removeFromToManyRelationshipAction;
 	value = "x";
 	onSuccess = onSuccess;

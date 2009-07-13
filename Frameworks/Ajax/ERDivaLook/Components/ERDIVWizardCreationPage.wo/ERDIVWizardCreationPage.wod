@@ -1,0 +1,81 @@
+CancelButton: AjaxUpdaterButton {
+	action = cancelAction;
+	value = d2wContext.cancelButtonLabel;
+	class = "cancel";
+	container = d2wContext.container;
+}
+
+EditForm: AjaxUpdaterForm {
+	class = "edit wizard";
+    enctype = d2wContext.formEncoding;
+}
+
+Errors: ERXAjaxErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
+}
+
+Help: ERDAjaxDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = d2wContext;
+	object = object;
+	displayPropertyKeys = currentTab.keys;
+}
+
+PreviousButton: ModalBoxButton {
+    action = previousStep;
+    value = d2wContext.previousButtonLabel;
+    class = "previous";
+}
+
+PageWrapper: WOSwitchComponent {
+	_componentUnroll = true;
+	_unroll = true;
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+NextButton: ModalBoxButton {
+    action = nextStep;
+    value = d2wContext.nextButtonLabel;
+    class = "next";
+}
+
+ShowCancel: WOConditional {
+    condition=showCancel;
+}
+
+ShowNext: WOConditional {
+    condition=showNext;
+}
+
+ShowPrevious: WOConditional {
+    condition=showPrevious;
+}
+
+ShowSave: WOConditional {
+    condition=showNext;
+    negate=true;
+}
+
+StepName: WOString {
+    value=currentTab.displayName;
+}
+
+Steps: ERXLocalizedString {
+	object = self;
+	templateString = "ERD2WWizardCreationPage.stepsMessage";
+}
+
+SaveButton: AjaxUpdaterButton {
+	action = submitAction;
+	value = d2wContext.saveButtonLabel;
+	class = "save";
+	container = "a";		// FIXME Try to put in rules
+	onCreate = "function() { Modalbox.hide(); }";
+}

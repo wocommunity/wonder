@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo class="CalendarDateSelect.java" wocomponentcontent="false">
+        <wo class="AjaxCalendarDateSelect.java" wocomponentcontent="false">
 
         <binding name="value"/>
         <validation message="'value' is a required binding.">

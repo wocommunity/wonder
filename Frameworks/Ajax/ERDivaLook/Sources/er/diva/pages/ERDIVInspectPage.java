@@ -1,11 +1,13 @@
 package er.diva.pages;
 
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
 import er.ajax.AjaxUtils;
 import er.directtoweb.pages.ERD2WTabInspectPage;
 import er.diva.ERDIVPageInterface;
+import er.extensions.foundation.ERXProperties;
 
 
 /**
@@ -15,6 +17,8 @@ import er.diva.ERDIVPageInterface;
  *
  */
 public class ERDIVInspectPage extends ERD2WTabInspectPage implements ERDIVPageInterface {
+	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", true);
+
     public ERDIVInspectPage(WOContext context) {
         super(context);
     }
@@ -30,7 +34,7 @@ public class ERDIVInspectPage extends ERD2WTabInspectPage implements ERDIVPageIn
     	super.appendToResponse(response, context);
 
     	// add page style sheet
-    	if (stylesheet() != null) {
+    	if (!useUnobtrusively && stylesheet() != null) {
     		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
     	}
     }

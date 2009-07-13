@@ -8,8 +8,9 @@ Radio: WORadioButton {
 	class = ^class;
 	id = id;
 	name = elementName;
-	checked = checked;
+	value = ^item;
 	disabled = ^disabled;
+	selection = selection;
 }
 
 Label: WOGenericContainer {

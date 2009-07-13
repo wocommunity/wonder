@@ -1,6 +1,6 @@
 package er.extensions.components._ajax;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXTabPanel;
@@ -10,10 +10,9 @@ import er.extensions.components.ERXTabPanel;
  * 
  * It's worth noting that because this is an ajax tab that the contents of the tab must be contained within this tab contents in order to be updated.
  * 
- * @binding tabs: a list of objects representing the tabs
- * @binding tabNameKey: a string containing a key to apply to tabs to get the title of the tab
- * @binding selectedTab: contains the selected tab
- * @binding submitActionName: if this binding is non null, tabs will contain a submit button instead of a regular hyperlink and the action pointed to by the binding will be called
+ * @see ERXTabPanel for bindings
+ * 
+ * @binding		container		This is a required binding that says which container to perform an Ajax.Updater on when the tab is clicked.
  */
 public class ERXAjaxTabPanel extends ERXTabPanel {
 	public String containerID;

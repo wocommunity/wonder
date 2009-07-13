@@ -36,6 +36,7 @@ PopupList: WOPopUpButton {
 	id = ^id;
 	disabled = ^disabled;
 	title = ^title;
+	value = theCurrentValue;
 }
 
 RadioButtonMatrix: WXRadioButtonList {

@@ -1,6 +1,5 @@
-@import url("ERDIVDebug.css");
 @import url("D2WDisplayBoolean2.css");
-@import url("ERXBatchNavigationBar2.css");
+@import url("ERXAjaxBatchNavigationBar.css");
 @import url("ERDSearchDisplayGroup.css");
 
 div#a table.list thead tr th div {

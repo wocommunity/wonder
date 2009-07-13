@@ -3,7 +3,7 @@ Conditional2: ERXNonNullConditional {
 	condition = message;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERDAjaxDebuggingHelp {
 	d2wContext = d2wContext;
 }
 

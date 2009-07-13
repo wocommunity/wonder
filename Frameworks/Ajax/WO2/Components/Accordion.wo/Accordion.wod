@@ -6,3 +6,13 @@ Accordion: WOGenericContainer {
 	id = accordionID;
 	class = "accordion";
 }
+
+Enabled: WOConditional {
+	condition = disabled;
+	negate = true;
+}
+
+Script: WOString {
+	value = script;
+	escapeHTML = false;
+}

@@ -13,6 +13,7 @@ import er.extensions.woextensions.WOCollapsibleComponentContent;
  * @binding visibility
  * @binding submitActionName
  */
+@Deprecated
 public class WOCollapsibleComponentContent2 extends WOCollapsibleComponentContent {
 	
     public WOCollapsibleComponentContent2(WOContext context) {

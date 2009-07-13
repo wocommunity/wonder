@@ -19,27 +19,27 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @author mendis
  * 
- * @property er.prototaculous.CalendarDateSelect.DateFormats.natural 	Default date format
- * @property er.prototaculous.CalendarDateSelect.DateFormats.american 	US date format
- * @property er.prototaculous.CalendarDateSelect.DateFormats.euro24hYmd		EU date format
+ * @property er.prototaculous.AjaxCalendarDateSelect.DateFormats.natural 	Default date format
+ * @property er.prototaculous.AjaxCalendarDateSelect.DateFormats.american 	US date format
+ * @property er.prototaculous.AjaxCalendarDateSelect.DateFormats.euro24hYmd		EU date format
  * 
- * @property er.prototaculous.CalendarDateSelect.Scripts.american	Script file for US date format
- * @property er.prototaculous.CalendarDateSelect.Scripts.euro24hYmd		Script file for EU date format
+ * @property er.prototaculous.AjaxCalendarDateSelect.Scripts.american	Script file for US date format
+ * @property er.prototaculous.AjaxCalendarDateSelect.Scripts.euro24hYmd		Script file for EU date format
  * 
- * @property er.prototculous.useUnobtrusively	If you want the component to include its JavaScripts and CSS set to false. (This is the default).
+ * @property er.prototaculous.useUnobtrusively	If you want the component to include its JavaScripts and CSS set to false. (This is the default).
  * 												This is to support Unobtrusive Javascript programming.
  *
  */
 public class CalendarDateSelect extends WOComponent {
-	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototculous.useUnobtrusively", false);
+	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", false);
 	
 	/*
 	 * WO date formats 
 	 */
 	public static interface DateFormats {
-		public static String natural = ERXProperties.stringForKeyWithDefault("er.ajax.CalendarDateSelect.DateFormats.natural", "%B %d, %Y");
-		public static String american = ERXProperties.stringForKeyWithDefault("er.ajax.CalendarDateSelect.DateFormats.american", "%m/%d/%Y");		
-		public static String euro24hYmd = ERXProperties.stringForKeyWithDefault("er.ajax.CalendarDateSelect.DateFormats.euro24hYmd", "%Y.%m.%d");		
+		public static String natural = ERXProperties.stringForKeyWithDefault("er.ajax.AjaxCalendarDateSelect.DateFormats.natural", "%B %d, %Y");
+		public static String american = ERXProperties.stringForKeyWithDefault("er.ajax.AjaxCalendarDateSelect.DateFormats.american", "%m/%d/%Y");		
+		public static String euro24hYmd = ERXProperties.stringForKeyWithDefault("er.ajax.AjaxCalendarDateSelect.DateFormats.euro24hYmd", "%Y.%m.%d");		
 	}
 	
 	/*
@@ -47,8 +47,8 @@ public class CalendarDateSelect extends WOComponent {
 	 */
 	private static interface Scripts {
 		public static Object natural = NSKeyValueCoding.NullValue;
-		public static String american = ERXProperties.stringForKeyWithDefault("er.ajax.CalendarDateSelect.Scripts.american", "format_american.js");		
-		public static String euro24hYmd = ERXProperties.stringForKeyWithDefault("er.ajax.CalendarDateSelect.Scripts.euro24hYmd", "format_euro_24hr_ymd.js");		
+		public static String american = ERXProperties.stringForKeyWithDefault("er.ajax.AjaxCalendarDateSelect.Scripts.american", "format_american.js");		
+		public static String euro24hYmd = ERXProperties.stringForKeyWithDefault("er.ajax.AjaxCalendarDateSelect.Scripts.euro24hYmd", "format_euro_24hr_ymd.js");		
 	}
 	
 	/*

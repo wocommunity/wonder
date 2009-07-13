@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo class="ModalBoxOnLoad.java" wocomponentcontent="false">
+        <wo class="AjaxOnLoadModalBox.java" wocomponentcontent="false">
 
         <binding name="href"/>
         <binding defaults="Page Names" name="pageName"/>
@@ -13,5 +13,6 @@
     <binding name="width"/>
     <binding name="showID"/>
     <binding name="left"/>
+    <binding defaults="Boolean" name="disabled"/>
     </wo>
 </wodefinitions>

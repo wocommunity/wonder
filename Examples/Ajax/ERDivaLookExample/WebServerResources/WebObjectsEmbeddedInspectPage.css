@@ -1,14 +1,11 @@
-@import url("ERDIVInspectPage.css");
-@import url("WebObjectsInspect.css");
-
-tr.detail h1.task {
+div#a table.list tbody tr.detail h1.task, div#a table.list tbody tr.detail h2.entity {
 	display: none;
 }
 
-tr.detail div.button {
+div#a table.list tbody tr.detail div.button {
 	display: none;
 }
 
-tr.detail {
+div#a table.list tbody tr.detail {
 	background-color: transparent;
 }

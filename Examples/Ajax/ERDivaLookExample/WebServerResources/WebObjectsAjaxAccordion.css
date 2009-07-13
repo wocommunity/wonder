@@ -1,3 +1,5 @@
+@import url("AjaxAccordion.css");
+
 div#a div.tab_panel .accordion-toggle {
 	background-color: #333333;
 }

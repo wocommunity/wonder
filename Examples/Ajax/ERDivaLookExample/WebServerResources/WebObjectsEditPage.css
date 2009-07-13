@@ -5,7 +5,7 @@
 
 /* The following are styles for the edit page */
 
-div#a #EditForm h1.edit {
+div#a form.edit h1.edit {
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/edit-ban.gif);
 	background-repeat: no-repeat;
 	text-indent: -5000px;
@@ -17,7 +17,7 @@ div#a h2.entity {
 	min-width: expression(document.getElementById('section').offsetWidth + "px");
 }
 
-div#a #EditForm fieldset.button ul li button {
+div#a form.edit fieldset.button ul li button {
 	text-indent: -5000px;
 	display: block;
 	height:27px;
@@ -26,42 +26,42 @@ div#a #EditForm fieldset.button ul li button {
 	width: 100px;
 }
 
-div#a #EditForm fieldset.button ul li button.cancel {
+div#a form.edit fieldset.button ul li button.cancel {
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/cancel-btn.gif);
 }
 
-div#a #EditForm fieldset.button ul li button.save {
+div#a form.edit fieldset.button ul li button.save {
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/save-btn.gif);
 }
 
-div#a #EditForm div.accordion-content ul li.attribute legend.propertyKey {
+div#a form.edit div.accordion-content ul li.attribute legend.propertyKey {
 	font-size: 10pt;
 	margin-left: -128px; /*width of left column*/
 	color: white;
 }
 
-div#a #EditForm fieldset.attribute {
+div#a form.edit fieldset.attribute {
 	padding-left: 12em; /*width of left column*/
 }
 
-div#a #EditForm div.accordion-content ul li.attribute div.content {
+div#a form.edit div.accordion-content ul li.attribute div.content {
 	border-left: solid #333333 1px;
 	padding-left: 4px;
 	margin-top: -27px;
 	min-height: 27px;
 }
 
-div#a #EditForm div.accordion-content ul li.attribute {
+div#a form.edit div.accordion-content ul li.attribute {
 	line-height: 27px;
 }
 
-div#a #EditForm fieldset.button {
+div#a form.edit fieldset.button {
 	width: expression(document.getElementById('section').offsetWidth + "px");
 	margin-top: 3px;
 	width: 100%;
 }
 
-div#a #EditForm fieldset.button ul {
+div#a form.edit fieldset.button ul {
 	margin-top: 10px;
 	margin-left: auto;
 	margin-right: auto;

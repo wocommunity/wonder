@@ -16,11 +16,10 @@ IsDebug :WOConditional {
 	condition = application.isDevelopmentMode;
 }
 
-Divider: AjaxHyperlink {
+Divider: WOGenericContainer {
 	elementName = "div";
 	id = "vertical_divider";
-	onComplete = "function() { Effect.toggle('b', 'slide', { scaleX: true, scaleY: false}); return false; }";
-	action = session.toggleMenubar;
+	onclick = "Effect.toggle('b', 'slide', { scaleX: true, scaleY: false});";
 }
 
 B: WOGenericContainer {
@@ -29,10 +28,10 @@ B: WOGenericContainer {
 	style = style;
 }
 
-A: AjaxUpdateContainer {
+A: WXGenericContainer {
 	elementName = "div";
 	id = "a";
-	evalScripts = true;
+	ajax = true;
 }
 
 CSS: ERXStyleSheet {
@@ -40,13 +39,11 @@ CSS: ERXStyleSheet {
 }
 
 Prototype: ERXJavaScript {
-	filename = "prototype.js";
-	framework = "Ajax";
+	scriptSource = "http://ajax.googleapis.com/ajax/libs/prototype/1.6/prototype.js";
 }
 
-Scriptaculous: ERXJavaScript {
-	filename = "scriptaculous.js";
-	framework = "Ajax";
+Effects: ERXJavaScript {
+	scriptSource = "http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8/scriptaculous.js";
 }
 
 CalendarDateSelectScript: ERXJavaScript {
@@ -59,3 +56,20 @@ AccordionScript: ERXJavaScript {
 	framework = "WO2";
 }
 
+ModalBoxScript: ERXJavaScript {
+	filename = "modalbox.js";
+	framework = "Ajax";
+}
+
+ModalBoxCSS: ERXStyleSheet {
+	filename = "modalbox.css";
+	framework = "Ajax";
+}
+
+CalendarDateSelectCSS: ERXStyleSheet {
+	filename = "CalendarDateSelect.css";
+	framework = "WO2";
+}
+
+
+Busy: ERDIVGlobalBusyIndicator {}

@@ -1,8 +1,6 @@
-@import url("ERDIVListPage.css");
-@import url("NeutralList.css");
 @import url("ERDList2.css");
 
-div.ERDList2 table thead tr th {
+div#a div.ERDList2 table thead tr th {
 	background-color: rgb(51, 102, 153);
 	color: white;
 	border: solid rgb(238, 238, 238) 1px;
@@ -10,13 +8,28 @@ div.ERDList2 table thead tr th {
 
 /* the following are custom settings for the batch nav bar - when embedded */
 
-div.ERDList2 fieldset.batch_nav_bar h3 {
-	font-size: 10px;
-	color: grey;
-	font-style: italic;
+div#a div.ERDList2 fieldset.batch_nav_bar h3 {
 	padding-right: 4px;
 }
 
-div.ERDList2 fieldset.batch_nav_bar h3 span.count {
-	padding-right: 2px;
+div#a div.ERDList2 fieldset.batch_nav_bar h3, div#a div.ERDList2 fieldset.batch_nav_bar h3 span.count {
+	font-size: 10px;
+	color: grey;
+	font-style: italic;
+	vertical-align: baseline;
+}
+
+div#a div.ERDList2 fieldset.batch_nav_bar h3 span.count {
+	padding:0 2px 0 0;
+	border: 0;
+	background-color: transparent;
+	-webkit-border-radius: 0;
+}
+
+div#a div.ERDList2 fieldset.batch_nav_bar li.batch_nav_bar {
+	width: auto;
+}
+
+div#a div.ERDList2 fieldset.batch_nav_bar {
+	height: auto;
 }

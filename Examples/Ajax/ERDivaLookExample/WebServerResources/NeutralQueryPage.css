@@ -9,6 +9,10 @@ div#a h1.query {
 	text-indent: -5000px;
 }
 
+div#a form.query fieldset.attribute ul li fieldset legend {
+	-webkit-transform: translate(0, 1.5em);
+}
+
 div#a h2.entity, div#a form fieldset.button {
 	background-color: #eeeeee;
 	height: 31px;

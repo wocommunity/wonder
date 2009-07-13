@@ -59,14 +59,18 @@ public class WXCheckboxList extends WOComponent {
     	return valueForBinding(Bindings.item);
     }
     
-    public boolean checked() {
-    	return (selections() != null) ? selections().contains(item()) : false;
+    public Object selection() {
+    	if (selections() == null) return null;
+    	return selections().contains(item()) ? item() : null;
     }
     
-    public void setChecked(boolean checked) {
-    	NSMutableArray<Object> selections = (selections() != null) ? selections().mutableClone() : new NSMutableArray<Object>();
-    	if (checked) selections.addObject(item());
-    	else selections.removeObject(item());
+    public void setSelection(Object value) {
+     	NSMutableArray<Object> selections = (selections() != null) ? selections().mutableClone() : new NSMutableArray<Object>();
+    	if (value != null) {
+    		selections.addObject(item());
+    	} else {
+    		selections.removeObject(item());
+    	}
     	setValueForBinding(selections, Bindings.selections);
     }
     

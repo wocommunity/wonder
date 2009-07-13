@@ -13,5 +13,9 @@
         <binding name="tabNameKey"/>
         <binding name="submitActionName"/>
     <binding name="onComplete"/>
+    <binding name="container"/>
+        <validation message="'container' is a required binding.">
+            <unbound name="container"/>
+        </validation>
     </wo>
 </wodefinitions>

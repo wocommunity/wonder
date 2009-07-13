@@ -16,11 +16,4 @@ public class ERDIVInspectConfirmPage extends ERDIVInspectPage {
     public ERDIVInspectConfirmPage(WOContext context) {
         super(context);
     }
-    
-    // actions
-    public WOComponent okAction() {
-    	WOComponent nextPage = context().page();
-    	if (nextPage instanceof ERDIVEditPage) nextPage.takeValueForKey(Boolean.FALSE, "showConfirmationPanel");
-    	return nextPage;
-    }
 }

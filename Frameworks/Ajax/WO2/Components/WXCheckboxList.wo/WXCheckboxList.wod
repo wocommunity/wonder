@@ -8,8 +8,9 @@ Checkbox: WOCheckBox {
 	class = ^class;
 	id = id;
 	name = elementName;
-	checked = checked;
+	selection = selection;
 	disabled = ^disabled;
+	value = ^item;
 }
 
 Label: WOGenericContainer {

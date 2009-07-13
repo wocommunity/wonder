@@ -1,22 +1,5 @@
-@import url("Neutral.css");
-
-body {
-	min-width: 0;
-}
-
-div#a {
-	height: auto;
-	width: auto;
-	min-height: 0;
-}
-
-h1.ERDIVEditRelationshipPage {
+h1.task.editRelationship {
 	display: none;
-}
-
-ul#ERDIVEditRelationshipPage_Buttons li {
-	float: left;
-	padding: 2px;
 }
 
 div#ERDIVEditRelationshipPage_Select h1.task {

@@ -59,17 +59,13 @@ public class ERDAjaxTrashcan extends ERDTrashcan {
     	return "alert('" + errorMessage + "'); return false;";
     }
     
-    public String onClickBefore() {
-    	return "confirm('" + message() + "')";
-    }
-    
     public String rowID() {
         String primaryKeyString = ERXEOControlUtilities.primaryKeyStringForObject(object());
         return ERXStringUtilities.safeIdentifierName(object().entityName() + primaryKeyString);
     }
     
-    public String onSuccess() {
-    	return "function(e){ new Effect.Fade('" + rowID() + "', {duration: " + effectDuration + "}); AjaxUpdateContainer.update(" + d2wContext().valueForKey("updateContainerID") + ", {}); }";
+    public String onCreate() {
+    	return "function(e){ new Effect.Fade('" + rowID() + "', {duration: " + effectDuration + "}); }";
     }
     
     // actions

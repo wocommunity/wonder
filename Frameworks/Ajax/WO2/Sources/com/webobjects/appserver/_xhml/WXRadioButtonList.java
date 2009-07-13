@@ -48,11 +48,11 @@ public class WXRadioButtonList extends WOComponent {
 	}
     
     // accesors
-    private Object selection() {
+    public Object selection() {
     	return valueForBinding(Bindings.selection);
     }
     
-    private void setSelection(Object selection) {
+    public void setSelection(Object selection) {
     	setValueForBinding(selection, Bindings.selection);
     }
     

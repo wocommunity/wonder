@@ -7,6 +7,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.ajax.AjaxUtils;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Encapsulation of http://www.wildbit.com/labs/modalbox/ (a re-implementation of AjaxModalDialog)  
@@ -15,6 +16,7 @@ import er.ajax.AjaxUtils;
  *
  */
 public abstract class ModalBox extends WOComponent {
+	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", false);
 	
     /*
      * API or bindings common to light window subcomponents
@@ -63,11 +65,12 @@ public abstract class ModalBox extends WOComponent {
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
-        AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-        AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
-        AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
-        AjaxUtils.addScriptResourceInHead(context, response, "modalbox.js");
-        AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");		// RM: only necessary for ajax updates from dialog
-        AjaxUtils.addStylesheetResourceInHead(context, response, "modalbox.css");
+    	
+    	if (!useUnobtrusively) {
+    		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+    		AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
+    		AjaxUtils.addScriptResourceInHead(context, response, "modalbox.js");
+    		AjaxUtils.addStylesheetResourceInHead(context, response, "modalbox.css");
+    	}
     }
 }

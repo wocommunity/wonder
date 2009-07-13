@@ -3,13 +3,11 @@ package er.prototaculous.widgets;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXWOContext;
-import er.prototaculous.widgets.ModalBox.Bindings;
 
 
 /**
@@ -23,6 +21,8 @@ import er.prototaculous.widgets.ModalBox.Bindings;
  * @binding 	serializeForm	If you do not want to process form data set to false
  * 								NOTE: there appears to be a limitation as to how much can be serialized in WO + Ajax. Results vary - IE being the worst :)
  * 								Default is true
+ * 
+ * FIXME		Form value taking
  *
  */
 public class ModalBoxButton extends ModalBox {
@@ -35,6 +35,17 @@ public class ModalBoxButton extends ModalBox {
     @Override
     public boolean synchronizesVariablesWithBindings() {
     	return false;
+    }
+    
+    @Override
+    public boolean isStateless() {
+    	return true;
+    }
+    
+    @Override
+    public void reset() {
+    	super.reset();
+    	_serializeForm = true;
     }
     
     /*
@@ -56,14 +67,18 @@ public class ModalBoxButton extends ModalBox {
     protected NSArray<String> _options() {
     	NSMutableArray<String> params = new NSMutableArray<String>(super._options());
     	
-    	if (hasBinding(Bindings.method)) params.add("method: '" + method() + "'");
-    	if (shouldSerializeForm()) params.add("params: Form.serialize(" + _formString() + ")");
-    	if (hasBinding(Bindings.title)) params.add("title: '" + title() + "'");
+    	params.add("method: '" + method() + "'");
+    	if (shouldSerializeForm()) params.add("params: " + _formString() + ".serialize(true)");
+    	    if (hasBinding(Bindings.title)) params.add("title: '" + title() + "'");
     		
     	return params.immutableClone();
     }
     
     public String method() {
+    	return (_method() != null) ? _method() : "post";
+    }
+    
+    private String _method() {
     	return (String) valueForBinding(Bindings.method);
     }
     
@@ -80,7 +95,7 @@ public class ModalBoxButton extends ModalBox {
     }
     
     private String _formString() {
-    	return (hasBinding(Bindings.formID)) ? "'" + formID() + "'" : "this.form";
+    	return (hasBinding(Bindings.formID)) ? "$('" + formID() + "')" : "this.form";
     }
     
 	public String href() {
@@ -94,30 +109,12 @@ public class ModalBoxButton extends ModalBox {
     	} else return null;
     }
     
-    // R/R
-	@Override
-    public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
-    	if (aContext.senderID().equals(aContext.elementID())) {		// check to see if the request is coming from modalbox
-    		if (hasBinding(Bindings.action)) {
-        		aContext._setActionInvoked(true);
-    			return (WOComponent) valueForBinding(Bindings.action);
-    		}
-    	} return null;
+    // actions
+    public WOActionResults invokeAction() {
+		if (hasBinding(Bindings.action)) {
+			WOActionResults action = (WOActionResults) valueForBinding(Bindings.action);
+			if (action instanceof WOComponent)  ((WOComponent) action)._setIsPage(true);	// cache is pageFrag cache
+			return action;
+		} else return context().page();
     }
-    
-    @Override
-    public void awake() {
-    	super.awake();
-    	context()._setFormSubmitted(true);
-    }
-    
-    @Override
-    public void sleep() {
-    	super.sleep();
-    	context()._setFormSubmitted(false);
-    }
-
-	public WOActionResults dummy() {
-		return null;
-	}
 }

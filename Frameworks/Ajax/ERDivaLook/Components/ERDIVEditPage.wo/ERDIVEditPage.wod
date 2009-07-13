@@ -1,7 +1,7 @@
-EditingForm:ERXOptionalForm {
-	enctype = d2wContext.formEncoding;
-	multipleSubmit = true;
-	name = "EditForm";
+EditingForm: AjaxUpdaterForm {
+	container = d2wContext.container;
+	class = "edit";
+	id = d2wContext.pageConfiguration;
 }
 
 EntityName: WOString {
@@ -9,7 +9,7 @@ EntityName: WOString {
 	value = d2wContext.displayNameForEntity;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERDAjaxDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
@@ -19,33 +19,21 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-SubmitButton6: WOSubmitButton {
+SubmitButton6: AjaxUpdaterButton {
 	action = cancelAction;
 	value = "Cancel";
 	class = "cancel";
 	disabled = disableCancel;
+	container = d2wContext.container;
+	evalScripts = true;
 }
 
-SubmitChanges: WOSubmitButton {
+SubmitChanges: AjaxUpdaterButton {
 	action = submitAction;
 	value = "Save";
 	class = "save";
-}
-
-SubmitChanges1: AjaxSubmitButton {
-	action = submitAction;
-	value = "Save";
-	class = "save";
-	onComplete = "function(x){ parent.window.location.reload(); parent.myLightWindow.deactivate(); }";
-}
-
-NotModal: WOConditional {
-	condition = d2wContext.isModal;
-	negate = true;
-}
-
-Modal: WOConditional {
-	condition = d2wContext.isModal;
+	container = d2wContext.container;
+	evalScripts = true;
 }
 
 Errors: ERXAjaxErrorDictionaryPanel {
@@ -75,6 +63,7 @@ TabPanel : WOSwitchComponent {
 	tabNameKey = "displayName";
 	tabs = tabSectionsContents;
 	useFormSubmit = d2wContext.hasForm;
+	container = d2wContext.container;
 }
 
 IsTab: WOKeyValueConditional {
@@ -89,31 +78,6 @@ IsNotTab: WOKeyValueConditional {
 }
 
 HeaderContainer: WOGenericContainer {
-	class = d2wContext.class;
+	class = d2wContext.classForTask;
 	elementName = "h1";
-}
-
-ShowConfirmation: WOConditional {
-	condition = showConfirmationPanel;
-}
-
-DialogOnLoad: ModalBoxOnLoad {
-	showID = "$('confirmation_panel')";
-	title = d2wContext.displayNameForEntity;
-	left = d2wContext.left;
-}
-
-ConfirmInspectPanel: ERXD2WInspect {
-	pageConfiguration = d2wContext.inspectConfirmConfigurationName;
-	entityName = d2wContext.entity.name;
-	object = object;
-}
-
-NoConfirmation: WOConditional {
-	condition = showConfirmationPanel;
-	negate = true;
-}
-
-Watcher: AjaxBusyIndicator {
-	watchContainerID = "a";
 }

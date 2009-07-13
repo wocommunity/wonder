@@ -1,0 +1,33 @@
+package er.extensions.batching._ajax;
+
+import com.webobjects.appserver.*;
+import er.extensions.batching.ERXBatchNavigationBar;
+
+/**
+ * ERXBatchNavigationBar less presentation features
+ * 
+ * @binding container the update container to update on batch actions
+ * @binding showForm whether to use a form or not
+ * @binding displayGroup the WODisplayGroup that is being controlled
+ * @binding objectName the name of the type of object that is contained in the WODisplayGroup
+ * @binding sortKeyList an NSArray of sort key paths that will be displayed in a popup button
+ * @binding clearSelection boolean that indicates if the selection should be reset on paging (default false)
+ */
+public class ERXAjaxBatchNavigationBar extends ERXBatchNavigationBar {
+
+	public ERXAjaxBatchNavigationBar(WOContext context) {
+		super(context);
+	}
+	 
+	// actions
+	public WOComponent submit() {
+		return null;
+	}
+    
+	/*
+	 * Workaround for when there are more than one batch nav bar on a list page
+	 */
+    public boolean isStateless() {
+    	return false;
+    }
+ }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo class="ModalBoxButton.java" wocomponentcontent="true">
+        <wo class="AjaxModalBoxButton.java" wocomponentcontent="true">
 
         <binding defaults="Actions" name="action"/>
         <binding defaults="Direct Actions" name="directActionName"/>
@@ -15,5 +15,9 @@
         </validation>
     <binding name="method"/>
         <binding defaults="Boolean" name="serializeForm"/>
+    <binding name="name"/>
+        <validation message="'name' is a required binding.">
+            <unbound name="name"/>
+        </validation>
     </wo>
 </wodefinitions>

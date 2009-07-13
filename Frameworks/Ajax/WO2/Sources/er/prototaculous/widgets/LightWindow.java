@@ -8,15 +8,19 @@ import er.extensions.foundation.ERXProperties;
 /**
  * Abstract superclass that encapsulates http://www.stickmanlabs.com/lightwindow 2.0
  * 
+ * @property		useUnobtrusively		For Unobtrusive JavaScript programming
+ * 
  * @author mendis
  *
  */
 public abstract class LightWindow extends WOComponent {
+	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", true);
+
 	public LightWindow(WOContext context) {
 		super(context);
 	}
 
-	public final static String type = ERXProperties.stringForKeyWithDefault("er.ajax.AjaxLightWindow.type", "external");		// Default is to treat all Window content as external
+	public final static String type = ERXProperties.stringForKeyWithDefault("er.prototaculous.widgets.LightWindow.type", "external");		// Default is to treat all Window content as external
 
     /*
      * API or bindings common to light window subcomponents
@@ -43,10 +47,12 @@ public abstract class LightWindow extends WOComponent {
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
-        AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-        AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
-        AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
-        AjaxUtils.addScriptResourceInHead(context, response, "WO2", "lightwindow.js");
-        AjaxUtils.addStylesheetResourceInHead(context, response, "WO2", "lightwindow.css");
+    	if (!useUnobtrusively) {
+    		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+    		AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
+    		AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
+    		AjaxUtils.addScriptResourceInHead(context, response, "WO2", "lightwindow.js");
+    		AjaxUtils.addStylesheetResourceInHead(context, response, "WO2", "lightwindow.css");
+    	}
     }
 }

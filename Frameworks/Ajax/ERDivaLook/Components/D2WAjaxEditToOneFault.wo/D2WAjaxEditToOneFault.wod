@@ -1,25 +1,21 @@
-ChangeImage: LightWindowButton {
+ChangeImage: AjaxUpdaterButton {
 	action = editRelationship;
 	class = "D2WAjaxEditToOneFault_Add";
-	formID = "EditForm";		// FIXME: RM: need to get from d2w context or something
-	width = d2wContext.width;
-	height = d2wContext.height;
-	top = d2wContext.top;
-	left = d2wContext.left;	
+	container = d2wContext.container;
 }
 
-RemoveButton: AjaxSubmitButton {
+RemoveButton: AjaxRequestButton {
 	action = removeFromToOneRelationshipAction;
 	value = "x";
 	onSuccess = onSuccess;
 	class = "D2WAjaxEditToOneFault_Delete";
 }
 
-EditObject: WOHyperlink {
+EditObject: AjaxUpdaterLink {
 	action = toOneAction;
 	disabled = d2wContext.disabled;
 	string = toOneDescription;
-	target = target;
+	container = d2wContext.container;
 }
 
 HasProperty: WOConditional {

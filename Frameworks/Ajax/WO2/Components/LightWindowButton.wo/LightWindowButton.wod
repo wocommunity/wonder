@@ -1,9 +1,11 @@
-SubmitButton: WOSubmitButton {
+SubmitButton: WOGenericContainer {
+	elementName = "button";
+	type = "submit";
 	id = ^id;
 	onclick = onClick;
 	class = ^class;
 	value = ^value;
-	action = dummy;
+	invokeAction = invokeAction;
 }
 
 Content: WOComponentContent {
