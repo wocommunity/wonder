@@ -1,15 +1,16 @@
 Content2: WOComponentContent {}
 
 List1: ERXD2WList { 	
-	pageConfiguration = ^listConfigurationName;
+	pageConfiguration = ^listEmbeddedConfigurationName;
 	dataSource = detailDataSource;
 	entityName = ^destinationEntityName;
 	settings = settings;
 }
 
-Select: WOSubmitButton {
+Select: AjaxUpdaterButton {
 	action = createObjectAction;
 	value = ^createButtonLabel;
+	container = ^container;
 }
 
 ShowActions: WOConditional {

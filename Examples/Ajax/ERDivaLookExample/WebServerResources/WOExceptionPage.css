@@ -1,0 +1,19 @@
+div#WOExceptionPage {
+	max-width: 700px;
+}
+
+div#WOExceptionPage a.exception {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/exclamation.gif) no-repeat;
+	height: 32px;
+	display: block;
+}
+
+div#WOExceptionPage a.exception:hover {
+	text-decoration: none;
+}
+
+div#WOExceptionPage a.exception span {
+	margin-left: 32px;
+	display: inline-block;
+	padding: 8px 0;
+}

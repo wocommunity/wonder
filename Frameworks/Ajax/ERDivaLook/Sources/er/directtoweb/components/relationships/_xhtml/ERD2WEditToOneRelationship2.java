@@ -2,15 +2,13 @@ package er.directtoweb.components.relationships._xhtml;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 
-import er.ajax.AjaxUtils;
 import er.directtoweb.components.relationships.ERD2WEditToOneRelationship;
-import er.diva.ERDIVPageInterface;
 import er.extensions.foundation.ERXValueUtilities;
 
 public class ERD2WEditToOneRelationship2 extends ERD2WEditToOneRelationship {
@@ -18,18 +16,33 @@ public class ERD2WEditToOneRelationship2 extends ERD2WEditToOneRelationship {
         super(context);
     }
     
-    // accessors
-    public String stylesheet() {
-    	return (String) d2wContext().valueForKey(ERDIVPageInterface.Keys.Stylesheet);
-    }
-    
     // actions
     public WOActionResults newAction() {
-    	return (WOActionResults) D2W.factory().editPageForNewObjectWithConfigurationNamed("ModalCreate" + destinationEntityName(), session());
-    }
+    	EditPageInterface newAction = (EditPageInterface) D2W.factory().editPageForNewObjectWithConfigurationNamed("AjaxCreate" + destinationEntityName(), session());
+    	newAction.setNextPage(context().page());
+    	return (WOActionResults) newAction;
+    }  
     
+    // accessors
     private String destinationEntityName() {
     	return (String) d2wContext().valueForKey("destinationEntityName");
+    }
+    
+    public String onChange() {
+    	return isAjax() ? _onChange() : null;
+    }
+    
+    private String _onChange() {
+    	return "new Ajax.Updater('" + container() + "', $('" + container() + "').getAttribute('ref'), {parameters:Form.serialize(this.form), evalScripts:true});";
+    }
+    
+    public boolean isAjax() {
+    	Object b = d2wContext().valueForKey("isAjax");
+    	return b != null ? ERXValueUtilities.booleanValue(b) : false;
+    }
+    
+    private String container() {
+    	return (String) d2wContext().valueForKey("updateContainerID");
     }
     
     /*
@@ -42,19 +55,5 @@ public class ERD2WEditToOneRelationship2 extends ERD2WEditToOneRelationship {
     	subContext.setTask("editRelationship");
     	
     	return ERXValueUtilities.booleanValueWithDefault(subContext.valueForKey("isEntityEditable"), !super.isEntityReadOnly(destinationEntity));
-    }
-    
-    /*
-     * To apply the stylesheet for the modal page
-     */
-    // R&R
-    @Override
-	public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);
-
-    	// add page style sheet
-    	if (stylesheet() != null) {
-    		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
-    	}
     }
 }

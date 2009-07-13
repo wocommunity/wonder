@@ -1,23 +1,23 @@
-div.ERDList2 h1, div.ERDList2 h2 {
+div#a div.ERDList2 h1, div#a div.ERDList2 h2 {
 	display: none;
 }
 
-div.ERDList2 li.page_batch {
+div#a div.ERDList2 li.page_batch {
 	display: none;
 }
 
-div.ERDList2 li.content a.return {
+div#a div.ERDList2 li.content a.return {
 	display: none;
 }
 
-div.ERDList2 table.list {
+div#a div.ERDList2 table.list {
 	line-height: normal;
 }
 
-div.ERDList2 fieldset.batch_nav_bar ul.batch_nav_bar li.batch_nav_bar {
+div#a div.ERDList2 fieldset.batch_nav_bar ul.batch_nav_bar li.batch_nav_bar {
 	margin: 0;
 }
 
-div.ERDList2 ul.ERDSearchDisplayGroup {
+div#a div.ERDList2 ul.ERDSearchDisplayGroup {
 	display: none;
 }

@@ -1,0 +1,84 @@
+
+BatchNumber: WOTextField {
+	numberformat = "0";
+	size = 2;
+	value = currentBatchIndex;
+	class = "batch_number";
+}
+
+OptionalForm: AjaxUpdaterForm {
+	action = submit;
+	container = ^container;
+	showForm = ^showForm;
+}
+
+hasMultipleBatches: WOConditional {
+	condition = ^displayGroup.hasMultipleBatches;
+}
+
+DGHasQualifier: ERXNonNullConditional {
+	condition = displayGroup.qualifier;
+}
+
+EntityName3: ERXPluralString2 {
+	count = objectCount;
+	value = ^objectName;
+}
+
+EntityNameConditional: WOConditional {
+	condition = hasObjectName;
+}
+
+ItemsPerBatch: WOTextField {
+	numberformat = "0";
+	size = 2;
+	value = numberOfObjectsPerBatch;
+	class = "batch_size";
+}
+
+LeftArrow: AjaxUpdaterButton {
+    action = displayPreviousBatch;
+    value = "Previous";
+    class = "previous";
+    container = ^container;
+}
+
+RightArrow: AjaxUpdaterButton {
+    action = displayNextBatch;
+    value = "Next";
+    class = "next";
+    container = ^container;
+}
+
+TotalBatches: WOString {
+	value = ^displayGroup.batchCount;
+}
+
+filteredObjectsCount: WOString {
+	value = filteredObjectsCount;
+}
+
+items_per_page: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.items_per_page"; 
+}
+
+of: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.of"; 
+}
+
+page: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.page"; 
+}
+
+show: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.show";
+}
+
+FieldSet: WOGenericContainer {
+	elementName = "fieldset";
+	class="batch_nav_bar";
+	id = ^id;
+}
+
+ComponentContent: WOComponentContent {
+}

@@ -16,21 +16,21 @@ import er.extensions.foundation.ERXProperties;
  * Extends the api of AjaxAccordion. i.e:
  * @see er.ajax.AjaxAccordion
  * 
- * @property er.prototculous.useUnobtrusively	If you want the component to include its JavaScripts and CSS set to false. (This is the default).
+ * @property er.prototaculous.useUnobtrusively	If you want the component to include its JavaScripts and CSS set to false. (This is the default).
  * 												This is to support Unobtrusive Javascript programming.
  * 
  * @author mendis
  *
  */
 public class Accordion extends AjaxAccordion {
-	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototculous.useUnobtrusively", false);
+	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", false);
 	
     public Accordion(WOContext context) {
         super(context);
     }
     
     // accessors
-    private String script() {
+    public String script() {
     	return isAjaxRequest() ? _script() : "document.observe(\"dom:loaded\", function() {" + _script() + "});";
     }
     
@@ -69,13 +69,7 @@ public class Accordion extends AjaxAccordion {
     		addScriptResourceInHead(response, "prototype.js");
     		addScriptResourceInHead(response, "scriptaculous.js");
     		addScriptResourceInHead(response, "WO2", "accordion.js");
-    	} addStylesheetResourceInHead(response, "WO2", "Accordion.css");
-    }
-    
-    @Override
-    public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);
-        if (!disabled()) 
-        	AjaxUtils.addScriptCodeInHead(response, context, script());	
+    		addStylesheetResourceInHead(response, "WO2", "Accordion.css");
+    	} 
     }
 }

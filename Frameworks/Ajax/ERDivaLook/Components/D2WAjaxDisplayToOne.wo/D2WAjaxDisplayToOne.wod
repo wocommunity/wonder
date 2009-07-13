@@ -1,0 +1,17 @@
+Link: AjaxUpdaterLink {
+	action = toOneAction;
+	disabled = d2wContext.disabled;
+	container = d2wContext.container;
+	evalScripts = true;
+}
+
+Span: WOGenericContainer {
+	elementName = "span";
+	class = classString;
+}
+
+String: WOString {
+	valueWhenEmpty = d2wContext.valueWhenEmpty;
+	value = toOneDescription;
+	escapeHTML = false;
+}

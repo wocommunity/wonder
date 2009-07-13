@@ -27,19 +27,11 @@ Sections: WORepetition {
     item=currentSection;
 }
 
-AccordionContent: WOSwitchComponent {
-	WOComponentName = componentName;
+AccordionContent: WXGenericContainer {
 	elementName = "div";
 	id = d2wContext.idForSection;
 	class = "accordion-content";
-}
-
-IsAjax: WOConditional {
-	condition = d2wContext.isAjax;
-}
-
-WatchIndicator : AjaxBusyIndicator {
-  watchContainerID = d2wContext.id;
+	ajax = d2wContext.isAjax;
 }
 
 DebugPropertyName: ERDIVDebugPropertyName {
@@ -63,9 +55,11 @@ PropertyClass: WOGenericContainer {
 	title = d2wContext.title;
 }
 
-ContentClass: WOGenericContainer {
+ContentClass: WXGenericContainer {
 	elementName = "div";
 	class = contentClassString;
+	ajax = d2wContext.isAjax;
+	id = contentContainerID;
 }
 
 AttributeContainer: WOGenericContainer {

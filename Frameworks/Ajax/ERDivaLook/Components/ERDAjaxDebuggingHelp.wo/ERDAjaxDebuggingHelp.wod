@@ -1,0 +1,138 @@
+Conditional1: WOConditional {
+	condition = showHelp;
+}
+
+Conditional2: WOConditional {
+	condition = d2wComponentNameDebuggingEnabled;
+	negate = true;
+}
+
+Conditional3: WOConditional {
+	condition = d2wComponentNameDebuggingEnabled;
+}
+
+Conditional4: WOConditional {
+	condition = hasEditingContext;
+}
+
+Form1: AjaxUpdaterForm {
+	action = submit;
+	container = d2wContext.container;
+}
+
+Submit: AjaxUpdaterButton {
+	action = submit;
+	container = d2wContext.container;
+}
+
+Hyperlink1: AjaxUpdaterLink {
+	action = toggleComponentNameDebugging;
+	container = d2wContext.container;
+}
+
+Hyperlink2: AjaxUpdaterLink {
+	action = toggleComponentNameDebugging;
+	container = d2wContext.container;
+}
+
+Hyperlink3: WOHyperlink {
+	action = showEditingContext;
+	target = "_inspector";
+}
+
+Hyperlink4: WOHyperlink {
+	action = showDefaultEditingContext;
+	target = "_inspector";
+}
+
+Hyperlink5: AjaxRequestLink {
+	action = toggleRuleTracing;
+	string = ruleTracingState;
+}
+
+Repetition1: WORepetition {
+	list = contextDictionaryForPage.allKeys.@sortAsc.toString;
+	item = currentKey;
+}
+
+String1: WOString {
+	value = ^d2wContext.pageConfiguration;
+	valueWhenEmpty = "No Page Configuration";
+}
+
+String11: WOString {
+	value = ^d2wContext.subTask;
+	valueWhenEmpty = "No Sub Task";
+}
+
+String12: WOString {
+	value = ^d2wContext.pageName;
+	valueWhenEmpty = "Now this is very strange";
+}
+
+String13: WOString {
+	value = ^d2wContext.parentPageConfiguration;
+	valueWhenEmpty = "No Parent Configuration";
+}
+
+String2: WOString {
+	value = ^d2wContext.task;
+}
+
+String3: WOString {
+	value = ^d2wContext.tabKey;
+	valueWhenEmpty = "No Current Page Name";
+}
+
+String4: WOString {
+	value = ^d2wContext.entity.name;
+}
+
+String5: WOString {
+	value = editingContext;
+}
+
+String6: WOString {
+	value = debugValueForKey;
+	valueWhenEmpty = "No value set or empty";
+}
+
+String7: WOString {
+	value = session.defaultEditingContext;
+}
+
+String8: WOString {
+	value = currentValue;
+}
+
+String9: WOString {
+	value = currentKey;
+}
+
+TextField1: WOTextField {
+	value = key;
+	size = 14;
+}
+
+Summary: WOGenericContainer {
+	elementName = "table";
+	id = summaryId;
+	style ="display:none;";
+	class = "ERDAjaxDebuggingHelp summary";
+}
+
+SummaryHover: WOHyperlink {
+	href = "#";
+	onmouseover = onMouseOver;
+	onmouseout = onMouseOut;
+}
+
+DebugTable: WOGenericContainer {
+	elementName = "table";
+	id = id;
+}
+
+TableToggle: WOHyperlink {
+	href = "#";
+	onclick = onClick;
+}

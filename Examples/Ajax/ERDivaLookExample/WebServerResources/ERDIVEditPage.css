@@ -1,28 +1,31 @@
-@import url("ERDIVDebug.css");
 @import url("D2WAjaxEditToManyFault.css");
 @import url("D2WAjaxEditToOneFault.css");
 @import url("CalendarDateSelect.css");
 @import url("ERD2WEditToOneRelationship2.css");
 
-div#a #EditForm fieldset.button ul li {
+div#a form.edit fieldset.button ul li {
 	float: left;
 }
 
-div#a #EditForm fieldset.attribute legend {
+div#a form.edit fieldset.attribute legend {
 	margin-left: -10em; /*width of left column*/
 	display: inline-block;
 	-webkit-transform: translate(0, 1.75em);
 }
 
-div#a #EditForm fieldset.attribute {
+div#a form.edit fieldset.attribute {
 	padding-left: 10em; /*width of left column*/
 }
 
-div#a #EditForm fieldset.attribute div.content {
+div#a form.edit fieldset.attribute div.content {
 	margin-top: -1em;
 }
 
-div#a .accordion-toggle {
+div#a form.edit div.accordion-content ul li.attribute {
+	padding-left: 0;
+}
+
+div#a form.edit .accordion-toggle {
 	max-width: 100%;
 	padding-top:4px;
 	padding-bottom: 4px;

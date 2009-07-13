@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo class="Accordion.java" wocomponentcontent="true">
+        <wo class="AjaxAccordion2.java" wocomponentcontent="true">
 
         <binding name="id"/>
     <binding name="elementName"/>

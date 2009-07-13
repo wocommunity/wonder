@@ -3,7 +3,7 @@ EntityName: WOString {
 	value = d2wContext.displayNameForEntity;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERDAjaxDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
@@ -14,8 +14,9 @@ PageWrapper: WOSwitchComponent {
 }
 
 ReturnLink: WOHyperlink {
-	action = okAction;
+	href = "#";
 	class = "ok";
+	onclick = "Modalbox.hide(); return false;";
 }
 
 InspectPageRepetition: WOSwitchComponent {
@@ -23,4 +24,10 @@ InspectPageRepetition: WOSwitchComponent {
 	displayPropertyKeys = d2wContext.displayPropertyKeys;
 	d2wContext = localContext;
 	object = object;
+}
+
+OnLoadModal: ModalBoxOnLoad {
+	showID = "confirmation_panel";
+	title = d2wContext.displayNameForEntity;
+	id = "confirmation_panel";
 }

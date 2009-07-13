@@ -7,11 +7,11 @@ HasNoItems: WOConditional {
 	negate = true;
 }
 
-Inspect: WOHyperlink {
+Inspect: AjaxUpdaterLink {
 	action = inspectAction;
 	disabled = d2wContext.disabled;
 	string = stringForItem;
-	target = target;
+	container = d2wContext.container;
 }
 
 ItemRepetition: WORepetition {

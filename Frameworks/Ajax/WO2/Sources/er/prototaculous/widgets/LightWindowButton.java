@@ -4,7 +4,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.appserver.ERXWOContext;
-import er.prototaculous.widgets.LightWindow.Bindings;
 
 import com.webobjects.appserver.WOActionResults;
 
@@ -70,30 +69,12 @@ public class LightWindowButton extends LightWindow {
     	} else return null;
     }
     
-    // R/R
-	@Override
-    public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
-    	if (aContext.senderID().equals(aContext.elementID())) {		// check to see if the request is coming from lightwindow
-    		if (hasBinding(Bindings.action)) {
-        		aContext._setActionInvoked(true);
-    			return (WOComponent) valueForBinding(Bindings.action);
-    		}
-    	} return null;
+    // actions
+    public WOActionResults invokeAction() {
+		if (hasBinding(Bindings.action)) {
+			WOActionResults action = (WOActionResults) valueForBinding(Bindings.action);
+			if (action instanceof WOComponent)  ((WOComponent) action)._setIsPage(true);	// cache is pageFrag cache
+			return action;
+		} else return context().page();
     }
-    
-    @Override
-    public void awake() {
-    	super.awake();
-    	context()._setFormSubmitted(true);
-    }
-    
-    @Override
-    public void sleep() {
-    	super.sleep();
-    	context()._setFormSubmitted(false);
-    }
-
-	public WOActionResults dummy() {
-		return null;
-	}
 }

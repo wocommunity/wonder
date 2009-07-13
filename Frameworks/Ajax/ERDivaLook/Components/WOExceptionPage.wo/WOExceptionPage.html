@@ -1,0 +1,50 @@
+<div id="WOExceptionPage">
+    <webobject name=VisibleConditional><span>An Exception has Occurred (click to toggle)</span></webobject>
+      <ul id="exception_description">
+        <li> 
+          <h3>Application</h3>
+          <div><webobject name=ApplicationNameString /></div> 
+        </li>
+        <li> 
+          <h3>Error</h3>
+          <div> <webobject name=ExceptionNameString /></div> 
+          </td>
+        </li>
+        <li> 
+          <h3>Reason</h3>
+          <div><webobject name=CurrentReason /></div> 
+        </li>
+        <li> 
+          <h3>Stack trace</h3>
+            <table class="stacktrace">
+              <tr> 
+                <td>File</td>
+                <td>Line#</td>
+                <td>Method</td>
+                <td>Package</td>
+              </tr>
+              <tr> 
+                <td colspan="4"> 
+                  <hr />
+                </td>
+              </tr>
+              <webobject name=ReasonRepetition> 
+              <tr> 
+                <td><webobject name=filename></webobject></td>
+                <td><webobject name=line></webobject></td>
+                <td><webobject name=methodname></webobject></td>
+                <td><webobject name=packagename></webobject></td>
+              </tr>
+              </webobject> 
+              <tr> 
+                <td colspan=4> 
+                  <hr />
+                </td>
+              </tr>
+              <tr> 
+                <td>NA : Non applicable, JIT activated</td>
+              </tr>
+            </table>
+       </li>
+    </ul>
+</div>

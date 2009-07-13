@@ -11,6 +11,7 @@ import er.directtoweb.pages.ERD2WListPage;
 import er.diva.ERDIVPageInterface;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGenericRecord;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -24,6 +25,8 @@ import er.extensions.foundation.ERXValueUtilities;
  *
  */
 public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
+	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", true);
+
 	public int index;
 	
     public ERDIVListPage(WOContext context) {
@@ -97,17 +100,26 @@ public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
         } else return null;
     }
     
+    /*
+     * detail toggle
+     */
+    public String onClick() {
+    	return "Effect.toggle($('" + tbodyID() + "'), 'slide', {duration: 0.8}); return false;";
+    }
+    
     // R/R
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
     	
-    	// prototype events
-	    AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-	    
-    	// add page style sheet
-    	if (stylesheet() != null) {
-    		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
+    	if (!useUnobtrusively) {
+    		// prototype events
+    		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+
+    		// add page style sheet
+    		if (stylesheet() != null) {
+    			AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
+    		}
     	}
     }
     
@@ -119,5 +131,17 @@ public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
     	ERD2WListPage excelListPage = (ERD2WListPage) D2W.factory().pageForConfigurationNamed("ListExcel" + entityName(), session());
     	excelListPage.setDataSource(dataSource());
     	return excelListPage;
+    }
+    
+    @Override
+    public WOComponent backAction() {
+    	WOComponent result = nextPageFromDelegate();
+    	if (result == null) {
+    		result = nextPage();
+    		if (result == null) {
+    			result = (WOComponent) D2W.factory().pageForConfigurationNamed("AjaxQuery" + entity().name(), session());
+    		}
+    	}
+    	return result;
     }
 }

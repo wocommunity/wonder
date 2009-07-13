@@ -1,9 +1,3 @@
-IsEntityWritable: WOConditional {
-	_unroll = true;
-	condition = isEntityReadOnly;
-	negate = true;
-}
-
 AttributeName: WOString {
 	value = displayNameForRelationshipKey;
 }
@@ -26,7 +20,7 @@ DisplayCreate: WOConditional {
 	negate = true;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERDAjaxDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
@@ -42,6 +36,7 @@ ListComponent: ERXD2WSelect {
 	dataSource = selectDataSource;
 	entityName = entity.name;
 	selectedObject = objectToAddToRelationship;
+	pageConfiguration = listPageConfiguration;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -55,9 +50,4 @@ QueryComponent: D2WQuery {
 	entityName = entity.name;
 	queryDataSource = selectDataSource;
 	pageConfiguration = queryPageConfiguration;
-}
-
-NewLink: WOHyperlink {
-	action = newObjectAction;
-	id = "ERDIVEditRelationshipPage_NewButton";
 }

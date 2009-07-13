@@ -11,6 +11,7 @@ import er.extensions.components.ERXTabPanel;
  * @binding selectedTab: contains the selected tab
  * @binding submitActionName: if this binding is non null, tabs will contain a submit button instead of a regular hyperlink and the action pointed to by the binding will be called
  */
+@Deprecated
 public class WOTabPanel2 extends ERXTabPanel {
     public WOTabPanel2(WOContext context) {
         super(context);

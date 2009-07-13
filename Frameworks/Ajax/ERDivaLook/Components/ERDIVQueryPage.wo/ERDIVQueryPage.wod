@@ -1,6 +1,7 @@
-BackLink: WOHyperlink {
+BackLink: AjaxUpdaterLink {
 	action = returnAction;
 	class = "return";
+	container = "a";
 }
 
 Conditional1: WOConditional {
@@ -26,7 +27,7 @@ FetchLimitConditional: WOConditional {
 	condition = fetchLimit;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERDAjaxDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
@@ -43,16 +44,18 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-QueryForm: WOForm {
+QueryForm: AjaxUpdaterForm {
+	class = "query";
+	id = d2wContext.pageConfiguration;
 	action = queryAction;
-	name = "QueryForm";
-	multipleSubmit = true;
+	container = d2wContext.container;
 }
 
-QuerySubmitButton: WOSubmitButton {
+QuerySubmitButton: AjaxUpdaterButton {
 	action = queryAction;
 	value = "Search";
 	class = "search";
+	container = "a";
 }
 
 ResourceInputRepresentation: WOSwitchComponent {
@@ -91,8 +94,4 @@ DebugComponentName: ERDIVDebugComponentName {
 AttributeContainer: WOGenericContainer {
 	elementName = "li";
 	class = d2wContext.class;
-}
-
-Watcher: AjaxBusyIndicator {
-	watchContainerID = "a";
 }

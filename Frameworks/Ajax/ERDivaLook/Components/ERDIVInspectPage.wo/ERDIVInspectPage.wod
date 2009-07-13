@@ -1,6 +1,8 @@
-EditLink: WOHyperlink {
+EditLink: AjaxUpdaterLink {
 	action = editAction;
 	class = "edit";
+	container = d2wContext.container;
+	evalScripts = true;
 }
 
 EntityName: WOString {
@@ -8,7 +10,7 @@ EntityName: WOString {
 	value = d2wContext.displayNameForEntity;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERDAjaxDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
@@ -18,14 +20,11 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-Watcher: AjaxBusyIndicator {
-	watchContainerID = "a";
-}
-
-
-ReturnLink: WOHyperlink {
+ReturnLink: AjaxUpdaterLink {
 	action = nextPage;
 	class = "return";
+	container = d2wContext.container;
+	evalScripts = true;
 }
 
 ShowCancel: WOConditional {
@@ -46,6 +45,7 @@ TabPanel : WOSwitchComponent {
 	tabNameKey = "displayName";
 	tabs = tabSectionsContents;
 	useFormSubmit = d2wContext.hasForm;
+	container = d2wContext.container;
 }
 
 InspectPageRepetition1: WOSwitchComponent {
@@ -68,4 +68,9 @@ IsNotTabs: WOKeyValueConditional {
 
 CanEdit: WOConditional {
 	condition = isEntityEditable;
+}
+
+Container: WOGenericContainer {
+	elementName = "div";
+	id = d2wContext.idForPageConfiguration;
 }

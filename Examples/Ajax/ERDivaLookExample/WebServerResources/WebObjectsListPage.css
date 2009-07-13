@@ -14,7 +14,7 @@ div#a h1.list {
 	height: 34px;
 }
 
-div#a a.return {
+div#a div.list a.return {
 	text-indent: -5000px;
 	display: block;
 	border: 0px;

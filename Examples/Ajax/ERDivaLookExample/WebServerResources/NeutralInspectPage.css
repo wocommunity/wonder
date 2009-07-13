@@ -4,7 +4,7 @@
 
 /* The following are styles for the inspect page */
 
-div#a h1.task {
+div#a h1.task.inspect {
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/InspectMetalBan.gif);
 	background-repeat: no-repeat;
 	text-indent: -5000px;

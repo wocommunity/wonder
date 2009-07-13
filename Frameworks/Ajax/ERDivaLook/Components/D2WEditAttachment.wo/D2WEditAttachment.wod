@@ -1,17 +1,17 @@
-HasAttachment: WOConditional {
-	condition = objectPropertyValueIsNonNull;
+HasAttachment: ERXNonNullConditional {
+	condition = objectPropertyValue;
 }
 
-NoAttachment: WOConditional {
-	condition = objectPropertyValueIsNonNull;
+NoAttachment: ERXNonNullConditional {
+	condition = objectPropertyValue;
 	negate = true;
 }
 
-AddAttachment: ModalBoxButton {
-	action = addAttachment;
-	value = "Attach a file...";
-	class = "D2WEditAttachment";
-	title = "File Upload";
+FileUpload : ERAjaxAttachmentUpload {
+	attachment = attachment;
+	editingContext = object.editingContext;
+	configurationName = configurationName;
+	onComplete = onComplete;
 }
 
 DisplayAttachmentDownloadLink: ERAttachmentLink {
@@ -28,9 +28,9 @@ Icon: ERAttachmentIcon {
 	size = d2wContext.size;
 }
 
-DeleteButton: WOSubmitButton {
+DeleteButton: AjaxUpdaterButton {
 	action = removeAttachment;
 	class = "delete";
-	value = "x";
 	title = "Delete";
+	container = container;
 }

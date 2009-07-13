@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo class="AccordionTab.java" wocomponentcontent="true">
+        <wo class="AjaxAccordionTab2.java" wocomponentcontent="true">
 
         <binding name="title"/>
     </wo>

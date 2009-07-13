@@ -1,22 +1,5 @@
-@import url("WebObjects.css");
-
-body {
-	min-width: 0;
-}
-
-div#a {
-	height: auto;
-	width: auto;
-	min-height: 0;
-}
-
-h1.ERDIVEditRelationshipPage {
+h1.task.editRelationship {
 	display: none;
-}
-
-ul#ERDIVEditRelationshipPage_Buttons li {
-	float: left;
-	padding: 2px;
 }
 
 div#ERDIVEditRelationshipPage_Select h1.task {
@@ -31,10 +14,4 @@ a.ERDIVListPage_SelectButton {
 	display: block;
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/add-sm-btn.gif);
 	width: 46px;
-}
-
-/* hide the side bar and divider on the modal page */
-
-div#c, div#b, div#vertical_divider  {
-	display: none;
 }

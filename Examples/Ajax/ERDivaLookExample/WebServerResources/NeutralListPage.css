@@ -4,7 +4,7 @@
 
 /* The following are styles for the list page  */
 
-div#a h2.entity {
+div#a h2.entity.list {
 	display: none;
 }
 

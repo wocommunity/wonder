@@ -1,0 +1,7 @@
+EditEO: AjaxUpdaterLink {
+	action = inspectObjectAction;
+	title = ^displayNameForInspectConfiguration;
+	class = "ERDInspectButton2";
+	container = d2wContext.container;
+	evalScripts = true;
+}

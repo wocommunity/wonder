@@ -2,5 +2,55 @@ Content: WOComponentContent {
 	_unroll = YES;
 }
 
-Head: D2WHead {
+Head: ERD2WHead {
+}
+
+CSS: ERXStyleSheet {
+	filename = stylesheet;
+}
+
+Prototype: ERXJavaScript {
+	filename = "prototype.js";
+	framework = "Ajax";
+}
+
+Effects: ERXJavaScript {
+	filename = "effects.js";
+	framework = "Ajax";
+}
+
+Builder: ERXJavaScript {
+	filename = "builder.js";
+	framework = "Ajax";
+}
+
+CalendarDateSelectScript: ERXJavaScript {
+	filename = "calendar_date_select.js";
+	framework = "WO2";
+}
+
+AccordionScript: ERXJavaScript {
+	filename = "accordion.js";
+	framework = "WO2";
+}
+
+LightwindowScript: ERXJavaScript {
+	filename = "lightwindow.js";
+	framework = "WO2";
+}
+
+LightwindowCSS: ERXStyleSheet {
+	filename = "lightwindow.css";
+	framework = "WO2";
+}
+
+CalendarDateSelectCSS: ERXStyleSheet {
+	filename = "CalendarDateSelect.css";
+	framework = "WO2";
+}
+
+A: WXGenericContainer {
+	elementName = "div";
+	id = "a";
+	ajax = true;
 }

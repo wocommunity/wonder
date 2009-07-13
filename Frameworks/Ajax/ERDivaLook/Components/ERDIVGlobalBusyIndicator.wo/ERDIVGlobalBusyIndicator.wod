@@ -1,0 +1,6 @@
+Busy: WOGenericContainer {
+	elementName = elementName;
+	id = id;
+	style = "display: none;";
+	class = ^class;
+}

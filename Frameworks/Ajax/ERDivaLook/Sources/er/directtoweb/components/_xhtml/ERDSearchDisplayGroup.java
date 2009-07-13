@@ -3,12 +3,19 @@ package er.directtoweb.components._xhtml;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSSelector;
 
 import er.directtoweb.components.ERDCustomQueryComponent;
 
+/**
+ * QuickSerch or 'filter' feature
+ * 
+ * @author mendis
+ *
+ */
 public class ERDSearchDisplayGroup extends ERDCustomQueryComponent {
 	public String value;
 	
@@ -16,6 +23,7 @@ public class ERDSearchDisplayGroup extends ERDCustomQueryComponent {
         super(context);
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() {
     	return false;
     }
@@ -24,11 +32,12 @@ public class ERDSearchDisplayGroup extends ERDCustomQueryComponent {
     // accessors    
     public String searchKey() {
     	String searchKey = (String) d2wContext().valueForKey("searchKey");
-    	return (searchKey != null) ? searchKey : (String) dataSource().entity().classPropertyNames().objectAtIndex(0);
-    }
-    
-    private EODatabaseDataSource dataSource() {
-		return (EODatabaseDataSource) displayGroup().dataSource();
+    	EODataSource dataSource = displayGroup().dataSource();
+    	
+    	if (searchKey == null && dataSource instanceof EODatabaseDataSource) {
+    		searchKey = (String) ((EODatabaseDataSource) dataSource).entity().classPropertyNames().objectAtIndex(0);
+    	}
+    	return searchKey;
     }
     
     public String displayNameForSearchKey() {
@@ -38,10 +47,12 @@ public class ERDSearchDisplayGroup extends ERDCustomQueryComponent {
     
     // actions
     public WOActionResults search() {
-    	if (value != null) {
+    	EODataSource dataSource = displayGroup().dataSource();
+    	
+    	if (value != null && dataSource instanceof EODatabaseDataSource) {
     		EOQualifier _qualifier = new EOKeyValueQualifier(searchKey(), selector, "*" + value + "*");
-    		dataSource().setAuxiliaryQualifier(_qualifier);
-    	} else dataSource().setAuxiliaryQualifier(null);
+    		((EODatabaseDataSource) dataSource).setAuxiliaryQualifier(_qualifier);
+    	} else ((EODatabaseDataSource) dataSource).setAuxiliaryQualifier(null);
     	
 		displayGroup().fetch();
 		

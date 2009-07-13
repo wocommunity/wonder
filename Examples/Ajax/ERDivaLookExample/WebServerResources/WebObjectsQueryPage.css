@@ -16,7 +16,7 @@ div#a h2.entity {
 	min-width: expression(document.getElementById('QueryList').offsetWidth + "px");
 }
 
-div#a form fieldset.button ul li button.search {
+div#a form.query fieldset.button ul li button.search {
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/searchdb-btn.gif) no-repeat;
 	width: 177px;
 	height: 27px;
@@ -26,7 +26,7 @@ div#a form fieldset.button ul li button.search {
 	margin-bottom: 10px;
 }
 
-div#a form fieldset.button ul li button {
+div#a form.query fieldset.button ul li button {
 	text-indent: -5000px;
 	display: block;
 	height:22px;
@@ -40,32 +40,32 @@ div#a {
 	width: expression(document.getElementById('QueryList').offsetWidth + "px");
 }
 
-div#a form fieldset.attribute ul li.attribute {
+div#a form.query fieldset.attribute ul li.attribute {
 	line-height: 30px;
 }
 
-div#a form fieldset.attribute ul li fieldset legend {
+div#a form.query fieldset.attribute ul li fieldset legend {
 	margin-left: -130px; /*width of left column*/
 	font-size: 13px;
 	color: white;
 	-webkit-transform: translate(0, 30px);
 }
 
-div#a form fieldset.attribute ul li fieldset {
+div#a form.query fieldset.attribute ul li fieldset {
 	padding-left: 130px; /*width of left column*/
 }
 
-div#a form fieldset.attribute ul li fieldset div.content {
+div#a form.query fieldset.attribute ul li fieldset div.content {
 	margin-top: -30px;
 	border-left: solid #333333 1px;
 	padding-left: 5px;
 	min-height: 30px;
 }
 
-div#a form fieldset.attribute ul li.attribute div.content *, div#a form fieldset.attribute ul li.attribute legend * {
+div#a form.query fieldset.attribute ul li.attribute div.content *, div#a form.query fieldset.attribute ul li.attribute legend * {
 	padding: 1px;
 }
 
-div#a form fieldset.attribute ul li.attribute div.content select, div#a form fieldset.attribute ul li.attribute div.content option {
+div#a  fieldset.attribute ul li.attribute div.content select, div#a  fieldset.attribute ul li.attribute div.content option {
 	padding: 0;
 }
