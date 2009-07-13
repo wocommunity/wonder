@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="AjaxUploadButton" wocomponentcontent="false">    <binding name="id"/>
+    <binding name="name"/>
+        <validation message="'name' is a required binding.">
+            <unbound name="name"/>
+        </validation>
+    <binding name="filePath"/>
+        <validation message="'filePath' must be bound to a settable value">
+            <unsettable name="filePath"/>
+        </validation>
+        <binding name="data"/>
+        <binding name="mimeType"/>
+        <validation message="'mimeType' must be bound to a settable value">
+            <unsettable name="mimeType"/>
+        </validation>
+        <binding name="inputStream"/>
+        <binding name="outputStream"/>
+        <binding name="finalFilePath"/>
+        <binding name="streamToFilePath"/>
+    <binding name="onChange"/>
+        <binding name="onSubmit"/>
+        <binding name="onComplete"/>
+    </wo>
+</wodefinitions>
