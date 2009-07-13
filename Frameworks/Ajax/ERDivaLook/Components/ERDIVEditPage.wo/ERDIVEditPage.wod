@@ -48,7 +48,7 @@ Modal: WOConditional {
 	condition = d2wContext.isModal;
 }
 
-Errors: ERXErrorDictionaryPanel2 {
+Errors: ERXAjaxErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
 	errorKeyOrder = errorKeyOrder;

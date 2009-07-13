@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo class="ERXErrorDictionaryPanel2.java" wocomponentcontent="false">
+        <wo class="ERXAjaxErrorDictionaryPanel.java" wocomponentcontent="false">
 
         <binding name="errorMessages"/>
         <validation message="'errorMessages' is a required binding.">
