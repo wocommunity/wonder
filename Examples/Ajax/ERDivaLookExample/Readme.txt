@@ -1,27 +1,23 @@
+See: http://wiki.objectstyle.org/confluence/display/WO/ERDivaLook
+
 Prerequisites
 =============
 
 1. WO 5.4.1+
-2. Wonder Rev 8764 or later. Rev 9029+ preferable.
-3. Eclipse 3.4.1/3.5
+2. Eclipse 3.4.1/3.5
 
 
 Installation
 ============
 
-1. Download and install the latest Openbase (10+ i think) and set OBMovies db to startup.
-2. Import and build the two frameworks WO2 and ERDivaLook and the example ERDivaLookExample in Eclipse.
-3. Run ERDivaLookExample (Choose Application.java from the WO Explorer, control/right-click and select Run As...WOApplication)
+1. Import and build the two frameworks WO2 and ERDivaLook and the example ERDivaLookExample in Eclipse.
+2. Run ERDivaLookExample (Choose Application.java from the WO Explorer, control/right-click and select Run As...WOApplication)
 
 Troubleshooting
 ===============
 
 1. If you don't see any images check to see that your web server is running and that JavaDirectToWeb.framework has been installed
 
-Documentation
-=============
-
-See: http://wiki.objectstyle.org/confluence/display/WO/ERDivaLook
 
 Features (Demo-ed)
 ========
