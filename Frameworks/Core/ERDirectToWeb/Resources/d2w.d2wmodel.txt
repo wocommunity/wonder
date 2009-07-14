@@ -102,6 +102,7 @@
     0 : pageConfiguration like 'ConfirmDelete*' => explanationConfigurationName = inspectConfigurationName [er.directtoweb.ERDKeyValueAssignment],
     0 : *true* => templateNameForGroupingPrinterFriendlyListPage = ERD2WGroupingPrinterFriendlyListPageTemplate [com.webobjects.directtoweb.Assignment],
     0 : *true* => complexRichTextMode = mode : 'textareas', theme: 'advanced', theme_advanced_layout_manager : 'SimpleLayout', theme_advanced_buttons1 : 'separator,insertdate,inserttime,preview,zoom,separator,forecolor,backcolor' [com.webobjects.directtoweb.Assignment],
+    1 : *true* => omitTags = true [com.webobjects.directtoweb.BooleanAssignment],
     1 : not (task = 'query') => componentName = ERD2WDisplayString [com.webobjects.directtoweb.Assignment],
     1 : (task = 'list' or task = 'select' or (task = 'edit' and subTask = 'list')) => repetitionComponentName = ERDListPageRepetition [com.webobjects.directtoweb.Assignment],
     5 : *true* => useTabImages = false [com.webobjects.directtoweb.BooleanAssignment],
