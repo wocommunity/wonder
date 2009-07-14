@@ -48,11 +48,12 @@ Features (Demo-ed)
 Features (Not demo-ed)
 ========
 
-1. Support for ERAttachments
+1. Support for ERAttachments and ajax file uploads
 2. Global "loading..." that may be styled as a busy spinner (for ajax updates).
 3. Error page/alert panel.
 4. Excel/report function added to list page. Hidden via CSS.
 5. Old school tooltips set via D2W key "title".
+6. Wizard (Modal) EO creation
 
 Notes on XHTML, CSS and D2W
 ===========================
@@ -63,7 +64,8 @@ This is often a pre-requisite for unobtrusive Javascript libraries (like the acc
 3. D2W rules are (mostly) stripped of presentation rules like colour, number of row, width, height, etc.
 The presentation related rules (including the ones for stylesheet) are in the user.d2wmodel
 
-Compatible browsers
+Compatible browsers (ERDivaLookExample)
 ===================
 
-Safari2+3+4, FireFox3, IE7+8 (standard mode), Chrome
+CSS is universal for the following browsers:
+Safari4, FireFox3+, Chrome, IE (forthcoming)
