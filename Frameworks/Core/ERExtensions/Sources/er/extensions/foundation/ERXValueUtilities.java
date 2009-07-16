@@ -20,7 +20,7 @@ import er.extensions.components.ERXComponentUtilities;
  * (or one containing only whitespace) is given, then
  * the string is assumed to be null. This is because
  * D2W is not able to give back null values anymore.
- * @created ak on Mon Oct 28 2002
+ * @author ak on Mon Oct 28 2002
  * @project ERExtensions
  */
 

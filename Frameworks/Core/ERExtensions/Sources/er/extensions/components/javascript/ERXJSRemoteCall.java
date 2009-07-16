@@ -16,7 +16,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * See: http://developer.apple.com/internet/javascript/iframe.html for details
  * @binding sample sample binding explanation
  *
- * @created ak on Fri May 02 2003
+ * @author ak on Fri May 02 2003
  * @project ERExtensions
  */
 

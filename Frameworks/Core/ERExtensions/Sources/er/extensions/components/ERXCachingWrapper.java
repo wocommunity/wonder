@@ -38,7 +38,7 @@ import er.extensions.foundation.ERXAssert;
  * @binding duration the duration the entry stays in the cache
  * @binding entryName the name to cache on
  *
- * @created ak on 20.01.05
+ * @author ak on 20.01.05
  * @project ERExtensions
  */
 

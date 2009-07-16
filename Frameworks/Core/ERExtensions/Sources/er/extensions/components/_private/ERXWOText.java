@@ -13,7 +13,7 @@ import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.Text;
  * This class will get used automatically at startup, so do not use it directly
  * But use <code>WOText</code> instead.
  * 
- * @created ak on Tue Oct 15 2002
+ * @author ak on Tue Oct 15 2002
  * @project ERExtensions
  */
 

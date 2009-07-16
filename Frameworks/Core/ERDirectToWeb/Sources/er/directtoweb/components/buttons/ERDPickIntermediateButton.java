@@ -23,7 +23,7 @@ import er.extensions.localization.ERXLocalizer;
  * @binding pickConfigurationName name of the page configuration to use (optional)
  * @binding pickButtonLabel label for the button (optional)
  *
- * @created ak on 07.11.05
+ * @author ak on 07.11.05
  * @project ERDirectToWeb
  */
 

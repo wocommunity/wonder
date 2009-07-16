@@ -18,7 +18,7 @@ import er.directtoweb.delegates.ERDBranchInterface;
  *
  * @binding d2wContext the context for this component 
  *
- * @created ak on Sun Jan 26 2003
+ * @author ak on Sun Jan 26 2003
  * @project ERExtras
  */
 

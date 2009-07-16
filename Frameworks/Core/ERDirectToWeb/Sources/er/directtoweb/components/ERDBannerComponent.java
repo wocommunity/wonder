@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
  * @binding bannerFileName which image to show
  * @binding framework framework from where the image comes from
  *
- * @created ak on Tue Sep 02 2003
+ * @author ak on Tue Sep 02 2003
  * @project ERDirectToWeb
  */
 

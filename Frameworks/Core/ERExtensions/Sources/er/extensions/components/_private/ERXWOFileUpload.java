@@ -19,7 +19,7 @@ import er.extensions.appserver.ERXWOContext;
  *  <li> throws an IllegalArgumentException when it is embedded in a WOForm that does not have enctype=multipart/form-data
  *  <li> catches "ran out of data" IllegalStateException in superclass when the user backtracked.
  *</ul>
- * @created ak on Wed Oct 09 2002
+ * @author ak on Wed Oct 09 2002
  * @project ERExtensions
  */
 

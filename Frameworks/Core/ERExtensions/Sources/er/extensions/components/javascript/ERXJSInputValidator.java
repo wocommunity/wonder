@@ -26,7 +26,7 @@ import er.extensions.components._private.ERXWOTextField;
  * @binding entityName the entity to validate against
  * @binding disabled disable the validation
  *
- * @created ak on Fri May 02 2003
+ * @author ak on Fri May 02 2003
  * @project ERExtensions
  */
 

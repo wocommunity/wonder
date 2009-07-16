@@ -9,7 +9,7 @@ import com.webobjects.appserver.WOContext;
  *
  * @binding cellWidth width if the date cells. Default is 20.
  *
- * @created ak on Thu Sep 04 2003
+ * @author ak on Thu Sep 04 2003
  * @project ERExtensions
  */
 

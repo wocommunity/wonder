@@ -9,7 +9,7 @@ import er.extensions.localization.ERXLocalizer;
 
 /**
  * Class for Wonder Component ERXAnyField.
- * @created ak on Thu Feb 27 2003
+ * @author ak on Thu Feb 27 2003
  */
 
 public class ERXAnyField extends WOAnyField {

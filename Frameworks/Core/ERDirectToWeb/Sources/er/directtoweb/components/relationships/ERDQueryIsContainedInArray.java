@@ -24,7 +24,7 @@ import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
  * @binding numCols number of columns when "checkbox" is the UIStyle
  * @binding size number of rows for "checkbox" or "browser" UIStyle
  * 
- * @created ak on Wed Apr 07 2004
+ * @author ak on Wed Apr 07 2004
  * @project ERDirectToWeb
  */
 

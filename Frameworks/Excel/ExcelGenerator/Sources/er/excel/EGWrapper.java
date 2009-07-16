@@ -16,7 +16,7 @@ import er.extensions.components.ERXNonSynchronizingComponent;
  *
  * @binding sample sample binding explanation
  *
- * @created ak on Thu Mar 04 2004
+ * @author ak on Thu Mar 04 2004
  * @project ExcelGenerator
  */
 

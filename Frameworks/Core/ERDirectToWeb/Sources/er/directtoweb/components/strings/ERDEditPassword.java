@@ -29,7 +29,7 @@ import er.extensions.validation.ERXValidationFactory;
  * @binding passwordConfirmationValidates if true, then the property key validation is left to the confirmation component. Otherwise the validation occurs here.
  * @d2wKey length the length of the text field
  *
- * @created ak on Sun Aug 17 2003
+ * @author ak on Sun Aug 17 2003
  * @project ERDirectToWeb
  */
 

@@ -9,7 +9,7 @@ import com.webobjects.directtoweb.D2WSwitchComponent;
 /**
  * Same as D2WQuery, except that you can specify the queryBindings in advance.
  * 
- * @created ak on Fri Jan 09 2004
+ * @author ak on Fri Jan 09 2004
  * @project ERDirectToWeb
  */
 
