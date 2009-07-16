@@ -13,7 +13,7 @@ import com.webobjects.directtoweb.SelectPageInterface;
  *
  * @binding d2wContext the d2wContext
  *
- * @created ak on Mon Sep 01 2003
+ * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
  */
 

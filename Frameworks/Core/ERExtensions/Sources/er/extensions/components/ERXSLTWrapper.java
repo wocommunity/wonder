@@ -63,7 +63,7 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * @binding data will be set to the transformed data (optional)
  * @binding stream will be set to the transformed data (optional)
  * @binding nocache flag that if set creates a new transformer instead of using the one in the cache. Useful when deleloping the stylesheet. 
- * @created ak on 07.04.05
+ * @author ak on 07.04.05
  * @project ERExtensions
  */
 

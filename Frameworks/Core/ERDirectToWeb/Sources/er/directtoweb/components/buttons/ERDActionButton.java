@@ -21,7 +21,7 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
 /**
  * Abstract superclass for all actions inside of Wonder D2W.
  * 
- * @created ak on Mon Sep 01 2003
+ * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
  */
 

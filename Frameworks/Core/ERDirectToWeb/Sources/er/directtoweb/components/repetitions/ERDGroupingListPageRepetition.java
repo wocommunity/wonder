@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSArray;
  * @binding sample sample binding explanation
  * @d2wKey sample sample d2w key
  *
- * @created ak on 31.10.05
+ * @author ak on 31.10.05
  * @project ERDirectToWeb
  */
 

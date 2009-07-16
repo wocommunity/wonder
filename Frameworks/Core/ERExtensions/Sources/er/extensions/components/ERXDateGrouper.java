@@ -23,7 +23,7 @@ import er.extensions.foundation.ERXTimestampUtility;
  * Works much the same as a {@link WODisplayGroup}.
  * See {@link ERXMonthView} for an example on how to use it.
  *
- * @created ak on Mon Nov 04 2002
+ * @author ak on Mon Nov 04 2002
  */
 
 public class ERXDateGrouper extends WODisplayGroup {

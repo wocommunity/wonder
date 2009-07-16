@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  *
  * @binding sample sample binding explanation
  *
- * @created ak on Sat May 03 2003
+ * @author ak on Sat May 03 2003
  * @project ERExtensions
  */
 

@@ -16,7 +16,7 @@ import er.extensions.validation.ERXValidationException;
  *
  * @binding sample sample binding explanation
  *
- * @created ak on Fri May 02 2003
+ * @author ak on Fri May 02 2003
  * @project ERExtensions
  */
 

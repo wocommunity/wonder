@@ -22,7 +22,7 @@ import er.extensions.localization.ERXLocalizer;
  * @binding trashcanExplanation
  * @binding noTrashcanExplanation
  *
- * @created ak on Mon Sep 01 2003
+ * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
  */
 

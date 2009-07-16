@@ -13,7 +13,7 @@ import er.extensions.localization.ERXLocalizer;
  * containing the labels in a format like ("Don't care", "Yes", "No") or ("Yes", "No").
  * Also keeps the selected value. 
  * 
- * @created ak on Mon Dec 22 2003
+ * @author ak on Mon Dec 22 2003
  * @project ERDirectToWeb
  */
 

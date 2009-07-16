@@ -7,7 +7,7 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
 
 /**
  * For editing a selection in a list repetition. You'd typicically but this somewhere into the actions.
- * @created ak on Thu Sep 04 2003
+ * @author ak on Thu Sep 04 2003
  * @project ERDirectToWeb
  */
 
