@@ -11,8 +11,8 @@ import er.attachment.model.ERAttachment;
  * 
  * @author mendis
  *
- * @bindings object
- * @bindings propertyKey
+ * @binding object
+ * @binding propertyKey
  */
 public class D2WEditAttachment extends D2WComponent {
     public D2WEditAttachment(WOContext context) {
