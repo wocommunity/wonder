@@ -8,7 +8,6 @@ import er.extensions.foundation.ERXProperties;
 
 /**
  * Prototype event notification for errors
- * FIXME: will have to modify for Ajax pageconfigs
  * 
  * @author mendis
  *
