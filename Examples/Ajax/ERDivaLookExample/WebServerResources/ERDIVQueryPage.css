@@ -1,5 +1,37 @@
-@import url("WXRadioButtonList.css");
-@import url("WXCheckboxList.css");
+/* WXRadioButtonList.css */
+
+ul.WXRadioButtonList {
+	width: 10em;
+}
+
+ul.WXRadioButtonList li {
+	width: 10em;
+	float: left;
+}
+
+/* WXCheckboxList.css */
+
+ul.WXCheckboxList {
+	width: 20em;
+}
+
+ul.WXCheckboxList li {
+	width: 10em;
+	float: left;
+}
+
+/* ERD2WAjaxQueryDateRange.css */
+
+em.ERD2WAjaxQueryDateRange_Subscript {
+	display: none;
+}
+
+label.ERD2WAjaxQueryDateRange_label_from {
+	display: none;
+}
+
+
+/* ERDIVQueryPage.css */
 
 div#a form.query fieldset.attribute ul li fieldset legend {
 	margin-left: -10em; /*width of left column*/

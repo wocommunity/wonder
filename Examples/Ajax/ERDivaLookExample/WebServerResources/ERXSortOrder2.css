@@ -1,9 +1,0 @@
-/* The following are styles for the sort order  */
-
-div#a div table.list thead tr th div.property {
-	margin: 2px;
-}
-
-div#a div table.list thead tr th div.sort {
-	margin: 4px 4px 4px 2px;
-}

@@ -1,7 +1,42 @@
-@import url("D2WAjaxEditToManyFault.css");
-@import url("D2WAjaxEditToOneFault.css");
-@import url("CalendarDateSelect.css");
-@import url("ERD2WEditToOneRelationship2.css");
+/* D2WAjaxEditToManyFault.css */
+
+button.D2WAjaxEditToManyFault_Delete {
+	border:0px;
+	cursor:pointer;
+	background-color: transparent;
+}
+
+/* D2WAjaxEditToOneFault.css */
+
+button.D2WAjaxEditToOneFault_Delete {
+	border: 0px;
+	cursor: pointer;
+	background-color: transparent;
+}
+
+div.D2WAjaxEditToOneFault a {
+	overflow: hidden hidden;
+}
+
+/* CalendarDateSelect.css */
+
+input.CalendarDateSelect {
+	background: url(/WebObjects/Frameworks/ERExtensions.framework/WebServerResources/calendar.gif) no-repeat 100% white;
+}
+
+/* ERD2WEditToOneRelationship2.css */
+
+button.ERD2WEditToOneRelationship_New {
+	border: 0;
+	background-color: transparent;
+	padding: 0;
+}
+
+button.ERD2WEditToOneRelationship_New:hover {
+	text-decoration: underline;
+}
+
+/* ERDIVEditPage.css */
 
 div#a form.edit fieldset.button ul li {
 	float: left;
