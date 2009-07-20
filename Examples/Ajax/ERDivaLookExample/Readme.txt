@@ -40,6 +40,7 @@ Features (Demo-ed)
 16. Modal confirmation panel (ajax) on Rental edit page (on save).
 17. Property level ajax updates set via the d2wRule "isAjax" for some components. See Edit Movie.studio for a (contrived) example.
 18. Ajax exception page (to use the ERDivaLook default exception page, you need to order ERDivaLook framework before JavaWOExtensions).
+19. Dynamic D2W. See Edit Studio. Add movie.
 
 Features (Not demo-ed)
 ========
