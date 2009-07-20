@@ -1,6 +1,49 @@
 @import url("ERDIVListPage.css");
 @import url("NeutralList.css");
-@import url("NeutralSearchDisplayGroup.css");
+
+/* NeutralSearchDisplayGroup.css */
+
+ul.ERDSearchDisplayGroup label, ul.ERDSearchDisplayGroup input.quick_serach_field, button#quick_search_submit {
+	margin: 2px 0;
+	border-width: 0;
+	padding: 2px 0;
+	background-color: white;
+	display: inline-block;
+	font-size: 12px;
+	vertical-align: middle;
+}
+
+ul.ERDSearchDisplayGroup label {
+	color: #777777;
+	-moz-border-radius-bottomleft: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+	-webkit-border-top-left-radius: 8px;
+	border-top-left-radius: 8px;
+	text-indent: 3px;
+	height: 15px;
+}
+
+ul.ERDSearchDisplayGroup input.quick_serach_field {
+	width: 150px;
+	padding-left: 2px;
+	padding-right: 2px;
+	height: 15px;
+}
+
+button#quick_search_submit {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/magglass-btn.png) 0 1px no-repeat white;
+	width: 18px;
+	text-indent: -5000px;
+	-moz-border-radius-bottomright: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+	-moz-border-radius-topright: 8px;
+	-webkit-border-top-right-radius: 8px;
+	border-top-right-radius: 8px;
+	height: 19px;
+}
 
 /* The following are styles for the list page  */
 
