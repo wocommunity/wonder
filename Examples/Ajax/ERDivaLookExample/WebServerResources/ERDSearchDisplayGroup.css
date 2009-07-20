@@ -1,7 +1,0 @@
-ul.ERDSearchDisplayGroup label:after {
-	content: ":";
-}
-
-ul.ERDSearchDisplayGroup li {
-	float: right;
-}
