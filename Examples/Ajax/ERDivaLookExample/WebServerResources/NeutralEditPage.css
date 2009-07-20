@@ -1,9 +1,98 @@
 @import url("ERDIVEditPage.css");
-@import url("NeutralEditToManyFault.css");
-@import url("NeutralEditToOneFault.css");
-@import url("NeutralCalendarDateSelect.css");
-@import url("NeutralAjaxAccordion.css");
-@import url("NeutralEditToOneRelationship2.css");
+
+/* NeutralEditToManyFault.css */
+
+button.D2WAjaxEditToManyFault_Add {
+	text-indent: -5000px;
+	cursor: pointer;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
+	height: 13px;
+	width: 42px;
+	border:0;
+	display: block;
+}
+
+button.D2WAjaxEditToManyFault_Delete {
+	color: transparent;
+	margin-top: -24px;
+	font-size: 10pt;
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+li.D2WAjaxEditToManyFault:hover button.D2WAjaxEditToManyFault_Delete {
+	color: blue;
+}
+
+li.D2WAjaxEditToManyFault:hover button.D2WAjaxEditToManyFault_Delete:hover {
+	color: white;
+}
+
+li.D2WAjaxEditToManyFault a, button.D2WAjaxEditToManyFault_Delete {
+	padding-top: 1px;
+	padding-bottom: 2px;
+	vertical-align: 0%;
+}
+
+button.D2WAjaxEditToManyFault_Delete:hover {
+	background-color: #336699;
+	color: white;
+}
+
+li.D2WAjaxEditToManyFault a {
+	margin-right: 2px;
+}
+
+/* NeutralEditToOneFault.css */
+
+button.D2WAjaxEditToOneFault_Add {
+	text-indent: -5000px;
+	cursor: pointer;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
+	height: 13px;
+	width: 42px;
+	border:0;
+	display: block;
+}
+
+button.D2WAjaxEditToOneFault_Delete {
+	color: transparent;
+	margin-top: -24px;
+	font-size: 10pt;
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+button.D2WAjaxEditToOneFault_Delete:hover {
+	background-color: #336699;
+	color: white;
+}
+
+div.D2WAjaxEditToOneFault:hover button.D2WAjaxEditToOneFault_Delete {
+	color: blue;
+}
+
+div.D2WAjaxEditToOneFault:hover button.D2WAjaxEditToOneFault_Delete:hover {
+	color: white;
+}
+
+div.D2WAjaxEditToOneFault a, button.D2WAjaxEditToOneFault_Delete {
+	padding-top: 1px;
+	padding-bottom: 2px;
+	vertical-align: 0%;
+}
+
+div.D2WAjaxEditToOneFault a {
+	margin-right: 2px;
+}
+
+/* NeutralEditToOneRelationship2.css */
+
+button.ERD2WEditToOneRelationship_New {
+	color: rgb(0, 0, 238);
+}
 
 /* The following are styles for the edit page */
 
