@@ -417,9 +417,10 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
                                                                                                       fetchSpecification.sortOrderings(),
                                                                                                       null);
             pkFetchSpec.setFetchLimit(fetchSpecification.fetchLimit());
+            pkFetchSpec.setUsesDistinct(fetchSpecification.usesDistinct());
             boolean performDistinctInMemory = ERXSQLHelper.newSQLHelper(entity).shouldPerformDistinctInMemory(pkFetchSpec);
-            if (!performDistinctInMemory) {
-            	pkFetchSpec.setUsesDistinct(fetchSpecification.usesDistinct());
+            if (performDistinctInMemory) {
+            	pkFetchSpec.setUsesDistinct(false);
             }
             log.debug("Fetching primary keys.");
             NSArray primaryKeyDictionaries = editingContext().objectsWithFetchSpecification(pkFetchSpec);
