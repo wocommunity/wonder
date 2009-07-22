@@ -147,7 +147,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 			String path = sb.toString();
 			try {
 				path = path.replaceAll("\\?.*", "");
-				if (!request.userInfo().containsKey("HttpServletRequest")) {
+				if (request.userInfo() != null && !request.userInfo().containsKey("HttpServletRequest")) {
 					/* PATH_INFO is already decoded by the servlet container */
 					path = path.replace('+', ' ');
 					path = URLDecoder.decode(path, "UTF-8");
