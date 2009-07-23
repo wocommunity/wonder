@@ -1,19 +1,16 @@
-
-Anchor: WOGenericContainer {
-	elementName = "a";
-	name = anchor;
-}
-
-ArrowActiveImage: WOSubmitButton {
+ArrowActiveButton: AjaxUpdaterButton {
 	action = toggleVisibilityClicked;
-	disabled = ^disabled;
 	value = label;
+	container = ^container;
+	class = toggleButtonClass;
+	evalScripts = true;
 }
 
-ArrowLink: WOHyperlink {
+ArrowActiveLink: AjaxUpdaterLink {
 	action = toggleVisibilityClicked;
-	disabled = ^disabled;
-	fragmentIdentifier = anchor;
+	container = ^container;
+	class = toggleButtonClass;
+	evalScripts = true;
 }
 
 Conditional: WOConditional {
