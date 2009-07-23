@@ -16,3 +16,11 @@ Select: AjaxUpdaterButton {
 ShowActions: WOConditional {
 	condition = ^showActions;
 }
+
+CollapseContainer: D2WAjaxCollapsibleComponentContent {
+	_unroll = true;
+	allowCollapsing = ^allowCollapsing;
+	closedLabel = closedLabelString;
+	submitActionName = "";
+	container = container;
+}

@@ -12,6 +12,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @see ERDList
  * 
  * @author mendis
+ * @author dschonen			Added collapsing
  *
  */
 public class ERDList2 extends ERDList {
@@ -42,5 +43,14 @@ public class ERDList2 extends ERDList {
     	NSMutableDictionary settings = super.settings().mutableClone();
     	settings.setObjectForKey(object(), "object");
     	return settings.immutableClone();
+    }
+    
+    public String container() {
+    	return d2wContext().valueForKey("id") + "_container";
+    }
+    
+    public String closedLabelString() {
+        String localizedEntityName = (String)d2wContext().valueForKey("displayNameForDestinationEntity");
+    	return detailDataSource().fetchObjects().count() + " " + localizedEntityName + "s";		// FIXME: RM: perhaps better plurification?
     }
 }
