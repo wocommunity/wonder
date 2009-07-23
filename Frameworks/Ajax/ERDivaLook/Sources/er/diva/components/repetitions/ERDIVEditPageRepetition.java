@@ -13,15 +13,17 @@ public class ERDIVEditPageRepetition extends ERDInspectPageRepetition {
     }
     
     // accessors	
+    //FIXME RM: move into rules
 	public String propertyClassString() {
-		return isManadatory() ? "propertyKey mandatory" : "propertyKey";
+		return isMandatory() ? "propertyKey mandatory" : "propertyKey";
 	}
 	
-	public boolean isManadatory() {
+	public boolean isMandatory() {
 		Object b = d2wContext().valueForKey("isMandatory");
 		return b != null ? ERXValueUtilities.booleanValue(b) : false;
 	}
 	
+    //FIXME RM: move into rules
 	public String contentClassString() {
 		return "content " + d2wContext().componentName();
 	}
@@ -31,7 +33,7 @@ public class ERDIVEditPageRepetition extends ERDInspectPageRepetition {
 	}
 	
 	public String attributeClassString() {
-		String attributeClassString = "attribute " + ERXStringUtilities.safeIdentifierName(propertyKey());
+		String attributeClassString = (String) d2wContext().valueForKey("classForAttribute");
 		return hasTitle() ? attributeClassString + " tooltip" : attributeClassString;
 	}
 	

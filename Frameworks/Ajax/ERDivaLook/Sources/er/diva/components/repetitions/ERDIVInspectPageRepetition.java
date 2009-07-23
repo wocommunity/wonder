@@ -13,6 +13,7 @@ public class ERDIVInspectPageRepetition extends ERDInspectPageRepetition {
     }
     
     // accessors
+    //FIXME RM: move into rules
 	public String contentClassString() {
 		return "content " + d2wContext().componentName();
 	}
@@ -22,7 +23,7 @@ public class ERDIVInspectPageRepetition extends ERDInspectPageRepetition {
 	}
 	
 	public String attributeClassString() {
-		return "attribute " + ERXStringUtilities.safeIdentifierName(propertyKey()); 
+		return (String) d2wContext().valueForKey("classForAttribute"); 
 	}
 	
 	public String accordionID() {
