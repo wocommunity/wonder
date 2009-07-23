@@ -17,6 +17,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class ERDList2 extends ERDList {
 	public EODetailDataSource detailDataSource;
+	private String closedLabelString;
+	private String container;
 	
     public ERDList2(WOContext context) {
         super(context);
@@ -24,6 +26,8 @@ public class ERDList2 extends ERDList {
     
     public void reset() {
     	detailDataSource = null;
+    	closedLabelString = null;
+    	container = null;
     	super.reset();
     }
     
@@ -46,11 +50,14 @@ public class ERDList2 extends ERDList {
     }
     
     public String container() {
-    	return d2wContext().valueForKey("id") + "_container";
+    	if (container == null) container = d2wContext().valueForKey("id") + "_container";
+    	return container;
     }
     
     public String closedLabelString() {
-        String localizedEntityName = (String)d2wContext().valueForKey("displayNameForDestinationEntity");
-    	return detailDataSource().fetchObjects().count() + " " + localizedEntityName + "s";		// FIXME: RM: perhaps better plurification?
+    	if (closedLabelString == null) {
+    		String localizedEntityName = (String)d2wContext().valueForKey("displayNameForDestinationEntity");
+    		closedLabelString = detailDataSource().fetchObjects().count() + " " + localizedEntityName + "s";		// FIXME: RM: perhaps better plurification?
+    	} return closedLabelString;
     }
 }
