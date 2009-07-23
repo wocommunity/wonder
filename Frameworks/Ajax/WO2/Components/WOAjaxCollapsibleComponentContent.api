@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="WOAjaxCollapsibleComponentContent" wocomponentcontent="true">    <binding name="container"/>
+    <binding name="openedLabel"/>
+        <binding name="closedLabel"/>
+        <binding defaults="Boolean" name="condition"/>
+        <binding name="submitActionName"/>
+        <binding defaults="Boolean" name="visibility"/>
+    </wo>
+</wodefinitions>
