@@ -261,8 +261,19 @@ public class ERXEOAccessUtilities {
 			if (ERXEOAccessUtilities.log.isInfoEnabled()) {
 				ERXEOAccessUtilities.log.info("Executing " + exp);
 			}
-	        adaptorChannel.evaluateExpression(factory.expressionForString(exp));        
-	     }
+	        // If channel.evaluateExpression throws when committing, it won't close the JDBC transaction
+	        // Probably a bug in JDBCChannel, but we must take care of it
+	        boolean contextHadOpenTransaction = adaptorChannel.adaptorContext().hasOpenTransaction();
+			try {
+				adaptorChannel.evaluateExpression(factory.expressionForString(exp));        
+			}
+			catch (EOGeneralAdaptorException e) {
+				if (adaptorChannel.adaptorContext().hasOpenTransaction() && ! contextHadOpenTransaction) {
+					adaptorChannel.adaptorContext().rollbackTransaction();
+				}
+				throw e;
+			}
+        }
         finally {
         	dbContext.unlock();
         }
@@ -352,8 +363,19 @@ public class ERXEOAccessUtilities {
         
         if (!channel.isOpen()) 
             channel.openChannel();
-            
-        channel.evaluateExpression(expression);
+        // If channel.evaluateExpression throws when committing, it won't close the JDBC transaction
+        // Probably a bug in JDBCChannel, but we must take care of it
+        boolean contextHadOpenTransaction = channel.adaptorContext().hasOpenTransaction();
+		try {
+			channel.evaluateExpression(expression);       
+		}
+		catch (EOGeneralAdaptorException e) {
+			if (channel.adaptorContext().hasOpenTransaction() && ! contextHadOpenTransaction) {
+				channel.adaptorContext().rollbackTransaction();
+			}
+			throw e;
+		}
+        
         if (attributes == null) {
             channel.setAttributesToFetch(channel.describeResults());
         }
