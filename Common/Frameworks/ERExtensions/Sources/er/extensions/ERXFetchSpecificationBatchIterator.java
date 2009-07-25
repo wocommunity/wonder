@@ -413,10 +413,10 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
                                                                                                       fetchSpecification.sortOrderings(),
                                                                                                       null);
             pkFetchSpec.setFetchLimit(fetchSpecification.fetchLimit());
-        	pkFetchSpec.setUsesDistinct(fetchSpecification.usesDistinct());
+            pkFetchSpec.setUsesDistinct(fetchSpecification.usesDistinct());
             boolean shouldPerformDistinctInMemory = false;
             if (ERXSQLHelper.newSQLHelper(editingContext(), entity).shouldPerformDistinctInMemory(pkFetchSpec)) {
-            	pkFetchSpec.setUsesDistinct(false);
+                pkFetchSpec.setUsesDistinct(false);
             	shouldPerformDistinctInMemory = true;
             }
             log.debug("Fetching primary keys.");

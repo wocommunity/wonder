@@ -9,21 +9,13 @@ AttributeRepetition: WORepetition {
 	list = currentSection.keys;
 }
 
-AttributeValue1: ERXTimedSwitchComponent { 
+AttributeValue: ERXTimedSwitchComponent { 
 	localContext = localContext;
 	object = object;
 	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-}
-
-AttributeValue2: WOSwitchComponent { 
-	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
-	localContext = localContext;
-	object = object;
 }
 
 BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
