@@ -201,7 +201,14 @@ public class ERD2WModel extends D2WModel {
     		NSNotificationCenter.defaultCenter().addObserver(this, 
     				ERXSelectorUtilities.notificationSelector("applicationWillDispatchRequest"), 
     				WOApplication.ApplicationWillDispatchRequestNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, 
+            ERXSelectorUtilities.notificationSelector("clearD2WRuleCache"), 
+            "clearD2WRuleCache", null);
     	}
+    }
+    
+    public void clearD2WRuleCache(NSNotification n) {
+      clearD2WRuleCache();
     }
     
     public NSArray rules() {
@@ -790,7 +797,7 @@ public class ERD2WModel extends D2WModel {
                 log.warn("Unknown qualifier type: " + q.getClass().getName());
             }
         } else {
-            log.warn("Asking caceh for a null qualifier.");
+            log.warn("Asking cache for a null qualifier.");
         }
         return cacheQualifier;
     }
