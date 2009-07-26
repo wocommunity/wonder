@@ -288,7 +288,8 @@ public class ERXUtilities {
     }
 
     /** entity name cache */
-    private static NSMutableDictionary _entityNameEntityCache;
+    private static NSDictionary<String, EOEntity> _entityNameEntityCache;
+
     /**
      * Finds an entity given a case insensitive search
      * of all the entity names.<br/>
@@ -298,18 +299,19 @@ public class ERXUtilities {
      */
     // FIXME: Should add an EOEditingContext parameter to get the right
     //	      EOModelGroup. Should also have a way to clear the cache.
-    // CHECKME: Should this even be cached? Not thread safe now.
+    // CHECKME: Should this even be cached?
     public static EOEntity caseInsensitiveEntityNamed(String entityName) {
         EOEntity entity = null;
         if (entityName != null) {
             if (_entityNameEntityCache == null) {
-                _entityNameEntityCache = new NSMutableDictionary();
-                for (Enumeration e = entitiesForModelGroup(ERXEOAccessUtilities.modelGroup(null)).objectEnumerator(); e.hasMoreElements();) {
-                    EOEntity anEntity = (EOEntity)e.nextElement();
-                    _entityNameEntityCache.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
+            	NSMutableDictionary<String, EOEntity>entityNameDict = new NSMutableDictionary<String, EOEntity>();
+                for (Enumeration<EOEntity> e = entitiesForModelGroup(ERXEOAccessUtilities.modelGroup(null)).objectEnumerator(); e.hasMoreElements();) {
+                    EOEntity anEntity = e.nextElement();
+                    entityNameDict.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
                 }
+                _entityNameEntityCache = entityNameDict;
             }
-            entity = (EOEntity)_entityNameEntityCache.objectForKey(entityName.toLowerCase());
+            entity = _entityNameEntityCache.objectForKey(entityName.toLowerCase());
         }
         return entity;
     }
