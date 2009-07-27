@@ -1,6 +1,6 @@
 ERAttachment.MigrationClassPrefix=er.attachment.migrations.ERAttachment
 
-er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,application/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/css,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime
+er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,application/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/css,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime,application/guitar-pro3,application/guitar-pro4,application/guitar-pro5
 
 er.attachment.mimeType.video/quicktime.viewer=er.attachment.components.viewers.ERAttachmentQuickTimeViewer
 er.attachment.mimeType.image/*.viewer=er.attachment.components.viewers.ERAttachmentImageViewer
@@ -95,3 +95,12 @@ er.attachment.mimeType.application/x-octet-stream.extensions=dat
 er.attachment.mimeType.video/quicktime.name=QuickTime Movie
 er.attachment.mimeType.video/quicktime.uti=com.apple.quicktime-movie 
 er.attachment.mimeType.video/quicktime.extensions=mov,qt
+
+er.attachment.mimeType.application/guitar-pro3.name=Guitar Pro3
+er.attachment.mimeType.application/guitar-pro3.extensions=gp3
+
+er.attachment.mimeType.application/guitar-pro4.name=Guitar Pro4
+er.attachment.mimeType.application/guitar-pro4.extensions=gp4
+
+er.attachment.mimeType.application/guitar-pro5.name=Guitar Pro5
+er.attachment.mimeType.application/guitar-pro5.extensions=gp5
