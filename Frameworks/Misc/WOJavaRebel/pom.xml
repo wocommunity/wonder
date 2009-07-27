@@ -21,6 +21,14 @@
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOAccess</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOControl</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.zeroturnaround</groupId>
 			<artifactId>javarebel-sdk</artifactId>
 		</dependency>
