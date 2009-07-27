@@ -16,10 +16,10 @@ import org.zeroturnaround.javarebel.integration.support.JavassistClassBytecodePr
  */
 public class WOJavaRebelBytecodeProcessor extends JavassistClassBytecodeProcessor {
 	public static final String IDEPATCH_CLASS = "com.webobjects._ideservices._WOProject";
-  public static final String IDESUPPORT_CLASS = "com.webobjects._ideservices._IDEProjectWOLips";
-	public static final String IDEPATCH_METHODNAME = "ideProjectAtPath";
-	public static final String IDEPATCH_SIGNATURE = "(Ljava/lang/String;)Lcom/webobjects/_ideservices/_IDEProject;";
-	public static final String IDEPATCH_CODE = 
+	private static final String IDESUPPORT_CLASS = "com.webobjects._ideservices._IDEProjectWOLips";
+	private static final String IDEPATCH_METHODNAME = "ideProjectAtPath";
+	private static final String IDEPATCH_SIGNATURE = "(Ljava/lang/String;)Lcom/webobjects/_ideservices/_IDEProject;";
+	private static final String IDEPATCH_CODE = 
 		"Object obj = com.webobjects._ideservices._JR_IDEProjectWOLips.wolipsProjectAtPath($1);" +
 		"if (obj != null) {" +
 		"  if (com.webobjects.foundation.NSLog.debugLoggingAllowedForLevelAndGroups(2, 32L)) {" +
@@ -28,13 +28,30 @@ public class WOJavaRebelBytecodeProcessor extends JavassistClassBytecodeProcesso
 		"  return obj;" +
 		"}";
 	
+	public static final String WORKERTHREAD_CLASS = "com.webobjects.appserver._private.WOWorkerThread";
+	private static final String WOJAVAREBEL_SUPPORT = "org.zeroturnaround.javarebel.WOJavaRebelSupport";
+	private static final String WORKERPATCH_METHODNAME = "runOnce";
+	private static final String WORKERPATCH_SIGNATURE = "()V";
+	private static final String WORKERPATCH_CODE = 
+	  "try {" +
+	    WOJAVAREBEL_SUPPORT + ".run();" +
+	  "} catch (Exception e) {" +
+	  "  e.printStackTrace();" +
+	  "}";
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public void process(ClassPool classpool, ClassLoader classloader, CtClass ctClass) throws Exception {
-		Collection<String> classes = ctClass.getRefClasses();
-		if (!classes.contains(IDESUPPORT_CLASS)) {
-			CtMethod m = ctClass.getMethod(IDEPATCH_METHODNAME, IDEPATCH_SIGNATURE);
-			m.insertBefore(IDEPATCH_CODE);
-		}
+	  if (IDEPATCH_CLASS.equals(ctClass.getName())) {
+	    Collection<String> classes = ctClass.getRefClasses();
+	    if (!classes.contains(IDESUPPORT_CLASS)) {
+	      CtMethod m = ctClass.getMethod(IDEPATCH_METHODNAME, IDEPATCH_SIGNATURE);
+	      m.insertBefore(IDEPATCH_CODE);
+	    }
+	  }
+	  if (WORKERTHREAD_CLASS.equals(ctClass.getName())) {
+	    CtMethod m = ctClass.getMethod(WORKERPATCH_METHODNAME, WORKERPATCH_SIGNATURE);
+	    m.insertBefore(WORKERPATCH_CODE);
+	  }
 	}
 }

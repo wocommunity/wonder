@@ -9,8 +9,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSNotification;
-import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation._NSUtilities;
 
 /**
@@ -25,34 +23,35 @@ public class WOJavaRebelClassReloadHandler {
 	private static boolean initialized = false;
 		
 	private boolean resetKVCCaches = false;
-    private boolean resetComponentCache = false;
-    private boolean resetActionClassCache = false;
+	private boolean resetComponentCache = false;
+	private boolean resetActionClassCache = false;
 
-	private static final WOJavaRebelClassReloadHandler handler = new WOJavaRebelClassReloadHandler();
+	private static final WOJavaRebelClassReloadHandler instance = new WOJavaRebelClassReloadHandler();
+	private static final Logger log = LoggerFactory.getInstance();
 
 	private WOJavaRebelClassReloadHandler() { /* Private */ }
 	
-	public static WOJavaRebelClassReloadHandler getClassHandler() {
-		return handler;
+	public static WOJavaRebelClassReloadHandler getInstance() {
+		return instance;
 	}
 
 	private void doReset() {
 		if (resetKVCCaches) {
 			resetKVCCaches = false;
-			System.out.println("JavaRebel: Resetting KeyValueCoding caches");
+			log.echo("JavaRebel: Resetting KeyValueCoding caches");
 			NSKeyValueCoding.DefaultImplementation._flushCaches();
 			NSKeyValueCoding._ReflectionKeyBindingCreation._flushCaches();
 			NSKeyValueCoding.ValueAccessor._flushCaches();
 		}
 		if (resetComponentCache) {
-		    resetComponentCache = false;
-		    System.out.println("JavaRebel: Resetting Component Definition cache");
-		    WOApplication.application()._removeComponentDefinitionCacheContents();
+		  resetComponentCache = false;
+		  log.echo("JavaRebel: Resetting Component Definition cache");
+		  WOApplication.application()._removeComponentDefinitionCacheContents();
 		}
 		if(resetActionClassCache) {
-		    resetActionClassCache = false;
-            System.out.println("JavaRebel: Resetting Action class cache");
-		    WOClassCacheAccessor.clearActionClassCache();
+		  resetActionClassCache = false;
+		  log.echo("JavaRebel: Resetting Action class cache");
+		  WOClassCacheAccessor.clearActionClassCache();
 		}
 	}
 
@@ -76,10 +75,7 @@ public class WOJavaRebelClassReloadHandler {
 			return;
 		}
 
-		System.out.println("JavaRebel: WebObjects support enabled");
-		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("updateLoadedClasses", 
-				new Class[] { NSNotification.class }),
-				WOApplication.ApplicationWillDispatchRequestNotification, null);
+		log.echo("JavaRebel: WebObjects support enabled");
 		WOEventClassListener listener = new WOEventClassListener();
 		Reloader reloader = ReloaderFactory.getInstance();
 		reloader.addClassReloadListener(listener);
@@ -99,12 +95,14 @@ public class WOJavaRebelClassReloadHandler {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void updateLoadedClasses(NSNotification n) {
+	public synchronized void updateLoadedClasses(NSNotification notification) {
 		Reloader reloader = ReloaderFactory.getInstance();
-		WORequest request = (WORequest) n.object();
-		String key = "/" + WOApplication.application().resourceRequestHandlerKey();
-		if (request.uri().indexOf(request.adaptorPrefix()) != 0 || request.uri().indexOf(key) >= 0) {
-			return;
+		if (notification != null) {
+		  WORequest request = (WORequest) notification.object();
+		  String key = "/" + WOApplication.application().resourceRequestHandlerKey();
+		  if (request.uri().indexOf(request.adaptorPrefix()) != 0 || request.uri().indexOf(key) >= 0) {
+		    return;
+		  }
 		}
 		NSDictionary classList = WOClassCacheAccessor.getClassCache();
 		String unknownClassName = "com.webobjects.foundation._NSUtilities$_NoClassUnderTheSun";
@@ -132,7 +130,7 @@ public class WOJavaRebelClassReloadHandler {
 		}
 		doReset();
 	}
-	
+
 	public boolean isReloadEnabled() {
 		return ReloaderFactory.getInstance().isReloadEnabled();
 	}

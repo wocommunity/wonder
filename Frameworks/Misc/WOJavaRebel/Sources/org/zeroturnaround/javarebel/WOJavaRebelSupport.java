@@ -18,10 +18,16 @@ public class WOJavaRebelSupport {
 		//Do nothing
 	}
 	
+	public static void run() {
+	  WOJavaRebelClassReloadHandler.getInstance().updateLoadedClasses(null);
+	  WOJavaRebelModelReloadHandler.getInstance().updateLoadedModels(null);
+	}
+	
 	public static class Observer {
 		public void finishedLaunchingApp(NSNotification n) {
 			try {
-				WOJavaRebelClassReloadHandler.getClassHandler().initialize();
+				WOJavaRebelClassReloadHandler.getInstance().initialize();
+				WOJavaRebelModelReloadHandler.getInstance().initialize();
 			} catch (NoClassDefFoundError e) {
 				/* JavaRebel isn't in the classpath so we do nothing */
 				return;
