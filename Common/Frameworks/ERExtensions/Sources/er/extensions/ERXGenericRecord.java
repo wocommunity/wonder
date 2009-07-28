@@ -154,6 +154,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public void delete() {
         editingContext().deleteObject(this);
     }
+    
+    /**
+     * Called when this EO is saved from a child editing context into a parent editing context.
+     * 
+     * @param originalEO the original EO in the child editing context
+     * @param childEditingContext the child editing context
+     */
+    public void didCopyFromChildInEditingContext(ERXGenericRecord originalEO, EOEditingContext childEditingContext) {
+    	_primaryKey = originalEO._primaryKey;
+    	_primaryKeyDictionary = originalEO._primaryKeyDictionary;
+    }
 
     /**
      * Called as part of the augmented transaction process.
