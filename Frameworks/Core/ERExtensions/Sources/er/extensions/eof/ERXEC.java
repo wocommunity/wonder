@@ -1125,6 +1125,14 @@ public class ERXEC extends EOEditingContext {
 		boolean wasAutoLocked = autoLock("saveChangesInEditingContext");
 		try {
 			super.saveChangesInEditingContext(eoeditingcontext);
+			
+			NSArray<EOEnterpriseObject> childInsertedObjects = eoeditingcontext.insertedObjects();
+			for (EOEnterpriseObject childInsertedObject : childInsertedObjects) {
+				EOEnterpriseObject parentInsertedObject = objectForGlobalID(eoeditingcontext.globalIDForObject(childInsertedObject));
+				if (parentInsertedObject instanceof ERXGenericRecord && childInsertedObject instanceof ERXGenericRecord) {
+					((ERXGenericRecord)parentInsertedObject).didCopyFromChildInEditingContext((ERXGenericRecord)childInsertedObject, eoeditingcontext);
+				}
+			}
 		}
 		finally {
 			autoUnlock(wasAutoLocked);
