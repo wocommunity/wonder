@@ -444,7 +444,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                         log.debug("Loading: " + fileName + " - " 
                             + (framework == null ? "app" : framework) + " - " 
                             + languages + ERXFileUtilities.pathForResourceNamed(fileName, framework, languages));
-                        String encoding = ERXProperties.stringForKey("er.extensions.ERXLocalizer.encodingForLocalizationFiles");
+                        String encoding = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.encodingForLocalizationFiles", "UTF-8");
                        NSDictionary dict = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework(fileName, framework, languages,encoding);
                        // HACK: ak we have could have a collision between the search path for validation strings and
                        // the normal localized strings.
