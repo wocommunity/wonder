@@ -48,6 +48,7 @@ import er.directtoweb.interfaces.ERDListPageInterface;
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXComponentActionRedirector;
 import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.appserver.ERXSession;
 import er.extensions.batching.ERXBatchingDisplayGroup;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
@@ -68,8 +69,10 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	/** logging support */
 	public final static Logger log = Logger.getLogger(ERD2WListPage.class);
-	
-	protected boolean _shouldRefetch;
+    
+    protected boolean _shouldRefetch;
+    
+    protected String _sessionID;
 
 	/**
 	 * Public constructor. Registers for
@@ -81,6 +84,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 */
 	public ERD2WListPage(WOContext c) {
 		super(c);
+		_sessionID = c.session().sessionID();
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 
@@ -133,13 +137,22 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	/**
+	 * Cached session ID, so we don't need to awake.
+	 */
+	@Override
+	public String sessionID() {
+	    return _sessionID;
+	}
+	
+	/**
 	 * Called when an {@link EOEditingContext} has changed. Sets
 	 * {@link #_hasToUpdate} which in turn lets the group refetch on the next
 	 * display.
 	 */
-	// CHECKME ak is this really needed? I'd think it's kindo of overkill.
 	public void editingContextDidSaveChanges(NSNotification notif) {
-		_hasToUpdate = true;
+	    if(sessionID() == ERXSession.currentSessionID()) {
+	        _hasToUpdate = true;
+	    }
 	}
 
 	/**
