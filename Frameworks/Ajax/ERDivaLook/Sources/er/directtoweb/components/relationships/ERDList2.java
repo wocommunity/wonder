@@ -60,4 +60,11 @@ public class ERDList2 extends ERDList {
     		closedLabelString = detailDataSource().fetchObjects().count() + " " + localizedEntityName + "s";		// FIXME: RM: perhaps better plurification?
     	} return closedLabelString;
     }
+    
+    /*
+     * forces button on edit pages
+     */
+    public String submitActionName() {
+    	return taskIsEdit() ? "" : null;
+    }
 }

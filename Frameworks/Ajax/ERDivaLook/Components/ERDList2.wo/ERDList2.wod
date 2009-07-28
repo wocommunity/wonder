@@ -21,6 +21,6 @@ CollapseContainer: D2WAjaxCollapsibleComponentContent {
 	_unroll = true;
 	allowCollapsing = ^allowCollapsing;
 	closedLabel = closedLabelString;
-	submitActionName = "";
+	submitActionName = submitActionName;
 	container = container;
 }
