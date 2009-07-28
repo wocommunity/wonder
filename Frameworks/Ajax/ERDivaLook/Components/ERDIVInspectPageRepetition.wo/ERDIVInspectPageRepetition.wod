@@ -45,6 +45,7 @@ Accordion: Accordion {
 ContentClass: WOGenericContainer {
 	elementName = "div";
 	class = contentClassString;
+	id = contentContainerID;
 }
 
 ListContainer: WOGenericContainer {
