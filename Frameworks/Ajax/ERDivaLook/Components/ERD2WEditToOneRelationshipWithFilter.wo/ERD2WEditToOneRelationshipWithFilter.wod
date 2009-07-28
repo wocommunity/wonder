@@ -1,21 +1,6 @@
-EditToOneRelationship: ERXToOneRelationship2 {
-        destinationDisplayKey = keyWhenRelationship;
-        possibleChoices = restrictedChoiceList;
-        destinationSortKey = d2wContext.sortKey;
-        // isMandatory = d2wContext.isMandatory;
-        relationshipKey = d2wContext.propertyKey;
-        size = d2wContext.size;
-        sourceEntityName = object.entityName;
-        sourceObject = object;
-        uiStyle = d2wContext.toOneUIStyle;
-	noSelectionString = d2wContext.noSelectionString;
-	popupName = d2wContext.popupName;
-	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
-	destinationEntityName = d2wContext.destinationEntityName;
-    sortCaseInsensitive = d2wContext.sortCaseInsensitive;
-    id = d2wContext.id;
-    title = d2wContext.title;
-    onChange = onChange;
+EditToOneRelationship: ERD2WEditToOneRelationship2 {
+	localContext = d2wContext;
+	object = object;
 }
 
 FilterButton: AjaxUpdaterButton {
