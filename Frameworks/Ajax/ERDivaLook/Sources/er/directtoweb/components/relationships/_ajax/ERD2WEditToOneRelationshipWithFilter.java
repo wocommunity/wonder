@@ -2,6 +2,7 @@ package er.directtoweb.components.relationships._ajax;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WComponent;
 
 import er.directtoweb.components.relationships._xhtml.ERD2WEditToOneRelationship2;
 import er.extensions.foundation.ERXValueUtilities;
@@ -15,7 +16,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author mendis
  *
  */
-public class ERD2WEditToOneRelationshipWithFilter extends ERD2WEditToOneRelationship2 {
+public class ERD2WEditToOneRelationshipWithFilter extends D2WComponent {
 
 	public ERD2WEditToOneRelationshipWithFilter(WOContext context) {
 		super(context);
