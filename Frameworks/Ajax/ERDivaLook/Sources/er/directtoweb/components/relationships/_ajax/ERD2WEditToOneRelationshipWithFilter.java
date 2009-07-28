@@ -9,7 +9,7 @@ import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Adds a filter for the select list.
- * How to use: Set a delayed boolean assignment on restrictedChoiceKey or restrictedFetchSpecification based on the condition isFiltered
+ * How to use: Set a delayed boolean assignment on restrictedChoiceKey or restrictedFetchSpecification based on the condition key defined by filterKey
  * 
  * @see ERD2WEditToOneRelationship2
  * 
@@ -23,17 +23,22 @@ public class ERD2WEditToOneRelationshipWithFilter extends D2WComponent {
 	}
 	
 	// accessors
+	public String filterKey() {
+		return (String) _localContext.valueForKey("filterKey");
+	}
+	
 	private boolean isFiltered() {
-    	return ERXValueUtilities.booleanValue(d2wContext().valueForKey("isFiltered"));
+    	return ERXValueUtilities.booleanValue(_localContext.valueForKey(filterKey()));
 	}
 	
 	private void setIsFiltered(boolean flag) {
-		d2wContext().takeValueForKey(flag, "isFiltered");
+		_localContext.takeValueForKey(flag, filterKey());
 	}
 	
+	/*
 	public String container() {
-		return d2wContext().valueForKey("id") + "_container";
-	}
+		return _localContext.valueForKey("id") + "_container";
+	} */
 	
 	/*
 	 * button
@@ -45,6 +50,6 @@ public class ERD2WEditToOneRelationshipWithFilter extends D2WComponent {
 	// actions (ajax)
 	public WOComponent toggleFilter() {
 		setIsFiltered(!isFiltered());
-		return this;
+		return context().page();
 	}
 }
