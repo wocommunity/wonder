@@ -51,6 +51,8 @@ Features (Not demo-ed)
 4. Excel/report function added to list page. Hidden via CSS.
 5. Old school tooltips set via D2W key "title".
 6. Wizard (Modal) EO creation
+7. allowsCollapsing of embedded lists (ERDList2)
+8. Dynamic D2W toOne relationship filter components (query + edit)
 
 Notes on XHTML, CSS and D2W
 ===========================
