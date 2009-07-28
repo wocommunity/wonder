@@ -81,7 +81,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 */
 	public ERD2WListPage(WOContext c) {
 		super(c);
-		//NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 
 	/* Not necessary -- NSNotificationCenter uses weak references
