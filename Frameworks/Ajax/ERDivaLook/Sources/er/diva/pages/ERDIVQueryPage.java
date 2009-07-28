@@ -1,8 +1,8 @@
 package er.diva.pages;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.D2WContext;
 
 import er.ajax.AjaxUtils;
 import er.directtoweb.pages.ERD2WQueryPage;
@@ -21,6 +21,22 @@ public class ERDIVQueryPage extends ERD2WQueryPage implements ERDIVPageInterface
     public String stylesheet() {
     	return (String) d2wContext().valueForKey(ERDIVPageInterface.Keys.Stylesheet);
     }
+    
+	public String contentContainerID() {
+		return subContext.valueForKey("id") + "_container";
+	}
+    
+	public D2WContext subContext;
+	
+	/**
+	 * Gives each property its own d2wContext rather than sharing one
+	 * Necessary for ajax or dyanmic D2W
+	 */
+	@Override
+	public void setPropertyKey(String propertyKey) {
+		subContext = new D2WContext(d2wContext());
+		subContext.takeValueForKey(propertyKey, "propertyKey");
+	}
     
     // R/R
     @Override

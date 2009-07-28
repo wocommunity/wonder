@@ -34,11 +34,10 @@ public class ERD2WEditToOneRelationshipWithFilter extends D2WComponent {
 	private void setIsFiltered(boolean flag) {
 		_localContext.takeValueForKey(flag, filterKey());
 	}
-	
-	/*
+
 	public String container() {
 		return _localContext.valueForKey("id") + "_container";
-	} */
+	} 
 	
 	/*
 	 * button
@@ -50,6 +49,6 @@ public class ERD2WEditToOneRelationshipWithFilter extends D2WComponent {
 	// actions (ajax)
 	public WOComponent toggleFilter() {
 		setIsFiltered(!isFiltered());
-		return context().page();
+		return this;
 	}
 }
