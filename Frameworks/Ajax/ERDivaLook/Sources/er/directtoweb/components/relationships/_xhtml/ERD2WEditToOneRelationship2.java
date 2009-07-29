@@ -56,4 +56,10 @@ public class ERD2WEditToOneRelationship2 extends ERD2WEditToOneRelationship {
     	
     	return ERXValueUtilities.booleanValueWithDefault(subContext.valueForKey("isEntityEditable"), !super.isEntityReadOnly(destinationEntity));
     }
+    
+    @Override
+    public void setLocalContext(D2WContext aContext) {
+    	if (aContext != null) 
+    		_localContext = aContext;
+    }
 }
