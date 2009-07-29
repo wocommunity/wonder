@@ -23,10 +23,18 @@ public class ERDIVQueryPage extends ERD2WQueryPage implements ERDIVPageInterface
     }
     
 	public String contentContainerID() {
-		return subContext.valueForKey("id") + "_container";
+		return subContext().valueForKey("id") + "_container";
 	}
     
-	public D2WContext subContext;
+	protected D2WContext _subContext;
+	
+	public D2WContext subContext() {
+		return _subContext;
+	}
+	
+	public void setSubContext(D2WContext aContext) {
+		_subContext = aContext;
+	}
 	
 	/**
 	 * Gives each property its own d2wContext rather than sharing one
@@ -34,8 +42,8 @@ public class ERDIVQueryPage extends ERD2WQueryPage implements ERDIVPageInterface
 	 */
 	@Override
 	public void setPropertyKey(String propertyKey) {
-		subContext = new D2WContext(d2wContext());
-		subContext.takeValueForKey(propertyKey, "propertyKey");
+		_subContext = new D2WContext(d2wContext());
+		_subContext.takeValueForKey(propertyKey, "propertyKey");
 	}
     
     // R/R
