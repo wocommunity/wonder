@@ -26,27 +26,27 @@ Builder: ERXJavaScript {
 
 CalendarDateSelectScript: ERXJavaScript {
 	filename = "calendar_date_select.js";
-	framework = "WO2";
+	framework = "ERPrototaculous";
 }
 
 AccordionScript: ERXJavaScript {
 	filename = "accordion.js";
-	framework = "WO2";
+	framework = "ERPrototaculous";
 }
 
 LightwindowScript: ERXJavaScript {
 	filename = "lightwindow.js";
-	framework = "WO2";
+	framework = "ERPrototaculous";
 }
 
 LightwindowCSS: ERXStyleSheet {
 	filename = "lightwindow.css";
-	framework = "WO2";
+	framework = "ERPrototaculous";
 }
 
 CalendarDateSelectCSS: ERXStyleSheet {
 	filename = "CalendarDateSelect.css";
-	framework = "WO2";
+	framework = "ERPrototaculous";
 }
 
 A: WXGenericContainer {
