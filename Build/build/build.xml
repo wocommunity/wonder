@@ -645,11 +645,11 @@
         </antcall>
     </target>
     
-    <target name="WO2.all">
+    <target name="ERPrototaculous.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
-            <param name="project.name" value="WO2" />
-            <param name="project.dir" value="Frameworks/Ajax/WO2" />
+            <param name="project.name" value="ERPrototaculous" />
+            <param name="project.dir" value="Frameworks/Ajax/ERPrototaculous" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax" />
         </antcall>
@@ -673,7 +673,7 @@
             <param name="project.dir" value="Examples/Ajax/ERDivaLookExample" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/WO2/DerbyPlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/DerbyPlugIn/ERMoviesLogic" />
         </antcall>
     </target>
     
@@ -824,7 +824,7 @@
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
     <target name="excelgeneration.examples.all" depends="ExcelGeneratorExample.all" />
     
-    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, SproutCore.all, ERIUI.all, GoogleChart.all, WO2.all, ERDivaLook.all" />
+    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, SproutCore.all, ERIUI.all, GoogleChart.all, ERPrototaculous.all, ERDivaLook.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, SproutCoreExample.all, ERIUIExample.all, ERDivaLookExample.all" />
     
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all" />

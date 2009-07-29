@@ -94,15 +94,15 @@ public class CalendarDateSelect extends WOComponent {
 	// R/R
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-		AjaxUtils.addStylesheetResourceInHead(context, response, "WO2", "CalendarDateSelect.css");
+		AjaxUtils.addStylesheetResourceInHead(context, response, "ERPrototaculous", "CalendarDateSelect.css");
 
 		// include javascripts if not being used unobtrusively
 		if (!useUnobtrusively) {
 			AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-			AjaxUtils.addScriptResourceInHead(context, response, "WO2", "calendar_date_select.js");
+			AjaxUtils.addScriptResourceInHead(context, response, "ERPrototaculous", "calendar_date_select.js");
 
 			// date format script
-			if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) AjaxUtils.addScriptResourceInHead(context, response, "WO2", (String) dateFormatScript());	
+			if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) AjaxUtils.addScriptResourceInHead(context, response, "ERPrototaculous", (String) dateFormatScript());	
 		} super.appendToResponse(response, context);
 	}
 }

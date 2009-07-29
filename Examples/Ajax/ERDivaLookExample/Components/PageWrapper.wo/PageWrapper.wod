@@ -48,12 +48,12 @@ Effects: ERXJavaScript {
 
 CalendarDateSelectScript: ERXJavaScript {
 	filename = "calendar_date_select.js";
-	framework = "WO2";
+	framework = "ERPrototaculous";
 }
 
 AccordionScript: ERXJavaScript {
 	filename = "accordion.js";
-	framework = "WO2";
+	framework = "ERPrototaculous";
 }
 
 ModalBoxScript: ERXJavaScript {
@@ -68,7 +68,7 @@ ModalBoxCSS: ERXStyleSheet {
 
 CalendarDateSelectCSS: ERXStyleSheet {
 	filename = "CalendarDateSelect.css";
-	framework = "WO2";
+	framework = "ERPrototaculous";
 }
 
 

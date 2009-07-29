@@ -51,8 +51,8 @@ public abstract class LightWindow extends WOComponent {
     		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
     		AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
     		AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
-    		AjaxUtils.addScriptResourceInHead(context, response, "WO2", "lightwindow.js");
-    		AjaxUtils.addStylesheetResourceInHead(context, response, "WO2", "lightwindow.css");
+    		AjaxUtils.addScriptResourceInHead(context, response, "ERPrototaculous", "lightwindow.js");
+    		AjaxUtils.addStylesheetResourceInHead(context, response, "ERPrototaculous", "lightwindow.css");
     	}
     }
 }

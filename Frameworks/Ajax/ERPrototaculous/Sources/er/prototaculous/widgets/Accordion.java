@@ -68,8 +68,8 @@ public class Accordion extends AjaxAccordion {
     	if (!useUnobtrusively) {
     		addScriptResourceInHead(response, "prototype.js");
     		addScriptResourceInHead(response, "scriptaculous.js");
-    		addScriptResourceInHead(response, "WO2", "accordion.js");
-    		addStylesheetResourceInHead(response, "WO2", "Accordion.css");
+    		addScriptResourceInHead(response, "ERPrototaculous", "accordion.js");
+    		addStylesheetResourceInHead(response, "ERPrototaculous", "Accordion.css");
     	} 
     }
 }
