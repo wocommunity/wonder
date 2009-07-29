@@ -563,7 +563,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             		if (unsavedMatchingObject != null) {
             			return unsavedMatchingObject;
             		}
-            	}	            handleUnsuccessfullQueryForKey(key);
+            	}	            
+            	handleUnsuccessfullQueryForKey(key);
 	            record = cache.objectForKey(key);
 	            if (record == null) {
 	            	return null;
