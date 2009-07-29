@@ -23,5 +23,10 @@
             <property name="build.action" value="web" />
         </ant>
     </target>
+    <target name="test">
+        <ant antFile="Build/build/build.xml" target="${project.name}.all" dir="../../../">
+            <property name="build.action" value="test" />
+        </ant>
+    </target>
     <target name="all" depends="clean, build, install, web" />
 </project>
