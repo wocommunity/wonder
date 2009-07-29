@@ -16,7 +16,7 @@
 		<module>ERIUI</module>
 		<module>GoogleChart</module>
 		<module>SproutCore</module>
-		<module>WO2</module>
+		<module>ERPrototaculous</module>
 		<module>YUI</module>
 	</modules>
 </project>
