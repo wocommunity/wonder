@@ -5,8 +5,8 @@ AttributeRepetition: WORepetition {
 }
 
 AttributeValue: WOSwitchComponent { 
-	WOComponentName = d2wContext.componentName;
-	localContext = d2wContext;
+	WOComponentName = subContext.componentName;
+	localContext = subContext;
 	object = object;
 }
 
@@ -15,7 +15,7 @@ HasSectionName: ERXNonZeroConditional {
 }
 
 PropertyName: WOString {
-    value = d2wContext.displayNameForProperty;
+    value = subContext.displayNameForProperty;
 }
 
 Section: WOString {
@@ -28,12 +28,12 @@ Sections: WORepetition {
 }
 
 DebugPropertyName: ERDIVDebugPropertyName {
-	d2wContext = d2wContext;
+	d2wContext = subContext;
 	isDebug = d2wComponentNameDebuggingEnabled;
 }
 
 DebugComponentName: ERDIVDebugComponentName {
-	d2wContext = d2wContext;
+	d2wContext = subContext;
 	isDebug = d2wComponentNameDebuggingEnabled;
 }
 
@@ -50,7 +50,7 @@ ContentClass: WOGenericContainer {
 
 ListContainer: WOGenericContainer {
 	elementName = "li";
-	class = attributeClassString;
+	class = subContext.classForAttribute;
 }
 
 SectionContainer: WOGenericContainer {
