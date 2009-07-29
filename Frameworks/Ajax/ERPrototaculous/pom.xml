@@ -7,8 +7,8 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.ajax</groupId>
-	<artifactId>WO2</artifactId>
-	<name>WO2 Framework</name>
+	<artifactId>ERPrototaculous</artifactId>
+	<name>ERPrototaculous Framework</name>
 	<packaging>woframework</packaging>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
