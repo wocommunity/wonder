@@ -23,5 +23,6 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/ERMoviesLogic"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERPrototaculous"/>
 	<classpathentry kind="con" path="WOFramework/ERPrototaculous"/>
+	<classpathentry kind="con" path="WOFramework/ERSelenium"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
