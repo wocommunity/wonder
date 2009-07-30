@@ -7,16 +7,6 @@ List1: ERXD2WList {
 	settings = settings;
 }
 
-Select: AjaxUpdaterButton {
-	action = createObjectAction;
-	value = ^createButtonLabel;
-	container = ^container;
-}
-
-ShowActions: WOConditional {
-	condition = ^showActions;
-}
-
 CollapseContainer: D2WAjaxCollapsibleComponentContent {
 	_unroll = true;
 	allowCollapsing = ^allowCollapsing;
