@@ -76,6 +76,14 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate=false
 #log4j.logger.er.directtoweb.ERD2WDirectAction = DEBUG
 #log4j.logger.er.directtoweb.ERD2WDirectAction.actions = DEBUG
 
+
+#################
+ERSelenium
+#################
+
+SeleniumTestsEnabled=true
+
+
 #################
 ERDivaLook pref
 #################
