@@ -5,8 +5,8 @@
 //  Created by Max Muller on Sun Feb 23 2003.
 //
 package er.extensions;
-import java.util.*;
-import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -601,6 +601,16 @@ public class ERXEC extends EOEditingContext {
         boolean wasAutoLocked = autoLock("saveChangesInEditingContext");
         try {
             super.saveChangesInEditingContext(eoeditingcontext);
+            
+            NSArray childInsertedObjects = eoeditingcontext.insertedObjects();
+            Enumeration childInsertedObjectsEnum = childInsertedObjects.objectEnumerator();
+            while (childInsertedObjectsEnum.hasMoreElements()) {
+            	EOEnterpriseObject childInsertedObject = (EOEnterpriseObject) childInsertedObjectsEnum.nextElement();
+            	EOEnterpriseObject parentInsertedObject = objectForGlobalID(eoeditingcontext.globalIDForObject(childInsertedObject));
+            	if (parentInsertedObject instanceof ERXGenericRecord && childInsertedObject instanceof ERXGenericRecord) {
+            		((ERXGenericRecord)parentInsertedObject).didCopyFromChildInEditingContext((ERXGenericRecord)childInsertedObject, eoeditingcontext);
+            	}
+            }
         } finally {
             autoUnlock(wasAutoLocked);
         }
