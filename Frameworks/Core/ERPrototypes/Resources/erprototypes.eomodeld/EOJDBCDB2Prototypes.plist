@@ -1,0 +1,337 @@
+{
+    attributes = (
+        {
+            columnName = amount; 
+            externalType = DECIMAL; 
+            name = amount; 
+            precision = 38; 
+            scale = 2; 
+            userInfo = {modificationDate = "2002-07-21 21:47:27 +0200"; }; 
+            valueClassName = NSNumber; 
+            valueType = B; 
+        }, 
+        {
+            columnName = blob; 
+            externalType = BLOB; 
+            name = blob; 
+            valueClassName = NSData; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toString; 
+            columnName = boolean; 
+            externalType = SMALLINT; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = boolean; 
+            valueClassName = "java.lang.Boolean"; 
+            valueFactoryMethodName = valueOf; 
+            width = 5; 
+        }, 
+        {
+            columnName = charFlag; 
+            externalType = CHAR; 
+            name = charFlag; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 1; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toCryptoString; 
+            columnName = cryptoString; 
+            externalType = VARCHAR; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = cryptoString; 
+            valueClassName = "er.extensions.ERXCryptoString"; 
+            valueFactoryMethodName = createInstanceFromCryptoString; 
+            width = 100; 
+        }, 
+        {
+            columnName = currencyAmount; 
+            externalType = DECIMAL; 
+            name = currencyAmount; 
+            precision = 38; 
+            scale = 4; 
+            valueClassName = NSDecimalNumber; 
+            valueType = B; 
+        }, 
+        {
+            columnName = date; 
+            externalType = DATE; 
+            name = date; 
+            userInfo = {modificationDate = "2002-07-21 21:47:29 +0200"; }; 
+            valueClassName = NSCalendarDate; 
+        }, 
+        {
+            columnName = dateTime; 
+            externalType = TIMESTAMP; 
+            name = dateTime; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSCalendarDate; 
+        }, 
+        {
+            columnName = doubleNumber; 
+            externalType = "DOUBLE PRECISION"; 
+            name = doubleNumber; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSNumber; 
+            valueType = d; 
+        }, 
+        {
+            columnName = flag; 
+            externalType = SMALLINT; 
+            name = flag; 
+            userInfo = {modificationDate = "2002-07-21 21:47:30 +0200"; }; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            adaptorValueConversionMethodName = asString; 
+            columnName = globalID; 
+            externalType = VARCHAR; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = globalID; 
+            valueClassName = "er.extensions.ERXKeyGlobalID"; 
+            valueFactoryMethodName = fromString; 
+            valueType = c; 
+            width = 255; 
+        }, 
+        {
+            columnName = id; 
+            externalType = INTEGER; 
+            name = id; 
+            serverTimeZone = "Europe/Berlin"; 
+            userInfo = {modificationDate = "2002-05-03 15:42:07 +0200"; }; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toString; 
+            columnName = intBoolean; 
+            externalType = SMALLINT; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = intBoolean; 
+            valueClassName = NSNumber; 
+            valueFactoryMethodName = valueOf; 
+            valueType = c; 
+        }, 
+        {
+            columnName = intNumber; 
+            externalType = INTEGER; 
+            name = intNumber; 
+            userInfo = {modificationDate = "2002-07-21 21:47:31 +0200"; }; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = ipAddress; 
+            externalType = VARCHAR; 
+            name = ipAddress; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 39; 
+        }, 
+        {
+            adaptorValueConversionMethodName = name; 
+            columnName = javaEnum; 
+            externalType = VARCHAR; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = javaEnum; 
+            valueClassName = "java.lang.Enum"; 
+            valueFactoryMethodName = valueOf; 
+            width = 50; 
+        }, 
+        {
+            columnName = longNumber; 
+            externalType = INTEGER; 
+            name = longNumber; 
+            valueClassName = NSNumber; 
+            valueType = l; 
+        }, 
+        {
+            columnName = longText; 
+            externalType = VARCHAR; 
+            name = longText; 
+            userInfo = {modificationDate = "2002-07-21 21:47:32 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 10000000; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toBlob; 
+            columnName = mutableArray; 
+            externalType = BLOB; 
+            name = mutableArray; 
+            valueClassName = "er.extensions.ERXMutableArray"; 
+            valueFactoryMethodName = fromBlob; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toBlob; 
+            columnName = mutableDictionary; 
+            externalType = BLOB; 
+            name = mutableDictionary; 
+            valueClassName = "er.extensions.ERXMutableDictionary"; 
+            valueFactoryMethodName = fromBlob; 
+        }, 
+        {
+            columnName = osType; 
+            externalType = VARCHAR; 
+            name = osType; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 4; 
+        }, 
+        {
+            columnName = shortString; 
+            externalType = VARCHAR; 
+            name = shortString; 
+            userInfo = {modificationDate = "2002-07-21 21:47:32 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 50; 
+        }, 
+        {
+            columnName = type; 
+            externalType = VARCHAR; 
+            name = type; 
+            userInfo = {modificationDate = "2002-07-21 21:47:33 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 4; 
+        }, 
+        {
+            columnName = varchar10; 
+            externalType = VARCHAR; 
+            name = varchar10; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 10; 
+        }, 
+        {
+            columnName = varchar100; 
+            externalType = VARCHAR; 
+            name = varchar100; 
+            serverTimeZone = "Europe/Berlin"; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 100; 
+        }, 
+        {
+            columnName = varchar1000; 
+            externalType = VARCHAR; 
+            name = varchar1000; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 1000; 
+        }, 
+        {
+            columnName = varchar16; 
+            externalType = VARCHAR; 
+            name = varchar16; 
+            serverTimeZone = "Europe/Berlin"; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 16; 
+        }, 
+        {
+            columnName = varchar255; 
+            externalType = VARCHAR; 
+            name = varchar255; 
+            serverTimeZone = "Europe/Berlin"; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 255; 
+        }, 
+        {
+            columnName = varchar50; 
+            externalType = VARCHAR; 
+            name = varchar50; 
+            serverTimeZone = "Europe/Berlin"; 
+            userInfo = {modificationDate = "2002-08-21 22:42:33 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 50; 
+        }, 
+        {
+            columnName = varcharLarge; 
+            externalType = BLOB; 
+            name = varcharLarge; 
+            userInfo = {modificationDate = "2002-08-19 11:56:16 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 32765; 
+        }
+    ); 
+    attributesUsedForLocking = (boolean, id); 
+    className = EOGenericRecord; 
+    classProperties = (
+        amount, 
+        blob, 
+        boolean, 
+        charFlag, 
+        cryptoString, 
+        currencyAmount, 
+        date, 
+        dateTime, 
+        doubleNumber, 
+        flag, 
+        globalID, 
+        intBoolean, 
+        intNumber, 
+        ipAddress, 
+        javaEnum, 
+        longNumber, 
+        longText, 
+        mutableArray, 
+        mutableDictionary, 
+        osType, 
+        shortString, 
+        type, 
+        varchar10, 
+        varchar100, 
+        varchar1000, 
+        varchar16, 
+        varchar255, 
+        varchar50, 
+        varcharLarge
+    ); 
+    externalName = EOJDBCDB2Prototypes; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (
+            amount, 
+            blob, 
+            boolean, 
+            charFlag, 
+            date, 
+            dateTime, 
+            doubleNumber, 
+            flag, 
+            id, 
+            intBoolean, 
+            intNumber, 
+            longNumber, 
+            longText, 
+            mutableArray, 
+            mutableDictionary, 
+            osType, 
+            shortString, 
+            type, 
+            varchar10, 
+            varchar100, 
+            varchar1000, 
+            varchar16, 
+            varchar255, 
+            varchar50, 
+            varcharLarge
+        ); 
+    }; 
+    isAbstractEntity = Y; 
+    name = EOJDBCDB2Prototypes; 
+    primaryKeyAttributes = (id); 
+}
