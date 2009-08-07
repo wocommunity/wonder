@@ -311,6 +311,9 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
         int batchSize = batchSize();
         int totalCountMinusStart = count() - start;
         int length = totalCountMinusStart > batchSize ? batchSize : totalCountMinusStart;
+        if (length < 0) {
+        	length = 0;
+        }
         return new NSRange(start, length);
     }
 
