@@ -5,6 +5,7 @@ AddHyperlink: WOHyperlink {
 
 AddImage: WOImage {
 	alt = "Add";
+	border = 0;
 	filename = "plus.gif";
 	framework = "ERExtensions";
 	height = 14;
@@ -31,6 +32,7 @@ RemoveHyperlink: WOHyperlink {
 
 RemoveImageTemplate: WOImage {
 	alt = "Remove";
+	border = 0;
 	filename = "minus.gif";
 	framework = "ERExtensions";
 	height = 14;
@@ -41,6 +43,7 @@ RemoveImageTemplate: WOImage {
 
 RemoveImage: WOImage {
 	alt = "Remove";
+	border = 0;
 	filename = "minus.gif";
 	framework = "ERExtensions";
 	height = 14;
