@@ -110,5 +110,3 @@ Building with Eclipse:
 2. Install WOLips
 
 3. Open the projects you need, choose "WOLips>Install..." in the context menu
-
-[test]
