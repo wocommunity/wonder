@@ -327,6 +327,16 @@ There are many ways to use this script:
             <test name="${test.className}" if="test.className" />
             <formatter type="brief" usefile="false" />
             <classpath>
+
+                <!-- XXX - Including these three filesets in this way is not the best way to go. It would be better
+                           to get the list of frameworks that the project is dependent on to build, and then we may
+                           also need another thing in the build.xml entry for the project to declare frameworks
+                           that are only run-time dependencies. -rrk, Fri Aug  7 13:21:11 PDT 2009 -->
+
+                <fileset dir="${build.root}"><include name="*.framework/Resources/Java/*.jar"/></fileset>
+                <fileset dir="${wo.local.frameworks}"><include name="*.framework/Resources/Java/*.jar"/></fileset>
+                <fileset dir="${wo.system.frameworks}"><include name="*.framework/Resources/Java/*.jar"/></fileset>
+
                 <pathelement location="${build.root}/${project.name}-${project.version}.jar" />
                 <pathelement path="${build.root}/${project.name}.framework/Resources/Java/*.jar" />
                 <pathelement location="${build.root}/ERJars.framework/Resources/Java/junit.jar" />

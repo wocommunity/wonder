@@ -177,7 +177,7 @@
             <param name="classes.exclude.0" value="${erx.class.exclude.0}" />
             <param name="classes.exclude.1" value="${erx.class.exclude.1}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.jars}/JavaWOExtensions" />
-            <param name="test.className" value="er.extensions.statistics.ERXMetricsTest" />
+            <param name="test.className" value="er.extensions.ERExtensionsTest" />
         </antcall>
     </target>
     
