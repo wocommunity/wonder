@@ -217,7 +217,12 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 		else {
 			String qualifierStr = _request.stringFormValueForKey("qualifier");
 			if (qualifierStr == null || qualifierStr.length() == 0) {
-				qualifier = _defaultQualifier;
+				if (_baseQualifier == null) {
+					qualifier = _defaultQualifier;
+				}
+				else {
+					qualifier = ERXQ.and(_baseQualifier, _defaultQualifier);
+				}
 			}
 			else {
 				qualifier = EOQualifier.qualifierWithQualifierFormat(qualifierStr, null);
