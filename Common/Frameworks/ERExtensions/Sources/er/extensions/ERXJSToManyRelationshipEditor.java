@@ -242,7 +242,10 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
      */
     private NSArray selectionsFromBindings() {
         if (canGetValueForBinding(Keys.Selections)) {
-            return (NSArray)valueForBinding(Keys.Selections);
+            NSArray result = (NSArray)valueForBinding(Keys.Selections);
+            if(result != null) {
+            	return result;
+            }
         }
         return NSArray.EmptyArray;
     }
@@ -253,7 +256,10 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
      */
     private NSArray listFromBindings() {
         if (canGetValueForBinding(Keys.List)) {
-            return (NSArray)valueForBinding(Keys.List);
+            NSArray result = (NSArray)valueForBinding(Keys.List);
+            if(result != null) {
+            	return result;
+            }
         }
         return NSArray.EmptyArray;
     }
