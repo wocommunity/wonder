@@ -225,10 +225,6 @@ public class ERXMutableArray extends NSMutableArray implements List {
 			super.sortUsingComparator(comparator);
 		}
 
-		protected synchronized void _ensureCapacity(int capacity) {
-			super._ensureCapacity(capacity);
-		}
-
 		protected synchronized void _initializeWithCapacity(int capacity) {
 			super._initializeWithCapacity(capacity);
 		}
@@ -254,12 +250,7 @@ public class ERXMutableArray extends NSMutableArray implements List {
 		}
 
 		public synchronized ArrayList arrayList() {
-			Object objects[] = objectsNoCopy();
-			ArrayList list = new ArrayList(objects.length);
-			for(int i = 0; i < objects.length; i++) {
-				list.add(objects[i]);
-			}
-			return list;
+			return super.arrayList();
 		}
 
 		public synchronized Class classForCoder() {
@@ -336,10 +327,6 @@ public class ERXMutableArray extends NSMutableArray implements List {
 
 		public synchronized Object[] objects(NSRange range) {
 			return super.objects(range);
-		}
-
-		protected synchronized Object[] objectsNoCopy() {
-			return super.objectsNoCopy();
 		}
 
 		public synchronized Enumeration reverseObjectEnumerator() {
