@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -37,19 +39,25 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXBatchingDisplayGroup;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
+
+import er.directtoweb.ERD2WFactory;
+import er.directtoweb.ERDDeletionDelegate;
+import er.directtoweb.ERDListPageInterface;
+import er.extensions.ERXExtensions;
 import er.extensions.ERXComponentActionRedirector;
-import er.extensions.ERXConstant;
 import er.extensions.ERXDisplayGroup;
+import er.extensions.ERXSession;
+import er.extensions.ERXBatchingDisplayGroup;
+import er.extensions.ERXConstant;
 import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXExtensions;
+import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXValueUtilities;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXMetrics;
 import er.extensions.ERXMetricsEvent;
-import er.extensions.ERXValueUtilities;
-import org.apache.log4j.Logger;
 
 /**
  * Reimplementation of the D2WListPage. Descends from ERD2WPage instead of
@@ -64,6 +72,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	
 	protected boolean _shouldRefetch;
 
+    protected String _sessionID;
+
 	/**
 	 * Public constructor. Registers for
 	 * {@link EOEditingContext#EditingContextDidSaveChangesNotification} so that
@@ -74,7 +84,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 */
 	public ERD2WListPage(WOContext c) {
 		super(c);
-		//NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
+		_sessionID = c.session().sessionID();
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 
 	/* Not necessary -- NSNotificationCenter uses weak references
@@ -126,13 +137,22 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	/**
+	 * Cached session ID, so we don't need to awake.
+	 */
+	@Override
+	public String sessionID() {
+	    return _sessionID;
+	}
+	
+	/**
 	 * Called when an {@link EOEditingContext} has changed. Sets
 	 * {@link #_hasToUpdate} which in turn lets the group refetch on the next
 	 * display.
 	 */
-	// CHECKME ak is this really needed? I'd think it's kindo of overkill.
 	public void editingContextDidSaveChanges(NSNotification notif) {
-		_hasToUpdate = true;
+	    if(sessionID() == ERXSession.currentSessionID()) {
+		    _hasToUpdate = true;
+        }
 	}
 
 	/**
