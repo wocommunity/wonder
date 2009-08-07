@@ -8,10 +8,12 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
 import er.extensions.eof.ERXQ;
+import er.extensions.eof.ERXS;
 
 /**
  * <p>
@@ -281,13 +283,48 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 		fetchSpec.setIsDeep(true);
 
 		NSArray<T> results;
-		if (batchSize == -1) {
+		if (batchSize <= 0) {
 			results = editingContext.objectsWithFetchSpecification(fetchSpec);
 		}
 		else {
 			int batchNumber = batchNumber();
 			ERXFetchSpecificationBatchIterator batchIterator = new ERXFetchSpecificationBatchIterator(fetchSpec, editingContext, batchSize);
 			results = batchIterator.batchWithIndex(batchNumber);
+		}
+		return results;
+	}
+
+	/**
+	 * Applies the effective attributes of this fetch specification to the given array, filtering, sorting,
+	 * and cutting into batches accordingly.
+	 * 
+	 * @param objects
+	 *            the objects to filter
+	 * @return the filtered objects
+	 */
+	public NSArray<T> objectsFromArray(NSArray<T> objects) {
+		NSArray<EOSortOrdering> sortOrderings = sortOrderings();
+		EOQualifier qualifier = qualifier();
+		int batchSize = batchSize();
+
+		NSArray<T> results = ERXS.sorted(ERXQ.filtered(objects, qualifier), sortOrderings);
+		if (batchSize > 0) {
+			int batchNumber = batchNumber();
+			int offset = batchNumber * batchSize;
+			int length = batchSize;
+			if (offset >= results.count()) {
+				results = NSArray.<T>emptyArray();
+			}
+			else {
+				NSRange range;
+				if (offset + length > results.count()) {
+					range = new NSRange(offset, results.count() - offset);
+				}
+				else {
+					range = new NSRange(offset, length);
+				}
+				results = objects.subarrayWithRange(range);
+			}
 		}
 		return results;
 	}
