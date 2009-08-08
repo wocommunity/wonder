@@ -1,6 +1,7 @@
 package er.rest.routes;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
 
@@ -164,21 +165,64 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	/**
+	 * Returns the default route controller class for the given entity name.
+	 * 
+	 * @param entityName the name of the entity
+	 * @return the corresponding route controller
+	 */
+	protected Class<? extends ERXRouteController> routeControllerClassForEntityNamed(String entityName) {
+		String pluralEntityName = ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2);
+		String controllerName = pluralEntityName + "Controller";
+		Class<?> controllerClass = _NSUtilities.classWithName(controllerName);
+		if (controllerClass == null) {
+			throw new IllegalArgumentException("There is controller named '" + controllerName + "'.");
+		}
+		return controllerClass.asSubclass(ERXRouteController.class);
+	}
+
+	/**
+	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the route
+	 * controller for the given entity name, giving it the opportunity to add routes for 
+	 * this entity. If no addRoutes method is found, it will log a warning and add default
+	 * routes instead.
+	 * 
+	 * @param entityName the name of the entity
+	 */
+	public void addRoutes(String entityName) {
+		addRoutes(entityName, routeControllerClassForEntityNamed(entityName));
+	}
+	
+	/**
+	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the given route
+	 * controller class, giving it the opportunity to add routes for the given entity. If no
+	 * addRoutes method is found, it will log a warning and add default routes instead.
+	 * 
+	 * @param entityName the name of the entity
+	 * @param routeControllerClass the name of the route controller
+	 */
+	public void addRoutes(String entityName, Class<? extends ERXRouteController> routeControllerClass) {
+		try {
+			Method addRoutesMethod = routeControllerClass.getMethod("addRoutes", String.class, ERXRouteRequestHandler.class);
+			addRoutesMethod.invoke(null, entityName, this);
+		}
+		catch (NoSuchMethodError e) {
+			ERXRouteRequestHandler.log.warn("No 'addRoutes(entityName, routeRequetHandler)' method found on '" + routeControllerClass.getSimpleName() + "'. Registering default routes instead.");
+			addDefaultRoutes(entityName, routeControllerClass);
+		}
+		catch (Throwable t) {
+			throw new RuntimeException("Failed to add routes for " + routeControllerClass + ".", t);
+		}
+	}
+	
+	/**
 	 * Adds default routes and maps them to a controller named "[plural entity name]Controller". For instance, if the
 	 * entity name is "Person" it would make a controller named "PeopleController".
 	 * 
 	 * @param entityName
 	 *            the name of the entity to create routes for
 	 */
-	@SuppressWarnings("unchecked")
 	public void addDefaultRoutes(String entityName) {
-		String pluralEntityName = ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2);
-		String controllerName = pluralEntityName + "Controller";
-		Class controllerClass = _NSUtilities.classWithName(controllerName);
-		if (controllerClass == null) {
-			throw new IllegalArgumentException("There is controller named '" + controllerName + "'.");
-		}
-		addDefaultRoutes(entityName, controllerClass.asSubclass(ERXRouteController.class));
+		addDefaultRoutes(entityName, routeControllerClassForEntityNamed(entityName));
 	}
 
 	/**
