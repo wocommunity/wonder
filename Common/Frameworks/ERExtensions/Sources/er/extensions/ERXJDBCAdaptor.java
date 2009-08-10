@@ -171,7 +171,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		public NSArray primaryKeysForNewRowsWithEntity(int cnt, EOEntity entity) {
 			if (defaultBatchSize > 0) {
 				synchronized (pkCache) {
-					String key = entity.primaryKeyRootName();
+					String key = _plugIn().sequenceNameForEntity(entity);
 					NSMutableArray pks = (NSMutableArray)pkCache.objectForKey(key);
 					if (pks == null) {
 						pks = new NSMutableArray();
