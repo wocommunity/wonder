@@ -10,17 +10,19 @@ import junit.framework.TestSuite;
  */
 public class ERExtensionsTest extends TestSuite {
 
-    static public Test suite() { 
-        TestSuite suite = new TestSuite(); 
-
+    public static Test suite() { 
+        TestSuite suite = new TestSuite("Tests for ERExtensions"); 
+		//$JUnit-BEGIN$
         suite.addTestSuite(com.webobjects.foundation.NSArrayTest.class);
+        suite.addTestSuite(com.webobjects.foundation.NSDictionaryTest.class);
         suite.addTestSuite(com.webobjects.foundation.NSMutableArrayTest.class);
-
+        suite.addTestSuite(com.webobjects.foundation.NSMutableDictionaryTest.class);
+        suite.addTestSuite(com.webobjects.foundation.NSMutableSetTest.class);
+        suite.addTestSuite(com.webobjects.foundation.NSSetTest.class);
         suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
         suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);
-
         suite.addTestSuite(er.extensions.statistics.ERXMetricsTest.class);
-
+		//$JUnit-END$
         return suite; 
     }
 }
