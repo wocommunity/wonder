@@ -15,12 +15,14 @@ public class ERExtensionsTest extends TestSuite {
 		//$JUnit-BEGIN$
         suite.addTestSuite(com.webobjects.foundation.NSArrayTest.class);
         suite.addTestSuite(com.webobjects.foundation.NSDictionaryTest.class);
+        suite.addTestSuite(com.webobjects.foundation.NSKeyValueCodingTest.class);
         suite.addTestSuite(com.webobjects.foundation.NSMutableArrayTest.class);
         suite.addTestSuite(com.webobjects.foundation.NSMutableDictionaryTest.class);
         suite.addTestSuite(com.webobjects.foundation.NSMutableSetTest.class);
         suite.addTestSuite(com.webobjects.foundation.NSSetTest.class);
         suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
         suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);
+        suite.addTestSuite(er.extensions.foundation.ERXThreadStorageTest.class);
         suite.addTestSuite(er.extensions.statistics.ERXMetricsTest.class);
 		//$JUnit-END$
         return suite; 
