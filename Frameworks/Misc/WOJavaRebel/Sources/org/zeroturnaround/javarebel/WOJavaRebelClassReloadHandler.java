@@ -9,6 +9,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 
 /**
@@ -25,6 +26,7 @@ public class WOJavaRebelClassReloadHandler {
 	private boolean resetKVCCaches = false;
 	private boolean resetComponentCache = false;
 	private boolean resetActionClassCache = false;
+	private boolean resetValidationCache = false;
 
 	private static final WOJavaRebelClassReloadHandler instance = new WOJavaRebelClassReloadHandler();
 	private static final Logger log = LoggerFactory.getInstance();
@@ -48,10 +50,15 @@ public class WOJavaRebelClassReloadHandler {
 		  log.echo("JavaRebel: Resetting Component Definition cache");
 		  WOApplication.application()._removeComponentDefinitionCacheContents();
 		}
-		if(resetActionClassCache) {
+		if (resetActionClassCache) {
 		  resetActionClassCache = false;
 		  log.echo("JavaRebel: Resetting Action class cache");
 		  WOClassCacheAccessor.clearActionClassCache();
+		}
+		if (resetValidationCache) {
+		  resetValidationCache = false;
+		  log.echo("JavaRebel: Resetting NSValidation cache");
+		  NSValidation.DefaultImplementation._flushCaches();
 		}
 	}
 
@@ -90,6 +97,9 @@ public class WOJavaRebelClassReloadHandler {
 	  }
 	  if (WOAction.class.isAssignableFrom(clazz)) {
 	    resetActionClassCache = true;
+	  }
+	  if (NSValidation.class.isAssignableFrom(clazz)) {
+	    resetValidationCache = true;
 	  }
 	  doReset();
 	}

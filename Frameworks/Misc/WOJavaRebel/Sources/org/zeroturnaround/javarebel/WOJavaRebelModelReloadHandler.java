@@ -16,6 +16,7 @@ import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 
 public class WOJavaRebelModelReloadHandler {
@@ -41,7 +42,6 @@ public class WOJavaRebelModelReloadHandler {
       flushCaches();
     }
   }
-
 
   private boolean updateModel(EOModel model) {
     if (modelCache.containsKey(model)) {
@@ -134,6 +134,7 @@ public class WOJavaRebelModelReloadHandler {
   private void flushCaches() {
     EOClassDescription.invalidateClassDescriptionCache();
     D2WAccessor.flushCaches();
+    NSValidation.DefaultImplementation._flushCaches();
 
     if (erxEntityCache != null) {
       try {
