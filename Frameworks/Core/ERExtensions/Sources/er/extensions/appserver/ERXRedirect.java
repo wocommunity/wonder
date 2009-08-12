@@ -11,8 +11,8 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXMutableURL;
 
 /**
- * ERXComponentRedirect is like a WORedirect except that you can give it a
- * compoennt instance to redirect to (as well as several other convenient
+ * ERXRedirect is like a WORedirect except that you can give it a
+ * component instance to redirect to (as well as several other convenient
  * methods of redirecting). This is useful for situations like in an Ajax
  * request where you want to do a full page reload that points to the component
  * that you would normally return from your action method. If your redirect is
