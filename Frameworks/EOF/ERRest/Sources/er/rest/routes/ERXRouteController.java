@@ -51,6 +51,11 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public ERXRouteController(WORequest request) {
 		super(request);
+		ERXRoute route = (ERXRoute) request.userInfo().objectForKey(ERXRouteRequestHandler.RouteKey);
+		_setRoute(route);
+		@SuppressWarnings("unchecked")
+		NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
+		_setRouteKeys(keys);
 	}
 
 	/**
