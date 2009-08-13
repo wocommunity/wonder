@@ -14,6 +14,7 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
@@ -51,11 +52,6 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public ERXRouteController(WORequest request) {
 		super(request);
-		ERXRoute route = (ERXRoute) request.userInfo().objectForKey(ERXRouteRequestHandler.RouteKey);
-		_setRoute(route);
-		@SuppressWarnings("unchecked")
-		NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
-		_setRouteKeys(keys);
 	}
 
 	/**
@@ -721,7 +717,7 @@ public class ERXRouteController extends WODirectAction {
 	 * Calls pageWithName.
 	 * 
 	 * @param <T>
-	 *            the type of component to
+	 *            the type of component to return
 	 * @param componentClass
 	 *            the component class to lookup
 	 * @return the created component
@@ -729,5 +725,28 @@ public class ERXRouteController extends WODirectAction {
 	@SuppressWarnings("unchecked")
 	public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
 		return (T) super.pageWithName(componentClass.getName());
+	}
+
+	/**
+	 * Returns another controller, passing the required state on.
+	 * 
+	 * @param <T>
+	 *            the type of controller to return
+	 * @param controllerClass
+	 *            the controller class to lookup
+	 * @return the created controller
+	 */
+	public <T extends ERXRouteController> T controller(Class<T> controllerClass) {
+		try {
+			T controller = controllerClass.getConstructor(WORequest.class).newInstance(request());
+			controller._route = _route;
+			controller._editingContext = _editingContext;
+			controller._routeKeys = _routeKeys;
+			controller._objects = _objects;
+			return controller;
+		}
+		catch (Exception e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
 	}
 }
