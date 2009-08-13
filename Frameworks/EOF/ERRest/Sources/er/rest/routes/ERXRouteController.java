@@ -1,7 +1,10 @@
 package er.rest.routes;
 
+import java.lang.reflect.Field;
+
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -692,12 +695,10 @@ public class ERXRouteController extends WODirectAction {
 			}
 
 			WOContext context = context();
-			if (context.hasSession()) {
-				WOSession session = context.session();
-				if (session.storesIDsInCookies() && results instanceof WOResponse) {
-					WOResponse response = (WOResponse)results;
-					session._appendCookieToResponse(response);
-				}
+			WOSession session = context._session();
+			if (session != null && session.storesIDsInCookies() && results instanceof WOResponse) {
+				WOResponse response = (WOResponse)results;
+				session._appendCookieToResponse(response);
 			}
 
 			return results;
@@ -743,6 +744,9 @@ public class ERXRouteController extends WODirectAction {
 			controller._editingContext = _editingContext;
 			controller._routeKeys = _routeKeys;
 			controller._objects = _objects;
+			Field contextField = WOAction.class.getDeclaredField("_context");
+			contextField.setAccessible(true);
+			contextField.set(controller, context());
 			return controller;
 		}
 		catch (Exception e) {
