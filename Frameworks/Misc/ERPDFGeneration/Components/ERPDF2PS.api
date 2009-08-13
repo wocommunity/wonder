@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
-    <wo class="PDF2PS" wocomponentcontent="true">    <binding defaults="Boolean" name="duplex"/>
-        <validation message="'duplex' must be bound to a settable value">
-            
-        </validation>
-    <binding defaults="Boolean" name="enabled"/>
+    <wo class="PDF2PS" wocomponentcontent="true">
+      <binding defaults="Boolean" name="duplex"/>
+      <binding defaults="Boolean" name="enabled"/>
     </wo>
 </wodefinitions>
