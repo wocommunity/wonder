@@ -13,10 +13,12 @@ import er.rest.ERXRestUtils;
 import er.rest.IERXRestDelegate;
 
 /**
+ * <p>
  * ERXRoute encapsulates a URL path with matching values inside of it. For instance, the route
  * "/company/{company:Company}/employees/{Person}/name/{name:String}" would yield an objects(..) dictionary with a
  * Company EO mapped to the key "company," a Person EO mapped to the key "Person" and a String mapped to the key "name".
  * ERXRoutes do not enforce any security -- they simply represent a way to map URL patterns onto objects.
+ * </p>
  * 
  * @author mschrag
  */
@@ -182,8 +184,12 @@ public class ERXRoute {
 				}
 			}
 			else {
-				key._key = keyStr.substring(0, colonIndex);
-				key._valueType = keyStr.substring(colonIndex + 1);
+				String[] segments = keyStr.split(":");
+				key._key = segments[0];
+				key._valueType = segments[1];
+				if (segments.length == 3) {
+					replacement = "(" + segments[2].replaceAll("[\\\\$]", "\\\\$0") + ")";
+				}
 			}
 			
 			if ("identifier".equals(key._valueType)) {
@@ -243,7 +249,9 @@ public class ERXRoute {
 
 		if (_method == ERXRoute.Method.All || _method == null || method == null || method.equals(_method)) {
 			Matcher routeMatcher = _routePattern.matcher(url);
+			System.out.println("ERXRoute.keys: " + _routePattern.pattern());
 			if (routeMatcher.matches()) {
+				System.out.println("ERXRoute.keys:   matches");
 				keys = new NSMutableDictionary<ERXRoute.Key, String>();
 				int groupCount = routeMatcher.groupCount();
 				int keyCount = _keys.count();
