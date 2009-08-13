@@ -249,9 +249,7 @@ public class ERXRoute {
 
 		if (_method == ERXRoute.Method.All || _method == null || method == null || method.equals(_method)) {
 			Matcher routeMatcher = _routePattern.matcher(url);
-			System.out.println("ERXRoute.keys: " + _routePattern.pattern());
 			if (routeMatcher.matches()) {
-				System.out.println("ERXRoute.keys:   matches");
 				keys = new NSMutableDictionary<ERXRoute.Key, String>();
 				int groupCount = routeMatcher.groupCount();
 				int keyCount = _keys.count();
