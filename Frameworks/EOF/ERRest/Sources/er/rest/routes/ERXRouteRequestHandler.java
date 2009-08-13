@@ -354,12 +354,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	@Override
 	public WOAction getActionInstance(Class class1, Class[] aclass, Object[] aobj) {
 		ERXRouteController actionInstance = (ERXRouteController) super.getActionInstance(class1, aclass, aobj);
-		WORequest request = (WORequest) aobj[0];
-		ERXRoute route = (ERXRoute) request.userInfo().objectForKey(ERXRouteRequestHandler.RouteKey);
-		actionInstance._setRoute(route);
-		@SuppressWarnings("unchecked")
-		NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
-		actionInstance._setRouteKeys(keys);
+//		WORequest request = (WORequest) aobj[0];
+//		ERXRoute route = (ERXRoute) request.userInfo().objectForKey(ERXRouteRequestHandler.RouteKey);
+//		actionInstance._setRoute(route);
+//		@SuppressWarnings("unchecked")
+//		NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
+//		actionInstance._setRouteKeys(keys);
 		return actionInstance;
 	}
 
