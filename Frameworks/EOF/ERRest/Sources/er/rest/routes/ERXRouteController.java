@@ -5,9 +5,11 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
@@ -687,6 +689,16 @@ public class ERXRouteController extends WODirectAction {
 			if (results == null) {
 				results = response(null, ERXKeyFilter.filterWithAttributes());
 			}
+
+			WOContext context = context();
+			if (context.hasSession()) {
+				WOSession session = context.session();
+				if (session.storesIDsInCookies() && results instanceof WOResponse) {
+					WOResponse response = (WOResponse)results;
+					session._appendCookieToResponse(response);
+				}
+			}
+
 			return results;
 		}
 		catch (ObjectNotAvailableException e) {
