@@ -41,7 +41,25 @@ public class ERXResponse extends WOResponse {
 
 	public ERXResponse() {
 	}
-	
+
+	/**
+	 * Convenience constructor for direct actions.
+	 * @param content text content of the response
+	 * @param status HTTP status code of the response
+	 */
+	public ERXResponse(String content, int status) {
+		this(content);
+		setStatus(status);
+	}
+
+	/**
+	 * Convenience constructor for direct actions.
+	 * @param content text content of the response
+	 */
+	public ERXResponse(String content) {
+		setContent(content);
+	}
+
 	public ERXResponse(WOContext context) {
 		_context = context;
 	}
