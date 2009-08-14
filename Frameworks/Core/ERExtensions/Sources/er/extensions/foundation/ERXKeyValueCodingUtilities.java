@@ -24,14 +24,12 @@ import er.extensions.eof.ERXConstant;
 
 /**
  * Utilities for use with key value coding. You could instantiate one of these in your app-startup:
- * <code>
- *
- * public NSKeyValueCodingUtilities statics = ERXKeyValueCodingUtilities.Statics;
- * 
+ * <pre><code>
  * ERXKeyValueCodingUtilities.registerClass(SomeClass.class); 
- * myValue = valueForKeyPath("statics.SomeClass.SOME_FIELD");
- * </code>
- * 
+ * NSKeyValueCodingAdditions statics = ERXKeyValueCodingUtilities.Statics;
+ * myValue = statics.valueForKeyPath("SomeClass.SOME_FIELD");
+ * </code></pre>
+ * Also has utilities for getting and private fields and methods on an object. 
  * @author ak
  */
 public class ERXKeyValueCodingUtilities {
