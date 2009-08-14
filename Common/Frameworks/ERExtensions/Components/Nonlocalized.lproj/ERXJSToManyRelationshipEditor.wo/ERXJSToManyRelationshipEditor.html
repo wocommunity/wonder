@@ -17,6 +17,7 @@ ERXJSToManyRelationshipEditor.prototype = {
 		
 		var selectedValue = popupEl.value;
 		if (selectedValue) {
+			selectedValue = parseInt(selectedValue);
 			if (this.selectedValues.indexOf(selectedValue) == -1) {
 				this.selectedValues.push(selectedValue);
 				this.selectedValues.sort(function(a, b) { return a - b });
@@ -34,7 +35,7 @@ ERXJSToManyRelationshipEditor.prototype = {
 		var hiddenFieldEl = document.getElementById(hiddenFieldName);
 		
 		var index = this.selectedValues.indexOf(value);
-		if (index > 0) {
+		if (index >= 0) {
 			this.selectedValues.splice(index, 1);
 		}
 		
@@ -53,7 +54,7 @@ ERXJSToManyRelationshipEditor.prototype = {
 		
 		// Create the cell for the display string.
 		var nameCell = document.createElement('td');
-		var displayStringNode = document.createTextNode(this.possibleValues[value])
+		var displayStringNode = document.createTextNode(this.possibleValues[value]);
 		nameCell.appendChild(displayStringNode);
 		newRow.appendChild(nameCell);
 		
@@ -86,6 +87,9 @@ ERXJSToManyRelationshipEditor.prototype = {
 	},
 	
 	addValueToAvailableValuesPopup: function(value) {
+		if (this.possibleValues[value] === undefined) { // The item is not in the list of possible values
+			return;
+		}
 		var popupName = 'ERXJSToManyRelationshipEditor_SelectedValuesPopup_' + this.elementID;
 		var popupEl = document.getElementById(popupName);
 		var options = popupEl.options;
