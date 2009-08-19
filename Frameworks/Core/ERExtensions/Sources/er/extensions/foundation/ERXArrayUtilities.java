@@ -68,10 +68,9 @@ public class ERXArrayUtilities extends Object {
     });
 
     /**
-     * Simply utility method to create a concreate
-     * set object from an array
+     * Simply utility method to create a concrete set object from an array.
+     *
      * @param array of elements
-     * @return concreate set.
      */
     // CHECKME: Is this a value add?
     public static <T> NSSet<T> setFromArray(NSArray<T> array) {
@@ -82,16 +81,17 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-        * The qualifiers EOSortOrdering.CompareAscending.. and friends are
+     * The qualifiers EOSortOrdering.CompareAscending.. and friends are
      * actually 'special' and processed in a different/faster way when
-     * sorting than a selector that would be created by
-     * new NSSelector("compareAscending", ObjectClassArray). This method
-     * eases the pain on creating those selectors from a string.
+     * sorting than a selector that would be created by:
+     * new NSSelector("compareAscending", ObjectClassArray)
+     * This method eases the pain on creating those selectors from a string.
+     *
      * @param key sort key
      */
     public static NSSelector sortSelectorWithKey(String key) {
         NSSelector result=null;
-        if (key!=null) {
+        if (key!=null && !key.equals("")) {
             result=_selectorsByKey.objectForKey(key);
             if (result==null) result=new NSSelector(key, ERXConstant.ObjectClassArray);
         }
@@ -630,16 +630,16 @@ public class ERXArrayUtilities extends Object {
     }
     
     /**
- 	 * Adds the object to the mutable array if the object is not null.
- 	 * @param array mutable array where non-null object will be added
- 	 * @param object to be added to array
- 	 */
- 	public static <T> void safeAddObject(NSMutableArray<T> array, T object) {
- 		if (array != null && object != null) {
- 			array.addObject(object);
- 		}
- 	}
- 	
+     * Adds the object to the mutable array if the object is not null.
+     * @param array mutable array where non-null object will be added
+     * @param object to be added to array
+     */
+    public static <T> void safeAddObject(NSMutableArray<T> array, T object) {
+        if (array != null && object != null) {
+            array.addObject(object);
+        }
+    }
+ 
     /**
      * Adds all of the non-duplicate elements from the second
      * array to the mutable array.
@@ -923,7 +923,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-        * Sorts a given array with a set of keys according to the given selector.
+       * Sorts a given array with a set of keys according to the given selector.
      * @param array array to be sorted.
      * @param keys sort keys
      * @param selector sort order selector to use, if null, then sort will be case insensitive ascending.
