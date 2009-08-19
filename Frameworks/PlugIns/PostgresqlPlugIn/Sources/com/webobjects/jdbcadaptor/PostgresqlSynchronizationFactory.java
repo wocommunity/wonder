@@ -115,7 +115,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         int count = entityGroup.count();
         for (int i = 0; i < count; i++) {
             EOEntity entity = (EOEntity) entityGroup.objectAtIndex(i);
-            String sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
+            String sequenceName = PostgresqlPlugIn._sequenceNameForEntity(entity);
             if (!sequenceNames.containsObject(sequenceName)) {
                 sequenceNames.addObject(sequenceName);
                 String sql = "DROP SEQUENCE " + sequenceName + " CASCADE";
@@ -304,7 +304,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
                 }
                 String sql;
 
-                sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
+                sequenceName = PostgresqlPlugIn._sequenceNameForEntity(entity);
                 if (!sequenceNames.containsObject(sequenceName)) {
                     sequenceNames.addObject(sequenceName);
                     // timc 2006-11-06 create result here so we can check for
