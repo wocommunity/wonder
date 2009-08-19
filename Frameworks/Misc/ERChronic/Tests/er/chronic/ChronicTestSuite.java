@@ -12,6 +12,7 @@ public class ChronicTestSuite {
     suite.addTestSuite(RepeaterYearTest.class);
     suite.addTestSuite(RepeaterDayNameTest.class);
     suite.addTestSuite(ParserTest.class);
+    suite.addTestSuite(ParseSpanTest.class);
     suite.addTestSuite(RepeaterTimeTest.class);
     suite.addTestSuite(TokenTestCase.class);
     suite.addTestSuite(RepeaterMonthTest.class);

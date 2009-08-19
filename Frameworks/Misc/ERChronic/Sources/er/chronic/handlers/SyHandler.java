@@ -19,8 +19,12 @@ public class SyHandler implements IHandler {
       Calendar dayStart = Time.construct(year, 1, 1);
       List<Token> timeTokens = tokens.subList(1, tokens.size());
       span = Handler.dayOrTime(dayStart, timeTokens, options);
-    }
-    catch (IllegalArgumentException e) {
+      // make the year span last a year rather than a day
+      if (!options.isGuess()) {
+        Calendar beginCalendar = span.getBeginCalendar();
+        span = new Span(beginCalendar, Time.cloneAndAdd(beginCalendar, Calendar.YEAR, 1));
+      }
+    } catch (IllegalArgumentException e) {
       if (options.isDebug()) {
         e.printStackTrace(System.out);
       }

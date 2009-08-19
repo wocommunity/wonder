@@ -8,7 +8,7 @@ import er.chronic.utils.Span;
 import er.chronic.utils.Time;
 
 public class RepeaterMonth extends RepeaterUnit {
-  private static final int MONTH_SECONDS = 2592000; // 30 * 24 * 60 * 60
+  public static final int MONTH_SECONDS = 2592000; // 30 * 24 * 60 * 60
 
   private Calendar _currentMonthStart;
 
