@@ -124,6 +124,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 	  ajaxOptionsArray.addObject(new AjaxOption("choices", AjaxOption.NUMBER));
 	  ajaxOptionsArray.addObject(new AjaxOption("partialChars", AjaxOption.NUMBER));
 	  ajaxOptionsArray.addObject(new AjaxOption("ignoreCase", AjaxOption.BOOLEAN));
+	  ajaxOptionsArray.addObject(new AjaxOption("activateOnFocus", AjaxOption.BOOLEAN));
       NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
       return options;
     }

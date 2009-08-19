@@ -89,6 +89,15 @@ Autocompleter.Base = Class.create({
 
     Event.observe(this.element, 'blur', this.onBlur.bindAsEventListener(this));
     Event.observe(this.element, 'keydown', this.onKeyPress.bindAsEventListener(this));
+    // AK new option: activateOnFocus
+    if(this.options.activateOnFocus) {
+	    Event.observe(this.element, 'focus', this.onActivate.bindAsEventListener(this));
+    }
+  },
+  
+  // AK new option: activateOnFocus, note that this will work only when you have a afterUpdateElement like  "function(e,s) {document.forms['searchForm'].submit()}";
+  onActivate: function() {
+    this.activate();
   },
 
   show: function() {
