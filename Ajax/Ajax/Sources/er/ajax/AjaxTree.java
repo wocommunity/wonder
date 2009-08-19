@@ -21,6 +21,7 @@ import er.extensions.ERXWOContext;
  * @binding root the root node of the tree
  * @binding item the current tree node (equivalent to "item" on WORepetition)
  * @binding itemClass the class of the current item
+ * @binding itemID the id of the current item 
  * @binding rootExpanded if true, the tree will require the root node to be open; ignored if showRoot = false
  * @binding allExpanded if true, the tree defaults to have all its nodes expanded
  * @binding parentKeyPath the keypath to call on a node to get its parent node (ignored if delegate is set)
@@ -63,7 +64,8 @@ public class AjaxTree extends WOComponent {
 
 	public NSArray nodes() {
 		Object rootNode = treeModel().rootTreeNode();
-		if (_nodes == null || rootNode == null || !rootNode.equals(_lastParent) || !AjaxUtils.booleanValueForBinding("cache", true, _keyAssociations, parent())) {
+		boolean useCache = AjaxUtils.booleanValueForBinding("cache", true, _keyAssociations, parent());
+		if (_nodes == null || rootNode == null || !rootNode.equals(_lastRootNode) || !useCache) {
 			NSMutableArray nodes = new NSMutableArray();
 			boolean showRoot = AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, parent());
 			_fillInOpenNodes(treeModel().rootTreeNode(), nodes, showRoot);
@@ -247,8 +249,16 @@ public class AjaxTree extends WOComponent {
 	public String nodeItem() {
 		StringBuffer nodeItem = new StringBuffer();
 		nodeItem.append("<li");
+		if (hasBinding("itemID")) {
+			String itemID = (String) valueForBinding("itemID");
+			if (itemID != null) {
+				nodeItem.append(" id = \"");
+				nodeItem.append(itemID);
+				nodeItem.append("\"");
+			}
+		}
 		if (hasBinding("itemClass")) {
-			String itemClass = (String)valueForBinding("itemClass");
+			String itemClass = (String) valueForBinding("itemClass");
 			if (itemClass != null) {
 				nodeItem.append(" class = \"");
 				nodeItem.append(itemClass);

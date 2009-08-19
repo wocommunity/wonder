@@ -26,6 +26,7 @@ import er.extensions.ERXValueUtilities;
  * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
  * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
  * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion) 
+ * @binding asynchronous set to false to force a synchronous refresh of the container. Defaults to true.
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
 	public static final String UPDATE_CONTAINER_ID_KEY = ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID;
@@ -78,10 +79,14 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", AjaxOption.BOOLEAN));
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		options.setObjectForKey("'get'", "method");
 		if (options.objectForKey("evalScripts") == null) {
 			options.setObjectForKey("true", "evalScripts");
+		}
+		if (options.objectForKey("asynchronous") == null) {
+			options.setObjectForKey("true", "asynchronous");
 		}
 		
 		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
@@ -236,6 +241,11 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		if (onRefreshComplete != null) {
 			AjaxUtils.appendScriptHeader(response);
 			response.appendContentString(onRefreshComplete);
+			AjaxUtils.appendScriptFooter(response);
+		}
+		if (AjaxModalDialog.isInDialog(context)) {
+			AjaxUtils.appendScriptHeader(response);
+			response.appendContentString("AMD.contentUpdated();");
 			AjaxUtils.appendScriptFooter(response);
 		}
 		return null;

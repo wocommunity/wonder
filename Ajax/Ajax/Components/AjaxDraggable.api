@@ -17,5 +17,7 @@
 	<binding name="scroll"/>
     <binding name="ghosting"/>
     <binding name="handle"/>
+    <binding defaults="Boolean" name="omitContainer"/>
+    
     </wo>
 </wodefinitions>

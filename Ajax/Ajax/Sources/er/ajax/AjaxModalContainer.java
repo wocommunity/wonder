@@ -101,8 +101,9 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         		}
         	}
         }
+        boolean isAjax = booleanValueForBinding("ajax", false, component);
         if(href == null) {
-            if (booleanValueForBinding("ajax", false, component)) {
+			if (isAjax) {
             	if (valueForBinding("id", component) == null) {
     				throw new IllegalArgumentException("If ajax = 'true', you must also bind 'id'.");
             	}
@@ -140,7 +141,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
         appendTagAttributeToResponse(response, "id", linkID);
         response.appendContentString(">");
-        if(!href.startsWith("#") && childrenElements().count() > 0) {
+        if(!href.startsWith("#") && !isAjax && childrenElements() != null && childrenElements().count() > 0) {
         	appendChildrenToResponse(response, context);
         } else {
             Object label = valueForBinding("label", "", component);

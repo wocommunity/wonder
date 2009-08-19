@@ -139,3 +139,7 @@ Contents : WOComponentContent {
 RefreshTime : WOString {
 	value = refreshTime;
 }
+
+ProgressOfText : WOString {
+	value = progressOfText;
+}

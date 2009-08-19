@@ -27,6 +27,7 @@ import er.extensions.ERXComponentUtilities;
  * @binding cancelText the text to display for the cancel link
  * @binding cancelingText the text to display when the progress is being canceled
  * @binding startingText the text to display when the progress is starting
+ * @binding progressOfText the text to display for the word "of" in the "[size] of [totalsize]" string during upload
  * @binding finishedAction the action to fire when the progress finishes (cancel, failed, or succeeded)
  * @binding canceledAction the action to fire when the progress is canceled
  * @binding succeededAction the action to fire when the progress succeeded
@@ -240,6 +241,14 @@ public class AjaxProgressBar extends WOComponent {
 		return cancelText;
 	}
 
+	public String progressOfText() {
+		String progressOfText = (String) valueForBinding("progressOfText");
+		if (progressOfText == null) {
+			progressOfText = "of";
+		}
+		return progressOfText;
+	}
+	
 	public String onChange() {
 		return id() + "AjaxProgress.start()";
 	}

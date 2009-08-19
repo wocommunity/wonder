@@ -65,8 +65,8 @@ Modalbox.Methods = {
 			)
 		);
 		if ( ! this.options.locked) {
-		this.MBclose = new Element("a", {id: "MB_close", title: this.options.closeString, href: "#"}).update("<span>" + this.options.closeValue + "</span>");
-		this.MBheader.insert({'bottom':this.MBclose});
+			this.MBclose = new Element("a", {id: "MB_close", title: this.options.closeString, href: "#"}).update("<span>" + this.options.closeValue + "</span>");
+			this.MBheader.insert({'bottom':this.MBclose});
 		}
 		this.MBcontent = new Element("div", {id: "MB_content"}).update(
 			this.MBloading = new Element("div", {id: "MB_loading"}).update(this.options.loadingString)
@@ -295,17 +295,20 @@ Modalbox.Methods = {
 	
 	_putContent: function(callback){
 		// Prepare and resize modal box for content
-		if(this.options.height == this._options.height) {
+		// MS: check for a -1 height ... I'm only doing this because the "else" tries to make it scrollable
+		if(this.options.height == this._options.height || this.options.height == -1) {
 			setTimeout(function() { // MSIE sometimes doesn't display content correctly
 				Modalbox.resize(0, $(this.MBcontent).getHeight() - $(this.MBwindow).getHeight() + $(this.MBheader).getHeight(), {
 					afterResize: function(){
 						this.MBcontent.show().makePositioned();
 						this.focusableElements = this._findFocusableElements();
-						this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
+						this._setWidthAndPosition(); // CH: Set position (and width) after the content loads so that dialog is centered when width = - 1
 						setTimeout(function(){ // MSIE fix
 							if(callback != undefined)
 								callback(); // Executing internal JS from loaded content
 							this.event("afterLoad"); // Passing callback
+							// CH move _setFocus to after timeout so elements with onFocus binding aren't focused too early
+							this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
 						}.bind(this),1);
 					}.bind(this)
 				});
@@ -317,11 +320,12 @@ Modalbox.Methods = {
 			setTimeout(function(){ // MSIE fix
 				// MS: moved this code inside the setTimeout to compute focusable elements after a delay .. fixes bug in FireFox
 				this.focusableElements = this._findFocusableElements();
-				this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
-				
+				this._setWidthAndPosition(); // CH: Set position (and width) after the content loads so that dialog is centered when width = - 1
 				if(callback != undefined)
 					callback(); // Executing internal JS from loaded content
 				this.event("afterLoad"); // Passing callback
+				// CH move _setFocus to after timeout so elements with onFocus binding aren't focused too early
+				this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
 			}.bind(this),1);
 		}
 	},
@@ -330,11 +334,11 @@ Modalbox.Methods = {
 		this.setOptions(options);
 		this.active = true;
 		if ( ! this.options.locked) 
-		$(this.MBclose).observe("click", this.hideObserver);
+			$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
 		if ( ! this.options.locked) 
-		$(this.MBclose).show();
+			$(this.MBclose).show();
 		if(this.options.transitions && this.options.inactiveFade)
 			new Effect.Appear(this.MBwindow, {duration: this.options.slideUpDuration});
 	},
@@ -343,21 +347,21 @@ Modalbox.Methods = {
 		this.setOptions(options);
 		this.active = false;
 		if ( ! this.options.locked) 
-		$(this.MBclose).stopObserving("click", this.hideObserver);
+			$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
 		if ( ! this.options.locked) 
-		$(this.MBclose).hide();
+			$(this.MBclose).hide();
 		if(this.options.transitions && this.options.inactiveFade)
 			new Effect.Fade(this.MBwindow, {duration: this.options.slideUpDuration, to: .75});
 	},
 	
 	_initObservers: function(){
 		if ( ! this.options.locked) 
-		$(this.MBclose).observe("click", this.hideObserver);
+			$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.observe(document, "keydown", this.kbdObserver);
 		else
 			Event.observe(document, "keypress", this.kbdObserver);
@@ -365,10 +369,10 @@ Modalbox.Methods = {
 	
 	_removeObservers: function(){
 		if ( ! this.options.locked) 
-		$(this.MBclose).stopObserving("click", this.hideObserver);
+			$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.stopObserving(document, "keydown", this.kbdObserver);
 		else
 			Event.stopObserving(document, "keypress", this.kbdObserver);
@@ -383,9 +387,30 @@ Modalbox.Methods = {
 	_setFocus: function() { 
 		/* Setting focus to the first 'focusable' element which is one with tabindex = 1 or the first in the form loaded. */
 		if(this.focusableElements.length > 0 && this.options.autoFocusing == true) {
+
+			// MS: don't steal focus if there is already an element inside the AMD that is focused
+			var focusedElement = $$('*:focus').first();
+			var alreadyFocused = focusedElement && this.focusableElements.indexOf(focusedElement) != -1;
+			if (alreadyFocused) {
+				return;
+			}
+			// MS: done
+			
 			var firstEl = this.focusableElements.find(function (el){
 				return el.tabIndex == 1;
 			}) || this.focusableElements.first();
+			
+			// MS: try to focus on form field rather than a link ...
+			var inputTagNames = ['input', 'select', 'textarea'];
+			if (firstEl && !inputTagNames.include(firstEl.tagName.toLowerCase())) {
+				var firstInputEl = this.focusableElements.find(function(element) {
+					return inputTagNames.include(element.tagName.toLowerCase());
+    		});
+    		if (firstInputEl) {
+    			firstEl = firstInputEl;
+    		}
+			}
+    	
 			this.currFocused = this.focusableElements.toArray().indexOf(firstEl);
 			firstEl.focus(); // Focus on first focusable element except close button
 		} else if(! this.options.locked && $(this.MBclose).visible())
@@ -426,6 +451,17 @@ Modalbox.Methods = {
 				}
 				break;			
 			case Event.KEY_ESC:
+				// CH: Add Esc key handling start
+				if (this.options.clickOnEscId) {
+					var target = $(this.options.clickOnEscId);
+					if (target && this._isClickable(target)) {
+						target.onclick();
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+				// CH: done
 				if(this.active && ! this.options.locked) this._hide(event);
 				break;
 			case 32:
@@ -436,6 +472,12 @@ Modalbox.Methods = {
 				break;
 			case Event.KEY_UP:
 			case Event.KEY_DOWN:
+			    // Allow up and down arrow keys in text boxes in WebKit browsers,
+                // because these keys can move the cursor.
+                if(Prototype.Browser.WebKit && (["textarea","select"].include(node.tagName.toLowerCase()) ||
+                   (node.tagName.toLowerCase() == "input" && ["text", "password"].include(node.type)))) {
+                    break;
+                }
 			case Event.KEY_PAGEDOWN:
 			case Event.KEY_PAGEUP:
 			case Event.KEY_HOME:
@@ -443,11 +485,30 @@ Modalbox.Methods = {
 				// Safari operates in slightly different way. This realization is still buggy in Safari.
 				if(Prototype.Browser.WebKit && !["textarea", "select"].include(node.tagName.toLowerCase()))
 					event.stop();
-				else if( (node.tagName.toLowerCase() == "input" && ["submit", "button"].include(node.type)) || (node.tagName.toLowerCase() == "a") )
+				else if( this._isClickable(node) )  // CH: change to use _isClickable
 					event.stop();
 				break;
+			// CH: Add Return key handling start
+			case Event.KEY_RETURN:
+				if (this.options.clickOnReturnId) {
+					var target = $(this.options.clickOnReturnId);
+					// Don't trigger this for clickable elements or text areas
+					if (target && this._isClickable(target) &&  ! (this._isClickable(node) || ["textarea"].include(node.type)) ) {
+						target.onclick();
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+			// CH: done
 		}
 	},
+	
+	// CH: add _isClickable
+	_isClickable: function(element) {
+		return (["input", "button"].include(element.tagName.toLowerCase()) && ["submit", "button"].include(element.type)) || (element.tagName.toLowerCase() == "a")
+	},
+	// CH: done
 	
 	_preventScroll: function(event) { // Disabling scrolling by "space" key
 		if(!["input", "textarea", "select", "button"].include(event.element().tagName.toLowerCase())) 

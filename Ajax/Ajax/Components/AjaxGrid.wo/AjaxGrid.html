@@ -13,10 +13,15 @@
 	</tr>
 	<webobject name="RowRepetition">
 		<webobject name="TableRow">
-			<td class="ajaxGridSelectRow"><webobject name="ToggleRowSelection">
-				<webobject name="IsRowNotSelected"><span>&nbsp;&nbsp;&nbsp;</span></webobject name="IsRowNotSelected">
-				<webobject name="IsRowSelected"><span>X</span><em>&nbsp;</em></webobject name="IsRowSelected">
-			</webobject name="ToggleRowSelection"></td>
+			<td class="ajaxGridSelectRow">
+				<webobject name="CanSelectRows">
+					<webobject name="ToggleRowSelection">
+						<webobject name="IsRowNotSelected"><span>&nbsp;&nbsp;&nbsp;</span></webobject name="IsRowNotSelected">
+						<webobject name="IsRowSelected"><span>X</span><em>&nbsp;</em></webobject name="IsRowSelected">
+					</webobject name="ToggleRowSelection">
+				</webobject name="CanSelectRows">
+				<webobject name="CantSelectRows">&nbsp;</webobject name="CantSelectRows">
+			</td>
 			<webobject name="ColumnRepetition">
 				<webobject name="TableData"><webobject name="ColumnValue"/></webobject name="TableData">
 			</webobject name="ColumnRepetition">

@@ -6,3 +6,4 @@ PB.project
 target
 build
 CPFileList.txt
+*.xcodeproj

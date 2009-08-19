@@ -55,11 +55,13 @@ import er.extensions.ERXValueUtilities;
  *        oddRowCSSClass = &quot;greyBackground&quot;;          // CSS class attribute on odd rows, optional
  *        evenRowCSSStyle = &quot;background:lightyellow;&quot; // CSS style attribute on even rows, optional
  *        oddRowCSSStyle = &quot;background:lightgrey;&quot;;   // CSS style attribute on odd rows, optional
+ *        showRowSelector = true;                               // Optional, defaults to true, if false no UI is shown to select a row - the cell has only &amp;nbsp;
  *        selectedRowCSSClass = &quot;yellowBackground&quot;;   // Secondary CSS class attribute on selected rows, optional
  *        unselectedRowCSSClass = &quot;greyBackground&quot;;   // Secondary CSS class attribute on unselected rows, optional
  *        selectedRowCSSStyle = &quot;background:lightyellow;&quot;; // Secondary CSS style attribute on selected rows, optional
  *        unselectedRowCSSStyle = &quot;background:lightgrey;&quot;;// Secondary CSS style attribute on unselected rows, optional
- *        canReorder = true;                                    // Enables (or disables) drag and drop reordering of columns
+ *        canReorder = true;                                    // Optional, defaults to true, Enables (or disables) drag and drop reordering of columns
+ *        canResort = true;                                     // Optional, defaults to true, Enables (or disables) sorting by clicking the column titles
  *        dragHeaderOnly = true;                                // Optional, defaults to false, true if only the title/header cells can
  *                                                              // be dragged to re-order columns
  *        batchSize = 10;                                       // Controls size of batch in display group, use zero for no batching
@@ -277,6 +279,7 @@ public class AjaxGrid extends WOComponent {
 	private NSMutableDictionary columnsByKeypath; // optimization
 	private NSMutableDictionary sortOrdersByKeypath; // optimization
 	private NSMutableDictionary formattersByKeypath; // optimization
+	private Boolean showRowSelector; // optimization
 
 	private NSKeyValueCodingAdditions row; // local binding
 	private NSDictionary currentColumn; // local binding
@@ -295,6 +298,7 @@ public class AjaxGrid extends WOComponent {
 	public static final String TABLE_ID = "tableID";
 	public static final String ROW_IDENTIFIER = "rowIdentifier";
 	public static final String CAN_REORDER = "canReorder";
+	public static final String CAN_RESORT = "canResort";
 	public static final String DRAG_HEADER_ONLY = "dragHeaderOnly";
 	public static final String SOURCE_COLUMN_FORM_VALUE = "sourceColumn";
 	public static final String DESTINATION_COLUMN_FORM_VALUE = "destinationColumn";
@@ -304,6 +308,7 @@ public class AjaxGrid extends WOComponent {
 	public static final String ODD_ROW_CSS_CLASS = "oddRowCSSClass";
 	public static final String EVEN_ROW_CSS_STYLE = "evenRowCSSStyle";
 	public static final String ODD_ROW_CSS_STYLE = "oddRowCSSStyle";
+	public static final String SHOW_ROW_SELECTOR = "showRowSelector";
 	public static final String SELECTED_ROW_CSS_CLASS = "selectedRowCSSClass";
 	public static final String UNSELECTED_ROW_CSS_CLASS = "unselectedRowCSSClass";
 	public static final String SELECTED_ROW_CSS_STYLE = "selectedRowCSSStyle";
@@ -358,7 +363,7 @@ public class AjaxGrid extends WOComponent {
 	 */
 	public void sortOrderUpdated() {
 		// Columns without a key path or sort path can't be sorted
-		if (currentSortPath() == null) {
+		if (currentSortPath() == null || ! canResort()) {
 			return;
 		}
 
@@ -384,9 +389,11 @@ public class AjaxGrid extends WOComponent {
 	 * Updates configurationData() and displayGroup().
 	 */
 	public void removeSorting() {
+		if (canResort()) {
 		configurationData().setObjectForKey(new NSMutableArray(), SORT_ORDER);
 		clearCachedConfiguration();
 		updateDisplayGroupSort();
+	}
 	}
 	
 	/**
@@ -477,15 +484,27 @@ public class AjaxGrid extends WOComponent {
 		columnsByKeypath = null;
 		sortOrdersByKeypath = null;
 		formattersByKeypath = null;
+		showRowSelector = null;
 	}
 
 	/**
-	 * Returns CAN_REORDER value from configurationData()
+	 * Returns CAN_REORDER value from configurationData(), or <code>true</code> if not
+	 * configured.
 	 * 
 	 * @return <code>true</code> if column re-ordering is enabled
 	 */
 	public boolean canReorder() {
-		return Boolean.valueOf((String) configurationData().valueForKey(CAN_REORDER)).booleanValue();
+		return configurationData().valueForKey(CAN_REORDER) != null ? Boolean.valueOf((String) configurationData().valueForKey(CAN_REORDER)).booleanValue() : true;
+	}
+
+	/**
+	 * Returns CAN_RESORT value from configurationData(), or <code>true</code> if not
+	 * configured.
+	 * 
+	 * @return <code>true</code> if data sorting is enabled
+	 */
+	public boolean canResort() {
+		return configurationData().valueForKey(CAN_RESORT) != null ? Boolean.valueOf((String) configurationData().valueForKey(CAN_RESORT)).booleanValue() : true;
 	}
 
 	/**
@@ -805,6 +824,19 @@ public class AjaxGrid extends WOComponent {
 		return componentName != null ? componentName : "WOString";
 	}
 
+	/**
+	 * @return value of SHOW_ROW_SELECTOR from the configuration data, or <code>true</code> if unset
+	 */
+	public boolean showRowSelector() {
+		if (showRowSelector == null) {
+			showRowSelector = Boolean.TRUE;
+			if (configurationData().valueForKey(SHOW_ROW_SELECTOR) != null) {
+				showRowSelector = Boolean.valueOf((String) configurationData().valueForKey(SHOW_ROW_SELECTOR));
+			}
+		}
+		return showRowSelector.booleanValue();
+	}
+	
 	/**
 	 * This list is implemented by AjaxGrid and is not based on the display
 	 * group's selected objects. The list of selected objects is maintained

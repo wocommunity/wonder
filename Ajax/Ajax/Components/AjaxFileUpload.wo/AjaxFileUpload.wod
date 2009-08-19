@@ -65,9 +65,11 @@ UploadProgressBar : AjaxProgressBar {
 	allowCancel = ^allowCancel;
 	visibleBeforeStart = progressBarBeforeStart;
 	visibleAfterDone = progressBarAfterDone;
+	cancelText = cancelText;
 	cancelingText = cancelingText;
 	startingText = startingText;
 	refreshTime = ^refreshTime;
+	progressOfText = ^progressOfText;
 }
 
 Contents : WOComponentContent {
