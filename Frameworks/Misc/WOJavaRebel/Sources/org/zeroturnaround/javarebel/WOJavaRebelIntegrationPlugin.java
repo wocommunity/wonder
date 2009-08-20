@@ -11,7 +11,10 @@ import org.zeroturnaround.javarebel.support.PackageClassFilter;
  *
  */
 public class WOJavaRebelIntegrationPlugin implements Plugin {
+  private static boolean enabled = false;
+  
 	public void preinit() {
+    enabled = true;
 	  JavassistClassBytecodeProcessor processor = new WOJavaRebelBytecodeProcessor();
 	  IntegrationFactory.getInstance()
 	    .addIntegrationProcessor(WOJavaRebelBytecodeProcessor.IDEPATCH_CLASS, processor);
@@ -50,5 +53,9 @@ public class WOJavaRebelIntegrationPlugin implements Plugin {
 
   public String getWebsite() {
     return null;
+  }
+  
+  public static boolean isEnabled() {
+    return enabled;
   }
 }
