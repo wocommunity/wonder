@@ -15,7 +15,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.appserver.ERXRequest;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
@@ -311,9 +310,20 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 				path = path.substring(0, dotIndex);
 			}
 			@SuppressWarnings("unchecked")
-			NSMutableDictionary<String, Object> userInfo = ((ERXRequest) request).mutableUserInfo();
-			userInfo.setObjectForKey(type, ERXRouteRequestHandler.TypeKey);
-			userInfo.setObjectForKey(path, ERXRouteRequestHandler.PathKey);
+			
+			NSDictionary<String, Object> userInfo = request.userInfo();
+			NSMutableDictionary<String, Object> mutableUserInfo;
+			if (userInfo instanceof NSMutableDictionary) {
+				mutableUserInfo = (NSMutableDictionary<String, Object>) userInfo;
+			}
+			else if (userInfo != null) {
+				mutableUserInfo = userInfo.mutableClone();
+			}
+			else {
+				mutableUserInfo = new NSMutableDictionary<String, Object>();
+			}
+			mutableUserInfo.setObjectForKey(type, ERXRouteRequestHandler.TypeKey);
+			mutableUserInfo.setObjectForKey(path, ERXRouteRequestHandler.PathKey);
 
 			ERXRoute matchingRoute = null;
 			NSDictionary<ERXRoute.Key, String> keys = null;
@@ -330,11 +340,15 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 				String actionName = keys.objectForKey(ERXRoute.ActionKey);
 				requestHandlerPath.addObject(controller);
 				requestHandlerPath.addObject(actionName);
-				userInfo.setObjectForKey(matchingRoute, ERXRouteRequestHandler.RouteKey);
-				userInfo.setObjectForKey(keys, ERXRouteRequestHandler.KeysKey);
+				mutableUserInfo.setObjectForKey(matchingRoute, ERXRouteRequestHandler.RouteKey);
+				mutableUserInfo.setObjectForKey(keys, ERXRouteRequestHandler.KeysKey);
 			}
 			else {
 				throw new FileNotFoundException("There is no controller for the route '" + path + "'.");
+			}
+			
+			if (mutableUserInfo != userInfo) {
+				request.setUserInfo(mutableUserInfo);
 			}
 		}
 		catch (Throwable t) {

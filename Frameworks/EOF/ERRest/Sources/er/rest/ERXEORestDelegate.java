@@ -3,12 +3,11 @@ package er.rest;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-
-import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.eof.ERXEntityClassDescription;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * EODelegate is an implementation of the ERXRestRequestNode.Delegate interface that understands EOF.
@@ -27,7 +26,13 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 		if (obj instanceof EOEnterpriseObject) {
 			// Object pkValue = entity.primaryKeyValue(obj);
 			EOEnterpriseObject eo = (EOEnterpriseObject) obj;
-			pkValue = ERXEOControlUtilities.primaryKeyObjectForObject(eo);
+			NSDictionary pkDict = EOUtilities.primaryKeyForObject(_editingContext, eo);
+			if (pkDict.count() == 1) {
+				pkValue = pkDict.allValues().lastObject();
+			}
+			else {
+				pkValue = pkDict;
+			}
 		}
 		else {
 			pkValue = null;
@@ -42,10 +47,16 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 
 	public Object createObjectOfEntity(EOClassDescription entity) {
 		Object obj;
-		if (entity instanceof ERXEntityClassDescription) {
-			EOEnterpriseObject eo = entity.createInstanceWithEditingContext(_editingContext, null);
-			_editingContext.insertObject(eo);
-			obj = eo;
+		if (entity instanceof EOEntityClassDescription) {
+			_editingContext.lock();
+			try {
+				EOEnterpriseObject eo = entity.createInstanceWithEditingContext(_editingContext, null);
+				_editingContext.insertObject(eo);
+			      obj = eo;
+			}
+			finally {
+				_editingContext.unlock();
+			}
 		}
 		else if (entity instanceof BeanInfoClassDescription) {
 			obj = ((BeanInfoClassDescription) entity).createInstance();
@@ -81,7 +92,13 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 			EOEntity eoEntity = ((EOEntityClassDescription) entity).entity();
 			String strPKValue = String.valueOf(id);
 			Object pkValue = ((EOAttribute) eoEntity.primaryKeyAttributes().objectAtIndex(0)).validateValue(strPKValue);
-			obj = ERXEOControlUtilities.objectWithPrimaryKeyValue(_editingContext, eoEntity.name(), pkValue, null, false);
+			_editingContext.lock();
+			try {
+				obj = EOUtilities.objectWithPrimaryKeyValue(_editingContext, eoEntity.name(), pkValue);
+			}
+			finally {
+				_editingContext.unlock();
+			}
 		}
 		else {
 			throw new UnsupportedOperationException("Unable to fetch objects for anything except EOs.");
