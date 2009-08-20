@@ -1,5 +1,7 @@
 package org.zeroturnaround.javarebel;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -12,15 +14,28 @@ import com.webobjects.foundation.NSSelector;
  *
  */
 public class WOJavaRebelSupport {
-	public final static Observer observer = new Observer();
+	public static final Observer observer = new Observer();
+  private static final ReentrantLock lock = new ReentrantLock();
+  
+  private static final long MIN_ELAPSED_TIME = 2000;
+  private static long lastRunTimestamp = System.currentTimeMillis();
 
 	public WOJavaRebelSupport() {
 		//Do nothing
 	}
 	
 	public static void run() {
-	  WOJavaRebelClassReloadHandler.getInstance().updateLoadedClasses(null);
-	  WOJavaRebelModelReloadHandler.getInstance().updateLoadedModels(null);
+	  long currentTime = System.currentTimeMillis();
+	  if (currentTime - lastRunTimestamp > MIN_ELAPSED_TIME) {
+	    lock.lock();
+	    try {
+	      lastRunTimestamp = System.currentTimeMillis();
+	      WOJavaRebelClassReloadHandler.getInstance().updateLoadedClasses(null);
+	      WOJavaRebelModelReloadHandler.getInstance().updateLoadedModels(null);
+	    } finally {
+	      lock.unlock();
+	    }
+	  }
 	}
 	
 	public static class Observer {

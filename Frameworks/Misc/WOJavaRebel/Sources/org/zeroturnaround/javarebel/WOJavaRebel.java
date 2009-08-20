@@ -17,7 +17,7 @@ public class WOJavaRebel {
 	
 	static {
 		try {
-			if (ReloaderFactory.getInstance().isReloadEnabled()) {
+			if (ReloaderFactory.getInstance().isReloadEnabled() && WOJavaRebelIntegrationPlugin.isEnabled()) {
 				new WOJavaRebelSupport();
 			}
 		} catch (NoClassDefFoundError e) {

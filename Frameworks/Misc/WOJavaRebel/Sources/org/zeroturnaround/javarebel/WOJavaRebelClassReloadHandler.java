@@ -131,9 +131,6 @@ public class WOJavaRebelClassReloadHandler {
 
 			if (clazz == null || clazz.equals(unknownClass)) {
 				WOClassCacheAccessor.removeClassForName(className);
-				if ((clazz = _NSUtilities.classWithName(className)) != null) {
-				  reloaded(clazz);
-				}
 				continue;
 			}
 			reloader.checkAndReload(clazz);
