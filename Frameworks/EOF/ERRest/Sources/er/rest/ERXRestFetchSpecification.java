@@ -180,7 +180,7 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 		}
 		NSMutableArray<EOSortOrdering> sortOrderings = new NSMutableArray<EOSortOrdering>();
 		for (String sortKeyStr : sortKeysStr.split(",")) {
-			String[] sortAttributes = sortKeyStr.split("|");
+			String[] sortAttributes = sortKeyStr.split("\\|");
 			String sortKey = sortAttributes[0];
 
 			NSSelector sortDirection;
