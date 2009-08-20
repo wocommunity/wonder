@@ -19,7 +19,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.localization.ERXLocalizer;
@@ -1038,7 +1037,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 						}
 						else if (lockedRelationship) {
 							Object previousChildObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
-							updateChildObj = ERXExtensions.safeEquals(previousChildObj, childObj);
+							updateChildObj = previousChildObj != null && previousChildObj.equals(childObj);
 						}
 						else {
 							updateChildObj = true;

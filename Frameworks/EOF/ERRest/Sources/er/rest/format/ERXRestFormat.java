@@ -6,9 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.webobjects.eocontrol.EOClassDescription;
 
-import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
-import er.rest.ERXEORestDelegate;
 import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
 
@@ -50,14 +48,6 @@ public class ERXRestFormat {
 
 	public ERXRestFormat.Delegate delegate() {
 		return _delegate;
-	}
-
-	public String toString(Object obj, ERXKeyFilter filter) {
-		return toString(obj, filter, new ERXEORestDelegate(ERXEC.newEditingContext()));
-	}
-
-	public String toString(EOClassDescription classDescription, List<?> list, ERXKeyFilter filter) {
-		return toString(classDescription, list, filter, new ERXEORestDelegate(ERXEC.newEditingContext()));
 	}
 
 	public String toString(Object obj, ERXKeyFilter filter, IERXRestDelegate delegate) {
