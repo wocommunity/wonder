@@ -367,21 +367,33 @@ public class ERXUtilities {
     }    
 
     /**
-     * Generates a string representation of
-     * the current stacktrace.
+     * Generates a string representation of the current stacktrace.
+     *
      * @return current stacktrace.
      */
     public static String stackTrace() {
-        String result;
+        String result = null;
         try {
             throw new Throwable();
         } catch (Throwable t) {
             result = ERXUtilities.stackTrace(t);
         }
-        // clipping the early parts of the stack trace which include
-        // ERXUtilities.stackTrace()
-        //"java.lang.Throwable 	at er.extensions.ERXUtilities.stackTrace(ERXUtilities.java:429)".length()
-        return result.substring(84);
+
+        String separator = System.getProperties().getProperty("line.separator");
+
+        // Chop off the 1st line, "java.lang.Throwable"
+        //
+        int offset = result.indexOf(separator);
+        result = result.substring(offset+1);
+
+        // Chop off the lines at the start that refer to ERXUtilities
+        //
+        offset = result.indexOf(separator);
+        while (result.substring(0,offset).indexOf("ERXUtilities.java") >= 0) {
+            result = result.substring(offset+1);
+            offset = result.indexOf(separator);
+        }
+        return separator+result;
     }
 
     /**
