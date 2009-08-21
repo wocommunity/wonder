@@ -3,7 +3,7 @@ Browser: WOBrowser {
 	item = theCurrentItem;
 	list = theList;
 	multiple = false;
-	selections = selections;
+	selections = selection;
 	size = ^size;
         name=^popupName;
 }
