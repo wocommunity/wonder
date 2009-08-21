@@ -85,7 +85,7 @@ public class EREntityStoreFactory {
 
   private String _entityExternalName(EOEntity entity) {
     String externalName = entity.externalName();
-    if (!entity.hasExternalName()){ 
+    if (externalName == null || externalName.trim().length() == 0){ 
       externalName = entity.name();
     }
     return externalName;
