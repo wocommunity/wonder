@@ -8,6 +8,7 @@ WelcomeModalDialog: AjaxModalDialog {
 	id = "WelcomeModalDialog";
 	title = "Welcome";
 	width = 400;
+	centerVertically = true;
 	overlayOpacity = "0.4";
 	overlayDuration = "0.1";
 	slideDownDuration = "0.2";
