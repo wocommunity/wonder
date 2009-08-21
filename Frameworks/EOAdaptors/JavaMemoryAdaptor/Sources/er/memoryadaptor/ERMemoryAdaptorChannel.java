@@ -30,12 +30,14 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
     _fetchIndex = -1;
   }
   
+  @Deprecated
   public NSDictionary primaryKeyForNewRowWithEntity(EOEntity entity) {
-	return context()._newPrimaryKey(null, entity);
+    return adaptorContext()._newPrimaryKey(null, entity);
   }
 
-  public ERMemoryAdaptorContext context() {
-    return (ERMemoryAdaptorContext) _context;
+  @Override
+  public ERMemoryAdaptorContext adaptorContext() {
+    return (ERMemoryAdaptorContext) super.adaptorContext();
   }
 
   @Override
@@ -120,16 +122,18 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
     }
     setAttributesToFetch(attributesToFetch);
 
-    ERMemoryEntityStore store = context()._entityStoreForEntity(entity);
+    EREntityStore store = adaptorContext()._entityStoreForEntity(entity);
     try {
       _fetchIndex = 0;
       _fetchedRows = store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity);
     }
     catch (EOGeneralAdaptorException e) {
+      cancelFetch();
       throw e;
     }
     catch (Throwable e) {
       e.printStackTrace();
+      cancelFetch();
       throw new EOGeneralAdaptorException("Failed to fetch '" + entity.name() + "' with fetch specification '" + fetchSpecification + "': " + e.getMessage());
     }
   }
@@ -146,7 +150,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
   @Override
   public int updateValuesInRowsDescribedByQualifier(NSDictionary updatedRow, EOQualifier qualifier, EOEntity entity) {
     try {
-      ERMemoryEntityStore store = context()._entityStoreForEntity(entity);
+      EREntityStore store = adaptorContext()._entityStoreForEntity(entity);
       return store.updateValuesInRowsDescribedByQualifier(updatedRow, qualifier, entity);
     }
     catch (EOGeneralAdaptorException e) {
@@ -161,7 +165,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
   @Override
   public void insertRow(NSDictionary row, EOEntity entity) {
     try {
-      ERMemoryEntityStore store = context()._entityStoreForEntity(entity);
+      EREntityStore store = adaptorContext()._entityStoreForEntity(entity);
       store.insertRow(row, entity);
     }
     catch (EOGeneralAdaptorException e) {
@@ -176,7 +180,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
   @Override
   public int deleteRowsDescribedByQualifier(EOQualifier qualifier, EOEntity entity) {
     try {
-      ERMemoryEntityStore store = context()._entityStoreForEntity(entity);
+      EREntityStore store = adaptorContext()._entityStoreForEntity(entity);
       return store.deleteRowsDescribedByQualifier(qualifier, entity);
     }
     catch (EOGeneralAdaptorException e) {
