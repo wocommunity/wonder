@@ -22,6 +22,7 @@ Modalbox.Methods = {
 		overlayClose: true, // Close modal box by clicking on overlay
 		width: 500, // Default width in px
 		height: 90, // Default height in px
+		centerVertically: false, // True if should be centered vertically on page
 		overlayOpacity: .65, // Default overlay opacity
 		overlayDuration: .25, // Default overlay fade in/out duration in seconds
 		slideDownDuration: .5, // Default Modalbox appear slide down effect in seconds
@@ -558,6 +559,17 @@ Modalbox.Methods = {
 	
 	_setPosition: function () {
 		$(this.MBwindow).setStyle({left: Math.round((Element.getWidth(document.body) - Element.getWidth(this.MBwindow)) / 2 ) + "px"});
+		
+		// CH: Add vertical centering
+		if (this.options.centerVertically) {
+			var elem = $(this.MBwindow);
+			var docElem = document.documentElement;
+			pageHeight = self.innerHeight || (docElem&&docElem.clientHeight) ||	document.body.clientHeight;
+			elemHeight = elem.getHeight();
+			var y = Math.round(pageHeight/2) - (elemHeight/2);	
+			elem.style.top = y+'px';
+        }	
+		// CH: Done adding vertical centering
 	},
 	
 	_setWidthAndPosition: function () {
