@@ -314,20 +314,20 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   }
 
   public WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
-    WOComponent wocomponent = wocontext.component();
-    WOActionResults result = (WOActionResults) valueForBinding("action", wocomponent);
-    if (result == null) {
-    	WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
-        String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
-        if (onClickServer != null) {
-    		AjaxUtils.appendScriptHeaderIfNecessary(worequest, response);
-    		response.appendContentString(onClickServer);
-    		AjaxUtils.appendScriptFooterIfNecessary(worequest, response);
-    		result = response;
-        }
-    }
+	   WOComponent wocomponent = wocontext.component();
+	   WOActionResults result = (WOActionResults) valueForBinding("action", wocomponent);
+	   if (result == null) {
+	     WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
+	     String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
+	     if (onClickServer != null) {
+	       AjaxUtils.appendScriptHeaderIfNecessary(worequest, response);
+	       response.appendContentString(onClickServer);
+	       AjaxUtils.appendScriptFooterIfNecessary(worequest, response);
+	     }
+	     result = response;
+	   }
 
-    return result;
-  }
+	   return result;
+	 }
 
 }
