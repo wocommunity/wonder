@@ -54,7 +54,7 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
   private EREntityStore join(EORelationship rel, EREntityStore store1, EREntityStore store2) {
     /* FIXME: Need to support outer joins too */
     if (rel.joinSemantic() == EORelationship.InnerJoin)
-      return new InnerJoinEntityStore(rel.joins(), store1, store2);
+      return new InnerJoinEntityStore(rel, store1, store2);
     throw new UnsupportedOperationException("ERMemoryAdaptor does not support outer joins");
   }
 
@@ -90,11 +90,13 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
     NSMutableDictionary<EOAttribute, EOAttribute> attributeMap = new NSMutableDictionary<EOAttribute, EOAttribute>();
     EREntityStore srcStore;
     EREntityStore destStore;
+    EORelationship relationship;
 
-    public InnerJoinEntityStore(NSArray<EOJoin> joins, EREntityStore store1, EREntityStore store2) {
+    public InnerJoinEntityStore(EORelationship rel, EREntityStore store1, EREntityStore store2) {
       srcStore = store1;
       destStore = store2;
-      for (EOJoin join : joins) {
+      relationship = rel;
+      for (EOJoin join : rel.joins()) {
         attributeMap.setObjectForKey(join.destinationAttribute(), join.sourceAttribute());
       }
     }
@@ -156,7 +158,18 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
       public NSMutableDictionary<String, Object> next() {
         hasNext();
         _hasNext = null;
-        return ERXDictionaryUtilities.dictionaryWithDictionaryAndDictionary(src, dst).mutableClone();
+        NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(src);
+        EOEntity entity = relationship.entity();
+        for (EOAttribute attrib : entity.attributesToFetch()) {
+          EORelationship rel = entity._relationshipForPath(attrib.relationshipPath());
+          if (attrib.isFlattened() && relationship.equals(rel)) {
+            String dstKey = entity._attributeForPath(attrib.definition()).name();
+            Object value = dst.objectForKey(dstKey);
+            if (value != null)
+              row.setObjectForKey(value, attrib.name());
+          }
+        }
+        return row;
       }
 
       public void remove() {
