@@ -30,5 +30,6 @@
     <binding name="name"/>
     <binding name="calendarCSS"/>
     <binding name="calendarCSSFramework"/>
-   </wo>
+   <binding name="onDateSelect"/>
+    </wo>
 </wodefinitions>
