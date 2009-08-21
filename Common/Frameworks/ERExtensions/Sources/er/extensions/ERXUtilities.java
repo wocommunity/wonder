@@ -14,13 +14,16 @@ import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
