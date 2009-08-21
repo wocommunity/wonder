@@ -92,11 +92,12 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
     EREntityStore destStore;
     EORelationship relationship;
 
+    @SuppressWarnings("cast")
     public InnerJoinEntityStore(EORelationship rel, EREntityStore store1, EREntityStore store2) {
       srcStore = store1;
       destStore = store2;
       relationship = rel;
-      for (EOJoin join : rel.joins()) {
+      for (EOJoin join : (NSArray<EOJoin>)rel.joins()) {
         attributeMap.setObjectForKey(join.destinationAttribute(), join.sourceAttribute());
       }
     }
@@ -155,12 +156,13 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
         return _hasNext.booleanValue();
       }
 
+      @SuppressWarnings("cast")
       public NSMutableDictionary<String, Object> next() {
         hasNext();
         _hasNext = null;
         NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(src);
         EOEntity entity = relationship.entity();
-        for (EOAttribute attrib : entity.attributesToFetch()) {
+        for (EOAttribute attrib : (NSArray<EOAttribute>) entity.attributesToFetch()) {
           EORelationship rel = entity._relationshipForPath(attrib.relationshipPath());
           if (attrib.isFlattened() && relationship.equals(rel)) {
             String dstKey = entity._attributeForPath(attrib.definition()).name();
