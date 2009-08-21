@@ -13,7 +13,6 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * ERMemoryAdaptorContext provides the adaptor context implementation for ERMemoryAdaptor.
@@ -25,13 +24,10 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author mschrag
  */
 public class ERMemoryAdaptorContext extends EOAdaptorContext {
-  private boolean _hasTransaction = false;
-  private NSMutableDictionary<String, ERMemoryEntityStore> _entityStores;
-  private NSMutableDictionary<String, ERMemoryEntityStore> _transactionEntityStores;
+  private final EREntityStoreFactory _storeFactory = new EREntityStoreFactory(ERMemoryEntityStore.class);
 
   public ERMemoryAdaptorContext(EOAdaptor adaptor) {
     super(adaptor);
-    _entityStores = new NSMutableDictionary<String, ERMemoryEntityStore>();
   }
 
   /**
@@ -39,10 +35,7 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
    * clearing out any transactions.
    */
   public void resetAllEntities() {
-    _entityStores.removeAllObjects();
-    if (_transactionEntityStores != null) {
-      _transactionEntityStores.removeAllObjects();
-    }
+    _storeFactory.resetAllEntities();
   }
 
   /**
@@ -52,50 +45,33 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
    * @param entity the entity to reset
    */
   public void resetEntity(EOEntity entity) {
-    _entityStores.removeObjectForKey(entity);
-    if (_transactionEntityStores != null) {
-      _transactionEntityStores.removeObjectForKey(entity);
-    }
+    _storeFactory.resetEntity(entity);
   }
 
   /**
-   * Returns the ERMemoryEntityStore for the given entity.
+   * Returns an EREntityStore for the given entity.
    * 
    * @param entity the entity to lookup
    * @return the datastore for the entity
    */
-  public ERMemoryEntityStore _entityStoreForEntity(EOEntity entity) {
-    return _entityStoreForEntity(entity, _hasTransaction);
+  public EREntityStore _entityStoreForEntity(EOEntity entity) {
+    return _storeFactory._entityStoreForEntity(entity);
   }
 
   /**
-   * Returns the ERMemoryEntityStore for the given entity.
+   * Returns an EREntityStore for the given entity.
    * 
    * @param entity the entity to lookup
    * @param transactional if true, this will return a transactional view of the store 
    * @return the datastore for the entity
    */
-  public ERMemoryEntityStore _entityStoreForEntity(EOEntity entity, boolean transactional) {
-    String entityName = entity.name();
-    ERMemoryEntityStore store = _entityStores.objectForKey(entityName);
-    if (store == null) {
-      store = new ERMemoryEntityStore();
-      _entityStores.setObjectForKey(store, entityName);
-    }
-    if (transactional) {
-      ERMemoryEntityStore transactionStore = _transactionEntityStores.objectForKey(entityName);
-      if (transactionStore == null) {
-        transactionStore = store.transactionStore();
-        _transactionEntityStores.setObjectForKey(transactionStore, entityName);
-      }
-      store = transactionStore;
-    }
-    return store;
+  public EREntityStore _entityStoreForEntity(EOEntity entity, boolean transactional) {
+    return _storeFactory._entityStoreForEntity(entity, transactional);
   }
 
   @Override
   public NSDictionary _newPrimaryKey(EOEnterpriseObject object, EOEntity entity) {
-    ERMemoryEntityStore store = _entityStoreForEntity(entity, false);
+    EREntityStore store = _entityStoreForEntity(entity, false);
     NSArray pkAttributes = entity.primaryKeyAttributes();
     if (pkAttributes.count() > 1) {
       throw new EOGeneralAdaptorException("Failed to generate primary key because " + entity.name() + " has a composite primary key.");
@@ -134,23 +110,14 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
 
   @Override
   public void beginTransaction() {
-    if (!_hasTransaction) {
-      _hasTransaction = true;
-      _transactionEntityStores = new NSMutableDictionary<String, ERMemoryEntityStore>();
+    if (_storeFactory.beginTransaction()) {
       transactionDidBegin();
     }
   }
 
   @Override
   public void commitTransaction() {
-    if (_hasTransaction) {
-      _hasTransaction = false;
-      for (String entityName : _transactionEntityStores.allKeys()) {
-        ERMemoryEntityStore transactionStore = _transactionEntityStores.objectForKey(entityName);
-        ERMemoryEntityStore entityStore = _entityStores.objectForKey(entityName);
-        entityStore.commitFromTransactionStore(transactionStore);
-      }
-      _transactionEntityStores = null;
+    if (_storeFactory.commitTransaction()) {
       transactionDidCommit();
     }
   }
@@ -167,9 +134,7 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
 
   @Override
   public void rollbackTransaction() {
-    if (_hasTransaction) {
-      _hasTransaction = false;
-      _transactionEntityStores = null;
+    if (_storeFactory.rollbackTransaction()) {
       transactionDidRollback();
     }
   }
