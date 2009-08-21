@@ -75,6 +75,32 @@ function calendar_hide_check(evt) {
   }
 }
 
+// CH: new method start
+/* Fire the onChange event of the text input that we are setting so that it plays nice with
+   AjaxObserveField etc. that use this notification.  */
+function fireOnChangeEvent() 
+{
+	var evt;
+	var el = calendar.input_element;
+	if (document.createEvent) {
+		evt = document.createEvent("HTMLEvents");
+		if (evt.initEvent) {
+			evt.initEvent("change", false, false);
+		}
+		else {
+			evt = false;
+		}
+		el.dispatchEvent(evt);
+	}
+	else {
+		if(document.createEventObject) {
+			var evt=document.createEventObject();
+			el.fireEvent("onChange", evt);
+		}
+	}
+}
+// CH: new method done
+
 // Input control keypress handler.
 function input_keypress(evt) {
   calendar_hide();
@@ -187,6 +213,19 @@ function calendar_out(evt) {
 function calendar_click(evt) {
   var date = calendar.dates[event_target(evt).id.substr('calendar_day_'.length)];
   calendar.input_element.value = date_to_string(date, calendar.format);
+  
+  //CH: Start add eval of onDateSelect
+  if(calendar.onDateSelect) {
+    eval(calendar.onDateSelect);
+  }
+  //CH: Done add eval of onDateSelect
+    
+  //CH: Start add JS firing of onChange for text input
+  if (calendar.fireEvent) {
+    fireOnChangeEvent();
+  }
+  //CH: Done add JS firing of onChange for text input
+    
   calendar_hide();
 }
 

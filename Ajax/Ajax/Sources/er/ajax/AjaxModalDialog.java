@@ -63,6 +63,7 @@ import er.extensions.ERXWOForm;
  *
  * @binding width integer Width in pixels, use -1 for auto-width
  * @binding height integer Height in pixels, use -1 for auto-height. When set Modalbox will operate in 'fixed-height' mode. 
+ * @binding centerVertically optional, if true the dialog is centered vertically on the page instead of appearing at the top
  * 
  * @binding open if true, the container is rendered already opened, the default is false
  * @binding showOpener if false, no HTML is generated for the link, button etc. to open this dialog, it can only be opened from
@@ -625,6 +626,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("title", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("width", AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("centerVertically", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("overlayClose", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("height", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("method", AjaxOption.STRING));

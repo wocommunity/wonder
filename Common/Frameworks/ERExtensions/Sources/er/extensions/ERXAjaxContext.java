@@ -22,6 +22,11 @@ public class ERXAjaxContext extends WOContext {
 		super(request);
 	}
 
+	// @Override no override for 5.4/5.3 compatibility
+	public boolean wasFormSubmitted() {
+		return _wasFormSubmitted();
+	}
+	
 	@Override
 	public boolean _wasFormSubmitted() {
 		boolean wasFormSubmitted = super._wasFormSubmitted();

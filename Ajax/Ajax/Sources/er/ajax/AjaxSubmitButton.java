@@ -323,9 +323,9 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     		AjaxUtils.appendScriptHeaderIfNecessary(worequest, response);
     		response.appendContentString(onClickServer);
     		AjaxUtils.appendScriptFooterIfNecessary(worequest, response);
+	     }
     		result = response;
         }
-    }
 
     return result;
   }

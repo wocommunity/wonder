@@ -16,4 +16,3 @@ prototype.js
 ibox.js:
 * added _pub.init function to support reinitializing iBox
 * added X-Requested-With header so iBox requests are recognized as Ajax requests
- 
