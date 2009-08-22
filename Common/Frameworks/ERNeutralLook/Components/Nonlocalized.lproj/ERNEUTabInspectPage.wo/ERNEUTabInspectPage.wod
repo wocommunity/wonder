@@ -209,6 +209,11 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 Image1: WOImage {
 	filename = "floppy.gif";
 	framework = "ERExtensions";

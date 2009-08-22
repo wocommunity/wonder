@@ -22,6 +22,7 @@
 				<webobject name="ListTableHeaderRow">
 					<th>&nbsp;</th>
 					<webobject name="ColumnLabelRepetition">
+					<webobject name="IfPropertyKeyIsNotOmitted">
 					<th nowrap="nowrap" valign="bottom" class="ERNEUPickListPageColumnLabelRepetition">
 						<table>
 							<tr>
@@ -40,6 +41,7 @@
 					</th>
 					</webobject>
 					</webobject>
+					</webobject>
 					<th valign="bottom">Select</th>
 				</webobject>
 				<webobject name="EntityRepetition">
@@ -53,6 +55,7 @@
 						</webobject>
 					</td>
 					<webobject name="AttributeRepetition">
+					<webobject name="IfPropertyKeyIsNotOmitted">
 					<webobject name="AttributeCell">
 						<webobject name="AttributeDisplay"></webobject>
 					</webobject>
@@ -60,6 +63,7 @@
 					<td class="InlineMetrics">
 						<webobject name="InlineMetricsForPropertyKey"></webobject>
 					</td>
+					</webobject>
 					</webobject>
 					</webobject>
 					<td>
@@ -73,8 +77,10 @@
 					<tr class="MetricsSummary">
 						<td>&nbsp;</td>
 						<webobject name="AttributeRepetition">
+						<webobject name="IfPropertyKeyIsNotOmitted">
 						<td>&nbsp;</td>
 						<td class="InlineMetrics"><webobject name="MetricsDurationForCurrentPropertyKey"></webobject></td>
+						</webobject>
 						</webobject>
 						<td>&nbsp;</td>
 					</tr>

@@ -67,6 +67,11 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 ListPage: D2WList {
 	dataSource = queryDataSource;
 	entityName = entity;

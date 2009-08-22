@@ -149,6 +149,11 @@ HideReturnOnSelect3: WOConditional {
 	negate = true;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
 	value = latestEventForCurrentPropertyKey.duration;
