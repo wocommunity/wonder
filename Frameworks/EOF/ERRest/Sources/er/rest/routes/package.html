@@ -1,4 +1,39 @@
-<pre>
+<html>
+<head>
+</head>
+<body>
+<style>
+p {
+	color: rgb(80, 80, 80);
+}
+
+h1,h2,h3,h4 {
+	font-family: Helvetica;
+	margin-top: 20px;
+}
+
+dl dt {
+	font-family: Helvetica;
+	font-weight: bold;
+}
+
+dl dd {
+	margin-bottom: 10px;
+}
+
+code {
+	display: block;
+	margin-left: 20px;
+	margin-right: 20px;
+	white-space: pre;
+}
+
+</style>
+
+<h1>ERRest Routes</h1>
+
+<h2>Application</h2>
+<code>
 public class Application extends ERXApplication {
   public Application() {
     ...
@@ -10,9 +45,10 @@ public class Application extends ERXApplication {
     ERXRouteRequestHandler.register(routeRequestHandler);
     
 }
-</pre>
+</code>
 
-<pre>
+<h2>Entity Controller</h2>
+<code>
 public class PeopleController extends ERXDefaultRouteController {
   public PeopleController(WORequest request) {
     super(request);
@@ -124,4 +160,6 @@ public class PeopleController extends ERXDefaultRouteController {
     return response(person, showFilter());
   }
 }
-</pre>
+</code>
+</body>
+</html>
