@@ -31,10 +31,29 @@ import er.extensions.eof.ERXS;
  * </ul>
  * 
  * <p>
- * Because request EOQualifiers could possibly expose a security risk, you must explicitly enable request qualifiers by
- * calling enableRequestQualifiers(baseQualifier).
+ * Because request EOQualifiers could possibly pose a security risk, you must explicitly enable request qualifiers by
+ * calling enableRequestQualifiers(baseQualifier) or by using the longer constructor that takes an optional base
+ * qualifier. A base qualifier is prepended (AND'd) to whatever qualifier is passed on the query string to restrict the 
+ * results of the user's query.
  * </p>
  * 
+ * <p>
+ * An example use:
+ * </p>
+ * 
+ * <code>
+ * @Override
+ * public WOActionResults indexAction() throws Throwable {
+ *     ERXRestFetchSpecification<Task> fetchSpec = new ERXRestFetchSpecification<Task>(request(), Task.ENTITY_NAME, null, null, Task.CREATION_DATE.descs(), 25);
+ *     return response(editingContext(), Task.ENTITY_NAME, fetchSpec.objectsInEditingContext(editingContext()), showFilter());
+ * }
+ * </code>
+ * 
+ * <p>
+ * In this example, we are fetching the "Task" entity, sorted by creation date, with a default batch size of 25, and with request qualifiers enable (meaning, we 
+ * allow users to pass in a qualifier in the query string).
+ * </p>
+ *
  * @author mschrag
  * 
  * @param <T>
