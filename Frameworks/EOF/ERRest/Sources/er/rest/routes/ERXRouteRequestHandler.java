@@ -115,12 +115,23 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public static final String RouteKey = "ERXRouteRequestHandler.route";
 	public static final String KeysKey = "ERXRouteRequestHandler.keys";
 
+	private boolean _usePluralEntityNames;
 	private NSMutableArray<ERXRoute> _routes;
 
 	/**
-	 * Constructs a new ERXRouteRequestHandler.
+	 * Constructs a new ERXRouteRequestHandler with plural entity names.
 	 */
 	public ERXRouteRequestHandler() {
+		this(true);
+	}
+
+	/**
+	 * Constructs a new ERXRouteRequestHandler.
+	 * 
+	 * @param usePluralEntityNames if true, plural rails-compatible entity and controller names will be used
+	 */
+	public ERXRouteRequestHandler(boolean usePluralEntityNames) {
+		_usePluralEntityNames = usePluralEntityNames;
 		_routes = new NSMutableArray<ERXRoute>();
 	}
 
@@ -170,8 +181,8 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @return the corresponding route controller
 	 */
 	protected Class<? extends ERXRouteController> routeControllerClassForEntityNamed(String entityName) {
-		String pluralEntityName = ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2);
-		String controllerName = pluralEntityName + "Controller";
+		String controllerEntityName = _usePluralEntityNames ? ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2) : entityName;
+		String controllerName = controllerEntityName + "Controller";
 		Class<?> controllerClass = _NSUtilities.classWithName(controllerName);
 		if (controllerClass == null) {
 			throw new IllegalArgumentException("There is controller named '" + controllerName + "'.");
@@ -272,25 +283,42 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		String pluralExternalName = ERXLocalizer.englishLocalizer().plurifiedString(singularExternalName, 2);
 
 		addRoute(new ERXRoute(".*", ERXRoute.Method.Head, controllerClass, "head"));
-		addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.Post, controllerClass, "create"));
+		if (_usePluralEntityNames) {
+			addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.Post, controllerClass, "create"));
+		}
 		addRoute(new ERXRoute("/" + singularExternalName, ERXRoute.Method.Post, controllerClass, "create"));
-		addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.All, controllerClass, "index"));
+		if (_usePluralEntityNames) {
+			addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.All, controllerClass, "index"));
+		}
 
 		if (numericPKs) {
-			addRoute(new ERXRoute("/" + pluralExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS:
-			// this only works with numeric ids
+			addRoute(new ERXRoute("/" + singularExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS: this only works with numeric ids
+			if (_usePluralEntityNames) {
+				addRoute(new ERXRoute("/" + pluralExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS: this only works with numeric ids
+			}
 		}
 		else {
-			addRoute(new ERXRoute("/" + pluralExternalName + "/new", ERXRoute.Method.All, controllerClass, "new"));
+			addRoute(new ERXRoute("/" + singularExternalName + "/new", ERXRoute.Method.All, controllerClass, "new"));
+			if (_usePluralEntityNames) {
+				addRoute(new ERXRoute("/" + pluralExternalName + "/new", ERXRoute.Method.All, controllerClass, "new"));
+			}
 		}
 
-		addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
+		if (_usePluralEntityNames) {
+			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
+		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
-		addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+		if (_usePluralEntityNames) {
+			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
-		addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
+		if (_usePluralEntityNames) {
+			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
+		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
-		addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
+		if (_usePluralEntityNames) {
+			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
+		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
 	}
 
