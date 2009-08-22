@@ -25,9 +25,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.concurrency.ERXRunnable;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
-import er.extensions.foundation.ERXRuntimeUtilities;
 
 /**
  * This class is used to send mails in a threaded way.<BR>
