@@ -99,7 +99,6 @@ public class ERXFilteredQualifierTraversal extends ERXQualifierTraversal {
 				type = null;
 			}
 		}
-		System.out.println("ERXFilteredQualifierTraversal.typeForKeyInEntity: type for " + key + "=>" + type);
 		return type;
 	}
 
