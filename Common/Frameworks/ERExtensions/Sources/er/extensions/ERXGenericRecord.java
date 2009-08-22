@@ -593,55 +593,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return _primaryKeyDictionary;
     }
 
-    private EOKeyGlobalID _permanentGlobalID;
-
-    /**
-     * This method allows you to compute what the permanent EOGlobalID will be for an object before it has been
-     * saved to the database.  It functions by calling into <code>primaryKeyDictionary()</code> to allocate the primary
-     * key if necessary.  Then we build an EOKeyGlobalID from it.  If the object already has a permanent global ID, we use that.
-     *
-     * If you pass false for <code>generateIfMissing</code> and this object has a temporary global ID, null will be returned.
-     */
-    public EOKeyGlobalID permanentGlobalID(boolean generateIfMissing) {
-        if ( _permanentGlobalID == null ) {
-            final EOEditingContext ec = editingContext();
-
-            if ( ec != null ) {
-                final EOGlobalID gid = ec.globalIDForObject(this);
-
-                if ( ! gid.isTemporary() ) {
-                    _permanentGlobalID = (EOKeyGlobalID)gid;
-                }
-                else if ( generateIfMissing ) {
-                    final NSDictionary primaryKeyDictionary = primaryKeyDictionary(false);
-                    final Object[] values;
-
-                    if ( primaryKeyDictionary.count() == 1 ) {
-                        values = primaryKeyDictionary.allValues().objects();
-                    }
-                    else {
-                        final NSArray sortedKeys = ERXDictionaryUtilities.stringKeysSortedAscending(primaryKeyDictionary);
-
-                        values = primaryKeyDictionary.objectsForKeys(sortedKeys, null).objects();
-                    }
-
-                    _permanentGlobalID = EOKeyGlobalID.globalIDWithEntityName(entityName(), values);
-                }
-            }
-        }
-
-        return _permanentGlobalID;
-    }
-
-    /**
-     * Calls permanentGlobalID(boolean) passing true for generateIfMissing.
-     *
-     * @see #permanentGlobalID(boolean)
-     */
-    public EOKeyGlobalID permanentGlobalID() {
-        return permanentGlobalID(true);
-    }
-
     /**
      * Determines what the value of the given key is in the committed
      * snapshot
@@ -697,6 +648,57 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
+	 * Returns whether or not the given key has changed when compared to the committed snapshot.
+	 *
+	 * @param key The key that you wish to check has changed from the committed snapshot
+	 * @return true if it has changed
+	 */
+	public boolean hasKeyChangedFromCommittedSnapshot(String key) {
+		NSDictionary d = changesFromCommittedSnapshot();
+		return d.allKeys().containsObject(key);
+	}
+
+	/**
+	 * Returns whether or not the given key has changed from the given committed value.
+
+	 * @param key The key that you wish to check has changed from the committed snapshot
+	 * @param oldValue The value you wish to see if the key has changed from EG. Has 'status' changed from
+	 *            STATUS.PENDING_STATUS
+	 * @return true if the specified key value has changed from the specified value
+	 */
+	public boolean hasKeyChangedFromCommittedSnapshotFromValue(String key, Object oldValue) {
+		NSDictionary d = changesFromCommittedSnapshot();
+		return d.allKeys().containsObject(key) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
+	}
+
+	/**
+	 * Returns whether or not the given key has changed from the given previous value to the new value since the committed value.
+	 *
+	 * @param key The key that you wish to check has changed from the committed snapshot
+	 * @param oldValue The value you wish to see if the key has changed from
+	 * @param newValue The value you wish to see if the key has changed to EG. Has 'status' changed from
+	 *            STATUS.PENDING_STATUS to STATUS.CONFIRMED_STATUS
+	 * @return true if the specified key value has changed from the specified value
+	 */
+	public boolean hasKeyChangedFromCommittedSnapshotFromValueToNewValue(String key, Object oldValue, Object newValue) {
+		NSDictionary d = changesFromCommittedSnapshot();
+		return d.allKeys().containsObject(key) && ERXExtensions.safeEquals(newValue, d.objectForKey(key)) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
+	}
+
+	/**
+	 * Returns whether or not the given key has changed to the new value since the committed value.
+	 *
+	 * @param key The key that you wish to check has changed from the committed snapshot
+	 * @param newValue The value you wish to see if the key has changed to EG. Has 'status' changed to
+	 *            STATUS.CANCELLED_STATUS
+	 * @return true if the specified key value has changed to the specified value
+	 */
+	public boolean hasKeyChangedFromCommittedSnapshotToValue(String key, Object newValue) {
+		NSDictionary d = changesFromCommittedSnapshot();
+		return d.allKeys().containsObject(key) && ERXExtensions.safeEquals(newValue, d.objectForKey(key));
+	}
+
+    /**
      * Simple method that will return if the parent object store of this object's editing
      * context is an instance of {@link com.webobjects.eocontrol.EOObjectStoreCoordinator EOObjectStoreCoordinator}. The reason this is important
      * is because if this condition evaluates to true then when changes are saved in this
@@ -706,6 +708,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public boolean parentObjectStoreIsObjectStoreCoordinator() {
         return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator;
     }
+
+    /**
+	 * Calls the method
+	 * <code>refetchObjectFromDBinEditingContext(EOEditingContext ec)</code> and
+	 * passes the object's Editing Context as Editing Context parameter.
+	 *
+	 * @return the newly fetched object from the DB.
+	 */
+	public ERXGenericRecord refetchObjectFromDB() {
+		return refetchObjectFromDBinEditingContext(editingContext());
+	}
 
     /**
      * Method that will make sure to fetch an eo from the Database and
@@ -725,6 +738,55 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             freshObject = (ERXGenericRecord)results.objectAtIndex(0);
         }
         return freshObject;
+    }
+
+    private EOKeyGlobalID _permanentGlobalID;
+
+    /**
+     * This method allows you to compute what the permanent EOGlobalID will be for an object before it has been
+     * saved to the database.  It functions by calling into <code>primaryKeyDictionary()</code> to allocate the primary
+     * key if necessary.  Then we build an EOKeyGlobalID from it.  If the object already has a permanent global ID, we use that.
+     *
+     * If you pass false for <code>generateIfMissing</code> and this object has a temporary global ID, null will be returned.
+     */
+    public EOKeyGlobalID permanentGlobalID(boolean generateIfMissing) {
+        if ( _permanentGlobalID == null ) {
+            final EOEditingContext ec = editingContext();
+
+            if ( ec != null ) {
+                final EOGlobalID gid = ec.globalIDForObject(this);
+
+                if ( ! gid.isTemporary() ) {
+                    _permanentGlobalID = (EOKeyGlobalID)gid;
+                }
+                else if ( generateIfMissing ) {
+                    final NSDictionary primaryKeyDictionary = primaryKeyDictionary(false);
+                    final Object[] values;
+
+                    if ( primaryKeyDictionary.count() == 1 ) {
+                        values = primaryKeyDictionary.allValues().objects();
+                    }
+                    else {
+                        final NSArray sortedKeys = ERXDictionaryUtilities.stringKeysSortedAscending(primaryKeyDictionary);
+
+                        values = primaryKeyDictionary.objectsForKeys(sortedKeys, null).objects();
+                    }
+
+                    _permanentGlobalID = EOKeyGlobalID.globalIDWithEntityName(entityName(), values);
+                }
+            }
+        }
+
+        return _permanentGlobalID;
+    }
+
+    /**
+     * Calls permanentGlobalID(boolean) passing true for generateIfMissing.
+     *
+     * @see #permanentGlobalID(boolean)
+     */
+    public EOKeyGlobalID permanentGlobalID() {
+        return permanentGlobalID(true);
     }
     
     /**
