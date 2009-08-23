@@ -346,7 +346,7 @@ public class ERXRoute {
 	
 	@Override
 	public String toString() {
-		return "[ERXRoute: pattern=" + _routePattern + "]";
+		return "[ERXRoute: pattern=" + _routePattern + "; method=" + _method + "]";
 	}
 
 	/**
