@@ -110,6 +110,57 @@ import er.rest.format.ERXRestFormat;
  * @author mschrag
  */
 public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
+	/**
+	 * NameFormat specifies how routes and controller names should be capitalized by default.
+	 * 
+	 * @author mschrag
+	 */
+	public static class NameFormat {
+		private boolean _pluralControllerName;
+		private boolean _pluralRouteName;
+		private boolean _lowercaseRouteName;
+
+		/**
+		 * Creates a new NameFormat.
+		 * 
+		 * @param pluralControllerName if true, controller names with be pluralized ("CompaniesController")
+		 * @param pluralRouteName if true, routes will be pluralizd ("/Companies.xml")
+		 * @param lowercaseRouteName if true, routes will be lowercased ("/companies.xml")
+		 */
+		public NameFormat(boolean pluralControllerName, boolean pluralRouteName, boolean lowercaseRouteName) {
+			_pluralControllerName = pluralControllerName;
+			_pluralRouteName = pluralRouteName;
+			_lowercaseRouteName = lowercaseRouteName;
+		}
+		
+		/**
+		 * Returne whether or not controller names should be pluralizd.
+		 * 
+		 * @return whether or not controller names should be pluralizd
+		 */
+		public boolean pluralControllerName() {
+			return _pluralControllerName;
+		}
+		
+		/**
+		 * Returne whether or not routes should be pluralizd.
+		 * 
+		 * @return whether or not routes should be pluralizd
+		 */
+		public boolean pluralRouteName() {
+			return _pluralRouteName;
+		}
+		
+		/**
+		 * Returne whether or not routes should be capitalized.
+		 * 
+		 * @return whether or not routes should be capitalized
+		 */
+		public boolean lowercaseRouteName() {
+			return _lowercaseRouteName;
+		}
+	}
+	
 	public static final Logger log = Logger.getLogger(ERXRouteRequestHandler.class);
 
 	public static final String Key = "ra";
@@ -118,23 +169,23 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public static final String RouteKey = "ERXRouteRequestHandler.route";
 	public static final String KeysKey = "ERXRouteRequestHandler.keys";
 
-	private boolean _usePluralEntityNames;
+	private NameFormat _entityNameFormat;
 	private NSMutableArray<ERXRoute> _routes;
 
 	/**
-	 * Constructs a new ERXRouteRequestHandler with plural entity names.
+	 * Constructs a new ERXRouteRequestHandler with the default entity name format.
 	 */
 	public ERXRouteRequestHandler() {
-		this(true);
+		this(new NameFormat(ERXProperties.booleanForKeyWithDefault("ERXRest.pluralEntityNames", true), ERXProperties.booleanForKeyWithDefault("ERXRest.pluralEntityNames", true), ERXProperties.booleanForKeyWithDefault("ERXRest.lowercaseEntityNames", true)));
 	}
 
 	/**
 	 * Constructs a new ERXRouteRequestHandler.
 	 * 
-	 * @param usePluralEntityNames if true, plural rails-compatible entity and controller names will be used
+	 * @parma entityNameFormat the format to use for entity names in URLs
 	 */
-	public ERXRouteRequestHandler(boolean usePluralEntityNames) {
-		_usePluralEntityNames = usePluralEntityNames;
+	public ERXRouteRequestHandler(NameFormat entityNameFormat) {
+		_entityNameFormat = entityNameFormat;
 		_routes = new NSMutableArray<ERXRoute>();
 	}
 
@@ -184,7 +235,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @return the corresponding route controller
 	 */
 	protected Class<? extends ERXRouteController> routeControllerClassForEntityNamed(String entityName) {
-		String controllerEntityName = _usePluralEntityNames ? ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2) : entityName;
+		String controllerEntityName = _entityNameFormat.pluralControllerName() ? ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2) : entityName;
 		String controllerName = controllerEntityName + "Controller";
 		Class<?> controllerClass = _NSUtilities.classWithName(controllerName);
 		if (controllerClass == null) {
@@ -277,49 +328,58 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the controller class
 	 */
 	public void addDefaultRoutes(String entityName, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
-		boolean lowercaseEntityNames = ERXProperties.booleanForKeyWithDefault("ERXRest.lowercaseEntityNames", true);
-
-		String singularInternalName = lowercaseEntityNames ? ERXStringUtilities.uncapitalize(entityName) : entityName;
+		String singularInternalName = _entityNameFormat.lowercaseRouteName() ? ERXStringUtilities.uncapitalize(entityName) : entityName;
 
 		String externalName = ERXRestNameRegistry.registry().externalNameForInternalName(entityName);
-		String singularExternalName = lowercaseEntityNames ? ERXStringUtilities.uncapitalize(externalName) : externalName;
+		String singularExternalName = _entityNameFormat.lowercaseRouteName() ? ERXStringUtilities.uncapitalize(externalName) : externalName;
 		String pluralExternalName = ERXLocalizer.englishLocalizer().plurifiedString(singularExternalName, 2);
 
-		addRoute(new ERXRoute(".*", ERXRoute.Method.Head, controllerClass, "head"));
-		if (_usePluralEntityNames) {
+		if (_entityNameFormat.pluralRouteName()) {
+			addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.Head, controllerClass, "head"));
+		}
+		addRoute(new ERXRoute("/" + singularExternalName, ERXRoute.Method.Head, controllerClass, "head"));
+		
+		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.Post, controllerClass, "create"));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName, ERXRoute.Method.Post, controllerClass, "create"));
-		if (_usePluralEntityNames) {
+		
+		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.All, controllerClass, "index"));
+		}
+		else {
+			addRoute(new ERXRoute("/" + singularExternalName, ERXRoute.Method.All, controllerClass, "index"));
 		}
 
 		if (numericPKs) {
 			addRoute(new ERXRoute("/" + singularExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS: this only works with numeric ids
-			if (_usePluralEntityNames) {
+			if (_entityNameFormat.pluralRouteName()) {
 				addRoute(new ERXRoute("/" + pluralExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS: this only works with numeric ids
 			}
 		}
 		else {
 			addRoute(new ERXRoute("/" + singularExternalName + "/new", ERXRoute.Method.All, controllerClass, "new"));
-			if (_usePluralEntityNames) {
+			if (_entityNameFormat.pluralRouteName()) {
 				addRoute(new ERXRoute("/" + pluralExternalName + "/new", ERXRoute.Method.All, controllerClass, "new"));
 			}
 		}
 
-		if (_usePluralEntityNames) {
+		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
-		if (_usePluralEntityNames) {
+		
+		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
-		if (_usePluralEntityNames) {
+		
+		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
-		if (_usePluralEntityNames) {
+		
+		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
