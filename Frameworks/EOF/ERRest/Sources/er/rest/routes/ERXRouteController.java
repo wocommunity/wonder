@@ -1,6 +1,7 @@
 package er.rest.routes;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -29,6 +30,8 @@ import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
+import er.rest.format.IERXRestParser;
+import er.rest.format.IERXRestWriter;
 
 /**
  * ERXRouteController is equivalent to a Rails controller class. It's actually a direct action, and has the same naming
@@ -182,10 +185,26 @@ public class ERXRouteController extends WODirectAction {
 	 * 
 	 * @return the format that the user requested
 	 */
+	@SuppressWarnings("unchecked")
 	public ERXRestFormat format() {
-		String typeKey = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
-		ERXRestFormat format = ERXRestFormat.formatNamed(typeKey);
-		return format;
+		List<String> types = (List<String>) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
+		ERXRestFormat matchingFormat = null;
+		if (types == null || types.size() == 0) {
+			matchingFormat = ERXRestFormat.XML;
+		}
+		else {
+			for (String type : types) {
+				ERXRestFormat format = ERXRestFormat.formatNamed(type);
+				if (format != null && format.parser() != null && format.writer() != null) {
+					matchingFormat = format;
+					break;
+				}
+			}
+			if (matchingFormat == null) {
+				matchingFormat = ERXRestFormat.formatNamed(types.get(0));
+			}
+		}
+		return matchingFormat;
 	}
 
 	/**
@@ -208,7 +227,12 @@ public class ERXRouteController extends WODirectAction {
 	public ERXRestRequestNode requestNode() {
 		if (_requestNode == null) {
 			try {
-				_requestNode = format().parser().parseRestRequest(request(), format().delegate());
+				ERXRestFormat format = format();
+				IERXRestParser parser = format.parser();
+				if (parser == null) {
+					throw new IllegalStateException("There is no parser for the format '" + format.name() + "'.");
+				}
+				_requestNode = parser.parseRestRequest(request(), format().delegate());
 			}
 			catch (Throwable t) {
 				throw new RuntimeException("Failed to parse a " + format() + " request.", t);
@@ -558,7 +582,11 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public WOResponse response(ERXRestFormat format, EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		WOResponse response = WOApplication.application().createResponseInContext(context());
-		format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate()), new ERXWORestResponse(response), format.delegate());
+		IERXRestWriter writer = format.writer();
+		if (writer == null) {
+			throw new IllegalStateException("There is no writer for the format '" + format.name() + "'.");
+		}
+		writer.appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate()), new ERXWORestResponse(response), format.delegate());
 		return response;
 	}
 
@@ -628,7 +656,11 @@ public class ERXRouteController extends WODirectAction {
 	public WOResponse response(ERXRestFormat format, Object value, ERXKeyFilter filter) {
 		try {
 			WOResponse response = WOApplication.application().createResponseInContext(context());
-			format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate()), new ERXWORestResponse(response), format.delegate());
+			IERXRestWriter writer = format.writer();
+			if (writer == null) {
+				throw new IllegalStateException("There is no writer for the format '" + format.name() + "'.");
+			}
+			writer.appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate()), new ERXWORestResponse(response), format.delegate());
 			return response;
 		}
 		catch (ObjectNotAvailableException e) {
