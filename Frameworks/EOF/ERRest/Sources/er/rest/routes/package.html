@@ -43,7 +43,9 @@ public class Application extends ERXApplication {
     routeRequestHandler.addRoutes(Person.ENTITY_NAME); // addRoutes looks for an addRoutes method on PeopleController
     routeRequestHandler.addDefaultRoutes(Task.ENTITY_NAME);
     ERXRouteRequestHandler.register(routeRequestHandler);
-    
+  }
+  
+  ...
 }
 </code>
 
@@ -98,7 +100,6 @@ public class PeopleController extends ERXDefaultRouteController {
     return response(person, showFilter());
   }
 
-  @Override
   public WOActionResults createAction() throws Exception {
     checkAdminAccess();
     ERXKeyFilter personFilter = showFilter();
@@ -108,7 +109,6 @@ public class PeopleController extends ERXDefaultRouteController {
     return response(person, showFilter());
   }
 
-  @Override
   public WOActionResults updateAction() throws Exception {
     checkAdminAccess();
     Person person = person();
@@ -117,13 +117,11 @@ public class PeopleController extends ERXDefaultRouteController {
     return response(person, showFilter());
   }
 
-  @Override
   public WOActionResults showAction() {
     Person person = person();
     return response(person, showFilter());
   }
 
-  @Override
   public WOActionResults indexAction() throws Exception {
     ERXRestFetchSpecification<Person> fetchSpec = new ERXRestFetchSpecification<Person>(Person.ENTITY_NAME, null, null, showFilter(), Person.LAST_NAME.ascInsensitive().then(Person.FIRST_NAME.ascInsensitive()), -1);
     return response(editingContext(), Person.ENTITY_NAME, fetchSpec.objects(editingContext(), request()), showFilter());
@@ -141,7 +139,6 @@ public class PeopleController extends ERXDefaultRouteController {
     return controller(RemindersController.class).indexAction(); // Reminders controller looks for an optional {person} request object and an optional {date}
   }
 
-  @Override
   public WOActionResults destroyAction() throws Throwable {
     checkAdminAccess();
     Person person = person();
@@ -150,7 +147,6 @@ public class PeopleController extends ERXDefaultRouteController {
     return response(person, showFilter());
   }
 
-  @Override
   public WOActionResults newAction() throws Throwable {
     checkAdminAccess();
     ERXKeyFilter personFilter = showFilter();
