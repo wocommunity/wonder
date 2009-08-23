@@ -15,6 +15,8 @@ import er.extensions.components.ERXStatelessComponent;
  * it detects cookies are disabled. This can be useful for displaying
  * messages to the user that they should have cookies enabled in order
  * to use different features of the application.<br/>
+ * The content is used as a JavaScript string literal, so it must all be on single line.
+ * Any line breaks will result in invalid JavaScript.
  * <br/>
  * @binding negate 
  */
@@ -54,7 +56,7 @@ public class ERXJSCookiesConditional extends ERXStatelessComponent {
         "   persistentCookies = false\n"+
         "}\n"+
         "if (" + ( negate() ? "sessionCookies && persistentCookies" : "!sessionCookies || !persistentCookies") + " ) {\n" +
-        "  document.write(\"";
+        "  document.write(\'";
     }
 
     private boolean negate() {
@@ -66,7 +68,7 @@ public class ERXJSCookiesConditional extends ERXStatelessComponent {
      * @return second part of the js string.
      */
     public String string2() {
-        return "\")\n"+
+        return "')\n"+
             "}\n"+
             "//-->\n"+
             "</script>\n";
