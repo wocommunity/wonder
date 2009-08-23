@@ -257,6 +257,10 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 				}
 			}
 			while (true);
+		} else {
+ 			if (!ignoreNull) {
+				throw new IllegalArgumentException("Attempt to create NSDictionary from null Map.");
+			}
 		}
 	}
 

@@ -36,8 +36,9 @@ public class NSDictionaryTest extends BaseTestCase {
 	public void testNSDictionaryMapOfKVNull() {
 	  try {
 	    new NSDictionary<String, String>((Map<String, String>)null);
-	    fail("NullPointerException expected");
-	  } catch (NullPointerException e) {
+	    fail("IllegalArgumentException or NullPointerException expected");
+          } catch (NullPointerException npe) {
+	  } catch (IllegalArgumentException iae) {
 	  }
 	}
 
