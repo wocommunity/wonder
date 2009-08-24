@@ -17,46 +17,15 @@ import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Edits a boolean with radio buttons and Yes/No<br />
- * 
+ * You should use ERD2WCustomEditBoolean with the choicesNames d2w key instead.
  */
 
-public class ERD2WEditYesNo extends D2WEditBoolean {
+@Deprecated
+public class ERD2WEditYesNo extends ERD2WCustomEditBoolean {
+    
     public static Logger log = Logger.getLogger(ERD2WEditYesNo.class);
-	private String _groupName;
 
-    public ERD2WEditYesNo(WOContext context) { super(context); }
-
-    public Integer yesNoBoolean() {
-        Object bool = object().valueForKeyPath(propertyKey());
-        bool = new Integer(ERXValueUtilities.booleanValue(bool) ? 1 : 0);
-        return (Integer)bool;
-    }
-    
-    public void awake() {
-    	_groupName = "YesNoGroup_"+context().elementID();
-    }
-    public void sleep() {
-    	_groupName = null;
-    }
-    
-    public void setYesNoBoolean(Integer newYesNoBoolean) {
-        object().validateTakeValueForKeyPath(newYesNoBoolean, propertyKey());
-    }
-
-    public String radioBoxGroupName() {
-        return _groupName;
-    }
-
-    public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
-        parent().validationFailedWithException(theException, theValue, theKeyPath);
-    }
-
-    public void takeValuesFromRequest(WORequest r, WOContext c) {
-        super.takeValuesFromRequest(r,c);
-        try {
-            object().validateTakeValueForKeyPath(objectPropertyValue(), propertyKey());
-        } catch (NSValidation.ValidationException e) {
-            validationFailedWithException(e, objectPropertyValue(), propertyKey());
-        }
+    public ERD2WEditYesNo(WOContext context) {
+        super(context);
     }
 }

@@ -1,26 +1,22 @@
-/*
- * Copyright (C) NetStruxr, Inc. All rights reserved.
- *
- * This software is published under the terms of the NetStruxr
- * Public Software License version 0.5, a copy of which has been
- * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components.bool;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2WDisplayBoolean;
-
-import er.extensions.foundation.ERXValueUtilities;
+import com.webobjects.foundation.NSArray;
 
 /**
- * Displays a boolean as Yes or No.<br />
- * 
+ * Displays a boolean localized as Yes or No.<br />
+ * You should use ERD2WCustomDisplayBoolean with the choicesNames d2w key instead.
  */
+@Deprecated 
+public class ERD2WDisplayYesNo extends ERD2WCustomDisplayBoolean {
 
-public class ERD2WDisplayYesNo extends D2WDisplayBoolean {
-
-    public ERD2WDisplayYesNo(WOContext context) { super(context); }
-
-    public boolean isYes() {
-        return ERXValueUtilities.booleanValue(objectPropertyValue());
+    private  NSArray<String> choicesNames = new NSArray(new String[] {"Yes" , "No"});
+    
+    public ERD2WDisplayYesNo(WOContext context) {
+        super(context);
+    }
+    
+    public NSArray<String> choicesNames() {
+        return choicesNames;
     }
 }
