@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WEditBoolean;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.foundation.ERXValueUtilities;
@@ -24,103 +25,42 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
     public ERD2WCustomEditBoolean(WOContext context) {
         super(context);
     }
-
-    public static class BooleanProxy {
-        private String _name;
-        private Boolean _value;
-       
-        BooleanProxy(String name, Boolean value) {
-            _name = name;
-            _value = value;
-        }
-        
-    	public String name() {
-            return _name;
-    	}
-    	
-    	public Boolean value() {
-            return _value;
-    	}
-    	
-    	public boolean equals(Object other) {
-            return other == _value || (other != null && _value != null && ERXValueUtilities.booleanValue(other) == _value);
-    	}
-    }
-    
-    public BooleanProxy trueValue;
-    public BooleanProxy falseValue;
-    public BooleanProxy nullValue;
-    
-    protected NSArray _choicesNames;
-    protected String _radioBoxGroupName;
+ 
+    protected NSArray<String> _choicesNames;
     
     public void reset(){
         super.reset();
         _choicesNames = null;
-        _radioBoxGroupName = null;
     }
 
-    public Object yesNoBoolean() {
-        Object value = object().valueForKeyPath(propertyKey());
-        if(trueValue.equals(value)) return trueValue;
-        if(falseValue.equals(value)) return falseValue;
-        return nullValue;
-    }
-    
-    public void setYesNoBoolean(Object newYesNoBoolean) {
-    	BooleanProxy proxy = (BooleanProxy)newYesNoBoolean;
-    	Object o = object().validateTakeValueForKeyPath(proxy.value(), propertyKey());
-    	object().takeValueForKeyPath(o, propertyKey());
-    }
-    public String radioBoxGroupName(){ 
-        if (_radioBoxGroupName == null) { 
-            _radioBoxGroupName = "YesNoGroup_"+ context().elementID().replace('.','_'); 
-        } 
-        return _radioBoxGroupName; 
-    }
-
-    public NSArray choicesNames(){
+    public NSArray<String> choicesNames() {
         if(_choicesNames == null) {
             _choicesNames = (NSArray)d2wContext().valueForKey("choicesNames");
-            trueValue = new BooleanProxy((String) choicesNames().objectAtIndex(0), Boolean.TRUE);
-            falseValue = new BooleanProxy((String) choicesNames().objectAtIndex(1), Boolean.FALSE);
-            if(choicesNames().count() > 2) {
-                nullValue = new BooleanProxy((String) choicesNames().objectAtIndex(2), null);
-            }
         }
         return _choicesNames;
     }
 
-    public boolean useCheckbox() {
-    	return choicesNames().count() == 1;
+    public String stringForYes() {
+        return choicesNames().objectAtIndex(0);
     }
     
-    public void validationFailedWithException(Throwable theException,Object object, String theKeyPath) {
-    	if(object instanceof BooleanProxy) {
-    		BooleanProxy proxy = (BooleanProxy)object;
-    		object = proxy.value();
-    	}
-    	parent().validationFailedWithException(theException, object, theKeyPath);
+    public String stringForNo() {
+        return choicesNames().objectAtIndex(1);
     }
-
-    public Object validateTakeValueForKeyPath(Object object, String string) {
-    	if(useCheckbox() && object == null) {
-    		object = Boolean.FALSE;
-    	}
-    	if(object instanceof BooleanProxy) {
-    		BooleanProxy proxy = (BooleanProxy)object;
-    		object = proxy.value();
-    	}
-    	return super.validateTakeValueForKeyPath(object, string);
-    }
-
-    public void takeValuesFromRequest(WORequest r, WOContext c) {
-        super.takeValuesFromRequest(r,c);
-        try {
-            object().validateTakeValueForKeyPath(objectPropertyValue(), propertyKey());
-        } catch (NSValidation.ValidationException e) {
-            validationFailedWithException(e, objectPropertyValue(), propertyKey());
+    
+    public String stringForNull() {
+        if(allowsNull()) {
+            return choicesNames().objectAtIndex(2);
         }
+        return null;
+    }
+
+    public String uiMode() {
+        return useCheckbox() ? "checkbox" : "radio";
+    }
+
+    public boolean useCheckbox() {
+    	return choicesNames().count() == 1;
     }
 
     public boolean allowsNull() {
