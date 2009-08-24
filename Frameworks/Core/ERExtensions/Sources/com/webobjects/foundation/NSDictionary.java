@@ -199,11 +199,11 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 					_count++;
 				}
 			}
-
 		} else if (objects == null && keys == null) {
 			_initializeDictionary();
+
 		} else {
-			throw new IllegalArgumentException("Both objects and keys cannot be null");
+			throw new java.lang.NullPointerException("Either objects and keys must both be non-null or both must be null.");
 		}
 	}
 
@@ -232,7 +232,9 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	
 	public NSDictionary(Map<? extends K, ? extends V> map, boolean ignoreNull) {
 		_initializeDictionary();
-		if (map != null) {
+		if (map == null) {
+			throw new NullPointerException("Attempt to create NSDictionary from null Map.");
+		} else {
 			_ensureCapacity(map.size());
 			Set<? extends K> keySet = map.keySet();
 			Iterator<? extends K> it = keySet.iterator();
@@ -257,10 +259,6 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 				}
 			}
 			while (true);
-		} else {
- 			if (!ignoreNull) {
-				throw new IllegalArgumentException("Attempt to create NSDictionary from null Map.");
-			}
 		}
 	}
 
