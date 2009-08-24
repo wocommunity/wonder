@@ -38,10 +38,6 @@ public class ERXJSCookiesConditional extends ERXStatelessComponent {
     public String string1() {
         return "<script LANGUAGE=\"JavaScript\">\n"+
         "<!--\n"+
-        //CHECKME AK: why are we not allowed to use it in a frame?
-        "if (top.frames.length != 0) {\n"+
-        "   top.location = self.document.location\n"+
-        "}\n"+
         "var sessionCookies = true\n"+
         "var persistentCookies = true\n"+
         "document.cookie = \"session=on\"\n"+
