@@ -1,35 +1,8 @@
-AllowsNull: WOConditional {
-	condition = allowsNull;
+Selector: ERXBooleanSelector {
+	yesString = stringForYes;
+	noString = stringForNo;
+	noSelectionString = stringForNull;
+	selection = objectPropertyValue;
+	uiMode = uiMode;
 }
-
-ERXLocalizedString1: ERXLocalizedString {
-	value = yesName;
-}
-
-ERXLocalizedString2: ERXLocalizedString {
-	value = noName;
-}
-
-ERXLocalizedString3: ERXLocalizedString {
-	value = unsetName;
-}
-
-RadioButton1: WORadioButton {
-	value = 1;
-	selection = yesNoBoolean;
-	name = radioBoxGroupName;
-}
-
-RadioButton2: WORadioButton {
-	value = 0;
-	selection = yesNoBoolean;
-	name = radioBoxGroupName;
-}
-
-RadioButton3: WORadioButton {
-	value = nullValue;
-	selection = yesNoBoolean;
-	name = radioBoxGroupName;
-}
-
 

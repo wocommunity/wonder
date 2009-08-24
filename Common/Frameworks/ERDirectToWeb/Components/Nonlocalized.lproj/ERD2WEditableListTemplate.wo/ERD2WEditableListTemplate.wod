@@ -6,8 +6,8 @@ CancelActiveImage: WOActiveImage {
 }
 
 ClearChangesButton: WOSubmitButton {
-    value = "Clear Changes";
-    action = clearMassChangeEO;
+	value = "Clear Changes";
+	action = clearMassChangeEO;
 }
 
 EditForm: WOForm {
@@ -73,16 +73,15 @@ ListTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 0;
 	cellspacing = 0;
-	elementName = "Table";
+	elementName = "table";
 }
 
 NavBar: ERXBatchNavigationBarInForm {
 	bgcolor = backgroundColorForTable;
+	d2wContext = d2wContext;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
-    d2wContext = d2wContext;
-
 }
 
 PageWrapper: WOSwitchComponent {
@@ -92,20 +91,20 @@ PageWrapper: WOSwitchComponent {
 }
 
 PropagateButton: WOSubmitButton {
-    value = "Propagate Changes";
-    action = propagateChangesToVisibleObjects;
+	action = propagateChangesToVisibleObjects;
+	value = "Propagate Changes";
 }
 
 PropagateDebug: WOString {
-    value = propagateChangesDetails;
-    escapeHTML = false;
+	escapeHTML = false;
+	value = propagateChangesDetails;
 }
 
 ReturnActiveImage: WOActiveImage {
-	filename = "ReturnMetalBtn.gif";
-	framework = "JavaDirectToWeb";
 	action = backAction;
 	alt = "Returns to the previous task.";
+	filename = "ReturnMetalBtn.gif";
+	framework = "JavaDirectToWeb";
 }
 
 SaveActiveImage: WOActiveImage {
@@ -120,11 +119,11 @@ ShouldShowBanner: WOConditional {
 }
 
 ShouldShowMassChange: WOConditional {
-    condition = shouldShowMassChange;
+	condition = shouldShowMassChange;
 }
 
 ShouldShowPropagateDebug: WOConditional {
-    condition = d2wDebuggingEnabled;
+	condition = d2wDebuggingEnabled;
 }
 
 ShowCancel: WOConditional {
