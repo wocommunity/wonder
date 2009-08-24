@@ -61,19 +61,20 @@ public class NSDictionaryTest extends BaseTestCase {
 	}
 	
 	 public void testNSDictionaryNSArrayOfVNSArrayOfKNull() {
-		NSArray<String> array = new NSArray<String>(new String[] { "value1", "value2" });
-		try {
-			new NSDictionary<String, String>((NSArray<String>)null, array);
-		} catch (NullPointerException e) { }
-
-		try {
-			new NSDictionary<String, String>(array, (NSArray<String>)null);
-		} catch (NullPointerException e) { }
-
-		try {
-			new NSDictionary<String, String>((NSArray<String>)null, (NSArray<String>)null);
-		} catch (IllegalArgumentException e) { }
-	}
+	    NSArray<String> array = new NSArray<String>(new String[] { "value1", "value2" });
+	    try {
+	      new NSDictionary<String, String>((NSArray<String>)null, array);
+	    } catch (IllegalArgumentException e) {
+	    }
+      try {
+        new NSDictionary<String, String>(array, (NSArray<String>)null);
+      } catch (IllegalArgumentException e) {
+      }
+      try {
+        new NSDictionary<String, String>((NSArray<String>)null, (NSArray<String>)null);
+      } catch (IllegalArgumentException e) {
+      }
+	  }
 
 	public void testNSDictionaryNSDictionaryOfKV() {
 		NSMutableDictionary<String, String> mutableDict = new NSMutableDictionary<String, String>("value", "key");
@@ -104,19 +105,21 @@ public class NSDictionaryTest extends BaseTestCase {
 	}
 
 	public void testNSDictionaryVArrayKArrayNull() {
-		String[] values = new String[] {"value1", "value2"};
-		try {
-			new NSDictionary<String, String>((String[])null, values);
-			fail("IllegalArgumentException expected");
-		} catch (NullPointerException e) { }
+    String[] values = new String[] {"value1", "value2"};
+    try {
+      new NSDictionary<String, String>((String[])null, values);
+      fail("IllegalArgumentException expected");
+    } catch (IllegalArgumentException e) {
+    }
+    
+    try {
+      new NSDictionary<String, String>(values, (String[])null);
+      fail("IllegalArgumentException expected");
+    } catch (IllegalArgumentException e) {
+    }
 
-		try {
-			new NSDictionary<String, String>(values, (String[])null);
-			fail("IllegalArgumentException expected");
-		} catch (NullPointerException e) { }
-
-		NSDictionary<String, String> dict = new NSDictionary<String, String>((String[])null, (String[])null);
-		assertTrue(dict.isEmpty());
+    NSDictionary<String, String> dict = new NSDictionary<String, String>((String[])null, (String[])null);
+    assertTrue(dict.isEmpty());
 	}
 
 	
