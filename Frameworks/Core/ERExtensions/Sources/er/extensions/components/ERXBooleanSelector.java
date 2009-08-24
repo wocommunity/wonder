@@ -62,13 +62,13 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 	public String displayString() {
 		String displayString;
 		if (_option == Boolean.TRUE || _proxy == TRUE) {
-			displayString = stringValueForBinding("yesString", ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault("Yes"));
+			displayString = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(stringValueForBinding("yesString", "Yes"));
 		}
 		else if (_option == Boolean.FALSE || _proxy == FALSE) {
-			displayString = stringValueForBinding("noString", ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault("No"));
+			displayString = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(stringValueForBinding("noString", "No"));
 		}
 		else {
-			displayString = noSelectionString();
+			displayString = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(noSelectionString());
 		}
 		return displayString;
 	}
