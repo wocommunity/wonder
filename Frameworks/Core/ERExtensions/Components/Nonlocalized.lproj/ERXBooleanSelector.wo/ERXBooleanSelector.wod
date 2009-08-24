@@ -1,0 +1,50 @@
+WOPopUpButton : WOPopUpButton {
+  list = options;
+  item = option;
+  displayString = displayString;
+  noSelectionString = noSelectionString;
+  selection = ^selection;
+  class = ^class;
+  id = ^id;
+  style = ^style;
+}
+
+RadioButtonMatrix: ERXRadioButtonMatrix {
+	item = proxy;
+	list = proxyOptions;
+	maxColumns = 3;
+	selection = proxySelection;
+	uniqueID = ^uniqueID;
+    goingVertically = ^goingVertically;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
+}
+
+IsCheckbox : WOConditional {
+	condition = isCheckbox;
+}
+
+IsPopup : WOConditional {
+	condition = isPopup;
+}
+
+IsRadio : WOConditional {
+	condition = isRadio;
+}
+
+DisplayName: WOString {
+	value = displayString;
+}
+
+WOCheckbox: WOCheckBox {
+	checked = ^selection;
+	class = ^class;
+	id = ^id;
+	style = ^style;
+}
+
+YesName: ERXLocalizedString {
+	value = ^yesName;
+	valueWhenEmpty = "Yes";
+}
