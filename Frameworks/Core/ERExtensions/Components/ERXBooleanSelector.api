@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo wocomponentcontent="false" class="ERXBooleanSelector">
+
+        <binding name="yesString"/>
+        <binding name="noString"/>
+        <binding name="selection"/>
+    	<binding name="noSelectionString"/>
+    	<binding name="style"/>
+        <binding name="id"/>
+        <binding name="class"/>
+    	<validation message="'selection' is a required binding.">
+            <unbound name="selection"/>
+        </validation>
+        </wo>
+</wodefinitions>
