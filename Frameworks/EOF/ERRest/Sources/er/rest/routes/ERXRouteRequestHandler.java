@@ -239,7 +239,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		String controllerName = controllerEntityName + "Controller";
 		Class<?> controllerClass = _NSUtilities.classWithName(controllerName);
 		if (controllerClass == null) {
-			throw new IllegalArgumentException("There is controller named '" + controllerName + "'.");
+			throw new IllegalArgumentException("There is no controller named '" + controllerName + "'.");
 		}
 		return controllerClass.asSubclass(ERXRouteController.class);
 	}
