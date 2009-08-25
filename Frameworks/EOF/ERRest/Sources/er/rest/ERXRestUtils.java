@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSUtilities;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -95,11 +96,11 @@ public class ERXRestUtils {
 		}
 		else if (value instanceof NSTimestamp) {
 			NSTimestamp timestamp = (NSTimestamp) value;
-			formattedValue = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ").format(timestamp);
+			formattedValue = new NSTimestampFormatter(ERXRestUtils.timestampFormat()).format(timestamp);
 		}
 		else if (value instanceof Date) {
 			Date date = (Date) value;
-			formattedValue = new SimpleDateFormat("YYYY-MM-dd\\THH:mm:ss\\Z").format(value);
+			formattedValue = new SimpleDateFormat(ERXRestUtils.dateFormat(false)).format(value);
 		}
 		else {
 			formattedValue = value.toString();
@@ -108,6 +109,20 @@ public class ERXRestUtils {
 
 	}
 
+	protected static String timestampFormat() {
+		return ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat", "%Y-%m-%dT%H:%M:%SZ");
+	}
+
+	// this "spaces" attribtue is stupid, i know ... this whole api is stupid.  it's a quick hack for now
+	protected static String dateFormat(boolean spaces) {
+		if (spaces) {
+			return ERXProperties.stringForKeyWithDefault("er.rest.dateFormat", "YYYY-MM-dd HH:mm:ss z");
+		}
+		else {
+			return ERXProperties.stringForKeyWithDefault("er.rest.dateFormat", "YYYY-MM-dd\\THH:mm:ss\\Z");
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static Object coerceValueToTypeNamed(Object value, String valueTypeName, IERXRestDelegate delegate) {
 		Object parsedValue;
@@ -154,7 +169,7 @@ public class ERXRestUtils {
 				NSTimestampFormatter formatter = null;
 				try {
 					if (strValue.indexOf(' ') == -1) {
-						formatter = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ");
+						formatter = new NSTimestampFormatter(ERXRestUtils.timestampFormat());
 					}
 					else {
 						formatter = new NSTimestampFormatter();
@@ -180,10 +195,10 @@ public class ERXRestUtils {
 				SimpleDateFormat formatter = null;
 				try {
 					if (strValue.indexOf(' ') == -1) {
-						formatter = new SimpleDateFormat("YYYY-MM-dd\\THH:mm:ss\\Z");
+						formatter = new SimpleDateFormat(ERXRestUtils.dateFormat(false));
 					}
 					else {
-						formatter = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss z");
+						formatter = new SimpleDateFormat(ERXRestUtils.dateFormat(true));
 					}
 					parsedValue = formatter.parseObject(strValue);
 				}
