@@ -13,7 +13,9 @@ AreThereReferenceEO2: ERXNonNullConditional {
 
 AttributeCell: WOGenericContainer {
 	align = d2wContext.justification;
+	class = cssClassForPropertyKey;
 	elementName = "td";
+	style = inlineStyleDeclarationForPropertyKey;
 	valign = "middle";
 	width = d2wContext.width;
 }
@@ -230,6 +232,7 @@ ListTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 1;
 	cellspacing = 0;
+	class = cssClassForPageContainerElement;
 	elementName = "table";
 }
 
@@ -280,6 +283,19 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	nowrap = "nowrap";
+	style = inlineStyleDeclarationForPropertyKey;
+	valign = "bottom";
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 Repetition1: WORepetition {
@@ -359,11 +375,6 @@ String1: WOString {
 
 String2: WOString {
 	value = referenceEO.name;
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
 }
 
 SwitchComponent2: WOSwitchComponent {

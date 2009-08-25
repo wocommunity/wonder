@@ -6,12 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSDictionary;
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXWOContext;
+import org.apache.log4j.Logger;
 
 /**
  * Used for displaying the propertyName in a template.<br />
@@ -19,35 +19,67 @@ import er.extensions.*;
  * @binding localContext
  */
 
-public class ERD2WPropertyName extends D2WStatelessComponent {
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WPropertyName.class);
-    
-    public ERD2WPropertyName(WOContext context) { super(context); }
+public class ERD2WPropertyName extends ERD2WStatelessComponent {
+    public static final Logger log = Logger.getLogger(ERD2WPropertyName.class);
 
-    // public boolean isStateless() {return false;}
-    String displayNameForProperty;
-    public String displayNameForProperty() {
-        if(displayNameForProperty == null)
-            displayNameForProperty = (String)d2wContext().valueForKey("displayNameForProperty");
-        return displayNameForProperty;
+    protected String _displayNameForProperty;
+    protected NSDictionary _contextDictionary;
+    public String currentKey;
+  
+    public ERD2WPropertyName(WOContext context) { 
+        super(context); 
     }
+
+    public String displayNameForProperty() {
+        if(_displayNameForProperty == null) {
+            _displayNameForProperty = (String)d2wContext().valueForKey("displayNameForProperty");
+        }
+        return _displayNameForProperty;
+    }
+    
     public void reset() {
         super.reset();
-        displayNameForProperty = null;
+        _displayNameForProperty = null;
+        _contextDictionary = null;
     }
     
     public boolean hasNoErrors() {
-        if(false) {
-            String keyPath = "errorMessages." + displayNameForProperty();
-            return d2wContext().valueForKeyPath(keyPath) == null;
-        }
-        return !validationExceptionOccurredForPropertyKey();
+        return !ERD2WUtilities.validationExceptionOccurredForPropertyKey(propertyKey(), d2wContext());
     }
 
     public boolean d2wComponentNameDebuggingEnabled() {
         return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
     }
 
+    public boolean d2wDebuggingEnabled() {
+        return ERDirectToWeb.d2wDebuggingEnabled(session());
+    }
+
+    public Object currentValue() {
+        return contextDictionaryForPropertyKey().valueForKey(currentKey);
+    }
+
+    public NSDictionary contextDictionary() {
+        if(_contextDictionary == null) {
+            String key = "contextDictionary." + d2wContext().dynamicPage();
+            _contextDictionary = (NSDictionary)ERXWOContext.contextDictionary().objectForKey(key);
+            if(_contextDictionary == null) {
+            	ERD2WContextDictionary dict = new ERD2WContextDictionary(d2wContext().dynamicPage(), null, null);
+            	_contextDictionary = dict.dictionary();
+            	ERXWOContext.contextDictionary().setObjectForKey(_contextDictionary, key);
+            }
+        }
+        return _contextDictionary;
+    }
+    
+    public NSDictionary contextDictionaryForPropertyKey() {
+        Object o = contextDictionary().valueForKeyPath("componentLevelKeys." + propertyKey());
+        if(o instanceof NSDictionary) {
+            return (NSDictionary)o;
+        }
+        return NSDictionary.EmptyDictionary;
+    }
+    
     public String d2wComponentName() {
         String name = (String)d2wContext().valueForKey("componentName");
         if(name != null && name.indexOf("CustomComponent")>=0) {
@@ -59,39 +91,15 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
     public String width() { return hasPropertyName() ? "148" : null; }
 
     public boolean hasPropertyName() {
-        String displayNameForProperty=displayNameForProperty();
-        return displayNameForProperty!=null && displayNameForProperty.length()>0;
+        return !ERXValueUtilities.booleanValue(d2wContext().valueForKey("hidePropertyName"));
     }
 
     public boolean displayRequiredMarker() {
-        boolean displayRequiredMarker = false;
-        // avoiding attribute() and relationship() because of lame-ass caching scheme on D2WContext
-        String task = (String)d2wContext().valueForKey("task");
-        if (task==null || task.equals("edit")) {
-            if (!ERXValueUtilities.booleanValue(d2wContext().valueForKey("isMandatory"))) {
-                EOAttribute a=(EOAttribute)d2wContext().valueForKey("smartAttribute");
-                if (a!=null)
-                    displayRequiredMarker = !a.allowsNull();
-                else {
-                    EORelationship r=(EORelationship)d2wContext().valueForKey("smartRelationship");
-                    if (r!=null) displayRequiredMarker = r.isMandatory();
-                }                
-            } else
-                displayRequiredMarker = true;
-        }
-        return displayRequiredMarker;
+    	return ERXValueUtilities.booleanValue(d2wContext().valueForKey("displayRequiredMarker"));
     }
 
-    public void takeValueFromRequest(WORequest r, WOContext c) {
+    public void takeValuesFromRequest(WORequest r, WOContext c) {
         // no form values in here!
     }
-
-    public boolean validationExceptionOccurredForPropertyKey() {
-        return d2wContext().propertyKey() != null ? keyPathsWithValidationExceptions().containsObject(d2wContext().propertyKey()) : false;
-    }
     
-    public NSArray keyPathsWithValidationExceptions() {
-        NSArray exceptions = (NSArray)d2wContext().valueForKey("keyPathsWithValidationExceptions");
-        return exceptions != null ? exceptions : NSArray.EmptyArray;
-    }
 }

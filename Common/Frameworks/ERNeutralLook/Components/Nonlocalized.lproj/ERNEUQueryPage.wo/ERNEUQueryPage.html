@@ -28,24 +28,21 @@
                   <TR>
                      <TD ALIGN=left VALIGN=top>
                         <TABLE BORDER=0 CELLPADDING=2 CELLSPACING=2>
-                           <WEBOBJECT NAME=ResourceRepetition>
+							<webobject name="ResourceRepetition">
 							<webobject name="IfPropertyKeyIsNotOmitted">
-                              <WEBOBJECT NAME=QueryTableRow>
-                                 <TD ALIGN=right VALIGN=middle> <WEBOBJECT NAME=SwitchComponent1></WEBOBJECT><FONT SIZE="-1"><B>
-                                    &nbsp;</B></FONT> </TD>
-                                 <TD ALIGN=left VALIGN=middle>&nbsp;
-                                    <WEBOBJECT NAME=ResourceInputRepresentation></WEBOBJECT>
-                                 </TD>
-                                 <webobject name="CanQueryForNullValues">
-                                 <td align="left" valign="middle">
-                                    <webobject name="CanQueryPropertyForNullValue">
-                                        <webobject name="PropertyHasNullValueCheckBox"></webobject>&nbsp;<webobject name="NoValueString"></webobject>
-                                    </webobject>
-                                 </td>
-                                 </webobject>
-                              </WEBOBJECT>
+								<webobject name="QueryTableRow">
+									<webobject name="PropertyNameComponentGenericContainer"><webobject name="PropertyNameSwitchComponent"></webobject></webobject>
+									<webobject name="PropertyKeyComponentGenericContainer"><webobject name="ResourceInputRepresentation"></webobject></webobject>
+									<webobject name="CanQueryForNullValues">
+									<td align="left" valign="middle">
+										<webobject name="CanQueryPropertyForNullValue">
+										<webobject name="PropertyHasNullValueCheckBox"></webobject>&nbsp;<webobject name="NoValueString"></webobject>
+										</webobject>
+									</td>
+									</webobject>
+								</webobject>
 							</webobject>
-                           </WEBOBJECT>
+							</webobject>
                         </TABLE>
                      </TD>
                   </TR>

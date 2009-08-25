@@ -140,6 +140,7 @@ InspectTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 2;
 	cellspacing = 1;
+	class = cssClassForPageContainerElement;
 	elementName = "table";
 }
 
@@ -199,8 +200,24 @@ PageWrapper: WOSwitchComponent {
 }
 
 PropertyKeyComponentGenericContainer: WOGenericContainer {
+	align = "left";
+	class = cssClassForPropertyKey;
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
+	style = inlineStyleDeclarationForPropertyKey;
+}
+
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	align = "right";
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	scope = "row";
+	style = inlineStyleDeclarationForPropertyKey;
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 ReturnButton: WOImage {
@@ -251,11 +268,6 @@ SubmitChangesButton: WOImageButton {
 	height = "31";
 	name = "Saves your changes";
 	width = "88";
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
 }
 
 UseFocusConditional: WOConditional {

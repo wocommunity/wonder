@@ -137,8 +137,9 @@ InspectTable: WOGenericContainer {
 
 InspectTableHeaderRow: WOGenericContainer {
 	_unroll = true;
-	height=24;
+	class = cssClassForPageContainerElement;
 	elementName = "tr";
+	height = 24;
 }
 
 IsEditing: WOKeyValueConditional {
@@ -185,6 +186,26 @@ PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 	action = printerFriendlyVersion;
 	scrollbars = true;
 	target = "PrinterFriendly";
+}
+
+PropertyKeyComponentGenericContainer: WOGenericContainer {
+	align = "left";
+	class = cssClassForPropertyKey;
+	elementName = "td";
+	style = inlineStyleDeclarationForPropertyKey;
+	valign = "top";
+}
+
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	align = "right";
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	style = inlineStyleDeclarationForPropertyKey;
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 RightArrow: WOImageButton {
@@ -255,11 +276,6 @@ SubmitChanges: WOImageButton {
 	name = "Saves your changes";
 	filename = "SaveMetalBtn.gif";
 	framework = "JavaDirectToWeb";
-}
-
-SwitchComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
 }
 
 TotalSteps: WOString {

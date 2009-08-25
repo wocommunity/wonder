@@ -9,12 +9,11 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-AttributeValue: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
+AttributeValue: ERXTimedSwitchComponent {
 	localContext = localContext;
-	object = object;
+ 	object = object;
+	userInfo = timingEventUserInfo;
+	WOComponentName = d2wContext.componentName;
 }
 
 BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
@@ -65,6 +64,17 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
+InspectRow: WOGenericContainer {
+	_unroll = true;
+	bgcolor = d2wContext.backgroundColorForTable;
+	elementName = "tr";
+}
+
 InspectTable: WOGenericContainer {
 	_unroll = true;
 	border = 0;
@@ -78,10 +88,26 @@ NoTitleAvailable: ERXNonNullConditional {
 	negate = true;
 }
 
-QueryRow: WOGenericContainer {
-	_unroll = true;
-	bgcolor = d2wContext.backgroundColorForTable;
-	elementName = "tr";
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+PropertyKeyComponentGenericContainer: WOGenericContainer {
+	class = cssClassForPropertyKey;
+	elementName = "td";
+	style = inlineStyleDeclarationForPropertyKey;
+}
+
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	align = "right";
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	style = inlineStyleDeclarationForPropertyKey;
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 Repetition1: WORepetition {
@@ -101,15 +127,6 @@ String3: WOString {
 SubmitButton1: WOSubmitButton {
 	action = nextPageAction;
 	value = branch.branchButtonLabel;
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
-}
-
-SwitchComponent3: WOSwitchComponent {
-	WOComponentName = d2wContext.pageWrapperName;
 }
 
 SwitchComponent4: WOSwitchComponent {

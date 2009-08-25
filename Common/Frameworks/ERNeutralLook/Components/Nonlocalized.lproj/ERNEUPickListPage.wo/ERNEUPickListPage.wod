@@ -6,7 +6,9 @@ AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 AttributeCell: WOGenericContainer {
 	_unroll = true;
 	align = d2wContext.justification;
+	class = cssClassForPropertyKey;
 	elementName = "td";
+	style = inlineStyleDeclarationForPropertyKey;
 	valign = "middle";
 }
 
@@ -23,13 +25,6 @@ AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
-}
-
-AttributeSorter: ERXSortOrder {
-	displayGroup = displayGroup;
-	displayKey = d2wContext.displayNameForProperty;
-	key = d2wContext.sortKeyForList;
-	d2wContext = d2wContext;
 }
 
 BackButton: WOHyperlink {
@@ -208,6 +203,7 @@ ListTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 1;
 	cellspacing = 0;
+	class = cssClassForPageContainerElement;
 	elementName = "table";
 }
 
@@ -257,6 +253,19 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 }
 
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	nowrap = "nowrap";
+	style = inlineStyleDeclarationForPropertyKey;
+	valign = "bottom";
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
+}
+
 Repetition1: WORepetition {
 	item = branch;
 	list = branchChoices;
@@ -288,6 +297,13 @@ ShowCancel: WOConditional {
 
 ShowCancel2: WOConditional {
 	condition = showCancel;
+}
+
+SortOrder: ERXSortOrder {
+	displayGroup = displayGroup;
+	displayKey = d2wContext.displayNameForProperty;
+	key = d2wContext.sortKeyForList;
+	d2wContext = d2wContext;
 }
 
 SubmitButton1: WOSubmitButton {
@@ -322,7 +338,3 @@ SubmitButton6: WOSubmitButton {
 	value = "Select All On Page";
 }
 
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
-}
