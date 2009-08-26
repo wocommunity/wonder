@@ -173,6 +173,9 @@ public class BTDataCreator {
 				log.info("Creating tables: " + eomodel.name());
 				ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, true);
 				if (eomodel.name().equals("BugTracker")) {
+				    if(dropTables) {
+	                    ERXJDBCUtilities.executeUpdateScript(channel, "drop table BugTag;", true);
+				    }
 					ERTaggableEntity0.upgrade(ec, channel, eomodel, Bug.ENTITY_NAME);
 					InputStream is = ERXFileUtilities.inputStreamForResourceNamed("populate.sql", "BTBusinessLogic", null);
 					String sql = ERXFileUtilities.stringFromInputStream(is);
