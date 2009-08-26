@@ -10,8 +10,13 @@ import com.webobjects.appserver.WOContext;
 
 import er.directtoweb.components.ERDCustomEditComponent;
 
+import com.webobjects.foundation.NSArray;
+
+import er.extensions.foundation.ERXArrayUtilities;
+
 /////////////////////////////////////////////////////////////////////////////////
 // Important D2W Keys:
+//	displayString - String that will be used to display the hyperlink
 //	displayKey - key that specifies the key path off of the object that will be used
 //		for displaying in the hyperlink.  Not required.
 //	showBrackets - Boolean, specifies if the <> should be displayed around the mailto link.
@@ -56,14 +61,26 @@ public class ERDDisplayMailTo extends ERDCustomEditComponent {
     
     public String email() {
         if (_email == null) {
-            _email = (String)(hasBinding("email") ? valueForBinding("email") : objectKeyPathValue());
+            Object emailObj = (hasBinding("email") ? valueForBinding("email") : objectKeyPathValue());
+            if(emailObj != null && emailObj instanceof NSArray) {
+                _email = ERXArrayUtilities.removeNullValues(((NSArray)emailObj)).componentsJoinedByString(",");
+            }
+            else if(emailObj != null && emailObj instanceof String) {
+                _email = (String) emailObj;
+            }
         }
         return _email;
     }
 
     public String displayString() {
         if (_displayString == null) {
-            _displayString = (String)(hasBinding("displayKey") ? object().valueForKeyPath((String)valueForBinding("displayKey")) : email());
+            //first look for displayString binding
+            _displayString = (String)(hasBinding("displayString")? valueForBinding("displayString") : null);
+
+            //if displayString binding is not available, then settle for just email
+            if (_displayString == null) {
+                _displayString = email();
+            }
         }
         return _displayString;
     }
