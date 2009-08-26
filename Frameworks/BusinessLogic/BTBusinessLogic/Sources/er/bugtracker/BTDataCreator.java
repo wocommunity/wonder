@@ -151,6 +151,9 @@ public class BTDataCreator {
 	private void createTables(boolean dropTables) {
 		for (Enumeration e = EOModelGroup.defaultGroup().models().objectEnumerator(); e.hasMoreElements();) {
 			final EOModel eomodel = (EOModel) e.nextElement();
+			if(eomodel.name().toLowerCase().endsWith("prototypes")) {
+			    continue;
+			}
 			EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, eomodel.name());
 			dbc.lock();
 			try {
