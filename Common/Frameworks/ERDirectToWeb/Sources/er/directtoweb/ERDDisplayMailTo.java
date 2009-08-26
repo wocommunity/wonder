@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
@@ -58,14 +59,26 @@ public class ERDDisplayMailTo extends ERDCustomEditComponent {
     
     public String email() {
         if (_email == null) {
-            _email = (String)(hasBinding("email") ? valueForBinding("email") : objectKeyPathValue());
+            Object emailObj = (hasBinding("email") ? valueForBinding("email") : objectKeyPathValue());
+            if(emailObj != null && emailObj instanceof NSArray) {
+                _email = ERXArrayUtilities.removeNullValues(((NSArray)emailObj)).componentsJoinedByString(",");
+            }
+            else if(emailObj != null && emailObj instanceof String) {
+                _email = (String) emailObj;
+            }
         }
         return _email;
     }
 
     public String displayString() {
         if (_displayString == null) {
-            _displayString = (String)(hasBinding("displayKey") ? object().valueForKeyPath((String)valueForBinding("displayKey")) : email());
+                //first look for displayString binding
+                _displayString = (String)(hasBinding("displayString")? valueForBinding("displayString") : null);
+                
+                //if displayString binding is not available, then settle for just email
+                if (_displayString == null){
+                    _displayString =  email();
+                }
         }
         return _displayString;
     }
