@@ -2,8 +2,6 @@ package er.rest.routes;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -21,7 +19,6 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRestNameRegistry;
-import er.rest.format.ERXRestFormat;
 
 /**
  * ERXRouteRequestHandler is the request handler that can process rails-style route mappings and convert them to
@@ -395,31 +392,13 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 				path = "/" + path;
 			}
 			int dotIndex = path.lastIndexOf('.');
-			List<String> types = new LinkedList<String>();
+			String requestedType = null;
 			if (dotIndex >= 0) {
 				String type = path.substring(dotIndex + 1);
 				if (type.length() > 0) {
-					types.add(type);
+					requestedType = type;
 				}
 				path = path.substring(0, dotIndex);
-			}
-			else {
-				String accept = request.headerForKey("Accept");
-				if (accept != null) {
-					String[] acceptTypes = accept.split(",");
-					for (String acceptType : acceptTypes) {
-						int semiIndex = acceptType.indexOf(";");
-						if (semiIndex == -1) {
-							types.add(acceptType);
-						}
-						else {
-							types.add(acceptType.substring(0, semiIndex));
-						}
-					}
-					
-					// Make sure we stick "xml" on the end, so we eventually end up with a known format ... 
-					types.add(ERXRestFormat.XML.name());
-				}
 			}
 
 			@SuppressWarnings("unchecked")
@@ -434,7 +413,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			else {
 				mutableUserInfo = new NSMutableDictionary<String, Object>();
 			}
-			mutableUserInfo.setObjectForKey(types, ERXRouteRequestHandler.TypeKey);
+			if (requestedType != null) {
+				mutableUserInfo.setObjectForKey(requestedType, ERXRouteRequestHandler.TypeKey);
+			}
 			mutableUserInfo.setObjectForKey(path, ERXRouteRequestHandler.PathKey);
 
 			ERXRoute matchingRoute = null;

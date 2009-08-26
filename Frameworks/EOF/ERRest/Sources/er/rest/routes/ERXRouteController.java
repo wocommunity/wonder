@@ -1,7 +1,6 @@
 package er.rest.routes;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -179,32 +178,50 @@ public class ERXRouteController extends WODirectAction {
 		_objects = _route.keysWithObjects(_routeKeys, delegate);
 		return _objects;
 	}
+	
+	/**
+	 * Returns the default format to use if no other format is found, or if the requested format is invalid.
+	 *  
+	 * @return the default format to use if no other format is found, or if the requested format is invalid
+	 */
+	protected ERXRestFormat defaultFormat() {
+		return ERXRestFormat.XML;
+	}
 
 	/**
 	 * Returns the format that the user requested (usually based on the request file extension).
 	 * 
 	 * @return the format that the user requested
 	 */
-	@SuppressWarnings("unchecked")
 	public ERXRestFormat format() {
-		List<String> types = (List<String>) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
-		ERXRestFormat matchingFormat = null;
-		if (types == null || types.size() == 0) {
-			matchingFormat = ERXRestFormat.XML;
-		}
-		else {
-			for (String type : types) {
-				ERXRestFormat format = ERXRestFormat.formatNamed(type);
-				if (format != null && format.parser() != null && format.writer() != null) {
-					matchingFormat = format;
-					break;
+		String type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
+		/*
+		if (type == null) {
+			List<String> acceptTypesList = new LinkedList<String>();
+			String accept = request().headerForKey("Accept");
+			if (accept != null) {
+				String[] acceptTypes = accept.split(",");
+				for (String acceptType : acceptTypes) {
+					int semiIndex = acceptType.indexOf(";");
+					if (semiIndex == -1) {
+						acceptTypesList.add(acceptType);
+					}
+					else {
+						acceptTypesList.add(acceptType.substring(0, semiIndex));
+					}
 				}
 			}
-			if (matchingFormat == null) {
-				matchingFormat = ERXRestFormat.formatNamed(types.get(0));
-			}
 		}
-		return matchingFormat;
+		*/
+		
+		ERXRestFormat format;
+		if (type == null) {
+			format = defaultFormat();
+		}
+		else {
+			format = ERXRestFormat.formatNamed(type);
+		}
+		return format;
 	}
 
 	/**
