@@ -119,7 +119,12 @@ public class BeanInfoClassDescription extends EOClassDescription {
 	public EOClassDescription classDescriptionForDestinationKey(String detailKey) {
 		for (PropertyDescriptor descriptor : _beanInfo.getPropertyDescriptors()) {
 			if (descriptor.getName().equals(detailKey)) {
-				return ERXRestClassDescriptionFactory.classDescriptionForClass(descriptor.getPropertyType(), false);
+				if (isToMany(descriptor)) {
+					return ERXRestClassDescriptionFactory.classDescriptionForClass(Object.class, true);
+				}
+				else {
+					return ERXRestClassDescriptionFactory.classDescriptionForClass(descriptor.getPropertyType(), false);
+				}
 			}
 		}
 		return null;
