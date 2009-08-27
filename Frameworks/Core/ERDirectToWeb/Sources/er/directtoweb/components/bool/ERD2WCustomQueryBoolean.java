@@ -30,7 +30,7 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
         super(context);
     }
 
-    public NSArray choicesNames() {
+    public NSArray<String> choicesNames() {
         if (_choicesNames == null)
             _choicesNames = (NSArray)d2wContext().valueForKey("choicesNames");
         return _choicesNames;
@@ -53,21 +53,39 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
         } else {
             index = 0;
         }
-        return queryNumbers.objectAtIndex(index);
+        return value;
     }
 
     public void setValue(Object obj) {
         displayGroup().queryOperator().removeObjectForKey(propertyKey());
         displayGroup().queryMatch().removeObjectForKey(propertyKey());
-        if(obj.equals(queryNumbers.objectAtIndex(0))) {
+        if(obj == null) {
             log.debug("Don't care");
         } else {
-            Boolean value = (obj.equals(queryNumbers.objectAtIndex(1)) ? Boolean.TRUE : Boolean.FALSE);
-            displayGroup().queryMatch().takeValueForKey(value, propertyKey());
-            log.debug(value);
+            displayGroup().queryMatch().takeValueForKey(obj, propertyKey());
+            log.debug(obj);
         }
     }
+
+    public String stringForYes() {
+        return choicesNames().objectAtIndex(0);
+    }
     
+    public String stringForNo() {
+        return choicesNames().objectAtIndex(1);
+    }
+    
+    public String stringForNull() {
+        if(allowsNull()) {
+            return choicesNames().objectAtIndex(2);
+        }
+        return null;
+    }
+
+    public boolean allowsNull() {
+        return choicesNames().count() > 2;
+    }
+
     public String displayString() {
         NSArray choicesNames = choicesNames();
         String result;
