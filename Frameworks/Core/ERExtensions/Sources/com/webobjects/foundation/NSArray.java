@@ -454,7 +454,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		return _findObjectInArray(0, count(), object, false) != NotFound;
 	}
 
-	public E firstObjectCommonWithArray(NSArray<?> otherArray) {
+	public E firstObjectCommonWithArray(NSArray<? extends E> otherArray) {
 		if (otherArray == null) {
 			return null;
 		}
