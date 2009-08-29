@@ -163,7 +163,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
     boolean isIntType = "i".equals(attribute.valueType());
 
     NSMutableArray results = new NSMutableArray(count);
-    String sequenceName = sequenceNameForEntity(entity);
+    String sequenceName = _sequenceNameForEntity(entity);
     PostgresqlExpression expression = new PostgresqlExpression(entity);
     
     // MS: The original implementation of this did something like select setval('seq', nextval('seq') + count)
@@ -260,7 +260,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * @param entity    the entity
    * @return  the name of the sequence
    */
-  protected static String sequenceNameForEntity(EOEntity entity) {
+  protected static String _sequenceNameForEntity(EOEntity entity) {
     /* timc 2006-11-06 
      * This used to say ... + "_SEQ";
      * _SEQ would get converted to _seq because postgresql converts all unquoted identifiers to lower case.
