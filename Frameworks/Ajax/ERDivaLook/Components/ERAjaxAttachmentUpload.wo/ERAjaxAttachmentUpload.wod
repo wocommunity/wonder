@@ -1,0 +1,13 @@
+FileUpload : AjaxUploadButton {
+	filePath = filePath;
+	streamToFilePath = tempFilePath;
+	finalFilePath = finalFilePath;
+	id = ^id;
+	class = ^class;
+	style = ^style;
+	title = ^title;
+	onComplete = ^onComplete;
+	onSubmit = ^onSubmit;
+	onChange = ^onChange;
+	name = ^name;
+}

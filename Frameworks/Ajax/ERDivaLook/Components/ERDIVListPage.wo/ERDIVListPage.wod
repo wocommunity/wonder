@@ -9,9 +9,10 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-BackLink: WOHyperlink {
+BackLink: AjaxUpdaterLink {
 	action = backAction;
 	class = "return";
+	container = d2wContext.container;
 }
 
 ColumnLabelRepetition: WORepetition {
@@ -32,9 +33,10 @@ ERXNonNullConditional2: ERXNonNullConditional {
 	condition = d2wContext.editButtonComponentName;
 }
 
-EditButton: ERDEditButton2 {
+EditButton: ERDAjaxEditButton {
 	d2wContext = d2wContext;
 	object = object;
+	editConfigurationName = d2wContext.editConfigurationName;
 }
 
 EntityName: WOString {
@@ -48,13 +50,14 @@ EntityRepetition: WORepetition {
 	index = index;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERDAjaxDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-InspectButton: ERDInspectButton2 {
+InspectButton: ERDAjaxInspectButton {
 	d2wContext = d2wContext;
 	object = object;
+	inspectConfigurationName = d2wContext.inspectConfigurationName;
 }
 
 IsEntityNotWritable: WOConditional {
@@ -104,15 +107,17 @@ NavBar: WOSwitchComponent {
     WOComponentName = d2wContext.batchNavigationBarComponentName;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
-    d2wContext = d2wContext;
+    container = d2wContext.container;
     id = "top_batch_nav";
+    showForm = d2wContext.showForm;
 }
 
 NavBar2: WOSwitchComponent {
     WOComponentName = d2wContext.batchNavigationBarComponentName;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
-    d2wContext = d2wContext;
+    container = d2wContext.container;
+    showForm = d2wContext.showForm;
     id = "bottom_batch_nav";
 }
 
@@ -122,7 +127,7 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-SelectEO: ERDSelectButton2 {
+SelectEO: ERDAjaxSelectButton {
 	d2wContext = d2wContext;
 	object = object;
 }
@@ -133,6 +138,7 @@ SortOrder: WOSwitchComponent {
 	displayGroup = displayGroup;
 	displayKey = d2wContext.displayNameForProperty;
 	key = d2wContext.sortKeyForList;
+	container = d2wContext.container;
 }
 
 SwitchComponent1: WOSwitchComponent {
@@ -146,7 +152,7 @@ SwitchComponent2: WOSwitchComponent {
 	object = object;
 }
 
-Trash: ERDTrashcan2 {
+Trash: ERDAjaxTrashcan {
 	d2wContext = d2wContext;
 	dataSource = dataSource;
 	object = object;
@@ -176,10 +182,11 @@ ButtonHeader: WOGenericContainer {
 
 ValueCell: WOGenericContainer {
 	elementName = "td";
-	class = colClass;
+	class = d2wContext.classForColumn;
 }
 
-UpdateContainer: AjaxUpdateContainer {
+UpdateContainer: WOGenericContainer {
+	elementName = "div";
 	id = d2wContext.idForPageConfiguration;
 	class = "list";
 }
@@ -198,25 +205,24 @@ ShowAdd: WOConditional {
 	condition = d2wContext.showActions;
 }
 
-AddButton: AjaxSubmitButton {
+AddButton: AjaxUpdaterButton {
 	action = displayGroup.insert;
 	class = "ERDIVListPage_Add";
-	updateContainerID = d2wContext.updateContainerID;
+	container = d2wContext.container;
 	value = "Add...";
 }
 
 HeaderCell: WOGenericContainer {
 	elementName = "th";
 	scope = "col";
-	class = colClass;
+	class = d2wContext.classForColumn;
 }
 
 
-CollapseLink: AjaxToggleLink {
-	toggleID = tbodyID;
-	effect = "slide";
+CollapseLink: WOHyperlink {
+	href = "#";
 	class = "ERDIVDetailListPage_detail";
-	duration = "0.8";
+	onclick = onClick;
 }
 
 DetailDiv: WOGenericContainer {
@@ -250,7 +256,8 @@ ShowQuickSearch: WOConditional {
 	condition = d2wContext.allowsFiltering;
 }
 
-ReportLink: WOHyperlink {
+ReportLink: AjaxUpdaterLink {
 	action = reportListAction;
 	class = "export";
+	container = d2wContext.container;
 }

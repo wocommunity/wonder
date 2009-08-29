@@ -1,16 +1,12 @@
 package com.gammastream.validity;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-
 import java.math.BigDecimal;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.io.StringReader;
 
-import com.gammastream.gammacore.gammatext.*;
+import com.gammastream.gammacore.gammatext.GSTextUtilities;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  *	This class provides a set of predefined rules for performing

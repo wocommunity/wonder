@@ -15,5 +15,5 @@ Relationship : WOSwitchComponent {
 	noSelectionString = d2wContext.noSelectionString;
 	id = d2wContext.id;
 	class = "ERD2WQueryToOneRelationship2";
+	popupName = d2wContext.popupName;
 }
-

@@ -1,0 +1,12 @@
+Container: WOGenericContainer {
+	elementName = elementName;
+	ref = ref;
+	id = id;
+	omitTags = omitTags;
+	class = ^class;
+	style = ^style;
+	invokeAction = invokeAction;
+}
+
+Content: WOComponentContent {
+}

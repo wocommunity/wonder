@@ -23,9 +23,10 @@ import er.extensions.foundation.ERXProperties;
  * @binding id the HTML ID of this submit button
  * @binding class the HTML class of this submit button
  * @binding style the HTML style of this submit button
+ * @binding title the HTML title of this submit button
  * @binding onClick arbitrary Javascript to execute when the client clicks the button
  * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs. 
- * @binding onServerClick if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
+ * @binding onClickServer if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
  * @binding onComplete JavaScript function to evaluate when the request has finished.
  * @binding onSuccess javascript to execute in response to the Ajax onSuccess event
  * @binding onFailure javascript to execute in response to the Ajax onFailure event
@@ -266,6 +267,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 	    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
 	    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+	    appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
     	if (functionName == null) {
     		appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
     	}
@@ -312,20 +314,20 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   }
 
   public WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
-    WOComponent wocomponent = wocontext.component();
-    WOActionResults result = (WOActionResults) valueForBinding("action", wocomponent);
-    if (result == null) {
-    	WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
-        String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
-        if (onClickServer != null) {
-    		AjaxUtils.appendScriptHeaderIfNecessary(worequest, response);
-    		response.appendContentString(onClickServer);
-    		AjaxUtils.appendScriptFooterIfNecessary(worequest, response);
-    		result = response;
-        }
-    }
+	   WOComponent wocomponent = wocontext.component();
+	   WOActionResults result = (WOActionResults) valueForBinding("action", wocomponent);
+	   if (result == null) {
+	     WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
+	     String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
+	     if (onClickServer != null) {
+	       AjaxUtils.appendScriptHeaderIfNecessary(worequest, response);
+	       response.appendContentString(onClickServer);
+	       AjaxUtils.appendScriptFooterIfNecessary(worequest, response);
+	     }
+	     result = response;
+	   }
 
-    return result;
-  }
+	   return result;
+	 }
 
 }

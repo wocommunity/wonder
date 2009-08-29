@@ -1,10 +1,5 @@
 /* KeyValue.java created by root on Sat 24-Mar-2001 */
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 
 
 public class KeyValue{

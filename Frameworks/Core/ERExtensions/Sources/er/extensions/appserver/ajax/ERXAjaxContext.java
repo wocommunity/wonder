@@ -21,7 +21,7 @@ public class ERXAjaxContext extends WOContext {
 	public ERXAjaxContext(WORequest request) {
 		super(request);
 	}
-
+	
 	@Override
 	public boolean wasFormSubmitted() {
 		return _wasFormSubmitted();

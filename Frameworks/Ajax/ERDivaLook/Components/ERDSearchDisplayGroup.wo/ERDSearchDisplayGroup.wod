@@ -1,17 +1,16 @@
-SearchField: FocusTextField {
+SearchField: WOTextField {
 	value = value;
-	onEnter = "$('quick_search_submit').click()";
-	focus = false;
 	class = "quick_serach_field";
+	id = "quick_search_field";
 }
 
 Key: WOString {
 	value = displayNameForSearchKey;
 }
 
-Submit: AjaxSubmitButton {
+Submit: AjaxUpdaterButton {
 	action = search;
-	updateContainerID = d2wContext.updateContainerID;
+	container = d2wContext.container;
 	value = "Search";
 	name = "quick_search_submit";
 	id = "quick_search_submit";

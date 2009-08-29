@@ -1,12 +1,10 @@
 package com.gammastream.validity;
 
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import java.lang.*;
-import java.net.*;
-import java.math.*;
+import com.webobjects.appserver.xml.WOXMLCoder;
+import com.webobjects.appserver.xml.WOXMLCoding;
+import com.webobjects.appserver.xml.WOXMLDecoder;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  *	This structure maps validation rules to a specific attribute of an entity.

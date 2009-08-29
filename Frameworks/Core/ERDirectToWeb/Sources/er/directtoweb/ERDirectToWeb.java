@@ -40,6 +40,7 @@ import com.webobjects.foundation.NSSelector;
 import er.directtoweb.pages.ERD2WPage;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXConfigurationManager;
@@ -70,6 +71,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     public final static String D2WDEBUGGING_ENABLED_KEY = "ERDirectToWeb_d2wDebuggingEnabled";
     public final static String D2WDISPLAY_COMPONENTNAMES_KEY = "ERDirectToWeb_displayComponentNames";
     public final static String D2WDISPLAY_PROPERTYKEYS_KEY = "ERDirectToWeb_displayPropertyKeys";
+    public final static String D2WDISPLAY_DETAILED_PAGE_METRICS_KEY = "ERDirectToWeb_displayDetailedPageMetrics";
     public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
     public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
     public final static Logger propertyKeyLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
@@ -163,6 +165,14 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(s,
                                                                   D2WDISPLAY_PROPERTYKEYS_KEY,
                                                                   propertyKeyLog.isDebugEnabled());
+    }
+
+    public static boolean detailedPageMetricsEnabled() {
+        return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(ERXSession.session(), D2WDISPLAY_DETAILED_PAGE_METRICS_KEY, false);
+    }
+
+    public static void setDetailedPageMetricsEnabled(boolean value) {
+        ERXExtensions.setBooleanFlagOnSessionForKey(ERXSession.session(), D2WDISPLAY_DETAILED_PAGE_METRICS_KEY, value);
     }
     
     public static String resolveUnit(String userInfoUnitString,
@@ -346,7 +356,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     
     /**
      * Logs some debugging info and and throws a D2WException that wraps the original exception.
-     * This is usefull when your app fails very deep inside of a repetition of switch components
+     * This is useful when your app fails very deep inside of a repetition of switch components
      * and you need to find out just what the state of the D2WContext is.
      * @param ex
      * @param d2wContext

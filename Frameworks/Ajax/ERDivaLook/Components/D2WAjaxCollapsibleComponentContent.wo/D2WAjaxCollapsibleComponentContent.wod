@@ -1,0 +1,28 @@
+CollapseCondition: WOConditional {
+	_unroll = YES;
+	condition = ^allowCollapsing;
+}
+
+Content2: WOComponentContent {
+	_unroll = YES;
+}
+
+Content: WOComponentContent {
+	_unroll = YES;
+}
+
+DoNotCollapseCondition: WOConditional {
+	_unroll = YES;
+	condition = ^allowCollapsing;
+	negate = YES;
+}
+
+RealCollapseComponent: WOAjaxCollapsibleComponentContent {
+	closedLabel = ^closedLabel;
+	condition = ^condition;
+	disabled = ^disabled;
+	openedLabel = ^openedLabel;
+	submitActionName = ^submitActionName;
+	visibility = ^visibility;
+	container = ^container;
+}

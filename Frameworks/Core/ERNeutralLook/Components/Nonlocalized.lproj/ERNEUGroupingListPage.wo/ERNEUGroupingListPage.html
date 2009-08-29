@@ -3,13 +3,14 @@
 	
 	<webobject name="AboveDisplayPropertyKeys"></webobject>
 	
-	<webobject name="NonNullConditional1">
-		<webobject name="SwitchComponent1"></webobject>
+	<webobject name="HasHeadComponentConditional">
+		<webobject name="HeadComponentSwitchComponent"></webobject>
 	</webobject>
 	
 	<webobject name="ListNotEmpty">
 		<webobject name="ERTableWithBorder1">
 			<webobject name="ListTable">
+				<webobject name="ShowBatchNavigationConditional">
 				<webobject name="GenericContainer1">
 					<webobject name="GenericContainer2">
 						<table cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -31,6 +32,7 @@
 				<td></td>
 				<td></td>
 				</webobject>
+				</webobject>
 				
 				<webobject name="ListTableHeaderRow">
 					<th>&nbsp;</th>
@@ -49,22 +51,26 @@
 								</tr>
 							</table>
 						</th>
+						<webobject name="ShouldDisplayDetailedPageMetrics">
+						<th scope="col" class="InlineMetrics">&nbsp;</th>
+						</webobject>
 					<td width="1">&nbsp;</td>
 				</webobject>
 				<th bgcolor="#999999">&nbsp;</th>
 			</webobject>
 			
 			<webobject name="EntityRepetition">
-				<tr height="1">
+			<tr>
 					<webobject name="GenericContainer3">
-						<img alt="" height="1" src="/nsi/s.gif"/>
+					<img alt="" height="1" src="/nsi/s.gif" />
 					</webobject>
+				<webobject name="ShouldDisplayDetailedPageMetrics"><td bgcolor="#ffffff"><img border="0" height="2" width="1" /></td></webobject>
 				</tr>
 			<webobject name="ListTableRow">
 				<td bgcolor="#ffffff">
 					<table>
-						<tr height="15">
-							<td>
+						<tr>
+							<td height="15">
 								<webobject name="IsSelecting">
 									<webobject name="SelectEO2"><webobject name="SelectImage"></webobject></webobject>
 								</webobject>
@@ -77,7 +83,7 @@
 									</webobject>
 								</webobject>
 							</td>
-							<td></td>
+							<td>&nbsp;</td>
 						</tr>
 					</table>
 				</td>
@@ -85,6 +91,11 @@
 					<webobject name="AttributeCell">
 						<font size="-1"><webobject name="AttributeDisplay"></webobject></font>
 					</webobject>
+				<webobject name="ShouldDisplayDetailedPageMetrics">
+				<td class="InlineMetrics">
+					<font size="-1"><webobject name="InlineMetricsForPropertyKey"></webobject></font>
+				</td>
+				</webobject>
 					<td width="1"></td>
 				</webobject>
 				<td>
@@ -95,10 +106,22 @@
 					</webobject>
 				</td>
 			</webobject>
+			<webobject name="ShouldDisplayDetailedPageMetrics">
+				<tr class="MetricsSummary">
+					<td>&nbsp;</td>
+					<webobject name="AttributeRepetition">
+					<td>&nbsp;</td>
+					<td class="InlineMetrics"><webobject name="MetricsDurationForCurrentPropertyKey"></webobject></td>
+					</webobject>
+					<td>&nbsp;</td>
+				</tr>
+			</webobject>
 		</webobject>
+		
+		<webobject name="ShowBatchNavigationConditional">
 	<webobject name="DisplayBottomBatchNavigationConditional">
 	<webobject name="TableRowForBottomBatchNavigationGenericContainer">
-		<webobject name="TableCellForBottomBatchNaviationGenericContainer">
+			<webobject name="TableCellForBottomBatchNavigationGenericContainer">
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
 					<td>
@@ -120,18 +143,20 @@
 </webobject>
 </webobject>
 </webobject>
-</webobject>
-		<br/>
+	
+	</webobject>
+	</webobject>
+		<br />
 		<webobject name="HideReturnOnSelect1">
 			<webobject name="ShowCancel">
 				<webobject name="Return"></webobject>
 			</webobject>
 		</webobject>
 		</webobject>
+	
 		<webobject name="ListEmpty">
 			<webobject name="EmptyMessageComponent"></webobject>
-		<br/>
-		<br/>
+		
 		<webobject name="HideReturnOnSelect2">
 			<webobject name="ShowCancel2">
 				<webobject name="Return2"></webobject>
@@ -139,6 +164,12 @@
         </webobject>
 </webobject>
 
-    <webobject name="BelowDisplayPropertyKeys"></webobject>
+	<webobject name="BelowDisplayPropertyKeys"></webobject>
+
+	<webobject name="ShouldDisplayMetricsSummary">
+	<div class="PageMetricsSummary">
+		<webobject name="PageMetricsSummary"></webobject>
+	</div>
+	</webobject>
 
 </webobject>

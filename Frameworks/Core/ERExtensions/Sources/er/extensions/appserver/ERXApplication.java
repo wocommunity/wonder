@@ -841,6 +841,17 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public ERXApplication() {
 		super();
 
+		// WOFrameworksBaseURL and WOApplicationBaseURL properties are broken in 5.4.  
+    	// This is the workaround.
+		frameworksBaseURL();
+		applicationBaseURL();
+		if (System.getProperty("WOFrameworksBaseURL") != null) {
+			setFrameworksBaseURL(System.getProperty("WOFrameworksBaseURL"));
+		}
+		if (System.getProperty("WOApplicationBaseURL") != null) {
+			setApplicationBaseURL(System.getProperty("WOApplicationBaseURL"));
+		}
+
 		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || _loader == null)) {
 			_displayMainMethodWarning();
 		}
@@ -1011,8 +1022,27 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public final void finishInitialization(NSNotification n) {
 		finishInitialization();
 		if (ERXMigrator.shouldMigrateAtStartup()) {
-			migrator().migrateToLatest();
+			ERXMigrator migrator = migrator();
+			migrationsWillRun(migrator);
+			migrator.migrateToLatest();
+			migrationsDidRun(migrator);
 		}
+	}
+	
+	/**
+	 * Called prior to migrations running.
+	 * @param migrator the migrator that will be used
+	 */
+	protected void migrationsWillRun(ERXMigrator migrator) {
+		// DO NOTHING
+	}
+	
+	/**
+	 * Called after migrations finish running.
+	 * @param migrator the migrator that was used
+	 */
+	protected void migrationsDidRun(ERXMigrator migrator) {
+		// DO NOTHING
 	}
 
 	/**
@@ -1844,7 +1874,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	@Override
 	public WOResponse createResponseInContext(WOContext context) {
-		WOResponse response = new ERXResponse();
+		WOResponse response = new ERXResponse(context);
 		return response;
 	}
 

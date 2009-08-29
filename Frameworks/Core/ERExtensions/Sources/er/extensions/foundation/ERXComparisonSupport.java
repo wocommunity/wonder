@@ -17,7 +17,7 @@ import er.extensions.localization.ERXLocalizer;
  * Comparison support that sorts strings in a locale-savvy manner and adds
  * support for regex in-memory matching when using qualifier strings.
  * 
- * @created ak on Fri Apr 11 2003
+ * @author ak on Fri Apr 11 2003
  */
 
 public class ERXComparisonSupport {

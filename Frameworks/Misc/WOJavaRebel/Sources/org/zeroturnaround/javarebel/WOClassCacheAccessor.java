@@ -16,8 +16,8 @@ import com.webobjects.foundation._NSUtilities;
  */
 public class WOClassCacheAccessor {
 	private static boolean initialized = false;
-    private static _NSThreadsafeMutableDictionary classesByPartialName = null;
-    private static _NSThreadsafeMutableDictionary actionClassCache = null;
+  private static _NSThreadsafeMutableDictionary classesByPartialName = null;
+	private static _NSThreadsafeMutableDictionary actionClassCache = null;
 
 	public static void setClassForName(Class<?> objectClass, String className) {
 		classesByPartialName.setObjectForKey(objectClass, className);
@@ -28,34 +28,34 @@ public class WOClassCacheAccessor {
 	}
 
 	public static Class<?> classForName(String className) {
-		return (Class<?>) classesByPartialName.objectForKey(className);
+	  return (Class<?>) classesByPartialName.objectForKey(className);
 	}
 
-    public static NSDictionary getClassCache() {
-        return classesByPartialName.immutableClone();
-    }
+	public static NSDictionary getClassCache() {
+	  return classesByPartialName.immutableClone();
+	}
 
-    public static void clearActionClassCache() {
-        actionClassCache.removeAllObjects();
-    }
+	public static void clearActionClassCache() {
+	  actionClassCache.removeAllObjects();
+	}
 
 	private static void initialize() {
-		if (initialized)
-			return;
-		initialized = true;
-		try {
-			Field f = _NSUtilities.class.getDeclaredField("_classesByPartialName");
-			f.setAccessible(true);
-			classesByPartialName = (_NSThreadsafeMutableDictionary) f.get(null);
-			f = WOAction.class.getDeclaredField("_actionClasses");
-            f.setAccessible(true);
-            actionClassCache = (_NSThreadsafeMutableDictionary) f.get(null);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	  if (initialized)
+	    return;
+	  initialized = true;
+	  try {
+	    Field f = _NSUtilities.class.getDeclaredField("_classesByPartialName");
+	    f.setAccessible(true);
+	    classesByPartialName = (_NSThreadsafeMutableDictionary) f.get(null);
+	    f = WOAction.class.getDeclaredField("_actionClasses");
+	    f.setAccessible(true);
+	    actionClassCache = (_NSThreadsafeMutableDictionary) f.get(null);
+	  } catch (Exception e) {
+	    e.printStackTrace();
+	  }
 	}
 
 	static {
-		initialize();
+	  initialize();
 	}
 }

@@ -83,7 +83,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 	}
 
 	public static NSData toBlob(NSMutableArray<?> d) {
-		return toBlob(d);
+		return toBlob((NSArray<?>) d);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -129,7 +129,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 	public String[] toStringArray() {
 		return ERXArrayUtilities.toStringArray(this);
 	}
-	
+
 	/**
 	 * Simple thread safe wrapper. May or may not be correct, but it doesn't
 	 * matter as you will never, *ever* call this directly, but call <code>
@@ -150,12 +150,12 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized void addObject(Object object) {
+		public synchronized void addObject(V object) {
 			super.addObject(object);
 		}
 
 		@Override
-		public synchronized void addObjects(Object[] objects) {
+		public synchronized void addObjects(V... objects) {
 			super.addObjects(objects);
 		}
 
@@ -195,7 +195,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized Object removeLastObject() {
+		public synchronized V removeLastObject() {
 			return super.removeLastObject();
 		}
 
@@ -215,7 +215,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized void removeObjects(Object[] objects) {
+		public synchronized void removeObjects(Object... objects) {
 			super.removeObjects(objects);
 		}
 
@@ -230,12 +230,12 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized Object replaceObjectAtIndex(V object, int index) {
+		public synchronized V replaceObjectAtIndex(V object, int index) {
 			return super.replaceObjectAtIndex(object, index);
 		}
 
 		@Override
-		public synchronized void replaceObjectsInRange(NSRange range, NSArray<V> otherArray, NSRange otherRange) {
+		public synchronized void replaceObjectsInRange(NSRange range, NSArray<? extends V> otherArray, NSRange otherRange) {
 			super.replaceObjectsInRange(range, otherArray, otherRange);
 		}
 
@@ -247,26 +247,6 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		@Override
 		public synchronized void sortUsingComparator(NSComparator comparator) throws ComparisonException {
 			super.sortUsingComparator(comparator);
-		}
-
-		@Override
-		protected synchronized void _ensureCapacity(int capacity) {
-			super._ensureCapacity(capacity);
-		}
-
-		@Override
-		protected synchronized void _initializeWithCapacity(int capacity) {
-			super._initializeWithCapacity(capacity);
-		}
-
-		@Override
-		protected synchronized boolean _mustRecomputeHash() {
-			return super._mustRecomputeHash();
-		}
-
-		@Override
-		protected synchronized void _setMustRecomputeHash(boolean change) {
-			super._setMustRecomputeHash(change);
 		}
 
 		@Override
@@ -326,7 +306,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized Object firstObjectCommonWithArray(NSArray<?> otherArray) {
+		public synchronized V firstObjectCommonWithArray(NSArray<?> otherArray) {
 			return super.firstObjectCommonWithArray(otherArray);
 		}
 
@@ -366,7 +346,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized void makeObjectsPerformSelector(NSSelector selector, Object[] parameters) {
+		public synchronized void makeObjectsPerformSelector(NSSelector selector, Object... parameters) {
 			super.makeObjectsPerformSelector(selector, parameters);
 		}
 
@@ -391,7 +371,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		protected synchronized V[] objectsNoCopy() {
+		protected synchronized Object[] objectsNoCopy() {
 			return super.objectsNoCopy();
 		}
 
@@ -449,7 +429,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		if(!(array instanceof NSMutableArray)) {
 			return array;
 		}
-		return new ThreadSafeArray((NSMutableArray)array);
+		return new ThreadSafeArray(array);
 	}
 
 	public static <T> NSMutableArray<T> synchronizedArray(NSMutableArray<T> array) {

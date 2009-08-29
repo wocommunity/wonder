@@ -51,20 +51,6 @@ public class ERDIVEditRelationshipPage extends ERD2WEditRelationshipPage impleme
         return super.displayQueryAction();
     }
     
-    @Override
-    public WOComponent newObjectAction() {
-    	WOComponent nextPage = super.newObjectAction(); 
-    	d2wContext().takeValueForKey("new", Keys.subTask);
-    	return nextPage;
-    }
-    
-    @Override
-    public WOComponent returnAction() {
-    	if (displayNew()) dataSource().editingContext().revert();
-        _editingContext.saveChanges();
-    	return displayQueryAction();
-    }
-    
     // accessors
     public String stylesheet() {
     	return (String) d2wContext().valueForKey(ERDIVPageInterface.Keys.Stylesheet);
@@ -80,21 +66,6 @@ public class ERDIVEditRelationshipPage extends ERD2WEditRelationshipPage impleme
     
     public String newPageConfiguration() {
     	return "EditEditRelationship" + d2wContext().entity().name();		// FIXME: change to CreateEditRelationship
-    }
-    
-    /*
-     * Use <code>readOnly</code> rule to override the default behavior.
-     * 
-     * @see er.directtoweb.pages.ERD2WEditRelationshipPage#isEntityReadOnly()
-     */
-    @Override
-    public boolean isEntityReadOnly() {
-        boolean flag = super.isEntityReadOnly(); // First, check super's implementation.
-        
-        // Check readOnly.
-        flag = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey(Keys.readOnly), flag);
-        
-        return flag;
     }
     
     // R/R

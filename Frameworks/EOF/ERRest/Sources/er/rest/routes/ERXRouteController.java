@@ -1,17 +1,23 @@
 package er.rest.routes;
 
+import java.lang.reflect.Field;
+
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
@@ -23,6 +29,8 @@ import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
+import er.rest.format.IERXRestParser;
+import er.rest.format.IERXRestWriter;
 
 /**
  * ERXRouteController is equivalent to a Rails controller class. It's actually a direct action, and has the same naming
@@ -170,6 +178,15 @@ public class ERXRouteController extends WODirectAction {
 		_objects = _route.keysWithObjects(_routeKeys, delegate);
 		return _objects;
 	}
+	
+	/**
+	 * Returns the default format to use if no other format is found, or if the requested format is invalid.
+	 *  
+	 * @return the default format to use if no other format is found, or if the requested format is invalid
+	 */
+	protected ERXRestFormat defaultFormat() {
+		return ERXRestFormat.XML;
+	}
 
 	/**
 	 * Returns the format that the user requested (usually based on the request file extension).
@@ -177,8 +194,33 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the format that the user requested
 	 */
 	public ERXRestFormat format() {
-		String typeKey = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
-		ERXRestFormat format = ERXRestFormat.formatNamed(typeKey);
+		String type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
+		/*
+		if (type == null) {
+			List<String> acceptTypesList = new LinkedList<String>();
+			String accept = request().headerForKey("Accept");
+			if (accept != null) {
+				String[] acceptTypes = accept.split(",");
+				for (String acceptType : acceptTypes) {
+					int semiIndex = acceptType.indexOf(";");
+					if (semiIndex == -1) {
+						acceptTypesList.add(acceptType);
+					}
+					else {
+						acceptTypesList.add(acceptType.substring(0, semiIndex));
+					}
+				}
+			}
+		}
+		*/
+		
+		ERXRestFormat format;
+		if (type == null) {
+			format = defaultFormat();
+		}
+		else {
+			format = ERXRestFormat.formatNamed(type);
+		}
 		return format;
 	}
 
@@ -202,7 +244,12 @@ public class ERXRouteController extends WODirectAction {
 	public ERXRestRequestNode requestNode() {
 		if (_requestNode == null) {
 			try {
-				_requestNode = format().parser().parseRestRequest(request(), format().delegate());
+				ERXRestFormat format = format();
+				IERXRestParser parser = format.parser();
+				if (parser == null) {
+					throw new IllegalStateException("There is no parser for the format '" + format.name() + "'.");
+				}
+				_requestNode = parser.parseRestRequest(request(), format().delegate());
 			}
 			catch (Throwable t) {
 				throw new RuntimeException("Failed to parse a " + format() + " request.", t);
@@ -552,7 +599,11 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public WOResponse response(ERXRestFormat format, EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		WOResponse response = WOApplication.application().createResponseInContext(context());
-		format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate()), new ERXWORestResponse(response), format.delegate());
+		IERXRestWriter writer = format.writer();
+		if (writer == null) {
+			throw new IllegalStateException("There is no writer for the format '" + format.name() + "'.");
+		}
+		writer.appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate()), new ERXWORestResponse(response), format.delegate());
 		return response;
 	}
 
@@ -622,7 +673,11 @@ public class ERXRouteController extends WODirectAction {
 	public WOResponse response(ERXRestFormat format, Object value, ERXKeyFilter filter) {
 		try {
 			WOResponse response = WOApplication.application().createResponseInContext(context());
-			format.writer().appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate()), new ERXWORestResponse(response), format.delegate());
+			IERXRestWriter writer = format.writer();
+			if (writer == null) {
+				throw new IllegalStateException("There is no writer for the format '" + format.name() + "'.");
+			}
+			writer.appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate()), new ERXWORestResponse(response), format.delegate());
 			return response;
 		}
 		catch (ObjectNotAvailableException e) {
@@ -685,8 +740,16 @@ public class ERXRouteController extends WODirectAction {
 			checkAccess();
 			WOActionResults results = super.performActionNamed(s);
 			if (results == null) {
-				results = response(ERXKeyFilter.filterWithAttributes(), null);
+				results = response(null, ERXKeyFilter.filterWithAttributes());
 			}
+
+			WOContext context = context();
+			WOSession session = context._session();
+			if (session != null && session.storesIDsInCookies() && results instanceof WOResponse) {
+				WOResponse response = (WOResponse)results;
+				session._appendCookieToResponse(response);
+			}
+
 			return results;
 		}
 		catch (ObjectNotAvailableException e) {
@@ -704,7 +767,7 @@ public class ERXRouteController extends WODirectAction {
 	 * Calls pageWithName.
 	 * 
 	 * @param <T>
-	 *            the type of component to
+	 *            the type of component to return
 	 * @param componentClass
 	 *            the component class to lookup
 	 * @return the created component
@@ -712,5 +775,31 @@ public class ERXRouteController extends WODirectAction {
 	@SuppressWarnings("unchecked")
 	public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
 		return (T) super.pageWithName(componentClass.getName());
+	}
+
+	/**
+	 * Returns another controller, passing the required state on.
+	 * 
+	 * @param <T>
+	 *            the type of controller to return
+	 * @param controllerClass
+	 *            the controller class to lookup
+	 * @return the created controller
+	 */
+	public <T extends ERXRouteController> T controller(Class<T> controllerClass) {
+		try {
+			T controller = controllerClass.getConstructor(WORequest.class).newInstance(request());
+			controller._route = _route;
+			controller._editingContext = _editingContext;
+			controller._routeKeys = _routeKeys;
+			controller._objects = _objects;
+			Field contextField = WOAction.class.getDeclaredField("_context");
+			contextField.setAccessible(true);
+			contextField.set(controller, context());
+			return controller;
+		}
+		catch (Exception e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
 	}
 }

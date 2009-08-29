@@ -1,0 +1,39 @@
+HasBrowserItems : WOConditional {
+  condition = browserList.count;
+}
+
+ItemRepetition: WORepetition {
+	list = browserList;
+	item = browserItem;
+}
+
+AddButton: AjaxUpdaterButton {
+	action = editValues;
+	class = "D2WAjaxEditToManyFault_Add";
+	container = d2wContext.container;
+}
+
+AddBox: WOGenericContainer {
+	elementName = "div";
+	id = addBoxID;
+}
+
+RemoveBox: WOGenericContainer {
+	elementName = "li";
+	id = removeBoxID;
+	class = "D2WAjaxEditToManyFault";
+}
+
+ToOneLink: AjaxUpdaterLink {
+	action = toOneAction;
+	disabled = d2wContext.disabled;
+	string = toOneDescription;
+	container = d2wContext.container;
+}
+
+DeleteButton: AjaxRequestButton {
+	action = removeFromToManyRelationshipAction;
+	value = "x";
+	onSuccess = onSuccess;
+	class = "D2WAjaxEditToManyFault_Delete";
+}

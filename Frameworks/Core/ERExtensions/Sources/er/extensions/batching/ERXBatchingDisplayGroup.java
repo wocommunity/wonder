@@ -8,10 +8,8 @@ import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
-import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -29,7 +27,7 @@ import er.extensions.appserver.ERXDisplayGroup;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXEOGlobalIDUtilities;
-import er.extensions.eof.ERXRecursiveBatchFetching;
+import er.extensions.eof.ERXBatchFetchUtilities;
 import er.extensions.eof.ERXS;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
@@ -349,14 +347,14 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 				EOGlobalID gid = entity.globalIDForRow(pkDict);
 				gids.addObject(gid);
 			}
-			NSMutableArray objects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, gids);
+			NSMutableArray objects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, gids, spec.refreshesRefetchedObjects());
 
 			NSArray prefetchingRelationshipKeyPaths = _prefetchingRelationshipKeyPaths;
 			if (prefetchingRelationshipKeyPaths == null || prefetchingRelationshipKeyPaths.count() == 0) {
 				prefetchingRelationshipKeyPaths = spec.prefetchingRelationshipKeyPaths();
 			}
 			if (prefetchingRelationshipKeyPaths != null && prefetchingRelationshipKeyPaths.count() > 0) {
-				ERXRecursiveBatchFetching.batchFetch(objects, prefetchingRelationshipKeyPaths, true);
+				ERXBatchFetchUtilities.batchFetch(objects, prefetchingRelationshipKeyPaths, ! spec.refreshesRefetchedObjects());
 			}
 
 			ERXS.sort(objects, spec.sortOrderings());

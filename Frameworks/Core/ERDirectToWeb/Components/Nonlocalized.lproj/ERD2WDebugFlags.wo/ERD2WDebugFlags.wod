@@ -1,5 +1,5 @@
 Show: WOConditional {
-	condition = application.isDevelopmentMode;
+	condition = shouldShow;
 }
 
 Log4J: WOHyperlink {
@@ -17,6 +17,15 @@ D2W: WOHyperlink {
 SQL: WOHyperlink {
 	action = toggleAdaptorLogging;
 	class = ^linkClass;
+}
+
+SQLEnabled: WOConditional {
+    condition = adaptorLoggingEnabled;
+}
+
+SQLNotEnabled: WOConditional {
+    condition = adaptorLoggingEnabled;
+    negate = true;
 }
 
 CSSUrl : WOResourceURL {
@@ -40,15 +49,46 @@ Dump: WOHyperlink {
 	directActionName = "dumpCreatedKeys";
 	class = ^linkClass;
 }
+
 WOStats: WOHyperlink {
 	action = statisticsPage;
 	class = ^linkClass;
 }
+
 Localization: WOHyperlink {
 	actionClass = "ERXDirectAction";
 	directActionName = "editLocalizedFiles";
 	class = ^linkClass;
 }
+
+DetailedPageMetrics: WOHyperlink {
+	action = toggleDetailedPageMetrics;
+	class = ^linkClass;
+}
+
+IfDetailedMetricsEnabled: WOConditional {
+    condition = detailedMetricsEnabled;
+}
+
+IfNotDetailedMetricsEnabled: WOConditional {
+    condition = detailedMetricsEnabled;
+    negate = true;
+}
+
+IfMetricsEnabled: WOConditional {
+    condition = metricsEnabled;
+}
+
+IfNotMetricsEnabled: WOConditional {
+    condition = metricsEnabled;
+    negate = true;
+}
+
+PageMetrics: WOHyperlink {
+	action = togglePageMetrics;
+	class = ^linkClass;
+}
+
 Test: WOHyperlink {
 	actionClass = "er.selenium.SeleniumStartTesting";
 	class = ^linkClass;

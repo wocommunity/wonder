@@ -68,10 +68,10 @@ public class ERMimeType {
       int slashIndex = mimeTypeStr.indexOf('/');
       int otherSlashIndex = otherMimeTypeStr.indexOf('/');
       String base = mimeTypeStr.substring(0, slashIndex);
-      String otherBase = otherMimeTypeStr.substring(0, slashIndex);
+      String otherBase = otherMimeTypeStr.substring(0, otherSlashIndex);
       if (base.equals(otherBase)) {
         String type = mimeTypeStr.substring(slashIndex + 1);
-        String otherType = otherMimeTypeStr.substring(slashIndex + 1);
+        String otherType = otherMimeTypeStr.substring(otherSlashIndex + 1);
         matches = "*".equals(type) || "*".equals(otherType) || type.equals(otherType);
       }
       else {

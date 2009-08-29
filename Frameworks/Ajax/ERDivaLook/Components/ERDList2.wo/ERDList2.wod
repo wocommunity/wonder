@@ -1,17 +1,16 @@
 Content2: WOComponentContent {}
 
 List1: ERXD2WList { 	
-	pageConfiguration = ^listConfigurationName;
+	pageConfiguration = ^listEmbeddedConfigurationName;
 	dataSource = detailDataSource;
 	entityName = ^destinationEntityName;
 	settings = settings;
 }
 
-Select: WOSubmitButton {
-	action = createObjectAction;
-	value = ^createButtonLabel;
-}
-
-ShowActions: WOConditional {
-	condition = ^showActions;
+CollapseContainer: D2WAjaxCollapsibleComponentContent {
+	_unroll = true;
+	allowCollapsing = ^allowCollapsing;
+	closedLabel = closedLabelString;
+	submitActionName = submitActionName;
+	container = container;
 }

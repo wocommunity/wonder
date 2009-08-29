@@ -21,7 +21,7 @@ import er.extensions.foundation.ERXFileUtilities;
  * @binding url url to get content from.
  * @binding encoding content encoding to use.
  *
- * @created ak on 31.10.05
+ * @author ak on 31.10.05
  * @project ERExtensions
  */
 

@@ -7,6 +7,7 @@
 package er.extensions.foundation;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -23,14 +24,12 @@ import er.extensions.eof.ERXConstant;
 
 /**
  * Utilities for use with key value coding. You could instantiate one of these in your app-startup:
- * <code>
- *
- * public NSKeyValueCodingUtilities statics = ERXKeyValueCodingUtilities.Statics;
- * 
+ * <pre><code>
  * ERXKeyValueCodingUtilities.registerClass(SomeClass.class); 
- * myValue = valueForKeyPath("statics.SomeClass.SOME_FIELD");
- * </code>
- * 
+ * NSKeyValueCodingAdditions statics = ERXKeyValueCodingUtilities.Statics;
+ * myValue = statics.valueForKeyPath("SomeClass.SOME_FIELD");
+ * </code></pre>
+ * Also has utilities for getting and private fields and methods on an object. 
  * @author ak
  */
 public class ERXKeyValueCodingUtilities {
@@ -189,7 +188,11 @@ public class ERXKeyValueCodingUtilities {
     		if(field != null) {
         		return field.get(target);
     		} else {
-    	    	throw new NSKeyValueCoding.UnknownKeyException("Key "+ key + " not found", target, key);
+    			Method method = accessibleMethodForKey(target, key);
+    			if(method != null) {
+    				return method.invoke(target, null);
+    			}
+    			throw new NSKeyValueCoding.UnknownKeyException("Key "+ key + " not found", target, key);
     		}
     	}
     	catch (IllegalArgumentException e) {
@@ -198,6 +201,9 @@ public class ERXKeyValueCodingUtilities {
     	catch (IllegalAccessException e) {
     		throw NSForwardException._runtimeExceptionForThrowable(e);
     	}
+		catch (InvocationTargetException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
     }
 
     public static void takePrivateValueForKey(Object target, Object value, String key) {
@@ -224,22 +230,49 @@ public class ERXKeyValueCodingUtilities {
     	}
     	return f;
     }
-    
+
+    private static Method accessibleMethodForKey(Object target, String key) {
+    	Method f = methodForKey(target, key);
+    	if(f != null) {
+    		f.setAccessible(true);
+    	}
+    	return f;
+    }
 
     public static Field fieldForKey(Object target, String key) {
-    	Field field = null;
+    	Field result = null;
     	Class c = target.getClass();
-    	while(field == null && c != null) {
+    	while(result == null && c != null) {
     		try {
-    			field = c.getDeclaredField(key);
-    			if(field != null) { 
-    				return field;
+    			result = c.getDeclaredField(key);
+    			if(result != null) { 
+    				return result;
     			}
     		}
     		catch (SecurityException e) {
     			throw NSForwardException._runtimeExceptionForThrowable(e);
     		}
     		catch (NoSuchFieldException e) {
+    			c = c.getSuperclass();
+    		}
+    	}
+    	return null;
+    }
+
+    public static Method methodForKey(Object target, String key) {
+    	Method result = null;
+    	Class c = target.getClass();
+    	while(result == null && c != null) {
+    		try {
+    			result = c.getDeclaredMethod(key);
+    			if(result != null) { 
+    				return result;
+    			}
+    		}
+    		catch (SecurityException e) {
+    			throw NSForwardException._runtimeExceptionForThrowable(e);
+    		}
+    		catch (NoSuchMethodException e) {
     			c = c.getSuperclass();
     		}
     	}

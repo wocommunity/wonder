@@ -1,0 +1,11 @@
+Relationship : ERD2WQueryToOneRelationship2 {
+	localContext = localContext;
+	displayGroup = displayGroup;
+}
+
+FilterButton: AjaxUpdaterButton {
+	action = toggleFilter;
+	container = container;
+	value = value;
+	name = buttonName;
+}

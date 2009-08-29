@@ -151,6 +151,9 @@ public class BTDataCreator {
 	private void createTables(boolean dropTables) {
 		for (Enumeration e = EOModelGroup.defaultGroup().models().objectEnumerator(); e.hasMoreElements();) {
 			final EOModel eomodel = (EOModel) e.nextElement();
+			if(eomodel.name().toLowerCase().endsWith("prototypes")) {
+			    continue;
+			}
 			EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, eomodel.name());
 			dbc.lock();
 			try {
@@ -170,6 +173,9 @@ public class BTDataCreator {
 				log.info("Creating tables: " + eomodel.name());
 				ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, true);
 				if (eomodel.name().equals("BugTracker")) {
+				    if(dropTables) {
+				        ERXJDBCUtilities.executeUpdateScript(channel, "drop table BugTag;", true);
+				    }
 					ERTaggableEntity0.upgrade(ec, channel, eomodel, Bug.ENTITY_NAME);
 					InputStream is = ERXFileUtilities.inputStreamForResourceNamed("populate.sql", "BTBusinessLogic", null);
 					String sql = ERXFileUtilities.stringFromInputStream(is);
@@ -218,9 +224,10 @@ public class BTDataCreator {
 		requirementTypes = RequirementType.clazz.allObjects(ec).mutableClone();
 		requirementSubTypes = RequirementSubType.clazz.allObjects(ec).mutableClone();
 
-		log.info("Creating users");
+		int maxUsers = 20;
+		log.info("Creating users: " + maxUsers);
 
-		for (int i = 100; i < 150; i++) {
+		for (int i = 100; i < 100 + maxUsers; i++) {
 			People user = (People) People.clazz.createAndInsertObject(ec);
 			users.addObject(user);
 			user.setLogin("user" + i);
@@ -274,11 +281,11 @@ public class BTDataCreator {
 		log.info("Saving...");
 		ec.saveChanges();
 
-		int MAX = 500;
+		int maxItems = maxUsers * 10;
 
-		log.info("Creating bugs: " + MAX);
+		log.info("Creating bugs: " + maxItems);
 
-		for (int i = 0; i < MAX; i++) {
+		for (int i = 0; i < maxItems; i++) {
 			People.clazz.setCurrentUser(randomUser());
 			Bug bug = (Bug) Bug.clazz.createAndInsertObject(ec);
 			bugs.addObject(bug);
@@ -297,9 +304,9 @@ public class BTDataCreator {
 			addComments(bug);
 		}
 
-		log.info("Creating requirements: " + MAX);
+		log.info("Creating requirements: " + maxItems);
 
-		for (int i = 0; i < MAX; i++) {
+		for (int i = 0; i < maxItems; i++) {
 			People.clazz.setCurrentUser(randomUser());
 			Requirement bug = (Requirement) Requirement.clazz.createAndInsertObject(ec);
 			requirements.addObject(bug);
@@ -321,9 +328,9 @@ public class BTDataCreator {
 			addComments(bug);
 		}
 
-		log.info("Creating test items: " + MAX * 9);
+		log.info("Creating test items: " + maxItems * 2);
 
-		for (int i = 0; i < MAX * 9; i++) {
+		for (int i = 0; i < maxItems * 2; i++) {
 			People.clazz.setCurrentUser(randomUser());
 			TestItem testItem = (TestItem) TestItem.clazz.createAndInsertObject(ec);
 			testItems.addObject(testItem);

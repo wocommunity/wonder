@@ -13,19 +13,19 @@ ActiveImage2: WOActiveImage {
 
 ActiveImage3: WOActiveImage {
 	action = showEntityAction;
-	filename = "graphics/view.gif";
+	filename = "graphics/buttons/view.gif";
 	framework = "app";
 }
 
 ActiveImage4: WOActiveImage {
 	action = newRuleAction;
-	filename = "graphics/add.gif";
+	filename = "graphics/buttons/add.gif";
 	framework = "app";
 }
 
 ActiveImage5: WOActiveImage {
 	action = newKeyValueAction;
-	filename = "graphics/newkeyvalue.gif";
+	filename = "graphics/buttons/newkeyvalue.gif";
 	framework = "app";
 	border = 0;
 }
@@ -45,8 +45,6 @@ ActiveImage9: WOActiveImage {
 }
 
 Attributes:	WORepetition 	{ list = selectedEntity.gsveoAttributes; item = currentAttribute; }
-
-Attributes2:	WORepetition 	{ list = selectedEntity.attributes; item = currentAttribute; }
 
 CheckBox1: WOCheckBox {
 	checked = selectedRule.onInsert;
@@ -224,13 +222,13 @@ Image1: WOImage {
 
 Image10: WOImage {
 	border = 0;
-	filename = "graphics/cancel.gif";
+	filename = "graphics/buttons/cancel.gif";
 	framework = "app";
 }
 
 Image11: WOImage {
 	border = 0;
-	filename = "graphics/delete.gif";
+	filename = "graphics/buttons/delete.gif";
 	framework = "app";
 }
 
@@ -278,7 +276,7 @@ Image9: WOImage {
 
 ImageButton1: WOImageButton {
 	border = 0;
-	filename = "graphics/save.gif";
+	filename = "graphics/buttons/save.gif";
 	framework = "app";
 	action = saveAction;
 }

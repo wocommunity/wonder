@@ -529,6 +529,21 @@ public class ERXKey<T> {
 	public ERXAndQualifier containsAll(String[] tokens) {
 		return ERXQ.containsAll(_key, tokens);
 	}
+	
+	/**
+	 * <p>Returns a qualifier that evaluates to true when the given to many key
+	 * contains the given object.</p>
+	 * 
+	 * <p>Equivalent to new ERXKeyValueQualifier(key, EOQualifier.OperatorContains,
+	 * value).</p>
+	 * 
+	 * @param obj
+	 *            the object
+	 * @return an EOKeyValueQualifier
+	 */
+	public ERXKeyValueQualifier containsObject(Object obj) {
+		return ERXQ.containsObject(_key, obj);
+	}
 
 	@Override
 	public int hashCode() {

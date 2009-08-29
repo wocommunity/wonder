@@ -330,7 +330,7 @@ public class ERXMigrator {
 		if (migratorVersion.intValue() != ERXMigrator.LATEST_VERSION) {
 			boolean done = false;
 			for (int versionNum = migratorVersion.intValue() + 1; !done && versionNum <= migrateToVersion; versionNum++) {
-				String migrationClassPrefix = ERXProperties.stringForKeyWithDefault(modelName + ".MigrationClassPrefix", modelName);
+				String migrationClassPrefix = ERXProperties.stringForKeyWithDefault(modelName + ".MigrationClassPrefix", modelName).trim();
 				String erMigrationClassName = migrationClassPrefix + versionNum;
 				String vendorMigrationClassName = migrationClassPrefix + ERXJDBCUtilities.databaseProductName(model) + versionNum;
 				Class erMigrationClass;

@@ -9,7 +9,7 @@ import com.webobjects.appserver.WOContext;
  * @binding value value
  * @binding escapeHTML escape HTML
  *
- * @created ak on Sat Sep 27 2003
+ * @author ak on Sat Sep 27 2003
  * @project ERExtensions
  */
 

@@ -75,6 +75,32 @@ function calendar_hide_check(evt) {
   }
 }
 
+// CH: new method start
+/* Fire the onChange event of the text input that we are setting so that it plays nice with
+   AjaxObserveField etc. that use this notification.  */
+function fireOnChangeEvent() 
+{
+	var evt;
+	var el = calendar.input_element;
+	if (document.createEvent) {
+		evt = document.createEvent("HTMLEvents");
+		if (evt.initEvent) {
+			evt.initEvent("change", false, false);
+		}
+		else {
+			evt = false;
+		}
+		el.dispatchEvent(evt);
+	}
+	else {
+		if(document.createEventObject) {
+			var evt=document.createEventObject();
+			el.fireEvent("onChange", evt);
+		}
+	}
+}
+// CH: new method done
+
 // Input control keypress handler.
 function input_keypress(evt) {
   calendar_hide();
@@ -187,6 +213,19 @@ function calendar_out(evt) {
 function calendar_click(evt) {
   var date = calendar.dates[event_target(evt).id.substr('calendar_day_'.length)];
   calendar.input_element.value = date_to_string(date, calendar.format);
+  
+  //CH: Start add eval of onDateSelect
+  if(calendar.onDateSelect) {
+    eval(calendar.onDateSelect);
+  }
+  //CH: Done add eval of onDateSelect
+    
+  //CH: Start add JS firing of onChange for text input
+  if (calendar.fireEvent) {
+    fireOnChangeEvent();
+  }
+  //CH: Done add JS firing of onChange for text input
+    
   calendar_hide();
 }
 
@@ -314,12 +353,23 @@ function calendar_update() {
   See calendar_example.html for example usage.
 */
 function calendar_open(input_element, options) {
+  build_calendar(input_element);  // CH: added this, see method below
   calendar.input_element = input_element;
   options = options || {};
   calendar.format = options.format;
   if (options.month_names) {
     calendar.month_names = options.month_names;
   }
+  
+  // CH: Start add init of new options
+  if(options.onDateSelect) {
+    calendar.onDateSelect = options.onDateSelect;
+  }
+  if(options.ajaxSupport) {
+    calendar.fireEvent = true;
+  }
+  // CH: Done add init of new options
+  
   if (options.day_names) {
     calendar.day_names = options.day_names;
   }
@@ -349,7 +399,7 @@ function calendar_open(input_element, options) {
   images[2].src = images_dir + '/' + NEXT_MONTH_IMAGE;
   images[3].src = images_dir + '/' + NEXT_YEAR_IMAGE;
   add_event('click', calendar_hide_check);
-  input_element.onkeypress = input_keypress;
+  input_element.onkeydown = input_keypress;  // CH use onkeydown instead of onkeypress to trap Tab key too
   // Position calendar by input element.
   calendar.element.style.left = left(input_element) + 'px';
   calendar.element.style.top = (top(input_element) + input_element.offsetHeight) + 'px';
@@ -370,43 +420,49 @@ function calendar_open(input_element, options) {
 
 
 /*
-  Build calendar table.
-*/
-if (get_element('calendar_control') == null) {  // CH only do this once per page or FireFox gets confused
-	document.write('<table id="calendar_control" style="display:none; z-index: 10000;">');// CH add z-index so this overlays AMD
-	// Header row.
-	document.write('<tr>');
-	document.write('<td id="calendar_prev_year" title="Previous year"></td>');
-	document.write('<td id="calendar_prev_month" title="Previous month"></td>');
-	document.write('<td id="calendar_header" colspan="3"></td>');
-	document.write('<td id="calendar_next_month" title="Next month"></td>');
-	document.write('<td id="calendar_next_year" title="Next year"></td>');
-	
-	document.write('</tr>');
-	// Day letters row.
-	document.write('<tr>');
-	for (var i=0; i < 7; i++) {
-	  document.write('<td class="day_letter"></td>');
+ * Adds the calendar table after the BODY when the calendar is first opened.
+ * This is a total re-write / conversion of static block to function to better support using this inside an AjaxModalDialog.
+ */
+function build_calendar(input_element) {
+	if (get_element('calendar_control') == null) {  // CH only do this once per page or FireFox gets confused
+		var firstRow;
+		var calendarControl = new Element("table", {id: "calendar_control", style: "position: absolute; display:none; z-index: 10001;"}).update(
+          firstRow = new Element("tr", {}));
+		firstRow.appendChild(new Element("td", {id: "calendar_prev_year", title: "Previous year"}));
+		firstRow.appendChild(new Element("td", {id: "calendar_prev_month", title: "Previous month"}));
+		firstRow.appendChild(new Element("td", {id: "calendar_header", colspan: "3"}));
+		firstRow.appendChild(new Element("td", {id: "calendar_next_month", title: "Next month"}));
+		firstRow.appendChild(new Element("td", {id: "calendar_next_year", title: "Next year"}));
+		
+		var secondRow = new Element("tr", {});
+		calendarControl.appendChild(secondRow);
+		for (var i=0; i < 7; i++) {
+	  	  secondRow.appendChild(new Element("td", {'class': "day_letter"}));
+        }
+        
+        for(var n=1, i=0; i<6 ;i++) {
+		  var dayRow = new Element("tr", {});
+		  calendarControl.appendChild(dayRow);
+		  for(var j=0; j<7; j++,n++) {
+	  		dayRow.appendChild(new Element("td", {id: "calendar_day_" + n, 'class': "day_number normal"}));
+	  	  }
+	  	}
+	  	
+   		document.body.insert({'top': calendarControl});
+		calendar.element = get_element('calendar_control');
 	}
-	document.write('</tr>');
-	// Day numbers rows.
-	for(var n=1, i=0; i<6 ;i++) {
-	  document.write('<tr>');
-	  for(var j=0; j<7; j++,n++) {
-	    document.write('<td id="calendar_day_' + n + '" class="day_number normal"></td>');
-	  }
-	  document.write('</tr>');
-	}
-	document.write('</table>');
 }
+
 
 /*
   Namespace globals.
 */
 calendar = {                        // Calendar properties.
   dates: new Array(6*7),            // Date values for each calendar day.
-  element: get_element('calendar_control'),
+  element: undefined,				// The calendar table.  CH: lazy init
   input_element: undefined,         // Calendar input element, set by calendar_show().
+  onDateSelect: undefined,          // CH: add function called when user selects a date
+  fireEvent: false,					// CH: add should event listener for text field be fired upon date select?
   input_date: undefined,            // Date value of input element, set by calendar_show().
   month_date: undefined,            // First day of calendar month.
   format: undefined,                // The date display format, set by calendar_show().

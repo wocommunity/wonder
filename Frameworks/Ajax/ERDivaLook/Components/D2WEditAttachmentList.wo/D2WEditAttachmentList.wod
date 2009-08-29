@@ -1,0 +1,37 @@
+HasAttachments: WOConditional {
+	condition = objectPropertyValue.count;
+}
+
+FileUpload : ERAjaxAttachmentUpload {
+	attachment = attachment;
+	editingContext = object.editingContext;
+	configurationName = configurationName;
+	onComplete = onComplete;
+}
+
+DisplayAttachmentDownloadLink: ERAttachmentLink {
+	attachment = attachment;
+	class = "D2WDisplayAttachment download";
+}
+
+FileName: WOString {
+	value = attachment.originalFileName;
+}
+
+Icon: ERAttachmentIcon {
+	attachment = attachment;
+	size = d2wContext.size;
+}
+
+DeleteButton: AjaxUpdaterButton {
+	action = removeAttachment;
+	class = "delete";
+	value = "x";
+	title = "Delete";
+	container = container;
+}
+
+Repetition: WORepetition {
+	list = objectPropertyValue;
+	item = attachment;
+}

@@ -16,6 +16,8 @@ import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.validation.ERXValidation;
 
 /**
  * <p>
@@ -31,6 +33,13 @@ import er.extensions.foundation.ERXProperties;
  * ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, fileUploadFinalFilePath, fileUploadFilePath, mimeType, configurationName, ownerID);
  * </code>
  *
+ * <p>
+ * Note that for the attachment binding, you do not create the attachment instance and
+ * pass it in. The attachment processor inside of ERAttachmentUpload creates an appropriate 
+ * attachment instance for you (using the editing context you provide) and simply binds it 
+ * back to you when the upload is complete.
+ * </p>
+ * 
  * @author mschrag
  * @binding attachment the binding to store the newly created attachment in
  * @binding editingContext the editing context to create the attachment in
@@ -39,6 +48,8 @@ import er.extensions.foundation.ERXProperties;
  * @binding ajax (optional) if true, AjaxFileUpload is used, if false WOFileUpload is used
  * @binding configurationName (optional) the configuration name for this attachment (see top level documentation)
  * @binding ownerID (optional) a string ID of the "owner" of this attachment (Person.primaryKey for instance)
+ * @binding width (optional) the desired width of the attachment 
+ * @binding height (optional) the desired height of the attachment 
  * @binding others all AjaxFileUpload bindings are proxied
  * @binding cleanup (optional) if true, the old attachment binding value will be deleted 
  * 
@@ -132,8 +143,23 @@ public class ERAttachmentUpload extends WOComponent {
     String mimeType = (String) valueForBinding("mimeType");
     
     String ownerID = (String) valueForBinding("ownerID");
+
+    int width = ERXValueUtilities.intValueWithDefault(valueForBinding("width"), -1);
+    if (width == -1) {
+    	width = ERXProperties.intForKeyWithDefault("er.attachment." + configurationName + ".width", -1);
+    	if (width == -1) {
+    		width = ERXProperties.intForKeyWithDefault("er.attachment.width", -1);
+    	}
+    }
+    int height = ERXValueUtilities.intValueWithDefault(valueForBinding("height"), -1);
+    if (height == -1) {
+    	height = ERXProperties.intForKeyWithDefault("er.attachment." + configurationName + ".height", -1);
+    	if (height == -1) {
+    		height = ERXProperties.intForKeyWithDefault("er.attachment.height", -1);
+    	}
+    }
     
-    ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, uploadedFile, _filePath, mimeType, configurationName, ownerID);
+    ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, uploadedFile, _filePath, mimeType, width, height, configurationName, ownerID);
     if (ERXComponentUtilities.booleanValueForBinding(this, "cleanup", false)) {
       ERAttachment oldAttachment = (ERAttachment) valueForBinding("attachment");
       if (oldAttachment != null) {

@@ -1,0 +1,6 @@
+Toggle: AjaxUpdaterButton {
+	action = toggleClicked;
+	class = styleClass;
+	value = displayString;
+	container = ^d2wContext.container;
+}

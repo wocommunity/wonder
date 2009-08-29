@@ -11,19 +11,21 @@ import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXEqualator;
 import er.extensions.foundation.ERXStringUtilities;
+import org.apache.log4j.Logger;
 
 import java.util.Enumeration;
-import org.apache.log4j.Logger;
 
 /**
  * A fancy to-many relationship editor component.
  * @author Travis Cripps
  *
- * @binding displayString
- * @binding item
- * @binding list
- * @binding selections
- * @binding sortKey
+ * @binding displayString for the items in the menu, this should be a keyPath that will be resolved from each item to 
+ * produce the display string for the item.
+ * @binding item to use as an iteration variable
+ * @binding list of items to display; equivalent to the possible values from which a user might choose
+ * @binding selections items from the list that are selected.  The resulting selections will be pushed back into the 
+ * parent component's variable that is bound to the <code>selections</code> binding.
+ * @binding sortKey (optional) to use in order to produce a sorted menu
  */
 public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent {
 
@@ -92,7 +94,15 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
      */
     public NSArray selections() {
         if (null == _selections) {
-            _selections = selectionsFromBindings();
+            NSMutableArray selections = new NSMutableArray();
+            // Prune out any items that are not in the base list.
+            for (Enumeration selectionsEnum = selectionsFromBindings().objectEnumerator(); selectionsEnum.hasMoreElements();) {
+                Object aSelection = selectionsEnum.nextElement();
+                if (maybeSortedList().containsObject(aSelection)) {
+                    selections.addObject(aSelection);
+                }
+            }
+            _selections = selections.immutableClone();
         }
         return _selections;
     }
@@ -208,7 +218,7 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
             for (Enumeration offsetsEnum = itemOffsets.objectEnumerator(); offsetsEnum.hasMoreElements();) {
                 String offsetString = (String)offsetsEnum.nextElement();
                 int offset = ERXStringUtilities.integerWithString(offsetString);
-                if (offset < list.count()) {
+                if (offset >= 0 && offset < list.count()) {
                     selections.addObject(list.objectAtIndex(offset));
                 }
             }
@@ -304,7 +314,7 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         sb.append("var ").append(editorName()).append(" = new ERXJSToManyRelationshipEditor();\n");
         sb.append(editorName).append(".elementID = '").append(safeElementID).append("';\n");
         sb.append(editorName).append(".possibleValues = ").append(possibleValuesHashForScript()).append(";\n");
-        sb.append(editorName).append(".selectedValues = ").append(selectedValuesArrayForScript());
+        sb.append(editorName).append(".selectedValues = ").append(selectedValuesArrayForScript()).append(";");
         return sb.toString();
     }
 
@@ -317,6 +327,9 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         NSMutableArray jsHashValues = new NSMutableArray();
         for (int i = 0; i < valuesDict.count(); i++) {
             String displayString = (String)valuesDict.objectForKey(i);
+            if (displayString != null) {
+                displayString = displayString.replaceAll("'", "\\\\'");
+            }
             jsHashValues.addObject(i + " : '" + displayString + "'");
         }
         return "{ " + jsHashValues.componentsJoinedByString(", ") + " }";
@@ -331,7 +344,10 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         NSArray sortedList = maybeSortedList();
         for (Enumeration selectionsEnum = selections().objectEnumerator(); selectionsEnum.hasMoreElements();) {
             Object obj = selectionsEnum.nextElement();
-            offsets.addObject(indexOfObjectInArrayUsingERXEOControlUtilitiesEOEquals(obj, sortedList));
+            int offset = indexOfObjectInArrayUsingERXEOControlUtilitiesEOEquals(obj, sortedList);
+            if (offset >= 0) {
+                offsets.addObject(offset);
+            }
         }
         return "[" + offsets.componentsJoinedByString(", ") + "]";
     }

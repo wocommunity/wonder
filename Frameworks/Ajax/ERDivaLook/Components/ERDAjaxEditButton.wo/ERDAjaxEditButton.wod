@@ -1,0 +1,16 @@
+Conditional1: WOConditional {
+	condition = isEditable;
+}
+
+Conditional2: WOConditional {
+	condition = isEditable;
+	negate = true;
+}
+
+EditEO: AjaxUpdaterLink {
+	action = editObjectAction;
+	title = ^displayNameForEditConfiguration;
+	class = "ERDEditButton2";
+	container = d2wContext.container;
+	evalScripts = true;
+}

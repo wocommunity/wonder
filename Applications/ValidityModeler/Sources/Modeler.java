@@ -1,10 +1,15 @@
-import com.gammastream.validity.*;
-import com.webobjects.appserver.*;
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.gammastream.gammacore.gammatext.*;
+import com.gammastream.validity.GSVAttribute;
+import com.gammastream.validity.GSVEOAttribute;
+import com.gammastream.validity.GSVEOEntity;
+import com.gammastream.validity.GSVEntity;
+import com.gammastream.validity.GSVModel;
+import com.gammastream.validity.GSVRule;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 public class Modeler extends WOComponent {
 
@@ -29,7 +34,13 @@ public class Modeler extends WOComponent {
     protected boolean checked = false;
     protected String errorMessage = "";
 
-    public void awake(){
+    
+    public Modeler(WOContext arg0) {
+		super(arg0);
+	}
+
+	@Override
+	public void awake(){
         super.awake();
         error=false;
         checked=false;
@@ -282,7 +293,6 @@ public class Modeler extends WOComponent {
     
     public boolean convertRuleKeyValueToDictionary(){
         NSMutableDictionary dict = new NSMutableDictionary();
-        String k,v;
         KeyValue temp;
         for(int i = 0; i<keyValueParameters.count();i++){
             temp  = (KeyValue)keyValueParameters.objectAtIndex(i);

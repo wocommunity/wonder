@@ -12,10 +12,13 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @see ERDList
  * 
  * @author mendis
+ * @author dschonen			Added collapsing
  *
  */
 public class ERDList2 extends ERDList {
 	public EODetailDataSource detailDataSource;
+	private String closedLabelString;
+	private String container;
 	
     public ERDList2(WOContext context) {
         super(context);
@@ -23,6 +26,8 @@ public class ERDList2 extends ERDList {
     
     public void reset() {
     	detailDataSource = null;
+    	closedLabelString = null;
+    	container = null;
     	super.reset();
     }
     
@@ -42,5 +47,24 @@ public class ERDList2 extends ERDList {
     	NSMutableDictionary settings = super.settings().mutableClone();
     	settings.setObjectForKey(object(), "object");
     	return settings.immutableClone();
+    }
+    
+    public String container() {
+    	if (container == null) container = d2wContext().valueForKey("id") + "_container";
+    	return container;
+    }
+    
+    public String closedLabelString() {
+    	if (closedLabelString == null) {
+    		String localizedEntityName = (String)d2wContext().valueForKey("displayNameForDestinationEntity");
+    		closedLabelString = detailDataSource().fetchObjects().count() + " " + localizedEntityName + "s";		// FIXME: RM: perhaps better plurification?
+    	} return closedLabelString;
+    }
+    
+    /*
+     * forces button on edit pages
+     */
+    public String submitActionName() {
+    	return taskIsEdit() ? "" : null;
     }
 }

@@ -6,7 +6,7 @@ import er.directtoweb.pages.ERD2WCalendarPage;
 
 /**
  * Class for DirectToWeb Component ERD2WCalendarPageTemplate.
- * @created ak on Thu Sep 04 2003
+ * @author ak on Thu Sep 04 2003
  * @project ERDirectToWeb
  */
 

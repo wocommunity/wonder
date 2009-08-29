@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERXAjaxContainer.java" wocomponentcontent="true">
+
+        <binding name="elementName"/>
+    <binding name="id"/>
+    <binding name="class"/>
+        
+    <binding defaults="Boolean" name="ajax"/>
+    </wo>
+</wodefinitions>

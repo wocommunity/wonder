@@ -15,7 +15,7 @@ import com.webobjects.eocontrol.EODataSource;
  * Page that can query a set of entities.
  * It is like the D2WQueryAll page except that you can partition your entities into sections.
  *
- * @created ak on Mon Sep 01 2003
+ * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
  */
 

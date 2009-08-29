@@ -1,5 +1,6 @@
 package er.extensions.components;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -22,7 +23,7 @@ import er.extensions.foundation.ERXTimestampUtility;
  * Works much the same as a {@link WODisplayGroup}.
  * See {@link ERXMonthView} for an example on how to use it.
  *
- * @created ak on Mon Nov 04 2002
+ * @author ak on Mon Nov 04 2002
  */
 
 public class ERXDateGrouper extends WODisplayGroup {
@@ -107,7 +108,8 @@ public class ERXDateGrouper extends WODisplayGroup {
         _datesForWeeksForCurrentMonth = null;
     }
     public NSTimestamp selectedDate() { return _selectedDate == null ? today() : _selectedDate; }
-    public void setSelectedDate(NSTimestamp value) {
+    public void setSelectedDate(Date date) {
+    	NSTimestamp value = (date instanceof NSTimestamp)?(NSTimestamp)date:new NSTimestamp(date);
         _reset();
         _selectedDate = value;
     }

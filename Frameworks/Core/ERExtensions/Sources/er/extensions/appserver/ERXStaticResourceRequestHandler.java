@@ -128,8 +128,13 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 			if (_useRequestHandlerPath) {
 					try {
 						WODynamicURL dynamicURL = new WODynamicURL(uri);
-						sb.append("/");
-						sb.append(dynamicURL.requestHandlerPath());
+						String requestHandlerPath = dynamicURL.requestHandlerPath();
+						if (requestHandlerPath == null || requestHandlerPath.length() == 0) {
+							sb.append(uri);
+						} else {
+							sb.append("/");
+							sb.append(requestHandlerPath);
+						}
 					}
 					catch (Exception e) {
 						throw new RuntimeException("Failed to parse URL '" + uri + "'.", e);
@@ -141,9 +146,12 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 			
 			String path = sb.toString();
 			try {
-				path = path.replace('+', ' ');
 				path = path.replaceAll("\\?.*", "");
-				path = URLDecoder.decode(path, "UTF-8");
+				if (request.userInfo() != null && !request.userInfo().containsKey("HttpServletRequest")) {
+					/* PATH_INFO is already decoded by the servlet container */
+					path = path.replace('+', ' ');
+					path = URLDecoder.decode(path, "UTF-8");
+				}
 				file = new File(path);
 				length = (int) file.length();
 				is = new FileInputStream(file);

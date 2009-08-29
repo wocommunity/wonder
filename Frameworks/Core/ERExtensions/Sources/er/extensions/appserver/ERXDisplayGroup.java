@@ -302,4 +302,34 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	public NSArray<EOSortOrdering> sortOrderings() {
 		return super.sortOrderings();
 	}
+	
+	/**
+	 * Overridden to return correct result when no objects are displayed
+	 */
+	
+	@Override
+	public int indexOfFirstDisplayedObject() {
+		if (currentBatchIndex() == 1 && displayedObjects().count() == 0)
+			return 0;
+		return super.indexOfFirstDisplayedObject();
+	}
+
+	/**
+	 * Overridden to return correct index if the number of filtered objects
+	 * is not a multiple of <code>numberOfObjectsPerBatch</code> and we are
+	 * on the last batch index. The superclass incorrectly uses allObjects
+	 * instead of displayedObjects to determine the index value.
+	 */
+	@Override
+	public int indexOfLastDisplayedObject() {
+        int computedEnd = numberOfObjectsPerBatch() * currentBatchIndex();
+        int realEnd = displayedObjects().count();
+        if(numberOfObjectsPerBatch() == 0) {
+            return realEnd;
+        }
+        if (currentBatchIndex() > 1) {
+        	realEnd += numberOfObjectsPerBatch() * (currentBatchIndex() - 1);
+        }
+        return realEnd >= computedEnd ? computedEnd : realEnd;
+    }
 }

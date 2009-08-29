@@ -258,8 +258,22 @@ public class ERXEOAccessUtilities {
 	        	adaptorChannel.openChannel();
 	        }
 	        EOSQLExpressionFactory factory = adaptorChannel.adaptorContext().adaptor().expressionFactory();
-	        adaptorChannel.evaluateExpression(factory.expressionForString(exp));        
-	     }
+			if (ERXEOAccessUtilities.log.isInfoEnabled()) {
+				ERXEOAccessUtilities.log.info("Executing " + exp);
+			}
+	        // If channel.evaluateExpression throws when committing, it won't close the JDBC transaction
+	        // Probably a bug in JDBCChannel, but we must take care of it
+	        boolean contextHadOpenTransaction = adaptorChannel.adaptorContext().hasOpenTransaction();
+			try {
+				adaptorChannel.evaluateExpression(factory.expressionForString(exp));        
+			}
+			catch (EOGeneralAdaptorException e) {
+				if (adaptorChannel.adaptorContext().hasOpenTransaction() && ! contextHadOpenTransaction) {
+					adaptorChannel.adaptorContext().rollbackTransaction();
+				}
+				throw e;
+			}
+        }
         finally {
         	dbContext.unlock();
         }
@@ -349,8 +363,19 @@ public class ERXEOAccessUtilities {
         
         if (!channel.isOpen()) 
             channel.openChannel();
-            
-        channel.evaluateExpression(expression);
+        // If channel.evaluateExpression throws when committing, it won't close the JDBC transaction
+        // Probably a bug in JDBCChannel, but we must take care of it
+        boolean contextHadOpenTransaction = channel.adaptorContext().hasOpenTransaction();
+		try {
+			channel.evaluateExpression(expression);       
+		}
+		catch (EOGeneralAdaptorException e) {
+			if (channel.adaptorContext().hasOpenTransaction() && ! contextHadOpenTransaction) {
+				channel.adaptorContext().rollbackTransaction();
+			}
+			throw e;
+		}
+        
         if (attributes == null) {
             channel.setAttributesToFetch(channel.describeResults());
         }
@@ -1699,8 +1724,9 @@ public class ERXEOAccessUtilities {
  	 */
  	public static void batchFetchRelationship(EODatabaseContext databaseContext, EORelationship relationship, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
  		NSArray objectsToBatchFetch;
- 		if (skipFaultedRelationships) {
- 			if (relationship.isToMany()) {
+
+		if (relationship.isToMany()) {
+	 		if (skipFaultedRelationships) {
  				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
  				String relationshipName = relationship.name();
  				Enumeration objectsEnum = objects.objectEnumerator();
@@ -1712,61 +1738,64 @@ public class ERXEOAccessUtilities {
  					}
  				}
  				objectsToBatchFetch = objectsWithUnfaultedRelationships;
- 			}
- 			else {
- 		 		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
- 		 		
- 				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
- 				EOEntity destinationEntity = relationship.destinationEntity();
- 				String relationshipName = relationship.name();
- 				Enumeration objectsEnum = objects.objectEnumerator();
- 				while (objectsEnum.hasMoreElements()) {
- 					EOEnterpriseObject object = (EOEnterpriseObject) objectsEnum.nextElement();
- 					NSDictionary sourceSnapshot = databaseContext.snapshotForGlobalID(editingContext.globalIDForObject(object));
- 					if (sourceSnapshot == null) {
- 						objectsWithUnfaultedRelationships.addObject(object);
- 					}
- 					else {
- 						NSDictionary destinationPK = relationship._foreignKeyForSourceRow(sourceSnapshot);
- 						EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
- 						if (destinationGID != null) {
-	 						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
-	 						if (destinationSnapshot == null) {
-	 	 						gids.addObject(destinationGID);
-	 	 						
-	 	 						// The ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs below will fetch the row and register 
-	 	 						// the snapshot.  BUT as the fault is deferred, it will not get fired.  This means there is no
-	 							// strong reference to the fetched object in the EC.  If the garbage collector runs, it will detect
-	 							// this and place the EO on the EC's cleanup queue (_referenceQueue()).  This is processed from 
-	 							// _processReferenceQueue() which is called at various points in EOEditingContext, most problematically
-	 							// from unlockObjectStore().  If this happens before the deferred fault is fired, the snapshot will be discarded.
-	 							// The object will get re-fetched when next referenced.  This makes batch fetching of to-one relationships of
-	 							// little use.  To avoid this, the call to storedValueForKey below will call (via the _LazyGenericRecordBinding) 
-	 							// willReadRelationship() on the deferred fault.  This fires the deferred fault (calls createFaultForDeferredFault() 
-	 							// defined on EOAccessDeferredFaultHandler), making it a regular fault.  When the EO is batch fetched below, 
-	 							// the regular fault resolves and there is a strong reference to the EO.  This is what EOFetchSpecification 
-	 							// pre-fetching does for to-one relationships.
-	 							// References:
-	 							// http://developer.apple.com/documentation/developertools/reference/wo541reference/com/webobjects/eocontrol/EODeferredFaulting.html
-	 							// http://developer.apple.com/DOCUMENTATION/WebObjects/Enterprise_Objects/Fetching/chapter_6_section_8.html
-	 	 						object.storedValueForKey(relationshipName);
-	 						}
+	 		}
+	 		else {
+	 			objectsToBatchFetch = objects;
+	 		}
+		}
+		else {
+	 		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+	 		
+			NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+			EOEntity destinationEntity = relationship.destinationEntity();
+			String relationshipName = relationship.name();
+			Enumeration objectsEnum = objects.objectEnumerator();
+			while (objectsEnum.hasMoreElements()) {
+				EOEnterpriseObject object = (EOEnterpriseObject) objectsEnum.nextElement();
+				// This seems a bit odd.  Why not just use object.isFault()?
+				NSDictionary sourceSnapshot = databaseContext.snapshotForGlobalID(editingContext.globalIDForObject(object));
+				if (sourceSnapshot == null) {
+					// object here is an unfaulted object, not an object with an unfaulted relationship
+					objectsWithUnfaultedRelationships.addObject(object);
+				}
+				else {
+					NSDictionary destinationPK = relationship._foreignKeyForSourceRow(sourceSnapshot);
+					EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
+					if (destinationGID != null) {
+ 						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
+ 						if (destinationSnapshot == null || ! skipFaultedRelationships) {
+ 	 						gids.addObject(destinationGID);
+ 	 						
+ 	 						// The ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs below will fetch the row and register 
+ 	 						// the snapshot.  BUT as the fault is deferred, it will not get fired.  This means there is no
+ 							// strong reference to the fetched object in the EC.  If the garbage collector runs, it will detect
+ 							// this and place the EO on the EC's cleanup queue (_referenceQueue()).  This is processed from 
+ 							// _processReferenceQueue() which is called at various points in EOEditingContext, most problematically
+ 							// from unlockObjectStore().  If this happens before the deferred fault is fired, the snapshot will be discarded.
+ 							// The object will get re-fetched when next referenced.  This makes batch fetching of to-one relationships of
+ 							// little use.  To avoid this, the call to storedValueForKey below will call (via the _LazyGenericRecordBinding) 
+ 							// willReadRelationship() on the deferred fault.  This fires the deferred fault (calls createFaultForDeferredFault() 
+ 							// defined on EOAccessDeferredFaultHandler), making it a regular fault.  When the EO is batch fetched below, 
+ 							// the regular fault resolves and there is a strong reference to the EO.  This is what EOFetchSpecification 
+ 							// pre-fetching does for to-one relationships.
+ 							// References:
+ 							// http://developer.apple.com/documentation/developertools/reference/wo541reference/com/webobjects/eocontrol/EODeferredFaulting.html
+ 							// http://developer.apple.com/DOCUMENTATION/WebObjects/Enterprise_Objects/Fetching/chapter_6_section_8.html
+ 	 						object.storedValueForKey(relationshipName);
  						}
- 					}
- 				}
- 				objectsToBatchFetch = objectsWithUnfaultedRelationships;
- 				
- 				// MS: This is split out into a separate fetch because EOF does not handle batch
- 				// fetching of abstract entities very effectively.  We instead want to create
- 				// our own GID and batch fetch the GIDs ourselves.
- 				if (gids.count() > 0) {
- 					ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids);
- 				}
- 			}
- 		}
- 		else {
- 			objectsToBatchFetch = objects;
- 		}
+					}
+				}
+			}
+			objectsToBatchFetch = objectsWithUnfaultedRelationships;
+
+			// MS: This is split out into a separate fetch because EOF does not handle batch
+			// fetching of abstract entities very effectively.  We instead want to create
+			// our own GID and batch fetch the GIDs ourselves.
+			if (gids.count() > 0) {
+				ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids, ! skipFaultedRelationships);
+			}
+		}
+
  		if (objectsToBatchFetch.count() > 0) {
  			databaseContext.batchFetchRelationship(relationship, objectsToBatchFetch, editingContext);
  		}

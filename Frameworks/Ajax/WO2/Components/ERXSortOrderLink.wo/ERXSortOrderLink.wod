@@ -1,9 +1,0 @@
-Toggle: WOHyperlink {
-	action = toggleClicked;
-	class = styleClass;
-}
-
-Display: WOString {
-	value = displayString;
-	escapeHTML = "false";
-}

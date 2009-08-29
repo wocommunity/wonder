@@ -22,6 +22,7 @@ Modalbox.Methods = {
 		overlayClose: true, // Close modal box by clicking on overlay
 		width: 500, // Default width in px
 		height: 90, // Default height in px
+		centerVertically: false, // True if should be centered vertically on page
 		overlayOpacity: .65, // Default overlay opacity
 		overlayDuration: .25, // Default overlay fade in/out duration in seconds
 		slideDownDuration: .5, // Default Modalbox appear slide down effect in seconds
@@ -451,6 +452,17 @@ Modalbox.Methods = {
 				}
 				break;			
 			case Event.KEY_ESC:
+				// CH: Add Esc key handling start
+				if (this.options.clickOnEscId) {
+					var target = $(this.options.clickOnEscId);
+					if (target && this._isClickable(target)) {
+						target.onclick();
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+				// CH: done
 				if(this.active && ! this.options.locked) this._hide(event);
 				break;
 			case 32:
@@ -474,11 +486,30 @@ Modalbox.Methods = {
 				// Safari operates in slightly different way. This realization is still buggy in Safari.
 				if(Prototype.Browser.WebKit && !["textarea", "select"].include(node.tagName.toLowerCase()))
 					event.stop();
-				else if( (node.tagName.toLowerCase() == "input" && ["submit", "button"].include(node.type)) || (node.tagName.toLowerCase() == "a") )
+				else if( this._isClickable(node) )  // CH: change to use _isClickable
 					event.stop();
 				break;
+			// CH: Add Return key handling start
+			case Event.KEY_RETURN:
+				if (this.options.clickOnReturnId) {
+					var target = $(this.options.clickOnReturnId);
+					// Don't trigger this for clickable elements or text areas
+					if (target && this._isClickable(target) &&  ! (this._isClickable(node) || ["textarea"].include(node.type)) ) {
+						target.onclick();
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+			// CH: done
 		}
 	},
+	
+	// CH: add _isClickable
+	_isClickable: function(element) {
+		return (["input", "button"].include(element.tagName.toLowerCase()) && ["submit", "button"].include(element.type)) || (element.tagName.toLowerCase() == "a")
+	},
+	// CH: done
 	
 	_preventScroll: function(event) { // Disabling scrolling by "space" key
 		if(!["input", "textarea", "select", "button"].include(event.element().tagName.toLowerCase())) 
@@ -528,6 +559,17 @@ Modalbox.Methods = {
 	
 	_setPosition: function () {
 		$(this.MBwindow).setStyle({left: Math.round((Element.getWidth(document.body) - Element.getWidth(this.MBwindow)) / 2 ) + "px"});
+		
+		// CH: Add vertical centering
+		if (this.options.centerVertically) {
+			var elem = $(this.MBwindow);
+			var docElem = document.documentElement;
+			pageHeight = self.innerHeight || (docElem&&docElem.clientHeight) ||	document.body.clientHeight;
+			elemHeight = elem.getHeight();
+			var y = Math.round(pageHeight/2) - (elemHeight/2);	
+			elem.style.top = y+'px';
+        }	
+		// CH: Done adding vertical centering
 	},
 	
 	_setWidthAndPosition: function () {

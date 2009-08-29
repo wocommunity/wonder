@@ -166,15 +166,13 @@ var AjaxOnDemand = {
 	},
 	
 	loadCSS: function(css) {
-		var linkElement = document.createElement("link");
-  	linkElement.setAttribute("rel", "stylesheet");
-  	linkElement.setAttribute("type", "text/css");
-  	linkElement.setAttribute("href", css);
-  	document.getElementsByTagName('HEAD')[0].appendChild(linkElement);
-		//new Ajax.Request(script, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
+		new Ajax.Request(css, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
 	},
 	
 	loadedCSS: function(request) {
+		var inlineStyle = new Element("style", {"type": "text/css"});
+		inlineStyle.appendChild(document.createTextNode(request.responseText));
+		document.getElementsByTagName('HEAD')[0].appendChild(inlineStyle);
 	}
 };
 var AOD = AjaxOnDemand;

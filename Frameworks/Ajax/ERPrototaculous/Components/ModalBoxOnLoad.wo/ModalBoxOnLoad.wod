@@ -1,0 +1,12 @@
+JavaScript: WOJavaScript {
+	scriptString = scriptString;
+}
+
+ModalContainer: WOGenericContainer {
+	elementName = "div";
+	id = id;
+	style = "display:none";
+}
+
+Content: WOComponentContent {
+}

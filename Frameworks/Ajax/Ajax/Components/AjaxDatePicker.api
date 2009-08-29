@@ -28,5 +28,8 @@
     <binding name="maxlength"/>
     <binding name="size"/>
     <binding name="name"/>
-   </wo>
+    <binding name="calendarCSS"/>
+    <binding name="calendarCSSFramework"/>
+   <binding name="onDateSelect"/>
+    </wo>
 </wodefinitions>

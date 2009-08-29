@@ -34,7 +34,7 @@ public class SeleniumPresentationExporterPage extends SeleniumComponentExporterP
     }
 
     public String localizedStringWithDefault(String key, String aDefault) {
-    	String result = ERXLocalizer.defaultLocalizer().localizedStringForKey(key);
+    	String result = ERXLocalizer.englishLocalizer().localizedStringForKey(key);
     	return result == null ? aDefault : result;
     }
 }

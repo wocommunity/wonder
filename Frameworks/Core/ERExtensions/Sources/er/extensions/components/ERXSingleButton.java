@@ -18,33 +18,30 @@ import er.extensions.foundation.ERXValueUtilities;
 
 // A Submit button that can be used stand alone.
 /**
- * A stand alone submit button to be used as an action button.<br />
- * Usefull for cancel buttons which should not submit the page and create all the validation messages.
- * Can also create its own FORM, so you can drop it anywhere.
+ * A stand alone submit button to be used as an action button.
+ *
+ * This is useful for cancel buttons which should not submit the
+ * page and create all the validation messages. It can also create
+ * its own FORM, so you can drop this component anywhere.
+ *
  * @binding action
  * @binding value
- * @binding doNotUseForm" defaults="Boolean
+ * @binding doNotUseForm If <code>true<code>, do not output a form, ever.
+            If <code>false</code> or not specified, do what is more efficient.
  * @binding actionClass
  * @binding directActionName
  * @binding target
- * @binding shouldSubmitForm" defaults="Boolean
+ * @binding shouldSubmitForm If <code>false</code>, will let the submit button
+            use javascript code to set "document.location", which does not submit
+            the form the button is in. The default value is <code>false</code>.
  */
-
 public class ERXSingleButton extends WOComponent {
 
     public ERXSingleButton(WOContext aContext) {
         super(aContext);
     }
 
-    /* Bindings:
-
-doNotUseForm: if true, do not output a form ever. If false or not specified, do what is more efficient.
-shouldSubmitForm: if false, will let the submit button use javascript code to set document.location, which does not submit the form the button is in. the default is false
-    
-    */
-
     public boolean isStateless() { return true; }
-
 
     // determines wether this component will output its own form or not
     public boolean useForm() {
@@ -86,8 +83,6 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
     	super.appendToResponse(aResponse, aContext);
     }
 
-    // determines wether the form this component is in (wether it was output by this component or not
-    // has to be submitted or can be bypassed
     public boolean shouldSubmitForm() {
         return hasBinding("shouldSubmitForm") ? ERXValueUtilities.booleanValue(valueForBinding("shouldSubmitForm")) : false;
     }
@@ -96,8 +91,11 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
         return shouldSubmitForm() || !((ERXSession)session()).javaScriptEnabled();
     }
 
-    // When possible we use JavaScript to completely bypass form submission (effectively ending up with a button behaving like a
-    // hyperlink). The processing of takeValuesFromRequest is in this case more efficient
+    /*
+     * Use JavaScript to completely bypass form submission, when possible. This effectively
+     * makes the button behave like a hyperlink. The processing of takeValuesFromRequest is
+     * in this case more efficient.
+     */
     public String jsString() {
         String directActionName=(String)valueForBinding("directActionName");
         String url=null;

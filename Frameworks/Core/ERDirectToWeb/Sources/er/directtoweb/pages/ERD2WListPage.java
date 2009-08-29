@@ -36,6 +36,7 @@ import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -47,6 +48,7 @@ import er.directtoweb.interfaces.ERDListPageInterface;
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXComponentActionRedirector;
 import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.appserver.ERXSession;
 import er.extensions.batching.ERXBatchingDisplayGroup;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
@@ -54,9 +56,11 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
+import er.extensions.statistics.ERXMetrics;
+import er.extensions.statistics.ERXMetricsEvent;
 
 /**
- * Reimplementation of the D2WListPage. Descendes from ERD2WPage instead of
+ * Reimplementation of the D2WListPage. Descends from ERD2WPage instead of
  * D2WList.
  * 
  * @author ak
@@ -65,12 +69,14 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	/** logging support */
 	public final static Logger log = Logger.getLogger(ERD2WListPage.class);
-	
-	protected boolean _shouldRefetch;
+    
+    protected boolean _shouldRefetch;
+    
+    protected String _sessionID;
 
 	/**
 	 * Public constructor. Registers for
-	 * {@link EOEditingContext.EditingContextDidSaveChangesNotification} so that
+	 * {@link EOEditingContext#EditingContextDidSaveChangesNotification} so that
 	 * component stays informed when objects are deleted and added.
 	 * 
 	 * @param c
@@ -78,14 +84,16 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 */
 	public ERD2WListPage(WOContext c) {
 		super(c);
+		_sessionID = c.session().sessionID();
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 
-	/** Override to un-register for stop obsevring notifcations. */
+	/* Not necessary -- NSNotificationCenter uses weak references
 	public void finalize() throws Throwable {
 		NSNotificationCenter.defaultCenter().removeObserver(this);
 		super.finalize();
 	}
+	*/
 
 	// reimplementation of D2WList stuff
 
@@ -129,13 +137,22 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	/**
-	 * Called when an {@link EOditingContext} has changed. Sets
+	 * Cached session ID, so we don't need to awake.
+	 */
+	@Override
+	public String sessionID() {
+	    return _sessionID;
+	}
+	
+	/**
+	 * Called when an {@link EOEditingContext} has changed. Sets
 	 * {@link #_hasToUpdate} which in turn lets the group refetch on the next
 	 * display.
 	 */
-	// CHECKME ak is this really needed? I'd think it's kindo of overkill.
 	public void editingContextDidSaveChanges(NSNotification notif) {
-		_hasToUpdate = true;
+	    if(sessionID() == ERXSession.currentSessionID()) {
+	        _hasToUpdate = true;
+	    }
 	}
 
 	/**
@@ -305,15 +322,20 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	public int numberOfObjectsPerBatch() {
 		if (_batchSize == null) {
+			if (shouldShowBatchNavigation()) {
 			int batchSize = ERXValueUtilities.intValueWithDefault(d2wContext().valueForKey("defaultBatchSize"), 0);
 			Object batchSizePref = userPreferencesValueForPageConfigurationKey("batchSize");
 			if (batchSizePref != null) {
 				if (log.isDebugEnabled()) {
-					log.debug("batchSize User Prefererence: " + batchSizePref);
+						log.debug("batchSize User Preference: " + batchSizePref);
 				}
 				batchSize = ERXValueUtilities.intValueWithDefault(batchSizePref, batchSize);
 			}
 			_batchSize = ERXConstant.integerForInt(batchSize);
+			} else {
+				// We are not showing the batch nav, so we need to display all results.
+				_batchSize = ERXConstant.ZeroInteger;
+			}
 		}
 		return _batchSize.intValue();
 	}
@@ -324,40 +346,66 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		return !"printerFriendly".equals(d2wContext().valueForKey("subTask"));
 	}
 
+	/**
+	 * Returns whether or not sort orderings should be validated (based on the checkSortOrderingKeys rule).
+	 * @return whether or not sort orderings should be validated
+	 */
 	public boolean checkSortOrderingKeys() {
 		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("checkSortOrderingKeys"), false);
 	}
+	
+	/**
+	 * Validates the given sort key (is it a display key, an attribute, or a valid attribute path). 
+	 * 
+	 * @param displayPropertyKeys the current display properties
+	 * @param sortKey the sort key to validate
+	 * @return true if the sort key is valid, false if not
+	 */
+	protected boolean isValidSortKey(NSArray displayPropertyKeys, String sortKey) {
+	  boolean validSortOrdering = false;
+	  try {
+	    if (displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
+	      validSortOrdering = true;
+	    }
+	  }
+	  catch (IllegalArgumentException e) {
+	    // MS: ERXEOAccessUtilities.attributePathForKeyPath throws IllegalArgumentException for a bogus key path
+	    validSortOrdering = false;
+	  }
+	  
+	  if (!validSortOrdering) {
+	    log.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths for the entity '" + entity().name() + "'.");
+	    validSortOrdering = false;
+	  }
+	  return validSortOrdering;
+  }
 
-	public NSArray sortOrderings() {
-		NSArray sortOrderings = null;
+	@SuppressWarnings("unchecked")
+  public NSArray<EOSortOrdering> sortOrderings() {
+		NSArray<EOSortOrdering> sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
-			sortOrderings = (NSArray) userPreferencesValueForPageConfigurationKey("sortOrdering");
-			if (log.isDebugEnabled())
-				log.debug("Found sort Orderings in user prefs " + sortOrderings);
+			sortOrderings = (NSArray<EOSortOrdering>) userPreferencesValueForPageConfigurationKey("sortOrdering");
+			if (log.isDebugEnabled()) {
+			  log.debug("Found sort Orderings in user prefs " + sortOrderings);
+			}
 		}
 		if (sortOrderings == null) {
-			NSArray sortOrderingDefinition = (NSArray) d2wContext().valueForKey("defaultSortOrdering");
+			NSArray<String> sortOrderingDefinition = (NSArray<String>) d2wContext().valueForKey("defaultSortOrdering");
 			if (sortOrderingDefinition != null) {
-				NSMutableArray so = new NSMutableArray();
-				NSArray displayPropertyKeys = (NSArray) d2wContext().valueForKey("displayPropertyKeys");
+				NSMutableArray<EOSortOrdering> validatedSortOrderings = new NSMutableArray<EOSortOrdering>();
+				NSArray<String> displayPropertyKeys = (NSArray<String>) d2wContext().valueForKey("displayPropertyKeys");
 				for (int i = 0; i < sortOrderingDefinition.count();) {
-					String sortKey = (String) sortOrderingDefinition.objectAtIndex(i++);
-					String sortSelectorKey = (String) sortOrderingDefinition.objectAtIndex(i++);
-					if (checkSortOrderingKeys()) {
-						if (displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
-							EOSortOrdering sortOrdering = new EOSortOrdering(sortKey, ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
-							so.addObject(sortOrdering);
-						} else {
-							log.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths");
-						}
-					} else {
-						EOSortOrdering sortOrdering = new EOSortOrdering(sortKey, ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
-						so.addObject(sortOrdering);
+					String sortKey = sortOrderingDefinition.objectAtIndex(i++);
+					String sortSelectorKey = sortOrderingDefinition.objectAtIndex(i++);
+					if (!checkSortOrderingKeys() || isValidSortKey(displayPropertyKeys, sortKey)) {
+					  EOSortOrdering sortOrdering = new EOSortOrdering(sortKey, ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
+					  validatedSortOrderings.addObject(sortOrdering);
 					}
 				}
-				sortOrderings = so;
-				if (log.isDebugEnabled())
+				sortOrderings = validatedSortOrderings;
+				if (log.isDebugEnabled()) {
 					log.debug("Found sort Orderings in rules " + sortOrderings);
+				}
 			}
 		}
 		return sortOrderings;
@@ -373,20 +421,43 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		super.takeValuesFromRequest(r, c);
 	}
 
+	protected void _fetchDisplayGroup(WODisplayGroup dg) {
+		try {
+			dg.fetch();
+		}
+		catch (NSKeyValueCoding.UnknownKeyException e) {
+			if (dg.sortOrderings() != null && dg.sortOrderings().count() > 0) {
+				log.error("Fetching display group failed. Resetting potentially bogus sort orderings and trying again.", e);
+				dg.setSortOrderings(null);
+				dg.fetch();
+			}
+			else {
+				throw e;
+			}
+		}
+	}
+		
+	protected void fetchIfNecessary() {
+		if (_hasToUpdate) {
+			willUpdate();
+			ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.DBFetch, timingEventUserInfo());
+			_fetchDisplayGroup(displayGroup());
+			ERXMetrics.markEndOfEvent(event);
+			_hasToUpdate = false;
+			didUpdate();
+		}
+	}
+	
 	public WOActionResults invokeAction(WORequest r, WOContext c) {
 		setupPhase();
+		fetchIfNecessary();
 		return super.invokeAction(r, c);
 	}
 
 	public void appendToResponse(WOResponse r, WOContext c) {
 		setupPhase();
 		_rowFlip = true;
-		if (_hasToUpdate) {
-			willUpdate();
-			displayGroup().fetch();
-			_hasToUpdate = false;
-			didUpdate();
-		}
+		fetchIfNecessary();
 
 		// GN: reset the displayed batch if it is out of range
 		if (this.displayGroup() != null && this.displayGroup().currentBatchIndex() > this.displayGroup().batchCount()) {
@@ -453,7 +524,9 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 					setSortOrderingsOnDisplayGroup(sortOrderings, dg);
 				}
 				dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-				dg.fetch();
+				ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.DBFetch, timingEventUserInfo());
+				_fetchDisplayGroup(dg);
+				ERXMetrics.markEndOfEvent(event);
 				dg.updateDisplayedObjects();
 				_hasBeenInitialized = true;
 				_hasToUpdate = false;
@@ -601,7 +674,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	public boolean shouldShowSelectAll() {
-		return listSize() > 10 || ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowSelectAll"));
+		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldShowSelectAll"), listSize() > 10);
 	}
 
 	public void warmUpForDisplay() {
@@ -632,6 +705,15 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 			}
 		}
 		return _referenceEOs;
+	}
+
+	/**
+	 * Determines if the batch navigation should be shown.	It can be explicitly disabled by setting the D2W key 
+	 * <code>showBatchNavigation</code> to false.
+	 * @return true if the batch navigation should be shown
+	 */
+	public boolean shouldShowBatchNavigation() {
+		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("showBatchNavigation"), true);
 	}
 
 }

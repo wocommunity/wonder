@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableData;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSRange;
 
 import er.extensions.foundation.ERXThreadStorage;
@@ -24,6 +25,10 @@ import er.extensions.foundation.ERXThreadStorage;
  * @author ak
  */
 public class ERXResponse extends WOResponse {
+	public static final String ContentDispositionHeaderKey = "content-disposition";
+	public static final String ContentTypeHeaderKey = "content-type";
+	public static final String DisablePageCachingKey = "com.webobjects.appserver.Response.DisablePageCaching";
+
 	public static class Context {
 		protected LinkedHashMap<String, ERXResponse> partials = new LinkedHashMap<String, ERXResponse>();
 
@@ -32,7 +37,33 @@ public class ERXResponse extends WOResponse {
 
 	private LinkedHashMap<String, Integer> marks;
 	private Stack<Object> _contentStack;
-	
+	private WOContext _context;
+
+	public ERXResponse() {
+	}
+
+	/**
+	 * Convenience constructor for direct actions.
+	 * @param content text content of the response
+	 * @param status HTTP status code of the response
+	 */
+	public ERXResponse(String content, int status) {
+		this(content);
+		setStatus(status);
+	}
+
+	/**
+	 * Convenience constructor for direct actions.
+	 * @param content text content of the response
+	 */
+	public ERXResponse(String content) {
+		setContent(content);
+	}
+
+	public ERXResponse(WOContext context) {
+		_context = context;
+	}
+
 	protected void __setContent(Object appendable) {
 		try {
 			WOMessage.class.getDeclaredField("_content").set(this, appendable);
@@ -41,10 +72,10 @@ public class ERXResponse extends WOResponse {
 			throw new NSForwardException(e);
 		}
 	}
-	
+
 	/**
-	 * Pushes a new _content onto the stack, so you can write to this response and capture the 
-	 * output.
+	 * Pushes a new _content onto the stack, so you can write to this response
+	 * and capture the output.
 	 */
 	public void pushContent() {
 		if (_contentStack == null) {
@@ -62,7 +93,8 @@ public class ERXResponse extends WOResponse {
 	}
 
 	/**
-	 * Pops the last _content off the stack, optionally appending the current content to it.
+	 * Pops the last _content off the stack, optionally appending the current
+	 * content to it.
 	 * 
 	 * @param append
 	 */
@@ -94,8 +126,8 @@ public class ERXResponse extends WOResponse {
 	 * Overridden to insert the partials in the respective area.
 	 */
 	@Override
-	public void _finalizeInContext(WOContext arg0) {
-		super._finalizeInContext(arg0);
+	public void _finalizeInContext(WOContext originalContext) {
+		super._finalizeInContext(originalContext);
 		if (marks != null && marks.size() > 0) {
 			Context context = currentContext();
 			NSMutableData content = new NSMutableData();
@@ -133,7 +165,8 @@ public class ERXResponse extends WOResponse {
 	 * Returns the associated response for the supplied key. Creates it if
 	 * needed.
 	 * 
-	 * @param key the key to push the partial as
+	 * @param key
+	 *            the key to push the partial as
 	 * @return the new ERXResponse to write to
 	 */
 	public static ERXResponse pushPartial(String key) {
@@ -142,7 +175,7 @@ public class ERXResponse extends WOResponse {
 		context.stack.push((ERXResponse) wocontext.response());
 		ERXResponse response = context.partials.get(key);
 		if (response == null) {
-			response = new ERXResponse();
+			response = new ERXResponse(wocontext);
 			context.partials.put(key, response);
 		}
 		wocontext._setResponse(response);
@@ -174,4 +207,104 @@ public class ERXResponse extends WOResponse {
 			super._appendTagAttributeAndValue(name, value, escape);
 		}
 	}
+
+	/**
+	 * Overridden to <b>not</b> call super if trying to download an attachment
+	 * to IE.
+	 * 
+	 * @see com.webobjects.appserver.WOResponse#disableClientCaching()
+	 * 
+	 */
+	@Override
+	public void disableClientCaching() {
+		boolean isIEDownloadingAttachment = isIE() && isAttachment() && !isHTML();
+		if (!isIEDownloadingAttachment) {
+			//NSLog.out.appendln("Disabling client caching");
+			super.disableClientCaching();
+		}
+		else {
+			//NSLog.out.appendln("Allowing IE client caching");
+		}
+	}
+
+	/**
+	 * @see #disablePageCaching()
+	 * @return <code>true</code> if disablePageCaching() has been called for
+	 *         this response
+	 */
+	public boolean isPageCachingDisabled() {
+		return userInfoForKey(DisablePageCachingKey) != null;
+	}
+
+	/**
+	 * WO 5.4 API Sets the value for key in the user info dictionary.
+	 * 
+	 * @param value
+	 *            value to add to userInfo()
+	 * @param key
+	 *            key to add value under
+	 */
+	public void setUserInfoForKey(Object value, String key) {
+		/**
+		 * require [valid_value] value != null; [valid_key] key != null;
+		 **/
+		NSMutableDictionary newUserInfo = new NSMutableDictionary(value, key);
+		if (userInfo() != null) {
+			newUserInfo.addEntriesFromDictionary(userInfo());
+		}
+		setUserInfo(newUserInfo);
+		/** ensure [value_set] userInfoForKey(key).equals(value); **/
+	}
+
+	/**
+	 * WO 5.4 API
+	 * 
+	 * @param key
+	 *            key to return value from userInfo() for
+	 * @return value from userInfo() for key, or null if not available
+	 */
+	public Object userInfoForKey(String key) {
+		/** require [valid_key] key != null; **/
+		return userInfo() != null ? userInfo().objectForKey(key) : null;
+	}
+
+	public boolean isAttachment() {
+		String contentDisposition = contentDisposition();
+		return contentDisposition != null && (contentDisposition.indexOf("inline") > -1 || contentDisposition.indexOf("attachment") > -1);
+	}
+
+	/**
+	 * @return <code>true</code> if the content type of this response indicates
+	 *         HTML
+	 */
+	public boolean isHTML() {
+		return contentType() != null && contentType().toLowerCase().indexOf("text/html") > -1;
+	}
+
+	/**
+	 * @return header value for ContentDispositionHeaderKey
+	 */
+	public String contentDisposition() {
+		return headerForKey(ContentDispositionHeaderKey);
+	}
+
+	/**
+	 * @return header value for ContentTypeHeaderKey
+	 */
+	public String contentType() {
+		return headerForKey(ContentTypeHeaderKey);
+	}
+
+	/**
+	 * @return <code>true</code> if the Request this Response is for has a user
+	 *         agent that indicates and IE browser
+	 */
+	public boolean isIE() {
+		boolean isIE = false;
+		if (_context != null && _context.request() instanceof ERXRequest) {
+			isIE = ((ERXRequest) _context.request()).browser().isIE();
+		}
+		return isIE;
+	}
+
 }

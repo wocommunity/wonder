@@ -288,7 +288,8 @@ public class ERXUtilities {
     }
 
     /** entity name cache */
-    private static NSMutableDictionary _entityNameEntityCache;
+    private static NSDictionary<String, EOEntity> _entityNameEntityCache;
+
     /**
      * Finds an entity given a case insensitive search
      * of all the entity names.<br/>
@@ -298,18 +299,19 @@ public class ERXUtilities {
      */
     // FIXME: Should add an EOEditingContext parameter to get the right
     //	      EOModelGroup. Should also have a way to clear the cache.
-    // CHECKME: Should this even be cached? Not thread safe now.
+    // CHECKME: Should this even be cached?
     public static EOEntity caseInsensitiveEntityNamed(String entityName) {
         EOEntity entity = null;
         if (entityName != null) {
             if (_entityNameEntityCache == null) {
-                _entityNameEntityCache = new NSMutableDictionary();
-                for (Enumeration e = entitiesForModelGroup(ERXEOAccessUtilities.modelGroup(null)).objectEnumerator(); e.hasMoreElements();) {
-                    EOEntity anEntity = (EOEntity)e.nextElement();
-                    _entityNameEntityCache.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
+            	NSMutableDictionary<String, EOEntity>entityNameDict = new NSMutableDictionary<String, EOEntity>();
+                for (Enumeration<EOEntity> e = entitiesForModelGroup(ERXEOAccessUtilities.modelGroup(null)).objectEnumerator(); e.hasMoreElements();) {
+                    EOEntity anEntity = e.nextElement();
+                    entityNameDict.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
                 }
+                _entityNameEntityCache = entityNameDict;
             }
-            entity = (EOEntity)_entityNameEntityCache.objectForKey(entityName.toLowerCase());
+            entity = _entityNameEntityCache.objectForKey(entityName.toLowerCase());
         }
         return entity;
     }
@@ -365,21 +367,33 @@ public class ERXUtilities {
     }    
 
     /**
-     * Generates a string representation of
-     * the current stacktrace.
+     * Generates a string representation of the current stacktrace.
+     *
      * @return current stacktrace.
      */
     public static String stackTrace() {
-        String result;
+        String result = null;
         try {
             throw new Throwable();
         } catch (Throwable t) {
             result = ERXUtilities.stackTrace(t);
         }
-        // clipping the early parts of the stack trace which include
-        // ERXUtilities.stackTrace()
-        //"java.lang.Throwable 	at er.extensions.ERXUtilities.stackTrace(ERXUtilities.java:429)".length()
-        return result.substring(84);
+
+        String separator = System.getProperties().getProperty("line.separator");
+
+        // Chop off the 1st line, "java.lang.Throwable"
+        //
+        int offset = result.indexOf(separator);
+        result = result.substring(offset+1);
+
+        // Chop off the lines at the start that refer to ERXUtilities
+        //
+        offset = result.indexOf(separator);
+        while (result.substring(0,offset).indexOf("ERXUtilities.java") >= 0) {
+            result = result.substring(offset+1);
+            offset = result.indexOf(separator);
+        }
+        return separator+result;
     }
 
     /**

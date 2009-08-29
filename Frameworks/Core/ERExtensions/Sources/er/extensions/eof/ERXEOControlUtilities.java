@@ -60,6 +60,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
@@ -549,12 +550,12 @@ public class ERXEOControlUtilities {
      *
      * @return objects in the given range
      */
-    public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+    public static <T extends EOEnterpriseObject> NSArray<T> objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
     	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
         NSDictionary<String, Object> hints = new NSDictionary<String, Object>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
         clonedFetchSpec.setHints(hints);
-        return ec.objectsWithFetchSpecification(clonedFetchSpec);
+        return (NSArray<T>)ec.objectsWithFetchSpecification(clonedFetchSpec);
     }
 
     /**
@@ -665,6 +666,19 @@ public class ERXEOControlUtilities {
         EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
         fetchSpec.setFetchesRawRows(true);
 
+        if (sqlFactory == null) {
+        	/* if there is no expression factory we have no choice but to fetch */
+        	NSArray<?> array = ec.objectsWithFetchSpecification(fetchSpec);
+        	if (aggregateAttribute == EOEnterpriseObjectClazz.objectCountAttribute()) {
+        		return array.count();
+        	}
+        	if (aggregateAttribute.name().startsWith("p_objectCountUnique")) {
+        		String attributeName = aggregateAttribute.name().substring("p_objectCountUnique".length());
+        		return ERXArrayUtilities.arrayWithoutDuplicateKeyValue(array, attributeName).count();
+        	}
+        	throw new UnsupportedOperationException("Unable to perform aggregate function for attribute " + aggregateAttribute.name());
+        }
+        
         EOSQLExpression sqlExpr = sqlFactory.expressionForEntity(entity);
         sqlExpr.prepareSelectExpressionWithAttributes(new NSArray<EOAttribute>(aggregateAttribute), false, fetchSpec);
 
@@ -2203,14 +2217,19 @@ public class ERXEOControlUtilities {
 	 */
 	public static NSDictionary<String, Integer> registeredObjectCount(EOEditingContext ec) {
 		NSMutableDictionary<String, Integer> counts = new NSMutableDictionary<String, Integer>();
-		for(EOEnterpriseObject eo : (NSArray<EOEnterpriseObject>)ec.registeredObjects()) {
-			String entityName = eo.entityName();
-			Integer count = counts.objectForKey(entityName);
-			if(count == null) {
-				count = new Integer(0);
-				counts.setObjectForKey(count, entityName);
+		ERXEC erxec = (ERXEC) ec;
+		NSArray<EOGlobalID> gids = (NSArray<EOGlobalID>)ERXKeyValueCodingUtilities.privateValueForKey(erxec, "_globalIDsForRegisteredObjects");
+		for(EOGlobalID gid : gids) {
+			if (gid instanceof EOKeyGlobalID) {
+				EOKeyGlobalID kgid = (EOKeyGlobalID) gid;
+				String entityName = kgid.entityName();
+				Integer count = counts.objectForKey(entityName);
+				if(count == null) {
+					count = new Integer(0);
+					counts.setObjectForKey(count, entityName);
+				}
+				counts.setObjectForKey(count+1, entityName);
 			}
-			counts.setObjectForKey(count+1, entityName);
 		}
 		return counts;
 	}

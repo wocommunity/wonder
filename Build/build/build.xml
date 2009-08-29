@@ -132,6 +132,15 @@
        </antcall>
     </target>
 
+    <target name="ERPDFGeneration.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERPDFGeneration" />
+            <param name="project.dir" value="Frameworks/Misc/ERPDFGeneration" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+       </antcall>
+    </target>
+
     <target name="ERJGroupsSynchronizer.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -167,8 +176,8 @@
             <!-- kind of cheating here...-->
             <param name="classes.exclude.0" value="${erx.class.exclude.0}" />
             <param name="classes.exclude.1" value="${erx.class.exclude.1}" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.jars}/JavaWOExtensions" />
+            <param name="test.className" value="er.extensions.ERExtensionsTest" />
         </antcall>
     </target>
     
@@ -208,6 +217,7 @@
             <param name="project.name" value="ERChronic" />
             <param name="project.dir" value="Frameworks/Misc/ERChronic" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="test.className" value="er.chronic.ChronicTestSuite" />
        </antcall>
     </target>
 
@@ -218,6 +228,16 @@
             <param name="project.dir" value="Frameworks/EOF/ERCaching" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
+    </target>
+
+    <target name="ERXTest.all" if="${include.tests}">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.erxtest.Application" />
+            <param name="project.name" value="ERXTest" />
+            <param name="project.dir" value="Tests/ERXTest" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+        </antcall>
     </target>
 
     <target name="ERIndexing.all">
@@ -373,6 +393,7 @@
             <param name="project.principal.class" value="er.wopaypal.WOPayPal" />
             <param name="project.name" value="WOPayPal" />
             <param name="project.dir" value="Frameworks/BusinessLogic/WOPayPal" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
@@ -533,7 +554,7 @@
             <param name="project.name" value="AjaxExample" />
             <param name="project.dir" value="Examples/Ajax/AjaxExample" />
 
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERPrototypes/JavaMemoryAdaptor" />
         </antcall>
     </target>
     <target name="AjaxExample2.all">
@@ -635,11 +656,11 @@
         </antcall>
     </target>
     
-    <target name="WO2.all">
+    <target name="ERPrototaculous.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
-            <param name="project.name" value="WO2" />
-            <param name="project.dir" value="Frameworks/Ajax/WO2" />
+            <param name="project.name" value="ERPrototaculous" />
+            <param name="project.dir" value="Frameworks/Ajax/ERPrototaculous" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax" />
         </antcall>
@@ -663,7 +684,7 @@
             <param name="project.dir" value="Examples/Ajax/ERDivaLookExample" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/WO2/DerbyPlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/DerbyPlugIn/ERMoviesLogic" />
         </antcall>
     </target>
     
@@ -802,9 +823,9 @@
         to add your own, add a target definition above and choose the correct group below 
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, WOLips.all, WOJavaRebel.all, ERMoviesLogic.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, WOLips.all, WOJavaRebel.all, ERMoviesLogic.all" />
     
-    <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, TickTockMan.all" />
+    <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, TickTockMan.all, ERXTest.all" />
 
     <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, SproutCoreExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all" />
     
@@ -814,7 +835,7 @@
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
     <target name="excelgeneration.examples.all" depends="ExcelGeneratorExample.all" />
     
-    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, SproutCore.all, ERIUI.all, GoogleChart.all, WO2.all, ERDivaLook.all" />
+    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, SproutCore.all, ERIUI.all, GoogleChart.all, ERPrototaculous.all, ERDivaLook.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, SproutCoreExample.all, ERIUIExample.all, ERDivaLookExample.all" />
     
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all" />
@@ -914,6 +935,11 @@
         </antcall>
     </target>
     
+    <target name="tests.run">
+        <antcall target="ERExtensions.all"><param name="build.action" value="test" /></antcall>
+        <antcall target="ERChronic.all"><param name="build.action" value="test" /></antcall>
+    </target>
+
     <target name="clean">
         <antcall target="all.run" >
             <param name="build.action" value="clean" />

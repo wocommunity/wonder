@@ -9,20 +9,13 @@ AttributeRepetition: WORepetition {
 	list = currentSectionKeys;
 }
 
-AttributeValue1: WOSwitchComponent { 
+AttributeValue: ERXTimedSwitchComponent { 
+	localContext = localContext;
+	object = object;
+	userInfo = timingEventUserInfo;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
-	localContext = localContext;
-	object = object;
-}
-
-AttributeValue2: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
-	localContext = localContext;
-	object = object;
 }
 
 BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
@@ -33,13 +26,13 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 Border: ERXTableWithBorder {
     color="#999999";
     bgcolor="#CCCCCC";
-    renderBorder=session.browser.willRenderNestedTablesFast; // VALID
+	renderBorder=session.browser.willRenderNestedTablesFast; // VALID
     doNotRenderTop = true;
 }
 
 BorderWasRendered: WOConditional {
-condition=session.browser.willRenderNestedTablesFast; // VALID
-negate=true;
+	condition = session.browser.willRenderNestedTablesFast; // VALID
+	negate = true;
 }
 
 CancelButton: WOImage {
@@ -143,6 +136,7 @@ EditForm: ERXOptionalForm {
 	enctype = d2wContext.formEncoding;
 	showForm = d2wContext.hasForm;
 	name = "EditForm";
+	multipleSubmit = true;
 }
 
 EditImage: WOImage {
@@ -204,7 +198,7 @@ Errors: ERXErrorDictionaryPanel {
 }
 
 HasDisplayNameForProperty: ERXNonZeroConditional {
-condition=displayNameForProperty.length;
+	condition = displayNameForProperty.length;
 }
 
 HasSectionName: ERXNonZeroConditional {
@@ -227,6 +221,11 @@ ImageSpacer: WOImage {
 	framework = "ERExtensions";
 	height = 20;
 	width = 1;
+}
+
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEventForCurrentPropertyKey.duration;
 }
 
 IsEditing: WOKeyValueConditional {
@@ -253,8 +252,6 @@ IsEntityWritable2: WOConditional {
 IsNotEditingConditional: WOConditional {
 	_unroll = true;
 	condition = isEditing;
-
-
 	negate = true;
 }
 
@@ -284,6 +281,10 @@ NotUsingMatrixLayout: WOConditional {
 	negate = true;
 }
 
+PageMetricsSummary: ERXMetricsSummary {
+	aggregateEventInfo = aggregateEventInfoForPage;
+}
+
 PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
@@ -303,17 +304,17 @@ PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 	target = "PrinterFriendly";
 }
 
-ProprtyKeyComponentGenericContainer: WOGenericContainer {
+PropertyKeyComponentGenericContainer: WOGenericContainer {
 	align = "left";
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
 	valign = "top";
 }
 
-ProprtyKeyComponentGenericContainer2: WOGenericContainer {
+PropertyKeyComponentGenericContainer2: WOGenericContainer {
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
-	valign = "TOP";
+	valign = "top";
 	width = 120;
 }
 
@@ -354,6 +355,14 @@ SectionNameString: WOString {
 Sections: WORepetition {
     list=sectionsForCurrentTab;
     item=currentSection;
+}
+
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
 }
 
 ShowCancel2: WOConditional {

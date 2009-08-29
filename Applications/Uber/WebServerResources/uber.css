@@ -86,3 +86,11 @@ span.actual {
 div#cssRelativeImage div.content {
 	background-image: url(images/ModernWebObjects.png);
 }
+
+.logo {
+	vertical-align: middle;
+}
+
+div.tagCloud {
+	text-align: center;
+}

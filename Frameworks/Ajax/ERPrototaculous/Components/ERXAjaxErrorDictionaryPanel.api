@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERXAjaxErrorDictionaryPanel.java" wocomponentcontent="false">
+
+        <binding name="errorMessages"/>
+        <validation message="'errorMessages' is a required binding.">
+            <unbound name="errorMessages"/>
+        </validation>
+        <binding name="extraErrorMessage"/>
+        <binding name="errorKeyOrder"/>
+    </wo>
+</wodefinitions>

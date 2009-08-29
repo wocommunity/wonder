@@ -1,0 +1,27 @@
+DateMaxField: CalendarDateSelect {
+	dateformat = formatter;
+	size = length;
+	value = maxValue;
+	name = maxName;
+}
+
+DateMinField: CalendarDateSelect {
+	dateformat = formatter;
+	size = length;
+	value = minValue;
+	name = minName;
+}
+
+DateReadableDescription: WOString {
+	_unroll = true;
+	value = dateReadableDescription;
+}
+
+SessionLocalizerERD2WQueryDateRangeTo: ERXLocalizedString {
+	value = "ERD2WQueryDateRange.to";
+}
+
+SessionLocalizerERD2WQueryDateRangeFrom: ERXLocalizedString {
+	value = "ERD2WQueryDateRange.from";
+}
+

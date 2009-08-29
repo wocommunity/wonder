@@ -1,0 +1,35 @@
+ChangeImage: AjaxUpdaterButton {
+	action = editRelationship;
+	class = "D2WAjaxEditToOneFault_Add";
+	container = d2wContext.container;
+}
+
+RemoveButton: AjaxRequestButton {
+	action = removeFromToOneRelationshipAction;
+	value = "x";
+	onSuccess = onSuccess;
+	class = "D2WAjaxEditToOneFault_Delete";
+}
+
+EditObject: AjaxUpdaterLink {
+	action = toOneAction;
+	disabled = d2wContext.disabled;
+	string = toOneDescription;
+	container = d2wContext.container;
+}
+
+HasProperty: WOConditional {
+	condition = hasObjectPropertyValue;
+}
+
+AddBox: WOGenericContainer {
+	elementName = "div";
+	id = addBoxID;
+	style = displayStyle;
+}
+
+RemoveBox: WOGenericContainer {
+	elementName = "div";
+	id = removeBoxID;
+	class = "D2WAjaxEditToOneFault";
+}

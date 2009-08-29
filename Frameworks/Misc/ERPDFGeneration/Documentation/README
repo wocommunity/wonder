@@ -1,0 +1,9 @@
+ERPDFGeneration provides both a utility class and a wrapper component for generating
+PDF documents from XHTML markup. Two PDF generation engines are currently supported, 
+FlyingSaucer (xhtmlrenderer) [1] and Useful Java Application Components (UJAC) [2],
+however additional parser based engines like FOP could be added fairly easily. 
+This is still experimental and the API may change as it evolves. You should test
+thoroughly before using this in production.  
+
+[1] http://xhtmlrenderer.dev.java.net/ 
+[2] http://ujac.sourceforge.net/

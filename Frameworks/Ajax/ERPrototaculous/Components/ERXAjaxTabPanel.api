@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERATabPanel.java" wocomponentcontent="true">
+
+        <binding name="tabs"/>
+        <validation message="'tabs' is a required binding.">
+            <unbound name="tabs"/>
+        </validation>
+        <binding name="selectedTab"/>
+        <validation message="'selectedTab' must be bound to a settable value">
+            <unsettable name="selectedTab"/>
+        </validation>
+        <binding name="tabNameKey"/>
+        <binding name="submitActionName"/>
+    <binding name="onComplete"/>
+    <binding name="container"/>
+        <validation message="'container' is a required binding.">
+            <unbound name="container"/>
+        </validation>
+    </wo>
+</wodefinitions>

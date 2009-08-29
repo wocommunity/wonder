@@ -8,6 +8,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.appserver.ERXBrowser;
+import er.extensions.appserver.ERXBrowserFactory;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
 
@@ -17,7 +19,7 @@ import er.extensions.appserver.ERXWOContext;
  *  <li> throws an IllegalArgumentException when it is embedded in a WOForm that does not have enctype=multipart/form-data
  *  <li> catches "ran out of data" IllegalStateException in superclass when the user backtracked.
  *</ul>
- * @created ak on Wed Oct 09 2002
+ * @author ak on Wed Oct 09 2002
  * @project ERExtensions
  */
 
@@ -63,6 +65,17 @@ public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpl
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
         checkEnctype(context);
+        /* Fix for lame Safari upload bug.  - CH
+         * For more details, see
+         * http://lists.macosforge.org/pipermail/webkit-unassigned/2007-January/026203.html
+         * http://lists.apple.com/archives/macnetworkprog/2006/Dec/msg00021.html
+		 * https://bugs.webkit.org/show_bug.cgi?id=5760
+		 * http://www.webmasterworld.com/macintosh_webmaster/3300569.htm
+		 * http://blog.airbladesoftware.com/2007/8/17/note-to-self-prevent-uploads-hanging-in-safari
+         */
+        if (ERXBrowserFactory.factory().browserMatchingRequest(context.request()).isSafari()) {
+        	response.setHeader("close", "Connection");
+        }
         super.appendToResponse(response, context);
     }
 }

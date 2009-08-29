@@ -1,0 +1,10 @@
+EditToOneRelationship: ERD2WEditToOneRelationship2 {
+	localContext = d2wContext;
+	object = object;
+}
+
+FilterButton: AjaxUpdaterButton {
+	action = toggleFilter;
+	container = container;
+	value = value;
+}

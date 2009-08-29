@@ -15,19 +15,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="WOFramework/FrontBasePlugIn"/>
 	<classpathentry kind="con" path="WOFramework/WOLips"/>
-	<classpathentry kind="con" path="WOFramework/JavaMemoryAdaptor"/>
 	<classpathentry kind="con" path="WOFramework/ERChronic"/>
-	<classpathentry kind="con" path="WOFramework/EROraclePlugIn"/>
 	<classpathentry kind="con" path="WOFramework/GoogleChart"/>
-	<classpathentry kind="con" path="WOFramework/PostgresqlPlugIn"/>
 	<classpathentry kind="con" path="WOFramework/JavaJNDIAdaptor"/>
-	<classpathentry kind="con" path="WOFramework/ERCaptcha"/>
 	<classpathentry kind="con" path="WOFramework/ERJGroupsSynchronizer"/>
-	<classpathentry kind="con" path="WOFramework/ERIMAdaptor"/>
 	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
-	<classpathentry kind="con" path="WOFramework/ERJavaMail"/>
-	<classpathentry kind="con" path="WOFramework/JavaRESTAdaptor"/>
-	<classpathentry kind="con" path="WOFramework/EROpenID"/>
 	<classpathentry kind="con" path="WOFramework/ERRest"/>
 	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
 	<classpathentry kind="con" path="WOFramework/Ajax"/>

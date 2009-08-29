@@ -1,0 +1,10 @@
+Toggle: AjaxUpdaterLink {
+	action = toggleClicked;
+	class = styleClass;
+	container = ^container;
+}
+
+Display: WOString {
+	value = displayString;
+	escapeHTML = "false";
+}

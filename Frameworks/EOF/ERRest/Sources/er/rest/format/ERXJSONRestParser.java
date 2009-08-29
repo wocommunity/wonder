@@ -18,8 +18,8 @@ import er.rest.ERXRestUtils;
  * @author mschrag
  */
 public class ERXJSONRestParser implements IERXRestParser {
-	protected ERXRestRequestNode createRequestNodeForJSON(String name, JSON json, ERXRestFormat.Delegate delegate) {
-		ERXRestRequestNode requestNode = new ERXRestRequestNode(name);
+	protected static ERXRestRequestNode createRequestNodeForJSON(String name, JSON json, boolean rootNode, ERXRestFormat.Delegate delegate) {
+		ERXRestRequestNode requestNode = new ERXRestRequestNode(name, rootNode);
 
 		if (json instanceof JSONNull) {
 			// just leave the value null
@@ -29,10 +29,12 @@ public class ERXJSONRestParser implements IERXRestParser {
 			JSONArray jsonArray = (JSONArray) json;
 			for (Object obj : jsonArray) {
 				if (ERXRestUtils.isPrimitive(obj)) {
-					requestNode.addChild(new ERXRestRequestNode(null, obj));
+					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(null, obj, false);
+					requestNode.addChild(primitiveChild);
+					delegate.nodeDidParse(primitiveChild);
 				}
 				else {
-					requestNode.addChild(createRequestNodeForJSON(null, (JSON) obj, delegate));
+					requestNode.addChild(ERXJSONRestParser.createRequestNodeForJSON(null, (JSON) obj, true, delegate));
 				}
 			}
 		}
@@ -42,10 +44,12 @@ public class ERXJSONRestParser implements IERXRestParser {
 				String strKey = (String) key;
 				Object value = jsonObject.get(key);
 				if (ERXRestUtils.isPrimitive(value)) {
-					requestNode.addChild(new ERXRestRequestNode(strKey, value));
+					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(strKey, value, false);
+					requestNode.addChild(primitiveChild);
+					delegate.nodeDidParse(primitiveChild);
 				}
 				else {
-					requestNode.addChild(createRequestNodeForJSON(strKey, (JSON) value, delegate));
+					requestNode.addChild(ERXJSONRestParser.createRequestNodeForJSON(strKey, (JSON) value, false, delegate));
 				}
 			}
 		}
@@ -73,7 +77,7 @@ public class ERXJSONRestParser implements IERXRestParser {
 			// }
 
 			JSON rootJSON = JSONSerializer.toJSON(contentStr, ERXJSONRestWriter._config);
-			rootRequestNode = createRequestNodeForJSON(null, rootJSON, delegate);
+			rootRequestNode = createRequestNodeForJSON(null, rootJSON, true, delegate);
 		}
 
 		return rootRequestNode;

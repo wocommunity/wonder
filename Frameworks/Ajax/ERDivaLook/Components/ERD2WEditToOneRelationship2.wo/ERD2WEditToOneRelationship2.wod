@@ -15,28 +15,13 @@ EditToOneRelationship: ERXToOneRelationship2 {
     sortCaseInsensitive = d2wContext.sortCaseInsensitive;
     id = d2wContext.id;
     title = d2wContext.title;
+    onChange = onChange;
 }
 
-Observer: AjaxObserveField {
-	updateContainerID = d2wContext.updateContainerID;
-	observeFieldID = d2wContext.id;
-	fullSubmit = true;
-}
-
-IsAjax: WOConditional {
-	condition = d2wContext.isAjax;
-}
-
-NewButton: AjaxLightWindowButton {
-	value = "New...";
+NewButton: AjaxUpdaterButton {
 	action = newAction;
-	title = "New...";
-	height = d2wContext.height;
-	width = d2wContext.width;
-	top = d2wContext.top;
-	left = d2wContext.left;
 	class = "ERD2WEditToOneRelationship_New";
-	formID = "EditForm";		// FIXME: RM: need to get from d2w context or something
+	container = d2wContext.container;
 }
 
 IsEditable: WOConditional {

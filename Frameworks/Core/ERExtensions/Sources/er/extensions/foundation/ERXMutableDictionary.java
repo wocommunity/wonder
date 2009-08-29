@@ -162,7 +162,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		public synchronized void removeObjectsForKeys(NSArray<? extends K> keys) {
+		public synchronized void removeObjectsForKeys(NSArray<?> keys) {
 			super.removeObjectsForKeys(keys);
 		}
 
@@ -172,7 +172,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		public synchronized void setObjectForKey(Object object, Object key) {
+		public synchronized void setObjectForKey(V object, K key) {
 			super.setObjectForKey(object, key);
 		}
 
@@ -265,7 +265,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		protected synchronized K[] keysNoCopy() {
+		protected synchronized Object[] keysNoCopy() {
 			return super.keysNoCopy();
 		}
 
@@ -280,12 +280,12 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		public synchronized NSArray<V> objectsForKeys(NSArray<K> keys, V notFoundMarker) {
+		public synchronized NSArray<V> objectsForKeys(NSArray<? extends K> keys, V notFoundMarker) {
 			return super.objectsForKeys(keys, notFoundMarker);
 		}
 
 		@Override
-		protected synchronized V[] objectsNoCopy() {
+		protected synchronized Object[] objectsNoCopy() {
 			return super.objectsNoCopy();
 		}
 

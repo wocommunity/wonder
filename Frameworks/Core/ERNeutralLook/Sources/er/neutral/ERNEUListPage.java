@@ -17,6 +17,10 @@ public class ERNEUListPage extends ERD2WListPage {
     public ERNEUListPage(WOContext context) { super(context); }
 
     public int colSpan() {
-        return ((NSArray)d2wContext().valueForKey("displayPropertyKeys")).count() + 2;
+        int multiplier = 1;
+        if (shouldDisplayDetailedPageMetrics()) {
+            multiplier = 2;
+        }
+        return (((NSArray)d2wContext().valueForKey("displayPropertyKeys")).count() * multiplier) + 2;
     }
 }

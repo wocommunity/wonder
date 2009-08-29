@@ -49,7 +49,7 @@ public class ERMemoryAdaptor extends EOAdaptor {
 
   @Override
   public EOSQLExpressionFactory expressionFactory() {
-    throw new UnsupportedOperationException("ERMemoryAdaptor.expressionFactory");
+    return null;
   }
 
   @Override

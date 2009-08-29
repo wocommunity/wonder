@@ -1,12 +1,13 @@
 //Check path to Config File.
 //Check the Expire Date.
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver.xml.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.xml.WOXMLCoder;
+import com.webobjects.foundation.NSPathUtilities;
 
 public class Application extends WOApplication {
 

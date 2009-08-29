@@ -1,6 +1,7 @@
 NumberField: WOTextField {
 	size = length;
 	value = value;
+	name = d2wContext.name;
 }
 
 OperatorPopUp: WOPopUpButton {

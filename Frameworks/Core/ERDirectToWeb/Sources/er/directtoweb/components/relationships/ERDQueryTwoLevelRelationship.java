@@ -31,7 +31,7 @@ import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
  * restrictedChildrenChoiceKey = "session.user.visibleDepartments", Restriction on the children entity,
  *          if unset all children are shown
  * displayGroup = display group the query is in
- * @created ak on Fri Nov 21 2003
+ * @author ak on Fri Nov 21 2003
  * @project ERDirectToWeb
  */
 

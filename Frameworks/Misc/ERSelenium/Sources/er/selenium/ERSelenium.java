@@ -26,6 +26,7 @@ package er.selenium;
 import com.webobjects.appserver.WOApplication;
 
 import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXProperties;
 import er.selenium.io.SeleniumComponentExporter;
 import er.selenium.io.SeleniumImporterExporterFactory;
@@ -73,7 +74,8 @@ public class ERSelenium extends ERXFrameworkPrincipal {
     }
 
     public static boolean testsEnabled() {
-        return ERXProperties.booleanForKeyWithDefault("SeleniumTestsEnabled", false);
+    	boolean isDevMode = ERXApplication.erxApplication().isDevelopmentMode();
+        return isDevMode || ERXProperties.booleanForKeyWithDefault("SeleniumTestsEnabled", false);
     }
 
     // @Override

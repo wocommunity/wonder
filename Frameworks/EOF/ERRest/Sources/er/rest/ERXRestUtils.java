@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSUtilities;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -95,11 +96,11 @@ public class ERXRestUtils {
 		}
 		else if (value instanceof NSTimestamp) {
 			NSTimestamp timestamp = (NSTimestamp) value;
-			formattedValue = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ").format(timestamp);
+			formattedValue = new NSTimestampFormatter(ERXRestUtils.timestampFormat(false)).format(timestamp);
 		}
 		else if (value instanceof Date) {
 			Date date = (Date) value;
-			formattedValue = new SimpleDateFormat("YYYY-MM-dd\\THH:mm:ss\\Z").format(value);
+			formattedValue = new SimpleDateFormat(ERXRestUtils.dateFormat(false)).format(value);
 		}
 		else {
 			formattedValue = value.toString();
@@ -108,6 +109,33 @@ public class ERXRestUtils {
 
 	}
 
+	// this "spaces" attribute is stupid, i know ... this whole api is stupid.  it's a quick hack for now to accommodate someone very near and dear to my heart ... yes i'm talking to you.
+	protected static String timestampFormat(boolean spaces) {
+		String dateFormat = ERXProperties.stringForKey("er.rest.timestampFormat");
+		if (dateFormat == null) {
+			if (spaces) {
+				dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.secondary", "%Y-%m-%d %H:%M:%S %Z");
+			}
+			else {
+				dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.primary", "%Y-%m-%dT%H:%M:%SZ");
+			}
+		}
+		return dateFormat;
+	}
+
+	protected static String dateFormat(boolean spaces) {
+		String timestampFormat = ERXProperties.stringForKey("er.rest.dateFormat");
+		if (timestampFormat == null) {
+			if (spaces) {
+				timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.secondary", "YYYY-MM-dd HH:mm:ss z");
+			}
+			else {
+				timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.primary", "YYYY-MM-dd\\THH:mm:ss\\Z");
+			}
+		}
+		return timestampFormat;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static Object coerceValueToTypeNamed(Object value, String valueTypeName, IERXRestDelegate delegate) {
 		Object parsedValue;
@@ -153,12 +181,8 @@ public class ERXRestUtils {
 				String strValue = (String) value;
 				NSTimestampFormatter formatter = null;
 				try {
-					if (strValue.indexOf(' ') == -1) {
-						formatter = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ");
-					}
-					else {
-						formatter = new NSTimestampFormatter();
-					}
+					boolean spaces = strValue.indexOf(' ') != -1;
+					formatter = new NSTimestampFormatter(ERXRestUtils.timestampFormat(spaces));
 					parsedValue = formatter.parseObject(strValue);
 				}
 				catch (Throwable t) {
@@ -167,7 +191,7 @@ public class ERXRestUtils {
 						msg += " (example: " + formatter.format(new NSTimestamp()) + ")";
 					}
 					msg += ".";
-					throw new IllegalArgumentException(msg);
+					throw new IllegalArgumentException(msg, t);
 				}
 			}
 		}
@@ -179,12 +203,8 @@ public class ERXRestUtils {
 				String strValue = (String) value;
 				SimpleDateFormat formatter = null;
 				try {
-					if (strValue.indexOf(' ') == -1) {
-						formatter = new SimpleDateFormat("YYYY-MM-dd\\THH:mm:ss\\Z");
-					}
-					else {
-						formatter = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss z");
-					}
+					boolean spaces = strValue.indexOf(' ') != -1;
+					formatter = new SimpleDateFormat(ERXRestUtils.dateFormat(spaces));
 					parsedValue = formatter.parseObject(strValue);
 				}
 				catch (Throwable t) {
@@ -193,7 +213,7 @@ public class ERXRestUtils {
 						msg += " (example: " + formatter.format(new Date()) + ")";
 					}
 					msg += ".";
-					throw new IllegalArgumentException(msg);
+					throw new IllegalArgumentException(msg, t);
 				}
 			}
 		}

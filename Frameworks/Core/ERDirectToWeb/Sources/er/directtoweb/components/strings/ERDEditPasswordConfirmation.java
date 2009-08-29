@@ -22,7 +22,7 @@ import er.extensions.validation.ERXValidationFactory;
  * @binding length the length of the text field
  * @d2wKey length the length of the text field
  *
- * @created ak on Sun Aug 17 2003
+ * @author ak on Sun Aug 17 2003
  * @project ERDirectToWeb
  */
 

@@ -825,7 +825,7 @@ public class ERXModelGroup extends EOModelGroup {
 			EOModel otherModel = (EOModel)modelsEnum.nextElement();
 			if (otherModel != model) {
 				NSDictionary otherConnectionDictionary = otherModel.connectionDictionary();
-				if (otherConnectionDictionary != null) {
+				if (otherConnectionDictionary != null && ERXExtensions.safeEquals(newConnectionDictionary.objectForKey("adaptorName"), otherConnectionDictionary.objectForKey("adaptorName"))) {
 					boolean valuesThatMatterMatch = true;
 					for (int keyNum = 0; valuesThatMatterMatch && keyNum < keysThatMatter.length; keyNum ++) {
 						String thisValue = (String)newConnectionDictionary.objectForKey(keysThatMatter[keyNum]);

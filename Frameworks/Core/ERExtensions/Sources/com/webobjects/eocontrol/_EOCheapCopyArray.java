@@ -31,13 +31,11 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 
 	public void _setArray(NSArray otherArray) {
 		willRead();
-		_capacity = _count = otherArray.count();
+		int count = otherArray.count();
 		_objects = null;
-		_objectsCache = null;
-		if (_count > 0) {
-			_objects = new Object[_count];
-			System.arraycopy(((otherArray.objects())), 0,
-					((_objects)), 0, _count);
+		if (count > 0) {
+			_objects = new Object[count];
+			System.arraycopy(((otherArray.objects())), 0, ((_objects)), 0, count);
 		}
 		_setMustRecomputeHash(true);
 	}

@@ -36,6 +36,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -1227,7 +1228,7 @@ public class ERXSQLHelper {
 			sqlName = e.sqlStringForAttribute(attribute);
 		}
 
-		int maxPerQuery = 256;
+		int maxPerQuery = maximumElementPerInClause(e.entity());
 
 		// Need to wrap this SQL in parens if there are multiple grougps
 		if (valueArray.count() > maxPerQuery) {
@@ -1268,6 +1269,17 @@ public class ERXSQLHelper {
 		return sb.toString();
 	}
 
+	/**
+	 * The database specific limit, or or most efficient number, of elements in an IN clause in a statement.  If there
+	 * are more that this number of elements, additional IN clauses will be generated, ORed to the others.
+	 * 
+	 * @param entity EOEntity that can be used to fine-tune the result
+	 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
+	 */
+	protected int maximumElementPerInClause(EOEntity entity) {
+		return 256;
+	}
+	
 	protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
 		return expression.sqlStringForValue(value, key);
 	}
@@ -1419,6 +1431,41 @@ public class ERXSQLHelper {
 		return columnName;
 	}
 
+	/**
+	 * Returns whether or not this database can always perform the a distinct operation
+	 * when sort orderings are applied. Oracle, for instance, will fail if you try to
+	 * sort on a key that isn't in the list of fetched keys.
+	 * 
+	 * @return whether or not this database can always perform the a distinct operation
+	 * when sort orderings are applied
+	 */
+	protected boolean canReliablyPerformDistinctWithSortOrderings() {
+		return true;
+	}
+	
+	/**
+	 * Returns whether or not this database should perform the distinct portion of the
+	 * given fetch spec in memory or not.
+	 * 
+	 * @param fetchSpecification the fetch spec to check
+	 * @return whether or not this database should perform the distinct portion of the
+	 * given fetch spec in memory or not
+	 */
+	public boolean shouldPerformDistinctInMemory(EOFetchSpecification fetchSpecification) {
+		boolean shouldPerformDistinctInMemory = false;
+		if (!canReliablyPerformDistinctWithSortOrderings()) {
+			NSArray<EOSortOrdering> sortOrderings = fetchSpecification.sortOrderings();
+	        if (fetchSpecification.usesDistinct() && sortOrderings != null && sortOrderings.count() > 0) {
+	        	shouldPerformDistinctInMemory = true;
+	        	// MS: We might be able to restrict this check further at some point ...
+//	        	for (EOSortOrdering sortOrdering : sortOrderings) {
+//	        		sortOrdering.key();
+//	        	}
+	        }
+		}
+        return shouldPerformDistinctInMemory;
+	}
+
 	public static ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
 		// This is REALLY hacky.
 		String className = expression.getClass().getName();
@@ -1435,14 +1482,15 @@ public class ERXSQLHelper {
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOEditingContext ec, String modelName) {
-		ec.lock();
-		try {
-			EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
-			return ERXSQLHelper.newSQLHelper(databaseContext);
-		}
-		finally {
-			ec.unlock();
-		}
+		return ERXSQLHelper.newSQLHelper(EOUtilities.databaseContextForModelNamed(ec, modelName));
+	}
+
+	public static ERXSQLHelper newSQLHelper(EOEditingContext ec, EOEntity entity) {
+		return ERXSQLHelper.newSQLHelper(EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec));
+	}
+
+	public static ERXSQLHelper newSQLHelper(EOEditingContext ec, EOModel model) {
+		return ERXSQLHelper.newSQLHelper(EODatabaseContext.registeredDatabaseContextForModel(model, ec));
 	}
 
 	public static ERXSQLHelper newSQLHelper(EODatabaseContext databaseContext) {
@@ -1468,6 +1516,10 @@ public class ERXSQLHelper {
 	public static ERXSQLHelper newSQLHelper(JDBCPlugIn plugin) {
 		String databaseProductName = plugin.databaseProductName();
 		return ERXSQLHelper.newSQLHelper(databaseProductName);
+	}
+
+	public static ERXSQLHelper newSQLHelper(EOEntity entity) {
+		return ERXSQLHelper.newSQLHelper(entity.model());
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOModel model) {
@@ -1709,6 +1761,11 @@ public class ERXSQLHelper {
 		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 			return false;
 		}
+		
+		@Override
+		protected boolean canReliablyPerformDistinctWithSortOrderings() {
+			return false;
+		}
 	}
 
 	public static class OpenBaseSQLHelper extends ERXSQLHelper {
@@ -1885,6 +1942,31 @@ public class ERXSQLHelper {
 				return "\"" + columnName + "\"";
 
 			return "\"" + columnName.substring(0, i) + "\".\"" + columnName.substring(i + 1, columnName.length()) + "\"";
+		}
+		
+		/**
+		 * FrontBase is exceedingly inefficient in processing OR clauses.   A query like this:<br/>
+		 * SELECT * FROM "Foo" t0 WHERE ( t0."oid" IN (431, 437, ...) OR t0."oid" IN (1479, 1480, 1481,...)...<br/>
+		 * Completely KILLS FrontBase (30+ seconds of 100%+ CPU usage). The same query rendered as:<br/>
+		 * SELECT * FROM "Foo" t0 WHERE t0."oid" IN (431, 437, ...) UNION SELECT * FROM "Foo" t0 WHERE t0."oid" IN (1479, 1480, 1481, ...)...
+		 * executes in less than a tenth of the time with less high CPU load.  Collapse all the ORs and INs into one and it is faster
+		 * still.  This has been tested with over 17,000 elements, so 15,000 seemed like a safe maximum.  I don't know what the actual
+		 * theoretical maximum is.
+		 * 
+		 * But... It looks to like the query optimizer will choose to NOT use an index if the number of elements in the IN gets close to, 
+		 * or exceeds, the number of rows (as in the case of a select based on FK with a large number of keys that don't match any rows).  In 
+		 * this case it seems to fall back to table scanning (or something dreadfully slow).  This only seems to have an impact when the number
+		 * of elements in the IN is greater than 1,000.  For larger sizes, the correct number for this method to return seems to depend on the
+		 * number of rows in the tables.  1/5th of the table size may be a good place to start looking for the upper bound.
+		 * 
+		 * @see ERXSQLHelper#maximumElementPerInClause()
+		 * 
+		 * @param entity EOEntity that can be used to fine-tune the result
+		 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
+		 */
+		@Override
+		protected int maximumElementPerInClause(EOEntity entity) {
+			return 15000;
 		}
 	}
 

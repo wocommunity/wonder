@@ -16,7 +16,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * @binding sample sample binding explanation
  * @d2wKey sample sample d2w key
  *
- * @created ak on Mon Sep 01 2003
+ * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
  */
 

@@ -6,7 +6,7 @@ import com.webobjects.appserver.*;
  *
  * @binding sample sample binding explanation
  *
- * @created ak on Mon Mar 17 2003
+ * @author ak on Mon Mar 17 2003
  * @project WRReporting
  */
 

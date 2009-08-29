@@ -16,7 +16,7 @@ import com.webobjects.foundation.NSArray;
  * @d2wKey customComponentName the component to use as display for the propertyKey when no label was given (optional)
  * @d2wKey displayPropertyKeys the keys value to show in the table
  *
- * @created ak on Tue Feb 10 2004
+ * @author ak on Tue Feb 10 2004
  * @project ERDirectToWeb
  */
 

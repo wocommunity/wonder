@@ -164,6 +164,7 @@ There are many ways to use this script:
         <property name="web.application.install.root" value="${wo.server.root}" />
         <!-- just some existing value -->
         <property name="project.sources.dir" value="${project.dir}/Sources" />
+        <property name="project.tests.dir" value="${project.dir}/Tests" />
         <property name="patches.dir" value="${wonder.root}/Build/build" />
         <property name="classes.exclude.0" value="does_not_exists_hopefully" />
         <property name="classes.exclude.1" value="does_not_exists_hopefully" />
@@ -261,23 +262,86 @@ There are many ways to use this script:
         </taskdef>
          
        <antcall target="${before.compile}" />
+
        <wocompile srcdir="${project.sources.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}" >
-       <!--compilerarg value="-Xlint:unchecked" /-->
-                    <exclude name="${classes.exclude.0}" />
-                    <exclude name="${classes.exclude.1}" />
-                    <exclude name="${classes.exclude.2}" />
-            <classpath>
-                <fileset dir="${project.dir}/Libraries">
-                    <include name="**/*.jar" />
-                    <!-- ak: i know, fix this...-->
-                </fileset>
-            </classpath>
-            <!-- ak: must NOT be a copy of WOApp, as deploymentDir doesn't work here -->
+           <!-- compilerarg value="-Xlint:unchecked" -->
+           <exclude name="**/Tests/**" /> <!-- perhaps not necessary, but will not hurt. -rrk -->
+           <exclude name="${classes.exclude.0}" />
+           <exclude name="${classes.exclude.1}" />
+           <exclude name="${classes.exclude.2}" />
+           <classpath>
+               <fileset dir="${project.dir}/Libraries">
+                   <include name="**/*.jar" />
+                   <!-- ak: i know, fix this...-->
+               </fileset>
+           </classpath>
+           <!-- ak: must NOT be a copy of WOApp, as deploymentDir doesn't work here -->
            <frameworks root="External" if="wo.external.root.bundles" bundles="${wo.external.root.bundles}" embed="${wo.external.root.bundles.embed}" dir="${wo.external.root}" />
            <frameworks root="Local"    if="wo.local.root.bundles" bundles="${wo.local.root.bundles}" embed="${wo.local.root.bundles.embed}" dir="${wo.local.root}"/>
            <frameworks root="System"   if="wo.system.root.bundles" bundles="${wo.system.root.bundles}" embed="${wo.system.root.bundles.embed}" dir="${wo.system.frameworks}"/>
         </wocompile>
+
+        <!-- Do another wocompile for test sources, but only if the Tests directory exists and we
+             are building with the include.tests property set to true and we actually have a test.className
+             set for the project. (This last condition takes care of ERWorkerChannel, which has Tests
+             sources, but they do not compile.)
+
+             The <condition> below will set the <wocompile> srcdir to project.tests.dir if we want tests.
+             If not, the srcdir will be set to project.sources.dir. Since that is what the <wocompile> above
+             does, so this second <wocompile> becomes a noop.
+
+             Does this seem lame? To me, also. I have suggested a "if" attribute for <wocompile> and
+             this will be simplified if that goes in. -rrk
+        -->
+
+        <condition property="tests.dir" value="${project.tests.dir}" else="${project.sources.dir}">
+            <and>
+                <available file="${project.tests.dir}" />
+                <istrue value="${include.tests}" />
+                <isset property="test.className" />
+            </and>
+        </condition>
+
+       <wocompile srcdir="${tests.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}" >
+           <!--compilerarg value="-Xlint:unchecked" /-->
+           <exclude name="${classes.exclude.0}" />
+           <exclude name="${classes.exclude.1}" />
+           <exclude name="${classes.exclude.2}" />
+           <classpath>
+                <fileset dir="${project.dir}/Libraries">
+                    <include name="**/*.jar" />
+                    <!-- ak: i know, fix this...-->
+                </fileset>
+           </classpath>
+           <!-- ak: must NOT be a copy of WOApp, as deploymentDir doesn't work here -->
+           <frameworks root="External" if="wo.external.root.bundles" bundles="${wo.external.root.bundles}" embed="${wo.external.root.bundles.embed}" dir="${wo.external.root}" />
+           <frameworks root="Local"    if="wo.local.root.bundles" bundles="${wo.local.root.bundles}" embed="${wo.local.root.bundles.embed}" dir="${wo.local.root}"/>
+           <frameworks root="System"   if="wo.system.root.bundles" bundles="${wo.system.root.bundles}" embed="${wo.system.root.bundles.embed}" dir="${wo.system.frameworks}"/>
+        </wocompile>
+
         <antcall target="${after.compile}" />
+    </target>
+
+    <target name="global.framework.test" depends="global.properties">
+        <junit haltonfailure="yes">
+            <test name="${test.className}" if="test.className" />
+            <formatter type="brief" usefile="false" />
+            <classpath>
+
+                <!-- XXX - Including these three filesets in this way is not the best way to go. It would be better
+                           to get the list of frameworks that the project is dependent on to build, and then we may
+                           also need another thing in the build.xml entry for the project to declare frameworks
+                           that are only run-time dependencies. -rrk, Fri Aug  7 13:21:11 PDT 2009 -->
+
+                <fileset dir="${build.root}"><include name="*.framework/Resources/Java/*.jar"/></fileset>
+                <fileset dir="${wo.local.frameworks}"><include name="*.framework/Resources/Java/*.jar"/></fileset>
+                <fileset dir="${wo.system.frameworks}"><include name="*.framework/Resources/Java/*.jar"/></fileset>
+
+                <pathelement location="${build.root}/${project.name}-${project.version}.jar" />
+                <pathelement path="${build.root}/${project.name}.framework/Resources/Java/*.jar" />
+                <pathelement location="${build.root}/ERJars.framework/Resources/Java/junit.jar" />
+            </classpath>
+        </junit>
     </target>
 
     <target name="global.unjar" if="bundle.jars">
@@ -295,7 +359,7 @@ There are many ways to use this script:
         </taskdef>
 
         <antcall target="${before.build}" />
-        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}" customInfoPListContent="${project.customInfo.plist}">
+        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}" CFBundleVersion="${project.name} ${project.version}" CFBundleShortVersion="${project.version}" customInfoPListContent="${project.customInfo.plist}">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
             </lib>
@@ -423,6 +487,7 @@ There are many ways to use this script:
     
     <target name="global.framework.web" depends="global.properties">
         <mkdir dir="${web.framework.install.root}/${project.name}.framework" />
+        <mkdir dir="${build.root}/${project.name}.framework/WebServerResources" />
         <sync todir="${web.framework.install.root}/${project.name}.framework/WebServerResources">
             <fileset dir="${build.root}/${project.name}.framework/WebServerResources" />
         </sync>

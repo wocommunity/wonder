@@ -109,9 +109,10 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
 					if (app.sessionStore().getClass() == WOServerSessionStore.class) {
 						if (app.sessionStore().restoreSessionWithID(request.sessionID(), request) == null) {
         					response = generateRequestRefusal(request);
-        					// permanent redirect, as the session is gone for good. It
-        					// shouldn't matter which instance we go to now.
-        					response.setStatus(301);
+        					// AK: should be a permanent redirect, as the session is gone for good. 
+        					// However, the adaptor checks explictely on 302 so we return that...
+        					// It shouldn't matter which instance we go to now.
+        					response.setStatus(302);
         				}
         			}
         		} else {

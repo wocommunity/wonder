@@ -1,12 +1,5 @@
-RadioButton1: WORadioButton {
-	value = 1;
-	selection = yesNoBoolean;
-	name = radioBoxGroupName;
+Selector: ERXBooleanSelector {
+	selection = objectPropertyValue;
+	yesString = "Allow";
+	noString = "Restrict";
 }
-
-RadioButton2: WORadioButton {
-	value = 0;
-	selection = yesNoBoolean;
-	name = radioBoxGroupName;
-}
-

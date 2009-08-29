@@ -1,4 +1,4 @@
-<WEBOBJECT NAME=Show>
+<WEBOBJECT NAME="Show">
 <script>
 function ERD2WDebugFlags_cssDebug() {
     var newSS;
@@ -10,22 +10,25 @@ function ERD2WDebugFlags_cssDebug() {
         newSS=document.createElement('link');
         newSS.rel='stylesheet';
         newSS.type='text/css';
-        newSS.href='<webobject name=CSSUrl></webobject>';
+        newSS.href='<webobject name="CSSUrl"></webobject>';
         newSS.id='debug-stylesheet';
         document.documentElement.childNodes[0].appendChild(newSS);
     }
 }
 </script>
 <ul class="DebugFlags">
-	<li><WEBOBJECT NAME=Log4J>Log4J</WEBOBJECT></li>
-	<li><WEBOBJECT NAME=D2W>D2W</WEBOBJECT> </li>
-	<li><WEBOBJECT NAME=CSS>CSS</WEBOBJECT> </li>
-	<li><WEBOBJECT NAME=SQL>Toggle SQL</WEBOBJECT></li>
-	<li><WEBOBJECT NAME=Clear>Clear D2W Cache</WEBOBJECT></li>
-	<li><WEBOBJECT NAME=Dump>Created keys</WEBOBJECT></li>
-	<li><WEBOBJECT NAME=Localization>Localization</WEBOBJECT></li>
-	<li><WEBOBJECT NAME=WOStats>WOStats</WEBOBJECT></li>
-	<li><WEBOBJECT NAME=Test>Run Test</WEBOBJECT></li>
+	<li><WEBOBJECT NAME="Log4J">Log4J</WEBOBJECT></li>
+	<li><WEBOBJECT NAME="D2W">D2W</WEBOBJECT> </li>
+	<li><WEBOBJECT NAME="CSS">CSS</WEBOBJECT> </li>
+	<li><WEBOBJECT NAME="SQL">Toggle SQL (<webobject name="SQLEnabled"><span style="color: red;">ON</span></webobject><webobject name="SQLNotEnabled">off</webobject>)</WEBOBJECT></li>
+	<li><WEBOBJECT NAME="Clear">Clear D2W Cache</WEBOBJECT></li>
+	<li><webobject name="PageMetrics">Page Metrics (<webobject name="IfMetricsEnabled">on</webobject><webobject name="IfNotMetricsEnabled">off</webobject>)</webobject>
+		<webobject name="IfMetricsEnabled"> | <webobject name="DetailedPageMetrics"><webobject name="IfDetailedMetricsEnabled">Hide</webobject><webobject name="IfNotDetailedMetricsEnabled">Show</webobject> Details</webobject></webobject>
+	</li>
+	<li><WEBOBJECT NAME="Dump">Created keys</WEBOBJECT></li>
+	<li><WEBOBJECT NAME="Localization">Localization</WEBOBJECT></li>
+	<li><WEBOBJECT NAME="WOStats">WOStats</WEBOBJECT></li>
+	<li><WEBOBJECT NAME="Test">Run Test</WEBOBJECT></li>
 </ul>
 </WEBOBJECT>
 

@@ -56,7 +56,7 @@ public class ERDPickIntermediateDelegate implements NextPageDelegate {
             	selectedObjects = (NSArray)sender.valueForKeyPath("selectedObjects");
             }
             NSArray relatedObjects = (NSArray)eo.valueForKeyPath(relationshipName);
-            for(Enumeration e = relatedObjects.objectEnumerator(); e.hasMoreElements(); ) {
+            for(Enumeration e = relatedObjects.immutableClone().objectEnumerator(); e.hasMoreElements(); ) {
                 EOEnterpriseObject relatedObject = (EOEnterpriseObject)e.nextElement();
                 EOEnterpriseObject pickedObject = (EOEnterpriseObject)relatedObject.valueForKey(pickRelationshipName);
                 if(!selectedObjects.containsObject(pickedObject)) {

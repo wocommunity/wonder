@@ -1,9 +1,0 @@
-Span: WOGenericContainer {
-	elementName = "span";
-	class = classString;
-}
-
-String: WOString {
-    valueWhenEmpty = localContext.valueWhenEmpty;
-	value = objectPropertyValue;
-}

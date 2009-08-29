@@ -1,12 +1,12 @@
 ActiveImage1: WOActiveImage {
 	action = saveChanges;
-	filename = "graphics/save.gif";
+	filename = "graphics/buttons/save.gif";
 	framework = "app";
 }
 
 ActiveImage2: WOActiveImage {
 	action = saveChanges;
-	filename = "graphics/save.gif";
+	filename = "graphics/buttons/save.gif";
 	framework = "app";
 }
 

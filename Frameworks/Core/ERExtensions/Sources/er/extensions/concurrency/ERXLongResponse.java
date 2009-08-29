@@ -18,7 +18,7 @@ import er.extensions.eof.ERXConstant;
  * via either the bindings or explicitely.
  *
  * @binding task implementation of ERXLongResponseTask
- * @created ak on Tue Feb 03 2004
+ * @author ak on Tue Feb 03 2004
  * @project ERExtensions
  */
 

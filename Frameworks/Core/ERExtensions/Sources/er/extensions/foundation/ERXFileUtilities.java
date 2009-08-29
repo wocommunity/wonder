@@ -1496,22 +1496,23 @@ public class ERXFileUtilities {
     }
 
     
-    /** Lists all directories in the specified directory, is desired recursive.
+    /** Lists all files in the specified directory, if desired recursively.
      *  
-     * @param baseDir the dir from which to list the child directories
-     * @param recursive if true this methods works recursively
-     * @return an array of files which are directories
+     * @param baseDir the dir from which to list the child files
+     * @param recursive if true this method works recursively
+     * @param filter filter to match the files against. If null, all files will be included. 
+     * @return an array of files
      */
     public static File[] listFiles(File baseDir, boolean recursive, FileFilter filter) {
         File[] files = baseDir.listFiles(filter);
         if (files != null && recursive) {
-        	NSMutableArray<File> a = new NSMutableArray<File>(files);
+        	NSMutableArray<File> a = new NSMutableArray<File>();
             for (int i = files.length; i-- > 0;) {
-                File currentDir = files [i];
-            	a.addObject(currentDir);
-                if(currentDir.isDirectory()) {
-                	File[] currentDirs = listFiles(currentDir, true, filter);
-                	a.addObjects(currentDirs);
+                File currentFile = files[i];
+            	a.addObject(currentFile);
+                if(currentFile.isDirectory()) {
+                	File[] currentFiles = listFiles(currentFile, true, filter);
+                	a.addObjects(currentFiles);
                 }
             }
             Object[] objects = a.objects();

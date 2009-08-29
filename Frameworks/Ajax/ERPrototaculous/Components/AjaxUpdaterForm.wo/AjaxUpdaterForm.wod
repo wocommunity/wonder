@@ -1,0 +1,40 @@
+Form: WOGenericContainer {
+	elementName = "form";
+	id = ^id;
+	class = classString;
+	style = ^style;
+	method = method;
+	action = "#";
+	enctype = ^enctype;
+	name = elementID;
+	onsubmit = onSubmit;
+	invokeAction = invokeAction;
+	omitTags = omitTags;
+}
+
+Contents: WOComponentContent {
+}
+
+WOSID: WOHiddenField {
+	value = session.sessionID;
+	name = "wosid";
+}
+
+FID: WOGenericElement {
+	elementName = "input";
+	type = "hidden";
+	value = elementID;
+	name = "_forceFormSubmitted";
+}
+
+HasSession: WOConditional {
+	condition = context.hasSession;
+}
+
+HasDefaultSubmit: WOConditional {
+	condition = addDefaultSubmitButtonDefault;
+}
+
+ShowForm: WOConditional {
+	condition = showForm;
+}

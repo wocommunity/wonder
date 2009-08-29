@@ -63,6 +63,7 @@ import er.extensions.components._private.ERXWOForm;
  *
  * @binding width integer Width in pixels, use -1 for auto-width
  * @binding height integer Height in pixels, use -1 for auto-height. When set Modalbox will operate in 'fixed-height' mode. 
+ * @binding centerVertically optional, if true the dialog is centered vertically on the page instead of appearing at the top
  * 
  * @binding open if true, the container is rendered already opened, the default is false
  * @binding showOpener if false, no HTML is generated for the link, button etc. to open this dialog, it can only be opened from
@@ -74,14 +75,18 @@ import er.extensions.components._private.ERXWOForm;
  * @binding onClose server side method that runs before the dialog is closed, the return value is discarded.
  *                  This will be executed if the page is reloaded, but not if the user navigates elsewhere.
  * @binding closeUpdateContainerID the update container to refresh when onClose is called
- * 
+ * @binding clickOnReturnId optional, ID of clickable HTML element to click when the Return key is pressed.  This is ignored
+ * 					if a clickable element has the focus
+ * @binding clickOnEscId optional, ID of clickable HTML element to click when the Esc key is pressed.  This is ignored
+ * 					if a clickable element has the focus but overrides the locked setting
+ *  
  * @binding id HTML id for the link activating the modal dialog
  * @binding class CSS class for the link activating the modal dialog
  * @binding style CSS style for the link activating the modal dialog
  *
  * @binding overlayClose true | false Close modal box by clicking on overlay. Default is true.
  * @binding locked if true, suppresses the close window link, prevents Esc key and overlay from closing dialog.  Default is false,
- *          true implies overlayClose false
+ *          true implies overlayClose false.  If clickOnEscId is bound, this allows Esc to do something regardless of the locked binding
  * @binding method get | post. Method of passing variables to a server. Default is 'get'.
  * @binding params {} Collection of parameters to pass on AJAX request. Should be URL-encoded. See PassingFormValues for details.
  * 
@@ -503,7 +508,7 @@ public class AjaxModalDialog extends AjaxComponent {
 			}
 			
 			// This script can also be called directly by other code to show the modal dialog
-			response.appendContentString("<script>\n");
+			AjaxUtils.appendScriptHeader(response);
 			response.appendContentString(openDialogFunctionName(id()));
 			response.appendContentString(" = function(titleBarText) {\n");
 			appendOpenModalDialogFunction(response, context);
@@ -514,7 +519,7 @@ public class AjaxModalDialog extends AjaxComponent {
 				response.appendContentString(openDialogFunctionName(id()));
 				response.appendContentString("();\n");
 			}
-			response.appendContentString("</script>");
+			AjaxUtils.appendScriptFooter(response);
 			
 			// normally this would be done in super, but we're not always calling super here
 			addRequiredWebResources(response);
@@ -621,6 +626,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("title", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("width", AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("centerVertically", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("overlayClose", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("height", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("method", AjaxOption.STRING));
@@ -637,6 +643,8 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("inactiveFade", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("transitions", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("autoFocusing", AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxOption("clickOnReturnId", AjaxOption.STRING));
+		ajaxOptionsArray.addObject(new AjaxOption("clickOnEscId", AjaxOption.STRING));
 		
 		// IMPORTANT NOTICE. Each callback gets removed from options of the ModalBox after execution
 		ajaxOptionsArray.addObject(new AjaxOption("beforeLoad", AjaxOption.SCRIPT));

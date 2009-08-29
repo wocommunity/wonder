@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>TickTockMan</title>
+</head>
+<body>
+
+<h2>NSTimestampFormatter vs SimpleDateFormat</h2>
+
+<p>
+This page uses an NSTimestamp object, the value of which can be modified, and uses format strings with an
+com.webobjects.foundation.NSTimestampFormatter and with a java.text.SimpleDateFormat. This shows the differences
+between what the two objects can do. The SimpleDateFormat appears to do less, but that is because the JDK does
+some of these things in the java.util.Calendar class and others in the java.util.SimpleTimeZone class.
+</p>
+
+<p><wo:form action="$setDate">
+	<wo:if condition="$setDateMessage"><wo:string value="$setDateMessage" /></wo:if>
+	Set Date:
+	<wo:textfield value="$currentTS" size="50" dateformat="%Y-%m-%d %H:%M:%S %Z"/><br/>
+</wo:form></p>
+
+or ...
+
+<p><wo:form>
+	Increment (or Decrement using "-") Date by <wo:textfield size="4" value="$incrementDateBy" numberformat="0" /> <wo:select list="$units" item="$unit" selection="$chosenUnit" noSelectionString="none" />
+	<wo:submit action="$incrementDate" />
+</wo:form></p>
+<hr/>
+
+<table>
+<caption>NSTimestamp to Display: <wo:str value="$currentTS" /></caption>
+<tr><td colspan="3"><hr/></td></tr>
+<tr><td valign="top" align="center">
+
+<table border="1">
+	<caption>NSTimestampFormatter</caption>
+	<tr>
+		<th>Format</th>
+		<th>Time</th>
+		<th>Explained in Doc</th>
+	</tr>
+
+	<wo:loop list="$nstKeys" item="$currentNSTFormat">
+	<tr>
+		<td><wo:str value="$currentNSTFormat" /></td>
+		<td><wo:str value="$currentFormattedNST" /></td>
+		<td><wo:str value="$currentNSTExplain" /></td>
+	</tr>
+	</wo:loop>
+</table>
+
+</td>
+<td width="10%"></td>
+<td valign="top" align="center">
+
+<table border="1">
+	<caption>SimpleDateFormat</caption>
+	<wo:loop list="$sdfKeys" item="$currentSDFFormat">
+	<tr>
+		<td><wo:str value="$currentSDFFormat" /></td>
+		<td><wo:str value="$currentFormattedSDF" /></td>
+		<td><wo:str value="$currentSDFExplain" /></td>
+	</tr>
+	</wo:loop>
+</table>
+
+</td></tr></table>
+
+</body>
+</html>

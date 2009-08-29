@@ -7,6 +7,6 @@ Conditional2: WOConditional {
 }
 
 MailHyperlink: WOHyperlink {
-   href=mailToHref;
-	string = email;
+    href=mailToHref;
+    string = displayString;
 }

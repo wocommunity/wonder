@@ -1,20 +1,16 @@
 package org.zeroturnaround.javarebel;
 
-import java.lang.reflect.Field;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WORequestHandler;
-import com.webobjects.appserver._private.WODirectActionRequestHandler;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSNotification;
-import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSValidation;
+import com.webobjects.foundation._NSUtilities;
 
 /**
  * WOJavaRebelClassReloadHandler manages the clearing of KVC, component definition and class caches
@@ -28,34 +24,41 @@ public class WOJavaRebelClassReloadHandler {
 	private static boolean initialized = false;
 		
 	private boolean resetKVCCaches = false;
-    private boolean resetComponentCache = false;
-    private boolean resetActionClassCache = false;
+	private boolean resetComponentCache = false;
+	private boolean resetActionClassCache = false;
+	private boolean resetValidationCache = false;
 
-	private static final WOJavaRebelClassReloadHandler handler = new WOJavaRebelClassReloadHandler();
+	private static final WOJavaRebelClassReloadHandler instance = new WOJavaRebelClassReloadHandler();
+	private static final Logger log = LoggerFactory.getInstance();
 
 	private WOJavaRebelClassReloadHandler() { /* Private */ }
 	
-	public static WOJavaRebelClassReloadHandler getClassHandler() {
-		return handler;
+	public static WOJavaRebelClassReloadHandler getInstance() {
+		return instance;
 	}
 
 	private void doReset() {
 		if (resetKVCCaches) {
 			resetKVCCaches = false;
-			System.out.println("JavaRebel: Resetting KeyValueCoding caches");
+			log.echo("JavaRebel: Resetting KeyValueCoding caches");
 			NSKeyValueCoding.DefaultImplementation._flushCaches();
 			NSKeyValueCoding._ReflectionKeyBindingCreation._flushCaches();
 			NSKeyValueCoding.ValueAccessor._flushCaches();
 		}
 		if (resetComponentCache) {
-		    resetComponentCache = false;
-		    System.out.println("JavaRebel: Resetting Component Definition cache");
-		    WOApplication.application()._removeComponentDefinitionCacheContents();
+		  resetComponentCache = false;
+		  log.echo("JavaRebel: Resetting Component Definition cache");
+		  WOApplication.application()._removeComponentDefinitionCacheContents();
 		}
-		if(resetActionClassCache) {
-		    resetActionClassCache = false;
-            System.out.println("JavaRebel: Resetting Action class cache");
-		    WOClassCacheAccessor.clearActionClassCache();
+		if (resetActionClassCache) {
+		  resetActionClassCache = false;
+		  log.echo("JavaRebel: Resetting Action class cache");
+		  WOClassCacheAccessor.clearActionClassCache();
+		}
+		if (resetValidationCache) {
+		  resetValidationCache = false;
+		  log.echo("JavaRebel: Resetting NSValidation cache");
+		  NSValidation.DefaultImplementation._flushCaches();
 		}
 	}
 
@@ -79,10 +82,7 @@ public class WOJavaRebelClassReloadHandler {
 			return;
 		}
 
-		System.out.println("JavaRebel: WebObjects support enabled");
-		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("updateLoadedClasses", 
-				new Class[] { NSNotification.class }),
-				WOApplication.ApplicationWillDispatchRequestNotification, null);
+		log.echo("JavaRebel: WebObjects support enabled");
 		WOEventClassListener listener = new WOEventClassListener();
 		Reloader reloader = ReloaderFactory.getInstance();
 		reloader.addClassReloadListener(listener);
@@ -91,23 +91,28 @@ public class WOJavaRebelClassReloadHandler {
 
 	@SuppressWarnings("all")
 	public void reloaded(Class clazz) {
-		resetKVCCaches = true;
-        if (WOComponent.class.isAssignableFrom(clazz)) {
-            resetComponentCache = true;
-        }
-        if (WOAction.class.isAssignableFrom(clazz)) {
-            resetActionClassCache = true;
-        }
-		doReset();
+	  resetKVCCaches = true;
+	  if (WOComponent.class.isAssignableFrom(clazz)) {
+	    resetComponentCache = true;
+	  }
+	  if (WOAction.class.isAssignableFrom(clazz)) {
+	    resetActionClassCache = true;
+	  }
+	  if (NSValidation.class.isAssignableFrom(clazz)) {
+	    resetValidationCache = true;
+	  }
+	  doReset();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void updateLoadedClasses(NSNotification n) {
+	public synchronized void updateLoadedClasses(NSNotification notification) {
 		Reloader reloader = ReloaderFactory.getInstance();
-		WORequest request = (WORequest) n.object();
-		String key = "/" + WOApplication.application().resourceRequestHandlerKey();
-		if (request.uri().indexOf(request.adaptorPrefix()) != 0 || request.uri().indexOf(key) >= 0) {
-			return;
+		if (notification != null) {
+		  WORequest request = (WORequest) notification.object();
+		  String key = "/" + WOApplication.application().resourceRequestHandlerKey();
+		  if (request.uri().indexOf(request.adaptorPrefix()) != 0 || request.uri().indexOf(key) >= 0) {
+		    return;
+		  }
 		}
 		NSDictionary classList = WOClassCacheAccessor.getClassCache();
 		String unknownClassName = "com.webobjects.foundation._NSUtilities$_NoClassUnderTheSun";
@@ -126,12 +131,13 @@ public class WOJavaRebelClassReloadHandler {
 
 			if (clazz == null || clazz.equals(unknownClass)) {
 				WOClassCacheAccessor.removeClassForName(className);
+				continue;
 			}
 			reloader.checkAndReload(clazz);
 		}
 		doReset();
 	}
-	
+
 	public boolean isReloadEnabled() {
 		return ReloaderFactory.getInstance().isReloadEnabled();
 	}

@@ -564,7 +564,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             		if (unsavedMatchingObject != null) {
             			return unsavedMatchingObject;
             		}
-            	}	            handleUnsuccessfullQueryForKey(key);
+            	}	            
+            	handleUnsuccessfullQueryForKey(key);
 	            record = cache.objectForKey(key);
 	            if (record == null) {
 	            	return null;
@@ -769,7 +770,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     				"er.extensions.ERXEC.safeLocking in your Properties file");
     	}
 		_retainObjects = retainObjects;
-		setReuseEditingContext(true);
+		setReuseEditingContext(retainObjects);
 	}
     
     /**

@@ -30,6 +30,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.logging.ERXLog4JConfiguration;
 import er.extensions.logging.ERXLogger;
@@ -154,7 +155,73 @@ public class ERXDirectAction extends WODirectAction {
     }
 
     
-    
+    /**
+     * Action used for turning EOAdaptorDebugging output on or off.<br/>
+     * <br/>
+     * Synopsis:<br/>
+     * pw=<i>aPassword</i>
+     * <br/>
+     * Form Values:<br/>
+     * <strong>pw</strong> password to be checked against the system property <code>er.extensions.ERXEOAdaptorDebuggingPassword</code>.<br/>
+     * <strong>debug</strong> flag signaling whether to turn EOAdaptorDebugging on or off (defaults to off).  The value should be one of:
+     * <ul>
+     *  <li>on</li>
+     *  <li>true</li>
+     *  <li>1</li>
+     *  <li>y</li>
+     *  <li>yes</li>
+     *  <li>off</li>
+     *  <li>false</li>
+     *  <li>0</li>
+     *  <li>n</li>
+     *  <li>no</li>
+     * <ul>
+     * <br/>
+     * Note: this action must be invoked against a specific instance (the instance number must be in the request URL).
+     * @return a page showing what action was taken (with regard to EOAdaptorDebugging), if any.
+     */
+    public WOComponent eoAdaptorDebuggingAction() {
+        ERXStringHolder result = (ERXStringHolder)pageWithName("ERXStringHolder");
+        result.setEscapeHTML(false);
+
+        if (canPerformActionWithPasswordKey("er.extensions.ERXEOAdaptorDebuggingPassword")) {
+            String message;
+            boolean currentState = ERXExtensions.adaptorLogging();
+            int instance = request().applicationNumber();
+            if (instance == -1) {
+                log.info("EOAdaptorDebuggingAction requested without a specific instance.");
+                message = "<p>You must invoke this action on a <em>specific</em> instance.</p>" +
+                        "<p>Your url should look like: <code>.../WebObjects/1/wa/...</code>, where '1' would be the first instance of the target application.</p>";
+            } else {
+                String debugParam = request().stringFormValueForKey("debug");
+                log.debug("EOAdaptorDebuggingAction requested with 'debug' param:" + debugParam);
+                if (debugParam == null || debugParam.trim().length() == 0) {
+                    message = "<p>EOAdaptorDebugging is currently <strong>" + (currentState ? "ON" : "OFF") + "</strong> for instance <strong>" + instance + "</strong>.</p>";
+                    message += "<p>To change the setting, provide the 'debug' parameter to this action, e.g.: <code>...eoAdaptorDebugging?debug=on&pw=secret</code></p>";
+                } else {
+                    if (debugParam.trim().equalsIgnoreCase("on")) {
+                        debugParam = "true";
+                    } else if (debugParam.trim().equalsIgnoreCase("off")) {
+                        debugParam = "false";
+                    }
+
+                    boolean desiredState = ERXValueUtilities.booleanValueWithDefault(debugParam, false);
+                    log.debug("EOAdaptorDebuggingAction requested 'debug' state change to: '" + desiredState + "' for instance: " + instance + ".");
+                    if (currentState != desiredState) {
+                        ERXExtensions.setAdaptorLogging(desiredState);
+                        message = "<p>Turned EOAdaptorDebugging <strong>" + (desiredState ? "ON" : "OFF") + "</strong> for instance <strong>" + instance + "</strong>.</p>";
+                    } else {
+                        message = "<p>EOAdaptorDebugging setting <strong>not changed</strong>.</p>";
+                    }
+                }
+            }
+
+            message += "<p><em>Please be mindful of using EOAdaptorDebugging as it may have a large impact on application performance.</em></p>";
+            result.setValue(message);
+        }
+
+        return result;
+    }
     
     /**
      * Action used for changing logging settings at runtime. This method is only active
@@ -200,7 +267,7 @@ public class ERXDirectAction extends WODirectAction {
     }
 
     /**
-     * Action used for accessing the databse console
+     * Action used for accessing the database console
      * <br/>
      * <br/>
      * Synopsis:<br/>
@@ -374,7 +441,7 @@ public class ERXDirectAction extends WODirectAction {
     }
     
     /**
-     * Opens the localizer edit page if the app is in dvelopment mode.
+     * Opens the localizer edit page if the app is in development mode.
      */
     public WOActionResults editLocalizedFilesAction() {
     	WOResponse r = null;

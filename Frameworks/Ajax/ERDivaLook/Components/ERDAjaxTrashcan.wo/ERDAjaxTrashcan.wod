@@ -1,0 +1,24 @@
+DeleteEO2: AjaxUpdaterLink {
+	confirmMessage = message;
+	class = "ERDTrashcan2";
+	action = deleteObject;
+	onCreate = onCreate;
+	container = d2wContext.container;
+	onException = "function(transport, e) { alert('Request failed: ' + e.name + e.message); }";
+}
+
+HasError: WOConditional {
+	condition = canDelete;
+		negate = true;
+}
+
+CanDelete: WOConditional {
+	condition = canDelete;
+}
+
+Error: WOGenericContainer {
+	elementName = "a";
+	href = "#";
+	onclick = onClick;
+	class = "ERDTrashcan2";
+}

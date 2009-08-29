@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo wocomponentcontent="false" class="ERXStatelessInlineTemplate.java">
+			        <binding name="html"/>
+			        <binding name="wod"/>
+			        <binding name="errorTemplate"/>
+			        <binding defaults="Boolean" name="proxyParent"/>
+			        <binding name="cacheKey"/>
+			        <binding name="cacheVersion"/>
+			        <validation message="&amp;apos;html&amp;apos; is a required binding">
+			        	<unbound name="html"/>
+			        </validation>
+			    <binding defaults="Boolean" name="defaultToDynamicBindings"/>
+
+        </wo>
+</wodefinitions>

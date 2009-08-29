@@ -15,6 +15,7 @@ import org.xml.sax.InputSource;
 
 import com.webobjects.appserver.WORequest;
 
+import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;
 
 /**
@@ -24,9 +25,9 @@ import er.rest.ERXRestRequestNode;
  * @author mschrag
  */
 public class ERXXmlRestParser implements IERXRestParser {
-	protected ERXRestRequestNode createRequestNodeForElement(Element element, ERXRestFormat.Delegate delegate) {
+	protected ERXRestRequestNode createRequestNodeForElement(Element element, boolean rootNode, ERXRestFormat.Delegate delegate) {
 		String name = element.getTagName();
-		ERXRestRequestNode requestNode = new ERXRestRequestNode(name);
+		ERXRestRequestNode requestNode = new ERXRestRequestNode(name, rootNode);
 
 		String value = element.getNodeValue();
 
@@ -40,7 +41,7 @@ public class ERXXmlRestParser implements IERXRestParser {
 			Node childNode = childNodes.item(childNodeNum);
 			if (childNode instanceof Element) {
 				Element childElement = (Element) childNode;
-				ERXRestRequestNode childRequestNode = createRequestNodeForElement(childElement, delegate);
+				ERXRestRequestNode childRequestNode = createRequestNodeForElement(childElement, false, delegate);
 				if (childRequestNode != null) {
 					String childRequestNodeName = childRequestNode.name();
 					// MS: this is a huge hack, but it turns out that it's surprinsingly tricky to
@@ -49,6 +50,7 @@ public class ERXXmlRestParser implements IERXRestParser {
 					// this will totally break on rails-style lowercase class names, but for now
 					// this flag is just a heuristic
 					if (childRequestNodeName == null || Character.isUpperCase(childRequestNodeName.charAt(0))) {
+						childRequestNode.setRootNode(true);
 						requestNode.setArray(true);
 					}
 					requestNode.addChild(childRequestNode);
@@ -96,7 +98,7 @@ public class ERXXmlRestParser implements IERXRestParser {
 				document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
 				document.normalize();
 				Element rootElement = document.getDocumentElement();
-				rootRequestNode = createRequestNodeForElement(rootElement, delegate);
+				rootRequestNode = createRequestNodeForElement(rootElement, true, delegate);
 			}
 			catch (Exception e) {
 				throw new IllegalArgumentException("Failed to parse request document.", e);
@@ -108,9 +110,12 @@ public class ERXXmlRestParser implements IERXRestParser {
 
 	public static void main(String[] args) {
 		String str = "<Company><id>100</id><type>Company</type><name>mDT</name><firstName nil=\"true\"/><employees><Employee id=\"101\" type=\"Employee\"/><Employee id=\"102\"><name>Mike</name></Employee></employees></Company>";
-		ERXRestRequestNode n = new ERXXmlRestParser().parseRestRequest(str, new ERXRestFormat.DefaultDelegate());
+		//String str = "<Employees><Employee id=\"101\" type=\"Employee\"/><Employee id=\"102\"><name>Mike</name></Employee></Employees>";
+		ERXRestNameRegistry.registry().setExternalNameForInternalName("Super", "Company");
+		ERXRestNameRegistry.registry().setExternalNameForInternalName("Super2", "Employee");
+		ERXRestRequestNode n = new ERXXmlRestParser().parseRestRequest(str, new ERXRestFormatDelegate());
 		ERXStringBufferRestResponse response = new ERXStringBufferRestResponse();
-		new ERXXmlRestWriter().appendToResponse(n, response, new ERXRestFormat.DefaultDelegate());
+		new ERXXmlRestWriter().appendToResponse(n, response, new ERXRestFormatDelegate());
 		System.out.println("ERXXmlRestParser.main: " + response);
 	}
 }

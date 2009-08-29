@@ -16,6 +16,8 @@ public class ERPendingAttachment {
   private String _mimeType;
   private String _configurationName;
   private String _ownerID;
+  private int _width;
+  private int _height;
   private boolean _pendingDelete;
 
   /**
@@ -58,6 +60,21 @@ public class ERPendingAttachment {
    * @param ownerID an arbitrary string that represents the ID of the "owner" of this thumbnail (Person.primaryKey, for instance) 
    */
   public ERPendingAttachment(File uploadedFile, String recommendedFilePath, String mimeType, String configurationName, String ownerID) {
+  	this(uploadedFile, recommendedFilePath, mimeType, -1, -1, configurationName, ownerID);
+  }
+
+  /**
+   * Constructs an ERPendingAttachment.
+   * 
+   * @param uploadedFile the uploaded temporary file (which will be deleted at the end)
+   * @param recommendedFilePath the path recommended by the user during import
+   * @param mimeType the mimeType to use (null = guess based on file extension)
+   * @param width the desired width of the attachment
+   * @param height the desired height of the attachment
+   * @param configurationName the name of the configuration settings to use for this processor (see top level docs) 
+   * @param ownerID an arbitrary string that represents the ID of the "owner" of this thumbnail (Person.primaryKey, for instance) 
+   */
+  public ERPendingAttachment(File uploadedFile, String recommendedFilePath, String mimeType, int width, int height, String configurationName, String ownerID) {
     _uploadedFile = uploadedFile;
     if (recommendedFilePath == null) {
       _recommendedFilePath = _uploadedFile.getName();
@@ -65,6 +82,8 @@ public class ERPendingAttachment {
     else {
       _recommendedFilePath = recommendedFilePath;
     }
+    _width = width;
+    _height = height;
     _mimeType = mimeType;
     _configurationName = configurationName;
     _ownerID = ownerID;
@@ -186,6 +205,42 @@ public class ERPendingAttachment {
   public boolean isPendingDelete() {
     return _pendingDelete;
   }
+  
+  /**
+   * Sets the desired width of this attachment (or -1 to not specify).
+   * 
+   * @param width the desired width of this attachment
+   */
+  public void setWidth(int width) {
+		_width = width;
+	}
+  
+  /**
+   * Returns the desired width of this attachment.
+   * 
+   * @return the desired width of this attachment
+   */
+  public int width() {
+		return _width;
+	}
+  
+  /**
+   * Sets the desired height of this attachment (or -1 to not specify).
+   * 
+   * @param height the desired height of this attachment
+   */
+  public void setHeight(int height) {
+		_height = height;
+	}
+  
+  /**
+   * Returns the desired height of this attachment.
+   * 
+   * @return the desired height of this attachment
+   */
+  public int height() {
+		return _height;
+	}
 
   @Override
   public String toString() {

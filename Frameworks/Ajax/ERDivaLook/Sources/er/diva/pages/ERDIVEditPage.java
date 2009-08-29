@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOResponse;
 import er.ajax.AjaxUtils;
 import er.directtoweb.pages.ERD2WTabInspectPage;
 import er.diva.ERDIVPageInterface;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Edit page template for Diva
@@ -15,6 +16,8 @@ import er.diva.ERDIVPageInterface;
  *
  */
 public class ERDIVEditPage extends ERD2WTabInspectPage implements ERDIVPageInterface {	
+	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", true);
+	
     public ERDIVEditPage(WOContext context) {
         super(context);
     }
@@ -24,8 +27,12 @@ public class ERDIVEditPage extends ERD2WTabInspectPage implements ERDIVPageInter
     	return (String) d2wContext().valueForKey(ERDIVPageInterface.Keys.Stylesheet);
     }
     
-    public String headerClassString() {
-    	return "task " + d2wContext().task() + " " + d2wContext().valueForKey("subTask");
+    /*
+     * To avoid validation when switching tabs
+     */
+    @Override
+    public boolean switchTabAction() {
+    	return true;
     }
     
     // actions
@@ -37,20 +44,6 @@ public class ERDIVEditPage extends ERD2WTabInspectPage implements ERDIVPageInter
         	clearValidationFailed();
         } return super.cancelAction();
     }
-
-    public boolean showConfirmationPanel;
-    
-    @Override
-    public WOComponent nextPage(boolean doConfirm) {
-        Object inspectConfirmConfigurationName = d2wContext().valueForKey("inspectConfirmConfigurationName");
-        if(doConfirm && inspectConfirmConfigurationName != null && ! "".equals(inspectConfirmConfigurationName)) {
-        	showConfirmationPanel = true;
-        	return context().page();
-        } else {
-        	showConfirmationPanel = false;
-        	return super.nextPage(false);
-        } 
-    }
     
     // R/R
     @Override
@@ -58,7 +51,7 @@ public class ERDIVEditPage extends ERD2WTabInspectPage implements ERDIVPageInter
     	super.appendToResponse(response, context);
 
     	// add page style sheet
-    	if (stylesheet() != null) {
+    	if (!useUnobtrusively && stylesheet() != null) {
     		AjaxUtils.addStylesheetResourceInHead(context, response, "app", stylesheet());
     	}
     }

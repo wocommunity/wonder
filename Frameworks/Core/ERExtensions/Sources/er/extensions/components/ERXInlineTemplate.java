@@ -27,8 +27,10 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * "foo.bar") and looks, if there is a binding with that key. <br />
  * If there is such a binding, the value is retrieved and the rest of the keyPath applied to it
  * (valueForBinding("foo").valueForKeyPath("bar")). <br />
- * If no such binding is available, the value is stored in a NSMutableDictionary. The remaining keyPath is applied as
- * above. <br />
+ * If there is no binding with that name and "proxyParent" is true, the keyPath is resolved against the parent component.<br />
+ * Otherwise, dynamicBindings ({@link ERXComponent#dynamicBindings()}) are used. <br />
+ * You can switch off the usage of dynamicBindings by setting the binding "defaultToDynamicBindings" to false. 
+ * Then a warning will be logged for unknown keys.<br />
  * <br />
  * When an error occurs, an error message is displayed. The message can be altered using the "errorTemplate" binding.
  * <br />
@@ -36,18 +38,21 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * Optionally, a "cacheKey" (String) can be specified, under which the parsed WOElement will be cached. To allow
  * updating, a "cacheVersion" (Object) is available. When the version changes, the value is recalculated.
  * 
- * @binding HTML HTML-part of the component (required)
- * @binding WOD WOD-part of the component (optional)
+ * @binding html HTML-part of the component (required)
+ * @binding wod WOD-part of the component (optional)
  * @binding cacheKey Key under which to cache the WOElement (optional)
  * @binding cacheVersion Hint to determine if the cached object is up-to-date (optional)
  * @binding errorTemplate Template to use for displaying error messages. Uses {@link ERXSimpleTemplateParser} for display.
  *                Method name and HTML-escaped message are provided by the "method" and "message" keys. (optional)
+ * @binding proxyParent whether to proxy key path lookup to the parent (default is false)
+ * @binding defaultToDynamicBindings whether to use dynamicBindings for unknown keys (default is true)
  * 
  * @author th
  * 
  */
 public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
-	public static Logger log = Logger.getLogger(ERXInlineTemplate.class);
+
+	private static Logger log = Logger.getLogger(ERXInlineTemplate.class);
 
 	private static final String ERROR_TEMPLATE_DEFAULT = "<div class=\"ERXInlineTemplateError\" style=\"background-color: #faa; border: 2px dotted red;\">@@message@@</div>";
 
@@ -61,9 +66,13 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 
 	private static final String TEMPLATE_WOD_BINDING = "wod";
 
+	private static final String PROXY_PARENT_BINDING = "proxyParent";
+
+	private static final String DEFAULT_TO_DYNAMIC_BINDINGS_BINDING = "defaultToDynamicBindings";
+
 	private static NSMutableDictionary<String, CacheEntry> _cache = ERXMutableDictionary.synchronizedDictionary();
 
-	private Error _deferredError = null;
+	protected Error _deferredError = null;
 
 	public ERXInlineTemplate(WOContext context) {
 		super(context);
@@ -85,21 +94,21 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 	}
 
 	public String errorTemplate() {
-		String template = (String) valueForBinding(ERROR_TEMPLATE_BINDING);
-		if (template == null) {
-			template = ERROR_TEMPLATE_DEFAULT;
-		}
-		return template;
+		return stringValueForBinding(ERROR_TEMPLATE_BINDING, ERROR_TEMPLATE_DEFAULT);
 	}
 
 	public boolean proxyParent() {
-		return ERXComponentUtilities.booleanValueForBinding(this, "proxyParent");
+		return booleanValueForBinding(PROXY_PARENT_BINDING);
+	}
+	
+	public boolean defaultToDynamicBindings() {
+		return booleanValueForBinding(DEFAULT_TO_DYNAMIC_BINDINGS_BINDING, true);
 	}
 	
 	public void takeValueForKeyPath(Object value, String keyPath) {
 		try {
 			NSMutableArray<String> keyPathComponents = NSArray.componentsSeparatedByString(keyPath, ".").mutableClone();
-			String firstKey = (String) keyPathComponents.removeObjectAtIndex(0);
+			String firstKey = keyPathComponents.removeObjectAtIndex(0);
 			if (bindingKeys().contains(firstKey)) {
 				if (keyPathComponents.count() > 0) {
 					Object o = valueForBinding(firstKey);
@@ -122,11 +131,13 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 				}
 				parent().takeValueForKeyPath(value, keyPath);
 			}
-			else {
+			else if (defaultToDynamicBindings()){
 				if (log.isDebugEnabled()) {
 					log.debug("set dynamic binding " + keyPath);
 				}
 				dynamicBindings().takeValueForKeyPath(value, keyPath);
+			} else {
+				log.warn("Unknown keyPath: "+keyPath);
 			}
 		}
 		catch (Throwable t) {
@@ -137,8 +148,8 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 	public Object valueForKeyPath(String keyPath) {
 		try {
 			NSMutableArray<String> keyPathComponents = NSArray.componentsSeparatedByString(keyPath, ".").mutableClone();
-			String firstKey = (String) keyPathComponents.removeObjectAtIndex(0);
-			Object value;
+			String firstKey = keyPathComponents.removeObjectAtIndex(0);
+			Object value = null;
 			if (bindingKeys().contains(firstKey)) {
 				Object o = valueForBinding(firstKey);
 				if (keyPathComponents.count() > 0) {
@@ -161,12 +172,16 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 				}
 				value = parent().valueForKeyPath(keyPath);
 			}
-			else {
-				if (log.isDebugEnabled()) { 
+			else if (defaultToDynamicBindings()) {
+				if (log.isDebugEnabled()) {
 					log.debug("get dynamic binding " + keyPath);
 				}
 				value = dynamicBindings().valueForKeyPath(keyPath);
 			}
+			else {
+				log.warn("Unknown keyPath: " + keyPath);
+			}
+
 			return value;
 		}
 		catch (Throwable t) {
@@ -217,14 +232,15 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 			return element;
 		}
 		catch (Throwable t) {
-			return WOComponent.templateWithHTMLString(new Error("template", t).formatWithTemplate(errorTemplate()), "", null);
+			String html = new Error("template", t).formatWithTemplate(errorTemplate());
+			return WOComponent.templateWithHTMLString(html, "", null);
 		}
 	}
 
 	private WOElement _template() {
-		String templateHtmlString = (String) valueForBinding(TEMPLATE_HTML_BINDING);
-		String templateWodString = (String) valueForBinding(TEMPLATE_WOD_BINDING);
-		WOElement element = WOComponent.templateWithHTMLString((templateHtmlString == null) ? "" : templateHtmlString, (templateWodString == null ? "" : templateWodString), null);
+		String html = stringValueForBinding(TEMPLATE_HTML_BINDING, "");
+		String wod = stringValueForBinding(TEMPLATE_WOD_BINDING, "");
+		WOElement element = WOComponent.templateWithHTMLString(html, wod, null);
 		return element;
 	}
 

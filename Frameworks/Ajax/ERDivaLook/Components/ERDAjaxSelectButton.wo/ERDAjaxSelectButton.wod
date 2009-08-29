@@ -1,0 +1,6 @@
+SelectEO: AjaxUpdaterLink {
+	action = selectObjectAction;
+	class = "ERDIVListPage_SelectButton";		// TODO: Change to ERDselectButton2
+	container = d2wContext.container;
+	evalScripts = true;
+}

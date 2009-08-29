@@ -1,0 +1,35 @@
+ArrowActiveButton: AjaxUpdaterButton {
+	action = toggleVisibilityClicked;
+	value = label;
+	container = ^container;
+	class = toggleButtonClass;
+	evalScripts = true;
+}
+
+ArrowActiveLink: AjaxUpdaterLink {
+	action = toggleVisibilityClicked;
+	container = ^container;
+	class = toggleButtonClass;
+	evalScripts = true;
+}
+
+Conditional: WOConditional {
+	condition = isVisible;
+}
+
+Content: WOComponentContent {
+}
+
+IsInFormConditional: WOConditional {
+	condition = hasSubmitAction;
+}
+
+IsNotInFormConditional: WOConditional {
+	condition = hasSubmitAction;
+	negate = true;
+}
+
+LabelString: WOString {
+	escapeHTML = false;
+	value = label;
+}
