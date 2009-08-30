@@ -9,6 +9,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.eof.ERXEOControlUtilities;
+
 /**
  * EODelegate is an implementation of the ERXRestRequestNode.Delegate interface that understands EOF.
  * 
@@ -94,7 +96,7 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 			Object pkValue = ((EOAttribute) eoEntity.primaryKeyAttributes().objectAtIndex(0)).validateValue(strPKValue);
 			_editingContext.lock();
 			try {
-				obj = EOUtilities.objectWithPrimaryKeyValue(_editingContext, eoEntity.name(), pkValue);
+				obj = ERXEOControlUtilities.objectWithPrimaryKeyValue(_editingContext, eoEntity.name(), pkValue, null, false);
 			}
 			finally {
 				_editingContext.unlock();
