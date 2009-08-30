@@ -16,6 +16,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -33,7 +34,7 @@ import er.rest.format.IERXRestWriter;
  * 
  * @author mschrag
  */
-public class ERXRestRequestNode implements NSKeyValueCoding {
+public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 	private boolean _array;
 	private String _name;
 	private boolean _rootNode;
@@ -326,6 +327,14 @@ public class ERXRestRequestNode implements NSKeyValueCoding {
 			}
 		}
 		return value;
+	}
+	
+	public Object valueForKeyPath(String keyPath) {
+		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(this, keyPath);
+	}
+	
+	public void takeValueForKeyPath(Object value, String keyPath) {
+		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(this, value, keyPath);
 	}
 
 	/**
