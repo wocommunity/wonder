@@ -9,6 +9,7 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
@@ -47,7 +48,7 @@ import er.extensions.eof.ERXS;
  * <pre>
  * public WOActionResults indexAction() throws Throwable {
  *     ERXRestFetchSpecification<Task> fetchSpec = new ERXRestFetchSpecification<Task>(Task.ENTITY_NAME, null, null, queryFilter(), Task.CREATION_DATE.descs(), 25);
- *     NSArray<Task> tasks = fetchSpec.objects(editingContext(), request());
+ *     NSArray<Task> tasks = fetchSpec.objects(editingContext(), options());
  *     return response(editingContext(), Task.ENTITY_NAME, tasks, showFilter());
  * }
  * </pre>
@@ -65,7 +66,6 @@ import er.extensions.eof.ERXS;
  *            the type of the objects being returned
  */
 public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
-	// private WORequest _request;
 	private String _entityName;
 	private EOQualifier _defaultQualifier;
 	private EOQualifier _baseQualifier;
@@ -192,12 +192,12 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	/**
 	 * Returns the effective sort orderings.
 	 * 
-	 * @param request
-	 *            the current request
+	 * @param options
+	 *            the current options
 	 * @return the effective sort orderings
 	 */
-	public NSArray<EOSortOrdering> sortOrderings(WORequest request) {
-		String sortKeysStr = request.stringFormValueForKey("sort");
+	public NSArray<EOSortOrdering> sortOrderings(NSKeyValueCoding options) {
+		String sortKeysStr = (String)options.valueForKey("sort");
 		if (sortKeysStr == null || sortKeysStr.length() == 0) {
 			return _defaultSortOrderings;
 		}
@@ -230,17 +230,17 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	/**
 	 * Returns the effective qualifier.
 	 * 
-	 * @param request
-	 *            the current request
+	 * @param options
+	 *            the current options
 	 * @return the effective qualifier
 	 */
-	public EOQualifier qualifier(EOEditingContext editingContext, WORequest request) {
+	public EOQualifier qualifier(EOEditingContext editingContext, NSKeyValueCoding options) {
 		EOQualifier qualifier;
 		if (!_requestQualifiersEnabled) {
 			qualifier = _defaultQualifier;
 		}
 		else {
-			String qualifierStr = request.stringFormValueForKey("qualifier");
+			String qualifierStr = (String)options.valueForKey("qualifier");
 			if (qualifierStr == null || qualifierStr.length() == 0) {
 				if (_baseQualifier == null) {
 					qualifier = _defaultQualifier;
@@ -269,13 +269,13 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	/**
 	 * Returns the effective batch number.
 	 * 
-	 * @param request
-	 *            the current request
+	 * @param options
+	 *            the current options
 	 * @return the effective batch number
 	 */
-	public int batchNumber(WORequest request) {
+	public int batchNumber(NSKeyValueCoding options) {
 		int batchNumber;
-		String batchNumberStr = request.stringFormValueForKey("batch");
+		String batchNumberStr = (String)options.valueForKey("batch");
 		if (batchNumberStr == null) {
 			batchNumber = 0;
 		}
@@ -288,13 +288,13 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	/**
 	 * Returns the effective batch size.
 	 * 
-	 * @param request
-	 *            the current request
+	 * @param options
+	 *            the current options
 	 * @return the effective batch size
 	 */
-	public int batchSize(WORequest request) {
+	public int batchSize(NSKeyValueCoding options) {
 		int batchSize;
-		String batchSizeStr = request.stringFormValueForKey("batchSize");
+		String batchSizeStr = (String)options.valueForKey("batchSize");
 		if (batchSizeStr == null) {
 			batchSize = _defaultBatchSize;
 		}
@@ -309,15 +309,15 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	 * 
 	 * @param editingContext
 	 *            the editing context to fetch into
-	 * @param request
-	 *            the current request
+	 * @param options
+	 *            the current options
 	 * @return the fetch objects
 	 */
 	@SuppressWarnings("unchecked")
-	public NSArray<T> objects(EOEditingContext editingContext, WORequest request) {
-		NSArray<EOSortOrdering> sortOrderings = sortOrderings(request);
-		EOQualifier qualifier = qualifier(editingContext, request);
-		int batchSize = batchSize(request);
+	public NSArray<T> objects(EOEditingContext editingContext, NSKeyValueCoding options) {
+		NSArray<EOSortOrdering> sortOrderings = sortOrderings(options);
+		EOQualifier qualifier = qualifier(editingContext, options);
+		int batchSize = batchSize(options);
 
 		EOFetchSpecification fetchSpec = new EOFetchSpecification(_entityName, qualifier, sortOrderings);
 		fetchSpec.setIsDeep(true);
@@ -327,13 +327,13 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 			results = editingContext.objectsWithFetchSpecification(fetchSpec);
 		}
 		else {
-			int batchNumber = batchNumber(request);
+			int batchNumber = batchNumber(options);
 			ERXFetchSpecificationBatchIterator batchIterator = new ERXFetchSpecificationBatchIterator(fetchSpec, editingContext, batchSize);
 			results = batchIterator.batchWithIndex(batchNumber);
 		}
 		return results;
 	}
-
+	
 	/**
 	 * Applies the effective attributes of this fetch specification to the given array, filtering, sorting, and cutting
 	 * into batches accordingly.
@@ -342,18 +342,18 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	 *            the objects to filter
 	 * @param editingContext
 	 *            the editing context to evaluate the qualifer filter with
-	 * @param request
-	 *            the current request
+	 * @param options
+	 *            the current options
 	 * @return the filtered objects
 	 */
-	public NSArray<T> objects(NSArray<T> objects, EOEditingContext editingContext, WORequest request) {
-		NSArray<EOSortOrdering> sortOrderings = sortOrderings(request);
-		EOQualifier qualifier = qualifier(editingContext, request);
-		int batchSize = batchSize(request);
+	public NSArray<T> objects(NSArray<T> objects, EOEditingContext editingContext, NSKeyValueCoding options) {
+		NSArray<EOSortOrdering> sortOrderings = sortOrderings(options);
+		EOQualifier qualifier = qualifier(editingContext, options);
+		int batchSize = batchSize(options);
 
 		NSArray<T> results = ERXS.sorted(ERXQ.filtered(objects, qualifier), sortOrderings);
 		if (batchSize > 0) {
-			int batchNumber = batchNumber(request);
+			int batchNumber = batchNumber(options);
 			int offset = batchNumber * batchSize;
 			int length = batchSize;
 			if (offset >= results.count()) {
@@ -371,5 +371,34 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 			}
 		}
 		return results;
+	}
+
+	/**
+	 * Fetches the objects into the given editing context with the effective attributes of this fetch specification.
+	 * 
+	 * @param editingContext
+	 *            the editing context to fetch into
+	 * @param request
+	 *            the current request
+	 * @return the fetch objects
+	 */
+	public NSArray<T> objects(EOEditingContext editingContext, WORequest request) {
+		return objects(editingContext, new ERXRequestFormValues(request));
+	}
+
+	/**
+	 * Applies the effective attributes of this fetch specification to the given array, filtering, sorting, and cutting
+	 * into batches accordingly.
+	 * 
+	 * @param objects
+	 *            the objects to filter
+	 * @param editingContext
+	 *            the editing context to evaluate the qualifer filter with
+	 * @param request
+	 *            the current request
+	 * @return the filtered objects
+	 */
+	public NSArray<T> objects(NSArray<T> objects, EOEditingContext editingContext, WORequest request) {
+		return objects(objects, editingContext, new ERXRequestFormValues(request));
 	}
 }

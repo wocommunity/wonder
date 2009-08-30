@@ -120,16 +120,19 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		/**
 		 * Creates a new NameFormat.
 		 * 
-		 * @param pluralControllerName if true, controller names with be pluralized ("CompaniesController")
-		 * @param pluralRouteName if true, routes will be pluralizd ("/Companies.xml")
-		 * @param lowercaseRouteName if true, routes will be lowercased ("/companies.xml")
+		 * @param pluralControllerName
+		 *            if true, controller names with be pluralized ("CompaniesController")
+		 * @param pluralRouteName
+		 *            if true, routes will be pluralizd ("/Companies.xml")
+		 * @param lowercaseRouteName
+		 *            if true, routes will be lowercased ("/companies.xml")
 		 */
 		public NameFormat(boolean pluralControllerName, boolean pluralRouteName, boolean lowercaseRouteName) {
 			_pluralControllerName = pluralControllerName;
 			_pluralRouteName = pluralRouteName;
 			_lowercaseRouteName = lowercaseRouteName;
 		}
-		
+
 		/**
 		 * Returne whether or not controller names should be pluralizd.
 		 * 
@@ -138,7 +141,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		public boolean pluralControllerName() {
 			return _pluralControllerName;
 		}
-		
+
 		/**
 		 * Returne whether or not routes should be pluralizd.
 		 * 
@@ -147,7 +150,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		public boolean pluralRouteName() {
 			return _pluralRouteName;
 		}
-		
+
 		/**
 		 * Returne whether or not routes should be capitalized.
 		 * 
@@ -157,11 +160,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			return _lowercaseRouteName;
 		}
 	}
-	
+
 	public static final Logger log = Logger.getLogger(ERXRouteRequestHandler.class);
 
 	public static final String Key = "ra";
 	public static final String TypeKey = "ERXRouteRequestHandler.type";
+	public static final String ExtensionKey = "ERXRouteRequestHandler.extension";
 	public static final String PathKey = "ERXRouteRequestHandler.path";
 	public static final String RouteKey = "ERXRouteRequestHandler.route";
 	public static final String KeysKey = "ERXRouteRequestHandler.keys";
@@ -228,10 +232,11 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	/**
 	 * Returns the default route controller class for the given entity name.
 	 * 
-	 * @param entityName the name of the entity
+	 * @param entityName
+	 *            the name of the entity
 	 * @return the corresponding route controller
 	 */
-	protected Class<? extends ERXRouteController> routeControllerClassForEntityNamed(String entityName) {
+	public Class<? extends ERXRouteController> routeControllerClassForEntityNamed(String entityName) {
 		String controllerEntityName = _entityNameFormat.pluralControllerName() ? ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2) : entityName;
 		String controllerName = controllerEntityName + "Controller";
 		Class<?> controllerClass = _NSUtilities.classWithName(controllerName);
@@ -242,24 +247,26 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	/**
-	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the route
-	 * controller for the given entity name, giving it the opportunity to add routes for 
-	 * this entity. If no addRoutes method is found, it will log a warning and add default
-	 * routes instead.
+	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the route controller for the given entity
+	 * name, giving it the opportunity to add routes for this entity. If no addRoutes method is found, it will log a
+	 * warning and add default routes instead.
 	 * 
-	 * @param entityName the name of the entity
+	 * @param entityName
+	 *            the name of the entity
 	 */
 	public void addRoutes(String entityName) {
 		addRoutes(entityName, routeControllerClassForEntityNamed(entityName));
 	}
-	
+
 	/**
-	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the given route
-	 * controller class, giving it the opportunity to add routes for the given entity. If no
-	 * addRoutes method is found, it will log a warning and add default routes instead.
+	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the given route controller class, giving
+	 * it the opportunity to add routes for the given entity. If no addRoutes method is found, it will log a warning and
+	 * add default routes instead.
 	 * 
-	 * @param entityName the name of the entity
-	 * @param routeControllerClass the name of the route controller
+	 * @param entityName
+	 *            the name of the entity
+	 * @param routeControllerClass
+	 *            the name of the route controller
 	 */
 	public void addRoutes(String entityName, Class<? extends ERXRouteController> routeControllerClass) {
 		try {
@@ -274,7 +281,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			throw new RuntimeException("Failed to add routes for " + routeControllerClass + ".", t);
 		}
 	}
-	
+
 	/**
 	 * Adds default routes and maps them to a controller named "[plural entity name]Controller". For instance, if the
 	 * entity name is "Person" it would make a controller named "PeopleController".
@@ -307,6 +314,25 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	/**
+	 * Return the controller path name for an entity name based on the entity name format.
+	 * 
+	 * @param entityName
+	 *            the entity name
+	 * @return the controller identifier part of the path (the "companies" part in "/companies/1000");
+	 */
+	public String controllerPathForEntityNamed(String entityName) {
+		String singularEntityName = _entityNameFormat.lowercaseRouteName() ? ERXStringUtilities.uncapitalize(entityName) : entityName;
+		String controllerPath;
+		if (_entityNameFormat.pluralRouteName()) {
+			controllerPath = ERXLocalizer.englishLocalizer().plurifiedString(singularEntityName, 2);
+		}
+		else {
+			controllerPath = singularEntityName;
+		}
+		return controllerPath;
+	}
+
+	/**
 	 * Adds list and view routes for the given entity. For instance, if you provide the entity name "Reminder" you will
 	 * get the routes:
 	 * 
@@ -335,12 +361,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.Head, controllerClass, "head"));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName, ERXRoute.Method.Head, controllerClass, "head"));
-		
+
 		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.Post, controllerClass, "create"));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName, ERXRoute.Method.Post, controllerClass, "create"));
-		
+
 		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName, ERXRoute.Method.All, controllerClass, "index"));
 		}
@@ -349,9 +375,11 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 
 		if (numericPKs) {
-			addRoute(new ERXRoute("/" + singularExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS: this only works with numeric ids
+			// MS: this only works with numeric ids
+			addRoute(new ERXRoute("/" + singularExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass));
 			if (_entityNameFormat.pluralRouteName()) {
-				addRoute(new ERXRoute("/" + pluralExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass)); // MS: this only works with numeric ids
+				// MS: this only works with numeric ids
+				addRoute(new ERXRoute("/" + pluralExternalName + "/{action:identifier}", ERXRoute.Method.Get, controllerClass));
 			}
 		}
 		else {
@@ -365,21 +393,124 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
-		
+
 		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
-		
+
 		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
-		
+
 		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute("/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
 		}
 		addRoute(new ERXRoute("/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
+	}
+
+	/**
+	 * Returns the route that matches the request method and path, storing metadata about the route in the given
+	 * userInfo dictionary.
+	 * 
+	 * @param method
+	 *            the request method
+	 * @param path
+	 *            the request path
+	 * @param userInfo
+	 *            a mutable userInfo
+	 * @return the matching route (or null if one is not found)
+	 */
+	public ERXRoute routeForMethodAndPath(String method, String path, NSMutableDictionary<String, Object> userInfo) {
+		if (!path.startsWith("/")) {
+			path = "/" + path;
+		}
+
+		int dotIndex = path.lastIndexOf('.');
+		String requestedType = null;
+		if (dotIndex >= 0) {
+			String type = path.substring(dotIndex + 1);
+			if (type.length() > 0) {
+				requestedType = type;
+				userInfo.setObjectForKey(type, ERXRouteRequestHandler.ExtensionKey);
+			}
+			path = path.substring(0, dotIndex);
+		}
+
+		ERXRoute.Method routeMethod = ERXRoute.Method.valueOf(ERXStringUtilities.capitalize(method.toLowerCase()));
+		ERXRoute matchingRoute = null;
+		NSDictionary<ERXRoute.Key, String> keys = null;
+		for (ERXRoute route : _routes) {
+			keys = route.keys(path, routeMethod);
+			if (keys != null) {
+				matchingRoute = route;
+				break;
+			}
+		}
+
+		if (matchingRoute != null) {
+			if (requestedType != null) {
+				userInfo.setObjectForKey(requestedType, ERXRouteRequestHandler.TypeKey);
+			}
+			userInfo.setObjectForKey(path, ERXRouteRequestHandler.PathKey);
+			userInfo.setObjectForKey(matchingRoute, ERXRouteRequestHandler.RouteKey);
+			userInfo.setObjectForKey(keys, ERXRouteRequestHandler.KeysKey);
+		}
+
+		return matchingRoute;
+	}
+
+	/**
+	 * Sets up the request userInfo for the given request for a request of the given method and path.
+	 * 
+	 * @param request
+	 *            the request to configure the userInfo on
+	 * @param method
+	 *            the request method
+	 * @param path
+	 *            the request path
+	 * @return the matching route for this method and path
+	 */
+	public ERXRoute setupRequestWithRouteForMethodAndPath(WORequest request, String method, String path) {
+		@SuppressWarnings("unchecked")
+		NSDictionary<String, Object> userInfo = request.userInfo();
+		NSMutableDictionary<String, Object> mutableUserInfo;
+		if (userInfo instanceof NSMutableDictionary) {
+			mutableUserInfo = (NSMutableDictionary<String, Object>) userInfo;
+		}
+		else if (userInfo != null) {
+			mutableUserInfo = userInfo.mutableClone();
+		}
+		else {
+			mutableUserInfo = new NSMutableDictionary<String, Object>();
+		}
+
+		ERXRoute matchingRoute = routeForMethodAndPath(method, path, mutableUserInfo);
+
+		if (matchingRoute != null && mutableUserInfo != userInfo) {
+			request.setUserInfo(mutableUserInfo);
+		}
+
+		return matchingRoute;
+	}
+
+	/**
+	 * Sets up a route controller based on a request userInfo that came from routeForMethodAndPath.
+	 * 
+	 * @param controller
+	 *            the controller to setup
+	 * @param userInfo
+	 *            the request userInfo
+	 */
+	public void setupRouteControllerFromUserInfo(ERXRouteController controller, NSDictionary<String, Object> userInfo) {
+		controller._setRequestHandler(this);
+
+		ERXRoute route = (ERXRoute) userInfo.objectForKey(ERXRouteRequestHandler.RouteKey);
+		controller._setRoute(route);
+		@SuppressWarnings("unchecked")
+		NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) userInfo.objectForKey(ERXRouteRequestHandler.KeysKey);
+		controller._setRouteKeys(keys);
 	}
 
 	@Override
@@ -388,61 +519,20 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 		try {
 			String path = request._uriDecomposed().requestHandlerPath();
-			if (!path.startsWith("/")) {
-				path = "/" + path;
-			}
-			int dotIndex = path.lastIndexOf('.');
-			String requestedType = null;
-			if (dotIndex >= 0) {
-				String type = path.substring(dotIndex + 1);
-				if (type.length() > 0) {
-					requestedType = type;
-				}
-				path = path.substring(0, dotIndex);
-			}
 
-			@SuppressWarnings("unchecked")
-			NSDictionary<String, Object> userInfo = request.userInfo();
-			NSMutableDictionary<String, Object> mutableUserInfo;
-			if (userInfo instanceof NSMutableDictionary) {
-				mutableUserInfo = (NSMutableDictionary<String, Object>) userInfo;
-			}
-			else if (userInfo != null) {
-				mutableUserInfo = userInfo.mutableClone();
-			}
-			else {
-				mutableUserInfo = new NSMutableDictionary<String, Object>();
-			}
-			if (requestedType != null) {
-				mutableUserInfo.setObjectForKey(requestedType, ERXRouteRequestHandler.TypeKey);
-			}
-			mutableUserInfo.setObjectForKey(path, ERXRouteRequestHandler.PathKey);
-
-			ERXRoute matchingRoute = null;
-			NSDictionary<ERXRoute.Key, String> keys = null;
-			for (ERXRoute route : _routes) {
-				keys = route.keys(path, ERXRoute.Method.valueOf(ERXStringUtilities.capitalize(request.method().toLowerCase())));
-				if (keys != null) {
-					matchingRoute = route;
-					break;
-				}
-			}
-
+			ERXRoute matchingRoute = setupRequestWithRouteForMethodAndPath(request, request.method(), path);
 			if (matchingRoute != null) {
+				@SuppressWarnings("unchecked")
+				NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
 				String controller = keys.objectForKey(ERXRoute.ControllerKey);
 				String actionName = keys.objectForKey(ERXRoute.ActionKey);
 				requestHandlerPath.addObject(controller);
 				requestHandlerPath.addObject(actionName);
-				mutableUserInfo.setObjectForKey(matchingRoute, ERXRouteRequestHandler.RouteKey);
-				mutableUserInfo.setObjectForKey(keys, ERXRouteRequestHandler.KeysKey);
 			}
 			else {
 				throw new FileNotFoundException("There is no controller for the route '" + path + "'.");
 			}
-			
-			if (mutableUserInfo != userInfo) {
-				request.setUserInfo(mutableUserInfo);
-			}
+
 		}
 		catch (Throwable t) {
 			throw new RuntimeException("Failed to process the requested route.", t);
@@ -459,15 +549,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public WOAction getActionInstance(Class class1, Class[] aclass, Object[] aobj) {
-		ERXRouteController actionInstance = (ERXRouteController) super.getActionInstance(class1, aclass, aobj);
+		ERXRouteController controller = (ERXRouteController) super.getActionInstance(class1, aclass, aobj);
 		WORequest request = (WORequest) aobj[0];
-		ERXRoute route = (ERXRoute) request.userInfo().objectForKey(ERXRouteRequestHandler.RouteKey);
-		actionInstance._setRoute(route);
-		@SuppressWarnings("unchecked")
-		NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
-		actionInstance._setRouteKeys(keys);
-		return actionInstance;
+		setupRouteControllerFromUserInfo(controller, request.userInfo());
+		return controller;
 	}
 
 	/**

@@ -18,12 +18,17 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
 
 import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.foundation.ERXExceptionUtilities;
 import er.rest.ERXEORestDelegate;
+import er.rest.ERXRequestFormValues;
 import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
@@ -43,11 +48,14 @@ import er.rest.format.IERXRestWriter;
 public class ERXRouteController extends WODirectAction {
 	protected static Logger log = Logger.getLogger(ERXRouteController.class);
 
+	private ERXRouteRequestHandler _requestHandler;
 	private ERXRoute _route;
 	private NSDictionary<ERXRoute.Key, String> _routeKeys;
 	private NSDictionary<ERXRoute.Key, Object> _objects;
 	private EOEditingContext _editingContext;
 	private ERXRestRequestNode _requestNode;
+	private NSKeyValueCoding _options;
+	private NSSet<String> _prefetchingKeyPaths;
 
 	/**
 	 * Constructs a new ERXRouteController.
@@ -57,6 +65,98 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public ERXRouteController(WORequest request) {
 		super(request);
+	}
+
+	/**
+	 * Includes the key in the given filter if isKeyPathRequested returns true.
+	 * 
+	 * @param key the key to lookup
+	 * @param filter the filter to include into 
+	 * @return the nested filter (or null if the key was not requested)
+	 */
+	protected ERXKeyFilter includeOptional(ERXKey key, ERXKeyFilter filter) {
+		if (isKeyPathRequested(key)) {
+			return filter.include(key);
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns whether or not the prefetchingKeyPaths option includes the given keypath (meaning, the client requested
+	 * to include the given keypath).
+	 * 
+	 * @param key
+	 *            the ERXKey to check on
+	 * @return true if the keyPath is in the prefetchingKeyPaths option
+	 */
+	protected boolean isKeyPathRequested(ERXKey<?> key) {
+		return isKeyPathRequested(key.key());
+	}
+
+	/**
+	 * Returns whether or not the prefetchingKeyPaths option includes the given keypath (meaning, the client requested
+	 * to include the given keypath).
+	 * 
+	 * @param keyPath
+	 *            the keyPath to check on
+	 * @return true if the keyPath is in the prefetchingKeyPaths option
+	 */
+	protected boolean isKeyPathRequested(String keyPath) {
+		if (_prefetchingKeyPaths == null) {
+			NSMutableSet<String> prefetchingKeyPaths = new NSMutableSet<String>();
+			NSKeyValueCoding options = options();
+			if (options != null) {
+				String prefetchingKeyPathsStr = (String) options.valueForKey("prefetchingKeyPaths");
+				if (prefetchingKeyPathsStr != null) {
+					for (String prefetchingKeyPath : prefetchingKeyPathsStr.split(",")) {
+						prefetchingKeyPaths.addObject(prefetchingKeyPath);
+					}
+				}
+			}
+			_prefetchingKeyPaths = prefetchingKeyPaths;
+		}
+		return _prefetchingKeyPaths.containsObject(keyPath);
+	}
+
+	/**
+	 * Sets the options for this controller.
+	 * 
+	 * @param options
+	 *            options for this controller
+	 */
+	public void setOptions(NSKeyValueCoding options) {
+		_options = options;
+	}
+
+	/**
+	 * Returns the options for this controller. Options are an abstraction on request form values.
+	 * 
+	 * @return the options for this controller (default to be ERXRequestFormValues)
+	 */
+	public NSKeyValueCoding options() {
+		if (_options == null) {
+			_options = new ERXRequestFormValues(request());
+		}
+		return _options;
+	}
+
+	/**
+	 * Sets the request handler that processed this route.
+	 * 
+	 * @param requestHandler
+	 *            the request handler that processed this route
+	 */
+	public void _setRequestHandler(ERXRouteRequestHandler requestHandler) {
+		_requestHandler = requestHandler;
+	}
+
+	/**
+	 * Returns the request handler that processed this route.
+	 * 
+	 * @return the request handler that processed this route
+	 */
+	public ERXRouteRequestHandler requestHandler() {
+		return _requestHandler;
 	}
 
 	/**
@@ -109,6 +209,9 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public void _setRouteKeys(NSDictionary<ERXRoute.Key, String> routeKeys) {
 		_routeKeys = routeKeys;
+		if (_routeKeys != routeKeys) {
+			_objects = null;
+		}
 	}
 
 	/**
@@ -178,10 +281,10 @@ public class ERXRouteController extends WODirectAction {
 		_objects = _route.keysWithObjects(_routeKeys, delegate);
 		return _objects;
 	}
-	
+
 	/**
 	 * Returns the default format to use if no other format is found, or if the requested format is invalid.
-	 *  
+	 * 
 	 * @return the default format to use if no other format is found, or if the requested format is invalid
 	 */
 	protected ERXRestFormat defaultFormat() {
@@ -196,24 +299,12 @@ public class ERXRouteController extends WODirectAction {
 	public ERXRestFormat format() {
 		String type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
 		/*
-		if (type == null) {
-			List<String> acceptTypesList = new LinkedList<String>();
-			String accept = request().headerForKey("Accept");
-			if (accept != null) {
-				String[] acceptTypes = accept.split(",");
-				for (String acceptType : acceptTypes) {
-					int semiIndex = acceptType.indexOf(";");
-					if (semiIndex == -1) {
-						acceptTypesList.add(acceptType);
-					}
-					else {
-						acceptTypesList.add(acceptType.substring(0, semiIndex));
-					}
-				}
-			}
-		}
-		*/
-		
+		 * if (type == null) { List<String> acceptTypesList = new LinkedList<String>(); String accept =
+		 * request().headerForKey("Accept"); if (accept != null) { String[] acceptTypes = accept.split(","); for (String
+		 * acceptType : acceptTypes) { int semiIndex = acceptType.indexOf(";"); if (semiIndex == -1) {
+		 * acceptTypesList.add(acceptType); } else { acceptTypesList.add(acceptType.substring(0, semiIndex)); } } } }
+		 */
+
 		ERXRestFormat format;
 		if (type == null) {
 			format = defaultFormat();
@@ -722,7 +813,7 @@ public class ERXRouteController extends WODirectAction {
 		log.error("Request failed: " + request().uri() + ", " + errorMessage);
 		return response;
 	}
-	
+
 	/**
 	 * Returns the response from a HEAD call to this controller.
 	 * 
@@ -746,7 +837,7 @@ public class ERXRouteController extends WODirectAction {
 			WOContext context = context();
 			WOSession session = context._session();
 			if (session != null && session.storesIDsInCookies() && results instanceof WOResponse) {
-				WOResponse response = (WOResponse)results;
+				WOResponse response = (WOResponse) results;
 				session._appendCookieToResponse(response);
 			}
 
@@ -782,6 +873,20 @@ public class ERXRouteController extends WODirectAction {
 	 * 
 	 * @param <T>
 	 *            the type of controller to return
+	 * @param entityName
+	 *            the entity name of the controller to lookup
+	 * @return the created controller
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends ERXRouteController> T controller(String entityName) {
+		return controller((Class<T>) requestHandler().routeControllerClassForEntityNamed(entityName));
+	}
+
+	/**
+	 * Returns another controller, passing the required state on.
+	 * 
+	 * @param <T>
+	 *            the type of controller to return
 	 * @param controllerClass
 	 *            the controller class to lookup
 	 * @return the created controller
@@ -793,6 +898,8 @@ public class ERXRouteController extends WODirectAction {
 			controller._editingContext = _editingContext;
 			controller._routeKeys = _routeKeys;
 			controller._objects = _objects;
+			controller._options = _options;
+			controller._requestHandler = _requestHandler;
 			Field contextField = WOAction.class.getDeclaredField("_context");
 			contextField.setAccessible(true);
 			contextField.set(controller, context());
