@@ -1,4 +1,4 @@
-package er.rest.format;
+package er.rest.gianduia;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -11,6 +11,11 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
+import er.rest.format.ERXRestFormat;
+import er.rest.format.ERXRestFormatDelegate;
+import er.rest.format.IERXRestResponse;
+import er.rest.format.IERXRestWriter;
+import er.rest.format.ERXRestFormat.Delegate;
 
 public class ERXGianduiaRestWriter implements IERXRestWriter {
 	private String _persistentStoreName;

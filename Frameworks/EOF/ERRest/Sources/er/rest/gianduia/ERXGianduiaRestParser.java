@@ -1,4 +1,4 @@
-package er.rest.format;
+package er.rest.gianduia;
 
 import java.net.MalformedURLException;
 
@@ -9,6 +9,11 @@ import com.webobjects.appserver.WORequest;
 
 import er.extensions.foundation.ERXMutableURL;
 import er.rest.ERXRestRequestNode;
+import er.rest.format.ERXJSONRestParser;
+import er.rest.format.ERXJSONRestWriter;
+import er.rest.format.ERXRestFormat;
+import er.rest.format.IERXRestParser;
+import er.rest.format.ERXRestFormat.Delegate;
 
 // ignore me .. i don't do anything real yet
 public class ERXGianduiaRestParser implements IERXRestParser {

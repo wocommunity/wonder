@@ -9,6 +9,8 @@ import com.webobjects.eocontrol.EOClassDescription;
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
+import er.rest.gianduia.ERXGianduiaRestParser;
+import er.rest.gianduia.ERXGianduiaRestWriter;
 
 public class ERXRestFormat {
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
