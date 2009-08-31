@@ -50,6 +50,7 @@ public class ERXGianduiaController extends ERXRouteController {
 		}
 		else {
 			ERXRestRequestNode fetchResultsNode = new ERXRestRequestNode(null, true);
+			fetchResultsNode.setID(node.id());
 			fetchResultsNode.setArray(true);
 			if ("OR".equals(predicateNode.valueForKey("compoundPredicateType"))) {
 				ERXRestRequestNode subpredicatesNode = predicateNode.childNamed("subpredicates");
@@ -58,8 +59,7 @@ public class ERXGianduiaController extends ERXRouteController {
 						if ("NSConstantValueExpressionType".equals(subpredicateNode.valueForKeyPath("rightExpression.expressionType"))) {
 							String moGID = (String) subpredicateNode.valueForKeyPath("rightExpression.constantValue");
 							int lastSlashIndex = moGID.lastIndexOf('/');
-							String moPK = moGID.substring(lastSlashIndex + 2); // + 2 because the PK will be "p10000"
-																				// and we want "10000"
+							String moPK = moGID.substring(lastSlashIndex + 2); // + 2 because the PK will be "p10000" and we want "10000"
 							StringBuffer path = new StringBuffer();
 							path.append("/");
 							path.append(requestHandler().controllerPathForEntityNamed(entityName));
