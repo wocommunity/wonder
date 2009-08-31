@@ -80,7 +80,7 @@ public class ERXRouteController extends WODirectAction {
 		if (isKeyPathRequested(key)) {
 			return filter.include(key);
 		}
-		return null;
+		return ERXKeyFilter.filterWithNone(); // prevent NPE's -- just return an unrooted filter
 	}
 
 	/**
