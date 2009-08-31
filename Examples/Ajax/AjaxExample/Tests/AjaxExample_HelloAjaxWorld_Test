@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>AjaxExample_HelloAjaxWorld_Test</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">AjaxExample_HelloAjaxWorld_Test</td></tr>
+</thead><tbody>
+
+<tr>
+  <td>open</td>
+  <td>http://localhost:55555/cgi-bin/WebObjects/AjaxExample.woa</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>waitForPageToLoad</td>
+  <td>500</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Hello Ajax World</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Page Refreshed</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>//a[@id='UpdateLink']</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyText</td>
+  <td>//*[@id='HelloWorldOutput']</td>
+  <td>Hello WOrld. Boring. </td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>//a[@id='UpdateLink']</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyText</td>
+  <td>//*[@id='HelloWorldOutput']</td>
+  <td>Hello WOrld. Boring. Boring. </td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>//a[@id='AjaxUpdateLink']</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyText</td>
+  <td>//*[@id='HelloAjaxWorldOutput']</td>
+  <td>Hello Ajax WOrld! Fun! </td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>//a[@id='AjaxUpdateLink']</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyText</td>
+  <td>//*[@id='HelloAjaxWorldOutput']</td>
+  <td>Hello Ajax WOrld! Fun! Fun! </td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Hello Ajax World</td>
+  <td> </td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyText</td>
+  <td>//*[@id='HelloWorldOutput']</td>
+  <td>Hello WOrld. </td>
+</tr>
+
+<tr>
+  <td>verifyText</td>
+  <td>//*[@id='HelloAjaxWorldOutput']</td>
+  <td>Hello Ajax WOrld! </td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

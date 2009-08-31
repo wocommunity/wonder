@@ -3,6 +3,7 @@ AjaxExampleComponent : AjaxExampleComponent {
 }
 
 AjaxUpdateLink : AjaxUpdateLink {
+	id = "AjaxUpdateLink";
 	updateContainerID = "ajaxContent";
 	action = updateHelloAjaxWorld;
 }
@@ -27,5 +28,6 @@ UpdateArea : AjaxUpdateContainer {
 }
 
 UpdateLink : WOHyperlink {
+	id = "UpdateLink";
 	action = updateHelloWorld;
 }

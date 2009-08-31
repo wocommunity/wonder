@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>AjaxExample_HelloAjaxWorld_Test</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">AjaxExample_HelloAjaxWorld_Test</td></tr>
+</thead><tbody>
+
+<tr>
+  <td>open</td>
+  <td>http://localhost:55555/cgi-bin/WebObjects/AjaxExample.woa</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>waitForPageToLoad</td>
+  <td>500</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Hello Ajax World</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Page Refreshed</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Ajax Updates</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Initial time:</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Container in Container</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>This demo shows a periodic updating component</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Update Trigger</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>This example demonstrates the AjaxTrigger component</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Autocompletion</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Simple field, just the values</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Dependent Popups</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>AjaxUpdateContainer has an optional 'observeFieldID' binding.</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Slider</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Value:</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Display Group</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>This value shouldn't change:</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Long-Running Task</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Initial time:</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Links</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>For any of the Ajax components that provide</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Drag and Drop</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Drag one of the green draggable items</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Drag and Drop Lists</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Drag Item #0</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Sortable List</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>The first list is an NSMutableArray</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=AjaxInPlaceEditor</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>AjaxInPlaceEditor is a wrapper component</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=AjaxInPlace</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>AjaxInPlace provides support for arbitrarily complex view</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Busy Indicator</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>make a long running AJAX request</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Tree</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Below is an example of the AjaxTree component:</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Toggle</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Toggle?</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Grid</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Click the batch size to edit</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Highlight</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>A common technique in Ajax applications</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Live Preview</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Preview</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Radio Buttons</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>You selected:</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Modal Container</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Modal container with direct content</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Component Reveal</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Click on me to reveal a slider.</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Date Picker</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>Date with no configuration</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=JSON</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>This is a blank div.</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>click</td>
+  <td>link=Complex JSON</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>pause</td>
+  <td>1200</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>verifyTextPresent</td>
+  <td>simple synchronous call</td>
+  <td></td>
+</tr>
+
+
+</tbody></table>
+</body>
+</html>
