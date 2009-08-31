@@ -15,7 +15,6 @@ import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXRestFormatDelegate;
 import er.rest.format.IERXRestResponse;
 import er.rest.format.IERXRestWriter;
-import er.rest.format.ERXRestFormat.Delegate;
 
 public class ERXGianduiaRestWriter implements IERXRestWriter {
 	private String _persistentStoreName;
