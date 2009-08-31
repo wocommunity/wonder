@@ -1,6 +1,5 @@
 package er.rest.routes;
 
-import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
@@ -506,11 +505,13 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public void setupRouteControllerFromUserInfo(ERXRouteController controller, NSDictionary<String, Object> userInfo) {
 		controller._setRequestHandler(this);
 
-		ERXRoute route = (ERXRoute) userInfo.objectForKey(ERXRouteRequestHandler.RouteKey);
-		controller._setRoute(route);
-		@SuppressWarnings("unchecked")
-		NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) userInfo.objectForKey(ERXRouteRequestHandler.KeysKey);
-		controller._setRouteKeys(keys);
+		if (userInfo != null) {
+			ERXRoute route = (ERXRoute) userInfo.objectForKey(ERXRouteRequestHandler.RouteKey);
+			controller._setRoute(route);
+			@SuppressWarnings("unchecked")
+			NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) userInfo.objectForKey(ERXRouteRequestHandler.KeysKey);
+			controller._setRouteKeys(keys);
+		}
 	}
 
 	@Override
@@ -530,7 +531,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 				requestHandlerPath.addObject(actionName);
 			}
 			else {
-				throw new FileNotFoundException("There is no controller for the route '" + path + "'.");
+				requestHandlerPath.addObject(ERXProperties.stringForKeyWithDefault("ERXRest.missingControllerName", "ERXMissingRouteController"));
+				requestHandlerPath.addObject("missing");
+				//throw new FileNotFoundException("There is no controller for the route '" + path + "'.");
 			}
 
 		}

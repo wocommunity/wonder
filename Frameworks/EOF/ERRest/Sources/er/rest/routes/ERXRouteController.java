@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
@@ -35,7 +36,6 @@ import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestParser;
-import er.rest.format.IERXRestWriter;
 
 /**
  * ERXRouteController is equivalent to a Rails controller class. It's actually a direct action, and has the same naming
@@ -70,8 +70,10 @@ public class ERXRouteController extends WODirectAction {
 	/**
 	 * Includes the key in the given filter if isKeyPathRequested returns true.
 	 * 
-	 * @param key the key to lookup
-	 * @param filter the filter to include into 
+	 * @param key
+	 *            the key to lookup
+	 * @param filter
+	 *            the filter to include into
 	 * @return the nested filter (or null if the key was not requested)
 	 */
 	protected ERXKeyFilter includeOptional(ERXKey key, ERXKeyFilter filter) {
@@ -80,7 +82,7 @@ public class ERXRouteController extends WODirectAction {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns whether or not the prefetchingKeyPaths option includes the given keypath (meaning, the client requested
 	 * to include the given keypath).
@@ -461,7 +463,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a JSON WOResponse
 	 */
-	public WOResponse json(String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults json(String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.JSON, editingContext(), entityName, values, filter);
 	}
 
@@ -478,7 +480,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a JSON WOResponse
 	 */
-	public WOResponse json(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults json(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.JSON, editingContext, entityName, values, filter);
 	}
 
@@ -493,7 +495,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a JSON WOResponse
 	 */
-	public WOResponse json(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults json(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.JSON, entity, values, filter);
 	}
 
@@ -508,7 +510,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a PList WOResponse
 	 */
-	public WOResponse plist(String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults plist(String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.PLIST, editingContext(), entityName, values, filter);
 	}
 
@@ -525,7 +527,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a JSON WOResponse
 	 */
-	public WOResponse plist(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults plist(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.PLIST, editingContext, entityName, values, filter);
 	}
 
@@ -540,7 +542,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a JSON WOResponse
 	 */
-	public WOResponse plist(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults plist(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.PLIST, entity, values, filter);
 	}
 
@@ -555,7 +557,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return an XML WOResponse
 	 */
-	public WOResponse xml(String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults xml(String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.XML, editingContext(), entityName, values, filter);
 	}
 
@@ -572,7 +574,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return an XML WOResponse
 	 */
-	public WOResponse xml(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults xml(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.XML, editingContext, entityName, values, filter);
 	}
 
@@ -587,7 +589,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return an XML WOResponse
 	 */
-	public WOResponse xml(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults xml(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.XML, entity, values, filter);
 	}
 
@@ -603,7 +605,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a WOResponse of the format returned from the format() method
 	 */
-	public WOResponse response(String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults response(String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(format(), editingContext(), entityName, values, filter);
 	}
 
@@ -620,7 +622,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a WOResponse of the format returned from the format() method
 	 */
-	public WOResponse response(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults response(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(format(), editingContext, entityName, values, filter);
 	}
 
@@ -635,7 +637,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a WOResponse of the format returned from the format() method
 	 */
-	public WOResponse response(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults response(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		return response(format(), entity, values, filter);
 	}
 
@@ -652,7 +654,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a WOResponse in the given format
 	 */
-	public WOResponse response(ERXRestFormat format, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults response(ERXRestFormat format, String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(format, editingContext(), entityName, values, filter);
 	}
 
@@ -671,7 +673,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a WOResponse in the given format
 	 */
-	public WOResponse response(ERXRestFormat format, EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
+	public WOActionResults response(ERXRestFormat format, EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
 		return response(format, ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName), values, filter);
 	}
 
@@ -688,14 +690,35 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the objects
 	 * @return a WOResponse in the given format
 	 */
-	public WOResponse response(ERXRestFormat format, EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
-		WOResponse response = WOApplication.application().createResponseInContext(context());
-		IERXRestWriter writer = format.writer();
-		if (writer == null) {
-			throw new IllegalStateException("There is no writer for the format '" + format.name() + "'.");
+	public WOActionResults response(ERXRestFormat format, EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
+		ERXRestRequestNode responseNode;
+		try {
+			responseNode = ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate());
 		}
-		writer.appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate()), new ERXWORestResponse(response), format.delegate());
-		return response;
+		catch (ObjectNotAvailableException e) {
+			return errorResponse(e, WOMessage.HTTP_STATUS_NOT_FOUND);
+		}
+		catch (SecurityException e) {
+			return errorResponse(e, WOMessage.HTTP_STATUS_FORBIDDEN);
+		}
+		catch (Throwable t) {
+			return errorResponse(t, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
+		}
+		return response(format, responseNode);
+	}
+
+	/**
+	 * Returns the given ERXRestRequestNode as a response in the given format.
+	 * 
+	 * @param format
+	 *            the format to use
+	 * @param responseNode
+	 *            the request node to render
+	 * @return a WOResponse in the given format
+	 */
+	public WOActionResults response(ERXRestFormat format, ERXRestRequestNode responseNode) {
+		ERXRouteResults results = new ERXRouteResults(context(), format, responseNode);
+		return results;
 	}
 
 	/**
@@ -707,7 +730,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply
 	 * @return a WOResponse in JSON format
 	 */
-	public WOResponse json(Object value, ERXKeyFilter filter) {
+	public WOActionResults json(Object value, ERXKeyFilter filter) {
 		return response(ERXRestFormat.JSON, value, filter);
 	}
 
@@ -720,7 +743,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply
 	 * @return a WOResponse in PList format
 	 */
-	public WOResponse plist(Object value, ERXKeyFilter filter) {
+	public WOActionResults plist(Object value, ERXKeyFilter filter) {
 		return response(ERXRestFormat.PLIST, value, filter);
 	}
 
@@ -733,7 +756,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply
 	 * @return a WOResponse in XML format
 	 */
-	public WOResponse xml(Object value, ERXKeyFilter filter) {
+	public WOActionResults xml(Object value, ERXKeyFilter filter) {
 		return response(ERXRestFormat.XML, value, filter);
 	}
 
@@ -746,7 +769,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply
 	 * @return a WOResponse in the format returned from the format() method.
 	 */
-	public WOResponse response(Object value, ERXKeyFilter filter) {
+	public WOActionResults response(Object value, ERXKeyFilter filter) {
 		return response(format(), value, filter);
 	}
 
@@ -761,25 +784,21 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply
 	 * @return a WOResponse in the given format
 	 */
-	public WOResponse response(ERXRestFormat format, Object value, ERXKeyFilter filter) {
+	public WOActionResults response(ERXRestFormat format, Object value, ERXKeyFilter filter) {
+		ERXRestRequestNode responseNode;
 		try {
-			WOResponse response = WOApplication.application().createResponseInContext(context());
-			IERXRestWriter writer = format.writer();
-			if (writer == null) {
-				throw new IllegalStateException("There is no writer for the format '" + format.name() + "'.");
-			}
-			writer.appendToResponse(ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate()), new ERXWORestResponse(response), format.delegate());
-			return response;
+			responseNode = ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate());
 		}
 		catch (ObjectNotAvailableException e) {
-			return errorResponse(e, WOResponse.HTTP_STATUS_NOT_FOUND);
+			return errorResponse(e, WOMessage.HTTP_STATUS_NOT_FOUND);
 		}
 		catch (SecurityException e) {
-			return errorResponse(e, WOResponse.HTTP_STATUS_FORBIDDEN);
+			return errorResponse(e, WOMessage.HTTP_STATUS_FORBIDDEN);
 		}
 		catch (Throwable t) {
-			return errorResponse(t, WOResponse.HTTP_STATUS_INTERNAL_ERROR);
+			return errorResponse(t, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
 		}
+		return response(format, responseNode);
 	}
 
 	/**
@@ -791,7 +810,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the HTTP status code
 	 * @return an error WOResponse
 	 */
-	public WOResponse errorResponse(Throwable t, int status) {
+	public WOActionResults errorResponse(Throwable t, int status) {
 		WOResponse response = stringResponse(ERXExceptionUtilities.toParagraph(t));
 		response.setStatus(status);
 		log.error("Request failed: " + request().uri(), t);
@@ -807,7 +826,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the HTTP status code
 	 * @return an error WOResponse
 	 */
-	public WOResponse errorResponse(String errorMessage, int status) {
+	public WOActionResults errorResponse(String errorMessage, int status) {
 		WOResponse response = stringResponse(errorMessage);
 		response.setStatus(status);
 		log.error("Request failed: " + request().uri() + ", " + errorMessage);
@@ -844,13 +863,13 @@ public class ERXRouteController extends WODirectAction {
 			return results;
 		}
 		catch (ObjectNotAvailableException e) {
-			return errorResponse(e, WOResponse.HTTP_STATUS_NOT_FOUND);
+			return errorResponse(e, WOMessage.HTTP_STATUS_NOT_FOUND);
 		}
 		catch (SecurityException e) {
-			return errorResponse(e, WOResponse.HTTP_STATUS_FORBIDDEN);
+			return errorResponse(e, WOMessage.HTTP_STATUS_FORBIDDEN);
 		}
 		catch (Throwable t) {
-			return errorResponse(t, WOResponse.HTTP_STATUS_INTERNAL_ERROR);
+			return errorResponse(t, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
 		}
 	}
 
