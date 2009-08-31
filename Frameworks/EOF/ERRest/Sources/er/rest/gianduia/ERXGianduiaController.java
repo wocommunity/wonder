@@ -46,7 +46,13 @@ public class ERXGianduiaController extends ERXRouteController {
 		WOActionResults fetchResults = null;
 		ERXRestRequestNode predicateNode = node.childNamed("predicate");
 		if (predicateNode == null) {
-			fetchResults = controller.performActionNamed("index");
+			WOActionResults actionResults = controller.performActionNamed("index");
+			if (actionResults instanceof ERXRouteResults) {
+				ERXRestRequestNode responseNode = ((ERXRouteResults) actionResults).responseNode();
+				responseNode.setID(node.id());
+				responseNode.setArray(true);
+				fetchResults = actionResults;
+			}
 		}
 		else {
 			ERXRestRequestNode fetchResultsNode = new ERXRestRequestNode(null, true);
@@ -59,7 +65,8 @@ public class ERXGianduiaController extends ERXRouteController {
 						if ("NSConstantValueExpressionType".equals(subpredicateNode.valueForKeyPath("rightExpression.expressionType"))) {
 							String moGID = (String) subpredicateNode.valueForKeyPath("rightExpression.constantValue");
 							int lastSlashIndex = moGID.lastIndexOf('/');
-							String moPK = moGID.substring(lastSlashIndex + 2); // + 2 because the PK will be "p10000" and we want "10000"
+							String moPK = moGID.substring(lastSlashIndex + 2); // + 2 because the PK will be "p10000"
+																				// and we want "10000"
 							StringBuffer path = new StringBuffer();
 							path.append("/");
 							path.append(requestHandler().controllerPathForEntityNamed(entityName));
@@ -74,6 +81,9 @@ public class ERXGianduiaController extends ERXRouteController {
 							if (actionResults instanceof ERXRouteResults) {
 								ERXRestRequestNode responseNode = ((ERXRouteResults) actionResults).responseNode();
 								fetchResultsNode.addChild(responseNode);
+							}
+							else {
+								// ???
 							}
 						}
 					}
