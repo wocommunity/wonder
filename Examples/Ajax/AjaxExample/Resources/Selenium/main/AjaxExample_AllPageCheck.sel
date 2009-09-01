@@ -1,0 +1,112 @@
+
+|open|/||
+|waitForPageToLoad|500||
+
+|click|link=Hello Ajax World||
+|pause|2400||
+|verifyTextPresent|Page Refreshed||
+
+|click|link=Ajax Updates||
+|pause|1200||
+|verifyTextPresent|Initial time:||
+
+|click|link=Container in Container||
+|pause|1200||
+|verifyTextPresent|This demo shows a periodic updating component||
+
+|click|link=Update Trigger||
+|pause|1200||
+|verifyTextPresent|This example demonstrates the AjaxTrigger component||
+
+|click|link=Autocompletion||
+|pause|1200||
+|verifyTextPresent|Simple field, just the values||
+
+|click|link=Dependent Popups||
+|pause|1200||
+|verifyTextPresent|AjaxUpdateContainer has an optional 'observeFieldID' binding.||
+
+|click|link=Slider||
+|pause|1200||
+|verifyTextPresent|Value:||
+
+|click|link=Display Group||
+|pause|1200||
+|verifyTextPresent|This value shouldn't change:||
+
+|click|link=Long-Running Task||
+|pause|1200||
+|verifyTextPresent|Initial time:||
+
+|click|link=Links||
+|pause|1200||
+|verifyTextPresent|For any of the Ajax components that provide||
+
+|click|link=Drag and Drop||
+|pause|1200||
+|verifyTextPresent|Drag one of the green draggable items||
+
+|click|link=Drag and Drop Lists||
+|pause|1200||
+|verifyTextPresent|Drag Item #0||
+
+|click|link=Sortable List||
+|pause|1200||
+|verifyTextPresent|The first list is an NSMutableArray||
+
+|click|link=AjaxInPlaceEditor||
+|pause|1200||
+|verifyTextPresent|AjaxInPlaceEditor is a wrapper component||
+
+|click|link=AjaxInPlace||
+|pause|1200||
+|verifyTextPresent|AjaxInPlace provides support for arbitrarily complex view||
+
+|click|link=Busy Indicator||
+|pause|1200||
+|verifyTextPresent|make a long running AJAX request||
+
+|click|link=Tree||
+|pause|1200||
+|verifyTextPresent|Below is an example of the AjaxTree component:||
+
+|click|link=Toggle||
+|pause|1200||
+|verifyTextPresent|Toggle?||
+
+|click|link=Grid||
+|pause|1200||
+|verifyTextPresent|Click the batch size to edit||
+
+|click|link=Highlight||
+|pause|1200||
+|verifyTextPresent|A common technique in Ajax applications||
+
+|click|link=Live Preview||
+|pause|1200||
+|verifyTextPresent|Preview||
+
+|click|link=Radio Buttons||
+|pause|1200||
+|verifyTextPresent|You selected:||
+
+|click|link=Modal Container||
+|pause|1200||
+|verifyTextPresent|Modal container with direct content||
+
+|click|link=Component Reveal||
+|pause|1200||
+|verifyTextPresent|Click on me to reveal a slider.||
+
+|click|link=Date Picker||
+|pause|1200||
+|verifyTextPresent|Date with no configuration||
+
+|click|link=JSON||
+|pause|1200||
+|verifyTextPresent|This is a blank div.||
+
+|click|link=Complex JSON||
+|pause|1200||
+|verifyTextPresent|simple synchronous call||
+
