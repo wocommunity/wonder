@@ -554,7 +554,7 @@
             <param name="project.name" value="AjaxExample" />
             <param name="project.dir" value="Examples/Ajax/AjaxExample" />
 
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERPrototypes/JavaMemoryAdaptor" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERPrototypes/JavaMemoryAdaptor/ERSelenium" />
         </antcall>
     </target>
     <target name="AjaxExample2.all">

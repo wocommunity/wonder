@@ -1,0 +1,28 @@
+Test for HelloAjaxWorld page
+
+|open|/|
+
+|click|link=Hello Ajax World|
+|pause|1200|
+|verifyTextPresent|Page Refreshed|
+
+|click|UpdateLink|
+|pause|1200|
+|verifyText|HelloWorldOutput|Hello WOrld. Boring. |
+
+|click|UpdateLink|
+|pause|1200|
+|verifyText|HelloWorldOutput|Hello WOrld. Boring. Boring. |
+
+|click|AjaxUpdateLink|
+|pause|1200|
+|verifyText|HelloAjaxWorldOutput|Hello Ajax WOrld! Fun! |
+
+|click|AjaxUpdateLink|
+|pause|1200|
+|verifyText|HelloAjaxWorldOutput|Hello Ajax WOrld! Fun! Fun! |
+
+|click|link=Hello Ajax World| |
+|pause|1200|
+|verifyText|HelloWorldOutput|Hello WOrld. |
+|verifyText|HelloAjaxWorldOutput|Hello Ajax WOrld! |
