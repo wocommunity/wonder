@@ -118,7 +118,9 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 			testFilter.addTestFilter(new SeleniumIncludeTestFilter(new NSArray<File>(searchPaths)));
 
 			testFilter.addTestFilter(new SeleniumRepeatExpanderTestFilter());
-			testFilter.addTestFilter(new SeleniumOverrideOpenTestFilter(context().urlWithRequestHandlerKey(null, null, null)));
+			if (!ERXProperties.booleanForKey("er.selenium.filters.overrideopen.disable")) {
+				testFilter.addTestFilter(new SeleniumOverrideOpenTestFilter(context().urlWithRequestHandlerKey(null, null, null)));
+			}
 		}
 		
 		return testFilter;
