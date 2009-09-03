@@ -203,7 +203,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		} else if (objects == null && keys == null) {
 			_initializeDictionary();
 		} else {
-			throw new IllegalArgumentException("Both objects and keys cannot be null");
+			throw new IllegalArgumentException("Either objects and keys cannot be null");
 		}
 	}
 
@@ -257,6 +257,8 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 				}
 			}
 			while (true);
+		} else {
+			throw new NullPointerException("map cannot be null");
 		}
 	}
 
