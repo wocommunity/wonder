@@ -60,7 +60,7 @@ public class NSDictionaryTest extends BaseTestCase {
 		assertEquals("value", dict.get("key"));
 	}
 
-	public void testNSDictionaryMapOfKVNullBoolean() {
+	public void testNSDictionaryMapOfKVBooleanNull() {
 		try {
 			new NSDictionary<String, String>((Map<String, String>)null, true);
 			fail("NullPointerException expected");
