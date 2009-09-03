@@ -308,6 +308,7 @@ There are many ways to use this script:
            <exclude name="${classes.exclude.1}" />
            <exclude name="${classes.exclude.2}" />
            <classpath>
+                <pathelement location="${build.root}/ERJars.framework/Resources/Java/junit.jar" />
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />
                     <!-- ak: i know, fix this...-->
