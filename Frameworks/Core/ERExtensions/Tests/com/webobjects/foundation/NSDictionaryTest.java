@@ -93,21 +93,18 @@ public class NSDictionaryTest extends BaseTestCase {
 	}
 	
 	public void testNSDictionaryNSArrayOfVNSArrayOfKNull() {
-	    String[] values = new String[] {"value1", "value2"};
+	    NSArray<String> array = new NSArray<String>(new String[] { "value1", "value2" });
 	    try {
-	      new NSDictionary<String, String>((String[])null, values);
+	      new NSDictionary<String, String>((NSArray<String>)null, array);
 	      fail("IllegalArgumentException expected");
 	    } catch (IllegalArgumentException e) {
 	    }
-	    
 	    try {
-	      new NSDictionary<String, String>(values, (String[])null);
+	      new NSDictionary<String, String>(array, (NSArray<String>)null);
 	      fail("IllegalArgumentException expected");
 	    } catch (IllegalArgumentException e) {
 	    }
-
-	    NSDictionary<String, String> dict = new NSDictionary<String, String>((String[])null, (String[])null);
-	    assertTrue(dict.isEmpty());
+	    new NSDictionary<String, String>((NSArray<String>)null, (NSArray<String>)null);
 	}
 
 	public void testNSDictionaryNSDictionaryOfKV() {
