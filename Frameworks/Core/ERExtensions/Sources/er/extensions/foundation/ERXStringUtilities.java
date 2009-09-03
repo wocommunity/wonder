@@ -891,24 +891,20 @@ public class ERXStringUtilities {
 			byte b = 0;
             if(c1 >= '0' && c1 <= '9')
                 b += (c1 - 48) * 16;
-            else
-            if(c1 >= 'a' && c1 <= 'f')
+            else if(c1 >= 'a' && c1 <= 'f')
                 b += ((c1 - 97) + 10) * 16;
-            else
-            if(c1 >= 'A' && c1 <= 'F')
+            else if(c1 >= 'A' && c1 <= 'F')
                 b += ((c1 - 65) + 10) * 16;
             else
-                throw new IllegalArgumentException("Illegal Character");
+                throw new IllegalArgumentException("Illegal Character: '" + c1 + "' in " + hexString);
             if(c2 >= '0' && c2 <= '9')
                 b += c2 - 48;
-            else
-            if(c2 >= 'a' && c2 <= 'f')
+            else if(c2 >= 'a' && c2 <= 'f')
                 b += (c2 - 97) + 10;
-            else
-            if(c2 >= 'A' && c2 <= 'F')
+            else if(c2 >= 'A' && c2 <= 'F')
                 b += (c2 - 65) + 10;
             else
-                throw new IllegalArgumentException("Illegal Character");
+                throw new IllegalArgumentException("Illegal Character: '" + c2 + "' in " + hexString);
             array[i] = b;
 
 		}
