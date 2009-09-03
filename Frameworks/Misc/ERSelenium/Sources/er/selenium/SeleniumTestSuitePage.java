@@ -81,8 +81,21 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 		return new File(ERXProperties.stringForKeyWithDefault("SeleniumTestsRoot", DEFAULT_SELENIUM_TESTS_ROOT));		
 	}
 	
-	public File testDir() {
+	protected File testDir() {
 		return testFile.getParentFile();
+	}
+	
+	public String testGroupName() {
+		File parentFile = testFile.getParentFile();
+		try {
+			return parentFile.getCanonicalPath().equals(testsRoot().getCanonicalPath()) ? "" : parentFile.getName();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public boolean hasTestGroup() {
+		return testGroupName().length() > 0;
 	}
 	
 	protected void checkTestPath() {
@@ -120,7 +133,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     	String format = context().request().stringFormValueForKey("format");
     	if (format != null)
     		queryArgs.setObjectForKey(format, "format");
-    	return context().directActionURLForActionNamed("SeleniumTestSuite/" + testDir().getName() +ERSelenium.SUITE_SEPERATOR + testFile.getName(), queryArgs);
+    	return context().directActionURLForActionNamed(String.format("SeleniumTestSuite/%s%s", (hasTestGroup() ? testGroupName() + ERSelenium.SUITE_SEPERATOR : ""), testFile.getName()), queryArgs);
     }
     
     public String testContents() {
