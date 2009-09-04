@@ -79,6 +79,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 			_count = count;
 			_keysCache = null;
 		}
+		_entrySetCache = null;
 		_objectsCache = null;
 	}
 
@@ -96,6 +97,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 					_clearDeletionsAndCollisions();
 				}
 				_objectsCache = null;
+				_entrySetCache = null;
 				_keysCache = null;
 			}
 		}
@@ -109,6 +111,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 			_flags = new byte[_hashtableBuckets];
 			_count = 0;
 			_objectsCache = null;
+			_entrySetCache = null;
 			_keysCache = null;
 			_deletionLimit = _NSCollectionPrimitives.deletionLimitForTableBuckets(_hashtableBuckets);
 		}

@@ -42,7 +42,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		}
 
 		public Q setValue(Q value) {
-			throw new UnsupportedOperationException("setValue is not a supported operation in _JavaNSDictionaryMapEntry");
+			return (Q)NSDictionary.this.put((K)getKey(), (V)value);
 		}
 
 		public boolean equals(Object o) {
@@ -70,6 +70,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		_hashCache = otherDictionary._hashCache;
 		_objects = otherDictionary._objects;
 		_objectsCache = otherDictionary._objectsCache;
+		_entrySetCache = null;
 		_flags = otherDictionary._flags;
 		_keys = otherDictionary._keys;
 		_keysCache = otherDictionary._keysCache;
@@ -83,6 +84,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		_hashCache = otherDictionary._hashCache;
 		_objects = _NSCollectionPrimitives.copyArray(otherDictionary._objects);
 		_objectsCache = null;
+		_entrySetCache = null;
 		_flags = _NSCollectionPrimitives.copyArray(otherDictionary._flags);
 		_keys = _NSCollectionPrimitives.copyArray(otherDictionary._keys);
 		_keysCache = null;
@@ -92,6 +94,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	protected void _initializeDictionary() {
 		_capacity = _count = 0;
 		_objects = _objectsCache = null;
+		_entrySetCache = null;
 		_flags = null;
 		_keys = _keysCache = null;
 		_hashtableBuckets = _NSCollectionPrimitives.hashTableBucketsForCapacity(_capacity);
@@ -301,6 +304,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	protected Object[] objectsNoCopy() {
 		if (_objectsCache == null) {
 			_objectsCache = _count != 0 ? _NSCollectionPrimitives.valuesInHashTable(_keys, _objects, _flags, _capacity, _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray;
+			_entrySetCache = null;
 		}
 		return _objectsCache;
 	}
@@ -634,7 +638,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 
 	public Set<Map.Entry<K, V>> entrySet() {
 		if (_entrySetCache == null) {
-			return _initMapEntrySet();
+			_entrySetCache = _initMapEntrySet();
 		}
 		
 		return _entrySetCache;
@@ -642,8 +646,9 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 
 	private Set<Map.Entry<K, V>> _initMapEntrySet() {
 		Object[] keys = keysNoCopy();
-		_JavaNSDictionaryMapEntry<K, V>[] set = new _JavaNSDictionaryMapEntry[keys.length];
-		for (int i = 0; i < keys.length; i++) {
+		int length = keys.length;
+		_JavaNSDictionaryMapEntry<K, V>[] set = new _JavaNSDictionaryMapEntry[length];
+		for (int i = 0; i < length; i++) {
 			K key = (K) keys[i];
 			V object = objectForKey(key);
 			_JavaNSDictionaryMapEntry<K, V> current = new _JavaNSDictionaryMapEntry<K, V>(key, object);
