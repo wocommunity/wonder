@@ -105,7 +105,7 @@
 + (void)_appendDictionary:(NSDictionary *)plist toMutableString:(NSMutableString *)str level:(int)level maxLevel:(int)maxLevel escapeNonASCII:(BOOL)escapeNonASCII {
     [str appendString:@"{"];
     
-    NSArray *keys = [[plist allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSArray *keys = [[plist allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     int i, count = [keys count];
     id key, value;
     

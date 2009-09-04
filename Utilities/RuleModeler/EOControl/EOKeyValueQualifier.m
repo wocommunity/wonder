@@ -306,7 +306,11 @@ static EONull *null = nil;
       [_archiver encodeObject:[self value] forKey:@"value"];
   
   s = NSStringFromSelector([self selector]);
-  if ([s hasSuffix:@":"]) s = [s substringToIndex:[s length] - 1];
+  // MS: RuleModeler change!
+  BOOL useRuleEditorRuleOrdering = [[NSUserDefaults standardUserDefaults] boolForKey:@"useRuleEditorRuleOrdering"];
+  if (!useRuleEditorRuleOrdering) {
+    if ([s hasSuffix:@":"]) s = [s substringToIndex:[s length] - 1];
+  }
   [_archiver encodeObject:s forKey:@"selectorName"];
 }
 

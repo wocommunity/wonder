@@ -97,9 +97,10 @@ static NSArray * _sortDescriptors = nil;
             // dscheck: Change the sorting to match what was in the old RuleEditor.
             NSSortDescriptor *rhsKeyPathDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"rhs.keyPath" ascending:YES] autorelease];
             NSSortDescriptor *authorDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"author" ascending:NO] autorelease];
+            NSSortDescriptor *hasLHSDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"hasLHS" ascending:NO] autorelease];
             NSSortDescriptor *lhsDescriptionDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"lhsDescription" ascending:YES] autorelease];
-            
-            _sortDescriptors = [[NSArray arrayWithObjects:rhsKeyPathDescriptor, authorDescriptor, lhsDescriptionDescriptor, nil] retain];
+
+            _sortDescriptors = [[NSArray arrayWithObjects:rhsKeyPathDescriptor, authorDescriptor, hasLHSDescriptor, lhsDescriptionDescriptor, nil] retain];
         }
 	}
     

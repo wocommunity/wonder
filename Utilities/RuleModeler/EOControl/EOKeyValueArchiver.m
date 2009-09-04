@@ -480,7 +480,13 @@ static BOOL isPListObject(id _obj) {
 
 - (void)encodeWithKeyValueArchiver:(EOKeyValueArchiver *)archiver {
 #ifdef WO_JAVA_COMPATIBILITY
-  [archiver encodeObject:@"java.lang.Number" forKey:@"class"];
+  // MS: RuleModeler change!
+  BOOL useRuleEditorRuleOrdering = [[NSUserDefaults standardUserDefaults] boolForKey:@"useRuleEditorRuleOrdering"];
+  if (useRuleEditorRuleOrdering) {
+    [archiver encodeObject:@"NSNumber" forKey:@"class"];
+  } else {
+    [archiver encodeObject:@"java.lang.Number" forKey:@"class"];
+  }
 #endif
   [archiver encodeObject:[self description] forKey:@"value"];
 }
@@ -523,7 +529,13 @@ static BOOL isPListObject(id _obj) {
 
 - (void)encodeWithKeyValueArchiver:(EOKeyValueArchiver *)archiver {
 #ifdef WO_JAVA_COMPATIBILITY
-  [archiver encodeObject:@"com.webobjects.foundation.NSKeyValueCoding$Null" forKey:@"class"];
+  // MS: RuleModeler change!
+  BOOL useRuleEditorRuleOrdering = [[NSUserDefaults standardUserDefaults] boolForKey:@"useRuleEditorRuleOrdering"];
+  if (useRuleEditorRuleOrdering) {
+    [archiver encodeObject:@"EONull" forKey:@"class"];
+  } else {
+    [archiver encodeObject:@"com.webobjects.foundation.NSKeyValueCoding$Null" forKey:@"class"];
+  }
 #endif
 }
 
