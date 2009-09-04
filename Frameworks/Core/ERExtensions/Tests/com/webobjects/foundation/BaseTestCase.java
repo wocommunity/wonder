@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
-public class BaseTestCase extends TestCase {
-  
+public abstract class BaseTestCase extends TestCase {
+
   public static void assertEquals(Object[] arg0, Object[] arg1) {
     if (Arrays.equals(arg0, arg1))
       return;
