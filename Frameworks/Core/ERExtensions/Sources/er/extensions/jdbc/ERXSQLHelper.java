@@ -2169,6 +2169,48 @@ public class ERXSQLHelper {
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
 		}
+		
+		@Override
+		public String limitExpressionForSQL( EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end ) {
+			if( sql == null || "".equals( sql ) )
+			{
+				return sql;
+			}
+
+			String originalSql = sql.toLowerCase();
+
+			String orderBy;
+
+			int indexOfOrderByClause = originalSql.indexOf( " order by " );
+
+			if( indexOfOrderByClause > 0)
+			{
+				orderBy = originalSql.substring( indexOfOrderByClause + 1, originalSql.length() );
+
+				originalSql = originalSql.substring( 0, indexOfOrderByClause );
+			}
+			else
+			{
+				String columns = originalSql.substring( originalSql.indexOf(  "select " ) + 7, originalSql.indexOf( " from " ) );
+
+				orderBy = "order by " + columns.split( "," )[0];
+			}
+
+			StringBuilder limitSqlBuilder = new StringBuilder( originalSql );
+
+			limitSqlBuilder.insert( 0, "select * from (" );
+
+			String rowNumberClause = ", row_number() over (" + orderBy + ") eo_rownum";
+
+			limitSqlBuilder.insert( limitSqlBuilder.lastIndexOf( " from " ), rowNumberClause );
+			limitSqlBuilder.append( ") as temp_row_number where eo_rownum >= " );
+			limitSqlBuilder.append( start + 1 );
+			limitSqlBuilder.append( " and eo_rownum < " );
+			limitSqlBuilder.append( end + 1 );
+			limitSqlBuilder.append( " order by eo_rownum" );
+
+			return limitSqlBuilder.toString();
+		}
 	}
 
 }
