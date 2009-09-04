@@ -50,7 +50,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		}
 
 		public int hashCode() {
-			return NSDictionary._NSDictionaryMapEntryHashCode;
+			return _entryKey == null ? System.identityHashCode(this) : _entryKey.hashCode();
 		}
 
 		Q _entryValue;
