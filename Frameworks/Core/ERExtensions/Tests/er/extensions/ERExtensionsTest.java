@@ -10,8 +10,8 @@ import junit.framework.TestSuite;
  */
 public class ERExtensionsTest extends TestSuite {
 
-    public static Test suite() { 
-        TestSuite suite = new TestSuite("Tests for ERExtensions"); 
+    public static Test suite() {
+        TestSuite suite = new TestSuite("Tests for ERExtensions");
 		//$JUnit-BEGIN$
         suite.addTestSuite(com.webobjects.foundation.NSArrayTest.class);
         suite.addTestSuite(com.webobjects.foundation.NSDictionaryTest.class);
@@ -25,8 +25,9 @@ public class ERExtensionsTest extends TestSuite {
         suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);
         suite.addTestSuite(er.extensions.foundation.ERXThreadStorageTest.class);
         suite.addTestSuite(er.extensions.foundation.ERXUtilitiesTest.class);
+        suite.addTestSuite(er.extensions.jdbc.MicrosoftSQLHelperTest.class);
         suite.addTestSuite(er.extensions.statistics.ERXMetricsTest.class);
 		//$JUnit-END$
-        return suite; 
+        return suite;
     }
 }
