@@ -172,7 +172,18 @@ static int defaultRulePriority = 0;
     EOQualifier *lhs = _lhs;
     if (_enabled == NO) {
         EOKeyValueQualifier *kvq = [[EOKeyValueQualifier alloc] initWithKey:@"RuleIsDisabled" operatorSelector:@selector(isEqual:) value:@"YES"];
-        lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:kvq, _lhs, nil] autorelease]]; // _lhs might be nil
+        BOOL useRuleEditorRuleOrdering = [[NSUserDefaults standardUserDefaults] boolForKey:@"useRuleEditorRuleOrdering"];
+        if (useRuleEditorRuleOrdering) {
+            if (_lhs) {
+                lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:_lhs, kvq, nil] autorelease]]; // _lhs might be nil
+            }
+            else {
+                lhs = kvq;
+            }
+        }
+        else {
+            lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:kvq, _lhs, nil] autorelease]]; // _lhs might be nil
+        }
         [kvq release];
     }
     
@@ -238,6 +249,10 @@ static int defaultRulePriority = 0;
 		_lhs = [lhs retain];
         [self resetDescriptionCaches];
 	}
+}
+
+- (BOOL)hasLHS {
+    return _lhs != nil;
 }
 
 - (NSString *)lhsDescription {

@@ -62,6 +62,7 @@
 
 - (EOQualifier *)lhs;
 - (void)setLhs:(EOQualifier *)lhs;
+- (BOOL)hasLHS;
 - (NSString *)lhsDescription;
 - (NSString *)lhsFormattedDescription;
 

@@ -283,7 +283,14 @@ static BOOL useParenthesesForComparisonQualifier = NO;
 }
 - (void)encodeWithKeyValueArchiver:(EOKeyValueArchiver *)_archiver {
 #ifdef WO_JAVA_COMPATIBILITY
-    [_archiver encodeObject:[NSString stringWithFormat:@"com.webobjects.eocontrol.%@", NSStringFromClass([self class])] forKey:@"class"];
+    // MS: RuleModeler change!
+    BOOL useRuleEditorRuleOrdering = [[NSUserDefaults standardUserDefaults] boolForKey:@"useRuleEditorRuleOrdering"];
+    if (useRuleEditorRuleOrdering) {
+        [_archiver encodeObject:NSStringFromClass([self class]) forKey:@"class"];
+    }
+    else {
+        [_archiver encodeObject:[NSString stringWithFormat:@"com.webobjects.eocontrol.%@", NSStringFromClass([self class])] forKey:@"class"];
+    }
 #endif
 }
 
