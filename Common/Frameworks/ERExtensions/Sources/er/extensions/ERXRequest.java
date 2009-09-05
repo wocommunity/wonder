@@ -1,6 +1,7 @@
 package er.extensions;
 
 import java.util.Enumeration;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -17,6 +18,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+
 
 /** Subclass of WORequest that fixes several Bugs.
  * The ID's are #2924761 and #2961017. It can also be extended to handle
@@ -143,9 +145,11 @@ public  class ERXRequest extends WORequest {
     		String requestHandlerKey = (String)valueForKeyPath("_uriDecomposed.requestHandlerKey");
     		if (WOApplication.application().resourceRequestHandlerKey().equals(requestHandlerKey)) {
     			String requestHandlerPath = (String)valueForKeyPath("_uriDecomposed.requestHandlerPath");
+    			if(requestHandlerPath != null) {
         		requestHandlerPath = "file:/" +  requestHandlerPath.substring("wodata=/".length());
     			result = requestHandlerPath.replace('+', ' ');
     		}
+    	}
     	}
 
 		return result;
@@ -450,14 +454,14 @@ public  class ERXRequest extends WORequest {
 		NSMutableDictionary mutableUserInfo;
 		if (userInfo == null) {
 			mutableUserInfo = new NSMutableDictionary();
-			setUserInfo(mutableUserInfo);
+			_userInfo = mutableUserInfo;
 		}
 		else if (userInfo instanceof NSMutableDictionary) {
 			mutableUserInfo = (NSMutableDictionary) userInfo;
 		}
 		else {
 			mutableUserInfo = userInfo.mutableClone();
-			setUserInfo(mutableUserInfo);
+			_userInfo = mutableUserInfo;
 		}
 		return mutableUserInfo;
 	}

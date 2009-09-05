@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
 	<wo class="AjaxUpdateContainer" wocomponentcontent="true">
     
 		<binding name="elementName"/>
@@ -18,11 +19,13 @@
 		<binding name="onException"/>
 		<binding name="onRefreshComplete"/>
 
-		<binding name = "insertion"/>
-		<binding name = "insertionDuration"/>
-		<binding name = "beforeInsertionDuration"/>
-		<binding name = "afterInsertionDuration"/>
+		<binding name="insertion"/>
+		<binding name="insertionDuration"/>
+		<binding name="beforeInsertionDuration"/>
+		<binding name="afterInsertionDuration"/>
 
     
-	<binding name="id"/></wo>
+	<binding name="id"/>
+        <binding name="asynchronous"/>
+    </wo>
 </wodefinitions>

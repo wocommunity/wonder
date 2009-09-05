@@ -1,0 +1,10 @@
+WOPopUpButton : ERXBooleanSelector {
+  yesString = yesString;
+  noString = noString;
+  noSelectionString = noSelectionString;
+  selection = ^selection;
+  class = ^class;
+  id = ^id;
+  style = ^style;
+  uiMode = "popup";
+}

@@ -433,7 +433,11 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      */
     @Override
 	public String toString() {
-        return "<" + getClass().getName() + " object: " + object() + "; propertyKey: "
-        + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
+		try {
+	        return "<" + getClass().getName() + " object: " + object() + "; propertyKey: " + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
+		}
+		catch (Throwable t) {
+	        return "<" + getClass().getName() + " object of type " + ((this.object() == null) ? "null" : this.object().getClass().getSimpleName()) + "; propertyKey: " + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
+		}
     }
 }

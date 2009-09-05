@@ -67,6 +67,11 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 ListPage: D2WList {
 	dataSource = queryDataSource;
 	entityName = entity;
@@ -129,6 +134,7 @@ QueryTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 0;
 	cellspacing = 5;
+	class = cssClassForPageContainerElement;
 	elementName = "table";
 }
 
@@ -142,6 +148,27 @@ QueryTableRow: WOGenericContainer {
 	_unroll = true;
 	bgcolor = backgroundColorForTable;
 	elementName = "tr";
+}
+
+PropertyKeyComponentGenericContainer: WOGenericContainer {
+	align = "left";
+	class = cssClassForPropertyKey;
+	elementName = "td";
+	style = inlineStyleDeclarationForPropertyKey;
+	valign = "middle";
+}
+
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	align = "right";
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	style = inlineStyleDeclarationForPropertyKey;
+	valign = "middle";
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 ResourceInputRepresentation: WOSwitchComponent {
@@ -182,10 +209,5 @@ SavedQuerySwitchedComponent:  WOSwitchComponent {
 
 ShowCancel: WOConditional {
 	condition = showCancel;
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
 }
 

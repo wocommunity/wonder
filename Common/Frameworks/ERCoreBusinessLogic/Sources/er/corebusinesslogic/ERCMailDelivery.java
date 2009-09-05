@@ -171,6 +171,7 @@ public class ERCMailDelivery {
      * @param title of the message
      * @param message text of the message
      * @param filePaths array of file paths to attach
+     * @param deleteOnSent should the attachment files be deleted when the message is sent
      * @param ec editing context to create the mail
      *		message in.
      * @return created mail message for the given parameters
@@ -182,8 +183,9 @@ public class ERCMailDelivery {
                                                        String title,
                                                        String message,
                                                        NSArray filePaths,
+                                                       boolean deleteOnSent,
                                                        EOEditingContext ec) {
-    	return composeEmailWithAttachments(null, from, to, cc, bcc, title, message, filePaths, ec);
+    	return composeEmailWithAttachments(null, from, to, cc, bcc, title, message, filePaths, deleteOnSent, ec);
     }
     
     /**
@@ -197,6 +199,7 @@ public class ERCMailDelivery {
      * @param title of the message
      * @param message text of the message
      * @param filePaths array of file paths to attach
+     * @param deleteOnSent should the attachment files be deleted when the message is sent
      * @param ec editing context to create the mail
      *		message in.
      * @return created mail message for the given parameters
@@ -209,6 +212,7 @@ public class ERCMailDelivery {
                                                        String title,
                                                        String message,
                                                        NSArray filePaths,
+                                                       boolean deleteOnSent,
                                                        EOEditingContext ec) {
         ERCMailMessage mailMessage = this.composeEmail(contextString, from, to, cc, bcc, title, message, ec);
 
@@ -217,6 +221,7 @@ public class ERCMailDelivery {
             String filePath = (String)filePathEnumerator.nextElement();
             ERCMessageAttachment attachment = (ERCMessageAttachment)ERCMessageAttachment.messageAttachmentClazz().createAndInsertObject(ec);
             attachment.setFilePath(filePath);
+            attachment.setDeleteOnSent(Boolean.valueOf(deleteOnSent));
             mailMessage.addToBothSidesOfAttachments(attachment);
         }
         return mailMessage;

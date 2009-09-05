@@ -166,15 +166,13 @@ var AjaxOnDemand = {
 	},
 	
 	loadCSS: function(css) {
-		var linkElement = document.createElement("link");
-  	linkElement.setAttribute("rel", "stylesheet");
-  	linkElement.setAttribute("type", "text/css");
-  	linkElement.setAttribute("href", css);
-  	document.getElementsByTagName('HEAD')[0].appendChild(linkElement);
-		//new Ajax.Request(script, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
+		new Ajax.Request(css, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
 	},
 	
 	loadedCSS: function(request) {
+		var inlineStyle = new Element("style", {"type": "text/css"});
+		inlineStyle.appendChild(document.createTextNode(request.responseText));
+		document.getElementsByTagName('HEAD')[0].appendChild(inlineStyle);
 	}
 };
 var AOD = AjaxOnDemand;
@@ -586,7 +584,10 @@ var AjaxDroppable = Class.create({
 			this.onbeforedrop(element, droppableElement);
 		}
 
-    	var data = this.draggableKeyName + '=' + element.getAttribute('draggableID');
+		var draggableID = element.getAttribute('draggableID');
+		if(draggableID == null)
+			draggableID = element.getAttribute('id');
+    	var data = this.draggableKeyName + '=' + draggableID;
     	
 			if (this.updateContainerID == null) {
 				if (this.form) {
@@ -1001,6 +1002,10 @@ var AjaxModalDialog = {
 	
 	open: function(id) {
 		eval("openAMD_" + id + "()");
+	},
+	
+	contentUpdated: function() {
+		Modalbox._putContent();
 	}
 };
 var AMD = AjaxModalDialog;

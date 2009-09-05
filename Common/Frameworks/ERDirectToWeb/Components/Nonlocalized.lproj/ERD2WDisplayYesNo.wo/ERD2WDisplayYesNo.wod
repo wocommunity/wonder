@@ -1,17 +1,3 @@
-Conditional1: WOConditional {
-	condition = isYes;
+Display: WOString {
+	value = displayString;
 }
-
-Conditional2: WOConditional {
-	condition = isYes;
-	negate = true;
-}
-
-ERXLocalizedString1: ERXLocalizedString {
-	value = "Yes";
-}
-
-ERXLocalizedString2: ERXLocalizedString {
-	value = "No";
-}
-

@@ -6,8 +6,10 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 /** 
  * ERXBrowser is an abstract class that defines browser object. 
@@ -54,6 +56,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
 
     public static final String UNKNOWN_BROWSER = "Unknown Broswer";
 
+    public static final String ROBOT 	= "robot";
     public static final String ICAB 	= "iCab";
     public static final String IE	= "IE";
     public static final String NETSCAPE = "Netscape";
@@ -69,6 +72,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public static final String MACOS	= "MacOS";
     public static final String WINDOWS 	= "Windows";
     public static final String LINUX	= "Linux";
+    public static final String IPHONE	= "iPhone";
 
     public static final String POWER_PC	= "PowerPC";
     public static final String UNKNOWN_CPU = "Unknown CPU";
@@ -111,6 +115,12 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract NSDictionary userInfo();
 
     public abstract boolean isUnknownBrowser();
+
+    /**
+     * Browser is isRobot?
+     * @return true if browser is robot.
+     */
+    public abstract boolean isRobot();
 
     /**
      * Browser is iCab?
@@ -161,6 +171,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isVersion7();
     public abstract boolean isVersion6();
     public abstract boolean isVersion5();
+    public abstract boolean isVersion51();  // IE 5.0 and IE 5.1 on Mac OS is different
 
     public abstract boolean isVersion45();  // Netscape 4.5 to 4.7 is very different from 4.0 
                                             // NOTE: 4.6 and 4.7 is fell into this group
@@ -176,6 +187,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isMacOS();
     public abstract boolean isWindows();
     public abstract boolean isLinux();
+    public abstract boolean isIPhone();
 
     /**
      * Gets the message encoding for a given request. Default implementation

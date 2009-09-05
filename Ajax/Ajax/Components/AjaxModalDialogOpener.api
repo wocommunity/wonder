@@ -12,5 +12,7 @@
     	<validation message="'dialogId' is a required binding.">
             <unbound name="dialogId"/>
         </validation>
+    <binding defaults="Actions" name="action"/>
+    <binding defaults="Boolean" name="enabled"/>
     </wo>
 </wodefinitions>

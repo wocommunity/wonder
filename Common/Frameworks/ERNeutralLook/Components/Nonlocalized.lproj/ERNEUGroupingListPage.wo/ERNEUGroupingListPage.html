@@ -37,24 +37,20 @@
 				<webobject name="ListTableHeaderRow">
 					<th>&nbsp;</th>
 					<webobject name="ColumnLabelRepetition">
-						<th nowrap valign="bottom">
+					<webobject name="IfPropertyKeyIsNotOmitted">
+						<webobject name="PropertyNameComponentGenericContainer">
 							<table>
 								<tr>
-									<th>
-										<b class="white"><webobject name="PropertyName"></webobject></b>
-									</th>
-									<th valign="bottom">
-										<webobject name="IsPropertySortable">
-											<webobject name="AttributeSorter"></webobject>
-										</webobject>
-									</th>
+									<th><webobject name="PropertyNameSwitchComponent"></webobject></th>
+									<td><webobject name="IsPropertySortable"><webobject name="SortOrder"></webobject></webobject></td>
 								</tr>
 							</table>
-						</th>
+						</webobject>
 						<webobject name="ShouldDisplayDetailedPageMetrics">
 						<th scope="col" class="InlineMetrics">&nbsp;</th>
 						</webobject>
-					<td width="1">&nbsp;</td>
+						<td width="1">&nbsp;</td>
+					</webobject>
 				</webobject>
 				<th bgcolor="#999999">&nbsp;</th>
 			</webobject>
@@ -88,6 +84,7 @@
 					</table>
 				</td>
 				<webobject name="AttributeRepetition">
+				<webobject name="IfPropertyKeyIsNotOmitted">
 				<webobject name="AttributeCell">
 					<font size="-1"><webobject name="AttributeDisplay"></webobject></font>
 				</webobject>
@@ -97,6 +94,7 @@
 				</td>
 				</webobject>
 				<td width="1"></td>
+				</webobject>
 				</webobject>
 				<td>
 					<webobject name="IsListing2">
@@ -110,8 +108,10 @@
 				<tr class="MetricsSummary">
 					<td>&nbsp;</td>
 					<webobject name="AttributeRepetition">
+					<webobject name="IfPropertyKeyIsNotOmitted">
 					<td>&nbsp;</td>
 					<td class="InlineMetrics"><webobject name="MetricsDurationForCurrentPropertyKey"></webobject></td>
+					</webobject>
 					</webobject>
 					<td>&nbsp;</td>
 				</tr>

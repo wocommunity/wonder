@@ -1,8 +1,3 @@
 Content: ERXWOComponentContent {
 	templateName = templateName;
 }
-
-DialogUpdater: AjaxUpdateContainer {
-	id = updateContainerID;
-	onComplete = "function() { Modalbox.resizeToContent(); }";
-}

@@ -8,7 +8,7 @@
 		<WEBOBJECT NAME=SubmitChanges2></WEBOBJECT>
 		<WEBOBJECT NAME=SwitchComponent3>
 			<WEBOBJECT NAME=Border>
-					<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 BGCOLOR=#ebebeb>
+					<webobject name="TabInspectTable">
 						<WEBOBJECT NAME=BorderWasRendered>
 							<TR BGCOLOR=#CCCCCC>
 								<TD COLSPAN=4>&nbsp;</TD>
@@ -26,27 +26,31 @@
 								<TD ALIGN=left COLSPAN=3><WEBOBJECT NAME=NotUsingMatrixLayout>
 										<TABLE CELLSPACING=1 BORDER=0 CELLPADDING=0>
 											<WEBOBJECT NAME=AttributeRepetition>
+												<webobject name="IfPropertyKeyIsNotOmitted">
 												<TR>
-													<WEBOBJECT NAME=HasDisplayNameForProperty>
-														<TD ALIGN=LEFT VALIGN=TOP><WEBOBJECT NAME=SwitchComponent1></WEBOBJECT></TD>
-													</WEBOBJECT><WEBOBJECT NAME=DoNotFlush>
+													<WEBOBJECT NAME="HasDisplayNameForProperty">
+														<webobject name="PropertyNameComponentGenericContainer"><webobject name="PropertyNameSwitchComponent"></webobject></webobject>
+													</WEBOBJECT>
+													<WEBOBJECT NAME="DoNotFlush">
 														<TD>&nbsp;</TD>
 													</WEBOBJECT>
-													<webobject name="PropertyKeyComponentGenericContainer"><WEBOBJECT NAME="AttributeValue"></WEBOBJECT></webobject>
+													<webobject name="PropertyKeyComponentGenericContainer"><webobject name="AttributeValue"></webobject></webobject>
 													<webobject name="ShouldDisplayDetailedPageMetrics">
 													<td class="InlineMetrics">
 														<webobject name="InlineMetricsForPropertyKey"></webobject>
 													</td>
 													</webobject>
 												</TR>
+												</webobject>
 											</WEBOBJECT>
 										</TABLE>
 									</WEBOBJECT><WEBOBJECT NAME=Conditional4><WEBOBJECT NAME=ERTable1>
+											<webobject name="IfPropertyKeyIsNotOmitted">
 											<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=0>
 												<TR>
-													<TD ALIGN=LEFT WIDTH=120 VALIGN=TOP><WEBOBJECT NAME=SwitchComponent2></WEBOBJECT></TD>
+													<webobject name="PropertyNameComponentGenericContainer"><webobject name="PropertyNameSwitchComponent"></webobject></webobject>
 													<TD WIDTH=10>&nbsp;</TD>
-													<webobject name="PropertyKeyComponentGenericContainer2"><WEBOBJECT NAME=AttributeValue></WEBOBJECT></webobject>
+													<webobject name="PropertyKeyComponentGenericContainer"><webobject name="AttributeValue"></webobject></webobject>
 													<webobject name="ShouldDisplayDetailedPageMetrics">
 													<td class="InlineMetrics">
 														<webobject name="InlineMetricsForPropertyKey"></webobject>
@@ -54,6 +58,7 @@
 													</webobject>
 												</TR>
 											</TABLE>
+											</webobject>
 										</WEBOBJECT></WEBOBJECT></TD>
 							</TR>
 							<WEBOBJECT NAME=DoNotFlush>
@@ -85,7 +90,7 @@
 								</TABLE>
 							</TD>
 						</TR>
-					</TABLE>
+					</webobject>
 				</WEBOBJECT>
 			</WEBOBJECT>
 		</WEBOBJECT>

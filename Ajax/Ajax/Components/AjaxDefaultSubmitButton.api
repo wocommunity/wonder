@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxDefaultSubmitButton" wocomponentcontent="false">
+		<binding name="name"/>
+		<binding name="value"/>
+		<binding name="action"/>
+		<binding name="id"/>
+		<binding name="class"/>
+		<binding name="style"/>
+		<binding name="onClick"/>
+		<binding name="onClickBefore"/>
+		<binding name="onClickServer"/>
+		<binding name="onComplete"/>
+		<binding name="onSuccess"/>
+		<binding name="onFailure"/>
+		<binding name="formName"/>
+		<binding name="formSerializer"/>
+		<binding name="updateContainerID"/>
+		<binding defaults="Boolean" name="evalScripts"/>
+		
+		<binding name="insertion"/>
+		<binding name="insertionDuration"/>
+		<binding name="beforeInsertionDuration"/>
+		<binding name="afterInsertionDuration"/>
+		
+		<binding name="effect"/>
+    	<binding name="beforeEffect"/>
+		<binding name="beforeEffectID"/>
+		<binding name="beforeEffectDuration"/>
+		<binding name="afterEffect"/>
+		<binding name="afterEffectID"/>
+
+   		<binding defaults="Boolean" name="asynchronous"/>
+    
+    <validation message="'effect' and 'onSuccess' cannot both be bound.">
+	    <bound name="effect"/>
+	    <bound name="onSuccess"/>
+    </validation>
+    
+    <validation message="If 'effect' is bound, then 'updateContainerID' must also be bound.">
+	    <bound name="effect"/>
+	    <unbound name="updateContainerID"/>
+    </validation>
+    </wo>
+</wodefinitions>

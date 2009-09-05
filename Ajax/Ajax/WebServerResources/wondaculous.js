@@ -3861,7 +3861,7 @@ Event.Methods = (function() {
             && currentTarget.type === 'radio'))
               node = currentTarget;
       }
-      if (node.nodeType == Node.TEXT_NODE) node = node.parentNode;
+      if (node && node.nodeType == Node.TEXT_NODE) node = node.parentNode; // WONDER-248
       return Element.extend(node);
     },
 
@@ -7933,6 +7933,7 @@ Modalbox.Methods = {
 		loadingString: "Please wait. Loading...", // Default loading string message
 		closeString: "Close window", // Default title attribute for close window link
 		closeValue: "&times;", // Default string for close link in the header
+		locked: false, // Use true to supress close window link, prevent Esc key and overlay from closing dialog
 		params: {},
 		method: 'get', // Default Ajax request method
 		autoFocusing: true, // Toggles auto-focusing for form elements. Disable for long text pages.
@@ -7941,6 +7942,10 @@ Modalbox.Methods = {
 	_options: new Object,
 	
 	setOptions: function(options) {
+		// locked implies the overlay is also deactivated
+		if (options.locked) {
+			options.overlayClose = false;
+		}
 		Object.extend(this.options, options || {});
 	},
 	
@@ -7960,9 +7965,10 @@ Modalbox.Methods = {
 				)
 			)
 		);
-		this.MBclose = new Element("a", {id: "MB_close", title: this.options.closeString, href: "#"}).update("<span>" + this.options.closeValue + "</span>");
-		this.MBheader.insert({'bottom':this.MBclose});
-		
+		if ( ! this.options.locked) {
+			this.MBclose = new Element("a", {id: "MB_close", title: this.options.closeString, href: "#"}).update("<span>" + this.options.closeValue + "</span>");
+			this.MBheader.insert({'bottom':this.MBclose});
+		}
 		this.MBcontent = new Element("div", {id: "MB_content"}).update(
 			this.MBloading = new Element("div", {id: "MB_loading"}).update(this.options.loadingString)
 		);
@@ -8190,17 +8196,20 @@ Modalbox.Methods = {
 	
 	_putContent: function(callback){
 		// Prepare and resize modal box for content
-		if(this.options.height == this._options.height) {
+		// MS: check for a -1 height ... I'm only doing this because the "else" tries to make it scrollable
+		if(this.options.height == this._options.height || this.options.height == -1) {
 			setTimeout(function() { // MSIE sometimes doesn't display content correctly
 				Modalbox.resize(0, $(this.MBcontent).getHeight() - $(this.MBwindow).getHeight() + $(this.MBheader).getHeight(), {
 					afterResize: function(){
 						this.MBcontent.show().makePositioned();
 						this.focusableElements = this._findFocusableElements();
-						this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
+						this._setWidthAndPosition(); // CH: Set position (and width) after the content loads so that dialog is centered when width = - 1
 						setTimeout(function(){ // MSIE fix
 							if(callback != undefined)
 								callback(); // Executing internal JS from loaded content
 							this.event("afterLoad"); // Passing callback
+							// CH move _setFocus to after timeout so elements with onFocus binding aren't focused too early
+							this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
 						}.bind(this),1);
 					}.bind(this)
 				});
@@ -8212,11 +8221,12 @@ Modalbox.Methods = {
 			setTimeout(function(){ // MSIE fix
 				// MS: moved this code inside the setTimeout to compute focusable elements after a delay .. fixes bug in FireFox
 				this.focusableElements = this._findFocusableElements();
-				this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
-				
+				this._setWidthAndPosition(); // CH: Set position (and width) after the content loads so that dialog is centered when width = - 1
 				if(callback != undefined)
 					callback(); // Executing internal JS from loaded content
 				this.event("afterLoad"); // Passing callback
+				// CH move _setFocus to after timeout so elements with onFocus binding aren't focused too early
+				this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
 			}.bind(this),1);
 		}
 	},
@@ -8224,10 +8234,12 @@ Modalbox.Methods = {
 	activate: function(options){
 		this.setOptions(options);
 		this.active = true;
-		$(this.MBclose).observe("click", this.hideObserver);
+		if ( ! this.options.locked) 
+			$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
-		$(this.MBclose).show();
+		if ( ! this.options.locked) 
+			$(this.MBclose).show();
 		if(this.options.transitions && this.options.inactiveFade)
 			new Effect.Appear(this.MBwindow, {duration: this.options.slideUpDuration});
 	},
@@ -8235,29 +8247,33 @@ Modalbox.Methods = {
 	deactivate: function(options) {
 		this.setOptions(options);
 		this.active = false;
-		$(this.MBclose).stopObserving("click", this.hideObserver);
+		if ( ! this.options.locked) 
+			$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
-		$(this.MBclose).hide();
+		if ( ! this.options.locked) 
+			$(this.MBclose).hide();
 		if(this.options.transitions && this.options.inactiveFade)
 			new Effect.Fade(this.MBwindow, {duration: this.options.slideUpDuration, to: .75});
 	},
 	
 	_initObservers: function(){
-		$(this.MBclose).observe("click", this.hideObserver);
+		if ( ! this.options.locked) 
+			$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.observe(document, "keydown", this.kbdObserver);
 		else
 			Event.observe(document, "keypress", this.kbdObserver);
 	},
 	
 	_removeObservers: function(){
-		$(this.MBclose).stopObserving("click", this.hideObserver);
+		if ( ! this.options.locked) 
+			$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.stopObserving(document, "keydown", this.kbdObserver);
 		else
 			Event.stopObserving(document, "keypress", this.kbdObserver);
@@ -8272,18 +8288,39 @@ Modalbox.Methods = {
 	_setFocus: function() { 
 		/* Setting focus to the first 'focusable' element which is one with tabindex = 1 or the first in the form loaded. */
 		if(this.focusableElements.length > 0 && this.options.autoFocusing == true) {
+
+			// MS: don't steal focus if there is already an element inside the AMD that is focused
+			var focusedElement = $$('*:focus').first();
+			var alreadyFocused = focusedElement && this.focusableElements.indexOf(focusedElement) != -1;
+			if (alreadyFocused) {
+				return;
+			}
+			// MS: done
+			
 			var firstEl = this.focusableElements.find(function (el){
 				return el.tabIndex == 1;
 			}) || this.focusableElements.first();
+			
+			// MS: try to focus on form field rather than a link ...
+			var inputTagNames = ['input', 'select', 'textarea'];
+			if (firstEl && !inputTagNames.include(firstEl.tagName.toLowerCase())) {
+				var firstInputEl = this.focusableElements.find(function(element) {
+					return inputTagNames.include(element.tagName.toLowerCase());
+    		});
+    		if (firstInputEl) {
+    			firstEl = firstInputEl;
+    		}
+			}
+    	
 			this.currFocused = this.focusableElements.toArray().indexOf(firstEl);
 			firstEl.focus(); // Focus on first focusable element except close button
-		} else if($(this.MBclose).visible())
+		} else if(! this.options.locked && $(this.MBclose).visible())
 			$(this.MBclose).focus(); // If no focusable elements exist focus on close button
 	},
 	
-	_findFocusableElements: function(){ // Collect form elements or links from MB content
+	_findFocusableElements: function(){ // Collect form elements or links from MB content, elements with class MB_notFocusable are excluded
 		this.MBcontent.select('input:not([type~=hidden]), select, textarea, button, a[href]').invoke('addClassName', 'MB_focusable');
-		return this.MBcontent.select('.MB_focusable');
+		return this.MBcontent.select('.MB_focusable').reject(function(e) { return e.hasClassName('MB_notFocusable'); });
 	},
 	
 	_kbdHandler: function(event) {
@@ -8315,7 +8352,18 @@ Modalbox.Methods = {
 				}
 				break;			
 			case Event.KEY_ESC:
-				if(this.active) this._hide(event);
+				// CH: Add Esc key handling start
+				if (this.options.clickOnEscId) {
+					var target = $(this.options.clickOnEscId);
+					if (target && this._isClickable(target)) {
+						target.onclick();
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+				// CH: done
+				if(this.active && ! this.options.locked) this._hide(event);
 				break;
 			case 32:
 				this._preventScroll(event);
@@ -8325,6 +8373,12 @@ Modalbox.Methods = {
 				break;
 			case Event.KEY_UP:
 			case Event.KEY_DOWN:
+			    // Allow up and down arrow keys in text boxes in WebKit browsers,
+                // because these keys can move the cursor.
+                if(Prototype.Browser.WebKit && (["textarea","select"].include(node.tagName.toLowerCase()) ||
+                   (node.tagName.toLowerCase() == "input" && ["text", "password"].include(node.type)))) {
+                    break;
+                }
 			case Event.KEY_PAGEDOWN:
 			case Event.KEY_PAGEUP:
 			case Event.KEY_HOME:
@@ -8332,11 +8386,30 @@ Modalbox.Methods = {
 				// Safari operates in slightly different way. This realization is still buggy in Safari.
 				if(Prototype.Browser.WebKit && !["textarea", "select"].include(node.tagName.toLowerCase()))
 					event.stop();
-				else if( (node.tagName.toLowerCase() == "input" && ["submit", "button"].include(node.type)) || (node.tagName.toLowerCase() == "a") )
+				else if( this._isClickable(node) )  // CH: change to use _isClickable
 					event.stop();
 				break;
+			// CH: Add Return key handling start
+			case Event.KEY_RETURN:
+				if (this.options.clickOnReturnId) {
+					var target = $(this.options.clickOnReturnId);
+					// Don't trigger this for clickable elements or text areas
+					if (target && this._isClickable(target) &&  ! (this._isClickable(node) || ["textarea"].include(node.type)) ) {
+						target.onclick();
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+			// CH: done
 		}
 	},
+	
+	// CH: add _isClickable
+	_isClickable: function(element) {
+		return (["input", "button"].include(element.tagName.toLowerCase()) && ["submit", "button"].include(element.type)) || (element.tagName.toLowerCase() == "a")
+	},
+	// CH: done
 	
 	_preventScroll: function(event) { // Disabling scrolling by "space" key
 		if(!["input", "textarea", "select", "button"].include(event.element().tagName.toLowerCase())) 
@@ -8646,15 +8719,13 @@ var AjaxOnDemand = {
 	},
 	
 	loadCSS: function(css) {
-		var linkElement = document.createElement("link");
-  	linkElement.setAttribute("rel", "stylesheet");
-  	linkElement.setAttribute("type", "text/css");
-  	linkElement.setAttribute("href", css);
-  	document.getElementsByTagName('HEAD')[0].appendChild(linkElement);
-		//new Ajax.Request(script, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
+		new Ajax.Request(css, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
 	},
 	
 	loadedCSS: function(request) {
+		var inlineStyle = new Element("style", {"type": "text/css"});
+		inlineStyle.appendChild(document.createTextNode(request.responseText));
+		document.getElementsByTagName('HEAD')[0].appendChild(inlineStyle);
 	}
 };
 var AOD = AjaxOnDemand;
@@ -9066,7 +9137,10 @@ var AjaxDroppable = Class.create({
 			this.onbeforedrop(element, droppableElement);
 		}
 
-    	var data = this.draggableKeyName + '=' + element.getAttribute('draggableID');
+		var draggableID = element.getAttribute('draggableID');
+		if(draggableID == null)
+			draggableID = element.getAttribute('id');
+    	var data = this.draggableKeyName + '=' + draggableID;
     	
 			if (this.updateContainerID == null) {
 				if (this.form) {
@@ -9481,6 +9555,10 @@ var AjaxModalDialog = {
 	
 	open: function(id) {
 		eval("openAMD_" + id + "()");
+	},
+	
+	contentUpdated: function() {
+		Modalbox._putContent();
 	}
 };
 var AMD = AjaxModalDialog;
@@ -9539,7 +9617,7 @@ var AjaxTabbedPanel = {
 	},
 	
     // Change which tab appears in selected state
-    selectTab : function(tabControlID, selectedTabID) {
+    selectTab : function(tabControlID, selectedTabID, paneID, busyDivID) {
       var selectedTab = $(selectedTabID);
       var tablist = this.getChildrenByTagName($(tabControlID), 'li');
       var nodes = $A(tablist);
@@ -9551,6 +9629,12 @@ var AjaxTabbedPanel = {
           }
       });
       selectedTab.removeClassName('ajaxTabbedPanelTab-unselected').addClassName('ajaxTabbedPanelTab-selected');
+      
+      // Only call runOnSelect if the panel contents have previously been loaded.
+      // If the panel contents are getting loaded the loadPanel function will call this
+      var pane = $(paneID);
+      if (pane.innerHTML!='' && pane.innerHTML!=this.busyContent(busyDivID))
+          AjaxTabbedPanel.runOnSelect($(tabControlID)); 
     },
 
     // Change which panel appears
@@ -9570,29 +9654,23 @@ var AjaxTabbedPanel = {
         };
       });
 
-      // Select the new tab and ntify the app of the selected tab
+      // Select the new tab and notify the app of the selected tab
       selectedPane.removeClassName('ajaxTabbedPanelPane-unselected').addClassName('ajaxTabbedPanelPane-selected');
-       new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
+      new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
     },
 
     // Loads the panel contents if not already loaded
-    loadPanel : function(paneID, busyDivID, shouldReload) {
-
-      // Determine what to show if the panel takes a while to  load
-      var busyContent = 'Loading, please wait...';
-      if (busyDivID != '') {
-          busyContent = $('busydiv').innerHTML;
-      }
-
+    loadPanel : function(tabControlID, paneID, busyDivID, shouldReload) {
       var pane = $(paneID);
-      if (pane.innerHTML=='' || pane.innerHTML==busyContent || shouldReload) {
-         pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=busyContent; pe.stop()}, 0.25);
+      if (pane.innerHTML=='' || pane.innerHTML==this.busyContent(busyDivID) || shouldReload) {
+         pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=busyContent(busyDivID); pe.stop()}, 0.25);
          new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: 1, 
          														 evalScripts: true, 
-         														 onSuccess: function(a, b) {pe.stop(); AjaxTabbedPanel.runOnLoad(pane); }});
+         														 onComplete: function(a, b) {pe.stop(); 
+         														                             AjaxTabbedPanel.runOnLoad(pane); 
+         														                             AjaxTabbedPanel.runOnSelect($(tabControlID)); }});
       }
     },
-
 
     runOnLoad : function(element) {
     	var onLoadScript = element.getAttribute('onLoad');
@@ -9601,6 +9679,21 @@ var AjaxTabbedPanel = {
 		}
     },
     
+    runOnSelect : function(element) {
+    	var onSelectScript = element.getAttribute('onSelect');
+		if (onSelectScript) {
+			eval(onSelectScript);	
+		}
+    },
+        
+    // Determines what to show if the panel takes a while to  load  
+    busyContent : function(busyDivID) {
+      var busyContent = 'Loading, please wait...';
+      if (busyDivID != '') {
+          busyContent = $(busyDivID).innerHTML;
+      }
+      return busyContent;
+    },   
     
     // Returns an element's children that have a specific tag name as an array
     getChildrenByTagName : function(element, tag_name) {

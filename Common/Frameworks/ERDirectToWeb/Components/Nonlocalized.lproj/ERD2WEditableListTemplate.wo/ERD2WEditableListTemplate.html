@@ -1,41 +1,152 @@
-<webobject name=PageWrapper>
-    <webobject name=Help></webobject>
-    <webobject name=ListTable>
-        <webobject name=ListNotEmpty>
-            <webobject name=EditForm>
-                <webobject name=HiddenField></webobject>
-                <webobject name=ShouldShowMassChange>
-                    <tr><td><webobject name=MassChangeRepetition></webobject></td></tr>
-                    <tr height=2><td><webobject name=ClearChangesButton></webobject> <webobject name=PropagateButton></webobject> <webobject name=ShouldShowPropagateDebug><br><webobject name=PropagateDebug></webobject></webobject></td></tr>
-                    <tr height=2><td><hr></td></tr>
-                    <tr bgcolor=white height=2><td>&nbsp;</td></tr>
-                </webobject>
-                <webobject name=ShouldShowBanner>
-					<tr height="">
-						<td colspan=30 bgcolor=#EBEBEB>
-							<webobject name=NavBar></webobject></td>
-					</tr>
-				</webobject>
-                <TR>
-                    <TD ALIGN=center COLSPAN=3><WEBOBJECT NAME=Errors></WEBOBJECT></TD>
-                </TR>
-                <tr>
-					<td><webobject name=ListPageRepetition><WEBOBJECT NAME=ErrorsForEntity></WEBOBJECT></webobject></td>
-				</tr>
-				<tr>
-					<td ALIGN=CENTER COLSPAN=2><webobject name=CancelActiveImage></webobject>&nbsp;<webobject name=UpdateActiveImage></webobject>&nbsp;<webobject name=SaveActiveImage></webobject></td>
-				</tr>
-			</webobject>
-        </webobject>
-        <webobject name=ListEmpty>
-		    <tr>
-				<td ALIGN=CENTER COLSPAN=2><webobject name=EmptyMessageComponent></webobject></td>
+<webobject name="PageWrapper">
+<style type="text/css">
+	input[type=button].clearbutton {
+		font-size: .75em;
+	}
+</style>
+
+<script type="text/javascript">
+	function propagateClearValue(evt) {
+		// Find the element that triggered the event.
+		var targ;
+		if (!evt) { var evt = window.event; }
+		if (evt.target) {
+			targ = evt.target;
+		} else if (evt.srcElement) { targ = evt.srcElement; }
+		if (targ.nodeType == 3) {// defeat Safari bug
+			targ = targ.parentNode;
+		}
+
+		// So now that we have the element that triggered the event, we need to find the form element before it.
+		var formEl = findPreviousSiblingElementWithTagName('input', targ);
+		if (!formEl) {
+			formEl = findPreviousSiblingElementWithTagName('select', targ);
+		}
+		
+		if (!formEl) {
+			return;
+		}
+
+		// Find the td position (which column are we in?)
+		var tdEl = findParentElementWithTagName('td', formEl);
+		if (!tdEl) { // Something is really wrong.
+			return;
+		}
+
+		var trEl = tdEl.getParentElement();
+		var cells = trEl.getElementsByTagName('td');
+		var tdPos = -1;
+		for (var i = 0; i < cells.length; i++) {
+			var aCell = cells[i];
+			if (aCell === tdEl) {
+				tdPos = i;
+				break;
+			}
+		}
+
+
+
+		// We have the td, we need to find the table.
+		var innerTableEl = findParentElementWithTagName('table', tdEl);
+		if (!innerTableEl) {
+			return;
+		}
+
+		var outerTableEl = findParentElementWithTagName('table', innerTableEl);
+		if (!outerTableEl) {
+			return;
+		}
+
+
+	}
+
+	function findPreviousSiblingElementWithTagName(name, el) {
+		if (!el) { return null; }
+
+		var resultEl;
+		var tmpEl = el;
+
+		do {
+			tmpEl = tmpEl.previousSibling();
+			if (tmpEl.tagName == name) {
+				resultEl = tmpEl;
+				break;
+			}
+		} while (tmpEl.tagName != name || tmpEl == window);
+
+		return resultEl;
+	}
+
+	function findParentElementWithTagName(name, el) {
+		if (!el) { return null; }
+
+		var resultEl;
+		var tmpEl = el;
+
+		do {
+			tmpEl = tmpEl.parentElement();
+			if (tmpEl.tagName == name) {
+				resultEl = tmpEl;
+				break;
+			}
+		} while (tmpEl.tagName != name || tmpEl == window);
+
+		return resultEl;
+	}
+
+</script>
+
+<webobject name="Help"></webobject>
+
+<webobject name="ListNotEmpty">
+	<webobject name="EditForm">
+		<webobject name="HiddenField"></webobject>
+		<webobject name="ListTable">
+			<webobject name="ShouldShowMassChange">
+			<tr>
+				<td><webobject name="MassChangeRepetition"></webobject><br />
+					<input class="clearbutton" type="button" value="Clear" onclick="propagateClearValue(this);" />
+				</td>
 			</tr>
 			<tr>
-				<td ALIGN=CENTER><webobject name=HideReturnOnSelect>
-						<webobject name=ShowCancel><webobject name=ReturnActiveImage></webobject></webobject>
-					</webobject></td>
+				<td><webobject name="ClearChangesButton"></webobject>&nbsp;<webobject name="PropagateButton"></webobject>&nbsp;
+					<webobject name="ShouldShowPropagateDebug"><br />
+						<webobject name="PropagateDebug"></webobject>
+					</webobject>
+				</td>
+			</tr>
+			<tr><td height="2"><hr /></td></tr>
+			<tr bgcolor="white"><td height="2">&nbsp;</td></tr>
+			</webobject>
+			<webobject name="ShouldShowBanner">
+			<tr>
+				<td bgcolor="#EBEBEB"><webobject name="NavBar"></webobject></td>
+			</tr>
+			</webobject>
+			<tr>
+				<td align="center"><webobject name="Errors"></webobject></td>
+			</tr>
+			<tr>
+				<td><webobject name="ListPageRepetition"><webobject name="ErrorsForEntity"></webobject></webobject></td>
+			</tr>
+			<tr>
+				<td align="center"><webobject name="CancelActiveImage"></webobject>&nbsp;<webobject name="UpdateActiveImage"></webobject>&nbsp;<webobject name="SaveActiveImage"></webobject></td>
 			</tr>
 		</webobject>
-    </webobject>
+	</webobject>
+</webobject>
+<webobject name="ListEmpty">
+	<webobject name="ListTable">
+		<tr>
+			<td align="center"><webobject name="EmptyMessageComponent"></webobject></td>
+		</tr>
+		<tr>
+			<td align="center">
+				<webobject name="HideReturnOnSelect">
+					<webobject name="ShowCancel"><webobject name="ReturnActiveImage"></webobject></webobject>
+				</webobject>
+			</td>
+		</tr>
+	</webobject>
+</webobject>
 </webobject>

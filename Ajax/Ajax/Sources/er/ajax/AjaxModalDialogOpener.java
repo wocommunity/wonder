@@ -9,8 +9,14 @@ import er.extensions.ERXWOContext;
 
 /**
  * <p>Generates a link to open a specific AjaxModalDialog.  This is useful when you want to physically separate the modal dialog from what
- * opens it, for example if you want a modal dialog containing a form to have an opener inside of another form.  Normally you will want to
- * bind showOpener=false; on the AjaxModalDialog that this opens.</p>
+ * opens it, for example if you want a modal dialog containing a form to have an opener inside of another form.  It is also useful if you
+ * want to use a dialog in a repetition.  Using an AjaxModalDialogOpener in the repetition and moving the AjaxModalDialog outside of the
+ * repetition will result in only a single rendering of the AjaxModalDialog in the page.  You can also move it before the repetition to 
+ * speed up request handling when the dialog is open. Normally you will want to bind showOpener=false; on the AjaxModalDialog that this opens.
+ * </p>
+ * <p> If you need to do some preparation before the dialog opens, use the action
+ * method.This is called synchronously so make it quick!  The action method is useful for things like copying the item from a repetition
+ * to use in a dialog that is not nested in the repetition. </p>
  * 
  * <p>The link shown can come from two sources:
  * <ul>
@@ -22,7 +28,9 @@ import er.extensions.ERXWOContext;
  * @binding label the text for the link that opens the dialog box, if this used the child elements are ignored
  * @binding linkTitle used as title attribute of link opening dialog
  * @binding title the Title to be displayed in the ModalBox window header, can override what the dialog was created with
- *
+ * @binding action, optional action to call before opening the modal dialog.  
+ * @binding enabled if false, nothing is rendered for this component.  This can be used instead of wrapping this in a WOConditional.
+ *          The default is true.
  * @binding id HTML id for the link
  * @binding class CSS class for the link
  * @binding style CSS style for the link
@@ -49,6 +57,10 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 	 * @see er.ajax.AjaxComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
 	 */
 	public void appendToResponse(WOResponse response, WOContext context) {
+		if( ! booleanValueForBinding("enabled", true)) {
+			return;
+		}
+		
 		response.appendContentString("<a href=\"javascript:void(0)\"");
 		appendTagAttributeToResponse(response, "id", id());
 		appendTagAttributeToResponse(response, "class", valueForBinding("class", null));
@@ -57,14 +69,19 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 		
 		// onclick calls the script that opens the AjaxModalDialog
 		response.appendContentString(" onclick=\"");
+		
+		if (hasBinding("action")) {
+			response.appendContentString("new Ajax.Request('");
+			response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context()));
+			response.appendContentString("',  {asynchronous:false, evalScripts:false});");
+		}
+
 		response.appendContentString(AjaxModalDialog.openDialogFunctionName(modalDialogId()));
 		
 		// Override for dialog name
 		response.appendContentString("(");	
 		if (hasBinding("title")) {
-			response.appendContentString("'");	
-			response.appendContentString((String) valueForBinding("title"));
-			response.appendContentString("'");	
+			response.appendContentString(AjaxValue.javaScriptEscaped(valueForBinding("title")));
 		}		
 		response.appendContentString("); return false;\" >");	
 
@@ -95,6 +112,7 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 	}
 	
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
+		valueForBinding("action");
 		return null;
 	}
 

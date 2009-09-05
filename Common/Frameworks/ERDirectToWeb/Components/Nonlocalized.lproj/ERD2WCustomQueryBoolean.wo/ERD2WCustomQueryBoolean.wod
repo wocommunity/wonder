@@ -1,8 +1,8 @@
-RadioButtonList: WORadioButtonList {
-	displayString = displayString;
-	index = index;
-	item = item;
-	list = queryNumbers;
+Selector: ERXBooleanSelector {
+	yesString = stringForYes;
+	noString = stringForNo;
+	noSelectionString = stringForNull;
 	selection = value;
-	suffix = " ";
+	uiMode = "radio";
 }
+

@@ -3573,7 +3573,7 @@ Form.Element.Methods = {
   serialize: function(element) {
     element = $(element);
     if (!element.disabled && element.name) {
-      var value = element.getValue();
+      var value = Form.Element.Methods.getValue(element);
       if (value != undefined) {
         var pair = { };
         pair[element.name] = value;
@@ -3858,7 +3858,7 @@ Event.Methods = (function() {
             && currentTarget.type === 'radio'))
               node = currentTarget;
       }
-      if (node.nodeType == Node.TEXT_NODE) node = node.parentNode;
+      if (node && node.nodeType == Node.TEXT_NODE) node = node.parentNode; // WONDER-248
       return Element.extend(node);
     },
 

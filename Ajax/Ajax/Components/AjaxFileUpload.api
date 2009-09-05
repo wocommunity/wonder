@@ -26,5 +26,6 @@
         <binding name="keepTempFile"/>
         <binding name="uploadLabel"/>
         <binding name="uploadFunctionName"/>
+    	<binding name="progressOfText"/>
     </wo>
 </wodefinitions>

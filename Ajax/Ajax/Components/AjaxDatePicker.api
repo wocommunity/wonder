@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+   <wo class="AjaxDatePicker.java" wocomponentcontent="false">
+
+     <binding name="id"/>
+     <binding name="class"/>
+     <binding name="style"/>
+     <binding name="value"/>
+     <validation message="'value' is a required binding.">
+         <unbound name="value"/>
+     </validation>
+     <validation message="'value' must be bound to a settable value">
+         <unsettable name="value"/>
+     </validation>
+
+     <binding name="dayNames"/>
+     <binding name="monthNames"/>
+     <binding name="imagesDir"/>
+
+     <binding name="format"/>
+     <binding name="formatter"/>
+     <validation message="Both 'formatter' and 'format' can't be used, pick one.">
+       <and>
+         <bound name="formatter"/>
+         <bound name="format"/>
+       </and>
+     </validation>
+    <binding name="maxlength"/>
+    <binding name="size"/>
+    <binding name="name"/>
+    <binding name="calendarCSS"/>
+    <binding name="calendarCSSFramework"/>
+   <binding name="onDateSelect"/>
+   </wo>
+</wodefinitions>

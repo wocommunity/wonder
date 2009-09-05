@@ -12,6 +12,8 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -41,7 +43,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
 public class ERXUtilities {
 
     /** logging support */
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXUtilities.class);
+    public static Logger log = Logger.getLogger(ERXUtilities.class);
 
     /**
      * @deprecated use ERXEOControlUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject,EOEnterpriseObject,String)
@@ -248,8 +250,10 @@ public class ERXUtilities {
     }
     
     public static EOEnterpriseObject relationshipObjectWithObjectAndKeyPath(EOEnterpriseObject object, String keyPath) {
+        if(object == null) {
+        	return null;
+        }
         EOEnterpriseObject lastEO=object;
-        EORelationship relationship = null;
         if (keyPath.indexOf(".")!=-1) {
             String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(keyPath);
             Object rawLastEO=object.valueForKeyPath(partialKeyPath);
@@ -322,7 +326,8 @@ public class ERXUtilities {
     }
 
     /** entity name cache */
-    private static NSMutableDictionary _entityNameEntityCache;
+    private static NSDictionary _entityNameEntityCache;
+
     /**
      * Finds an entity given a case insensitive search
      * of all the entity names.<br/>
@@ -332,16 +337,17 @@ public class ERXUtilities {
      */
     // FIXME: Should add an EOEditingContext parameter to get the right
     //	      EOModelGroup. Should also have a way to clear the cache.
-    // CHECKME: Should this even be cached? Not thread safe now.
+    // CHECKME: Should this even be cached?
     public static EOEntity caseInsensitiveEntityNamed(String entityName) {
         EOEntity entity = null;
         if (entityName != null) {
             if (_entityNameEntityCache == null) {
-                _entityNameEntityCache = new NSMutableDictionary();
+		NSMutableDictionary entityNameDict = new NSMutableDictionary();
                 for (Enumeration e = entitiesForModelGroup(ERXEOAccessUtilities.modelGroup(null)).objectEnumerator(); e.hasMoreElements();) {
                     EOEntity anEntity = (EOEntity)e.nextElement();
-                    _entityNameEntityCache.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
+                    entityNameDict.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
                 }
+		_entityNameEntityCache = entityNameDict;
             }
             entity = (EOEntity)_entityNameEntityCache.objectForKey(entityName.toLowerCase());
         }
@@ -399,20 +405,33 @@ public class ERXUtilities {
     }    
 
     /**
-     * Generates a string representation of
-     * the current stacktrace.
+     * Generates a string representation of the current stacktrace.
+     *
      * @return current stacktrace.
      */
     public static String stackTrace() {
-        String result;
+        String result = null;
         try {
             throw new Throwable();
         } catch (Throwable t) {
             result = ERXUtilities.stackTrace(t);
         }
-        // clipping the early parts of the stack trace which include
-        // ERXUtilities.stackTrace()
-        return result.substring(122);
+
+        String separator = System.getProperties().getProperty("line.separator");
+
+        // Chop off the 1st line, "java.lang.Throwable"
+        //
+        int offset = result.indexOf(separator);
+        result = result.substring(offset+1);
+
+        // Chop off the lines at the start that refer to ERXUtilities
+        //
+        offset = result.indexOf(separator);
+        while (result.substring(0,offset).indexOf("ERXUtilities.java") >= 0) {
+            result = result.substring(offset+1);
+            offset = result.indexOf(separator);
+        }
+        return separator+result;
     }
 
     /**
@@ -500,7 +519,7 @@ public class ERXUtilities {
     }
 
     /** Copies values from one EO to another using an array of Attributes */
-    public static void replicateDataFromEOToEO(ERXGenericRecord r1, ERXGenericRecord r2, NSArray attributeNames){
+    public static void replicateDataFromEOToEO(EOEnterpriseObject r1, EOEnterpriseObject r2, NSArray attributeNames){
         for(Enumeration e = attributeNames.objectEnumerator(); e.hasMoreElements();){
             String attributeName = (String)e.nextElement();
             r2.takeValueForKey(r1.valueForKey(attributeName), attributeName);
@@ -508,7 +527,7 @@ public class ERXUtilities {
     }
 
     /** Copies a relationship from one EO to another using the name of the relationship */
-    public static void replicateRelationshipFromEOToEO(ERXGenericRecord r1, ERXGenericRecord r2, String relationshipName){
+    public static void replicateRelationshipFromEOToEO(EOEnterpriseObject r1, EOEnterpriseObject r2, String relationshipName){
         for(Enumeration e = ((NSArray)r1.valueForKey(relationshipName)).objectEnumerator(); e.hasMoreElements();){
             ERXReplicableInterface replicableTarget = (ERXReplicableInterface)e.nextElement();
             r2.addObjectToBothSidesOfRelationshipWithKey(replicableTarget.replicate(r2.editingContext()), relationshipName);
@@ -516,7 +535,7 @@ public class ERXUtilities {
     }
 
     /** Copies a relationship from one EO to another using the name of the relationship */
-    public static void deplicateRelationshipFromEO(ERXGenericRecord r1, String relationshipName){
+    public static void deplicateRelationshipFromEO(EOEnterpriseObject r1, String relationshipName){
         //System.out.println("r1 "+r1);
         //System.out.println("relationshipName "+relationshipName);
         //System.out.println("array "+r1.valueForKey(relationshipName));

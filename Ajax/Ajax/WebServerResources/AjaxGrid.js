@@ -23,7 +23,7 @@ var AjaxGrid = {
 		numberOfColumns = table.rows[0].cells.length;
 		tableRows = table.getElementsByTagName("TR");
 		numberOfRows = dragHeaderOnly ? 1 : tableRows.length;
-	
+			
 		for (row=0; row < numberOfRows; row++) {
 			tds = tableRows[row].cells;
 			for (col=1; col<tds.length; col++) {
