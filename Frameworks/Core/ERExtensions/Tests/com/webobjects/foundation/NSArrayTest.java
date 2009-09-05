@@ -763,7 +763,7 @@ public class NSArrayTest extends BaseTestCase {
   public void testMakeObjectsPerformSelector() {
     TestSelectable selectable = new TestSelectable();
     NSArray<Object> array = new NSArray<Object>(selectable);
-    NSSelector<?> selector = new NSSelector<Void>("invoke", new Class[] { String.class });
+    NSSelector selector = new NSSelector("invoke", new Class[] { String.class });
     array.makeObjectsPerformSelector(selector, new Object[] { "abc" });
     assertTrue(selectable.array.contains("abc"));
   }
@@ -781,7 +781,7 @@ public class NSArrayTest extends BaseTestCase {
   public void testMakeObjectsPerformSelectorInvalid() {
     TestSelectable selectable = new TestSelectable();
     NSArray<Object> array = new NSArray<Object>(selectable);
-    NSSelector<?> selector = new NSSelector<Void>("missiginvoke", new Class[] { String.class });
+    NSSelector selector = new NSSelector("missiginvoke", new Class[] { String.class });
     try {
       array.makeObjectsPerformSelector(selector, new Object[] { "abc" });
       fail("IllegalArgumentException expected");
@@ -790,7 +790,7 @@ public class NSArrayTest extends BaseTestCase {
 
     NSArray<String> array2 = new NSArray<String>("abc");
     try {
-      array2.makeObjectsPerformSelector(new NSSelector<Void>("invoke"), (Object[])null);
+      array2.makeObjectsPerformSelector(new NSSelector("invoke"), (Object[])null);
       fail("IllegalArgumentException expected");
     } catch (IllegalArgumentException e) {
     }
