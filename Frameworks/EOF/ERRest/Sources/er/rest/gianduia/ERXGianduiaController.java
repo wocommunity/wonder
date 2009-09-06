@@ -18,7 +18,7 @@ public class ERXGianduiaController extends ERXRouteController {
 	}
 
 	public static void addRoutes(String entityName, ERXRouteRequestHandler requestHandler) {
-		requestHandler.addRoute(new ERXRoute("/gianduia/fetch", ERXRoute.Method.Post, ERXGianduiaController.class, "fetch"));
+		requestHandler.addRoute(new ERXRoute(entityName, "/gianduia/fetch", ERXRoute.Method.Post, ERXGianduiaController.class, "fetch"));
 	}
 
 	@SuppressWarnings("unchecked")

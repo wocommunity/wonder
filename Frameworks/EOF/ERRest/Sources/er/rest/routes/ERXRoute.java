@@ -23,11 +23,14 @@ import er.rest.IERXRestDelegate;
  * @author mschrag
  */
 public class ERXRoute {
-	public static enum Method { All, Get, Put, Post, Delete, Head }
-	
+	public static enum Method {
+		All, Get, Put, Post, Delete, Head
+	}
+
 	public static final ERXRoute.Key ControllerKey = new ERXRoute.Key("controller");
 	public static final ERXRoute.Key ActionKey = new ERXRoute.Key("action");
 
+	private String _entityName;
 	private Pattern _routePattern;
 	private ERXRoute.Method _method;
 	private NSMutableArray<ERXRoute.Key> _keys;
@@ -37,76 +40,90 @@ public class ERXRoute {
 	/**
 	 * Constructs a new route with the given URL pattern.
 	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
 	 * @param urlPattern
 	 *            the url pattern to use
 	 */
-	public ERXRoute(String urlPattern, ERXRoute.Method method) {
-		this(urlPattern, method, (Class<? extends ERXRouteController>) null, null);
+	public ERXRoute(String entityName, String urlPattern, ERXRoute.Method method) {
+		this(entityName, urlPattern, method, (Class<? extends ERXRouteController>) null, null);
 	}
 
 	/**
 	 * Constructs a new route with the given URL pattern.
 	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
 	 * @param urlPattern
 	 *            the url pattern to use
 	 */
-	public ERXRoute(String urlPattern) {
-		this(urlPattern, ERXRoute.Method.All, (Class<? extends ERXRouteController>) null, null);
+	public ERXRoute(String entityName, String urlPattern) {
+		this(entityName, urlPattern, ERXRoute.Method.All, (Class<? extends ERXRouteController>) null, null);
 	}
 
 	/**
 	 * Constructs a new route with the given URL pattern.
 	 * 
-	 * @param urlPattern
-	 *            the url pattern to use
-	 * @param controller
-	 *            the default controller class name
-	 */
-	@SuppressWarnings("unchecked")
-	public ERXRoute(String urlPattern, String controller) {
-		this(urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), null);
-	}
-
-	/**
-	 * Constructs a new route with the given URL pattern.
-	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
 	 * @param urlPattern
 	 *            the url pattern to use
 	 * @param controller
 	 *            the default controller class name
 	 */
 	@SuppressWarnings("unchecked")
-	public ERXRoute(String urlPattern, ERXRoute.Method method, String controller) {
-		this(urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), null);
+	public ERXRoute(String entityName, String urlPattern, String controller) {
+		this(entityName, urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), null);
 	}
 
 	/**
 	 * Constructs a new route with the given URL pattern.
 	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
+	 * @param urlPattern
+	 *            the url pattern to use
+	 * @param controller
+	 *            the default controller class name
+	 */
+	@SuppressWarnings("unchecked")
+	public ERXRoute(String entityName, String urlPattern, ERXRoute.Method method, String controller) {
+		this(entityName, urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), null);
+	}
+
+	/**
+	 * Constructs a new route with the given URL pattern.
+	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
 	 * @param urlPattern
 	 *            the url pattern to use
 	 * @param controller
 	 *            the default controller class
 	 */
-	public ERXRoute(String urlPattern, Class<? extends ERXRouteController> controller) {
-		this(urlPattern, ERXRoute.Method.All, controller, null);
+	public ERXRoute(String entityName, String urlPattern, Class<? extends ERXRouteController> controller) {
+		this(entityName, urlPattern, ERXRoute.Method.All, controller, null);
 	}
 
 	/**
 	 * Constructs a new route with the given URL pattern.
 	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
 	 * @param urlPattern
 	 *            the url pattern to use
 	 * @param controller
 	 *            the default controller class
 	 */
-	public ERXRoute(String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteController> controller) {
-		this(urlPattern, method, controller, null);
+	public ERXRoute(String entityName, String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteController> controller) {
+		this(entityName, urlPattern, method, controller, null);
 	}
 
 	/**
 	 * Constructs a new route with the given URL pattern.
 	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
 	 * @param urlPattern
 	 *            the url pattern to use
 	 * @param controller
@@ -115,13 +132,15 @@ public class ERXRoute {
 	 *            the action name
 	 */
 	@SuppressWarnings("unchecked")
-	public ERXRoute(String urlPattern, String controller, String action) {
-		this(urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), action);
+	public ERXRoute(String entityName, String urlPattern, String controller, String action) {
+		this(entityName, urlPattern, ERXRoute.Method.All, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), action);
 	}
 
 	/**
 	 * Constructs a new route with the given URL pattern.
 	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
 	 * @param urlPattern
 	 *            the url pattern to use
 	 * @param controller
@@ -130,13 +149,15 @@ public class ERXRoute {
 	 *            the action name
 	 */
 	@SuppressWarnings("unchecked")
-	public ERXRoute(String urlPattern, ERXRoute.Method method, String controller, String action) {
-		this(urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), action);
+	public ERXRoute(String entityName, String urlPattern, ERXRoute.Method method, String controller, String action) {
+		this(entityName, urlPattern, method, _NSUtilities.classWithName(controller).asSubclass(ERXRouteController.class), action);
 	}
 
 	/**
 	 * Constructs a new route with the given URL pattern.
 	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
 	 * @param urlPattern
 	 *            the url pattern to use
 	 * @param controller
@@ -144,13 +165,15 @@ public class ERXRoute {
 	 * @param action
 	 *            the action name
 	 */
-	public ERXRoute(String urlPattern, Class<? extends ERXRouteController> controller, String action) {
-		this(urlPattern, ERXRoute.Method.All, controller, action);
+	public ERXRoute(String entityName, String urlPattern, Class<? extends ERXRouteController> controller, String action) {
+		this(entityName, urlPattern, ERXRoute.Method.All, controller, action);
 	}
-	
+
 	/**
 	 * Constructs a new route with the given URL pattern.
 	 * 
+	 * @param entityName
+	 *            the name of the entity this route points to
 	 * @param urlPattern
 	 *            the url pattern to use
 	 * @param controller
@@ -158,7 +181,8 @@ public class ERXRoute {
 	 * @param action
 	 *            the action name
 	 */
-	public ERXRoute(String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteController> controller, String action) {
+	public ERXRoute(String entityName, String urlPattern, ERXRoute.Method method, Class<? extends ERXRouteController> controller, String action) {
+		_entityName = entityName;
 		_method = method;
 		_controller = controller;
 		_action = action;
@@ -191,12 +215,12 @@ public class ERXRoute {
 					replacement = "(" + segments[2].replaceAll("[\\\\$]", "\\\\$0") + ")";
 				}
 			}
-			
+
 			if ("identifier".equals(key._valueType)) {
 				key._valueType = String.class.getName();
 				replacement = "(\\\\D[^/-]*)";
 			}
-			
+
 			_keys.addObject(key);
 			keyMatcher.appendReplacement(routeRegex, replacement);
 		}
@@ -209,6 +233,15 @@ public class ERXRoute {
 		}
 		_routePattern = Pattern.compile(routeRegex.toString());
 	}
+
+	/**
+	 * Returns the entity name of the target of this route (can be null).
+	 * 
+	 * @return the entity name of the target of this route
+	 */
+	public String entityName() {
+		return _entityName;
+	}
 	
 	/**
 	 * Returns the Pattern used to match this route.
@@ -218,7 +251,7 @@ public class ERXRoute {
 	public Pattern routePattern() {
 		return _routePattern;
 	}
-	
+
 	/**
 	 * Returns the method of this request.
 	 * 
@@ -227,11 +260,12 @@ public class ERXRoute {
 	public ERXRoute.Method method() {
 		return _method;
 	}
-	
+
 	/**
 	 * Sets the method of this request.
 	 * 
-	 * @param method the method of this request
+	 * @param method
+	 *            the method of this request
 	 */
 	public void setMethod(ERXRoute.Method method) {
 		_method = method;
@@ -258,11 +292,11 @@ public class ERXRoute {
 					String value = routeMatcher.group(keyNum + 1);
 					keys.setObjectForKey(value, key);
 				}
-	
+
 				if (!keys.containsKey(ERXRoute.ControllerKey) && _controller != null) {
 					keys.setObjectForKey(_controller.getName(), ERXRoute.ControllerKey);
 				}
-	
+
 				if (!keys.containsKey(ERXRoute.ActionKey) && _action != null) {
 					keys.setObjectForKey(_action, ERXRoute.ActionKey);
 				}
@@ -343,7 +377,7 @@ public class ERXRoute {
 		}
 		return objects;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "[ERXRoute: pattern=" + _routePattern + "; method=" + _method + "]";

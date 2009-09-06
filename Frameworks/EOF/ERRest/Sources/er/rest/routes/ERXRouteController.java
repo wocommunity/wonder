@@ -13,6 +13,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WOMessage;
+import com.webobjects.appserver.WOPageNotFoundException;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
@@ -900,11 +901,73 @@ public class ERXRouteController extends WODirectAction {
 		}
 	}
 
+	/**
+	 * If this method returns true, all HTML format requests will be automatically routed to the corresponding
+	 * IERXRouteComponent implementation based on the name returned by pageNameForAction(String).
+	 * 
+	 * @return true if HTML format requests should be automatically routed to the corresponding page component
+	 */
+	protected boolean isAutomaticHtmlRoutingEnabled() {
+		return false;
+	}
+
+	/**
+	 * Returns the name of the entity that this controller is currently handling. The default implementation retrieves
+	 * the entity name from the ERXRoute.
+	 * 
+	 * @return the entity name for the current route
+	 */
+	protected String entityName() {
+		String entityName = null;
+		ERXRoute route = route();
+		if (route != null) {
+			entityName = route.entityName();
+		}
+		if (entityName == null) {
+			throw new IllegalStateException("Unable to determine the entity name for the controller '" + getClass().getSimpleName() + "'. Please override entityName().");
+		}
+		return entityName;
+	}
+	
+	/**
+	 * Returns the name of the page component for this entity and the given action. The default implementation of this
+	 * returns entityName + Action + Page ("PersonEditPage", "PersonViewPage", etc).
+	 * 
+	 * @param actionName
+	 *            the name of the action
+	 * @return the name of the page component for this action
+	 */
+	protected String pageNameForAction(String actionName) {
+		return entityName() + ERXStringUtilities.capitalize(actionName) + "Page";
+	}
+
 	@Override
-	public WOActionResults performActionNamed(String s) {
+	public WOActionResults performActionNamed(String actionName) {
 		try {
 			checkAccess();
-			WOActionResults results = super.performActionNamed(s);
+			
+			WOActionResults results = null;
+			if (isAutomaticHtmlRoutingEnabled() && format() == ERXRestFormat.HTML) {
+				String pageName = pageNameForAction(actionName);
+				if (_NSUtilities.classWithName(pageName) != null) {
+					try {
+						results = pageWithName(pageName);
+						if (!(results instanceof IERXRouteComponent)) {
+							log.error(pageName + " does not implement IERXRouteComponent, so it will be ignored.");
+							results = null;
+						}
+					}
+					catch (WOPageNotFoundException e) {
+						log.info(pageName + " does not exist, falling back to route controller.");
+						results = null;
+					}
+				}
+			}
+			
+			if (results == null) {
+				results = super.performActionNamed(actionName);
+			}
+			
 			if (results == null) {
 				results = response(null, ERXKeyFilter.filterWithAttributes());
 			}
