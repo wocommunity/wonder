@@ -19,9 +19,8 @@ public class ERXRequestFormValues implements NSKeyValueCoding {
 	 */
 	public ERXRequestFormValues(WORequest request) {
 		_request = request;
-
 	}
-
+	
 	public void takeValueForKey(Object value, String key) {
 		throw new UnsupportedOperationException("Cannot set form values.");
 	}
