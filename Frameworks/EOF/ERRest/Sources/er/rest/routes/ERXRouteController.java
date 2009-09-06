@@ -962,6 +962,9 @@ public class ERXRouteController extends WODirectAction {
 						results = null;
 					}
 				}
+				else {
+					log.info(pageName + " does not exist, falling back to route controller.");
+				}
 			}
 			
 			if (results == null) {
