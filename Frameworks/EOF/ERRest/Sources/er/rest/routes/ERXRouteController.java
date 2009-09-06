@@ -1,6 +1,8 @@
 package er.rest.routes;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
 
@@ -22,12 +24,14 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.foundation.ERXExceptionUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 import er.rest.ERXEORestDelegate;
 import er.rest.ERXRequestFormValues;
 import er.rest.ERXRestClassDescriptionFactory;
@@ -844,6 +848,58 @@ public class ERXRouteController extends WODirectAction {
 		return response;
 	}
 
+	/**
+	 * Enumerates the route keys, looks for @ERXRouteParameter annotated methods, and sets the value of the routeKey
+	 * with the corresponding method if it exists.
+	 * 
+	 * @param results
+	 *            the results to apply route parameter to
+	 */
+	protected void _takeRouteParametersFromRequest(WOActionResults results) {
+		Class<?> resultsClass = results.getClass();
+		for (ERXRoute.Key key : _routeKeys.allKeys()) {
+			String setMethodName = "set" + ERXStringUtilities.capitalize(key.key());
+			try {
+				Method setStringMethod = resultsClass.getMethod(setMethodName, String.class);
+				ERXRouteParameter routeParameter = setStringMethod.getAnnotation(ERXRouteParameter.class);
+				if (routeParameter != null) {
+					setStringMethod.invoke(results, routeStringForKey(key.key()));
+				}
+			}
+			catch (NoSuchMethodException e) {
+				try {
+					Class<?> valueType = _NSUtilities.classWithName(key.valueType());
+					Method setObjectMethod = resultsClass.getMethod(setMethodName, valueType);
+					ERXRouteParameter routeParameter = setObjectMethod.getAnnotation(ERXRouteParameter.class);
+					if (routeParameter != null) {
+						setObjectMethod.invoke(results, routeObjectForKey(key.key()));
+					}
+				}
+				catch (NoSuchMethodException e2) {
+					// SKIP
+				}
+				catch (IllegalArgumentException e2) {
+					e2.printStackTrace();
+				}
+				catch (IllegalAccessException e2) {
+					e2.printStackTrace();
+				}
+				catch (InvocationTargetException e2) {
+					e2.printStackTrace();
+				}
+			}
+			catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			}
+			catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	@Override
 	public WOActionResults performActionNamed(String s) {
 		try {
@@ -851,6 +907,9 @@ public class ERXRouteController extends WODirectAction {
 			WOActionResults results = super.performActionNamed(s);
 			if (results == null) {
 				results = response(null, ERXKeyFilter.filterWithAttributes());
+			}
+			else if (results instanceof IERXRouteComponent) {
+				_takeRouteParametersFromRequest(results);
 			}
 
 			WOContext context = context();
