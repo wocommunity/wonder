@@ -362,7 +362,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             String name = (String)n.object();
             EOEntity e = ERXEOAccessUtilities.entityNamed(null,name);
             if(e == null) log.error("Entity " + name + " not found in the default model group!");
-            registerDescriptionForEntity(e);
+            if (e != null) {
+            	registerDescriptionForEntity(e);
+            }
         }
 
         /**
