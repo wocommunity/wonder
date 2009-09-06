@@ -350,6 +350,30 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the controller class
 	 */
 	public void addDefaultRoutes(String entityName, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
+		addDefaultRoutes(entityName, entityName, numericPKs, controllerClass);
+	}
+
+	/**
+	 * Adds list and view routes for the given entity. For instance, if you provide the entity name "Reminder" you will
+	 * get the routes:
+	 * 
+	 * <pre>
+	 * /reminders
+	 * /reminders/{action}
+	 * /reminder/{reminder:Reminder}
+	 * /reminder/{reminder:Reminder}/{action}
+	 * </pre>
+	 * 
+	 * @param entityName
+	 *            the entity name to route with
+	 * @param entityType
+	 *            the type of the enity
+	 * @param numericPKs
+	 *            if true, routes can assume numeric PK's and add some extra convenience routes
+	 * @param controllerClass
+	 *            the controller class
+	 */
+	public void addDefaultRoutes(String entityName, String entityType, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
 		String singularInternalName = _entityNameFormat.lowercaseRouteName() ? ERXStringUtilities.uncapitalize(entityName) : entityName;
 
 		String externalName = ERXRestNameRegistry.registry().externalNameForInternalName(entityName);
@@ -389,24 +413,24 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 
 		if (_entityNameFormat.pluralRouteName()) {
-			addRoute(new ERXRoute(entityName, "/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
+			addRoute(new ERXRoute(entityName, "/" + pluralExternalName + "/{" + singularInternalName + ":" + entityType + "}", ERXRoute.Method.Get, controllerClass, "show"));
 		}
-		addRoute(new ERXRoute(entityName, "/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Get, controllerClass, "show"));
+		addRoute(new ERXRoute(entityName, "/" + singularExternalName + "/{" + singularInternalName + ":" + entityType + "}", ERXRoute.Method.Get, controllerClass, "show"));
 
 		if (_entityNameFormat.pluralRouteName()) {
-			addRoute(new ERXRoute(entityName, "/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+			addRoute(new ERXRoute(entityName, "/" + pluralExternalName + "/{" + singularInternalName + ":" + entityType + "}", ERXRoute.Method.Put, controllerClass, "update"));
 		}
-		addRoute(new ERXRoute(entityName, "/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Put, controllerClass, "update"));
+		addRoute(new ERXRoute(entityName, "/" + singularExternalName + "/{" + singularInternalName + ":" + entityType + "}", ERXRoute.Method.Put, controllerClass, "update"));
 
 		if (_entityNameFormat.pluralRouteName()) {
-			addRoute(new ERXRoute(entityName, "/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
+			addRoute(new ERXRoute(entityName, "/" + pluralExternalName + "/{" + singularInternalName + ":" + entityType + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
 		}
-		addRoute(new ERXRoute(entityName, "/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
+		addRoute(new ERXRoute(entityName, "/" + singularExternalName + "/{" + singularInternalName + ":" + entityType + "}", ERXRoute.Method.Delete, controllerClass, "destroy"));
 
 		if (_entityNameFormat.pluralRouteName()) {
-			addRoute(new ERXRoute(entityName, "/" + pluralExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
+			addRoute(new ERXRoute(entityName, "/" + pluralExternalName + "/{" + singularInternalName + ":" + entityType + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
 		}
-		addRoute(new ERXRoute(entityName, "/" + singularExternalName + "/{" + singularInternalName + ":" + entityName + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
+		addRoute(new ERXRoute(entityName, "/" + singularExternalName + "/{" + singularInternalName + ":" + entityType + "}/{action:identifier}", ERXRoute.Method.All, controllerClass));
 	}
 
 	/**
@@ -533,7 +557,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			else {
 				requestHandlerPath.addObject(ERXProperties.stringForKeyWithDefault("ERXRest.missingControllerName", "ERXMissingRouteController"));
 				requestHandlerPath.addObject("missing");
-				//throw new FileNotFoundException("There is no controller for the route '" + path + "'.");
+				// throw new FileNotFoundException("There is no controller for the route '" + path + "'.");
 			}
 
 		}
