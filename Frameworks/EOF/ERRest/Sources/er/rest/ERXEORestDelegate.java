@@ -8,6 +8,7 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.eof.ERXEOControlUtilities;
 
@@ -60,13 +61,20 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 				_editingContext.unlock();
 			}
 		}
-		else if (entity instanceof BeanInfoClassDescription) {
-			obj = ((BeanInfoClassDescription) entity).createInstance();
-		}
 		else {
-			throw new UnsupportedOperationException("Unable to create an instance of the entity '" + entity + "'.");
+			IERXRestDelegate delegate = delegateForEntity(entity);
+			if (delegate == null) {
+				if (entity instanceof BeanInfoClassDescription) {
+					obj = ((BeanInfoClassDescription) entity).createInstance();
+				}
+				else {
+					throw new UnsupportedOperationException("Unable to create an instance of the entity '" + entity + "'.");
+				}
+			}
+			else {
+				obj = delegate.createObjectOfEntity(entity);
+			}
 		}
-		// Object obj = entity.createInstance(_editingContext);
 		return obj;
 	}
 
@@ -103,8 +111,29 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 			}
 		}
 		else {
-			throw new UnsupportedOperationException("Unable to fetch objects for anything except EOs.");
+			IERXRestDelegate delegate = delegateForEntity(entity);
+			if (delegate != null) {
+				obj = delegate.objectOfEntityWithID(entity, id);
+			}
+			else {
+				throw new UnsupportedOperationException("Unable to fetch an object for the entity '" + entity.entityName() + "'.");
+			}
 		}
 		return obj;
+	}
+	
+	protected IERXRestDelegate delegateForEntity(EOClassDescription entity) {
+		String entityName = entity.entityName();
+		Class<?> entityDelegateClass = _NSUtilities.classWithName(entityName + "RestDelegate");
+		if (entityDelegateClass != null) {
+			Class<? extends IERXRestDelegate> castEntityDelegateClass = entityDelegateClass.asSubclass(IERXRestDelegate.class);
+			try {
+				return castEntityDelegateClass.newInstance();
+			}
+			catch (Throwable t) {
+				throw new RuntimeException("Failed to create a delegate for the entity '" + entityName + "'.", t);
+			}
+		}
+		return null;
 	}
 }
