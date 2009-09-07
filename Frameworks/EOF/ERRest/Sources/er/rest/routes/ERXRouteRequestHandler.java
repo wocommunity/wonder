@@ -158,6 +158,25 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		public boolean lowercaseRouteName() {
 			return _lowercaseRouteName;
 		}
+
+		/**
+		 * Formats the given entity name based on the rules of this format.
+		 * 
+		 * @param entityName
+		 *            the entity name to format
+		 * @return the formatted entity name
+		 */
+		public String formatEntityNamed(String entityName) {
+			String singularEntityName = lowercaseRouteName() ? ERXStringUtilities.uncapitalize(entityName) : entityName;
+			String controllerPath;
+			if (pluralRouteName()) {
+				controllerPath = ERXLocalizer.englishLocalizer().plurifiedString(singularEntityName, 2);
+			}
+			else {
+				controllerPath = singularEntityName;
+			}
+			return controllerPath;
+		}
 	}
 
 	public static final Logger log = Logger.getLogger(ERXRouteRequestHandler.class);
@@ -320,15 +339,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @return the controller identifier part of the path (the "companies" part in "/companies/1000");
 	 */
 	public String controllerPathForEntityNamed(String entityName) {
-		String singularEntityName = _entityNameFormat.lowercaseRouteName() ? ERXStringUtilities.uncapitalize(entityName) : entityName;
-		String controllerPath;
-		if (_entityNameFormat.pluralRouteName()) {
-			controllerPath = ERXLocalizer.englishLocalizer().plurifiedString(singularEntityName, 2);
-		}
-		else {
-			controllerPath = singularEntityName;
-		}
-		return controllerPath;
+	  return _entityNameFormat.formatEntityNamed(entityName);
 	}
 
 	/**
