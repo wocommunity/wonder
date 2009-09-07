@@ -561,7 +561,7 @@ public class ERXEC extends EOEditingContext {
 					lockTrace.debug("called method " + method + " without a lock, ec=" + this, new Exception());
 				}
 				else {
-					lockLogger.warn("called method " + method + " without a lock, ec=" + this);
+					//lockLogger.warn("called method " + method + " without a lock, ec=" + this);
 				}
 			}
 		}
