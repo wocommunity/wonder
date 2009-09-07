@@ -1,6 +1,7 @@
 package er.memoryadaptor;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Map.Entry;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -13,7 +14,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.foundation.ERXDictionaryUtilities;
 import er.memoryadaptor.EREntityStore.JoinEntityStore;
 
 /**
@@ -158,7 +158,9 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
 
       @SuppressWarnings("cast")
       public NSMutableDictionary<String, Object> next() {
-        hasNext();
+        if (!hasNext()) {
+          throw new NoSuchElementException("No more rows are available");
+        }
         _hasNext = null;
         NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(src);
         EOEntity entity = relationship.entity();
@@ -176,8 +178,18 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
 
       public void remove() {
         srcIterator.remove();
-        destIterator.remove();
+        //XXX: This should probably invalidate the destIterator
       }
     }
+
+    @Override
+    protected void _insertRow(NSMutableDictionary<String, Object> row, EOEntity entity) {
+      throw new UnsupportedOperationException("Inserting rows is not supported in " + getClass().getName());
+    }
+  }
+
+  @Override
+  protected void _insertRow(NSMutableDictionary<String, Object> row, EOEntity entity) {
+    throw new UnsupportedOperationException("Inserting rows is not supported in " + getClass().getName());
   }
 }
