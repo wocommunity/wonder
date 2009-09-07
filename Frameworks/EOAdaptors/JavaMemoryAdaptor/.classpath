@@ -11,6 +11,5 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="Libraries/ognl-2.6.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
