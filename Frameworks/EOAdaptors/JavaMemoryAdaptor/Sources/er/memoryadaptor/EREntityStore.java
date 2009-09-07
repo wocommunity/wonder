@@ -93,7 +93,7 @@ public abstract class EREntityStore {
 
   private NSMutableDictionary<String, Object> rowFromStoredValues(NSMutableDictionary<String, Object> rawRow, EOEntity entity) {
     NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(rawRow.count()); 
-    for (EOAttribute attribute : entity.attributesToFetch()) {
+    for (EOAttribute attribute : (NSArray<EOAttribute>)entity.attributesToFetch()) {
       Object value = rawRow.objectForKey(attribute.columnName());
       if (attribute.isDerived() && !attribute.isFlattened()) {
         // Evaluate derived attribute expression
