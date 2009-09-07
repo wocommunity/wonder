@@ -10,6 +10,7 @@ package ognl.webobjects;
 
 import java.util.Map;
 
+import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.PropertyAccessor;
 
@@ -40,4 +41,16 @@ public class NSObjectPropertyAccessor implements PropertyAccessor {
     public void setProperty(Map map, Object target, Object name, Object value) throws OgnlException {
         setProperty(target, name, value);
     }
+
+	public String getSourceAccessor(OgnlContext context, Object target, Object name) {
+		context.put("_noRoot", "true");
+		return "com.webobjects.foundation.NSKeyValueCoding.Utility#valueForKey($2, " + name + ")";
+	}
+
+	public String getSourceSetter(OgnlContext context, Object target, Object name) {
+		if (target instanceof NSValidation)
+			return ".validateTakeValueForKeyPath($3," + name + ")";
+		context.put("_noRoot", "true");
+		return "com.webobjects.foundation.NSKeyValueCoding.Utility#takeValueForKey($2,$3," + name + ")";
+	}
 }

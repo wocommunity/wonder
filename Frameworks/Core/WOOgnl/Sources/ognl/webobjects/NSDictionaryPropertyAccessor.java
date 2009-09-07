@@ -10,6 +10,7 @@ package ognl.webobjects;
 
 import java.util.Map;
 
+import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.PropertyAccessor;
 
@@ -43,5 +44,13 @@ public class NSDictionaryPropertyAccessor implements PropertyAccessor {
 
     public void setProperty(Map map, Object target, Object name, Object value) throws OgnlException {
         setProperty(target, name, value);
+    }
+
+    public String getSourceAccessor(OgnlContext context, Object target, Object name) {
+        return ".valueForKey(" + name +")";
+    }
+
+    public String getSourceSetter(OgnlContext context, Object target, Object name) {
+        return ".takeValueForKey($3," + name + ")";
     }
 }
