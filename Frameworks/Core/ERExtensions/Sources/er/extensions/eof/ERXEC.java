@@ -15,7 +15,6 @@ import java.util.Vector;
 import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
-import org.apache.xalan.transformer.TransformerImpl.ThreadControler;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
