@@ -2,12 +2,14 @@ package er.memoryadaptor;
 
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Map;
+
+import ognl.Ognl;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
@@ -72,8 +74,7 @@ public abstract class EREntityStore {
     NSMutableArray<NSMutableDictionary<String, Object>> fetchedRows = new NSMutableArray<NSMutableDictionary<String, Object>>();
     Iterator<NSMutableDictionary<String, Object>> i = iterator();
     while (i.hasNext()) {
-      NSMutableDictionary<String, Object> row = i.next();
-      /* FIXME: This should technically map between columnName() and name() rather than just use name() */
+      NSMutableDictionary<String, Object> row = rowFromStoredValues(i.next(), entity);
       if (qualifier == null || qualifier.evaluateWithObject(row)) {
         fetchedRows.addObject(row);
         count++;
@@ -90,20 +91,39 @@ public abstract class EREntityStore {
     return fetchedRows;
   }
 
+  private NSMutableDictionary<String, Object> rowFromStoredValues(NSMutableDictionary<String, Object> rawRow, EOEntity entity) {
+    NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(rawRow.count()); 
+    for (EOAttribute attribute : entity.attributesToFetch()) {
+      Object value = rawRow.objectForKey(attribute.columnName());
+      if (attribute.isDerived() && !attribute.isFlattened()) {
+        // Evaluate derived attribute expression
+        
+        //This is a hack to support SQL string concatenation in derived attributes
+        String expression = attribute.definition().replaceAll("\\|\\|", "+ '' +");
+        try {
+          value = Ognl.getValue(expression, rawRow);
+        } catch (Throwable t) {
+          t.printStackTrace();
+        }
+      }
+      row.setObjectForKey(value != null ? value : NSKeyValueCoding.NullValue, attribute.name());
+    }
+    return row;
+  }
+
   protected abstract void _insertRow(NSMutableDictionary<String, Object> row, EOEntity entity);
   
   public void insertRow(NSDictionary<String, Object> row, EOEntity entity) {
     try {
       // AK: it looks like the higher levels sometimes do not add null values correctly,
       // so we make it up here and put NullValue in the dict
-      NSMutableDictionary<String, Object> mutableRow = new NSMutableDictionary<String, Object>(row);
+      NSMutableDictionary<String, Object> mutableRow = new NSMutableDictionary<String, Object>(row.size());
       if(entity.attributes().count() != row.allKeys().count()) {
         for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
           EOAttribute attribute = (EOAttribute) e.nextElement();
-          // XXX: We should handle derived attributes and columnName() -> name() mappings here
-          if(!attribute.isFlattened() && mutableRow.objectForKey(attribute.name()) == null) {
-            mutableRow.setObjectForKey(NSKeyValueCoding.NullValue, attribute.name());
-          }
+          Object value = row.objectForKey(attribute.name());
+          if (value != null)
+            mutableRow.setObjectForKey(value, attribute.columnName());
         }
       }
       _insertRow(mutableRow, entity);
@@ -127,14 +147,19 @@ public abstract class EREntityStore {
     throw new UnsupportedOperationException("Transactions are not supported in " + getClass().getName());
   }
 
-  public int updateValuesInRowsDescribedByQualifier(NSDictionary updatedRow, EOQualifier qualifier, EOEntity entity) {
+  public int updateValuesInRowsDescribedByQualifier(NSDictionary<String, Object> updatedRow, EOQualifier qualifier, EOEntity entity) {
     try {
       int count = 0;
       Iterator<NSMutableDictionary<String, Object>> i = iterator();
       while (i.hasNext()) {
-        NSMutableDictionary<String, Object> row = i.next();
+        NSMutableDictionary<String, Object> rawRow = i.next();
+        NSMutableDictionary<String, Object> row = rowFromStoredValues(rawRow, entity);
+        
         if (qualifier == null || qualifier.evaluateWithObject(row)) {
-          EOKeyValueCodingAdditions.Utility.takeValuesFromDictionary(row, updatedRow);
+          for (Map.Entry<String, Object> entry : updatedRow.entrySet()) {
+            EOAttribute attribute = entity.attributeNamed(entry.getKey());
+            rawRow.setObjectForKey(entry.getValue(), attribute.columnName());
+          }
           count++;
         }
       }
@@ -142,6 +167,7 @@ public abstract class EREntityStore {
       return count;
     }
     catch (EOGeneralAdaptorException e) {
+      e.printStackTrace();
       throw e;
     }
     catch (Throwable e) {
