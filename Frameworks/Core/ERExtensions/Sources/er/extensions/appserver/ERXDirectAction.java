@@ -20,6 +20,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.woextensions.WOEventDisplayPage;
 import com.webobjects.woextensions.WOEventSetupPage;
 import com.webobjects.woextensions.WOStatsPage;
@@ -347,13 +349,15 @@ public class ERXDirectAction extends WODirectAction {
           else {
 	          while (lockedEditingContextEnum.hasMoreElements()) {
 	            EOEditingContext lockedEditingContext = (EOEditingContext)lockedEditingContextEnum.nextElement();
-	            NSArray openLockTraces = ((ERXEC)lockedEditingContext).openLockTraces();
+	            NSDictionary<Thread, NSMutableArray<Exception>> openLockTraces = ((ERXEC)lockedEditingContext).openLockTraces();
 	            if (openLockTraces != null) {
-	            	Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
+	            	Enumeration<NSMutableArray<Exception>> openLockTracesEnum = openLockTraces.objectEnumerator();
 	            	while (openLockTracesEnum.hasMoreElements()) {
-	            		Exception openLockTrace = (Exception)openLockTracesEnum.nextElement();
-	                	openLockTrace.printStackTrace(pw);
-	                	pw.println();
+	            		NSMutableArray<Exception> openLockTracesForThread = openLockTracesEnum.nextElement();
+	            		for (Exception openLockTrace : openLockTracesForThread) {
+	            			openLockTrace.printStackTrace(pw);
+		                	pw.println();
+	            		}
 	            	}
 	            }
 	          }
