@@ -41,7 +41,9 @@ public class EREntityStoreFactory {
   
   /**
    * Resets the given entity, removing any known rows and
-   * clearing out any transactions.
+   * clearing out any transactions. This is the equivalent
+   * deleting all rows in a relational database table. Be
+   * careful using this if you use single table inheritance.
    * 
    * @param entity the entity to reset
    */
