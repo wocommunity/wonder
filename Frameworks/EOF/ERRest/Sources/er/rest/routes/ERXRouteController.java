@@ -33,7 +33,6 @@ import er.extensions.eof.ERXKeyFilter;
 import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXStringUtilities;
-import er.rest.ERXEORestDelegate;
 import er.rest.ERXRequestFormValues;
 import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestRequestNode;
@@ -330,7 +329,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a default rest delegate
 	 */
 	protected IERXRestDelegate delegate() {
-		return new ERXEORestDelegate(editingContext());
+		return IERXRestDelegate.Factory.delegateForEntityNamed(entityName(), editingContext());
 	}
 
 	/**
@@ -928,7 +927,7 @@ public class ERXRouteController extends WODirectAction {
 		}
 		return entityName;
 	}
-	
+
 	/**
 	 * Returns the name of the page component for this entity and the given action. The default implementation of this
 	 * returns entityName + Action + Page ("PersonEditPage", "PersonViewPage", etc).
@@ -945,7 +944,7 @@ public class ERXRouteController extends WODirectAction {
 	public WOActionResults performActionNamed(String actionName) {
 		try {
 			checkAccess();
-			
+
 			WOActionResults results = null;
 			if (isAutomaticHtmlRoutingEnabled() && format() == ERXRestFormat.HTML) {
 				String pageName = pageNameForAction(actionName);
@@ -966,11 +965,11 @@ public class ERXRouteController extends WODirectAction {
 					log.info(pageName + " does not exist, falling back to route controller.");
 				}
 			}
-			
+
 			if (results == null) {
 				results = super.performActionNamed(actionName);
 			}
-			
+
 			if (results == null) {
 				results = response(null, ERXKeyFilter.filterWithAttributes());
 			}

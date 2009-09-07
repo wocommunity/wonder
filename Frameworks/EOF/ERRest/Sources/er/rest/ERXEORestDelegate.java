@@ -8,7 +8,6 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.eof.ERXEOControlUtilities;
 
@@ -20,7 +19,14 @@ import er.extensions.eof.ERXEOControlUtilities;
 public class ERXEORestDelegate implements IERXRestDelegate {
 	private EOEditingContext _editingContext;
 
+	public ERXEORestDelegate() {
+	}
+
 	public ERXEORestDelegate(EOEditingContext editingContext) {
+		_editingContext = editingContext;
+	}
+	
+	public void setEditingContext(EOEditingContext editingContext) {
 		_editingContext = editingContext;
 	}
 
@@ -62,7 +68,7 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 			}
 		}
 		else {
-			IERXRestDelegate delegate = delegateForEntity(entity);
+			IERXRestDelegate delegate = IERXRestDelegate.Factory.delegateForEntityNamed(entity.entityName(), _editingContext);
 			if (delegate == null) {
 				if (entity instanceof BeanInfoClassDescription) {
 					obj = ((BeanInfoClassDescription) entity).createInstance();
@@ -111,7 +117,7 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 			}
 		}
 		else {
-			IERXRestDelegate delegate = delegateForEntity(entity);
+			IERXRestDelegate delegate = IERXRestDelegate.Factory.delegateForEntityNamed(entity.entityName(), _editingContext);
 			if (delegate != null) {
 				obj = delegate.objectOfEntityWithID(entity, id);
 			}
@@ -120,20 +126,5 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 			}
 		}
 		return obj;
-	}
-	
-	protected IERXRestDelegate delegateForEntity(EOClassDescription entity) {
-		String entityName = entity.entityName();
-		Class<?> entityDelegateClass = _NSUtilities.classWithName(entityName + "RestDelegate");
-		if (entityDelegateClass != null) {
-			Class<? extends IERXRestDelegate> castEntityDelegateClass = entityDelegateClass.asSubclass(IERXRestDelegate.class);
-			try {
-				return castEntityDelegateClass.newInstance();
-			}
-			catch (Throwable t) {
-				throw new RuntimeException("Failed to create a delegate for the entity '" + entityName + "'.", t);
-			}
-		}
-		return null;
 	}
 }
