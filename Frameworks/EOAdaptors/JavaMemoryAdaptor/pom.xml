@@ -29,6 +29,10 @@
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaEOControl</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
