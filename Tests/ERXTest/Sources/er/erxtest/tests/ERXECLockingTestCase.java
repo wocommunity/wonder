@@ -243,6 +243,7 @@ public class ERXECLockingTestCase extends TestCase {
         ec.saveChanges();
         ec.saveChanges();
         assertNotLockable(ec);
+        assertTrue(ec.isAutoLocked());
         ERXApplication._endRequest();
         assertTrue(ec.beforeLock);
         assertTrue(ec.afterLock);
