@@ -10,16 +10,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
-import org.apache.xerces.impl.dv.dtd.ListDatatypeValidator;
-import org.apache.xml.utils.StringBufferPool;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
