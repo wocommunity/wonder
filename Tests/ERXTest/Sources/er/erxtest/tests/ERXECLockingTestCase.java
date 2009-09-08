@@ -1,6 +1,16 @@
 package er.erxtest.tests;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.log4j.Logger;
+
+import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
@@ -44,7 +54,20 @@ expected results are:
 
  */
 public class ERXECLockingTestCase extends TestCase {
+    static ExecutorService executor = Executors.newCachedThreadPool();
 
+    protected static Object call(Callable<? extends Object> aCallable, long timeout) throws TimeoutException {
+
+        Future<? extends Object> future = executor.submit(aCallable);
+        try {
+            return future.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e1) {
+            throw new TimeoutException();
+        } catch (ExecutionException e1) {
+            throw NSForwardException._runtimeExceptionForThrowable(e1.getCause());
+        }
+    }
+    
     public static final Logger log = Logger.getLogger(ERXECLockingTestCase.class);
     private static final long JOIN_TIME = 2000L;
     
@@ -118,16 +141,30 @@ public class ERXECLockingTestCase extends TestCase {
         return new EC() ;
     }
 
-    private void assertLockable(EC ec) {
-        assertTrue("Should be lockable", ec.tryLock());
-        ec.unlock();
+    private void assertLockable(final EC ec) {
+        assertTrue(isLockable(ec));
+   }
+
+    private boolean isLockable(final EC ec) {
+        try {
+            return (Boolean) call(new Callable<Boolean>() {
+                public Boolean call() throws Exception {
+                    Boolean r = ec.tryLock();
+                    if(r) {
+                        ec.unlock();
+                    }
+                    return r;
+                }
+                
+            }, 1);
+        } catch (TimeoutException e) {
+            fail(e.getMessage());
+        }
+        return false;
     }
 
     private void assertNotLockable(EC ec) {
-        if(ec.tryLock()) {
-            fail("Should be not lockable");
-        }
-        ec.unlock();
+        assertFalse(isLockable(ec));
     }
     
     public void test() {
@@ -205,6 +242,7 @@ public class ERXECLockingTestCase extends TestCase {
         ec.setCoalesceAutoLocks(true);
         ec.saveChanges();
         ec.saveChanges();
+        assertNotLockable(ec);
         ERXApplication._endRequest();
         assertTrue(ec.beforeLock);
         assertTrue(ec.afterLock);
