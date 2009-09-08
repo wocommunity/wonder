@@ -245,6 +245,7 @@ public class ERXEC extends EOEditingContext {
 				boolean openAutoLocks = (ec instanceof ERXEC && ((ERXEC) ec).isAutoLocked());
 				if (openAutoLocks) {
 					log.debug("Unlocking autolocked editing context: " + ec);
+					((ERXEC) ec).autoLocked = 0;
 				}
 				else {
 					log.warn("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
@@ -572,8 +573,8 @@ public class ERXEC extends EOEditingContext {
 	 */
 	protected void autoUnlock(boolean wasAutoLocked) {
 		if (wasAutoLocked) {
-			// MS: Coalescing autolocks leaves the last autolock open to be closed
-			// by the request.
+			// MS: Coalescing autolocks leaves the last autolock open to be
+			// closed by the request.
 			if (!coalesceAutoLocks()) {
 				autoLocked--;
 				unlock();
@@ -1544,7 +1545,7 @@ public class ERXEC extends EOEditingContext {
 	 * @param aFactory
 	 *            factory used to create editing contexts
 	 */
-	public static void setFactory(Factory aFactory) {
+	public static void setFactory(Factory aFactory) { 
 		factory = aFactory;
 	}
 
