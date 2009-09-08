@@ -134,7 +134,7 @@ public class WOOgnl {
 		OgnlRuntime.setElementsAccessor(NSDictionary.class, e);
 		OgnlRuntime.setElementsAccessor(NSSet.class, e);
 		// Register template parser
-		if (!"false".equals(System.getProperty("ognl.active"))) {
+		if (hasProperty("ognl.active", "true")) {
 			String parserClassName;
 			if (isWO54()) {
 				parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionParser54");
@@ -154,16 +154,21 @@ public class WOOgnl {
 					throw new RuntimeException("Failed to set the template parser to WOHelperFunctionParser53.", e1);
 				}
 			}
-			if ("true".equalsIgnoreCase(System.getProperty("ognl.inlineBindings"))) {
+			if (hasProperty("ognl.inlineBindings", "false")) {
 				WOHelperFunctionTagRegistry.setAllowInlineBindings(true);
 			}
-			if ("true".equalsIgnoreCase(System.getProperty("ognl.parseStandardTags"))) {
+			if (hasProperty("ognl.parseStandardTags", "false")) {
 				WOHelperFunctionHTMLParser.setParseStandardTags(true);
 			}
-			if ("true".equalsIgnoreCase(System.getProperty("ognl.debugSupport"))) {
+			if (hasProperty("ognl.debugSupport", "false")) {
 				WOHelperFunctionParser._debugSupport = true;
 			}
 		}
+	}
+	
+	private boolean hasProperty(String prop, String def) {
+		String property = System.getProperty(prop, def).trim();
+		return "true".equalsIgnoreCase(property) || "yes".equalsIgnoreCase(property);
 	}
 
 	public void convertOgnlConstantAssociations(NSMutableDictionary associations) {
