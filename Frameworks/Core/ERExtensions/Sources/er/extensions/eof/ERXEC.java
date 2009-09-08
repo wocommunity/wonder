@@ -18,6 +18,7 @@ import java.util.Vector;
 import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
+import org.apache.xerces.impl.dv.dtd.ListDatatypeValidator;
 import org.apache.xml.utils.StringBufferPool;
 
 import sun.misc.Signal;
@@ -118,11 +119,8 @@ public class ERXEC extends EOEditingContext {
 	 */
 	private Boolean coalesceAutoLocks;
 
-	/** if true, there is an autolock on this editingContext */ 
-	private boolean autoLocked;
-
-	/** how many times has the EC been locked. */
-	private int lockCount;
+	/** if > 0, there is an autolock on this editingContext */ 
+	private int autoLocked;
 
 	/**
 	 * holds a flag if the EC is in finalize(). This is needed because we can't
@@ -181,7 +179,7 @@ public class ERXEC extends EOEditingContext {
 		traceOpenLocks = value;
 	}
 
-	private static ThreadLocal locks = new ThreadLocal() {
+	private static ThreadLocal<List> locks = new ThreadLocal() {
 		@Override
 		protected Object initialValue() {
 			return new Vector();
@@ -197,7 +195,7 @@ public class ERXEC extends EOEditingContext {
 	 */
 	public static void pushLockedContextForCurrentThread(EOEditingContext ec) {
 		if (useUnlocker() && ec != null) {
-			List ecs = (List) locks.get();
+			List ecs = locks.get();
 			ecs.add(ec);
 			if (log.isDebugEnabled()) {
 				log.debug("After pushing: " + ecs);
@@ -214,7 +212,7 @@ public class ERXEC extends EOEditingContext {
 	 */
 	public static void popLockedContextForCurrentThread(EOEditingContext ec) {
 		if (useUnlocker() && ec != null) {
-			List ecs = (List) locks.get();
+			List ecs = locks.get();
 			if (ecs != null) {
 				int index = ecs.lastIndexOf(ec);
 				if (index >= 0) {
@@ -235,7 +233,7 @@ public class ERXEC extends EOEditingContext {
 	 * shouldn't call this yourself, but let the Unlocker handle it for you.
 	 */
 	public static void unlockAllContextsForCurrentThread() {
-		List ecs = (List) locks.get();
+		List ecs = locks.get();
 		if (useUnlocker() && ecs != null && ecs.size() > 0) {
 			if (log.isDebugEnabled()) {
 				log.debug("Unlock remaining: " + ecs);
@@ -445,7 +443,7 @@ public class ERXEC extends EOEditingContext {
 			traceLock();
 		}
 		super.lock();
-		lockCount++;
+		pushLockedContextForCurrentThread(this);
 		if (traceOpenLocks()) {
 			lockingThread = Thread.currentThread();
 		}
@@ -457,7 +455,6 @@ public class ERXEC extends EOEditingContext {
 				lockLogger.debug("locked " + this);
 			}
 		}
-		pushLockedContextForCurrentThread(this);
 	}
 
 	/**
@@ -506,7 +503,7 @@ public class ERXEC extends EOEditingContext {
 				openLockTraces = null;
 			}
 		}
-		if(lockCount == 0) {
+		if(!isLockedInThread()) {
 			lockingThread = null;
 		}
 	}
@@ -517,7 +514,6 @@ public class ERXEC extends EOEditingContext {
 	 */
 	public void unlock() {
 		popLockedContextForCurrentThread(this);
-		lockCount--;
 		if (traceOpenLocks()) {
 			traceUnlock();
 		}
@@ -529,14 +525,11 @@ public class ERXEC extends EOEditingContext {
 				lockLogger.debug("unlocked " + this);
 			}
 		}
-		// If coalesceAutoLocks is true, then we will often end up with
-		// a hanging autoLock at the final unlock, so we want to reset the
-		// autolock count to zero so things behave properly when you
-		// next use autolocking
-		if (lockCount == 0 && autoLocked) {
-			autoLocked = false;
-		}
 		super.unlock();
+	}
+
+	private boolean isLockedInThread() {
+		return locks.get().contains(this);
 	}
 
 	/**
@@ -548,16 +541,15 @@ public class ERXEC extends EOEditingContext {
 	 * @return whether we did lock automatically
 	 */
 	protected boolean autoLock(String method) {
-		if (!useAutoLock() || isFinalizing)
+		if (!useAutoLock() || isFinalizing || isLockedInThread())
 			return false;
 
 		boolean wasAutoLocked = false;
 
-		//AK: we should check the parent class here, as _processNotificationQueue is called inside of lock()
-		if (lockCount == 0) {
+		if (!isAutoLocked() || !coalesceAutoLocks()) {
 			wasAutoLocked = true;
-			autoLocked = true;
 			lock();
+			autoLocked++;
 
 			if (!isFinalizing) {
 				if (lockTrace.isDebugEnabled()) {
@@ -582,9 +574,9 @@ public class ERXEC extends EOEditingContext {
 		if (wasAutoLocked) {
 			// MS: Coalescing autolocks leaves the last autolock open to be closed
 			// by the request.
-			if (autoLocked && !coalesceAutoLocks()) {
+			if (!coalesceAutoLocks()) {
+				autoLocked--;
 				unlock();
-				autoLocked = false;
 			}
 		}
 	}
@@ -595,7 +587,7 @@ public class ERXEC extends EOEditingContext {
 	 * @return true if we were autolocked.
 	 */
 	public boolean isAutoLocked() {
-		return autoLocked;
+		return autoLocked > 0;
 	}
 
 	protected void _checkOpenLockTraces() {
@@ -1699,6 +1691,9 @@ public class ERXEC extends EOEditingContext {
 						ex.printStackTrace(pw);
 					}
 				}
+			} else {
+				// pw.println("\n------------------------");
+				// pw.println("Editing Context: " + ec + " unlocked");
 			}
 		}
 		if(!hadLocks) {
