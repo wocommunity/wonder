@@ -1,14 +1,6 @@
 package er.extensions.eof;
 
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import org.apache.log4j.Logger;
-
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -21,10 +13,6 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
-
-import er.extensions.foundation.ERXUtilities;
 
 public class ERXDatabaseContext extends EODatabaseContext {
 
@@ -33,85 +21,8 @@ public class ERXDatabaseContext extends EODatabaseContext {
 
 	private static ThreadLocal _fetching = new ThreadLocal();
 
-	NSMutableDictionary<Thread, NSMutableArray<Exception>> openLockTraces;
-	/**
-	 * if traceOpenEditingContextLocks is true, this will contain the name of
-	 * the locking thread
-	 */
-	Thread lockingThread;
-
-	protected static Map<ERXDatabaseContext, String> activeDatabaseContexts = Collections.synchronizedMap(new WeakHashMap());
-
-	private long lockCount = 0;
-
 	public ERXDatabaseContext(EODatabase database) {
 		super(new ERXDatabase(database));
-		if (ERXEC.traceOpenLocks()) {
-			activeDatabaseContexts.put(this, Thread.currentThread().getName());
-		}
-	}
-
-	/**
-	 * Adds the current stack trace to openLockTraces. 
-	 */
-	private synchronized void traceLock() {
-		if(openLockTraces == null) {
-			openLockTraces = new NSMutableDictionary<Thread, NSMutableArray<Exception>>();
-		}
-		Exception openLockTrace = new Exception("Locked");
-		openLockTrace.fillInStackTrace();
-		Thread currentThread = Thread.currentThread();
-		NSMutableArray<Exception> currentTraces = openLockTraces.objectForKey(currentThread);
-		if(currentTraces == null) {
-			currentTraces = new NSMutableArray<Exception>();
-			openLockTraces.setObjectForKey(currentTraces, currentThread);
-		}
-		currentTraces.addObject(openLockTrace);
-	}
-
-	/**
-	 * Removes the current trace from the openLockTraces.
-	 */
-	private synchronized void traceUnlock() {
-		if (openLockTraces != null) {
-			NSMutableArray<Exception> traces = openLockTraces.objectForKey(lockingThread);
-			traces.removeLastObject();
-			if (traces.count() == 0) {
-				openLockTraces.removeObjectForKey(lockingThread);
-			}
-			if (openLockTraces.count() == 0) {
-				openLockTraces = null;
-			}
-		}
-		if(lockCount == 0) {
-			lockingThread = null;
-		}
-	}
-	
-	/**
-	 * Overridden to emmit log messages and push this instance to the locked
-	 * editing contexts in this thread.
-	 */
-	public void lock() {
-		boolean tracing = ERXEC.traceOpenLocks();
-		if (tracing) {
-			traceLock();
-		}
-		super.lock();
-		lockCount++;
-		lockingThread = Thread.currentThread();
-	}
-
-	/**
-	 * Overridden to emmit log messages and pull this instance from the locked
-	 * editing contexts in this thread.
-	 */
-	public void unlock() {
-		lockCount--;
-		super.unlock();
-		if (ERXEC.traceOpenLocks()) {
-			traceUnlock();
-		}
 	}
 
 	public static boolean isFetching() {
@@ -210,29 +121,6 @@ public class ERXDatabaseContext extends EODatabaseContext {
 				}
 			}
 
-		}
-	}
-
-	public static class OpenDatabaseContextLockSignalHandler implements SignalHandler {
-		public void handle(Signal signal) {
-			boolean hadLocks = false;
-			for (ERXDatabaseContext dbc : activeDatabaseContexts.keySet()) {
-				NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = dbc.openLockTraces;
-				if (traces != null && traces.count() > 0) {
-					hadLocks = true;
-					log.info("  Database Context: " + dbc + " Lock active: " + dbc.lockingThread.getName());
-					for (Thread thread : traces.keySet()) {
-						log.info("  By: " + thread);
-						for(Exception ex: traces.objectForKey(thread)) {
-							log.info("", ex);
-							log.info("");
-						}
-					}
-				}
-			}
-			if(!hadLocks) {
-				log.info("No open database contexts");
-			}
 		}
 	}
 }
