@@ -6,15 +6,19 @@
 //
 package er.extensions.eof;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
+import org.apache.xml.utils.StringBufferPool;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
@@ -350,9 +354,10 @@ public class ERXEC extends EOEditingContext {
 	public ERXEC(EOObjectStore os) {
 		super(os);
 		ERXEnterpriseObject.Observer.install();
-		if (traceOpenLocks()) {
+		if (ERXEC.traceOpenLocks()) {
 			creationTrace = new Exception("Creation");
 			creationTrace.fillInStackTrace();
+			activeEditingContexts.put(this, Thread.currentThread().getName());
 		}
 	}
 
@@ -415,11 +420,6 @@ public class ERXEC extends EOEditingContext {
 		coalesceAutoLocks = Boolean.valueOf(value);
 	}
 
-	/** Returns the number of outstanding locks. */
-	public int lockCount() {
-		return lockCount;
-	}
-
 	/**
 	 * If traceOpenEditingContextLocks is true, returns the stack trace from
 	 * when this EC was created
@@ -437,15 +437,15 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	/**
-	 * Overridden to emmit log messages and push this instance to the locked
+	 * Overridden to emit log messages and push this instance to the locked
 	 * editing contexts in this thread.
 	 */
 	public void lock() {
 		if (traceOpenLocks()) {
 			traceLock();
 		}
-		lockCount++;
 		super.lock();
+		lockCount++;
 		if (traceOpenLocks()) {
 			lockingThread = Thread.currentThread();
 		}
@@ -499,9 +499,11 @@ public class ERXEC extends EOEditingContext {
 				if (traces.count() == 0) {
 					openLockTraces.removeObjectForKey(lockingThread);
 				}
-				if (openLockTraces.count() == 0) {
-					openLockTraces = null;
-				}
+			} else {
+				log.error("Missing lock: " + lockingThread);
+			}
+			if (openLockTraces.count() == 0) {
+				openLockTraces = null;
 			}
 		}
 		if(lockCount == 0) {
@@ -515,7 +517,10 @@ public class ERXEC extends EOEditingContext {
 	 */
 	public void unlock() {
 		popLockedContextForCurrentThread(this);
-		super.unlock();
+		lockCount--;
+		if (traceOpenLocks()) {
+			traceUnlock();
+		}
 		if (!isAutoLocked() && lockLogger.isDebugEnabled()) {
 			if (lockTrace.isDebugEnabled()) {
 				lockLogger.debug("unlocked " + this, new Exception());
@@ -524,7 +529,6 @@ public class ERXEC extends EOEditingContext {
 				lockLogger.debug("unlocked " + this);
 			}
 		}
-		lockCount--;
 		// If coalesceAutoLocks is true, then we will often end up with
 		// a hanging autoLock at the final unlock, so we want to reset the
 		// autolock count to zero so things behave properly when you
@@ -532,9 +536,7 @@ public class ERXEC extends EOEditingContext {
 		if (lockCount == 0 && autoLocked) {
 			autoLocked = false;
 		}
-		if (traceOpenLocks()) {
-			traceUnlock();
-		}
+		super.unlock();
 	}
 
 	/**
@@ -546,11 +548,12 @@ public class ERXEC extends EOEditingContext {
 	 * @return whether we did lock automatically
 	 */
 	protected boolean autoLock(String method) {
-		if (!useAutoLock())
+		if (!useAutoLock() || isFinalizing)
 			return false;
 
 		boolean wasAutoLocked = false;
 
+		//AK: we should check the parent class here, as _processNotificationQueue is called inside of lock()
 		if (lockCount == 0) {
 			wasAutoLocked = true;
 			autoLocked = true;
@@ -1309,6 +1312,8 @@ public class ERXEC extends EOEditingContext {
 	private boolean savingChanges;
 	private NSMutableArray queuedNotifications = new NSMutableArray();
 
+	protected static Map<ERXEC, String> activeEditingContexts = Collections.synchronizedMap(new WeakHashMap());
+
 	/**
 	 * Overridden so add a bugfix from Lenny Marks
 	 * 
@@ -1368,8 +1373,6 @@ public class ERXEC extends EOEditingContext {
 		 * context.
 		 */
 		protected Boolean useSharedEditingContext = null;
-
-		protected Map activeEditingContexts = Collections.synchronizedMap(new WeakHashMap());
 
 		public DefaultFactory() {
 			// Initing defaultEditingContext delegates
@@ -1503,22 +1506,8 @@ public class ERXEC extends EOEditingContext {
 				ec.setSharedEditingContext(null);
 				ec.unlock();
 			}
-			if (ERXEC.traceOpenLocks()) {
-				activeEditingContexts.put(ec, Thread.currentThread().getName());
-			}
 			NSNotificationCenter.defaultCenter().postNotification(EditingContextDidCreateNotification, ec);
 			return ec;
-		}
-
-		public NSArray lockedEditingContexts() {
-			NSMutableArray ecs = new NSMutableArray();
-			for (Iterator e = activeEditingContexts.keySet().iterator(); e.hasNext();) {
-				ERXEC ec = (ERXEC) e.next();
-				if (ec.lockCount() > 0) {
-					ecs.addObject(ec);
-				}
-			}
-			return ecs;
 		}
 
 		/**
@@ -1685,10 +1674,40 @@ public class ERXEC extends EOEditingContext {
 	 *            the name of the signal to handle
 	 */
 	public static void registerOpenEditingContextLockSignalHandler(String signalName) {
-		ERXSignalHandler.register(signalName, new ERXEC.OpenEditingContextLockSignalHandler());
-		ERXSignalHandler.register(signalName, new ERXDatabaseContext.OpenDatabaseContextLockSignalHandler());
+		ERXSignalHandler.register(signalName, new ERXEC.DumpLocksSignalHandler());
+		ERXSignalHandler.register(signalName, new ERXObjectStoreCoordinator.DumpLocksSignalHandler());
 	}
 
+	/**
+	 * Returns a string describing outstanding locks for the created ECs 
+	 * @return description of locks
+	 */
+
+	public static String outstandingLockDescription() {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		boolean hadLocks = false;
+		for (ERXEC ec : ERXEC.activeEditingContexts.keySet()) {
+			NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
+			if (traces != null && traces.count() > 0) {
+				hadLocks = true;
+				pw.println("\n------------------------");
+				pw.println("Editing Context: " + ec + " Locking thread: " + ec.lockingThread);
+				for (Thread thread : traces.keySet()) {
+					pw.println("@" + thread);
+					for(Exception ex: traces.objectForKey(thread)) {
+						ex.printStackTrace(pw);
+					}
+				}
+			}
+		}
+		if(!hadLocks) {
+			pw.print("No open editing contexts (of " + activeEditingContexts.size() + ")");
+		}
+        pw.close();
+		return sw.toString();
+	}
+	
 	/**
 	 * OpenEditingContextLockSignalHandler provides a signal handler that prints
 	 * out open editing context locks. By default, the handler attaches to
@@ -1696,35 +1715,10 @@ public class ERXEC extends EOEditingContext {
 	 * <p>
 	 * Call ERXEC.registerOpenEditingContextLockSignalHandler() to attach it.
 	 */
-	public static class OpenEditingContextLockSignalHandler implements SignalHandler {
+	public static class DumpLocksSignalHandler implements SignalHandler {
 
 		public void handle(Signal signal) {
-			ERXEC.Factory ecFactory = ERXEC.factory();
-			if (ecFactory instanceof ERXEC.DefaultFactory) {
-				NSArray<ERXEC> lockedEditingContexts = ((ERXEC.DefaultFactory) ecFactory).lockedEditingContexts();
-				boolean hadLocks = false;
-				for (ERXEC ec : lockedEditingContexts) {
-					NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
-					if (traces != null && traces.count() > 0) {
-						hadLocks = true;
-						log.info("  Editing Context: " + ec + " Lock active: " + ec.lockingThread.getName());
-						log.info("          Created: ", ec.creationTrace());
-						for (Thread thread : traces.keySet()) {
-							log.info("  Locked By: " + thread);
-							for(Exception ex: traces.objectForKey(thread)) {
-								log.info("Waiting: ", ex);
-								log.info("");
-							}
-						}
-					}
-				}
-				if(!hadLocks) {
-					log.info("No open editing contexts");
-				}
-			}
-			else {
-				log.info("OpenEditingContextLockSignalHandler is only available for ERXEC.DefaultFactory.");
-			}
+			log.info(outstandingLockDescription());
 		}
 	}
 }
