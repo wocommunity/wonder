@@ -29,6 +29,7 @@ import com.webobjects.woextensions.WOStatsPage;
 import er.extensions.ERXExtensions;
 import er.extensions.components.ERXStringHolder;
 import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
@@ -339,33 +340,11 @@ public class ERXDirectAction extends WODirectAction {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         pw.println("<pre>");
-        ERXEC.Factory ecFactory = ERXEC.factory();
-        if (ecFactory instanceof ERXEC.DefaultFactory) {
-          NSArray lockedEditingContexts = ((ERXEC.DefaultFactory)ecFactory).lockedEditingContexts();
-          Enumeration lockedEditingContextEnum = lockedEditingContexts.objectEnumerator();
-          if (!lockedEditingContextEnum.hasMoreElements()) {
-        	  pw.println("There are no open editing context lock traces.");
-          }
-          else {
-	          while (lockedEditingContextEnum.hasMoreElements()) {
-	            EOEditingContext lockedEditingContext = (EOEditingContext)lockedEditingContextEnum.nextElement();
-	            NSDictionary<Thread, NSMutableArray<Exception>> openLockTraces = ((ERXEC)lockedEditingContext).openLockTraces();
-	            if (openLockTraces != null) {
-	            	Enumeration<NSMutableArray<Exception>> openLockTracesEnum = openLockTraces.objectEnumerator();
-	            	while (openLockTracesEnum.hasMoreElements()) {
-	            		NSMutableArray<Exception> openLockTracesForThread = openLockTracesEnum.nextElement();
-	            		for (Exception openLockTrace : openLockTracesForThread) {
-	            			openLockTrace.printStackTrace(pw);
-		                	pw.println();
-	            		}
-	            	}
-	            }
-	          }
-          }
-        }
-        else {
-          pw.println("showOpenEditingContextLockTraces is only available for ERXEC.DefaultFactory.");
-        }
+        pw.println(ERXEC.outstandingLockDescription());
+        pw.println("</pre>");
+        pw.println("<hr>");
+        pw.println("<pre>");
+        pw.println(ERXObjectStoreCoordinator.outstandingLockDescription());
         pw.println("</pre>");
         pw.close();
         result.setValue(sw.toString());
