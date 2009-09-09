@@ -7,6 +7,22 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSynchronizationFactory;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
+
 public class ERDerbyPlugIn extends JDBCPlugIn {
 
 	public static class DerbyExpression extends JDBCExpression {
@@ -45,7 +61,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		 * Fixes an incompatibility with JDK 1.5 and using toString() instead of
 		 * toPlainString() for BigDecimals. From what I understand, you will
 		 * only need this if you disable bind variables.
-		 * 
+		 *
 		 * @param value
 		 * @param eoattribute
 		 * @return
@@ -169,7 +185,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 
 		/**
 		 * Helper to check for timestamp columns that have a "D" value type.
-		 * 
+		 *
 		 * @param eoattribute
 		 * @return
 		 */
@@ -179,7 +195,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 
 		/**
 		 * Helper to check for timestamp columns that have a "T" value type.
-		 * 
+		 *
 		 * @param eoattribute
 		 * @return
 		 */
