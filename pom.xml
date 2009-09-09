@@ -427,11 +427,6 @@
 				<version>1.0</version>
 			</dependency>
 			<dependency>
-				<groupId>javax.mail</groupId>
-				<artifactId>mail</artifactId>
-				<version>1.4.1</version>
-			</dependency>
-			<dependency>
 				<groupId>com.octo.captcha</groupId>
 				<artifactId>jcaptcha-all</artifactId>
 				<version>1.0-RC6</version>
