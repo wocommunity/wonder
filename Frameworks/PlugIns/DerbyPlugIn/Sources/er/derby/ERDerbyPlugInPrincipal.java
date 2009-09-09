@@ -1,4 +1,6 @@
-package com.webobjects.jdbcadaptor;
+package er.derby;
+
+import com.webobjects.jdbcadaptor.ERDerbyPlugIn;
 
 /**
  * 5.4 declares the same class name for the DerbyPlugIn. If your classpath isn't
@@ -9,8 +11,8 @@ package com.webobjects.jdbcadaptor;
  * 
  * @author hprange guided by mschrag
  */
-public class DerbyPlugIn extends ERDerbyPlugIn {
-	public DerbyPlugIn(final JDBCAdaptor adaptor) {
-		super(adaptor);
+public class ERDerbyPlugInPrincipal {
+	static {
+		JDBCPlugIn.setPlugInNameForSubprotocol(ERDerbyPlugIn.class.getName(), "derby");
 	}
 }
