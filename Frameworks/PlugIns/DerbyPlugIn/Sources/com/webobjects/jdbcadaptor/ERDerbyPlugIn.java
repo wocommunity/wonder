@@ -348,7 +348,6 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		return jdbcInfo;
 	}
 
-	@Override
 	public String name() {
 		return DRIVER_NAME;
 	}
