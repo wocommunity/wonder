@@ -2171,6 +2171,15 @@ public class ERXSQLHelper {
 		}
 		
 		@Override
+		public String externalTypeForJDBCType( JDBCAdaptor adaptor, int type ) {
+			if( type == Types.BLOB ) {
+				return "binary";
+			}
+
+			return super.externalTypeForJDBCType( adaptor, type );
+		}
+		
+		@Override
 		public String limitExpressionForSQL( EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end ) {
 			if( sql == null || "".equals( sql ) )
 			{
