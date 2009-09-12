@@ -36,6 +36,7 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimeZone;
@@ -1018,6 +1019,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	}
 
 	public static class FrontbaseExpression extends JDBCExpression {
+		private boolean _useBindVariables;
 		EOQualifier _qualifier;
 		NSMutableArray _lobList;
 
@@ -1028,6 +1030,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 
 		public FrontbaseExpression(EOEntity eoentity) {
 			super(eoentity);
+			_useBindVariables = NSProperties.booleanForKeyWithDefault("FrontBasePlugIn.useBindVariables", false);
 			_rtrimFunctionName = null;
 			_externalQuoteChar = "\"";
 		}
@@ -1483,11 +1486,16 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		}
 
 		public boolean useBindVariables() {
-			return false;
+			return _useBindVariables;
 		}
 
 		public boolean shouldUseBindVariableForAttribute(EOAttribute eoattribute) {
-			return false;
+			return useBindVariables() && !isLOBAttribute(eoattribute);
+		}
+
+		private boolean isLOBAttribute(EOAttribute att) {
+			int internalType = internalTypeForExternal(att.externalType());
+			return internalType == FB_BLOB || internalType == FB_CLOB;
 		}
 
 		public boolean mustUseBindVariableForAttribute(EOAttribute eoattribute) {
