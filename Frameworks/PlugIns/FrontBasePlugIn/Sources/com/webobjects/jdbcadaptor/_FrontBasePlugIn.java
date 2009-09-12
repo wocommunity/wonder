@@ -1030,7 +1030,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 
 		public FrontbaseExpression(EOEntity eoentity) {
 			super(eoentity);
-			_useBindVariables = NSProperties.booleanForKeyWithDefault("FrontBasePlugIn.useBindVariables", false);
+			_useBindVariables = "true".equalsIgnoreCase(System.getProperty("FrontBasePlugIn.useBindVariables"));
 			_rtrimFunctionName = null;
 			_externalQuoteChar = "\"";
 		}
