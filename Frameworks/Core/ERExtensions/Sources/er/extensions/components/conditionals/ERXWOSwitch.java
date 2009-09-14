@@ -43,6 +43,18 @@ import com.webobjects.foundation.NSMutableDictionary;
         &lt;h2&gt;Default: &lt;webobject name=ChosenCaseString&gt;&lt;/webobject&gt;&lt;/h2&gt;
     &lt;/webobject&gt;    
 &lt;/webobject&gt;
+ or
+    &lt;wo:ERXWOSwitch case="$case"&gt;
+        &lt;wo:ERXWOCase case="caseOne"&gt;
+                Case One!
+        &lt;/wo:ERXWOCase&gt;
+        &lt;wo:ERXWOCase case="caseTwo"&gt;
+                Case Two!
+        &lt;/wo:ERXWOCase&gt;
+        &lt;wo:WXCase case="default"&gt;
+                OTHER
+        &lt;/wo:WXCase&gt;
+    &lt;/wo:ERXWOSwitch&gt;
 
  ==========================
  Example.wo/Example.wod
@@ -88,6 +100,7 @@ public Object chosenCase() {
  </code></pre>
  * @author ak (Java port)
  * @author Charles Lloyd
+ * @binding case the ivar that holds the value to be switched on
  */
 public class ERXWOSwitch extends WODynamicElement {
     

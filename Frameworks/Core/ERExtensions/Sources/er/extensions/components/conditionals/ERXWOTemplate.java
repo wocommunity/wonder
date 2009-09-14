@@ -20,6 +20,7 @@ import er.extensions.components.ERXWOComponentContent;
  * a second time. See {@link ERXWOComponentContent} for a full explaination.
  * @author ak (Java port)
  * @author Charles Lloyd
+ * @binding templateName
  */
 public class ERXWOTemplate extends WODynamicElement {
 
