@@ -18,6 +18,8 @@ import er.extensions.appserver.ERXWOContext;
  * Also makes it easier to override by implementing {@link #meetsConditionInComponent(WOComponent)} and {@link #pullAssociations(NSDictionary)}.
  * @author mschrag
  * @author ak
+ * @binding condition
+ * @binding negate
  */
 public class ERXWOConditional extends WODynamicGroup {
 	public static final String LAST_CONDITION_KEY = "er.extensions.ERXWOConditional.lastCondition";

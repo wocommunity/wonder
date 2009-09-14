@@ -19,9 +19,10 @@ import er.extensions.components.ERXStatelessComponent;
 import er.extensions.eof.ERXConstant;
 
 /** 
- * ERXOncePerRequestConditional is a component that will 
- * render it's embedded content only once during the RR loop.
- *  Useful for JavaScript code that should be included only once.
+ * Will render its embedded content only once during the RR loop.
+ * Useful for JavaScript code that should be included only once.
+ * @binding keyName
+ * @binding ERXOncePerRequestDisplayCountDict
  */
 public class ERXOncePerRequestConditional extends ERXStatelessComponent {
     /** logging support */

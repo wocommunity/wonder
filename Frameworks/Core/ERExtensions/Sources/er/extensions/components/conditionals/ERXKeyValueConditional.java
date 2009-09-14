@@ -13,7 +13,10 @@ import er.extensions.eof.ERXEOControlUtilities;
 /**
  * Same as the {@link WOKeyValueConditional}, but as a dynamic element. Matches if
  * a given key from the component matches the given value. Compares EOs by global ID.
+ *
  * @author ak
+ * @binding key
+ * @binding value
  */
 public class ERXKeyValueConditional extends ERXWOConditional {
 

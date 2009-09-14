@@ -18,7 +18,6 @@ import er.extensions.foundation.ERXPatcher;
 /**
  * Conditional component that tests if an object is an instance of a given class
  * or interface <br/> Synopsis:<br/> object=<i>anObject</i>;className=<i>aClassName2</i>;[negate=<i>aBoolean</i>;]
- * 
  * @binding object object to test
  * @binding className class or interface name
  * @binding negate Inverts the sense of the conditional.
