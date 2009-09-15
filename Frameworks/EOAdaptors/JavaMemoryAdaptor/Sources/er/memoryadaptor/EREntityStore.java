@@ -96,15 +96,20 @@ public abstract class EREntityStore {
     NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(rawRow.count()); 
     for (EOAttribute attribute : (NSArray<EOAttribute>)entity.attributesToFetch()) {
       Object value = rawRow.objectForKey(attribute.columnName());
-      if (attribute.isDerived() && !attribute.isFlattened()) {
-        // Evaluate derived attribute expression
-        
-        //This is a hack to support SQL string concatenation in derived attributes
-        String expression = attribute.definition().replaceAll("\\|\\|", "+ '' +");
-        try {
-          value = Ognl.getValue(expression, rawRow);
-        } catch (Throwable t) {
-          t.printStackTrace();
+      if (attribute.isDerived()) {
+        if (!attribute.isFlattened()) {
+          // Evaluate derived attribute expression
+
+          //This is a hack to support SQL string concatenation in derived attributes
+          String expression = attribute.definition().replaceAll("\\|\\|", "+ '' +");
+          try {
+            value = Ognl.getValue(expression, rawRow);
+          } catch (Throwable t) {
+            t.printStackTrace();
+          }
+        } else {
+          String dstKey = entity._attributeForPath(attribute.definition()).columnName();
+          value = rawRow.objectForKey(dstKey);
         }
       }
       row.setObjectForKey(value != null ? value : NSKeyValueCoding.NullValue, attribute.name());
@@ -120,7 +125,7 @@ public abstract class EREntityStore {
       for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
         EOAttribute attribute = (EOAttribute) e.nextElement();
         Object value = row.objectForKey(attribute.name());
-        if (value != null)
+        if (value != null && !attribute.isDerived())
           mutableRow.setObjectForKey(value, attribute.columnName());
       }
       _insertRow(mutableRow, entity);
