@@ -6,6 +6,9 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSUtilities;
 
@@ -22,10 +25,12 @@ public class EREntityStoreFactory {
   private NSMutableDictionary<String, EREntityStore> _entityStores;
   private NSMutableDictionary<String, EREntityStore> _transactionEntityStores;
   private final Class<? extends EREntityStore> _entityStoreClazz;
+  public static final String RESET_ALL_ENTITIES = "EREntityStoreResetAllEntities";
   
   public EREntityStoreFactory(Class<? extends EREntityStore> clazz) {
     _entityStores = new NSMutableDictionary<String, EREntityStore>();
     _entityStoreClazz = clazz;
+    NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("resetAllEntities", new Class[] { NSNotification.class }), RESET_ALL_ENTITIES, null);
   }
   
   /**
@@ -37,6 +42,11 @@ public class EREntityStoreFactory {
     if (_transactionEntityStores != null) {
       _transactionEntityStores.removeAllObjects();
     }
+  }
+  
+  /* This is to satisfy NSNotificationCenter */
+  public void resetAllEntities(NSNotification object) {
+    resetAllEntities();
   }
   
   /**

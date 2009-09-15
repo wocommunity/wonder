@@ -78,7 +78,7 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
         newRow.setObjectForKey(entry.getValue(), attrib.name());
       }
     }
-    _stores.objectForKey(target).insertRow(newRow, entity);
+    _stores.objectForKey(target).insertRow(newRow, target);
   }
   
   @Override
@@ -167,10 +167,10 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
         for (EOAttribute attrib : (NSArray<EOAttribute>) entity.attributesToFetch()) {
           EORelationship rel = entity._relationshipForPath(attrib.relationshipPath());
           if (attrib.isFlattened() && relationship.equals(rel)) {
-            String dstKey = entity._attributeForPath(attrib.definition()).name();
+            String dstKey = entity._attributeForPath(attrib.definition()).columnName();
             Object value = dst.objectForKey(dstKey);
             if (value != null)
-              row.setObjectForKey(value, attrib.name());
+              row.setObjectForKey(value, dstKey);
           }
         }
         return row;
