@@ -74,7 +74,8 @@ public abstract class EREntityStore {
     NSMutableArray<NSMutableDictionary<String, Object>> fetchedRows = new NSMutableArray<NSMutableDictionary<String, Object>>();
     Iterator<NSMutableDictionary<String, Object>> i = iterator();
     while (i.hasNext()) {
-      NSMutableDictionary<String, Object> row = rowFromStoredValues(i.next(), entity);
+      NSMutableDictionary<String, Object> rawRow = i.next();
+      NSMutableDictionary<String, Object> row = rowFromStoredValues(rawRow, entity);
       if (qualifier == null || qualifier.evaluateWithObject(row)) {
         fetchedRows.addObject(row);
         count++;
@@ -115,16 +116,12 @@ public abstract class EREntityStore {
   
   public void insertRow(NSDictionary<String, Object> row, EOEntity entity) {
     try {
-      // AK: it looks like the higher levels sometimes do not add null values correctly,
-      // so we make it up here and put NullValue in the dict
       NSMutableDictionary<String, Object> mutableRow = new NSMutableDictionary<String, Object>(row.size());
-      if(entity.attributes().count() != row.allKeys().count()) {
-        for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
-          EOAttribute attribute = (EOAttribute) e.nextElement();
-          Object value = row.objectForKey(attribute.name());
-          if (value != null)
-            mutableRow.setObjectForKey(value, attribute.columnName());
-        }
+      for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
+        EOAttribute attribute = (EOAttribute) e.nextElement();
+        Object value = row.objectForKey(attribute.name());
+        if (value != null)
+          mutableRow.setObjectForKey(value, attribute.columnName());
       }
       _insertRow(mutableRow, entity);
     }
