@@ -588,14 +588,16 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	protected void _checkOpenLockTraces() {
-		if (openLockTraces != null && openLockTraces.count() != 0) {
-			log.error(System.identityHashCode(this) + " Disposed with " + openLockTraces.count() + " locks (finalizing = " + isFinalizing + ")");
-			Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
-			while (openLockTracesEnum.hasMoreElements()) {
-				Exception existingOpenLockTrace = (Exception) openLockTracesEnum.nextElement();
-				log.error(System.identityHashCode(this) + " Existing lock: ", existingOpenLockTrace);
+		NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = openLockTraces;
+		if (traces != null && traces.count() != 0) {
+			String instance = getClass().getSimpleName() + "@" + System.identityHashCode(this);
+			log.error(instance + " Disposed with " + traces.count() + " locks (finalizing = " + isFinalizing + ")");
+			for (NSMutableArray<Exception> actual : traces.values()) {
+				for (Exception existingOpenLockTrace : actual) {
+					log.error(instance + " Existing lock: ", existingOpenLockTrace);
+				}
 			}
-			log.error(System.identityHashCode(this) + " created: ", creationTrace);
+			log.error(instance + " Created: ", creationTrace);
 		}
 	}
 
@@ -609,33 +611,55 @@ public class ERXEC extends EOEditingContext {
 	/** Overridden to support automatic autoLocking. */
 	public void finalize() throws Throwable {
 		isFinalizing = true;
-		if (traceOpenLocks()) {
-			_checkOpenLockTraces();
+		try {
+			if (traceOpenLocks()) {
+				// log.info("Finalize " + getClass().getSimpleName() + "@" + System.identityHashCode(this));
+				_checkOpenLockTraces();
+			}
+		} catch(Throwable ex) {
+			// we *must* not fail in a finalizer
+			log.error("Error finalizing: " + ex, ex);
+		} finally {
+			super.finalize();
 		}
-		super.finalize();
 	}
+	
+	/**
+	 * Technically, the OSC is public API and as such should also get
+	 * auto-locked. In practice, it's called too often to warrant it. If you
+	 * want, you can turn it on on a case by case basis.
+	 */
+	protected static boolean _shouldLockOnLockObjectStore = false;
 	
 	/** Overridden to support automatic autoLocking. */
 	@Override
 	public void lockObjectStore() {
-		boolean wasAutoLocked = autoLock("lockObjectStore");
-		try {
+		if(!_shouldLockOnLockObjectStore) {
 			super.lockObjectStore();
-		}
-		finally {
-			autoUnlock(wasAutoLocked);
+		} else {
+			boolean wasAutoLocked = autoLock("lockObjectStore");
+			try {
+				super.lockObjectStore();
+			}
+			finally {
+				autoUnlock(wasAutoLocked);
+			}
 		}
 	}
 	
 	/** Overridden to support automatic autoLocking. */
 	@Override
 	public void unlockObjectStore() {
-		boolean wasAutoLocked = autoLock("unlockObjectStore");
-		try {
+		if(!_shouldLockOnLockObjectStore) {
 			super.unlockObjectStore();
-		}
-		finally {
-			autoUnlock(wasAutoLocked);
+		} else {
+			boolean wasAutoLocked = autoLock("unlockObjectStore");
+			try {
+				super.unlockObjectStore();
+			}
+			finally {
+				autoUnlock(wasAutoLocked);
+			}
 		}
 	}
 
@@ -1694,7 +1718,7 @@ public class ERXEC extends EOEditingContext {
 			}
 		}
 		if(!hadLocks) {
-			pw.print("No open editing contexts (of " + activeEditingContexts.size() + ")");
+			pw.print("No open editing contexts (of " + activeEditingContexts.size() + "->"+ activeEditingContexts + ")");
 		}
         pw.close();
 		return sw.toString();
