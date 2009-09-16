@@ -315,7 +315,11 @@ public class ERXDirectAction extends WODirectAction {
             info += decimalFormatter.format(runtime.totalMemory()-runtime.freeMemory()) + " used, ";
             info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
             
-            ERXExtensions.forceGC(5);
+            int count = 5;
+            if(request().stringFormValueForKey("count") != null) {
+            	count = Integer.parseInt(request().stringFormValueForKey("count"));
+            }
+            ERXExtensions.forceGC(count);
   
             info += "After: ";
             info += decimalFormatter.format(runtime.maxMemory()) + " max, ";
@@ -324,6 +328,7 @@ public class ERXDirectAction extends WODirectAction {
             info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
 
             result.setValue(info);
+            log.info("GC forced\n"+info);
         }
         return result;
     }
