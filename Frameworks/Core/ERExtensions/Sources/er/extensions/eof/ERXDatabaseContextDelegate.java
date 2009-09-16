@@ -321,7 +321,7 @@ public class ERXDatabaseContextDelegate {
 
    /**
     * This delegate method first checks the arrayFaultCache if it is set before trying to
-    * resolve the fault from the DB. It can be a severe performance optimisation depending
+    * resolve the fault from the DB. It can be a severe performance optimization depending
     * on your setup.
     * @param eodatabasecontext
     * @param obj
