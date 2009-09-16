@@ -2078,6 +2078,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/** Overridden to check the sessions */
 	@Override
 	public WOSession restoreSessionWithID(String sessionID, WOContext wocontext) {
+		if(sessionID != null && ERXSession.session() != null && sessionID.equals(ERXSession.session().sessionID())) {
+			// AK: I have no idea how this can happen
+			throw new IllegalStateException("Trying to check out a session twice in one RR loop: " + sessionID);
+		}
 		WOSession session = null;
 		if (useSessionStoreDeadlockDetection()) {
 			SessionInfo sessionInfo = _sessions.get(sessionID);
