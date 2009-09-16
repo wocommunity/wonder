@@ -10,6 +10,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.eoaccess.EOAccessArrayFaultHandler;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorOperation;
@@ -18,9 +19,11 @@ import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EODatabaseOperation;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOObjectNotAvailableException;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -130,7 +133,7 @@ public class ERXDatabaseContextDelegate {
 	}
 
 	/**
-	 * Sets the cache enty for the fetched objects.
+	 * Sets the cache entry for the fetched objects.
 	 * @param dbc
 	 * @param eos
 	 * @param fs
@@ -318,24 +321,71 @@ public class ERXDatabaseContextDelegate {
             dbLog.debug("databaseContextDidSelectObjects " + fs, new Exception());
         }
     }
-
-   /**
-    * This delegate method first checks the arrayFaultCache if it is set before trying to
-    * resolve the fault from the DB. It can be a severe performance optimization depending
-    * on your setup.
-    * @param eodatabasecontext
-    * @param obj
-    */
-    public boolean databaseContextShouldFetchArrayFault(EODatabaseContext eodatabasecontext, Object obj) {
-        if(_arrayFaultCache != null) {
-            _arrayFaultCache.clearFault(obj);
-            if(!EOFaultHandler.isFault(obj)) {
-                return false;
-            }
-        }
-        return true;
-    }
     
+    private boolean fetching = false;
+
+    /**
+     * Simple interface to provide batch fetching of to-many faults.
+     * @author ak
+     *
+     */
+    public interface FetchTimestampedEO {
+    	public long __fetchTimestamp();
+    }
+
+	/**
+	 * This delegate method first checks the arrayFaultCache if it is set before
+	 * trying to resolve the fault from the DB. It can be a severe performance
+	 * optimization depending on your setup. Also, it support batch fetching of
+	 * to-many relationships of EOs that were fetched at the "same" time.
+	 * 
+	 * @param dbc
+	 * @param obj
+	 */
+
+    public boolean databaseContextShouldFetchArrayFault(EODatabaseContext dbc, Object obj) {
+    	if(_arrayFaultCache != null) {
+    		_arrayFaultCache.clearFault(obj);
+    		if(!EOFaultHandler.isFault(obj)) {
+    			return false;
+    		}
+    	}
+    	//AK: experimental code to have auto-batch faulting...
+    	EOAccessArrayFaultHandler handler = (EOAccessArrayFaultHandler) EOFaultHandler.handlerForFault(obj);
+    	if(handler != null && !fetching && false) {
+    		fetching = true;
+    		try {
+    			EOGlobalID source = handler.sourceGlobalID();
+    			ERXEC ec = (ERXEC)handler.editingContext();
+    			String key = handler.relationshipName();
+    			EOEnterpriseObject sourceEO = ec.faultForGlobalID(source, ec);
+				EOEntityClassDescription cd = (EOEntityClassDescription)ec.objectForGlobalID(source).classDescription();
+				EORelationship relationship = cd.entity().relationshipNamed(key);
+    			if(sourceEO instanceof FetchTimestampedEO && !(relationship.destinationEntity().isAbstractEntity())) {
+    				long timestamp = ((FetchTimestampedEO)sourceEO).__fetchTimestamp();
+    				NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
+    				for(EOEnterpriseObject eo: (NSArray<EOEnterpriseObject>)ec.registeredObjects()) {
+    					if (eo instanceof FetchTimestampedEO) {
+							if(((FetchTimestampedEO) eo).__fetchTimestamp() == timestamp) {
+								if(!EOFaultHandler.isFault(eo) && eo.classDescription() == sourceEO.classDescription() && EOFaultHandler.isFault(eo.storedValueForKey(key))) {
+									eos.addObject(eo);
+								}
+							}
+						}
+    				}
+    				if(eos.count() > 1) {
+    					dbc.batchFetchRelationship(relationship, eos, ec);
+    					log.info("Fetched " + eos.count() + " for " + key);
+    					return EOFaultHandler.isFault(obj);
+    				}
+    			}
+    		} finally {
+    			fetching = false;
+    		}
+    	}
+    	return true;
+    }
+
     /**
      * Overridden to remove inserts and deletes of the "same" row. When you
      * delete from a join table and then re-add the same object, then the
