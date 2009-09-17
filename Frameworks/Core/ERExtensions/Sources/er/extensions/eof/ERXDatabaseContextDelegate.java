@@ -33,8 +33,10 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.eocontrol.EOGenericRecord._LazyDictionaryBinding;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -133,17 +135,21 @@ public class ERXDatabaseContextDelegate {
 	}
 
 	/**
-	 * Sets the cache entry for the fetched objects.
+	 * Sets the cache entry for the fetched objects and refreshes the timestamps
+	 * for fetched objects if batch faulting is enabled.
+	 * 
 	 * @param dbc
 	 * @param eos
 	 * @param fs
 	 * @param ec
 	 */
 	public void databaseContextDidFetchObjects(EODatabaseContext dbc, NSArray eos, EOFetchSpecification fs, EOEditingContext ec) {
-		NSArray result = null;
 		ERXFetchResultCache fetchResultCache = fetchResultCache();
 		if (fetchResultCache != null) {
 			fetchResultCache.setObjectsForFetchSpecification(dbc, ec, eos, fs);
+		}
+		if(autoBatchFetchSize() > 0) {
+			freshenFetchTimestamps(eos, ec);
 		}
 	}
 
@@ -321,17 +327,6 @@ public class ERXDatabaseContextDelegate {
             dbLog.debug("databaseContextDidSelectObjects " + fs, new Exception());
         }
     }
-    
-    private boolean fetching = false;
-
-    /**
-     * Simple interface to provide batch fetching of to-many faults.
-     * @author ak
-     *
-     */
-    public interface FetchTimestampedEO {
-    	public long __fetchTimestamp();
-    }
 
 	/**
 	 * This delegate method first checks the arrayFaultCache if it is set before
@@ -350,41 +345,24 @@ public class ERXDatabaseContextDelegate {
     			return false;
     		}
     	}
-    	//AK: experimental code to have auto-batch faulting...
-    	EOAccessArrayFaultHandler handler = (EOAccessArrayFaultHandler) EOFaultHandler.handlerForFault(obj);
-    	if(handler != null && !fetching && false) {
-    		fetching = true;
-    		try {
-    			EOGlobalID source = handler.sourceGlobalID();
-    			ERXEC ec = (ERXEC)handler.editingContext();
-    			String key = handler.relationshipName();
-    			EOEnterpriseObject sourceEO = ec.faultForGlobalID(source, ec);
-				EOEntityClassDescription cd = (EOEntityClassDescription)ec.objectForGlobalID(source).classDescription();
-				EORelationship relationship = cd.entity().relationshipNamed(key);
-    			if(sourceEO instanceof FetchTimestampedEO && !(relationship.destinationEntity().isAbstractEntity())) {
-    				long timestamp = ((FetchTimestampedEO)sourceEO).__fetchTimestamp();
-    				NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
-    				for(EOEnterpriseObject eo: (NSArray<EOEnterpriseObject>)ec.registeredObjects()) {
-    					if (eo instanceof FetchTimestampedEO) {
-							if(((FetchTimestampedEO) eo).__fetchTimestamp() == timestamp) {
-								if(!EOFaultHandler.isFault(eo) && eo.classDescription() == sourceEO.classDescription() && EOFaultHandler.isFault(eo.storedValueForKey(key))) {
-									eos.addObject(eo);
-								}
-							}
-						}
-    				}
-    				if(eos.count() > 1) {
-    					dbc.batchFetchRelationship(relationship, eos, ec);
-    					log.info("Fetched " + eos.count() + " for " + key);
-    					return EOFaultHandler.isFault(obj);
-    				}
-    			}
-    		} finally {
-    			fetching = false;
-    		}
+    	if(autoBatchFetchSize() > 0) {
+    		return batchFetchToManyFault(dbc, obj);
     	}
     	return true;
     }
+
+    /**
+     * Batch fetches to one relationships if enabled.
+     * @param dbc
+     * @param obj
+     * @return true if the fault should get fetched
+     */
+	public boolean databaseContextShouldFetchObjectFault(EODatabaseContext dbc, Object obj) {
+		if(autoBatchFetchSize() > 0 && obj instanceof AutoBatchFaultingEnterpriseObject) {
+			return batchFetchToOneFault(dbc, (AutoBatchFaultingEnterpriseObject)obj);
+		}
+		return true;
+	}
 
     /**
      * Overridden to remove inserts and deletes of the "same" row. When you
@@ -446,4 +424,206 @@ public class ERXDatabaseContextDelegate {
     	}
     	return result;
     }
+
+    /**
+     * The delegate is not reentrant, so this marks whether we are already batch faulting a to-many relationship.
+     */
+    private boolean fetchingToMany = false;
+
+    /**
+     * The delegate is not reentrant, so this marks whether we are already batch faulting a to-one relationship.
+     */
+    private boolean fetchingToOne = false;
+    
+    /**
+     * Holds the auto batch fetch size.
+     */
+    private static int autoBatchFetchSize = -1;
+    
+    /**
+     * Returns the batch size for automatic batch faulting from the System property <code>er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize</code>.
+     * Default is 0, meaning it's disabled.
+     * @return batch size
+     */
+    public static int autoBatchFetchSize() {
+    	if(autoBatchFetchSize == -1) {
+    		autoBatchFetchSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize", 0);
+    	}
+    	return autoBatchFetchSize;
+    }
+
+    /**
+     * Interface to provide auto-magic batch fetching. For an implementation (and the hack needed for to-one handling), see {@link ERXGenericRecord}.
+     */
+    
+    public interface AutoBatchFaultingEnterpriseObject extends EOEnterpriseObject {
+    	/**
+    	 * Last time fetched.
+    	 * @return millis of last fetch.
+    	 */
+    	public long batchFaultingTimeStamp();
+    	
+    	/**
+    	 * Updates the last time this object was fetched.
+    	 * @param fetchTimestamp
+    	 */
+    	public void setBatchFaultingTimestamp(long fetchTimestamp);
+    	
+    	/**
+    	 * Marks the object as touched from the specified source with the specified key.
+    	 * @param toucher
+    	 * @param relationship name of relationship
+    	 */
+    	public void touchFromBatchFaultingSource(AutoBatchFaultingEnterpriseObject toucher, String relationship);
+    	
+    	/**
+    	 * The GID of the object that last touched us, or null.
+    	 * @return gid of touching object.
+    	 */
+		public EOGlobalID batchFaultingSourceGlobalID();
+		
+		/**
+		 * The key through which we were last accessed.
+		 * @return relationship name or null
+		 */
+    	public String batchFaultingRelationshipName();
+    }
+
+    /**
+     * Refreshes the fetch timestamp for the fetched objects.
+     * @param eos
+     * @param ec
+     */
+	private void freshenFetchTimestamps(NSArray eos, EOEditingContext ec) {
+		for(Object eo: eos) {
+			if (eo instanceof AutoBatchFaultingEnterpriseObject) {
+				AutoBatchFaultingEnterpriseObject ft = (AutoBatchFaultingEnterpriseObject) eo;
+				ft.setBatchFaultingTimestamp(ec.fetchTimestamp());
+			}
+		}
+	}
+
+	/**
+	 * Fetches the to-many fault and the faults of all other objects in the EC
+	 * that have the same relationship, the fetch timestamp and the same class
+	 * description.<br>
+	 * 
+	 * @param dbc
+	 *            database context
+	 * @param obj
+	 *            to-many fault
+	 * @return true if it's still a fault.
+	 */
+	private synchronized boolean batchFetchToManyFault(EODatabaseContext dbc, Object obj) {
+		if (!fetchingToMany) {
+			fetchingToMany = true;
+			try {
+				EOAccessArrayFaultHandler handler = (EOAccessArrayFaultHandler) EOFaultHandler.handlerForFault(obj);
+				EOGlobalID source = handler.sourceGlobalID();
+				EOEditingContext ec = handler.editingContext();
+				EOEnterpriseObject sourceEO = ec.faultForGlobalID(source, ec);
+				if (sourceEO instanceof AutoBatchFaultingEnterpriseObject) {
+					String key = handler.relationshipName();
+					EOEntityClassDescription cd = (EOEntityClassDescription) sourceEO.classDescription();
+					EORelationship relationship = cd.entity().relationshipNamed(key);
+					if (shouldBatchFetch(sourceEO.entityName(), relationship)) {
+						long timestamp = ((AutoBatchFaultingEnterpriseObject) sourceEO).batchFaultingTimeStamp();
+						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
+						for (EOEnterpriseObject eo : (NSArray<EOEnterpriseObject>) ec.registeredObjects()) {
+							if (eo instanceof AutoBatchFaultingEnterpriseObject) {
+								if (((AutoBatchFaultingEnterpriseObject) eo).batchFaultingTimeStamp() == timestamp) {
+									if (!EOFaultHandler.isFault(eo) && eo.classDescription() == sourceEO.classDescription()) {
+										if (EOFaultHandler.isFault(eo.storedValueForKey(key))) {
+											eos.addObject(eo);
+											if (eos.count() == autoBatchFetchSize()) {
+												break;
+											}
+										}
+									}
+								}
+							}
+						}
+						if (eos.count() > 1) {
+							// dbc.batchFetchRelationship(relationship, eos, ec);
+							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
+							log.info("Fetched to-many " + relationship.destinationEntity().name() + " " + eos.count() + " for " + key);
+							return EOFaultHandler.isFault(obj);
+						}
+					}
+				}
+			}
+			finally {
+				fetchingToMany = false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Fetches the to-one fault and the faults of all other objects in the EC
+	 * that have the same relationship, the fetch timestamp and the same class
+	 * description.<br>
+	 * 
+	 * @param dbc
+	 *            database context
+	 * @param obj
+	 *            to-one fault
+	 * @return true if it's still a fault.
+	 */
+
+	private synchronized boolean batchFetchToOneFault(EODatabaseContext dbc, AutoBatchFaultingEnterpriseObject eo) {
+		if(!fetchingToOne) {
+			fetchingToOne = true;
+			try {
+				EOGlobalID sourceGID = eo.batchFaultingSourceGlobalID();
+				String key = eo.batchFaultingRelationshipName();
+				if(sourceGID != null && key != null) {
+					EOEditingContext ec = eo.editingContext();
+					AutoBatchFaultingEnterpriseObject source = (AutoBatchFaultingEnterpriseObject) ec.faultForGlobalID(sourceGID, ec);
+					EOEntityClassDescription cd = (EOEntityClassDescription)source.classDescription();
+					EORelationship relationship = cd.entity().relationshipNamed(key);
+					if(shouldBatchFetch(source.entityName(), relationship) && !relationship.isToMany()) {
+						long timeStamp = source.batchFaultingTimeStamp();
+						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
+						for (EOEnterpriseObject current : (NSArray<EOEnterpriseObject>)ec.registeredObjects()) {
+							if (current instanceof AutoBatchFaultingEnterpriseObject) {
+								AutoBatchFaultingEnterpriseObject currentEO = (AutoBatchFaultingEnterpriseObject) current;
+								if(source.classDescription() == currentEO.classDescription()) {
+									if(EOFaultHandler.isFault(currentEO.storedValueForKey(key))) {
+										if(currentEO.batchFaultingTimeStamp() == timeStamp) {
+											eos.addObject(currentEO);
+											if(eos.count() == autoBatchFetchSize()) {
+												break;
+											}
+										}
+									}
+								}
+							}
+						}
+						if(eos.count() > 1) {
+							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
+							// dbc.batchFetchRelationship(relationship, eos, ec);
+							log.info("Fetched to-one " + relationship.destinationEntity().name() + " " + eos.count() + " for " + key);
+							return EOFaultHandler.isFault(eo);
+						}
+					}
+				}
+			} finally {
+				fetchingToOne = false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Override this to skip fetching for the given entity and relationship. The
+	 * default is to skip abstract destination entities. You might want to include very large destinations and so on.
+	 * 
+	 * @param entityName
+	 * @param relationship
+	 * @return true if batch fetching should proceed (the default)
+	 */
+	protected boolean shouldBatchFetch(String entityName, EORelationship relationship) {
+		return !relationship.destinationEntity().isAbstractEntity();
+	}
 }

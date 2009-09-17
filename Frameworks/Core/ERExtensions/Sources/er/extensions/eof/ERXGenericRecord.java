@@ -32,11 +32,11 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXExtensions;
 import er.extensions.crypting.ERXCrypto;
+import er.extensions.eof.ERXDatabaseContextDelegate.AutoBatchFaultingEnterpriseObject;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXProperties;
@@ -77,7 +77,7 @@ import er.extensions.validation.ERXValidationFactory;
  * on, you must set the system default
  * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
  */
-public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject, ERXKey.ValueCoding {
+public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject, ERXKey.ValueCoding, AutoBatchFaultingEnterpriseObject {
 
 	/** holds all subclass related Logger's */
 	private static NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
@@ -146,6 +146,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return null;
 	}
 
+	/**
+	 * Special binding for localized key support.
+	 * @author ak
+	 *
+	 */
 	public static class LocalizedBinding extends NSKeyValueCoding._KeyBinding {
 
 		public LocalizedBinding(String key) {
@@ -180,18 +185,44 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		}
 	}
 
-	@Override
-	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
-		NSKeyValueCoding._KeyBinding result;
-		String localizedKey = localizedKey(key);
-		if (localizedKey != null) {
-			result = new LocalizedBinding(key);
-		}
-		else {
-			result = super._otherStorageBinding(key);
-		}
-		return result;
-	}
+    /**
+     * Special binding that touches the target of a relationship. Needed for automatic batch faulting.
+     * @author ak
+     *
+     */
+    public static class TouchingBinding extends _LazyDictionaryBinding {
+
+        public TouchingBinding(String key) {
+            super(key);
+        }
+        
+        @Override
+        public Object valueInObject(Object object) {
+             Object result = super.valueInObject(object);
+             if(result instanceof AutoBatchFaultingEnterpriseObject && EOFaultHandler.isFault(result)) {
+                 AutoBatchFaultingEnterpriseObject eo = (AutoBatchFaultingEnterpriseObject)object;
+                 AutoBatchFaultingEnterpriseObject target = (AutoBatchFaultingEnterpriseObject)result;
+                 target.touchFromBatchFaultingSource(eo, key());
+             }
+             return result;
+        }
+    }
+    
+
+    @Override
+    public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
+    	NSKeyValueCoding._KeyBinding result;
+    	String localizedKey = localizedKey(key);
+    	if (classDescription().toOneRelationshipKeys().containsObject(key)) {
+    		result = new TouchingBinding(key);
+    	} else if (localizedKey != null) {
+    		result = new LocalizedBinding(key);
+    	}
+    	else {
+    		result = super._otherStorageBinding(key);
+    	}
+    	return result;
+    }
 
 	/**
 	 * Clazz object implementation for ERXGenericRecord. See
@@ -1568,4 +1599,61 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			}
 		}
 	}
+
+	/** 
+	 * Last fetch time
+	 */
+    private long _fetchTime;
+    
+    /**
+     * Which key touched us
+     */
+    private String _touchKey;
+    
+    /**
+     * Which GID touched us
+     */
+    public EOGlobalID _touchSource;
+
+    /**
+     * The fetch time for this object
+     * @return fetch time
+     */
+    public long batchFaultingTimeStamp() {
+        return _fetchTime;
+    }
+    
+    /**
+     * The source EO that touched us
+     * @return gid of the source
+     */
+    public EOGlobalID batchFaultingSourceGlobalID() {
+        return _touchSource;
+    }
+    
+    /**
+     * The key that touched us
+     * @return relationship name
+     */
+    public String batchFaultingRelationshipName() {
+        return _touchKey;
+    }
+
+    /**
+     * Touches this EO with the given source and the given key. Stores GID and timestamp.
+     * @param toucher
+     * @param key
+     */
+    public void touchFromBatchFaultingSource(AutoBatchFaultingEnterpriseObject toucher, String key) {
+       _touchKey = key;
+       _touchSource = toucher.editingContext().globalIDForObject(toucher);
+    }
+
+    /**
+     * Touches this EO from a fetch. Note that this is the last fetch, not when the object has been initialized.
+     * @param timestamp
+     */
+    public void setBatchFaultingTimestamp(long timestamp) {
+        _fetchTime = timestamp;
+    }
 }
