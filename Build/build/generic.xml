@@ -347,6 +347,7 @@ There are many ways to use this script:
             <test name="${test.className}" if="test.className" />
             <formatter type="brief" usefile="false" />
             <classpath refid="wo.exec.test.path" />
+            <sysproperty key="build.root" value="${build.root}" />
         </junit>
     </target>
 

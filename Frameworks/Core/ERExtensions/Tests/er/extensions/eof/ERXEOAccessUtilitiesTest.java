@@ -17,17 +17,22 @@ import junit.framework.TestCase;
 
 public class ERXEOAccessUtilitiesTest extends TestCase {
 
-    EOModel memories = null;
+    EOModel ajaxModel = null;
     EOEditingContext ec = null;
+
+    static String buildRoot;
+    static {
+         buildRoot = System.getProperty("build.root");
+    }
 
     void loadModels() {
 
         EOModelGroup.setDefaultGroup(new EOModelGroup());
 
         try {
-            EOModelGroup.defaultGroup().addModel(new EOModel(new java.net.URL("file:///Users/ray/Documents/workspace/MemTest/Resources/MemoryModel.eomodeld")));
+            EOModelGroup.defaultGroup().addModel(new EOModel(new java.net.URL("file://"+buildRoot+"/AjaxExample.woa/Contents/Resources/AjaxExample.eomodeld")));
         } catch (java.net.MalformedURLException mue) { System.out.println("mue: "+mue); }
-        memories = EOModelGroup.defaultGroup().modelNamed("MemoryModel");
+        ajaxModel = EOModelGroup.defaultGroup().modelNamed("AjaxExample");
         ec = new EOEditingContext();
     }
 
@@ -51,29 +56,32 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
     public void testEntityMatchingString() {
         this.loadModels();
 
-        EOEntity found1 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeE1Place");
-        Assert.assertSame(memories.entityNamed("E1"), found1);
+        EOEntity found1 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeCompanyPlace");
+        Assert.assertSame(ajaxModel.entityNamed("Company"), found1);
 
-        EOEntity found2 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeE2Thing");
-        Assert.assertSame(memories.entityNamed("E2"), found2);
+        EOEntity found2 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeEmployeeThing");
+        Assert.assertSame(ajaxModel.entityNamed("Employee"), found2);
 
-        EOEntity found3 = ERXEOAccessUtilities.entityMatchingString(ec, "E1Thing");
-        Assert.assertSame(memories.entityNamed("E1"), found3);
+        EOEntity found3 = ERXEOAccessUtilities.entityMatchingString(ec, "CompanyThing");
+        Assert.assertSame(ajaxModel.entityNamed("Company"), found3);
 
-        EOEntity found4 = ERXEOAccessUtilities.entityMatchingString(ec, "ThatE1");
-        Assert.assertSame(memories.entityNamed("E1"), found4);
+        EOEntity found4 = ERXEOAccessUtilities.entityMatchingString(ec, "ThatCompany");
+        Assert.assertSame(ajaxModel.entityNamed("Company"), found4);
 
-        EOEntity found5 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeGarbage");
-        Assert.assertNull(found5);
+        EOEntity found5 = ERXEOAccessUtilities.entityMatchingString(ec, "Company");
+        Assert.assertSame(ajaxModel.entityNamed("Company"), found5);
 
-        EOEntity found6 = ERXEOAccessUtilities.entityMatchingString(ec, null);
+        EOEntity found6 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeGarbage");
         Assert.assertNull(found6);
 
-        EOEntity found7 = ERXEOAccessUtilities.entityMatchingString(null, "SomeThing");
+        EOEntity found7 = ERXEOAccessUtilities.entityMatchingString(ec, null);
         Assert.assertNull(found7);
 
-        EOEntity found8 = ERXEOAccessUtilities.entityMatchingString(null, null);
+        EOEntity found8 = ERXEOAccessUtilities.entityMatchingString(null, "SomeThing");
         Assert.assertNull(found8);
+
+        EOEntity found9 = ERXEOAccessUtilities.entityMatchingString(null, null);
+        Assert.assertNull(found9);
     }
 
     public void testEntityUsingTable() {
@@ -86,9 +94,9 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
     public void testEntityWithNamedIsShared() {
         this.loadModels();
 
-        Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(ec, "E1"));
-        Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(ec, "E2"));
-        Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(null, "E1"));
+        Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(ec, "Company"));
+        Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(ec, "Employee"));
+        Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(null, "Company"));
 
         try {
             boolean check = ERXEOAccessUtilities.entityWithNamedIsShared(ec, null);
@@ -99,17 +107,20 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
     public void testEntityNamed() {
         this.loadModels();
 
-        EOEntity found1 = ERXEOAccessUtilities.entityNamed(ec, "E1");
+        // It would be more obvious to use EOEntity equals here, but that method does not seem to work,
+        // sees differences. -rrk
+        //
+        EOEntity found1 = ERXEOAccessUtilities.entityNamed(ec, "Company");
         Assert.assertNotNull(found1);
-        Assert.assertEquals(EOModelGroup.defaultGroup().entityNamed("E1").name(), found1.name());
+        Assert.assertEquals(EOModelGroup.defaultGroup().entityNamed("Company").name(), found1.name());
 
-        EOEntity found2 = ERXEOAccessUtilities.entityNamed(ec, "E2");
+        EOEntity found2 = ERXEOAccessUtilities.entityNamed(ec, "Employee");
         Assert.assertNotNull(found2);
-        Assert.assertEquals(EOModelGroup.defaultGroup().entityNamed("E2").name(), found2.name());
+        Assert.assertEquals(EOModelGroup.defaultGroup().entityNamed("Employee").name(), found2.name());
 
-        EOEntity found3 = ERXEOAccessUtilities.entityNamed(null, "E1");
+        EOEntity found3 = ERXEOAccessUtilities.entityNamed(null, "Company");
         Assert.assertNotNull(found3);
-        Assert.assertEquals(EOModelGroup.defaultGroup().entityNamed("E1").name(), found3.name());
+        Assert.assertEquals(EOModelGroup.defaultGroup().entityNamed("Company").name(), found3.name());
 
         Assert.assertNull(ERXEOAccessUtilities.entityNamed(ec, null));
     }
