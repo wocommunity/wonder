@@ -286,6 +286,9 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## only log an error. Default is unset.
 # er.extensions.ERXDatabaseContextDelegate.tolerantEntityPattern = ^(Entity1|Entity3)$
 
+## The batch size for automatic batch faulting, default is 0 for unset
+# er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize = 100
+
 #########################################################################
 # ERXEC 
 #########################################################################
