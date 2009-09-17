@@ -295,19 +295,19 @@ public class ERXMetrics {
             }
 
             // Handle the current event.
-            Long duration = (Long)dictForEventType.valueForKey("duration");
+            Long duration = (Long)dictForEventType.valueForKey(ERXMetricsEvent.Keys.Duration);
             if (null == duration) {
                 duration = 0L;
             }
             duration += event.duration();//durationWithoutSubEvents
-            dictForEventType.setObjectForKey(duration, "duration");
+            dictForEventType.setObjectForKey(duration, ERXMetricsEvent.Keys.Duration);
 
             // Handle sub events.
             if (event.hasSubEvents()) {
                 NSDictionary aggregateEventInfoByType = aggregateEventInfoByTypeForEventsInArray(event.subEvents());
                 for (Enumeration keyEnum = aggregateEventInfoByType.allKeys().objectEnumerator(); keyEnum.hasMoreElements();) {
                     String aType = (String)keyEnum.nextElement();
-                    Long subduration = (Long)aggregateEventInfoByType.valueForKey("duration");
+                    Long subduration = (Long)aggregateEventInfoByType.valueForKey(ERXMetricsEvent.Keys.Duration);
                     if (null == subduration) {
                         subduration = 0L;
                     }
@@ -317,12 +317,12 @@ public class ERXMetrics {
                         dictForEventType = new NSMutableDictionary();
                         eventsDict.setObjectForKey(dictForEventType, aType);
                     }
-                    Long aggregateDuration = (Long)dictForEventType.valueForKey("duration");
+                    Long aggregateDuration = (Long)dictForEventType.valueForKey(ERXMetricsEvent.Keys.Duration);
                     if (null == aggregateDuration) {
                         aggregateDuration = 0L;
                     }
                     aggregateDuration += subduration;
-                    dictForEventType.setObjectForKey(aggregateDuration, "duration");
+                    dictForEventType.setObjectForKey(aggregateDuration, ERXMetricsEvent.Keys.Duration);
                 }
             }
         }
