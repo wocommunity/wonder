@@ -177,6 +177,7 @@ public class ERXEOAccessUtilities {
      * @param entityName
      *            name of the entity
      * @return if the entity is a shared entity
+     * @throws IllegalStateException if the entityName provided is null
      */
     public static boolean entityWithNamedIsShared(EOEditingContext ec, String entityName) {
         if (entityName == null)
@@ -474,7 +475,7 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Similar to the helper in EUUtilities, but allows for null editingContext.
+     * Similar to the helper in EOUtilities, but allows for null editingContext.
      * If ec is null, it will try to get at the session via thread storage and
      * use its defaultEditingContext. This is here now so we can remove the
      * delegate in ERXApplication.
@@ -504,7 +505,7 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Similar to the helper in EUUtilities, but allows for null editingContext.
+     * Similar to the helper in EOUtilities, but allows for null editingContext.
      * 
      * @param ec
      *            editing context used to locate the model group (can be null)
