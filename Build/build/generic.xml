@@ -162,6 +162,7 @@ There are many ways to use this script:
         <property name="web.framework.install.root" value="${wo.server.root}/Frameworks" />
         <property name="wonder.application.install.root" value="${wo.local.root}/Library/WebObjects/JavaApplications" />
         <property name="web.application.install.root" value="${wo.server.root}" />
+        <property name="fRJ" value="framework/Resources/Java" />
         <!-- just some existing value -->
         <property name="project.sources.dir" value="${project.dir}/Sources" />
         <property name="project.tests.dir" value="${project.dir}/Tests" />
@@ -308,7 +309,7 @@ There are many ways to use this script:
            <exclude name="${classes.exclude.1}" />
            <exclude name="${classes.exclude.2}" />
            <classpath>
-                <pathelement location="${build.root}/ERJars.framework/Resources/Java/junit.jar" />
+                <pathelement location="${build.root}/ERJars.framework/${fRJ}/junit.jar" />
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />
                     <!-- ak: i know, fix this...-->
@@ -324,24 +325,28 @@ There are many ways to use this script:
     </target>
 
     <target name="global.framework.test" depends="global.properties">
-        <junit haltonfailure="yes">
+        <path id="wo.exec.test.path">
+            <pathelement location="${build.root}/ERJars.${fRJ}/junit.jar" />
+            <pathelement location="${build.root}/DerbyPlugIn.${fRJ}/derby.jar" />
+            <pathelement location="${build.root}/DerbyPlugIn.${fRJ}/DerbyPlugIn.jar" />
+            <pathelement location="${build.root}/DerbyPlugIn.${fRJ}/derbytools.jar" />
+            <pathelement location="${build.root}/ERCalendar.${fRJ}/ERCalendar.jar" />
+            <pathelement location="${build.root}/ERChronic.${fRJ}/commons-lang-2.4.jar" />
+            <pathelement location="${build.root}/ERChronic.${fRJ}/ERChronic.jar" />
+            <pathelement location="${build.root}/ERExtensions.${fRJ}/ERExtensions.jar" />
+            <pathelement location="${build.root}/JavaMemoryAdaptor.${fRJ}/JavaMemoryAdaptor.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaEOAccess.${fRJ}/javaeoaccess.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaEOControl.${fRJ}/javaeocontrol.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaFoundation.${fRJ}/javafoundation.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaJDBCAdaptor.${fRJ}/javajdbcadaptor.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaWebObjects.${fRJ}/javawebobjects.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaXML.${fRJ}/javaxml.jar" />
+        </path>
+
+        <junit haltonfailure="yes" fork="yes">
             <test name="${test.className}" if="test.className" />
             <formatter type="brief" usefile="false" />
-            <classpath>
-
-                <!-- XXX - Including these three filesets in this way is not the best way to go. It would be better
-                           to get the list of frameworks that the project is dependent on to build, and then we may
-                           also need another thing in the build.xml entry for the project to declare frameworks
-                           that are only run-time dependencies. -rrk, Fri Aug  7 13:21:11 PDT 2009 -->
-
-                <fileset dir="${build.root}"><include name="*.framework/Resources/Java/*.jar"/></fileset>
-                <fileset dir="${wo.local.frameworks}"><include name="*.framework/Resources/Java/*.jar"/></fileset>
-                <fileset dir="${wo.system.frameworks}"><include name="*.framework/Resources/Java/*.jar"/></fileset>
-
-                <pathelement location="${build.root}/${project.name}-${project.version}.jar" />
-                <pathelement path="${build.root}/${project.name}.framework/Resources/Java/*.jar" />
-                <pathelement location="${build.root}/ERJars.framework/Resources/Java/junit.jar" />
-            </classpath>
+            <classpath refid="wo.exec.test.path" />
         </junit>
     </target>
 
