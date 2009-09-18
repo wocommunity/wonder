@@ -519,6 +519,18 @@ public class ERXDatabaseContextDelegate {
 			}
 		}
 	}
+	
+	private void markStart(String type, EOEnterpriseObject eo, String key) {
+		if(ERXStats.isTrackingStatistics()) {
+			ERXStats.markStart(type + "."+ eo.entityName()+"."+key);
+		}
+	}
+	
+	private void markEnd(String type, EOEnterpriseObject eo, String key) {
+		if(ERXStats.isTrackingStatistics()) {
+			ERXStats.markEnd(type + "."+ eo.entityName()+"."+key);
+		}
+	}
 
 	/**
 	 * Fetches the to-many fault and the faults of all other objects in the EC
@@ -545,7 +557,7 @@ public class ERXDatabaseContextDelegate {
 					if (_handler.batchSizeForRelationship(ec, relationship) > 0) {
 						long timestamp = ((AutoBatchFaultingEnterpriseObject) source).batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
-						ERXStats.markStart("_ToManyBatchFaultCalculation."+ source.entityName()+"."+key);
+						markStart("_ToManyBatchFaultCalculation", source, key);
 						for (EOEnterpriseObject eo : (NSArray<EOEnterpriseObject>) ec.registeredObjects()) {
 							if (eo instanceof AutoBatchFaultingEnterpriseObject) {
 								if (((AutoBatchFaultingEnterpriseObject) eo).batchFaultingTimeStamp() == timestamp) {
@@ -560,12 +572,12 @@ public class ERXDatabaseContextDelegate {
 								}
 							}
 						}
-						ERXStats.markEnd("_ToManyBatchFaultCalculation."+ source.entityName()+"."+key);
+						markEnd("_ToManyBatchFaultCalculation", source, key);
 						if (eos.count() > 1) {
 							// dbc.batchFetchRelationship(relationship, eos, ec);
-							ERXStats.markStart("_ToManyBatchFaultFetching."+ source.entityName()+"."+key);
+							markStart("_ToManyBatchFaultFetching", source, key);
 							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
-							ERXStats.markEnd("_ToManyBatchFaultFetching."+ source.entityName()+"."+key);
+							markEnd("_ToManyBatchFaultFetching", source, key);
 							if(log.isDebugEnabled()) {
 								log.debug("Fetched to-many " + relationship.destinationEntity().name() + " " + eos.count() + " for " + key);
 							}
@@ -605,7 +617,7 @@ public class ERXDatabaseContextDelegate {
 					EOEntityClassDescription cd = (EOEntityClassDescription)source.classDescription();
 					EORelationship relationship = cd.entity().relationshipNamed(key);
 					if(_handler.batchSizeForRelationship(ec, relationship) > 0 && !relationship.isToMany()) {
-						ERXStats.markStart("_ToOneBatchFaultCalculation."+ source.entityName()+"."+key);
+						markStart("_ToOneBatchFaultCalculation", source, key);
 						long timeStamp = source.batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
 						for (EOEnterpriseObject current : (NSArray<EOEnterpriseObject>)ec.registeredObjects()) {
@@ -623,12 +635,12 @@ public class ERXDatabaseContextDelegate {
 								}
 							}
 						}
-						ERXStats.markEnd("_ToOneBatchFaultCalculation."+ source.entityName()+"."+key);
+						markEnd("_ToOneBatchFaultCalculation", source, key);
 						if(eos.count() > 1) {
-							ERXStats.markStart("_ToOneBatchFaultFetching."+ source.entityName()+"."+key);
+							markStart("_ToOneBatchFaultFetching", source, key);
 							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
 							// dbc.batchFetchRelationship(relationship, eos, ec);
-							ERXStats.markEnd("_ToOneBatchFaultFetching."+ source.entityName()+"."+key);
+							markEnd("_ToOneBatchFaultFetching", source, key);
 							if(log.isDebugEnabled()) {
 								log.debug("Fetched to-one " + relationship.destinationEntity().name() + " " + eos.count() + " for " + key);
 							}
