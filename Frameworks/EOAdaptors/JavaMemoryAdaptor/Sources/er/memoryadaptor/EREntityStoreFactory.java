@@ -1,9 +1,8 @@
 package er.memoryadaptor;
 
-import java.util.Enumeration;
-
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
@@ -154,15 +153,16 @@ public class EREntityStoreFactory {
   
   private NSSet<EOEntity> _relatedEntities(EOEntity entity) {
     NSMutableSet<EOEntity> entities = new NSMutableSet<EOEntity>();
-    Enumeration<EOAttribute> e = entity.attributesToFetch().objectEnumerator();
-    while (e.hasMoreElements()) {
-      EOAttribute attrib = e.nextElement();
+    for (EOAttribute attrib : (NSArray<EOAttribute>) entity.attributesToFetch()) {
       if (attrib.isDerived()) {
         attrib = entity._attributeForPath(attrib.definition());
         if (attrib != null)
           entities.add(attrib.entity());
       }
     }
+//    for (EORelationship rel : (NSArray<EORelationship>) entity._hiddenRelationships()) {
+//      entities.add(rel.destinationEntity());
+//    }
     return entities;
   }
 }
