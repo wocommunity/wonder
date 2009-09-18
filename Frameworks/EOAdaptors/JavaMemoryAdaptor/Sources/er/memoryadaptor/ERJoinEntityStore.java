@@ -11,6 +11,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -35,11 +36,11 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
   @Override
   public NSMutableArray<NSMutableDictionary<String, Object>> fetch(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification,
       boolean shouldLock, EOEntity entity) {
-    EREntityStore store = joinedStore(attributesToFetch, entity);
+    EREntityStore store = joinedStore(attributesToFetch, fetchSpecification, entity);
     return store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity);
   }
 
-  private EREntityStore joinedStore(NSArray<EOAttribute> attributesToFetch, EOEntity entity) {
+  private EREntityStore joinedStore(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification, EOEntity entity) {
     EREntityStore store = _stores.objectForKey(entity);
     for (EOAttribute attrib : attributesToFetch) {
       if (attrib.isFlattened()) {
@@ -48,6 +49,16 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
         store = join(_rel, store, _stores.objectForKey(_attrib.entity()));
       }
     }
+    // We need to check the qualifier for _hiddenRelationships and include them if referenced
+//    for (EORelationship rel : (NSArray<EORelationship>) entity._hiddenRelationships()) {
+//      if (rel.isFlattened()) {
+//        for (EORelationship compRel : (NSArray<EORelationship>) rel.componentRelationships()) {
+//          store = join(compRel, store, _stores.objectForKey(compRel.destinationEntity()));
+//        }
+//      } else {
+//        store = join(rel, store, _stores.objectForKey(rel.destinationEntity()));
+//      }
+//    }
     return store;
   }
 
@@ -60,7 +71,7 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
 
   @Override
   public Iterator<NSMutableDictionary<String, Object>> iterator() {
-    return joinedStore(_entity.attributesToFetch(), _entity).iterator();
+    return joinedStore(_entity.attributesToFetch(), null, _entity).iterator();
   }
 
   @Override
@@ -143,8 +154,8 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
             break;
           }
           for (Entry<EOAttribute, EOAttribute> entry : attributeMap.entrySet()) {
-            String srcKey = entry.getKey().name();
-            String dstKey = entry.getValue().name();
+            String srcKey = entry.getKey().columnName();
+            String dstKey = entry.getValue().columnName();
             Object srcValue = src.objectForKey(srcKey);
             Object dstValue = dst.objectForKey(dstKey);
             if (srcValue == dstValue || srcValue != null && srcValue.equals(dstValue)) {
@@ -169,10 +180,10 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
           if (attrib.isFlattened() && relationship.equals(rel)) {
             String dstKey = entity._attributeForPath(attrib.definition()).columnName();
             Object value = dst.objectForKey(dstKey);
-            if (value != null)
-              row.setObjectForKey(value, dstKey);
+            row.setObjectForKey(value != null ? value : NSKeyValueCoding.NullValue, attrib.definition());
           }
         }
+        //row.takeValueForKeyPath(rowFromStoredValues(dst, relationship.entity()), relationship.name());
         return row;
       }
 

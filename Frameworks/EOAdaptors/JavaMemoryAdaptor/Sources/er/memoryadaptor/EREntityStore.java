@@ -9,6 +9,7 @@ import ognl.Ognl;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
@@ -43,7 +44,8 @@ public abstract class EREntityStore {
       int count = 0;
       Iterator<NSMutableDictionary<String, Object>> i = iterator();
       while (i.hasNext()) {
-        NSMutableDictionary<String, Object> row = i.next();
+        NSMutableDictionary<String, Object> rawRow = i.next();
+        NSMutableDictionary<String, Object> row = rowFromStoredValues(rawRow, entity);
         if (qualifier == null || qualifier.evaluateWithObject(row)) {
           i.remove();
           count++;
@@ -88,11 +90,10 @@ public abstract class EREntityStore {
     if (sortOrderings != null) {
       EOSortOrdering.sortArrayUsingKeyOrderArray(fetchedRows, sortOrderings);
     }
-
     return fetchedRows;
   }
 
-  private NSMutableDictionary<String, Object> rowFromStoredValues(NSMutableDictionary<String, Object> rawRow, EOEntity entity) {
+  protected NSMutableDictionary<String, Object> rowFromStoredValues(NSMutableDictionary<String, Object> rawRow, EOEntity entity) {
     NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(rawRow.count()); 
     for (EOAttribute attribute : (NSArray<EOAttribute>)entity.attributesToFetch()) {
       Object value = rawRow.objectForKey(attribute.columnName());
@@ -108,7 +109,7 @@ public abstract class EREntityStore {
             t.printStackTrace();
           }
         } else {
-          String dstKey = entity._attributeForPath(attribute.definition()).columnName();
+          String dstKey = attribute.definition();
           value = rawRow.objectForKey(dstKey);
         }
       }
@@ -125,8 +126,8 @@ public abstract class EREntityStore {
       for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
         EOAttribute attribute = (EOAttribute) e.nextElement();
         Object value = row.objectForKey(attribute.name());
-        if (value != null && !attribute.isDerived())
-          mutableRow.setObjectForKey(value, attribute.columnName());
+        if (!attribute.isDerived())
+          mutableRow.setObjectForKey(value != null ? value : NSKeyValueCoding.NullValue, attribute.columnName());
       }
       _insertRow(mutableRow, entity);
     }
