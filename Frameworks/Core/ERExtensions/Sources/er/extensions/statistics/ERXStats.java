@@ -149,7 +149,7 @@ public class ERXStats {
 		NSMutableDictionary<String, LogEntry> statistics = ERXStats.statistics();
 		if (statistics != null) {
 			synchronized (statistics) {
-				entry = (LogEntry) statistics.objectForKey(key);
+				entry = statistics.objectForKey(key);
 				if (entry == null) {
 					entry = new LogEntry(key);
 					statistics.setObjectForKey(entry, key);
@@ -277,7 +277,7 @@ public class ERXStats {
 	 * key. Note that no log message is output if there aren't any values
 	 * 
 	 * @param operation
-	 *            operation to sort on ("sum", "count", "min", "max", "avg")
+	 *            operation to sort on ("sum", "count", "min", "max", "avg", "key")
 	 */
 	public static void logStatisticsForOperation(Logger statsLog, String operation) {
 		if(statsLog.isDebugEnabled()) {
@@ -293,9 +293,10 @@ public class ERXStats {
 						// result = result.replaceAll("\\n\\t", "\n\t\t");
 						// result = result.replaceAll("\\n", "\n\t\t");
 						statsLog.debug(
-								(startTime != null ? "Time since init " + (currentTime - startTime.longValue()) + " ms ": "" ) + 
-								(lastTime != null ? ", last log " + (currentTime - lastTime.longValue()) + " ms ": "" ) + 
-								"(cnt/sum : min/max/avg|trace cnt -> key) = " + result);
+								(startTime != null ? "Time since init " + (currentTime - startTime.longValue()) + " ms": "" ) + 
+								(lastTime != null ? ", last log " + (currentTime - lastTime.longValue()) + " ms": "" ) + 
+								", total cnt/sum: " + statistics.allValues().valueForKeyPath("@sum.count") + "/" + statistics.allValues().valueForKeyPath("@sum.sum") +
+								" (cnt/sum : min/max/avg|trace cnt -> key) = " + result);
 						ERXThreadStorage.takeValueForKey(new Long(currentTime), ERXStats.STATS_LAST_TIME_KEY);
 					}
 				}
