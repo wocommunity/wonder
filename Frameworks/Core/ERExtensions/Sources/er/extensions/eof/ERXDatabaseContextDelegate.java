@@ -582,14 +582,17 @@ public class ERXDatabaseContextDelegate {
 							// dbc.batchFetchRelationship(relationship, eos, ec);
 							// ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
 							ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
+							int cnt = 0;
 							for(Object fault: faults) {
 								if(!EOFaultHandler.isFault(fault)) {
-									freshenFetchTimestamps((NSArray)fault, timestamp);
+									NSArray array = (NSArray)fault;
+									freshenFetchTimestamps(array, timestamp);
+									cnt += array.count();
 								}
 							}
 							markEnd("_ToManyBatchFaultFetching", source, key);
 							if(batchLog.isDebugEnabled()) {
-								batchLog.debug("Fetched to-many " + relationship.destinationEntity().name() + " from " + eos.count() +  " " + source.entityName() + " for " + key);
+								batchLog.debug("Fetched " + cnt + " to-many " + relationship.destinationEntity().name() + " from " + eos.count() +  " " + source.entityName() + " for " + key);
 							}
 							return EOFaultHandler.isFault(obj);
 						}
@@ -659,7 +662,7 @@ public class ERXDatabaseContextDelegate {
 							freshenFetchTimestamps(faults.allObjects(), timestamp);
 							markEnd("_ToOneBatchFaultFetching", source, key);
 							if(batchLog.isDebugEnabled()) {
-								batchLog.debug("Fetched to-one " + relationship.destinationEntity().name() + " from " + eos.count() +  " " + source.entityName() + " for " + key);
+								batchLog.debug("Fetched " + faults.count() + " to-one " + relationship.destinationEntity().name() + " from " + eos.count() +  " " + source.entityName() + " for " + key);
 							}
 							return EOFaultHandler.isFault(eo);
 						}
