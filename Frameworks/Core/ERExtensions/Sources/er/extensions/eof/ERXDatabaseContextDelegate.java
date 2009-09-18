@@ -46,6 +46,7 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.jdbc.ERXJDBCConnectionAnalyzer;
 import er.extensions.logging.ERXPatternLayout;
+import er.extensions.statistics.ERXStats;
 
 /**
  * This delegate implements several methods from the formal interface
@@ -148,7 +149,8 @@ public class ERXDatabaseContextDelegate {
 		if (fetchResultCache != null) {
 			fetchResultCache.setObjectsForFetchSpecification(dbc, ec, eos, fs);
 		}
-		if(autoBatchFetchSize() > 0) {
+		if(autoBatchFetchSize() > 0 && eos.count() > 0) {
+			//log.info("Freshen: " + fs.entityName() +  " " + eos.count());
 			freshenFetchTimestamps(eos, ec);
 		}
 	}
@@ -438,7 +440,7 @@ public class ERXDatabaseContextDelegate {
     /**
      * Holds the auto batch fetch size.
      */
-    private static int autoBatchFetchSize = -1;
+    public static int autoBatchFetchSize = -1;
     
     /**
      * Returns the batch size for automatic batch faulting from the System property <code>er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize</code>.
@@ -519,20 +521,20 @@ public class ERXDatabaseContextDelegate {
 			fetchingToMany = true;
 			try {
 				EOAccessArrayFaultHandler handler = (EOAccessArrayFaultHandler) EOFaultHandler.handlerForFault(obj);
-				EOGlobalID source = handler.sourceGlobalID();
 				EOEditingContext ec = handler.editingContext();
-				EOEnterpriseObject sourceEO = ec.faultForGlobalID(source, ec);
-				if (sourceEO instanceof AutoBatchFaultingEnterpriseObject) {
+				EOEnterpriseObject source = ec.faultForGlobalID(handler.sourceGlobalID(), ec);
+				if (source instanceof AutoBatchFaultingEnterpriseObject) {
 					String key = handler.relationshipName();
-					EOEntityClassDescription cd = (EOEntityClassDescription) sourceEO.classDescription();
+					EOEntityClassDescription cd = (EOEntityClassDescription) source.classDescription();
 					EORelationship relationship = cd.entity().relationshipNamed(key);
-					if (shouldBatchFetch(sourceEO.entityName(), relationship)) {
-						long timestamp = ((AutoBatchFaultingEnterpriseObject) sourceEO).batchFaultingTimeStamp();
+					if (shouldBatchFetch(source.entityName(), relationship)) {
+						long timestamp = ((AutoBatchFaultingEnterpriseObject) source).batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
+						ERXStats.markStart("_ToManyBatchFaultCalculation."+ source.entityName()+"."+key);
 						for (EOEnterpriseObject eo : (NSArray<EOEnterpriseObject>) ec.registeredObjects()) {
 							if (eo instanceof AutoBatchFaultingEnterpriseObject) {
 								if (((AutoBatchFaultingEnterpriseObject) eo).batchFaultingTimeStamp() == timestamp) {
-									if (!EOFaultHandler.isFault(eo) && eo.classDescription() == sourceEO.classDescription()) {
+									if (!EOFaultHandler.isFault(eo) && eo.classDescription() == source.classDescription()) {
 										if (EOFaultHandler.isFault(eo.storedValueForKey(key))) {
 											eos.addObject(eo);
 											if (eos.count() == autoBatchFetchSize()) {
@@ -543,10 +545,15 @@ public class ERXDatabaseContextDelegate {
 								}
 							}
 						}
+						ERXStats.markEnd("_ToManyBatchFaultCalculation."+ source.entityName()+"."+key);
 						if (eos.count() > 1) {
 							// dbc.batchFetchRelationship(relationship, eos, ec);
+							ERXStats.markStart("_ToManyBatchFaultFetching."+ source.entityName()+"."+key);
 							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
-							log.info("Fetched to-many " + relationship.destinationEntity().name() + " " + eos.count() + " for " + key);
+							ERXStats.markEnd("_ToManyBatchFaultFetching."+ source.entityName()+"."+key);
+							if(log.isDebugEnabled()) {
+								log.debug("Fetched to-many " + relationship.destinationEntity().name() + " " + eos.count() + " for " + key);
+							}
 							return EOFaultHandler.isFault(obj);
 						}
 					}
@@ -583,13 +590,14 @@ public class ERXDatabaseContextDelegate {
 					EOEntityClassDescription cd = (EOEntityClassDescription)source.classDescription();
 					EORelationship relationship = cd.entity().relationshipNamed(key);
 					if(shouldBatchFetch(source.entityName(), relationship) && !relationship.isToMany()) {
+						ERXStats.markStart("_ToOneBatchFaultCalculation."+ source.entityName()+"."+key);
 						long timeStamp = source.batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
 						for (EOEnterpriseObject current : (NSArray<EOEnterpriseObject>)ec.registeredObjects()) {
 							if (current instanceof AutoBatchFaultingEnterpriseObject) {
 								AutoBatchFaultingEnterpriseObject currentEO = (AutoBatchFaultingEnterpriseObject) current;
 								if(source.classDescription() == currentEO.classDescription()) {
-									if(EOFaultHandler.isFault(currentEO.storedValueForKey(key))) {
+									if(!EOFaultHandler.isFault(currentEO) && EOFaultHandler.isFault(currentEO.storedValueForKey(key))) {
 										if(currentEO.batchFaultingTimeStamp() == timeStamp) {
 											eos.addObject(currentEO);
 											if(eos.count() == autoBatchFetchSize()) {
@@ -600,10 +608,15 @@ public class ERXDatabaseContextDelegate {
 								}
 							}
 						}
+						ERXStats.markEnd("_ToOneBatchFaultCalculation."+ source.entityName()+"."+key);
 						if(eos.count() > 1) {
+							ERXStats.markStart("_ToOneBatchFaultFetching."+ source.entityName()+"."+key);
 							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
 							// dbc.batchFetchRelationship(relationship, eos, ec);
-							log.info("Fetched to-one " + relationship.destinationEntity().name() + " " + eos.count() + " for " + key);
+							ERXStats.markEnd("_ToOneBatchFaultFetching."+ source.entityName()+"."+key);
+							if(log.isDebugEnabled()) {
+								log.debug("Fetched to-one " + relationship.destinationEntity().name() + " " + eos.count() + " for " + key);
+							}
 							return EOFaultHandler.isFault(eo);
 						}
 					}
@@ -617,13 +630,15 @@ public class ERXDatabaseContextDelegate {
 
 	/**
 	 * Override this to skip fetching for the given entity and relationship. The
-	 * default is to skip abstract destination entities. You might want to include very large destinations and so on.
+	 * default is to skip abstract destination entities of to.many
+	 * relationships. You might want to include very large destinations and so
+	 * on.
 	 * 
 	 * @param entityName
 	 * @param relationship
-	 * @return true if batch fetching should proceed (the default)
+	 * @return true if batch fetching should proceed
 	 */
 	protected boolean shouldBatchFetch(String entityName, EORelationship relationship) {
-		return !relationship.destinationEntity().isAbstractEntity();
+		return !(relationship.isToMany() && relationship.destinationEntity().isAbstractEntity());
 	}
 }
