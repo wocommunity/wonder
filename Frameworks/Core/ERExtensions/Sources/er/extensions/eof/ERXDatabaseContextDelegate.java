@@ -491,6 +491,21 @@ public class ERXDatabaseContextDelegate {
     	public String batchFaultingRelationshipName();
     }
 
+    public interface BatchHandler {
+
+		/**
+		 * Override this to skip fetching for the given ec and relationship. The
+		 * default is to skip abstract destination entities of to-many
+		 * relationships. You might want to exclude very large destinations or
+		 * sources and so on.
+		 * 
+		 * @param ec
+		 * @param relationship
+		 * @return int batch size (0 for not batch fetch)
+		 */
+    	public int batchSizeForRelationship(EOEditingContext ec, EORelationship rel);
+    }
+    
     /**
      * Refreshes the fetch timestamp for the fetched objects.
      * @param eos
@@ -527,7 +542,7 @@ public class ERXDatabaseContextDelegate {
 					String key = handler.relationshipName();
 					EOEntityClassDescription cd = (EOEntityClassDescription) source.classDescription();
 					EORelationship relationship = cd.entity().relationshipNamed(key);
-					if (shouldBatchFetch(source.entityName(), relationship)) {
+					if (_handler.batchSizeForRelationship(ec, relationship) > 0) {
 						long timestamp = ((AutoBatchFaultingEnterpriseObject) source).batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
 						ERXStats.markStart("_ToManyBatchFaultCalculation."+ source.entityName()+"."+key);
@@ -589,7 +604,7 @@ public class ERXDatabaseContextDelegate {
 					AutoBatchFaultingEnterpriseObject source = (AutoBatchFaultingEnterpriseObject) ec.faultForGlobalID(sourceGID, ec);
 					EOEntityClassDescription cd = (EOEntityClassDescription)source.classDescription();
 					EORelationship relationship = cd.entity().relationshipNamed(key);
-					if(shouldBatchFetch(source.entityName(), relationship) && !relationship.isToMany()) {
+					if(_handler.batchSizeForRelationship(ec, relationship) > 0 && !relationship.isToMany()) {
 						ERXStats.markStart("_ToOneBatchFaultCalculation."+ source.entityName()+"."+key);
 						long timeStamp = source.batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
@@ -628,17 +643,23 @@ public class ERXDatabaseContextDelegate {
 		return true;
 	}
 
+	private static BatchHandler DEFAULT = new BatchHandler() {
+		public int batchSizeForRelationship(EOEditingContext ec, EORelationship relationship) {
+			return (relationship.isToMany() && relationship.destinationEntity().isAbstractEntity()) ? 0 : autoBatchFetchSize();
+		}
+		
+	};
+	
+	private static BatchHandler _handler = DEFAULT;
+	
 	/**
-	 * Override this to skip fetching for the given entity and relationship. The
-	 * default is to skip abstract destination entities of to.many
-	 * relationships. You might want to include very large destinations and so
-	 * on.
-	 * 
-	 * @param entityName
-	 * @param relationship
-	 * @return true if batch fetching should proceed
+	 * Sets the batch handler.
+	 * @param handler
 	 */
-	protected boolean shouldBatchFetch(String entityName, EORelationship relationship) {
-		return !(relationship.isToMany() && relationship.destinationEntity().isAbstractEntity());
+	public void setBatchHandler(BatchHandler handler) {
+		if(handler == null) {
+			handler = DEFAULT;
+		}
+		_handler = handler;
 	}
 }
