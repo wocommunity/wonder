@@ -213,7 +213,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
     	NSKeyValueCoding._KeyBinding result;
     	String localizedKey = localizedKey(key);
-    	if (classDescription().toOneRelationshipKeys().containsObject(key)) {
+    	if (ERXDatabaseContextDelegate.autoBatchFetchSize() > 0 && classDescription().toOneRelationshipKeys().containsObject(key)) {
     		result = new TouchingBinding(key);
     	} else if (localizedKey != null) {
     		result = new LocalizedBinding(key);
