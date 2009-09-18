@@ -1702,7 +1702,7 @@ public class ERXEOAccessUtilities {
       * @param skipFaultedRelationships if true, skip any object whose relationship has already been faulted
       */
      public static void batchFetchRelationship(EODatabaseContext databaseContext, String entityName, String relationshipName, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
-    	 EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+    	 EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, entityName);
     	 EORelationship relationship = entity.relationshipNamed(relationshipName);
     	 ERXEOAccessUtilities.batchFetchRelationship(databaseContext, relationship, objects, editingContext, skipFaultedRelationships);
      }
