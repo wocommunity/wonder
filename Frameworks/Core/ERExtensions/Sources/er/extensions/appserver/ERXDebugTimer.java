@@ -10,6 +10,7 @@ import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.statistics.ERXStats;
+import er.extensions.statistics.ERXStats.Group;
 
 /**
  * Records stats on how long the various phases in the request-response loop
@@ -17,7 +18,7 @@ import er.extensions.statistics.ERXStats;
  * enabled.
  * 
  * @see er.extensions.statistics.ERXStats
- *
+ * @binding displayName name of the item in the stats (defaults to parent name)
  * @author ak
  * @author mschrag
  */
@@ -29,17 +30,24 @@ public class ERXDebugTimer extends WODynamicGroup {
 		_displayName = (WOAssociation) associations.valueForKey("displayName");
 	}
 
+	private String keyInContext(WOContext context, String suffix) {
+		String name = (_displayName != null) ? (String) _displayName.valueInComponent(context.component()) : null;
+		if(context.component() != null) {
+			name = context.component().name();
+		}
+		if(name == null) {
+			name = "ERXDebugTimer";
+		}
+		return name + "." + suffix;
+	}
+
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if (ERXStats.isTrackingStatistics()) {
-			String name = (_displayName != null) ? (String) _displayName.valueInComponent(context.component()) : "ERXDebugTimer";
-			ERXStats.markStart(name + ": takeValuesFromRequest");
-			try {
-				super.takeValuesFromRequest(request, context);
-			}
-			finally {
-				ERXStats.markEnd(name + ": takeValuesFromRequest");
-			}
+			String key = keyInContext(context, "takeValuesFromRequest");
+			ERXStats.markStart(Group.Component, key);
+			super.takeValuesFromRequest(request, context);
+			ERXStats.markEnd(Group.Component, key);
 		}
 		else {
 			super.takeValuesFromRequest(request, context);
@@ -48,32 +56,26 @@ public class ERXDebugTimer extends WODynamicGroup {
 
 	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
+		WOActionResults result;
 		if (ERXStats.isTrackingStatistics()) {
-			String name = (_displayName != null) ? (String) _displayName.valueInComponent(context.component()) : "ERXDebugTimer";
-			ERXStats.markStart(name + ": invokeAction");
-			try {
-				return super.invokeAction(request, context);
-			}
-			finally {
-				ERXStats.markEnd(name + ": invokeAction");
-			}
+			String key = keyInContext(context, "invokeAction");
+			ERXStats.markStart(Group.Component, key);
+			ERXStats.markEnd(Group.Component, key);
+			result = super.invokeAction(request, context);
 		}
 		else {
-			return super.invokeAction(request, context);
+			result = super.invokeAction(request, context);
 		}
+		return result;
 	}
 
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		if (ERXStats.isTrackingStatistics()) {
-			String name = (_displayName != null) ? (String) _displayName.valueInComponent(context.component()) : "ERXDebugTimer";
-			ERXStats.markStart(name + ": appendToResponse");
-			try {
-				super.appendToResponse(response, context);
-			}
-			finally {
-				ERXStats.markEnd(name + ": appendToResponse");
-			}
+			String key = keyInContext(context, "appendToResponse");
+			ERXStats.markStart(Group.Component, key);
+			super.appendToResponse(response, context);
+			ERXStats.markEnd(Group.Component, key);
 		}
 		else {
 			super.appendToResponse(response, context);

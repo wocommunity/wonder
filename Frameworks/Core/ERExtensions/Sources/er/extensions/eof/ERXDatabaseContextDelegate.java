@@ -45,6 +45,7 @@ import er.extensions.foundation.ERXUtilities;
 import er.extensions.jdbc.ERXJDBCConnectionAnalyzer;
 import er.extensions.logging.ERXPatternLayout;
 import er.extensions.statistics.ERXStats;
+import er.extensions.statistics.ERXStats.Group;
 
 /**
  * This delegate implements several methods from the formal interface
@@ -523,13 +524,13 @@ public class ERXDatabaseContextDelegate {
 	
 	private void markStart(String type, EOEnterpriseObject eo, String key) {
 		if(ERXStats.isTrackingStatistics()) {
-			ERXStats.markStart(type + "."+ eo.entityName()+"."+key);
+			ERXStats.markStart(Group.Batching, type + "." + eo.entityName()+"."+key);
 		}
 	}
 	
 	private void markEnd(String type, EOEnterpriseObject eo, String key) {
 		if(ERXStats.isTrackingStatistics()) {
-			ERXStats.markEnd(type + "."+ eo.entityName()+"."+key);
+			ERXStats.markEnd(Group.Batching,  type + "." + eo.entityName()+"."+key);
 		}
 	}
 
@@ -558,7 +559,7 @@ public class ERXDatabaseContextDelegate {
 					if (_handler.batchSizeForRelationship(ec, relationship) > 0) {
 						long timestamp = ((AutoBatchFaultingEnterpriseObject) source).batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
-						markStart("_ToManyBatchFaultCalculation", source, key);
+						markStart("ToMany.Calculation", source, key);
 						NSMutableArray faults = new NSMutableArray();
 						for (EOEnterpriseObject eo : (NSArray<EOEnterpriseObject>) ec.registeredObjects()) {
 							if (eo instanceof AutoBatchFaultingEnterpriseObject) {
@@ -576,9 +577,9 @@ public class ERXDatabaseContextDelegate {
 								}
 							}
 						}
-						markEnd("_ToManyBatchFaultCalculation", source, key);
+						markEnd("ToMany.Calculation", source, key);
 						if (eos.count() > 1) {
-							markStart("_ToManyBatchFaultFetching", source, key);
+							markStart("ToMany.Fetching", source, key);
 							// dbc.batchFetchRelationship(relationship, eos, ec);
 							// ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
 							ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
@@ -590,7 +591,7 @@ public class ERXDatabaseContextDelegate {
 									cnt += array.count();
 								}
 							}
-							markEnd("_ToManyBatchFaultFetching", source, key);
+							markEnd("ToMany.Fetching", source, key);
 							if(batchLog.isDebugEnabled()) {
 								batchLog.debug("Fetched " + cnt + " to-many " + relationship.destinationEntity().name() + " from " + eos.count() +  " " + source.entityName() + " for " + key);
 							}
@@ -630,7 +631,7 @@ public class ERXDatabaseContextDelegate {
 					EOEntityClassDescription cd = (EOEntityClassDescription)source.classDescription();
 					EORelationship relationship = cd.entity().relationshipNamed(key);
 					if(_handler.batchSizeForRelationship(ec, relationship) > 0 && !relationship.isToMany()) {
-						markStart("_ToOneBatchFaultCalculation", source, key);
+						markStart("ToOne.Calculation", source, key);
 						long timestamp = source.batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
 						NSMutableSet faults = new NSMutableSet();
@@ -653,14 +654,14 @@ public class ERXDatabaseContextDelegate {
 								}
 							}
 						}
-						markEnd("_ToOneBatchFaultCalculation", source, key);
+						markEnd("ToOne.Calculation", source, key);
 						if(eos.count() > 1) {
-							markStart("_ToOneBatchFaultFetching", source, key);
+							markStart("ToOne.Fetching", source, key);
 							// dbc.batchFetchRelationship(relationship, eos, ec);
 							// ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
 							ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
 							freshenFetchTimestamps(faults.allObjects(), timestamp);
-							markEnd("_ToOneBatchFaultFetching", source, key);
+							markEnd("ToOne.Fetching", source, key);
 							if(batchLog.isDebugEnabled()) {
 								batchLog.debug("Fetched " + faults.count() + " to-one " + relationship.destinationEntity().name() + " from " + eos.count() +  " " + source.entityName() + " for " + key);
 							}

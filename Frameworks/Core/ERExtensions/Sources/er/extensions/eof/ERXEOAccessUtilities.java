@@ -68,6 +68,7 @@ import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.statistics.ERXStats;
+import er.extensions.statistics.ERXStats.Group;
 
 /**
  * Collection of EOAccess related utilities.
@@ -1192,7 +1193,7 @@ public class ERXEOAccessUtilities {
                	statement = statement.replaceAll("([a-zA-Z0-9_\\.]+)\\s+IN \\(.*?\\)(\\s+OR\\s+\\1\\s+IN \\(.*?\\))+", " IN ([multi removed])");
                	// the cols are always the same, replace with *
                	statement = statement.replaceAll("((t0|T0)\\.[a-zA-Z0-9_]+\\,\\s*)*(t0|T0)\\.[a-zA-Z0-9_\\.]+\\s+FROM\\s+", "t0.* FROM ");
-            	ERXStats.addDurationForKey(millisecondsNeeded, entityName + ": " +statement);
+            	ERXStats.addDurationForKey(millisecondsNeeded, Group.SQL, entityName + ": " +statement);
             }
             if (needsLog) {
                 String logString = createLogString(channel, expression, millisecondsNeeded);
