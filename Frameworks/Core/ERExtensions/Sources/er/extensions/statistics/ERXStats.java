@@ -66,6 +66,13 @@ public class ERXStats {
 
 	public static final Logger log = Logger.getLogger(ERXStats.class);
 
+	public interface Group {
+		public String Default = " ";
+		public String SQL = "SQL";
+		public String Component = "Component";
+		public String Batching = "Batching";
+	}
+	
 	private static NSMutableArray<NSMutableDictionary<String, LogEntry>> _allStatistics = new NSMutableArray<NSMutableDictionary<String, LogEntry>>();
 
 	/**
@@ -144,7 +151,7 @@ public class ERXStats {
 	 *            the key to lookup
 	 * @return the log entry for the given key
 	 */
-	public static LogEntry logEntryForKey(String key) {
+	private static LogEntry logEntryForKey(String key) {
 		LogEntry entry = null;
 		NSMutableDictionary<String, LogEntry> statistics = ERXStats.statistics();
 		if (statistics != null) {
@@ -182,7 +189,7 @@ public class ERXStats {
 	 *            the key to lookup aggregate stats for
 	 * @return the aggregate log entry for the given key
 	 */
-	public static LogEntry aggregateLogEntryForKey(String key) {
+	private static LogEntry aggregateLogEntryForKey(String key) {
 		LogEntry aggregateLogEntry = new LogEntry(key);
 		if (key != null) {
 			synchronized (ERXStats._allStatistics) {
@@ -220,10 +227,33 @@ public class ERXStats {
 	 * 
 	 * @param key the key log to start logging 
 	 */
-	public static void markStart(String key) {
-		LogEntry entry = ERXStats.logEntryForKey(key);
+	public static void markStart(String group, String key) {
+		LogEntry entry = ERXStats.logEntryForKey(makeKey(group, key));
 		if (entry != null) {
 			entry.start();
+		}
+	}
+	
+	/**
+	 * Mark the start of a process, call markEnd when it is over to log the
+	 * duration.
+	 * 
+	 * @param key the key log to start logging 
+	 */
+	public static void markStart(String key) {
+		markStart(Group.Default, key);
+	}
+
+	/**
+	 * Marks the end of a process, and calls addDuration(..) with the 
+	 * time since markStart.
+	 * 
+	 * @param key the key to log under
+	 */
+	public static void markEnd(String group, String key) {
+		LogEntry entry = ERXStats.logEntryForKey(makeKey(group, key));
+		if (entry != null) {
+			entry.end();
 		}
 	}
 
@@ -234,10 +264,7 @@ public class ERXStats {
 	 * @param key the key to log under
 	 */
 	public static void markEnd(String key) {
-		LogEntry entry = ERXStats.logEntryForKey(key);
-		if (entry != null) {
-			entry.end();
-		}
+		markEnd(Group.Default);
 	}
 
 	/**
@@ -247,10 +274,24 @@ public class ERXStats {
 	 * @param key the name to log the time under
 	 */
 	public static void addDurationForKey(long duration, String key) {
-		LogEntry entry = ERXStats.logEntryForKey(key);
+		addDurationForKey(duration, Group.Default, key);
+	}
+
+	/**
+	 * Adds the specified duration in milliseconds for the given key.
+	 * 
+	 * @param duration the duration in milliseconds of the operation
+	 * @param key the name to log the time under
+	 */
+	public static void addDurationForKey(long duration, String group, String key) {
+		LogEntry entry = ERXStats.logEntryForKey(makeKey(group, key));
 		if (entry != null) {
 			entry.add(duration);
 		}
+	}
+
+	private static String makeKey(String group, String key) {
+		return group != null ? group + "." + key : key;
 	}
 
 	/**
