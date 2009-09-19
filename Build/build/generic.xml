@@ -398,6 +398,27 @@ There are many ways to use this script:
                 <include name="**/*" />
             </wsresources>
         </woframework>
+
+        <!-- It would be good to do this is a <resource> tag in the <woframework>, but that
+             tag does not support arbitrary directory names. The directories above are hard-coded
+             in WOFramework.java.
+             The <copy> tag cannot take an "if", but I set the directory to be copied to
+             "TestResources" if we want tests and "Resources" (and so a no-op) if we do not. -rrk
+        -->
+        <condition property="test.resources" value="TestResources" else="Resources">
+            <and>
+                <available file="${project.dir}/TestResources" />
+                <istrue value="${include.tests}" />
+            </and>
+        </condition>
+        <copy todir="${build.root}/${project.name}.framework/${test.resources}">
+            <fileset dir="${project.dir}/${test.resources}">
+                <include name="**/*" />
+                <exclude name="*.*~/" />
+                <exclude name="**/.svn" />
+            </fileset>
+        </copy>
+
         <jar destfile="${build.root}/${project.name}-${project.version}.jar" manifest="${manifest.mf}">
             <fileset dir="${build.classes}">
                     <exclude name="${classes.exclude.0}" />
