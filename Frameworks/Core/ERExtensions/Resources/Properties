@@ -425,6 +425,16 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## When the logs get rotated [24 hours in ms]
 # er.extensions.ERXApplication.StatisticsLogRotationFrequency = 86400000 
 
+## ERXStats support enabling
+# er.extensions.erxStats.enabled = true
+
+## ERXStats max size
+# er.extensions.erxStats.max = 1000
+
+## to display the stats after the RR loop
+# log4j.category.er.extensions.ERXApplication.Statistics=DEBUG
+
+
 ## When set, starts refusing new session once memory is filled up to this 
 ## threshold, which results in a more responsive app. If mem comes available again
 ## the app again starts to accept new session.
