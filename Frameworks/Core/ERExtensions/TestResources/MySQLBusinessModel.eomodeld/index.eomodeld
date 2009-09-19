@@ -1,0 +1,9 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {}; 
+    entities = (
+        {className = EOGenericRecord; name = Company; }, 
+        {className = EOGenericRecord; name = Employee; }
+    ); 
+}

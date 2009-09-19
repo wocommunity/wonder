@@ -1,148 +1,207 @@
 
 package er.extensions.eof;
 
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
 
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
+import er.extensions.ERExtensionsTest;
+
+
+/**
+ * Test the static methods in the ERXEOAccessUtilities class. This class has an inner
+ * class that actually contains the test methods. We can take the available models
+ * (or the ones compatible with these tests) and run the tests multiple times. The
+ * tests can be parameterized to use different models or different configurations.
+ */
 public class ERXEOAccessUtilitiesTest extends TestCase {
 
-    EOModel ajaxModel = null;
+    EOModel model = null;
     EOEditingContext ec = null;
 
-    static String buildRoot;
-    static {
-         buildRoot = System.getProperty("build.root");
-    }
+    public ERXEOAccessUtilitiesTest(String name) { super(name); }
 
-    void loadModels() {
+    static String buildRoot; static { buildRoot = System.getProperty("build.root"); }
 
-        EOModelGroup.setDefaultGroup(new EOModelGroup());
+    public void testAll() {
 
-        try {
-            EOModelGroup.defaultGroup().addModel(new EOModel(new java.net.URL("file://"+buildRoot+"/AjaxExample.woa/Contents/Resources/AjaxExample.eomodeld")));
-        } catch (java.net.MalformedURLException mue) { System.out.println("mue: "+mue); }
-        ajaxModel = EOModelGroup.defaultGroup().modelNamed("AjaxExample");
-        ec = new EOEditingContext();
-    }
+        TestSuite suite = ERExtensionsTest.suite;
 
-    static boolean eoModelGroupsEqual(EOModelGroup group1, EOModelGroup group2) {
-        if (group1 == null && group2 == null) return true;
-        if (group1 == null && group2 != null) return false;
-        if (group1 != null && group2 == null) return false;
+        // Right now, I just have to two models. I could look for *"BusinessModel" models instead.
+        //
+        // But I have to disable the use of the second model right now. If I run the tests using the
+        // Memory model, the tests pass. If I run the tests using the MySQL model, the tests pass.
+        // If I run both with both models, different tests using each will fail. There are obviously
+        // start-up or object cacheing issues here that need to be worked out. -rrk
 
-        if (group1.models().count() != group2.models().count()) return false;
+        NSArray<String> methods = ERExtensionsTest.testMethodsForClassName("er.extensions.eof.ERXEOAccessUtilitiesTest$Tests");
 
-        java.util.Enumeration<EOModel> models = group1.models().objectEnumerator();
+        for (int idx = 0; idx < methods.count(); idx++) {
+            String testName = methods.get(idx);
 
-        while (models.hasMoreElements()) {
-            EOModel model1 = models.nextElement();
-            EOModel model2 = group2.modelNamed(model1.name());
-            if (!model1.equals(model2)) return false;
+            suite.addTest(new Tests(testName, "MemoryBusinessModel"));
+            //suite.addTest(new Tests(testName, "MySQLBusinessModel"));
+
+            // It would be nice if these were found in TestResources....
+            //
+            //suite.addTest(new Tests(testName, "PostgresBusinessModel"));
+            //suite.addTest(new Tests(testName, "FrontBaseBusinessModel"));
+            //suite.addTest(new Tests(testName, "OpenBaseBusinessModel"));
         }
-        return true;
     }
 
-    public void testEntityMatchingString() {
-        this.loadModels();
+    public static class Tests extends TestCase {
 
-        EOEntity found1 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeCompanyPlace");
-        Assert.assertSame(ajaxModel.entityNamed("Company"), found1);
+        EOEditingContext ec;
+        String modelName;
+        EOModel model;
 
-        EOEntity found2 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeEmployeeThing");
-        Assert.assertSame(ajaxModel.entityNamed("Employee"), found2);
+        public Tests(String name, String param) {
+           super(name);
+           modelName = param;
+        }
 
-        EOEntity found3 = ERXEOAccessUtilities.entityMatchingString(ec, "CompanyThing");
-        Assert.assertSame(ajaxModel.entityNamed("Company"), found3);
+        String config() {
+            return "modelName: \""+modelName+"\"";
+        }
 
-        EOEntity found4 = ERXEOAccessUtilities.entityMatchingString(ec, "ThatCompany");
-        Assert.assertSame(ajaxModel.entityNamed("Company"), found4);
+        public void setUp() throws Exception {
+            super.setUp();
 
-        EOEntity found5 = ERXEOAccessUtilities.entityMatchingString(ec, "Company");
-        Assert.assertSame(ajaxModel.entityNamed("Company"), found5);
+            if (ec != null) ec.dispose();
+            if (model != null) model.dispose();
 
-        EOEntity found6 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeGarbage");
-        Assert.assertNull(found6);
+            EOModelGroup.setDefaultGroup(new EOModelGroup());
 
-        EOEntity found7 = ERXEOAccessUtilities.entityMatchingString(ec, null);
-        Assert.assertNull(found7);
+            try {
+                EOModelGroup.defaultGroup().addModel(new EOModel(new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld")));
+            } catch (java.net.MalformedURLException mue) { System.out.println("mue: "+mue); }
+            model = EOModelGroup.defaultGroup().modelNamed(modelName);
+            ec = new EOEditingContext();
+        }
 
-        EOEntity found8 = ERXEOAccessUtilities.entityMatchingString(null, "SomeThing");
-        Assert.assertNull(found8);
+        public void testEntityMatchingString() {
+            EOEntity found1 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeCompanyPlace");
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(model.entityNamed("Company"), found1));
 
-        EOEntity found9 = ERXEOAccessUtilities.entityMatchingString(null, null);
-        Assert.assertNull(found9);
-    }
+            EOEntity found2 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeEmployeeThing");
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(model.entityNamed("Employee"), found2));
 
-    public void testEntityUsingTable() {
-        this.loadModels();
+            EOEntity found3 = ERXEOAccessUtilities.entityMatchingString(ec, "CompanyThing");
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(model.entityNamed("Company"), found3));
 
-        EOEntity found1 = ERXEOAccessUtilities.entityUsingTable(ec, "GarbageName");
-        Assert.assertNull(found1);
-    }
+            EOEntity found4 = ERXEOAccessUtilities.entityMatchingString(ec, "ThatCompany");
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(model.entityNamed("Company"), found4));
 
-    public void testEntityWithNamedIsShared() {
-        this.loadModels();
+            EOEntity found5 = ERXEOAccessUtilities.entityMatchingString(ec, "Company");
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(model.entityNamed("Company"), found5));
 
-        Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(ec, "Company"));
-        Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(ec, "Employee"));
-        Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(null, "Company"));
+            EOEntity found6 = ERXEOAccessUtilities.entityMatchingString(ec, "SomeGarbage");
+            Assert.assertNull(this.config(), found6);
 
-        try {
-            boolean check = ERXEOAccessUtilities.entityWithNamedIsShared(ec, null);
-            Assert.fail();
-        } catch (java.lang.IllegalStateException ise) { /* Good! */ }
-    }
+            EOEntity found7 = ERXEOAccessUtilities.entityMatchingString(ec, null);
+            Assert.assertNull(this.config(), found7);
 
-    public void testEntityNamed() {
-        this.loadModels();
+            EOEntity found8 = ERXEOAccessUtilities.entityMatchingString(null, "SomeThing");
+            Assert.assertNull(this.config(), found8);
 
-        // It would be more obvious to use EOEntity equals here, but that method does not seem to work,
-        // sees differences. -rrk
-        //
-        EOEntity found1 = ERXEOAccessUtilities.entityNamed(ec, "Company");
-        Assert.assertNotNull(found1);
-        Assert.assertEquals(EOModelGroup.defaultGroup().entityNamed("Company").name(), found1.name());
+            EOEntity found9 = ERXEOAccessUtilities.entityMatchingString(null, null);
+            Assert.assertNull(this.config(), found9);
+        }
 
-        EOEntity found2 = ERXEOAccessUtilities.entityNamed(ec, "Employee");
-        Assert.assertNotNull(found2);
-        Assert.assertEquals(EOModelGroup.defaultGroup().entityNamed("Employee").name(), found2.name());
+        public void testEntityUsingTable() {
+            EOEntity found1 = ERXEOAccessUtilities.entityUsingTable(ec, "GarbageName");
+            Assert.assertNull(this.config(), found1);
+        }
 
-        EOEntity found3 = ERXEOAccessUtilities.entityNamed(null, "Company");
-        Assert.assertNotNull(found3);
-        Assert.assertEquals(EOModelGroup.defaultGroup().entityNamed("Company").name(), found3.name());
+        public void testEntityWithNamedIsShared() {
+            Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(ec, "Company"));
+            Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(ec, "Employee"));
+            Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(null, "Company"));
 
-        Assert.assertNull(ERXEOAccessUtilities.entityNamed(ec, null));
-    }
+            try {
+                boolean check = ERXEOAccessUtilities.entityWithNamedIsShared(ec, null);
+                Assert.fail();
+            } catch (java.lang.IllegalStateException ise) { /* Good! */ }
+        }
 
-    public void testModelGroup() {
-        this.loadModels();
+        public void testEntityNamed() {
+            EOEntity found1 = ERXEOAccessUtilities.entityNamed(ec, "Company");
+            Assert.assertNotNull(this.config(), found1);
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(EOModelGroup.defaultGroup().entityNamed("Company").name(), found1.name()));
+    
+            EOEntity found2 = ERXEOAccessUtilities.entityNamed(ec, "Employee");
+            Assert.assertNotNull(this.config(), found2);
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(EOModelGroup.defaultGroup().entityNamed("Employee").name(), found2.name()));
 
-        /*
-        // Does not seem to be very reliable...
+            EOEntity found3 = ERXEOAccessUtilities.entityNamed(null, "Company");
+            Assert.assertNotNull(this.config(), found3);
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(EOModelGroup.defaultGroup().entityNamed("Company").name(), found3.name()));
+    
+            Assert.assertNull(this.config(), ERXEOAccessUtilities.entityNamed(ec, null));
+        }
 
-        EOModelGroup referenceGroup = EOModelGroup.defaultGroup();
+        public void testModelGroup() {
+            EOModelGroup referenceGroup = EOModelGroup.defaultGroup();
+    
+            EOModelGroup group1 = ERXEOAccessUtilities.modelGroup(ec);
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(referenceGroup, group1));
+    
+            EOModelGroup group2 = ERXEOAccessUtilities.modelGroup(null);
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(referenceGroup, group2));
+        }
 
-        EOModelGroup group1 = ERXEOAccessUtilities.modelGroup(ec);
-        Assert.assertTrue(eoModelGroupsEqual(referenceGroup, group1));
+        public void testDestinationEntityForKeyPath() {
+            // public static EOEntity destinationEntityForKeyPath(com.webobjects.eoaccess.EOEntity, String);
 
-        // Apparently, this does not work all the time...
-        //
-        EOModelGroup group2 = ERXEOAccessUtilities.modelGroup(null);
-        Assert.assertTrue(eoModelGroupsEqual(referenceGroup, group2));
-        */
-    }
+            EOEntity companyEntity = EOModelGroup.defaultGroup().entityNamed("Company");
+            EOEntity employeeEntity = EOModelGroup.defaultGroup().entityNamed("Employee");
+    
+            EOEntity entity1 = ERXEOAccessUtilities.destinationEntityForKeyPath(companyEntity, "employees");
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(employeeEntity, entity1));
+    
+            EOEntity entity2 = ERXEOAccessUtilities.destinationEntityForKeyPath(employeeEntity, "company");
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(companyEntity, entity2));
+        }
+    
+        public void testEntityForEo() {
+            // public static EOEntity entityForEo(EOEnterpriseObject);
 
+            EOEntity companyEntity = EOModelGroup.defaultGroup().entityNamed("Company");
+            Assert.assertNotNull(this.config(), companyEntity);
+
+            EOEntity employeeEntity = EOModelGroup.defaultGroup().entityNamed("Employee");
+            Assert.assertNotNull(this.config(), employeeEntity);
+
+            EOEnterpriseObject eo1 = EOUtilities.createAndInsertInstance(ec, "Company");
+            Assert.assertNotNull(this.config(), eo1);
+
+            EOEntity entity1 = ERXEOAccessUtilities.entityForEo(eo1);
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(companyEntity, entity1));
+
+            EOEnterpriseObject eo2 = EOUtilities.createAndInsertInstance(ec, "Employee");
+            Assert.assertNotNull(this.config(), eo2);
+
+            EOEntity entity2 = ERXEOAccessUtilities.entityForEo(eo2);
+            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(employeeEntity, entity2));
+        }
 /*
  TODO:
     // What kind of sequence is needed here?
@@ -199,10 +258,6 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
 
     public static boolean closeDatabaseConnections(EOObjectStoreCoordinator);
 
-    public static EOEntity destinationEntityForKeyPath(com.webobjects.eoaccess.EOEntity, String);
-
-    public static EOEntity entityForEo(EOEnterpriseObject);
-
     public static NSArray classPropertiesNotInParent(EOEntity, boolean, boolean, boolean);
 
     public static NSArray externalNamesForEntity(EOEntity, boolean);
@@ -248,5 +303,5 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
     public static EORelationship createRelationship(String, String, String, String, String, boolean, int, boolean, boolean, boolean);
     public static EORelationship createFlattenedRelationship(String, String, String, int, boolean, boolean);
 */
+    }
 }
-
