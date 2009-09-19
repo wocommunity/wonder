@@ -295,8 +295,14 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## decides if new ECs use the shared editing context
 # er.extensions.ERXEC.useSharedEditingContext=true
 
-## Specifies if new ECs should lock/unlock automatically. Use with care...
-# er.extensions.ERXEC.defaultAutomaticLockUnlock = true
+## Specifies if new ECs should lock/unlock automatically.
+# er.extensions.ERXEC.safeLocking = true
+
+## Specifies if the lock/unlock calls should be marked with the thread (halfway cheap)
+# er.extensions.ERXEC.markOpenLocks = true
+
+## Specifies if the lock/unlock calls should be marked with a stack trace (pretty expensive, but more informational)
+# er.extensions.ERXEC.traceOpenLocks = true
 
 #########################################################################
 # ERX Remote Synchronizer

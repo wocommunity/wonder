@@ -44,7 +44,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	 */
 	public ERXObjectStoreCoordinator() {
 		super();
-		if (ERXEC.traceOpenLocks()) {
+		if (ERXEC.markOpenLocks()) {
 			activeDatabaseContexts.put(this, Thread.currentThread().getName());
 		}
 	}
@@ -53,6 +53,8 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 		this();
 		_shouldClose = shouldClose;
 	}
+	
+	private static Exception defaultTrace = new Exception("DefaultTrace");
 
 	/**
 	 * Adds the current stack trace to openLockTraces. 
@@ -61,8 +63,11 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 		if(openLockTraces == null) {
 			openLockTraces = new NSMutableDictionary<Thread, NSMutableArray<Exception>>();
 		}
-		Exception openLockTrace = new Exception("Locked");
-		openLockTrace.fillInStackTrace();
+		Exception openLockTrace = defaultTrace;
+		if(ERXEC.traceOpenLocks()) {
+			openLockTrace = new Exception("Locked");
+		}
+
 		Thread currentThread = Thread.currentThread();
 		NSMutableArray<Exception> currentTraces = openLockTraces.objectForKey(currentThread);
 		if(currentTraces == null) {
@@ -102,7 +107,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	 * editing contexts in this thread.
 	 */
 	public void lock() {
-		boolean tracing = ERXEC.traceOpenLocks();
+		boolean tracing = ERXEC.markOpenLocks();
 		if (tracing) {
 			traceLock();
 		}
@@ -118,7 +123,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	 */
 	public void unlock() {
 		lockCount--;
-		if (ERXEC.traceOpenLocks()) {
+		if (ERXEC.markOpenLocks()) {
 			traceUnlock();
 		}
 		super.unlock();
@@ -150,6 +155,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		boolean hadLocks = false;
+		pw.print(activeDatabaseContexts.size() + " active ObjectStoreCoordinators : "+ activeDatabaseContexts + ")");
 		for (ERXObjectStoreCoordinator ec : activeDatabaseContexts.keySet()) {
 			NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
 			if (traces != null && traces.count() > 0) {
@@ -157,9 +163,13 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 				pw.println("\n------------------------");
 				pw.println("ObjectStoreCoordinator: " + ec + " Locking thread: " + ec.lockingThread);
 				for (Thread thread : traces.keySet()) {
-					pw.println("@" + thread);
+					pw.println("Outstanding at @" + thread);
 					for(Exception ex: traces.objectForKey(thread)) {
-						ex.printStackTrace(pw);
+						if(ex == defaultTrace) {
+							pw.println("Stack tracing is disabled");
+						} else {
+							ex.printStackTrace(pw);
+						}
 					}
 				}
 			}
