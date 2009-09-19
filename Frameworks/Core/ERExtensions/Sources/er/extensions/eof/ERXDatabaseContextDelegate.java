@@ -452,7 +452,6 @@ public class ERXDatabaseContextDelegate {
     	if(autoBatchFetchSize == -1) {
     		autoBatchFetchSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize", 0);
     	}
-    	//if(true) return 50;
     	return autoBatchFetchSize;
     }
 
@@ -581,8 +580,8 @@ public class ERXDatabaseContextDelegate {
 						if (eos.count() > 1) {
 							markStart("ToMany.Fetching", source, key);
 							// dbc.batchFetchRelationship(relationship, eos, ec);
-							// ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
-							ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
+							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
+							// ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
 							int cnt = 0;
 							for(Object fault: faults) {
 								if(!EOFaultHandler.isFault(fault)) {
@@ -658,8 +657,8 @@ public class ERXDatabaseContextDelegate {
 						if(eos.count() > 1) {
 							markStart("ToOne.Fetching", source, key);
 							// dbc.batchFetchRelationship(relationship, eos, ec);
-							// ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
-							ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
+							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
+							// ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
 							freshenFetchTimestamps(faults.allObjects(), timestamp);
 							markEnd("ToOne.Fetching", source, key);
 							if(batchLog.isDebugEnabled()) {
@@ -676,14 +675,19 @@ public class ERXDatabaseContextDelegate {
 		return true;
 	}
 
-	private static BatchHandler DEFAULT = new BatchHandler() {
+	private BatchHandler DEFAULT = new BatchHandler() {
 		public int batchSizeForRelationship(EOEditingContext ec, EORelationship relationship) {
-			return (relationship.isToMany() && relationship.destinationEntity().isAbstractEntity()) ? 0 : autoBatchFetchSize();
+			// AK: this looks like a bug in EOF: when we have a flattened toMany (probably also to-one) to an abstract,
+			// the fetch doesn't also fetch the qualifiers for the destination, so the GID ends up without the correct sub-entity.
+			// So when the fault is fired, we get an exception.
+			// In the single-table case, we COULD "fix" this by overriding faultForGlobalID, catching and then trying with the right entity.
+			// but we'd probably end up with a totally messed EOF state...
+			return(relationship.isToMany() && relationship.isFlattened() && relationship.destinationEntity().isAbstractEntity()) ? 0 : autoBatchFetchSize();
 		}
 		
 	};
 	
-	private static BatchHandler _handler = DEFAULT;
+	private BatchHandler _handler = DEFAULT;
 	
 	/**
 	 * Sets the batch handler.
