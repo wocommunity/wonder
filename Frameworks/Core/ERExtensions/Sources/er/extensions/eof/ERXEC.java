@@ -182,7 +182,7 @@ public class ERXEC extends EOEditingContext {
 			markOpenLocks = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.markOpenLocks", false));
 			log.debug("setting markOpenLocks to " + markOpenLocks);
 		}
-		return markOpenLocks.booleanValue() || traceOpenLocks() || true;
+		return markOpenLocks.booleanValue() || traceOpenLocks();
 	}
 	
 	/**
