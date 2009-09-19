@@ -554,7 +554,7 @@ public class ERXDatabaseContextDelegate {
     	if(autoBatchFetchSize == -1) {
     		autoBatchFetchSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize", 0);
     	}
-    	//if(true) return 50;
+    	// if(true) return 50;
     	return autoBatchFetchSize;
     }
 
@@ -723,12 +723,7 @@ public class ERXDatabaseContextDelegate {
 	
 	private BatchHandler DEFAULT = new BatchHandler() {
 		public int batchSizeForRelationship(EOEditingContext ec, EORelationship relationship) {
-			// AK: this looks like a bug in EOF: when we have a flattened toMany (probably also to-one) to an abstract,
-			// the fetch doesn't also fetch the qualifiers for the destination, so the GID ends up without the correct sub-entity.
-			// So when the fault is fired, we get an exception.
-			// In the single-table case, we COULD "fix" this by overriding faultForGlobalID, catching and then trying with the right entity.
-			// but we'd probably end up with a totally messed EOF state...
-			return(relationship.isToMany() && relationship.isFlattened() && relationship.destinationEntity().isAbstractEntity()) ? 0 : autoBatchFetchSize();
+			return autoBatchFetchSize();
 		}
 		
 	};
