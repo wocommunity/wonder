@@ -29,6 +29,8 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	NSMutableDictionary<Thread, NSMutableArray<Exception>> openLockTraces;
 
 	Thread lockingThread;
+	
+	String lockingThreadName;
 
 	protected static Map<ERXObjectStoreCoordinator, String> activeDatabaseContexts = Collections.synchronizedMap(new WeakHashMap());
 
@@ -99,6 +101,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 		}
 		if(lockCount == 0) {
 			lockingThread = null;
+			lockingThreadName = null;
 		}
 	}
 	
@@ -114,6 +117,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 		super.lock();
 		lockCount++;
 		lockingThread = Thread.currentThread();
+		lockingThreadName = lockingThread.getName();
 		//log.error("locked: " + lockingThread);
 	}
 
@@ -161,7 +165,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 			if (traces != null && traces.count() > 0) {
 				hadLocks = true;
 				pw.println("\n------------------------");
-				pw.println("ObjectStoreCoordinator: " + ec + " Locking thread: " + ec.lockingThread);
+				pw.println("ObjectStoreCoordinator: " + ec + " Locking thread: " + ec.lockingThreadName + "->" + ec.lockingThread);
 				for (Thread thread : traces.keySet()) {
 					pw.println("Outstanding at @" + thread);
 					for(Exception ex: traces.objectForKey(thread)) {
