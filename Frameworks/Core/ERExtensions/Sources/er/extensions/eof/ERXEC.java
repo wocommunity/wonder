@@ -133,6 +133,9 @@ public class ERXEC extends EOEditingContext {
 	/** holds a flag if editing context locks should be traced */
 	private static Boolean traceOpenLocks;
 
+	/** holds a flag if editing context locks should be marked */
+	private static Boolean markOpenLocks;
+
 	/** key for the thread storage used by the unlocker. */
 	private static final String LockedContextsForCurrentThreadKey = "ERXEC.lockedContextsForCurrentThread";
 
@@ -167,12 +170,27 @@ public class ERXEC extends EOEditingContext {
 		}
 		return traceOpenLocks.booleanValue();
 	}
+
+	public static boolean markOpenLocks() {
+		if (markOpenLocks == null) {
+			markOpenLocks = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.markOpenLocks", false));
+			log.debug("setting markOpenLocks to " + markOpenLocks);
+		}
+		return markOpenLocks.booleanValue() || traceOpenLocks();
+	}
 	
 	/**
 	 * Sets whether or not open editing context lock tracing is enabled.
 	 */
 	public static void setTraceOpenLocks(boolean value) {
 		traceOpenLocks = value;
+	}
+	
+	/**
+	 * Sets whether or not open editing context lock tracing is enabled.
+	 */
+	public static void setMarkOpenLocks(boolean value) {
+		markOpenLocks = value;
 	}
 
 	private static ThreadLocal<List> locks = new ThreadLocal() {
@@ -349,7 +367,7 @@ public class ERXEC extends EOEditingContext {
 	public ERXEC(EOObjectStore os) {
 		super(os);
 		ERXEnterpriseObject.Observer.install();
-		if (ERXEC.traceOpenLocks()) {
+		if (ERXEC.markOpenLocks()) {
 			creationTrace = new Exception("Creation");
 			creationTrace.fillInStackTrace();
 			activeEditingContexts.put(this, Thread.currentThread().getName());
@@ -436,12 +454,12 @@ public class ERXEC extends EOEditingContext {
 	 * editing contexts in this thread.
 	 */
 	public void lock() {
-		if (traceOpenLocks()) {
+		if (markOpenLocks()) {
 			traceLock();
 		}
 		super.lock();
 		pushLockedContextForCurrentThread(this);
-		if (traceOpenLocks()) {
+		if (markOpenLocks()) {
 			lockingThread = Thread.currentThread();
 		}
 		if (!isAutoLocked() && lockLogger.isDebugEnabled()) {
@@ -454,6 +472,8 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	private static Exception defaultTrace = new Exception("DefaultTrace");
+	
 	/**
 	 * Adds the current stack trace to openLockTraces. 
 	 */
@@ -461,8 +481,10 @@ public class ERXEC extends EOEditingContext {
 		if(openLockTraces == null) {
 			openLockTraces = new NSMutableDictionary<Thread, NSMutableArray<Exception>>();
 		}
-		Exception openLockTrace = new Exception("Locked");
-		openLockTrace.fillInStackTrace();
+		Exception openLockTrace = defaultTrace;
+		if(traceOpenLocks()) {
+			openLockTrace = new Exception("Locked");
+		}
 		Thread currentThread = Thread.currentThread();
 		NSMutableArray<Exception> currentTraces = openLockTraces.objectForKey(currentThread);
 		if(currentTraces == null) {
@@ -511,7 +533,7 @@ public class ERXEC extends EOEditingContext {
 	 */
 	public void unlock() {
 		popLockedContextForCurrentThread(this);
-		if (traceOpenLocks()) {
+		if (markOpenLocks()) {
 			traceUnlock();
 		}
 		if (!isAutoLocked() && lockLogger.isDebugEnabled()) {
@@ -602,7 +624,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	public void dispose() {
-		if (traceOpenLocks()) {
+		if (markOpenLocks()) {
 			_checkOpenLockTraces();
 		}
 		super.dispose();
@@ -612,7 +634,7 @@ public class ERXEC extends EOEditingContext {
 	public void finalize() throws Throwable {
 		isFinalizing = true;
 		try {
-			if (traceOpenLocks()) {
+			if (markOpenLocks()) {
 				// log.info("Finalize " + getClass().getSimpleName() + "@" + System.identityHashCode(this));
 				_checkOpenLockTraces();
 			}
@@ -1700,16 +1722,24 @@ public class ERXEC extends EOEditingContext {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		boolean hadLocks = false;
+		pw.print("Currently " +activeEditingContexts.size() + " active ECs : "+ activeEditingContexts + ")");
 		for (ERXEC ec : ERXEC.activeEditingContexts.keySet()) {
 			NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
 			if (traces != null && traces.count() > 0) {
 				hadLocks = true;
 				pw.println("\n------------------------");
 				pw.println("Editing Context: " + ec + " Locking thread: " + ec.lockingThread);
-				for (Thread thread : traces.keySet()) {
-					pw.println("@" + thread);
-					for(Exception ex: traces.objectForKey(thread)) {
-						ex.printStackTrace(pw);
+				if(ec.creationTrace != null) {
+					ec.creationTrace.printStackTrace(pw);
+				}
+				if(!ERXEC.traceOpenLocks()) {
+					pw.println("Stack tracing is disabled");
+				} else {
+					for (Thread thread : traces.keySet()) {
+						pw.println("Outstanding at @" + thread);
+						for(Exception ex: traces.objectForKey(thread)) {
+							ex.printStackTrace(pw);
+						}
 					}
 				}
 			} else {
@@ -1718,7 +1748,7 @@ public class ERXEC extends EOEditingContext {
 			}
 		}
 		if(!hadLocks) {
-			pw.print("No open editing contexts (of " + activeEditingContexts.size() + "->"+ activeEditingContexts + ")");
+			pw.print("No open editing contexts (of " + activeEditingContexts.size() + ")");
 		}
         pw.close();
 		return sw.toString();
