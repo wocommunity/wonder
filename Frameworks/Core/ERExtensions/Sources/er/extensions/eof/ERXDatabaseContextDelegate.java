@@ -166,27 +166,33 @@ public class ERXDatabaseContextDelegate {
 	 * @param databaseContext
 	 * @param throwable
 	 */
-    public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
-    	if(exLog.isDebugEnabled()) {
-    		exLog.debug("Database Exception occured: " + throwable, throwable);
-    	} else if(exLog.isInfoEnabled()) {
-    		exLog.info("Database Exception occured: " + throwable);
-    	}
-    	if(throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
-    		NSArray models = databaseContext.database().models();
-    		for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
-    			EOModel model = (EOModel)e.nextElement();
-    			NSDictionary dict = model.connectionDictionary();
-    			log.info(model.name() + ": " + (dict == null ? "No connection dictionary!" : dict.toString()));
-    		}
-    		if ("JDBC".equals(databaseContext.adaptorContext().adaptor().name())) {
-    			new ERXJDBCConnectionAnalyzer(databaseContext.database().adaptor().connectionDictionary());
-    		}
-    	}
-    	//EOEditingContext ec = ERXEC.newEditingContext();
-    	//log.info(NSPropertyListSerialization.stringFromPropertyList(EOUtilities.modelGroup(ec).models().valueForKey("connectionDictionary")));
-    	return true;
-    }
+	public synchronized boolean  databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
+		if(reportingError) return true;
+		reportingError = true;
+		try {
+			if(exLog.isDebugEnabled()) {
+				exLog.debug("Database Exception occured: " + throwable, throwable);
+			} else if(exLog.isInfoEnabled()) {
+				exLog.info("Database Exception occured: " + throwable);
+			}
+			if(throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
+				NSArray models = databaseContext.database().models();
+				for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
+					EOModel model = (EOModel)e.nextElement();
+					NSDictionary dict = model.connectionDictionary();
+					log.info(model.name() + ": " + (dict == null ? "No connection dictionary!" : dict.toString()));
+				}
+				if ("JDBC".equals(databaseContext.adaptorContext().adaptor().name())) {
+					new ERXJDBCConnectionAnalyzer(databaseContext.database().adaptor().connectionDictionary());
+				}
+			}
+			//EOEditingContext ec = ERXEC.newEditingContext();
+			//log.info(NSPropertyListSerialization.stringFromPropertyList(EOUtilities.modelGroup(ec).models().valueForKey("connectionDictionary")));
+			return true;
+		} finally {
+			reportingError = false;
+		}
+	}
 
     /**
      * Provides the ability for new enterprise objects that implement the interface {@link ERXGeneratesPrimaryKeyInterface}
@@ -212,27 +218,33 @@ public class ERXDatabaseContextDelegate {
      *         is called directly on the database object of the context and <code>false</code> is returned otherwise <code>true</code>.
      */
     // CHECKME: Is this still needed now?
-    public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext dbc, Exception e) throws Throwable {
-        EOAdaptor adaptor=dbc.adaptorContext().adaptor();
-        boolean shouldHandleConnection = false;
-        if(e instanceof EOGeneralAdaptorException)
-            log.error(((EOGeneralAdaptorException)e).userInfo());
-        else
-            log.error(e);
-        if (adaptor.isDroppedConnectionException(e))
-            shouldHandleConnection = true;
-        // FIXME: Should provide api to extend the list of bad exceptions.
-        else if (e.toString().indexOf("ORA-01041")!=-1) {
-            // just returning true here does not seem to do the trick. why !?!?
-            log.error("ORA-01041 detecting -- forcing reconnect");
-            dbc.database().handleDroppedConnection();
-            shouldHandleConnection = false;
-        } else {
-            if(e instanceof EOGeneralAdaptorException)
-                log.info(((EOGeneralAdaptorException)e).userInfo());
-            throw e;
-        }
-        return shouldHandleConnection;
+    public synchronized boolean databaseContextShouldHandleDatabaseException(EODatabaseContext dbc, Exception e) throws Throwable {
+    	if(reportingError) return true;
+    	reportingError = true;
+    	try {
+    		EOAdaptor adaptor=dbc.adaptorContext().adaptor();
+    		boolean shouldHandleConnection = false;
+    		if(e instanceof EOGeneralAdaptorException)
+    			log.error(((EOGeneralAdaptorException)e).userInfo());
+    		else
+    			log.error(e);
+    		if (adaptor.isDroppedConnectionException(e))
+    			shouldHandleConnection = true;
+    		// FIXME: Should provide api to extend the list of bad exceptions.
+    		else if (e.toString().indexOf("ORA-01041")!=-1) {
+    			// just returning true here does not seem to do the trick. why !?!?
+    			log.error("ORA-01041 detecting -- forcing reconnect");
+    			dbc.database().handleDroppedConnection();
+    			shouldHandleConnection = false;
+    		} else {
+    			if(e instanceof EOGeneralAdaptorException)
+    				log.info(((EOGeneralAdaptorException)e).userInfo());
+    			throw e;
+    		}
+        	return shouldHandleConnection;
+    	} finally {
+    		reportingError = false;
+    	}
     }
 
     /**
@@ -428,6 +440,11 @@ public class ERXDatabaseContextDelegate {
     	}
     	return result;
     }
+
+    /**
+     * The delegate is not reentrant, so this marks whether we are already reporting an error (most probably due to a logging pattern)
+     */
+    private boolean reportingError = false;
 
     /**
      * The delegate is not reentrant, so this marks whether we are already batch faulting a to-many relationship.
