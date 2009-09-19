@@ -101,11 +101,17 @@ public class ERXEC extends EOEditingContext {
 	 */
 	private Exception creationTrace;
 	NSMutableDictionary<Thread, NSMutableArray<Exception>> openLockTraces = new NSMutableDictionary<Thread, NSMutableArray<Exception>>();
+
 	/**
 	 * if traceOpenEditingContextLocks is true, this will contain the
 	 * the locking thread
 	 */
 	Thread lockingThread;
+	
+	/**
+	 * And, as the name might change, also the name of the locking thread (might contain session ID or other info)
+	 */
+	String lockingThreadName;
 
 	/** decides whether to lock/unlock automatically when used without a lock. */
 	private Boolean useAutolock;
@@ -176,7 +182,7 @@ public class ERXEC extends EOEditingContext {
 			markOpenLocks = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.markOpenLocks", false));
 			log.debug("setting markOpenLocks to " + markOpenLocks);
 		}
-		return markOpenLocks.booleanValue() || traceOpenLocks();
+		return markOpenLocks.booleanValue() || traceOpenLocks() || true;
 	}
 	
 	/**
@@ -461,6 +467,7 @@ public class ERXEC extends EOEditingContext {
 		pushLockedContextForCurrentThread(this);
 		if (markOpenLocks()) {
 			lockingThread = Thread.currentThread();
+			lockingThreadName = lockingThread.getName();
 		}
 		if (!isAutoLocked() && lockLogger.isDebugEnabled()) {
 			if (lockTrace.isDebugEnabled()) {
@@ -524,6 +531,7 @@ public class ERXEC extends EOEditingContext {
 		}
 		if(!isLockedInThread()) {
 			lockingThread = null;
+			lockingThreadName = null;
 		}
 	}
 
@@ -1728,7 +1736,7 @@ public class ERXEC extends EOEditingContext {
 			if (traces != null && traces.count() > 0) {
 				hadLocks = true;
 				pw.println("\n------------------------");
-				pw.println("Editing Context: " + ec + " Locking thread: " + ec.lockingThread);
+				pw.println("Editing Context: " + ec + " Locking thread: " + ec.lockingThreadName + "->" + ec.lockingThread);
 				if(ec.creationTrace != null) {
 					ec.creationTrace.printStackTrace(pw);
 				}
