@@ -60,7 +60,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	
 	protected int _rowCount = -1;
 	
-	protected boolean _shouldRememberRowCount = false;
+	protected boolean _shouldRememberRowCount = true;
 	
 	/**
 	 * Creates a new ERXBatchingDisplayGroup.
@@ -130,6 +130,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	@Override
 	public void setDataSource(EODataSource eodatasource) {
 		_isBatching = (eodatasource instanceof EODatabaseDataSource) ? Boolean.TRUE : Boolean.FALSE;
+		setRowCount(-1);
 		super.setDataSource(eodatasource);
 	}
 	
