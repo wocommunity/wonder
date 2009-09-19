@@ -21,6 +21,9 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.eof.ERXDatabaseContext;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -214,6 +217,8 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							Map traces = Thread.getAllStackTraces();
 							_fatalTraces.put(thread, traces);
 							log.fatal("Request is taking too long, possible deadlock: " + time + " ms " + stringFromTraces(traces));
+							log.fatal("EC info:\n" + ERXEC.outstandingLockDescription());
+							log.fatal("OSC info:\n" + ERXObjectStoreCoordinator.outstandingLockDescription());
 						}
 					}
 				}
