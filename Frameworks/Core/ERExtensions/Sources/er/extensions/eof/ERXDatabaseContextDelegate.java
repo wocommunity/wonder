@@ -41,6 +41,7 @@ import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.jdbc.ERXJDBCConnectionAnalyzer;
 import er.extensions.logging.ERXPatternLayout;
@@ -444,16 +445,10 @@ public class ERXDatabaseContextDelegate {
     public static int autoBatchFetchSize = -1;
     
     /**
-     * Returns the batch size for automatic batch faulting from the System property <code>er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize</code>.
-     * Default is 0, meaning it's disabled.
-     * @return batch size
+     * Batching thread key
      */
-    public static int autoBatchFetchSize() {
-    	if(autoBatchFetchSize == -1) {
-    		autoBatchFetchSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize", 0);
-    	}
-    	return autoBatchFetchSize;
-    }
+    
+    public static String THREAD_KEY = "ERXBatching";
 
     /**
      * Interface to provide auto-magic batch fetching. For an implementation (and the hack needed for to-one handling), see {@link ERXGenericRecord}.
@@ -532,6 +527,19 @@ public class ERXDatabaseContextDelegate {
 			ERXStats.markEnd(Group.Batching,  type + "." + eo.entityName()+"."+key);
 		}
 	}
+    
+    /**
+     * Returns the batch size for automatic batch faulting from the System property <code>er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize</code>.
+     * Default is 0, meaning it's disabled.
+     * @return batch size
+     */
+    public static int autoBatchFetchSize() {
+    	if(autoBatchFetchSize == -1) {
+    		autoBatchFetchSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize", 0);
+    	}
+    	//if(true) return 50;
+    	return autoBatchFetchSize;
+    }
 
 	/**
 	 * Fetches the to-many fault and the faults of all other objects in the EC
@@ -556,13 +564,22 @@ public class ERXDatabaseContextDelegate {
 					EOEntityClassDescription cd = (EOEntityClassDescription) source.classDescription();
 					EORelationship relationship = cd.entity().relationshipNamed(key);
 					if (_handler.batchSizeForRelationship(ec, relationship) > 0) {
+						markStart("ToMany.Calculation", source, key);
+						NSArray<EOEnterpriseObject> candidates = null;
+						NSArray currentObjects = (NSArray) ERXThreadStorage.valueForKey(THREAD_KEY);
+						boolean fromThreadStorage = false;
+						if(currentObjects != null && currentObjects.lastObject() instanceof AutoBatchFaultingEnterpriseObject) {
+							candidates = currentObjects;
+							fromThreadStorage = true;
+						} else {
+							candidates = ec.registeredObjects();
+						}
 						long timestamp = ((AutoBatchFaultingEnterpriseObject) source).batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
-						markStart("ToMany.Calculation", source, key);
 						NSMutableArray faults = new NSMutableArray();
-						for (EOEnterpriseObject eo : (NSArray<EOEnterpriseObject>) ec.registeredObjects()) {
+						for (EOEnterpriseObject eo : candidates) {
 							if (eo instanceof AutoBatchFaultingEnterpriseObject) {
-								if (((AutoBatchFaultingEnterpriseObject) eo).batchFaultingTimeStamp() == timestamp) {
+								if (((AutoBatchFaultingEnterpriseObject) eo).batchFaultingTimeStamp() == timestamp || fromThreadStorage) {
 									if (!EOFaultHandler.isFault(eo) && eo.classDescription() == source.classDescription()) {
 										Object fault = eo.storedValueForKey(key);
 										if (EOFaultHandler.isFault(fault)) {
@@ -579,9 +596,7 @@ public class ERXDatabaseContextDelegate {
 						markEnd("ToMany.Calculation", source, key);
 						if (eos.count() > 1) {
 							markStart("ToMany.Fetching", source, key);
-							// dbc.batchFetchRelationship(relationship, eos, ec);
-							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
-							// ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
+							doFetch(dbc, ec, relationship, eos);
 							int cnt = 0;
 							for(Object fault: faults) {
 								if(!EOFaultHandler.isFault(fault)) {
@@ -632,12 +647,21 @@ public class ERXDatabaseContextDelegate {
 					if(_handler.batchSizeForRelationship(ec, relationship) > 0 && !relationship.isToMany()) {
 						markStart("ToOne.Calculation", source, key);
 						long timestamp = source.batchFaultingTimeStamp();
+						boolean fromThreadStorage = false;
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
 						NSMutableSet faults = new NSMutableSet();
-						for (EOEnterpriseObject current : (NSArray<EOEnterpriseObject>)ec.registeredObjects()) {
+						NSArray<EOEnterpriseObject> candidates = null;
+						NSArray currentObjects = (NSArray) ERXThreadStorage.valueForKey(THREAD_KEY);
+						if(currentObjects != null && currentObjects.lastObject() instanceof AutoBatchFaultingEnterpriseObject) {
+							candidates = currentObjects;
+							fromThreadStorage = true;
+						} else {
+							candidates = ec.registeredObjects();
+						}
+						for (EOEnterpriseObject current : candidates) {
 							if (current instanceof AutoBatchFaultingEnterpriseObject) {
 								AutoBatchFaultingEnterpriseObject currentEO = (AutoBatchFaultingEnterpriseObject) current;
-								if(currentEO.batchFaultingTimeStamp() == timestamp) {
+								if(currentEO.batchFaultingTimeStamp() == timestamp || fromThreadStorage) {
 									if(source.classDescription() == currentEO.classDescription()) {
 										if(!EOFaultHandler.isFault(currentEO)) {
 											Object fault = currentEO.storedValueForKey(key);
@@ -653,12 +677,11 @@ public class ERXDatabaseContextDelegate {
 								}
 							}
 						}
+
 						markEnd("ToOne.Calculation", source, key);
 						if(eos.count() > 1) {
 							markStart("ToOne.Fetching", source, key);
-							// dbc.batchFetchRelationship(relationship, eos, ec);
-							ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
-							// ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
+							doFetch(dbc, ec, relationship, eos);
 							freshenFetchTimestamps(faults.allObjects(), timestamp);
 							markEnd("ToOne.Fetching", source, key);
 							if(batchLog.isDebugEnabled()) {
@@ -675,6 +698,12 @@ public class ERXDatabaseContextDelegate {
 		return true;
 	}
 
+	private void doFetch(EODatabaseContext dbc, EOEditingContext ec, EORelationship relationship, NSArray eos) {
+		// dbc.batchFetchRelationship(relationship, eos, ec);
+		ERXEOAccessUtilities.batchFetchRelationship(dbc, relationship, eos, ec, true);
+		//ERXBatchFetchUtilities.batchFetch(eos, relationship.name());
+	}
+	
 	private BatchHandler DEFAULT = new BatchHandler() {
 		public int batchSizeForRelationship(EOEditingContext ec, EORelationship relationship) {
 			// AK: this looks like a bug in EOF: when we have a flattened toMany (probably also to-one) to an abstract,
