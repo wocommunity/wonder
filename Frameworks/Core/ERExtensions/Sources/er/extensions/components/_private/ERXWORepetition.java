@@ -20,9 +20,12 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
+import er.extensions.eof.ERXBatchFetchUtilities;
 import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXDatabaseContextDelegate;
 import er.extensions.eof.ERXRecursiveBatchFetching;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -297,6 +300,7 @@ public class ERXWORepetition extends WODynamicGroup {
 			Integer integer = ERXConstant.integerForInt(i);
 			_index._setValueNoValidation(integer, wocomponent);
 		}
+		
 		wocontext.deleteLastElementIDComponent();
 	}
 
@@ -346,13 +350,19 @@ public class ERXWORepetition extends WODynamicGroup {
 
 	protected Context createContext(WOComponent wocomponent) {
 		Object list = (_list != null ? _list.valueInComponent(wocomponent) : null);
-		if (_batchFetch != null && list instanceof NSArray) {
-			String batchFetchKeyPaths = (String)_batchFetch.valueInComponent(wocomponent);
-			if (batchFetchKeyPaths != null) {
-				NSArray<String> keyPaths = NSArray.componentsSeparatedByString(batchFetchKeyPaths, ",");
-				if (keyPaths.count() > 0) {
-					ERXRecursiveBatchFetching.batchFetch((NSArray)list, keyPaths, true);
+		if(list instanceof NSArray) {
+			if (_batchFetch != null) {
+				String batchFetchKeyPaths = (String)_batchFetch.valueInComponent(wocomponent);
+				if (batchFetchKeyPaths != null) {
+					NSArray<String> keyPaths = NSArray.componentsSeparatedByString(batchFetchKeyPaths, ",");
+					if (keyPaths.count() > 0) {
+						ERXBatchFetchUtilities.batchFetch((NSArray)list, keyPaths, true);
+					}
 				}
+			}
+			NSArray arr = (NSArray)list;
+			if(ERXDatabaseContextDelegate.autoBatchFetchSize() > 0 && arr.lastObject() instanceof EOEnterpriseObject) {
+				ERXThreadStorage.takeValueForKey(arr, ERXDatabaseContextDelegate.THREAD_KEY);
 			}
 		}
 		return new Context(list);
