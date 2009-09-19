@@ -520,6 +520,8 @@ public class ERXValidationFactory {
      * @param targetLanguage target language name
      * @return a templaet for the given set of parameters
      */
+    // The lookupKey additions are necessary because the MZ version of the localizer never returns null for the
+    // localized version of a key, instead returning the original query string.
     protected String templateForEntityPropertyType(String entityName,
                                                    String property,
                                                    String type,
@@ -527,21 +529,30 @@ public class ERXValidationFactory {
         if (log.isDebugEnabled())
             log.debug("Looking up template for entity named \"" + entityName + "\" property \"" + property
                       + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"");
+        String lookupKey = entityName + "." + property + "." + type;
         // 1st try the whole string.
-        String template = templateForKeyPath(entityName + "." + property + "." + type, targetLanguage);
+        String template = templateForKeyPath(lookupKey, targetLanguage);
         // 2nd try everything minus the type.
-        if (template == null)
-            template = templateForKeyPath(entityName + "." + property, targetLanguage);
+        if (template == null || template.equals(VALIDATION_TEMPLATE_PREFIX + lookupKey)) {
+            lookupKey = entityName + "." + property;
+            template = templateForKeyPath(lookupKey, targetLanguage);
+        }
         // 3rd try property plus type
-        if (template == null)
-            template = templateForKeyPath(property + "." + type, targetLanguage);
+        if (template == null || template.equals(VALIDATION_TEMPLATE_PREFIX + lookupKey)) {
+            lookupKey = property + "." + type;
+            template = templateForKeyPath(lookupKey, targetLanguage);
+        }
         // 4th try just property
-        if (template == null)
-            template = templateForKeyPath(property, targetLanguage);
+        if (template == null || template.equals(VALIDATION_TEMPLATE_PREFIX + lookupKey)) {
+            lookupKey = property;
+            template = templateForKeyPath(lookupKey, targetLanguage);
+        }
         // 5th try just type
-        if (template == null)
-            template = templateForKeyPath(type, targetLanguage);
-        if (template == null) {
+        if (template == null || template.equals(VALIDATION_TEMPLATE_PREFIX + lookupKey)) {
+            lookupKey = type;
+            template = templateForKeyPath(lookupKey, targetLanguage);
+        }
+        if (template == null || template.equals(VALIDATION_TEMPLATE_PREFIX + lookupKey)) {
             template = UNDEFINED_VALIDATION_TEMPLATE + " entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
             log.error(template);
         }
