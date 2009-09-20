@@ -7,6 +7,7 @@ import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EODatabaseOperation;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.ERXEOAccessHelper;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
@@ -70,6 +71,11 @@ public class ERXDatabaseContext extends EODatabaseContext {
 			}
 		}
 		return results;
+	}
+	
+	public void _followFetchSpecification(EOFetchSpecification fetchSpec, String relationshipName, NSArray sourceObjects, EOEditingContext context) {
+		fetchSpec = ERXEOAccessHelper.adjustPrefetching(this, fetchSpec, relationshipName, sourceObjects, context);
+		super._followFetchSpecification(fetchSpec, relationshipName, sourceObjects, context);
 	}
 
 	public void _verifyNoChangesToReadonlyEntity(EODatabaseOperation dbOp) {
