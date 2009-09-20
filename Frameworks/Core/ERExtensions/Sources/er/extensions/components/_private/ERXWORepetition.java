@@ -360,10 +360,7 @@ public class ERXWORepetition extends WODynamicGroup {
 					}
 				}
 			}
-			NSArray arr = (NSArray)list;
-			if(ERXDatabaseContextDelegate.autoBatchFetchSize() > 0 && arr.lastObject() instanceof EOEnterpriseObject) {
-				ERXThreadStorage.takeValueForKey(arr, ERXDatabaseContextDelegate.THREAD_KEY);
-			}
+			ERXDatabaseContextDelegate.setCurrentBatchObjects((NSArray)list);
 		}
 		return new Context(list);
 	}
