@@ -166,9 +166,8 @@ public class ERXDatabaseContextDelegate {
 	 * @param databaseContext
 	 * @param throwable
 	 */
-	public synchronized boolean  databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
-		if(reportingError) return true;
-		reportingError = true;
+	public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
+		if(!reportingError.canEnter(databaseContext)) return true;
 		try {
 			if(exLog.isDebugEnabled()) {
 				exLog.debug("Database Exception occured: " + throwable, throwable);
@@ -190,7 +189,7 @@ public class ERXDatabaseContextDelegate {
 			//log.info(NSPropertyListSerialization.stringFromPropertyList(EOUtilities.modelGroup(ec).models().valueForKey("connectionDictionary")));
 			return true;
 		} finally {
-			reportingError = false;
+			reportingError.leave(databaseContext);
 		}
 	}
 
@@ -218,9 +217,8 @@ public class ERXDatabaseContextDelegate {
      *         is called directly on the database object of the context and <code>false</code> is returned otherwise <code>true</code>.
      */
     // CHECKME: Is this still needed now?
-    public synchronized boolean databaseContextShouldHandleDatabaseException(EODatabaseContext dbc, Exception e) throws Throwable {
-    	if(reportingError) return true;
-    	reportingError = true;
+    public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext dbc, Exception e) throws Throwable {
+    	if(!reportingError.canEnter(dbc)) return true;
     	try {
     		EOAdaptor adaptor=dbc.adaptorContext().adaptor();
     		boolean shouldHandleConnection = false;
@@ -243,7 +241,7 @@ public class ERXDatabaseContextDelegate {
     		}
         	return shouldHandleConnection;
     	} finally {
-    		reportingError = false;
+    		reportingError.leave(dbc);
     	}
     }
 
@@ -444,17 +442,17 @@ public class ERXDatabaseContextDelegate {
     /**
      * The delegate is not reentrant, so this marks whether we are already reporting an error (most probably due to a logging pattern)
      */
-    private boolean reportingError = false;
+    private ReentranceProtector reportingError = new ReentranceProtector();
 
     /**
      * The delegate is not reentrant, so this marks whether we are already batch faulting a to-many relationship.
      */
-    private boolean fetchingToMany = false;
+    private ReentranceProtector fetchingToMany = new ReentranceProtector();
 
     /**
      * The delegate is not reentrant, so this marks whether we are already batch faulting a to-one relationship.
      */
-    private boolean fetchingToOne = false;
+    private ReentranceProtector fetchingToOne = new ReentranceProtector();
     
     /**
      * Holds the auto batch fetch size.
@@ -502,6 +500,23 @@ public class ERXDatabaseContextDelegate {
 		 * @return relationship name or null
 		 */
     	public String batchFaultingRelationshipName();
+    }
+    
+    private class ReentranceProtector {
+    	
+    	private NSMutableArray<EODatabaseContext> _accessing = new NSMutableArray<EODatabaseContext>();
+    	
+    	public synchronized boolean canEnter(EODatabaseContext dbc) {
+    		if(_accessing.containsObject(dbc)) {
+    			return false;
+    		}
+    		_accessing.addObject(dbc);
+    		return true;
+    	}
+    	
+       	public synchronized void leave(EODatabaseContext dbc) {
+    		_accessing.removeObject(dbc);
+    	}
     }
 
     public interface BatchHandler {
@@ -554,7 +569,7 @@ public class ERXDatabaseContextDelegate {
     	if(autoBatchFetchSize == -1) {
     		autoBatchFetchSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize", 0);
     	}
-    	// if(true) return 50;
+    	//if(true) return 50;
     	return autoBatchFetchSize;
     }
 
@@ -569,9 +584,8 @@ public class ERXDatabaseContextDelegate {
 	 *            to-many fault
 	 * @return true if it's still a fault.
 	 */
-	private synchronized boolean batchFetchToManyFault(EODatabaseContext dbc, Object obj) {
-		if (!fetchingToMany) {
-			fetchingToMany = true;
+	private boolean batchFetchToManyFault(EODatabaseContext dbc, Object obj) {
+		if (fetchingToMany.canEnter(dbc)) {
 			try {
 				EOAccessArrayFaultHandler handler = (EOAccessArrayFaultHandler) EOFaultHandler.handlerForFault(obj);
 				EOEditingContext ec = handler.editingContext();
@@ -632,7 +646,7 @@ public class ERXDatabaseContextDelegate {
 				}
 			}
 			finally {
-				fetchingToMany = false;
+				fetchingToMany.leave(dbc);
 			}
 		}
 		return true;
@@ -651,8 +665,7 @@ public class ERXDatabaseContextDelegate {
 	 */
 
 	private synchronized boolean batchFetchToOneFault(EODatabaseContext dbc, AutoBatchFaultingEnterpriseObject eo) {
-		if(!fetchingToOne) {
-			fetchingToOne = true;
+		if(fetchingToOne.canEnter(dbc)) {
 			try {
 				EOGlobalID sourceGID = eo.batchFaultingSourceGlobalID();
 				String key = eo.batchFaultingRelationshipName();
@@ -709,7 +722,7 @@ public class ERXDatabaseContextDelegate {
 					}
 				}
 			} finally {
-				fetchingToOne = false;
+				fetchingToOne.leave(dbc);
 			}
 		}
 		return true;
@@ -739,5 +752,13 @@ public class ERXDatabaseContextDelegate {
 			handler = DEFAULT;
 		}
 		_handler = handler;
+	}
+	
+	public static void setCurrentBatchObjects(NSArray arr) {
+		if(ERXDatabaseContextDelegate.autoBatchFetchSize() > 0) {
+			if(arr == null || arr.lastObject() instanceof EOEnterpriseObject) {
+				ERXThreadStorage.takeValueForKey(arr, ERXDatabaseContextDelegate.THREAD_KEY);
+			}
+		}
 	}
 }
