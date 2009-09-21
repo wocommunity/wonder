@@ -7,11 +7,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * There can only be one handler for any signal, so we define a catch-all
- * handler that makes a NSNotification from it. To use it, you need to define
- * the property <code>er.foundation.ERXSignalHandler.signals=HUP, TERM</code>
- * and listen to the notifications <code>HandleSignalHUP</code> and
- * <code>HandleSignalTERM</code>.
+ * There can only be one handler for any signal, so we have our own handler that
+ * maintains a list. Simply register your handlers to this one.
  * 
  * @author ak
  * 
@@ -20,15 +17,12 @@ public class ERXSignalHandler implements SignalHandler {
 	
 	static ERXSignalHandler _handler;
 	
-	public static final String HANDLE = "HandleSignal";
-	
 	private NSMutableDictionary<String, NSMutableArray<SignalHandler>> signals = new NSMutableDictionary();
 	
 	/**
-	 * Convenience to listen to a signal.
-	 * @param signalName
-	 * @param selectorName
-	 * @param listener
+	 * Adds your handler with the supplied signal name to the queue.
+	 * @param signalName eg HUP. TERM etc.
+	 * @param handler SignalHandler object
 	 */
 	public synchronized static void register(String signalName, SignalHandler handler) {
 		signalName = normalize(signalName);
@@ -45,11 +39,12 @@ public class ERXSignalHandler implements SignalHandler {
 		}
 		listeners.addObject(handler);
 	}
-
-	private static String normalize(String signalName) {
-		return signalName.toUpperCase();
-	}
 	
+	/**
+	 * Removes your handler with the supplied signal name from the queue.
+	 * @param signalName eg HUP. TERM etc.
+	 * @param handler SignalHandler object
+	 */
 	public synchronized static void unregister(String signalName, SignalHandler handler) {
 		signalName = normalize(signalName);
 		NSMutableArray<SignalHandler> listeners = _handler.signals.objectForKey(signalName);
@@ -69,6 +64,10 @@ public class ERXSignalHandler implements SignalHandler {
 				handler.handle(signal);
 			}
 		}
+	}
+
+	private static String normalize(String signalName) {
+		return signalName.toUpperCase();
 	}
 	
 }
