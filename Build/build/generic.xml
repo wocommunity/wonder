@@ -165,7 +165,8 @@ There are many ways to use this script:
         <property name="fRJ" value="framework/Resources/Java" />
         <!-- just some existing value -->
         <property name="project.sources.dir" value="${project.dir}/Sources" />
-        <property name="project.tests.dir" value="${project.dir}/Tests" />
+        <property name="project.test.sources.dir" value="${project.dir}/Tests/Sources" />
+        <property name="project.test.resources.dir" value="${project.dir}/Tests/Resources" />
         <property name="patches.dir" value="${wonder.root}/Build/build" />
         <property name="classes.exclude.0" value="does_not_exists_hopefully" />
         <property name="classes.exclude.1" value="does_not_exists_hopefully" />
@@ -292,12 +293,14 @@ There are many ways to use this script:
              does, so this second <wocompile> becomes a noop.
 
              Does this seem lame? To me, also. I have suggested a "if" attribute for <wocompile> and
-             this will be simplified if that goes in. -rrk
+             this will be simplified if that goes in.
+
+             See: http://issues.objectstyle.org/jira/browse/WOL-1100
         -->
 
-        <condition property="tests.dir" value="${project.tests.dir}" else="${project.sources.dir}">
+        <condition property="tests.dir" value="${project.test.sources.dir}" else="${project.sources.dir}">
             <and>
-                <available file="${project.tests.dir}" />
+                <available file="${project.test.sources.dir}" />
                 <istrue value="${include.tests}" />
                 <isset property="test.className" />
             </and>
@@ -360,10 +363,32 @@ There are many ways to use this script:
     </target>
 
     <target name="global.framework.build" depends="global.properties,global.compile,global.unjar">
+
         <mkdir dir="${build.framework.dir}" />
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
             <classpath refid="ant.classpath"/>
         </taskdef>
+
+        <condition property="include.test.source">
+            <and>
+                <istrue value="${include.tests}" />
+                <available file="${project.dir}/Tests/Sources" />
+            </and>
+        </condition>
+
+        <!-- None of these conditions should be necessary. See http://issues.objectstyle.org/jira/browse/WOL-1101 -->
+        <condition property="include.test.resources">
+            <and>
+                <istrue value="${include.tests}" />
+                <available file="${project.dir}/Tests/Resources" />
+            </and>
+        </condition>
+        <condition property="test.resources.dir" value="${project.dir}/Tests/Resources" else="${project.dir}/Resources">
+            <istrue value="${include.test.resources}" />
+        </condition>
+        <condition property="test.resources.root" value="${build.root}/${project.name}.framework/TestResources" else="${build.root}/${project.name}.framework/Resources">
+            <istrue value="${include.test.resources}" />
+        </condition>
 
         <antcall target="${before.build}" />
         <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}" CFBundleVersion="${project.name} ${project.version}" CFBundleShortVersion="${project.version}" customInfoPListContent="${project.customInfo.plist}">
@@ -386,6 +411,9 @@ There are many ways to use this script:
             <sources dir="${project.sources.dir}" if="include.source">
                 <include name="**/*.java" />
             </sources>
+            <sources dir="${project.test.sources.dir}" if="include.test.source">
+                <include name="**/*.java" />
+            </sources>
             <resources dir="${project.dir}/Components">
                 <include name="**.api" />
                 <include name="**/*.wo/**" />
@@ -394,28 +422,26 @@ There are many ways to use this script:
                 <include name="**/*" /> 
                 <exclude name="*.*~/" />
             </resources>
+
+            <!-- This bit below does not work. If it did, we would not need the <copy> below.
+                 See: http://issues.objectstyle.org/jira/browse/WOL-1101
+
+            <resources toDir="${build.root}/${project.name}.framework/TestResources" fromDir="${project.dir}/Tests/Resources" if="include.test.resources">
+                <include name="**/*" />
+                <exclude name="*.*~/" />
+            </resources>
+            -->
+
             <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*" />
             </wsresources>
         </woframework>
 
-        <!-- It would be good to do this is a <resource> tag in the <woframework>, but that
-             tag does not support arbitrary directory names. The directories above are hard-coded
-             in WOFramework.java.
-             The <copy> tag cannot take an "if", but I set the directory to be copied to
-             "TestResources" if we want tests and "Resources" (and so a no-op) if we do not. -rrk
-        -->
-        <condition property="test.resources" value="TestResources" else="Resources">
-            <and>
-                <available file="${project.dir}/TestResources" />
-                <istrue value="${include.tests}" />
-            </and>
-        </condition>
-        <copy todir="${build.root}/${project.name}.framework/${test.resources}">
-            <fileset dir="${project.dir}/${test.resources}">
+        <!-- See note above, in re http://issues.objectstyle.org/jira/browse/WOL-1101 -->
+        <copy todir="${test.resources.root}">
+            <fileset dir="${test.resources.dir}">
                 <include name="**/*" />
                 <exclude name="*.*~/" />
-                <exclude name="**/.svn" />
             </fileset>
         </copy>
 
