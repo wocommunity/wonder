@@ -25,7 +25,7 @@ import com.webobjects.appserver.*;
 public interface ERCalendarEvent {
 
     /**
-    * @return	<code>false</code> if this event have specified
+     * Return <code>false</code> if this event have specified
      *		start and ending times.
      *		<code>true</code> if this event is a whole-day
      *		event without a specific starting and ending hour
@@ -35,14 +35,14 @@ public interface ERCalendarEvent {
     public boolean wholeDay();
 
     /**
-     * @return  the start time of this event. For whole-day events,
+     * Return the start time of this event. For whole-day events,
      *          the time part of the NSTimestamp is ignored.
      * @see     #endTime
      */
     public NSTimestamp startTime();
 
     /**
-     * @return  the end time of this event. For whole-day events,
+     * Return the end time of this event. For whole-day events,
      *          this should be a time on the day following the
      *          last day of this event (the time part of the
      *          NSTimestamp is ignored, and the iCalendar standard
@@ -53,7 +53,7 @@ public interface ERCalendarEvent {
     public NSTimestamp endTime();
 
     /**
-     * @return  the change counter of this event. The sequence of a
+     * Return the change counter of this event. The sequence of a
      *          calendar event is supposed to increase every time
      *		any information in the event is modified, so that
      *		updates to events can be ordered.
@@ -62,19 +62,19 @@ public interface ERCalendarEvent {
     public int sequence();
 
     /**
-     * @return  status of this event. Values defined by the iCalendar
+     * Return the status of this event. Values defined by the iCalendar
      *		standard are: "TENTATIVE", "CONFIRMED", "CANCELLED".
      *		Return null if event status is unspecified.
      */
     public String status();
 
     /**
-     * @return  summary or textual description of this event.
+     * Return a summary or textual description of this event.
      */
     public String summary();
 
     /**
-     * @return  a persistent, globally unique identifier for this
+     * Return a persistent, globally unique identifier for this
      *          event.
      *		The unique identifier <b>must</b> be a globally unique
      *		identifier. The generator of the identifier <b>must</b>
@@ -105,7 +105,7 @@ public interface ERCalendarEvent {
     public String uniqueId();
 
     /**
-     * @return  the frequency of a repeating event, or 0 for a one time
+     * Return the frequency of a repeating event, or 0 for a one time
      *		event. Can be specified as one of the
      *		<code>java.util.Calendar</code> field numbers
      *		<code>YEAR</code>, <code>MONTH</code>,
@@ -117,14 +117,14 @@ public interface ERCalendarEvent {
     public int repeatFrequency();
 
     /**
-     * @return  the number of occurences of a repeating event. Ignored
+     * Return the number of occurences of a repeating event. Ignored
      *		if {@link #repeatFrequency} returns 0.
      * @see     #repeatFrequency
      */
     public int repeatCount();
 
     /**
-     * @return  the day of week of a repeating event, or 0 for unspecified
+     * Return the day of week of a repeating event, or 0 for unspecified
      *		day of week. Can be specified as one of the
      *		<code>java.util.Calendar</code> <code>DAY_OF_WEEK</code>
      *		field values <code>SUNDAY</code>, <code>MONDAY</code>,
@@ -137,7 +137,7 @@ public interface ERCalendarEvent {
     public int repeatDayOfWeek();
 
     /**
-     * @return  the ordinal number of day of the week within a month
+     * Return the ordinal number of day of the week within a month
      *		at which the event repeats. Together with
      *		{@link #repeatDayOfWeek} it uniquely specifies a day
      *		within the month. Ignored if {@link #repeatFrequency}
@@ -147,7 +147,7 @@ public interface ERCalendarEvent {
     public int repeatDayOfWeekInMonth();
 
     /**
-     * @return  an array of {@link Integer} indicating the days
+     * Return an array of {@link Integer} indicating the days
      *		within a month, at which the event repeats, or
      *		<code>null</code> for not restricting repeating
      *		to certain days.
