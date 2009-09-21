@@ -1240,10 +1240,11 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray<?> array, String keypath) {
+        	NSArray values = array;
             if(keypath != null) {
-                array = contents(array, keypath);
+            	values = contents(array, keypath);
             }
-            if (array != null) array = removeNullValues(array);
+            if (values != null) array = removeNullValues(array, values);
             return array;
         }
     }
@@ -1723,11 +1724,23 @@ public class ERXArrayUtilities extends Object {
      * without NSKeyValueCoding.NullValue objects
      */
     public static <T> NSArray<T> removeNullValues(NSArray<T> array) {
+        return removeNullValues(array, array);
+    }
+    
+    /** Removes all occurencies of NSKeyValueCoding.NullValue in the provided array
+     * @param target array to remove objects from
+     * @param array array of values
+     * @return a new NSArray with the same order than the original array but 
+     * without NSKeyValueCoding.NullValue objects
+     */
+    public static <T> NSArray<T> removeNullValues(NSArray<T> target, NSArray<T> array) {
         NSMutableArray<T> result = new NSMutableArray<T>();
+        int i = 0;
         for (T object : array) {
             if (!(object instanceof NSKeyValueCoding.Null)) {
-                result.addObject(object);
+                result.addObject(target.objectAtIndex(i));
             }
+            i++;
         }
         return result;
     }
