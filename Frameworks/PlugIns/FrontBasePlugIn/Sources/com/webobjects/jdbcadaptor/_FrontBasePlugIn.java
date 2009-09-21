@@ -989,7 +989,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					sql.append(quoteTableName(tableName.toUpperCase()));
 					sql.append(" ADD");
 
-					StringBuffer constraint = new StringBuffer(" CONSTRAINT PRIMARY_KEY_");
+					StringBuffer constraint = new StringBuffer(" CONSTRAINT \"PRIMARY_KEY_");
 					constraint.append(tableName);
 
 					StringBuffer pkSql = new StringBuffer(" PRIMARY KEY (");
@@ -1005,6 +1005,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 						pkSql.append("\"");
 						constraint.append(columnName);
 					}
+					constraint.append("\"");
 					pkSql.append(") NOT DEFERRABLE INITIALLY IMMEDIATE");
 
 					if (USE_NAMED_CONSTRAINTS)
