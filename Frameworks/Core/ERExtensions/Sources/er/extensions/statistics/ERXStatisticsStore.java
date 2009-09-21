@@ -67,7 +67,9 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		Map<Thread, Map<Thread, StackTraceElement[]>> _fatalTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
 
 		public StopWatchTimer() {
-			new Thread(this).start();
+			Thread timerThread = new Thread(this);
+			timerThread.setDaemon(true);
+			timerThread.start();
 			maximumRequestWarnTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.warn", 2000L);
 			maximumRequestErrorTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.error", 10000L);
 			maximumRequestFatalTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.fatal", 5 * 60 * 1000L);
@@ -216,9 +218,11 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 						if (time > maximumRequestFatalTime && _fatalTraces.get(thread) == null) {
 							Map traces = Thread.getAllStackTraces();
 							_fatalTraces.put(thread, traces);
-							log.fatal("Request is taking too long, possible deadlock: " + time + " ms " + stringFromTraces(traces));
-							log.fatal("EC info:\n" + ERXEC.outstandingLockDescription());
-							log.fatal("OSC info:\n" + ERXObjectStoreCoordinator.outstandingLockDescription());
+							String message = "Request is taking too long, possible deadlock: " + time + " ms ";
+							message += stringFromTraces(traces);
+							message += "EC info:\n" + ERXEC.outstandingLockDescription();
+							message += "OSC info:\n" + ERXObjectStoreCoordinator.outstandingLockDescription();
+							log.fatal(message);
 						}
 					}
 				}
