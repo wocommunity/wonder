@@ -445,6 +445,9 @@ public class ERXEOAccessUtilities {
      */
     public static int rowCountForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
     	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+        if (entity == null)
+            throw new java.lang.IllegalStateException("entity could not be found for name \""+spec.entityName()+"\". Checked EOModelGroup for loaded models.");
+
     	EOModel model = entity.model();
 
     	EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
