@@ -22,6 +22,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.woextensions.WOEventDisplayPage;
 import com.webobjects.woextensions.WOEventSetupPage;
 import com.webobjects.woextensions.WOStatsPage;
@@ -397,7 +398,7 @@ public class ERXDirectAction extends WODirectAction {
      * Synopsis:<br/>
      * pw=<i>aPassword</i>&key=<i>someSystemPropertyKey</i>&value=<i>someSystemPropertyValue</i>
      *
-     * @return either null when the password is wrong or the key is missing or a new page showing the System properties
+     * @return either null when the password is wrong or a new page showing the System properties
      */
     public WOActionResults systemPropertyAction() {
     	WOResponse r = null;
@@ -406,14 +407,13 @@ public class ERXDirectAction extends WODirectAction {
     		String value = request().stringFormValueForKey("value");
     		r = new WOResponse();
     		if (ERXStringUtilities.stringIsNullOrEmpty(key) ) {
-    			r.appendContentString("key cannot be null or empty old System properties:\n"+System.getProperties());
+    			r.appendContentString(NSPropertyListSerialization.stringFromPropertyList(ERXProperties.allProperties()));
     		} else {
     			value = ERXStringUtilities.stringIsNullOrEmpty(value) ? "" : value;
     			java.util.Properties p = System.getProperties();
     			p.put(key, value);
     			System.setProperties(p);
                 ERXLogger.configureLoggingWithSystemProperties();
-    			r.appendContentString("<html><body>New System properties:<br>");
     			for (java.util.Enumeration e = p.keys(); e.hasMoreElements();) {
     				Object k = e.nextElement();
     				if (k.equals(key)) {
