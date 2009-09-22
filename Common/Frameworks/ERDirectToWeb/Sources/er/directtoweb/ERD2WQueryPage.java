@@ -26,9 +26,11 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSValidation;
 import er.extensions.ERXDisplayGroup;
 import er.extensions.ERXValueUtilities;
 import er.extensions.ERXResponseRewriter;
+import er.extensions.ERXLocalizer;
 
 import java.util.Enumeration;
 
@@ -50,6 +52,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     protected EOFetchSpecification fetchSpecification;
     
     protected ERDQueryDataSourceDelegateInterface queryDataSourceDelegate;
+    protected ERDQueryValidationDelegate queryValidationDelegate;
 
     protected NSArray _nullablePropertyKeys;
     protected NSMutableDictionary keysToQueryForNull = new NSMutableDictionary();
@@ -226,6 +229,22 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
     public WOComponent queryAction() {
         WOComponent nextPage = null;
+
+        // If we have a validation delegate, validate the query values before actually performing the query.
+        ERDQueryValidationDelegate queryValidationDelegate = queryValidationDelegate();
+        if (queryValidationDelegate != null) {
+            clearValidationFailed();
+            try {
+                queryValidationDelegate.validateQuery(this);
+            } catch (NSValidation.ValidationException ex) {
+    			setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotQuery", ex));
+    			validationFailedWithException(ex, null, "queryExceptionKey");
+    		}
+            if (hasErrors()) {
+                return context().page();
+            }
+        }
+
         if (ERXValueUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))) {
             setShowResults(true);
         } else {
@@ -350,6 +369,28 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
      */
     public void setQueryDataSourceDelegate(ERDQueryDataSourceDelegateInterface delegate) {
         queryDataSourceDelegate = delegate;
+    }
+
+    /**
+     * Gets the query validation delegate.
+     * @return the query validation delegate
+     */
+    public ERDQueryValidationDelegate queryValidationDelegate() {
+        if (null == queryValidationDelegate) {
+            queryValidationDelegate = (ERDQueryValidationDelegate)d2wContext().valueForKey("queryValidationDelegate");
+            if (null == queryValidationDelegate) {
+                queryValidationDelegate = new ERDQueryValidationDelegate.DefaultQueryValidationDelegate();
+            }
+        }
+        return queryValidationDelegate;
+    }
+
+    /**
+     * Sets the query validation delegate.
+     * @param delegate to use as the query validation delegate
+     */
+    public void setQueryValidationDelegate(ERDQueryValidationDelegate delegate) {
+        queryValidationDelegate = delegate;
     }
 
     /**
