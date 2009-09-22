@@ -8,7 +8,7 @@ package er.extensions.appserver;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Enumeration;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
@@ -18,11 +18,6 @@ import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.woextensions.WOEventDisplayPage;
 import com.webobjects.woextensions.WOEventSetupPage;
 import com.webobjects.woextensions.WOStatsPage;
@@ -408,11 +403,12 @@ public class ERXDirectAction extends WODirectAction {
     		r = new WOResponse();
     		if (ERXStringUtilities.stringIsNullOrEmpty(key) ) {
         		String user = request().stringFormValueForKey("user");
+        		Properties props = ERXConfigurationManager.defaultManager().defaultProperties();
         		if(user != null) {
         			System.setProperty("user.name", user);
-        			ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
+        			props = ERXConfigurationManager.defaultManager().applyConfiguration(props);
         		}
-    			r.appendContentString(NSPropertyListSerialization.stringFromPropertyList(ERXProperties.allProperties()));
+    			r.appendContentString(ERXProperties.logString(props));
     		} else {
         		String value = request().stringFormValueForKey("value");
     			value = ERXStringUtilities.stringIsNullOrEmpty(value) ? "" : value;
