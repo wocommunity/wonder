@@ -40,6 +40,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.crypting.ERXCrypto;
+import er.extensions.logging.ERXLogger;
 
 /**
  * Collection of simple utility methods used to get and set properties
@@ -854,51 +855,39 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         return pathsForUserAndBundleProperties(false);
     }
 
+    private static void addIfPresent(String info, String path, NSMutableArray<String> propertiesPaths, NSMutableArray<String> projectsInfo) {
+    	if(path != null && path.length() > 0) {
+    		path = getActualPath(path);
+    		if(propertiesPaths.containsObject(path)) {
+    			log.error("Path was already included: " + path + "");
+    		}
+    		projectsInfo.addObject("  " + info +" -> " + path);
+    		propertiesPaths.addObject(path);
+    	}
+    }
+    
     public static NSArray pathsForUserAndBundleProperties(boolean reportLoggingEnabled) {
         NSMutableArray<String> propertiesPaths = new NSMutableArray();
         NSMutableArray<String> projectsInfo = new NSMutableArray();
-        String projectPath, propertyPath = null;
-        WOApplication application = WOApplication.application();
-        if (application == null && false) {
-            log.warn("The application is not yet initialized. Returning an empty array.");
-            return NSArray.EmptyArray;
-        }
 
         /*  Properties for frameworks */
         NSArray frameworkNames = (NSArray) NSBundle.frameworkBundles().valueForKey("name");
         Enumeration e = frameworkNames.reverseObjectEnumerator();
         while (e.hasMoreElements()) {
         	String frameworkName = (String) e.nextElement();
-        	projectPath = propertyPath = null;
-        	propertyPath = ERXFileUtilities.pathForResourceNamed("Properties", frameworkName, null);
-        	if (propertyPath != null) {
-        		propertyPath = getActualPath(propertyPath);
-        		projectsInfo.addObject("  " + frameworkName + ".framework -> " + propertyPath);
-        	}
 
-        	if (propertyPath != null)
-        		propertiesPaths.addObject(propertyPath);
+        	String propertyPath = ERXFileUtilities.pathForResourceNamed("Properties", frameworkName, null);
+        	addIfPresent(frameworkName + ".framework", propertyPath, propertiesPaths, projectsInfo);
 
         	/** Properties.<userName> -- per-Framework-per-User properties */
         	String userPropertiesPath = ERXProperties.variantPropertiesInBundle(ERXSystem.getProperty("user.name"), frameworkName);
-        	if (userPropertiesPath != null) {
-        		projectsInfo.addObject("  " + frameworkName + ".framework.user ->" + userPropertiesPath);
-        		propertiesPaths.addObject(userPropertiesPath);
-        	}
+        	addIfPresent(frameworkName + ".framework.user", userPropertiesPath, propertiesPaths, projectsInfo);
         }
 
-        projectPath = propertyPath = null;
         String mainBundleName = NSBundle.mainBundle().name();
-        // The application project is not opened from PBX, use the one in
-        // the bundle.
-        propertyPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
-        if (propertyPath != null) {
-        	propertyPath = getActualPath(propertyPath);
-        	projectsInfo.addObject("  " + mainBundleName + ".app -> " + propertyPath);
-        }
-        
-        if (propertyPath != null)
-        	propertiesPaths.addObject(propertyPath);
+
+        String appPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
+    	addIfPresent(mainBundleName + ".app", appPath, propertiesPaths, projectsInfo);
 
 		/*  WebObjects.properties in the user home directory */
 		String userHome = ERXSystem.getProperty("user.home");
@@ -906,9 +895,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			File file = new File(userHome, "WebObjects.properties");
 			if (file.exists() && file.isFile() && file.canRead()) {
 				try {
-					propertyPath = file.getCanonicalPath();
-					projectsInfo.addObject("  {$user.home}/WebObjects.properties -> " + propertyPath);
-					propertiesPaths.addObject(propertyPath);
+					String userHomePath = file.getCanonicalPath();
+			    	addIfPresent("{$user.home}/WebObjects.properties", userHomePath, propertiesPaths, projectsInfo);
 				}
 				catch (java.io.IOException ex) {
 					ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
@@ -923,9 +911,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				File file = new File(configFile);
 				if (file.exists() && file.isFile() && file.canRead()) {
 					try {
-						propertyPath = file.getCanonicalPath();
-						projectsInfo.addObject("  Optional Configuration -> " + propertyPath);
-						propertiesPaths.addObject(propertyPath);
+						String optionalPath = file.getCanonicalPath();
+				    	addIfPresent("Optional Configuration", optionalPath, propertiesPaths, projectsInfo);
 					}
 					catch (java.io.IOException ex) {
 						ERXProperties.log.error("Failed to load configuration file '" + file.getAbsolutePath() + "'.", ex);
@@ -939,24 +926,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
         /** /etc/WebObjects/AppName/Properties -- per-Application-per-Machine properties */
         String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
-        if (applicationMachinePropertiesPath != null) {
-        	projectsInfo.addObject("  Application-Machine Properties -> " + applicationMachinePropertiesPath);
-        	propertiesPaths.addObject(applicationMachinePropertiesPath);
-        }
+    	addIfPresent("Application-Machine Properties", applicationMachinePropertiesPath, propertiesPaths, projectsInfo);
 
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationDeveloperPropertiesPath = ERXProperties.applicationDeveloperProperties();
-        if (applicationDeveloperPropertiesPath != null) {
-        	projectsInfo.addObject("  Application-Developer Properties -> " + applicationDeveloperPropertiesPath);
-        	propertiesPaths.addObject(applicationDeveloperPropertiesPath);
-        }
+    	addIfPresent("Application-Developer Properties", applicationDeveloperPropertiesPath, propertiesPaths, projectsInfo);
 
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
-        if (applicationUserPropertiesPath != null) {
-        	projectsInfo.addObject("  Application-User Properties -> " + applicationUserPropertiesPath);
-        	propertiesPaths.addObject(applicationUserPropertiesPath);
-        }
+    	addIfPresent("Application-User Properties", applicationUserPropertiesPath, propertiesPaths, projectsInfo);
         
         /*  Report the result */
 		if (reportLoggingEnabled && projectsInfo.count() > 0 && log.isInfoEnabled()) {
@@ -964,12 +942,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			message.append("\n\n").append("ERXProperties has found the following Properties files: \n");
 			message.append(projectsInfo.componentsJoinedByString("\n"));
 			message.append("\n");
-			message.append("ERXProperties loaded the following Properties: \n");
-			message.append(logString(ERXSystem.getProperties()));
+			message.append("ERXProperties currently has the following properties:\n");
+			message.append(ERXProperties.logString(ERXSystem.getProperties()));
+			// ERXLogger.configureLoggingWithSystemProperties();
 			log.info(message.toString());
 		}
 
-		return propertiesPaths.immutableClone();
+    	return propertiesPaths.immutableClone();
     }
 
     /**
