@@ -50,7 +50,7 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 	}
 
 	public Object clone() {
-		ERXSingleValueID result = new ERXSingleValueID(_literalEntityName(), _keyValuesNoCopy());
+		ERXSingleValueID result = new ERXSingleValueID(_literalEntityName(), _keyValuesNoCopy()[0]);
 		_prepClone(result);
 		return result;
 	}
