@@ -770,6 +770,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
     }
     
+
+    
     /**
      * Reads a Java properties file at the given path 
      * and returns a {@link java.util.Properties Properties} object 
@@ -949,6 +951,44 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		}
 
     	return propertiesPaths.immutableClone();
+    }
+
+    /**
+     * Apply the current configuration to the supplied properties.
+     * @param source
+     * @param commandLine
+     */
+    public static Properties applyConfiguration(Properties source, Properties commandLine) {
+
+    	Properties dest = source != null ? (Properties) source.clone() : new Properties();
+    	NSArray additionalConfigurationFiles = ERXProperties.pathsForUserAndBundleProperties(false);
+
+    	if (additionalConfigurationFiles.count() > 0) {
+    		for (Enumeration configEnumerator = additionalConfigurationFiles.objectEnumerator(); configEnumerator.hasMoreElements();) {
+    			String configFile = (String)configEnumerator.nextElement();
+    			File file = new File(configFile);
+    			if (file.exists() && file.isFile() && file.canRead()) {
+    				try {
+    					Properties props = ERXProperties.propertiesFromFile(file);
+    					if(log.isDebugEnabled()) {
+    						log.debug("Loaded: " + file + "\n" + ERXProperties.logString(props));
+    					}
+    					ERXProperties.transferPropertiesFromSourceToDest(props, dest);
+    				} catch (java.io.IOException ex) {
+    					log.error("Unable to load optional configuration file: " + configFile, ex);
+    				}
+    			}
+    			else {
+    				ERXConfigurationManager.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or cannot be read.");
+    			}
+    		}
+    	}
+
+    	if(commandLine != null) {
+    		ERXProperties.transferPropertiesFromSourceToDest(commandLine, dest);
+    	}
+		return dest;
+    	
     }
 
     /**
@@ -1589,5 +1629,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				_files.pop();
 			}
 		}
+	}
+
+	public static void setCommandLineArguments(String[] argv) {
+		
 	}
 }
