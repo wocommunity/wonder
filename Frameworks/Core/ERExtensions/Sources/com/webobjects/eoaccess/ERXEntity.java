@@ -7,7 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * ERXEntity provides a basic subclass of EOEntity providing
@@ -92,4 +94,11 @@ public class ERXEntity extends EOEntity {
 		this._classDescription = classDescription;
 	}
 
+	/**
+	 * Overridden through our bottleneck.
+	 */
+	@Override
+	protected EOKeyGlobalID _globalIDWithoutTypeCoercion(Object[] values) {
+		return ERXSingleValueID.globalIDWithEntityName(name(), values);
+	}
 }

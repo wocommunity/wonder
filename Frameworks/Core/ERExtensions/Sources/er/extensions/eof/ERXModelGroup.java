@@ -26,6 +26,7 @@ import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.ERXEntity;
 import com.webobjects.eoaccess.ERXModel;
 import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.foundation.NSArray;
@@ -465,7 +466,7 @@ public class ERXModelGroup extends EOModelGroup {
 			}
 		}
 		else {
-			model = new EOModel(url);
+			model = new ERXModel(url);
 		}
 		addModel(model);
 		return model;
