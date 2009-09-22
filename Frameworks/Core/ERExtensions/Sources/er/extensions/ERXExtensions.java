@@ -168,11 +168,11 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	
     	try {
     		// This will load any optional configuration files, 
-    		ERXConfigurationManager.defaultManager().initialize();
     		// ensures that WOOutputPath's was processed with this @@
     		// variable substitution. WOApplication uses WOOutputPath in
     		// its constructor so we need to modify it before calling
     		// the constructor.
+    		ERXConfigurationManager.defaultManager().initialize();
         	EOModelGroup.setClassDelegate(this);
         	ERXSystem.updateProperties();
 
@@ -224,12 +224,12 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * This method is called when the application has finished
      * launching. Here is where log4j is configured for rapid
-     * turn around, the compiler proxy is initialized and the
-     * validation template system is configured.
+     * turn around and the validation template system is configured.
      */
     public void finishInitialization() {
     	ERXJDBCAdaptor.registerJDBCAdaptor();
-        ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
+        //AK: we now load all files rather early on, so we don't need to do it again
+    	// ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
         ERXProperties.populateSystemProperties();
         
         ERXConfigurationManager.defaultManager().configureRapidTurnAround();
