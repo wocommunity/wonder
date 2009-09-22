@@ -294,8 +294,11 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
             }
 
         });
-
+        reaper.setName("ERXJDBCReaper");
+        reaper.setDaemon(true);
         reaper.start();
+        pinger.setName("ERXJDBCPinger");
+        pinger.setDaemon(true);
         pinger.start();
         
         log.info("Started Broker : " + this);

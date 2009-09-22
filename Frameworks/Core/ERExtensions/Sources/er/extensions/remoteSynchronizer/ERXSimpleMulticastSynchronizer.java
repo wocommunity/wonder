@@ -201,6 +201,8 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 				}
 			}
 		});
+		listenThread.setName("ERXSimpleMultiCastListener");
+		listenThread.setDaemon(true);
 		listenThread.start();
 	}
 
