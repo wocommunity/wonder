@@ -32,6 +32,7 @@ import er.extensions.components.ERXStringHolder;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
+import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -404,11 +405,16 @@ public class ERXDirectAction extends WODirectAction {
     	WOResponse r = null;
     	if (canPerformActionWithPasswordKey("er.extensions.ERXDirectAction.ChangeSystemPropertyPassword")) {
     		String key = request().stringFormValueForKey("key");
-    		String value = request().stringFormValueForKey("value");
     		r = new WOResponse();
     		if (ERXStringUtilities.stringIsNullOrEmpty(key) ) {
+        		String user = request().stringFormValueForKey("user");
+        		if(user != null) {
+        			System.setProperty("user.name", user);
+        			ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
+        		}
     			r.appendContentString(NSPropertyListSerialization.stringFromPropertyList(ERXProperties.allProperties()));
     		} else {
+        		String value = request().stringFormValueForKey("value");
     			value = ERXStringUtilities.stringIsNullOrEmpty(value) ? "" : value;
     			java.util.Properties p = System.getProperties();
     			p.put(key, value);

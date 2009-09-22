@@ -175,7 +175,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		ERXConfigurationManager.defaultManager().initialize();
         	EOModelGroup.setClassDelegate(this);
         	ERXSystem.updateProperties();
-
+ 
     		// AK: enable this when we're ready
         	// WOEncodingDetector.sharedInstance().setFallbackEncoding("UTF-8");
         	
@@ -243,6 +243,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         // ERXLogger.configureLoggingWithSystemProperties();
         
         _log = Logger.getLogger(ERXExtensions.class);
+		ERXProperties.pathsForUserAndBundleProperties(true);
 
         registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), 
                 EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));

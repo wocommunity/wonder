@@ -123,6 +123,7 @@ public class ERXConfigurationManager {
     
     private String[] _commandLineArguments; 
     private NSArray _monitoredProperties;
+    private Properties _defaultProperties;
     private boolean _isInitialized = false;
     private boolean _isRapidTurnAroundInitialized = false;
 
@@ -169,6 +170,7 @@ public class ERXConfigurationManager {
      */
     public void setCommandLineArguments(String [] newCommandLineArguments) {
         _commandLineArguments = newCommandLineArguments;
+		_defaultProperties = System.getProperties();
     }
 
     /**
@@ -185,7 +187,7 @@ public class ERXConfigurationManager {
 
     private NSArray monitoredProperties() {
         if( _monitoredProperties == null) {
-            _monitoredProperties = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
+            _monitoredProperties = ERXProperties.pathsForUserAndBundleProperties();
         }
         return _monitoredProperties;
     }
