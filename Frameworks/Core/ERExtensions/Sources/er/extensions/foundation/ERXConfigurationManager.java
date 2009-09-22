@@ -14,11 +14,13 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.ERXExtensions;
@@ -182,7 +184,7 @@ public class ERXConfigurationManager {
     }
 
     private NSArray monitoredProperties() {
-        if( _monitoredProperties == null ) {
+        if( _monitoredProperties == null) {
             _monitoredProperties = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
         }
         return _monitoredProperties;
@@ -260,7 +262,7 @@ public class ERXConfigurationManager {
      * re-load the command line args.
      */
     public void loadOptionalConfigurationFiles() {
-    	NSArray additionalConfigurationFiles = ERXProperties.pathsForUserAndBundleProperties();
+    	NSArray additionalConfigurationFiles = ERXProperties.pathsForUserAndBundleProperties(false);
 
         if (additionalConfigurationFiles.count() > 0) {
             Properties systemProperties = System.getProperties();
@@ -268,12 +270,15 @@ public class ERXConfigurationManager {
                 String configFile = (String)configEnumerator.nextElement();
                 File file = new File(configFile);
                 if (file.exists() && file.isFile() && file.canRead()) {
-                    try {
-                        Properties props = ERXProperties.propertiesFromFile(file);
-                        ERXProperties.transferPropertiesFromSourceToDest(props, systemProperties);
-                        ERXSystem.updateProperties();
-                    } catch (java.io.IOException ex) {
-                        log.error("Unable to load optional configuration file: " + configFile, ex);
+                	try {
+                		Properties props = ERXProperties.propertiesFromFile(file);
+                		if(log.isDebugEnabled()) {
+                			log.debug("Loaded: " + file + "\n" + ERXProperties.logString(props));
+                		}
+                		ERXProperties.transferPropertiesFromSourceToDest(props, systemProperties);
+                		ERXSystem.updateProperties();
+                	} catch (java.io.IOException ex) {
+                		log.error("Unable to load optional configuration file: " + configFile, ex);
                     }
                 }
                 else {
