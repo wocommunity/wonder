@@ -50,7 +50,7 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 	}
 
 	public Object clone() {
-		ERXSingleValueID result = new ERXSingleValueID(_literalEntityName(), _keyValuesNoCopy()[0]);
+		ERXSingleValueID result = new ERXSingleValueID(_literalEntityName(), _value);
 		_prepClone(result);
 		return result;
 	}
@@ -80,14 +80,11 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 		ERXSingleValueID other = (ERXSingleValueID) obj;
 		Object thisValue = _value;
 		Object otherValue = other._value;
-		String entityName = _literalEntityName();
-		String otherEntityName = other._literalEntityName();
-		if(entityName != otherEntityName) {
-			return false;
-		}
-		if (thisValue == otherValue || (thisValue.hashCode() == otherValue.hashCode() && thisValue.equals(otherValue))) {
+		if (thisValue == otherValue || (hashCode() == other.hashCode() && thisValue.hashCode() == otherValue.hashCode())) {
+			String entityName = _literalEntityName();
+			String otherEntityName = other._literalEntityName();
 			if(entityName == otherEntityName || entityName.equals(otherEntityName)) {
-				return true;
+				return thisValue.equals(otherValue);
 			}
 		}
 		
