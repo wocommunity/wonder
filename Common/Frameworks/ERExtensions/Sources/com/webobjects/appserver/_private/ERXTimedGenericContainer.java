@@ -5,50 +5,44 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
-import er.extensions.ERXMetrics;
-import er.extensions.ERXMetricsEvent;
+import er.extensions.ERXStats;
 
 /**
- * A generic container that collects metrics.
+ * A generic container that collects timing stats.
  * @author Travis Cripps
  */
-// Note: This class must be in the webobjects package in order to properly process the "userInfo" binding association.
+// Note: This class must be in the webobjects package in order to properly process the "statsKey" binding association.
 public class ERXTimedGenericContainer extends WOGenericContainer {
     
-    WOAssociation _eventInfo;
+    WOAssociation _statsKey;
 
     public ERXTimedGenericContainer(String name, NSDictionary associations, WOElement template) {
         super(name, associations, template);
 
-        _eventInfo = (WOAssociation)_associations.removeObjectForKey("userInfo");
+        _statsKey = (WOAssociation)_associations.removeObjectForKey("statsKey");
     }
 
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
-        ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.ComponentRender, eventInfoInContext(context));
+        String statsKey = statsKey(context);
+        ERXStats.markStart(ERXStats.Group.Component, statsKey);
         super.appendToResponse(response, context);
-        ERXMetrics.markEndOfEvent(event);
+        ERXStats.markEnd(ERXStats.Group.Component, statsKey);
     }
 
     /**
-     * Gets contextual information for the {@link ERXMetricsEvent metrics event}.
+     * Gets the key for the {@link ERXStats.LogEntry stats entry}.
      * @param context of the element
-     * @return the event context information
+     * @return the key
      */
-    private NSMutableDictionary eventInfoInContext(WOContext context) {
-        NSMutableDictionary result = new NSMutableDictionary();
-        result.takeValueForKey(_elementNameInContext(context), "componentName");
-
-        // Try to get additional event info from the userInfo bindings.
-        if (_eventInfo != null) {
-            Object userInfo = _eventInfo.valueInComponent(context.component());
-            if (userInfo != null && userInfo instanceof NSDictionary) {
-                result.addEntriesFromDictionary((NSDictionary)userInfo);
-            }
+    private String statsKey(WOContext context) {
+        String key;
+        if (_statsKey != null) {
+            key = (String)_statsKey.valueInComponent(context.component());
+        } else {
+            key = _elementNameInContext(context);
         }
-        
-        return result;
+        return key;
     }
     
 }

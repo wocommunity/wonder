@@ -70,6 +70,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     public final static String D2WDEBUGGING_ENABLED_KEY = "ERDirectToWeb_d2wDebuggingEnabled";
     public final static String D2WDISPLAY_COMPONENTNAMES_KEY = "ERDirectToWeb_displayComponentNames";
     public final static String D2WDISPLAY_PROPERTYKEYS_KEY = "ERDirectToWeb_displayPropertyKeys";
+    public final static String D2WDISPLAY_PAGE_METRICS_KEY = "ERDirectToWeb_displayPageMetrics";
     public final static String D2WDISPLAY_DETAILED_PAGE_METRICS_KEY = "ERDirectToWeb_displayDetailedPageMetrics";
     public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
     public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
@@ -165,6 +166,14 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(s,
                                                                   D2WDISPLAY_PROPERTYKEYS_KEY,
                                                                   propertyKeyLog.isDebugEnabled());
+    }
+
+    public static boolean pageMetricsEnabled() {
+        return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(ERXSession.session(), D2WDISPLAY_PAGE_METRICS_KEY, false);
+    }
+
+    public static void setPageMetricsEnabled(boolean value) {
+        ERXExtensions.setBooleanFlagOnSessionForKey(ERXSession.session(), D2WDISPLAY_PAGE_METRICS_KEY, value);
     }
 
     public static boolean detailedPageMetricsEnabled() {

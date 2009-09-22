@@ -15,7 +15,6 @@ import er.extensions.ERXExtensions;
 import er.extensions.ERXApplication;
 import er.extensions.ERXComponentUtilities;
 import er.extensions.ERXProperties;
-import er.extensions.ERXMetrics;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // This component can be used in the wrapper of a D2W app to provide convenient development time 
@@ -67,7 +66,7 @@ public class ERD2WDebugFlags extends WOComponent {
      * @return the current page
      */
     public WOComponent togglePageMetrics() {
-        ERXMetrics.setMetricsEnabled(!metricsEnabled());
+        ERDirectToWeb.setPageMetricsEnabled(!metricsEnabled());
         return null;
     }
 
@@ -76,7 +75,7 @@ public class ERD2WDebugFlags extends WOComponent {
      * @return true if they should be displayed
      */
     public boolean metricsEnabled() {
-        return ERXMetrics.metricsEnabled();
+        return ERDirectToWeb.pageMetricsEnabled();
     }
 
     /**

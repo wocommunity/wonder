@@ -1344,10 +1344,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		private String _name;
 
 		/**
-		 * Constructs a new InRangeOperator.
-		 * 
-		 * @param value
-		 *            the instance number of this application
+		 * Constructs a new AppNameOperator.
 		 */
 		public AppNameOperator() {
 			initialize();

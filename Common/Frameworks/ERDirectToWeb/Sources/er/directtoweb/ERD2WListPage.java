@@ -42,9 +42,6 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
-import er.directtoweb.ERD2WFactory;
-import er.directtoweb.ERDDeletionDelegate;
-import er.directtoweb.ERDListPageInterface;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXComponentActionRedirector;
 import er.extensions.ERXDisplayGroup;
@@ -56,8 +53,7 @@ import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXValueUtilities;
 import er.extensions.ERXLocalizer;
-import er.extensions.ERXMetrics;
-import er.extensions.ERXMetricsEvent;
+import er.extensions.ERXStats;
 
 /**
  * Reimplementation of the D2WListPage. Descends from ERD2WPage instead of
@@ -421,6 +417,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	protected void _fetchDisplayGroup(WODisplayGroup dg) {
+        String statsKey = super.makeStatsKey("DisplayGroup Fetch");
+		ERXStats.markStart(ERXStats.Group.SQL, statsKey);
 		try {
 			dg.fetch();
 		}
@@ -434,14 +432,13 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 				throw e;
 			}
 		}
+        ERXStats.markEnd(ERXStats.Group.SQL, statsKey);
 	}
 		
 	protected void fetchIfNecessary() {
 		if (_hasToUpdate) {
 			willUpdate();
-			ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.DBFetch, timingEventUserInfo());
 			_fetchDisplayGroup(displayGroup());
-			ERXMetrics.markEndOfEvent(event);
 			_hasToUpdate = false;
 			didUpdate();
 		}
@@ -501,7 +498,14 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	protected void didUpdate() {
 	}
 
+    @Override
+    public void sleep() {
+        setObject(null); //object is set by WORepetition, can get "stuck" after invokeAction bails out of the repetition early; have to do this before super.sleep() or EC unlocking goes awry
+        super.sleep();
+    }
+
 	protected void setupPhase() {
+        setObject(null); //object is set by WORepetition, can get "stuck" after invokeAction bails out of the repetition early
 		WODisplayGroup dg = displayGroup();
 		if (dg != null) {
 			NSArray sortOrderings = dg.sortOrderings();
@@ -523,9 +527,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 					setSortOrderingsOnDisplayGroup(sortOrderings, dg);
 				}
 				dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-				ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.DBFetch, timingEventUserInfo());
 				_fetchDisplayGroup(dg);
-				ERXMetrics.markEndOfEvent(event);
 				dg.updateDisplayedObjects();
 				_hasBeenInitialized = true;
 				_hasToUpdate = false;

@@ -14,7 +14,7 @@ AttributeCell: WOGenericContainer {
 AttributeDisplay: ERXTimedSwitchComponent { 
 	localContext = d2wContext;
 	object = object;
-	userInfo = timingEventUserInfo;
+	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
@@ -145,7 +145,7 @@ IfPropertyKeyIsNotOmitted: WOConditional {
 
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
-	value = latestEventForCurrentPropertyKey.duration;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
 }
 
 InspectEO: WOHyperlink {
@@ -231,7 +231,7 @@ ListTableRow: WOGenericContainer {
 }
 
 MetricsDurationForCurrentPropertyKey: WOString {
-	value = durationOfAllEventsForCurrentPropertyKey;
+	value = aggregateEventDurationForCurrentPropertyKey;
 }
 
 NavBar1: WOSwitchComponent {   
@@ -256,8 +256,8 @@ NavBar2: WOSwitchComponent {
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
 }
 
-PageMetricsSummary: ERXMetricsSummary {
-	aggregateEventInfo = aggregateEventInfoForPage;
+PageMetricsSummary: ERXStatsSummary {
+	aggregateStats = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {

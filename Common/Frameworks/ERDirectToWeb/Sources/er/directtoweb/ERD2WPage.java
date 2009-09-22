@@ -12,7 +12,6 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WModel;
 import com.webobjects.directtoweb.D2WPage;
@@ -21,35 +20,25 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSNotification;
-import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import er.extensions.ERXClickToOpenSupport;
 import er.extensions.ERXComponentActionRedirector;
 import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXConstant;
 import er.extensions.ERXExceptionHolder;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXGuardedObjectInterface;
 import er.extensions.ERXLocalizer;
-import er.extensions.ERXMetrics;
+import er.extensions.ERXStats;
+import er.extensions.ERXStringUtilities;
 import er.extensions.ERXValidation;
 import er.extensions.ERXValidationException;
 import er.extensions.ERXValueUtilities;
-import er.extensions.ERXMetricsEvent;
-import er.extensions.ERXSession;
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXStringUtilities;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
@@ -142,6 +131,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     public static final Logger validationLog = Logger.getLogger("er.directtoweb.validation.ERD2WPage");
 
+    private String _statsKeyPrefix;
+
     /**
      * Default public constructor.
      * 
@@ -150,7 +141,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      */
     public ERD2WPage(WOContext c) {
         super(c);
-        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("handleSessionRestored", ERXConstant.NotificationClassArray), WOSession.SessionDidRestoreNotification, null);
     }
 
     /**
@@ -790,9 +780,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             if (tabSectionContentsFromRule == null)
                 throw new RuntimeException("Could not find tabSectionsContents in " + d2wContext());
 
-            ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent("ComputeTabSectionsContents", timingEventUserInfo());
+            String statsKey = makeStatsKey("ComputeTabSectionsContents");
+            ERXStats.markStart("D2W", statsKey);
             _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
-            ERXMetrics.markEndOfEvent(event);
+            ERXStats.markEnd("D2W", statsKey);
             
             d2wContext().takeValueForKey(tabSectionContentsFromRule, "tabSectionsContents");
             // Once calculated we then determine any displayNameForTabKey
@@ -1108,12 +1099,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /**
-     * Determines whether the component should display the page metrics by looking at the D2W context for
-     * <code>showPageMetrics</code>, defaulting to the value returned by {@link ERXMetrics#metricsEnabled()}.
-     * @return true if should show metrics
+     * Determines whether the component should display the detailed "inline" page metrics.
+     * @return true if should show the detailed metrics
      */
     public boolean shouldDisplayDetailedPageMetrics() {
-        return ERXMetrics.metricsEnabled() && ERDirectToWeb.detailedPageMetricsEnabled();
+        return ERDirectToWeb.pageMetricsEnabled() && ERDirectToWeb.detailedPageMetricsEnabled();
     }
 
     /**
@@ -1122,81 +1112,74 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return true if should show metrics summary
      */
     public boolean shouldDisplayPageMetricsSummary() {
-        boolean metricsEnabled = ERXMetrics.metricsEnabled();
+        boolean metricsEnabled = ERDirectToWeb.pageMetricsEnabled();
         return isTopLevelPage() ? metricsEnabled : (metricsEnabled && shouldDisplayDetailedPageMetrics());
     }
 
     /**
-     * Gathers contextual information for a {@link ERXMetricsEvent metrics event}.
-     * @return the contextual information
+     * Creates a stats key to identify stats to the current property key.
+     * @return the stats key
      */
-    public NSMutableDictionary timingEventUserInfo() {
-        NSMutableDictionary result = new NSMutableDictionary();
-        result.takeValueForKey(name(), "componentName");
-        result.takeValueForKey(entityName(), "entityName");
-        String pageConfiguration = (String)d2wContext().valueForKey(Keys.pageConfiguration);
-        result.takeValueForKey((pageConfiguration != null ? pageConfiguration : "none"), Keys.pageConfiguration);
-        result.takeValueForKey((propertyKey() != null ? propertyKey() : "none"), Keys.propertyKey);
-        result.takeValueForKey((task() != null ? task() : "none"), "task");
-        result.takeValueForKey(this, "page");
-        return result;
+    public String statsKeyForCurrentPropertyKey() {
+        return makeStatsKey(propertyKey());
+    }
+
+    /**
+     * Makes the stats key, prepending a prefix to identify the stats to the originating page.
+     * @param key to format
+     * @return the formatted key
+     */
+    protected String makeStatsKey(String key) {
+        return statsKeyPrefix() + key;
+    }
+
+    /**
+     * A stats key prefix that guarantees the stats will be identifiable to this instance.
+     * @return the key prefix
+     */
+    public String statsKeyPrefix() {
+        if (null == _statsKeyPrefix) {
+            _statsKeyPrefix = d2wContext().dynamicPage() + "_0x" + hashCode() + ".";
+        }
+        return _statsKeyPrefix;
     }
 
     /**
      * Gets the latest metrics event for the current property key.
      * @return the event
      */
-    public ERXMetricsEvent latestEventForCurrentPropertyKey() {
-        EOKeyValueQualifier entityQual = new EOKeyValueQualifier("entityName", EOQualifier.QualifierOperatorEqual, entityName());
-        String propertyKey = (propertyKey() != null ? propertyKey() : "none");
-        EOKeyValueQualifier keyQual = new EOKeyValueQualifier("propertyKey", EOQualifier.QualifierOperatorEqual, propertyKey);
-        EOKeyValueQualifier pageQual = new EOKeyValueQualifier("page", EOQualifier.QualifierOperatorEqual, this);
-        EOAndQualifier andQual = new EOAndQualifier(new NSArray(new EOQualifier[] { entityQual, keyQual, pageQual }));
-        return ERXMetrics.latestEventMatchingQualifier(andQual);
+    public ERXStats.LogEntry latestEntryForCurrentPropertyKey() {
+        return ERXStats.logEntryForKey(ERXStats.Group.Component, statsKeyForCurrentPropertyKey());
     }
 
     /**
      * Gets the aggregate duration of events sharing the current property key.
      * @return the duration
      */
-    public long durationOfAllEventsForCurrentPropertyKey() {
-        EOKeyValueQualifier entityQual = new EOKeyValueQualifier("entityName", EOQualifier.QualifierOperatorEqual, entityName());
-        String propertyKey = (propertyKey() != null ? propertyKey() : "none");
-        EOKeyValueQualifier keyQual = new EOKeyValueQualifier(Keys.propertyKey, EOQualifier.QualifierOperatorEqual, propertyKey);
-        EOKeyValueQualifier pageQual = new EOKeyValueQualifier("page", EOQualifier.QualifierOperatorEqual, this);
-        EOAndQualifier andQual = new EOAndQualifier(new NSArray(new EOQualifier[] { entityQual, keyQual, pageQual }));
-        NSArray events = ERXMetrics.eventsMatchingQualifier(andQual);
-        long duration = 0L;
-        for (Enumeration eventsEnum = events.objectEnumerator(); eventsEnum.hasMoreElements();) {
-            ERXMetricsEvent event = (ERXMetricsEvent)eventsEnum.nextElement();
-            duration += event.duration();
-        }
-        return duration;
+    public long aggregateEventDurationForCurrentPropertyKey() {
+        return ERXStats.logEntryForKey(ERXStats.Group.Component, statsKeyForCurrentPropertyKey()).sum();
     }
 
     /**
-     * Gets the aggregate event information for the current page.
-     * @return the aggregate event information
+     * Gets the stats for the current page.
+     * @return the stats
      */
-    public NSDictionary aggregateEventInfoForPage() {
+    public NSDictionary statsForPage() {
         NSMutableDictionary result = new NSMutableDictionary();
-        EOKeyValueQualifier entityQual = new EOKeyValueQualifier("entityName", EOQualifier.QualifierOperatorEqual, entityName());
-        String pageConfiguration = (String)d2wContext().valueForKey(Keys.pageConfiguration);
-        result.takeValueForKey((pageConfiguration != null ? pageConfiguration : "none"), Keys.pageConfiguration);
-        EOKeyValueQualifier pageQual = new EOKeyValueQualifier("page", EOQualifier.QualifierOperatorEqual, this);
-        EOAndQualifier andQual = new EOAndQualifier(new NSArray(new EOQualifier[] { entityQual, pageQual }));
-        return ERXMetrics.aggregateEventInfoByTypeForEventsMatchingQualifier(andQual);
-    }
-
-    /**
-     * Resets the page metrics upon restoration of the session.
-     * @param notification to handle
-     */
-    public void handleSessionRestored(NSNotification notification) {
-        WOSession session = (WOSession)notification.object();
-        if (session != null && session.equals(ERXSession.session())) {
-            ERXMetrics.reset();
+        NSDictionary statsDict = ERXStats.statistics();
+        for (Enumeration keysEnum = statsDict.keyEnumerator(); keysEnum.hasMoreElements();) {
+            String key = (String)keysEnum.nextElement();
+            if (key.contains(statsKeyPrefix())) {
+                String statsGroup = ERXStringUtilities.firstPropertyKeyInKeyPath(key);
+                NSMutableArray events = (NSMutableArray)result.objectForKey(statsGroup);
+                if (null == events) {
+                    events = new NSMutableArray();
+                    result.setObjectForKey(events, statsGroup);
+                }
+                events.addObject(statsDict.objectForKey(key));
+            }
         }
+        return result;
     }
 
     /**
