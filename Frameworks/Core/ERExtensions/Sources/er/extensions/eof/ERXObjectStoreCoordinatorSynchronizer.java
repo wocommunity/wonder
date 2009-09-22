@@ -81,7 +81,10 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		_defaultSettings = new SynchronizerSettings(true, true, true, true);
 		_settings = new NSMutableDictionary<EOObjectStoreCoordinator, SynchronizerSettings>();
 
-		new Thread(_queueThread).start();
+		Thread thread = new Thread(_queueThread);
+		thread.setName("ERXOSCProcessChanges");
+		thread.setDaemon(true);
+		thread.start();
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasAdded", ERXConstant.NotificationClassArray), EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification, null);
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasRemoved", ERXConstant.NotificationClassArray), EOObjectStoreCoordinator.CooperatingObjectStoreWasRemovedNotification, null);
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("startRemoteSynchronizer", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
