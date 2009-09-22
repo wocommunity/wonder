@@ -886,10 +886,14 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         	addIfPresent(frameworkName + ".framework.user", userPropertiesPath, propertiesPaths, projectsInfo);
         }
 
-        String mainBundleName = NSBundle.mainBundle().name();
-
-        String appPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
-    	addIfPresent(mainBundleName + ".app", appPath, propertiesPaths, projectsInfo);
+		NSBundle mainBundle = NSBundle.mainBundle();
+		
+		if( mainBundle != null ) {
+	        String mainBundleName = mainBundle.name();
+	
+	        String appPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
+	    	addIfPresent(mainBundleName + ".app", appPath, propertiesPaths, projectsInfo);
+		}
 
 		/*  WebObjects.properties in the user home directory */
 		String userHome = ERXSystem.getProperty("user.home");
