@@ -864,95 +864,101 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             return NSArray.EmptyArray;
         }
                 
-        /* *** Properties for frameworks *** */
-        NSArray frameworkNames = (NSArray)NSBundle.frameworkBundles().valueForKey("name");
-        Enumeration e = frameworkNames.objectEnumerator();
-        while (e.hasMoreElements()) {
-            String frameworkName = (String) e.nextElement();
-            projectPath = aPropertiesPath = null;
-            
-            // Check if the framework project is opened from PBX
-            WOProjectBundle bundle = WOProjectBundle.projectBundleForProject(frameworkName, true);
-            if (bundle != null) 
-                projectPath = bundle.projectPath();
-            else 
-                projectPath = ERXSystem.getProperty("projects." + frameworkName);
-            
-            if (projectPath != null) {
-                aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
-                if (aPropertiesPath != null) {
-                    projectsInfo.addObject("Framework:   " + frameworkName 
-                            + " (opened, development-mode) " + aPropertiesPath);
-                }
-            }
-            
-            if (aPropertiesPath == null) {
-                // The framework project is not opened from PBX, use the one in the bundle. 
-                URL url =  ERXFileUtilities.pathURLForResourceNamed("Properties", frameworkName, null);
-                if(url != null) {
-                    aPropertiesPath = url.getFile();
-                    if (aPropertiesPath != null) {
-                        aPropertiesPath = getActualPath(aPropertiesPath);
-                        projectsInfo.addObject("Framework:   " + frameworkName 
-                                + " (not opened, installed) " + aPropertiesPath); 
-                    }
-                }
-            }
-            
-            if (aPropertiesPath != null) 
-                    propertiesPaths.addObject(aPropertiesPath);
-        } 
-        
-        /* *** Properties for the application (mainBundle) *** */
-        
-        // Check if the application project is opened from PBXs
-        projectPath = aPropertiesPath = null;
-        String mainBundleName = NSBundle.mainBundle().name();
-        // horrendous hack to avoid having to set the NSProjectPath manually.
-            WOProjectBundle mainBundle = WOProjectBundle.projectBundleForProject(mainBundleName, false);
-            if (mainBundle == null) {
-                projectPath = ERXSystem.getProperty("projects." + mainBundleName);
-                if (projectPath == null)
-                    projectPath = "../..";
-            } else {
-                projectPath = mainBundle.projectPath();
-            }
-            
-        if (projectPath != null) {
-            aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
-            if (aPropertiesPath != null) {
-                projectsInfo.addObject("Application: " + mainBundleName 
-                            + " (opened, development-mode) " + aPropertiesPath); 
-            }
-        }
+        /*  Properties for frameworks */
+		NSArray frameworkNames = (NSArray) NSBundle.frameworkBundles().valueForKey("name");
+		Enumeration e = frameworkNames.reverseObjectEnumerator();
+		while (e.hasMoreElements()) {
+			String frameworkName = (String) e.nextElement();
+			projectPath = aPropertiesPath = null;
 
-        if (aPropertiesPath == null) {
-            // The application project is not opened from PBX, use the one in the bundle. 
-            aPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
-            if (aPropertiesPath != null) {
-               aPropertiesPath = getActualPath(aPropertiesPath);
-               projectsInfo.addObject("Application: " + mainBundleName 
-                            + " (not opened, installed) " + aPropertiesPath);  
-            }
-        }
+			// Check if the framework project is opened from PBX
+			WOProjectBundle bundle = WOProjectBundle.projectBundleForProject(frameworkName, true);
+			if (bundle != null)
+				projectPath = bundle.projectPath();
+			else
+				projectPath = ERXSystem.getProperty("projects." + frameworkName);
 
-        if (aPropertiesPath != null) 
-            propertiesPaths.addObject(aPropertiesPath);
+			if (projectPath != null) {
+				aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
+				if (aPropertiesPath != null) {
+					projectsInfo.addObject("Framework:   " + frameworkName + " (opened, development-mode) " + aPropertiesPath);
+				}
+			}
 
+			if (aPropertiesPath == null) {
+				// The framework project is not opened from PBX, use the one in
+				// the bundle.
+				URL url = ERXFileUtilities.pathURLForResourceNamed("Properties", frameworkName, null);
+				if (url != null) {
+					aPropertiesPath = url.getFile();
+					if (aPropertiesPath != null) {
+						aPropertiesPath = getActualPath(aPropertiesPath);
+						projectsInfo.addObject("Framework:   " + frameworkName + " (not opened, installed) " + aPropertiesPath);
+					}
+				}
+			}
 
-        /* *** WebObjects.properties in the user home directory *** */
-        String userHome = ERXSystem.getProperty("user.home");
-        if (userHome != null  &&  userHome.length() > 0) { 
-            File file = new File(userHome, "WebObjects.properties");
-            if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
-                try {
-                    aPropertiesPath = file.getCanonicalPath();
-                    projectsInfo.addObject("User:        WebObjects.properties " + aPropertiesPath);  
-                    propertiesPaths.addObject(aPropertiesPath);
-                } catch (java.io.IOException ex) {
-                	ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
-                }
-            }
+			if (aPropertiesPath != null)
+				propertiesPaths.addObject(aPropertiesPath);
+		    
+			/** Properties.<userName> -- per-Framework-per-User properties */
+	        String userPropertiesPath = ERXProperties.variantPropertiesInBundle(ERXSystem.getProperty("user.name"), frameworkName);
+	        if (userPropertiesPath != null) {
+	           projectsInfo.addObject("Framework " + frameworkName + "/User Properties: " + userPropertiesPath);
+	           propertiesPaths.addObject(userPropertiesPath);
+	        }
+		}
+
+		/*  Properties for the application (mainBundle) */
+
+		// Check if the application project is opened from PBXs
+		projectPath = aPropertiesPath = null;
+		String mainBundleName = NSBundle.mainBundle().name();
+		// horrendous hack to avoid having to set the NSProjectPath manually.
+		WOProjectBundle mainBundle = WOProjectBundle.projectBundleForProject(mainBundleName, false);
+		if (mainBundle == null) {
+			projectPath = ERXSystem.getProperty("projects." + mainBundleName);
+			if (projectPath == null)
+				projectPath = "../..";
+		}
+		else {
+			projectPath = mainBundle.projectPath();
+		}
+
+		if (projectPath != null) {
+			aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
+			if (aPropertiesPath != null) {
+				projectsInfo.addObject("Application: " + mainBundleName + " (opened, development-mode) " + aPropertiesPath);
+			}
+		}
+
+		if (aPropertiesPath == null) {
+			// The application project is not opened from PBX, use the one in
+			// the bundle.
+			aPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
+			if (aPropertiesPath != null) {
+				aPropertiesPath = getActualPath(aPropertiesPath);
+				projectsInfo.addObject("Application: " + mainBundleName + " (not opened, installed) " + aPropertiesPath);
+			}
+		}
+
+		if (aPropertiesPath != null)
+			propertiesPaths.addObject(aPropertiesPath);
+
+		/*  WebObjects.properties in the user home directory */
+		String userHome = ERXSystem.getProperty("user.home");
+		if (userHome != null && userHome.length() > 0) {
+			File file = new File(userHome, "WebObjects.properties");
+			if (file.exists() && file.isFile() && file.canRead()) {
+				try {
+					aPropertiesPath = file.getCanonicalPath();
+					projectsInfo.addObject("User:        WebObjects.properties " + aPropertiesPath);
+					propertiesPaths.addObject(aPropertiesPath);
+				}
+				catch (java.io.IOException ex) {
+					ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
+				}
+			}
         }
 
         /* **** Optional properties files **** */
@@ -1092,29 +1098,30 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	String applicationDeveloperPropertiesPath = null;
     	if (ERXApplication.isDevelopmentModeSafe()) {
 	        String devName = ERXSystem.getProperty("er.extensions.ERXProperties.devPropertiesName", "dev");
-	        if (devName != null  &&  devName.length() > 0) { 
-	        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + devName, "app", null);
-	            if (resourceApplicationUserPropertiesPath != null) {
-	            	applicationDeveloperPropertiesPath = ERXProperties.getActualPath(resourceApplicationUserPropertiesPath);
-	            }
-	        }
+	        applicationDeveloperPropertiesPath = variantPropertiesInBundle(devName, "app");
     	}
         return applicationDeveloperPropertiesPath;
     }
     
     /**
-     * Returns the application-specific user properties.
+     * Returns the application-specific variant properties for the given bundle.
      */
-    public static String applicationUserProperties() {
+    public static String variantPropertiesInBundle(String userName, String bundleName) {
     	String applicationUserPropertiesPath = null;
-        String userName = ERXSystem.getProperty("user.name");
         if (userName != null  &&  userName.length() > 0) { 
-        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + userName, "app", null);
+        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + userName, bundleName, null);
             if (resourceApplicationUserPropertiesPath != null) {
             	applicationUserPropertiesPath = ERXProperties.getActualPath(resourceApplicationUserPropertiesPath);
             }
         }
         return applicationUserPropertiesPath;
+    }
+
+    /**
+     * Returns the application-specific user properties.
+     */
+    public static String applicationUserProperties() {
+    	return variantPropertiesInBundle(ERXSystem.getProperty("user.name"), "app");
     }
     
     /**

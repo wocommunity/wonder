@@ -260,26 +260,7 @@ public class ERXConfigurationManager {
      * re-load the command line args.
      */
     public void loadOptionalConfigurationFiles() {
-    	NSMutableArray additionalConfigurationFiles = new NSMutableArray();
-    	NSArray optionalConfigurationFiles = ERXProperties.optionalConfigurationFiles();
-    	if (optionalConfigurationFiles != null) {
-    		additionalConfigurationFiles.addObjectsFromArray(optionalConfigurationFiles);
-    	}
-
-    	String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
-    	if (applicationMachinePropertiesPath != null) {
-    		additionalConfigurationFiles.addObject(applicationMachinePropertiesPath);
-    	}
-
-    	String applicationDeveloperPropertiesPath = ERXProperties.applicationDeveloperProperties();
-    	if (applicationDeveloperPropertiesPath != null) {
-    		additionalConfigurationFiles.addObject(applicationDeveloperPropertiesPath);
-    	}
-
-    	String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
-    	if (applicationUserPropertiesPath != null) {
-    		additionalConfigurationFiles.addObject(applicationUserPropertiesPath);
-    	}
+    	NSArray additionalConfigurationFiles = ERXProperties.pathsForUserAndBundleProperties();
 
         if (additionalConfigurationFiles.count() > 0) {
             Properties systemProperties = System.getProperties();
