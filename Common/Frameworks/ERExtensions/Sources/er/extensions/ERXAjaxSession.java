@@ -21,6 +21,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
+
 /**
  * ERXAjaxSession is the part of ERXSession that handles Ajax requests.
  * If you want to use the Ajax framework without using other parts of Project

@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.statistics;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -15,6 +15,11 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSet;
+
+import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXProperties;
+import er.extensions.ERXThreadStorage;
+import er.extensions.ERXUtilities;
 
 /**
  * <p>
@@ -168,8 +173,8 @@ public class ERXStats {
     /**
 	 * Returns the log entry for the given key within the specified logging group.
 	 *
-     * @param group
-     *            the logging group to search for the key
+	 * @param group
+	 *            the logging group to search for the key
 	 * @param key
 	 *            the key to lookup
 	 * @return the log entry for the given key
@@ -383,6 +388,7 @@ public class ERXStats {
 		}
 
 		public synchronized void _add(LogEntry logEntry) {
+			long originalCount = _count;
 			if (logEntry._min < _min) {
 				_min = logEntry._min;
 			}
@@ -444,7 +450,7 @@ public class ERXStats {
 			if (traceCollectingEnabled()) {
 				// Throwable t = new RuntimeException();
 				// t.fillInStackTrace();
-				String trace = ERXUtilities.stackTrace(); 
+				String trace = ERXUtilities.stackTrace();
 				_traces.add(trace);
 				_traceArray = null;
 			}

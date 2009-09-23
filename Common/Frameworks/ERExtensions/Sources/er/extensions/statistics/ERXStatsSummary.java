@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.statistics;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSDictionary;
@@ -8,6 +8,10 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import java.util.Enumeration;
+
+import er.extensions.ERXStatelessComponent;
+import er.extensions.ERXStringUtilities;
+import er.extensions.ERXArrayUtilities;
 
 /**
  * A component to display a summary of collected stats.

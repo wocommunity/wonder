@@ -18,6 +18,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSValidation;
 
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
+
 /**
  * Replacement for WOTextField. Provides for localized formatters. 
  * Never use this directly, rather use WOTextField and let the ERXPatcher handle the

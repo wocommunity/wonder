@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.components.conditionals;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
@@ -11,6 +11,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WONoContentElement;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.ERXWOComponentContent;
+
 /**
  * Allows for multiple contents in a component. For every of one of these, when 
  * you have ERXWOComponentContent in your wrapper, then they will append in their stead.
@@ -18,6 +20,7 @@ import com.webobjects.foundation.NSDictionary;
  * a second time. See {@link ERXWOComponentContent} for a full explaination.
  * @author ak (Java port)
  * @author Charles Lloyd
+ * @binding templateName
  */
 public class ERXWOTemplate extends WODynamicElement {
 
@@ -39,16 +42,16 @@ public class ERXWOTemplate extends WODynamicElement {
     public String templateName(WOComponent component) {
        return (String) _templateName.valueInComponent(component);
     }
-
+    
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
     	_template.takeValuesFromRequest(worequest, wocontext);
     }
-
+    
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
     	WOActionResults results = _template.invokeAction(worequest, wocontext);
     	return results;
     }
-
+    
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
     	_template.appendToResponse(woresponse, wocontext);
     }

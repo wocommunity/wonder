@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.foundation;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,6 +19,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import er.extensions.ERXMappingObjectStream;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Adds {@link java.util.Map} functionality to NSMutableDictionary and has

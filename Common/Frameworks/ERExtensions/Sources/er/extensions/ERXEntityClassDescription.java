@@ -42,6 +42,8 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
+import er.extensions.foundation.ERXMutableDictionary;
+
 /**
  * The main purpose of the ERXClassDescription class is
  * to throw {@link ERXValidationException}s instead of the

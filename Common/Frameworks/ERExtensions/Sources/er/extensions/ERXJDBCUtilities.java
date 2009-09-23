@@ -42,6 +42,8 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCContext;
 
+import er.extensions.foundation.ERXExceptionUtilities;
+
 public class ERXJDBCUtilities {
 
 	public static Logger log = Logger.getLogger(ERXJDBCUtilities.class);

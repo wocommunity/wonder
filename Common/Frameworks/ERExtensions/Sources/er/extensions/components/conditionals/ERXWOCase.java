@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.components.conditionals;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
@@ -7,13 +7,14 @@ import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * Contains one case of a ERXWOSwitch.
+ * Contains one case of a {@link ERXWOSwitch}.
+ *
  * @author ak (Java port)
  * @author Charles Lloyd
+ * @binding case
  */
 public class ERXWOCase extends WODynamicElement {
 
@@ -23,7 +24,7 @@ public class ERXWOCase extends WODynamicElement {
     public ERXWOCase(String name, NSDictionary associations, WOElement woelement) {
         super(name, associations, woelement);
         WOAssociation assoc = (WOAssociation) associations.objectForKey("case");
-        if(!(assoc instanceof WOConstantValueAssociation)) {
+        if(!assoc.isValueConstant()) {
             throw new IllegalStateException("You must bind 'case' to a constant value");
         }
         _value = assoc.valueInComponent(null);
