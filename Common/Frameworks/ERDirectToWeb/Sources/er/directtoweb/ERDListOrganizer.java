@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXSession;
 import er.extensions.ERXConstant;
-import er.extensions.ERXKeyValuePair;
+import er.extensions.foundation.ERXKeyValuePair;
 
 /**
  * Crazy cool component that allows one to select strings (using arrow buttons), and organize them.<br />

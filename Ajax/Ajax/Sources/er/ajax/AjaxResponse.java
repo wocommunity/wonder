@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXResponse;
 import er.extensions.ERXAjaxApplication.ERXAjaxResponseDelegate;
-import er.extensions.ERXKeyValueCodingUtilities;
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 /**
  * AjaxResponse provides support for performing an AjaxUpdate in the same response

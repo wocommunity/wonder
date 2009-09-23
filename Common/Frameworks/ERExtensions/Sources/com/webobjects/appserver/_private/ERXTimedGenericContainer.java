@@ -5,7 +5,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
-import er.extensions.ERXStats;
+import er.extensions.statistics.ERXStats;
 
 /**
  * A generic container that collects timing stats.

@@ -34,11 +34,11 @@ import er.extensions.ERXExceptionHolder;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXGuardedObjectInterface;
 import er.extensions.ERXLocalizer;
-import er.extensions.ERXStats;
 import er.extensions.ERXStringUtilities;
 import er.extensions.ERXValidation;
 import er.extensions.ERXValidationException;
 import er.extensions.ERXValueUtilities;
+import er.extensions.statistics.ERXStats;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 

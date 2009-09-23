@@ -26,7 +26,6 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
@@ -42,13 +41,12 @@ import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.ERXConstant;
 import er.extensions.ERXConfigurationManager;
 import er.extensions.ERXFileUtilities;
-import er.extensions.ERXKeyValuePair;
-import er.extensions.ERXPatcher;
 import er.extensions.ERXProperties;
+import er.extensions.ERXSession;
 import er.extensions.ERXValueUtilities;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXWOContext;
-import er.extensions.ERXSession;
+import er.extensions.foundation.ERXKeyValuePair;
 
 /**
  * Principle class of the ERDirectToWeb framework.

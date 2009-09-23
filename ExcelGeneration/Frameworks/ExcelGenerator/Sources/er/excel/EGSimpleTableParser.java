@@ -17,6 +17,7 @@ import org.w3c.dom.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 
 /**
