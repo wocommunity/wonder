@@ -6,10 +6,10 @@
 //
 package er.extensions.eof;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Level;
@@ -1565,7 +1565,7 @@ public class ERXEOAccessUtilities {
      * @param newValues
      */
     public static int insertRows(EOEditingContext ec, String entityName, 
-            final List<NSDictionary> newValues) {
+            final Collection<NSDictionary> newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
             protected int doPerform(EOAdaptorChannel channel) {
