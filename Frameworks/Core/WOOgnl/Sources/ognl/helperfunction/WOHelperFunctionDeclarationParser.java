@@ -292,10 +292,10 @@ public class WOHelperFunctionDeclarationParser {
 				Integer integer = WOShared.unsignedIntNumber(Integer.parseInt(associationValue));
 				association = WOHelperFunctionAssociation.associationWithValue(integer);
 			}
-			else if (associationValue.equalsIgnoreCase("true") || associationValue.equalsIgnoreCase("yes")) {
+			else if ("true".equalsIgnoreCase(associationValue) || "yes".equalsIgnoreCase(associationValue)) {
 				association = WOConstantValueAssociation.TRUE;
 			}
-			else if (associationValue.equalsIgnoreCase("false") || associationValue.equalsIgnoreCase("no") || associationValue.equalsIgnoreCase("nil") || associationValue.equalsIgnoreCase("null")) {
+			else if ("false".equalsIgnoreCase(associationValue) || "no".equalsIgnoreCase(associationValue) || "nil".equalsIgnoreCase(associationValue) || "null".equalsIgnoreCase(associationValue)) {
 				association = WOConstantValueAssociation.FALSE;
 			}
 			else {
