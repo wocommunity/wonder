@@ -12,7 +12,7 @@ AttributeRepetition: WORepetition {
 AttributeValue: ERXTimedSwitchComponent { 
 	localContext = localContext;
 	object = object;
-	userInfo = timingEventUserInfo;
+	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
@@ -230,7 +230,7 @@ ImageSpacer: WOImage {
 
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
-	value = latestEventForCurrentPropertyKey.duration;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
 }
 
 IsEditing: WOKeyValueConditional {
@@ -286,8 +286,8 @@ NotUsingMatrixLayout: WOConditional {
 	negate = true;
 }
 
-PageMetricsSummary: ERXMetricsSummary {
-	aggregateEventInfo = aggregateEventInfoForPage;
+PageMetricsSummary: ERXStatsSummary {
+	aggregateStats = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {

@@ -15,7 +15,7 @@ AttributeCell: WOGenericContainer {
 AttributeDisplay: ERXTimedSwitchComponent { 
 	localContext = d2wContext;
 	object = object;
-	userInfo = timingEventUserInfo;
+	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
@@ -151,7 +151,7 @@ IfPropertyKeyIsNotOmitted: WOConditional {
 
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
-	value = latestEventForCurrentPropertyKey.duration;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
 }
 
 InspectImage: WOImage {
@@ -219,7 +219,7 @@ ListTableRow: WOGenericContainer {
 }
 
 MetricsDurationForCurrentPropertyKey: WOString {
-	value = durationOfAllEventsForCurrentPropertyKey;
+	value = aggregateEventDurationForCurrentPropertyKey;
 }
 
 NavBar: WOSwitchComponent {
@@ -245,8 +245,8 @@ NumberOfItems: WOString {
 	value = listSize;
 }
 
-PageMetricsSummary: ERXMetricsSummary {
-	aggregateEventInfo = aggregateEventInfoForPage;
+PageMetricsSummary: ERXStatsSummary {
+	aggregateStats = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {

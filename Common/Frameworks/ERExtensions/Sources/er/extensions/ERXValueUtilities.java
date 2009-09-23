@@ -170,6 +170,48 @@ public class ERXValueUtilities {
     }
 
     /**
+     * Basic utility method for reading double values. The current
+     * implementation uses {@link #doubleValueWithDefault(Object, double)}
+     * with a default of <code>0</code>.
+     * @param obj object to be evaluated
+     * @return boolean evaluation of the given object
+     */
+    public static double doubleValue(Object obj) {
+        return doubleValueWithDefault(obj, 0);
+    }
+
+    /**
+     * Basic utility method for reading <code>double</code> values. The current
+     * implementation tests if the object is an instance of
+     * a String, Number and Boolean. Booleans are 1 if they equal
+     * <code>true</code>. The default value is used if
+     * the object is null or the boolean value is false.
+     * @param obj object to be evaluated
+     * @param def default value if object is null
+     * @return double evaluation of the given object
+     */
+    public static double doubleValueWithDefault(Object obj, double def) {
+        double value = def;
+        if (obj != null) {
+            if (obj instanceof Number) {
+                value = ((Number)obj).doubleValue();
+            } else if (obj instanceof String) {
+                try {
+                    String s = ((String)obj).trim(); // Need to trim trailing space
+                    if (s.length() > 0)
+                        value = Double.parseDouble(s);
+                } catch(NumberFormatException numberformatexception) {
+                    throw new IllegalStateException("Error parsing double from value : <" + obj + ">");
+                }
+            } else if (obj instanceof Boolean)
+                value = ((Boolean)obj).booleanValue() ? 1d : def;
+        } else {
+            value = def;
+        }
+        return value;
+    }
+
+    /**
      * This method resolves bindings from WOComponents to
      * <code>long</code> values.
      * Note: This is only needed for non-syncronizing components

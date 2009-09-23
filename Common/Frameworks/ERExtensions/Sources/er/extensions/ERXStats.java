@@ -60,7 +60,17 @@ public class ERXStats {
 	private static final String STATS_LAST_TIME_KEY = "er.extensions.erxStats.lastTime";
 	private static final String STATS_KEY = "er.extensions.erxStats.statistics";
 
+    public static final String STATS_ENABLED_KEY = "er.extensions.erxStats.enabled";
+    public static final String STATS_TRACE_COLLECTING_ENABLED_KEY = "er.extensions.erxStats.traceCollectingEnabled";
+
 	public static final Logger log = Logger.getLogger(ERXStats.class);
+
+	public interface Group {
+		public String Default = " ";
+		public String SQL = "SQL";
+		public String Component = "Component";
+		public String Batching = "Batching";
+	}
 
 	private static NSMutableArray _allStatistics = new NSMutableArray();
 
@@ -86,11 +96,11 @@ public class ERXStats {
 	 * 
 	 */
 	public static boolean traceCollectingEnabled() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.erxStats.traceCollectingEnabled", false);
+		return ERXProperties.booleanForKeyWithDefault(STATS_TRACE_COLLECTING_ENABLED_KEY, false);
 	}
 
 	/**
-	 * Initializes the logging stats manually. You can all this if you want to
+	 * Initializes the logging stats manually. You can call this if you want to
 	 * turn on thread logging just for a particular area of your application.
 	 */
 	public static void initStatistics() {
@@ -155,6 +165,19 @@ public class ERXStats {
 		return entry;
 	}
 
+    /**
+	 * Returns the log entry for the given key within the specified logging group.
+	 *
+     * @param group
+     *            the logging group to search for the key
+	 * @param key
+	 *            the key to lookup
+	 * @return the log entry for the given key
+	 */
+    public static LogEntry logEntryForKey(String group, String key) {
+        return logEntryForKey(makeKey(group, key));
+    }
+
 	/**
 	 * Returns the aggregate key names for all of the threads that have been
 	 * recorded.
@@ -179,7 +202,7 @@ public class ERXStats {
 	 *            the key to lookup aggregate stats for
 	 * @return the aggregate log entry for the given key
 	 */
-	public static LogEntry aggregateLogEntryForKey(String key) {
+	private static LogEntry aggregateLogEntryForKey(String key) {
 		LogEntry aggregateLogEntry = new LogEntry(key);
 		if (key != null) {
 			synchronized (ERXStats._allStatistics) {
@@ -219,10 +242,33 @@ public class ERXStats {
 	 * 
 	 * @param key the key log to start logging 
 	 */
-	public static void markStart(String key) {
-		LogEntry entry = ERXStats.logEntryForKey(key);
+	public static void markStart(String group, String key) {
+		LogEntry entry = ERXStats.logEntryForKey(makeKey(group, key));
 		if (entry != null) {
 			entry.start();
+		}
+	}
+	
+	/**
+	 * Mark the start of a process, call markEnd when it is over to log the
+	 * duration.
+	 * 
+	 * @param key the key log to start logging 
+	 */
+	public static void markStart(String key) {
+		markStart(Group.Default, key);
+	}
+
+	/**
+	 * Marks the end of a process, and calls addDuration(..) with the 
+	 * time since markStart.
+	 * 
+	 * @param key the key to log under
+	 */
+	public static void markEnd(String group, String key) {
+		LogEntry entry = ERXStats.logEntryForKey(makeKey(group, key));
+		if (entry != null) {
+			entry.end();
 		}
 	}
 
@@ -233,10 +279,7 @@ public class ERXStats {
 	 * @param key the key to log under
 	 */
 	public static void markEnd(String key) {
-		LogEntry entry = ERXStats.logEntryForKey(key);
-		if (entry != null) {
-			entry.end();
-		}
+		markEnd(Group.Default);
 	}
 
 	/**
@@ -246,10 +289,24 @@ public class ERXStats {
 	 * @param key the name to log the time under
 	 */
 	public static void addDurationForKey(long duration, String key) {
-		LogEntry entry = ERXStats.logEntryForKey(key);
+		addDurationForKey(duration, Group.Default, key);
+	}
+
+	/**
+	 * Adds the specified duration in milliseconds for the given key.
+	 * 
+	 * @param duration the duration in milliseconds of the operation
+	 * @param key the name to log the time under
+	 */
+	public static void addDurationForKey(long duration, String group, String key) {
+		LogEntry entry = ERXStats.logEntryForKey(makeKey(group, key));
 		if (entry != null) {
 			entry.add(duration);
 		}
+	}
+
+	private static String makeKey(String group, String key) {
+		return group != null ? group + "." + key : key;
 	}
 
 	/**
@@ -276,7 +333,7 @@ public class ERXStats {
 	 * key. Note that no log message is output if there aren't any values
 	 * 
 	 * @param operation
-	 *            operation to sort on ("sum", "count", "min", "max", "avg")
+	 *            operation to sort on ("sum", "count", "min", "max", "avg", "key")
 	 */
 	public static void logStatisticsForOperation(Logger statsLog, String operation) {
 		if(statsLog.isDebugEnabled()) {
@@ -292,9 +349,10 @@ public class ERXStats {
 						// result = result.replaceAll("\\n\\t", "\n\t\t");
 						// result = result.replaceAll("\\n", "\n\t\t");
 						statsLog.debug(
-								(startTime != null ? "Time since init " + (currentTime - startTime.longValue()) + " ms ": "" ) + 
-								(lastTime != null ? ", last log " + (currentTime - lastTime.longValue()) + " ms ": "" ) + 
-								"(cnt/sum : min/max/avg|trace cnt -> key) = " + result);
+								(startTime != null ? "Time since init " + (currentTime - startTime.longValue()) + " ms": "" ) + 
+								(lastTime != null ? ", last log " + (currentTime - lastTime.longValue()) + " ms": "" ) + 
+								", total cnt/sum: " + statistics.allValues().valueForKeyPath("@sum.count") + "/" + statistics.allValues().valueForKeyPath("@sum.sum") +
+								" (cnt/sum : min/max/avg|trace cnt -> key) = " + result);
 						ERXThreadStorage.takeValueForKey(new Long(currentTime), ERXStats.STATS_LAST_TIME_KEY);
 					}
 				}
@@ -303,9 +361,7 @@ public class ERXStats {
 	}
 
 	/**
-	 * 
-	 * @param expression
-	 * @param startTime
+	 * A statistics logging entry.
 	 */
 	public static class LogEntry {
 		private float _avg;
@@ -313,19 +369,20 @@ public class ERXStats {
 		private long _min;
 		private long _max;
 		private long _sum;
+        private long _latestDuration;
 		private String _key;
 		private Set<String> _traces = Collections.synchronizedSet(new HashSet<String>());
 		private NSArray _traceArray = null;
 		private long _lastMark;
 
-		public LogEntry(String key) {
+        public LogEntry(String key) {
 			_key = key;
 			_avg = -1.0f;
 			_min = Long.MAX_VALUE;
+            _latestDuration = -1;
 		}
 
 		public synchronized void _add(LogEntry logEntry) {
-			long originalCount = _count;
 			if (logEntry._min < _min) {
 				_min = logEntry._min;
 			}
@@ -355,6 +412,10 @@ public class ERXStats {
 			return _sum;
 		}
 
+        public synchronized long latestDuration() {
+            return _latestDuration;
+        }
+
 		public synchronized void start() {
 			_lastMark = System.currentTimeMillis();
 		}
@@ -370,6 +431,7 @@ public class ERXStats {
 		}
 
 		public synchronized void add(long time) {
+            _latestDuration = time;
 			if (time < _min) {
 				_min = time;
 			}
@@ -417,6 +479,6 @@ public class ERXStats {
 			return count() + "/" + sum() + " : " + min() + "/" + max() + "/" + new BigDecimal(avg(), MathContext.DECIMAL32).setScale(2, BigDecimal.ROUND_HALF_EVEN) + "|" + _traces.size() + "->" + _key;
 			// + "\n" + traces.iterator().next();
 		}
-	}
+    }
 
 }

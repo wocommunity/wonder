@@ -34,20 +34,20 @@ tr.MetricsSummary td.InlineMetrics  {
 	white-space: nowrap;
 }
 
-.ERXMetricsSummary {
+.ERXStatsSummary {
 	border: 1px solid #bbb;
 	border-collapse: collapse;
 	color: #ccc;
 	margin: 1em auto;
 }
 
-.ERXMetricsSummary tr td,
-.ERXMetricsSummary tr th {
+.ERXStatsSummary tr td,
+.ERXStatsSummary tr th {
 	border: 1px solid #bbb;
 	padding: .25em .5em;
 }
 
-.ERXMetricsSummary tr.alt td {
+.ERXStatsSummary tr.alt td {
 	background-color: #ececec;
 }
 
