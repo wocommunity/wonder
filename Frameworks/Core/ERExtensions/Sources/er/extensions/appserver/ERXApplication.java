@@ -161,6 +161,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private static int lowMemBufferSize = 0;
 
 	/**
+	 * Property to control whether to exit on an OutOfMemoryError.
+	 */
+	public static final String AppShouldExitOnOutOfMemoryError = "er.extensions.AppShouldExitOnOutOfMemoryError";
+
+	/**
 	 * Notification to post when all bundles were loaded but before their
 	 * principal was called
 	 */
@@ -1695,7 +1700,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (throwable instanceof Error) {
 			boolean shouldQuit = false;
 			if (throwable instanceof OutOfMemoryError) {
-				shouldQuit = true;
+				boolean shouldExitOnOOMError = ERXProperties.booleanForKeyWithDefault(AppShouldExitOnOutOfMemoryError, true);
+				shouldQuit = shouldExitOnOOMError;
 				// AK: I'm not sure this actually works, in particular when the
 				// buffer is in the long-running generational mem, but it's
 				// worth a try.
@@ -1715,14 +1721,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						lowMemBuffer = new byte[lowMemBufferSize];
 					}
 					catch (Throwable ex) {
-						shouldQuit = true;
+						shouldQuit = shouldExitOnOOMError;
 					}
 				}
 				// We first log just in case the log4j call puts us in a bad
 				// state.
 				if (shouldQuit) {
 					NSLog.err.appendln("Ran out of memory, killing this instance");
-					log.error("Ran out of memory, killing this instance");
+					log.fatal("Ran out of memory, killing this instance");
 				}
 			}
 			else {
