@@ -36,7 +36,6 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimeZone;
@@ -712,7 +711,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				sql.append(quoteTableName(tableName.toUpperCase()));
 				sql.append(" ADD");
 
-				StringBuffer constraint = new StringBuffer(" CONSTRAINT FOREIGN_KEY_");
+				StringBuffer constraint = new StringBuffer(" CONSTRAINT \"FOREIGN_KEY_");
 				constraint.append(tableName);
 
 				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
@@ -752,6 +751,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					constraint.append(referencedColumnName);
 					fkSql.append("\"");
 				}
+				
+				// MS: did i write this code?  sorry about that everything. this is crazy. 
+				constraint.append("\"");
 
 				fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
 
