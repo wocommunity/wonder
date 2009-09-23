@@ -24,6 +24,16 @@ import er.extensions.jdbc.ERXSQLHelper;
 public class ERXMigrationColumn {
 	public static final String NULL_VALUE_TYPE = "___NULL_VALUE_TYPE___";
 
+	/**
+	 * Constant for use with ERXMigrationTable.newXxxColumn AllowsNull columns.
+	 */
+	public static final boolean AllowsNull = true;
+
+	/**
+	 * Constant for use with ERXMigrationTable.newXxxColumn NotNull columns.
+	 */
+	public static final boolean NotNull = false;
+	
 	private ERXMigrationTable _table;
 	private String _name;
 	private int _jdbcType;
