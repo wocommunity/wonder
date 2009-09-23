@@ -10,6 +10,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.util.*;
 
+import er.extensions.foundation.ERXMutableInteger;
+
 /**
  * All WebObjects applications have exactly one <code>ERXBrowserFactory</code> 
  * instance. Its primary role is to manage {@link ERXBrowser} objects. 

@@ -14,6 +14,8 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
+
 /**
  * Clone of WOSubmitButton that should emit <code>&lt;button&gt;</code> tags instead of 
  * <code>&lt;input&gt;</code> tags. This allows you to use HTML content and superior style

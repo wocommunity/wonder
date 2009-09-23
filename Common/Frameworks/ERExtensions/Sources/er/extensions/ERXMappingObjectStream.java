@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
 
+import er.extensions.foundation.ERXMutableArray;
+import er.extensions.foundation.ERXMutableDictionary;
+
 /**
  * Fixes errors in serialized streams so they can still handle the classes before the packaging changes in 5.0.
  * @author ak

@@ -71,6 +71,8 @@ import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.statistics.ERXStats;
+
 /**
  * ERXApplication is the abstract superclass of WebObjects applications built
  * with the ER frameworks.<br/> <br/> Useful enhancements include the ability

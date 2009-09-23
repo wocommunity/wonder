@@ -1,8 +1,8 @@
 package er.ajax;
 
-
-import com.webobjects.appserver.*;
-
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 
 /**

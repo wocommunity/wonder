@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.foundation;
 
 
 import com.webobjects.foundation.*;
@@ -19,7 +19,7 @@ import java.util.*;
  */
 public class ERXMutableArray extends NSMutableArray implements List {
     public static final long serialVersionUID = -6581075256974648875L;
-    
+
     public ERXMutableArray() {
         super();
     }
@@ -51,7 +51,7 @@ public class ERXMutableArray extends NSMutableArray implements List {
     public ERXMutableArray(Vector vector, NSRange range, boolean flag) {
        super(vector, range, flag);
     }
-    
+
     public static NSData toBlob(ERXMutableArray d) throws Exception {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bout);
@@ -269,7 +269,7 @@ public class ERXMutableArray extends NSMutableArray implements List {
     /**
      * Increases the capacity of this <tt>ERXMutableArray</tt> instance, if
      * necessary, to ensure  that it can hold at least the number of elements
-     * specified by the minimum capacity argument. 
+     * specified by the minimum capacity argument.
      *
      * @param   minCapacity   the desired minimum capacity.
      */
@@ -309,8 +309,8 @@ public class ERXMutableArray extends NSMutableArray implements List {
     }
 
     /**
-     * Searches for the first occurence of the given argument, testing 
-     * for equality using the <tt>equals</tt> method. 
+     * Searches for the first occurence of the given argument, testing
+     * for equality using the <tt>equals</tt> method.
      *
      * @param   elem   an object.
      * @return  the index of the first occurrence of the argument in this
@@ -510,17 +510,17 @@ public class ERXMutableArray extends NSMutableArray implements List {
      * @param index index at which to insert the first element from the
      *		    specified collection.
      * @param c elements to be inserted into this List.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>addAll</tt> method is
      *		  not supported by this list.
-     * 
+     *
      * @throws ClassCastException if the class of an element of the specified
      * 		  collection prevents it from being added to this List.
-     * 
+     *
      * @throws IllegalArgumentException some aspect an element of the
      *		  specified collection prevents it from being added to this
      *		  List.
-     * 
+     *
      * @throws IndexOutOfBoundsException index out of range (<tt>index &lt; 0
      *            || index &gt; size()</tt>).
      *
@@ -557,7 +557,7 @@ public class ERXMutableArray extends NSMutableArray implements List {
      * (protected) <tt>modCount</tt> field.
      *
      * @return an iterator over the elements in this list in proper sequence.
-     * 
+     *
      * @see #modCount
      */
     public Iterator iterator() {
@@ -567,9 +567,9 @@ public class ERXMutableArray extends NSMutableArray implements List {
     /**
      * Returns an iterator of the elements in this list (in proper sequence).
      * This implementation returns <tt>listIterator(0)</tt>.
-     * 
+     *
      * @return an iterator of the elements in this list (in proper sequence).
-     * 
+     *
      * @see #listIterator(int)
      */
     public ListIterator listIterator() {
@@ -603,13 +603,13 @@ public class ERXMutableArray extends NSMutableArray implements List {
      *
      * @param index index of the first element to be returned from the list
      *		    iterator (by a call to the <tt>next</tt> method).
-     * 
+     *
      * @return a list iterator of the elements in this list (in proper
      * 	       sequence), starting at the specified position in the list.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the specified index is out of
      *		  range (<tt>index &lt; 0 || index &gt; size()</tt>).
-     * 
+     *
      * @see #modCount
      */
     public ListIterator listIterator(final int index) {
@@ -752,7 +752,7 @@ public class ERXMutableArray extends NSMutableArray implements List {
      * Similar idioms may be constructed for <tt>indexOf</tt> and
      * <tt>lastIndexOf</tt>, and all of the algorithms in the
      * <tt>Collections</tt> class can be applied to a subList.<p>
-     * 
+     *
      * The semantics of the list returned by this method become undefined if
      * the backing list (i.e., this list) is <i>structurally modified</i> in
      * any way other than via the returned list.  (Structural modifications are

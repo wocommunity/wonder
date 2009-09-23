@@ -53,7 +53,7 @@ import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXValueUtilities;
 import er.extensions.ERXLocalizer;
-import er.extensions.ERXStats;
+import er.extensions.statistics.ERXStats;
 
 /**
  * Reimplementation of the D2WListPage. Descends from ERD2WPage instead of

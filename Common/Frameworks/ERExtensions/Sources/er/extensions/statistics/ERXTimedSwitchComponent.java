@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.statistics;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;

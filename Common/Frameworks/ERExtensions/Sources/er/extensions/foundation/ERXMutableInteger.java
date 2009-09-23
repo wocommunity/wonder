@@ -14,7 +14,7 @@
 //  	which can get expensive if done a lot.
 //  	Not subclassed from Integer, since Integer is final (for performance :-))
 
-package er.extensions;
+package er.extensions.foundation;
 
 /** 
  * <code>ERXMutableInteger</code> is like {@link java.lang.Integer Integer}

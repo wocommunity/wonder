@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.foundation;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -14,6 +14,11 @@ import org.apache.log4j.Logger;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
+import er.extensions.ERXProperties;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXFileUtilities;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXStringUtilities;
 
 
 /**

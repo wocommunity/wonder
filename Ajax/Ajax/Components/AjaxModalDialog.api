@@ -37,7 +37,7 @@
 	    <binding name="afterResize"/>
 	    <binding name="onShow"/>
 	    <binding name="onUpdate"/>
-    <binding name="closeUpdateContainerID"/>
+    	<binding name="closeUpdateContainerID"/>
     	<binding name="clickOnReturnId"/>
     	<binding name="clickOnEscId"/>
     </wo>
