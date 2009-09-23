@@ -1802,6 +1802,15 @@ public class ERXSQLHelper {
 		private static final String PREFIX_LOCKING = "locking=";
 
 		@Override
+		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
+			boolean reassignExternalTypeForValueTypeOverride = super.reassignExternalTypeForValueTypeOverride(attribute);
+			if ("DATE".equalsIgnoreCase(attribute.externalType()) && attribute.valueType() == null) {
+				reassignExternalTypeForValueTypeOverride = false;
+			}
+			return reassignExternalTypeForValueTypeOverride;
+		}
+		
+		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			return "select unique from " + sequenceName;
 		}
