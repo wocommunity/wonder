@@ -18,6 +18,7 @@
 		<binding name="formSerializer"/>
 		<binding name="functionName"/>
 		<binding name="updateContainerID"/>
+		<binding name="requestFailureUpdateContainerID"/>
 		<binding name="showUI"/>
 		<binding defaults="Boolean" name="evalScripts"/>
 		

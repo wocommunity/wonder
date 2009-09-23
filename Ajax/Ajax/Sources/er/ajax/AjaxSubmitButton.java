@@ -62,7 +62,7 @@ import er.extensions.ERXProperties;
  * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion)
  *  
  * @property er.ajax.formSerializer the default form serializer to use for all ajax submits
-
+ * 
  * @author anjo
  */
 public class AjaxSubmitButton extends AjaxDynamicElement {
