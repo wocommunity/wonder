@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -179,7 +180,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	private static ThreadLocal<Boolean> isInRequest = new ThreadLocal<Boolean>();
 
-	private static NSDictionary propertiesFromArgv;
+	protected static NSDictionary propertiesFromArgv;
 
 	/**
 	 * Time that garbage collection was last called when checking memory.
@@ -300,43 +301,74 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		private Set<String> allFrameworks;
 
 		private Properties allBundleProps;
+		private Properties defaultProperties;
 		
-		private static Properties readProperties(File file) {
+		private List<URL> allBundlePropURLs = new ArrayList<URL>();
+		
+		private Properties readProperties(File file) {
 			if (!file.exists()) {
 				return null;
 			}
 
-			URL url = null;
-
 			try {
-				url = file.toURL();
+				URL url = file.toURI().toURL();
+				return readProperties(url);
 			}
 			catch (MalformedURLException e) {
 				e.printStackTrace();
+				return null;
 			}
-
-			return readProperties(url);
 		}
 
-		private static Properties readProperties(URL url) {
+		private Properties readProperties(URL url) {
 			if (url == null) {
 				return null;
 			}
 
-			Properties result = new Properties();
-
 			try {
+				Properties result = new Properties();
 				result.load(url.openStream());
+				urls.add(url);
+				return result;
 			}
 			catch (MalformedURLException exception) {
 				exception.printStackTrace();
 				return null;
 			}
 			catch (IOException exception) {
+				return null;
+			}
+		}
+
+		private Properties readProperties(NSBundle bundle, String name) {
+			if (bundle == null) {
+				return null;
+			}
+			if (name == null) {
+				URL url = bundle.pathURLForResourcePath("Properties");
+				if(url != null) {
+					urls.add(url);
+				}
+				return bundle.properties();
+			}
+
+			try {
+				InputStream inputStream = bundle.inputStreamForResourcePath(name);
+				if(inputStream == null) {
+					return null;
+				}
+				Properties result = new Properties();
+				result.load(inputStream);
+				urls.add(bundle.pathURLForResourcePath(name));
+				return result;
+			}
+			catch (MalformedURLException exception) {
 				exception.printStackTrace();
 				return null;
 			}
-			return result;
+			catch (IOException exception) {
+				return null;
+			}
 		}
 
 		/**
@@ -347,6 +379,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			wasERXApplicationMainInvoked = true;
 			String cps[] = new String[] { "java.class.path", "com.webobjects.classpath" };
 			propertiesFromArgv = NSProperties.valuesFromArgv(argv);
+			defaultProperties = (Properties) NSProperties._getProperties().clone();
 			allFrameworks = new HashSet<String>();
 			_checker = new JarChecker();
 
@@ -418,12 +451,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						String jar = jars[i];
 						_checker.processJar(jar);
 					}
-					// AK: this is pretty experimental for now. The classpath
-					// reordering
-					// should actually be done in a WOLips bootstrap because as this
-					// time all
-					// the static inits of WO app have already happened (which
-					// include NSMutableArray and _NSThreadSaveSet)
 					if (System.getProperty("_DisableClasspathReorder") == null) {
 						System.setProperty(cpName, newCP);
 					}
@@ -436,6 +463,36 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			return (allFrameworks != null && allFrameworks.size() == 0);
 		}
 
+		private NSBundle mainBundle() {
+			NSBundle mainBundle = null;
+			String mainBundleName = NSProperties._mainBundleName();
+			if (mainBundleName != null) {
+				mainBundle = NSBundle.bundleForName(mainBundleName);
+			}
+			if (mainBundle == null) {
+				mainBundle = NSBundle.mainBundle();
+			}
+			if (mainBundle == null) {
+				// AK: when we get here, the main bundle wasn't inited yet
+				// so we do it ourself...
+				try {
+					Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
+					ClassPath.setAccessible(true);
+					if (ClassPath.get(NSBundle.class) != null) {
+						Method init = NSBundle.class.getDeclaredMethod("InitMainBundle");
+						init.setAccessible(true);
+						init.invoke(NSBundle.class);
+					}
+				}
+				catch (Exception e) {
+					System.err.println(e);
+					e.printStackTrace();
+					System.exit(1);
+				}
+				mainBundle = NSBundle.mainBundle();
+			}
+			return mainBundle;
+		}
 		
 		/**
 		 * Will be called after each bundle load. We use it to know when the last
@@ -448,6 +505,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		 * @param n
 		 */
 
+		
+		
 		public void bundleDidLoad(NSNotification n) {
 			NSBundle bundle = (NSBundle) n.object();
 			// System.out.println(bundle.name() + ": " + allFrameworks);
@@ -455,78 +514,99 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (allBundleProps == null) {
 				allBundleProps = new Properties();
 			}
+			
+			String userName = propertyFromCommandLineFirst("user.name");
 
-			Properties bundleProps = bundle.properties();
-			if (bundleProps != null) {
-				for (Iterator iter = bundleProps.entrySet().iterator(); iter.hasNext();) {
-					Map.Entry entry = (Map.Entry) iter.next();
-					if (!allBundleProps.containsKey(entry.getKey())) {
-						allBundleProps.setProperty((String) entry.getKey(), (String) entry.getValue());
-					}
-				}
-			}
+			applyIfUnset(readProperties(bundle, "Properties." + userName));
+			applyIfUnset(readProperties(bundle, null));
 
 			if (allFrameworks.size() == 0) {
-				Properties mainProps = null;
-				NSBundle mainBundle = null;
-				String mainBundleName = NSProperties._mainBundleName();
-				if (mainBundleName != null) {
-					mainBundle = NSBundle.bundleForName(mainBundleName);
-				}
-				if (mainBundle == null) {
-					mainBundle = NSBundle.mainBundle();
-				}
-				if (mainBundle == null) {
-					// AK: when we get here, the main bundle wasn't inited yet
-					// so we do it ourself...
-					try {
-						Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
-						ClassPath.setAccessible(true);
-						if (ClassPath.get(NSBundle.class) != null) {
-							Method init = NSBundle.class.getDeclaredMethod("InitMainBundle");
-							init.setAccessible(true);
-							init.invoke(NSBundle.class);
-						}
-					}
-					catch (Exception e) {
-						System.err.println(e);
-						e.printStackTrace();
-						System.exit(1);
-					}
-					mainBundle = NSBundle.mainBundle();
-				}
-				if (mainBundle != null) {
-					mainProps = mainBundle.properties();
-				}
-				if (mainProps == null) {
-					String woUserDir = NSProperties.getProperty("webobjects.user.dir");
-					if (woUserDir == null) {
-						woUserDir = System.getProperty("user.dir");
-					}
-					mainProps = readProperties(new File(woUserDir, "Contents" + File.separator + "Resources" + File.separator + "Properties"));
-				}
+				mainProps = null;
+				mainUserProps = null;
 				
-				if (mainProps == null) {
-					ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+				collectMainProps(userName);
+				
+				allBundleProps.putAll(mainProps);
+				if(mainUserProps!= null) {
+					allBundleProps.putAll(mainUserProps);
+				}
 
-					Enumeration jarBundles = null;
-					try {
-						jarBundles = classLoader.getResources("Resources/Properties");
-					}
-					catch (IOException exception) {
-						exception.printStackTrace();
-					}
+				String userHome = propertyFromCommandLineFirst("user.home");
+				Properties userHomeProps = null;
+				if (userHome != null && userHome.length() > 0) {
+					userHomeProps = readProperties(new File(userHome, "WebObjects.properties"));
+				}
+
+				if (userHomeProps != null) {
+					allBundleProps.putAll(userHomeProps);
+				}
+
+				Properties props = NSProperties._getProperties();
+				props.putAll(allBundleProps);
+				
+				NSProperties._setProperties(props);
+				
+				insertCommandLineArguments();
+				if(userHomeProps != null) {
+					urls.add(0,urls.remove(urls.size()-1));
+				}
+				if(mainUserProps != null) {
+					urls.add(0,urls.remove(urls.size()-1));
+				}
+				urls.add(0,urls.remove(urls.size()-1));
+				// System.out.print(urls);
+				NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
+			}
+		}
+		
+
+		private List<URL> urls = new ArrayList<URL>();
+		private Properties mainProps;
+		private Properties mainUserProps;
+
+		private String propertyFromCommandLineFirst(String key) {
+			String result = (String) propertiesFromArgv.valueForKey(key);
+			if(result == null) {
+				result = NSProperties.getProperty(key);
+			}		
+			return result;
+		}
+
+		private void collectMainProps(String userName) {
+			NSBundle mainBundle = mainBundle();
+			
+			if (mainBundle != null) {
+				mainUserProps = readProperties(mainBundle, "Properties." + userName);
+				mainProps = readProperties(mainBundle, null);
+			}
+			if (mainProps == null) {
+				String woUserDir = NSProperties.getProperty("webobjects.user.dir");
+				if (woUserDir == null) {
+					woUserDir = System.getProperty("user.dir");
+				}
+				mainUserProps = readProperties(new File(woUserDir, "Contents" + File.separator + "Resources" + File.separator + "Properties." + userName));
+				mainProps = readProperties(new File(woUserDir, "Contents" + File.separator + "Resources" + File.separator + "Properties"));
+			}
+			
+			if (mainProps == null) {
+				ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+				try {
+					Enumeration<URL> jarBundles = classLoader.getResources("Resources/Properties");
 
 					URL propertiesPath = null;
+					URL userPropertiesPath = null;
+					String mainBundleName = NSProperties._mainBundleName();
 
 					while (jarBundles.hasMoreElements()) {
-						URL url = (URL) jarBundles.nextElement();
+						URL url = jarBundles.nextElement();
 
 						String urlAsString = url.toString();
 
 						if (urlAsString.contains(mainBundleName + ".jar")) {
 							try {
 								propertiesPath = new URL(URLDecoder.decode(urlAsString, "UTF-8"));
+								userPropertiesPath = new URL(propertiesPath.toExternalForm() + userName);
 							}
 							catch (MalformedURLException exception) {
 								exception.printStackTrace();
@@ -539,26 +619,25 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						}
 					}
 					mainProps = readProperties(propertiesPath);
+					mainUserProps = readProperties(userPropertiesPath);
 				}
-
-				if (mainProps == null) {
-					throw new IllegalStateException("Main bundle 'Properties' file can't be read.  Did you run as a Java Application instead of a WOApplication in WOLips?\nPlease post your deployment configuration in the Wonder mailing list.");
+				catch (IOException exception) {
+					exception.printStackTrace();
 				}
-				allBundleProps.putAll(mainProps);
+			}
 
-				String userhome = System.getProperty("user.home");
-				if (userhome != null && userhome.length() > 0) {
-					Properties userProps = readProperties(new File(userhome, "WebObjects.properties"));
-					if (userProps != null) {
-						allBundleProps.putAll(userProps);
-					}
+			if (mainProps == null) {
+				throw new IllegalStateException("Main bundle 'Properties' file can't be read.  Did you run as a Java Application instead of a WOApplication in WOLips?\nPlease post your deployment configuration in the Wonder mailing list.");
+			}
+		}
+
+		private void applyIfUnset(Properties bundleProps) {
+			if(bundleProps == null) return;
+			for (Iterator iter = bundleProps.entrySet().iterator(); iter.hasNext();) {
+				Map.Entry entry = (Map.Entry) iter.next();
+				if (!allBundleProps.containsKey(entry.getKey())) {
+					allBundleProps.setProperty((String) entry.getKey(), (String) entry.getValue());
 				}
-
-				Properties props = NSProperties._getProperties();
-				props.putAll(allBundleProps);
-				NSProperties._setProperties(props);
-				insertCommandLineArguments();
-				NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
 			}
 		}
 
@@ -1804,7 +1883,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		}
 		finally {
-			ERXStats.logStatisticsForOperation(statsLog, "sum");
+			ERXStats.logStatisticsForOperation(statsLog, "key");
 			ERXApplication._endRequest();
 		}
 		if (requestHandlingLog.isDebugEnabled()) {
