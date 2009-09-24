@@ -387,6 +387,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     	if (_retainObjects) {
     		EOEditingContext editingContext = editingContext();
     		T localEO = ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
+    		if (localEO != null && localEO.isFault()) {
+    			localEO.willRead();
+    		}
     		record = new EORecord<T>(gid, localEO);
     	}
     	else {
