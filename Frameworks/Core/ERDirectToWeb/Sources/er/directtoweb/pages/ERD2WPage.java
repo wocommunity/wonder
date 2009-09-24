@@ -363,6 +363,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         errorMessage = message == null ? "" : message;
     }
 
+    public boolean hasErrors() {
+        return (errorMessages != null && errorMessages.count() > 0) || (errorMessage != null && errorMessage.trim().length() > 0);
+    }
+
     public NSArray errorKeyOrder() {
         return errorKeyOrder;
     }
@@ -449,7 +453,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                         }
                     }
                 }
-                if("saveChangesExceptionKey".equals(keyPath) && erv.propertyKey() != null) { 
+                if(("saveChangesExceptionKey".equals(keyPath) || "queryExceptionKey".equals(keyPath)) && erv.propertyKey() != null) { 
                 	// AK: this is for combined keys like company,taxIdentifier
                 	keyPathsWithValidationExceptions.addObjectsFromArray(NSArray.componentsSeparatedByString( erv.propertyKey(), ","));
                 }

@@ -11,4 +11,11 @@
 	"ObjectsRemovalException" = "Cannot delete this <b>@@displayNameForEntity@@</b>. You should first delete the items in its <b>@@displayNameForProperty@@</b>.";
 	"PasswordsDontMatchException" = "The <b>passwords</b> you entered don't match";
 	"PasswordsFillBothFieldsException" = "Please fill in both <b>password</b> fields";
+	
+	"QueryEmpty" = "Please provide query criteria";
+	"QueryValueRequired" = "Please enter a value for @@displayNameForProperty@@";
+	"QueryValueTooShort" = "The value entered for @@displayNameForProperty@@ is not long enough";
+	"QueryValueTooLong" = "The value entered for @@displayNameForProperty@@ is too long";
+	"QueryValueTooSmall" = "The value entered for @@displayNameForProperty@@ is too small";
+	"QueryValueTooLarge" = "The value entered for @@displayNameForProperty@@ is too large";
 }
