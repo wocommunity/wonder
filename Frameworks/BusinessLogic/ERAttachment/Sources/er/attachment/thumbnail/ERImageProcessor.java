@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
 import er.extensions.foundation.ERXExceptionUtilities;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ImageProcessor is a common superclass of all IImageProcessor 
@@ -30,28 +31,54 @@ public abstract class ERImageProcessor implements IERImageProcessor {
     if (imageProcessor == null) {
       synchronized (IERImageProcessor.class) {
         if (imageProcessor == null) {
-          // Try ImageIO ...
-          try {
-            imageProcessor = ImageIOImageProcessor.imageIOImageProcessor();
+          String imageProcessorKey = ERXProperties.stringForKey("er.attachment.thumbnail.imageProcessor");
+          if (imageProcessorKey != null) {
+            // ... add a registry of these at some point
+            if ("sips".equals(imageProcessorKey)) {
+              imageProcessor = new SipsImageProcessor();
+            }
+            else if ("imageio".equals(imageProcessorKey)) {
+              imageProcessor = ImageIOImageProcessor.imageIOImageProcessor();
+            }
+            else if ("imagemagick".equals(imageProcessorKey)) {
+              try {
+                imageProcessor = ImageMagickImageProcessor.imageMagickImageProcessor();
+              }
+              catch (Throwable t) {
+                throw new RuntimeException("Failed to load ImageMagick image processor.", t);
+              }
+            }
+            else if ("java".equals(imageProcessorKey)) {
+              imageProcessor = new Java2DImageProcessor();
+            }
+            else {
+              throw new IllegalArgumentException("Unknown image processor '" + imageProcessorKey + "'.");
+            }
           }
-          catch (Throwable t) {
-            // ... failure in the constructor means the lib doesn't exist
-            log.warn("Cannot use ImageIOProcessor: " + ERXExceptionUtilities.toParagraph(t));
-          }
-
-          // Try ImageMagick ...
-          if (imageProcessor == null) {
+          else {
+            // Try ImageIO ...
             try {
-              imageProcessor = ImageMagickImageProcessor.imageMagickImageProcessor();
+              imageProcessor = ImageIOImageProcessor.imageIOImageProcessor();
             }
             catch (Throwable t) {
-              log.warn("Cannot use ImageMagickImageProcessor: " + ERXExceptionUtilities.toParagraph(t));
+              // ... failure in the constructor means the lib doesn't exist
+              log.warn("Cannot use ImageIOProcessor: " + ERXExceptionUtilities.toParagraph(t));
             }
-          }
-
-          // ... and the fallback to Java2D
-          if (imageProcessor == null) {
-            imageProcessor = new Java2DImageProcessor();
+  
+            // Try ImageMagick ...
+            if (imageProcessor == null) {
+              try {
+                imageProcessor = ImageMagickImageProcessor.imageMagickImageProcessor();
+              }
+              catch (Throwable t) {
+                log.warn("Cannot use ImageMagickImageProcessor: " + ERXExceptionUtilities.toParagraph(t));
+              }
+            }
+  
+            // ... and the fallback to Java2D
+            if (imageProcessor == null) {
+              imageProcessor = new Java2DImageProcessor();
+            }
           }
 
           _imageProcessor = imageProcessor;
