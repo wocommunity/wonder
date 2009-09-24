@@ -134,6 +134,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
         public static final String alternateKeyInfo = "alternateKeyInfo";
         
+        public static final String displayVariant = "displayVariant";
+        
         public static final String clickToOpenEnabled = "clickToOpenEnabled";
 
 		// The propertyKey whose form widget gets the focus upon loading an edit page.
@@ -893,6 +895,26 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return ERXComponentUtilities.booleanValueForBinding(this, "isEmbedded", false);
     }
 
+    /**
+     * Gets the <code>displayVariant</code> for the current property key.  The intention is that the display variant
+     * allows variation in the display method of property keys without needing different, slightly varying,
+     * <code>displayPropertyKeys</code> or <code>tabSectionsContents</code> rules.  Template support has been added for
+     * the <code>omit</code> and <code>blank</code> variants.  One could imagine others, such as <code>collapsed</code>,
+     * <code>ajax</code>, etc.
+     * @return the display variant, if specified
+     */
+    public String displayVariant() {
+        return (String)d2wContext().valueForKey(Keys.displayVariant);
+    }
+
+    /**
+     * Determines if display of the current property key should be <code>omitted</code>.
+     * @return true if key should be omitted
+     */
+    public boolean isKeyOmitted() {
+        return "omit".equals(displayVariant());
+    }
+
     /*
      * // FIXME: Should be dynamic public String pageTitle() { return "NetStruxr -
      * "+d2wContext().valueForKey("displayNameForEntity")+" View"; }
@@ -1171,6 +1193,69 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             }
         }
         return result;
+    }
+
+    /**
+     * Gets the CSS class(es) for the container element, based on the current entity and task.
+     * @return the css classes
+     */
+    public String cssClassForPageContainerElement() {
+        NSMutableArray classes = new NSMutableArray();
+        D2WContext d2wContext = d2wContext();
+		String task = d2wContext.task();
+		String subTask = (String)d2wContext.valueForKey("subTask");
+		String elementClassPrefix = ERXStringUtilities.capitalize(task) + "Table";
+		classes.addObject(elementClassPrefix);
+		if (subTask != null) {
+			classes.addObject(ERXStringUtilities.capitalize(task) + ERXStringUtilities.capitalize(subTask) + "Table");
+		}
+		if (d2wContext.dynamicPage() != null && d2wContext.dynamicPage().indexOf("Embedded") > -1) {
+			classes.addObject(ERXStringUtilities.capitalize(task) + "Embedded");
+			classes.addObject("embedded");
+		}
+        if (entityName() != null) {
+            classes.addObject(elementClassPrefix + entityName());
+        }
+        classes.addObject(elementClassPrefix + d2wContext.dynamicPage());
+		return classes.componentsJoinedByString(" ");
+    }
+
+    /**
+     * Gets the CSS class(es) that should be applied to the current property key container element.
+     * @return the css classes
+     */
+    public String cssClassForPropertyKey() {
+        NSMutableArray classes = new NSMutableArray();
+        D2WContext d2wContext = d2wContext();
+        String propertyKey = d2wContext.propertyKey();
+        if (propertyKey != null) {
+            classes.addObject(propertyKey.replaceAll("\\.", "_"));
+
+            // Required?
+            if (ERXValueUtilities.booleanValue(d2wContext.valueForKey("displayRequiredMarker")) && !"query".equals(task())) {
+                classes.addObject("required");
+            }
+
+            // Has error?
+            if (hasValidationExceptionForPropertyKey()) {
+                classes.addObject("error");
+            }
+
+            // Explicitly defined class(es).
+            NSArray explicitClasses = ERXValueUtilities.arrayValueWithDefault(d2wContext.valueForKey("cssClass"), NSArray.EmptyArray);
+            if (explicitClasses.count() > 0) {
+                classes.addObjectsFromArray(explicitClasses);
+            }
+        }
+        return classes.componentsJoinedByString(" ");
+    }
+
+    /**
+     * Gets any inline style declarations for the current property key container element.
+     * @return the inline style declarations
+     */
+    public String inlineStyleDeclarationForPropertyKey() {
+        return (String)d2wContext().valueForKey("inlineStyle");
     }
 
 }

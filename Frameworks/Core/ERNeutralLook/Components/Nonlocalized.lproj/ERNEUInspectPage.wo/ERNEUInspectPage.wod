@@ -119,6 +119,11 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
 	value = latestEntryForCurrentPropertyKey.latestDuration;
@@ -135,6 +140,7 @@ InspectTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 2;
 	cellspacing = 1;
+	class = cssClassForPageContainerElement;
 	elementName = "table";
 }
 
@@ -194,8 +200,19 @@ PageWrapper: WOSwitchComponent {
 }
 
 PropertyKeyComponentGenericContainer: WOGenericContainer {
+	align = "left";
+	class = cssClassForPropertyKey;
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
+	style = inlineStyleDeclarationForPropertyKey;
+}
+
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	align = "right";
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	scope = "row";
+	style = inlineStyleDeclarationForPropertyKey;
 }
 
 PropertyNameSwitchComponent: WOSwitchComponent {

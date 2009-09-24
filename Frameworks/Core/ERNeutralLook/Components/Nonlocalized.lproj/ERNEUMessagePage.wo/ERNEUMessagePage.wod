@@ -64,6 +64,11 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 InspectRow: WOGenericContainer {
 	_unroll = true;
 	bgcolor = d2wContext.backgroundColorForTable;
@@ -85,6 +90,19 @@ NoTitleAvailable: ERXNonNullConditional {
 
 PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
+}
+
+PropertyKeyComponentGenericContainer: WOGenericContainer {
+	class = cssClassForPropertyKey;
+	elementName = "td";
+	style = inlineStyleDeclarationForPropertyKey;
+}
+
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	align = "right";
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	style = inlineStyleDeclarationForPropertyKey;
 }
 
 PropertyNameSwitchComponent: WOSwitchComponent {

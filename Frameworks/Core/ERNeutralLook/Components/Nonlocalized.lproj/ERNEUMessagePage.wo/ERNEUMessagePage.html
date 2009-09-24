@@ -30,11 +30,15 @@
 							</tr>
 							<tr>
 								<td align=center valign=top>
-									<table cellspacing=2 border=0 cellpadding=2>
-										<webobject name=AttributeRepetition><webobject name=QueryRow>
-												<td align=right><webobject name=SwitchComponent1></webobject><font size=-1><strong></strong></font></td>
-												<td><webobject name=AttributeValue></webobject></td>
-											</webobject></webobject>
+									<table border="0" cellpadding="2" cellspacing="2">
+										<webobject name="AttributeRepetition">
+											<webobject name="IfPropertyKeyIsNotOmitted">
+											<webobject name="InspectRow">
+												<webobject name="PropertyNameComponentGenericContainer"><webobject name="PropertyNameSwitchComponent"></webobject></webobject>
+												<webobject name="PropertyKeyComponentGenericContainer"><webobject name="AttributeValue"></webobject></webobject>
+											</webobject>
+											</webobject>
+										</webobject>
 									</table>
 								</td>
 							</tr>
