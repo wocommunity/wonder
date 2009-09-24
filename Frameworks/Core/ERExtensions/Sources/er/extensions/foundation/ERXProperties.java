@@ -1138,7 +1138,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	else {
     		applicationName = ERXSystem.getProperty("WOApplicationName");
     		if (applicationName == null) {
-    			applicationName = NSBundle.mainBundle().name();
+    			NSBundle mainBundle = NSBundle.mainBundle();
+    			if (mainBundle != null) {
+    				applicationName = mainBundle.name();
+    			}
     			if (applicationName == null) {
     				applicationName = "Unknown";
     			}
