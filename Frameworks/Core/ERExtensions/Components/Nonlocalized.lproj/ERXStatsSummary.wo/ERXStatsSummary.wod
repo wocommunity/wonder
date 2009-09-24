@@ -1,5 +1,5 @@
 Duration: WOString {
-    value = aggregateDurationForMetricsType;
+    value = durationForStatsType;
 }
 
 EventType: WOString {
@@ -8,9 +8,9 @@ EventType: WOString {
 
 EventTypeRepetition: WORepetition {
     item = currentType;
-    list = eventTypes;
+    list = statsTypes;
 }
 
-IfMetricsEnabled: WOConditional {
-    condition = metricsEnabled;
+IfHasStats: WOConditional {
+    condition = hasStats;
 }

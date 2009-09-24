@@ -64,6 +64,9 @@ public class ERXStats {
 	private static final String STATS_LAST_TIME_KEY = "er.extensions.erxStats.lastTime";
 	private static final String STATS_KEY = "er.extensions.erxStats.statistics";
 
+    public static final String STATS_ENABLED_KEY = "er.extensions.erxStats.enabled";
+    public static final String STATS_TRACE_COLLECTING_ENABLED_KEY = "er.extensions.erxStats.traceCollectingEnabled";
+
 	public static final Logger log = Logger.getLogger(ERXStats.class);
 
 	public interface Group {
@@ -97,11 +100,11 @@ public class ERXStats {
 	 * 
 	 */
 	public static boolean traceCollectingEnabled() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.erxStats.traceCollectingEnabled", false);
+		return ERXProperties.booleanForKeyWithDefault(STATS_TRACE_COLLECTING_ENABLED_KEY, false);
 	}
 
 	/**
-	 * Initializes the logging stats manually. You can all this if you want to
+	 * Initializes the logging stats manually. You can call this if you want to
 	 * turn on thread logging just for a particular area of your application.
 	 */
 	public static void initStatistics() {
@@ -151,7 +154,7 @@ public class ERXStats {
 	 *            the key to lookup
 	 * @return the log entry for the given key
 	 */
-	private static LogEntry logEntryForKey(String key) {
+	public static LogEntry logEntryForKey(String key) {
 		LogEntry entry = null;
 		NSMutableDictionary<String, LogEntry> statistics = ERXStats.statistics();
 		if (statistics != null) {
@@ -165,6 +168,19 @@ public class ERXStats {
 		}
 		return entry;
 	}
+
+	/**
+     * Returns the log entry for the given key within the specified logging group.
+     *
+     * @param group
+     *            the logging group to search for the key
+     * @param key
+     *            the key to lookup
+     * @return the log entry for the given key
+     */
+    public static LogEntry logEntryForKey(String group, String key) {
+        return logEntryForKey(makeKey(group, key));
+    }
 
 	/**
 	 * Returns the aggregate key names for all of the threads that have been
@@ -346,9 +362,7 @@ public class ERXStats {
 	}
 
 	/**
-	 * 
-	 * @param expression
-	 * @param startTime
+	 * A statistics logging entry.
 	 */
 	public static class LogEntry {
 		private float _avg;
@@ -356,6 +370,7 @@ public class ERXStats {
 		private long _min;
 		private long _max;
 		private long _sum;
+        private long _latestDuration;
 		private String _key;
 		private Set<String> _traces = Collections.synchronizedSet(new HashSet<String>());
 		private NSArray<String> _traceArray = null;
@@ -365,6 +380,7 @@ public class ERXStats {
 			_key = key;
 			_avg = -1.0f;
 			_min = Long.MAX_VALUE;
+            _latestDuration = -1;
 		}
 
 		public synchronized void _add(LogEntry logEntry) {
@@ -398,6 +414,10 @@ public class ERXStats {
 			return _sum;
 		}
 
+        public synchronized long latestDuration() {
+            return _latestDuration;
+        }
+
 		public synchronized void start() {
 			_lastMark = System.currentTimeMillis();
 		}
@@ -413,6 +433,7 @@ public class ERXStats {
 		}
 
 		public synchronized void add(long time) {
+            _latestDuration = time;
 			if (time < _min) {
 				_min = time;
 			}

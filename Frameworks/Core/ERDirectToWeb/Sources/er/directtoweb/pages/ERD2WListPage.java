@@ -56,8 +56,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
-import er.extensions.statistics.ERXMetrics;
-import er.extensions.statistics.ERXMetricsEvent;
+import er.extensions.statistics.ERXStats;
 
 /**
  * Reimplementation of the D2WListPage. Descends from ERD2WPage instead of
@@ -422,6 +421,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	protected void _fetchDisplayGroup(WODisplayGroup dg) {
+        	String statsKey = super.makeStatsKey("DisplayGroup Fetch");
+		ERXStats.markStart(ERXStats.Group.SQL, statsKey);
 		try {
 			dg.fetch();
 		}
@@ -435,14 +436,13 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 				throw e;
 			}
 		}
+        	ERXStats.markEnd(ERXStats.Group.SQL, statsKey);
 	}
 		
 	protected void fetchIfNecessary() {
 		if (_hasToUpdate) {
 			willUpdate();
-			ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.DBFetch, timingEventUserInfo());
 			_fetchDisplayGroup(displayGroup());
-			ERXMetrics.markEndOfEvent(event);
 			_hasToUpdate = false;
 			didUpdate();
 		}
@@ -524,9 +524,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 					setSortOrderingsOnDisplayGroup(sortOrderings, dg);
 				}
 				dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-				ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.DBFetch, timingEventUserInfo());
 				_fetchDisplayGroup(dg);
-				ERXMetrics.markEndOfEvent(event);
 				dg.updateDisplayedObjects();
 				_hasBeenInitialized = true;
 				_hasToUpdate = false;

@@ -14,7 +14,7 @@ AttributeCell: WOGenericContainer {
 AttributeDisplay: ERXTimedSwitchComponent { 
 	localContext = d2wContext;
 	object = object;
-	userInfo = timingEventUserInfo;
+	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
@@ -24,12 +24,6 @@ AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
-}
-
-AttributeSorter: ERXSortOrder {
-	displayGroup = displayGroup;
-	displayKey = d2wContext.displayNameForProperty;
-	key = d2wContext.sortKeyForList;
 }
 
 BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
@@ -146,7 +140,7 @@ HideReturnOnSelect2: WOConditional {
 
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
-	value = latestEventForCurrentPropertyKey.duration;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
 }
 
 InspectEO: WOHyperlink {
@@ -231,7 +225,7 @@ ListTableRow: WOGenericContainer {
 }
 
 MetricsDurationForCurrentPropertyKey: WOString {
-	value = durationOfAllEventsForCurrentPropertyKey;
+	value = aggregateEventDurationForCurrentPropertyKey;
 }
 
 NavBar1: WOSwitchComponent {   
@@ -256,8 +250,8 @@ NavBar2: WOSwitchComponent {
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
 }
 
-PageMetricsSummary: ERXMetricsSummary {
-	aggregateEventInfo = aggregateEventInfoForPage;
+PageMetricsSummary: ERXStatsSummary {
+	aggregateStats = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -266,9 +260,10 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-PropertyName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForProperty;
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 Return: ERXSingleButton {
@@ -310,6 +305,12 @@ ShowCancel: WOConditional {
 
 ShowCancel2: WOConditional {
 	condition = showCancel;
+}
+
+SortOrder: ERXSortOrder {
+	displayGroup = displayGroup;
+	displayKey = d2wContext.displayNameForProperty;
+	key = d2wContext.sortKeyForList;
 }
 
 TableCellForBottomBatchNavigationGenericContainer: WOGenericContainer {

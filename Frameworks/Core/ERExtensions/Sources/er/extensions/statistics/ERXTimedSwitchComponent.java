@@ -6,44 +6,44 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOSwitchComponent;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * A switch component that collects metrics.
+ * A switch component that collects timing stats.
  * @author Travis Cripps
  */
 public class ERXTimedSwitchComponent extends WOSwitchComponent {
 
-    WOAssociation _eventInfo;
+    WOAssociation _statsKey;
 
     public ERXTimedSwitchComponent(String name, NSDictionary associations, WOElement template) {
         super(name, associations, template);
         
         if (super.componentAttributes != null) {
-            _eventInfo = (WOAssociation)super.componentAttributes.removeObjectForKey("userInfo");
+            _statsKey = (WOAssociation)super.componentAttributes.removeObjectForKey("statsKey");
         }
     }
 
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
-        ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent(ERXMetricsEvent.EventTypes.ComponentRender, eventInfoInContext(context));
+        String statsKey = statsKey(context);
+        ERXStats.markStart(ERXStats.Group.Component, statsKey);
         super.appendToResponse(response, context);
-        ERXMetrics.markEndOfEvent(event);
+        ERXStats.markEnd(ERXStats.Group.Component, statsKey);
     }
 
-    private NSMutableDictionary eventInfoInContext(WOContext context) {
-        NSMutableDictionary result = new NSMutableDictionary();
-        result.takeValueForKey(_elementNameInContext(context), "componentName");
-
-        // Try to get additional event info from the userInfo bindings.
-        if (_eventInfo != null) {
-            Object userInfo = _eventInfo.valueInComponent(context.component());
-            if (userInfo != null && userInfo instanceof NSDictionary) {
-                result.addEntriesFromDictionary((NSDictionary)userInfo);
-            }
+    /**
+     * Gets the key for the {@link ERXStats.LogEntry stats entry}.
+     * @param context of the element
+     * @return the key
+     */
+    private String statsKey(WOContext context) {
+        String key;
+        if (_statsKey != null) {
+            key = (String)_statsKey.valueInComponent(context.component());
+        } else {
+            key = _elementNameInContext(context);
         }
-        
-        return result;
+        return key;
     }
     
 }
