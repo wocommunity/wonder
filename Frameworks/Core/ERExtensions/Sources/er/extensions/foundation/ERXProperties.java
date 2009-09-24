@@ -1131,19 +1131,32 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	String applicationMachinePropertiesPath = null;
     	String machinePropertiesPath = ERXSystem.getProperty("er.extensions.ERXProperties.machinePropertiesPath", "/etc/WebObjects");
     	WOApplication application = WOApplication.application();
+    	String applicationName;
     	if (application != null) {
-    		String applicationName = application.name();
-    		File applicationPropertiesFile = new File(machinePropertiesPath + File.separator + applicationName + File.separator + fileName);
-    		if (applicationPropertiesFile.exists()) {
-    			try {
-    				applicationMachinePropertiesPath = applicationPropertiesFile.getCanonicalPath();
-    			}
-    			catch (IOException e) {
-    				ERXProperties.log.error("Failed to load machine Properties file '" + fileName + "'.", e);
+    		applicationName = application.name();
+    	}
+    	else {
+    		applicationName = ERXSystem.getProperty("WOApplicationName");
+    		if (applicationName == null) {
+    			applicationName = NSBundle.mainBundle().name();
+    			if (applicationName == null) {
+    				applicationName = "Unknown";
     			}
     		}
     	}
-        return applicationMachinePropertiesPath;
+    	File applicationPropertiesFile = new File(machinePropertiesPath + File.separator + fileName);
+    	if (!applicationPropertiesFile.exists()) {
+    		applicationPropertiesFile = new File(machinePropertiesPath + File.separator + applicationName + File.separator + fileName);
+    	}
+    	if (applicationPropertiesFile.exists()) {
+    		try {
+    			applicationMachinePropertiesPath = applicationPropertiesFile.getCanonicalPath();
+    		}
+    		catch (IOException e) {
+    			ERXProperties.log.error("Failed to load machine Properties file '" + fileName + "'.", e);
+    		}
+    	}
+    	return applicationMachinePropertiesPath;
     }
 
     /**
