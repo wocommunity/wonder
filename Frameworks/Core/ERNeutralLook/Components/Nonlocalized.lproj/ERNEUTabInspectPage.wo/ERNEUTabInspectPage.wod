@@ -209,6 +209,11 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 Image1: WOImage {
 	filename = "floppy.gif";
 	framework = "ERExtensions";
@@ -306,11 +311,20 @@ PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 
 PropertyKeyComponentGenericContainer: WOGenericContainer {
 	align = "left";
+	class = cssClassForPropertyKey;
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
+	style = inlineStyleDeclarationForPropertyKey;
 	valign = "top";
 }
 
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	align = "right";
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	otherTagString = otherTagStringsForPropertyKeyComponentCell;
+	style = inlineStyleDeclarationForPropertyKey;
+}
 
 PropertyNameSwitchComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
@@ -417,6 +431,15 @@ SwitchComponent3: WOSwitchComponent {
 	tabNameKey = "name";
 	tabs = tabSectionsContents;
 	useFormSubmit = d2wContext.hasForm;
+}
+
+TabInspectTable: WOGenericContainer {
+	bgcolor = "#ebebeb";
+	border = 0;
+	cellpadding = 0;
+	cellspacing = 0;
+	class = cssClassForPageContainerElement;
+	elementName = "table";
 }
 
 UseSectionImagesConditional: WOConditional {

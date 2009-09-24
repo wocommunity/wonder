@@ -22,18 +22,20 @@
 				<webobject name="ListTableHeaderRow">
 					<th>&nbsp;</th>
 					<webobject name="ColumnLabelRepetition">
-					<th nowrap="nowrap" valign="bottom" class="ERNEUPickListPageColumnLabelRepetition">
+					<webobject name="IfPropertyKeyIsNotOmitted">
+					<webobject name="PropertyNameComponentGenericContainer">
 						<table>
 							<tr>
 								<th><span class="ERNEUPickListPageColumnLabel"><webobject name="PropertyNameSwitchComponent"></webobject></span></th>
 								<td><webobject name="IsPropertySortable"><webobject name="SortOrder"></webobject></webobject></td>
 							</tr>
 						</table>
-					</th>
+					</webobject>
 					<webobject name="ShouldDisplayDetailedPageMetrics">
 					<th scope="col" class="InlineMetrics">
 						&nbsp;
 					</th>
+					</webobject>
 					</webobject>
 					</webobject>
 					<th valign="bottom">Select</th>
@@ -49,6 +51,7 @@
 						</webobject>
 					</td>
 					<webobject name="AttributeRepetition">
+					<webobject name="IfPropertyKeyIsNotOmitted">
 					<webobject name="AttributeCell">
 						<webobject name="AttributeDisplay"></webobject>
 					</webobject>
@@ -56,6 +59,7 @@
 					<td class="InlineMetrics">
 						<webobject name="InlineMetricsForPropertyKey"></webobject>
 					</td>
+					</webobject>
 					</webobject>
 					</webobject>
 					<td>
@@ -69,8 +73,10 @@
 					<tr class="MetricsSummary">
 						<td>&nbsp;</td>
 						<webobject name="AttributeRepetition">
+						<webobject name="IfPropertyKeyIsNotOmitted">
 						<td>&nbsp;</td>
 						<td class="InlineMetrics"><webobject name="MetricsDurationForCurrentPropertyKey"></webobject></td>
+						</webobject>
 						</webobject>
 						<td>&nbsp;</td>
 					</tr>

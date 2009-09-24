@@ -138,6 +138,11 @@ HideReturnOnSelect2: WOConditional {
 	negate = true;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
 	value = latestEntryForCurrentPropertyKey.latestDuration;
@@ -208,6 +213,7 @@ ListTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 0;
 	cellspacing = 0;
+	class = cssClassForPageContainerElement;
 	elementName = "table";
 }
 
@@ -260,6 +266,13 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	class = cssClassForPropertyKey;
+	elementName = "th";
+	nowrap = "nowrap";
+	style = inlineStyleDeclarationForPropertyKey;
+	valign = "bottom";
+}
 
 PropertyNameSwitchComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;

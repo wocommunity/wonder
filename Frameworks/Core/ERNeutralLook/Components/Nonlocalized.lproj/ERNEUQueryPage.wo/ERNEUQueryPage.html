@@ -28,19 +28,21 @@
                   <TR>
                      <TD ALIGN=left VALIGN=top>
                         <TABLE BORDER=0 CELLPADDING=2 CELLSPACING=2>
-                           <WEBOBJECT NAME=ResourceRepetition>
-                              <WEBOBJECT NAME=QueryTableRow>
-                                 <TD ALIGN=right VALIGN=middle><webobject name="PropertyNameSwitchComponent"></webobject></TD>
-                                 <TD ALIGN=left VALIGN=middle><webobject name="ResourceInputRepresentation"></webobject></TD>
-                                 <webobject name="CanQueryForNullValues">
-                                 <td align="left" valign="middle">
-                                    <webobject name="CanQueryPropertyForNullValue">
-                                        <webobject name="PropertyHasNullValueCheckBox"></webobject>&nbsp;<webobject name="NoValueString"></webobject>
-                                    </webobject>
-                                 </td>
-                                 </webobject>
-                              </WEBOBJECT>
-                           </WEBOBJECT>
+							<webobject name="ResourceRepetition">
+							<webobject name="IfPropertyKeyIsNotOmitted">
+								<webobject name="QueryTableRow">
+									<webobject name="PropertyNameComponentGenericContainer"><webobject name="PropertyNameSwitchComponent"></webobject></webobject>
+									<webobject name="PropertyKeyComponentGenericContainer"><webobject name="ResourceInputRepresentation"></webobject></webobject>
+									<webobject name="CanQueryForNullValues">
+									<td align="left" valign="middle">
+										<webobject name="CanQueryPropertyForNullValue">
+										<webobject name="PropertyHasNullValueCheckBox"></webobject>&nbsp;<webobject name="NoValueString"></webobject>
+										</webobject>
+									</td>
+									</webobject>
+								</webobject>
+							</webobject>
+							</webobject>
                         </TABLE>
                      </TD>
                   </TR>
