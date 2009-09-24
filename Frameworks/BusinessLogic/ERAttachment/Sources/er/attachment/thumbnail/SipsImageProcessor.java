@@ -99,7 +99,7 @@ public class SipsImageProcessor extends ERImageProcessor {
       }
     }
     catch (Throwable t) {
-      throw new IOException("Failed to thumbnail image.", t);
+      throw new IOException("Failed to thumbnail image: " + t.getMessage() + " (also, Java 1.5 is stupid!)");
     }
   }
 }
