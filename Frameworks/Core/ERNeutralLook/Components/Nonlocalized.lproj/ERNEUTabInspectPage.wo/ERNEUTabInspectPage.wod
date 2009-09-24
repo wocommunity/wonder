@@ -12,7 +12,7 @@ AttributeRepetition: WORepetition {
 AttributeValue: ERXTimedSwitchComponent { 
 	localContext = localContext;
 	object = object;
-	userInfo = timingEventUserInfo;
+	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
@@ -225,7 +225,7 @@ ImageSpacer: WOImage {
 
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
-	value = latestEventForCurrentPropertyKey.duration;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
 }
 
 IsEditing: WOKeyValueConditional {
@@ -281,8 +281,8 @@ NotUsingMatrixLayout: WOConditional {
 	negate = true;
 }
 
-PageMetricsSummary: ERXMetricsSummary {
-	aggregateEventInfo = aggregateEventInfoForPage;
+PageMetricsSummary: ERXStatsSummary {
+	aggregateStats = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -311,11 +311,10 @@ PropertyKeyComponentGenericContainer: WOGenericContainer {
 	valign = "top";
 }
 
-PropertyKeyComponentGenericContainer2: WOGenericContainer {
-	elementName = "td";
-	otherTagString = otherTagStringsForPropertyKeyComponentCell;
-	valign = "top";
-	width = 120;
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 ReturnButton: WOImage {
@@ -338,7 +337,8 @@ ReturnLink: WOHyperlink {
 	action = nextPage;
 }
 
-Script: WOJavaScript{	scriptString = tabScriptString;
+Script: WOJavaScript {
+	scriptString = tabScriptString;
 	hideInComment = true;
 }
 
@@ -406,16 +406,6 @@ SubmitChanges5: WOImageButton {
 	name = "Previous Tab";
 	filename = "LeftArrow.gif";
 	framework = "JavaDirectToWeb";
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
-}
-
-SwitchComponent2: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
 }
 
 SwitchComponent3: WOSwitchComponent {

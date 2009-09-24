@@ -21,8 +21,10 @@ AttributeCell: WOGenericContainer {
 AttributeDisplay: ERXTimedSwitchComponent {
  	localContext = localContext;
  	object = object;
-	userInfo = timingEventUserInfo;
+	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;
+	_componentUnroll = true;
+	_unroll = true;
 }
 
 AttributeRepetition: WORepetition {
@@ -132,7 +134,7 @@ Help: ERDDebuggingHelp {
 
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
-	value = latestEventForCurrentPropertyKey.duration;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
 }
 
 InspectButton: ERDInspectButton {
@@ -217,7 +219,7 @@ ListTableRow: WOGenericContainer {
 }
 
 MetricsDurationForCurrentPropertyKey: WOString {
-	value = durationOfAllEventsForCurrentPropertyKey;
+	value = aggregateEventDurationForCurrentPropertyKey;
 }
 
 NavBar: WOSwitchComponent {
@@ -239,14 +241,19 @@ NavBar2: WOSwitchComponent {
        	 d2wContext = d2wContext;
 }
 
-PageMetricsSummary: ERXMetricsSummary {
-	aggregateEventInfo = aggregateEventInfoForPage;
+PageMetricsSummary: ERXStatsSummary {
+	aggregateStats = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 Repetition1: WORepetition {
@@ -326,11 +333,6 @@ String1: WOString {
 
 String2: WOString {
 	value = referenceEO.name;
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
 }
 
 SwitchComponent2: WOSwitchComponent {

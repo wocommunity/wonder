@@ -12,7 +12,7 @@ AttributeRepetition: WORepetition {
 AttributeValue: ERXTimedSwitchComponent { 
 	localContext = localContext;
 	object = object;
-	userInfo = timingEventUserInfo;
+	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
@@ -118,7 +118,7 @@ Image3: WOImage {
 
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
-	value = latestEventForCurrentPropertyKey.duration;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
 }
 
 InspectTable: WOGenericContainer {
@@ -126,7 +126,7 @@ InspectTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 3;
 	cellspacing = 0;
-	elementName = "TABLE";
+	elementName = "table";
 	bgcolor="#ebebeb";
 }
 
@@ -159,8 +159,8 @@ NotUsingMatrixLayout: WOConditional {
 	negate = true;
 }
 
-PageMetricsSummary: ERXMetricsSummary {
-	aggregateEventInfo = aggregateEventInfoForPage;
+PageMetricsSummary: ERXStatsSummary {
+	aggregateEventInfo = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -180,6 +180,11 @@ PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 	action = printerFriendlyVersion;
 	scrollbars = true;
 	target = "PrinterFriendly";
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 RightArrow: WOImageButton {
@@ -250,11 +255,6 @@ SubmitChanges: WOImageButton {
 	name = "Saves your changes";
 	filename = "SaveMetalBtn.gif";
 	framework = "JavaDirectToWeb";
-}
-
-SwitchComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
 }
 
 TotalSteps: WOString {

@@ -12,7 +12,7 @@ AttributeRepetition: WORepetition {
 AttributeValue: ERXTimedSwitchComponent {
 	localContext = localContext;
 	object = object;
-	userInfo = timingEventUserInfo;
+	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
@@ -121,7 +121,7 @@ Help: ERDDebuggingHelp {
 
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
-	value = latestEventForCurrentPropertyKey.duration;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
 }
 
 InspectRow: WOGenericContainer {
@@ -183,8 +183,8 @@ MainTable: WOGenericContainer {
 	elementName = "table";
 }
 
-PageMetricsSummary: ERXMetricsSummary {
-	aggregateEventInfo = aggregateEventInfoForPage;
+PageMetricsSummary: ERXStatsSummary {
+	aggregateStats = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -196,6 +196,11 @@ PageWrapper: WOSwitchComponent {
 PropertyKeyComponentGenericContainer: WOGenericContainer {
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 ReturnButton: WOImage {
@@ -246,11 +251,6 @@ SubmitChangesButton: WOImageButton {
 	height = "31";
 	name = "Saves your changes";
 	width = "88";
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
 }
 
 UseFocusConditional: WOConditional {

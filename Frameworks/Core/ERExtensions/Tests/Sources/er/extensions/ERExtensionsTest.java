@@ -35,7 +35,6 @@ public class ERExtensionsTest extends TestSuite {
         suite.addTestSuite(er.extensions.foundation.ERXThreadStorageTest.class);
         suite.addTestSuite(er.extensions.foundation.ERXUtilitiesTest.class);
         suite.addTestSuite(er.extensions.jdbc.MicrosoftSQLHelperTest.class);
-        suite.addTestSuite(er.extensions.statistics.ERXMetricsTest.class);
 		//$JUnit-END$
         return suite;
     }
