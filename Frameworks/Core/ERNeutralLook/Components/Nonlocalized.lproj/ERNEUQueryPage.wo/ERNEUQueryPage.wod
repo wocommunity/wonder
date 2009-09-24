@@ -48,6 +48,14 @@ EntityName: WOString {
 	value = d2wContext.displayNameForEntity;
 }
 
+Errors: ERXErrorDictionaryPanel {
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	errorKeyOrder = errorKeyOrder;
+}
+
 FetchLimit: WOString {
 	_unroll = true;
 	value = fetchLimit;
