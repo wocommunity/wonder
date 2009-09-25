@@ -26,3 +26,5 @@ Test for HelloAjaxWorld page
 |pause|1200|
 |verifyText|HelloWorldOutput|Hello WOrld. |
 |verifyText|HelloAjaxWorldOutput|Hello Ajax WOrld! |
+|assertNotText|HelloWorldOutput|Hello WOrld. Boring. Boring. |
+|assertNotText|HelloAjaxWorldOutput|Hello Ajax WOrld! Fun! Fun! |

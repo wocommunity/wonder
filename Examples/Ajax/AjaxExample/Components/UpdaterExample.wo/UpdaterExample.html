@@ -9,7 +9,7 @@
 }
 				</style>
 
-        <p>Initial time: <webobject name="String1"></webobject></p>
+        <p>Initial time: <span id="UpdateTimeTopString"><webobject name="String1"></webobject></span></p>
         <p><webobject name = "UpdateLink">Do Update with AjaxUpdateLink</webobject></p>
         <p><webobject name = "UpdateShortcutLink">Do Update With Javascript Function</webobject></p>
         <p><webobject name = "UpdateWithActionLink">Do Update After Action</webobject></p>
@@ -32,7 +32,7 @@
         	the container using an AjaxUpdateLink, set evalScripts = true on the update link.  This update container updates the 
         	status message above every time it is reloaded.
 					<script>
-					Element.update('statusMessage', 'Javascript update from container <webobject name="String1"></webobject>');
+					Element.update('statusMessage', 'Javascript update from container <span id="UpdateTimeBottomString"><webobject name="String1"></webobject></span>');
 					</script>
         	<hr>
 					<p>
@@ -41,7 +41,7 @@
 		      <p><webobject name = "UpdateLink4">Update Nested Update Container (Link Outside Container)</webobject></p>
 	        <webobject name="AjaxUpdateContainer4">
 			      <p><webobject name = "UpdateLink5">Update Nested Update Container (Link Inside Container)</webobject></p>
-	        	<b><webobject name="String1"></webobject></b>
+	        	<b><span id="UpdateTimeInsideContainer"><webobject name="String1"></webobject></span></b>
 	        </webobject>
 	        <p>
 	        <webobject name = "UpdateForm">
@@ -55,7 +55,7 @@
         <p>
         <b>Periodic Update</b>
         <webobject name="AjaxUpdateContainer2">
-        	<b><webobject name="String1"></webobject></b>
+        	<b><span id="UpdateTimePeriodicallyUpdated"><webobject name="String1"></webobject></span></b>
         	<p>
         	<webobject name="Hyperlink2">Example Link (This is a Direct Action)</webobject>
         	<p>
