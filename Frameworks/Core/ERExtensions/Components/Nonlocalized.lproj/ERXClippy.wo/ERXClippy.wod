@@ -1,0 +1,31 @@
+MovieParameter: WOGenericElement {
+	elementName = "param";
+	name = "movie";
+	value = src;
+}
+
+FlashVarsParameter: WOGenericElement {
+	elementName = "param";
+	NAME = "FlashVars";
+	value = flashVars;
+}
+
+BgColorParameter: WOGenericElement {
+    elementName = "param";
+    name = "bgcolor";
+    value = bgcolor;
+}
+
+Embed: WOGenericElement {
+	elementName = "embed";
+	src = src;
+    width = "110";
+    height = "14";
+    name = "clippy";
+    quality = "high";
+    allowScriptAccess = "always";
+    type = "application/x-shockwave-flash";
+    pluginspage = "http://www.macromedia.com/go/getflashplayer";
+    FlashVars = flashVars;
+    bgcolor = bgcolor;
+}
