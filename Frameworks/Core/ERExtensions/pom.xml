@@ -31,6 +31,8 @@
 			<id>wo54</id>
 			<properties>
 				<woClassifier>wo54</woClassifier>
+				<!-- Temporary fix. TestResources are load in a way not compatible with Maven -->
+				<maven.test.skip>true</maven.test.skip>
 			</properties>
 			<build>
 				<plugins>
@@ -124,6 +126,11 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.eoadaptors</groupId>
+			<artifactId>JavaMemoryAdaptor</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
