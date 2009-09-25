@@ -1,0 +1,15 @@
+<wo:SEHeaderFooter title="$eomodel.name">
+	<wo:SEPanel>
+		<wo:ERXWOTemplate templateName="title">
+			<wo:ERXRouteLink entityName="EOModelGroup" id="default">Default</wo:ERXRouteLink> ::
+			<wo:ERXRouteLink entityName="EOModel" record="$eomodel"><wo:str value="$eomodel.name"/></wo:ERXRouteLink>
+			<span class="details">
+				<wo:str value="$modelStats.snapshotCount"/> snapshots
+			</span>
+		</wo:ERXWOTemplate>
+		
+	  <wo:WORepetition list="$entitiesStats.@sort.entity.name" item="$entityStat">
+	  	<wo:SEEntitySnapshots entityStats="$entityStat" showModelGroup="$false" showModel="$false"/>
+	  </wo:WORepetition>
+  </wo:SEPanel>
+</wo:SEHeaderFooter>
