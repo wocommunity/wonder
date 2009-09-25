@@ -23,6 +23,8 @@
 			<id>wo53</id>
 			<properties>
 				<woClassifier>wo53</woClassifier>
+				<!-- ERExtensions tests are not compatible with WO 5.3.x -->
+				<maven.test.skip>true</maven.test.skip>
 			</properties>
 		</profile>
 		<profile>
