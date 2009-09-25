@@ -118,7 +118,7 @@ public class ERXEORestDelegate implements IERXRestDelegate {
 		}
 		else {
 			IERXRestDelegate delegate = IERXRestDelegate.Factory.delegateForEntityNamed(entity.entityName(), _editingContext);
-			if (delegate != null) {
+			if (delegate != null && delegate.getClass() != getClass()) {
 				obj = delegate.objectOfEntityWithID(entity, id);
 			}
 			else {
