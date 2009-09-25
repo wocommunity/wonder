@@ -2,6 +2,7 @@ package er.rest;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
@@ -121,6 +122,26 @@ public interface IERXRestDelegate {
 			}
 			delegate.setEditingContext(editingContext);
 			return delegate;
+		}
+
+		/**
+		 * Returns the entity name for the given object.
+		 * 
+		 * @param obj the object to return an entity name for
+		 * @return the entity name for the given object
+		 */
+		public static String entityNameForObject(Object obj) {
+			String entityName;
+			EOEditingContext editingContext;
+			if (obj instanceof EOEnterpriseObject) {
+				entityName = ((EOEnterpriseObject)obj).entityName();
+				editingContext = ((EOEnterpriseObject)obj).editingContext();
+			}
+			else {
+				entityName = obj.getClass().getSimpleName();
+				editingContext = null;
+			}
+			return entityName;
 		}
 	}
 }

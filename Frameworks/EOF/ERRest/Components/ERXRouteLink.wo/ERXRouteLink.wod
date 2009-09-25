@@ -1,0 +1,6 @@
+Link : WOHyperlink {
+  href = linkURL;
+  class = ^class;
+  id = ^id;
+  style = ^style;
+}
