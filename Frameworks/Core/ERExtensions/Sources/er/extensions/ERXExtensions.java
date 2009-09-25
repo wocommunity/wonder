@@ -228,8 +228,14 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public void finishInitialization() {
     	ERXJDBCAdaptor.registerJDBCAdaptor();
-        //AK: we now load all files rather early on, so we don't need to do it again
-    	// ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
+        // AK: we now setup the properties three times. At startup, in ERX.init
+		// and here. Note that this sucks beyond belief, as this will produce
+		// unforeseen results in several cases, but it's the only way to set up
+		// all parts of the property handling. The first install only loads plain
+		// and user props the second has no good way to set up the main bundle and this one
+		// comes too late for static inits
+    	ERXConfigurationManager.defaultManager().loadConfiguration();
+    	
         ERXProperties.populateSystemProperties();
         
         ERXConfigurationManager.defaultManager().configureRapidTurnAround();
@@ -613,16 +619,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s string to capitalize
      * @return capitalized string if the first char is a
      *		lowercase character.
+     *@deprecated ERXStringUtilities.capitalize()
      */
-    // MOVEME: ERXStringUtilities
     public static String capitalize(String s) {
-        String result=s;
-        if (s!=null && s.length()>0) {
-            char c=s.charAt(0);
-            if (Character.isLowerCase(c))
-                result=Character.toUpperCase(c)+s.substring(1);
-        }
-        return result;
+        return ERXStringUtilities.capitalize(s);
     }
 
     /**
@@ -632,8 +632,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param howMany number of its
      * @param language target language
      * @return plurified string
+     * @deprecated use ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany)
      */
-    // MOVEME: ERXStringUtilities
     public static String plurify(String s, int howMany, String language) {
         return ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany);
     }
@@ -785,9 +785,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param frameworkName name of the framework, null or "app"
      *		for the application bundle
      * @return the <code>lastModified</code> method of the file object
+     * @deprecated use ERXFileUtilities.lastModifiedDateForFileInFramework()
      */
-    // MOVEME: ERXFileUtilities
-    // ENHANCEME: Should be able to specify the language to check
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
         return ERXFileUtilities.lastModifiedDateForFileInFramework(fileName, frameworkName);
     }
@@ -799,9 +798,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      *		'app' for the application bundle.
      * @return de-serialized object from the plist formatted file
      *		specified.
+     * @deprecated use ERXFileUtilities.readPropertyListFromFileInFramework()
      */
-    // FIXME: Capitalize inFramework
-    // MOVEME: ERXFileUtilities
     public static Object readPropertyListFromFileinFramework(String fileName, String aFrameWorkName) {
         return ERXFileUtilities.readPropertyListFromFileInFramework(fileName, aFrameWorkName);
     }
@@ -815,9 +813,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param languageList language list search order
      * @return de-serialized object from the plist formatted file
      *		specified.
+     * @deprecated use ERXFileUtilities.readPropertyListFromFileInFramework()
      */
-    // FIXME: Not the best way of handling encoding
-    // MOVEME: ERXFileUtilities
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
                                                              NSArray languageList) {
