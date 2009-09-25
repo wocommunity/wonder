@@ -339,7 +339,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @return the controller identifier part of the path (the "companies" part in "/companies/1000");
 	 */
 	public String controllerPathForEntityNamed(String entityName) {
-	  return _entityNameFormat.formatEntityNamed(entityName);
+	  return _entityNameFormat.formatEntityNamed(ERXRestNameRegistry.registry().externalNameForInternalName(entityName));
 	}
 
 	/**
