@@ -10,6 +10,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXSession;
 import er.extensions.components.ERXStatelessComponent;
 
@@ -60,6 +61,7 @@ public class ERXJSLifebeat extends ERXStatelessComponent {
 					// CHECKME TH do we still need that?
 					// we give over the session id as we also need to touch the session anyway
 					response.setHeader(ERXSession.DONT_STORE_PAGE, sessionID);
+					response.setHeader("application/x-empty", ERXResponse.ContentTypeHeaderKey);
 				}
 				else {
 					log.debug("Couldn't ping " + sessionID);
