@@ -1,0 +1,17 @@
+<div class="entityStats">
+	<h3>
+		<wo:if condition="$^showModelGroup">
+			<wo:ERXRouteLink entityName="EOModelGroup" id="default">Default</wo:ERXRouteLink> ::
+		</wo:if>
+		<wo:if condition="$^showModel">
+			<wo:ERXRouteLink entityName="EOModel" record="$entityStats.entity.model"><wo:str value="$entityStats.entity.model.name"/></wo:ERXRouteLink> ::
+		</wo:if>
+		<wo:ERXRouteLink entityName="EOEntity" record="$entityStats.entity"><wo:str value="$entityStats.entity.name"/></wo:ERXRouteLink>
+	</h3>
+	
+	<wo:AjaxExpansion id="$entityStats.entity.name" class="snapshotExpansion" linkClass="snapshotsLink" string="~ entityStats.snapshotCount + ' Snapshots'" insertion="Effect.blind" insertionDuration="0.1">
+		<div class="snapshotsContainer">
+			<wo:SESnapshotsList entity="$entityStats.entity" snapshotStats="$entityStats.snapshotStats"></wo:SESnapshotsList>
+		</div>
+	</wo:AjaxExpansion>
+</div>

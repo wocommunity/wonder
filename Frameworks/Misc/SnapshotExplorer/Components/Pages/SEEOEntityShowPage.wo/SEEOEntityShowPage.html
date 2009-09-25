@@ -1,0 +1,18 @@
+<wo:SEHeaderFooter title="$entityStats.entity.name">
+	<wo:SEPanel>
+		<wo:ERXWOTemplate templateName="title">
+			<wo:ERXRouteLink entityName="EOModelGroup" id="default">Default</wo:ERXRouteLink> ::
+			<wo:ERXRouteLink entityName="EOModel" record="$entityStats.entity.model"><wo:str value="$entityStats.entity.model.name"/></wo:ERXRouteLink> ::
+			<wo:ERXRouteLink entityName="EOEntity" record="$entityStats.entity"><wo:str value="$entityStats.entity.name"/></wo:ERXRouteLink>
+			<span class="details">
+				<wo:str value="$entityStats.snapshotCount"/> snapshots
+			</span>
+		</wo:ERXWOTemplate>
+		
+		<wo:AjaxUpdateContainer>
+			<div class="snapshotsContainer">
+				<wo:SESnapshotsList entity="$entityStats.entity" snapshotStats="$entityStats.snapshotStats"></wo:SESnapshotsList>
+			</div>
+		</wo:AjaxUpdateContainer>
+  </wo:SEPanel>
+</wo:SEHeaderFooter>

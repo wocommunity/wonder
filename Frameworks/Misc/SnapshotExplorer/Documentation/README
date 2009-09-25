@@ -1,0 +1,5 @@
+SnapshotExplorer allows you to browse snapshots in your EODatabases. Currently this is restricted to only work in development mode (for obviousy horrible security reasons).
+
+* In your application, add the frameworks: Ajax, ERRest, WOOgnl, SnapshotExplorer 
+* In your application constructor, add: SESnapshotExplorer.register(); or SESnapshotExplorer.register(routeRequestHandler);
+* go to http://yourhost:yourport/cgi-bin/WebObjects/YourApp.woa/ra/modelGroups.html

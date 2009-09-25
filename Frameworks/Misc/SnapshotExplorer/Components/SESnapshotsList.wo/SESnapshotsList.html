@@ -1,0 +1,19 @@
+<table>
+  <tr>
+    <th>gid</th>
+    
+    <wo:WORepetition list="$entity.attributes.@sort.name" item="$attribute">
+      <th><wo:str value="$attribute.name" /></th>
+    </wo:WORepetition>
+  </tr>
+  <wo:WORepetition list="$snapshotStatsDisplayGroup.displayedObjects" item="$snapshotStat">
+    <tr>
+    	<td><wo:str value="~snapshotStat.gid.keyValues[0]"/></td>
+    	
+      <wo:WORepetition list="$entity.attributes.@sort.name" item="$attribute">
+        <td><wo:str value="$value" /></td>
+      </wo:WORepetition>
+    </tr>
+  </wo:WORepetition>
+</table>
+<wo:AjaxFlickrBatchNavigation updateContainerID="_parent" displayGroup="$snapshotStatsDisplayGroup" displayName="snapshot"/>
