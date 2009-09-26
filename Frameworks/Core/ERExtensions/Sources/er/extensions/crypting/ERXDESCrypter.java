@@ -97,7 +97,7 @@ public class ERXDESCrypter implements ERXCrypterInterface {
 				}
 			}
 			else {
-				throw new RuntimeException("No secret key found. You should add a 'Secret.ser' file into your app's resources or use setSecretKeyPath(String aPath)");
+				throw new RuntimeException("No secret key found. You should add a 'SecretKey.ser' file into your app's resources or use setSecretKeyPath(String aPath)");
 			}
 		}
 		return _secretDESKey;
