@@ -215,7 +215,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 						if(availableTasks.length() > 0 && !availableTasks.contains(task)) {
 							isAllowed = false;
 						}
-						if(availablePages.length() > 0 && !availablePages.contains(task)) {
+						if(availablePages.length() > 0 && !availablePages.contains(pageName)) {
 							isAllowed = false;
 						}
                     }
