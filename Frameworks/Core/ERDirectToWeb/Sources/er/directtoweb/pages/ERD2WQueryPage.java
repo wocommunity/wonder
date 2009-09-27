@@ -238,6 +238,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         ERDQueryValidationDelegate queryValidationDelegate = queryValidationDelegate();
         if (queryValidationDelegate != null) {
             clearValidationFailed();
+            setErrorMessage(null);
             try {
                 queryValidationDelegate.validateQuery(this);
             } catch (NSValidation.ValidationException ex) {

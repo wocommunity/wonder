@@ -80,7 +80,7 @@ public abstract class ERDQueryValidationDelegate {
         WODisplayGroup displayGroup = sender.displayGroup();
         if (displayGroup.queryMatch().allKeys().count() == 0 && displayGroup.queryMin().allKeys().count() == 0 &&
             displayGroup.queryMax().allKeys().count() == 0 && displayGroup.queryBindings().allKeys().count() == 0 &&
-            !ERXValueUtilities.booleanValueWithDefault(d2wContext.valueForKey(ValidationKeys.AllowsEmptyQuery), false)) {
+            !ERXValueUtilities.booleanValueWithDefault(d2wContext.valueForKey(ValidationKeys.AllowsEmptyQuery), true)) {
             throw ERXValidationFactory.defaultFactory().createCustomException(null, ErrorKeys.QueryEmpty);
         }
 
