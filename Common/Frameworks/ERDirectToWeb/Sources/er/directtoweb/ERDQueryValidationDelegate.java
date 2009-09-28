@@ -32,11 +32,11 @@ import java.util.Enumeration;
  *
  * <p><code>entity.name = 'Foo' and propertyKey = 'bar' => minimumInputLength = "3" (Assignment)</code></p>
  *
- * <p>Subclasses wishing to implement custom validation logic should implement the {@link #validateQuery} method.  The
- * implementation should catch validation exceptions and invoke
+ * <p>Subclasses wishing to implement custom validation logic should implement the {@link #validateQueryValues} method.
+ * The implementation should catch validation exceptions and invoke
  * {@link ERD2WPage#validationFailedWithException(Throwable, Object, String)} with any caught exceptions.  To customize
  * behavior, while retaining the default checks, extend {@link ERDQueryValidationDelegate.DefaultQueryValidationDelegate}
- * to perform custom validations and then call {@link #validateQuery} on the superclass.
+ * to perform custom validations and then call {@link #validateQueryValues} on the superclass.</p>
  *
  * @author Travis Cripps
  */

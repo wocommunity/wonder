@@ -122,8 +122,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 		// The propertyKey whose form widget gets the focus upon loading an edit page.
 		public static final String firstResponderKey = "firstResponderKey";
 
-        public static final String showPageMetrics = "showPageMetrics";
-           
     }
 
     /** logging support */
@@ -1224,7 +1222,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             }
 
             // Has error?
-            if (ERD2WUtilities.validationExceptionOccurredForPropertyKey(propertyKey, d2wContext)) {
+            if (hasValidationExceptionForPropertyKey()) {
                 classes.addObject("error");
             }
 
