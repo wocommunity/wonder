@@ -1,11 +1,13 @@
 package er.prototaculous;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver._private.WOForm;
 
+import er.extensions.appserver.ERXBrowser;
+import er.extensions.appserver.ERXBrowserFactory;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
@@ -77,6 +79,17 @@ public class AjaxUpdaterForm extends AjaxUpdater {
     
     public boolean omitTags() {
     	return !showForm();
+    }
+    
+    /*
+     * Lifted from ERXWOForm
+     */
+    public String style() {
+		ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context().request());
+		boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("522") > 0);
+		if (useDisplayNone) {
+			return "position: absolute; left: -10000px; display: none;";
+		} else return "position: absolute; left: -10000px;";
     }
     
     // actions
