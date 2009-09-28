@@ -383,9 +383,6 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     public ERDQueryValidationDelegate queryValidationDelegate() {
         if (null == queryValidationDelegate) {
             queryValidationDelegate = (ERDQueryValidationDelegate)d2wContext().valueForKey("queryValidationDelegate");
-            if (null == queryValidationDelegate) {
-                queryValidationDelegate = new ERDQueryValidationDelegate.DefaultQueryValidationDelegate();
-            }
         }
         return queryValidationDelegate;
     }
