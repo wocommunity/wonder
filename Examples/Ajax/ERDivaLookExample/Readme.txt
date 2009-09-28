@@ -67,4 +67,4 @@ Compatible browsers (ERDivaLookExample)
 ===================
 
 CSS is universal for the following browsers:
-Safari4, FireFox3+, Chrome, IE (forthcoming)
+Safari4, FireFox3+, Chrome, IE8 (IE7 forthcoming)
