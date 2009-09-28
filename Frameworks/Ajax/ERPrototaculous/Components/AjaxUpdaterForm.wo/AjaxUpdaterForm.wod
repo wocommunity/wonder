@@ -38,3 +38,8 @@ HasDefaultSubmit: WOConditional {
 ShowForm: WOConditional {
 	condition = showForm;
 }
+
+Hidden: WOGenericContainer {
+	elementName = "div";
+	style = style;
+}
