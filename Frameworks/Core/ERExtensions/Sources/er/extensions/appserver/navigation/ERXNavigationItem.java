@@ -50,6 +50,7 @@ public class ERXNavigationItem {
     protected String _childrenBinding;
     protected NSDictionary _childrenChoices;
     protected NSDictionary _queryBindings;
+    protected String _href;
 
     protected int _height;
     protected int _width;
@@ -75,6 +76,7 @@ public class ERXNavigationItem {
             if (o instanceof String && ((String)o).trim().length() > 0) {
                 _qualifier = EOQualifier.qualifierWithQualifierFormat((String)o, null);
             }
+            _href=(String)values.valueForKey("href");
             _directActionName=(String)values.valueForKey("directActionName");
             _directActionClass=(String)values.valueForKey("directActionClass");
             if (values.valueForKey("height")!=null)
@@ -253,6 +255,10 @@ public class ERXNavigationItem {
 		return _conditions;
 	}
 
+	public String href() {
+		return _href;
+	}
+	
 	public String directActionName() {
 		return directActionClass() == null ? _directActionName : directActionClass() + "/" + _directActionName;
 	}
