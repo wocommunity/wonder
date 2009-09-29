@@ -52,8 +52,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      *  @return String
      */
     public String payPalPurchaseHref() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(WOPayPal.PAYPAL_SECURE_URL_BASE); // required -- duh!!!
+        StringBuffer sb = WOPayPal.baseUrl();
         sb.append(PayPalSingleItemLinkBase.PAYPAL_CGI_NAME);
         sb.append(PAYPAL_CGI_COMMAND);
         sb.append(payPalUrlParams());
@@ -67,6 +66,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      */
     public String payPalUrlParams() { // this should probably have much more robust error handling
         DecimalFormat currencyFormatter = new DecimalFormat("##0.00", new DecimalFormatSymbols(Locale.US));
+        DecimalFormat taxFormatter = new DecimalFormat("##0.000", new DecimalFormatSymbols(Locale.US));
 
         StringBuffer sb = new StringBuffer();
         sb.append("&business=" + urlEncode(payPalBusinessName) ); // required!!!
@@ -110,7 +110,9 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
                 sb.append("&notify_url=" + PayPalEmailURLUTF8Encoder.encode(defaultNotificationURL()) );
             }  
         }
-
+        if (tax_rate != null) {
+        	sb.append("&tax_rate=" + taxFormatter.format(Double.valueOf(tax_rate)) );  
+        }   
 
         return sb.toString();
     }

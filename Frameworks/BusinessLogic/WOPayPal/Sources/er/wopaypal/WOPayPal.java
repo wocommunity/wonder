@@ -11,6 +11,9 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+
+import er.extensions.foundation.ERXProperties;
+
 import java.util.*;
 
 /** WOPayPal is the principal class in the framework.  It gets initialized first, and contains the setup for initializing the framework's functionality
@@ -18,9 +21,14 @@ import java.util.*;
 public class WOPayPal {
     public static final String PAYPAL_URL_BASE = "http://www.paypal.com/";
     public static final String PAYPAL_SECURE_URL_BASE = "https://www.paypal.com/";
+    public static final String PAYPAL_SANDBOX_URL_BASE = "https://www.sandbox.paypal.com/";
     public static final Class[] NotificationClassArray = { com.webobjects.foundation.NSNotification.class };
     private static NSMutableSet _retainer = new NSMutableSet();
 
+    /** Property name to determine if we are using the sandbox or the live site
+     */
+    public static final String SANDBOX_MODE_PROP = "er.wopaypal.sandboxmode";
+    
     /** Constructor.
      */
     public WOPayPal() {
@@ -73,6 +81,25 @@ public class WOPayPal {
                               PayPalNotificationListener.ValidPayPalPaymentReceivedNotification,
                               null);
     }
-
+    
+    /**
+     * Does the er.wopaypal.sandboxmode is set to true?
+     */
+    public static final boolean isSandboxMode() {
+    	return ERXProperties.booleanForKeyWithDefault(SANDBOX_MODE_PROP, false);
+    }
+    
+    /**
+     * Return the base URL for the PayPal site, either the live or sandbox URL.
+     */
+    public static final StringBuffer baseUrl() {
+    	StringBuffer sb = new StringBuffer();
+        if (WOPayPal.isSandboxMode()) {
+        	sb.append(WOPayPal.PAYPAL_SANDBOX_URL_BASE);
+        } else {
+            sb.append(WOPayPal.PAYPAL_SECURE_URL_BASE);      	
+        }
+        return sb;
+    }
 
 }

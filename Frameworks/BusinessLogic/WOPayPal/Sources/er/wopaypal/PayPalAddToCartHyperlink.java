@@ -19,7 +19,7 @@ public class PayPalAddToCartHyperlink extends PayPalSingleItemHyperlink {
     
     /** The cgi command we're calling on PayPal's server.
      */
-    protected static String PAYPAL_CGI_COMMAND = "cart/add=1";
+    protected static String PAYPAL_CGI_COMMAND = "?cmd=_cart&add=1";
 
     
     /** Constructor
@@ -37,9 +37,9 @@ public class PayPalAddToCartHyperlink extends PayPalSingleItemHyperlink {
      *      PayPal shopping cart.
      */
     public String addToCartHref() { 
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = WOPayPal.baseUrl();
 
-        sb.append(WOPayPal.PAYPAL_SECURE_URL_BASE); // required -- duh!!!
+        sb.append(PayPalSingleItemLinkBase.PAYPAL_CGI_NAME);
         sb.append(PAYPAL_CGI_COMMAND);
         sb.append(payPalUrlParams());
 

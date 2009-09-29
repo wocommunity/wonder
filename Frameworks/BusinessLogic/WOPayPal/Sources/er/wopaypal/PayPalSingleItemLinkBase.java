@@ -71,6 +71,10 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
     /** use the default IPN Notification URL from the PayPalAction class?
      */
     public Boolean useDefaultIPNURL;
+    
+    /** Transaction-based tax override variable.
+     */
+    public String tax_rate;
 
     /** Constructor.
      * 
@@ -99,7 +103,8 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
                 "cancelURL",
                 "notifyURL",
                 "useIPN",
-                "useDefaultIPNURL" });
+                "useDefaultIPNURL",
+                "tax_rate"});
     } 
 
     /** for subclasses to add additional bindings
