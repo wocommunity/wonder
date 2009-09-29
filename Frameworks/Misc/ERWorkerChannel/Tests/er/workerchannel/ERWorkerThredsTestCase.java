@@ -6,15 +6,13 @@
 //
 package er.workerchannel;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.codefab.wounittest.*;
-import er.extensions.ERXLogger;
+import junit.framework.TestCase;
 
-public class ERWorkerThredsTestCase extends WOUTTestCase {
+import org.apache.log4j.Logger;
 
-    public static ERXLogger log = ERXLogger.getERXLogger(ERWorkerThredsTestCase.class);
+public class ERWorkerThredsTestCase extends TestCase {
+
+    public static Logger log = Logger.getLogger(ERWorkerThredsTestCase.class);
 
     public ERWorkerThredsTestCase(String name) { 
         super(name); 

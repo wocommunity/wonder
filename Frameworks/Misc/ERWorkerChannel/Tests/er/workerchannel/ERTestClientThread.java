@@ -7,11 +7,12 @@
 package er.workerchannel;
 
 import java.util.Random;
-import er.extensions.ERXLogger;
+
+import org.apache.log4j.Logger;
 
 public class ERTestClientThread extends Thread {
 
-    public static ERXLogger log = ERXLogger.getERXLogger(ERTestClientThread.class);
+    public static Logger log = Logger.getLogger(ERTestClientThread.class);
 
     private final ERWorkerChannel _channel;
     private final int _repeat;
