@@ -1706,7 +1706,12 @@ public class ERXEC extends EOEditingContext {
 	 * signal.
 	 */
 	public static void registerOpenEditingContextLockSignalHandler() {
-		ERXEC.registerOpenEditingContextLockSignalHandler("HUP");
+		try {
+			ERXEC.registerOpenEditingContextLockSignalHandler("HUP");
+		}
+		catch (IllegalArgumentException e) {
+			log.warn("ERXEC's HUP signal handler was not registered, probably because your operating system does not support this signal.");
+		}
 	}
 
 	/**
