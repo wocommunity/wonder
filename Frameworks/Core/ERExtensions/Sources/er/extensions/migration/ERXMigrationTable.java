@@ -474,6 +474,31 @@ public class ERXMigrationTable {
 		return newColumn(name, Types.INTEGER, 0, scale, precision, allowsNull, null, defaultValue);
 	}
 	
+
+	/**
+	 * Returns a new small integer column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newSmallIntegerColumn(String name, boolean allowsNull) throws SQLException {
+		return newColumn(name, Types.SMALLINT, 0, 0, 0, allowsNull, null);
+	}
+
+	/**
+	 * Returns a new small integer column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newSmallIntegerColumn(String name, boolean allowsNull, Short defaultValue) throws SQLException {
+		return newColumn(name, Types.SMALLINT, 0, 0, 0, allowsNull, null, defaultValue);
+	}
 	/**
 	 * Returns a new long column.  See newColumn(..) for the full docs.
 	 * 
