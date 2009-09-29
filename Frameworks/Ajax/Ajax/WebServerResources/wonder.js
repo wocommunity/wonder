@@ -812,14 +812,14 @@ var AjaxHintedText = {
         e.setAttribute('default', unescape(e.getAttribute('default')));
         e.showDefaultValue = function() {
             if(e.value == "") {
-                e.className = "ajax-hinted-text-with-default";
+                e.addClassName('ajax-hinted-text-with-default');
                 e.value = e.getAttribute('default');
             } else {
-                e.className = "";
+                e.removeClassName('ajax-hinted-text-with-default');
             }
         }
         e.showTextValue = function() {
-            e.className = "";
+            e.removeClassName('ajax-hinted-text-with-default');
             if(e.value.replace(/[\r\n]/g, "") == e.getAttribute('default').replace(/[\r\n]/g, "")) {
                 e.value = "";
             }
