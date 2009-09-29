@@ -16,6 +16,7 @@ import com.webobjects.eocontrol.EOKeyValueArchiver;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -28,6 +29,7 @@ import er.extensions.components.ERXSortOrder;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRetainer;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -63,11 +65,12 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
      * @return single instance of the user preferences
      */
     public static ERCoreUserPreferences userPreferences() {
-        if (_userPreferences == null)
-            _userPreferences = new ERCoreUserPreferences();
+        if (_userPreferences == null) {
+        	_userPreferences = new ERCoreUserPreferences();
+        }
         return _userPreferences;
     }
-
+    
     //	===========================================================================
     //	Instance Method(s)
     //	---------------------------------------------------------------------------    
@@ -78,17 +81,20 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
      */
     public void registerHandlers() {
         log.debug("Registering preference handlers");
-        _UserPreferenceHandler handler = new _UserPreferenceHandler();
-        ERXRetainer.retain(handler);
-        NSNotificationCenter.defaultCenter().addObserver(handler,
-                                                         new NSSelector("handleBatchSizeChange", ERXConstant.NotificationClassArray),
-                                                         ERXBatchNavigationBar.BatchSizeChanged,
-                                                         null);
-        NSNotificationCenter.defaultCenter().addObserver(handler,
-                                                         new NSSelector("handleSortOrderingChange", ERXConstant.NotificationClassArray),
-                                                         ERXSortOrder.SortOrderingChanged,
-                                                         null);
-        
+        Object handler = null;
+        String handlerClassName = ERXProperties.stringForKey("er.corebusinesslogic.ERCoreUserPreferences.handlerClassName");
+        if (handlerClassName != null) {
+          try {
+            handler = Class.forName(handlerClassName).newInstance();
+          }
+          catch (Exception e) {
+            throw NSForwardException._runtimeExceptionForThrowable(e);
+          }
+        }
+        if (handler == null) {
+        	handler = new _UserPreferenceHandler();
+        }
+        ERXRetainer.retain(handler);        
     }
     
     protected NSArray preferences(EOEditingContext ec) {
@@ -213,7 +219,11 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     }
 
     public static class _UserPreferenceHandler {
-
+        public _UserPreferenceHandler() {
+            NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("handleBatchSizeChange", ERXConstant.NotificationClassArray), ERXBatchNavigationBar.BatchSizeChanged, null);
+            NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("handleSortOrderingChange", ERXConstant.NotificationClassArray), ERXSortOrder.SortOrderingChanged, null);
+        }
+    	
         public void handleBatchSizeChange(NSNotification n) { handleChange("batchSize", n); }
         public void handleSortOrderingChange(NSNotification n) { handleChange("sortOrdering", n); }
 
