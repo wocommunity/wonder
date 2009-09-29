@@ -1532,7 +1532,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 						// then we want to remove this object from the CURRENT inverse
 						// relationship
 						if (oldValueEO != null && oldValueEO != object) {
-							oldValueEO.removeObjectFromPropertyWithKey(object, inverse);
+							if (oldValueEO.isToManyKey(inverse)) {
+								oldValueEO.removeObjectFromPropertyWithKey(object, inverse);
+							}
+							else {
+								oldValueEO.takeStoredValueForKey(null, inverse);
+							}
 						}
 						
 						ERXEnterpriseObject newValueEO = (ERXEnterpriseObject) value;
