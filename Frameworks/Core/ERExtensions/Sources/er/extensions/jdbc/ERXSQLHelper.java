@@ -1995,7 +1995,7 @@ public class ERXSQLHelper {
 		@Override
 		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
 			String externalType;
-			if (jdbcType == Types.LONGVARCHAR) {
+			if (jdbcType == Types.LONGVARCHAR || jdbcType == Types.CLOB) {
 				externalType = "longtext";
 			}
 			else {
