@@ -2154,7 +2154,16 @@ public class ERXSQLHelper {
 			}
 			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
-		
+
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+
 		@Override
 		public int varcharLargeJDBCType() {
 			return Types.LONGVARCHAR;
