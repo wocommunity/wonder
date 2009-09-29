@@ -783,6 +783,16 @@ public class ERXStringUtilities {
     }
 
     /**
+     * Escapes the apostrophes in a Javascript string with a backslash.
+     * 
+     * @param sourceString the source string to escape
+     * @return the escaped javascript string
+     */
+    public static String escapeJavascriptApostrophes(String sourceString) {
+    	return ERXStringUtilities.escape(new char[] { '\'' }, '\\', sourceString);
+    }
+    
+    /**
      * Escapes the given characters with the given escape character in _sourceString.  This 
      * implementation is specifically designed for large strings.  In the event that no characters 
      * are escaped, the original string will be returned with no new object creation.  A null
