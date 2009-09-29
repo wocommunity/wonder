@@ -1257,7 +1257,7 @@ public class ERXEOControlUtilities {
      * @return array of objects matching the constructed qualifier
      */
     public static NSArray objectsWithQualifier(EOEditingContext editingContext, String entityName, EOQualifier qualifier, NSArray prefetchKeyPaths, boolean includeNewObjects, boolean includeNewObjectsInParentEditingContext, boolean filterUpdatedObjects, boolean removeDeletedObjects) {
-    	return ERXEOControlUtilities.objectsWithQualifier(editingContext, entityName, qualifier, prefetchKeyPaths, null, false, true, null, includeNewObjects, includeNewObjectsInParentEditingContext, filterUpdatedObjects, removeDeletedObjects);
+    	return ERXEOControlUtilities.objectsWithQualifier(editingContext, entityName, qualifier, prefetchKeyPaths, null, 0, false, true, null, includeNewObjects, includeNewObjectsInParentEditingContext, filterUpdatedObjects, removeDeletedObjects);
     }
     
     /**
@@ -1286,6 +1286,36 @@ public class ERXEOControlUtilities {
      */
     // ENHANCEME: This should handle entity inheritance for in memory filtering
     public static NSArray objectsWithQualifier(EOEditingContext editingContext, String entityName, EOQualifier qualifier, NSArray prefetchKeyPaths, NSArray sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints, boolean includeNewObjects, boolean includeNewObjectsInParentEditingContext, boolean filterUpdatedObjects, boolean removeDeletedObjects) {
+    	return objectsWithQualifier(editingContext, entityName, qualifier, prefetchKeyPaths, sortOrderings, 0, usesDistinct, isDeep, hints, includeNewObjects, includeNewObjectsInParentEditingContext, filterUpdatedObjects, removeDeletedObjects);
+    }
+    
+    /**
+     * Utility method used to fetch an array of objects given a qualifier. Also
+     * has support for filtering the newly inserted, updateed, and deleted objects in the 
+     * passed editing context or any parent editing contexts as well as specifying prefetching 
+     * key paths.  Note that only NEW objects are supported in parent editing contexts.
+     * 
+     * @param editingContext editing context to fetch it into
+     * @param entityName name of the entity
+     * @param qualifier qualifier
+     * @param prefetchKeyPaths prefetching key paths
+     * @param sortOrderings the sort orderings to use on the results
+     * @param fetchLimit the fetch limit to use
+     * @param usesDistinct whether or not to distinct the results
+     * @param isDeep whether or not to fetch deeply
+     * @param hints fetch hints to apply
+     * @param includeNewObjects option to include newly inserted objects in the result set
+     * @param includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
+     *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the
+     *        qualifier are collected and faulted down through all parent editing contexts of ec.
+     * @param filterUpdatedObjects option to include updated objects that now match the qualifier or remove updated
+     *         objects thats no longer match the qualifier
+     * @param removeDeletedObjects option to remove objects that have been deleted
+     *
+     * @return array of objects matching the constructed qualifier
+     */
+    // ENHANCEME: This should handle entity inheritance for in memory filtering
+    public static NSArray objectsWithQualifier(EOEditingContext editingContext, String entityName, EOQualifier qualifier, NSArray prefetchKeyPaths, NSArray sortOrderings, int fetchLimit, boolean usesDistinct, boolean isDeep, NSDictionary hints, boolean includeNewObjects, boolean includeNewObjectsInParentEditingContext, boolean filterUpdatedObjects, boolean removeDeletedObjects) {
     	boolean objectsMayGetAdded = includeNewObjects || includeNewObjectsInParentEditingContext || filterUpdatedObjects;
     	NSArray<EOSortOrdering> fetchSortOrderings = sortOrderings;
     	if (objectsMayGetAdded) {
@@ -1301,6 +1331,7 @@ public class ERXEOControlUtilities {
     		}
     	}
       EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, fetchSortOrderings);
+      fs.setFetchLimit(fetchLimit);
       fs.setPrefetchingRelationshipKeyPaths(prefetchKeyPaths);
       fs.setIsDeep(isDeep);
       fs.setUsesDistinct(usesDistinct);
