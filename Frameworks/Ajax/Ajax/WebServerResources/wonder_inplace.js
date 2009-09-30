@@ -8,10 +8,10 @@ if (typeof Ajax != 'undefined' && typeof Ajax.InPlaceEditor != 'undefined') {
 	Ajax.InPlaceEditor.prototype.__onComplete = Ajax.InPlaceEditor.prototype.onComplete;
 	Ajax.InPlaceEditor.prototype = Object.extend(Ajax.InPlaceEditor.prototype, {
 		  initialize: function(element, url, options) {
-		    	var newOptions = Object.extend(options || {}, {
+		    	var newOptions = Object.extend({
 	            valueWhenEmpty: 'click to edit...',
 	            emptyClassName: 'inplaceeditor-empty'
-	        });
+	        }, options || {});
 	        this.__initialize(element,url,newOptions)
 	        this._checkEmpty();
 	    },
