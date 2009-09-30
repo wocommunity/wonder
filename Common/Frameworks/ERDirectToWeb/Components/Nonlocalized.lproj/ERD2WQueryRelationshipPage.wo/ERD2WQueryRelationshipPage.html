@@ -1,0 +1,55 @@
+<webobject name="PageWrapper">
+
+<webobject name="Help"></webobject>
+
+<webobject name="AboveDisplayPropertyKeys"></webobject>
+
+<webobject name="QueryTable">
+	<caption>
+		<div class="banner">
+			<h3>Select&nbsp;a&nbsp;<span class="object-entity-name"><webobject name="EntityName"></webobject></span></h3>
+		</div>
+	</caption>
+
+	<tr>
+		<td>
+      <webobject name="IfHasSelectedObject">
+			<table class="relationship_manipulation">
+				<tr>
+					<td align="center">
+						<webobject name="ToOneValue"></webobject>
+					</td>
+					<td>
+						<webobject name="ToOneForm">
+							<p><webobject name="RemoveToOneSubmitButton"></webobject></p>
+						</webobject>
+					</td>
+				</tr>
+			</table>
+      </webobject>
+		</td>
+	</tr>
+
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr>
+		<td class="ActionButtonContainer">
+			<webobject name="ReturnSubmitButton"></webobject>
+			<webobject name="QuerySubmitButton"></webobject>
+		</td>
+	</tr>
+</webobject>
+
+<webobject name="DisplayQuery">
+	<webobject name="QueryComponent"></webobject>
+</webobject>
+
+<webobject name="DisplayList">
+	<webobject name="ListComponent"></webobject>
+</webobject>
+
+<webobject name="BelowDisplayPropertyKeys"></webobject>
+
+</webobject>

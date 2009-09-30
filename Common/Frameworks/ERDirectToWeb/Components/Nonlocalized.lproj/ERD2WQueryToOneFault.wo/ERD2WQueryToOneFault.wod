@@ -1,0 +1,8 @@
+DisplayString: WOString {
+  value = displayString;
+}
+
+QueryRelationshipButton: WOSubmitButton {
+  action = queryRelationshipAction;
+  value = queryButtonLabel;
+}
