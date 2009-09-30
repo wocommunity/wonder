@@ -70,6 +70,7 @@ No : WOHyperlink {
 }
 
 UpdatingModalDialog: AjaxModalDialog {
+	pageName = "ModalDialogPageContent";
 	id = "UpdatingModalDialog";
 	title = "Confirm Deletion";
 	label = "Delete Account";
@@ -78,16 +79,6 @@ UpdatingModalDialog: AjaxModalDialog {
 	overlayDuration = "0.3";
 	slideDownDuration = "0.3";
 	slideUpDuration = "0.3";
-}
-
-
-Yes2 : AjaxHyperlink {
-	action = deleteIt2;
-	evalScripts = true;	
-}
-
-ConfirmationMessage: WOString {
-	value = confirmationMessage;
 }
 
 FirstName : WOString {

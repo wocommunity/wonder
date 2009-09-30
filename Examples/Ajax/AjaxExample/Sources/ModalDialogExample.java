@@ -57,14 +57,6 @@ public class ModalDialogExample extends WOComponent {
 	}
 
 	
-	/**
-	 * Example of action method returning component to show in AjaxModalDialog
-	 */
-    public WOComponent dialogContents() {
-    	NSLog.out.appendln("dialogContents called");
-    	return pageWithName(ModalDialogContents.class.getCanonicalName());
-    }
-    
     
     /** 
      * Ajax method that is called when deletion is confirmed in the Ajax Dialog with the Yes hyperlink
@@ -84,8 +76,7 @@ public class ModalDialogExample extends WOComponent {
     	isSecondConfirmation = ! isSecondConfirmation;
     	
     	if (isSecondConfirmation) {
-    		AjaxModalDialog.setTitle(context(), "Think again...");
-    		AjaxModalDialog.update(context());
+    		AjaxModalDialog.update(context(), "Think again...");
     	} else {
     		AjaxModalDialog.close(context());
     	}
