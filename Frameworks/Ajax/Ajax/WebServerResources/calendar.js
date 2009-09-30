@@ -448,7 +448,7 @@ function build_calendar(input_element) {
 	  	  }
 	  	}
 	  	
-   		document.body.insert({'top': calendarControl});
+   		$(document.body).insert({'top': calendarControl});
 		calendar.element = get_element('calendar_control');
 	}
 }
