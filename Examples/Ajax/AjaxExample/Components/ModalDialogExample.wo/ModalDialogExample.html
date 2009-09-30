@@ -31,24 +31,20 @@
 	
 	<hr />
 	
-	<h3>Updating dialog with in-line content</h3>
+	<h3>Updating dialog with external content</h3>
 	<div>
 		Demonstrates: 
 		<ul>
-			<li>dialog content is fully in-line</li>
+			<li>dialog content comes from a named component (pageName = "ModalDialogPageContent")</li>
 			<li>confirmation message is updated, dialog does not close</li>
 			<li>updating the title of the dialog</li>
 			<li>server side hiding of dialog on second confirmation</li>
 			<li>AjaxHyperlink inside dialog to call method on server</li>
 		</ul>
 
-		<webobject name = "UpdatingModalDialog">
-			<webobject name = "ConfirmationMessage"/><br />
-			<span style="float:left"><webobject name = "Yes2">yes</webobject></span>
-			<span style="float:right"><webobject name = "No">no</webobject></span>
-		</webobject>
+		<webobject name = "UpdatingModalDialog"/>
 		
-		<br/><br/>Look in the application log for "deleteIt2 called".
+		<br/><br/>Look in the application log for "deleteIt in ModalDialogPageContent called".
 	</div><br/>
 
 	<hr />
@@ -57,7 +53,7 @@
 	<div>
 		Demonstrates the same dialog as above with these changes: 
 		<ul>
-			<li>dialog content is taken from a different WOComponent</li>
+			<li>dialog content comes from a WOComponent nested in dialog tag</li>
 			<li>rich link content (an image)</li>
 			<li>server side hiding of dialog on second confirmation</li>
 			<li>AjaxHyperlink inside dialog to call method on server</li>
@@ -141,7 +137,7 @@
 	<div>
 		Demonstrates the same dialog as above, but with these changes: 
 		<ul>
-			<li>external content loaded from an action method</li>
+			<li>dialog content comes from an action method</li>
 			<li>ERXWOTemplate to hold link text</li>
 		</ul>
 
