@@ -104,7 +104,8 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
                 "notifyURL",
                 "useIPN",
                 "useDefaultIPNURL",
-                "tax_rate"});
+                "tax_rate",
+                "custom"});
     } 
 
     /** for subclasses to add additional bindings
