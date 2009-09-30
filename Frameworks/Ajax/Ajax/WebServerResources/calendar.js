@@ -365,8 +365,9 @@ function calendar_open(input_element, options) {
   if(options.onDateSelect) {
     calendar.onDateSelect = options.onDateSelect;
   }
-  if(options.ajaxSupport) {
-    calendar.fireEvent = true;
+
+  if(options.fireEvent == false) {
+    calendar.fireEvent = false;
   }
   // CH: Done add init of new options
   
@@ -462,7 +463,7 @@ calendar = {                        // Calendar properties.
   element: undefined,				// The calendar table.  CH: lazy init
   input_element: undefined,         // Calendar input element, set by calendar_show().
   onDateSelect: undefined,          // CH: add function called when user selects a date
-  fireEvent: false,					// CH: add should event listener for text field be fired upon date select?
+  fireEvent: true,					// CH: add should event listener for text field be fired upon date select?
   input_date: undefined,            // Date value of input element, set by calendar_show().
   month_date: undefined,            // First day of calendar month.
   format: undefined,                // The date display format, set by calendar_show().
