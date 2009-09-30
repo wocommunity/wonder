@@ -56,7 +56,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * ERXMigrationFailedException when that method is called to notify the system
  * that the requested migration cannot be performed. As an example,
  * AuthModel1.upgrade(..) will be called to move from version 1 to version 2,
- * and AuthModel2.downgrade(..) will be called to move from version 2 back to
+ * and AuthModel1.downgrade(..) will be called to move from version 2 back to
  * version 1. Your lowest version number migration should throw an
  * ERXMigrationFailedException when its downgrade method is called.
  * <p>
