@@ -3,21 +3,34 @@
         {
             allowsNull = N; 
             columnName = companyId; 
+            externalType = INT; 
             name = companyId; 
-            prototypeName = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
         }, 
         {
             allowsNull = N; 
             columnName = firstName; 
+            externalType = VARCHAR; 
             name = firstName; 
-            prototypeName = varchar100; 
+            valueClassName = NSString; 
+            width = 100; 
         }, 
-        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = id; 
+            externalType = INT; 
+            name = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
         {
             allowsNull = N; 
             columnName = lastName; 
+            externalType = VARCHAR; 
             name = lastName; 
-            prototypeName = varchar100; 
+            valueClassName = NSString; 
+            width = 100; 
         }
     ); 
     attributesUsedForLocking = (companyId, firstName, id, lastName); 

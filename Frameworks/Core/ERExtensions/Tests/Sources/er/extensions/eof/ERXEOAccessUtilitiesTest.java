@@ -17,6 +17,8 @@ import com.webobjects.eoaccess.EOUtilities;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -35,6 +37,8 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
 
     EOModel model = null;
     EOEditingContext ec = null;
+
+    static boolean modelDataLoaded = false;
 
     public ERXEOAccessUtilitiesTest(String name) { super(name); }
 
@@ -56,30 +60,32 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
         for (int idx = 0; idx < methods.count(); idx++) {
             String testName = methods.get(idx);
 
-            suite.addTest(new Tests(testName, "MemoryBusinessModel"));
-            //suite.addTest(new Tests(testName, "MySQLBusinessModel"));
+            java.util.Enumeration<String> adaptors = ERExtensionsTest.availableAdaptorNames().objectEnumerator();
 
-            // It would be nice if these were found in TestResources....
-            //
-            //suite.addTest(new Tests(testName, "PostgresBusinessModel"));
-            //suite.addTest(new Tests(testName, "FrontBaseBusinessModel"));
-            //suite.addTest(new Tests(testName, "OpenBaseBusinessModel"));
+            if (!adaptors.hasMoreElements())
+                suite.addTest(new Tests(testName, "Memory"));
+
+            while (adaptors.hasMoreElements()) {
+                String adaptorName = adaptors.nextElement();
+                if (ERExtensionsTest.dbExistsForAdaptor(adaptorName))
+                    suite.addTest(new Tests(testName, adaptorName));
+            }
         }
     }
 
     public static class Tests extends TestCase {
-
         EOEditingContext ec;
+        String adaptorName;
         String modelName;
         EOModel model;
 
         public Tests(String name, String param) {
            super(name);
-           modelName = param;
+           adaptorName = param;
         }
 
         String config() {
-            return "modelName: \""+modelName+"\"";
+            return "adaptor: \""+adaptorName+"\"";
         }
 
         public void setUp() throws Exception {
@@ -90,11 +96,60 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
 
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
+            modelName = adaptorName+"BusinessModel";
+
             try {
-                EOModelGroup.defaultGroup().addModel(new EOModel(new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld")));
-            } catch (java.net.MalformedURLException mue) { System.out.println("mue: "+mue); }
+                EOModelGroup.defaultGroup().addModel(
+                   new EOModel(new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld")));
+            } catch (java.net.MalformedURLException mue) { System.out.println(this.config()+", mue: "+mue); }
             model = EOModelGroup.defaultGroup().modelNamed(modelName);
+            model.setConnectionDictionary(ERExtensionsTest.connectionDict(adaptorName));
+
             ec = new EOEditingContext();
+
+            if (model.adaptorName().equals("JDBC") && !modelDataLoaded) {
+
+                // I _should_ be able to do this!
+                //
+                //ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, "Company", EOQualifier.qualifierWithQualifierFormat("*",null));
+                //ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, "Employee", EOQualifier.qualifierWithQualifierFormat("*",null));
+
+                // instead I must do this. How lame...
+                java.util.Enumeration<EOEnterpriseObject> rows;
+                rows = EOUtilities.objectsForEntityNamed(ec, "Company").objectEnumerator();
+                while (rows.hasMoreElements()) { ec.deleteObject(rows.nextElement()); }
+                rows = EOUtilities.objectsForEntityNamed(ec, "Employee").objectEnumerator();
+                while (rows.hasMoreElements()) { ec.deleteObject(rows.nextElement()); }
+                ec.saveChanges();
+
+                EOEnterpriseObject com1 = EOUtilities.createAndInsertInstance(ec, "Company");
+                com1.takeValueForKey("IBM", "name");
+                EOEnterpriseObject emp1a = EOUtilities.createAndInsertInstance(ec, "Employee");
+                emp1a.takeValueForKey("Allenson", "lastName");
+                emp1a.takeValueForKey("Alex", "firstName");
+                EOEnterpriseObject emp1b = EOUtilities.createAndInsertInstance(ec, "Employee");
+                emp1b.takeValueForKey("Barley", "lastName");
+                emp1b.takeValueForKey("Bob", "firstName");
+                com1.addObjectToBothSidesOfRelationshipWithKey(emp1a, "employees");
+                com1.addObjectToBothSidesOfRelationshipWithKey(emp1b, "employees");
+
+                EOEnterpriseObject com2 = EOUtilities.createAndInsertInstance(ec, "Company");
+                com2.takeValueForKey("Apple", "name");
+                EOEnterpriseObject emp2a = EOUtilities.createAndInsertInstance(ec, "Employee");
+                emp2a.takeValueForKey("Carter", "lastName");
+                emp2a.takeValueForKey("Charlie", "firstName");
+                EOEnterpriseObject emp2b = EOUtilities.createAndInsertInstance(ec, "Employee");
+                emp2b.takeValueForKey("Dickerson", "lastName");
+                emp2b.takeValueForKey("Donna", "firstName");
+                com2.addObjectToBothSidesOfRelationshipWithKey(emp2a, "employees");
+                com2.addObjectToBothSidesOfRelationshipWithKey(emp2b, "employees");
+
+                ec.saveChanges();
+                modelDataLoaded = true;
+
+                ec.dispose();
+                ec = new EOEditingContext();
+            }
         }
 
         public void testEntityMatchingString() {
@@ -201,6 +256,19 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
 
             EOEntity entity2 = ERXEOAccessUtilities.entityForEo(eo2);
             Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(employeeEntity, entity2));
+        }
+
+        public void testRowCountForFetchSpecification() {
+            // public static int rowCountForFetchSpecification(EOEditingContext, com.webobjects.eocontrol.EOFetchSpecification);
+
+            if (!model.adaptorName().equals("JDBC")) return;
+
+            // first check getting all objects for entity...
+
+            int count = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, new EOFetchSpecification("Employee", null, null));
+            //int count = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, new EOFetchSpecification("Expn", null, null));
+
+            //System.out.println("count: "+count);
         }
 /*
  TODO:

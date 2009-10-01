@@ -1,7 +1,21 @@
 {
     attributes = (
-        {allowsNull = N; name = id; prototypeName = id; }, 
-        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
+        {
+            allowsNull = N; 
+            columnName = id; 
+            externalType = INT; 
+            name = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = name; 
+            externalType = VARCHAR; 
+            name = name; 
+            valueClassName = NSString; 
+            width = 100; 
+        }
     ); 
     attributesUsedForLocking = (id, name); 
     className = EOGenericRecord; 

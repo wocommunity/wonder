@@ -1,7 +1,21 @@
 {
     attributes = (
-        {allowsNull = N; name = id; prototypeName = id; }, 
-        {allowsNull = N; columnName = name; name = name; prototypeName = varchar100; }
+        {
+            allowsNull = N; 
+            columnName = ""; 
+            name = id; 
+            prototypeName = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = name; 
+            name = name; 
+            prototypeName = varchar100; 
+            valueClassName = NSString; 
+            width = 100; 
+        }
     ); 
     attributesUsedForLocking = (id, name); 
     className = "er.ajax.example.Company"; 
