@@ -12,7 +12,6 @@ import er.extensions.ERXProperties;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import er.extensions.*;
-import er.directtoweb.ERD2WQueryPage;
 
 import java.util.Enumeration;
 
@@ -71,13 +70,13 @@ public class ERNEUSavedQueriesComponent extends ERDSavedQueriesComponent {
     public NSMutableArray loadSavedQueriesForPageConfigurationNamed(String pageConfigurationName) {
         NSArray savedQueries=null;
 
-        EOKeyValueArchiving.Support.setSupportForClass(newEOKVArchiningTimestampSupport, NSTimestamp._CLASS);
+        EOKeyValueArchiving.Support.setSupportForClass(newEOKVArchivingTimestampSupport, NSTimestamp._CLASS);
 
         try {
             savedQueries = (NSArray) userPreferences().valueForKey(userPreferenceNameForPageConfiguration(pageConfigurationName));
         }
         finally {
-            EOKeyValueArchiving.Support.setSupportForClass(originalEOKVArchiningTimestampSupport, NSTimestamp._CLASS);
+            EOKeyValueArchiving.Support.setSupportForClass(originalEOKVArchivingTimestampSupport, NSTimestamp._CLASS);
         }
 
         if (log.isDebugEnabled()) log.debug("loadSavedQueriesForPageConfigurationNamed("+pageConfigurationName+"): queries = "+savedQueries);
@@ -89,13 +88,13 @@ public class ERNEUSavedQueriesComponent extends ERDSavedQueriesComponent {
         if (log.isDebugEnabled()) log.debug("saveQueriesForPageConfigurationNamed("+pageConfigurationName+"): queries = "+queries);
 
 
-        EOKeyValueArchiving.Support.setSupportForClass(newEOKVArchiningTimestampSupport, NSTimestamp._CLASS);
+        EOKeyValueArchiving.Support.setSupportForClass(newEOKVArchivingTimestampSupport, NSTimestamp._CLASS);
 
         try {
             userPreferences().takeValueForKey(queries,userPreferenceNameForPageConfiguration(pageConfigurationName));
         }
         finally {
-            EOKeyValueArchiving.Support.setSupportForClass(originalEOKVArchiningTimestampSupport, NSTimestamp._CLASS);
+            EOKeyValueArchiving.Support.setSupportForClass(originalEOKVArchivingTimestampSupport, NSTimestamp._CLASS);
         }
     }
 
