@@ -3,6 +3,7 @@ Link : WOHyperlink {
   class = ^class;
   id = ^id;
   style = ^style;
+  target = ^target;
 }
 
 Image : WOImage {

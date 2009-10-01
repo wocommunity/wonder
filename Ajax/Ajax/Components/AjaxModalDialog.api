@@ -7,9 +7,9 @@
 	    <binding name="linkTitle"/>
 	    <binding name="width"/>
 	    <binding name="height"/>
-	    <binding name="open" defaults="Boolean"/>
-	    <binding name="showOpener" defaults="Boolean"/>
-	    <binding name="enabled" defaults="Boolean"/>
+	    <binding defaults="Boolean" name="open"/>
+	    <binding defaults="Boolean" name="showOpener"/>
+	    <binding defaults="Boolean" name="enabled"/>
 	    <binding defaults="Actions" name="onOpen"/>
 	    <binding defaults="Actions" name="onClose"/>
 	    <binding name="id"/>
@@ -40,5 +40,13 @@
     	<binding name="closeUpdateContainerID"/>
     	<binding name="clickOnReturnId"/>
     	<binding name="clickOnEscId"/>
+        <binding name="pageName"/>
+        
+        <validation message="'action' and 'pageName' cannot both be bound">
+          <and>
+            <bound name="action"/>
+            <bound name="pageName"/>
+          </and>
+        </validation> 
     </wo>
 </wodefinitions>

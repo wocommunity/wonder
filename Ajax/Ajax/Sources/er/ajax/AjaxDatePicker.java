@@ -49,6 +49,7 @@ import er.extensions.ERXResponseRewriter;
  * @binding maxlength optional maxlength attribute passed to the input field 
  * @binding name optional name attribute passed to the input field 
  * @binding onDateSelect optional JavaScript to execute when a date is selected from the calendar
+ * @binding fireEvent optional, false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
  * 
  * @binding dayNames optional list of day names (Sunday to Saturday) for localization, English is the default
  * @binding monthNames optional list of month names for localization, English is the default
@@ -149,7 +150,9 @@ public class AjaxDatePicker extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("format", format(), AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("month_names", valueForBinding("monthNames"), AjaxOption.ARRAY));
 		ajaxOptionsArray.addObject(new AjaxOption("day_names", valueForBinding("dayNames"), AjaxOption.ARRAY));
-		ajaxOptionsArray.addObject(new AjaxOption("onDateSelect", valueForBinding("onDateSelect"), AjaxOption.SCRIPT));
+		
+		ajaxOptionsArray.addObject(new AjaxOption("onDateSelect", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("fireEvent", AjaxOption.BOOLEAN));
 		
 		if (hasBinding("imagesDir")) {
 			ajaxOptionsArray.addObject(new AjaxOption("images_dir", valueForBinding("imagesDir"), AjaxOption.STRING));
