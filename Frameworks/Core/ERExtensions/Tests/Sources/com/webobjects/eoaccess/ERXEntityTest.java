@@ -30,33 +30,43 @@ public class ERXEntityTest extends TestCase {
 
     public void testAll() {
 
-        TestSuite suite = er.extensions.ERExtensionsTest.suite;
+        TestSuite suite = ERExtensionsTest.suite;
 
         // See note in er.extensions.eof.ERXEOAccessUtilities.testAll() -rrk
 
-        NSArray<String> methods = er.extensions.ERExtensionsTest.testMethodsForClassName("com.webobjects.eoaccess.ERXEntityTest$Tests");
+        NSArray<String> methods = ERExtensionsTest.testMethodsForClassName("com.webobjects.eoaccess.ERXEntityTest$Tests");
 
         for (int idx = 0; idx < methods.count(); idx++) {
             String testName = methods.get(idx);
 
-            suite.addTest(new Tests(testName, "MemoryBusinessModel"));
-            //suite.addTest(new Tests(testName, "MySQLBusinessModel"));
+            java.util.Enumeration<String> adaptors = ERExtensionsTest.availableAdaptorNames().objectEnumerator();
+
+            if (!adaptors.hasMoreElements())
+                suite.addTest(new Tests(testName, "Memory"));
+
+            while (adaptors.hasMoreElements()) {
+                String adaptorName = adaptors.nextElement();
+                if (ERExtensionsTest.dbExistsForAdaptor(adaptorName))
+                    suite.addTest(new Tests(testName, adaptorName));
+            }
         }
+
     }
 
     public static class Tests extends TestCase {
 
         EOEditingContext ec;
+        String adaptorName;
         String modelName;
         EOModel model;
 
         public Tests(String name, String param) {
            super(name);
-           modelName = param;
+           adaptorName = param;
         }
 
         String config() {
-            return "modelName: \""+modelName+"\"";
+            return "adaptor: \""+adaptorName+"\"";
         }
 
         public void setUp() throws Exception {
@@ -67,10 +77,15 @@ public class ERXEntityTest extends TestCase {
 
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
+            modelName = adaptorName+"BusinessModel";
+
             try {
-                EOModelGroup.defaultGroup().addModel(new EOModel(new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld")));
+                EOModelGroup.defaultGroup().addModel(
+                   new EOModel(new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld")));
             } catch (java.net.MalformedURLException mue) { System.out.println(this.config()+", mue: "+mue); }
             model = EOModelGroup.defaultGroup().modelNamed(modelName);
+            model.setConnectionDictionary(ERExtensionsTest.connectionDict(adaptorName));
+
             ec = new EOEditingContext();
         }
 

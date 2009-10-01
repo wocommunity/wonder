@@ -7,7 +7,10 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+
+import com.webobjects.eoaccess.EOModel;
 
 /** Tests of the public API of the ERXExtensions framework.
  *
@@ -74,5 +77,32 @@ public class ERExtensionsTest extends TestSuite {
             }
         }
         return target.immutableClone();
+    }
+
+    public static NSArray<String> availableAdaptorNames() {
+        //return new NSArray<String>(new String[] { "MySQL" });
+        return new NSArray<String>();
+    }
+
+    public static boolean dbExistsForAdaptor(String name) {
+        String url = System.getProperties().getProperty("wonder.test."+name+".url");
+        String usr = System.getProperties().getProperty("wonder.test."+name+".user");
+        String pwd = System.getProperties().getProperty("wonder.test."+name+".pwd");
+        return (url != null && url.length() > 0 && usr != null && usr.length() > 0 && pwd != null && pwd.length() > 0);
+    }
+
+    public static NSDictionary connectionDict(String name) {
+
+        if (name == null || name.equals("Memory")) return NSDictionary.EmptyDictionary;
+
+        String url = System.getProperties().getProperty("wonder.test."+name+".url");
+        String usr = System.getProperties().getProperty("wonder.test."+name+".user");
+        String pwd = System.getProperties().getProperty("wonder.test."+name+".pwd");
+
+        //System.out.println("connectionDict:: url = \""+url+"\", usr = \""+usr+"\", pwd = \""+pwd+"\"");
+
+        NSArray keys = new NSArray(new Object[] { "URL", "username", "password" } );
+        NSArray vals = new NSArray(new Object[] { url, usr, pwd } );
+        return new NSDictionary(vals, keys);
     }
 }
