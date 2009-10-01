@@ -346,11 +346,17 @@ There are many ways to use this script:
             <pathelement location="${wo.system.frameworks}/JavaXML.${fRJ}/javaxml.jar" />
         </path>
 
+        <property file="${user.home}${file.separator}Library${file.separator}wobuild.properties"/>
+
         <junit haltonfailure="yes" fork="yes">
             <test name="${test.className}" if="test.className" />
             <formatter type="brief" usefile="false" />
             <classpath refid="wo.exec.test.path" />
             <sysproperty key="build.root" value="${build.root}" />
+
+            <sysproperty key="wonder.test.MySQL.url" value="${wonder.test.MySQL.url}" />
+            <sysproperty key="wonder.test.MySQL.user" value="${wonder.test.MySQL.user}" />
+            <sysproperty key="wonder.test.MySQL.pwd" value="${wonder.test.MySQL.pwd}" />
         </junit>
     </target>
 
