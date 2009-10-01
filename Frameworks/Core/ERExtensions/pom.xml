@@ -127,10 +127,5 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>wonder.eoadaptors</groupId>
-			<artifactId>JavaMemoryAdaptor</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 </project>
