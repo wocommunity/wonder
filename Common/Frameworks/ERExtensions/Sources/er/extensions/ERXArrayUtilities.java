@@ -63,33 +63,30 @@ public class ERXArrayUtilities extends Object {
     });
 
     /**
-     * Simply utility method to create a concreate
-     * set object from an array
+     * Simply utility method to create a concrete set object from an array.
+     *
      * @param array of elements
-     * @return concreate set.
      */
     // CHECKME: Is this a value add?
     public static NSSet setFromArray(NSArray array) {
-        if (array == null || array.count() == 0)
+        if (array == null || array.count() == 0) {
             return NSSet.EmptySet;
-        else {
-            Object [] objs = new Object[array.count()];
-            objs = array.objects();
-            return new NSSet(objs);
         }
+        return new NSSet(array);
     }
 
     /**
-        * The qualifiers EOSortOrdering.CompareAscending.. and friends are
+     * The qualifiers EOSortOrdering.CompareAscending.. and friends are
      * actually 'special' and processed in a different/faster way when
-     * sorting than a selector that would be created by
-     * new NSSelector("compareAscending", ObjectClassArray). This method
-     * eases the pain on creating those selectors from a string.
+     * sorting than a selector that would be created by:
+     * new NSSelector("compareAscending", ObjectClassArray)
+     * This method eases the pain on creating those selectors from a string.
+     *
      * @param key sort key
      */
     public static NSSelector sortSelectorWithKey(String key) {
         NSSelector result=null;
-        if (key!=null) {
+        if (key!=null && !key.equals("")) {
             result=(NSSelector)_selectorsByKey.objectForKey(key);
             if (result==null) result=new NSSelector(key, ERXConstant.ObjectClassArray);
         }
@@ -316,6 +313,9 @@ public class ERXArrayUtilities extends Object {
      * @return result of comparison
      */
     public static boolean arraysAreIdenticalSets(NSArray a1, NSArray a2) {
+        if (a1 == null || a2 == null) {
+    		return a1 == a2;
+    	}
         boolean result=true;
         for (Enumeration e=a1.objectEnumerator();e.hasMoreElements();) {
             Object i=e.nextElement();
@@ -342,10 +342,10 @@ public class ERXArrayUtilities extends Object {
      * @return array of filtered results.
      */
     public static NSArray filteredArrayWithQualifierEvaluation(NSArray array, EOQualifierEvaluation qualifier) {
-        if (array == null) 
+        if (array == null) {
             return NSArray.EmptyArray;
-        else 
-            return filteredArrayWithQualifierEvaluation(array.objectEnumerator(), qualifier);
+        }
+        return filteredArrayWithQualifierEvaluation(array.objectEnumerator(), qualifier);
     }
 
     /**
@@ -494,18 +494,11 @@ public class ERXArrayUtilities extends Object {
      *		the second array.
      */
     public static NSArray arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray a1, NSArray a2) {
-        // FIXME this is n2 -- could be made n lg n
-        NSArray result=null;
         if (a2.count()==0)
-            result=a1;
-        else {
-            NSMutableArray mutableResult=new NSMutableArray(a1);
-            for (Enumeration e=a2.objectEnumerator(); e.hasMoreElements();) {
-                Object elt=e.nextElement();
-                if (!mutableResult.containsObject(elt)) mutableResult.addObject(elt);
-            }
-            result=mutableResult;
-        }
+            return a1;
+        
+        NSMutableArray result=new NSMutableArray(a1);
+        addObjectsFromArrayWithoutDuplicates(result, a2);
         return result;
     }
     
@@ -548,9 +541,13 @@ public class ERXArrayUtilities extends Object {
      * @param a2 array to be added to a1
      */
     public static void addObjectsFromArrayWithoutDuplicates(NSMutableArray a1, NSArray a2) {
+        NSMutableSet resultSet=new NSMutableSet(a1);
         for (Enumeration e=a2.objectEnumerator(); e.hasMoreElements();) {
             Object elt=e.nextElement();
-            if (!a1.containsObject(elt)) a1.addObject(elt);
+            if (!resultSet.containsObject(elt)) {
+                a1.addObject(elt);
+            	resultSet.addObject(elt);
+            }
         }
     }
 
@@ -579,9 +576,8 @@ public class ERXArrayUtilities extends Object {
         
         if (filterDuplicates) {
             return arrayWithoutDuplicates(flattenedArray);
-        } else {
-            return flattenedArray;
-        }
+        } 
+        return flattenedArray;
     }
     
 
@@ -905,9 +901,9 @@ public class ERXArrayUtilities extends Object {
                 return sortedArraySortedWithKeys(array,
                         NSArray.componentsSeparatedByString(keypath, ","),
                         selector);
-            } else {
-                return sortedArraySortedWithKey(array, keypath, selector);
-            }
+            } 
+            return sortedArraySortedWithKey(array, keypath, selector);
+
         }
     }
 
@@ -1134,10 +1130,11 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
+        	NSArray values = array;
             if(keypath != null) {
-                array = contents(array, keypath);
+            	values = contents(array, keypath);
             }
-            if (array != null) array = removeNullValues(array);
+            if (values != null) array = removeNullValues(array, values);
             return array;
         }
     }
@@ -1207,7 +1204,7 @@ public class ERXArrayUtilities extends Object {
             if(count == 0) {
                 return null;
             }
-            return result.divide(BigDecimal.valueOf((long) count), result.scale() + 4, 6);
+            return result.divide(BigDecimal.valueOf(count), result.scale() + 4, 6);
         }
     }
 
@@ -1312,7 +1309,7 @@ public class ERXArrayUtilities extends Object {
         } else {
             // array = (NSArray) array.valueForKeyPath(keypath);
             // array = ERXArrayUtilities.sortedArraySortedWithKey(array, "doubleValue");
-            array = ERXArrayUtilities.sortedArraySortedWithKey(array, keypath);
+            array = sortedArraySortedWithKey(array, keypath);
             int mid = count / 2;
             if(count % 2 == 0) {
                 Object o = array.objectAtIndex(mid-1);
@@ -1334,7 +1331,7 @@ public class ERXArrayUtilities extends Object {
      * @return an array of distinct elements from the input array
      */
     public static NSArray distinct(NSArray array) {
-      return ERXArrayUtilities.arrayWithoutDuplicates(array);
+      return arrayWithoutDuplicates(array);
     }
     
     /**
@@ -1396,7 +1393,8 @@ public class ERXArrayUtilities extends Object {
             log.error("filteredArrayWithEntityFetchSpecification Calling conventions have changed from fetchSpec, entity to entity, fetchSpec");
         }
         EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed(fetchSpec, entity);
-        NSArray sortOrderings, result;
+        NSArray sortOrderings;
+        NSArray result;
         EOQualifier qualifier;
 
         if (bindings != null) {
@@ -1604,27 +1602,39 @@ public class ERXArrayUtilities extends Object {
         NSMutableArray result=new NSMutableArray();
         if (array != null && keys != null) {
             for (Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
-                Object o = e.nextElement();
-                result.addObject(ERXDictionaryUtilities.dictionaryFromObjectWithKeys(o, keys));
+                Object object = e.nextElement();
+                result.addObject(ERXDictionaryUtilities.dictionaryFromObjectWithKeys(object, keys));
             }
         }
         return result.immutableClone();
     }
     
     /** Removes all occurencies of NSKeyValueCoding.NullValue in the provided array
-     * @param a the array from which the NullValue should be removed
+     * @param array the array from which the NullValue should be removed
      * @return a new NSArray with the same order than the original array but 
      * without NSKeyValueCoding.NullValue objects
      */
-    public static NSArray removeNullValues(NSArray a) {
-        NSMutableArray aa = new NSMutableArray();
-        for (int i = 0; i < a.count(); i++) {
-            Object o = a.objectAtIndex(i);
-            if (!(o instanceof NSKeyValueCoding.Null)) {
-                aa.addObject(o);
+    public static NSArray removeNullValues(NSArray array) {
+        return removeNullValues(array, array);
+    }
+
+    /** Removes all occurencies of NSKeyValueCoding.NullValue in the provided array
+     * @param target array to remove objects from
+     * @param array array of values
+     * @return a new NSArray with the same order than the original array but
+     * without NSKeyValueCoding.NullValue objects
+     */
+    public static NSArray removeNullValues(NSArray target, NSArray array) {
+        NSMutableArray result = new NSMutableArray();
+        int i = 0;
+        for (Enumeration arrayEnum = array.objectEnumerator(); arrayEnum.hasMoreElements();) {
+            Object object = arrayEnum.nextElement();
+            if (!(object instanceof NSKeyValueCoding.Null)) {
+                result.addObject(target.objectAtIndex(i));
             }
+            i++;
         }
-        return aa;
+        return result;
     }
     
     /** Converts an Object array to a String array by casting each element.
@@ -1651,27 +1661,27 @@ public class ERXArrayUtilities extends Object {
     }
     
     /** pretty prints a two dimensional Object array which is ugly when using toString
-     * @param o the object which one wants to print as a String
+     * @param array the object which one wants to print as a String
      * @return the String which can be used in lets say 
      * <code>log.info("my array = "+ERXArrayUtilities.objectArrayToString(myArray));</code>
      */
-    public static String objectArrayToString(Object[][] o) {
-        NSMutableArray a = new NSMutableArray();
-        for (int i = 0; i < o.length; i++) {
-            a.addObject(objectArrayToString(o[i]));
+    public static String objectArrayToString(Object[][] array) {
+        NSMutableArray result = new NSMutableArray();
+        for (int i = 0; i < array.length; i++) {
+            result.addObject(objectArrayToString(array[i]));
         }
-        return a.toString();
+        return result.toString();
     }
     
     /** pretty prints a NSArray of two dimensional Object array which is ugly when using toString
-     * @param a the object which one wants to print as a String
+     * @param array the object which one wants to print as a String
      * @return the String which can be used in lets say 
      * <code>log.info("my array = "+ERXArrayUtilities.objectArrayToString(myArray));</code>
      */
-    public static String objectArraysToString(NSArray a) {
+    public static String objectArraysToString(NSArray array) {
         NSMutableArray aa = new NSMutableArray();
-        for (int i = 0; i < a.count(); i++) {
-            aa.addObject(objectArrayToString((Object[][])a.objectAtIndex(i)));
+        for (int i = 0; i < array.count(); i++) {
+            aa.addObject(objectArrayToString((Object[][])array.objectAtIndex(i)));
         }
         return aa.toString();
     }
@@ -1772,8 +1782,12 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Just like the method on NSArray, except it catches the NSComparator.ComparisonException and, if thrown,
+     * Just like the method {@link NSArray#sortedArrayUsingComparator(NSComparator)}, 
+     * except it catches the NSComparator.ComparisonException and, if thrown,
      * it wraps it in a runtime exception.  Returns null when passed null for array.
+     * @param array 
+     * @param comparator 
+     * @return the sorted array
      */
     public static NSArray sortedArrayUsingComparator(final NSArray array, final NSComparator comparator) {
         NSArray result = array;
@@ -1909,7 +1923,31 @@ public class ERXArrayUtilities extends Object {
         }
     }
 
-	@SuppressWarnings("unchecked")
+	/**
+	* Swaps the object a with the object at the given index
+	*
+	* @author edgar - Apr 14, 2008
+	* @param array the array
+	* @param a - first object
+	* @param indexOfB - index of second object
+	*/
+	public static void swapObjectWithObjectAtIndexInArray(NSMutableArray array, Object a, int indexOfB) {
+		if (array == null || array.count() < 2) {
+			throw new RuntimeException ("Array is either null or does not have enough elements.");
+		}
+		
+		int indexOfA = array.indexOfObject(a);
+		
+		if (indexOfA >= 0 && indexOfB >= 0) {
+			if (indexOfA != indexOfB) {
+				swapObjectsAtIndexesInArray(array, indexOfA, indexOfB);
+			}
+		}
+		else {
+			throw new RuntimeException ("At least one of the objects is not element of the array!");
+		}
+	}
+
      /**
       * Returns a deep clone of the given array.  A deep clone will attempt 
       * to clone the values of this array as well as the array itself.

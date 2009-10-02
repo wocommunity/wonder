@@ -6,15 +6,18 @@
 //
 package er.extensions;
 
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
-import org.apache.log4j.Logger;
 
-import java.util.Enumeration;
+
 
 /**
  * A "backing store" for the properties of a single navigation item in the tree of navigation items.  Configured by the
@@ -47,6 +50,7 @@ public class ERXNavigationItem {
     protected String _childrenBinding;
     protected NSDictionary _childrenChoices;
     protected NSDictionary _queryBindings;
+    protected String _href;
 
     protected int _height;
     protected int _width;
@@ -72,6 +76,7 @@ public class ERXNavigationItem {
             if (o instanceof String && ((String)o).trim().length() > 0) {
                 _qualifier = EOQualifier.qualifierWithQualifierFormat((String)o, null);
             }
+            _href=(String)values.valueForKey("href");
             _directActionName=(String)values.valueForKey("directActionName");
             _directActionClass=(String)values.valueForKey("directActionClass");
             if (values.valueForKey("height")!=null)
@@ -103,7 +108,7 @@ public class ERXNavigationItem {
             if (values.valueForKey("childrenConditions") == null || ((String)values.valueForKey("childrenConditions")).equals("")) {
                 _childrenConditions = NSArray.EmptyArray;
             } else {
-                _childrenConditions=NSArray.componentsSeparatedByString((String)values.valueForKey("childrenConditions"), ",");
+                _childrenConditions=NSArray.componentsSeparatedByString((String)values.valueForKey("childrenConditions"),",");
             }
         } else {
             log.warn("Constructing a ERXNavigationItem with a null dictionary!");
@@ -162,7 +167,6 @@ public class ERXNavigationItem {
     	return meetsDisplayConditions.booleanValue();
     }
 
-    
     public NSArray childItemsInContext(NSKeyValueCodingAdditions context) {
         NSArray children = null;
 
@@ -251,6 +255,10 @@ public class ERXNavigationItem {
 		return _conditions;
 	}
 
+	public String href() {
+		return _href;
+	}
+	
 	public String directActionName() {
 		return directActionClass() == null ? _directActionName : directActionClass() + "/" + _directActionName;
 	}

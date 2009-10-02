@@ -6,10 +6,20 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.foundation.ERXMutableDictionary;
 import er.extensions.foundation.ERXMutableInteger;
 
 /**
@@ -77,6 +87,7 @@ import er.extensions.foundation.ERXMutableInteger;
  * Netscape 6.2.3   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
  * OmniWeb 4.1-v422 Mozilla/4.5 (compatible; OmniWeb/4.1-v422; Mac_PowerPC)
  * Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/48 (like Gecko) Safari/48
+ * iPhone 1.0       Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
  * 
  * Windows 2000
  * ----------------------------------------------------------------------------------
@@ -91,13 +102,19 @@ import er.extensions.foundation.ERXMutableInteger;
 public class ERXBrowserFactory {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBrowserFactory.class);
+    public static final Logger log = Logger.getLogger(ERXBrowserFactory.class);
 
     /** holds the default browser class name */
-    private static final String _DEFAULT_BROWSER_CLASS_NAME = "er.extensions.ERXBasicBrowser";
+    private static final String _DEFAULT_BROWSER_CLASS_NAME = ERXBasicBrowser.class.getName();
 
     /** Caches a reference to the browser factory */
     private static ERXBrowserFactory _factory;
+
+    /** Expressions that define a robot */
+    private static final NSMutableArray robotExpressions = new NSMutableArray();
+
+    /** Mapping of UAs to browsers */
+    private static final NSMutableDictionary _cache = ERXMutableDictionary.synchronizedDictionary();
 
     /**
      * Gets the singleton browser factory object.
@@ -106,7 +123,7 @@ public class ERXBrowserFactory {
     public static ERXBrowserFactory factory() {
         if (_factory == null) {
             String browserFactoryClass = System.getProperty("er.extensions.ERXBrowserFactory.FactoryClassName");
-            if (browserFactoryClass != null && !browserFactoryClass.equals("er.extensions.ERXBrowserFactory")) {
+            if (browserFactoryClass != null && !browserFactoryClass.equals(ERXBrowserFactory.class.getName())) {
                 log.debug("Creating browser factory for class name: " + browserFactoryClass);
                 try {
                     Class browserClass = Class.forName(browserFactoryClass);
@@ -187,15 +204,20 @@ public class ERXBrowserFactory {
             return getBrowserInstance(ERXBrowser.UNKNOWN_BROWSER, ERXBrowser.UNKNOWN_VERSION, 
                                         ERXBrowser.UNKNOWN_VERSION, ERXBrowser.UNKNOWN_PLATFORM, null);
         } else {
-            String browserName 		= parseBrowserName(ua);
-            String version 		= parseVersion(ua);
-            String mozillaVersion	= parseMozillaVersion(ua);
-            String platform 		= parsePlatform(ua);
-            NSDictionary userInfo 	= new NSDictionary(
-                new Object[] {parseCPU(ua), parseGeckoVersion(ua)},
-                new Object[] {"cpu", "geckoRevision"});
+        	ERXBrowser result = (ERXBrowser) _cache.objectForKey(ua);
+        	if(result == null) {
+                    String browserName 		= parseBrowserName(ua);
+                    String version 		= parseVersion(ua);
+                    String mozillaVersion	= parseMozillaVersion(ua);
+                    String platform 		= parsePlatform(ua);
+                    NSDictionary userInfo 	= new NSDictionary(
+                                    new Object[] {parseCPU(ua), parseGeckoVersion(ua)},
+                                    new Object[] {"cpu", "geckoRevision"});
             
-            return getBrowserInstance(browserName, version, mozillaVersion, platform, userInfo);
+        	    result = getBrowserInstance(browserName, version, mozillaVersion, platform, userInfo);
+        	    _cache.setObjectForKey(result, ua);
+        	}
+        	return result;
         }
     }
 
@@ -320,9 +342,9 @@ public class ERXBrowserFactory {
 
     public String parseBrowserName(String userAgent) {
         String browserString = _browserString(userAgent);
-
         String browser  = ERXBrowser.UNKNOWN_BROWSER;
-        if      (browserString.indexOf("MSIE") > -1) 		browser  = ERXBrowser.IE;
+        if(isRobot(browserString)) 							browser  = ERXBrowser.ROBOT;
+        else if (browserString.indexOf("MSIE") > -1) 		browser  = ERXBrowser.IE;
         else if (browserString.indexOf("Safari") > -1) 		browser  = ERXBrowser.SAFARI;
         else if (browserString.indexOf("OmniWeb") > -1)		browser  = ERXBrowser.OMNIWEB;
         else if (browserString.indexOf("iCab") > -1)		browser  = ERXBrowser.ICAB;
@@ -337,20 +359,44 @@ public class ERXBrowserFactory {
         return browser;
     }
 
-    public String parseGeckoVersion(String userAgent) {
-        if(userAgent.indexOf("Gecko") == -1) {
-            return ERXBrowser.NO_GECKO;
-        }
+    private boolean isRobot(String userAgent) {
+    	synchronized (robotExpressions) {
+			if(robotExpressions.count()==0) {
+				String strings = ERXStringUtilities.stringFromResource("robots", "txt", NSBundle.bundleForName("ERExtensions"));
+				for (Enumeration iter = NSArray.componentsSeparatedByString(strings, "\n").objectEnumerator(); iter.hasMoreElements();) {
+					String item = (String) iter.nextElement();
+					if(item.trim().length() > 0 && item.charAt(0) != '#') {
+						robotExpressions.addObject(Pattern.compile(item));
+					}
+				}
+			}
+			userAgent = userAgent.toLowerCase();
+			for (Enumeration iter = robotExpressions.objectEnumerator(); iter.hasMoreElements();) {
+				Pattern pattern = (Pattern) iter.nextElement();
+				if(pattern.matcher(userAgent).find()) {
+					log.debug(pattern + " matches  " + userAgent);
+					return true;
+				}
+			}
+		}
+		
+    	return false;
+    }
     
+    public String parseGeckoVersion(String userAgent) {
+    	if (userAgent.indexOf("Gecko") >= 0) {
         int startPos = userAgent.indexOf("; rv:") + 5;
-
-        if(startPos == 4) {
-            return ERXBrowser.NO_GECKO;
-        }
+            // TODO someone document why '4'
+            if (startPos >= 0 && startPos != 4) {
 
         int endPos = userAgent.indexOf(")", startPos);
 
+            	if (endPos > startPos) {
         return userAgent.substring(startPos, endPos);
+    }
+            }
+        }
+        return ERXBrowser.NO_GECKO;
     }
 
     public String parseVersion(String userAgent) {
@@ -391,6 +437,7 @@ public class ERXBrowserFactory {
     public String parsePlatform(String userAgent) {
         String platform = ERXBrowser.UNKNOWN_PLATFORM;
         if      (userAgent.indexOf("Win") > -1) 	platform = ERXBrowser.WINDOWS;
+        else if ((userAgent.indexOf("iPhone") > -1) || (userAgent.indexOf("iPod") > -1)) 	platform = ERXBrowser.IPHONE;
         else if (userAgent.indexOf("Mac") > -1) 	platform = ERXBrowser.MACOS;
         else if (userAgent.indexOf("Linux") > -1) 	platform = ERXBrowser.LINUX;
         return platform;
@@ -402,8 +449,6 @@ public class ERXBrowserFactory {
         else if (userAgent.indexOf("PPC") > -1) 	cpu = ERXBrowser.POWER_PC;
         return cpu;
     }
-
-
 
     private String _browserString(String userAgent) {
         String browserString = userAgent;

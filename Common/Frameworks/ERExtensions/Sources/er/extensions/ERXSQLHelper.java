@@ -37,6 +37,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -860,7 +861,8 @@ public class ERXSQLHelper {
 	 * @return a SQL expression
 	 */
 	public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
-		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating unique index expressions.");
+		NSMutableArray columnNames = columnNamesFromColumnIndexes(columnIndexes);
+		return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray(columnNames).componentsJoinedByString("\", \"") + "\")";
 	}
 
 	/**
@@ -1114,7 +1116,9 @@ public class ERXSQLHelper {
 					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
 				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
 				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(distinct t0." + pkColumnName + ") ";
+				countExpression = "count(distinct " +
+						quoteColumnName("t0." + pkColumnName) 
+						+ ") ";
 			}
 			else {
 				countExpression = "count(*) ";
@@ -1222,7 +1226,7 @@ public class ERXSQLHelper {
 			sqlName = e.sqlStringForAttribute(attribute);
 		}
 
-		int maxPerQuery = 256;
+		int maxPerQuery = maximumElementPerInClause(e.entity());
 
 		// Need to wrap this SQL in parens if there are multiple grougps
 		if (valueArray.count() > maxPerQuery) {
@@ -1263,6 +1267,17 @@ public class ERXSQLHelper {
 		return sb.toString();
 	}
 
+	/**
+	 * The database specific limit, or or most efficient number, of elements in an IN clause in a statement.  If there
+	 * are more that this number of elements, additional IN clauses will be generated, ORed to the others.
+	 * 
+	 * @param entity EOEntity that can be used to fine-tune the result
+	 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
+	 */
+	protected int maximumElementPerInClause(EOEntity entity) {
+		return 256;
+	}
+	
 	protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
 		return expression.sqlStringForValue(value, key);
 	}
@@ -1325,6 +1340,10 @@ public class ERXSQLHelper {
 					}
 					
 					nextLine = reader.readLine();
+				}
+				String finalStatement = statementBuffer.toString().trim();
+				if (finalStatement.length() > 0) {
+					statements.addObject(finalStatement);
 				}
 			}
 			catch (IOException e) {
@@ -1404,6 +1423,12 @@ public class ERXSQLHelper {
 	public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 		return true;
 	}
+	
+	public String quoteColumnName(String columnName){
+		// just pass through by default
+		return columnName;
+	}
+
 	/**
 	 * Returns whether or not this database can always perform the a distinct operation
 	 * when sort orderings are applied. Oracle, for instance, will fail if you try to
@@ -1584,7 +1609,7 @@ public class ERXSQLHelper {
 		 * This method checks each foreign key constraint name and if it is
 		 * longer than 30 characters its replaced with a unique name.
 		 * 
-		 * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
+		 * @see #createSchemaSQLForEntitiesInModelWithNameAndOptions
 		 */
 		@Override
 		public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
@@ -1637,7 +1662,6 @@ public class ERXSQLHelper {
 					buf.append("/");
 				}
 			}
-			System.out.println("finished!");
 			return buf.toString();
 		}
 
@@ -1736,6 +1760,7 @@ public class ERXSQLHelper {
 			return false;
 		}
 
+		@Override
 		protected boolean canReliablyPerformDistinctWithSortOrderings() {
 			return false;
 		}
@@ -1774,6 +1799,15 @@ public class ERXSQLHelper {
 		private static final String PREFIX_ISOLATION_LEVEL = "isolation=";
 		private static final String PREFIX_LOCKING = "locking=";
 
+		@Override
+		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
+			boolean reassignExternalTypeForValueTypeOverride = super.reassignExternalTypeForValueTypeOverride(attribute);
+			if ("DATE".equalsIgnoreCase(attribute.externalType()) && attribute.valueType() == null) {
+				reassignExternalTypeForValueTypeOverride = false;
+			}
+			return reassignExternalTypeForValueTypeOverride;
+		}
+		
 		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			return "select unique from " + sequenceName;
@@ -1835,7 +1869,7 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray(columnNames).componentsJoinedByString("\", \"") + "\") INITIALLY IMMEDIATE NOT DEFERRABLE";
+			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray(columnNames).componentsJoinedByString("\", \"") + "\") DEFERRABLE INITIALLY DEFERRED";
 		}
 
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
@@ -1905,9 +1939,71 @@ public class ERXSQLHelper {
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
 		}
+		
+		@Override
+		public String quoteColumnName(String columnName){
+			if (columnName == null)
+				return null;
+
+			int i = columnName.lastIndexOf(46);
+			
+			if (i == -1)
+				return "\"" + columnName + "\"";
+
+			return "\"" + columnName.substring(0, i) + "\".\"" + columnName.substring(i + 1, columnName.length()) + "\"";
+		}
+		
+		/**
+		 * FrontBase is exceedingly inefficient in processing OR clauses.   A query like this:<br/>
+		 * SELECT * FROM "Foo" t0 WHERE ( t0."oid" IN (431, 437, ...) OR t0."oid" IN (1479, 1480, 1481,...)...<br/>
+		 * Completely KILLS FrontBase (30+ seconds of 100%+ CPU usage). The same query rendered as:<br/>
+		 * SELECT * FROM "Foo" t0 WHERE t0."oid" IN (431, 437, ...) UNION SELECT * FROM "Foo" t0 WHERE t0."oid" IN (1479, 1480, 1481, ...)...
+		 * executes in less than a tenth of the time with less high CPU load.  Collapse all the ORs and INs into one and it is faster
+		 * still.  This has been tested with over 17,000 elements, so 15,000 seemed like a safe maximum.  I don't know what the actual
+		 * theoretical maximum is.
+		 * 
+		 * But... It looks to like the query optimizer will choose to NOT use an index if the number of elements in the IN gets close to, 
+		 * or exceeds, the number of rows (as in the case of a select based on FK with a large number of keys that don't match any rows).  In 
+		 * this case it seems to fall back to table scanning (or something dreadfully slow).  This only seems to have an impact when the number
+		 * of elements in the IN is greater than 1,000.  For larger sizes, the correct number for this method to return seems to depend on the
+		 * number of rows in the tables.  1/5th of the table size may be a good place to start looking for the upper bound.
+		 * 
+		 * @see ERXSQLHelper#maximumElementPerInClause(EOEntity)
+		 * 
+		 * @param entity EOEntity that can be used to fine-tune the result
+		 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
+		 */
+		@Override
+		protected int maximumElementPerInClause(EOEntity entity) {
+			return 15000;
+		}
 	}
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {
+		
+		/** 
+		 * We know better than EOF.
+		 * 
+		 * For any other case, we pass it up to the default impl.
+		 * 
+		 * @param adaptor
+		 *            the adaptor to retrieve an external type for
+		 * @param jdbcType
+		 *            the JDBC type number
+		 * @return a guess at the external type name to use
+		 */
+		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.LONGVARCHAR || jdbcType == Types.CLOB) {
+				externalType = "longtext";
+			}
+			else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			return externalType;
+		}
+		
 		@Override
 		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + start + ", " + (end - start);
@@ -1950,6 +2046,16 @@ public class ERXSQLHelper {
 					sql.append(", ");
 				}
 			}
+		}
+		
+		@Override
+		public int varcharLargeJDBCType() {
+			return Types.LONGVARCHAR;
+		}
+		
+		@Override
+		public int varcharLargeColumnWidth() {
+			return -1;
 		}
 	}
 
@@ -2025,6 +2131,9 @@ public class ERXSQLHelper {
 			else if (jdbcType == CustomTypes.INET) {
 				externalType = "inet";
 			}
+			else if (jdbcType == Types.LONGVARCHAR) {
+				externalType = "text";
+			}
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
 			}
@@ -2046,6 +2155,25 @@ public class ERXSQLHelper {
 			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray columnNames = new NSMutableArray();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+
+		@Override
+		public int varcharLargeJDBCType() {
+			return Types.LONGVARCHAR;
+		}
+		
+		@Override
+		public int varcharLargeColumnWidth() {
+			return -1;
+		}
+
 	}
 	
 	
@@ -2058,6 +2186,57 @@ public class ERXSQLHelper {
 		 */
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
+		}
+		
+		@Override
+		public String externalTypeForJDBCType( JDBCAdaptor adaptor, int type ) {
+			if( type == Types.BLOB ) {
+				return "binary";
+			}
+
+			return super.externalTypeForJDBCType( adaptor, type );
+		}
+		
+		@Override
+		public String limitExpressionForSQL( EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end ) {
+			if( sql == null || "".equals( sql ) )
+			{
+				return sql;
+			}
+
+			String originalSql = sql.toLowerCase();
+
+			String orderBy;
+
+			int indexOfOrderByClause = originalSql.indexOf( " order by " );
+
+			if( indexOfOrderByClause > 0)
+			{
+				orderBy = originalSql.substring( indexOfOrderByClause + 1, originalSql.length() );
+
+				originalSql = originalSql.substring( 0, indexOfOrderByClause );
+			}
+			else
+			{
+				String columns = originalSql.substring( originalSql.indexOf(  "select " ) + 7, originalSql.indexOf( " from " ) );
+
+				orderBy = "order by " + columns.split( "," )[0];
+			}
+
+			StringBuilder limitSqlBuilder = new StringBuilder( originalSql );
+
+			limitSqlBuilder.insert( 0, "select * from (" );
+
+			String rowNumberClause = ", row_number() over (" + orderBy + ") eo_rownum";
+
+			limitSqlBuilder.insert( limitSqlBuilder.lastIndexOf( " from " ), rowNumberClause );
+			limitSqlBuilder.append( ") as temp_row_number where eo_rownum >= " );
+			limitSqlBuilder.append( start + 1 );
+			limitSqlBuilder.append( " and eo_rownum < " );
+			limitSqlBuilder.append( end + 1 );
+			limitSqlBuilder.append( " order by eo_rownum" );
+
+			return limitSqlBuilder.toString();
 		}
 	}
 

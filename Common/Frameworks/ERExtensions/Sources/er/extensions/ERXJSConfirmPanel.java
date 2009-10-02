@@ -33,5 +33,5 @@ public class ERXJSConfirmPanel extends WOComponent {
     public boolean isStateless() { return true; }
     
     public String confirmMessage() { return "return confirm('" +
-        (String)valueForBinding("confirmMessage") + "')"; }
+        ERXStringUtilities.escapeJavascriptApostrophes((String)valueForBinding("confirmMessage")) + "')"; }
 }
