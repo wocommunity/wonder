@@ -1,3 +1,7 @@
 AjaxExampleComponent : AjaxExampleComponent {
 	title = "Main";
 }
+
+SeleniumTestLink : WOHyperlink {
+	actionClass = "er.selenium.SeleniumStartTesting";
+}
