@@ -4,6 +4,7 @@ BatchNumber: WOTextField {
 	size = 2;
 	value = currentBatchIndex;
 	class = "batch_number";
+	name = "batch_number";	// FIXME RM - This may not work so well with more than one batch nav in a page
 }
 
 OptionalForm: AjaxUpdaterForm {
@@ -34,6 +35,7 @@ ItemsPerBatch: WOTextField {
 	size = 2;
 	value = numberOfObjectsPerBatch;
 	class = "batch_size";
+	name = "batch_size";	// FIXME RM - This may not work so well with more than one batch nav in a page
 }
 
 LeftArrow: AjaxUpdaterButton {
