@@ -5,11 +5,16 @@
 |assertText|//div[@id='a']/h2|Movie|
 ** Search
 |click|//button[@class='search']||
-|pause|1000||
+|pause|2000||
 |assertText|//div[@id='a']/h1/span|List|
 |assertText|//div[@id='a']/h2|Movie|
 ** Inspect
 |click|link=Inspect||
-|pause|1000||
+|pause|2000||
 |assertText|//div[@id='a']/div/h1/span|Inspect|
 |assertText|//div[@id='a']/div/h2|Movie|
+** Edit
+|click|link=Edit||
+|pause|2000||
+|assertText|//div[@id='a']/form/h1/span|Edit|
+|assertText|//div[@id='a']/form/h2|Movie|
