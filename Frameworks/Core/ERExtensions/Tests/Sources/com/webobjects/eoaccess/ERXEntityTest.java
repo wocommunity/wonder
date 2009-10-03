@@ -99,8 +99,8 @@ public class ERXEntityTest extends TestCase {
             NSDictionary plist = null;
 
             try {
-                plist = NSPropertyListSerialization.dictionaryWithPathURL(
-                            new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld/Company.plist"));
+                plist = NSPropertyListSerialization.dictionaryForString(
+                            new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld/Company.plist").toString());
         } catch (java.net.MalformedURLException mue) { Assert.fail(this.config()+", mue: "+mue.getMessage()); }
 
             // TODO - we probably want to verify here that the values returned by the ERXEntity and found in the plist are the same.
@@ -119,8 +119,8 @@ public class ERXEntityTest extends TestCase {
 
             NSDictionary plist = null;
             try {
-                plist = NSPropertyListSerialization.dictionaryWithPathURL(
-                            new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld/Company.plist"));
+                plist = NSPropertyListSerialization.dictionaryForString(
+                            new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld/Company.plist").toString());
             } catch (java.net.MalformedURLException mue) { Assert.fail(this.config()+", mue: "+mue.getMessage()); }
 
             ERXEntity erxentity = new ERXEntity(plist, model);
@@ -137,8 +137,8 @@ public class ERXEntityTest extends TestCase {
 
             NSDictionary plist = null;
             try {
-                plist = NSPropertyListSerialization.dictionaryWithPathURL(
-                                                    new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld/Employee.plist"));
+                plist = NSPropertyListSerialization.dictionaryForString(
+                                                    new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld/Employee.plist").toString());
             } catch (java.net.MalformedURLException mue) { Assert.fail(this.config()+", mue: "+mue.getMessage()); }
 
             ERXEntity entity2 = new ERXEntity(plist, model);
