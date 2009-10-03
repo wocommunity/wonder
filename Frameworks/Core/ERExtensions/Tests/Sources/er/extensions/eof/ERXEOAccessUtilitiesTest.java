@@ -1,6 +1,8 @@
 
 package er.extensions.eof;
 
+import java.net.URL;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -97,11 +99,11 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
             modelName = adaptorName+"BusinessModel";
-
-            try {
-                EOModelGroup.defaultGroup().addModel(
-                   new EOModel(new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld")));
-            } catch (java.net.MalformedURLException mue) { System.out.println(this.config()+", mue: "+mue); }
+	
+			URL modelUrl = getClass().getResource("/"+modelName+".eomodeld");
+			
+            EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
+            
             model = EOModelGroup.defaultGroup().modelNamed(modelName);
             model.setConnectionDictionary(ERExtensionsTest.connectionDict(adaptorName));
 
