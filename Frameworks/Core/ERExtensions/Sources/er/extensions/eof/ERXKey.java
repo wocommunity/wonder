@@ -8,6 +8,7 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
+import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
 
 /**
  * <p>
@@ -720,6 +721,16 @@ public class ERXKey<T> {
 	 */
 	public void takeValueInObject(T value, Object obj) {
 		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(obj, value, _key);
+	}
+	
+	/**
+	 * Prefixes the keys in the given qualifier with this key.
+	 * 
+	 * @param qualifier the qualifier to prefix
+	 * @return a qualifier with all of its keys prefixed with this key
+	 */
+	public EOQualifier prefix(EOQualifier qualifier) {
+		return ERXPrefixQualifierTraversal.prefixQualifierWithKey(qualifier, this);
 	}
 
 	@Override
