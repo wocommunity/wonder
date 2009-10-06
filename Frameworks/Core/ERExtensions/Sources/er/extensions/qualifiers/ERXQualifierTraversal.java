@@ -124,7 +124,7 @@ public class ERXQualifierTraversal {
 				if (!postOrder) {
 					result = traverseOrQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
 				}
-				if (result) {
+				if (result == null || result.booleanValue()) {
 					for (Enumeration e = aq.qualifiers().objectEnumerator(); e.hasMoreElements();) {
 						if (!traverseQualifier((EOQualifierEvaluation) e.nextElement(), postOrder)) {
 							result = Boolean.FALSE;
@@ -141,7 +141,7 @@ public class ERXQualifierTraversal {
 				if (!postOrder) {
 					result = traverseAndQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
 				}
-				if (result) {
+				if (result == null || result.booleanValue()) {
 					for (Enumeration e = aq.qualifiers().objectEnumerator(); e.hasMoreElements();) {
 						if (!traverseQualifier((EOQualifierEvaluation) e.nextElement(), postOrder)) {
 							result = Boolean.FALSE;
@@ -158,7 +158,7 @@ public class ERXQualifierTraversal {
 				if (!postOrder) {
 					result = traverseNotQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
 				}
-				if (result) {
+				if (result == null || result.booleanValue()) {
 					result = traverseQualifier((EOQualifierEvaluation) aq.qualifier(), postOrder) ? Boolean.TRUE : Boolean.FALSE;
 				}
 				if (postOrder && (result == null || result.booleanValue())) {
