@@ -32,25 +32,21 @@ import er.extensions.foundation.ERXUtilities;
  * As an example, you may want to track stats on keypaths in your components.  In your
  * base components, you could add:
  * </p>
- * <code>
+ * <code><pre>
  * public Object valueForKeyPath(String keyPath) {
  *   Object value;
  *   if (_shouldTrackStats) {
  *     String logName = ERXStringUtilities.getSimpleClassName(getClass()) + ": " + keyPath;
  *     ERXStats.markStart(logName);
- *     try {
- *       value = super.valueForKeyPath(keyPath);
- *     }
- *     finally {
- *       ERXStats.markEnd(logName);
- *     }
+ *     value = super.valueForKeyPath(keyPath);
+ *     ERXStats.markEnd(logName);
  *   }
  *   else {
  *     value = super.valueForKeyPath(keyPath);
  *   }
  *   return value;
  * }
- * </code>
+ * </pre></code>
  * 
  * @author anjo
  * @author mschrag
