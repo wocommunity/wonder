@@ -132,7 +132,7 @@ public class ERXQualifierTraversal {
 						}
 					}
 				}
-				if (postOrder) {
+				if (postOrder && (result == null || result.booleanValue())) {
 					result = traverseOrQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
 				}
 			}
@@ -149,7 +149,7 @@ public class ERXQualifierTraversal {
 						}
 					}
 				}
-				if (postOrder) {
+				if (postOrder && (result == null || result.booleanValue())) {
 					result = traverseAndQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
 				}
 			}
@@ -161,7 +161,7 @@ public class ERXQualifierTraversal {
 				if (result) {
 					result = traverseQualifier((EOQualifierEvaluation) aq.qualifier(), postOrder) ? Boolean.TRUE : Boolean.FALSE;
 				}
-				if (postOrder) {
+				if (postOrder && (result == null || result.booleanValue())) {
 					result = traverseNotQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
 				}
 			}
