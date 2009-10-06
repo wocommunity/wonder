@@ -6,6 +6,11 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
+/**
+ * Helper class to allow us to access protected stuff in EOAccess.
+ * @author ak
+ *
+ */
 public class ERXEOAccessHelper {
 	/*
 	public static EOGlobalID _globalIDForRowIsFinal(EOEntity entity, NSDictionary dict, boolean flag) {
