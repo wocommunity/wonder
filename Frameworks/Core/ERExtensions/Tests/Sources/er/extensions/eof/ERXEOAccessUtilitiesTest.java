@@ -99,11 +99,16 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
             modelName = adaptorName+"BusinessModel";
-	
-			URL modelUrl = getClass().getResource("/"+modelName+".eomodeld");
-			
+
+            URL modelUrl = getClass().getResource("/"+modelName+".eomodeld");
+            if (modelUrl == null) {
+                try {
+                    modelUrl = new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld");
+                } catch (java.net.MalformedURLException mue) { System.out.println(this.config()+", mue: "+mue); }
+            }
+
             EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
-            
+
             model = EOModelGroup.defaultGroup().modelNamed(modelName);
             model.setConnectionDictionary(ERExtensionsTest.connectionDict(adaptorName));
 
@@ -203,7 +208,7 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
             EOEntity found1 = ERXEOAccessUtilities.entityNamed(ec, "Company");
             Assert.assertNotNull(this.config(), found1);
             Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(EOModelGroup.defaultGroup().entityNamed("Company").name(), found1.name()));
-    
+
             EOEntity found2 = ERXEOAccessUtilities.entityNamed(ec, "Employee");
             Assert.assertNotNull(this.config(), found2);
             Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(EOModelGroup.defaultGroup().entityNamed("Employee").name(), found2.name()));
@@ -211,16 +216,16 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
             EOEntity found3 = ERXEOAccessUtilities.entityNamed(null, "Company");
             Assert.assertNotNull(this.config(), found3);
             Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(EOModelGroup.defaultGroup().entityNamed("Company").name(), found3.name()));
-    
+
             Assert.assertNull(this.config(), ERXEOAccessUtilities.entityNamed(ec, null));
         }
 
         public void testModelGroup() {
             EOModelGroup referenceGroup = EOModelGroup.defaultGroup();
-    
+
             EOModelGroup group1 = ERXEOAccessUtilities.modelGroup(ec);
             Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(referenceGroup, group1));
-    
+
             EOModelGroup group2 = ERXEOAccessUtilities.modelGroup(null);
             Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(referenceGroup, group2));
         }
@@ -230,14 +235,14 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
 
             EOEntity companyEntity = EOModelGroup.defaultGroup().entityNamed("Company");
             EOEntity employeeEntity = EOModelGroup.defaultGroup().entityNamed("Employee");
-    
+
             EOEntity entity1 = ERXEOAccessUtilities.destinationEntityForKeyPath(companyEntity, "employees");
             Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(employeeEntity, entity1));
-    
+
             EOEntity entity2 = ERXEOAccessUtilities.destinationEntityForKeyPath(employeeEntity, "company");
             Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(companyEntity, entity2));
         }
-    
+
         public void testEntityForEo() {
             // public static EOEntity entityForEo(EOEnterpriseObject);
 

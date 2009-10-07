@@ -80,8 +80,14 @@ public class ERXEntityTest extends TestCase {
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
             modelName = adaptorName+"BusinessModel";
-		
-			URL modelUrl = getClass().getResource("/"+modelName+".eomodeld");
+
+            URL modelUrl = getClass().getResource("/"+modelName+".eomodeld");
+
+            if (modelUrl == null) {
+                try {
+                    modelUrl = new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld");
+                } catch (java.net.MalformedURLException mue) { System.out.println(this.config()+", mue: "+mue); }
+            }
 
             EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
 
@@ -98,9 +104,9 @@ public class ERXEntityTest extends TestCase {
 
         public void testPlistConstructor() {
 
-			URL plistUrl = getClass().getResource("/"+modelName+".eomodeld/Company.plist");
-			
-			String plistAsString = NSPropertyListSerialization.stringFromPropertyList(NSPropertyListSerialization.propertyListWithPathURL(plistUrl));
+            URL plistUrl = getClass().getResource("/"+modelName+".eomodeld/Company.plist");
+
+            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(NSPropertyListSerialization.propertyListWithPathURL(plistUrl));
 
             NSDictionary plist = NSPropertyListSerialization.dictionaryForString(plistAsString);
 
@@ -118,9 +124,14 @@ public class ERXEntityTest extends TestCase {
 
         public void testHasExternalName() {
 
-			URL plistUrl = getClass().getResource("/"+modelName+".eomodeld/Company.plist");
-			
-			String plistAsString = NSPropertyListSerialization.stringFromPropertyList(NSPropertyListSerialization.propertyListWithPathURL(plistUrl));
+            URL plistUrl = getClass().getResource("/"+modelName+".eomodeld/Company.plist");
+            if (plistUrl == null) {
+                try {
+                    plistUrl = new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld/Company.plist");
+                } catch (java.net.MalformedURLException mue) { Assert.fail(this.config()+", mue: "+mue.getMessage()); }
+            }
+
+            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(NSPropertyListSerialization.propertyListWithPathURL(plistUrl));
 
             NSDictionary plist = NSPropertyListSerialization.dictionaryForString(plistAsString);
 
@@ -137,11 +148,11 @@ public class ERXEntityTest extends TestCase {
             Assert.assertNotNull(desc);
 
             URL plistUrl = getClass().getResource("/"+modelName+".eomodeld/Employee.plist");
-            
+
             String plistAsString = NSPropertyListSerialization.stringFromPropertyList(NSPropertyListSerialization.propertyListWithPathURL(plistUrl));
 
             NSDictionary plist = NSPropertyListSerialization.dictionaryForString(plistAsString);
-            
+
             ERXEntity entity2 = new ERXEntity(plist, model);
 
             // Using a mis-matched EOClassDescription here, but doing that on purpose so we can verify the superclass did not just ignore the set.
