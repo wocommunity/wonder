@@ -53,6 +53,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * to use <code>https</code>.
  * <li> it adds the <code>disabled</code> boolean binding allows you to omit
  * the form tag.
+ * <li> it adds a default submit button at the start of the form, so that your
+ * user can simply press return without and javascript gimmicks.
+ * <li> the <code>id<code> binding can override the <code>name</code> binding.
  * </ul>
  * This subclass is installed when the frameworks loads. <br />
  * If you actually want to see those new bindings in WOBuilder, edit the file
@@ -62,7 +65,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @property er.extensions.ERXWOForm.multipleSubmitDefault the default value of
  *           multipleSubmit for all forms
  * @property er.extensions.ERXWOForm.addDefaultSubmitButtonDefault whether or
- *           not a default submit button should be addd to the form
+ *           not a default submit button should be add to the form
  * 
  * @author ak
  * @author Mike Schrag (idea to secure binding)
@@ -196,44 +199,24 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		}
 		return result;
 	}
-
-	// WO 5.4
-	// protected NSDictionary computeQueryDictionaryInContext(String
-	// aRequestHandlerPath, WOAssociation queryDictionary, NSDictionary
-	// otherQueryAssociations, WOContext aContext) {
-	// try {
-	// Class woFormClass = getClass();
-	// __queryDictionaryInContext(queryDictionary, aContext);
-	// Method __queryDictionaryInContextMethod =
-	// woFormClass.getMethod("__queryDictionaryInContext", new Class[] {
-	// WOAssociation.class, WOContext.class });
-	// NSDictionary aQueryDict = (NSDictionary)
-	// __queryDictionaryInContextMethod.invoke(this, new Object[] {
-	// queryDictionary, aContext });
-	//			
-	// Method __otherQueryDictionaryInContextMethod =
-	// woFormClass.getMethod("__otherQueryDictionaryInContext", new Class[] {
-	// NSDictionary.class, WOContext.class });
-	// NSDictionary anotherQueryDict = (NSDictionary)
-	// __otherQueryDictionaryInContextMethod.invoke(this, new Object[] {
-	// otherQueryAssociations, aContext });
-	//
-	// Method computeQueryDictionaryMethod =
-	// woFormClass.getMethod("computeQueryDictionary", new Class[] {
-	// String.class, NSDictionary.class, NSDictionary.class });
-	// NSDictionary queryDict = (NSDictionary)
-	// computeQueryDictionaryMethod.invoke(this, new Object[] {
-	// aRequestHandlerPath, aQueryDict, anotherQueryDict });
-	// return queryDict;
-	// }
-	// catch (Exception e) {
-	// throw new RuntimeException("computeQueryDictionaryInContext failed.", e);
-	// }
-	// }
-
-
+	
 	protected void _appendHiddenFieldsToResponse(WOResponse response, WOContext context) {
 		boolean flag = _actionClass != null;
+		NSDictionary hiddenFields = hiddenFieldsInContext(context, flag);
+		if (hiddenFields.count() > 0) {
+			for (Enumeration enumeration = hiddenFields.keyEnumerator(); enumeration.hasMoreElements();) {
+				String s = (String) enumeration.nextElement();
+				Object obj = hiddenFields.objectForKey(s);
+				response._appendContentAsciiString("<div><input type=\"hidden\"");
+				response._appendTagAttributeAndValue("name", s, false);
+				response._appendTagAttributeAndValue("value", obj.toString(), false);
+				response._appendContentAsciiString(" /></div>\n");
+			}
+
+		}
+	}
+
+	private NSDictionary hiddenFieldsInContext(WOContext context, boolean hasActionClass) {
 		NSDictionary hiddenFields;
 		if (ERXApplication.isWO54()) {
 			try {
@@ -256,23 +239,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			try {
 				Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { WOAssociation.class, WOAssociation.class, WOAssociation.class, boolean.class, NSDictionary.class, WOContext.class });
 				computeQueryDictionaryInContextMethod.setAccessible(true);
-				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { _actionClass, _directActionName, _queryDictionary, Boolean.valueOf(flag), _otherQueryAssociations, context });
+				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { _actionClass, _directActionName, _queryDictionary, Boolean.valueOf(hasActionClass), _otherQueryAssociations, context });
 			}
 			catch (Exception e) {
 				throw new RuntimeException("computeQueryDictionaryInContext failed.", e);
 			}
 		}
-		if (hiddenFields.count() > 0) {
-			for (Enumeration enumeration = hiddenFields.keyEnumerator(); enumeration.hasMoreElements();) {
-				String s = (String) enumeration.nextElement();
-				Object obj = hiddenFields.objectForKey(s);
-				response._appendContentAsciiString("<div><input type=\"hidden\"");
-				response._appendTagAttributeAndValue("name", s, false);
-				response._appendTagAttributeAndValue("value", obj.toString(), false);
-				response._appendContentAsciiString(" /></div>\n");
-			}
-
-		}
+		return hiddenFields;
 	}
 
 	@Override
