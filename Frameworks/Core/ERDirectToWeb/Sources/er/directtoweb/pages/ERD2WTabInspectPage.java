@@ -93,7 +93,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     public void setTabByName(String tabName) {
         if (tabName != null) {
             int i = 0;
-            for (ERD2WContainer container : tabSectionsContents()) {
+            for (ERD2WContainer container : (NSArray<ERD2WContainer>)tabSectionsContents()) {
                 if (tabName.equals(container.name)) {
                     setTabNumber(Integer.valueOf(i));
                     setCurrentTab(container);
