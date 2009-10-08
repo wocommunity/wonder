@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSArray;
 /**
  * Array that converts EOGlobalIDs to faults on the fly. The idea is that you can use this in
  * place of an array of real EOs, which may consume quite a lot of memory when instantiated in an EC.
- * May or may not only work with the Wonder version of NSArray.
+ * May or may not only work without the Wonder version of NSArray.
  * @author ak
  *
  * @param <T>
