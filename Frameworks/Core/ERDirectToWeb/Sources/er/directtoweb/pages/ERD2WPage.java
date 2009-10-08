@@ -788,7 +788,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Returns the array of {@link ERD2WContainer} defining the tabs. A tab is a
      * key and an array of sections
      */
-    public NSArray tabSectionsContents() {
+    public NSArray<ERD2WContainer> tabSectionsContents() {
         if (_tabSectionsContents == null) {
             NSArray tabSectionContentsFromRule = (NSArray) d2wContext().valueForKey("tabSectionsContents");
             if (tabSectionContentsFromRule == null)
