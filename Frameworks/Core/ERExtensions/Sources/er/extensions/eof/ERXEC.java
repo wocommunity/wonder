@@ -150,16 +150,38 @@ public class ERXEC extends EOEditingContext {
 	private static final NSSelector EditingContextDidFailSaveChangesDelegateSelector = new NSSelector("editingContextDidFailSaveChanges", new Class[] { EOEditingContext.class, EOGeneralAdaptorException.class });
 
 	/**
-	 * Returns the value of the er.extensions.ERXEC.safeLocking property, which is the
+	 * Returns the value of the <code>er.extensions.ERXEC.safeLocking</code> property, which is the
 	 * new catch-all setting that turns on all of the recommended locking settings.
 	 */
 	public static boolean safeLocking() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.safeLocking", false);
 	}
-	
+
+	/**
+	 * Returns the value of the <code>er.extensions.ERXEC.defaultAutomaticLockUnlock</code> property, which 
+	 * turns on auto-locking by default. Also returns true if <code>safeLocking</code> is true.
+	 */
+	public static boolean defaultAutomaticLockUnlock() {
+		return ERXProperties.booleanForKey("er.extensions.ERXEC.defaultAutomaticLockUnlock") || ERXEC.safeLocking();
+	}
+
+	/**
+	 * Returns the value of the <code>er.extensions.ERXEC.defaultCoalesceAutoLocks</code> property, which 
+	 * turns on coalescing auto-locks, meaning that the EC gets locked once and unlocked at the end of the RR loop.
+	 * Also returns true if <code>safeLocking</code> is true.
+	 */
+	public static boolean defaultCoalesceAutoLocks() {
+		return ERXProperties.booleanForKey("er.extensions.ERXEC.defaultCoalesceAutoLocks") || ERXEC.safeLocking();
+	}
+
+	/**
+	 * Returns the value of the <code>er.extensions.ERXEC.useUnlocker</code> property, which 
+	 * turns on unlocking at the end of the RR loop.
+	 * Also returns true if <code>safeLocking</code> is true.
+	 */
 	public static boolean useUnlocker() {
 		if (useUnlocker == null) {
-			useUnlocker = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.useUnlocker", ERXEC.safeLocking()));
+			useUnlocker = Boolean.valueOf(ERXProperties.booleanForKey("er.extensions.ERXEC.useUnlocker") || ERXEC.safeLocking());
 			log.debug("setting useUnlocker to " + useUnlocker);
 		}
 		return useUnlocker.booleanValue();
@@ -169,6 +191,13 @@ public class ERXEC extends EOEditingContext {
 		useUnlocker = value;
 	}
 
+	/**
+	 * Returns the value of the <code>er.extensions.ERXEC.traceOpenLocks</code>
+	 * property, which turns on tracing of logs. You can see the trace either by
+	 * <code>kill -HUP</code>, by the
+	 * <code>ERXDirectAction/showOpenEditingContextLockTraces</code> action or 
+	 * by setting your App's statistic store to <code>ERXStatisticStore</code>.
+	 */
 	public static boolean traceOpenLocks() {
 		if (traceOpenLocks == null) {
 			traceOpenLocks = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.traceOpenLocks", false));
@@ -177,6 +206,14 @@ public class ERXEC extends EOEditingContext {
 		return traceOpenLocks.booleanValue();
 	}
 
+	/**
+	 * Returns the value of the <code>er.extensions.ERXEC.markOpenLocks</code>
+	 * property, which turns on marking of logs. You can see the threads that hold the lock either by
+	 * <code>kill -HUP</code>, by the
+	 * <code>ERXDirectAction/showOpenEditingContextLockTraces</code> action or 
+	 * by setting your App's statistic store to <code>ERXStatisticStore</code>.
+	 * Also returns true if <code>traceOpenLocks</code> is true.
+	 */
 	public static boolean markOpenLocks() {
 		if (markOpenLocks == null) {
 			markOpenLocks = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.markOpenLocks", false));
@@ -378,14 +415,6 @@ public class ERXEC extends EOEditingContext {
 			creationTrace.fillInStackTrace();
 			activeEditingContexts.put(this, Thread.currentThread().getName());
 		}
-	}
-
-	public static boolean defaultAutomaticLockUnlock() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.defaultAutomaticLockUnlock", ERXEC.safeLocking());
-	}
-
-	public static boolean defaultCoalesceAutoLocks() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.defaultCoalesceAutoLocks", ERXEC.safeLocking());
 	}
 
 	/** Utility to delete a bunch of objects. */
