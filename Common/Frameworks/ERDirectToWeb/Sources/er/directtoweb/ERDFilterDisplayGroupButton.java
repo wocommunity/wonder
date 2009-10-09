@@ -6,12 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.ERXLogger;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOQualifier;
+
+import er.extensions.ERXDisplayGroup;
 
 /**
  * Cool component that can be used in D2W list pages to filter the list, throwing to a D2W query page to restrict.<br />
@@ -24,7 +32,7 @@ public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
 
     public ERDFilterDisplayGroupButton(WOContext context) { super(context); }
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDFilterDisplayGroupButton.class, "components");
+    public static final Logger log = Logger.getLogger(ERDFilterDisplayGroupButton.class);
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
@@ -52,7 +60,7 @@ public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
                     log.warn("Data source of unknown type: "+eds.getClass().getName());
                 }
             }
-            return _nextPage;
+            return result;
         }
     }
 
@@ -71,12 +79,20 @@ public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
             qpi = D2W.factory().queryPageForEntityNamed(entityName, session());
         }
         qpi.setNextPageDelegate(new _FilterDelegate(context().page(), displayGroup()));
+        D2WContext d2wContext = (D2WContext)((WOComponent)qpi).valueForKey("d2wContext");
+        d2wContext.takeValueForKey("filter", "subTask");
         return (WOComponent)qpi;
     }
 
     public WOComponent clearFilter(){
         displayGroup().setQualifier(null);
         displayGroup().updateDisplayedObjects();
+        
+        if (displayGroup() instanceof ERXDisplayGroup) {
+            ERXDisplayGroup dg = (ERXDisplayGroup) displayGroup();
+            dg.clearExtraQualifiers();
+        }
+
         return null;
     }
 }
