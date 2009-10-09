@@ -12,6 +12,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
@@ -79,6 +80,8 @@ public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
             qpi = D2W.factory().queryPageForEntityNamed(entityName, session());
         }
         qpi.setNextPageDelegate(new _FilterDelegate(context().page(), displayGroup()));
+        D2WContext d2wContext = (D2WContext)((WOComponent)qpi).valueForKey("d2wContext");
+        d2wContext.takeValueForKey("filter", "subTask");
         return (WOComponent)qpi;
     }
 
