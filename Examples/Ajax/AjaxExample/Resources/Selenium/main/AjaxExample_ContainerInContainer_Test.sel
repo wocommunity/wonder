@@ -1,0 +1,42 @@
+
+Test for "Container in Container" page
+
+|open|/|
+
+|click|link=Container in Container|
+|pause|1200|
+|verifyTextPresent|This demo shows a periodic updating component|
+
+|storeText|OuterContent|outerContent|
+|storeText|InnerContent|innerContent|
+
+|pause|1200|
+
+|assertText|OuterContent|${outerContent}|
+|assertNotText|InnerContent|${innerContent}|
+
+|click|link=update outer|
+|pause|1200|
+
+|assertNotText|OuterContent|${outerContent}|
+|assertNotText|InnerContent|${innerContent}|
+
+|pause|2400|
+
+|storeText|OuterContent|outerContent|
+|storeText|InnerContent|innerContent|
+
+|click|link=update outer|
+|pause|1200|
+
+|assertNotText|OuterContent|${outerContent}|
+|assertNotText|InnerContent|${innerContent}|
+
+|storeText|OuterContent|outerContent|
+|storeText|InnerContent|innerContent|
+
+|pause|1200|
+
+|assertText|OuterContent|${outerContent}|
+|assertNotText|InnerContent|${innerContent}|
+

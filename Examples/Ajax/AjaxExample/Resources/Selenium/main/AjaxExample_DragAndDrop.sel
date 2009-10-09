@@ -1,0 +1,49 @@
+Test for Drag and Drop page
+
+|open|/|
+
+|click|link=Drag and Drop|
+|pause|1200|
+|verifyTextPresent|Drag one of the green draggable items|
+
+# |storeElementPositionLeft|FirstDraggableItem|First_Pos01_Left|
+# |storeElementPositionTop|FirstDraggableItem|First_Pos02_Top|
+
+# |dragdrop|FirstDraggableItem|+400,+100|
+# |pause|1200|
+
+# |storeElementPositionLeft|FirstDraggableItem|First_Pos02_Left|
+# |storeElementPositionTop|FirstDraggableItem|First_Pos02_Top|
+
+# maybe, verify that Pos01 != Pos02
+
+# Move the first draggable box to the second target box.
+#
+# |dragdrop|FirstDraggableItem|-380, +400|
+# |pause|1200|
+# |verifyTextPresent|dropped draggableExample1 onto droppableExample2->Object 0|
+
+# Move the first draggable box to the first target box.
+#
+# |dragdrop|FirstDraggableItem|+0, -60|
+# |pause|1200|
+# |verifyTextPresent|dropped draggableExample1 onto droppableExample1->Object 0|
+
+# Move the second draggable box to the first target box.
+#
+|dragdrop|SecondDraggableItem|+20, +360|
+|pause|1200|
+
+|verifyTextPresent|dropped draggableExample_0_79_3_0_1 onto droppableExample1->Object 1|
+
+# Move the second draggable box to the second target box.
+#
+|dragdrop|SecondDraggableItem|+20, +420|
+|pause|1200|
+
+|verifyTextPresent|dropped draggableExample_0_79_3_0_1 onto droppableExample2->Object 1|
+
+# TODO - It would be useful to drag one of the boxes in the bottom of the repetition, but I
+# am not seeing how to locate them at the moment.
+
+
