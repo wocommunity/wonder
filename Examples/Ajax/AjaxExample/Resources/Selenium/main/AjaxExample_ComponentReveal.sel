@@ -1,0 +1,17 @@
+Test for Component Reveal
+
+|open|/|
+
+|click|link=Component Reveal|
+|pause|1200|
+|verifyTextPresent|Click on me to reveal a slider.|
+|verifyElementNotPresent|aSliderAppears|
+
+|click|ClickOnMe|
+|pause|1200|
+|verifyElementPresent|aSliderAppears|
+
+|click|link=Component Reveal|
+|pause|1200|
+|verifyTextPresent|Click on me to reveal a slider.|
+|verifyElementNotPresent|aSliderAppears|

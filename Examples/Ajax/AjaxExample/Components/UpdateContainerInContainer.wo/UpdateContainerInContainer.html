@@ -13,13 +13,13 @@
 	<webobject name = "UpdateInnerLink">update inner</webobject>
 	</div>
 	
-	<webobject name = "AjaxUpdateContainer">
-		Content above = <webobject name = "Now"/>
-
-		<webobject name = "AjaxUpdateContainer1">
-			Auto update = <webobject name = "Now1"/>
-		</webobject>
-		
-		Content below.
-	</webobject>
+ 	<webobject name = "AjaxUpdateContainer">
+		Content above = <span id="OuterContent"><webobject name = "Now"/></span>
+ 
+ 		<webobject name = "AjaxUpdateContainer1">
+			Auto update = <span id="InnerContent"><webobject name = "Now1"/></span>
+ 		</webobject>
+ 		
+ 		Content below.
+ 	</webobject>
 </webobject>

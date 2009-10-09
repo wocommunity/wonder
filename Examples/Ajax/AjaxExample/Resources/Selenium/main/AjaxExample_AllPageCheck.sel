@@ -62,6 +62,8 @@
 |pause|1200||
 |verifyTextPresent|AjaxInPlace provides support for arbitrarily complex view||
 
+# TODO - Drag Resize page
+
 |click|link=Busy Indicator||
 |pause|1200||
 |verifyTextPresent|make a long running AJAX request||
@@ -74,9 +76,15 @@
 |pause|1200||
 |verifyTextPresent|Toggle?||
 
+# TODO - Google Maps - how to connect?
+
 |click|link=Grid||
 |pause|1200||
 |verifyTextPresent|Click the batch size to edit||
+
+# TODO - Ajax Tabbed Panel
+
+# TODO - Progress/File Upload
 
 |click|link=Highlight||
 |pause|1200||
@@ -86,6 +94,8 @@
 |pause|1200||
 |verifyTextPresent|Preview||
 
+# TODO - Selection List
+
 |click|link=Radio Buttons||
 |pause|1200||
 |verifyTextPresent|You selected:||
@@ -93,6 +103,10 @@
 |click|link=Modal Container||
 |pause|1200||
 |verifyTextPresent|Modal container with direct content||
+
+# TODO - Model Dialog
+
+# TODO - Model Dialog Opener
 
 |click|link=Component Reveal||
 |pause|1200||
