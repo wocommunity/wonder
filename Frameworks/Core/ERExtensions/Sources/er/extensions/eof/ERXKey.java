@@ -724,7 +724,12 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Prefixes the keys in the given qualifier with this key.
+	 * Prefixes the keys in the given qualifier with this key. For example, if you have a qualifier on Company of name = 'mDT' 
+	 * and you want to find Person eo's whose companies match that qualifier, you need to prefix all the keys in the qualifier 
+	 * to be "company.whatever" (to go through the company relationship on Person) -- so in the example you would need 
+	 * company.name = 'mDT'. Prefix provides a mechanism to do that. 
+	 * 
+	 * Person.COMPANY.prefix(ERXQ.is("name", "mDT")) is equivalent to ERXQ.is("company.name", "mDT")
 	 * 
 	 * @param qualifier the qualifier to prefix
 	 * @return a qualifier with all of its keys prefixed with this key
