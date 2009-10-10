@@ -20,8 +20,10 @@ import er.extensions.appserver.ERXRequest;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXStringUtilities;
+
 /**
  * Shows a link and wraps an area that is later presented as a modal window. Alternately, when you bind <b>action</b> then the content is used as the link.
+ * 
  * @binding label label for the link
  * @binding class class for the link
  * @binding style style for the link
@@ -37,6 +39,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding open if true, the container is rendered already opened (currently only workings, i think, with ajax=true)
  * @binding locked if true, the container will be "locked" and will not close unless you explicitly close it
  * @binding secure (only applicable for directAtionName) if true, the generated url will be https
+ * @binding skin the name of the skin to use (lightbox or darkbox right now)
  * 
  * @author timo
  * @author ak
@@ -181,8 +184,16 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 
     protected void addRequiredWebResources(WOResponse response, WOContext context) {
     	addScriptResourceInHead(context, response, "prototype.js");
-        addScriptResourceInHead(context, response, "ibox.js");
-        addStylesheetResourceInHead(context, response, "ibox.css");
+    	addScriptResourceInHead(context, response, "ibox/ibox.js");
+    	String skinName = stringValueForBinding("skin", context.component());
+    	String skinCSS;
+    	if (skinName == null) {
+    	  skinCSS = "ibox/ibox.css";
+    	}
+    	else {
+    	  skinCSS = "ibox/skins/" + skinName + "/" + skinName + ".css";
+    	}
+    	addStylesheetResourceInHead(context, response, skinCSS);
     }
 
 	protected String _containerID(WOContext context) {
