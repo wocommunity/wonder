@@ -89,19 +89,28 @@ var iBox = function() {
 		 * @param {String} content HTML content
 		 * @param {Object} params
 		 */
-		html: function(content, params) {
+		// MS: added resizeOnly param
+		html: function(content, params, resizeOnly) {
+		  // MS: added resizeOnly check
+		  if (resizeOnly === undefined) var resizeOnly = false;
 			if (content === undefined) return els.content;
 			if (params === undefined) var params = {};
 			if (!active.is_loaded) return;
-			_pub.clear();
 
-			_pub.updateObject(els.wrapper.style, {display: 'block', visibility: 'hidden', left: 0, top: 0, height: '', width: ''});
+			// MS: added resizeOnly check
+			if (!resizeOnly) {
+				_pub.clear();
+				_pub.updateObject(els.wrapper.style, {display: 'block', visibility: 'hidden', left: 0, top: 0, height: '', width: ''});
+				// MS Run HTML updates through prototype's .update() method so evalScripts works as expected 
+				//if (typeof(content) == 'string') els.content.innerHTML = content;
+				if (typeof(content) == 'string') $(els.content).update(content);
+				else els.content.appendChild(content);
+			}
+			// MS: added else block
+			else {
+				_pub.updateObject(els.wrapper.style, {display: 'block', visibility: 'hidden', left: 0, top: 0, height: '', width: ''});
+			}
 			
-			// MS Run HTML updates through prototype's .update() method so evalScripts works as expected 
-			//if (typeof(content) == 'string') els.content.innerHTML = content;
-			if (typeof(content) == 'string') $(els.content).update(content);
-			else els.content.appendChild(content);
-
 			var pagesize = _pub.getPageSize();
 
 			if (params.can_resize === undefined) params.can_resize = true;
@@ -132,7 +141,7 @@ var iBox = function() {
 			active.dimensions = [width, height];
 			active.params = params;
 			_pub.reposition();
-
+			
 			// XXX: Fix for inline containers which had elements that were hidden
 			for (var i=0; i<_pub.tags_to_hide.length; i++) {
 				showTags(_pub.tags_to_hide[i], els.content);
@@ -203,6 +212,11 @@ var iBox = function() {
 			_pub.fireEvent('hide');
 		},
 
+		// MS: Added contentChanged function
+		contentChanged: function() {
+			_pub.html(els.content.innerHTML, active.params, true);
+		},
+		
 		/**
 		 * Repositions the iBox wrapper based on the params set originally.
 		 */
