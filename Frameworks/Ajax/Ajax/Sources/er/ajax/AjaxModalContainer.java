@@ -41,6 +41,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding secure (only applicable for directAtionName) if true, the generated url will be https
  * @binding skin the name of the skin to use (lightbox or darkbox right now)
  * 
+ * If your content changes height and you want to autosize your iBox, you can add &lt;script&gt;iBox.contentChanged()&lt;/script&gt; into your
+ * AjaxUpdateContainer to trigger an iBox resize.
+ *  
  * @author timo
  * @author ak
  */
