@@ -59,6 +59,7 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
+import er.extensions.eof.ERXS;
 
 /**
  * Collection of EOF utility method centered around

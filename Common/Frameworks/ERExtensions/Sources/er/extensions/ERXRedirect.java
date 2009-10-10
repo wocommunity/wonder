@@ -7,7 +7,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXAjaxApplication;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.ERXMutableURL;
 
 /**

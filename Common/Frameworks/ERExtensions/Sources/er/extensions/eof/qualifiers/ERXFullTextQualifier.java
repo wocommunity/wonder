@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.eof.qualifiers;
 
 import java.util.Enumeration;
 import java.util.StringTokenizer;

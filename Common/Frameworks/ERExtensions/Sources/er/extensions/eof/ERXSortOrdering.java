@@ -1,9 +1,10 @@
-package er.extensions;
+package er.extensions.eof;
 
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
+import er.extensions.eof.ERXKey;
 
 
 /**

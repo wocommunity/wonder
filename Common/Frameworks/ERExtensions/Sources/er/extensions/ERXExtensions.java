@@ -45,6 +45,9 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
+import er.extensions.jdbc.ERXJDBCAdaptor;
+import er.extensions.eof.qualifiers.ERXToManyQualifier;
+import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
 
 /**
  * Principal class of the ERExtensions framework. This class

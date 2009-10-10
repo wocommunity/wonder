@@ -1,6 +1,7 @@
-package er.extensions;
+package er.extensions.components;
 
 import com.webobjects.appserver.WOContext;
+import er.extensions.ERXStatelessComponent;
 
 /**
  * <p>To quote <a href="http://msdn.microsoft.com/en-us/library/ms537512(VS.85).aspx">Microsoft:</a></p>

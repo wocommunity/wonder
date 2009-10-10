@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.eof;
 
 import java.io.Serializable;
 
@@ -19,6 +19,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSRecursiveLock;
+import er.extensions.ERXEC;
+import er.extensions.ERXProperties;
 
 /**
  * This class is a wrapper for the EOAdaptorOperation class

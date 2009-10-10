@@ -20,6 +20,8 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSRange;
+import er.extensions.jdbc.ERXSQLHelper;
+import er.extensions.eof.qualifiers.ERXInQualifier;
 
 /**
  * The goal of the fetch specification batch iterator is to have the ability to

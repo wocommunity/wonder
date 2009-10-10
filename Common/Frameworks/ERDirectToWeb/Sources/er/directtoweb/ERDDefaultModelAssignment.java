@@ -22,7 +22,7 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.ERXConstant;
 import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXS;
+import er.extensions.eof.ERXS;
 import er.extensions.ERXDictionaryUtilities;
 
 /**

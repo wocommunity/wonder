@@ -26,6 +26,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.ERXResponseRewriter.TagMissingBehavior;
+import er.extensions.appserver.ajax.ERXAjaxContext;
 
 /**
  * Replacement of WOContext. This subclass is installed when the frameworks

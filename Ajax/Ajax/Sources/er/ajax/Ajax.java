@@ -6,7 +6,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
-import er.extensions.ERXAjaxApplication;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.ERXConstant;
 
 public class Ajax extends ERXFrameworkPrincipal {

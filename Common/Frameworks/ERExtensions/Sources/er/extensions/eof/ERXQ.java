@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.eof;
 
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
@@ -9,9 +9,9 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXInQualifier;
-import er.extensions.ERXRegExQualifier;
-import er.extensions.ERXToManyQualifier;
+import er.extensions.eof.qualifiers.ERXInQualifier;
+import er.extensions.eof.qualifiers.ERXRegExQualifier;
+import er.extensions.eof.qualifiers.ERXToManyQualifier;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.qualifiers.ERXNotQualifier;

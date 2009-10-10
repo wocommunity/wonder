@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
-import er.extensions.ERXMappingObjectStream;
+import er.extensions.foundation.ERXMappingObjectStream;
 import er.extensions.ERXValueUtilities;
 
 /**

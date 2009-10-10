@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 /**
  * Copied from ERExtensions to enable the "title"-attribute for stylesheets.

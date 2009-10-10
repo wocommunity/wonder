@@ -4,7 +4,7 @@
 //
 // Created by ak on Mon Apr 01 2002
 //
-package er.extensions;
+package er.extensions.appserver.ajax;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;

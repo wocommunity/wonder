@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.jdbc;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -24,6 +24,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXProperties;
 
 /**
  * Creates and manages a pool of JDBC connections. Useful for SQL statements without

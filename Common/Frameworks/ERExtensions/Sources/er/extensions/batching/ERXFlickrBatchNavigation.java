@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.batching;
 
 
 
@@ -7,6 +7,10 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+import er.extensions.ERXComponent;
+import er.extensions.ERXDisplayGroup;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXComponentUtilities;
 
 /**
  * <p>

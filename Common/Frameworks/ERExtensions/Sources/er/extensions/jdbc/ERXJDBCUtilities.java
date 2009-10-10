@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.jdbc;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,6 +43,9 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCContext;
 
 import er.extensions.foundation.ERXExceptionUtilities;
+import er.extensions.ERXStringUtilities;
+import er.extensions.ERXFileUtilities;
+import er.extensions.ERXEC;
 
 public class ERXJDBCUtilities {
 

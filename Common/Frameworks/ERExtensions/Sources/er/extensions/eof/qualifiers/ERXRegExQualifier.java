@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.eof.qualifiers;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.qualifiers.ERXKeyValueQualifier;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * Provides regular expression matching of attributes. You can also bind a WODisplayGroup queryOperator to 

@@ -41,6 +41,8 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSArrayUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
+import er.extensions.jdbc.ERXSQLHelper;
+import er.extensions.jdbc.ERXJDBCAdaptor;
 
 /**
  * Enhanced model group that supports connection dict switching, definable and predictable model orderings and stackable prototypes.

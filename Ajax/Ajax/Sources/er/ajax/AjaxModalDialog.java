@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPathUtilities;
 
 import er.extensions.ERXWOContext;
-import er.extensions.ERXAjaxApplication;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.ERXWOForm;
 
 /**

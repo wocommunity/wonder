@@ -12,8 +12,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXAjaxApplication;
-
 public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjaxElement {
 	protected Logger log = Logger.getLogger(getClass());
 	private WOElement _children;

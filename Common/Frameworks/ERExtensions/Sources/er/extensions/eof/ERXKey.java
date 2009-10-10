@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.eof;
 
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
@@ -8,6 +8,10 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
+import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
+import er.extensions.eof.ERXSortOrdering;
+import er.extensions.eof.ERXS;
+import er.extensions.eof.ERXQ;
 
 /**
  * <p>
@@ -530,6 +534,21 @@ public class ERXKey<T> {
 		return ERXQ.containsAll(_key, tokens);
 	}
 
+	/**
+	 * <p>Returns a qualifier that evaluates to true when the given to many key
+	 * contains the given object.</p>
+	 * 
+	 * <p>Equivalent to new ERXKeyValueQualifier(key, EOQualifier.OperatorContains,
+	 * value).</p>
+	 * 
+	 * @param obj
+	 *            the object
+	 * @return an EOKeyValueQualifier
+	 */
+	public ERXKeyValueQualifier containsObject(Object obj) {
+		return ERXQ.containsObject(_key, obj);
+	}
+
 	@Override
 	public int hashCode() {
 		return _key.hashCode();
@@ -704,7 +723,22 @@ public class ERXKey<T> {
 	 *            the object to set the value on
 	 */
 	public void takeValueInObject(T value, Object obj) {
-		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(value, obj, _key);
+		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(obj, value, _key);
+	}
+	
+	/**
+	 * Prefixes the keys in the given qualifier with this key. For example, if you have a qualifier on Company of name = 'mDT' 
+	 * and you want to find Person eo's whose companies match that qualifier, you need to prefix all the keys in the qualifier 
+	 * to be "company.whatever" (to go through the company relationship on Person) -- so in the example you would need 
+	 * company.name = 'mDT'. Prefix provides a mechanism to do that. 
+	 * 
+	 * Person.COMPANY.prefix(ERXQ.is("name", "mDT")) is equivalent to ERXQ.is("company.name", "mDT")
+	 * 
+	 * @param qualifier the qualifier to prefix
+	 * @return a qualifier with all of its keys prefixed with this key
+	 */
+	public EOQualifier prefix(EOQualifier qualifier) {
+		return ERXPrefixQualifierTraversal.prefixQualifierWithKey(qualifier, this);
 	}
 
 	@Override

@@ -31,7 +31,6 @@ import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOObjectNotAvailableException;
-import com.webobjects.eoaccess.EOProperty;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
@@ -47,7 +46,6 @@ import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
@@ -61,6 +59,7 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.statistics.ERXStats;
 import er.extensions.statistics.ERXStats.Group;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * Collection of EOAccess related utilities.

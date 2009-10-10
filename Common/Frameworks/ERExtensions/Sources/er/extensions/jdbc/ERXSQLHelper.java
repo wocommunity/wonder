@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.jdbc;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -32,12 +32,10 @@ import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -48,6 +46,13 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXEC;
+import er.extensions.ERXModelGroup;
+import er.extensions.ERXStringUtilities;
+import er.extensions.eof.qualifiers.ERXFullTextQualifier;
+import er.extensions.ERXConstant;
+import er.extensions.ERXProperties;
 
 /**
  * ERXSQLHelper provides support for additional database-vender-specific
@@ -2144,7 +2149,7 @@ public class ERXSQLHelper {
 		 * Creates unique index; stolen from the derby helper
 		 * 
 		 * @author cug - Jun 24, 2008
-		 * @see er.extensions.ERXSQLHelper#sqlForCreateUniqueIndex(java.lang.String, java.lang.String, er.extensions.ERXSQLHelper.ColumnIndex[])
+		 * @see ERXSQLHelper#sqlForCreateUniqueIndex(java.lang.String, java.lang.String, ERXSQLHelper.ColumnIndex[])
 		 */
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {

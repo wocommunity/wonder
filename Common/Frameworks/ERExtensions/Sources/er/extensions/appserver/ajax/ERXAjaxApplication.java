@@ -1,4 +1,4 @@
-package er.extensions;
+package er.extensions.appserver.ajax;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -8,6 +8,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
+import er.extensions.ERXWOContext;
 
 /**
  * ERXAjaxApplication is the part of ERXApplication that handles Ajax requests.

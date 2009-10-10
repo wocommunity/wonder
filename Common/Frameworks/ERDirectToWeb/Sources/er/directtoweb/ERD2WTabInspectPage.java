@@ -6,13 +6,23 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXWOForm;
+import er.extensions.ERXStringUtilities;
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXValidationException;
 
 /**
  * Superclass for all tab and wizard pages.<br />
@@ -22,16 +32,14 @@ import java.util.*;
 public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
 
     public final static String WILL_SWITCH_TAB = "willSwitchTab";
-    public static String IMAGE_TAB_COMPONENT_NAME = "ERXImageTabPanel";
-    public static String TEXT_TAB_COMPONENT_NAME = "ERXTabPanel";
 
     public ERD2WTabInspectPage(WOContext c) {
         super(c);
     }
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WTabInspectPage.class, "templates,components");
-    public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.directtoweb.validation.ERD2WTabInspectPage");
+    public static final Logger log = Logger.getLogger(ERD2WTabInspectPage.class);
+    public static final Logger validationLog = Logger.getLogger("er.directtoweb.validation.ERD2WTabInspectPage");
 
 
     public String switchTabActionName() { return isEditing() ? "switchTabAction" : null; }
@@ -61,6 +69,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         super.appendToResponse(response, context);
     }
 
+    //AK: what are these used for? They do nothing?
     protected Integer _tabNumber;
     public Integer tabNumber(){ return _tabNumber;}
     public void setTabNumber(Integer newTabNumber){ _tabNumber  = newTabNumber;}
@@ -69,6 +78,38 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
+    }
+
+    @Override
+    public void awake() {
+        super.awake();
+        //ak: this only works in a direct link or if there are no form values...
+        String tabName = context().request().stringFormValueForKey("__tab");
+        setTabByName(tabName);
+    }
+    
+    public void setTabByName(String tabName) {
+        if (tabName != null) {
+            int i = 0;
+            for (Enumeration sectionsEnum = tabSectionsContents().objectEnumerator(); sectionsEnum.hasMoreElements();) {
+                ERD2WContainer container = (ERD2WContainer)sectionsEnum.nextElement();
+                if (tabName.equals(container.name)) {
+                    setTabNumber(Integer.valueOf(i));
+                    setCurrentTab(container);
+                    break;
+                }
+                i++;
+            }
+        }
+    }
+    
+    public String urlForCurrentState() {
+        String url = super.urlForCurrentState();
+        if (currentTab() != null) {
+            // AK: sloppy, I know...
+            url = url + "&__tab=" + ERXStringUtilities.urlEncode(currentTab().name);
+        }
+        return url;
     }
 
     /**
@@ -177,12 +218,20 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         tabSectionsContents().lastObject().equals(currentTab()) : false;
     }
 
-    /** Used to compute the name of the "tab" component used to render the tabs;
-     *  There are basically 2 choices: image tabs or text tabs.  This lets you switch
-     *  between them using the d2w rule system: 'useTabImages' => true or false
-     *  depending on which component you want.  false = TEXT_TAB_COMPONENT_NAME
-     */
     public String tabComponentName() {
-	return useTabImages() ? IMAGE_TAB_COMPONENT_NAME : TEXT_TAB_COMPONENT_NAME;
+    	return (String)d2wContext().valueForKey("tabComponentName");
+    }
+    
+    public boolean disablePrevious() {
+        return currentTabIsFirstTab();
+    }
+    public boolean disableNext() {
+        return currentTabIsLastTab();
+    }
+    public boolean disableCancel() {
+        return !showCancel();
+    }
+    public boolean disableSave() {
+        return false;
     }
 }

@@ -15,6 +15,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 /**
  * ERXResponseRewriter provides several utilities for manipulating a WOResponse
