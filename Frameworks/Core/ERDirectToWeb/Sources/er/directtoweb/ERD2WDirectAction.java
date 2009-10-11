@@ -327,8 +327,10 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             if(fs == null) {
                 fs = new EOFetchSpecification(entityName, null, null);
             }
-            int fetchLimit = ERXValueUtilities.intValueWithDefault(context.valueForKey("fetchLimit"), 200);
-            fs.setFetchLimit(fetchLimit);
+            if(!context().request().formValueKeys().contains(fetchLimitKey)) {
+                int fetchLimit = ERXValueUtilities.intValueWithDefault(context.valueForKey("fetchLimit"), 200);
+                fs.setFetchLimit(fetchLimit);
+            }
             boolean refresh = ERXValueUtilities.booleanValueWithDefault(context.valueForKey("refreshRefetchedObjects"), false);
             fs.setRefreshesRefetchedObjects(refresh);
             ((EODatabaseDataSource)ds).setFetchSpecification(fs);
