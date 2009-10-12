@@ -1539,7 +1539,11 @@ public class ERXSQLHelper {
 				try {
 					String sqlHelperClassName = ERXProperties.stringForKey(databaseProductName + ".SQLHelper");
 					if (sqlHelperClassName == null) {
-						if (databaseProductName.equalsIgnoreCase("frontbase")) {
+						if (databaseProductName == null) {
+							// If there is no plugin then product name will be null
+							sqlHelper = new ERXSQLHelper();
+						}
+						else if (databaseProductName.equalsIgnoreCase("frontbase")) {
 							sqlHelper = new FrontBaseSQLHelper();
 						}
 						else if (databaseProductName.equalsIgnoreCase("mysql")) {
@@ -1981,6 +1985,16 @@ public class ERXSQLHelper {
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {
 		
+		/**
+		 * Returns a pattern than matches lines that start with "--".
+		 * 
+		 * @return regex pattern that indicates this line is an SQL comment
+		 */
+		@Override
+		protected Pattern commentPattern() {
+			return Pattern.compile("^--");
+		}
+
 		/** 
 		 * We know better than EOF.
 		 * 
