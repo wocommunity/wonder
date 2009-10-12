@@ -16,12 +16,14 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXRequest;
-import er.extensions.ERXWOContext;
 import er.extensions.ERXMutableURL;
+import er.extensions.ERXRequest;
 import er.extensions.ERXStringUtilities;
+import er.extensions.ERXWOContext;
+
 /**
  * Shows a link and wraps an area that is later presented as a modal window. Alternately, when you bind <b>action</b> then the content is used as the link.
+ * 
  * @binding label label for the link
  * @binding class class for the link
  * @binding style style for the link
@@ -37,7 +39,11 @@ import er.extensions.ERXStringUtilities;
  * @binding open if true, the container is rendered already opened (currently only workings, i think, with ajax=true)
  * @binding locked if true, the container will be "locked" and will not close unless you explicitly close it
  * @binding secure (only applicable for directAtionName) if true, the generated url will be https
+ * @binding skin the name of the skin to use (lightbox or darkbox right now)
  * 
+ * If your content changes height and you want to autosize your iBox, you can add &lt;script&gt;iBox.contentChanged()&lt;/script&gt; into your
+ * AjaxUpdateContainer to trigger an iBox resize.
+ *  
  * @author timo
  * @author ak
  */
@@ -150,7 +156,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         response.appendContentString("</a>");
         if (AjaxUtils.isAjaxRequest(context.request())) {
 	        NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(response);
-	        if (!userInfo.allKeys().containsObject("er.ajax.AjaxModalContainer.init")) {
+	        if (!userInfo.containsKey("er.ajax.AjaxModalContainer.init")) {
 	            AjaxUtils.appendScriptHeader(response);
 	            response.appendContentString("iBox.init()");
 	            AjaxUtils.appendScriptFooter(response);
@@ -181,8 +187,16 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 
     protected void addRequiredWebResources(WOResponse response, WOContext context) {
     	addScriptResourceInHead(context, response, "prototype.js");
-        addScriptResourceInHead(context, response, "ibox.js");
-        addStylesheetResourceInHead(context, response, "ibox.css");
+    	addScriptResourceInHead(context, response, "ibox/ibox.js");
+    	String skinName = stringValueForBinding("skin", context.component());
+    	String skinCSS;
+    	if (skinName == null) {
+    	  skinCSS = "ibox/ibox.css";
+    	}
+    	else {
+    	  skinCSS = "ibox/skins/" + skinName + "/" + skinName + ".css";
+    	}
+    	addStylesheetResourceInHead(context, response, skinCSS);
     }
 
 	protected String _containerID(WOContext context) {

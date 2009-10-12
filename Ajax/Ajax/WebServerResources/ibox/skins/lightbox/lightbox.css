@@ -1,0 +1,27 @@
+#ibox_wrapper {
+    line-height:25px;
+    border-color:#fff;
+}
+#ibox_wrapper, #ibox_footer_wrapper a { background-color:#fff; }
+#ibox_content { background-color:#fff; border:0; margin: 10px 10px 40px 10px; }
+#ibox_footer_wrapper {
+    line-height: 25px;
+    bottom: 5px;
+    top: auto;
+}
+#ibox_footer_wrapper a {
+    text-indent: -100000px;
+    border:0;
+    background: #fff url('images/closelabel.gif') center center no-repeat;
+    width: 66px;
+    padding: 0;
+    height: 22px;
+    line-height: 22px;
+}
+#ibox_footer_wrapper a:hover { background-color:#fff; }
+#ibox_loading {
+    text-indent: -100000px;
+    width: 200px;
+    height: 200px;
+    background: #fff url('images/loading.gif') center center no-repeat;
+}

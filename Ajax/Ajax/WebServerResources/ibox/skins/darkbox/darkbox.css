@@ -1,0 +1,6 @@
+#ibox_content { background: #222; border-color: #222; color: #fff; }
+#ibox_wrapper { background: #222; border-color: #444; }
+#ibox_footer_wrapper { left: 0; right: 0; top: 0; padding: 3px 10px; }
+#ibox_footer_wrapper, #ibox_footer_wrapper a { color: #8dd6e2; background: #444; }
+#ibox_footer_wrapper a { color: #8dd6e2; font-weight: bold; text-decoration: none; padding: 0 3px; }
+#ibox_content { margin: 25px 0 0 0; padding: 10px; }
