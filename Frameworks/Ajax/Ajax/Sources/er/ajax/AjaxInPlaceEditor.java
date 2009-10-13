@@ -112,7 +112,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     response.appendContentString(elementName);
     response.appendContentString(">");
     AjaxUtils.appendScriptHeader(response);
-    response.appendContentString("new Ajax.InPlaceEditor('");
+    response.appendContentString("new Ajax.InPlaceEditorWithEmptyText('");
     response.appendContentString(id);
     response.appendContentString("', '");
     response.appendContentString(actionUrl);
@@ -188,23 +188,15 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
         }
         catch (IllegalArgumentException illegalargumentexception) {
           NSLog._conditionallyLogPrivateException(illegalargumentexception);
-          strValue = null;
         }
         catch (ParseException parseexception) {
           NSLog._conditionallyLogPrivateException(parseexception);
-          strValue = null;
         }
       }
       if (strValue == null) {
         strValue = objValue.toString();
       }
       response.appendContentString(strValue);
-    }
-	// Workaround for inplace control staying in "Saving..." mode forever
-    // when empty value was supplied
-    String contentString = response.contentString();
-    if (contentString == null || contentString.equals("")) {
-    	response.appendContentString(" ");
     }
   }
 }
