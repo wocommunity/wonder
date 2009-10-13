@@ -1,7 +1,7 @@
 CheckBox: WOGenericElement {
 	elementName = "input";
 	name = wrapperElementID;
-	otherTagString = isCurrentItemChecked;
+	otherTagString = otherTagStringForCheckBox;
 	type = "checkbox";
 	value = index;
 	id = ^itemID;
@@ -51,26 +51,26 @@ Content: WOComponentContent {
 }
 
 GenericContainer1: WOGenericContainer {
-	align = "LEFT";
-	elementName = "TD";
+	align = "left";
+	elementName = "td";
 	otherTagString = ^contentCellOtherTagString;
-	valign = "TOP";
+	valign = "top";
 	class = "ERXMatrixTableCell";
 }
 
 GenericElement1: WOGenericElement {
-	elementName = "INPUT";
+	elementName = "input";
 	name = "SelectAll";
 	onclick = selectOnClick;
-	type = "BUTTON";
+	type = "button";
 	value = session.localizer.ERXCheckboxMatrix.selectAll; // VALID
 }
 
 GenericElement2: WOGenericElement {
-	elementName = "INPUT";
+	elementName = "input";
 	name = "DeselectAll";
 	onclick = deselectOnClick;
-	type = "BUTTON";
+	type = "button";
 	value = session.localizer.ERXCheckboxMatrix.deselectAll; // VALID
 }
 
