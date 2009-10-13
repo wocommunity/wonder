@@ -1,0 +1,69 @@
+Test for DragAndDropLists page
+
+|open|/|
+
+|click|link=Drag and Drop Lists|
+|pause|1200|
+|verifyTextPresent|Wonder Ajax Examples: Drag and Drop Lists|
+
+# This is NOT how I want to test this. I cannot see a way to write a locator
+# for an element with some id inside another element with some id. The obvious
+# XPath does not seem to work. Also, I tried getting the position of the element
+# and verifying that it changes, but the id changes also, so this is difficult.
+
+# I think that this block will verify that the "Drag Item" has moved, as the id
+# of the element changes when it moves.
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #0|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertNotText|e_0_79_1_1_0_0_1_0_1|Drag Item #0|
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #1|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertNotText|e_0_79_1_1_0_0_1_0_1|Drag Item #1|
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #2|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertNotText|e_0_79_1_1_0_0_1_0_1|Drag Item #2|
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #3|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertNotText|e_0_79_1_1_0_0_1_0_1|Drag Item #3|
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #4|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertNotText|e_0_79_1_1_0_0_1_0_1|Drag Item #4|
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #5|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertNotText|e_0_79_1_1_0_0_1_0_1|Drag Item #5|
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #6|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertNotText|e_0_79_1_1_0_0_1_0_1|Drag Item #6|
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #7|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertNotText|e_0_79_1_1_0_0_1_0_1|Drag Item #7|
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #8|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertNotText|e_0_79_1_1_0_0_1_0_1|Drag Item #8|
+
+# An assertNotText here fails because after the last move, the object
+# with the expected id does not exist.
+
+|assertText|e_0_79_1_1_0_0_1_0_1|Drag Item #9|
+|dragdrop|e_0_79_1_1_0_0_1_0_1|+300,+0|
+|pause|1200|
+|assertText|e_0_79_1_3_0_0_1_9_1|Drag Item #9|
+
