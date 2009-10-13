@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Company</key>
+	<array>
+		<dict>
+			<key>id</key>
+			<integer>1</integer>
+			<key>name</key>
+			<string>IBM</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Apple</string>
+			<key>id</key>
+			<integer>2</integer>
+		</dict>
+	</array>
+	<key>Employee</key>
+	<array>
+		<dict>
+			<key>id</key>
+			<integer>1</integer>
+			<key>companyId</key>
+			<integer>1</integer>
+			<key>firstName</key>
+			<string>Alex</string>
+			<key>lastName</key>
+			<string>Allenson</string>
+		</dict>
+		<dict>
+			<key>id</key>
+			<integer>2</integer>
+			<key>companyId</key>
+			<integer>1</integer>
+			<key>firstName</key>
+			<string>Bob</string>
+			<key>lastName</key>
+			<string>Barley</string>
+		</dict>
+		<dict>
+			<key>id</key>
+			<integer>3</integer>
+			<key>companyId</key>
+			<integer>2</integer>
+			<key>firstName</key>
+			<string>Charlie</string>
+			<key>lastName</key>
+			<string>Carter</string>
+		</dict>
+		<dict>
+			<key>id</key>
+			<integer>4</integer>
+			<key>companyId</key>
+			<integer>2</integer>
+			<key>firstName</key>
+			<string>Donna</string>
+			<key>lastName</key>
+			<string>Dickerson</string>
+		</dict>
+	</array>
+</dict>
+</plist>
