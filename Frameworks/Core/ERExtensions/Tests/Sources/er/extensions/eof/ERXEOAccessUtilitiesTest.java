@@ -7,9 +7,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import com.webobjects.eoaccess.EOAdaptor;
-import com.webobjects.eoaccess.EOAdaptorContext;
-import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
@@ -50,12 +47,7 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
 
         TestSuite suite = ERExtensionsTest.suite;
 
-        // Right now, I just have to two models. I could look for *"BusinessModel" models instead.
-        //
-        // But I have to disable the use of the second model right now. If I run the tests using the
-        // Memory model, the tests pass. If I run the tests using the MySQL model, the tests pass.
-        // If I run both with both models, different tests using each will fail. There are obviously
-        // start-up or object cacheing issues here that need to be worked out. -rrk
+        // See note in er.extensions.eof.ERXEOAccessUtilities.testAll() -rrk
 
         NSArray<String> methods = ERExtensionsTest.testMethodsForClassName("er.extensions.eof.ERXEOAccessUtilitiesTest$Tests");
 
@@ -63,9 +55,6 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
             String testName = methods.get(idx);
 
             java.util.Enumeration<String> adaptors = ERExtensionsTest.availableAdaptorNames().objectEnumerator();
-
-            if (!adaptors.hasMoreElements())
-                suite.addTest(new Tests(testName, "Memory"));
 
             while (adaptors.hasMoreElements()) {
                 String adaptorName = adaptors.nextElement();
@@ -113,49 +102,9 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
             model.setConnectionDictionary(ERExtensionsTest.connectionDict(adaptorName));
 
             ec = new EOEditingContext();
-
             if (model.adaptorName().equals("JDBC") && !modelDataLoaded) {
-
-                // I _should_ be able to do this!
-                //
-                //ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, "Company", EOQualifier.qualifierWithQualifierFormat("*",null));
-                //ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, "Employee", EOQualifier.qualifierWithQualifierFormat("*",null));
-
-                // instead I must do this. How lame...
-                java.util.Enumeration<EOEnterpriseObject> rows;
-                rows = EOUtilities.objectsForEntityNamed(ec, "Company").objectEnumerator();
-                while (rows.hasMoreElements()) { ec.deleteObject(rows.nextElement()); }
-                rows = EOUtilities.objectsForEntityNamed(ec, "Employee").objectEnumerator();
-                while (rows.hasMoreElements()) { ec.deleteObject(rows.nextElement()); }
-                ec.saveChanges();
-
-                EOEnterpriseObject com1 = EOUtilities.createAndInsertInstance(ec, "Company");
-                com1.takeValueForKey("IBM", "name");
-                EOEnterpriseObject emp1a = EOUtilities.createAndInsertInstance(ec, "Employee");
-                emp1a.takeValueForKey("Allenson", "lastName");
-                emp1a.takeValueForKey("Alex", "firstName");
-                EOEnterpriseObject emp1b = EOUtilities.createAndInsertInstance(ec, "Employee");
-                emp1b.takeValueForKey("Barley", "lastName");
-                emp1b.takeValueForKey("Bob", "firstName");
-                com1.addObjectToBothSidesOfRelationshipWithKey(emp1a, "employees");
-                com1.addObjectToBothSidesOfRelationshipWithKey(emp1b, "employees");
-
-                EOEnterpriseObject com2 = EOUtilities.createAndInsertInstance(ec, "Company");
-                com2.takeValueForKey("Apple", "name");
-                EOEnterpriseObject emp2a = EOUtilities.createAndInsertInstance(ec, "Employee");
-                emp2a.takeValueForKey("Carter", "lastName");
-                emp2a.takeValueForKey("Charlie", "firstName");
-                EOEnterpriseObject emp2b = EOUtilities.createAndInsertInstance(ec, "Employee");
-                emp2b.takeValueForKey("Dickerson", "lastName");
-                emp2b.takeValueForKey("Donna", "firstName");
-                com2.addObjectToBothSidesOfRelationshipWithKey(emp2a, "employees");
-                com2.addObjectToBothSidesOfRelationshipWithKey(emp2b, "employees");
-
-                ec.saveChanges();
                 modelDataLoaded = true;
-
-                ec.dispose();
-                ec = new EOEditingContext();
+                ERExtensionsTest.loadData(ec, model, this, "AjaxExampleData.plist");
             }
         }
 

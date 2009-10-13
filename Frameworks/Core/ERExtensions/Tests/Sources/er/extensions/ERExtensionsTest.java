@@ -1,7 +1,11 @@
 
 package er.extensions;
 
+import java.net.URL;
+import java.util.Enumeration;
+
 import er.extensions.ERExtensionsTest;
+import er.extensions.eof.ERXEOAccessUtilities;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -9,8 +13,19 @@ import junit.framework.TestSuite;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorContext;
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOSQLExpression;
+
+import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
+
+import com.webobjects.eocontrol.EOEditingContext;
 
 /** Tests of the public API of the ERXExtensions framework.
  *
@@ -80,11 +95,13 @@ public class ERExtensionsTest extends TestSuite {
     }
 
     public static NSArray<String> availableAdaptorNames() {
-        //return new NSArray<String>(new String[] { "MySQL" });
-        return new NSArray<String>();
+        String mysqlURL = System.getProperties().getProperty("wonder.test.MySQL.url");
+        if (mysqlURL != null && !mysqlURL.startsWith("$")) return new NSArray<String>("MySQL");
+        return new NSArray<String>("Memory");
     }
 
     public static boolean dbExistsForAdaptor(String name) {
+        if (name.equals("Memory")) return true;
         String url = System.getProperties().getProperty("wonder.test."+name+".url");
         String usr = System.getProperties().getProperty("wonder.test."+name+".user");
         String pwd = System.getProperties().getProperty("wonder.test."+name+".pwd");
@@ -104,5 +121,49 @@ public class ERExtensionsTest extends TestSuite {
         NSArray keys = new NSArray(new Object[] { "URL", "username", "password" } );
         NSArray vals = new NSArray(new Object[] { url, usr, pwd } );
         return new NSDictionary(vals, keys);
+    }
+
+    public static void loadData(EOEditingContext ec, EOModel model, Test test, String plistName) {
+
+        EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
+        EOSchemaSynchronizationFactory factory = adaptor.schemaSynchronizationFactory();
+
+        NSMutableArray<NSArray<EOEntity>> entities = new NSMutableArray<NSArray<EOEntity>>();
+        entities.add(new NSArray<EOEntity>(model.entityNamed("Company")));
+        entities.add(new NSArray<EOEntity>(model.entityNamed("Employee")));
+
+        NSArray<EOSQLExpression> deletes = factory.dropTableStatementsForEntityGroups(entities);
+        NSArray<EOSQLExpression> creates = factory.createTableStatementsForEntityGroups(entities);
+
+        EOAdaptorContext context = adaptor.createAdaptorContext();
+        EOAdaptorChannel channel = context.createAdaptorChannel();
+        channel.openChannel();
+
+        for (int idx = 0; idx < deletes.count(); idx++) {
+            EOSQLExpression expr = deletes.get(idx);
+            try {
+            channel.evaluateExpression(expr);
+            } catch (com.webobjects.jdbcadaptor.JDBCAdaptorException jdbce) { /* swallow this exception. I could look for "error code: 1050". Robust? */ }
+        }
+        for (int idx = 0; idx < creates.count(); idx++) {
+            EOSQLExpression expr = creates.get(idx);
+            channel.evaluateExpression(expr);
+        }
+
+        URL plistURL = test.getClass().getResource("/AjaxExample.plist");
+        if (plistURL == null) {
+            try {
+                plistURL = new java.net.URL("file://"+System.getProperty("build.root")+"/ERExtensions.framework/TestResources/AjaxExample.xml");
+            } catch (java.net.MalformedURLException mue) { System.out.println("mue: "+mue); }
+        }
+
+        NSDictionary data = NSPropertyListSerialization.dictionaryWithPathURL(plistURL);
+
+        Enumeration<String> keys = data.allKeys().objectEnumerator();
+        while (keys.hasMoreElements()) {
+            String entityName = keys.nextElement();
+            ERXEOAccessUtilities.insertRows(ec, entityName, (NSArray<NSDictionary>)data.objectForKey(entityName));
+        }
+        ec.saveChanges();
     }
 }

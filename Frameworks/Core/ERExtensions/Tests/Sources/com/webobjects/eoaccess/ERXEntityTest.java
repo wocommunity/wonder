@@ -43,16 +43,12 @@ public class ERXEntityTest extends TestCase {
 
             java.util.Enumeration<String> adaptors = ERExtensionsTest.availableAdaptorNames().objectEnumerator();
 
-            if (!adaptors.hasMoreElements())
-                suite.addTest(new Tests(testName, "Memory"));
-
             while (adaptors.hasMoreElements()) {
                 String adaptorName = adaptors.nextElement();
                 if (ERExtensionsTest.dbExistsForAdaptor(adaptorName))
                     suite.addTest(new Tests(testName, adaptorName));
             }
         }
-
     }
 
     public static class Tests extends TestCase {
