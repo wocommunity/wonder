@@ -32,6 +32,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
   private WOAssociation _dateFormat;
   private WOAssociation _numberFormat;
   private WOAssociation _useDecimalNumber;
+  private WOAssociation _escapeHTML;
   
   public AjaxInPlaceEditor(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
@@ -46,6 +47,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     _dateFormat = (WOAssociation) associations.objectForKey("dateformat");
     _numberFormat = (WOAssociation) associations.objectForKey("numberformat");
     _useDecimalNumber = (WOAssociation) associations.objectForKey("useDecimalNumber");
+    _escapeHTML = (WOAssociation) associations.objectForKey("escapeHTML");
     if (_dateFormat != null && _numberFormat != null) {
       throw new WODynamicElementCreationException("<" + getClass().getName() + "> Cannot have 'dateFormat' and 'numberFormat' attributes at the same time.");
     }
@@ -196,7 +198,12 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
       if (strValue == null) {
         strValue = objValue.toString();
       }
-      response.appendContentString(strValue);
+      if (_escapeHTML != null && _escapeHTML.booleanValueInComponent(component)) {
+    	  response.appendContentHTMLString(strValue);
+      }
+      else {
+    	  response.appendContentString(strValue);
+      }
     }
   }
 }
