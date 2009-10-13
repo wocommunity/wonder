@@ -6,7 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -45,6 +44,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * @binding tableOtherTagString
  * @binding id optional ID for element wrapping checkbox matrix
  * @binding itemID optional ID for each checkbox element
+ * @binding disabled
  */
 
 public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
@@ -107,7 +107,7 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
         return _selections;
     }
 
-    public void setSelections(Vector v) throws IllegalAccessException, InvocationTargetException {
+    public void setSelections(Vector v) {
         NSRange r = new NSRange(0, v.size());
         setSelections(new NSArray(v, r, true));
     }
@@ -129,8 +129,8 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
         }
     }
     
-    public void setSelections(NSArray aFormValuesArray) throws IllegalAccessException, InvocationTargetException {
-        if(aFormValuesArray!=null){
+    public void setSelections(NSArray aFormValuesArray) {
+    	if(aFormValuesArray!=null && !disabled()){
             // ** This is where we accept the formValues.  Kind of weird.
             NSMutableArray aSelectionsArray = new NSMutableArray();
             Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
@@ -166,10 +166,16 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
             _selections = null;
         }
     }
+    
+	public String otherTagStringForCheckBox() {
+    	boolean isDisabled = disabled();
+    	boolean isChecked = selections() != null && selections().containsObject(currentItem);
+    	return (isDisabled ? "disabled" : "") + (isDisabled && isChecked? " " : "") + (isChecked ? "checked" : "");
+	}
 
-    public String isCurrentItemChecked() {
-        return selections() != null && selections().containsObject(currentItem) ? "checked" : null;
-    }
+	private boolean disabled() {
+		return booleanValueForBinding("disabled", false);
+	}
 
     public void invalidateCaches() {
         _selections=null;
@@ -208,21 +214,17 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
     public Object cellpadding() {
         Object v = valueForBinding("cellpadding");
 
-        if(v != null) {
+        if(v != null)
             return v;
-        } else {
-            return DEFAULT_PADDING;
-        }
+        return DEFAULT_PADDING;
     }
 
     public Object cellspacing() {
         Object v = valueForBinding("cellspacing");
 
-        if(v != null) {
+        if(v != null)
             return v;
-        } else {
-            return DEFAULT_SPACING;
-        }
+        return DEFAULT_SPACING;
     }
 
 }

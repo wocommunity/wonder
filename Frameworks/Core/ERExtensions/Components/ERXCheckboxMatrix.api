@@ -29,5 +29,6 @@
 		</validation>
 	<binding name="itemID"/>
     <binding name="id"/>
+    <binding defaults="Boolean" name="disabled"/>
     </wo>
 </wodefinitions>
