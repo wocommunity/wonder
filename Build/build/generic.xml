@@ -328,6 +328,7 @@ There are many ways to use this script:
     </target>
 
     <target name="global.framework.test" depends="global.properties">
+
         <path id="wo.exec.test.path">
             <pathelement location="${build.root}/ERJars.${fRJ}/junit.jar" />
             <pathelement location="${build.root}/DerbyPlugIn.${fRJ}/derby.jar" />
@@ -348,16 +349,33 @@ There are many ways to use this script:
 
         <property file="${user.home}${file.separator}Library${file.separator}wobuild.properties"/>
 
+        <condition property="run.test.MySQL">
+            <and>
+                <isset property="wonder.test.MySQL.url" />
+                <isset property="test.className" />
+            </and>
+        </condition>
+
+        <!-- Run first with Memory adaptor -->
         <junit haltonfailure="yes" fork="yes">
             <test name="${test.className}" if="test.className" />
             <formatter type="brief" usefile="false" />
             <classpath refid="wo.exec.test.path" />
             <sysproperty key="build.root" value="${build.root}" />
+       </junit>
 
+        <!-- If desired, run with MySQL -->
+        <junit haltonfailure="yes" fork="yes">
+            <test name="${test.className}" if="run.test.MySQL" />
+            <formatter type="brief" usefile="false" />
+            <classpath refid="wo.exec.test.path" />
+            <sysproperty key="build.root" value="${build.root}" />
+
+            <sysproperty key="wonder.test.db" value="${wonder.test.db}" />
             <sysproperty key="wonder.test.MySQL.url" value="${wonder.test.MySQL.url}" />
             <sysproperty key="wonder.test.MySQL.user" value="${wonder.test.MySQL.user}" />
             <sysproperty key="wonder.test.MySQL.pwd" value="${wonder.test.MySQL.pwd}" />
-        </junit>
+       </junit>
     </target>
 
     <target name="global.unjar" if="bundle.jars">
