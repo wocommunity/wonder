@@ -764,6 +764,34 @@ public class ERXStringUtilities {
         return result.toString();
     }
 
+    /**
+     * Escapes the given PCDATA string as CDATA.
+     * @param pcdata The string to escape
+     * @return the escaped string
+     */
+    public static String escapePCData(String pcdata) {
+    	if(pcdata == null) { return null; }
+    	
+    	int start = 0;
+    	int end = 0;
+    	String close = "]]>";
+    	String escape = "]]]]><![CDATA[>";
+
+    	StringBuffer sb = new StringBuffer("<![CDATA[");
+    	
+    	do {
+        	end = pcdata.indexOf(close, start);
+    		sb.append(pcdata.substring(start, (end==-1?pcdata.length():end)));
+    		if(end != -1) { sb.append(escape); }
+    		start = end;
+    		start += 3;
+    	} while (end != -1);
+    	
+    	sb.append(close);
+    	
+    	return sb.toString();
+    }
+
     public static String escapeNonBasicLatinChars(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
         if (block != null  &&  Character.UnicodeBlock.BASIC_LATIN.equals(block)) 
