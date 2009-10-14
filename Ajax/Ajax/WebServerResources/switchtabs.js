@@ -53,7 +53,7 @@ var AjaxTabbedPanel = {
     loadPanel : function(tabControlID, paneID, busyDivID, shouldReload) {
       var pane = $(paneID);
       if (pane.innerHTML=='' || pane.innerHTML==this.busyContent(busyDivID) || shouldReload) {
-         pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=busyContent(busyDivID); pe.stop()}, 0.25);
+         pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=AjaxTabbedPanel.busyContent(busyDivID); pe.stop()}, 0.25);
          new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: 1, 
          														 evalScripts: true, 
          														 onComplete: function(a, b) {pe.stop(); 

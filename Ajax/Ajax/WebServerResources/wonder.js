@@ -332,7 +332,7 @@ var AjaxUpdateLink = {
 	
 	_update: function(id, actionUrl, options, elementID, queryParams) {
 		if (elementID) {
-			actionUrl = actionUrl.sub('[^/]+$', elementID);
+			actionUrl = actionUrl.sub(/[^/]+$/, elementID);
 		}
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
@@ -342,7 +342,7 @@ var AjaxUpdateLink = {
 	
 	request: function(actionUrl, options, elementID, queryParams) {
 		if (elementID) {
-			actionUrl = actionUrl.sub('[^/]+$', elementID);
+			actionUrl = actionUrl.sub(/[^/]+$/, elementID);
 		}
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		new Ajax.Request(actionUrl, AjaxOptions.defaultOptions(options));
