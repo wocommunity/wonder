@@ -1,0 +1,42 @@
+Test for Toggle page
+
+|open|/|
+
+|click|link=Toggle|
+|pause|1200|
+|verifyTextPresent|Toggle?|
+
+# XXX - The text here is in a textfield and verifyTextPresent does not find it?
+#
+# |verifyTextPresent|This text should not change!|
+
+|verifyTextPresent|This area fires an action on change.|
+
+|click|testCheckBox|
+|pause|1200|
+|verifyTextPresent|This is a toggle area that is triggered by an AjaxObserveField.|
+
+|click|testCheckBox|
+|pause|1200|
+|verifyTextNotPresent|This is a toggle area that is triggered by an AjaxObserveField.|
+
+|click|testCheckBox2|
+|pause|1200|
+|verifyTextPresent|This is a toggle area that is triggered with observeFieldID on AjaxUpdateContainer.|
+
+|click|testCheckBox2|
+|pause|1200|
+|verifyTextNotPresent|This is a toggle area that is triggered with observeFieldID on AjaxUpdateContainer.|
+
+# TODO - the result of clicking the second and third checkbox needs to not be the same text
+
+|click|testCheckBox3|
+|pause|1200|
+|verifyTextPresent|This is a toggle area that is triggered with observeFieldID on AjaxUpdateContainer.|
+
+|click|testCheckBox3|
+|pause|1200|
+|verifyTextNotPresent|This is a toggle area that is triggered with observeFieldID on AjaxUpdateContainer.|
+
+|verifyTextPresent|Selected Names: ()|
+
