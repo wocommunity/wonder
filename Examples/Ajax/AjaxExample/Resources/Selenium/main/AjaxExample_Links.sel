@@ -1,0 +1,26 @@
+Test for Links page
+
+|open|/|
+
+|click|link=Links|
+|pause|1200|
+|verifyTextPresent|For any of the Ajax components that provide onSuccess,|
+
+|verifyTextPresent|This area will be replaced when you click "Replace Contents".|
+
+# Is the result of clicking on this link supposed to switch back and forth between
+# LinkExampleSubComponent2 and LinkExampleSubComponent1?
+
+|click|link=Replace Contents with replaceID binding|
+|pause|1200|
+|verifyTextPresent|This is LinkExampleSubComponent2.|
+
+|click|link=Replace Contents with replaceID binding|
+|pause|1200|
+|verifyTextPresent|This is LinkExampleSubComponent1.|
+
+|click|link=Replace Contents with replaceID binding|
+|pause|1200|
+|verifyTextPresent|This is LinkExampleSubComponent2.|
+
+# TODO - more...

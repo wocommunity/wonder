@@ -2,25 +2,11 @@
 |open|/||
 |waitForPageToLoad|500||
 
-|click|link=Hello Ajax World||
-|pause|2400||
-|verifyTextPresent|Page Refreshed||
-
-|click|link=Ajax Updates||
-|pause|1200||
-|verifyTextPresent|Initial time:||
-
-|click|link=Container in Container||
-|pause|1200||
-|verifyTextPresent|This demo shows a periodic updating component||
+# TODO - As we have tests for the individual components, they can be removed from this list.
 
 |click|link=Update Trigger||
 |pause|1200||
 |verifyTextPresent|This example demonstrates the AjaxTrigger component||
-
-|click|link=Autocompletion||
-|pause|1200||
-|verifyTextPresent|Simple field, just the values||
 
 |click|link=Dependent Popups||
 |pause|1200||
@@ -37,18 +23,6 @@
 |click|link=Long-Running Task||
 |pause|1200||
 |verifyTextPresent|Initial time:||
-
-|click|link=Links||
-|pause|1200||
-|verifyTextPresent|For any of the Ajax components that provide||
-
-|click|link=Drag and Drop||
-|pause|1200||
-|verifyTextPresent|Drag one of the green draggable items||
-
-|click|link=Drag and Drop Lists||
-|pause|1200||
-|verifyTextPresent|Drag Item #0||
 
 |click|link=Sortable List||
 |pause|1200||
@@ -72,10 +46,6 @@
 |pause|1200||
 |verifyTextPresent|Below is an example of the AjaxTree component:||
 
-|click|link=Toggle||
-|pause|1200||
-|verifyTextPresent|Toggle?||
-
 # TODO - Google Maps - how to connect?
 
 |click|link=Grid||
@@ -96,10 +66,6 @@
 
 # TODO - Selection List
 
-|click|link=Radio Buttons||
-|pause|1200||
-|verifyTextPresent|You selected:||
-
 |click|link=Modal Container||
 |pause|1200||
 |verifyTextPresent|Modal container with direct content||
@@ -107,10 +73,6 @@
 # TODO - Model Dialog
 
 # TODO - Model Dialog Opener
-
-|click|link=Component Reveal||
-|pause|1200||
-|verifyTextPresent|Click on me to reveal a slider.||
 
 |click|link=Date Picker||
 |pause|1200||
