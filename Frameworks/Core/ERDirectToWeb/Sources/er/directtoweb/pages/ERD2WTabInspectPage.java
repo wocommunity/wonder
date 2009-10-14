@@ -60,7 +60,11 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
 
     // Need to set the first tab before the page renders the first time so that rules based on tabKey will fire.
     public void appendToResponse(WOResponse response, WOContext context) {
-        if (currentTab() == null && tabSectionsContents() != null && tabSectionsContents().count() > 0) {
+        // ak: this only works in a direct link or if there are no form
+        // values...
+        String tabName = context().request().stringFormValueForKey("__tab");
+        setTabByName(tabName);
+       if (currentTab() == null && tabSectionsContents() != null && tabSectionsContents().count() > 0) {
             //If firstTab is not null, then try to find the tab named firstTab
             if(tabNumber()!=null && tabNumber().intValue() <= tabSectionsContents().count()){
                 setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(tabNumber().intValue()));
@@ -85,9 +89,6 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     @Override
     public void awake() {
         super.awake();
-        //ak: this only works in a direct link or if there are no form values...
-        String tabName = context().request().stringFormValueForKey("__tab");
-        setTabByName(tabName);
     }
     
     public void setTabByName(String tabName) {
