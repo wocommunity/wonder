@@ -1,8 +1,8 @@
-// script.aculo.us controls.js v1.8.2, Tue Nov 18 18:30:58 +0100 2008
+// script.aculo.us controls.js v1.8.3, Thu Oct 08 11:23:33 +0200 2009
 
-// Copyright (c) 2005-2008 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//           (c) 2005-2008 Ivan Krstic (http://blogs.law.harvard.edu/ivan)
-//           (c) 2005-2008 Jon Tirsen (http://www.tirsen.com)
+// Copyright (c) 2005-2009 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
+//           (c) 2005-2009 Ivan Krstic (http://blogs.law.harvard.edu/ivan)
+//           (c) 2005-2009 Jon Tirsen (http://www.tirsen.com)
 // Contributors:
 //  Richard Livsey
 //  Rahul Bhargava
@@ -94,7 +94,7 @@ Autocompleter.Base = Class.create({
 	    Event.observe(this.element, 'focus', this.onActivate.bindAsEventListener(this));
     }
   },
-  
+
   // AK new option: activateOnFocus, note that this will work only when you have a afterUpdateElement like  "function(e,s) {document.forms['searchForm'].submit()}";
   onActivate: function() {
     this.activate();
