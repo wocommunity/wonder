@@ -32,6 +32,15 @@ public class ExampleDataFactory {
 		return words;
 	}
 
+	public static synchronized NSArray<Word> someWords(int count) {
+		NSArray<Word> allWords = allWords();
+		NSMutableArray<Word> someWords = new NSMutableArray<Word>();
+		for (int i = 0; i < count; i ++) {
+			someWords.addObject(allWords.objectAtIndex((int)(Math.random() * allWords.count())));
+		}
+		return someWords;
+	}
+
 	public static synchronized NSArray<Word> allWords() {
 		// some sample data. if we don't find the file, just create random strings
 		if (_exampleData == null) {
