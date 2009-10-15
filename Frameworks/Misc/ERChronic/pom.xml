@@ -32,7 +32,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<!-- VERY BAD PRACTICE: But there are broken tests -->
-					<skipTests>true</skipTests>
+					<!-- <skipTests>true</skipTests> -->
 				</configuration>
 			</plugin>
 		</plugins>
