@@ -34,20 +34,12 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-BackButton: WOHyperlink {
-	action = backAction;
-}
-
 BackLink: WOHyperlink {
 	action = backAction;
 }
 
 BackLink2: WOHyperlink {
 	action = backAction;
-}
-
-BackgroundColor: WOString {
-	value = d2wContext.backgroundColorForTable;
 }
 
 Banner: WOImage {
@@ -72,16 +64,6 @@ ColSpanNumber: WOString {
 ColumnLabelRepetition: WORepetition {
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
-}
-
-ComponentsToAppendRepetition: WORepetition {
-	item = aComponentName;
-	list = componentsToDisplayBelow;
-}
-
-ComponentToAppendSwitchComponent: WOSwitchComponent {
-	WOComponentName = aComponentName;
-	localContext = d2wContext;
 }
 
 Conditional1: WOConditional {
@@ -150,12 +132,6 @@ Generic2: WOGenericContainer {
 
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
-}
-
-HideReturnOnSelect3: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
 }
 
 IfPropertyKeyIsNotOmitted: WOConditional {
@@ -271,10 +247,6 @@ NavBar2: WOSwitchComponent {
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
        	 d2wContext = d2wContext;
-}
-
-NumberOfItems: WOString {
-	value = listSize;
 }
 
 PageMetricsSummary: ERXStatsSummary {

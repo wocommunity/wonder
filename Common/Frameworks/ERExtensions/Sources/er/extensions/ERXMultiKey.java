@@ -6,10 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.lang.*;
-import java.util.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
+import java.util.Vector;
+
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.foundation.NSArray;
 
 /**
  * Simple class to use multiple objects as
@@ -23,12 +23,14 @@ public class ERXMultiKey {
     /** caches the number of keys */
     private short _keyCount;
 
+    private int _hashCode;
+    
     /**
      * Constructs a multi-key for a given
      * number.
      * @param keyCount number of keys
      */
-    public ERXMultiKey(short keyCount) {
+    private ERXMultiKey(short keyCount) {
         _keyCount=keyCount;
         _keys=new Object[keyCount];
     }
@@ -39,6 +41,7 @@ public class ERXMultiKey {
     public ERXMultiKey() {
         _keyCount=0;
         _keys=new Object[0];
+        recomputeHashCode();
     }
 
     /**
@@ -49,6 +52,7 @@ public class ERXMultiKey {
     public ERXMultiKey(Object[] keys) {
         this((short)keys.length);
         System.arraycopy(keys,0,_keys,0,(int)_keyCount);
+        recomputeHashCode();
     }
 
     /**
@@ -59,6 +63,7 @@ public class ERXMultiKey {
     public ERXMultiKey(NSArray keys) {
         this ((short)keys.count());
         for (int i=0; i<keys.count(); i++) _keys[i]=keys.objectAtIndex(i);
+        recomputeHashCode();
    }
 
     /**
@@ -69,13 +74,16 @@ public class ERXMultiKey {
     public ERXMultiKey(Vector keys) {
         this ((short)keys.size());
         for (int i=0; i<keys.size(); i++) _keys[i]=keys.elementAt(i);
+        recomputeHashCode();
     }
 
     /**
      * Method used to return the object array
-     * of keys for the current multi-key.
+     * of keys for the current multi-key.<br />
+     * DO NOT MODIFY!
      * @return object array of keys
      */    
+    // FIXME: should return a copy
     public final Object[] keys() { return _keys; }
 
     /**
@@ -85,6 +93,13 @@ public class ERXMultiKey {
      *		of keys.
      */
     public final int hashCode() {
+        return _hashCode;
+    }
+    
+    /**
+     * Recomputes the hash code if you ever changes the keys array directly 
+     */
+    public final void recomputeHashCode() {
         int result = 0;
 
         for (int i=0; i<_keyCount; i++) {
@@ -96,7 +111,7 @@ public class ERXMultiKey {
             }
         }
 
-        return result;
+        _hashCode = result;
     }
 
     /**
@@ -109,17 +124,21 @@ public class ERXMultiKey {
      * @return result of comparison
      */
     public final boolean equals(Object o) {
-        // FIXME: Potential ClassCastException here
-        ERXMultiKey o2=(ERXMultiKey)o;
-        if (_keyCount!=o2._keyCount)
-            return false;
-        for (int i=0; i<_keyCount; i++) {
-            Object k=o2._keys[i];
-            Object m=_keys[i];
-            if (m!=k && (m==null || k==null || !m.equals(k)))
-                return false;
-        }
-        return true;
+    	if (o instanceof ERXMultiKey) {
+    		ERXMultiKey o2 = (ERXMultiKey) o;
+    		if (_keyCount!=o2._keyCount)
+    			return false;
+    		if (hashCode()!=o2.hashCode())
+    			return false;
+    		for (int i=0; i<_keyCount; i++) {
+    			Object k=o2._keys[i];
+    			Object m=_keys[i];
+    			if (m!=k && (m==null || k==null || !m.equals(k)))
+    				return false;
+    		}
+    		return true;
+    	}
+    	return false;
     }
 
     /**

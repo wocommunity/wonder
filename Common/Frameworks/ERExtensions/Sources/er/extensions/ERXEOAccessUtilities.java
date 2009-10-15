@@ -6,16 +6,16 @@
 //
 package er.extensions;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAdaptorOperation;
@@ -34,7 +34,6 @@ import com.webobjects.eoaccess.EOObjectNotAvailableException;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
-import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOClassDescription;
@@ -47,18 +46,20 @@ import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
+
+import er.extensions.statistics.ERXStats;
+import er.extensions.statistics.ERXStats.Group;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * Collection of EOAccess related utilities.
@@ -138,11 +139,11 @@ public class ERXEOAccessUtilities {
                 	{
                     	// Prefer the parent entity as long as it is using the same table
                         EOEntity root = entity;
-                        while (root != null && root.parentEntity() != null && 
+                        while (root.parentEntity() != null && 
                         	   lowercaseTableName.equals(root.parentEntity().externalName().toLowerCase()))
                             root = root.parentEntity();
-                        if ( ! possibleEntities.containsObject(entity))
-                        	possibleEntities.addObject(entity);
+                        if (! possibleEntities.containsObject(root))
+                        	possibleEntities.addObject(root);
                 	}
             	}
             }
@@ -162,55 +163,60 @@ public class ERXEOAccessUtilities {
 
     /**
      * Method used to determine if a given entity is a shared entity.
-     * @param ec editing context
-     * @param entityName name of the entity
+     * 
+     * @param ec
+     *            editing context
+     * @param entityName
+     *            name of the entity
      * @return if the entity is a shared entity
+     * @throws IllegalStateException if the entityName provided is null
      */
     public static boolean entityWithNamedIsShared(EOEditingContext ec, String entityName) {
         if (entityName == null)
             throw new IllegalStateException("Entity name argument is null for method: entityWithNamedIsShared");
         EOEntity entity = entityNamed(ec, entityName);
-        return entity.sharedObjectFetchSpecificationNames().count() > 0;
+        return entity != null && entity.sharedObjectFetchSpecificationNames().count() > 0;
     }
     
     /**
     * Convenience method to get the next unique ID from a sequence.
-     * @param ec editing context
-     * @param modelName name of the model which connects to the database
-     *			that has the sequence in it
-     * @param sequenceName name of the sequence
+     * 
+     * @param ec
+     *            editing context
+     * @param modelName
+     *            name of the model which connects to the database that has the
+     *            sequence in it
+     * @param sequenceName
+     *            name of the sequence
      * @return next value in the sequence
+     * @deprecated
      */
-    // ENHANCEME: Need a non-oracle specific way of doing this. Should poke around at
+    // ENHANCEME: Need a non-oracle specific way of doing this. Should poke
+    // around at
     //		the adaptor level and see if we can't find something better.
-    public static Number getNextValFromSequenceNamed(EOEditingContext ec,
-                                                     String modelName,
-                                                     String sequenceName) {
-        String sqlString = "select "+sequenceName+".nextVal from dual";
-        NSArray array = EOUtilities.rawRowsForSQL(ec, modelName, sqlString);
-        if (array.count() == 0) {
-            throw new RuntimeException("Unable to generate value from sequence named: " + sequenceName + " in model: " + modelName);            
-        }
-        NSDictionary dictionary = (NSDictionary)array.objectAtIndex(0);
-        NSArray valuesArray = dictionary.allValues();
-        return (Number)valuesArray.objectAtIndex(0);
+    public static Number getNextValFromSequenceNamed(EOEditingContext ec, String modelName, String sequenceName) {
+    	EODatabaseContext dbContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
+    	return ERXSQLHelper.newSQLHelper(dbContext).getNextValFromSequenceNamed(ec, modelName, sequenceName);
     }
 
     /**
-     * Utility method used to execute arbitrary SQL. This
-     * has the advantage over the
-     * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
-     * <code>rawRowsForSQL</code> in that it can be used with
-     * other statements besides just SELECT without throwing
-     * exceptions.
-     * @param ec editing context that determines which model group
-     *		and database context to use.
-     * @param entityName name of an entity in the model connected
-     *		to the database you wish to execute SQL against
-     * @param exp SQL expression
+     * Utility method used to execute arbitrary SQL. This has the advantage over
+     * the {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
+     * <code>rawRowsForSQL</code> in that it can be used with other statements
+     * besides just SELECT without throwing exceptions.
+     * 
+     * @param ec
+     *            editing context that determines which model group and database
+     *            context to use.
+     * @param entityName
+     *            name of an entity in the model connected to the database you
+     *            wish to execute SQL against
+     * @param exp
+     *            SQL expression
      */
     // ENHANCEME: Should support the use of bindings
-    // ENHANCEME: Could also support the option of using a seperate EOF stack so as to execute
+    // ENHANCEME: Could also support the option of using a seperate EOF stack so
+    // as to execute
     //		sql in a non-blocking fashion.
     public static void evaluateSQLWithEntityNamed(EOEditingContext ec, String entityName, String exp) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
@@ -218,73 +224,167 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-    * Utility method used to execute arbitrary SQL. This
-     * has the advantage over the
-     * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
-     * <code>rawRowsForSQL</code> in that it can be used with
-     * other statements besides just SELECT without throwing
-     * exceptions.
-     * @param ec editing context that determines which model group
-     *		and database context to use.
-     * @param entity an entity in the model connected
-     *		to the database you wish to execute SQL against
-     * @param exp SQL expression
+     * Utility method used to execute arbitrary SQL. This has the advantage over
+     * the {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
+     * <code>rawRowsForSQL</code> in that it can be used with other statements
+     * besides just SELECT without throwing exceptions.
+     * 
+     * @param ec
+     *            editing context that determines which model group and database
+     *            context to use.
+     * @param entity
+     *            an entity in the model connected to the database you wish to
+     *            execute SQL against
+     * @param exp
+     *            SQL expression
      */
     // ENHANCEME: Should support the use of bindings
-    // ENHANCEME: Could also support the option of using a seperate EOF stack so as to execute
-    //		sql in a non-blocking fashion.
-    public static void evaluateSQLWithEntity(EOEditingContext ec, EOEntity  entity, String exp) {
+    // ENHANCEME: Could also support the option of using a seperate EOF stack so
+    // as to execute
+    // sql in a non-blocking fashion.
+    public static void evaluateSQLWithEntity(EOEditingContext ec, EOEntity entity, String exp) {
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+        dbContext.lock();
+        try {
         EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
-        if (!adaptorChannel.isOpen())
+	        if (!adaptorChannel.isOpen()) {
             adaptorChannel.openChannel();
-        EOSQLExpressionFactory factory=adaptorChannel.adaptorContext().adaptor().expressionFactory();
+	        }
+	        EOSQLExpressionFactory factory = adaptorChannel.adaptorContext().adaptor().expressionFactory();
+			if (ERXEOAccessUtilities.log.isInfoEnabled()) {
+				ERXEOAccessUtilities.log.info("Executing " + exp);
+			}
+	        // If channel.evaluateExpression throws when committing, it won't close the JDBC transaction
+	        // Probably a bug in JDBCChannel, but we must take care of it
+	        boolean contextHadOpenTransaction = adaptorChannel.adaptorContext().hasOpenTransaction();
+			try {
         adaptorChannel.evaluateExpression(factory.expressionForString(exp));
+    }
+			catch (EOGeneralAdaptorException e) {
+				if (adaptorChannel.adaptorContext().hasOpenTransaction() && ! contextHadOpenTransaction) {
+					adaptorChannel.adaptorContext().rollbackTransaction();
+				}
+				throw e;
+			}
+        }
+        finally {
+        	dbContext.unlock();
+        }
     }
 
     /**
      * Creates the SQL which is used by the provides EOFetchSpecification.
      *
-     * @param ec the EOEditingContext
-     * @param spec the EOFetchSpecification in question
+     * @param ec
+     *            the EOEditingContext
+     * @param spec
+     *            the EOFetchSpecification in question
      *
      * @return the SQL which the EOFetchSpecification would use
      */
     public static String sqlForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
-       return sqlExpressionForFetchSpecification(ec,spec,0,-1).statement();
+        return sqlExpressionForFetchSpecification(ec, spec, 0, -1).statement();
+    }
+
+    /**
+     * Returns the raw rows for the given EOSQLExpression.  When possible,
+     * you should use the variant of this method that requires you to pass
+     * in the array of EOAttributes you are fetching. If you do not pass in
+     * attributes, this will use channel.describeResults(), which can produce
+     * attributes that may not be able to be faulted back into EO's because
+     * of case mismatches.
+     * 
+     * @param ec
+     *            the EOEditingContext
+     * @param modelName
+     *            the name of the model in question
+     * @param expression
+     *            the EOSQLExpression in question
+     * 
+     * @return array of dictionaries
+     */
+    public static NSArray rawRowsForSQLExpression(EOEditingContext ec, String modelName, EOSQLExpression expression) {
+    	EOModelGroup modelGroup = EOUtilities.modelGroup(ec);
+        EOModel model = modelGroup.modelNamed(modelName);
+    	return ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model, expression, null);
     }
 
     /**
      * Returns the raw rows for the given EOSQLExpression.
      *
-     * @param ec the EOEditingContext
-     * @param spec the EOFetchSpecification in question
-     * @param modelName the name of the model in question
-     * @param expression the EOSQLExpression in question
+     * @param ec
+     *            the EOEditingContext
+     * @param model
+     *            the model in question
+     * @param expression
+     *            the EOSQLExpression to fetch with
+     * @param attributes the attributes to fetch
      *
      * @return array of dictionaries
      */
-    public static NSArray rawRowsForSQLExpression(EOEditingContext ec, String modelName, EOSQLExpression expression) {
-        EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
+    public static NSArray rawRowsForSQLExpression(EOEditingContext ec, EOModel model, EOSQLExpression expression, NSArray attributes) {
+        NSArray results = NSArray.EmptyArray;
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        
         dbc.lock();
-        NSMutableArray results = null;
         try {
-            EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
-            if (!channel.isOpen())
-                channel.openChannel();
-            channel.evaluateExpression(expression);
-            try {
-                channel.setAttributesToFetch(channel.describeResults());
-                results = new NSMutableArray();
-                NSDictionary row;
-                while ((row = channel.fetchRow()) != null)
-                    results.addObject(row);
-            } catch (EOGeneralAdaptorException ex) {
-                channel.cancelFetch();
-                throw ex;
+            results = _rawRowsForSQLExpression(dbc, expression, attributes);
+        } 
+        catch (Exception localException) {
+            if (dbc._isDroppedConnectionException(localException)) {
+                try {
+                    dbc.database().handleDroppedConnection();
+                    results = _rawRowsForSQLExpression(dbc, expression, attributes);
+                }
+                catch(Exception ex) {
+                    throw NSForwardException._runtimeExceptionForThrowable(ex);
+                }
             }
-        } finally {
+            else {
+            	throw NSForwardException._runtimeExceptionForThrowable(localException);
+            }
+        }
+        finally {
             dbc.unlock();
+        }
+        return results;
+    }
+
+    private static NSArray _rawRowsForSQLExpression(EODatabaseContext dbc, EOSQLExpression expression, NSArray attributes) {
+        NSMutableArray results = null;
+        EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
+
+        if (!channel.isOpen())
+            channel.openChannel();
+        // If channel.evaluateExpression throws when committing, it won't close the JDBC transaction
+        // Probably a bug in JDBCChannel, but we must take care of it
+        boolean contextHadOpenTransaction = channel.adaptorContext().hasOpenTransaction();
+        try {
+            channel.evaluateExpression(expression);
+        }
+        catch (EOGeneralAdaptorException e) {
+            if (channel.adaptorContext().hasOpenTransaction() && ! contextHadOpenTransaction) {
+                channel.adaptorContext().rollbackTransaction();
+            }
+            throw e;
+        }
+
+        if (attributes == null) {
+            channel.setAttributesToFetch(channel.describeResults());
+        }
+        else {
+            channel.setAttributesToFetch(attributes);
+        }
+
+        try {
+            results = new NSMutableArray();
+            NSDictionary row;
+            while ((row = channel.fetchRow()) != null)
+                results.addObject(row);
+        }
+        catch (EOGeneralAdaptorException ex) {
+            channel.cancelFetch();
+            throw ex;
         }
         return results;
     }
@@ -301,7 +401,6 @@ public class ERXEOAccessUtilities {
      *            start of rows to fetch
      * @param end
      *            end of rows to fetch (-1 if not used)
-     * @deprecated
      * 
      * @return the EOSQLExpression which the EOFetchSpecification would use
      */
@@ -334,10 +433,12 @@ public class ERXEOAccessUtilities {
      * @param spec
      *            the EOFetchSpecification in question
      * @return the number of rows
-     * @deprecated
      */
     public static int rowCountForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
     	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+        if (entity == null)
+            throw new java.lang.IllegalStateException("entity could not be found for name \""+spec.entityName()+"\". Checked EOModelGroup for loaded models.");
+
     	EOModel model = entity.model();
 
     	EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
@@ -368,9 +469,8 @@ public class ERXEOAccessUtilities {
     	return results;
     }
 
-
     /**
-     * Similar to the helper in EUUtilities, but allows for null editingContext.
+     * Similar to the helper in EOUtilities, but allows for null editingContext.
      * If ec is null, it will try to get at the session via thread storage and
      * use its defaultEditingContext. This is here now so we can remove the
      * delegate in ERXApplication.
@@ -380,8 +480,12 @@ public class ERXEOAccessUtilities {
      */
     
     public static EOModelGroup modelGroup(EOEditingContext ec) {
-        if (ec == null) {
-            ERXSession s = ERXSession.session();
+    	if (ec == null && !ERXThreadStorage.wasInheritedFromParentThread()) {
+			// this can be problematic, if called from a background thread with ERXThreadStorage.useInheritableThreadLocal=true, 
+    		// which is the default. In my case it was called indirectly from ERXEntityClassDescription.Factory.classDescriptionNeededForEntityName 
+    		// resulting in locking problems
+    		
+            WOSession s = ERXSession.anySession();
             if (s != null) {
                 ec = s.defaultEditingContext();
             }
@@ -396,7 +500,7 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Similar to the helper in EUUtilities, but allows for null editingContext.
+     * Similar to the helper in EOUtilities, but allows for null editingContext.
      * 
      * @param ec
      *            editing context used to locate the model group (can be null)
@@ -443,113 +547,252 @@ public class ERXEOAccessUtilities {
      * @return aggregate function attribute
      */
     public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName, Class valueClass, String valueType) {
-        if (function == null) throw new IllegalStateException("Function is null.");
-        if (attributeName == null) throw new IllegalStateException("Attribute name is null.");
-        if (entityName == null) throw new IllegalStateException("Entity name is null.");
+    	return ERXEOAccessUtilities.createAggregateAttribute(ec, function, attributeName, entityName, valueClass, valueType, null, null);
+    }
+    
+    /**
+     * Creates an aggregate attribute for a given function name. These can then
+     * be used to query on when using raw rows.
+     * 
+     * @param ec
+     *            editing context used to locate the model group
+     * @param function
+     *            name of the function MAX, MIN, etc
+     * @param attributeName
+     *            name of the attribute
+     * @param entityName
+     *            name of the entity
+     * @param aggregateName the name to assign to the aggregate column in the query
+     * @param valueClass the java class of this attribute's values
+     * @param valueType the EOAttribute value type
+     * @return aggregate function attribute
+     */
+    public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName, Class valueClass, String valueType, String aggregateName) {
+    	return ERXEOAccessUtilities.createAggregateAttribute(ec, function, attributeName, entityName, valueClass, valueType, aggregateName, null);
+    }
+    
+    /**
+     * Creates an aggregate attribute for a given function name. These can then
+     * be used to query on when using raw rows.
+     * 
+     * @param ec
+     *            editing context used to locate the model group
+     * @param function
+     *            name of the function MAX, MIN, etc
+     * @param attributeName
+     *            name of the attribute
+     * @param entityName
+     *            name of the entity
+     * @param aggregateName the name to assign to the aggregate column in the query
+     * @param valueClass the java class of this attribute's values
+     * @param valueType the EOAttribute value type
+     * @param entityTableAlias the "t0"-style name of the attribute in this query (or null for "t0")  
+     * @return aggregate function attribute
+     */
+    public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName, Class valueClass, String valueType, String aggregateName, String entityTableAlias) {
+        if (function == null) {
+        	throw new IllegalStateException("Function is null.");
+        }
+        if (attributeName == null) {
+        	throw new IllegalStateException("Attribute name is null.");
+        }
+        if (entityName == null) {
+        	throw new IllegalStateException("Entity name is null.");
+        }
 
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-
-        if (entity == null) throw new IllegalStateException("Unable find entity named: " + entityName);
+        if (entity == null) {
+        	throw new IllegalStateException("Unable find entity named: " + entityName);
+        }
 
         EOAttribute attribute = entity.attributeNamed(attributeName);
-
-        if (attribute == null)
+        if (attribute == null) {
                 throw new IllegalStateException("Unable find attribute named: " + attributeName + " for entity: " + entityName);
+        }
 
         EOAttribute aggregate = new EOAttribute();
+        if (aggregateName != null) {
+        	aggregate.setName(aggregateName);
+        	aggregate.setColumnName(aggregateName);
+        }
+        else {
         aggregate.setName("p_object" + function + "Attribute");
         aggregate.setColumnName("p_object" + function + "Attribute");
+        }
         aggregate.setClassName(valueClass.getName());
         if (valueType != null) {
         	aggregate.setValueType(valueType);
         }
-        aggregate.setReadFormat(function + "(t0." + attribute.columnName() + ")");
+        else {
+        	aggregate.setValueType(attribute.valueType());
+        }
+        
+        // MS: This "t0." is totally wrong, but it is required.  It should be dynamically
+        // generated, but this function doesn't have an EOSQLExpression to operate on
+        if (entityTableAlias == null) {
+        	entityTableAlias = "t0";
+        }
+        aggregate.setReadFormat(ERXSQLHelper.newSQLHelper(entity.model()).readFormatForAggregateFunction(function, entityTableAlias + "." + attribute.columnName(), aggregateName));
         return aggregate;
     }
 
-    /** creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method to
-    * create the tables.
-    *
-    * @param entities a NSArray containing the entities for which create table statements should be generated or null
-    * if all entitites in the model should be used.
-    * @param modelName the name of the EOModel
-    * @param optionsCreate a NSDictionary containing the different options. Possible keys are
-    * <ol><li>DropTablesKey</li>
-    * <ol><li>DropPrimaryKeySupportKey</li>
-    * <ol><li>CreateTablesKey</li>
-    * <ol><li>CreatePrimaryKeySupportKey</li>
-    * <ol><li>PrimaryKeyConstraintsKey</li>
-    * <ol><li>ForeignKeyConstraintsKey</li>
-    * <ol><li>CreateDatabaseKey</li>
-    * <ol><li>DropDatabaseKey</li>
-    *<br/><br>Possible values are <code>YES</code> and <code>NO</code>
-    *
-    * @return a <code>String</code> containing SQL statements to create tables
+    /** oracle 9 has a maximum length of 30 characters for table names, column names and constraint names
+     * Foreign key constraint names are defined like this from the plugin:<br/><br/>
+     * 
+     * TABLENAME_FOEREIGNKEYNAME_FK <br/><br/>
+     * 
+     * The whole statement looks like this:<br/><br/>
+     * 
+     * ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY ([FK]) REFERENCES [DESTINATION_TABLE] ([PK]) DEFERRABLE INITIALLY DEFERRED
+     * 
+     * THIS means that the tablename and the columnname together cannot
+     * be longer than 26 characters.<br/><br/>
+     * 
+     * This method checks each foreign key constraint name and if it is longer than 30 characters its replaced
+     * with a unique name.
+     * 
+     * @see #createSchemaSQLForEntitiesInModelWithNameAndOptions
+     */
+    public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName, NSDictionary optionsCreate) {
+        EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
+        return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
+    }
+    
+    /**
+     * creates SQL to create tables for the specified Entities. This can be used
+     * with EOUtilities rawRowsForSQL method to create the tables.
+     * 
+     * @param entities
+     *            a NSArray containing the entities for which create table
+     *            statements should be generated or null if all entitites in the
+     *            model should be used.
+     * @param modelName
+     *            the name of the EOModel
+     * @param optionsCreate
+     *            a NSDictionary containing the different options. Possible keys
+     *            are
+     *            <ul>
+     *            <li>EOSchemaGeneration.DropTablesKey</li>
+     *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey</li>
+     *            <li>EOSchemaGeneration.CreateTablesKey</li>
+     *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey</li>
+     *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey</li>
+     *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey</li>
+     *            <li>EOSchemaGeneration.CreateDatabaseKey</li>
+     *            </ul>
+     *            <li>EOSchemaGeneration.DropDatabaseKey</li>
+     *            <br/><br>
+     *            Possible values are <code>YES</code> and <code>NO</code>
+     * 
+     * @return a <code>String</code> containing SQL statements to create
+     *         tables
+     * @deprecated
     */
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
-        //get the JDBCAdaptor
-        EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(),
-                                                                        modelName);
-        EOAdaptorContext ac = dc.adaptorContext();
-        //ak: stupid trick to get around having to link to JDBCAdaptor
-        EOSynchronizationFactory sf = (EOSynchronizationFactory)NSKeyValueCodingAdditions.Utility.valueForKeyPath(ac, "adaptor.plugIn.createSynchronizationFactory");
-        EOModel m = modelGroup(null).modelNamed(modelName);
-        Enumeration e = m.entities().objectEnumerator();
-        entities = entities == null ? new NSMutableArray() : entities;
-
-        if (entities == null) {
-            NSMutableArray ar = new NSMutableArray();
-            while (e.hasMoreElements()) {
-                EOEntity currentEntity = (EOEntity) e.nextElement();
-                if (!(currentEntity.name().startsWith("EO") && currentEntity.name().endsWith("Prototypes"))) {
-                    //we do not want to add EOXXXPrototypes entities
-                    ar.addObject(currentEntity);
-                }
-            }
-            entities = ar;
-        }
-        return sf.schemaCreationScriptForEntities(entities, optionsCreate);
+        EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
+        return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
     }
-
-    /** creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method to
-    * create the tables.
-    *
-    * @param entities a NSArray containing the entities for which create table statements should be generated or null
-    * if all entitites in the model should be used.
-    * @param modelName the name of the EOModel
-    * <br/><br/>This method uses the following defaults options:
-    * <ol><li>DropTablesKey=YES</li>
-    * <ol><li>DropPrimaryKeySupportKey=YES</li>
-    * <ol><li>CreateTablesKey=YES</li>
-    * <ol><li>CreatePrimaryKeySupportKey=YES</li>
-    * <ol><li>PrimaryKeyConstraintsKey=YES</li>
-    * <ol><li>ForeignKeyConstraintsKey=YES</li>
-    * <ol><li>CreateDatabaseKey=NO</li>
-    * <ol><li>DropDatabaseKey=NO</li>
-    *<br/><br>Possible values are <code>YES</code> and <code>NO</code>
-    *
-    * @return a <code>String</code> containing SQL statements to create tables
+    
+    /**
+     * Creates the schema sql for a set of entities.
+     * 
+     * @param entities the entities to create sql for
+     * @param databaseContext the database context to use
+     * @param optionsCreate the options (@see createSchemaSQLForEntitiesInModelWithNameAndOptions)
+     * @return a sql script
+     * @deprecated
+     */
+    public static String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, NSDictionary optionsCreate) {
+    	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
+    }
+    
+    /**
+     * creates SQL to create tables for the specified Entities. This can be used
+     * with EOUtilities rawRowsForSQL method to create the tables.
+     * 
+     * @param entities
+     *            a NSArray containing the entities for which create table
+     *            statements should be generated or null if all entitites in the
+     *            model should be used.
+     * @param modelName
+     *            the name of the EOModel <br/><br/>This method uses the
+     *            following defaults options:
+     *            <ul>
+     *            <li>EOSchemaGeneration.DropTablesKey=YES</li>
+     *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=YES</li>
+     *            <li>EOSchemaGeneration.CreateTablesKey=YES</li>
+     *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES</li>
+     *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES</li>
+     *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES</li>
+     *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
+     *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
+     *            </ul>
+     *            <br/><br>
+     *            Possible values are <code>YES</code> and <code>NO</code>
+     * 
+     * @return a <code>String</code> containing SQL statements to create
+     *         tables
+     * @deprecated
     */
     public static String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
-        NSMutableDictionary optionsCreate = new NSMutableDictionary();
-        optionsCreate.setObjectForKey("YES", "DropTablesKey");
-        optionsCreate.setObjectForKey("YES", "DropPrimaryKeySupportKey");
-        optionsCreate.setObjectForKey("YES", "CreateTablesKey");
-        optionsCreate.setObjectForKey("YES", "CreatePrimaryKeySupportKey");
-        optionsCreate.setObjectForKey("YES", "PrimaryKeyConstraintsKey");
-        optionsCreate.setObjectForKey("YES", "ForeignKeyConstraintsKey");
-        optionsCreate.setObjectForKey("NO", "CreateDatabaseKey");
-        optionsCreate.setObjectForKey("NO", "DropDatabaseKey");
-        return createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
+    	EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
+    	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInModelWithName(entities, modelName);
     }
 
     /**
-    * Tries to recover from a {@link EOGeneralAdaptorException}. 
-    *
-    * @param exception the exception as recieved from saveChanges()
-    * @param editingContext editing context that created the error
-    * @return true if the error could be handled.
-    */
+     * creates SQL to create tables for the specified Entities. This can be used
+     * with EOUtilities rawRowsForSQL method to create the tables.
+     * 
+     * @param entities
+     *            a NSArray containing the entities for which create table
+     *            statements should be generated or null if all entitites in the
+     *            model should be used.
+     * @param databaseContext
+     *            the databaseContext
+     *
+     * @param create if true, tables and keys are created
+     * @param drop if true, tables and keys are dropped
+     * @return a <code>String</code> containing SQL statements to create
+     *         tables
+     * @deprecated
+     */
+    public static String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
+    	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInDatabaseContext(entities, databaseContext, create, drop);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static String createIndexSQLForEntitiesForOracle(NSArray entities) {
+        NSMutableArray a = new NSMutableArray();
+        a.addObject("BLOB");
+        a.addObject("CLOB");
+        return createIndexSQLForEntities(entities, a);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static String createIndexSQLForEntities(NSArray entities) {
+        return createIndexSQLForEntities(entities, null);
+    }
+    
+    /**
+     * @deprecated
+     */
+    public static String createIndexSQLForEntities(NSArray entities, NSArray externalTypesToIgnore) {
+        EOEntity ent = (EOEntity)entities.objectAtIndex(0);
+        String modelName = ent.model().name();
+        return ERXSQLHelper.newSQLHelper(ERXEC.newEditingContext(), modelName).createIndexSQLForEntities(entities, externalTypesToIgnore);
+    }
+
+    /**
+     * Tries to recover from a {@link EOGeneralAdaptorException}.
+     *
+     * @param exception the exception as recieved from saveChanges()
+     * @param editingContext editing context that created the error
+     * @return true if the error could be handled.
+     */
     public static boolean recoverFromAdaptorException(EOEditingContext editingContext, EOGeneralAdaptorException exception) {
         boolean wasHandled = false;
         NSDictionary userInfo = (NSDictionary)exception.userInfo();
@@ -561,12 +804,12 @@ public class ERXEOAccessUtilities {
                 if (adaptorOperation != null && databaseOperation != null) {
                     NSDictionary changedValues = adaptorOperation.changedValues();
                     NSDictionary snapshot = databaseOperation.dbSnapshot();
-                    
+
                     if (log.isDebugEnabled()) log.debug("snapshot"+ snapshot);
 
                     EOEntity entity = adaptorOperation.entity();
                     String entityName = entity.name();
-                    
+
                     if (log.isDebugEnabled()) log.debug("entityName: "+ entityName);
 
                     NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
@@ -659,53 +902,55 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Utility method to generate a new primary key dictionary using
-     * the adaptor for a given entity. This is can be handy if you
-     * need to have a primary key for an object before it is saved to
-     * the database. This method uses the same method that EOF uses
-     * by default for generating primary keys. See
-     * {@link ERXGeneratesPrimaryKeyInterface} for more information
-     * about using a newly created dictionary as the primary key for
-     * an enterprise object.
-     * @param ec editing context
-     * @param entityName name of the entity to generate the primary
-     *		key dictionary for.
-     * @return a dictionary containing a new primary key for the given
-     *		entity.
+     * Utility method to generate a new primary key dictionary using the adaptor
+     * for a given entity. This is can be handy if you need to have a primary
+     * key for an object before it is saved to the database. This method uses
+     * the same method that EOF uses by default for generating primary keys. See
+     * {@link ERXGeneratesPrimaryKeyInterface}for more information about using
+     * a newly created dictionary as the primary key for an enterprise object.
+     * 
+     * @param ec
+     *            editing context
+     * @param entityName
+     *            name of the entity to generate the primary key dictionary for.
+     * @return a dictionary containing a new primary key for the given entity.
      */
     public static NSDictionary primaryKeyDictionaryForEntity(EOEditingContext ec, String entityName) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
         NSDictionary primaryKey = null;
+    	dbContext.lock();
         try {
-            dbContext.lock();
             EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
-            if (!adaptorChannel.isOpen())
+    		if (!adaptorChannel.isOpen()) {
                 adaptorChannel.openChannel();
+    		}
             NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
-            if(arr != null)
-                primaryKey = (NSDictionary)arr.lastObject();
-            else
+    		if (arr != null) {
+    			primaryKey = (NSDictionary) arr.lastObject();
+    		} else {
                 log.warn("Could not get primary key for entity: " + entityName + " exception");
-            dbContext.unlock();
+    		}
         } catch (Exception e) {
-            dbContext.unlock();
             log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e, e);
+    	} finally {
+    		dbContext.unlock();
         }
         return primaryKey;
     }
     
     /**
-     * Creates an array containing all of the primary
-     * keys of the given objects.
-     * @param eos array of enterprise objects
+     * Creates an array containing all of the primary keys of the given objects.
+     * 
+     * @param eos
+     *            array of enterprise objects
      */
     public static NSArray primaryKeysForObjects(NSArray eos) {
-        NSMutableArray result=new NSMutableArray();
-        if (eos.count()>0) {
-            for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject target=(EOEnterpriseObject)e.nextElement();
-                NSDictionary pKey=EOUtilities.primaryKeyForObject(target.editingContext(),target);
+        NSMutableArray result = new NSMutableArray();
+        if (eos.count() > 0) {
+            for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject target = (EOEnterpriseObject) e.nextElement();
+                NSDictionary pKey = EOUtilities.primaryKeyForObject(target.editingContext(), target);
                 result.addObject(pKey.allValues().objectAtIndex(0));
             }
         }
@@ -763,7 +1008,7 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Creates a where clause string " someKey IN ( someValue1,...)".
+     * Creates a where clause string " someKey IN ( someValue1,...)". Can migrate keyPaths.
      * @deprecated
      */
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
@@ -942,6 +1187,132 @@ public class ERXEOAccessUtilities {
         return rootEntityForEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
     }
 
+    public static void logExpression(EOAdaptorChannel channel, EOSQLExpression expression, long startTime) {
+        if (sqlLoggingLogger == null) {
+            sqlLoggingLogger = Logger.getLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
+        }
+        // sqlLoggingLogger.setLevel(Level.DEBUG);
+        String entityMatchPattern = ERXProperties.stringForKeyWithDefault(
+                "er.extensions.ERXAdaptorChannelDelegate.trace.entityMatchPattern", ".*");
+        long millisecondsNeeded = System.currentTimeMillis() - startTime;
+        String entityName = (expression.entity() != null ? expression.entity().name() : "Unknown");
+        if (entityName.matches(entityMatchPattern)) {
+            long debugMilliseconds = ERXProperties.longForKeyWithDefault(
+                    "er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.debug", 0);
+            long infoMilliseconds = ERXProperties.longForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.info",
+                    100);
+            long warnMilliseconds = ERXProperties.longForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.warn",
+                    1000);
+            long errorMilliseconds = ERXProperties.longForKeyWithDefault(
+                    "er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.error", 5000);
+            int maxLength = ERXProperties.intForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.maxLength", 3000);
+            boolean needsLog = false;
+            if (millisecondsNeeded > errorMilliseconds) {
+                needsLog = true;
+            } else if (millisecondsNeeded > warnMilliseconds) {
+                needsLog = true;
+            } else if (millisecondsNeeded > infoMilliseconds) {
+                if (sqlLoggingLogger.isInfoEnabled()) {
+                    needsLog = true;
+                }
+            } else if (millisecondsNeeded > debugMilliseconds) {
+                if (sqlLoggingLogger.isDebugEnabled()) {
+                    needsLog = true;
+                }
+            }
+            if (ERXStats.isTrackingStatistics()) {
+            	String statement = expression.statement();
+            	// AK: special postgres data PK handling
+            	statement = statement.replaceAll("decode\\(.*?\\)", "?");
+            	// IN's can be quite long and are normally not bound
+               	statement = statement.replaceAll(" IN \\(.*?\\)", " IN ([removed])");
+               	statement = statement.replaceAll("([a-zA-Z0-9_\\.]+)\\s+IN \\(.*?\\)(\\s+OR\\s+\\1\\s+IN \\(.*?\\))+", " IN ([multi removed])");
+               	// the cols are always the same, replace with *
+               	statement = statement.replaceAll("((t0|T0)\\.[a-zA-Z0-9_]+\\,\\s*)*(t0|T0)\\.[a-zA-Z0-9_\\.]+\\s+FROM\\s+", "t0.* FROM ");
+            	ERXStats.addDurationForKey(millisecondsNeeded, Group.SQL, entityName + ": " +statement);
+            }
+            if (needsLog) {
+                String logString = createLogString(channel, expression, millisecondsNeeded);
+        		if (logString.length() > maxLength) {
+        		    logString = logString.substring(0, maxLength);
+        		}
+
+                if (millisecondsNeeded > errorMilliseconds) {
+        		    sqlLoggingLogger.error(logString, new RuntimeException("Statement running too long"));
+        		} else if (millisecondsNeeded > warnMilliseconds) {
+        		    sqlLoggingLogger.warn(logString);
+        		} else if (millisecondsNeeded > infoMilliseconds) {
+        		    if (sqlLoggingLogger.isInfoEnabled()) {
+        		        sqlLoggingLogger.info(logString);
+        		    }
+        		} else if (millisecondsNeeded > debugMilliseconds) {
+        		    if (sqlLoggingLogger.isDebugEnabled()) {
+        		        sqlLoggingLogger.debug(logString);
+        		    }
+        		}
+
+            }
+        }
+    }
+
+	public static String createLogString(EOAdaptorChannel channel, EOSQLExpression expression, long millisecondsNeeded) {
+        String entityName = (expression.entity() != null ? expression.entity().name() : "Unknown");
+		String description = "\"" + entityName + "\"@" + channel.adaptorContext().hashCode() + " expression took "
+		        + millisecondsNeeded + " ms: " + expression.statement();
+		StringBuffer sb = new StringBuffer();
+		NSArray variables = expression.bindVariableDictionaries();
+		int cnt = variables != null ? variables.count() : 0;
+		if (cnt > 0) {
+		    sb.append(" withBindings: ");
+		    for (int i = 0; i < cnt; i++) {
+		        NSDictionary nsdictionary = (NSDictionary) variables.objectAtIndex(i);
+		        Object obj = nsdictionary.valueForKey("BindVariableValue");
+		        String attributeName = (String) nsdictionary.valueForKey("BindVariableName");
+		        if (obj instanceof String) {
+		            obj = EOSQLExpression.sqlStringForString((String) obj);
+		        } else if (obj instanceof Number) {
+		        	obj = EOSQLExpression.sqlStringForNumber((Number) obj);
+		        } else if (obj instanceof NSData) {
+		            // ak: this is just for logging, however we would
+		            // like to get readable data
+		            // in particular for PKs and with postgres this
+		            // works.
+		            // plain EOF is broken, though
+		            try {
+		                if (((NSData) obj).length() < 50) {
+		                    obj = expression.sqlStringForData((NSData) obj);
+		                }
+		            } catch (ArrayIndexOutOfBoundsException ex) {
+		                // ignore, this is a bug in EOF
+		            }
+		            if (obj instanceof NSData) {
+		                // produces very yucky output
+		                obj = obj.toString();
+		            }
+		        } else {
+		            if (expression.entity() != null) {
+		                EOAttribute attribute = expression.entity().anyAttributeNamed(attributeName);
+		                if (attribute != null) {
+		                    obj = expression.formatValueForAttribute(obj, attribute);
+		                }
+		            }
+		        }
+		        if (i != 0)
+		            sb.append(", ");
+		        sb.append(i + 1);
+		        sb.append(":");
+		        sb.append(obj);
+		        sb.append("[");
+		        sb.append(attributeName);
+		        sb.append("]");
+		    }
+		}
+		description = description + sb.toString();
+
+		return description;
+	}
+    
+    
     /**
      * Creates an AND qualifier of EOKeyValueQualifiers for every keypath in the given array of attributes.
      *
@@ -980,6 +1351,57 @@ public class ERXEOAccessUtilities {
             }
         }
         return arr;
+    }
+
+    /**
+     * Returns the source attribute for the relationship named relationshipName on entity.  Assumes there is only one join.
+     *
+     * @param entity EOEntity to find relationship on
+     * @param relationshipName name of relationship on entity
+     * @return source attribute for the relationship
+     */
+    public static EOAttribute sourceAttributeForRelationship(EOEntity entity, String relationshipName)
+    {
+        EORelationship relationship = entity.relationshipNamed(relationshipName);
+        return sourceAttributeForRelationship(relationship);
+    }
+
+    /**
+     * Returns the source attribute for the relationship.  Assumes there is only one join.
+     *
+     * @param relationship relationship on entity to return source attribute for
+     * @return source attribute for the relationship
+     */
+    public static EOAttribute sourceAttributeForRelationship(EORelationship relationship)
+    {
+        EOJoin join = (EOJoin)relationship.joins().objectAtIndex(0);
+        return join.sourceAttribute();
+    }
+
+    /**
+     * Returns the external column name for the source attribute for the relationship named relationshipName on entity.  Assumes there is only one join.
+     * This is intend to support the *RowsDescribedByQualifier methods when used with relationships.
+     *
+     * @param entity EOEntity to find relationship on
+     * @param relationshipName name of relationship on entity
+     * @return the external column name for the source attribute for the relationship
+     */
+    public static String sourceColumnForRelationship(EOEntity entity, String relationshipName)
+    {
+        EORelationship relationship = entity.relationshipNamed(relationshipName);
+        return sourceColumnForRelationship(relationship);
+    }
+
+    /**
+     * Returns the external column name for the source attribute for the relationship named relationshipName on entity.  Assumes there is only one join.
+     * This is intend to support the *RowsDescribedByQualifier methods when used with relationships.
+     *
+     * @param relationship relationship on entity to return the external column name for the source attribute for
+     * @return the external column name for the source attribute for the relationship
+     */
+    public static String sourceColumnForRelationship(EORelationship relationship)
+    {
+        return sourceAttributeForRelationship(relationship).columnName();
     }
 
     public static EOEnterpriseObject refetchFailedObject(EOEditingContext ec, EOGeneralAdaptorException e) {
@@ -1176,7 +1598,7 @@ public class ERXEOAccessUtilities {
      * @param newValues
      */
     public static int insertRows(EOEditingContext ec, String entityName, 
-            final List<NSDictionary> newValues) {
+            final Collection<NSDictionary> newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
             protected int doPerform(EOAdaptorChannel channel) {
@@ -1253,6 +1675,9 @@ public class ERXEOAccessUtilities {
 	            } else {
 	                pluginName = ERXStringUtilities.lastPropertyKeyInKeyPath(pluginName);
 	                pluginName = pluginName.replaceFirst("PlugIn", "");
+	                if (pluginName.startsWith("_")) {
+	                	pluginName = pluginName.substring(1);
+	                }
 	            }
 	        }
 	    }
@@ -1263,6 +1688,47 @@ public class ERXEOAccessUtilities {
     }
 
     /**
+      * Returns a new fetch spec by morphing sort orderings containing the keys <code>foo.name</code>
+      * returning <code>foo.name_de</code> where appropriate.
+      * @param ec
+      * @param fetchSpecification
+      *//*
+     public static EOFetchSpecification localizeFetchSpecification(EOEditingContext ec, EOFetchSpecification fetchSpecification) {
+         if(fetchSpecification != null && fetchSpecification.sortOrderings().count() > 0) {
+             fetchSpecification = (EOFetchSpecification) fetchSpecification.clone();
+             NSMutableArray sortOrderings = new NSMutableArray(fetchSpecification.sortOrderings().count());
+             for (Enumeration enumerator = fetchSpecification.sortOrderings().objectEnumerator(); enumerator.hasMoreElements();) {
+                 EOSortOrdering item = (EOSortOrdering) enumerator.nextElement();
+                 String key = item.key();
+                 NSArray path = NSArray.componentsSeparatedByString(key, ".");
+                 EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, fetchSpecification.entityName());
+                 String attributeName = (String) path.lastObject();
+            	 String prefix = "";
+                 if(path.count() > 1) {
+                     for (int i = 0; i < path.count() - 1; i++) {
+                         String part = (String) path.objectAtIndex(i);
+                         EORelationship rel = entity.anyRelationshipNamed(part);
+                         entity = rel.destinationEntity();
+                         prefix += part + ".";
+                     }
+                 }
+                     if(entity.attributeNamed(attributeName) == null) {
+                    	 EOClassDescription cd = entity.classDescriptionForInstances();
+                         if(cd instanceof ERXEntityClassDescription) {
+                        	 String localizedKey = ((ERXEntityClassDescription)cd).localizedKey(attributeName);
+                        	 if(localizedKey != null) {
+                                 item = new EOSortOrdering(prefix + localizedKey, item.selector());
+                        	 }
+                         }
+                     }
+                 sortOrderings.addObject(item);
+             }
+             fetchSpecification.setSortOrderings(sortOrderings);
+         }
+         return fetchSpecification;
+     }*/
+     
+     /**
      * Batch fetch a relationship, optionally skipping any relationship that has already faulted in its to-many relationship.
      * 
      * @param databaseContext the database context to fetch in
@@ -1273,7 +1739,7 @@ public class ERXEOAccessUtilities {
      * @param skipFaultedRelationships if true, skip any object whose relationship has already been faulted
      */
     public static void batchFetchRelationship(EODatabaseContext databaseContext, String entityName, String relationshipName, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
-    	 EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+    	 EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, entityName);
     	 EORelationship relationship = entity.relationshipNamed(relationshipName);
     	 ERXEOAccessUtilities.batchFetchRelationship(databaseContext, relationship, objects, editingContext, skipFaultedRelationships);
     }
@@ -1296,8 +1762,9 @@ public class ERXEOAccessUtilities {
 	 */
 	public static void batchFetchRelationship(EODatabaseContext databaseContext, EORelationship relationship, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
 		NSArray objectsToBatchFetch;
+
+		if (relationship.isToMany()) {
 		if (skipFaultedRelationships) {
-			if (relationship.isToMany()) {
 				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
 				String relationshipName = relationship.name();
 				Enumeration objectsEnum = objects.objectEnumerator();
@@ -1311,7 +1778,11 @@ public class ERXEOAccessUtilities {
 				objectsToBatchFetch = objectsWithUnfaultedRelationships;
 			}
 			else {
-		 		NSMutableArray gids = new NSMutableArray();
+	 			objectsToBatchFetch = objects;
+	 		}
+		}
+		else {
+	 		NSMutableArray gids = new NSMutableArray();
 		 		
 				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
 				EOEntity destinationEntity = relationship.destinationEntity();
@@ -1319,8 +1790,10 @@ public class ERXEOAccessUtilities {
 				Enumeration objectsEnum = objects.objectEnumerator();
 				while (objectsEnum.hasMoreElements()) {
 					EOEnterpriseObject object = (EOEnterpriseObject) objectsEnum.nextElement();
+				// This seems a bit odd.  Why not just use object.isFault()?
 					NSDictionary sourceSnapshot = databaseContext.snapshotForGlobalID(editingContext.globalIDForObject(object));
 					if (sourceSnapshot == null) {
+					// object here is an unfaulted object, not an object with an unfaulted relationship
 						objectsWithUnfaultedRelationships.addObject(object);
 					}
 					else {
@@ -1328,9 +1801,25 @@ public class ERXEOAccessUtilities {
 						EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
 						if (destinationGID != null) {
     						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
-    						if (destinationSnapshot == null) {
+ 						if (destinationSnapshot == null || ! skipFaultedRelationships) {
     							gids.addObject(destinationGID);
-    							//objectsWithUnfaultedRelationships.addObject(object);
+ 	 						
+ 	 						// The ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs below will fetch the row and register 
+ 	 						// the snapshot.  BUT as the fault is deferred, it will not get fired.  This means there is no
+ 							// strong reference to the fetched object in the EC.  If the garbage collector runs, it will detect
+ 							// this and place the EO on the EC's cleanup queue (_referenceQueue()).  This is processed from 
+ 							// _processReferenceQueue() which is called at various points in EOEditingContext, most problematically
+ 							// from unlockObjectStore().  If this happens before the deferred fault is fired, the snapshot will be discarded.
+ 							// The object will get re-fetched when next referenced.  This makes batch fetching of to-one relationships of
+ 							// little use.  To avoid this, the call to storedValueForKey below will call (via the _LazyGenericRecordBinding) 
+ 							// willReadRelationship() on the deferred fault.  This fires the deferred fault (calls createFaultForDeferredFault() 
+ 							// defined on EOAccessDeferredFaultHandler), making it a regular fault.  When the EO is batch fetched below, 
+ 							// the regular fault resolves and there is a strong reference to the EO.  This is what EOFetchSpecification 
+ 							// pre-fetching does for to-one relationships.
+ 							// References:
+ 							// http://developer.apple.com/documentation/developertools/reference/wo541reference/com/webobjects/eocontrol/EODeferredFaulting.html
+ 							// http://developer.apple.com/DOCUMENTATION/WebObjects/Enterprise_Objects/Fetching/chapter_6_section_8.html
+ 	 						object.storedValueForKey(relationshipName);
     						}
 						}
 					}
@@ -1341,13 +1830,10 @@ public class ERXEOAccessUtilities {
 				// fetching of abstract entities very effectively.  We instead want to create
 				// our own GID and batch fetch the GIDs ourselves.
 				if (gids.count() > 0) {
-					ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids);
-				}
+				ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids, ! skipFaultedRelationships);
 			}
 		}
-		else {
-			objectsToBatchFetch = objects;
-		}
+
 		if (objectsToBatchFetch.count() > 0) {
 			databaseContext.batchFetchRelationship(relationship, objectsToBatchFetch, editingContext);
 		}
@@ -1485,12 +1971,12 @@ public class ERXEOAccessUtilities {
      * and need a way at start up to disable the sharing
      * constraints.
      * @param entityName name of the shared entity to make
-     *		shareable.
+   *    shareable.
      */
     // FIXME: Should have to pass in an editing context so that the
-    //		correct model group and shared ec will be used.
+  //    correct model group and shared ec will be used.
     // FIXME: Should also dump all of the currently shared eos from
-    //		the shared context.
+  //    the shared context.
     public static void makeEditableSharedEntityNamed(String entityName) {
         EOEntity e = ERXEOAccessUtilities.entityNamed(null, entityName);
         if (e != null && e.isReadOnly()) {
@@ -1507,4 +1993,97 @@ public class ERXEOAccessUtilities {
             log.warn("makeEditableSharedEntityNamed: entity already editable: " + entityName);
         }
     }
+
+	/**
+	 * Programatically adds a toOne or toMany relationship to an entity at runtime.
+	 * 
+	 * @param relationshipName name of the relationship to be created on the source entity
+	 * @param sourceEntityName name of the source entity
+	 * @param sourceAttributeName name of the attribute in the source entity to be used by the join
+	 * @param destinationEntityName name of the destination entity
+	 * @param destinationAttributeName name of the attribute in the destination entity to be used by the join
+	 * @param toMany if true, the relationship will be toMany, otherwise it will be toOne
+	 * @param deleteRule
+	 *            EOClassDescription.DeleteRuleCascade ||
+	 *            EOClassDescription.DeleteRuleDeny ||
+	 *            EOClassDescription.DeleteRuleNoAction ||
+	 *            EOClassDescription.DeleteRuleNullify
+	 * @param isMandatory mandatory or not
+	 * @param isClassProperty class property or not
+	 * @param shouldPropagatePrimaryKey propagate prmary key or not
+	 * @return the newly created relationship
+	 * 
+	 * @author th
+	 */
+	public static EORelationship createRelationship(String relationshipName, String sourceEntityName, String sourceAttributeName, String destinationEntityName, String destinationAttributeName, boolean toMany, int deleteRule, boolean isMandatory, boolean isClassProperty, boolean shouldPropagatePrimaryKey) {
+		EOEntity sourceEntity = EOModelGroup.defaultGroup().entityNamed(sourceEntityName);
+		if(sourceEntity.isAbstractEntity())
+			log.warn("If you programatically add relationships to an abstract entity, make sure you also add it to child entities");
+		EOEntity destinationEntity = EOModelGroup.defaultGroup().entityNamed(destinationEntityName);
+		EOAttribute sourceAttribute = sourceEntity.attributeNamed(sourceAttributeName);
+		EOAttribute destinationAttribute = destinationEntity.attributeNamed(destinationAttributeName);
+		EOJoin join = new EOJoin(sourceAttribute, destinationAttribute);
+		EORelationship relationship = new EORelationship();
+
+		relationship.setName(relationshipName);
+		sourceEntity.addRelationship(relationship);
+		relationship.addJoin(join);
+		relationship.setToMany(toMany);
+		relationship.setJoinSemantic(EORelationship.InnerJoin);
+		relationship.setDeleteRule(deleteRule);
+		relationship.setIsMandatory(isMandatory);
+		relationship.setPropagatesPrimaryKey(shouldPropagatePrimaryKey);
+		if (isClassProperty) {
+			NSMutableArray classProperties = sourceEntity.classProperties().mutableClone();
+			classProperties.addObject(relationship);
+			sourceEntity.setClassProperties(classProperties);
+		}
+		if(log.isDebugEnabled())
+			log.debug(relationship);
+
+		return relationship;
+	}
+
+	/**
+	 * Programatically adds a flattened relationship to an entity at runtime.
+	 * 
+	 * @param relationshipName name of the relationship to be created on the source entity
+	 * @param sourceEntityName name of the source entity
+	 * @param definition data path of the relationship (e.g. department.facility)
+	 * @param deleteRule
+	 *            EOClassDescription.DeleteRuleCascade ||
+	 *            EOClassDescription.DeleteRuleDeny ||
+	 *            EOClassDescription.DeleteRuleNoAction ||
+	 *            EOClassDescription.DeleteRuleNullify
+	 * @param isMandatory mandatory or not
+	 * @param isClassProperty class property or not
+	 * @return the newly created relationship
+	 * 
+	 * @author th
+	 */
+	public static EORelationship createFlattenedRelationship(String relationshipName, String sourceEntityName, String definition, int deleteRule, boolean isMandatory, boolean isClassProperty) {
+		EOEntity sourceEntity = EOModelGroup.defaultGroup().entityNamed(sourceEntityName);
+		if(sourceEntity.isAbstractEntity())
+			log.warn("If you programatically add relationships to an abstract entity, make sure you also add it to child entities");
+
+		// order is important here!
+		// first create relationship and set name
+		EORelationship relationship = new EORelationship();
+		relationship.setName(relationshipName);
+		// then add to entity (will only work if name is set!)
+		sourceEntity.addRelationship(relationship);
+		relationship.setDeleteRule(deleteRule);
+		relationship.setIsMandatory(isMandatory);
+		// finally set definition (only will work if assigned to entity!)
+		relationship.setDefinition(definition);
+		if (isClassProperty) {
+			NSMutableArray classProperties = sourceEntity.classProperties().mutableClone();
+			classProperties.addObject(relationship);
+			sourceEntity.setClassProperties(classProperties);
+		}
+		if(log.isDebugEnabled())
+				log.debug(relationship + ", flattened:" + relationship.isFlattened() + ", definition:" + relationship.definition() + ", relationshipPath:" + relationship.relationshipPath());
+		return relationship;
+	}
+
 }

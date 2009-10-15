@@ -6,7 +6,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXQ;
+import er.extensions.eof.ERXQ;
 
 /**
  * ERXKeyValueQualifier is a chainable extension of EOKeyValueQualifier.

@@ -5,9 +5,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXQ;
-
-import java.util.Enumeration;
+import er.extensions.eof.ERXQ;
 
 /**
  * ERXOrQualifier is a chainable extension of EOOrQualifier.
@@ -52,7 +50,7 @@ public class ERXOrQualifier extends EOOrQualifier implements IERXChainableQualif
 	}
 
 	public <T> T one(NSArray array) {
-		return (T)ERXQ.one(array, this);
+		return (T) ERXQ.one(array, this);
 	}
 
 	public <T> T requiredOne(NSArray array) {

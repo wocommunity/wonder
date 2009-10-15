@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXWOContext;
-import er.extensions.ERXAjaxApplication;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.ERXValueUtilities;
 
 /**

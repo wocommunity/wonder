@@ -1,0 +1,88 @@
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+	localContext = d2wContext;
+}
+
+AttributeName: WOString {
+	value = displayNameForRelationshipKey;
+}
+
+BannerString: WOString {
+	escapeHTML = false;
+	value = bannerText;
+}
+
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
+}
+
+DisplayList: WOConditional {
+	condition = displayList;
+}
+
+DisplayQuery: WOConditional {
+	condition = displayQuery;
+}
+
+QueryTable: WOGenericContainer {
+	class = "QueryRelationshipTable";
+	elementName = "table";
+}
+
+EntityName: WOString {
+	_unroll = true;
+	value = entity.name;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+IfHasSelectedObject: ERXNonNullConditional {
+  condition = selectedObject;
+}
+
+ListComponent: D2WSelect {
+	action = selectAction;
+	dataSource = selectDataSource;
+	entityName = entity.name;
+	selectedObject = eoToUse;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+QueryComponent: D2WQuery {
+	action = queryAction;
+	entityName = entity.name;
+	queryDataSource = selectDataSource;
+}
+
+QuerySubmitButton: ERXSingleButton {
+	action = displayQueryAction;
+	doNotUseForm = true;
+	value = d2wContext.findButtonLabel;
+}
+
+RemoveToOneSubmitButton: WOSubmitButton {
+	action = removeFromToOneRelationshipAction;
+	value = d2wContext.removeButtonLabel;
+}
+
+ReturnSubmitButton: ERXSingleButton {
+	action = returnAction;
+	doNotUseForm = true;
+	value = d2wContext.returnButtonLabel;
+}
+
+ToOneForm: WOForm {
+}
+
+ToOneValue: WOString {
+	value = toOneDescription;
+}
+

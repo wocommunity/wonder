@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSForwardException;
 import er.extensions.ERXApplication;
 import er.extensions.ERXConstant;
 import er.extensions.ERXPatcher;
-import er.extensions.ERXJDBCAdaptor.Channel;
+import er.extensions.jdbc.ERXJDBCAdaptor.Channel;
 
 /**
  * Adds numerical constant support to EOF. See ERXConstant for more info. 

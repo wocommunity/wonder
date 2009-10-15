@@ -30,6 +30,7 @@ public class ERXQualifierTraversal {
 	 * Catch-all visitor, will get called for each qualifier.
 	 * 
 	 * @param q
+	 *            the qualifier to process
 	 */
 	protected void visit(EOQualifierEvaluation q) {
 
@@ -38,6 +39,8 @@ public class ERXQualifierTraversal {
 	/**
 	 * Should traverse unknown qualifier? Logs an error.
 	 * 
+	 * @param q
+	 *            the qualifier to process
 	 * @return should traverse boolean qualifier
 	 */
 	protected boolean traverseUnknownQualifier(EOQualifierEvaluation q) {
@@ -48,6 +51,8 @@ public class ERXQualifierTraversal {
 	/**
 	 * Should traverse not qualifier?
 	 * 
+	 * @param q
+	 *            the qualifier to process
 	 * @return should traverse not qualifier
 	 */
 	protected boolean traverseNotQualifier(EONotQualifier q) {
@@ -57,6 +62,8 @@ public class ERXQualifierTraversal {
 	/**
 	 * Should traverse or qualifier?
 	 * 
+	 * @param q
+	 *            the qualifier to process
 	 * @return should traverse or qualifier
 	 */
 	protected boolean traverseOrQualifier(EOOrQualifier q) {
@@ -66,6 +73,8 @@ public class ERXQualifierTraversal {
 	/**
 	 * Should traverse and qualifier?
 	 * 
+	 * @param q
+	 *            the qualifier to process
 	 * @return should traverse and qualifier
 	 */
 	protected boolean traverseAndQualifier(EOAndQualifier q) {
@@ -75,6 +84,8 @@ public class ERXQualifierTraversal {
 	/**
 	 * Should traverse a key value qualifier?
 	 * 
+	 * @param q
+	 *            the qualifier to process
 	 * @return should traverse key value qualifier
 	 */
 	protected boolean traverseKeyValueQualifier(EOKeyValueQualifier q) {
@@ -84,6 +95,8 @@ public class ERXQualifierTraversal {
 	/**
 	 * Should traverse key comparison qualifier?
 	 * 
+	 * @param q
+	 *            the qualifier to process
 	 * @return should traverse key comparison qualifier
 	 */
 	protected boolean traverseKeyComparisonQualifier(EOKeyComparisonQualifier q) {
@@ -94,10 +107,13 @@ public class ERXQualifierTraversal {
 	 * Traverses the supplied qualifier
 	 * 
 	 * @param q
-	 * @return
+	 *            the qualifier to process
+	 * @param postOrder
+	 *            if true, the qualifier is traversed from the bottom to the top
+	 * @return whether or not to traverse the qualifier
 	 */
 	@SuppressWarnings("cast")
-	private boolean traverseQualifier(EOQualifierEvaluation q) {
+	private boolean traverseQualifier(EOQualifierEvaluation q, boolean postOrder) {
 		Boolean result = null;
 		if (q == null)
 			result = Boolean.TRUE;
@@ -105,33 +121,48 @@ public class ERXQualifierTraversal {
 			visit(q);
 			if (q instanceof EOOrQualifier) {
 				EOOrQualifier aq = (EOOrQualifier) q;
-				result = traverseOrQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
-				if(result) {
+				if (!postOrder) {
+					result = traverseOrQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
+				}
+				if (result == null || result.booleanValue()) {
 					for (Enumeration e = aq.qualifiers().objectEnumerator(); e.hasMoreElements();) {
-						if (!traverseQualifier((EOQualifierEvaluation) e.nextElement())) {
+						if (!traverseQualifier((EOQualifierEvaluation) e.nextElement(), postOrder)) {
 							result = Boolean.FALSE;
 							break;
 						}
 					}
+				}
+				if (postOrder && (result == null || result.booleanValue())) {
+					result = traverseOrQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
 				}
 			}
 			else if (q instanceof EOAndQualifier) {
 				EOAndQualifier aq = (EOAndQualifier) q;
-				result = traverseAndQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
-				if(result) {
+				if (!postOrder) {
+					result = traverseAndQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
+				}
+				if (result == null || result.booleanValue()) {
 					for (Enumeration e = aq.qualifiers().objectEnumerator(); e.hasMoreElements();) {
-						if (!traverseQualifier((EOQualifierEvaluation) e.nextElement())) {
+						if (!traverseQualifier((EOQualifierEvaluation) e.nextElement(), postOrder)) {
 							result = Boolean.FALSE;
 							break;
 						}
 					}
 				}
+				if (postOrder && (result == null || result.booleanValue())) {
+					result = traverseAndQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
+				}
 			}
 			else if (q instanceof EONotQualifier) {
 				EONotQualifier aq = (EONotQualifier) q;
-				result = traverseNotQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
-				if(result) {
-					result = traverseQualifier((EOQualifierEvaluation) aq.qualifier()) ? Boolean.TRUE : Boolean.FALSE;
+				if (!postOrder) {
+					result = traverseNotQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
+				}
+				if (result == null || result.booleanValue()) {
+					result = traverseQualifier((EOQualifierEvaluation) aq.qualifier(), postOrder) ? Boolean.TRUE : Boolean.FALSE;
+				}
+				if (postOrder && (result == null || result.booleanValue())) {
+					result = traverseNotQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
 				}
 			}
 			else if (q instanceof EOKeyValueQualifier) {
@@ -143,14 +174,32 @@ public class ERXQualifierTraversal {
 			else {
 				result = traverseUnknownQualifier(q) ? Boolean.TRUE : Boolean.FALSE;
 			}
-		}
-		if (result == null) {
-			throw new RuntimeException("Found unknown qualifier type:" + q.getClass().getName());
+			if (result == null) {
+				throw new RuntimeException("Found unknown qualifier type:" + q.getClass().getName());
+			}
 		}
 		return result.booleanValue();
 	}
 
+	/**
+	 * Visit every descendent qualifier in the given qualifier tree in a preorder traversal.
+	 * 
+	 * @param q
+	 *            the root qualifier to traverse
+	 */
 	public void traverse(EOQualifierEvaluation q) {
-		boolean dummy = traverseQualifier(q);
+		traverseQualifier(q, false);
+	}
+
+	/**
+	 * Visit every descendent qualifier in the given qualifier tree.
+	 * 
+	 * @param q
+	 *            the root qualifier to traverse
+	 * @param postOrder
+	 *            if true, the qualifier is traversed from the bottom to the top
+	 */
+	public void traverse(EOQualifierEvaluation q, boolean postOrder) {
+		traverseQualifier(q, postOrder);
 	}
 }

@@ -31,6 +31,7 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
+import er.extensions.appserver.ajax.ERXAjaxSession;
 
 /**
  * The ERXSession aguments the regular WOSession object

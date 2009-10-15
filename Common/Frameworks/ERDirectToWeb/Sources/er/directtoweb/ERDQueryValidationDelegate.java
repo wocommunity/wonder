@@ -5,9 +5,10 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSValidation;
 import er.extensions.ERXStringUtilities;
 import er.extensions.ERXValidationFactory;
 import er.extensions.ERXValueUtilities;
@@ -31,11 +32,11 @@ import java.util.Enumeration;
  *
  * <p><code>entity.name = 'Foo' and propertyKey = 'bar' => minimumInputLength = "3" (Assignment)</code></p>
  *
- * <p>Subclasses wishing to implement custom validation logic should implement the {@link #validateQuery} method.  The
- * implementation should catch validation exceptions and invoke
+ * <p>Subclasses wishing to implement custom validation logic should implement the {@link #validateQueryValues} method.
+ * The implementation should catch validation exceptions and invoke
  * {@link ERD2WPage#validationFailedWithException(Throwable, Object, String)} with any caught exceptions.  To customize
  * behavior, while retaining the default checks, extend {@link ERDQueryValidationDelegate.DefaultQueryValidationDelegate}
- * to perform custom validations and then call {@link #validateQuery} on the superclass.
+ * to perform custom validations and then call {@link #validateQueryValues} on the superclass.</p>
  *
  * @author Travis Cripps
  */
@@ -78,7 +79,7 @@ public abstract class ERDQueryValidationDelegate {
         WODisplayGroup displayGroup = sender.displayGroup();
         if (displayGroup.queryMatch().allKeys().count() == 0 && displayGroup.queryMin().allKeys().count() == 0 &&
             displayGroup.queryMax().allKeys().count() == 0 && displayGroup.queryBindings().allKeys().count() == 0 &&
-            !ERXValueUtilities.booleanValueWithDefault(d2wContext.valueForKey(ValidationKeys.AllowsEmptyQuery), false)) {
+            !ERXValueUtilities.booleanValueWithDefault(d2wContext.valueForKey(ValidationKeys.AllowsEmptyQuery), true)) {
             throw ERXValidationFactory.defaultFactory().createCustomException(null, ErrorKeys.QueryEmpty);
         }
 
@@ -284,7 +285,7 @@ public abstract class ERDQueryValidationDelegate {
                 attribute = d2wContext.attribute();
             } else {
                 EORelationship relationship = d2wContext.relationship();
-                if (relationship != null) {
+                if (relationship != null && !(value instanceof EOEnterpriseObject)) {
                     String keyWhenRelationship = (String)d2wContext.valueForKey("keyWhenRelationship");
                     if (keyWhenRelationship != null) {
                         EOEntity destinationEntity = relationship.destinationEntity();
@@ -295,7 +296,7 @@ public abstract class ERDQueryValidationDelegate {
 
             if (attribute != null) {
                 String valueClassName = attribute.className();
-                if (String.class.getName().equals(valueClassName)) {
+                if (String.class.getName().equals(valueClassName) && value instanceof String) {
                     validateStringValueForKey((String)value, propertyKey);
                 } else if (Number.class.getName().equals(valueClassName) || BigDecimal.class.getName().equals(valueClassName)) {
                     validateNumericValueForKey((Number)value, propertyKey);

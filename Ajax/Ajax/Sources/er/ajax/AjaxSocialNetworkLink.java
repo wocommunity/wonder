@@ -13,6 +13,7 @@ import er.extensions.ERXComponent;
  * @binding url the URL to submit
  * @binding title the title to submit
  * @binding alt the alt tag (defaults to the name of the network)
+ * @binding target the target of the link
  */
 public class AjaxSocialNetworkLink extends ERXComponent {
 	public AjaxSocialNetworkLink(WOContext context) {

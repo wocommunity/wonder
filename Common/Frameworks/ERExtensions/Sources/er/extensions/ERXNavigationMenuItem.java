@@ -86,6 +86,11 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
             return null;
         }
 
+        // hrefs take precedence over actions.
+        if (navigationItem().href() != null && !"".equals(navigationItem().href().trim())) {
+        	return navigationItem().href();
+        }
+        
         // If the user specified an action or pageName, return the source URL
         if ((navigationItem().action() != null) || (navigationItem().pageName() != null)) {
             // Return the URL to the action or page placed in the context by invokeAction

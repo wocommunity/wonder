@@ -7,11 +7,8 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.extensions.ERXWOContext;
-import er.extensions.ERXAjaxApplication;
 import er.extensions.ERXValueUtilities;
 
 /**

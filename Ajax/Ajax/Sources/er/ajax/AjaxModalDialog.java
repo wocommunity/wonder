@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPathUtilities;
 
 import er.extensions.ERXWOContext;
-import er.extensions.ERXAjaxApplication;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.ERXWOForm;
 
 /**
@@ -30,11 +30,12 @@ import er.extensions.ERXWOForm;
  * <li>an in-line ERXWOTemplate named "link".  This allows for images etc to be used to open the dialog</li>
  * </ul></p>
  *
- * <p>The contents for the modal dialog can come from three sources:
+ * <p>The contents for the modal dialog can come from four sources:
  * <ul>
  * <li>in-line, between the open in close tags</li>
- * <li>externally (i.e. from another template), from an in-line WOComponent</li>
- * <li>externally (i.e. from another template), from an action method</li>
+ * <li>externally from an in-line WOComponent</li>
+ * <li>externally from an action method (see action binding)</li>
+ * <li>externally from an named WOcomponent (see pageName binding)</li>
  * </ul></p>
  * 
  * <p>To cause the dialog to be closed in an Ajax action method, use this:
@@ -56,7 +57,8 @@ import er.extensions.ERXWOForm;
  * </code>
  * </p>
  * 
- * @binding action returns the contents of the dialog box
+ * @binding action action method returning the contents of the dialog box
+ * @binding pageName name of WOComponent for the contents of the dialog box
  * @binding label the text for the link that opens the dialog box
  * @binding title Title to be displayed in the ModalBox window header, also used as title attribute of link opening dialog
  * @binding linkTitle Title to be used as title attribute of link opening dialog, title is used if this is not present
@@ -405,10 +407,14 @@ public class AjaxModalDialog extends AjaxComponent {
 		else if ("open".equals(modalBoxAction) && !isOpen()) {
 			openDialog();
 
-			// If there is an action binding, we need to cache the result of calling that so that
+			// If there is an action or pageName binding, we need to cache the result of calling that so that
 			// the awake, takeValues, etc. messages can get passed onto it
 			if (hasBinding("action")) {
 				_actionResults = (WOComponent) valueForBinding("action");
+				_actionResults._awakeInContext(context);
+			}
+			else if (hasBinding("pageName")) {
+				_actionResults = pageWithName((String)valueForBinding("pageName"));
 				_actionResults._awakeInContext(context);
 			}
 		}

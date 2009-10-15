@@ -3861,7 +3861,7 @@ Event.Methods = (function() {
             && currentTarget.type === 'radio'))
               node = currentTarget;
       }
-      if (node.nodeType == Node.TEXT_NODE) node = node.parentNode;
+      if (node && node.nodeType == Node.TEXT_NODE) node = node.parentNode; // WONDER-248
       return Element.extend(node);
     },
 
@@ -6698,6 +6698,15 @@ Autocompleter.Base = Class.create({
 
     Event.observe(this.element, 'blur', this.onBlur.bindAsEventListener(this));
     Event.observe(this.element, 'keydown', this.onKeyPress.bindAsEventListener(this));
+    // AK new option: activateOnFocus
+    if(this.options.activateOnFocus) {
+	    Event.observe(this.element, 'focus', this.onActivate.bindAsEventListener(this));
+    }
+  },
+  
+  // AK new option: activateOnFocus, note that this will work only when you have a afterUpdateElement like  "function(e,s) {document.forms['searchForm'].submit()}";
+  onActivate: function() {
+    this.activate();
   },
 
   show: function() {
@@ -7571,7 +7580,8 @@ Form.Element.DelayedObserver = Class.create({
     this.timer = null;
     this.callback(this.element, $F(this.element));
   }
-});// script.aculo.us slider.js v1.8.2, Tue Nov 18 18:30:58 +0100 2008
+});
+// script.aculo.us slider.js v1.8.2, Tue Nov 18 18:30:58 +0100 2008
 
 // Copyright (c) 2005-2008 Marty Haught, Thomas Fuchs
 //
@@ -7923,6 +7933,7 @@ Modalbox.Methods = {
 		overlayClose: true, // Close modal box by clicking on overlay
 		width: 500, // Default width in px
 		height: 90, // Default height in px
+		centerVertically: false, // True if should be centered vertically on page
 		overlayOpacity: .65, // Default overlay opacity
 		overlayDuration: .25, // Default overlay fade in/out duration in seconds
 		slideDownDuration: .5, // Default Modalbox appear slide down effect in seconds
@@ -8196,17 +8207,20 @@ Modalbox.Methods = {
 	
 	_putContent: function(callback){
 		// Prepare and resize modal box for content
-		if(this.options.height == this._options.height) {
+		// MS: check for a -1 height ... I'm only doing this because the "else" tries to make it scrollable
+		if(this.options.height == this._options.height || this.options.height == -1) {
 			setTimeout(function() { // MSIE sometimes doesn't display content correctly
 				Modalbox.resize(0, $(this.MBcontent).getHeight() - $(this.MBwindow).getHeight() + $(this.MBheader).getHeight(), {
 					afterResize: function(){
 						this.MBcontent.show().makePositioned();
 						this.focusableElements = this._findFocusableElements();
-						this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
+						this._setWidthAndPosition(); // CH: Set position (and width) after the content loads so that dialog is centered when width = - 1
 						setTimeout(function(){ // MSIE fix
 							if(callback != undefined)
 								callback(); // Executing internal JS from loaded content
 							this.event("afterLoad"); // Passing callback
+							// CH move _setFocus to after timeout so elements with onFocus binding aren't focused too early
+							this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
 						}.bind(this),1);
 					}.bind(this)
 				});
@@ -8218,11 +8232,12 @@ Modalbox.Methods = {
 			setTimeout(function(){ // MSIE fix
 				// MS: moved this code inside the setTimeout to compute focusable elements after a delay .. fixes bug in FireFox
 				this.focusableElements = this._findFocusableElements();
-				this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
-				
+				this._setWidthAndPosition(); // CH: Set position (and width) after the content loads so that dialog is centered when width = - 1
 				if(callback != undefined)
 					callback(); // Executing internal JS from loaded content
 				this.event("afterLoad"); // Passing callback
+				// CH move _setFocus to after timeout so elements with onFocus binding aren't focused too early
+				this._setFocus(); // Setting focus on first 'focusable' element in content (input, select, textarea, link or button)
 			}.bind(this),1);
 		}
 	},
@@ -8258,7 +8273,7 @@ Modalbox.Methods = {
 			$(this.MBclose).observe("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).observe("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.observe(document, "keydown", this.kbdObserver);
 		else
 			Event.observe(document, "keypress", this.kbdObserver);
@@ -8269,7 +8284,7 @@ Modalbox.Methods = {
 			$(this.MBclose).stopObserving("click", this.hideObserver);
 		if(this.options.overlayClose)
 			$(this.MBoverlay).stopObserving("click", this.hideObserver);
-		if(Prototype.Browser.IE)
+		if(Prototype.Browser.IE || Prototype.Browser.WebKit)
 			Event.stopObserving(document, "keydown", this.kbdObserver);
 		else
 			Event.stopObserving(document, "keypress", this.kbdObserver);
@@ -8284,9 +8299,30 @@ Modalbox.Methods = {
 	_setFocus: function() { 
 		/* Setting focus to the first 'focusable' element which is one with tabindex = 1 or the first in the form loaded. */
 		if(this.focusableElements.length > 0 && this.options.autoFocusing == true) {
+
+			// MS: don't steal focus if there is already an element inside the AMD that is focused
+			var focusedElement = $$('*:focus').first();
+			var alreadyFocused = focusedElement && this.focusableElements.indexOf(focusedElement) != -1;
+			if (alreadyFocused) {
+				return;
+			}
+			// MS: done
+			
 			var firstEl = this.focusableElements.find(function (el){
 				return el.tabIndex == 1;
 			}) || this.focusableElements.first();
+			
+			// MS: try to focus on form field rather than a link ...
+			var inputTagNames = ['input', 'select', 'textarea'];
+			if (firstEl && !inputTagNames.include(firstEl.tagName.toLowerCase())) {
+				var firstInputEl = this.focusableElements.find(function(element) {
+					return inputTagNames.include(element.tagName.toLowerCase());
+    		});
+    		if (firstInputEl) {
+    			firstEl = firstInputEl;
+    		}
+			}
+    	
 			this.currFocused = this.focusableElements.toArray().indexOf(firstEl);
 			firstEl.focus(); // Focus on first focusable element except close button
 		} else if(! this.options.locked && $(this.MBclose).visible())
@@ -8327,6 +8363,17 @@ Modalbox.Methods = {
 				}
 				break;			
 			case Event.KEY_ESC:
+				// CH: Add Esc key handling start
+				if (this.options.clickOnEscId) {
+					var target = $(this.options.clickOnEscId);
+					if (target && this._isClickable(target)) {
+						target.onclick();
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+				// CH: done
 				if(this.active && ! this.options.locked) this._hide(event);
 				break;
 			case 32:
@@ -8337,6 +8384,12 @@ Modalbox.Methods = {
 				break;
 			case Event.KEY_UP:
 			case Event.KEY_DOWN:
+			    // Allow up and down arrow keys in text boxes in WebKit browsers,
+                // because these keys can move the cursor.
+                if(Prototype.Browser.WebKit && (["textarea","select"].include(node.tagName.toLowerCase()) ||
+                   (node.tagName.toLowerCase() == "input" && ["text", "password"].include(node.type)))) {
+                    break;
+                }
 			case Event.KEY_PAGEDOWN:
 			case Event.KEY_PAGEUP:
 			case Event.KEY_HOME:
@@ -8344,11 +8397,30 @@ Modalbox.Methods = {
 				// Safari operates in slightly different way. This realization is still buggy in Safari.
 				if(Prototype.Browser.WebKit && !["textarea", "select"].include(node.tagName.toLowerCase()))
 					event.stop();
-				else if( (node.tagName.toLowerCase() == "input" && ["submit", "button"].include(node.type)) || (node.tagName.toLowerCase() == "a") )
+				else if( this._isClickable(node) )  // CH: change to use _isClickable
 					event.stop();
 				break;
+			// CH: Add Return key handling start
+			case Event.KEY_RETURN:
+				if (this.options.clickOnReturnId) {
+					var target = $(this.options.clickOnReturnId);
+					// Don't trigger this for clickable elements or text areas
+					if (target && this._isClickable(target) &&  ! (this._isClickable(node) || ["textarea"].include(node.type)) ) {
+						target.onclick();
+						target.click();
+						event.stop();
+					}
+				}
+				break;
+			// CH: done
 		}
 	},
+	
+	// CH: add _isClickable
+	_isClickable: function(element) {
+		return (["input", "button"].include(element.tagName.toLowerCase()) && ["submit", "button"].include(element.type)) || (element.tagName.toLowerCase() == "a")
+	},
+	// CH: done
 	
 	_preventScroll: function(event) { // Disabling scrolling by "space" key
 		if(!["input", "textarea", "select", "button"].include(event.element().tagName.toLowerCase())) 
@@ -8398,6 +8470,17 @@ Modalbox.Methods = {
 	
 	_setPosition: function () {
 		$(this.MBwindow).setStyle({left: Math.round((Element.getWidth(document.body) - Element.getWidth(this.MBwindow)) / 2 ) + "px"});
+		
+		// CH: Add vertical centering
+		if (this.options.centerVertically) {
+			var elem = $(this.MBwindow);
+			var docElem = document.documentElement;
+			pageHeight = self.innerHeight || (docElem&&docElem.clientHeight) ||	document.body.clientHeight;
+			elemHeight = elem.getHeight();
+			var y = Math.round(pageHeight/2) - (elemHeight/2);	
+			elem.style.top = y+'px';
+        }	
+		// CH: Done adding vertical centering
 	},
 	
 	_setWidthAndPosition: function () {
@@ -8658,15 +8741,13 @@ var AjaxOnDemand = {
 	},
 	
 	loadCSS: function(css) {
-		var linkElement = document.createElement("link");
-  	linkElement.setAttribute("rel", "stylesheet");
-  	linkElement.setAttribute("type", "text/css");
-  	linkElement.setAttribute("href", css);
-  	document.getElementsByTagName('HEAD')[0].appendChild(linkElement);
-		//new Ajax.Request(script, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
+		new Ajax.Request(css, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
 	},
 	
 	loadedCSS: function(request) {
+		var inlineStyle = new Element("style", {"type": "text/css"});
+		inlineStyle.appendChild(document.createTextNode(request.responseText));
+		document.getElementsByTagName('HEAD')[0].appendChild(inlineStyle);
 	}
 };
 var AOD = AjaxOnDemand;
@@ -9078,7 +9159,10 @@ var AjaxDroppable = Class.create({
 			this.onbeforedrop(element, droppableElement);
 		}
 
-    	var data = this.draggableKeyName + '=' + element.getAttribute('draggableID');
+		var draggableID = element.getAttribute('draggableID');
+		if(draggableID == null)
+			draggableID = element.getAttribute('id');
+    	var data = this.draggableKeyName + '=' + draggableID;
     	
 			if (this.updateContainerID == null) {
 				if (this.form) {
@@ -9303,14 +9387,14 @@ var AjaxHintedText = {
         e.setAttribute('default', unescape(e.getAttribute('default')));
         e.showDefaultValue = function() {
             if(e.value == "") {
-                e.className = "ajax-hinted-text-with-default";
+                e.addClassName('ajax-hinted-text-with-default');
                 e.value = e.getAttribute('default');
             } else {
-                e.className = "";
+                e.removeClassName('ajax-hinted-text-with-default');
             }
         }
         e.showTextValue = function() {
-            e.className = "";
+            e.removeClassName('ajax-hinted-text-with-default');
             if(e.value.replace(/[\r\n]/g, "") == e.getAttribute('default').replace(/[\r\n]/g, "")) {
                 e.value = "";
             }
@@ -9493,6 +9577,10 @@ var AjaxModalDialog = {
 	
 	open: function(id) {
 		eval("openAMD_" + id + "()");
+	},
+	
+	contentUpdated: function() {
+		Modalbox._putContent();
 	}
 };
 var AMD = AjaxModalDialog;
@@ -9514,10 +9602,10 @@ var WonderJSON = {
 	Ajax.InPlaceEditor.prototype.__onComplete = Ajax.InPlaceEditor.prototype.onComplete;
 	Ajax.InPlaceEditor.prototype = Object.extend(Ajax.InPlaceEditor.prototype, {
 		  initialize: function(element, url, options) {
-		    	var newOptions = Object.extend(options || {}, {
+		    	var newOptions = Object.extend({
 	            valueWhenEmpty: 'click to edit...',
 	            emptyClassName: 'inplaceeditor-empty'
-	        });
+	        }, options || {});
 	        this.__initialize(element,url,newOptions)
 	        this._checkEmpty();
 	    },
@@ -9551,7 +9639,7 @@ var AjaxTabbedPanel = {
 	},
 	
     // Change which tab appears in selected state
-    selectTab : function(tabControlID, selectedTabID) {
+    selectTab : function(tabControlID, selectedTabID, paneID, busyDivID) {
       var selectedTab = $(selectedTabID);
       var tablist = this.getChildrenByTagName($(tabControlID), 'li');
       var nodes = $A(tablist);
@@ -9563,6 +9651,12 @@ var AjaxTabbedPanel = {
           }
       });
       selectedTab.removeClassName('ajaxTabbedPanelTab-unselected').addClassName('ajaxTabbedPanelTab-selected');
+      
+      // Only call runOnSelect if the panel contents have previously been loaded.
+      // If the panel contents are getting loaded the loadPanel function will call this
+      var pane = $(paneID);
+      if (pane.innerHTML!='' && pane.innerHTML!=this.busyContent(busyDivID))
+          AjaxTabbedPanel.runOnSelect($(tabControlID)); 
     },
 
     // Change which panel appears
@@ -9582,29 +9676,23 @@ var AjaxTabbedPanel = {
         };
       });
 
-      // Select the new tab and ntify the app of the selected tab
+      // Select the new tab and notify the app of the selected tab
       selectedPane.removeClassName('ajaxTabbedPanelPane-unselected').addClassName('ajaxTabbedPanelPane-selected');
-       new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
+      new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
     },
 
     // Loads the panel contents if not already loaded
-    loadPanel : function(paneID, busyDivID, shouldReload) {
-
-      // Determine what to show if the panel takes a while to  load
-      var busyContent = 'Loading, please wait...';
-      if (busyDivID != '') {
-          busyContent = $('busydiv').innerHTML;
-      }
-
+    loadPanel : function(tabControlID, paneID, busyDivID, shouldReload) {
       var pane = $(paneID);
-      if (pane.innerHTML=='' || pane.innerHTML==busyContent || shouldReload) {
-         pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=busyContent; pe.stop()}, 0.25);
+      if (pane.innerHTML=='' || pane.innerHTML==this.busyContent(busyDivID) || shouldReload) {
+         pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=AjaxTabbedPanel.busyContent(busyDivID); pe.stop()}, 0.25);
          new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: 1, 
          														 evalScripts: true, 
-         														 onSuccess: function(a, b) {pe.stop(); AjaxTabbedPanel.runOnLoad(pane); }});
+         														 onComplete: function(a, b) {pe.stop(); 
+         														                             AjaxTabbedPanel.runOnLoad(pane); 
+         														                             AjaxTabbedPanel.runOnSelect($(tabControlID)); }});
       }
     },
-
 
     runOnLoad : function(element) {
     	var onLoadScript = element.getAttribute('onLoad');
@@ -9613,6 +9701,21 @@ var AjaxTabbedPanel = {
 		}
     },
     
+    runOnSelect : function(element) {
+    	var onSelectScript = element.getAttribute('onSelect');
+		if (onSelectScript) {
+			eval(onSelectScript);	
+		}
+    },
+        
+    // Determines what to show if the panel takes a while to  load  
+    busyContent : function(busyDivID) {
+      var busyContent = 'Loading, please wait...';
+      if (busyDivID != '') {
+          busyContent = $(busyDivID).innerHTML;
+      }
+      return busyContent;
+    },   
     
     // Returns an element's children that have a specific tag name as an array
     getChildrenByTagName : function(element, tag_name) {

@@ -234,6 +234,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         ERDQueryValidationDelegate queryValidationDelegate = queryValidationDelegate();
         if (queryValidationDelegate != null) {
             clearValidationFailed();
+            setErrorMessage(null);
             try {
                 queryValidationDelegate.validateQuery(this);
             } catch (NSValidation.ValidationException ex) {
@@ -378,9 +379,6 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     public ERDQueryValidationDelegate queryValidationDelegate() {
         if (null == queryValidationDelegate) {
             queryValidationDelegate = (ERDQueryValidationDelegate)d2wContext().valueForKey("queryValidationDelegate");
-            if (null == queryValidationDelegate) {
-                queryValidationDelegate = new ERDQueryValidationDelegate.DefaultQueryValidationDelegate();
-            }
         }
         return queryValidationDelegate;
     }

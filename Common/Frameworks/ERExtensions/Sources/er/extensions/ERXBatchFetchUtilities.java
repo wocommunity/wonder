@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import er.extensions.eof.ERXKey;
 
 /**
  * ERXBatchFetchUtilities provides a collection of methods to support efficiently 

@@ -8,7 +8,6 @@ import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EODataSource;
@@ -23,6 +22,8 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation._NSDelegate;
+import er.extensions.eof.ERXS;
+import er.extensions.jdbc.ERXSQLHelper;
 
 import java.util.Enumeration;
 

@@ -6,10 +6,32 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
 import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueArchiver;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
+
+import er.extensions.ERXExtensions;
+import er.extensions.ERXBatchNavigationBar;
+import er.extensions.ERXSortOrder;
+import er.extensions.ERXConstant;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXProperties;
+import er.extensions.ERXRetainer;
+import er.extensions.ERXValueUtilities;
 
 public class ERCoreUserPreferences implements NSKeyValueCoding {
 
@@ -18,7 +40,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     //	---------------------------------------------------------------------------    
     
     /** Logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreUserPreferences.class);
+    public static final Logger log = Logger.getLogger(ERCoreUserPreferences.class);
 
     /** EOEncoding key */
     private final static String VALUE="_V";
@@ -33,9 +55,6 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     /** caches the singleton user preference object */
     private static ERCoreUserPreferences _userPreferences;
 
-    /** caches the singleton editingContext   */
-    private static EOEditingContext _editingContext;
-
     //	===========================================================================
     //	Class Method(s)
     //	---------------------------------------------------------------------------
@@ -46,17 +65,10 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
      * @return single instance of the user preferences
      */
     public static ERCoreUserPreferences userPreferences() {
-        if (_userPreferences == null){
+        if (_userPreferences == null) {
             _userPreferences = new ERCoreUserPreferences();
         }
         return _userPreferences;
-    }
-
-    public static EOEditingContext editingContext() {
-        if (_editingContext == null){
-            _editingContext = ERXEC.newEditingContext();
-        }
-        return _editingContext;
     }
 
     //	===========================================================================
@@ -69,17 +81,20 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
      */
     public void registerHandlers() {
         log.debug("Registering preference handlers");
-        _UserPreferenceHandler handler = new _UserPreferenceHandler();
+        Object handler = null;
+        String handlerClassName = ERXProperties.stringForKey("er.corebusinesslogic.ERCoreUserPreferences.handlerClassName");
+        if (handlerClassName != null) {
+            try {
+                handler = Class.forName(handlerClassName).newInstance();
+            }
+            catch (Exception e) {
+                throw NSForwardException._runtimeExceptionForThrowable(e);
+            }
+        }
+        if (handler == null) {
+            handler = new _UserPreferenceHandler();
+        }
         ERXRetainer.retain(handler);
-        NSNotificationCenter.defaultCenter().addObserver(handler,
-                                                         new NSSelector("handleBatchSizeChange", ERXConstant.NotificationClassArray),
-                                                         ERXBatchNavigationBar.BatchSizeChanged,
-                                                         null);
-        NSNotificationCenter.defaultCenter().addObserver(handler,
-                                                         new NSSelector("handleSortOrderingChange", ERXConstant.NotificationClassArray),
-                                                         ERXSortOrder.SortOrderingChanged,
-                                                         null);
-        
     }
     
     protected NSArray preferences(EOEditingContext ec) {
@@ -127,16 +142,22 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     // FIXME -- unarchiving - archiving probably could use optimization
     public Object valueForKey(String key) {
         Object result=null;
-        editingContext().lock();
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
         try {
-            EOEnterpriseObject pref = preferenceRecordForKey(key, editingContext());
+            EOEnterpriseObject pref = preferenceRecordForKey(key, ec);
             if (pref != null) {
                 String encodedValue = (String)pref.valueForKey("value");
-                result = decodedValue(encodedValue);
+                if(encodedValue !=null) {
+                    result = decodedValue(encodedValue);
+                }
             }
+        } catch(RuntimeException ex) {
+            log.error("Error while getting preference " + key +  ": " + ex);
         } finally {
-            editingContext().unlock();
+            ec.unlock();
         }
+        ec.dispose();
         if (log.isDebugEnabled())
             log.debug("Prefs vfk " + key + " = " + result);
         return result;
@@ -148,10 +169,11 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
         // so that if a user opens two sessions they don't get locking failures
         // this is OK for display style prefs (how many items, how they are sorted)
         // but might not be for more behavior-style prefs!!
-        editingContext().lock();
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
         try {
-            EOEnterpriseObject pref = preferenceRecordForKey(key, editingContext());
-            ERCoreUserInterface u = (ERCoreUserInterface)ERCoreBusinessLogic.actor(editingContext());
+            EOEnterpriseObject pref = preferenceRecordForKey(key, ec);
+            ERCoreUserInterface u = (ERCoreUserInterface)ERCoreBusinessLogic.actor(ec);
             if (pref != null) {
                 if (value != null) {
                     String encodedValue = encodedValue(value);
@@ -163,10 +185,10 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
                 } else {
                     if (log.isDebugEnabled())
                         log.debug("Removing preference "+u+": "+key);
-                    editingContext().deleteObject(pref);
+                    ec.deleteObject(pref);
                 }
             } else if (value!=null) {
-                pref = ERXEOControlUtilities.createAndInsertObject(editingContext(), "ERCPreference");
+                pref = ERXEOControlUtilities.createAndInsertObject(ec, "ERCPreference");
                 u.newPreference(pref);
                 // done this way to not force you to sub-class our User entity
                 pref.takeValueForKey(ERXEOControlUtilities.primaryKeyObjectForObject((EOEnterpriseObject)u),"userID");
@@ -175,18 +197,15 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
                 if (log.isDebugEnabled())
                     log.debug("Creating preference "+u+": "+key+" - "+value+" -- "+encodedValue(value));
             }
-            if (editingContext().hasChanges()) {
-                editingContext().saveChanges();
-                editingContext().revert();
+            if (ec.hasChanges()) {
+                ec.saveChanges();
             }
-        }catch(Throwable t){
-            log.error("Problem during ERCoreUserPreferences:takeValueForKey:",t);
-            //We are throwing away that editing context because it may be hosed at that point
-            _editingContext = null;
-        }finally {
-            if (_editingContext != null)
-                editingContext().unlock();
+        } catch(RuntimeException ex) {
+            log.error("Error while setting preference " + key +  ": " + ex);
+        } finally {
+            ec.unlock();
         }
+        ec.dispose();
         NSNotificationCenter.defaultCenter().postNotification(PreferenceDidChangeNotification,
                                                               new NSDictionary(value, key));
     }
@@ -200,6 +219,10 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     }
 
     public static class _UserPreferenceHandler {
+        public _UserPreferenceHandler() {
+            NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("handleBatchSizeChange", ERXConstant.NotificationClassArray), ERXBatchNavigationBar.BatchSizeChanged, null);
+            NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("handleSortOrderingChange", ERXConstant.NotificationClassArray), ERXSortOrder.SortOrderingChanged, null);
+        }
 
         public void handleBatchSizeChange(NSNotification n) { handleChange("batchSize", n); }
         public void handleSortOrderingChange(NSNotification n) { handleChange("sortOrdering", n); }
