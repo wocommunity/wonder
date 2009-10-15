@@ -368,13 +368,19 @@ public class ERXResponseRewriter {
 		String fallbackStartTag;
 		String fallbackEndTag;
 		if (ERXAjaxApplication.isAjaxRequest(context.request()) && ERXProperties.booleanForKeyWithDefault("er.extensions.loadOnDemand", true)) {
-			if (appendTypeAttribute) {
-				fallbackStartTag = "<script type=\"text/javascript\">AOD.loadScript('";
+			if (!ERXAjaxApplication.isAjaxReplacement(context.request()) || ERXProperties.booleanForKeyWithDefault("er.extensions.loadOnDemandDuringReplace", false)) {
+				if (appendTypeAttribute) {
+					fallbackStartTag = "<script type=\"text/javascript\">AOD.loadScript('";
+				}
+				else {
+					fallbackStartTag = "<script>AOD.loadScript('";
+				}
+				fallbackEndTag = "')</script>";
 			}
 			else {
-				fallbackStartTag = "<script>AOD.loadScript('";
+				fallbackStartTag = null;
+				fallbackEndTag = null;
 			}
-			fallbackEndTag = "')</script>";
 		}
 		else {
 			fallbackStartTag = null;

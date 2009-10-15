@@ -29,7 +29,6 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding asynchronous set to false to force a synchronous refresh of the container. Defaults to true.
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
-	public static final String UPDATE_CONTAINER_ID_KEY = ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID;
 	private static final String CURRENT_UPDATE_CONTAINER_ID_KEY = "er.ajax.AjaxUpdateContainer.currentID";
 	
 	public AjaxUpdateContainer(String name, NSDictionary associations, WOElement children) {
@@ -261,13 +260,13 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 	public static String updateContainerID(WORequest request) {
 		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
-		String updateContainerID = (String)userInfo.objectForKey(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
+		String updateContainerID = (String)userInfo.objectForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
 		return updateContainerID;
 	}
 
 	public static void setUpdateContainerID(WORequest request, String updateContainerID) {
 		if (updateContainerID != null) {
-			AjaxUtils.mutableUserInfo(request).setObjectForKey(updateContainerID, AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
+			AjaxUtils.mutableUserInfo(request).setObjectForKey(updateContainerID, ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
 		}
 	}
 	

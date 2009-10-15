@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.components._private.ERXWOForm;
 import er.extensions.foundation.ERXProperties;
 
@@ -36,6 +37,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding formName if button is false, you must specify the name of the form to submit
  * @binding functionName if set, the link becomes a javascript function instead
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
+ * @binding replaceID the ID of the div (or other html element) whose contents will be replaced with the results of this action
  * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
  * @binding formSerializer the name of the javascript function to call to serialize the form
  * @binding elementName the element name to use (defaults to "a")
@@ -189,8 +191,10 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 		onClickBuffer.append("queue:'end', afterFinish: function() {");
 	}
 
-	if (updateContainerID != null) {
-		onClickBuffer.append("ASB.update('" + updateContainerID + "',");
+    String replaceID = (String)valueForBinding("replaceID", component);
+	String id = (updateContainerID == null) ? replaceID : updateContainerID; 
+	if (id != null) {
+		onClickBuffer.append("ASB.update('" + id + "',");
 	}
 	else {
 		onClickBuffer.append("ASB.request(");
@@ -205,13 +209,16 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	onClickBuffer.append(",");
 	
     NSMutableDictionary options = createAjaxOptions(component);
+    if (replaceID != null) {
+    	options.setObjectForKey("true", ERXAjaxApplication.KEY_REPLACED);
+    }
 	
-	AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID, (String) valueForBinding("effectDuration", component));
+	AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), id, (String) valueForBinding("effectDuration", component));
 	String afterEffectID = (String) valueForBinding("afterEffectID", component);
 	if (afterEffectID == null) {
 		afterEffectID = AjaxUpdateContainer.currentUpdateContainerID();
 		if (afterEffectID == null) {
-			afterEffectID = updateContainerID;
+			afterEffectID = id;
 		}
 	}
 	AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID, (String) valueForBinding("afterEffectDuration", component));
@@ -313,18 +320,26 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     return result;
   }
 
-  public WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
-	   WOComponent wocomponent = wocontext.component();
-	   WOActionResults result = (WOActionResults) valueForBinding("action", wocomponent);
-	   if (result == null) {
-	     WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
-	     String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
+	   WOComponent component = context.component();
+	   WOActionResults result = (WOActionResults) valueForBinding("action", component);
+
+	   if (ERXAjaxApplication.isAjaxReplacement(request)) {
+		   AjaxUtils.setPageReplacementCacheKey(context, (String)valueForBinding("replaceID", component));
+	   }
+	   else if (result == null || booleanValueForBinding("ignoreActionResponse", false, component)) {
+	     WOResponse response = AjaxUtils.createResponse(request, context);
+	     String onClickServer = (String) valueForBinding("onClickServer", component);
 	     if (onClickServer != null) {
-	       AjaxUtils.appendScriptHeaderIfNecessary(worequest, response);
+	       AjaxUtils.appendScriptHeaderIfNecessary(request, response);
 	       response.appendContentString(onClickServer);
-	       AjaxUtils.appendScriptFooterIfNecessary(worequest, response);
+	       AjaxUtils.appendScriptFooterIfNecessary(request, response);
 	     }
 	     result = response;
+	   }
+	   else {
+		   String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component);
+		   AjaxUtils.setPageReplacementCacheKey(context, updateContainerID);
 	   }
 
 	   return result;

@@ -164,7 +164,7 @@ public class ERXAjaxSession extends WOSession {
    * is requesting in its own thread and generating their own non-overlapping context ids.
    */
   public void savePage(WOComponent page) {
-	WOContext context = context();
+	  WOContext context = context();
     if (ERXAjaxApplication.shouldNotStorePage(context)) {
     	// System.out.println("Not storing page: " + context.request().uri());
       WORequest request = context.request();
