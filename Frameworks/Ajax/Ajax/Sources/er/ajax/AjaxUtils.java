@@ -49,7 +49,7 @@ public class AjaxUtils {
 	}
 
 	public static void setPageReplacementCacheKey(WOContext _context, String _key) {
-		_context.response().setHeader(_key, ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+		_context.request().setHeader(_key, ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
 	}
 
 	/**

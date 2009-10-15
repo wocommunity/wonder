@@ -1,5 +1,7 @@
 package er.ajax;
 
+import java.net.MalformedURLException;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -9,10 +11,13 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.components.ERXComponentUtilities;
+import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -170,6 +175,17 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			}
 			else {
 				actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
+			}
+			
+			if (replaceID != null) {
+				try {
+					ERXMutableURL tempActionUrl = new ERXMutableURL(actionUrl);
+					tempActionUrl.addQueryParameter(ERXAjaxApplication.KEY_REPLACED, "true");
+					actionUrl = tempActionUrl.toExternalForm();
+				}
+				catch (MalformedURLException e) {
+					throw NSForwardException._runtimeExceptionForThrowable(e);
+				}
 			}
 
 			actionUrl = "'" + actionUrl + "'";
@@ -362,7 +378,11 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
 		AjaxUpdateContainer.setUpdateContainerID(request, updateContainerID);
 		WOActionResults results = (WOActionResults) valueForBinding("action", component);
-		if (results == null || booleanValueForBinding("ignoreActionResponse", false, component)) {
+
+		if (ERXAjaxApplication.isAjaxReplacement(request)) {
+			AjaxUtils.setPageReplacementCacheKey(context, (String)valueForBinding("replaceID", component));
+		}
+		else if (results == null || booleanValueForBinding("ignoreActionResponse", false, component)) {
 			String script = (String) valueForBinding("onClickServer", component);
 			if (script != null) {
 				WOResponse response = AjaxUtils.createResponse(request, context);
@@ -372,6 +392,10 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				results = response;
 			}
 		}
+		else {
+			AjaxUtils.setPageReplacementCacheKey(context, updateContainerID);
+		}
+
 		return results;
 	}
 }

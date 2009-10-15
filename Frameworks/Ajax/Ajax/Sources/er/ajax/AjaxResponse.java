@@ -12,6 +12,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXResponse;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxApplication.ERXAjaxResponseDelegate;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
@@ -134,7 +135,7 @@ public class AjaxResponse extends ERXResponse {
 					// pull it out of the query parameters.  This isn't ideal, but it's
 					// better than sending you back a big blank component to replace whatever
 					// it is you double-clicked on.
-					String updateContainerID = request.stringFormValueForKey(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
+					String updateContainerID = request.stringFormValueForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
 					if (updateContainerID != null) {
 						// .. .and let's make an AjaxResponse so we get our update container
 						// to be evaluated
