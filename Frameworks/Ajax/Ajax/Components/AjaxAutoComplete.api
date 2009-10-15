@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
 	<wo class="AjaxAutoComplete" wocomponentcontent="true">
 	<binding name="list"/>
@@ -29,5 +29,9 @@
         <binding name="tabindex"/>
     <binding name="default"/>
         <binding name="id"/>
+    <binding name="selection"/>
+        <validation message="'selection' must be bound to a settable value">
+            <unsettable name="selection"/>
+        </validation>
     </wo>
 </wodefinitions>
