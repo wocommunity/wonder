@@ -4,6 +4,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -19,8 +20,12 @@ public class AutoCompleteExample extends WOComponent {
 
 	public String value;
     public Word currentValue;
+    public Word selectedValue;
     
     public NSArray allValues;
+    
+	public String value2;
+    public Word selectedValue2;
 
     public AutoCompleteExample(WOContext context) {
     	super(context);
@@ -31,14 +36,28 @@ public class AutoCompleteExample extends WOComponent {
      * This method gets called after every keystroke, we check the value variable and return the 10 entries
      * in allValues that contain this value.
      */
-    public NSArray currentValues() {
+    public NSArray currentValues(String v) {
         NSMutableArray result = new NSMutableArray();
         for(Enumeration e = allValues.objectEnumerator(); e.hasMoreElements() && result.count() < 10;) {
         	Word c = (Word) e.nextElement();
-            if(value == null || c.name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+            if(v == null || c.name.toLowerCase().indexOf(v.toLowerCase()) >= 0) {
                 result.addObject(c);
             }
         }
         return result;
+    }
+    
+    public NSArray currentValues() {
+    	return currentValues(value);
+    }
+    
+    public NSArray currentValues2() {
+    	return currentValues(value2);
+    }
+    
+    public WOActionResults submitted() {
+    	System.out.println("AutoCompleteExample.submitted: " + value + ", " + selectedValue);
+    	System.out.println("AutoCompleteExample.submitted: " + value2 + ", " + selectedValue2);
+    	return null;
     }
 }
