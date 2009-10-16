@@ -4,6 +4,9 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXWOContext;
 
@@ -24,6 +27,12 @@ import er.extensions.appserver.ERXWOContext;
  * <li>child elements</li>
  * </ul></p>
  * 
+ * <p>As the opener functions on the client only, it is possible for it to be rendered when <code>enabled</code> evaluates to 
+ * <code>true</code> and clicked later when <code>enabled</code> would evaluate to <code>false</code>.  This condition is checked for
+ * when the opener is clicked.  If <code>enabled</code> evaluates to <code>false</code> at that time: the action method
+ * is not called, the AjaxModalDialog is not opened, and the onFailure handler (if any) is run.
+ * </p>
+ * 
  * @binding dialogId required, ID of the AjaxModalDialog to open
  * @binding label the text for the link that opens the dialog box, if this used the child elements are ignored
  * @binding linkTitle used as title attribute of link opening dialog
@@ -31,6 +40,9 @@ import er.extensions.appserver.ERXWOContext;
  * @binding action, optional action to call before opening the modal dialog.  
  * @binding enabled if false, nothing is rendered for this component.  This can be used instead of wrapping this in a WOConditional.
  *          The default is true.
+ * @binding onFailure optional JavaScript (not a function()!) to run if the opener is clicked and enabled evaluates to false. This can remove the element, show
+ * 			an alert, etc.  e.g. onFailure = "alert('This is no longer available');";
+ * 
  * @binding id HTML id for the link
  * @binding class CSS class for the link
  * @binding style CSS style for the link
@@ -70,20 +82,13 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 		// onclick calls the script that opens the AjaxModalDialog
 		response.appendContentString(" onclick=\"");
 		
-		if (hasBinding("action")) {
-			response.appendContentString("new Ajax.Request('");
-			response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context()));
-			response.appendContentString("',  {asynchronous:false, evalScripts:false});");
-		}
+		response.appendContentString("new Ajax.Request('");
+		response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context()));
+		response.appendContentString("', ");
+		AjaxOptions.appendToResponse(ajaxRequestOptions(), response, context);
+		response.appendContentString("); ");
 
-		response.appendContentString(AjaxModalDialog.openDialogFunctionName(modalDialogId()));
-		
-		// Override for dialog name
-		response.appendContentString("(");	
-		if (hasBinding("title")) {	
-			response.appendContentString(AjaxValue.javaScriptEscaped(valueForBinding("title")));
-		}		
-		response.appendContentString("); return false;\" >");	
+		response.appendContentString("return false;\" >");	
 
 		if (hasBinding("label")) {
 			response.appendContentString((String) valueForBinding("label"));
@@ -111,9 +116,46 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 	protected void addRequiredWebResources(WOResponse res) {
 	}
 	
+	/**
+	 * Runs action and returns success status if enabled, otherwise returns failed status.
+	 */
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
-		valueForBinding("action");
+		if( booleanValueForBinding("enabled", true)) {
+			valueForBinding("action");
+		}
+		else {
+			// Set the response status code to an error code so that the onSuccess callback is not executed
+			// If there is an onFailure callback, it will get executed
+			// Status 409 is "Conflict" which seemed like the best match for this
+			AjaxUtils.createResponse(request, context).setStatus(409);
+		}
+		
 		return null;
+	}
+	
+	
+	/**
+	 * @return options for Ajax.Request that is made when the link is clicked
+	 */
+	protected NSMutableDictionary ajaxRequestOptions() {
+		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", Boolean.FALSE, AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.FALSE, AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.FUNCTION_1));
+		
+		// onSuccess callback handler to open AMD
+		StringBuilder sb = new StringBuilder(500);
+		sb.append(AjaxModalDialog.openDialogFunctionName(modalDialogId()));
+		sb.append("(");	
+		
+		// Override for dialog name
+		if (hasBinding("title")) {	
+			sb.append(AjaxValue.javaScriptEscaped(valueForBinding("title")));
+		}		
+		sb.append(");");
+		ajaxOptionsArray.addObject(new AjaxOption("onSuccess", sb.toString(), AjaxOption.FUNCTION_1));
+
+		return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 	}
 
 }
