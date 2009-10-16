@@ -1,0 +1,8 @@
+Test for Client-Side Rendering page
+
+|open|/|
+
+|click|link=Client-side Rendering|
+|pause|1200|
+|verifyTextPresent|Click to Vote|
+

@@ -1,0 +1,8 @@
+Test for Live Search page
+
+|open|/|
+
+|click|link=Live Search|
+|pause|1200|
+|verifyTextPresent|Type in a product to search for.|
+
