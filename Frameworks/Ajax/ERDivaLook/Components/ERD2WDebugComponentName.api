@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo class="ERDIVDebugComponentName.java" wocomponentcontent="false">
+        <wo class="ERD2WDebugComponentName.java" wocomponentcontent="false">
 
         <binding defaults="Boolean" name="isDebug"/>
         <validation message="'isDebug' is a required binding.">

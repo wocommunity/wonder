@@ -3,8 +3,8 @@ package er.diva.components.help;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.D2WContext;
 
-public class ERDIVDebugPropertyName extends WOComponent {
-    public ERDIVDebugPropertyName(WOContext context) {
+public class ERD2WDebugPropertyName extends WOComponent {
+    public ERD2WDebugPropertyName(WOContext context) {
         super(context);
     }
     

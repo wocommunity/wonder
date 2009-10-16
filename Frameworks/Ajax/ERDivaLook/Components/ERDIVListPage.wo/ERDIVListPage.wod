@@ -164,12 +164,12 @@ TableRow: WOGenericContainer {
 	id = rowID;
 }
 
-DebugPropertyName: ERDIVDebugPropertyName {
+DebugPropertyName: ERD2WDebugPropertyName {
 	d2wContext = d2wContext;
 	isDebug = d2wComponentNameDebuggingEnabled;
 }
 
-DebugComponentName: ERDIVDebugComponentName {
+DebugComponentName: ERD2WDebugComponentName {
 	d2wContext = d2wContext;
 	isDebug = d2wComponentNameDebuggingEnabled;
 }
