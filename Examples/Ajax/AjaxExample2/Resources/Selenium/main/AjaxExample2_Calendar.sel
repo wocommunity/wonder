@@ -1,0 +1,8 @@
+Test for Calendar page
+
+|open|/|
+
+|click|link=Calendar|
+|pause|1200|
+|verifyTextPresent|Select a Day|
+

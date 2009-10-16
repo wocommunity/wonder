@@ -1,0 +1,8 @@
+Test for Toggle Details page
+
+|open|/|
+
+|click|link=Toggle Details|
+|pause|1200|
+|verifyTextPresent|Mike Schrag|
+
