@@ -99,141 +99,194 @@ public class ERXArrayUtilities extends Object {
     }
     
     /**
-     * Typesafe variant of arrayGroupedByKeyPath.
-     * 
+     * Starting with an array of KeyValueCoding-compliant objects and a keyPath,
+     * this method calls valueForKey on each object in the array and groups the
+     * contents of the array, using the result of the valueForKey call as a key
+     * in a dictionary. If passed a null array, null is returned. If passed a null
+     * keyPath, an empty dictionary is returned. This is a typesafe variant of
+     * arrayGroupedByKeyPath(NSArray<V> objects, String keyPath).
+     *
+     * <p>See arrayGroupedByKeyPath(NSArray<V> objects, String keyPath) for examples.</p>
+     *
+     * <p>This method calls
+     * arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath)
+     * with includeNulls set to true and valueKeyPath set to null.</p>
+     *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have that value.
-     *		Note that if the key path returns null then one of the 
-     *      keys will be NULL_GROUPING_KEY
+     *          objects are arrays of the objects that have that value.
+     *          Objects for which the key path returns null will be grouped
+     *          with the key {@link NULL_GROUPING_KEY}
      */
-	public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<V> objects, ERXKey<K> keyPath) {
-    	return arrayGroupedByKeyPath(objects, keyPath.key());
+    public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<V> objects, ERXKey<K> keyPath) {
+        return arrayGroupedByKeyPath(objects, (keyPath == null) ? null : keyPath.key());
     }
 
     /**
-     * Groups objects by the value returned by evaluating keyPath 
-     * on the objects.  The dictionary that is returned contains keys 
-     * that correspond to the values returned by the keyPath.  The 
-     * objects in the dictionary are NSArrays of the objects having 
-     * the key value at keyPath.
+     * Starting with an array of KeyValueCoding-compliant objects and a keyPath,
+     * this method calls valueForKey on each object in the array and groups the 
+     * contents of the array, using the result of the valueForKey call as a key
+     * in a dictionary. If passed a null array, null is returned. If passed a null
+     * keyPath, an empty dictionary is returned.
+     *
+     * <p>If one starts with:
+<pre>( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; },
+{ firstName = "Bob"; favoriteColor = "red"; },
+{ lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } )</pre>
+     * and one calls arrayGroupedByKeyPath(objects, "firstName"), one gets:
+<pre>{ "Bob" = ( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; }, { firstName = "Bob"; favoriteColor = "red"; } );
+"Frank" = ( { lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } ); }</pre><br/>
+     * If one calls arrayGroupedByKeyPath(objects, "lastName"), one gets:
+<pre>{ "Bob" = ( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; } );
+"Frank" = ( { lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } );
+"**** NULL GROUPING KEY ****" = ( { firstName = "Bob"; favoriteColor = "red"; } ); }</pre></p>
+     *
+     * <p>This method calls arrayGroupedByKeyPath(objects, keyPath, includeNulls, valueKeyPath) with
+     * includeNulls set to true and valueKeyPath set to null.</p>
      * 
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
      * @return a dictionary where the keys are the grouped values and the
      * 		objects are arrays of the objects that have that value.
-     *		Note that if the key path returns null then one of the 
-     *      keys will be NULL_GROUPING_KEY
+     *		Objects for which the key path returns null will be grouped 
+     *          with the key {@link NULL_GROUPING_KEY}
      */
     public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<V> objects, String keyPath) {
         return arrayGroupedByKeyPath(objects,keyPath,true,null);
     }
 
     /**
-     * Typesafe variant of arrayGroupedByKeyPath.
-     * 
+     * Starting with an array of KeyValueCoding-compliant objects and a keyPath,
+     * this method calls valueForKey on each object in the array and groups the
+     * contents of the array, using the result of the valueForKey call as a key
+     * in a dictionary. If passed a null array, null is returned. If passed a null
+     * keyPath, an empty dictionary is returned. If valueKeyPath is not null, then
+     * the grouped arrays each have valueForKey called with valueKeyPath and the
+     * grouped arrays are replaced with the results of those calls. This is a
+     * typesafe variant of
+     * arrayGroupedByKeyPath(NSArray<T> objects, String keyPath, boolean includeNulls, String valueKeyPath).
+     *
+     * <p>See arrayGroupedByKeyPath(NSArray<T> objects, String keyPath, boolean includeNulls, String valueKeyPath)
+     * for examples.</p>
+     *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
      * @param includeNulls determines if keyPaths that resolve to null
-     *		should be allowed into the group.
-     * @param valueKeyPath allows the grouped objects in the result to be
-     *        derived from objects (by evaluating valueKeyPath), instead
-     *        of being members of the objects collection.  Objects that 
-     *        evaluate valueKeyPath to null have no value included in the
-     *        result.
+     *        are included in the resulting dictionary
+     * @param valueKeyPath used to call valueForKey on the arrays in
+     *        the results dictionary, with the results of those calls each
+     *        replacing the corresponding array in the results dictionary.
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have that value.
-     *		Note that if the key path returns null then one of the 
-     *      keys will be NULL_GROUPING_KEY
+     *          objects are arrays of the objects that have that value.
+     *          Objects for which the key path returns null will be grouped
+     *          with the key {@link NULL_GROUPING_KEY}
      */
-	public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, ERXKey<K> keyPath, boolean includeNulls, ERXKey<V> valueKeyPath) {
-    	return arrayGroupedByKeyPath(objects, keyPath.key(), includeNulls, (valueKeyPath == null) ? null : valueKeyPath.key());
+    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, ERXKey<K> keyPath, boolean includeNulls, ERXKey<V> valueKeyPath) {
+        return arrayGroupedByKeyPath(objects, (keyPath == null) ? null : keyPath.key(), includeNulls, (valueKeyPath == null) ? null : valueKeyPath.key());
     }
 
     /**
-     * Groups objects by the value returned by evaluating keyPath 
-     * on the objects.  The dictionary that is returned contains keys 
-     * that correspond to the values returned by the keyPath.  If 
-     * valueKeyPath is null, the objects in the dictionary are NSArrays 
-     * of the objects having the key value at keyPath. If valueKeyPath
-     * is not null, the objects in the dictionary are NSArrays of the 
-     * result of calling valueKeyPath on the objects having the key 
-     * value at keyPath.  If valueKeyPath is not null, the objects in 
-     * the dictionary will not be from objects.
+     * Starting with an array of KeyValueCoding-compliant objects and a keyPath,
+     * this method calls valueForKey on each object in the array and groups the
+     * contents of the array, using the result of the valueForKey call as a key
+     * in a dictionary. If passed a null array, null is returned. If passed a null
+     * keyPath, an empty dictionary is returned. If valueKeyPath is not null, then
+     * the grouped arrays each have valueForKey called with valueKeyPath and the
+     * grouped arrays are replaced with the results of those calls.
      * 
+     * <p>If one starts with:
+<pre>( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; },
+{ firstName = "Bob"; favoriteColor = "red"; },
+{ lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } )</pre>
+     * and one calls arrayGroupedByKeyPath(objects, "firstName", true, "favoriteColor"), one gets:
+<pre>{Frank = ("green"); Bob = ("blue", "red");</pre>
+     * If one calls arrayGroupedByKeyPath(objects, "lastName", false, "favoriteColor"), one gets:
+<pre>{Further = ("green"); Barker = ("blue"); }</pre></p>
+     * If one calls arrayGroupedByKeyPath(objects, "lastName", true, "favoriteColor"), one gets:
+<pre>{Further = ("green"); Barker = ("blue"); "**** NULL GROUPING KEY ****" = ("red"); }</pre></p>
+     *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
      * @param includeNulls determines if keyPaths that resolve to null
-     *		should be allowed into the group.
-     * @param valueKeyPath allows the grouped objects in the result to be
-     *        derived from objects (by evaluating valueKeyPath), instead
-     *        of being members of the objects collection.  Objects that 
-     *        evaluate valueKeyPath to null have no value included in the
-     *        result.
+     *        are included in the resulting dictionary
+     * @param valueKeyPath used to call valueForKey on the arrays in
+     *        the results dictionary, with the results of those calls each
+     *        replacing the corresponding array in the results dictionary.
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have that value.
-     *		Note that if the key path returns null then one of the 
-     *      keys will be NULL_GROUPING_KEY
+     *          objects are arrays of the objects that have that value.
+     *          Objects for which the key path returns null will be grouped
+     *          with the key {@link NULL_GROUPING_KEY}
      */
-    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects,
-            String keyPath,
-            boolean includeNulls,
-            String valueKeyPath) {
-    	return arrayGroupedByKeyPath(objects, keyPath, (includeNulls) ? (K)NULL_GROUPING_KEY : null, valueKeyPath);
+    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, String keyPath, boolean includeNulls, String valueKeyPath) {
+        return arrayGroupedByKeyPath(objects, keyPath, (includeNulls) ? (K)NULL_GROUPING_KEY : null, valueKeyPath);
     }
 
     /**
-     * Typesafe variant of arrayGroupedByKeyPath.
-     * 
+     * Starting with an array of KeyValueCoding-compliant objects and a keyPath,
+     * this method calls valueForKey on each object in the array and groups the
+     * contents of the array, using the result of the valueForKey call as a key
+     * in a dictionary. If passed a null array, null is returned. If passed a null
+     * keyPath, an empty dictionary is returned. If valueKeyPath is not null, then
+     * the grouped arrays each have valueForKey called with valueKeyPath and the
+     * grouped arrays are replaced with the results of those calls. This is a
+     * typesafe variant of
+     * arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath).
+     *
+     * <p>See arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath)
+     * for examples.</p>
+     *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
-     * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
-     *      should be allowed into the group; if so, this key is used for them
-     * @param valueKeyPath allows the grouped objects in the result to be
-     *        derived from objects (by evaluating valueKeyPath), instead
-     *        of being members of the objects collection.  Objects that 
-     *        evaluate valueKeyPath to null have no value included in the
-     *        result.
+     * @param includeNulls determines if keyPaths that resolve to null
+     *        are included in the resulting dictionary
+     * @param valueKeyPath used to call valueForKey on the arrays in
+     *        the results dictionary, with the results of those calls each
+     *        replacing the corresponding array in the results dictionary.
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have that value.
-     *		Note that if the key path returns null then one of the 
-     *      keys will be NULL_GROUPING_KEY
+     *          objects are arrays of the objects that have that value.
+     *          Objects for which the key path returns null will be grouped
+     *          with the key {@link NULL_GROUPING_KEY}
      */
-	public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, ERXKey<K> keyPath, K nullGroupingKey, ERXKey<V> valueKeyPath) {
-    	return arrayGroupedByKeyPath(objects, keyPath.key(), nullGroupingKey, (valueKeyPath == null) ? null : valueKeyPath.key());
+    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, ERXKey<K> keyPath, K nullGroupingKey, ERXKey<V> valueKeyPath) {
+        return arrayGroupedByKeyPath(objects, (keyPath == null) ? null : keyPath.key(), nullGroupingKey, (valueKeyPath == null) ? null : valueKeyPath.key());
     }
     
     /**
-     * Groups objects by the value returned by evaluating keyPath 
-     * on the objects.  The dictionary that is returned contains keys 
-     * that correspond to the values returned by the keyPath.  If 
-     * valueKeyPath is null, the objects in the dictionary are NSArrays 
-     * of the objects having the key value at keyPath. If valueKeyPath
-     * is not null, the objects in the dictionary are NSArrays of the 
-     * result of calling valueKeyPath on the objects having the key 
-     * value at keyPath.  If valueKeyPath is not null, the objects in 
-     * the dictionary will not be from objects.
-     * 
+     * Starting with an array of KeyValueCoding-compliant objects and a keyPath,
+     * this method calls valueForKey on each object in the array and groups the
+     * contents of the array, using the result of the valueForKey call as a key
+     * in a dictionary. If passed a null array, null is returned. If passed a null
+     * keyPath, an empty dictionary is returned. If valueKeyPath is not null, then
+     * the grouped arrays each have valueForKey called with valueKeyPath and the
+     * grouped arrays are replaced with the results of that call.
+     *
+     * <p>If one starts with:
+<pre>( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; },
+{ firstName = "Bob"; favoriteColor = "red"; },
+{ lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } )</pre>
+     * and one calls arrayGroupedByKeyPath(objects, "firstName", null, "favoriteColor"), one gets:
+<pre>{Frank = ("green"); Bob = ("blue", "red");</pre>
+     * If one calls arrayGroupedByKeyPath(objects, "lastName", "extra", "favoriteColor"), one gets:
+<pre>{Further = ("green"); Barker = ("blue"); "extra" = ("red"); }</pre>
+     * If one calls arrayGroupedByKeyPath(objects, "lastName", null, "favoriteColor"), one gets:
+<pre>{Further = ("green"); Barker = ("blue"); "**** NULL GROUPING KEY ****" = ("red"); }</pre></p>
+     *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
-     * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
-     *      should be allowed into the group; if so, this key is used for them
-     * @param valueKeyPath allows the grouped objects in the result to be
-     *        derived from objects (by evaluating valueKeyPath), instead
-     *        of being members of the objects collection.  Objects that 
-     *        evaluate valueKeyPath to null have no value included in the
-     *        result
+     * @param includeNulls determines if keyPaths that resolve to null
+     *        are included in the resulting dictionary
+     * @param valueKeyPath used to call valueForKey on the arrays in
+     *        the results dictionary, with the results of those calls each
+     *        replacing the corresponding array in the results dictionary.
      * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have that value.
-     *		Note that if the key path returns null then one of the 
-     *      keys will be NULL_GROUPING_KEY
+     *          objects are arrays of the objects that have that value.
+     *          Objects for which the key path returns null will be grouped
+     *          with the key {@link NULL_GROUPING_KEY}
      */
     @SuppressWarnings("unchecked")
-	public static NSDictionary arrayGroupedByKeyPath(NSArray objects,
-                                                     String keyPath,
-                                                     Object nullGroupingKey,
-                                                     String valueKeyPath) {
+    public static NSDictionary arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath) {
+        if (objects == null) return null;
         NSMutableDictionary result=new NSMutableDictionary();
         for (Enumeration e=objects.objectEnumerator(); e.hasMoreElements();) {
             Object eo = e.nextElement();
@@ -1737,6 +1790,8 @@ public class ERXArrayUtilities extends Object {
      * without NSKeyValueCoding.NullValue objects
      */
     public static <T> NSArray<T> removeNullValues(NSArray<T> target, NSArray<T> array) {
+        if (target == null) return null;
+        if (array == null) return target;
         NSMutableArray<T> result = new NSMutableArray<T>();
         int i = 0;
         for (T object : array) {
@@ -1802,6 +1857,7 @@ public class ERXArrayUtilities extends Object {
      * @return a new NSArray which does not have NSKeyValueCoding.Null instances at the end
      */
     public static <T> NSArray<T> removeNullValuesFromEnd(NSArray<T> array) {
+        if (array == null) return null;
         NSMutableArray<T> a = array.mutableClone();
         while (a.lastObject() instanceof NSKeyValueCoding.Null) {
             a.removeLastObject();
