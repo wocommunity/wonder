@@ -1,4 +1,4 @@
-package er.diva.components.help;
+package er.directtoweb.components;
 
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.D2WContext;
