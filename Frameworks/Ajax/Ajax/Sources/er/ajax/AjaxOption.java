@@ -16,6 +16,9 @@ public class AjaxOption {
   public static AjaxOption.Type BOOLEAN = new AjaxOption.Type(6);
   public static AjaxOption.Type STRING_OR_ARRAY = new AjaxOption.Type(7);
   public static AjaxOption.Type DICTIONARY = new AjaxOption.Type(8);
+  public static AjaxOption.Type FUNCTION = new AjaxOption.Type(9);	// Function with no args
+  public static AjaxOption.Type FUNCTION_1 = new AjaxOption.Type(9);// Function with one arg
+  public static AjaxOption.Type FUNCTION_2 = new AjaxOption.Type(9);// Function with two args
   
   public static class Type {
     private int _number;
