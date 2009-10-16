@@ -171,7 +171,15 @@ public class AjaxValue {
 		else if (type == AjaxOption.SCRIPT) {
 			strValue = _value.toString();
 		}
-		else {
+		else if (type == AjaxOption.FUNCTION) {
+			strValue = "function() {" + _value.toString() + "}";
+		}
+		else if (type == AjaxOption.FUNCTION_1) {
+			strValue = "function(v) {" + _value.toString() + "}";
+		}
+		else if (type == AjaxOption.FUNCTION_2) {
+			strValue = "function(v1, v2) {" + _value.toString() + "}";
+		}else {
 			strValue = _value.toString();
 		}
 		return strValue;
