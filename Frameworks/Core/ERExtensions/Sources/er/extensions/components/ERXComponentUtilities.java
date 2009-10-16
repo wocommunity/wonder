@@ -8,12 +8,14 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -242,6 +244,41 @@ public class ERXComponentUtilities {
 			template = ERXStringUtilities.stringFromURL(templateUrl);
 		}
 		return template;
+	}
+	
+   /**
+    * Allows a component to "inherit" the template (.html and .wod files) from another component.
+    * <p>Usage in your WOComponent subclass:</p>
+    * <pre>
+    * @Override
+    * public WOElement template() {
+    *     return ERXComponentUtilities.inheritTemplateFrom("AddAddress", session().languages());
+    * }
+    * </pre>
+    * This very simple implementation does have some limitations:
+    * <ol>
+    * <li>It can't be used to inherit the template of another component inheriting a template.</li>
+    * <li>It can't handle having two components with the same name in different packages or frameworks</li>
+    * <li>It does not use WO template caching</li>
+    * </ol>
+    *
+    * @see com.webobjects.appserver.WOComponent#template()
+    *
+    * @param componentName the name of the component whose template will be inherited
+    * @param languages the list of languages to use for finding components
+    * @return the template from the indicated component
+    */
+	public static WOElement inheritTemplateFrom(String componentName, NSArray<String> languages) {
+		try {
+			/** require [valid_componentName] componentName != null;  **/
+			String htmlString = ERXComponentUtilities.template(componentName, "html", languages);
+			String wodString = ERXComponentUtilities.template(componentName, "wod", languages);
+			return WOComponent.templateWithHTMLString(htmlString, wodString, languages);
+			/** ensure [valid_Result] Result != null;  **/
+		}
+		catch (IOException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
 	}
 
 	/**
