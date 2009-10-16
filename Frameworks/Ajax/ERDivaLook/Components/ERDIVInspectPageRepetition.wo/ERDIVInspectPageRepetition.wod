@@ -27,12 +27,12 @@ Sections: WORepetition {
     item=currentSection;
 }
 
-DebugPropertyName: ERDIVDebugPropertyName {
+DebugPropertyName: ERD2WDebugPropertyName {
 	d2wContext = subContext;
 	isDebug = d2wComponentNameDebuggingEnabled;
 }
 
-DebugComponentName: ERDIVDebugComponentName {
+DebugComponentName: ERD2WDebugComponentName {
 	d2wContext = subContext;
 	isDebug = d2wComponentNameDebuggingEnabled;
 }

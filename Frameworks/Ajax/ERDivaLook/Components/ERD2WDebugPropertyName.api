@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo class="ERDIVDebugPropertyName.java" wocomponentcontent="false">
+        <wo class="ERD2WDebugPropertyName.java" wocomponentcontent="false">
 
         <binding name="d2wContext"/>
         <validation message="'d2wContext' is a required binding.">
