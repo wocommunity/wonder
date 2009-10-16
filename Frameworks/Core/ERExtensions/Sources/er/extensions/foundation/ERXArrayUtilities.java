@@ -1841,7 +1841,9 @@ public class ERXArrayUtilities extends Object {
      * @return a dictionary indexing the given array.  if array is null, an empty dictionary is returned.
      */
     public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(final NSArray<T> array, final String keyPath, final boolean throwOnCollision) {
-        final NSMutableDictionary<K, T> result = new NSMutableDictionary<K, T>();
+		if (array == null)
+			return NSDictionary.emptyDictionary();
+    	final NSMutableDictionary<K, T> result = new NSMutableDictionary<K, T>();
         final Enumeration<T> e = array.objectEnumerator();
 
         while ( e.hasMoreElements() ) {
