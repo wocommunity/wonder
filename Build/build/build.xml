@@ -575,7 +575,7 @@
 	          <param name="project.name" value="AjaxExample2" />
 	          <param name="project.dir" value="Examples/Ajax/AjaxExample2" />
 	
-	          <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/WOOgnl/WOLips" />
+	          <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/WOOgnl/WOLips/ERSelenium" />
 	      </antcall>
 	  </target>
     <target name="ERIUIExample.all">
