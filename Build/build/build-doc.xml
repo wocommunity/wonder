@@ -12,14 +12,13 @@
     <property file="${wonder.root}/build.properties" />
     <property file="${user.home}/Library/Application Support/WOLips/wolips.properties" />
     <property file="${wonder.root}/Build/build/default.properties" />
-	
+
     <property name="wo.system.root" value="/System" />
     <property name="build.root" value="${user.home}/Roots" />
     <property name="wo.local.root" value="/" />
     <property name="wo.system.frameworks" value="${wo.system.root}/Library/Frameworks" />
     <property name="wo.local.frameworks" value="${wo.local.root}/Library/Frameworks" />
     <property name="build.classes" value="${build.root}/classes/${project.name}" />
-
 
     <!-- ==================================================== -->
     <!--              Derived Properties.                     -->
@@ -67,14 +66,12 @@
         <mkdir dir="${dist}/Documentation/api"/>
     </target>
 
-
     <!-- ==================================================== -->
     <!-- Clean Wonder                                         -->
     <!-- ==================================================== -->
     <target name="clean">
         <delete dir="${dist}/Documentation"/>
     </target>
-
 
     <!-- ==================================================== -->
     <!-- Build Wonder documenatation.                         -->
@@ -126,7 +123,7 @@
                    version="true"
                    use="true"
                    verbose="false"
-        	         maxmemory="128m"
+                   maxmemory="128m"
                    windowtitle="Project Wonder Reference Documentation">
 
             <classpath refid="classpath"/>
@@ -147,6 +144,7 @@
             <link href="http://developer.apple.com/documentation/WebObjects/Reference/WO53_Reference/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
             <link href="http://junit.sourceforge.net/javadoc/"/>
+            <tag name="author" description="Author:" scope="all" />
             <taglet name="BindingTaglet" path="${wonder.root}/Build/lib/" />
             <taglet name="D2WKeyTaglet" path="${wonder.root}/Build/lib/" />
             <taglet name="PropertyTaglet" path="${wonder.root}/Build/lib/" />
