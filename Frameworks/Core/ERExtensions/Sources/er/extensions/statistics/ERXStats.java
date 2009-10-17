@@ -24,7 +24,7 @@ import er.extensions.foundation.ERXUtilities;
  * <p>
  * ERXStats provides a simple interface for logging statistics information like
  * WOEvent, but also tracked on a per-thread basis (so you can dump stats just
- * for a particular thread). DO PROBABLY DO NOT WANT TO TURN THIS ON IN
+ * for a particular thread). YOU PROBABLY DO NOT WANT TO TURN THIS ON IN
  * PRODUCTION.
  * </p>
  * 
@@ -52,12 +52,14 @@ import er.extensions.foundation.ERXUtilities;
  * @author mschrag
  * 
  * @property er.extensions.erxStats.enabled if true, stats will be initialized on each for each request
+ * @property er.extensions.erxStats.traceCollectingEnabled defaults to false
  * @property er.extensions.erxStats.max the maximum historical stats to collect (defaults to 1000) 
  */
 public class ERXStats {
 	private static final String STATS_INITIALIZED_KEY = "er.extensions.erxStats.initialized";
 	private static final String STATS_START_TIME_KEY = "er.extensions.erxStats.startTime";
 	private static final String STATS_LAST_TIME_KEY = "er.extensions.erxStats.lastTime";
+	private static final String STATS_MAX_KEY = "er.extensions.erxStats.max";
 	private static final String STATS_KEY = "er.extensions.erxStats.statistics";
 
     public static final String STATS_ENABLED_KEY = "er.extensions.erxStats.enabled";
@@ -89,14 +91,14 @@ public class ERXStats {
 	 * 
 	 */
 	private static boolean areStatisticsEnabled() {
-		return ERXProperties.booleanForKey("er.extensions.erxStats.enabled");
+		return ERXProperties.booleanForKey(ERXStats.STATS_ENABLED_KEY);
 	}
 	
 	/**
 	 * 
 	 */
 	public static boolean traceCollectingEnabled() {
-		return ERXProperties.booleanForKeyWithDefault(STATS_TRACE_COLLECTING_ENABLED_KEY, false);
+		return ERXProperties.booleanForKeyWithDefault(ERXStats.STATS_TRACE_COLLECTING_ENABLED_KEY, false);
 	}
 
 	/**
@@ -105,7 +107,7 @@ public class ERXStats {
 	 */
 	public static void initStatistics() {
 		ERXThreadStorage.takeValueForKey(Boolean.TRUE, ERXStats.STATS_INITIALIZED_KEY);
-		ERXThreadStorage.takeValueForKey(new Long(System.currentTimeMillis()), STATS_START_TIME_KEY);
+		ERXThreadStorage.takeValueForKey(new Long(System.currentTimeMillis()), ERXStats.STATS_START_TIME_KEY);
 		ERXThreadStorage.removeValueForKey(ERXStats.STATS_LAST_TIME_KEY);
 		ERXThreadStorage.removeValueForKey(ERXStats.STATS_KEY);
 	}
@@ -134,7 +136,7 @@ public class ERXStats {
 			synchronized (_allStatistics) {
 				ERXStats._allStatistics.addObject(statistics);
 
-				int maxStatistics = ERXProperties.intForKeyWithDefault("er.extensions.erxStats.max", 1000);
+				int maxStatistics = ERXProperties.intForKeyWithDefault(ERXStats.STATS_MAX_KEY, 1000);
 				if (ERXStats._allStatistics.count() > maxStatistics) {
 					ERXStats._allStatistics.removeObjectAtIndex(0);
 				}
@@ -339,8 +341,8 @@ public class ERXStats {
 				synchronized (statistics) {
 					NSArray values = ERXArrayUtilities.sortedArraySortedWithKey(statistics.allValues(), operation);
 					if (values.count() > 0) {
-						Long startTime = (Long) ERXThreadStorage.valueForKey(STATS_START_TIME_KEY);
-						Long lastTime = (Long) ERXThreadStorage.valueForKey(STATS_LAST_TIME_KEY);
+						Long startTime = (Long) ERXThreadStorage.valueForKey(ERXStats.STATS_START_TIME_KEY);
+						Long lastTime = (Long) ERXThreadStorage.valueForKey(ERXStats.STATS_LAST_TIME_KEY);
 						long currentTime = System.currentTimeMillis();
 						String result = NSPropertyListSerialization.stringFromPropertyList(values);
 						// result = result.replaceAll("\\n\\t", "\n\t\t");
