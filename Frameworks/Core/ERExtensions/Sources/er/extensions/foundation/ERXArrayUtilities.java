@@ -238,8 +238,9 @@ public class ERXArrayUtilities extends Object {
      *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
-     * @param includeNulls determines if keyPaths that resolve to null
-     *        are included in the resulting dictionary
+     * @param nullGroupingKey used as the key in the results dictionary
+     *        for the array of objects for which the valueForKey with keyPath
+     *        result is null.
      * @param valueKeyPath used to call valueForKey on the arrays in
      *        the results dictionary, with the results of those calls each
      *        replacing the corresponding array in the results dictionary.
@@ -274,8 +275,9 @@ public class ERXArrayUtilities extends Object {
      *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
-     * @param includeNulls determines if keyPaths that resolve to null
-     *        are included in the resulting dictionary
+     * @param nullGroupingKey used as the key in the results dictionary
+     *        for the array of objects for which the valueForKey with keyPath
+     *        result is null.
      * @param valueKeyPath used to call valueForKey on the arrays in
      *        the results dictionary, with the results of those calls each
      *        replacing the corresponding array in the results dictionary.
