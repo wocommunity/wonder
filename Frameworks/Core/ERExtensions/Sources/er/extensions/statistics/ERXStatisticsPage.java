@@ -11,7 +11,11 @@ import com.webobjects.woextensions.WOStatsPage;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 import er.extensions.statistics.ERXStats.LogEntry;
 
+/** Provides more and better functionality than the default WOStatsPage.
+ * <p>As with WOStatsPage, you must set the WOStatisticsPassword property on launch.</p>
+ */
 public class ERXStatisticsPage extends WOStatsPage {
+
 	private NSArray<ERXStats.LogEntry> _aggregateLogEntries;
 	private ERXStats.LogEntry _aggregateLogEntry;
 

@@ -30,13 +30,21 @@ import er.extensions.foundation.ERXProperties;
  * Enhances the normal stats store with a bunch of useful things which get
  * displayed in the ERXStatisticsPage.
  * <ul>
- * <li>warn and error messages when a request took too long, complete with stack traces of all threads in the state they were in at half-time.
- * <li>logs fatal messages before the request finished.
- * <li>fixes an incompatibility with 5.4.
+ * <li>will dump warning and error messages when a request takes too long, complete with stack traces of all threads.</li>
+ * <li>logs fatal messages that occurred before a request finished processing.</li>
+ * <li>fixes an incompatibility with 5.4.</li>
  * </ul>
+ *
+ * <p>In order to turn on this functionality, you must make this call in your Application null constructor:<br/>
+ * <pre>this.setStatisticsStore(new ERXStatisticsStore());</pre>
  * 
+ * Then configure the behavior of this class with the three properties that determine how much it logs and when it logs.
+ *
+ * @property er.extensions.ERXStatisticsStore.milliSeconds.warn defaults to 2000 ms
+ * @property er.extensions.ERXStatisticsStore.milliSeconds.error defaults to 10 seconds
+ * @property er.extensions.ERXStatisticsStore.milliSeconds.fatal defaults to 5 minutes
+ *
  * @author ak
- * 
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
 
