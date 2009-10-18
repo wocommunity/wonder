@@ -10,7 +10,7 @@ public abstract class BaseTestCase extends TestCase {
   public static void assertEquals(Object[] arg0, Object[] arg1) {
     if (Arrays.equals(arg0, arg1))
       return;
-    assertEquals(arg0, arg1);
+    TestCase.assertEquals(arg0, arg1);
   }
 
   public static void assertEquals(Collection<?> arg0, Collection<?> arg1) {
@@ -18,6 +18,6 @@ public abstract class BaseTestCase extends TestCase {
       return;
     if ((arg0 != null && arg0.equals(arg1)) || (arg1 != null && arg1.equals(arg0)))
       return;
-    assertEquals(arg0, arg1);
+    TestCase.assertEquals(arg0, arg1);
   }
 }
