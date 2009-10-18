@@ -6,6 +6,7 @@ import java.net.URL;
 import java.text.Format;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -328,12 +329,12 @@ public class ERIndex {
             registerNotification(ERXEC.EditingContextFailedToSaveChanges, "_handleChanges");
         }
 
-        protected void addObjectsToIndex(Transaction transaction, NSArray objects) {
+        protected void addObjectsToIndex(Transaction transaction, NSArray<? extends EOEnterpriseObject> objects) {
             NSArray added = addedDocumentsForObjects(objects);
             transaction.addJob(Command.ADD, added);
         }
 
-        protected void deleteObjectsFromIndex(Transaction transaction, NSArray objects) {
+        protected void deleteObjectsFromIndex(Transaction transaction, NSArray<? extends EOEnterpriseObject> objects) {
             NSArray deleted = deletedTermsForObjects(objects);
             transaction.addJob(Command.DELETE, deleted);
         }
@@ -403,15 +404,15 @@ public class ERIndex {
         indices.setObjectForKey(this, name);
     }
    
-    public void addObjectsToIndex(EOEditingContext ec, NSArray objects) {
+    public void addObjectsToIndex(EOEditingContext ec, NSArray<? extends EOEnterpriseObject> objects) {
         Transaction transaction = new Transaction(ec);
-        _handler.addObjectsToIndex(transaction, addedDocumentsForObjects(objects));
+        _handler.addObjectsToIndex(transaction, objects);
         _handler.submit(transaction);
     }
 
-    public void deleteObjectsFromIndex(EOEditingContext ec, NSArray objects) {
+    public void deleteObjectsFromIndex(EOEditingContext ec, NSArray<? extends EOEnterpriseObject> objects) {
         Transaction transaction = new Transaction(ec);
-        _handler.addObjectsToIndex(transaction, deletedTermsForObjects(objects));
+        _handler.deleteObjectsFromIndex(transaction, objects);
         _handler.submit(transaction);
     }
     
@@ -515,7 +516,7 @@ public class ERIndex {
         return true;
     }
     
-    protected NSArray<Document> addedDocumentsForObjects(NSArray objects) {
+    protected NSArray<Document> addedDocumentsForObjects(NSArray<? extends EOEnterpriseObject> objects) {
         NSMutableArray documents = new NSMutableArray();
 
         for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
@@ -551,7 +552,7 @@ public class ERIndex {
         return doc;
     }
 
-    protected NSArray<Term> deletedTermsForObjects(NSArray objects) {
+    protected NSArray<Term> deletedTermsForObjects(NSArray<? extends EOEnterpriseObject> objects) {
         NSMutableArray terms = new NSMutableArray();
         Term term;
         for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
@@ -622,7 +623,7 @@ public class ERIndex {
         }
     }
 
-    private NSArray<? extends EOEnterpriseObject> findObjects(EOEditingContext ec, Query query) {
+    public NSArray<? extends EOEnterpriseObject> findObjects(EOEditingContext ec, Query query) {
         return ERXEOControlUtilities.faultsForGlobalIDs(ec, findGlobalIDs(query));
     }
 
@@ -642,6 +643,54 @@ public class ERIndex {
         } catch (ParseException e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);
         }
+    }
+    
+    
+    public Hits findHits(Query query) {
+    	Hits hits = null;
+    	long start = System.currentTimeMillis();
+        try {
+            Searcher searcher = indexSearcher();
+            hits = searcher.search(query);
+            log.debug("Returning " + hits.length() + " after " + (System.currentTimeMillis() - start) + " ms");
+            return hits;
+        } catch (IOException e) {
+        	throw NSForwardException._runtimeExceptionForThrowable(e);
+        }
+    }
+    
+    public NSArray<Term> findTerms(Query q) {
+    	NSMutableArray<Term> terms = new NSMutableArray<Term>();
+    	try {
+    		IndexReader reader = indexReader(); 
+    		HashSet<Term> suggestedTerms = new HashSet<Term>(); 
+    		q.rewrite(reader).extractTerms(suggestedTerms); 
+    		for (Iterator<Term> iter = suggestedTerms.iterator(); iter.hasNext();) 
+    		{ 
+    			Term term = (Term) iter.next();
+    			terms.addObject(term); 
+    		} 
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return terms.immutableClone();
+    }
+    
+    public NSArray<String> findTermStrings(Query q) {
+    	NSMutableArray<String> terms = new NSMutableArray<String>();
+    	try {
+    		IndexReader reader = indexReader(); 
+    		HashSet<Term> suggestedTerms = new HashSet<Term>(); 
+    		q.rewrite(reader).extractTerms(suggestedTerms); 
+    		for (Iterator<Term> iter = suggestedTerms.iterator(); iter.hasNext();) 
+    		{ 
+    			Term term = (Term) iter.next();
+    			terms.addObject(term.text());
+    		} 
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return terms.immutableClone();
     }
 
     public IndexDocument findDocument(EOKeyGlobalID globalID) {
