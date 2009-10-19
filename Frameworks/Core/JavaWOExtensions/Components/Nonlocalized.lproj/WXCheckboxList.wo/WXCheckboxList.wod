@@ -10,7 +10,7 @@ Checkbox: WOCheckBox {
 	name = elementName;
 	selection = selection;
 	disabled = ^disabled;
-	value = ^item;
+	value = ^item.toString.hashCode;
 }
 
 Label: WOGenericContainer {
