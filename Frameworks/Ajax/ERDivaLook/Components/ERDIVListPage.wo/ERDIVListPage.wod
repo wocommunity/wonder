@@ -141,9 +141,9 @@ SortOrder: WOSwitchComponent {
 	container = d2wContext.container;
 }
 
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
+PropertyName: WOString {
+	value=d2wContext.displayNameForProperty;
+	escapeHTML = d2wContext.escapeHTML;
 }
 
 SwitchComponent2: WOSwitchComponent {
