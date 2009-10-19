@@ -76,9 +76,9 @@ ShowCancel: WOConditional {
 	condition = showCancel;
 }
 
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = subContext.propertyNameComponentName;
-	localContext = subContext;
+PropertyName: WOString {
+	value=subContext.displayNameForProperty;
+	escapeHTML = subContext.escapeHTML;
 }
 
 DebugPropertyName: ERD2WDebugPropertyName {
