@@ -8,7 +8,7 @@ Radio: WORadioButton {
 	class = ^class;
 	id = id;
 	name = elementName;
-	value = ^item;
+	value = ^item.toString.hashCode;
 	disabled = ^disabled;
 	selection = selection;
 }

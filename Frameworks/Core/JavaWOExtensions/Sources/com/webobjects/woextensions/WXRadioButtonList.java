@@ -1,4 +1,4 @@
-package com.webobjects.appserver._xhml;
+package com.webobjects.woextensions;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;

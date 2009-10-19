@@ -1,4 +1,4 @@
-package com.webobjects.appserver._xhml;
+package com.webobjects.woextensions;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -51,8 +51,8 @@ public class WXCheckboxList extends WOComponent {
     
     // accesors
     @SuppressWarnings("unchecked")
-	private NSArray<Object> selections() {
-    	return (NSArray<Object>) valueForBinding(Bindings.selections);
+	private NSArray selections() {
+    	return (NSArray) valueForBinding(Bindings.selections);
     }
     
     private Object item() {
@@ -65,7 +65,7 @@ public class WXCheckboxList extends WOComponent {
     }
     
     public void setSelection(Object value) {
-     	NSMutableArray<Object> selections = (selections() != null) ? selections().mutableClone() : new NSMutableArray<Object>();
+     	NSMutableArray selections = (selections() != null) ? selections().mutableClone() : new NSMutableArray();
     	if (value != null) {
     		selections.addObject(item());
     	} else {
