@@ -62,7 +62,7 @@ div#a div.button ul {
 
 /* The following are styles for WebObjects Look specific D2W components */
 
-div.D2WDisplayToOneFault2, div.D2WDisplayToManyList ul li {
+div.D2WDisplayToOneFault2, div.D2WAjaxDisplayToManyList ul li {
 	background-color: #333333;
 	width: 20em;
 }
