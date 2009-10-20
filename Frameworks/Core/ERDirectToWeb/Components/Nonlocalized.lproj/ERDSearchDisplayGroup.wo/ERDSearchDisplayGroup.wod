@@ -1,0 +1,16 @@
+SearchField: WOTextField {
+	value = value;
+	class = "quick_serach_field";
+	id = "quick_search_field";
+}
+
+Key: WOString {
+	value = displayNameForSearchKey;
+}
+
+Submit: WOSubmitButton {
+	action = search;
+	value = "Search";
+	name = "quick_search_submit";
+	id = "quick_search_submit";
+}
