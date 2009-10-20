@@ -1,4 +1,4 @@
-package er.directtoweb.components._xhtml;
+package er.directtoweb.components._ajax;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -16,10 +16,10 @@ import er.directtoweb.components.ERDCustomQueryComponent;
  * @author mendis
  *
  */
-public class ERDSearchDisplayGroup extends ERDCustomQueryComponent {
+public class ERDAjaxSearchDisplayGroup extends ERDCustomQueryComponent {
 	public String value;
 	
-    public ERDSearchDisplayGroup(WOContext context) {
+    public ERDAjaxSearchDisplayGroup(WOContext context) {
         super(context);
     }
     
