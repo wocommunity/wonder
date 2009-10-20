@@ -247,7 +247,7 @@ IsDetail: WOConditional {
 	condition = isDetailPage;
 }
 
-QuickSearch: ERDSearchDisplayGroup {
+QuickSearch: ERDAjaxSearchDisplayGroup {
 	displayGroup = displayGroup;
 	d2wContext = d2wContext;
 }

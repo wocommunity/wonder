@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-    <wo class="ERDSearchDisplayGroup" wocomponentcontent="false">    <binding name="displayGroup"/>
+    <wo class="ERDAjaxSearchDisplayGroup" wocomponentcontent="false">    <binding name="displayGroup"/>
         <validation message="'displayGroup' is a required binding.">
             <unbound name="displayGroup"/>
         </validation>
