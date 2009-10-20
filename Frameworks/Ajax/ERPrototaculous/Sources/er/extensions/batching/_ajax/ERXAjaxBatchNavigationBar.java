@@ -1,6 +1,8 @@
 package er.extensions.batching._ajax;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+
 import er.extensions.batching.ERXBatchNavigationBar;
 
 /**
@@ -29,5 +31,14 @@ public class ERXAjaxBatchNavigationBar extends ERXBatchNavigationBar {
 	 */
     public boolean isStateless() {
     	return false;
+    }
+    
+    /*
+     * @see ERXPluralString value()
+     */
+    public String objectName() {
+        Number c=(Number)valueForKey("objectCount");
+        String value = (String)valueForBinding("objectName");
+        return localizer().plurifiedString(value, c!=null ? c.intValue() : 0);
     }
  }

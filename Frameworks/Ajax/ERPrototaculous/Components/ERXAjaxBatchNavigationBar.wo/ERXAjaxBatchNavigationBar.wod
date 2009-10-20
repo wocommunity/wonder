@@ -21,9 +21,12 @@ DGHasQualifier: ERXNonNullConditional {
 	condition = displayGroup.qualifier;
 }
 
-EntityName3: ERXPluralString2 {
-	count = objectCount;
-	value = ^objectName;
+Count: WOString {
+	value = objectCount;
+}
+
+EntityName: WOString {
+	value = objectName;
 }
 
 EntityNameConditional: WOConditional {
