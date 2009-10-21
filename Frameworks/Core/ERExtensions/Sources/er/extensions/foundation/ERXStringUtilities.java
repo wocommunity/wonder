@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -28,6 +29,7 @@ import java.text.Format;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -762,6 +764,78 @@ public class ERXStringUtilities {
         }
         
         return result.toString();
+    }
+
+    /**
+     * XML entities to unescape.
+     */
+	public static final NSDictionary XML_UNESCAPES = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new String[] { "<", "lt", ">", "gt", "&", "amp", "\"", "quot" });
+	
+	/**
+	 * ISO entities to unescape.
+	 */
+	public static final NSDictionary ISO_UNESCAPES;
+	
+	/**
+	 * HTML entities to unescape.
+	 */
+	public static final NSDictionary HTML_UNESCAPES; 
+	
+	static {
+		Object[] chars = { 160, "nbsp", 161, "iexcl", 162, "cent", 163, "pound", 164, "curren", 165, "yen", 166, "brvbar", 167, "sect", 168, "uml", 169, "copy", 170, "ordf", 171, "laquo", 172, "not", 173, "shy", 174, "reg", 175, "macr", 176, "deg", 177, "plusmn", 178, "sup2", 179, "sup3", 180, "acute", 181, "micro", 182, "para", 183, "middot", 184, "cedil", 185, "sup1", 186, "ordm", 187, "raquo", 188, "frac14", 189, "frac12", 190, "frac34", 191, "iquest", 215, "times", 247, "divide", 192, "Agrave", 193, "Aacute", 194, "Acirc", 195, "Atilde", 196, "Auml", 197, "Aring", 198, "AElig", 199, "Ccedil", 200, "Egrave", 201, "Eacute", 202, "Ecirc", 203, "Euml", 204, "Igrave", 205, "Iacute", 206, "Icirc", 207, "Iuml", 208, "ETH", 209, "Ntilde", 210, "Ograve", 211, "Oacute", 212, "Ocirc", 213, "Otilde", 214, "Ouml", 216, "Oslash", 217, "Ugrave", 218, "Uacute", 219, "Ucirc", 220, "Uuml", 221, "Yacute", 222, "THORN", 223, "szlig", 224, "agrave", 225, "aacute", 226, "acirc", 227, "atilde", 228,
+				"auml", 229, "aring", 230, "aelig", 231, "ccedil", 232, "egrave", 233, "eacute", 234, "ecirc", 235, "euml", 236, "igrave", 237, "iacute", 238, "icirc", 239, "iuml", 240, "eth", 241, "ntilde", 242, "ograve", 243, "oacute", 244, "ocirc", 245, "otilde", 246, "ouml", 248, "oslash", 249, "ugrave", 250, "uacute", 251, "ucirc", 252, "uuml", 253, "yacute", 254, "thorn", 255, "yuml" };
+		NSMutableDictionary dict = new NSMutableDictionary();
+		for (int i = 0; i < chars.length; i+=2) {
+			Integer charValue = ((Integer) chars[i]);
+			String key = (String) chars[i+1];
+			dict.setObjectForKey(Character.toChars(charValue)[0]+"", key);
+		}
+		ISO_UNESCAPES = dict.immutableClone();
+		
+		dict = new NSMutableDictionary(XML_UNESCAPES);
+		dict.addEntriesFromDictionary(ISO_UNESCAPES);
+		HTML_UNESCAPES = dict.immutableClone();
+	}
+  
+    /**
+     * Util to unescape entities.
+     * @param string string to unescape
+     * @param map map of entities
+     * @return unescaped string
+     */
+	// FIXME handle numeric values
+    public static String unescapeEntities(String string, Map<String, String> map) {
+        if(string != null) {
+        	StringBuilder result = new StringBuilder();
+            int len = string.length();
+            for(int start = 0; start < len; start++) {
+                char c1 = string.charAt(start);
+                if(c1 == '&') {
+                	StringBuilder entity = new StringBuilder();
+                    for(int end = start+1; end < len; end++) {
+                        char c2 = string.charAt(end);
+                        if(c2 == ';') {
+                            String key = entity.toString();
+							String replacement = map.get(key);
+                            if(replacement == null) {
+                            	replacement = map.get(key.toUpperCase());
+                            }
+                            if(replacement == null) {
+                            	replacement = "?";
+                            }
+   							result.append(replacement);
+                            start = end;
+                            break;
+                        }
+                        entity.append(c2);
+                    }
+                } else {
+                    result.append(c1);
+                }
+            }
+            string = result.toString();
+        }
+        return string;
     }
 
     /**
