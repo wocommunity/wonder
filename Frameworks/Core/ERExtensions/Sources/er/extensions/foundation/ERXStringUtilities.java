@@ -780,16 +780,21 @@ public class ERXStringUtilities {
 	public static final NSDictionary SYMBOL_UNESCAPES; 
 
 	/**
-	 * HTML entities to unescape.
-	 */
-	public static final NSDictionary HTML_UNESCAPES; 
-
-	/**
-	 * Safe HTML entities to unescape (no XML).
+	 * Safe HTML entities to unescape (SYMBOL+ISO). This still prevents injection attacks.
 	 */
 	public static final NSDictionary HTML_SAFE_UNESCAPES; 
 
+	/**
+	 * HTML entities to unescape (XML+SYMBOL+ISO).
+	 */
+	public static final NSDictionary HTML_UNESCAPES; 
+
 	static {
+		// NOTE AK I used: 
+		// http://www.w3schools.com/tags/ref_symbols.asp
+		// http://www.w3schools.com/tags/ref_entities.asp
+		// as apache commons lang didn't really work for me?!?
+		
 		Object[] xml = new Object[] { '<', "lt", '>', "gt", '&', "amp", '\"', "quot" };
 		NSMutableDictionary dict = new NSMutableDictionary();
 		for (int i = 0; i < xml.length; i+=2) {
@@ -834,7 +839,7 @@ public class ERXStringUtilities {
 	}
   
     /**
-     * Util to unescape entities.
+     * Util to unescape entities. Entities not found in the set will be left intact.
      * @param string string to unescape
      * @param map map of entities
      * @return unescaped string
@@ -856,7 +861,7 @@ public class ERXStringUtilities {
                             	replacement = map.get(key.toUpperCase());
                             }
                             if(replacement == null) {
-                            	replacement = "?";
+                            	replacement = "&" + key + ";";
                             }
    							result.append(replacement);
                             start = end;
