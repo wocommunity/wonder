@@ -1,20 +1,33 @@
-<webobject name=CheckBoxWrapper><WEBOBJECT NAME=Conditional2>
-    <webobject name=CheckBoxRepetition>
-    <table border="0" cellpadding="0" cellspacing="0"><tr><td valign="top" align="center"><webobject name=CheckBox></webobject></td><WEBOBJECT NAME=GenericContainer1><webobject name=Content></webobject></WEBOBJECT></tr></table>
-    </webobject>
-    <WEBOBJECT NAME=HiddenInput></WEBOBJECT>
-<WEBOBJECT NAME=Conditional1>
-<webobject name=GenericElement1></webobject> 
-<webobject name=GenericElement2></webobject><webobject name="OnlyOnce"><SCRIPT TYPE=text/javascript>function checkAll(form, name, shouldCheck) {
-    var elements = form.elements;
-    var i = elements.length;
-    while  (i-- >= 0) {
-        var element = elements[i];
-        if (element.type.toLowerCase() == "checkbox") {
-            if (element.name == name && element.checked != shouldCheck) {
-                element.checked=shouldCheck;
-            }
-        }
-    }
-}
-</SCRIPT></webobject></WEBOBJECT></WEBOBJECT></webobject>
+<webobject name="CheckBoxWrapper">
+	<webobject name="ListIsNotEmpty">
+		<webobject name="CheckBoxRepetition">
+			<table border="0" cellpadding="0" cellspacing="0" class="ERXMatrixTable">
+				<tr>
+					<td valign="top" align="center"><webobject name="CheckBox"></webobject></td>
+					<webobject name="CheckBoxLabelCellContainer"><label><webobject name="LabelContent"></webobject></label></webobject>
+				</tr>
+			</table>
+		</webobject>
+		<webobject name="HiddenInput"></webobject>
+		<webobject name="ShouldShowSelectAllButtons">
+			<webobject name="SelectAllButton"></webobject>&nbsp;<webobject name="DeselectAllButton"></webobject>
+			<webobject name="OnlyOnce">
+			<script type="text/javascript">
+			var ERXCheckboxMatrix = {
+				checkAll: function(form, name, shouldCheck) {
+					var elements = form.elements;
+					for (var i = 0; i < elements.length; i++) {
+						var element = elements[i];
+						if (element.type.toLowerCase() == "checkbox") {
+							if (element.name == name && element.checked != shouldCheck) {
+								element.checked=shouldCheck;
+							}
+						}
+					}
+				}
+			}
+			</script>
+			</webobject>
+		</webobject>
+	</webobject>
+</webobject>
