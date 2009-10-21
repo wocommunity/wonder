@@ -789,6 +789,7 @@ public class ERXStringUtilities {
 			Integer charValue = ((Integer) chars[i]);
 			String key = (String) chars[i+1];
 			dict.setObjectForKey(Character.toChars(charValue)[0]+"", key);
+			dict.setObjectForKey(Character.toChars(charValue)[0]+"", "#"+charValue);
 		}
 		ISO_UNESCAPES = dict.immutableClone();
 		
@@ -803,7 +804,6 @@ public class ERXStringUtilities {
      * @param map map of entities
      * @return unescaped string
      */
-	// FIXME handle numeric values
     public static String unescapeEntities(String string, Map<String, String> map) {
         if(string != null) {
         	StringBuilder result = new StringBuilder();
