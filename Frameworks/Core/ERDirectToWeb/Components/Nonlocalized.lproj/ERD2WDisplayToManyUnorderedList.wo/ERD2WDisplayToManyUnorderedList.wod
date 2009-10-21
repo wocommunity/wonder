@@ -1,0 +1,19 @@
+Inspect: WOHyperlink {
+	action = inspectAction;
+	disabled = d2wContext.disabled;
+	string = stringForItem;
+}
+
+ItemRepetition: WORepetition {
+	list = list;
+	item = item;
+}
+
+HasItems: WOConditional {
+	condition = hasItems;
+}
+
+HasNoItems: WOConditional {
+	condition = hasItems;
+	negate = true;
+}
