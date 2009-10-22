@@ -14,16 +14,16 @@ import er.prototaculous.AjaxUpdater.Bindings;
 
 /**
  * Wrapper of Prototype's Ajax.Request
- * @see http://www.prototypejs.org/api/ajax/request
+ * @see <a href="http://www.prototypejs.org/api/ajax/request">Prototype's Ajax.Request Reference</a>
  * 
- * @binding action					When bound the action is performed
- * @binding	onComplete				Callback @see Prototype Ajax.options
- * @binding onSuccess				Callback @see Prototype Ajax.options
- * @binding onCreate				Callback @see Prototype Ajax.options
+ * @binding action      When bound the action is performed
+ * @binding onComplete  Callback @see Prototype Ajax.options
+ * @binding onSuccess   Callback @see Prototype Ajax.options
+ * @binding onCreate    Callback @see Prototype Ajax.options
  * 
- * @binding	evalScripts				@see Prototype Ajax.Request
+ * @binding evalScripts @see Prototype Ajax.Request
  *  
- * @property	er.prototaculous.useUnobtrusively		Support for Unobtrusive Javascript programming. (Turned on by default).
+ * @property er.prototaculous.useUnobtrusively Support for Unobtrusive Javascript programming. (Turned on by default).
  *  
  * @author mendis
  *

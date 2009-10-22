@@ -31,27 +31,27 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * This is the main class for sending mail with the JavaMail API. You typically don't create instances of this class
- * since it is abstract. Instead, you should create instances of its subclasses that fitted with specifical use cases.<BR>
- * Here is an example of its usage.
+ * This is the main class for sending mail with the JavaMail API. You should create
+ * instances of its subclasses that match with specific use cases.
+ *
+ * <p>Here is an example of its usage:
  * 
- * <PRE><code>
- ERMailDeliveryHTML mail = new ERMailDeliveryHTML ();
- mail.setWOComponentContent (mailPage);
+<pre>
+    ERMailDeliveryHTML mail = new ERMailDeliveryHTML ();
+    mail.setWOComponentContent (mailPage);
  
- try {
- mail.newMail ();
- mail.setFromAddress    (emailFrom);
- mail.setReplyToAddress (emailReplyTo);
- mail.setSubject 	   (emailSubject);
- mail.setToAddresses    (new NSArray (toEmailAddresses));
- 
- // Send the mail
- mail.sendMail ();
- } catch (Exception e) {
- // do something ...
- }
- </code></PRE>
+    try {
+        mail.newMail ();
+        mail.setFromAddress(emailFrom);
+        mail.setReplyToAddress(emailReplyTo);
+        mail.setSubject(emailSubject);
+        mail.setToAddresses(new NSArray (toEmailAddresses));
+
+        // Send the mail
+        mail.sendMail ();
+    } catch (Exception e) {
+        // do something ...
+    }</pre></p>
  * 
  * @author Camille Troillard <tuscland@mac.com>
  * @author ak fixes

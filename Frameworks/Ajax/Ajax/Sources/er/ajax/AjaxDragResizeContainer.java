@@ -13,6 +13,27 @@ import com.webobjects.foundation.NSNumberFormatter;
 
 import er.extensions.appserver.ERXWOContext;
 
+/**
+ *
+ * @binding minWidth
+ * @binding minHeight
+ * @binding minLeft
+ * @binding minTop
+ * @binding maxLeft
+ * @binding maxTop
+ * @binding ondragfocus
+ * @binding ondragblur
+ * @binding ondragstart
+ * @binding ondragmove
+ * @binding ondragend
+ * @binding dimensionsFromElementWithID
+ * @binding id
+ * @binding class
+ * @binding drsElement
+ * @binding drsMoveHandle
+ * @binding report
+ * @binding action
+ */
 public class AjaxDragResizeContainer extends AjaxComponent {
 
 	public static final String EVENT_BLUR = "dragblur";

@@ -280,7 +280,7 @@ public class ERXRouteController extends WODirectAction {
 	 * Returns all the processed objects from the route keys. For instance, if your route specifies that you have a
 	 * {person:Person}, routeObjectForKey("person") will return a Person object. This method does NOT cache the results.
 	 * 
-	 * @parmam delegate the delegate to fetch with
+	 * @param delegate the delegate to fetch with
 	 * @return the processed objects from the route keys
 	 */
 	public NSDictionary<ERXRoute.Key, Object> routeObjects(IERXRestDelegate delegate) {
@@ -422,7 +422,6 @@ public class ERXRouteController extends WODirectAction {
 	 *            the object to update
 	 * @param filter
 	 *            the filter to apply to the object for the purposes of updating (or null to not update)
-	 * @return the object from the request data
 	 */
 	public void update(Object obj, ERXKeyFilter filter) {
 		update(obj, filter, delegate());
@@ -432,12 +431,11 @@ public class ERXRouteController extends WODirectAction {
 	 * Updates the given object from the request data with the given filter.
 	 * 
 	 * @param obj
-	 *            the object to update
+         *            object to update
 	 * @param filter
-	 *            the filter to apply to the object for the purposes of updating (or null to not update)
+         *            the filter to apply to the object for the purposes of updating (or null to not update)
 	 * @param delegate
-	 *            the delegate to use
-	 * @return the object from the request data
+         *            delegate to use
 	 */
 	public void update(Object obj, ERXKeyFilter filter, IERXRestDelegate delegate) {
 		requestNode().updateObjectWithFilter(obj, filter, delegate);
@@ -650,8 +648,8 @@ public class ERXRouteController extends WODirectAction {
 	 * 
 	 * @param format
 	 *            the format to use
-	 * @param entity
-	 *            the entity type of the array
+	 * @param entityName
+	 *            the name of the entity type of the array
 	 * @param values
 	 *            the values in the array
 	 * @param filter

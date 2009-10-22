@@ -125,7 +125,7 @@ public class ERXQ {
 	 * @param qualifier
 	 *            the qualifier to filter on
 	 * @return one matching object or null
-	 * @throw IllegalStateException if more than one object matched
+	 * @throws IllegalStateException if more than one object matched
 	 */
 	public static <T> T one(NSArray<T> array, EOQualifier qualifier) {
 		T object;
@@ -159,7 +159,7 @@ public class ERXQ {
 	 * @param qualifier
 	 *            the qualifier to filter on
 	 * @return one matching object or null
-	 * @throw IllegalStateException if more than one object matched
+	 * @throws IllegalStateException if more than one object matched
 	 */
 	public static <T> T first(NSArray<T> array, EOQualifier qualifier) {
 		T object;
@@ -190,8 +190,8 @@ public class ERXQ {
 	 * @param qualifier
 	 *            the qualifier to filter on
 	 * @return one matching object
-	 * @throw IllegalStateException if more than one object matched
-	 * @throw NoSuchElementException if no objects matched
+	 * @throws IllegalStateException if more than one object matched
+	 * @throws NoSuchElementException if no objects matched
 	 */
 	public static <T> T requiredOne(NSArray<T> array, EOQualifier qualifier) {
 		T object = ERXQ.one(array, qualifier);

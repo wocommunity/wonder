@@ -14,20 +14,19 @@ import er.prototaculous.AjaxRequestButton.Bindings;
 
 /**
  * Wrapper of Prototype's Ajax.Updater
- * @see http://www.prototypejs.org/api/ajax/updater
+ * @see <a href="http://www.prototypejs.org/api/ajax/updater">Prototype's Ajax.Updater Reference</a>
  * 
- * @binding container				The id of the container to be updated
- * @binding action					When bound $('container') is replaced with the results of the action
- * @binding directActionName		When bound $('container') is replaced with the results of the direct action
- * @binding	onComplete				Callback @see Prototype Ajax.options
- * @binding onSuccess				Callback @see Prototype Ajax.options
- * @binding onCreate				Callback @see Prototype Ajax.options
- * @binding onException				Callback @see Prototype Ajax.options
- * 
- * @binding	evalScripts				@see Prototype Ajax.Updater
- * @binding method					@see Prototype Ajax.Updater
+ * @binding containe          The id of the container to be updated
+ * @binding action            When bound $('container') is replaced with the results of the action
+ * @binding directActionName  When bound $('container') is replaced with the results of the direct action
+ * @binding onComplete        Callback @see Prototype Ajax.options
+ * @binding onSuccess         Callback @see Prototype Ajax.options
+ * @binding onCreate          Callback @see Prototype Ajax.options
+ * @binding onException       Callback @see Prototype Ajax.options
+ * @binding evalScripts       @see Prototype Ajax.Updater
+ * @binding method            @see Prototype Ajax.Updater
  *  
- * @property	er.prototaculous.useUnobtrusively		Support for Unobtrusive Javascript programming. (Turned on by default).
+ * @property er.prototaculous.useUnobtrusively Support for Unobtrusive Javascript programming. (Turned on by default).
  *  
  * @author mendis
  *
