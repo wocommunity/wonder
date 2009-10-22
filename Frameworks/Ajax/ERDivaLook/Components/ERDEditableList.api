@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-    <wo class="ERDList2" wocomponentcontent="false">    <binding name="container"/>
+    <wo class="ERDEditableList" wocomponentcontent="false">    <binding name="container"/>
         <validation message="'container' is a required binding.">
             <unbound name="container"/>
         </validation>

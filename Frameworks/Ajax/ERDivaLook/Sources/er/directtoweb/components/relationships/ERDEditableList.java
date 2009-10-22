@@ -15,12 +15,12 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author dschonen			Added collapsing
  *
  */
-public class ERDList2 extends ERDList {
+public class ERDEditableList extends ERDList {
 	public EODetailDataSource detailDataSource;
 	private String closedLabelString;
 	private String container;
 	
-    public ERDList2(WOContext context) {
+    public ERDEditableList(WOContext context) {
         super(context);
     }
     

@@ -35,7 +35,7 @@ Features (Demo-ed)
 11. Use of CSS image replacement + dynamic D2W rule in place of custom components - even D2WDisplayBoolean can be deprecated. e.g: Talent List (isDirector).
 12. Use of CSS to display batch navigation on top and/or bottom as demoed in WebObjects/Neutral look.
 13. "Detail" Customer list page (or use of embedded inspect page on D2W list).
-14. Embedded lists (via ERDList2). See Studio movies on Inspect/Edit pages. (Neutral look only).
+14. Embedded lists (via ERDEditableList). See Studio movies on Inspect/Edit pages. (Neutral look only).
 15. Google-style "quick Search" feature on Movies List page. (Neutral look only). Turn on via D2w key allowsFiltering.
 16. Modal confirmation panel (ajax) on Rental edit page (on save).
 17. Property level ajax updates set via the d2wRule "isAjax" for some components. See Edit Movie.studio for a (contrived) example.
@@ -51,7 +51,7 @@ Features (Not demo-ed)
 4. Excel/report function added to list page. Hidden via CSS.
 5. Old school tooltips set via D2W key "title".
 6. Wizard (Modal) EO creation
-7. allowsCollapsing of embedded lists (ERDList2)
+7. allowsCollapsing of embedded lists (ERDEditableList)
 8. Dynamic D2W toOne relationship filter components (query + edit)
 
 Notes on XHTML, CSS and D2W
