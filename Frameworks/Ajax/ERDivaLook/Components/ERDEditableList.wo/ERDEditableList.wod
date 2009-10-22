@@ -7,7 +7,8 @@ List1: ERXD2WList {
 	settings = settings;
 }
 
-CollapseContainer: D2WAjaxCollapsibleComponentContent {
+CollapseContainer: WOSwitchComponent {
+	WOComponentName = ^collapsibleComponentName;
 	_unroll = true;
 	allowCollapsing = ^allowCollapsing;
 	closedLabel = closedLabelString;

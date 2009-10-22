@@ -69,6 +69,7 @@
     21 : smartAttribute.className = 'com.webobjects.foundation.NSTimestamp' => formatter = %B %d, %Y [com.webobjects.directtoweb.Assignment],
     21 : (not (propertyKey = '') and componentName = 'ERD2WDisplayString') => class = classForProperty [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment],
     50 : pageConfiguration like '*Embedded*' => defaultBatchSize = 0 [com.webobjects.directtoweb.Assignment],
+    50 : componentName = 'ERDEditableList' => collapsibleComponentName = D2WAjaxCollapsibleComponentContent [com.webobjects.directtoweb.Assignment],
     50 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 0) => componentName = D2WAjaxEditToOneFault [com.webobjects.directtoweb.Assignment],
     50 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 1) => componentName = D2WAjaxEditToManyFault [com.webobjects.directtoweb.Assignment],
     50 : ((task = 'inspect' or task = 'list') and propertyType = 'r' and smartRelationship.isToMany = 0) => componentName = D2WAjaxDisplayToOne [com.webobjects.directtoweb.Assignment],
