@@ -221,9 +221,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	/**
 	 * Returns the NSCollection/Java object that corresponds to this node hierarchy.
 	 * 
-	 * @param the
-	 *            associatedObjects map (to prevent infinite loops)
-	 * @return the NSCollection/Java object that corresponds to this node hierarchy
+	 * @param associatedObjects
+	 *            the associatedObjects map (to prevent infinite loops)
+	 * @return NSCollection/Java object that corresponds to this node hierarchy
 	 */
 	protected Object toNSCollection(ERXRestFormat.Delegate delegate, NSMutableDictionary<Object, Object> associatedObjects) {
 		Object result = associatedObjects.get(_associatedObject);
@@ -1120,7 +1120,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	/**
 	 * Creates a hierarchy of ERXRestRequestNodes based off of the given array of objects.
 	 * 
-	 * @param entity
+	 * @param classDescription
 	 *            the entity type of the objects in the array
 	 * @param objects
 	 *            the array to turn into request nodes
@@ -1139,7 +1139,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	/**
 	 * Creates a hierarchy of ERXRestRequestNodes based off of the given object.
 	 * 
-	 * @param object
+	 * @param obj
 	 *            the object to turn into request nodes
 	 * @param keyFilter
 	 *            the filter to use

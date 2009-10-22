@@ -40,8 +40,6 @@ public class ERMetadataDirectorySet {
 
   /**
    * Returns the width of the image.
-   * 
-   * @param width the width of the image
    */
   public int getWidth() {
     return _width;
@@ -50,7 +48,7 @@ public class ERMetadataDirectorySet {
   /**
    * Sets the height of the image.
    * 
-   * @param width the height of the image
+   * @param height the height of the image
    */
   public void setHeight(int height) {
     _height = height;
@@ -58,8 +56,6 @@ public class ERMetadataDirectorySet {
 
   /**
    * Returns the height of the image.
-   * 
-   * @param width the height of the image
    */
   public int getHeight() {
     return _height;
@@ -76,7 +72,6 @@ public class ERMetadataDirectorySet {
 
   /**
    * Returns whether or not the image was rotated.
-   * @return
    */
   public boolean isRotated() {
     return _rotated;
@@ -93,8 +88,6 @@ public class ERMetadataDirectorySet {
 
   /**
    * Sets the caption for the image.
-   * 
-   * @return the caption for the image
    */
   public void setCaption(String caption) {
     _caption = caption;

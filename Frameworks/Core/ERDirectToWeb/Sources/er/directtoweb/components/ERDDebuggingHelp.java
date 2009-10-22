@@ -29,7 +29,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * Little help component useful for debugging.<br />
  * 
  * @binding d2wContext
- * @binding condition" defaults="Boolean
+ * @binding condition default=Boolean
  */
 
 public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.DebugPageProvider {
