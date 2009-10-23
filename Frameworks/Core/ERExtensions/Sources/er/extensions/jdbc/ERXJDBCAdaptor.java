@@ -214,7 +214,8 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		}
 		
 		private void cleanup() {
-			// TODO Mike: look over this...
+			// TODO Mike: look over this... 
+			// TODONE Okey dokey. 
 			Boolean value = (Boolean) ERXKeyValueCodingUtilities.privateValueForKey(this, "_beganTransaction");
 			if (value) {
 				try {
