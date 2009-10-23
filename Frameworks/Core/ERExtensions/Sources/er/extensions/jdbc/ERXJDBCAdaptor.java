@@ -214,8 +214,17 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		}
 		
 		private void cleanup() {
-			// Mike: TODO
-			/// ERXKeyValueCodingUtilities.takePrivateValueForKey(this, Boolean.FALSE, "_beganTranstion");
+			// TODO Mike: look over this...
+			Boolean value = (Boolean) ERXKeyValueCodingUtilities.privateValueForKey(this, "_beganTransaction");
+			if (value) {
+				try {
+					_context.rollbackTransaction();
+				}
+				catch (JDBCAdaptorException ex) {
+					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, Boolean.FALSE, "_beganTransaction");
+					throw ex;
+				}
+			}
 		}
 		
 		/**
