@@ -10,7 +10,6 @@ import com.webobjects.foundation.NSMutableArray;
 import er.ajax.AjaxUtils;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.prototaculous.AjaxUpdater.Bindings;
 
 /**
  * Wrapper of Prototype's Ajax.Request
