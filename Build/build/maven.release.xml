@@ -185,9 +185,17 @@
 	     ================================= -->
 	<target name="--mvn-lifecycle" depends="release-prepare">
 		<fail unless="wonder.dir" message="${usage.message}"/>
+		<property name="maven.test.skip" value="false" />
+		<property name="skipTests" value="false" />
+		<condition property="skippy">
+			<or>
+				<equals arg1="${maven.test.skip}" arg2="true" />
+				<equals arg1="${skipTests}" arg2="true" />
+			</or>
+		</condition>
 		<exec executable="mvn" dir="${wonder.dir}" vmlauncher="no">
 			<env key="MAVEN_OPTS" value="-Xmx512m" />
-			<arg line="-P ${mvnProfile} ${mvn.goal} ${fixed_woversion}" />
+			<arg line="-P ${mvnProfile} ${mvn.goal} ${fixed_woversion} -Dmaven.test.skip=${skippy}" />
 		</exec>
 	</target>
 	
