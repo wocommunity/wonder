@@ -10,13 +10,12 @@ import com.webobjects.foundation.NSMutableArray;
 import er.ajax.AjaxUtils;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.prototaculous.AjaxRequestButton.Bindings;
 
 /**
  * Wrapper of Prototype's Ajax.Updater
  * @see <a href="http://www.prototypejs.org/api/ajax/updater">Prototype's Ajax.Updater Reference</a>
  * 
- * @binding containe          The id of the container to be updated
+ * @binding container          The id of the container to be updated
  * @binding action            When bound $('container') is replaced with the results of the action
  * @binding directActionName  When bound $('container') is replaced with the results of the direct action
  * @binding onComplete        Callback @see Prototype Ajax.options
