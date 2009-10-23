@@ -302,7 +302,7 @@ public class ERXEC extends EOEditingContext {
 				boolean openAutoLocks = (ec instanceof ERXEC && ((ERXEC) ec).isAutoLocked());
 				if (openAutoLocks) {
 					log.debug("Unlocking autolocked editing context: " + ec);
-					((ERXEC) ec).autoLocked = 0;
+					((ERXEC) ec).autoLocked--;
 				}
 				else {
 					log.warn("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
@@ -693,7 +693,7 @@ public class ERXEC extends EOEditingContext {
 	/** Overridden to support automatic autoLocking. */
 	@Override
 	public void lockObjectStore() {
-		if(!_shouldLockOnLockObjectStore) {
+		if(!_shouldLockOnLockObjectStore || (parentObjectStore() instanceof EOEditingContext)) {
 			super.lockObjectStore();
 		} else {
 			boolean wasAutoLocked = autoLock("lockObjectStore");
@@ -709,7 +709,7 @@ public class ERXEC extends EOEditingContext {
 	/** Overridden to support automatic autoLocking. */
 	@Override
 	public void unlockObjectStore() {
-		if(!_shouldLockOnLockObjectStore) {
+		if(!_shouldLockOnLockObjectStore || (parentObjectStore() instanceof EOEditingContext)) {
 			super.unlockObjectStore();
 		} else {
 			boolean wasAutoLocked = autoLock("unlockObjectStore");
