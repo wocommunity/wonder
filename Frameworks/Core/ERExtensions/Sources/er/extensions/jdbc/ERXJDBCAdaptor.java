@@ -12,7 +12,10 @@ import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOStoredProcedure;
 import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -25,6 +28,7 @@ import com.webobjects.jdbcadaptor.JDBCContext;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.eof.ERXAdaptorOperationWrapper;
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSystem;
@@ -207,6 +211,67 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 				}
 			}
 			return _plugIn().newPrimaryKeys(cnt, entity, this);
+		}
+		
+		private void cleanup() {
+			// Mike: TODO
+			/// ERXKeyValueCodingUtilities.takePrivateValueForKey(this, Boolean.FALSE, "_beganTranstion");
+		}
+		
+		/**
+		 * Overridden to clea up after a transaction fails.
+		 */
+		@Override
+		public void evaluateExpression(EOSQLExpression eosqlexpression) {
+			try {
+				super.evaluateExpression(eosqlexpression);
+			}
+			catch (JDBCAdaptorException ex) {
+				cleanup();
+				throw ex;
+			}
+		}
+		
+		/**
+		 * Overridden to clea up after a transaction fails.
+		 */
+		@Override
+		public void executeStoredProcedure(EOStoredProcedure eostoredprocedure, NSDictionary nsdictionary) {
+			try {
+				super.executeStoredProcedure(eostoredprocedure, nsdictionary);
+			}
+			catch (JDBCAdaptorException ex) {
+				cleanup();
+				throw ex;
+			}
+		}
+		
+		/**
+		 * Overridden to clea up after a transaction fails.
+		 */
+		@Override
+		public int deleteRowsDescribedByQualifier(EOQualifier eoqualifier, EOEntity eoentity) {
+			try {
+				return super.deleteRowsDescribedByQualifier(eoqualifier, eoentity);
+			}
+			catch (JDBCAdaptorException ex) {
+				cleanup();
+				throw ex;
+			}
+		}
+		
+		/**
+		 * Overridden to clea up after a transaction fails.
+		 */
+		@Override
+		public int updateValuesInRowsDescribedByQualifier(NSDictionary nsdictionary, EOQualifier eoqualifier, EOEntity eoentity) {
+			try {
+				return super.updateValuesInRowsDescribedByQualifier(nsdictionary, eoqualifier, eoentity);
+			}
+			catch (JDBCAdaptorException ex) {
+				cleanup();
+				throw ex;
+			}
 		}
 	}
 
