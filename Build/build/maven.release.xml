@@ -10,7 +10,9 @@
 	c) optionally updates the source from scm beforehand (default is true)
 	d) optionally reverts changes afterwards if desired (default is true)
 	
-	Note: if you've got your own modifications - use at your own risk!
+	Note1: if you've got your own modifications - use at your own risk!
+	Note2: default assumes an svn working copy
+	Note3: if using a git-svn working copy disable updating and reverting
 	
 	Note: you only need to supply woversion if you don't want the most recent version for the given mvnProfile
 	or if the default version range in the pom isn't resolving. The usual reason for failure is your
@@ -22,10 +24,11 @@
 	<property name="usage.1" value="-DmvnProfile=[wo54|wo53] [-Dwoversion=x.x.x] package" />
 	<property name="usage.2" value="-DmvnProfile=[wo54|wo53] [-Dwoversion=x.x.x] install" />
 	<property name="usage.3" value="-DmvnProfile=[wo54|wo53] [-Dwoversion=x.x.x] deploy -DmyRepoId=foo -DmyRepoURL='bar' [-DmyRepoLayout=baz]" />
-	<property name="usage.X" value="Additional properties: [-Drevert=false] [-Dupdate=false]" />
+	<property name="usage.X" value="Additional properties(*): [-Drevert=false] [-Dupdate=false]" />
+	<property name="usage.GITSVN" value="(*) if using git-svn set both 'revert' and 'update' properties to false" />
 	<property name="usage.description" value="Description: Updates the source, replaces pom versions with the scm version (e.g., 5.0.0-SNAPSHOT to 5.0.0.8979), performs the maven goal (e.g., install or deploy), reverts the source." />
 
-	<property name="usage.message" value="Usage:${line.separator}${usage.1}${line.separator}${usage.2}${line.separator}${usage.3}${line.separator}${line.separator}${usage.X}${line.separator}${line.separator}${usage.description}" />
+	<property name="usage.message" value="Usage:${line.separator}${usage.1}${line.separator}${usage.2}${line.separator}${usage.3}${line.separator}${line.separator}${usage.X}${line.separator}${usage.GITSVN}${line.separator}${line.separator}${usage.description}" />
 	
 	<property name="wonder.dir" value="${basedir}" />
 	<property name="project.scm.version" value="current.scm.version" />
@@ -89,7 +92,7 @@
 		<xmlproperty file="${wonder.dir}/pom.xml" collapseAttributes="true" />
 		<echo message="${project.scm.version}=${project.version}" file="${pom.version.file}" />
 		
-		<replace file="${pom.version.file}" token="-SNAPSHOT" value=".${svn.revision}" />
+		<replace file="${pom.version.file}" token="-SNAPSHOT" value=".${scm.revision}" />
 		<property file="${pom.version.file}" />
 		
 		<property name="project.version.text" value="&lt;version&gt;${project.version}&lt;/version&gt;" />
@@ -125,6 +128,35 @@
 		<exec executable="svn" dir="${wonder.dir}">
 			<arg line="up" />
 		</exec>
+	</target>
+	
+	<target name="test-version" depends="--setup-scm-revision">
+		<echo message="Revision: ${scm.revision}" />
+	</target>
+	
+	<!-- =================================
+	      target: \-\-gitsvnversion
+		  description: determines property scm.revision if an git-svn working copy
+	     ================================= -->
+	<target name="--gitsvnversion" unless="scm.revision">
+		<exec outputproperty="git-svn.version.output" executable="git">
+			<arg line="svn info" />
+			<redirector>
+				<outputfilterchain>
+					<linecontainsregexp>
+						<regexp pattern="^Revision:" />
+					</linecontainsregexp>
+					<tokenfilter>
+						<replaceregex pattern="^Revision[^0-9]*(.+?)$" replace="\1" flags="g"/>
+					</tokenfilter>
+				</outputfilterchain>
+			</redirector>
+		</exec>
+		<condition property="scm.revision" value="${git-svn.version.output}">
+			<not>
+				<contains string="${git-svn.version.output}" substring="not a working copy" />
+			</not>
+		</condition>
 	</target>
 	
 	<!-- =================================
@@ -227,9 +259,10 @@
 	
 	<!-- =================================
 	      target: \-\-setup
-		  description: determines property woversion, svn.revision
+		  description: determines property woversion, scm.revision
 	     ================================= -->
-	<target name="--setup">
+	<target name="--setup" depends="--setup-scm-revision">
+		
 		<condition property="fixed_woversion" value="-Dwoversion=${woversion}">
 			<isset property="woversion" />
 		</condition>
@@ -237,11 +270,35 @@
 		
 		<fail unless="wonder.dir" message="${usage.message}" />
 		
-		<exec executable="svn" output="${wonder.svninfo.xml}" dir="${wonder.dir}">
-			<arg line="info --xml"/>
+	</target>
+	
+	<target name="--setup-scm-revision" depends="--svnversion,--gitsvnversion">
+		<fail unless="scm.revision" message="Unable to determine svn or git-svn revision.${line.separator}${usage.message}" />
+	</target>
+	
+	<!-- =================================
+	      target: \-\-svnversion
+		  description: determines property scm.revision if an svn working copy
+	     ================================= -->
+	<target name="--svnversion">
+		<exec outputproperty="svn.version.output" executable="svn">
+			<arg line="info" />
+			<redirector>
+				<outputfilterchain>
+					<linecontainsregexp>
+						<regexp pattern="^Revision:" />
+					</linecontainsregexp>
+					<tokenfilter>
+						<replaceregex pattern="^Revision[^0-9]*(.+?)$" replace="\1" flags="g"/>
+					</tokenfilter>
+				</outputfilterchain>
+			</redirector>
 		</exec>
-		<xmlproperty file="${wonder.svninfo.xml}" collapseattributes="true" />
-		<property name="svn.revision" value="${info.entry.revision}" />
+		<condition property="scm.revision" value="${svn.version.output}">
+			<not>
+				<contains string="${svn.version.output}" substring="not a working copy" />
+			</not>
+		</condition>
 	</target>
 	
 </project>
