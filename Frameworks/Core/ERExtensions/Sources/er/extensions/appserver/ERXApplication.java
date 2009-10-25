@@ -1614,11 +1614,28 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	@Override
 	public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
 		WOContext context = actionInstance != null ? actionInstance.context() : null;
+		boolean didCreateContext = false;
 		if(context == null) {
 			// AK: we provide the "handleException" with not much enough info to output a reasonable error message
 			context = createContextForRequest(aRequest);
+			didCreateContext = true;
 		}
 		WOResponse response = handleException(exception, context);
+		
+		// CH: If we have created a context, then the request handler won't know about it and can't put the components
+		// from handleException(exception, context) to sleep nor check-in any session that may have been checked out
+		// or created (e.g. from a component action URL.
+		//
+		// I'm not sure if the reasoning below was valid, or of the real cause of this deadlocking was creating the context
+		// above and then creating / checking out a session during handleException(exception, context).  In any case, a zombie
+		// session was getting created with WO 5.4.3 and this does NOT happen with a pure WO application making the code above 
+		// a prime suspect.  I am leaving the code below in so that if it does something for prior versions, that will still work.
+		if (didCreateContext)
+		{
+			context._putAwakeComponentsToSleep();
+			saveSessionForContext(context);
+		}
+		
 		// AK: bugfix for #4186886 (Session store deadlock with DAs). The bug
 		// occurs in 5.2.3, I'm not sure about other
 		// versions.
@@ -1628,7 +1645,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// handler does not check sessions back in
 		// which leads to a deadlock in the session store when the session is
 		// accessed again.
-		if (context != null && context.hasSession() && ("InstantiationError".equals(reason) || "InvocationError".equals(reason))) {
+		else if (context.hasSession() && ("InstantiationError".equals(reason) || "InvocationError".equals(reason))) {
 			context._putAwakeComponentsToSleep();
 			saveSessionForContext(context);
 		}
