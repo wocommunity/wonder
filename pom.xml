@@ -603,9 +603,9 @@
 		</repository>
 		<snapshotRepository>
 			<id>wocommunity.deployment</id>
+			<uniqueVersion>false</uniqueVersion>
 			<name>WOCommunity Maven2 Snapshots Repository</name>
-			<url>http://maven.wocommunity.org/content/repositories/snapshots/
-			</url>
+			<url>http://maven.wocommunity.org/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>
