@@ -104,7 +104,7 @@ public class ERXModelGroup extends EOModelGroup {
 	private boolean raiseOnUnmatchingConnectionDictionaries = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries", true);
 	
 	/**
-	 * Nofitication that is sent when the model group was created form the bundle loading.
+	 * Notification that is sent when the model group was created form the bundle loading.
 	 */
 	public static final String ModelGroupAddedNotification = "ERXModelGroupAddedNotification";
 
