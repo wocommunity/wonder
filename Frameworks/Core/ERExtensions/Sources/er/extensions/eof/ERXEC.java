@@ -588,6 +588,15 @@ public class ERXEC extends EOEditingContext {
 		return locks.get().contains(this);
 	}
 
+	private ThreadLocal<Integer> autoLockAttempts = new ThreadLocal<Integer>() {
+		@Override
+		protected Integer initialValue() {
+			return Integer.valueOf(0);
+		}
+	};
+		
+  
+
 	/**
 	 * Utility to actually emit the log messages and do the locking, based on
 	 * the result of {@link #useAutoLock()}.
@@ -597,13 +606,14 @@ public class ERXEC extends EOEditingContext {
 	 * @return whether we did lock automatically
 	 */
 	protected boolean autoLock(String method) {
-		if (!useAutoLock() || isFinalizing || isLockedInThread())
+		if (!useAutoLock() || isFinalizing || isLockedInThread() || autoLockAttempts.get().intValue() > 0)
 			return false;
 
 		boolean wasAutoLocked = false;
 
 		if (!isAutoLocked() || !coalesceAutoLocks()) {
 			wasAutoLocked = true;
+			autoLockAttempts.set(autoLockAttempts.get().intValue()+1);
 			lock();
 			autoLocked++;
 
@@ -633,6 +643,7 @@ public class ERXEC extends EOEditingContext {
 			if (!coalesceAutoLocks()) {
 				autoLocked--;
 				unlock();
+				autoLockAttempts.set(autoLockAttempts.get().intValue()-1);
 			}
 		}
 	}
