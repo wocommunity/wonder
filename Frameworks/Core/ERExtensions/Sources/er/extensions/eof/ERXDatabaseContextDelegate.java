@@ -608,9 +608,10 @@ public class ERXDatabaseContextDelegate {
 						long timestamp = ((AutoBatchFaultingEnterpriseObject) source).batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
 						NSMutableArray faults = new NSMutableArray();
-						for (EOEnterpriseObject eo : candidates) {
-							if (eo instanceof AutoBatchFaultingEnterpriseObject) {
-								if (((AutoBatchFaultingEnterpriseObject) eo).batchFaultingTimeStamp() == timestamp || fromThreadStorage) {
+						for (Object o : candidates) {
+							if (o instanceof AutoBatchFaultingEnterpriseObject) {
+								AutoBatchFaultingEnterpriseObject eo = (AutoBatchFaultingEnterpriseObject) o;
+								if (eo.batchFaultingTimeStamp() == timestamp || fromThreadStorage) {
 									if (!EOFaultHandler.isFault(eo) && eo.classDescription() == source.classDescription()) {
 										Object fault = eo.storedValueForKey(key);
 										if (EOFaultHandler.isFault(fault)) {
