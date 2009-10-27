@@ -1,0 +1,5695 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>daylightSavingTimeTransitions</key>
+	<array>
+		<dict>
+			<key>after</key>
+			<string>1987 Apr 05 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1987 Apr 05 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1987 Oct 25 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1987 Oct 25 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Apr 03 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1988 Apr 03 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Oct 30 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1988 Oct 30 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Apr 02 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1989 Apr 02 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Oct 29 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1989 Oct 29 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Apr 01 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1990 Apr 01 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Oct 28 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1990 Oct 28 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Apr 07 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1991 Apr 07 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Oct 27 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1991 Oct 27 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Apr 05 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1992 Apr 05 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Oct 25 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1992 Oct 25 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Apr 04 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1993 Apr 04 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Oct 31 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1993 Oct 31 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Apr 03 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1994 Apr 03 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Oct 30 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1994 Oct 30 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Apr 02 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1995 Apr 02 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Oct 29 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1995 Oct 29 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Apr 07 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1996 Apr 07 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Oct 27 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1996 Oct 27 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Apr 06 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1997 Apr 06 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Oct 26 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1997 Oct 26 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Apr 05 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1998 Apr 05 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Oct 25 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1998 Oct 25 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Apr 04 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1999 Apr 04 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Oct 31 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>1999 Oct 31 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Apr 02 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2000 Apr 02 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Oct 29 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2000 Oct 29 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Apr 01 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2001 Apr 01 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Oct 28 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2001 Oct 28 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Apr 07 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2002 Apr 07 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Oct 27 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2002 Oct 27 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Apr 06 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2003 Apr 06 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Oct 26 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2003 Oct 26 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Apr 04 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2004 Apr 04 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Oct 31 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2004 Oct 31 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Apr 03 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2005 Apr 03 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Oct 30 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2005 Oct 30 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Apr 02 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2006 Apr 02 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Oct 29 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2006 Oct 29 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Mar 09 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2008 Mar 09 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Nov 02 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2008 Nov 02 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Mar 08 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2009 Mar 08 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Nov 01 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2009 Nov 01 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Mar 14 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2010 Mar 14 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Nov 07 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2010 Nov 07 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Mar 13 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2011 Mar 13 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Nov 06 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2011 Nov 06 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Mar 11 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2012 Mar 11 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Nov 04 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2012 Nov 04 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Mar 10 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2013 Mar 10 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Nov 03 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2013 Nov 03 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Mar 09 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2014 Mar 09 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Nov 02 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2014 Nov 02 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Mar 08 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2015 Mar 08 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Nov 01 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2015 Nov 01 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Mar 13 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2016 Mar 13 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Nov 06 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2016 Nov 06 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Mar 12 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2017 Mar 12 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Nov 05 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2017 Nov 05 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Mar 11 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2018 Mar 11 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Nov 04 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2018 Nov 04 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Mar 10 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2019 Mar 10 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Nov 03 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2019 Nov 03 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Mar 08 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2020 Mar 08 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Nov 01 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2020 Nov 01 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Mar 14 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2021 Mar 14 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Nov 07 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2021 Nov 07 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Mar 13 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2022 Mar 13 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Nov 06 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2022 Nov 06 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Mar 12 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2023 Mar 12 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Nov 05 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2023 Nov 05 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Mar 10 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2024 Mar 10 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Nov 03 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2024 Nov 03 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Mar 09 03:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2025 Mar 09 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Nov 02 01:00:01 America/Los_Angeles</string>
+			<key>before</key>
+			<string>2025 Nov 02 01:59:59 America/Los_Angeles</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/Los_Angeles</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1987 Apr 05 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1987 Apr 05 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1987 Oct 25 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1987 Oct 25 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Apr 03 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1988 Apr 03 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Oct 30 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1988 Oct 30 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Apr 02 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1989 Apr 02 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Oct 29 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1989 Oct 29 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Apr 01 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1990 Apr 01 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Oct 28 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1990 Oct 28 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Apr 07 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1991 Apr 07 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Oct 27 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1991 Oct 27 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Apr 05 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1992 Apr 05 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Oct 25 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1992 Oct 25 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Apr 04 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1993 Apr 04 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Oct 31 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1993 Oct 31 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Apr 03 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1994 Apr 03 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Oct 30 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1994 Oct 30 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Apr 02 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1995 Apr 02 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Oct 29 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1995 Oct 29 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Apr 07 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1996 Apr 07 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Oct 27 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1996 Oct 27 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Apr 06 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1997 Apr 06 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Oct 26 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1997 Oct 26 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Apr 05 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1998 Apr 05 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Oct 25 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1998 Oct 25 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Apr 04 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1999 Apr 04 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Oct 31 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>1999 Oct 31 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Apr 02 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2000 Apr 02 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Oct 29 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2000 Oct 29 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Apr 01 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2001 Apr 01 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Oct 28 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2001 Oct 28 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Apr 07 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2002 Apr 07 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Oct 27 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2002 Oct 27 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Apr 06 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2003 Apr 06 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Oct 26 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2003 Oct 26 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Apr 04 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2004 Apr 04 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Oct 31 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2004 Oct 31 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Apr 03 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2005 Apr 03 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Oct 30 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2005 Oct 30 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Apr 02 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2006 Apr 02 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Oct 29 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2006 Oct 29 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Mar 09 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2008 Mar 09 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Nov 02 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2008 Nov 02 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Mar 08 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2009 Mar 08 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Nov 01 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2009 Nov 01 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Mar 14 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2010 Mar 14 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Nov 07 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2010 Nov 07 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Mar 13 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2011 Mar 13 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Nov 06 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2011 Nov 06 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Mar 11 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2012 Mar 11 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Nov 04 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2012 Nov 04 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Mar 10 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2013 Mar 10 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Nov 03 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2013 Nov 03 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Mar 09 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2014 Mar 09 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Nov 02 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2014 Nov 02 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Mar 08 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2015 Mar 08 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Nov 01 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2015 Nov 01 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Mar 13 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2016 Mar 13 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Nov 06 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2016 Nov 06 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Mar 12 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2017 Mar 12 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Nov 05 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2017 Nov 05 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Mar 11 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2018 Mar 11 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Nov 04 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2018 Nov 04 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Mar 10 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2019 Mar 10 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Nov 03 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2019 Nov 03 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Mar 08 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2020 Mar 08 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Nov 01 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2020 Nov 01 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Mar 14 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2021 Mar 14 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Nov 07 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2021 Nov 07 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Mar 13 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2022 Mar 13 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Nov 06 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2022 Nov 06 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Mar 12 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2023 Mar 12 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Nov 05 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2023 Nov 05 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Mar 10 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2024 Mar 10 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Nov 03 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2024 Nov 03 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Mar 09 03:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2025 Mar 09 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Nov 02 01:00:01 America/New_York</string>
+			<key>before</key>
+			<string>2025 Nov 02 01:59:59 America/New_York</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/New_York</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1987 Apr 05 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1987 Apr 05 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1987 Oct 25 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1987 Oct 25 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Apr 03 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1988 Apr 03 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Oct 30 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1988 Oct 30 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Apr 02 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1989 Apr 02 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Oct 29 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1989 Oct 29 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Apr 01 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1990 Apr 01 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Oct 28 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1990 Oct 28 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Apr 07 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1991 Apr 07 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Oct 27 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1991 Oct 27 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Apr 05 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1992 Apr 05 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Oct 25 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1992 Oct 25 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Apr 04 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1993 Apr 04 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Oct 31 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1993 Oct 31 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Apr 03 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1994 Apr 03 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Oct 30 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1994 Oct 30 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Apr 02 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1995 Apr 02 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Oct 29 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1995 Oct 29 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Apr 07 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1996 Apr 07 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Oct 27 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1996 Oct 27 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Apr 06 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1997 Apr 06 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Oct 26 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1997 Oct 26 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Apr 05 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1998 Apr 05 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Oct 25 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1998 Oct 25 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Apr 04 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1999 Apr 04 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Oct 31 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>1999 Oct 31 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Apr 02 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2000 Apr 02 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Oct 29 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2000 Oct 29 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Apr 01 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2001 Apr 01 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Oct 28 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2001 Oct 28 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Apr 07 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2002 Apr 07 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Oct 27 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2002 Oct 27 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Apr 06 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2003 Apr 06 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Oct 26 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2003 Oct 26 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Apr 04 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2004 Apr 04 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Oct 31 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2004 Oct 31 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Apr 03 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2005 Apr 03 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Oct 30 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2005 Oct 30 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Apr 02 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2006 Apr 02 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Oct 29 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2006 Oct 29 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Mar 09 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2008 Mar 09 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Nov 02 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2008 Nov 02 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Mar 08 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2009 Mar 08 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Nov 01 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2009 Nov 01 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Mar 14 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2010 Mar 14 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Nov 07 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2010 Nov 07 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Mar 13 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2011 Mar 13 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Nov 06 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2011 Nov 06 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Mar 11 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2012 Mar 11 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Nov 04 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2012 Nov 04 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Mar 10 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2013 Mar 10 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Nov 03 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2013 Nov 03 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Mar 09 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2014 Mar 09 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Nov 02 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2014 Nov 02 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Mar 08 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2015 Mar 08 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Nov 01 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2015 Nov 01 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Mar 13 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2016 Mar 13 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Nov 06 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2016 Nov 06 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Mar 12 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2017 Mar 12 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Nov 05 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2017 Nov 05 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Mar 11 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2018 Mar 11 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Nov 04 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2018 Nov 04 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Mar 10 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2019 Mar 10 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Nov 03 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2019 Nov 03 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Mar 08 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2020 Mar 08 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Nov 01 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2020 Nov 01 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Mar 14 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2021 Mar 14 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Nov 07 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2021 Nov 07 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Mar 13 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2022 Mar 13 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Nov 06 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2022 Nov 06 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Mar 12 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2023 Mar 12 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Nov 05 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2023 Nov 05 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Mar 10 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2024 Mar 10 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Nov 03 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2024 Nov 03 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Mar 09 03:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2025 Mar 09 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Nov 02 01:00:01 America/Chicago</string>
+			<key>before</key>
+			<string>2025 Nov 02 01:59:59 America/Chicago</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/Chicago</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1987 Apr 05 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1987 Apr 05 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1987 Oct 25 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1987 Oct 25 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Apr 03 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1988 Apr 03 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Oct 30 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1988 Oct 30 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Apr 02 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1989 Apr 02 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Oct 29 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1989 Oct 29 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Apr 01 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1990 Apr 01 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Oct 28 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1990 Oct 28 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Apr 07 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1991 Apr 07 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Oct 27 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1991 Oct 27 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Apr 05 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1992 Apr 05 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Oct 25 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1992 Oct 25 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Apr 04 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1993 Apr 04 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Oct 31 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1993 Oct 31 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Apr 03 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1994 Apr 03 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Oct 30 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1994 Oct 30 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Apr 02 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1995 Apr 02 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Oct 29 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1995 Oct 29 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Apr 07 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1996 Apr 07 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Oct 27 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1996 Oct 27 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Apr 06 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1997 Apr 06 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Oct 26 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1997 Oct 26 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Apr 05 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1998 Apr 05 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Oct 25 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1998 Oct 25 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Apr 04 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1999 Apr 04 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Oct 31 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>1999 Oct 31 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Apr 02 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2000 Apr 02 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Oct 29 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2000 Oct 29 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Apr 01 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2001 Apr 01 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Oct 28 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2001 Oct 28 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Apr 07 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2002 Apr 07 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Oct 27 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2002 Oct 27 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Apr 06 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2003 Apr 06 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Oct 26 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2003 Oct 26 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Apr 04 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2004 Apr 04 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Oct 31 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2004 Oct 31 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Apr 03 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2005 Apr 03 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Oct 30 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2005 Oct 30 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Apr 02 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2006 Apr 02 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Oct 29 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2006 Oct 29 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Mar 09 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2008 Mar 09 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Nov 02 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2008 Nov 02 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Mar 08 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2009 Mar 08 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Nov 01 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2009 Nov 01 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Mar 14 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2010 Mar 14 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Nov 07 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2010 Nov 07 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Mar 13 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2011 Mar 13 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Nov 06 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2011 Nov 06 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Mar 11 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2012 Mar 11 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Nov 04 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2012 Nov 04 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Mar 10 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2013 Mar 10 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Nov 03 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2013 Nov 03 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Mar 09 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2014 Mar 09 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Nov 02 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2014 Nov 02 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Mar 08 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2015 Mar 08 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Nov 01 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2015 Nov 01 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Mar 13 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2016 Mar 13 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Nov 06 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2016 Nov 06 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Mar 12 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2017 Mar 12 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Nov 05 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2017 Nov 05 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Mar 11 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2018 Mar 11 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Nov 04 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2018 Nov 04 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Mar 10 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2019 Mar 10 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Nov 03 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2019 Nov 03 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Mar 08 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2020 Mar 08 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Nov 01 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2020 Nov 01 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Mar 14 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2021 Mar 14 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Nov 07 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2021 Nov 07 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Mar 13 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2022 Mar 13 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Nov 06 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2022 Nov 06 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Mar 12 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2023 Mar 12 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Nov 05 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2023 Nov 05 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Mar 10 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2024 Mar 10 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Nov 03 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2024 Nov 03 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Mar 09 03:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2025 Mar 09 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Nov 02 01:00:01 America/Denver</string>
+			<key>before</key>
+			<string>2025 Nov 02 01:59:59 America/Denver</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/Denver</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1987 Apr 05 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1987 Apr 05 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1987 Oct 25 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1987 Oct 25 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1987</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Apr 03 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1988 Apr 03 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1988 Oct 30 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1988 Oct 30 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1988</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Apr 02 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1989 Apr 02 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1989 Oct 29 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1989 Oct 29 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1989</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Apr 01 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1990 Apr 01 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1990 Oct 28 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1990 Oct 28 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1990</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Apr 07 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1991 Apr 07 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1991 Oct 27 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1991 Oct 27 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1991</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Apr 05 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1992 Apr 05 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1992 Oct 25 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1992 Oct 25 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1992</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Apr 04 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1993 Apr 04 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1993 Oct 31 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1993 Oct 31 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1993</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Apr 03 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1994 Apr 03 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1994 Oct 30 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1994 Oct 30 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1994</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Apr 02 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1995 Apr 02 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1995 Oct 29 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1995 Oct 29 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1995</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Apr 07 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1996 Apr 07 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1996 Oct 27 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1996 Oct 27 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1996</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Apr 06 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1997 Apr 06 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1997 Oct 26 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1997 Oct 26 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1997</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Apr 05 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1998 Apr 05 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1998 Oct 25 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1998 Oct 25 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>25</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1998</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Apr 04 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1999 Apr 04 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>1999 Oct 31 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>1999 Oct 31 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>1999</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Apr 02 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2000 Apr 02 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2000 Oct 29 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2000 Oct 29 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2000</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Apr 01 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2001 Apr 01 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2001 Oct 28 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2001 Oct 28 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>28</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2001</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Apr 07 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2002 Apr 07 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2002 Oct 27 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2002 Oct 27 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>27</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2002</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Apr 06 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2003 Apr 06 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2003 Oct 26 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2003 Oct 26 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>26</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2003</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Apr 04 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2004 Apr 04 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2004 Oct 31 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2004 Oct 31 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>31</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2004</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Apr 03 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2005 Apr 03 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2005 Oct 30 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2005 Oct 30 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>30</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2005</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Apr 02 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2006 Apr 02 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>4</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2006 Oct 29 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2006 Oct 29 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>29</integer>
+			<key>month</key>
+			<integer>10</integer>
+			<key>year</key>
+			<integer>2006</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Mar 11 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2007 Mar 11 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2007 Nov 04 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2007 Nov 04 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2007</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Mar 09 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2008 Mar 09 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2008 Nov 02 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2008 Nov 02 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2008</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Mar 08 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2009 Mar 08 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2009 Nov 01 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2009 Nov 01 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2009</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Mar 14 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2010 Mar 14 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2010 Nov 07 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2010 Nov 07 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2010</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Mar 13 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2011 Mar 13 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2011 Nov 06 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2011 Nov 06 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2011</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Mar 11 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2012 Mar 11 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2012 Nov 04 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2012 Nov 04 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2012</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Mar 10 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2013 Mar 10 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2013 Nov 03 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2013 Nov 03 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2013</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Mar 09 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2014 Mar 09 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2014 Nov 02 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2014 Nov 02 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2014</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Mar 08 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2015 Mar 08 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2015 Nov 01 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2015 Nov 01 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2015</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Mar 13 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2016 Mar 13 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2016 Nov 06 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2016 Nov 06 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2016</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Mar 12 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2017 Mar 12 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2017 Nov 05 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2017 Nov 05 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2017</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Mar 11 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2018 Mar 11 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>11</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2018 Nov 04 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2018 Nov 04 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>4</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2018</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Mar 10 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2019 Mar 10 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2019 Nov 03 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2019 Nov 03 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2019</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Mar 08 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2020 Mar 08 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>8</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2020 Nov 01 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2020 Nov 01 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>1</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2020</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Mar 14 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2021 Mar 14 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>14</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2021 Nov 07 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2021 Nov 07 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>7</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2021</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Mar 13 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2022 Mar 13 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>13</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2022 Nov 06 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2022 Nov 06 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>6</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2022</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Mar 12 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2023 Mar 12 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>12</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2023 Nov 05 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2023 Nov 05 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>5</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2023</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Mar 10 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2024 Mar 10 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>10</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2024 Nov 03 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2024 Nov 03 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>3</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2024</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Mar 09 03:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2025 Mar 09 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>9</integer>
+			<key>month</key>
+			<integer>3</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+		<dict>
+			<key>after</key>
+			<string>2025 Nov 02 01:00:01 America/Nome</string>
+			<key>before</key>
+			<string>2025 Nov 02 01:59:59 America/Nome</string>
+			<key>day</key>
+			<integer>2</integer>
+			<key>month</key>
+			<integer>11</integer>
+			<key>year</key>
+			<integer>2025</integer>
+			<key>tz</key>
+			<string>America/Nome</string>
+		</dict>
+	</array>
+	<key>firstDayForYears</key>
+	<dict>
+		<key>2</key><string>SUN</string>
+		<key>1970</key><string>THU</string>
+		<key>1971</key><string>FRI</string>
+		<key>1972</key><string>SAT</string>
+		<key>1973</key><string>MON</string>
+		<key>1974</key><string>TUE</string>
+		<key>1975</key><string>WED</string>
+		<key>1976</key><string>THU</string>
+		<key>1977</key><string>SAT</string>
+		<key>1978</key><string>SUN</string>
+		<key>1979</key><string>MON</string>
+		<key>1980</key><string>TUE</string>
+		<key>1981</key><string>THU</string>
+		<key>1982</key><string>FRI</string>
+		<key>1983</key><string>SAT</string>
+		<key>1984</key><string>SUN</string>
+		<key>1985</key><string>TUE</string>
+		<key>1986</key><string>WED</string>
+		<key>1987</key><string>THU</string>
+		<key>1988</key><string>FRI</string>
+		<key>1989</key><string>SUN</string>
+		<key>1990</key><string>MON</string>
+		<key>1991</key><string>TUE</string>
+		<key>1992</key><string>WED</string>
+		<key>1993</key><string>FRI</string>
+		<key>1994</key><string>SAT</string>
+		<key>1995</key><string>SUN</string>
+		<key>1996</key><string>MON</string>
+		<key>1997</key><string>WED</string>
+		<key>1998</key><string>THU</string>
+		<key>1999</key><string>FRI</string>
+		<key>2000</key><string>SAT</string>
+		<key>2001</key><string>MON</string>
+		<key>2002</key><string>TUE</string>
+		<key>2003</key><string>WED</string>
+		<key>2004</key><string>THU</string>
+		<key>2005</key><string>SAT</string>
+		<key>2006</key><string>SUN</string>
+		<key>2007</key><string>MON</string>
+		<key>2008</key><string>TUE</string>
+		<key>2009</key><string>THU</string>
+		<key>2010</key><string>FRI</string>
+		<key>2011</key><string>SAT</string>
+		<key>2012</key><string>SUN</string>
+		<key>2013</key><string>TUE</string>
+		<key>2014</key><string>WED</string>
+		<key>2015</key><string>THU</string>
+		<key>2016</key><string>FRI</string>
+		<key>2017</key><string>SUN</string>
+		<key>2018</key><string>MON</string>
+		<key>2019</key><string>TUE</string>
+		<key>2020</key><string>WED</string>
+		<key>2021</key><string>FRI</string>
+		<key>2022</key><string>SAT</string>
+		<key>2023</key><string>SUN</string>
+		<key>2024</key><string>MON</string>
+		<key>2025</key><string>WED</string>
+		<key>2026</key><string>THU</string>
+		<key>2027</key><string>FRI</string>
+		<key>2028</key><string>SAT</string>
+		<key>2029</key><string>MON</string>
+		<key>2030</key><string>TUE</string>
+		<key>2031</key><string>WED</string>
+		<key>2032</key><string>THU</string>
+		<key>2033</key><string>SAT</string>
+		<key>2034</key><string>SUN</string>
+		<key>2035</key><string>MON</string>
+		<key>2036</key><string>TUE</string>
+		<key>2037</key><string>THU</string>
+		<key>2038</key><string>FRI</string>
+		<key>2039</key><string>SAT</string>
+		<key>2040</key><string>SUN</string>
+		<key>2041</key><string>TUE</string>
+		<key>2042</key><string>WED</string>
+		<key>2043</key><string>THU</string>
+		<key>2044</key><string>FRI</string>
+		<key>2045</key><string>SUN</string>
+		<key>2046</key><string>MON</string>
+		<key>2047</key><string>TUE</string>
+		<key>2048</key><string>WED</string>
+		<key>2049</key><string>FRI</string>
+		<key>2050</key><string>SAT</string>
+		<key>3999</key><string>FRI</string>
+	</dict>
+</dict>
+</plist>
