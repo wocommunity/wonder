@@ -86,6 +86,7 @@ public class ERXModelGroup extends EOModelGroup {
 	
 	/**
 	 * <code>er.extensions.ERXModelGroup.flattenPrototypes</code> defines if the prototypes should get flattened. Default is true.
+	 * <p>Note: the default of true may be incompatible with {@link ERXModel#isUseExtendedPrototypesEnabled}.</p>
 	 */
 	protected static boolean flattenPrototypes = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.flattenPrototypes", true);
 	
@@ -1105,6 +1106,9 @@ public class ERXModelGroup extends EOModelGroup {
 	private void flattenPrototypes() {
 		if (!ERXModelGroup.flattenPrototypes) {
 			return;
+		}
+		else if (ERXModel.isUseExtendedPrototypesEnabled()) {
+			log.warn("Using er.extensions.ERXModel.useExtendedPrototypes=true may be incompatible with er.extensions.ERXModelGroup.flattenPrototypes=true (its default value).");
 		}
 		String prototypesFixedKey = "_EOPrototypesFixed";
 		NSMutableDictionary prototypeReplacement = new NSMutableDictionary();
