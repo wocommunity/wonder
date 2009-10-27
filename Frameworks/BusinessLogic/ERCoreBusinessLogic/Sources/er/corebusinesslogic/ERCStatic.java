@@ -14,7 +14,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
-
+// FIXME AK this code could be replaced by an ERXEOCache 
 public class ERCStatic extends _ERCStatic {
 
     /** logging support */
