@@ -46,6 +46,7 @@ public class ERExtensionsTest extends TestSuite {
         suite.addTestSuite(com.webobjects.foundation.NSMutableDictionaryTest.class);
         suite.addTestSuite(com.webobjects.foundation.NSMutableSetTest.class);
         suite.addTestSuite(com.webobjects.foundation.NSSetTest.class);
+        suite.addTestSuite(com.webobjects.foundation.NSTimestampTest.class);
         suite.addTestSuite(er.extensions.eof.ERXECTest.class);
         suite.addTestSuite(er.extensions.eof.ERXEOAccessUtilitiesTest.class);
         suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
