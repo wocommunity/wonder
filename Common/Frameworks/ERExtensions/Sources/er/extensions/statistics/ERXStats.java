@@ -70,6 +70,8 @@ public class ERXStats {
 		public String Default = " ";
 		public String SQL = "SQL";
 		public String Component = "Component";
+		public String ComponentTakeValuesFromRequest = "Component (takeValuesFromRequest)";
+		public String ComponentInvokeAction = "Component (invokeAction)";
 		public String Batching = "Batching";
 	}
 
