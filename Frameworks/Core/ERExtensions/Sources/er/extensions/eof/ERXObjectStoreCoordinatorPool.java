@@ -219,7 +219,7 @@ public class ERXObjectStoreCoordinatorPool {
         _objectStores = new ArrayList(_maxOS);
         _sharedEditingContexts = new ArrayList(_maxOS);
         for (int i = 0; i < _maxOS; i++) {
-            EOObjectStore os = new ERXObjectStoreCoordinator();
+            EOObjectStore os = ERXObjectStoreCoordinator.create();
             _objectStores.add(os);
             _sharedEditingContexts.add(new EOSharedEditingContext(os));
         }
