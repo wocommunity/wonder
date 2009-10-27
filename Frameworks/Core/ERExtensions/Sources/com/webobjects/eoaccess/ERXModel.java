@@ -27,16 +27,17 @@ import er.extensions.foundation.ERXProperties;
  * 
  * <p>To allow for extended prototypes set
  * <code>er.extensions.ERXModel.useExtendedPrototypes=true</code>.
+ * Note: this may be incompatible with {@link ERXModelGroup#flattenPrototypes}.</p>
  * 
- * The existence of prototype entities based on specific conventions
+ * <p>The existence of prototype entities based on specific conventions
  * is checked and the attributes of those prototype entities are added to the model's
  * prototype attributes cache in a specific order. The search order ensures that
  * the same prototype attribute names in different prototype entities get chosen
- * in a predictable way.
+ * in a predictable way.</p>
  * 
- * Consequently, you can use this search order knowledge to over-ride Wonder's
+ * <p>Consequently, you can use this search order knowledge to over-ride Wonder's
  * ERPrototypes for your entire set of application eomodels or just for specific
- * named eomodels.
+ * named eomodels.</p>
  * 
  * To understand the variables used in deriving the prototype entity names that are searched
  * a few definitions are appropriate
@@ -190,6 +191,15 @@ public class ERXModel extends EOModel {
 	private static NSArray<String> namesForAttributes(NSArray<? extends EOAttribute> attributes) {
 		return new ERXKey<String>("name").arrayValueInObject(attributes);
 	}
+	
+	/**
+	 * Defaults to false.
+	 * Note: when enabled, this may be incompatible with {@link ERXModelGroup#flattenPrototypes}.
+	 * @return the boolean property value for <code>er.extensions.ERXModel.useExtendedPrototypes</code>.
+	 */
+	public static boolean isUseExtendedPrototypesEnabled() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModel.useExtendedPrototypes", false);
+	}
 
 	/**
 	 * Creates and returns a new ERXModel.
@@ -285,11 +295,11 @@ public class ERXModel extends EOModel {
 	}
 	
 	/**
-	 * Defaults to false.
-	 * @return the boolean property value for <code>er.extensions.ERXModel.useExtendedPrototypes</code>.
+	 * Defaults to false as returned by {@link #isUseExtendedPrototypesEnabled()}.
+	 * @see ERXModel#isUseExtendedPrototypesEnabled()
 	 */
 	protected boolean useExtendedPrototypes() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModel.useExtendedPrototypes", false);
+		return isUseExtendedPrototypesEnabled();
 	}
 
 }
