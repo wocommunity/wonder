@@ -45,14 +45,12 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	 * 
 	 */
 	public ERXObjectStoreCoordinator() {
-		super();
 		if (ERXEC.markOpenLocks()) {
 			activeDatabaseContexts.put(this, Thread.currentThread().getName());
 		}
 	}
 
 	public ERXObjectStoreCoordinator(boolean shouldClose) {
-		this();
 		_shouldClose = shouldClose;
 	}
 	
@@ -204,5 +202,13 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 		public void handle(Signal signal) {
 			log.info(outstandingLockDescription());
 		}
+	}
+	
+	public static EOObjectStoreCoordinator create() {
+		return new ERXObjectStoreCoordinator();
+	}
+	
+	public static EOObjectStoreCoordinator create(boolean shouldClose) {
+		return new ERXObjectStoreCoordinator(shouldClose);
 	}
 }
