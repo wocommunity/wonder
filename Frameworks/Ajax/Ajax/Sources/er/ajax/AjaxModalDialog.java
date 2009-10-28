@@ -394,7 +394,6 @@ public class AjaxModalDialog extends AjaxComponent {
 		String modalBoxAction = NSPathUtilities.pathExtension(context.senderID());
 
 		if ("close".equals(modalBoxAction)) {
-			closeDialog();
 			// This update can't be done in the closeDialog() method as that also gets called from close(WOContext) and
 			// and Ajax update is not taking place.  If the page structure changes, this update will not take place,
 			// but the correct container ID is on the URL and the update will still happen thanks to the magic in
@@ -403,6 +402,11 @@ public class AjaxModalDialog extends AjaxComponent {
 			if (closeUpdateContainerID != null) {
 				AjaxUpdateContainer.setUpdateContainerID(request, closeUpdateContainerID);
 			}
+	
+			// This needs to happen AFTER setting up for an update so that AjaxUtils.appendScriptHeaderIfNecessary
+			// knows if the script header is needed or not.  Doing this before and setting up a JS response in 
+			// the onClose callback, resulted in plain text getting injected into the page.
+			closeDialog();
 		}
 		else if ("open".equals(modalBoxAction) && !isOpen()) {
 			openDialog();
