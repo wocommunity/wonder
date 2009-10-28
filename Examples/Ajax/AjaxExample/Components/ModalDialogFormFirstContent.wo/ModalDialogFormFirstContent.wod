@@ -1,0 +1,21 @@
+Form: WOForm {
+	multipleSubmit = true;
+}
+	
+ConfirmationMessage: WOString {
+	value = confirmationMessage;
+}
+
+No : WOHyperlink {
+	href = "javascript:void(0);";
+	onClick = "Modalbox.hide();";
+	id = "SimpleModalDialogNoLink";
+}
+
+
+
+Yes : AjaxSubmitButton {
+	action = deleteIt;
+	evalScripts = true;	
+	value = "Yes";
+}

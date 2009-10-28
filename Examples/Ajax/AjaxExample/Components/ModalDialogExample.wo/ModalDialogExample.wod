@@ -167,3 +167,15 @@ EditEmployeeLink: ERXWOTemplate {
 	templateName = "link";
 }
 
+
+BrokenModalDialog: AjaxModalDialog {
+	pageName = "ModalDialogFormFirstContent";
+	id = "BrokenModalDialog";
+	title = "Confirm Deletion";
+	label = "Delete Account";
+	width = 300;
+	overlayOpacity = "0.5";
+	overlayDuration = "0.3";
+	slideDownDuration = "0.3";
+	slideUpDuration = "0.3";
+}
