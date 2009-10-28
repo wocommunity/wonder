@@ -15,5 +15,8 @@ Relationship : WOSwitchComponent {
     sortCaseInsensitive = d2wContext.sortCaseInsensitive;
 	destinationSortKey = d2wContext.sortKey;
 	noSelectionString = d2wContext.noSelectionString;
+	id = d2wContext.id;
+	class = "ERD2WQueryToOneRelationship";
+	popupName = d2wContext.popupName;
 }
 

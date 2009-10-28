@@ -4,14 +4,13 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WComponent;
 
-import er.directtoweb.components.relationships._xhtml.ERD2WEditToOneRelationship2;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Adds a filter for the select list.
  * How to use: Set a delayed boolean assignment on restrictedChoiceKey or restrictedFetchSpecification based on the condition key defined by filterKey
  * 
- * @see ERD2WEditToOneRelationship2
+ * @see ERD2WEditToOneRelationshipWithNew
  * 
  * @author mendis
  *

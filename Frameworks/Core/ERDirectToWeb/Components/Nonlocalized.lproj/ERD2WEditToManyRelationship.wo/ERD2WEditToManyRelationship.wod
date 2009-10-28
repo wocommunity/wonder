@@ -1,4 +1,5 @@
-CollapseContainer: D2WCollapsibleComponentContent {
+CollapseContainer: WOSwitchComponent {
+	WOComponentName = d2wContext.collapsibleComponentName;
 	_unroll = true;
 	allowCollapsing = d2wContext.allowCollapsing;
 	closedLabel = toManyDescription;
@@ -22,5 +23,8 @@ EditToManyRelationship: ERXToManyRelationship {
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
 	destinationEntityName = d2wContext.destinationEntityName;
     sortCaseInsensitive = d2wContext.sortCaseInsensitive;
+    id = d2wContext.id;
+    title = d2wContext.title;
+    name = d2wContext.name;
 }
 

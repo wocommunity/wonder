@@ -11,7 +11,8 @@ CheckboxLabelString: WOString {
 	value = theCurrentValue;
 }
 
-CheckboxMatrix: ERXCheckboxMatrix {
+CheckboxMatrix: WOSwitchComponent {
+	WOComponentName = checkBoxComponentName;
 	item = theCurrentItem;
 	list = theList;
 	maxColumns = ^maxColumns;
@@ -20,6 +21,8 @@ CheckboxMatrix: ERXCheckboxMatrix {
 	goingVertically = ^goingVertically;
 	shouldShowSelectAllButtons = ^shouldShowSelectAllButtons;
 	cellVAlign = "top";
+	id = ^id;
+	displayString = theCurrentValue;
 }
 
 IsBrowserConditional: WOConditional {

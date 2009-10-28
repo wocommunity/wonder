@@ -1,4 +1,4 @@
-package er.directtoweb.components.relationships._xhtml;
+package er.directtoweb.components.relationships._ajax;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -11,8 +11,8 @@ import com.webobjects.eoaccess.EOModelGroup;
 import er.directtoweb.components.relationships.ERD2WEditToOneRelationship;
 import er.extensions.foundation.ERXValueUtilities;
 
-public class ERD2WEditToOneRelationship2 extends ERD2WEditToOneRelationship {
-    public ERD2WEditToOneRelationship2(WOContext context) {
+public class ERD2WEditToOneRelationshipWithNew extends ERD2WEditToOneRelationship {
+    public ERD2WEditToOneRelationshipWithNew(WOContext context) {
         super(context);
     }
     

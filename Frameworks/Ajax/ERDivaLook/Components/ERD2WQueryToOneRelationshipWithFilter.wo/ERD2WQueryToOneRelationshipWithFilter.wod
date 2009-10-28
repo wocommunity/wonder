@@ -1,4 +1,4 @@
-Relationship : ERD2WQueryToOneRelationship2 {
+Relationship : ERD2WQueryToOneRelationship {
 	localContext = localContext;
 	displayGroup = displayGroup;
 }
