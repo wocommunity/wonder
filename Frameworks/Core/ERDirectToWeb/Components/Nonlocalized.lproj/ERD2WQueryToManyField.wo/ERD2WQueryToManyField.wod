@@ -14,4 +14,5 @@ String2: WOString {
 ToManyTextField: WOTextField {
 	size = 25;
 	value = value;
+	name = d2wContext.name;
 }
