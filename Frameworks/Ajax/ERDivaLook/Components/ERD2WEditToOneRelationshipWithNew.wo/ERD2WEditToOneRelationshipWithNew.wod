@@ -1,4 +1,4 @@
-EditToOneRelationship: ERXToOneRelationship2 {
+EditToOneRelationship: ERXToOneRelationship {
         destinationDisplayKey = keyWhenRelationship;
         possibleChoices = restrictedChoiceList;
         destinationSortKey = d2wContext.sortKey;

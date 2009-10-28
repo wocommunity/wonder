@@ -8,11 +8,8 @@ package er.extensions.components;
 
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.eoaccess.EODatabaseDataSource;
-import com.webobjects.eocontrol.EOArrayDataSource;
-import com.webobjects.eocontrol.EODataSource;
-import com.webobjects.eocontrol.EOQualifier;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.woextensions.WOToOneRelationship;
 
 /**
@@ -40,8 +37,26 @@ import er.extensions.woextensions.WOToOneRelationship;
 //CHECKME AK: does this make sense? Why not set the qualifier in the parent component?
 // MS: OK.
 public class ERXToOneRelationship extends WOToOneRelationship {
+	
+	public final String radioButtonComponentName = ERXProperties.stringForKeyWithDefault("er.extensions.components.ERXToOneRelationship.radioButtonComponentName", "ERXRadioButtonMatrix");
 
     public ERXToOneRelationship(WOContext context) {
         super(context);
+    }
+    
+    //CHECKME	RM: I can't remember why we did this. It says...
+    /*
+     * @note Support for Prototype and Selenium
+     */
+    @Override
+    public Object theCurrentValue() {
+    	Object theCurrentValue = null;
+    	
+    	try {
+    		theCurrentValue = super.theCurrentValue();
+    	} catch (Exception e) {
+    		theCurrentValue = "Not found";
+    		log.error("No current value: " + e.getMessage());
+    	} return theCurrentValue;
     }
 }

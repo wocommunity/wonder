@@ -14,6 +14,7 @@ import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.woextensions.WOToManyRelationship;
 
 /**
@@ -43,6 +44,8 @@ public class ERXToManyRelationship extends WOToManyRelationship {
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXToManyRelationship.class);
+    
+    public final String checkBoxComponentName = ERXProperties.stringForKeyWithDefault("er.extensions.components.ERXToManyRelationship.checkBoxComponentName", "ERXCheckboxMatrix");
  
     public ERXToManyRelationship(WOContext context) {
         super(context);

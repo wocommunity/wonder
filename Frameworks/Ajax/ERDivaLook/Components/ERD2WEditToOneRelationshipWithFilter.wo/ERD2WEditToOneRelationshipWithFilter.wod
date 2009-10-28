@@ -1,4 +1,4 @@
-EditToOneRelationship: ERD2WEditToOneRelationship2 {
+EditToOneRelationship: ERD2WEditToOneRelationship {
 	localContext = d2wContext;
 	object = object;
 }

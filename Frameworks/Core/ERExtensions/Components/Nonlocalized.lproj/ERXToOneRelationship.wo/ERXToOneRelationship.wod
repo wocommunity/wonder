@@ -9,6 +9,7 @@ Browser: WOBrowser {
 	class = ^class;
 	id = ^id;
 	disabled = ^disabled;
+	title = ^title;
 }
 
 IsBrowserConditional: WOConditional {
@@ -34,9 +35,12 @@ PopupList: WOPopUpButton {
 	class = ^class;
 	id = ^id;
 	disabled = ^disabled;
+	title = ^title;
+	value = theCurrentValue;
 }
 
-RadioButtonMatrix: ERXRadioButtonMatrix {
+RadioButtonMatrix: WOSwitchComponent {
+	WOComponentName = radioButtonComponentName;
 	item = theCurrentItem;
 	list = theList;
 	maxColumns = ^maxColumns;
@@ -46,6 +50,7 @@ RadioButtonMatrix: ERXRadioButtonMatrix {
 	class = ^class;
 	id = ^id;
 	disabled = ^disabled;
+	displayString = theCurrentValue;
 }
 
 String: WOString {

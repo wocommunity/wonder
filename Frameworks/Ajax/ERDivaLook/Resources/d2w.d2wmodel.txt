@@ -16,6 +16,7 @@
     1 : task = 'inspect' => repetitionComponentName = ERDIVInspectPageRepetition [com.webobjects.directtoweb.Assignment],
     1 : pageConfiguration like '*Embedded*' => pageWrapperName = D2WEmptyWrapper [com.webobjects.directtoweb.Assignment],
     1 : (propertyType = 'r' and smartRelationship.destinationEntity.name = 'ERAttachment') => size = 16 [com.webobjects.directtoweb.Assignment],
+    2 : componentName = 'ERD2WDisplayString' => omitTags = false [com.webobjects.directtoweb.BooleanAssignment],
     2 : (pageConfiguration like '*Embedded*' and parentPageConfiguration like 'Edit*') => sortOrderComponentName = ERXAjaxSortOrderButton [com.webobjects.directtoweb.Assignment],
     5 : ((not (task = null) and not (entity.name = null)) or pageConfiguration != null) => id = idForPageConfiguration [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment],
     5 : (((not (task = null) and not (entity.name = null)) or not (pageConfiguration = null)) and not (sectionKey = null)) => updateContainerID = idForSection [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment],
@@ -73,11 +74,11 @@
     50 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 1) => componentName = D2WAjaxEditToManyFault [com.webobjects.directtoweb.Assignment],
     50 : ((task = 'inspect' or task = 'list') and propertyType = 'r' and smartRelationship.isToMany = 0) => componentName = D2WAjaxDisplayToOne [com.webobjects.directtoweb.Assignment],
     50 : ((task = 'inspect' or task = 'list') and propertyType = 'r' and smartRelationship.isToMany = 1) => componentName = D2WAjaxDisplayToManyList [com.webobjects.directtoweb.Assignment],
-    51 : componentName = 'ERDEditableList' => collapsibleComponentName = D2WAjaxCollapsibleComponentContent [com.webobjects.directtoweb.Assignment],
+    51 : *true* => collapsibleComponentName = D2WAjaxCollapsibleComponentContent [com.webobjects.directtoweb.Assignment],
     51 : ((task = 'inspect' or task = 'list') and propertyType = 'r' and smartRelationship.isToMany = 0 and smartRelationship.destinationEntity.name = 'ERAttachment') => componentName = D2WDisplayAttachment [com.webobjects.directtoweb.Assignment],
     51 : (pageConfiguration like '*Embedded*' and parentPageConfiguration like 'Edit*' and smartAttribute.valueType = 'c') => componentName = {"conditionKey" = "object.isNewObject"; "falseValue" = "ERD2WDisplayString"; "trueValue" = "D2WEditBoolean"; 
 } [er.directtoweb.assignments.delayed.ERDDelayedBooleanAssignment],
-    51 : (pageConfiguration like '*Embedded*' and parentPageConfiguration like 'Edit*' and propertyType = 'r' and smartRelationship.isToMany = 0) => componentName = {"conditionKey" = "object.isNewObject"; "falseValue" = "D2WAjaxDisplayToOne"; "trueValue" = "ERD2WEditToOneRelationship2"; 
+    51 : (pageConfiguration like '*Embedded*' and parentPageConfiguration like 'Edit*' and propertyType = 'r' and smartRelationship.isToMany = 0) => componentName = {"conditionKey" = "object.isNewObject"; "falseValue" = "D2WAjaxDisplayToOne"; "trueValue" = "ERD2WEditToOneRelationshipWithNew"; 
 } [er.directtoweb.assignments.delayed.ERDDelayedBooleanAssignment],
     52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 0 and smartRelationship.destinationEntity.name = 'ERAttachment') => isAjax = true [com.webobjects.directtoweb.BooleanAssignment],
     52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 1 and smartRelationship.destinationEntity.name = 'ERAttachment') => isAjax = true [com.webobjects.directtoweb.BooleanAssignment],
