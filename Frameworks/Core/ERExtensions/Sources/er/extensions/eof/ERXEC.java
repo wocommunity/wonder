@@ -492,6 +492,7 @@ public class ERXEC extends EOEditingContext {
 		if (markOpenLocks()) {
 			traceLock();
 		}
+		lockAttempts.set(lockAttempts.get().intValue()+1);
 		super.lock();
 		pushLockedContextForCurrentThread(this);
 		if (markOpenLocks()) {
@@ -582,13 +583,14 @@ public class ERXEC extends EOEditingContext {
 			}
 		}
 		super.unlock();
+		lockAttempts.set(lockAttempts.get().intValue()-1);
 	}
 
 	private boolean isLockedInThread() {
 		return locks.get().contains(this);
 	}
 
-	private ThreadLocal<Integer> autoLockAttempts = new ThreadLocal<Integer>() {
+	private ThreadLocal<Integer> lockAttempts = new ThreadLocal<Integer>() {
 		@Override
 		protected Integer initialValue() {
 			return Integer.valueOf(0);
@@ -606,14 +608,13 @@ public class ERXEC extends EOEditingContext {
 	 * @return whether we did lock automatically
 	 */
 	protected boolean autoLock(String method) {
-		if (!useAutoLock() || isFinalizing || isLockedInThread() || autoLockAttempts.get().intValue() > 0)
+		if (!useAutoLock() || isFinalizing || isLockedInThread() || lockAttempts.get().intValue() > 0)
 			return false;
 
 		boolean wasAutoLocked = false;
 
 		if (!isAutoLocked() || !coalesceAutoLocks()) {
 			wasAutoLocked = true;
-			autoLockAttempts.set(autoLockAttempts.get().intValue()+1);
 			lock();
 			autoLocked++;
 
@@ -643,7 +644,6 @@ public class ERXEC extends EOEditingContext {
 			if (!coalesceAutoLocks()) {
 				autoLocked--;
 				unlock();
-				autoLockAttempts.set(autoLockAttempts.get().intValue()-1);
 			}
 		}
 	}
