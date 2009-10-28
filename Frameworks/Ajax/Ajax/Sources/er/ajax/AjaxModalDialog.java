@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOForm;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPathUtilities;
@@ -421,6 +422,19 @@ public class AjaxModalDialog extends AjaxComponent {
 				_actionResults = pageWithName((String)valueForBinding("pageName"));
 				_actionResults._awakeInContext(context);
 			}
+
+			// WOForm expects that it is inside a WODynamicGroup and relies on WODynamicGroup having setup the WOContext to correctly 
+			// generate the URL.  It should not (IMO), but it does.  If you have anything before the WebObject tag for the form 
+			// (a space, a carriage return, text, HTML tags, anything at all), then the WO parser creates a WODynamicGroup to hold that.  
+			// If  the WebObject tag for the form is the very first thing in the template, then the WODynamicGroup is not created and 
+			// invalid URLs are generated rendering the submit controls non-functional.  Throw an exception so the developer knows what is 
+			// wrong and can correct it.
+			if (_actionResults != null && (_actionResults.template() instanceof WOForm ||
+			  		                       _actionResults.template() instanceof ERXWOForm)) {
+				throw new RuntimeException(_actionResults.name() + " is used as contents of AjaxModalDialog, but starts with WOForm tag.  " +
+						"Action elements inside the dialog will not function.  Add a space at the start or end of " + _actionResults.name() + ".html");
+			}
+				
 		}
 
 		if (isOpen()) {
