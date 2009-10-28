@@ -7,8 +7,8 @@ import er.ajax.AjaxUtils;
 import er.directtoweb.pages.templates.ERD2WMessagePageTemplate;
 import er.diva.ERDIVPageInterface;
 
-public class ERD2WMessagePageTemplate2 extends ERD2WMessagePageTemplate implements ERDIVPageInterface {
-    public ERD2WMessagePageTemplate2(WOContext context) {
+public class ERD2WAjaxMessagePageTemplate extends ERD2WMessagePageTemplate implements ERDIVPageInterface {
+    public ERD2WAjaxMessagePageTemplate(WOContext context) {
         super(context);
     }
     
