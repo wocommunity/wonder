@@ -302,7 +302,7 @@ public class ERXEC extends EOEditingContext {
 					((ERXEC) ec).autoLocked--;
 				}
 				else {
-					log.debug("Unlocking context that wasn't unlocked in RR-Loop: " + ec);
+					log.warn("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
 				}
 				try {
 					ec.unlock();
