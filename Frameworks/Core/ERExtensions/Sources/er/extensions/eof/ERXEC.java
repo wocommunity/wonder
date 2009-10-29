@@ -44,12 +44,12 @@ import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Subclass that has every public method overridden to support automatic
- * lock/unlock handling for you. This is very useful, as is is potentially very
+ * lock/unlock handling for you. This is very useful, as it is potentially very
  * dangerous to rely on EOFs automatic lock handling - it will invariably lead
  * into deadlocks. As you will need to use this class and its subclasses
  * exclusively as your ECs, it also contains a factory class to create editing
  * contexts. The Factory also sets a default delegate for you and is used
- * everywhere in ERExtensions and ERDirectToWeb. The Factory is actually and
+ * everywhere in ERExtensions and ERDirectToWeb. The Factory is actually an
  * interface and you would create a new EC by using:
  * <code>ERXEC.newEditingContext()</code> You can also install your own
  * Factory classes. It is recommended to subclass ERXEC.DefaultFactory and
