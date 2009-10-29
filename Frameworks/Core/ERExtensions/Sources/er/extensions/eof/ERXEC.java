@@ -60,12 +60,15 @@ public class ERXEC extends EOEditingContext {
 	public static final Logger log = Logger.getLogger(ERXEC.class);
 
 	/**
-	 * logs a message when set to DEBUG, autoLocking is enabled and an EC is
-	 * used without a lock.
+	 * Logs a message when set to DEBUG and an EC is locked/unlocked. Logs a message with
+	 * trace if {@link #lockTrace} is also set to DEBUG.
 	 */
 	public static final Logger lockLogger = Logger.getLogger("er.extensions.ERXEC.LockLogger");
 
-	/** Logs a message when set to DEBUG and an EC is locked/unlocked. */
+	/** 
+	 * Logs a message with trace when set to DEBUG if autoLocking is enabled and an EC is
+	 * used without a lock. Adds traces to messages by {@link #lockLogger} if it is also set to DEBUG.
+	 */
 	public static final Logger lockTrace = Logger.getLogger("er.extensions.ERXEC.LockTrace");
 
 	/** Name of the notification that is posted after editing context is created. */
