@@ -103,7 +103,7 @@ public class ERXEC extends EOEditingContext {
 	NSMutableDictionary<Thread, NSMutableArray<Exception>> openLockTraces = new NSMutableDictionary<Thread, NSMutableArray<Exception>>();
 
 	/**
-	 * if traceOpenEditingContextLocks is true, this will contain the
+	 * if traceOpenEditingContextLocks is true, this will contain
 	 * the locking thread
 	 */
 	Thread lockingThread;
@@ -193,7 +193,7 @@ public class ERXEC extends EOEditingContext {
 
 	/**
 	 * Returns the value of the <code>er.extensions.ERXEC.traceOpenLocks</code>
-	 * property, which turns on tracing of logs. You can see the trace either by
+	 * property, which turns on tracing of locks. You can see the trace either by
 	 * <code>kill -HUP</code>, by the
 	 * <code>ERXDirectAction/showOpenEditingContextLockTraces</code> action or 
 	 * by setting your App's statistic store to <code>ERXStatisticStore</code>.
@@ -230,7 +230,7 @@ public class ERXEC extends EOEditingContext {
 	}
 	
 	/**
-	 * Sets whether or not open editing context lock tracing is enabled.
+	 * Sets whether or not open editing context lock marking is enabled.
 	 */
 	public static void setMarkOpenLocks(boolean value) {
 		markOpenLocks = value;
@@ -449,7 +449,7 @@ public class ERXEC extends EOEditingContext {
 	 * actually locking across your entire request. Coalescing auto locks
 	 * attempts to solve this problem by leaving your auto lock open after the
 	 * first use. This "hanging lock" will be cleaned up at the end of the RR
-	 * loop but the unlocker.
+	 * loop by the unlocker.
 	 */
 	public boolean coalesceAutoLocks() {
 		if (coalesceAutoLocks == null) {
@@ -462,7 +462,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	/**
-	 * Returns whether or not coalescing auto locks is enabled.
+	 * Sets whether or not coalescing auto locks should be enabled.
 	 */
 	public void setCoalesceAutoLocks(boolean value) {
 		coalesceAutoLocks = Boolean.valueOf(value);
@@ -566,7 +566,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	/**
-	 * Overridden to emmit log messages and pull this instance from the locked
+	 * Overridden to emit log messages and pull this instance from the locked
 	 * editing contexts in this thread.
 	 */
 	public void unlock() {
@@ -967,7 +967,7 @@ public class ERXEC extends EOEditingContext {
 	 * <code>flushCaches()</code> on each corresponding EO in the parent
 	 * context.
 	 * <li> Unlock the parent editing context.
-	 * <li> Call <code>saveChanges()</code> on the child, commiting the child
+	 * <li> Call <code>saveChanges()</code> on the child, committing the child
 	 * changes to the parent editing context.
 	 * <li> Lock the parent editing context.
 	 * <li> On the objects that were updated or inserted in the child, call
@@ -980,7 +980,7 @@ public class ERXEC extends EOEditingContext {
 	 * 
 	 * The order of operations is a bit peculiar: flush deletes, save, flush
 	 * inserts and updates. This is done because deletes must be flushed because
-	 * there may be dependant computed state that needs to be reset. But
+	 * there may be dependent computed state that needs to be reset. But
 	 * following the delete being committed, the relationships to other objects
 	 * cannot be relied upon so it isn't reliable to call flushCaches after the
 	 * commit. It's not entirely correct to flush the deletes like this, but
@@ -1490,7 +1490,7 @@ public class ERXEC extends EOEditingContext {
 		/**
 		 * Default delegate that does not perform validation. Not performing
 		 * validation can be a good thing when using nested editing contexts as
-		 * sometimes you only want to validation one object, not all the
+		 * sometimes you only want to validate one object, not all the
 		 * objects.
 		 * 
 		 * @return default delegate that doesn't perform validation
@@ -1710,7 +1710,7 @@ public class ERXEC extends EOEditingContext {
 
 	/**
 	 * Factory method to create a new editing context with validation disabled.
-	 * Sets the default no validation delegate on the editing context. Becareful
+	 * Sets the default no validation delegate on the editing context. Be careful -
 	 * an editing context that does not perform validation means that none of
 	 * the usual validation methods are called on the enterprise objects before
 	 * they are saved to the database.
