@@ -205,7 +205,7 @@ public class ERXEC extends EOEditingContext {
 
 	/**
 	 * Returns the value of the <code>er.extensions.ERXEC.markOpenLocks</code>
-	 * property, which turns on marking of logs. You can see the threads that hold the lock either by
+	 * property, which turns on marking of locks. You can see the threads that hold the lock either by
 	 * <code>kill -HUP</code>, by the
 	 * <code>ERXDirectAction/showOpenEditingContextLockTraces</code> action or 
 	 * by setting your App's statistic store to <code>ERXStatisticStore</code>.
