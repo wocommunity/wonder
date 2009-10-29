@@ -65,12 +65,6 @@ public class ERXEC extends EOEditingContext {
 	 */
 	public static final Logger lockLogger = Logger.getLogger("er.extensions.ERXEC.LockLogger");
 
-	/**
-	 * logs a message with a stack trace when set to DEBUG and an EC is
-	 * locked/unlocked.
-	 */
-	public static final Logger lockLoggerTrace = Logger.getLogger("er.extensions.ERXEC.LockLoggerTrace");
-
 	/** Logs a message when set to DEBUG and an EC is locked/unlocked. */
 	public static final Logger lockTrace = Logger.getLogger("er.extensions.ERXEC.LockTrace");
 
