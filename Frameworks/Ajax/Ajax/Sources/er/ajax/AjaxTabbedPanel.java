@@ -97,7 +97,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
      * @param template the graph of elements passed to the constructor.
      */
     private void findTabs(WODynamicGroup template)  {
-    	if (template == null) return;
+    	if (template == null || template.childrenElements() == null) return;
 
         NSArray children = template.childrenElements();
         for (int i = 0; i < children.count(); i++) {
