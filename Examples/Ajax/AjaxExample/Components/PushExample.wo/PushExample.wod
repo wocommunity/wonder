@@ -2,19 +2,12 @@ AjaxExampleComponent : AjaxExampleComponent {
 	title = "Push example";
 }
 
-iframe: WOGenericContainer {
-	elementName = "iframe";
-	name = "dummy";
-	src = "/";
-	width=100;
-	height=100;
-}
 
 url: WOString {
 	value = url;
 }
 
-PushLink : WOHyperlink {
+PushLink : AjaxHyperlink {
 	action = push;
 	target = "dummy";
 }
