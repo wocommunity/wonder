@@ -1,3 +1,7 @@
+PushHyperlink : WOHyperlink {
+	pageName = "PushExample";
+}
+
 RPCHyperlink : WOHyperlink {
 	pageName = "ProxyExample";
 }
