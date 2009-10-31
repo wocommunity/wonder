@@ -1,10 +1,5 @@
 package er.ajax;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WORequest;
@@ -16,7 +11,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.appserver.ERXResponse;
+import er.extensions.appserver.ERXKeepAliveResponse;
 import er.extensions.foundation.ERXMutableDictionary;
 import er.extensions.foundation.ERXSelectorUtilities;
 
@@ -44,96 +39,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 
 	protected static Logger log = Logger.getLogger(AjaxPushRequestHandler.class);
 
-	private static NSMutableDictionary<String, KeepAliveResponse> responses = ERXMutableDictionary.synchronizedDictionary();
-
-	/**
-	 * Special response that keeps the connection alive and pushes the data to
-	 * the client. It does this by opening a stream that has small buffer but
-	 * huge length.
-	 * 
-	 * @author ak
-	 */
-	public static class KeepAliveResponse extends ERXResponse {
-
-		/**
-		 * Queue to push the items into.
-		 */
-		protected Queue<byte[]> queue = new ConcurrentLinkedQueue<byte[]>();
-
-		/**
-		 * Current data to write to client.
-		 */
-		protected byte current[] = null;
-
-		/**
-		 * Current index in
-		 */
-		protected int currentIndex = 0;
-
-		public KeepAliveResponse() {
-			setHeader("keep-alive", "connection");
-			setContentStream(new InputStream() {
-				public int read() throws IOException {
-					synchronized (queue) {
-						if (current != null && currentIndex >= current.length) {
-							current = null;
-							currentIndex = 0;
-						}
-						if (current == null) {
-							try {
-								if (log.isDebugEnabled()) {
-									log.debug("waiting: " + queue.hashCode());
-								}
-								queue.wait();
-								if (log.isDebugEnabled()) {
-									log.debug("got data: " + queue.hashCode());
-								}
-							}
-							catch (InterruptedException e) {
-								return -1;
-							}
-							current = queue.poll();
-						}
-					}
-					if (current == null) {
-						return -1;
-					}
-					if (log.isDebugEnabled()) {
-						log.debug("writing: " + currentIndex);
-					}
-					return current[currentIndex++];
-				}
-
-			}, 1, 2000000000); // this is 2 GB... should be enough.
-		}
-
-		/**
-		 * Enqueues the data.
-		 * 
-		 * @param data
-		 */
-		public void push(byte data[]) {
-			if (log.isDebugEnabled()) {
-				log.debug("pushing: " + queue.hashCode());
-			}
-			synchronized (queue) {
-				queue.offer(data);
-				queue.notify();
-			}
-		}
-
-		/**
-		 * Resets the response by clearing out the current item and notifying
-		 * the queue.
-		 */
-		public void reset() {
-			synchronized (queue) {
-				current = null;
-				currentIndex = 0;
-				queue.notify();
-			}
-		}
-	}
+	private static NSMutableDictionary<String, ERXKeepAliveResponse> responses = ERXMutableDictionary.synchronizedDictionary();
 
 	public AjaxPushRequestHandler() {
 		NSNotificationCenter.defaultCenter().addObserver(this, ERXSelectorUtilities.notificationSelector("sessionDidTimeOut"), WOSession.SessionDidTimeOutNotification, null);
@@ -146,7 +52,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	 */
 	public void sessionDidTimeOut(NSNotification n) {
 		String id = (String) n.object();
-		KeepAliveResponse response = responseForSessionID(id);
+		ERXKeepAliveResponse response = responseForSessionID(id);
 		response.reset();
 		responses.removeObjectForKey(id);
 	}
@@ -156,7 +62,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	 */
 	public WOResponse handleRequest(WORequest request) {
 		String sessionID = request.sessionID();
-		KeepAliveResponse response = responseForSessionID(sessionID);
+		ERXKeepAliveResponse response = responseForSessionID(sessionID);
 		response.reset();
 		return response;
 	}
@@ -167,12 +73,12 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	 * @param sessionID
 	 * @return response for ID
 	 */
-	private static KeepAliveResponse responseForSessionID(String sessionID) {
-		KeepAliveResponse response = null;
+	private static ERXKeepAliveResponse responseForSessionID(String sessionID) {
+		ERXKeepAliveResponse response = null;
 		if (sessionID != null) {
 			response = responses.objectForKey(sessionID);
 			if (response == null) {
-				response = new KeepAliveResponse();
+				response = new ERXKeepAliveResponse();
 				responses.setObjectForKey(response, sessionID);
 			}
 		}
@@ -187,7 +93,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	 * @param message
 	 */
 	public static void push(String sessionID, String message) {
-		responseForSessionID(sessionID).push(message.getBytes());
+		responseForSessionID(sessionID).push(message);
 	}
 
 	/**
