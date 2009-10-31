@@ -7,3 +7,4 @@ log4j.appender.STDOUT.layout=er.extensions.logging.ERXPatternLayout
 log4j.appender.STDOUT.layout.ConversionPattern=%-5p %d{HH:mm:ss} (%-20c:%L):  %m%n
 
 SeleniumTestsEnabled=true
+er.extensions.ERXApplication.DefaultEncoding=UTF-8
