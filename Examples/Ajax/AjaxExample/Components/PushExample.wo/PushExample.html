@@ -1,0 +1,23 @@
+<webobject name = "AjaxExampleComponent">
+	<script src="/cgi-bin/WebObjects/AjaxExample.woa/wr/wodata=/Volumes/Home/Wonder/Frameworks/Ajax/Ajax/build/Ajax.framework/WebServerResources/prototype.js"></script>
+<script src="/cgi-bin/WebObjects/AjaxExample.woa/wr/wodata=/Volumes/Home/Wonder/Frameworks/Ajax/Ajax/build/Ajax.framework/WebServerResources/effects.js"></script>
+<script src="/cgi-bin/WebObjects/AjaxExample.woa/wr/wodata=/Volumes/Home/Wonder/Frameworks/Ajax/Ajax/build/Ajax.framework/WebServerResources/wonder.js"></script>
+
+<webobject name = "PushLink">Push</webobject>
+<br />
+<webobject name = "iframe1"></webobject>
+<script>
+new Ajax.Request('<webobjects name=url/>',
+	       {
+		  parameters: '',
+		  method: 'GET',
+		  asynchronous: true,
+		  onInteractive: function(transport) {
+		   var result = document.getElementById('result');
+		  	result.innerHTML += "<br>" + transport.responseText;
+		  	//alert(transport.responseText);
+		  }
+       });
+</script>
+<div id="result"/>
+</webobject>
