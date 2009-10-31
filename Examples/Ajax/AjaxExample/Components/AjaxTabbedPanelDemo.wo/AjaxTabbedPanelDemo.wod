@@ -2,6 +2,23 @@ AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Tabbed Panel";
 }
 
+Form: WOForm {
+	multipleSubmit = true;
+}
+
+FormValueA: WOTextField {
+	value = formValueA;
+}
+
+FormValueB: WOTextField {
+	value = formValueB;
+}
+
+SubmitButton: WOSubmitButton {	
+	action = save;
+	value = "Save";
+}
+
 TabbedPanel: AjaxTabbedPanel {
 	id = "tabbedPanel";
 	busyDiv = "busydiv";
@@ -37,6 +54,7 @@ CurrentTime: WOString {
 }
 	
 SlowLoadingComponent: SlowLoadingComponent {
+	formValueC	= formValueC;
 }
 
 BusyImage : WOImage {
