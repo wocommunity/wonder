@@ -1,5 +1,8 @@
 package er.ajax;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WORequest;
@@ -7,12 +10,10 @@ import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSData;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.appserver.ERXKeepAliveResponse;
-import er.extensions.foundation.ERXMutableDictionary;
 import er.extensions.foundation.ERXSelectorUtilities;
 
 /**
@@ -39,7 +40,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 
 	protected static Logger log = Logger.getLogger(AjaxPushRequestHandler.class);
 
-	private static NSMutableDictionary<String, ERXKeepAliveResponse> responses = ERXMutableDictionary.synchronizedDictionary();
+	private static ConcurrentHashMap<String, ConcurrentHashMap<String, ERXKeepAliveResponse>> responses = new ConcurrentHashMap<String, ConcurrentHashMap<String, ERXKeepAliveResponse>>();
 
 	public AjaxPushRequestHandler() {
 		NSNotificationCenter.defaultCenter().addObserver(this, ERXSelectorUtilities.notificationSelector("sessionDidTimeOut"), WOSession.SessionDidTimeOutNotification, null);
@@ -48,21 +49,28 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	/**
 	 * Remove stale responses when a session times out.
 	 * 
-	 * @param n
+	 * @param n the session timeout notification
 	 */
 	public void sessionDidTimeOut(NSNotification n) {
 		String id = (String) n.object();
-		ERXKeepAliveResponse response = responseForSessionID(id);
-		response.reset();
-		responses.removeObjectForKey(id);
+		ConcurrentHashMap<String, ERXKeepAliveResponse> sessionResponses = responses.get(id);
+		if (sessionResponses != null) {
+			for (ERXKeepAliveResponse response : sessionResponses.values()) {
+				response.reset();
+			}
+			responses.remove(id);
+		}
 	}
 
 	/**
 	 * Get/Create the current request for the session and return it.
+	 * 
+	 * @param request the request
 	 */
 	public WOResponse handleRequest(WORequest request) {
 		String sessionID = request.sessionID();
-		ERXKeepAliveResponse response = responseForSessionID(sessionID);
+		String name = request.requestHandlerPath();
+		ERXKeepAliveResponse response = responseForSessionIDNamed(sessionID, name);
 		response.reset();
 		return response;
 	}
@@ -70,40 +78,89 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	/**
 	 * Return or create the correct response for the session ID.
 	 * 
-	 * @param sessionID
+	 * @param sessionID the session id of the response
+	 * @param name the name of the response
 	 * @return response for ID
 	 */
-	private static ERXKeepAliveResponse responseForSessionID(String sessionID) {
+	private static ERXKeepAliveResponse responseForSessionIDNamed(String sessionID, String name) {
 		ERXKeepAliveResponse response = null;
 		if (sessionID != null) {
-			response = responses.objectForKey(sessionID);
+			ConcurrentHashMap<String, ERXKeepAliveResponse> sessionResponses = responses.get(sessionID);
+			if (sessionResponses == null) {
+				ConcurrentHashMap<String, ERXKeepAliveResponse> newSessionResponses = new ConcurrentHashMap<String, ERXKeepAliveResponse>();
+				ConcurrentHashMap<String, ERXKeepAliveResponse> prevSessionResponses = responses.putIfAbsent(sessionID, newSessionResponses);
+				sessionResponses = (prevSessionResponses == null) ? newSessionResponses : prevSessionResponses;
+			}
+			response = sessionResponses.get(name);
 			if (response == null) {
-				response = new ERXKeepAliveResponse();
-				responses.setObjectForKey(response, sessionID);
+				ERXKeepAliveResponse newResponse = new ERXKeepAliveResponse();
+				ERXKeepAliveResponse prevResponse = sessionResponses.putIfAbsent(name, newResponse);
+				response = (prevResponse == null) ? newResponse : prevResponse;
 			}
 		}
 		return response;
 	}
 
 	/**
+	 * Returns whether or not there is a response open for the given session id and name.
+	 * 
+	 * @param sessionID the session id of the push response
+	 * @param name the name of the push response
+	 * @return whether or not there is still a response open
+	 */
+	public static boolean isResponseOpen(String sessionID, String name) {
+		ERXKeepAliveResponse response = responseForSessionIDNamed(sessionID, name);
+		return response != null; 
+	}
+	
+	/**
 	 * Push a string message to the client. At the moment, there is no boundary
 	 * handling, so be aware that you could get only half of a message.
 	 * 
-	 * @param sessionID
-	 * @param message
+	 * @param sessionID the session id of the push response
+	 * @param name the name of the push response
+	 * @param message the message to push
 	 */
-	public static void push(String sessionID, String message) {
-		responseForSessionID(sessionID).push(message);
+	public static void stop(String sessionID, String name) {
+		Map<String, ERXKeepAliveResponse> sessionResponses = responses.get(sessionID);
+		if (sessionResponses != null) {
+			ERXKeepAliveResponse response = sessionResponses.get(name);
+			if (response != null) {
+				response.reset();
+				sessionResponses.remove(name);
+			}
+			// not going to do an empty check on sessionResponses, because we'd have to synchronize on
+			// the top-level responses to do it safely
+		}
+	}
+	
+	/**
+	 * Push a string message to the client. At the moment, there is no boundary
+	 * handling, so be aware that you could get only half of a message.
+	 * 
+	 * @param sessionID the session id of the push response
+	 * @param name the name of the push response
+	 * @param message the message to push
+	 */
+	public static void push(String sessionID, String name, String message) {
+		ERXKeepAliveResponse response = responseForSessionIDNamed(sessionID, name);
+		if (response != null) {
+			response.push(message);
+		}
 	}
 
 	/**
 	 * Push a data message to the client. At the moment, there is no boundary
 	 * handling, so be aware that you could get only half of a message.
 	 * 
-	 * @param sessionID
-	 * @param message
+	 * @param sessionID the session id of the push response
+	 * @param name the name of the push response
+	 * @param message the message to push
 	 */
-	public static void push(String sessionID, NSData message) {
-		responseForSessionID(sessionID).push(message.bytes());
+	public static void push(String sessionID, String name, NSData message) {
+		ERXKeepAliveResponse response = responseForSessionIDNamed(sessionID, name);
+		if (response != null) {
+			response.push(message.bytes());
+		}
 	}
 }
