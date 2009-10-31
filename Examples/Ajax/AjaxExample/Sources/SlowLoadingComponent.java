@@ -3,6 +3,8 @@
 import com.webobjects.appserver.*;
 
 public class SlowLoadingComponent extends DragAndDropExample {
+	
+	public String formValueC;
 
     public SlowLoadingComponent(WOContext context) {
         super(context);

@@ -30,6 +30,24 @@ var AjaxTabbedPanel = {
     // Change which panel appears
     selectPanel : function(paneControlID, selectedPaneID) {
       var selectedPane = $(selectedPaneID);
+      
+      // Tabs are hidden with display:none.  This removes the contents from the DOM... including any form fields.
+      // The fields on any tab NOT selected since the last (non-Ajax)form submission will therefore not be sent 
+      // to the app and WO will interpret this as null values.  To avoid problems from this, the relevant form is 
+      // submitted before the tab is hidden.
+      
+      // First look for a form in each pane and if not found, look for one form wrapping the entire panel
+      var formInPanel = selectedPane.down('form');
+      if (formInPanel) {
+      	ASB.request(formInPanel, null, {_asbn: 'dummy'});
+      }
+      else {
+        var formAroundPanel = selectedPane.up('form');
+	    if (formAroundPanel) {
+	      ASB.request(formAroundPanel, null, {_asbn: 'dummy'});
+	    }
+      }
+
       var panelist = this.getChildrenByTagName($(paneControlID), 'li');
       var nodes = $A(panelist);
 

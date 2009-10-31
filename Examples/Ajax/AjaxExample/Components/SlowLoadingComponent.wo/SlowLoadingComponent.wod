@@ -1,3 +1,6 @@
+FormValueC: WOTextField {
+	value = formValueC;
+}
 
 DraggableExample1 : AjaxDraggable {
 	id = "draggableExample1";

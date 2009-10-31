@@ -8,7 +8,10 @@ import er.ajax.*;
 public class AjaxTabbedPanelDemo extends WOComponent {
 
     private boolean _isRefreshingContentSelected;
-
+    public String formValueA;
+    public String formValueB;
+    public String formValueC;
+    
 	public AjaxTabbedPanelDemo(WOContext context) {
         super(context);
     }
@@ -68,4 +71,10 @@ public class AjaxTabbedPanelDemo extends WOComponent {
     	return new NSTimestamp();
     }
 
+    public WOComponent save() {
+    	System.out.println("formValueA " + formValueA);
+    	System.out.println("formValueB " + formValueB);
+    	System.out.println("formValueB " + formValueC);
+    	return context().page();
+    }
 }
