@@ -145,6 +145,10 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	public static void push(String sessionID, String name, String message) {
 		ERXKeepAliveResponse response = responseForSessionIDNamed(sessionID, name);
 		if (response != null) {
+			StringBuffer sb = new StringBuffer();
+			sb.append(message.length());
+			sb.append(':');
+			response.push(sb.toString());
 			response.push(message);
 		}
 	}
@@ -160,6 +164,10 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	public static void push(String sessionID, String name, NSData message) {
 		ERXKeepAliveResponse response = responseForSessionIDNamed(sessionID, name);
 		if (response != null) {
+			StringBuffer sb = new StringBuffer();
+			sb.append(message.length());
+			sb.append(':');
+			response.push(sb.toString());
 			response.push(message.bytes());
 		}
 	}

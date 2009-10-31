@@ -96,15 +96,8 @@ public class ERXKeepAliveResponse extends ERXResponse {
 			log.debug("pushing: " + _queue.hashCode());
 		}
 		synchronized (_queue) {
-			try {
-				_queue.offer(String.valueOf(data.length).getBytes(contentEncoding()));
-				_queue.offer(":".getBytes(contentEncoding()));
-				_queue.offer(data);
-				_queue.notify();
-			}
-			catch (UnsupportedEncodingException e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
-			}
+			_queue.offer(data);
+			_queue.notify();
 		}
 	}
 
