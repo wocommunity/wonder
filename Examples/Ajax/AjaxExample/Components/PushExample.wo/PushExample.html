@@ -11,11 +11,13 @@ new Ajax.Request('<webobjects name=url/>', {
 		  asynchronous: true,
 		  onInteractive: function(transport) {
 		   var result = document.getElementById('result');
-		    // AK: this should remember what we had so far and only output new data
-		    // JS coders, get busy :)
-		    // it also should have a subclass that implements a protocoll that knows when a whole item
+		    // AK: this should have a subclass that implements a protocoll that knows when a whole item
 		    // has been transfered
-		  	result.innerHTML += "<br>" + transport.responseText;
+		    if(!result.last) {
+		    	result.last = "";
+		    }
+		  	result.innerHTML += "<br>" + transport.responseText.slice(result.last.length, transport.responseText.length);
+		  	result.last = transport.responseText;
 		  	//alert(transport.responseText);
 		  }
        });
