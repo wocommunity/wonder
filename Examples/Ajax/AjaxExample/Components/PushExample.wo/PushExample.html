@@ -7,22 +7,43 @@ This is different from Ajax.Updater, which polls at intervals.<br>
 <br />
 <script>
 // AK: I don't have time to look up the proper API, but for a proof of concept, this should suffice
+// MS: this is going to run out of memory, because transport.responseText is never reset ... are we allowed to mess with transport.responseText?
+var pendingLength = 0;
+var offset = 0;
 new Ajax.Request('<webobjects name=url/>', {
 		  parameters: '',
 		  method: 'GET',
 		  asynchronous: true,
 		  onInteractive: function(transport) {
-		   var result = document.getElementById('result');
-		    // AK: this should have a subclass that implements a protocoll that knows when a whole item
-		    // has been transfered
-		    if(!result.last) {
-		    	result.last = "";
-		    }
-		  	result.innerHTML += "<br>" + transport.responseText.slice(result.last.length, transport.responseText.length);
-		  	result.last = transport.responseText;
-		  	//alert(transport.responseText);
+		    var result = document.getElementById('result');
+		    if (transport.responseText.length - offset > 0) {
+			    while (true) {
+				    if (pendingLength == 0) {
+				    	var colonIndex = transport.responseText.indexOf(':', offset);
+				    	if (colonIndex != -1) {
+				    		pendingLength = parseInt(transport.responseText.substring(offset, colonIndex));
+				    		offset += ((colonIndex - offset) + 1);
+				    	}
+				    	else {
+				    		break;
+				    	}
+				    }
+				    if (pendingLength > 0 && (transport.responseText.length - offset) >= pendingLength) {
+				    	var nextStr = transport.responseText.substr(offset, pendingLength);
+					  	result.innerHTML += nextStr;
+				    	offset += pendingLength; 
+				    	pendingLength = 0;
+						  if (transport.responseText.length == offset) {
+						  	break;
+					  	}
+					  }
+					  else {
+					  	break;
+					  }
+					}
+				}
 		  }
-       });
+    });
 </script>
 <div id="result"/>
 </webobject>

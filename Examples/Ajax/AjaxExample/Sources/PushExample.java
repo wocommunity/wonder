@@ -1,58 +1,71 @@
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
 import er.ajax.AjaxPushRequestHandler;
 import er.ajax.AjaxUtils;
 
 public class PushExample extends WOComponent {
-	
-    public PushExample(WOContext context) {
-        super(context);
-        if(!thread.isAlive()) {
-            thread.start();
-        }
-    }
 
-    public String url() {
-    	return context().urlWithRequestHandlerKey(AjaxPushRequestHandler.AjaxCometRequestHandlerKey, "test", "wosid=" +session().sessionID());
-    }
+	public PushExample(WOContext context) {
+		super(context);
+		if (!_pushThread.isAlive()) {
+			_pushThread.start();
+		}
+	}
 
-    @Override
-    public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);
-    	AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-    	AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
-    }
-    
-    private static String pushingID = null;
-    
-    static Thread thread = new Thread(new Runnable() {
+	public String url() {
+		return context().urlWithRequestHandlerKey(AjaxPushRequestHandler.AjaxCometRequestHandlerKey, "test", "wosid=" + session().sessionID());
+	}
 
+	@Override
+	public void appendToResponse(WOResponse response, WOContext context) {
+		super.appendToResponse(response, context);
+		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+		AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
+	}
+
+	private static Set<String> _pushSessionIDs = Collections.synchronizedSet(new HashSet<String>());
+
+	private static Thread _pushThread = new Thread(new Runnable() {
 		public void run() {
 			boolean running = true;
-			while(running) {
-				String id = pushingID;
-				if(id != null) {
-					AjaxPushRequestHandler.push(id, "pushed: " + System.currentTimeMillis());
-				}
-				try {
-					Thread.sleep(2000);
-				}
-				catch (InterruptedException e) {
-					running = false;
+			while (running) {
+				Set<String> pushSessionIDs = new HashSet<String>(_pushSessionIDs);
+				for (String pushSessionID : pushSessionIDs) {
+					if (AjaxPushRequestHandler.isResponseOpen(pushSessionID, "test")) {
+						String str = "<br>push to '" + pushSessionID+ "': " + System.currentTimeMillis();
+						System.out.println("ERXKeepAliveResponse.push: sending '" + str + "'");
+						AjaxPushRequestHandler.push(pushSessionID, "test", str);
+						try {
+							Thread.sleep(2000);
+						}
+						catch (InterruptedException e) {
+							running = false;
+						}
+					}
+					else {
+						System.out.println("PushExample._pushThread.new Runnable() {...}.run: removing " + pushSessionID);
+						_pushSessionIDs.remove(pushSessionID);
+					}
 				}
 			}
-		}});
-    
-    
+		}
+	});
+
 	public WOActionResults push() {
-		if(pushingID == null) {
-			pushingID = session().sessionID();
-		} else {
-			pushingID = null;
+		if (_pushSessionIDs.contains(session().sessionID())) {
+			System.out.println("PushExample.push:  stopping " + session().sessionID());
+			_pushSessionIDs.remove(session().sessionID());
+		}
+		else {
+			System.out.println("PushExample.push: starting " + session().sessionID());
+			_pushSessionIDs.add(session().sessionID());
 		}
 		WOResponse response = new WOResponse();
 		response.setContent("Sent some data");
