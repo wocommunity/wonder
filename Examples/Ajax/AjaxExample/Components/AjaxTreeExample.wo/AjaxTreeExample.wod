@@ -23,7 +23,7 @@ AjaxTree : AjaxTree {
 
 TreeNodeAction : WOHyperlink {
 	action = nodeSelected;
-	string = treeNode.toString;
+	string = treeNode.toString; // VALID
 }
 
 Busy : AjaxBusyIndicator {
