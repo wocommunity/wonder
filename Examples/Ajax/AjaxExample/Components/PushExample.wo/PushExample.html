@@ -1,19 +1,20 @@
 <webobject name = "AjaxExampleComponent">
-	<script src="/cgi-bin/WebObjects/AjaxExample.woa/wr/wodata=/Volumes/Home/Wonder/Frameworks/Ajax/Ajax/build/Ajax.framework/WebServerResources/prototype.js"></script>
-<script src="/cgi-bin/WebObjects/AjaxExample.woa/wr/wodata=/Volumes/Home/Wonder/Frameworks/Ajax/Ajax/build/Ajax.framework/WebServerResources/effects.js"></script>
-<script src="/cgi-bin/WebObjects/AjaxExample.woa/wr/wodata=/Volumes/Home/Wonder/Frameworks/Ajax/Ajax/build/Ajax.framework/WebServerResources/wonder.js"></script>
-
+<!-- AK: this should be an ajax link... -->
 <webobject name = "PushLink">Push</webobject>
 <br />
-<webobject name = "iframe1"></webobject>
+<webobject name = "iframe"></webobject>
 <script>
-new Ajax.Request('<webobjects name=url/>',
-	       {
+// AK: I don't have time to look up the proper API, but for a proof of concept, this should suffice
+new Ajax.Request('<webobjects name=url/>', {
 		  parameters: '',
 		  method: 'GET',
 		  asynchronous: true,
 		  onInteractive: function(transport) {
 		   var result = document.getElementById('result');
+		    // AK: this should remember what we had so far and only output new data
+		    // JS coders, get busy :)
+		    // it also should have a subclass that implements a protocoll that knows when a whole item
+		    // has been transfered
 		  	result.innerHTML += "<br>" + transport.responseText;
 		  	//alert(transport.responseText);
 		  }
