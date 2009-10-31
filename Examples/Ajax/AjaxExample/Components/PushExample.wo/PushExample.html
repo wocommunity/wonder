@@ -1,8 +1,10 @@
 <webobject name = "AjaxExampleComponent">
-<!-- AK: this should be an ajax link... -->
-<webobject name = "PushLink">Push</webobject>
+
+Pressing <webobject name = "PushLink">push</webobject> will send an request to the app, which in turn
+will send data back in <b>another</b> request that will be opened on page load. <br>
+This is different from Ajax.Updater, which polls at intervals.<br>
+
 <br />
-<webobject name = "iframe"></webobject>
 <script>
 // AK: I don't have time to look up the proper API, but for a proof of concept, this should suffice
 new Ajax.Request('<webobjects name=url/>', {

@@ -11,6 +11,9 @@ public class PushExample extends WOComponent {
 	
     public PushExample(WOContext context) {
         super(context);
+        if(!thread.isAlive()) {
+            thread.start();
+        }
     }
 
     public String url() {
@@ -24,8 +27,33 @@ public class PushExample extends WOComponent {
     	AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
     }
     
+    private static String pushingID = null;
+    
+    static Thread thread = new Thread(new Runnable() {
+
+		public void run() {
+			boolean running = true;
+			while(running) {
+				String id = pushingID;
+				if(id != null) {
+					AjaxPushRequestHandler.push(id, "pushed: " + System.currentTimeMillis());
+				}
+				try {
+					Thread.sleep(2000);
+				}
+				catch (InterruptedException e) {
+					running = false;
+				}
+			}
+		}});
+    
+    
 	public WOActionResults push() {
-		AjaxPushRequestHandler.push(session().sessionID(), "test: " + System.currentTimeMillis());
+		if(pushingID == null) {
+			pushingID = session().sessionID();
+		} else {
+			pushingID = null;
+		}
 		WOResponse response = new WOResponse();
 		response.setContent("Sent some data");
 		return response;
