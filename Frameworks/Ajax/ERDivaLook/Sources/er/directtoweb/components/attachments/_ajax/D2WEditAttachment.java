@@ -8,6 +8,7 @@ import er.attachment.model.ERAttachment;
 
 /**
  * D2W component for editing ERAttachments
+ * The configurationName is computed: 'Entity.propertyKey'
  * 
  * @author mendis
  *
