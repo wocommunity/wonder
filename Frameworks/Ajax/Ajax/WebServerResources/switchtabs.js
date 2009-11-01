@@ -39,12 +39,12 @@ var AjaxTabbedPanel = {
       // First look for a form in each pane and if not found, look for one form wrapping the entire panel
       var formInPanel = selectedPane.down('form');
       if (formInPanel) {
-      	ASB.request(formInPanel, null, {_asbn: 'dummy'});
+      	ASB.request(formInPanel, {}, {_asbn: 'dummy'});
       }
       else {
         var formAroundPanel = selectedPane.up('form');
 	    if (formAroundPanel) {
-	      ASB.request(formAroundPanel, null, {_asbn: 'dummy'});
+	      ASB.request(formAroundPanel, {}, {_asbn: 'dummy'});
 	    }
       }
 
