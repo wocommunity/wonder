@@ -11,7 +11,7 @@ FileUpload : ERAjaxAttachmentUpload {
 
 DisplayAttachmentDownloadLink: ERAttachmentLink {
 	attachment = attachment;
-	class = "D2WDisplayAttachment download";
+	class = "ERD2WDisplayAttachment download";
 }
 
 FileName: WOString {
