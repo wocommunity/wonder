@@ -15,8 +15,8 @@ import er.attachment.model.ERAttachment;
  * @binding object
  * @binding propertyKey
  */
-public class D2WEditAttachment extends D2WComponent {
-    public D2WEditAttachment(WOContext context) {
+public class D2WAjaxEditAttachment extends D2WComponent {
+    public D2WAjaxEditAttachment(WOContext context) {
         super(context);
     }
     
