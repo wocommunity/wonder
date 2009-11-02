@@ -175,11 +175,11 @@ public class ERXDictionaryUtilities {
      * @param d dictionary to sort keys from
      * @return keys from d sorted by ascending value they are mapped to
      */
-    public static NSArray<String> keysSortedByValueAscending(final NSDictionary<String, ?> d) {
-        NSArray<String> result = null;
+    public static <T> NSArray<T> keysSortedByValueAscending(final NSDictionary<T, ?> d) {
+        NSArray<T> result = null;
 
         if ( d != null && d.count() > 0 ) {
-            final NSArray<String> keys = d.allKeys();
+            final NSArray<T> keys = d.allKeys();
             result = ERXArrayUtilities.sortedArrayUsingComparator(keys, new NSDictionaryKeyValueComparator(d));
         }
 
