@@ -1,4 +1,4 @@
-package er.directtoweb.components.attachments._xhtml;
+package er.directtoweb.components.attachments;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WComponent;
@@ -9,8 +9,8 @@ import com.webobjects.directtoweb.D2WComponent;
  * @author mendis
  *
  */
-public class D2WDisplayAttachment extends D2WComponent {
-    public D2WDisplayAttachment(WOContext context) {
+public class ERD2WDisplayAttachment extends D2WComponent {
+    public ERD2WDisplayAttachment(WOContext context) {
         super(context);
     }
 }

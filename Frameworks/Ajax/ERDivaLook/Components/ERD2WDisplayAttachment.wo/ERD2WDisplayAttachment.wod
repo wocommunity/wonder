@@ -9,7 +9,7 @@ NoAttachment: WOConditional {
 
 DisplayAttachmentDownloadLink: ERAttachmentLink {
 	attachment = objectPropertyValue;
-	class = "D2WDisplayAttachment download";
+	class = "ERD2WDisplayAttachment download";
 }
 
 FileName: WOString {
