@@ -82,7 +82,7 @@
 } [er.directtoweb.assignments.delayed.ERDDelayedBooleanAssignment],
     52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 0 and smartRelationship.destinationEntity.name = 'ERAttachment') => isAjax = true [com.webobjects.directtoweb.BooleanAssignment],
     52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 1 and smartRelationship.destinationEntity.name = 'ERAttachment') => isAjax = true [com.webobjects.directtoweb.BooleanAssignment],
-    52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 0 and smartRelationship.destinationEntity.name = 'ERAttachment') => componentName = D2WEditAttachment [com.webobjects.directtoweb.Assignment],
+    52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 0 and smartRelationship.destinationEntity.name = 'ERAttachment') => componentName = D2WAjaxEditAttachment [com.webobjects.directtoweb.Assignment],
     52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 1 and smartRelationship.destinationEntity.name = 'ERAttachment') => componentName = D2WEditAttachmentList [com.webobjects.directtoweb.Assignment],
     56 : task = 'edit' => pageName = templateNameForEditPage [er.directtoweb.ERDKeyValueAssignment],
     56 : pageConfiguration like 'InspectConfirm*' => pageName = templateNameForInspectConfirmPage [er.directtoweb.ERDKeyValueAssignment],
