@@ -329,6 +329,8 @@ There are many ways to use this script:
 
     <target name="global.framework.test" depends="global.properties">
 
+        <property file="${user.home}${file.separator}Library${file.separator}wobuild.properties"/>
+
         <path id="wo.exec.test.path">
             <pathelement location="${build.root}/ERJars.${fRJ}/junit.jar" />
             <pathelement location="${build.root}/DerbyPlugIn.${fRJ}/derby.jar" />
@@ -346,8 +348,6 @@ There are many ways to use this script:
             <pathelement location="${wo.system.frameworks}/JavaWebObjects.${fRJ}/javawebobjects.jar" />
             <pathelement location="${wo.system.frameworks}/JavaXML.${fRJ}/javaxml.jar" />
         </path>
-
-        <property file="${user.home}${file.separator}Library${file.separator}wobuild.properties"/>
 
         <condition property="run.test.MySQL">
             <and>
