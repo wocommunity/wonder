@@ -960,6 +960,15 @@
         <antcall target="ERChronic.all"><param name="build.action" value="test" /></antcall>
     </target>
 
+    <target name="thrash">
+        <antcall target="thrash.run" />
+    </target>
+
+    <target name="thrash.all">
+        <antcall target="thrash.run"><param name="thrash.scheme" value="scheme:SimpleFetchTest::0-5,2-5,3-5" /></antcall>
+        <antcall target="thrash.run"><param name="thrash.scheme" value="scheme:SimpleInsertTest::0-5,2-5,5-10" /></antcall>
+    </target>
+
     <target name="clean">
         <antcall target="all.run" >
             <param name="build.action" value="clean" />
