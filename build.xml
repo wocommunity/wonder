@@ -66,11 +66,11 @@
 
     <target name="build" depends="frameworks,applications,examples" />
 
-    <target name="tests.all" depends="clean,frameworks,applications,examples">
+    <target name="tests.build" depends="frameworks,applications,examples">
         <ant target="frameworks">
             <property name="include.tests" value="true" />
         </ant>
-      <ant target="applications">
+        <ant target="applications">
             <property name="include.tests" value="true" />
         </ant>
         <ant target="examples">
@@ -78,8 +78,18 @@
         </ant>
     </target>
 
+    <target name="tests.all" depends="clean,tests.build" />
+
     <target name="tests.run">
         <ant antFile="Build/build/build.xml" target="tests.run" />
+    </target>
+
+    <target name="thrash">
+        <ant antFile="Build/build/build.xml" target="thrash" />
+    </target>
+
+    <target name="thrash.all">
+        <ant antFile="Build/build/build.xml" target="thrash.all" />
     </target>
 
     <target name="plugins">

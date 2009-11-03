@@ -378,6 +378,31 @@ There are many ways to use this script:
        </junit>
     </target>
 
+    <target name="thrash.run" depends="global.properties">
+        <property file="${user.home}${file.separator}Library${file.separator}wobuild.properties"/>
+
+        <path id="wo.exec.test.path">
+            <pathelement location="${build.root}/ERChronic.${fRJ}/commons-lang-2.4.jar" />
+            <pathelement location="${build.root}/ERExtensions.${fRJ}/ERExtensions.jar" />
+            <pathelement location="${build.root}/JavaMemoryAdaptor.${fRJ}/JavaMemoryAdaptor.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaEOAccess.${fRJ}/javaeoaccess.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaEOControl.${fRJ}/javaeocontrol.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaFoundation.${fRJ}/javafoundation.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaJDBCAdaptor.${fRJ}/javajdbcadaptor.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaWebObjects.${fRJ}/javawebobjects.jar" />
+            <pathelement location="${wo.system.frameworks}/JavaXML.${fRJ}/javaxml.jar" />
+        </path>
+
+        <java classname="er.extensions.eof.ERXThrashTest" classpathref="wo.exec.test.path" fork="true" failonerror="true">
+            <sysproperty key="build.root" value="${build.root}" />
+            <sysproperty key="thrash.scheme" value="${thrash.scheme}" />
+            <sysproperty key="wonder.test.thrash.adaptor" value="${wonder.test.thrash.adaptor}" />
+            <sysproperty key="wonder.test.thrash.url" value="${wonder.test.thrash.url}" />
+            <sysproperty key="wonder.test.thrash.user" value="${wonder.test.thrash.user}" />
+            <sysproperty key="wonder.test.thrash.pwd" value="${wonder.test.thrash.pwd}" />
+        </java>
+    </target>
+
     <target name="global.unjar" if="bundle.jars">
         <unzip dest="${build.classes}">
             <fileset dir="${project.dir}/Libraries">
