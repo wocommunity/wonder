@@ -32,6 +32,7 @@ PreviousButton: ModalBoxButton {
     action = previousStep;
     value = d2wContext.previousButtonLabel;
     class = "previous";
+    name = "previous_step";
 }
 
 PageWrapper: WOSwitchComponent {
@@ -44,6 +45,7 @@ NextButton: ModalBoxButton {
     action = nextStep;
     value = d2wContext.nextButtonLabel;
     class = "next";
+    name = "next_step";
 }
 
 ShowCancel: WOConditional {
