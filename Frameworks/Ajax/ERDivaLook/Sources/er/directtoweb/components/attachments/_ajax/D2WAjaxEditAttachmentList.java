@@ -14,10 +14,10 @@ import er.attachment.model.ERAttachment;
  * @author mendis
  *
  */
-public class D2WEditAttachmentList extends D2WComponent {
+public class D2WAjaxEditAttachmentList extends D2WComponent {
 	public ERAttachment attachment;
 	
-    public D2WEditAttachmentList(WOContext context) {
+    public D2WAjaxEditAttachmentList(WOContext context) {
         super(context);
     }
     
