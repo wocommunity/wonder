@@ -371,6 +371,7 @@
     51 : (task = 'edit' or task = 'inspect') => pageName = templateNameForInspectPage [er.directtoweb.ERDKeyValueAssignment],
     51 : (task = 'query' and subTask = 'fetchSpecification') => pageName = templateNameForQueryPageWithFetchSpecification [er.directtoweb.ERDKeyValueAssignment],
     51 : ((task = 'inspect' or task = 'list') and propertyType = 'r' and smartRelationship.isToMany = 0 and smartRelationship.destinationEntity.name = 'ERAttachment') => componentName = ERD2WDisplayAttachment [com.webobjects.directtoweb.Assignment],
+    52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 0 and smartRelationship.destinationEntity.name = 'ERAttachment') => componentName = ERD2WEditAttachment [com.webobjects.directtoweb.Assignment],
     55 : (task = 'list' and subTask = 'csv') => pageName = templateNameForCSVListPage [er.directtoweb.ERDKeyValueAssignment],
     55 : (task = 'list' and subTask = 'group') => pageName = templateNameForGroupingListPage [er.directtoweb.ERDKeyValueAssignment],
     55 : (task = 'select' and subTask = 'pickType') => pageName = templateNameForPickTypePage [er.directtoweb.ERDKeyValueAssignment],
