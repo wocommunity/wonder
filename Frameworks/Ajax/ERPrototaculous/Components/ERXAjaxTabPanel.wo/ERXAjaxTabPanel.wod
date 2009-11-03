@@ -24,7 +24,6 @@ TabLink: AjaxUpdaterLink {
 	container = containerID;
 	evalScripts = true;
 	method = "get";
-	container = ^container;
 }
 
 TabName: WOString {
