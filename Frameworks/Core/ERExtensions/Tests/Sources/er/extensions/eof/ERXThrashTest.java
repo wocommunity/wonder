@@ -196,9 +196,24 @@ public class ERXThrashTest {
         private int delay;
         private String param;
 
+        private Constructor ecConstructor;
+
         public SimpleInsertTest(int aDelay, String parameter) {
             delay = aDelay;
             param = parameter;
+
+            Class ecClass = null;
+
+            try {
+                if (param == null || param.equals(""))
+                    ecClass = Class.forName("com.webobjects.eocontrol.EOEditingContext");
+                else
+                    ecClass = Class.forName(param);
+            } catch (java.lang.ClassNotFoundException cnfe) { System.exit(1); }
+
+            try {
+                ecConstructor = ecClass.getConstructor();
+            } catch (java.lang.NoSuchMethodException nsme) { System.exit(1); }
         }
 
         public void load() {
@@ -233,7 +248,13 @@ public class ERXThrashTest {
                 } catch (java.lang.InterruptedException ie) { }
             }
 
-            EOEditingContext ec = new EOEditingContext();
+            EOEditingContext ec = null;
+
+            try {
+            ec = (EOEditingContext)ecConstructor.newInstance();
+            } catch (java.lang.InstantiationException ie) { }
+              catch (java.lang.IllegalAccessException iae) { }
+              catch (java.lang.reflect.InvocationTargetException ite) { }
 
             ec.lock();
             EOEnterpriseObject company = EOUtilities.createAndInsertInstance(ec, "Company");
