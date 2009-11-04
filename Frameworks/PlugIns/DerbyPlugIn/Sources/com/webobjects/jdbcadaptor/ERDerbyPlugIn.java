@@ -24,6 +24,17 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 public class ERDerbyPlugIn extends JDBCPlugIn {
+	static final boolean USE_NAMED_CONSTRAINTS = true;
+	
+	protected static String quoteTableName(String s) {
+		if (s == null)
+			return null;
+		int i = s.lastIndexOf(46);
+		if (i == -1)
+			return "\"" + s + "\"";
+		else
+			return "\"" + s.substring(0, i) + "\".\"" + s.substring(i + 1, s.length()) + "\"";
+	}
 
 	public static class DerbyExpression extends JDBCExpression {
 		// more to come
@@ -225,10 +236,86 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 			return new NSArray(_expressionForString("drop table " + ((EOEntity) entityGroup.objectAtIndex(0)).externalName()));
 		}
 
-		@Override
-		public NSArray foreignKeyConstraintStatementsForRelationship(final EORelationship aArg0) {
-			return super.foreignKeyConstraintStatementsForRelationship(aArg0);
+		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray attributes) {
+			NSArray keys = entity.primaryKeyAttributeNames();
+			boolean result = attributes.count() == keys.count();
+
+			if (result) {
+				for (int i = 0; i < keys.count(); i++) {
+					if (!(result = keys.indexOfObject(((EOAttribute) attributes.objectAtIndex(i)).name()) != NSArray.NotFound))
+						break;
+				}
+			}
+			return result;
 		}
+
+		@Override
+		public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
+			if (!relationship.isToMany() && isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes())) {
+				StringBuffer sql = new StringBuffer();
+				String tableName = relationship.entity().externalName();
+
+				sql.append("ALTER TABLE ");
+				sql.append(quoteTableName(tableName.toUpperCase()));
+				sql.append(" ADD");
+
+				StringBuffer constraint = new StringBuffer(" CONSTRAINT \"FOREIGN_KEY_");
+				constraint.append(tableName);
+
+				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
+				NSArray attributes = relationship.sourceAttributes();
+
+				for (int i = 0; i < attributes.count(); i++) {
+					constraint.append("_");
+					if (i != 0)
+						fkSql.append(", ");
+
+					fkSql.append("\"");
+					String columnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
+					fkSql.append(columnName.toUpperCase());
+					constraint.append(columnName);
+					fkSql.append("\"");
+				}
+
+				fkSql.append(") REFERENCES ");
+				constraint.append("_");
+
+				String referencedExternalName = relationship.destinationEntity().externalName();
+				fkSql.append(quoteTableName(referencedExternalName.toUpperCase()));
+				constraint.append(referencedExternalName);
+
+				fkSql.append(" (");
+
+				attributes = relationship.destinationAttributes();
+
+				for (int i = 0; i < attributes.count(); i++) {
+					constraint.append("_");
+					if (i != 0)
+						fkSql.append(", ");
+
+					fkSql.append("\"");
+					String referencedColumnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
+					fkSql.append(referencedColumnName.toUpperCase());
+					constraint.append(referencedColumnName);
+					fkSql.append("\"");
+				}
+				
+				// MS: did i write this code?  sorry about that everything. this is crazy. 
+				constraint.append("\"");
+
+				fkSql.append(")");
+				// BOO
+				//fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
+
+				if (USE_NAMED_CONSTRAINTS)
+					sql.append(constraint);
+				sql.append(fkSql);
+
+				return new NSArray(_expressionForString(sql.toString()));
+			}
+			return NSArray.EmptyArray;
+		}
+
 
 		@Override
 		public NSArray primaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
