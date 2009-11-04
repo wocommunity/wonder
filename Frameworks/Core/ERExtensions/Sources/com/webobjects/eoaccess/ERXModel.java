@@ -7,7 +7,6 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOModel;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -68,6 +67,8 @@ import er.extensions.foundation.ERXProperties;
  * @author ldeck
  */
 public class ERXModel extends EOModel {
+	// Expose EOModel._EOGlobalModelLock so that ERXModelGroup can lock on it
+	public static Object _ERXGlobalModelLock = EOModel._EOGlobalModelLock;
 	
 	private static final Logger log = Logger.getLogger(ERXModel.class);
 	

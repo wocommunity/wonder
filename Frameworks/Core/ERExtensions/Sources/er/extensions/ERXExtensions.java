@@ -27,6 +27,7 @@ import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.ERXModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -112,7 +113,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /** holds the default model group */
-    protected ERXModelGroup defaultModelGroup;
+    protected volatile ERXModelGroup defaultModelGroup;
 
     /**
      * Delegate method for the {@link EOModelGroup} class delegate.
@@ -120,19 +121,23 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public EOModelGroup defaultModelGroup() {
         if(defaultModelGroup == null) {
-        	String defaultModelGroupClassName = ERXProperties.stringForKey("er.extensions.defaultModelGroupClassName");
-        	if (defaultModelGroupClassName == null) {
-	            defaultModelGroup = new ERXModelGroup();
+        	synchronized (ERXModel._ERXGlobalModelLock) {
+        		if (defaultModelGroup == null) {
+		        	String defaultModelGroupClassName = ERXProperties.stringForKey("er.extensions.defaultModelGroupClassName");
+		        	if (defaultModelGroupClassName == null) {
+			            defaultModelGroup = new ERXModelGroup();
+		        	}
+		        	else {
+		        		try {
+							defaultModelGroup = Class.forName(defaultModelGroupClassName).asSubclass(ERXModelGroup.class).newInstance();
+						}
+						catch (Exception e) {
+							throw new RuntimeException("Failed to create custom ERXModelGroup subclass '" + defaultModelGroupClassName + "'.", e);
+						}
+		        	}
+		            defaultModelGroup.loadModelsFromLoadedBundles();
+        		}
         	}
-        	else {
-        		try {
-					defaultModelGroup = Class.forName(defaultModelGroupClassName).asSubclass(ERXModelGroup.class).newInstance();
-				}
-				catch (Exception e) {
-					throw new RuntimeException("Failed to create custom ERXModelGroup subclass '" + defaultModelGroupClassName + "'.", e);
-				}
-        	}
-            defaultModelGroup.loadModelsFromLoadedBundles();
         }
         return defaultModelGroup;
     }
