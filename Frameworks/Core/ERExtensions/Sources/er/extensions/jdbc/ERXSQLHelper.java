@@ -1786,6 +1786,14 @@ public class ERXSQLHelper {
 			return sql != null && !sql.startsWith("--");
 		}
 
+		public int varcharLargeJDBCType() {
+			return Types.CLOB;
+		}
+
+		public int varcharLargeColumnWidth() {
+			return 0;
+		}
+
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = new NSMutableArray<String>();
