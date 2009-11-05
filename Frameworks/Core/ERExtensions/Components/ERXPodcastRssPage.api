@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="ERXPodcastRssPage.java" wocomponentcontent="true">    
+    
+        <binding name="list"/>
+        <validation message="'list' is a required binding">
+            <unbound name="list"/>
+        </validation>
+        <binding name="item"/>
+        <validation message="'items' must be bound to a settable value">
+            <unsettable name="items"/>
+        </validation>
+        <binding name="feedTitle"/>
+        <binding name="feedUrl"/>
+        <binding name="feedDescription"/>
+        <binding name="itemTitle"/>
+        <binding name="itemLink"/>
+        <binding name="itemPubDate"/>
+    <validation message="'item' is a required binding">
+            <unbound name="item"/>
+        </validation>
+        <validation message="'item' must be bound to a settable value">
+            <unsettable name="item"/>
+        </validation>
+        <validation message="'itemTitle' is a required binding">
+            <unbound name="itemTitle"/>
+        </validation>
+        <validation message="'itemLink' is a required binding">
+            <unbound name="itemLink"/>
+        </validation>
+    <binding name="itemGuid"/>
+    <binding name="itemAuthor"/>    
+    
+    <binding name="itemEncloseUrl"/>
+    <binding name="itemEnclosureLength"/>
+        <binding name="itemEnclosureMimeType"/>
+        <binding name="itemSubtitle"/>
+        <binding name="feedCategory"/>
+        <binding name="feedImageUrl"/>
+        <binding name="feedOwnerEmail"/>
+        <binding name="feedOwnerName"/>
+        <binding name="feedAuthor"/>
+        <binding name="feedSubtitle"/>
+    </wo>
+</wodefinitions>

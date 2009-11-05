@@ -1,0 +1,81 @@
+Content : WOComponentContent {
+	
+}
+
+FeedTitle : WOString {
+  value = ^feedTitle;
+}
+
+FeedUrl : WOString {
+  value = ^feedUrl;
+}
+
+FeedLanguage : WOString {
+  value = ^feedLanguage;
+}
+
+FeedCopyright : WOString {
+  value = ^feedCopyright;
+}
+
+FeedSubtitle : WOString {
+  value = ^feedSubtitle;
+}
+
+FeedAuthor : WOString {
+  value = ^feedAuthor;
+}
+
+FeedDescription : WOString {
+  value = ^feedDescription;
+}
+
+FeedOwnerName : WOString {
+  value = ^feedOwnerName;
+}
+
+FeedOwnerEmail : WOString {
+  value = ^feedOwnerEmail;
+}
+
+FeedImageUrl : WOGenericElement {
+  elementName = "itunes:image";
+  href = ^feedImageUrl;
+}
+
+FeedCategory : WOGenericElement {
+  elementName = "itunes:category";
+  text = ^feedCategory;
+}
+
+ListRepetition : WORepetition {
+  list = ^list;
+  item = ^item;
+}
+
+ItemTitle : WOString {
+  value = ^itemTitle;
+}
+
+ItemAuthor : WOString {
+  value = ^itemAuthor;
+}
+
+ItemSubtitle : WOString {
+  value = ^itemSubtitle;
+}
+
+ItemEnclosureUrl : WOGenericElement {
+  elementName = "enclosure";
+  url = ^itemEncloseUrl;
+  length = ^itemEnclosureLength; 
+  type = ^itemEnclosureMimeType;
+}
+
+ItemGuid : WOString {
+  value = ^itemGuid;
+}
+
+ItemPubDate : WOString {
+  value = ^itemPubDate;
+}\ No newline at end of file
