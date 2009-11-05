@@ -95,16 +95,33 @@ public class ERAutoIndex extends ERIndex {
         }
     }
 
+    /**
+     * This class encapsulates the index configuration logic and configures this Index 
+     * from the indexModel file associated with this ERIndex instance.
+     * One instance of Configuration is created during the ERAutoIndex constructor.
+     * 
+     * The Configuration class contains a private instance of a configuration dictionary
+     *
+     */
     protected class Configuration {
 
-        private NSMutableDictionary<String, ConfigurationEntry> configuration = new NSMutableDictionary<String, ConfigurationEntry>();
+    	// Holds the configuration
+    	// Each entity has an entry where the key is the entity name and the object is a ConfigurationEntry for that entity
+        private final NSMutableDictionary<String, ConfigurationEntry> configuration = new NSMutableDictionary<String, ConfigurationEntry>();
 
         protected void initFromDictionary(NSDictionary indexDef) {
             String store = (String) indexDef.objectForKey("store");
+            
+            // Set the index storage location
             setStore(store);
 
+            // Clear the current configuration
             configuration.clear();
+            
+            // Get the list of entities specififed in the indexModel definition
             NSArray<String> entities = (NSArray) indexDef.objectForKey("entities");
+            
+            // Creates IndexAttributes, one for each entry in indexModel.properties
             createAttributes(indexDef);
 
             for (String entityName : entities) {
@@ -114,8 +131,16 @@ public class ERAutoIndex extends ERIndex {
             log.info(configuration);
         }
 
+        /**
+         * Creates the lucene index attributes from the properties dictionary contained
+         * in the indexModel defintion. Each property is a key or keypath.
+         * @param indexDef
+         */
         protected void createAttributes(NSDictionary indexDef) {
+        	// Get the properties dictionary which is one element of the indexModel dictionary
             NSDictionary properties = (NSDictionary) indexDef.objectForKey("properties");
+            
+            // For each property in indexModel, create configuration attributes
             for (Enumeration names = properties.keyEnumerator(); names.hasMoreElements();) {
                 String propertyName = (String) names.nextElement();
                 NSDictionary propertyDefinition = (NSDictionary) properties.objectForKey(propertyName);
@@ -123,11 +148,20 @@ public class ERAutoIndex extends ERIndex {
             }
         }
 
+        /**
+         * @param entityName entity to be indexed
+         * @param keys attributes (keys or keypaths) to be indexed
+         * @return
+         */
         protected ConfigurationEntry configureEntity(String entityName, NSArray keys) {
 
+        	// CHECKME: Why would _entities be created for each entity in our index configuration?
             _entities = new NSMutableSet();
+            
+            // Get ConfigurationEntry for the entity if it already exists
             ConfigurationEntry config = configuration.objectForKey(entityName);
 
+            // If not already existing, create it
             if (config == null) {
                 config = new ConfigurationEntry();
                 configuration.setObjectForKey(config, entityName);
@@ -182,7 +216,8 @@ public class ERAutoIndex extends ERIndex {
 
     protected class AutoTransactionHandler extends TransactionHandler {
 
-        public void submit(Transaction transaction) {
+        @Override
+		public void submit(Transaction transaction) {
             if(false) {
                 _queue.enqueue(transaction);
             } else {
@@ -190,17 +225,18 @@ public class ERAutoIndex extends ERIndex {
             }
         }
 
-        public void _handleChanges(NSNotification n) {
+        @Override
+		public void _handleChanges(NSNotification n) {
             EOEditingContext ec = (EOEditingContext) n.object();
             if (ec.parentObjectStore() == ec.rootObjectStore()) {
 
                 String notificationName = n.name();
                 if (notificationName.equals(ERXEC.EditingContextWillSaveChangesNotification)) {
                     ec.processRecentChanges();
-                    NSArray inserted = (NSArray) ec.insertedObjects();
-                    NSArray updated = (NSArray) ec.updatedObjects();
+                    NSArray inserted = ec.insertedObjects();
+                    NSArray updated = ec.updatedObjects();
                     updated = ERXArrayUtilities.arrayMinusArray(updated, inserted);
-                    NSArray deleted = (NSArray) ec.deletedObjects();
+                    NSArray deleted = ec.deletedObjects();
 
                     Transaction transaction = new Transaction(ec);
 
@@ -273,7 +309,7 @@ public class ERAutoIndex extends ERIndex {
             return result.allObjects();
         }
 
-        private NSMutableSet<String> _warned = new NSMutableSet();
+        private final NSMutableSet<String> _warned = new NSMutableSet();
 
         protected NSArray indexableObjectsForObject(String type, EOEnterpriseObject object) {
             ERXGenericRecord eo = (ERXGenericRecord) object;
@@ -347,19 +383,27 @@ public class ERAutoIndex extends ERIndex {
 
     private NSSet<String> _entities = NSSet.EmptySet;
 
-    private Configuration _configuration = new Configuration();
+    private final Configuration _configuration = new Configuration();
 
     public ERAutoIndex(String name, NSDictionary indexDef) {
         super(name);
+        
+        // Ensures that the first instance of ERAutoIndex creates the singleton thread
+        // for processing the queue of transactions
         synchronized (ERIndex.class) {
             if (_queue == null) {
                 _queue = new ERXAsyncQueue<Transaction>() {
 
-                    public void process(Transaction transaction) {
+                    @Override
+					public void process(Transaction transaction) {
                         transaction.handler().index(transaction);
                     }
                 };
+                
+                // Set the name of the thread
                 _queue.setName(KEY);
+                
+                // Start the thread
                 _queue.start();
             }
         }
@@ -408,7 +452,8 @@ public class ERAutoIndex extends ERIndex {
         return config != null && config.active;
     }
 
-    protected boolean handlesObject(EOEnterpriseObject eo) {
+    @Override
+	protected boolean handlesObject(EOEnterpriseObject eo) {
         return handlesEntity(eo.entityName());
     }
 }

@@ -32,9 +32,10 @@ import er.extensions.foundation.ERXStringUtilities;
 
 public class ERIndexing extends ERXFrameworkPrincipal {
 	
-	private Logger log = Logger.getLogger(ERIndexing.class);
+	private final Logger log = Logger.getLogger(ERIndexing.class);
 
-	NSMutableDictionary indices = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
+	// Master dictionary of indices
+	NSMutableDictionary indices = ERXMutableDictionary.synchronizedDictionary();
 	
     public final static Class REQUIRES[] = new Class[] {ERXExtensions.class};
 
@@ -52,20 +53,38 @@ public class ERIndexing extends ERXFrameworkPrincipal {
 		return _indexRoot;
 	}
 
+	/**
+	 * Searches all bundles for *.indexModel resources files and dserializes the index definitions and adds
+	 * the index definitions to the master dictionary of application indices
+	 */
 	public void loadIndexDefinitions() {
+		// Check every bundle (app and frameworks)
 	    for (Enumeration bundles = NSBundle._allBundlesReally().objectEnumerator(); bundles.hasMoreElements();) {
 	        NSBundle bundle = (NSBundle) bundles.nextElement();
+	        
+	        // Get list of all files with extension indexModel
 	        NSArray<String> files = bundle.resourcePathsForResources("indexModel", null);
 	        for (String file : files) {
 	            URL url = bundle.pathURLForResourcePath(file);
+	            
+	            // Get the name of the indexModel file withut the directory path and without the file extension
 	            String name = url.toString().replaceAll(".*?/(\\w+)\\.indexModel$", "$1");
 	            if(url != null) {
+	            	
+	            	// If in development mode, observe the indexModel file for changes
+	            	// so that the index can be recreated
 	                if(ERXApplication.isDevelopmentModeSafe()) {
 	                    NSSelector selector = ERXSelectorUtilities.notificationSelector("fileDidChange");
 	                    ERXFileNotificationCenter.defaultCenter().addObserver(this, selector, url.getFile());
 	                }
+	                
+	                // Get contents of indexModel file
 	                String string = ERXStringUtilities.stringFromResource(name, "indexModel", bundle);
+	                
+	                // Convert file contents into nested NSDictionary
 	                NSDictionary dict = (NSDictionary)NSPropertyListSerialization.propertyListFromString(string);
+	                
+	                // Create the lucene index with name and dictionary definition
 	                addIndex(name, dict);
 	                log.info("Added index: " + name);
 	            }
@@ -87,13 +106,24 @@ public class ERIndexing extends ERXFrameworkPrincipal {
 		}
 	}
 	
+    /**
+     * @param key the name of the index
+     * @param index the indexer instance having the name of the index and the index definition from the indexModel file
+     */
     protected void addIndex(String key, ERIndex index) {
         indices.setObjectForKey(index, key);
     }
     
+	/**
+	 * @param key the name of the index
+	 * @param indexDef the dictionary containing the index definition (usually deserialized from the indexModel file)
+	 */
 	private void addIndex(String key, NSDictionary indexDef) {
+		// Classname for the class that will create the lucene index
 		String className = (String) indexDef.objectForKey("index");
 		NSMutableDictionary dict = indexDef.mutableClone();
+		
+		// If index store not defined, default to index named the dsame as the indexModel file in the indexRoot directory
 		if(!dict.containsKey("store")) {
 			try {
 				dict.setObjectForKey(new File(indexRoot(), key).toURL().toString(), "store");
@@ -101,6 +131,8 @@ public class ERIndexing extends ERXFrameworkPrincipal {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 		}
+		
+		// Create the class that will create the index. Defaults to ERAutoIndex
 		ERIndex index;
 		if (className != null) {
             Class c = ERXPatcher.classForName(className);
@@ -108,11 +140,14 @@ public class ERIndexing extends ERXFrameworkPrincipal {
         } else {
             index = new ERAutoIndex(key, dict);
         }
+		
+		// Add the index
 		addIndex(key, index);
     }
 
     @Override
     public void finishInitialization() {
+    	// load index definition files into indices
         loadIndexDefinitions();
     }
 
