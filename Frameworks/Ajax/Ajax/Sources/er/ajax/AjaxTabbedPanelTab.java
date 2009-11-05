@@ -98,11 +98,11 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     }
     
     /** 
-     * Do nothing if not visible and selected. 
+     * Do nothing if not visible. 
      */
     public void takeValuesFromRequest(WORequest request, WOContext context)
     {
-    	if (isVisble(context.component()) && isSelected(context.component())) {
+    	if (isVisble(context.component()) && (isSelected ==  null || isSelected(context.component())) ) {
     		super.takeChildrenValuesFromRequest(request, context);
     	}
     }
