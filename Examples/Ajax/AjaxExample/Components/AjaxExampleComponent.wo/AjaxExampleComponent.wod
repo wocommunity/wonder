@@ -102,6 +102,10 @@ AjaxTabbedPanelLink: WOHyperlink {
 	pageName = "AjaxTabbedPanelDemo";
 }
 
+AjaxTabbedPanelInModalDialogLink: WOHyperlink {
+	pageName = "AjaxTabbedPanelInModalDialogExample";
+}
+
 ModalContainer: WOHyperlink {
 	pageName = "ModalContainerExample";
 }
