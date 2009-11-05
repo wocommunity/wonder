@@ -87,16 +87,16 @@ public class ERIndex {
 
     public class IndexDocument implements NSKeyValueCoding {
 
-        private Document _document;
+        private final Document _document;
 
-        private NSMutableDictionary<String, String> _values = new NSMutableDictionary<String, String>();
+        private final NSMutableDictionary<String, String> _values = new NSMutableDictionary<String, String>();
 
         public IndexDocument(Document document) {
             _document = document;
         }
 
         public void takeValueForKey(Object value, String key) {
-            _document.getField(key).setValue((String) key);
+            _document.getField(key).setValue(key);
         }
 
         public Object valueForKey(String key) {
@@ -139,6 +139,13 @@ public class ERIndex {
 
         ERIndex _model;
 
+        /**
+         * This class corresponds to one property. indexModel --> properties --> a property
+         * 
+         * @param index the index
+         * @param name the property name (a key or keypath)
+         * @param dict the property definition form indexModel
+         */
         IndexAttribute(ERIndex index, String name, NSDictionary dict) {
             _name = name;
             _termVector = (TermVector) classValue(dict, "termVector", TermVector.class, "YES");
@@ -237,9 +244,9 @@ public class ERIndex {
 
     protected class Job {
 
-        private Command _command;
+        private final Command _command;
 
-        private NSArray _objects;
+        private final NSArray _objects;
 
         public Job(Command command, NSArray objects) {
             _command = command;
@@ -257,9 +264,9 @@ public class ERIndex {
 
     protected class Transaction {
 
-        private NSMutableArray<Job> _jobs = new NSMutableArray<Job>();
+        private final NSMutableArray<Job> _jobs = new NSMutableArray<Job>();
 
-        private EOEditingContext _editingContext;
+        private final EOEditingContext _editingContext;
 
         private boolean _clear = false;
 
@@ -288,7 +295,8 @@ public class ERIndex {
             return _jobs;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             if (hasClear()) {
                 return "Transaction@" + hashCode() + " clear";
             }
@@ -394,7 +402,7 @@ public class ERIndex {
 
     private NSDictionary<String, IndexAttribute> _attributes = NSDictionary.EmptyDictionary;
 
-    private String _name;
+    private final String _name;
 
     private String _store;
     
@@ -440,6 +448,13 @@ public class ERIndex {
         createAttribute(propertyName, propertyDefinition);
     }
 
+    /**
+     * Creates a new {@link IndexAttribute} and adds it to the attributes dictionary of this Index
+     * 
+     * @param propertyName
+     * @param propertyDefinition
+     * @return the new {@link IndexAttribute}
+     */
     protected IndexAttribute createAttribute(String propertyName, NSDictionary propertyDefinition) {
         IndexAttribute attribute = new IndexAttribute(this, propertyName, propertyDefinition);
         NSMutableDictionary attributes = _attributes.mutableClone();
@@ -509,7 +524,7 @@ public class ERIndex {
     }
 
     private IndexAttribute attributeNamed(String fieldName) {
-        return (IndexAttribute) _attributes.objectForKey(fieldName);
+        return _attributes.objectForKey(fieldName);
     }
 
     protected boolean handlesObject(EOEnterpriseObject eo) {
@@ -667,7 +682,7 @@ public class ERIndex {
     		q.rewrite(reader).extractTerms(suggestedTerms); 
     		for (Iterator<Term> iter = suggestedTerms.iterator(); iter.hasNext();) 
     		{ 
-    			Term term = (Term) iter.next();
+    			Term term = iter.next();
     			terms.addObject(term); 
     		} 
     	} catch (Exception e) {
@@ -684,7 +699,7 @@ public class ERIndex {
     		q.rewrite(reader).extractTerms(suggestedTerms); 
     		for (Iterator<Term> iter = suggestedTerms.iterator(); iter.hasNext();) 
     		{ 
-    			Term term = (Term) iter.next();
+    			Term term = iter.next();
     			terms.addObject(term.text());
     		} 
     	} catch (Exception e) {
@@ -773,6 +788,6 @@ public class ERIndex {
     }
 
     public static ERIndex indexNamed(String key) {
-        return (ERIndex) indices.objectForKey(key);
+        return indices.objectForKey(key);
     }
 }
