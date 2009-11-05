@@ -111,6 +111,7 @@ ExcelExportButton2: WOSwitchComponent {
 }
 
 FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
+	allowsFiltering = d2wContext.allowsFiltering;
 	d2wContext = d2wContext;
 	displayGroup = displayGroup;
 }
