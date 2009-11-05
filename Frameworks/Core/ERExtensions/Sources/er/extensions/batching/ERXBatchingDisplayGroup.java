@@ -194,6 +194,18 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		}
 		return super.displayedObjects();
 	}
+	
+	
+	
+	/** 
+	 * Overridden to refetchIfNecessary() first to ensure we get a correct result in cases where this is called before displayedObjects().
+	 * See http://issues.objectstyle.org/jira/browse/WONDER-381
+	 */
+	@Override
+	public boolean hasMultipleBatches() {
+		refetchIfNecessary();
+		return super.hasMultipleBatches();
+	}
 
 	/**
 	 * Overridden to return allObjects() when batching, as we can't qualify in memory.
