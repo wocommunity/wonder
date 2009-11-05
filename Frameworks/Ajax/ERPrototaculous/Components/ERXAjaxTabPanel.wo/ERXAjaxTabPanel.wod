@@ -21,7 +21,7 @@ SelectedTabConditional: WOConditional {
 
 TabLink: AjaxUpdaterLink {
 	action = switchTab;
-	container = containerID;
+	container = ^container;
 	evalScripts = true;
 	method = "get";
 }
