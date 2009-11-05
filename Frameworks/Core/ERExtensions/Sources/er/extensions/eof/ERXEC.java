@@ -406,12 +406,24 @@ public class ERXEC extends EOEditingContext {
 	/** alternative constructor */
 	public ERXEC(EOObjectStore os) {
 		super(os);
+		super._initWithParentObjectStore(os);
+		
 		ERXEnterpriseObject.Observer.install();
 		if (ERXEC.markOpenLocks()) {
 			creationTrace = new Exception("Creation");
 			creationTrace.fillInStackTrace();
 			activeEditingContexts.put(this, Thread.currentThread().getName());
 		}
+	}
+	
+	protected void _initWithParentObjectStore(EOObjectStore parent) {
+		/* NOTE: This method is called from EOEditingContext's constructor. Doing nothing here to avoid the following race condition:
+		 * - new ERXEC() is called, it starts with invoking EOEditingContext constructor
+		 * - EOEditingContext constructor registers notifications' handlers
+		 * - One of the handlers gets triggered in another thread
+		 * - As some handlers are overriden in ERXEC, the ERXEC's handler is called - which means that ERXEC's method is invoked when ERXEC is still
+		 * under construction. This leads to disaster as all instance variables are not initialized at the time of the method call.
+		 */
 	}
 
 	/** Utility to delete a bunch of objects. */
