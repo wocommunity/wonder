@@ -39,12 +39,12 @@ var AjaxTabbedPanel = {
       // First look for a form in each pane and if not found, look for one form wrapping the entire panel
       var formInPanel = selectedPane.down('form');
       if (formInPanel) {
-      	ASB.request(formInPanel, {}, {_asbn: 'dummy'});
+      	ASB.request(formInPanel, null, {asynchronous:false, evalScripts:false, _asbn: 'dummy'});
       }
       else {
         var formAroundPanel = selectedPane.up('form');
 	    if (formAroundPanel) {
-	      ASB.request(formAroundPanel, {}, {_asbn: 'dummy'});
+	      ASB.request(formAroundPanel, null, {asynchronous:false, evalScripts:false, _asbn: 'dummy'});
 	    }
       }
 
@@ -56,7 +56,7 @@ var AjaxTabbedPanel = {
         $(node);  // Force prototype extension of node for IE 7
         if (node.id != selectedPane.id) {
           if (node.hasClassName('ajaxTabbedPanelPane-selected')) {
-            new Ajax.Request(node.getAttribute('updateUrl') + "?didSelect=false",  {asynchronous:1, evalScripts:false})
+            new Ajax.Request(node.getAttribute('updateUrl') + "?didSelect=false",  {asynchronous:true, evalScripts:false})
             node.removeClassName('ajaxTabbedPanelPane-selected').addClassName('ajaxTabbedPanelPane-unselected');
           }
         };
@@ -64,7 +64,7 @@ var AjaxTabbedPanel = {
 
       // Select the new tab and notify the app of the selected tab
       selectedPane.removeClassName('ajaxTabbedPanelPane-unselected').addClassName('ajaxTabbedPanelPane-selected');
-      new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
+      new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:true, evalScripts:false})
     },
 
     // Loads the panel contents if not already loaded
@@ -72,7 +72,7 @@ var AjaxTabbedPanel = {
       var pane = $(paneID);
       if (pane.innerHTML=='' || pane.innerHTML==this.busyContent(busyDivID) || shouldReload) {
          pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=AjaxTabbedPanel.busyContent(busyDivID); pe.stop()}, 0.25);
-         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: 1, 
+         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: true, 
          														 evalScripts: true, 
          														 onComplete: function(a, b) {pe.stop(); 
          														                             AjaxTabbedPanel.runOnLoad(pane); 
