@@ -545,6 +545,17 @@ public class ERXKey<T> {
 	public ERXKeyValueQualifier containsObject(Object obj) {
 		return ERXQ.containsObject(_key, obj);
 	}
+	
+	/**
+	 * <p>Equivalent to new ERXInQualifier(key, values);</p>
+	 * 
+	 * @param values
+	 *            the values
+	 * @return an ERXKeyValueQualifier
+	 */
+	public ERXKeyValueQualifier hasValues(NSArray<T> values) {
+		return ERXQ.hasValues(_key, values);
+	}
 
 	@Override
 	public int hashCode() {
