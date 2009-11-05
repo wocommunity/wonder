@@ -33,24 +33,8 @@ public class ERXJDBCColumn extends JDBCColumn {
 		super(aChannel);
 	}
 
-	public static Object fixedInputValue(EOAttribute att, Object o) {
-		if(att.adaptorValueConversionMethod() != null) {
-			try {
-				return att.adaptorValueConversionMethod().invoke(o);
-			}
-			catch (Exception e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
-			}
-		}
-		return o;
-	}
-
 	public void takeInputValue(Object arg0, int arg1, boolean arg2) {
 		try {
-			if (ERXApplication.isWO54()) {
-				// 5.4 seed bug workaround
-				arg0 = ERXJDBCColumn.fixedInputValue(_attribute, arg0);
-			}
 			super.takeInputValue(arg0, arg1, arg2);
 		} catch(NSForwardException ex) {
 			if (ex.originalException() instanceof NoSuchMethodException) {
