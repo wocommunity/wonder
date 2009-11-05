@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSSet;
-
 
 public class NSMutableSetTest extends BaseTestCase {
 

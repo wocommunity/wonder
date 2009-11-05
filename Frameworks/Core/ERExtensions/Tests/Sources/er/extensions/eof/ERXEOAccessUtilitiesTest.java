@@ -3,27 +3,23 @@ package er.extensions.eof;
 
 import java.net.URL;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
-
-import com.webobjects.eoaccess.EOAttribute;
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModel;
-import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EORelationship;
-import com.webobjects.eoaccess.EOUtilities;
-
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOQualifier;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.foundation.NSArray;
+
 import er.extensions.ERExtensionsTest;
+import er.extensions.ERXTestUtilities;
 
 
 /**
@@ -89,12 +85,7 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
 
             modelName = adaptorName+"BusinessModel";
 
-            URL modelUrl = getClass().getResource("/"+modelName+".eomodeld");
-            if (modelUrl == null) {
-                try {
-                    modelUrl = new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld");
-                } catch (java.net.MalformedURLException mue) { System.out.println(this.config()+", mue: "+mue); }
-            }
+            URL modelUrl = ERXTestUtilities.resourcePathURL("/"+modelName+".eomodeld", getClass());
 
             EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
 
@@ -194,6 +185,8 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
 
         public void testEntityForEo() {
             // public static EOEntity entityForEo(EOEnterpriseObject);
+            // MS: hmmm .. this test randomly fails for me. when i put the following line in it passes.
+        	EOEntityClassDescription cd1 = (EOEntityClassDescription) EOClassDescription.classDescriptionForEntityName("Company");
 
             EOEntity companyEntity = EOModelGroup.defaultGroup().entityNamed("Company");
             Assert.assertNotNull(this.config(), companyEntity);

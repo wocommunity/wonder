@@ -1,7 +1,5 @@
 package er.extensions.foundation;
 
-import er.extensions.foundation.ERXThreadStorage;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

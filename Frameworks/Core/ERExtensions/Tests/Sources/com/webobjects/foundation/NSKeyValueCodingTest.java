@@ -1,9 +1,5 @@
 package com.webobjects.foundation;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

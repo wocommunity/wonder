@@ -1,20 +1,10 @@
 
 package er.extensions;
 
-import java.net.URL;
 import java.util.Enumeration;
-
-import er.extensions.ERExtensionsTest;
-import er.extensions.eof.ERXEOAccessUtilities;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSPropertyListSerialization;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -22,10 +12,13 @@ import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOSQLExpression;
-
-import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
-
+import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.eof.ERXEOAccessUtilities;
 
 /** Tests of the public API of the ERXExtensions framework.
  *
@@ -127,7 +120,7 @@ public class ERExtensionsTest extends TestSuite {
     public static void loadData(EOEditingContext ec, EOModel model, Test test, String plistName) {
 
         EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
-        EOSchemaSynchronizationFactory factory = adaptor.schemaSynchronizationFactory();
+        EOSchemaGeneration factory = adaptor.synchronizationFactory();
 
         NSMutableArray<NSArray<EOEntity>> entities = new NSMutableArray<NSArray<EOEntity>>();
         entities.add(new NSArray<EOEntity>(model.entityNamed("Company")));
@@ -151,14 +144,7 @@ public class ERExtensionsTest extends TestSuite {
             channel.evaluateExpression(expr);
         }
 
-        URL plistURL = test.getClass().getResource("/AjaxExample.plist");
-        if (plistURL == null) {
-            try {
-                plistURL = new java.net.URL("file://"+System.getProperty("build.root")+"/ERExtensions.framework/TestResources/AjaxExample.xml");
-            } catch (java.net.MalformedURLException mue) { System.out.println("mue: "+mue); }
-        }
-
-        NSDictionary data = NSPropertyListSerialization.dictionaryWithPathURL(plistURL);
+        NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/AjaxExample.xml", ERExtensionsTest.class);
 
         Enumeration<String> keys = data.allKeys().objectEnumerator();
         while (keys.hasMoreElements()) {

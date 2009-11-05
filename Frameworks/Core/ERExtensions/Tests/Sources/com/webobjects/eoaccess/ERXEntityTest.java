@@ -7,15 +7,14 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-import com.webobjects.foundation.NSArray;
-
-import com.webobjects.eocontrol.EOClassDescription;
-import com.webobjects.eocontrol.EOEditingContext;
-
 import er.extensions.ERExtensionsTest;
+import er.extensions.ERXTestUtilities;
 
 /* Test the ERXEntity methods. These tests are extremely minimal.
  * This class exists in order to deal with some issues in inheritance, and
@@ -77,13 +76,7 @@ public class ERXEntityTest extends TestCase {
 
             modelName = adaptorName+"BusinessModel";
 
-            URL modelUrl = getClass().getResource("/"+modelName+".eomodeld");
-
-            if (modelUrl == null) {
-                try {
-                    modelUrl = new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld");
-                } catch (java.net.MalformedURLException mue) { System.out.println(this.config()+", mue: "+mue); }
-            }
+            URL modelUrl = ERXTestUtilities.resourcePathURL("/"+modelName+".eomodeld", ERXEntityTest.class);
 
             EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
 
@@ -99,10 +92,9 @@ public class ERXEntityTest extends TestCase {
         }
 
         public void testPlistConstructor() {
+            NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/"+modelName+".eomodeld/Company.plist", ERXEntityTest.class); 
 
-            URL plistUrl = getClass().getResource("/"+modelName+".eomodeld/Company.plist");
-
-            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(NSPropertyListSerialization.propertyListWithPathURL(plistUrl));
+            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(data);
 
             NSDictionary plist = NSPropertyListSerialization.dictionaryForString(plistAsString);
 
@@ -119,15 +111,9 @@ public class ERXEntityTest extends TestCase {
         }
 
         public void testHasExternalName() {
+            NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/"+modelName+".eomodeld/Company.plist", ERXEntityTest.class); 
 
-            URL plistUrl = getClass().getResource("/"+modelName+".eomodeld/Company.plist");
-            if (plistUrl == null) {
-                try {
-                    plistUrl = new java.net.URL("file://"+buildRoot+"/ERExtensions.framework/TestResources/"+modelName+".eomodeld/Company.plist");
-                } catch (java.net.MalformedURLException mue) { Assert.fail(this.config()+", mue: "+mue.getMessage()); }
-            }
-
-            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(NSPropertyListSerialization.propertyListWithPathURL(plistUrl));
+            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(data);
 
             NSDictionary plist = NSPropertyListSerialization.dictionaryForString(plistAsString);
 
@@ -143,9 +129,9 @@ public class ERXEntityTest extends TestCase {
 
             Assert.assertNotNull(desc);
 
-            URL plistUrl = getClass().getResource("/"+modelName+".eomodeld/Employee.plist");
+            NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/"+modelName+".eomodeld/Employee.plist", ERXEntityTest.class); 
 
-            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(NSPropertyListSerialization.propertyListWithPathURL(plistUrl));
+            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(data);
 
             NSDictionary plist = NSPropertyListSerialization.dictionaryForString(plistAsString);
 

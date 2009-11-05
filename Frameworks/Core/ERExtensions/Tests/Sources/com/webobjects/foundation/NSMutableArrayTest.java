@@ -4,13 +4,6 @@ package com.webobjects.foundation;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSComparator;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSRange;
-import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSComparator.ComparisonException;
 
 public class NSMutableArrayTest extends BaseTestCase {
