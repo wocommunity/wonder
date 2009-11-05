@@ -5,11 +5,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSSet;
-
 
 public class NSSetTest extends BaseTestCase {
 

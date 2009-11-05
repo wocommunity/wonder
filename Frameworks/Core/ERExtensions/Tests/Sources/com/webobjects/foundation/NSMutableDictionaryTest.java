@@ -3,10 +3,6 @@ package com.webobjects.foundation;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
-
 public class NSMutableDictionaryTest extends BaseTestCase {
 
 	public void testNSMutableDictionary() {

@@ -1,8 +1,10 @@
 
 package er.extensions.foundation;
 
-import com.webobjects.eocontrol.EOSortOrdering;
+import junit.framework.Assert;
+import junit.framework.TestCase;
 
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -13,9 +15,6 @@ import com.webobjects.foundation.NSSet;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXKey;
-
-import junit.framework.Assert;
-import junit.framework.TestCase;
 
 /** Tests of the public API of the ERXArrayUtilities class.
  *

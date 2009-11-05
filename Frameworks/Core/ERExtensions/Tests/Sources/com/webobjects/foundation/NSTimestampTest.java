@@ -1,19 +1,11 @@
 package com.webobjects.foundation;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
+import java.util.Enumeration;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-
-import java.math.BigInteger;
-
-import java.net.URL;
-
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.GregorianCalendar;
+import er.extensions.ERXTestUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class NSTimestampTest extends TestCase {
 
@@ -105,12 +97,7 @@ public class NSTimestampTest extends TestCase {
         StringBuffer dt = null;
         java.text.FieldPosition fp = new java.text.FieldPosition(0);
 
-        URL url = getClass().getResource("/dates.plist");
-        try {
-            url = new java.net.URL("file://"+System.getProperty("build.root")+"/ERExtensions.framework/TestResources/dates.plist");
-        } catch (java.net.MalformedURLException mue) { System.exit(1); }
-
-        NSDictionary data = NSPropertyListSerialization.dictionaryWithPathURL(url);
+        NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/dates.plist", NSTimestampTest.class); 
         Enumeration dsts = ((NSArray)data.objectForKey("daylightSavingTimeTransitions")).objectEnumerator();
 
         while (dsts.hasMoreElements()) {
@@ -118,9 +105,9 @@ public class NSTimestampTest extends TestCase {
 
             // System.out.println("dst: "+dst);
 
-            int year = ((BigInteger)dst.objectForKey("year")).intValue();
-            int month = ((BigInteger)dst.objectForKey("month")).intValue();
-            int day = ((BigInteger)dst.objectForKey("day")).intValue();
+            int year = ERXValueUtilities.intValue(dst.objectForKey("year"));
+            int month = ERXValueUtilities.intValue(dst.objectForKey("month"));
+            int day = ERXValueUtilities.intValue(dst.objectForKey("day"));
             tz = NSTimeZone.timeZoneWithName((String)dst.objectForKey("tz"), false);
 
             formatter = new NSTimestampFormatter("%Y %b %d %H:%M:%S %z");
@@ -207,13 +194,7 @@ public class NSTimestampTest extends TestCase {
     }
 
     public void testFirstDaysOfYears() {
-
-        URL url = getClass().getResource("/dates.plist");
-        try {
-            url = new java.net.URL("file://"+System.getProperty("build.root")+"/ERExtensions.framework/TestResources/dates.plist");
-        } catch (java.net.MalformedURLException mue) { System.exit(1); }
-
-        NSDictionary data = NSPropertyListSerialization.dictionaryWithPathURL(url);
+        NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/dates.plist", NSTimestampTest.class);
         NSDictionary daysDict = (NSDictionary)data.objectForKey("firstDayForYears");
       
         Enumeration days = daysDict.allKeys().objectEnumerator();

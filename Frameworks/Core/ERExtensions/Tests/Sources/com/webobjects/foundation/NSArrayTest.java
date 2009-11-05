@@ -11,14 +11,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSComparator;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSRange;
-import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSComparator.ComparisonException;
 
 public class NSArrayTest extends BaseTestCase {

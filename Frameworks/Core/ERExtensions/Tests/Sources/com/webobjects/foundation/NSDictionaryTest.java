@@ -5,11 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableDictionary;
-
 public class NSDictionaryTest extends BaseTestCase {
 
 	public void testNSDictionary() {

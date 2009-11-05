@@ -3,22 +3,19 @@ package er.extensions.eof;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-
 import java.net.URL;
-
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
-
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
-
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.ERXTestUtilities;
 
 public class ERXThrashTest {
 
@@ -147,13 +144,7 @@ public class ERXThrashTest {
 
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
-            URL modelUrl = getClass().getResource("/"+System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel.eomodeld");
-            if (modelUrl == null) {
-                try {
-                    modelUrl = new java.net.URL("file://"+System.getProperty("build.root")+"/ERExtensions.framework/TestResources/"+
-                                                System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel.eomodeld");
-                } catch (java.net.MalformedURLException mue) { System.out.println(mue.getMessage()); }
-            }
+            URL modelUrl = ERXTestUtilities.resourcePathURL("/"+System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel.eomodeld", getClass());
 
             EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
 
@@ -220,13 +211,7 @@ public class ERXThrashTest {
 
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
-            URL modelUrl = getClass().getResource("/"+System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel.eomodeld");
-            if (modelUrl == null) {
-                try {
-                    modelUrl = new java.net.URL("file://"+System.getProperty("build.root")+"/ERExtensions.framework/TestResources/"+
-                                                System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel.eomodeld");
-                } catch (java.net.MalformedURLException mue) { System.out.println(mue.getMessage()); }
-            }
+            URL modelUrl = ERXTestUtilities.resourcePathURL("/"+System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel.eomodeld", getClass());
 
             EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
 
