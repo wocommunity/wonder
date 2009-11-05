@@ -564,37 +564,41 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		public void run() {
-			boolean run = true;
-			while (run) {
-				Change changes = null;
-				synchronized (_elements) {
-					try {
-						if (_elements.isEmpty()) {
-							_elements.wait();
+			try {
+				boolean run = true;
+				while (run) {
+					Change changes = null;
+					synchronized (_elements) {
+						try {
+							if (_elements.isEmpty()) {
+								_elements.wait();
+							}
+							if (!_elements.isEmpty()) {
+								changes = (Change) _elements.remove(0);
+							}
 						}
-						if (!_elements.isEmpty()) {
-							changes = (Change) _elements.remove(0);
+						catch (InterruptedException e) {
+							run = false;
+							log.warn("Interrupted: " + e, e);
 						}
 					}
-					catch (InterruptedException e) {
-						run = false;
-						log.warn("Interrupted: " + e, e);
+					if (changes != null) {
+						if (changes instanceof LocalChange) {
+							LocalChange localChange = (LocalChange) changes;
+							EOObjectStoreCoordinator sender = localChange.coordinator();
+							process(sender, _deleteProcessor, localChange.deleted(), EODatabaseContext.DeletedKey);
+							process(sender, _insertProcessor, localChange.inserted(), EODatabaseContext.InsertedKey);
+							process(sender, _updateProcessor, localChange.updated(), EODatabaseContext.UpdatedKey);
+							process(sender, _invalidateProcessor, localChange.invalidated(), EODatabaseContext.InvalidatedKey);
+							publishRemoteChanges(_transactionID++, localChange);
+						}
+						else if (changes instanceof RemoteChange) {
+							processRemoteChange((RemoteChange) changes);
+						}
 					}
 				}
-				if (changes != null) {
-					if (changes instanceof LocalChange) {
-						LocalChange localChange = (LocalChange) changes;
-						EOObjectStoreCoordinator sender = localChange.coordinator();
-						process(sender, _deleteProcessor, localChange.deleted(), EODatabaseContext.DeletedKey);
-						process(sender, _insertProcessor, localChange.inserted(), EODatabaseContext.InsertedKey);
-						process(sender, _updateProcessor, localChange.updated(), EODatabaseContext.UpdatedKey);
-						process(sender, _invalidateProcessor, localChange.invalidated(), EODatabaseContext.InvalidatedKey);
-						publishRemoteChanges(_transactionID++, localChange);
-					}
-					else if (changes instanceof RemoteChange) {
-						processRemoteChange((RemoteChange) changes);
-					}
-				}
+			} catch (Throwable e) {
+				log.error(e, e);
 			}
 		}
 	}
