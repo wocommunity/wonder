@@ -7,7 +7,9 @@ NoAttachment: WOConditional {
 	negate = true;
 }
 
-DisplayAttachmentDownloadLink: ERAttachmentLink {
+DisplayAttachmentDownloadLink: WOSwitchComponent { 
+    // Using WOSwitchComponent to prevent dependency on ERAttachment framework
+	WOComponentName = "ERAttachmentLink";
 	attachment = objectPropertyValue;
 	class = "ERD2WDisplayAttachment download";
 }
@@ -16,7 +18,9 @@ FileName: WOString {
 	value = objectPropertyValue.originalFileName;//VALID
 }
 
-Icon: ERAttachmentIcon {
+Icon: WOSwitchComponent {
+    // Using WOSwitchComponent to prevent dependency on ERAttachment framework
+    WOComponentName = "ERAttachmentIcon";
 	attachment = objectPropertyValue;
 	size = d2wContext.size;
 }

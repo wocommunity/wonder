@@ -4,7 +4,6 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
-	<classpathentry exported="true" kind="con" path="WOFramework/Ajax"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaDirectToWeb"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaDTWGeneration"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOAccess"/>
