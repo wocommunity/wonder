@@ -24,7 +24,7 @@ public class ERXAjaxTabPanel extends ERXTabPanel {
     // accessors
     public String containerID() {
     	if (containerID == null) {
-    		if (hasBinding("container")) containerID = (String) valueForBinding("container");
+    		if (hasBinding("container")) containerID = (String) valueForBinding("id");
     		else containerID = ERXWOContext.safeIdentifierName(context(), false);
     	} return containerID;
     }
