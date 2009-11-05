@@ -1,0 +1,55 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Tabbed Panel in Modal Dialog";
+}
+
+AMD: AjaxModalDialog {
+	label = "Click to Open Dialog";
+
+}
+
+
+Form: WOForm {
+	multipleSubmit = true;
+}
+
+FormValueA: WOTextField {
+	value = formValueA;
+}
+
+FormValueB: WOTextField {
+	value = formValueB;
+}
+
+FormValueC: WOTextField {
+	value = formValueC;
+}
+
+SubmitButton: WOSubmitButton {	
+	action = save;
+	value = "Save";
+}
+
+TabbedPanel: AjaxTabbedPanel {
+	id = "tabbedPanel";
+	busyDiv = "busydiv";
+}
+
+Tab1: AjaxTabbedPanelTab {
+	id = "tab1";
+	name = "Tab One";
+	isSelected = true;
+}
+
+Tab2: AjaxTabbedPanelTab {
+	name = "Tab Two";
+}
+
+Tab3: AjaxTabbedPanelTab {
+	name = "Tab Three";
+}
+
+
+BusyImage : WOImage {
+  framework = "Ajax";
+  filename = "wait30.gif";
+}
