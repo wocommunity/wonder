@@ -351,16 +351,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		resetCache();
 	}
 
-	public static NSArray availableLanguages() {
+	public static NSArray<String> availableLanguages() {
 		if (availableLanguages == null) {
-			availableLanguages = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.availableLanguages", new NSArray(new Object[] { "English", "German", "Japanese" }));
+			availableLanguages = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.availableLanguages", new NSArray(new String[] { "English", "German", "Japanese" }));
 			if (log.isDebugEnabled())
 				log.debug("AvailableLanguages: " + availableLanguages);
 		}
 		return availableLanguages;
 	}
 
-	public static void setAvailableLanguages(NSArray value) {
+	public static void setAvailableLanguages(NSArray<String> value) {
 		availableLanguages = value;
 		resetCache();
 	}
