@@ -22,6 +22,9 @@ public class ERXAjaxTabPanel extends ERXTabPanel {
     }
     
     // accessors
+    /**
+     * @return the id of the tab panel container - NOT the ajax update container
+     */
     public String containerID() {
     	if (containerID == null) {
     		if (hasBinding("container")) containerID = (String) valueForBinding("id");
