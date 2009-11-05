@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSForwardException;
@@ -36,7 +37,7 @@ public class ERXKeepAliveResponse extends ERXResponse {
 	protected int _currentIndex = 0;
 
 	public ERXKeepAliveResponse() {
-		setHeader("keep-alive", "connection");
+		//setHeader("keep-alive", "connection");
 		setContentStream(new InputStream() {
 			public int read() throws IOException {
 				synchronized (_queue) {
@@ -59,14 +60,14 @@ public class ERXKeepAliveResponse extends ERXResponse {
 						}
 						_current = _queue.poll();
 					}
+					if (_current == null) {
+						return -1;
+					}
+					if (log.isDebugEnabled()) {
+						log.debug("writing: " + _currentIndex);
+					}
+					return _current[_currentIndex++];
 				}
-				if (_current == null) {
-					return -1;
-				}
-				if (log.isDebugEnabled()) {
-					log.debug("writing: " + _currentIndex);
-				}
-				return _current[_currentIndex++];
 			}
 
 		}, 1, Integer.MAX_VALUE); // MS: turning it up to 11
