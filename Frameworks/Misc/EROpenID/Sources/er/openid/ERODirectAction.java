@@ -46,11 +46,12 @@ public class ERODirectAction extends ERXDirectAction {
    * @throws ConsumerException
    */
   public WOActionResults openIDRequestAction() {
-    String identity = request().stringFormValueForKey("identity");
+	String identity = request().stringFormValueForKey("identity");
+	String realm = request().stringFormValueForKey("realm");
     WOActionResults results = null;
     try
     {
-      results = EROpenIDManager.manager().authRequest(identity, request(), context());
+      results = EROpenIDManager.manager().authRequest(identity, realm, request(), context());
       if (results == null)
         results = this.pageForKey("er.openid.failurePageName");
     }
