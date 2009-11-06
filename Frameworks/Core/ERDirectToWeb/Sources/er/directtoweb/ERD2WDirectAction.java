@@ -6,12 +6,6 @@
 //
 package er.directtoweb;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.text.Format;
-import java.text.ParseException;
-import java.util.Date;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -43,7 +37,6 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -51,12 +44,12 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.directtoweb.interfaces.ERDErrorPageInterface;
 import er.directtoweb.pages.ERD2WEditableListPage;
 import er.directtoweb.pages.ERD2WQueryPage;
+import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXDirectAction;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
@@ -248,8 +241,10 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         if(cid == null) return context().page();
         WOComponent comp = session().restorePageForContextID(cid);
         // (ak) we need to put the component to sleep again
-        if(comp != null)
+    	// Michael Bushkov: WO5.4.3 tracks all awakened components so no need to call this manually
+        if(comp != null && !ERXApplication.isWO54()) {
             comp._sleepInContext(comp.context());
+        }
         return comp;
     }
 
