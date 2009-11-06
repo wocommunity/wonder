@@ -185,8 +185,10 @@ public class ERXEOAccessUtilitiesTest extends TestCase {
 
         public void testEntityForEo() {
             // public static EOEntity entityForEo(EOEnterpriseObject);
-            // MS: hmmm .. this test randomly fails for me. when i put the following line in it passes.
-        	EOEntityClassDescription cd1 = (EOEntityClassDescription) EOClassDescription.classDescriptionForEntityName("Company");
+            // MS: hmmm .. this test randomly fails for me. it appears to be some sort of race condition with
+        	// class description loading. i SUSPECT if this was going through the full wonder startup process,
+        	// this wouldn't happen as you'd have the full class description set loaded before any EOF
+        	// API was touched.
 
             EOEntity companyEntity = EOModelGroup.defaultGroup().entityNamed("Company");
             Assert.assertNotNull(this.config(), companyEntity);
