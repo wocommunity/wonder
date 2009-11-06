@@ -21,6 +21,10 @@ public class ERXThrashTest {
 
     static Method loadMethod;
 
+    public static String modelName() {
+    	return System.getProperty("wonder.test.thrash.adaptor", "Memory")+"BusinessModel";
+    }
+    
     static ArrayList<Thread> useScheme(String scheme) {
         // System.out.println("useScheme:: start, scheme = \""+scheme+"\"");
 
@@ -41,12 +45,12 @@ public class ERXThrashTest {
 
         try {
             testClass = Class.forName("er.extensions.eof.ERXThrashTest$"+testClassName);
-        } catch (java.lang.ClassNotFoundException cnfe) { throw new IllegalArgumentException(cnfe.getMessage()); }
+        } catch (java.lang.ClassNotFoundException cnfe) { throw new IllegalArgumentException(cnfe.getMessage(), cnfe); }
         // System.out.println("useScheme:: testClass = \""+testClass+"\"");
 
         try {
             loadMethod = testClass.getMethod("load");
-        } catch (java.lang.NoSuchMethodException nsme) { throw new IllegalArgumentException(nsme.getMessage()); }
+        } catch (java.lang.NoSuchMethodException nsme) { throw new IllegalArgumentException(nsme.getMessage(), nsme); }
 
         Constructor[] cons = testClass.getConstructors();
         // System.out.println("useScheme:: cons count = "+cons.length);
@@ -76,9 +80,9 @@ public class ERXThrashTest {
  
             try {
                 for (int jdx = 0; jdx < count; jdx++) { threads.add((Thread)con.newInstance(delay, parameter)); }
-            } catch (java.lang.InstantiationException ie) { throw new IllegalArgumentException(ie.getMessage()); }
-              catch (java.lang.IllegalAccessException iae) { throw new IllegalArgumentException(iae.getMessage()); }
-              catch (java.lang.reflect.InvocationTargetException ite) { throw new IllegalArgumentException(ite.getMessage()); }
+            } catch (java.lang.InstantiationException ie) { throw new IllegalArgumentException(ie.getMessage(), ie); }
+              catch (java.lang.IllegalAccessException iae) { throw new IllegalArgumentException(iae.getMessage(), iae); }
+              catch (java.lang.reflect.InvocationTargetException ite) { throw new IllegalArgumentException(ite.getMessage(), ite); }
         }
 
         return threads;
@@ -93,7 +97,7 @@ public class ERXThrashTest {
         // Enumeration props = System.getProperties().propertyNames();
         // while (props.hasMoreElements()) { System.out.println("props = "+props.nextElement()); }
 
-        threads = useScheme(System.getProperty("thrash.scheme"));
+        threads = useScheme(System.getProperty("thrash.scheme", "scheme:SimpleInsertTest::0-100,2-100,5-200,10-100,12-100,15-200,20-100,22-100,25-200"));
 
         if (threads == null || threads.size() == 0) { System.exit(0); }
 
@@ -101,8 +105,8 @@ public class ERXThrashTest {
 
         try {
             loadMethod.invoke(threads.get(0));
-        } catch (java.lang.IllegalAccessException iae) { throw new IllegalArgumentException(iae.getMessage()); }
-          catch (java.lang.reflect.InvocationTargetException ite) { throw new IllegalArgumentException(ite.getMessage()); }
+        } catch (java.lang.IllegalAccessException iae) { throw new IllegalArgumentException(iae.getMessage(), iae); }
+          catch (java.lang.reflect.InvocationTargetException ite) { throw new IllegalArgumentException(ite.getMessage(), ite); }
 
         Iterator<Thread> starting = threads.iterator();
 
@@ -144,11 +148,11 @@ public class ERXThrashTest {
 
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
-            URL modelUrl = ERXTestUtilities.resourcePathURL("/"+System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel.eomodeld", getClass());
+            URL modelUrl = ERXTestUtilities.resourcePathURL("/"+modelName() + ".eomodeld", getClass());
 
             EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
 
-            EOModel model = EOModelGroup.defaultGroup().modelNamed(System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel");
+            EOModel model = EOModelGroup.defaultGroup().modelNamed(modelName());
             NSDictionary connDict = new NSDictionary(
                     new NSArray(new Object[] { System.getProperty("wonder.test.thrash.user"),
                                                System.getProperty("wonder.test.thrash.pwd"), 
@@ -211,15 +215,15 @@ public class ERXThrashTest {
 
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
-            URL modelUrl = ERXTestUtilities.resourcePathURL("/"+System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel.eomodeld", getClass());
+            URL modelUrl = ERXTestUtilities.resourcePathURL("/" + modelName() + ".eomodeld", getClass());
 
             EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
 
-            EOModel model = EOModelGroup.defaultGroup().modelNamed(System.getProperty("wonder.test.thrash.adaptor")+"BusinessModel");
+            EOModel model = EOModelGroup.defaultGroup().modelNamed(modelName());
             NSDictionary connDict = new NSDictionary(
-                    new NSArray(new Object[] { System.getProperty("wonder.test.thrash.user"),
-                                               System.getProperty("wonder.test.thrash.pwd"), 
-                                               System.getProperty("wonder.test.thrash.url") }),
+                    new NSArray(new Object[] { System.getProperty("wonder.test.thrash.user", "none"),
+                                               System.getProperty("wonder.test.thrash.pwd", "none"), 
+                                               System.getProperty("wonder.test.thrash.url", "none") }),
                     new NSArray(new String[] { "username", "password", "URL" }));
 
             model.setConnectionDictionary(connDict);
