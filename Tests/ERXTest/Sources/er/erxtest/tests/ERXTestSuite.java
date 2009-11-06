@@ -9,13 +9,17 @@ public class ERXTestSuite {
   static {
     ERXExtensions.initApp(Application.class, new String[0]);
   }
+  
+  public static void initialize() {
+    // just provided so TestCase can touch this class to get the static block
+  }
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
-    suite.addTestSuite(ERXECLockingTestCase.class);
-    suite.addTestSuite(ERXEnterpriseObjectCacheTestCase.class);
-    suite.addTestSuite(ERXExpiringCacheTestCase.class);
-    suite.addTestSuite(ERXGenericRecordUpdateInverseRelationshipsTest.class);
+//    suite.addTestSuite(ERXECLockingTestCase.class);
+//    suite.addTestSuite(ERXEnterpriseObjectCacheTestCase.class);
+//    suite.addTestSuite(ERXExpiringCacheTestCase.class);
+//    suite.addTestSuite(ERXGenericRecordUpdateInverseRelationshipsTest.class);
     suite.addTestSuite(ERXObjectStoreCoordinatorSynchronizerTestCase.class);
     return suite;
   }

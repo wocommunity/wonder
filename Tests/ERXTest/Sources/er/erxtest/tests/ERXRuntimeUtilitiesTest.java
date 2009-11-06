@@ -2,12 +2,11 @@ package er.erxtest.tests;
 
 import java.io.IOException;
 
-import junit.framework.TestCase;
 import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXRuntimeUtilities.Result;
 import er.extensions.foundation.ERXRuntimeUtilities.TimeoutException;
 
-public class ERXRuntimeUtilitiesTest extends TestCase {
+public class ERXRuntimeUtilitiesTest extends ERXTestCase {
 
 	public void testExecuteMultipleFastCommands() throws IOException, TimeoutException {
 		for (int i = 0; i < 100; ++i) {

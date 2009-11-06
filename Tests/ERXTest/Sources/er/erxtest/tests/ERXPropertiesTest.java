@@ -4,14 +4,13 @@ import java.io.File;
 import java.io.IOException;
 
 import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.foundation.ERXProperties;
 
-public class ERXPropertiesTest extends TestCase {
+public class ERXPropertiesTest extends ERXTestCase {
   public void test() throws IOException {
     ERXProperties._Properties properties = new ERXProperties._Properties();
     properties.load(new File("ERXPropertiesTest0.properties"));

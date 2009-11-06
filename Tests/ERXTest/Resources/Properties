@@ -1,3 +1,13 @@
+#dbConnectAdaptorGLOBAL=JDBC
+#dbConnectURLGLOBAL=jdbc:FrontBase://127.0.0.1/ERXTest
+#dbConnectUserGLOBAL=ERXTest
+#dbConnectPasswordGLOBAL=
+
+dbConnectAdaptorGLOBAL=Memory
+dbConnectURLGLOBAL=none
+dbConnectUserGLOBAL=nons
+dbConnectPasswordGLOBAL=
+
 ognl.helperFunctions=true
 ognl.inlineBindings=true
 er.ajax.secureResources=false

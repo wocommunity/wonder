@@ -1,7 +1,5 @@
 package er.erxtest.tests;
 
-import junit.framework.TestCase;
-
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 
@@ -10,7 +8,7 @@ import er.erxtest.model.Employee;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXGenericRecord;
 
-public class ERXGenericRecordUpdateInverseRelationshipsTest extends TestCase {
+public class ERXGenericRecordUpdateInverseRelationshipsTest extends ERXTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
