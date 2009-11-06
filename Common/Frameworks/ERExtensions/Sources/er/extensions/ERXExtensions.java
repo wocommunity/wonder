@@ -183,6 +183,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         		ERXLogger.configureLoggingWithSystemProperties();
         	}
         	
+                ERXLogger.setLoggingConfigurationReloadAllowed(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLogger.loggingConfigurationReloadAllowed", true));
+
             ERXArrayUtilities.initialize();
             
     		// False by default

@@ -49,6 +49,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
     }
 
     private static boolean _isFirstTimeConfig = true;
+    private static boolean _loggingConfigurationReloadAllowed = true;
     
     /**
      * Sets the default Logger factory so that ERXLogger
@@ -160,6 +161,14 @@ public class ERXLogger extends org.apache.log4j.Logger {
         super(name);
     }
 
+    public static void setLoggingConfigurationReloadAllowed(boolean loggingConfigurationReloadAllowed) {
+        _loggingConfigurationReloadAllowed = loggingConfigurationReloadAllowed;
+    }
+
+    public static boolean isLoggingConfigurationReloadAllowed() {
+        return _loggingConfigurationReloadAllowed;
+    }
+
     public static synchronized void configureLoggingWithSystemProperties() {
         configureLogging(ERXSystem.getProperties());
     }
@@ -171,6 +180,12 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * @param  properties with the logging configuration 
      */
     public static synchronized void configureLogging(Properties properties) {
+        if (!ERXLogger.isLoggingConfigurationReloadAllowed()) {
+                log.warn("Logging configuration reloading has been disabled in this instance because it can cause deadlocks in log4j under load. To override this, set er.extensions.ERXLogger.loggingConfigurationReloadAllowed=true.");
+                return;
+        }
+
+
         if (_isFirstTimeConfig) {
             BasicConfigurator.configure();
             // AK: we re-configure the logging a few lines later from the properties, but in case
