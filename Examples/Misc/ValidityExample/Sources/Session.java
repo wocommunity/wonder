@@ -18,13 +18,15 @@ public class Session extends WOSession {
         /* ** Put your per-session initialization code here ** */
     }
 
-    public void takeValuesFromRequest(WORequest request, WOContext context) {
-        request.setDefaultFormValueEncoding("UTF8");
+    @Override
+	public void takeValuesFromRequest(WORequest request, WOContext context) {
+        request.setDefaultFormValueEncoding("UTF-8");
         super.takeValuesFromRequest(request, context);
     }
 
-    public void appendToResponse(WOResponse response, WOContext context) {
-        response.setContentEncoding("UTF8");
+    @Override
+	public void appendToResponse(WOResponse response, WOContext context) {
+        response.setContentEncoding("UTF-8");
         super.appendToResponse(response, context);
         response.setHeader("text/html; charset=UTF-8", "Content-Type");
     }
