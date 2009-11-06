@@ -17,7 +17,10 @@ public class ERXTestUtilities {
 				if (!resourceFile.exists()) {
 					resourceFile = new File("Tests/Resources" + name);
 					if (!resourceFile.exists()) {
-						throw new FileNotFoundException("Unable to find the property list '" + name + "'.");
+						resourceFile = new File("Resources" + name);
+						if (!resourceFile.exists()) {
+							throw new FileNotFoundException("Unable to find the property list '" + name + "'.");
+						}
 					}
 				}
 				url = resourceFile.toURI().toURL();
