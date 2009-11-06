@@ -24,7 +24,7 @@ import com.webobjects.foundation.NSDictionary;
  * @author mschrag
  */
 public class ERMemoryAdaptorContext extends EOAdaptorContext {
-  private final EREntityStoreFactory _storeFactory = new EREntityStoreFactory(ERMemoryEntityStore.class);
+  private static final EREntityStoreFactory _storeFactory = new EREntityStoreFactory(ERMemoryEntityStore.class);
 
   public ERMemoryAdaptorContext(EOAdaptor adaptor) {
     super(adaptor);
