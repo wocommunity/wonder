@@ -14,7 +14,6 @@ import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
-import junit.framework.TestCase;
 
 
 /*
@@ -53,7 +52,7 @@ expected results are:
 - if coalesce, autolock should stay open?
 
  */
-public class ERXECLockingTestCase extends TestCase {
+public class ERXECLockingTestCase extends ERXTestCase {
     static ExecutorService executor = Executors.newCachedThreadPool();
 
     protected static Object call(Callable<? extends Object> aCallable, long timeout) throws TimeoutException {

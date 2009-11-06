@@ -2,10 +2,10 @@ package er.erxtest.tests;
 import java.util.Enumeration;
 
 import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.foundation.NSArray;
 
 import er.erxtest.model.Company;
@@ -20,13 +20,26 @@ import er.extensions.foundation.ERXRandomGUID;
  * 
  * @author mschrag
  */
-public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
+public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
+  public void testPool() {
+    assertNotNull(ERXObjectStoreCoordinatorPool._pool());
+    assertNotNull(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
+  }
+  
+  public void testDifferenceStores() {
+    EOObjectStore osc1 = ERXObjectStoreCoordinatorPool._pool().nextObjectStore();
+    EOObjectStore osc2 = ERXObjectStoreCoordinatorPool._pool().nextObjectStore();
+    assertNotSame(osc1, osc2);
+  }
+  
   public void testInsertEO() {
     // Create Company in OSC1
     String companyName = "Company" + ERXRandomGUID.newGid();
     EOEditingContext editingContext_osc1 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc1 = Company.createCompany(editingContext_osc1, companyName);
     editingContext_osc1.saveChanges();
+    Company company_osc1_fetched = Company.fetchCompany(editingContext_osc1, Company.NAME_KEY, companyName);
+    assertNotNull(company_osc1_fetched);
     sleep();
 
     // Fetch Company in OSC2
@@ -48,6 +61,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
     // Fetch Company1 in OSC2
     EOEditingContext editingContext_osc2 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc2 = Company.fetchCompany(editingContext_osc2, Company.NAME_KEY, companyName);
+    assertNotNull(company_osc2);
 
     for (int i = 0; i < 10; i++) {
       // Change Company1's name in OSC1
@@ -95,6 +109,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
     // Fetch Company1 in OSC2
     EOEditingContext editingContext_osc2 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc2 = Company.fetchCompany(editingContext_osc2, Company.NAME_KEY, companyName);
+    assertNotNull(company_osc2);
 
     for (int i = 0; i < 10; i++) {
       // Change Company1's name in OSC1
@@ -144,6 +159,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
     // Fetch Company1 in OSC2
     EOEditingContext editingContext_osc2 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc2 = Company.fetchCompany(editingContext_osc2, Company.NAME_KEY, companyName);
+    assertNotNull(company_osc2);
 
     // Create and Save Employee1 in Company1 in OSC1
     String employeeName = "Employee" + ERXRandomGUID.newGid();
@@ -171,6 +187,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
     // Fetch Company1 in OSC2
     EOEditingContext editingContext_osc2 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc2 = Company.fetchCompany(editingContext_osc2, Company.NAME_KEY, companyName);
+    assertNotNull(company_osc2);
     // Fetch employees for Company1 in OSC2
     NSArray employees_osc2 = company_osc2.employees();
 
@@ -210,6 +227,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
     // Fetch Company1 in OSC2
     EOEditingContext editingContext_osc2 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc2 = Company.fetchCompany(editingContext_osc2, Company.NAME_KEY, companyName);
+    assertNotNull(company_osc2);
 
     // Create (but do not save) Employee1 for Company1 in OSC2
     String employeeName1 = "Employee" + ERXRandomGUID.newGid();
@@ -265,6 +283,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
     // Fetch Company1 in OSC2
     EOEditingContext editingContext_osc2 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc2 = Company.fetchCompany(editingContext_osc2, Company.NAME_KEY, companyName);
+    assertNotNull(company_osc2);
     // Fetch and check employees for Company1 in OSC2
     assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc1, employee2_osc1 }), company_osc2.employees());
 
