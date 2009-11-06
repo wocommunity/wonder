@@ -110,7 +110,7 @@ public final class GSVModel extends Object implements WOXMLCoding {
         try {
             File configurationFile = new File(xmlPath);
 
-            OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(configurationFile), "UTF8");
+            OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(configurationFile), "UTF-8");
             osw.write(codedString);
             osw.close();
 	    NSLog.out.appendln("did save model to file");
