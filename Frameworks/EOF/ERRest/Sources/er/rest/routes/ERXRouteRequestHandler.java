@@ -1,5 +1,6 @@
 package er.rest.routes;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
@@ -18,6 +19,13 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRestNameRegistry;
+import er.rest.routes.jsr311.DELETE;
+import er.rest.routes.jsr311.GET;
+import er.rest.routes.jsr311.HttpMethod;
+import er.rest.routes.jsr311.POST;
+import er.rest.routes.jsr311.PUT;
+import er.rest.routes.jsr311.Path;
+import er.rest.routes.jsr311.Paths;
 
 /**
  * ERXRouteRequestHandler is the request handler that can process rails-style route mappings and convert them to
@@ -266,8 +274,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 	/**
 	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the route controller for the given entity
-	 * name, giving it the opportunity to add routes for this entity. If no addRoutes method is found, it will log a
-	 * warning and add default routes instead.
+	 * name, giving it the opportunity to add routes for this entity. Additionally, this method looks for all methods annotated
+	 * with @Path or @Paths annotations and adds the corresponding routes. If no addRoutes method is found and no
+	 * @Path annotated methods exist, it will log a warning and add default routes instead.
 	 * 
 	 * @param entityName
 	 *            the name of the entity
@@ -278,8 +287,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 	/**
 	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the given route controller class, giving
-	 * it the opportunity to add routes for the given entity. If no addRoutes method is found, it will log a warning and
-	 * add default routes instead.
+	 * it the opportunity to add routes for the given entity. Additionally, this method looks for all methods annotated
+	 * with @Path or @Paths annotations and adds the corresponding routes. If no addRoutes method is found and no
+	 * @Path annotated methods exist, it will log a warning and add default routes instead.
 	 * 
 	 * @param entityName
 	 *            the name of the entity
@@ -287,16 +297,72 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the name of the route controller
 	 */
 	public void addRoutes(String entityName, Class<? extends ERXRouteController> routeControllerClass) {
+		boolean addDefaultRoutes = false;
 		try {
 			Method addRoutesMethod = routeControllerClass.getMethod("addRoutes", String.class, ERXRouteRequestHandler.class);
 			addRoutesMethod.invoke(null, entityName, this);
 		}
-		catch (NoSuchMethodError e) {
-			ERXRouteRequestHandler.log.warn("No 'addRoutes(entityName, routeRequetHandler)' method found on '" + routeControllerClass.getSimpleName() + "'. Registering default routes instead.");
-			addDefaultRoutes(entityName, routeControllerClass);
+		catch (NoSuchMethodException e) {
+			addDefaultRoutes = true;
 		}
 		catch (Throwable t) {
 			throw new RuntimeException("Failed to add routes for " + routeControllerClass + ".", t);
+		}
+		
+		for (Method routeMethod : routeControllerClass.getDeclaredMethods()) {
+			String routeMethodName = routeMethod.getName();
+			if (routeMethodName.endsWith("Action")) {
+				String actionName = routeMethodName.substring(0, routeMethodName.length() - "Action".length());
+				
+				Path pathAnnotation = routeMethod.getAnnotation(Path.class);
+				Paths pathsAnnotation = routeMethod.getAnnotation(Paths.class);
+				if (pathAnnotation != null || pathsAnnotation != null) {
+					addDefaultRoutes = false;
+					
+					ERXRoute.Method method = null;
+					for (Annotation annotation : routeMethod.getAnnotations()) {
+						HttpMethod httpMethod = annotation.annotationType().getAnnotation(HttpMethod.class);
+						if (httpMethod != null) {
+							if (method == null) {
+								method = httpMethod.value();
+							}
+							else {
+								throw new IllegalArgumentException(routeControllerClass.getSimpleName() + "." + routeMethod.getName() + " is annotated as more than one http method.");
+							}
+						}
+					}
+					if (method == null) {
+						method = ERXRoute.Method.Get;
+					}
+					
+					Annotation methodAnnotation = routeMethod.getAnnotation(GET.class);
+					if (methodAnnotation == null) {
+						methodAnnotation = routeMethod.getAnnotation(POST.class);
+						if (methodAnnotation == null) {
+							methodAnnotation = routeMethod.getAnnotation(PUT.class);
+							if (methodAnnotation == null) {
+								methodAnnotation = routeMethod.getAnnotation(DELETE.class);
+							}
+						}
+					}
+					if (methodAnnotation != null) {
+						method = methodAnnotation.annotationType().getAnnotation(HttpMethod.class).value();
+					}
+					if (pathAnnotation != null) {
+						addRoute(new ERXRoute(entityName, pathAnnotation.value(), method, routeControllerClass, actionName));
+					}
+					if (pathsAnnotation != null) {
+						for (Path path : pathsAnnotation.value()) {
+							addRoute(new ERXRoute(entityName, path.value(), method, routeControllerClass, actionName));
+						}
+					}
+				}
+			}
+		}
+		
+		if (addDefaultRoutes) {
+			ERXRouteRequestHandler.log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no @Path designations found on '" + routeControllerClass.getSimpleName() + "'. Registering default routes instead.");
+			addDefaultRoutes(entityName, routeControllerClass);
 		}
 	}
 

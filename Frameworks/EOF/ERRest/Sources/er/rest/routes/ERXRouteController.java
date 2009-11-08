@@ -43,6 +43,7 @@ import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestParser;
+import er.rest.routes.jsr311.PathParam;
 
 /**
  * ERXRouteController is equivalent to a Rails controller class. It's actually a direct action, and has the same naming
