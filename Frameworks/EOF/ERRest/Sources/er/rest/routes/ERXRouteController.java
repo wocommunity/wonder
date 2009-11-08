@@ -1,8 +1,11 @@
 package er.rest.routes;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -965,7 +968,64 @@ public class ERXRouteController extends WODirectAction {
 			}
 
 			if (results == null) {
-				results = super.performActionNamed(actionName);
+		        Method actionMethod = _methodForAction(actionName, WODirectAction.actionText);
+		        if (actionMethod == null || actionMethod.getParameterTypes().length > 0) {
+		        	String actionMethodName = actionName + WODirectAction.actionText;
+		        	int bestParameterCount = 0;
+		        	Method bestMethod = null;
+        			List<PathParam> bestParams = null;
+		        	for (Method method : getClass().getDeclaredMethods()) {
+		        		if (method.getName().equals(actionMethodName)) {
+		        			int parameterCount = 0;
+				        	List<PathParam> params = new LinkedList<PathParam>();
+		        			for (Annotation[] parameterAnnotations : method.getParameterAnnotations()) {
+		        				for (Annotation parameterAnnotation : parameterAnnotations) {
+		        					if (parameterAnnotation instanceof PathParam) {
+		        						PathParam pathParam = (PathParam)parameterAnnotation;
+		        						params.add(pathParam);
+		        						parameterCount ++;
+		        					}
+		        					else {
+		        						parameterCount = -1;
+		        						break;
+		        					}
+		        				}
+		        				if (parameterCount == -1) {
+		        					break;
+		        				}
+		        			}
+		        			if (parameterCount > bestParameterCount) {
+		        				bestMethod = method;
+		        				bestParameterCount = parameterCount;
+		        				bestParams = params;
+		        			}
+		        		}
+		        	}
+		        	if (bestMethod == null) {
+		        		throw new RuntimeException("There is no action named '" + actionName + "' on '" + getClass().getSimpleName() + ".");
+		        	}
+		        	else {
+		        		Object[] params = new Object[bestParameterCount];
+		        		for (int paramNum = 0; paramNum < params.length; paramNum ++) {
+		        			PathParam param = bestParams.get(paramNum);
+		        			params[paramNum] = routeObjectForKey(param.value());
+		        		}
+			        	try {
+			        		results = (WOActionResults)bestMethod.invoke(this, params);
+			        	}
+			        	catch (Throwable t) {
+			        		throw new NSForwardException(t, "Failed to perform the action named '" + actionName + "' on '" + getClass().getSimpleName() + ".");
+			        	}
+		        	}
+		        }
+		        else {
+		        	try {
+		        		results = (WOActionResults)actionMethod.invoke(this, _NSUtilities._NoObjectArray);
+		        	}
+		        	catch (Throwable t) {
+		        		throw new NSForwardException(t, "Failed to perform the action named '" + actionName + "' on '" + getClass().getSimpleName() + ".");
+		        	}
+		        }
 			}
 
 			if (results == null) {
