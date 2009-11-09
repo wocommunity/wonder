@@ -13,24 +13,25 @@ import er.extensions.eof.*;
  * @see AjaxModalDialog
  */
 public class ModalDialogOpenerExample extends ModalDialogExample {
-	
+
 	public Company selectedCompany;
 	public Company aCompany;
 	public int companyIndex;
 	public Company companyToEdit;
 	public String validationMessage;
-	
-	
+
 	public ModalDialogOpenerExample(WOContext context) {
         super(context);
     }
     
-    public WOActionResults cancelEdit() {
+    @Override
+	public WOActionResults cancelEdit() {
 		employee().editingContext().revert();
     	return context().page();
     }
     
-    public WOActionResults saveEdit() {
+    @Override
+	public WOActionResults saveEdit() {
     	try {
         	errorMessages = null;
     		employee().editingContext().saveChanges();
@@ -98,7 +99,7 @@ public class ModalDialogOpenerExample extends ModalDialogExample {
     		companyToEdit.editingContext().revert();
     		companyToEdit.editingContext().deleteObject(companyToEdit);
     		companyToEdit.editingContext().saveChanges();
-        	companies = Company.fetchAllCompanies(ec, ERXS.ascs(Company.NAME_KEY));
+        	companies = new NSMutableArray<Company>(Company.fetchAllCompanies(ec, ERXS.ascs(Company.NAME_KEY)));
         	AjaxModalDialog.close(context());
     	}
     	catch (Exception e)

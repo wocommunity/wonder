@@ -17,6 +17,7 @@ public class HelloAjaxWorld extends WOComponent {
 		_helloAjaxWorld = "Hello Ajax WOrld!";
 	}
 
+	@Override
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		_timestamp = new NSTimestamp();
 		super.appendToResponse(woresponse, wocontext);

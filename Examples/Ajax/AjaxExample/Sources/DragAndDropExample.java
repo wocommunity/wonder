@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSMutableArray;
  */
 public class DragAndDropExample extends WOComponent {
     public String droppedDraggableID;
-    public NSMutableArray objects = new NSMutableArray();
+    public NSMutableArray<Object> objects = new NSMutableArray<Object>();
     public Object o1 = "Object 0";
     public Object item;
     public Object droppedObject;

@@ -7,7 +7,7 @@ import er.ajax.AjaxTreeModel;
 
 public class InfiniteTreeNode {
 	private Object _parentTreeNode;
-	private NSMutableArray _children;
+	private NSMutableArray<InfiniteTreeNode> _children;
 	private String _name;
 	private int _depth;
 
@@ -19,7 +19,7 @@ public class InfiniteTreeNode {
 
 	public synchronized NSArray childrenTreeNodes() {
 		if (_children == null && _depth < 2) {
-			_children = new NSMutableArray();
+			_children = new NSMutableArray<InfiniteTreeNode>();
 			for (int i = 0; i < 5; i++) {
 				_children.addObject(new InfiniteTreeNode(this, _name + " Child " + i, _depth + 1));
 			}
@@ -31,6 +31,7 @@ public class InfiniteTreeNode {
 		return _parentTreeNode;
 	}
 
+	@Override
 	public String toString() {
 		return _name;
 	}

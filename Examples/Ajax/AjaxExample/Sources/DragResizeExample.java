@@ -12,7 +12,7 @@ public class DragResizeExample extends WOComponent {
 
     public AjaxDragResizeContainer.ResizeReport report = null;
 
-    public NSMutableArray annotations;
+    public NSMutableArray<Annotation> annotations;
 
     public Annotation annotationItem;
 
@@ -20,12 +20,13 @@ public class DragResizeExample extends WOComponent {
     
     public DragResizeExample(WOContext context) {
 	super(context);
-	annotations = new NSMutableArray(new Annotation[] { 
+	annotations = new NSMutableArray<Annotation>(new Annotation[] { 
 		new Annotation(377, 96, 79, 68, "Nose", "Due to his big nose, our dog loves to snoop around"), // 79x68+377+96 nose
 		new Annotation(312, 372, 112, 81, "Foot", "Athough the feet are quite big, the legs aren't, so he's not a big sprinter...") }); // 112x81+312+372 foot
     }
     
-    public void appendToResponse(WOResponse response, WOContext ctx) {
+    @Override
+	public void appendToResponse(WOResponse response, WOContext ctx) {
 	super.appendToResponse(response, ctx);
 	AjaxUtils.addScriptResourceInHead(ctx, response, "app", "overlib.js");
 	AjaxUtils.addStylesheetResourceInHead(ctx, response, "app", "dragresize_example.css");

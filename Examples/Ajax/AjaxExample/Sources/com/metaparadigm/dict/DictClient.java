@@ -41,8 +41,8 @@ public class DictClient implements Serializable
     private String host;
     private int port;
 
-    private transient ArrayList strategies;
-    private transient ArrayList databases;
+    private transient ArrayList<Strategy> strategies;
+    private transient ArrayList<Database> databases;
 
     private transient String ident;
     private transient Socket sock;
@@ -99,7 +99,8 @@ public class DictClient implements Serializable
 			   + host + ":" + port + " ident=\"" + ident + "\"");
     }
 
-    public void finalize() { close(); }
+    @Override
+	public void finalize() { close(); }
 
     private synchronized String status()
 	throws IOException, DictClientException
@@ -174,7 +175,7 @@ public class DictClient implements Serializable
 	if(r.code != DictCommandResult.DATABASES_PRESENT)
 	    throw new DictClientException(r);
 
-	databases = new ArrayList();
+	databases = new ArrayList<Database>();
 	String line;
 	while(true) {
 	    line = in.readLine();
@@ -208,7 +209,7 @@ public class DictClient implements Serializable
 	if(r.code != DictCommandResult.STRATEGIES_PRESENT)
 	    throw new DictClientException(r);
 
-	strategies = new ArrayList();
+	strategies = new ArrayList<Strategy>();
 	String line;
 	while(true) {
 	    line = in.readLine();
@@ -234,7 +235,7 @@ public class DictClient implements Serializable
 	    System.out.println("DictClient.matchWord(\"" + db + "\", \"" +
 			       strategy + "\", \"" + word + "\")");
 
-	ArrayList matches = new ArrayList();
+	ArrayList<Match> matches = new ArrayList<Match>();
 
 	out.print("MATCH " + db + " " + strategy +
 		  " \"" + word + "\"\n");
@@ -268,7 +269,7 @@ public class DictClient implements Serializable
 	    System.out.println
 		("DictClient.defineWord(\"" + db + "\", \"" + word + "\")");
 
-	ArrayList definitions = new ArrayList();
+	ArrayList<Definition> definitions = new ArrayList<Definition>();
 
 	out.print("DEFINE " + db + " \"" + word + "\"\n");
 	out.flush();
