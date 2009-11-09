@@ -34,14 +34,14 @@ Test for Drag and Drop page
 |dragdrop|SecondDraggableItem|+20, +360|
 |pause|1200|
 
-|verifyTextPresent|dropped draggableExample_0_79_3_0_1 onto droppableExample1->Object 1|
+|verifyTextPresent|dropped draggableExample_0_83_3_0_1 onto droppableExample1->Object 1|
 
 # Move the second draggable box to the second target box.
 #
 |dragdrop|SecondDraggableItem|+20, +420|
 |pause|1200|
 
-|verifyTextPresent|dropped draggableExample_0_79_3_0_1 onto droppableExample2->Object 1|
+|verifyTextPresent|dropped draggableExample_0_83_3_0_1 onto droppableExample2->Object 1|
 
 # TODO - It would be useful to drag one of the boxes in the bottom of the repetition, but I
 # am not seeing how to locate them at the moment.

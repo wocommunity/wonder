@@ -65,7 +65,8 @@ public class DictCommandResult
 	}
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
 	return "code=" + code + " msg=\"" + msg + "\"";
     }

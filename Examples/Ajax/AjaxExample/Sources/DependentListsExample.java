@@ -7,7 +7,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 public class DependentListsExample extends WOComponent {
-	private NSMutableArray _states;
+	private NSMutableArray<State> _states;
 	public State _repetitionState;
 	public County _repetitionCounty;
 	public Street _repetitionStreet;
@@ -24,7 +24,7 @@ public class DependentListsExample extends WOComponent {
 	
 	public DependentListsExample(WOContext context) {
 		super(context);
-		_states = new NSMutableArray();
+		_states = new NSMutableArray<State>();
 		for (int stateNum = 0; stateNum < 30; stateNum++) {
 			State state = new State("State " + stateNum);
 			for (int countyNum = 0; countyNum < 30; countyNum++) {
@@ -39,6 +39,7 @@ public class DependentListsExample extends WOComponent {
 		}
 	}
 	
+	@Override
 	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
 		super.takeValuesFromRequest(aRequest, aContext);
 	}
@@ -102,12 +103,13 @@ public class DependentListsExample extends WOComponent {
 	}
 
 	public static class State {
+
 		private String _name;
-		private NSMutableArray _counties;
+		private NSMutableArray<County> _counties;
 
 		public State(String name) {
 			_name = name;
-			_counties = new NSMutableArray();
+			_counties = new NSMutableArray<County>();
 		}
 
 		public String name() {
@@ -122,6 +124,7 @@ public class DependentListsExample extends WOComponent {
 			return _counties;
 		}
 		
+		@Override
 		public String toString() {
 			return "[State: name = " + _name + "]"; 
 		}
@@ -130,12 +133,12 @@ public class DependentListsExample extends WOComponent {
 	public static class County {
 		private State _state;
 		private String _name;
-		private NSMutableArray _streets;
+		private NSMutableArray<Street> _streets;
 
 		public County(State state, String name) {
 			_state = state;
 			_name = name;
-			_streets = new NSMutableArray();
+			_streets = new NSMutableArray<Street>();
 		}
 		
 		public State state() {
@@ -154,6 +157,7 @@ public class DependentListsExample extends WOComponent {
 			return _streets;
 		}
 		
+		@Override
 		public String toString() {
 			return "[County: state = " + _state + "; name = " + _name + "]"; 
 		}
@@ -176,6 +180,7 @@ public class DependentListsExample extends WOComponent {
 			return _name;
 		}
 		
+		@Override
 		public String toString() {
 			return "[Street: county = " + _county + "; name = " + _name + "]"; 
 		}

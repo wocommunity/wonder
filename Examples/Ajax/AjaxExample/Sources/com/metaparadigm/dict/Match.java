@@ -34,7 +34,8 @@ public class Match
 	this.word = word;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
 	return "match: " + word + " \"" + database + "\"";
     }

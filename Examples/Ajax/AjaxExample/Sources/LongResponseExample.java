@@ -14,6 +14,7 @@ public class LongResponseExample extends WOComponent {
 		int stage = 0;
 		String status = "Idle";
 
+		@Override
 		public void run() {
 
 			try {

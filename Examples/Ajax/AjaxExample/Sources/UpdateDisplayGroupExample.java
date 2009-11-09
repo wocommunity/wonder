@@ -26,11 +26,11 @@ public class UpdateDisplayGroupExample extends WOComponent {
 	}
 
 	private void setSortOrder(String name) {
-		NSArray oldArray = dg.sortOrderings();
+		NSArray<EOSortOrdering> oldArray = dg.sortOrderings();
 		EOSortOrdering oldOrdering = null;
 		EOSortOrdering newOrdering = null;
 		if (oldArray != null) {
-			oldOrdering = (EOSortOrdering) oldArray.lastObject();
+			oldOrdering = oldArray.lastObject();
 		}
 		if (oldOrdering != null && oldOrdering.key().equals(name)) {
 			newOrdering = EOSortOrdering.sortOrderingWithKey(name, oldOrdering.selector() == EOSortOrdering.CompareDescending ? EOSortOrdering.CompareAscending : EOSortOrdering.CompareDescending);
@@ -38,10 +38,11 @@ public class UpdateDisplayGroupExample extends WOComponent {
 		else {
 			newOrdering = EOSortOrdering.sortOrderingWithKey(name, EOSortOrdering.CompareAscending);
 		}
-		dg.setSortOrderings(new NSArray(newOrdering));
+		dg.setSortOrderings(new NSArray<EOSortOrdering>(newOrdering));
 		dg.qualifyDisplayGroup();
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		super.takeValuesFromRequest(worequest, wocontext);
 	}

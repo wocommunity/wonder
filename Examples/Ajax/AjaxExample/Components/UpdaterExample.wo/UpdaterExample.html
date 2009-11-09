@@ -22,28 +22,28 @@
         <b>On-Demand Update</b>
         <webobject name="AjaxUpdateContainer1">
         	<b><webobject name="String1"></webobject></b>
-        	<p>
+        	<p/>
         	<webobject name="Hyperlink1">Example Link (You will only be able to use component actions in an AjaxUpdateContainer if you include ERExtensions framework and extend ERXSession)</webobject>
-        	<p>
+        	<p/>
         	<webobject name="Hyperlink2">Example Link (This is a Direct Action)</webobject>
-        	<hr>
-        	<p>
+        	<hr/>
+        	<p/>
         	If you embed a script tag inside of an updating area, make sure to set evalScripts = true in the AjaxUpdateContainer's bindings.  If you update
         	the container using an AjaxUpdateLink, set evalScripts = true on the update link.  This update container updates the 
         	status message above every time it is reloaded.
 					<script>
 					Element.update('statusMessage', 'Javascript update from container <span id="UpdateTimeBottomString"><webobject name="String1"></webobject></span>');
 					</script>
-        	<hr>
-					<p>
+        	<hr/>
+					<p/>
 					Below is a nested update container:
-					<br>
+					<br/>
 		      <p><webobject name = "UpdateLink4">Update Nested Update Container (Link Outside Container)</webobject></p>
 	        <webobject name="AjaxUpdateContainer4">
 			      <p><webobject name = "UpdateLink5">Update Nested Update Container (Link Inside Container)</webobject></p>
 	        	<b><span id="UpdateTimeInsideContainer"><webobject name="String1"></webobject></span></b>
 	        </webobject>
-	        <p>
+	        <p/>
 	        <webobject name = "UpdateForm">
 	        	This is a multipleSubmit form inside an update container.
 		        <webobject name = "Submit1Action"/>
@@ -56,11 +56,11 @@
         <b>Periodic Update</b>
         <webobject name="AjaxUpdateContainer2">
         	<b><span id="UpdateTimePeriodicallyUpdated"><webobject name="String1"></webobject></span></b>
-        	<p>
+        	<p/>
         	<webobject name="Hyperlink2">Example Link (This is a Direct Action)</webobject>
-        	<p>
+        	<p/>
         	<webobject name="Hyperlink1">Example Link (You will only be able to use component actions in an AjaxUpdateContainer if you include ERExtensions framework and extend ERXSession)</webobject>
-        	<p>
+        	<p/>
         	<webobject name="Hyperlink1">Example Link (You will only be able to use component actions in an AjaxUpdateContainer if you include ERExtensions framework and extend ERXSession)</webobject>
         </webobject>
         </p>
@@ -71,28 +71,28 @@
         	This will be replaced
         </div>
         
-        <p>
+        <p/>
         <webobject name = "ExampleArea5">
         	<webobject name = "ExampleForm5">
         	This is exampleArea5
-        	<br> 
+        	<br/> 
         	<b><webobject name="String1"></webobject></b>
-        	<br>
+        	<br/>
         	<webobject name = "UpdateExampleArea5Then6">Update 5 Then 6</webobject>
         	</webobject>
         </webobject>
-        <p>
+        <p/>
         <webobject name = "ExampleArea6">
         	<webobject name = "ExampleForm6">
         	This is exampleArea6
-        	<br> 
+        	<br/> 
         	<b><webobject name="String1"></webobject></b>
-        	<br>
+        	<br/>
         	<webobject name = "UpdateExampleArea6Then5">Update 6 Then 5</webobject>
         	</webobject>
         </webobject>
         
-        <p>
+        <p/>
         <script>
         function onCompleteTest() {
         	alert('complete exampleArea7!');

@@ -26,6 +26,7 @@ public class Application extends ERXApplication {
 	}
 	
 	
+	@Override
 	public WOResponse dispatchRequest(WORequest request) {
 		boolean isActionRequest = request.uri().indexOf("/wo/") > -1 || request.uri().indexOf("/wa/") > -1 || request.uri().indexOf("/ajax/") > -1;
 		isActionRequest = false;  // Comment this out to enable debug logging

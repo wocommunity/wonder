@@ -17,7 +17,8 @@ public class Item {
     return _id;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "[Item: id = " + _id + "]";
   }
 }

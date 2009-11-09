@@ -29,10 +29,12 @@ public class SimplePerson {
 		_age = age;
 	}
 	
+	@Override
 	public int hashCode() {
 		return _name.hashCode();
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof SimplePerson && ((SimplePerson)obj)._name.equals(_name);
 	}
