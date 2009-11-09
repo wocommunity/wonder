@@ -78,4 +78,4 @@ ItemGuid : WOString {
 
 ItemPubDate : WOString {
   value = ^itemPubDate;
-}\ No newline at end of file
+}
