@@ -1,0 +1,778 @@
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.TreeMap;
+import java.util.Set;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.LineNumberReader;
+
+import com.sun.javadoc.FieldDoc;
+import com.sun.javadoc.MethodDoc;
+import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.RootDoc;
+import com.sun.javadoc.DocErrorReporter;
+
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
+
+import org.jdom.input.SAXBuilder;
+
+public class ComponentDoclet extends com.sun.javadoc.Doclet {
+
+    static ArrayList<String> srcDirs;
+    static ArrayList<String> compDirs;
+
+    static HashMap<String,HashMap<String,Object>> comps;
+
+    @SuppressWarnings("unchecked")
+    public static boolean start(RootDoc root) {
+
+        test();
+
+        ClassDoc[] classes = root.classes();
+
+        comps = new HashMap<String,HashMap<String,Object>>();
+
+        // Collect into comps{} new hashes for classes that are sub-classes of WOComponent.
+        //
+        for (int i = 0; i < classes.length; i++) {
+
+            ClassDoc aCD = classes[i];
+
+            ClassDoc parent = aCD.superclass();
+            boolean done = false;
+
+            while (parent != null && !done) {
+                if (parent.toString().equals("com.webobjects.appserver.WOComponent")) {
+                    // System.out.println("found component: "+aCD);
+                    comps.put(aCD.toString(), new HashMap<String,Object>());
+                    done = true;
+                }
+                if (parent.toString().equals("java.lang.Object"))
+                    done = true;
+                else
+                    parent = parent.superclass();
+            }
+        }
+
+        // For each subclass of WOComponent that had been found, get its source file name
+        // and api file name (if one exists) and component name and put it in the hashmap pointed
+        // to by the class name in comps.
+        //
+        Iterator keys = comps.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = keys.next().toString();
+
+            int lastDot = 0;
+            int currentDot = key.indexOf(".", lastDot);
+            while (currentDot > lastDot) {
+                lastDot = currentDot;
+                currentDot = key.indexOf(".", lastDot+1);
+            }
+            String leaf = key.substring(lastDot+1);
+            comps.get(key).put("componentName", leaf);
+
+            boolean found = false;
+
+            for (int jdx = 0; !found && jdx < compDirs.size(); jdx++) {
+                String apiFilename = compDirs.get(jdx)+leaf+".api";
+                File apiFile = new File(apiFilename);
+                if (apiFile.exists())
+                    comps.get(key).put("apiFile", apiFilename);
+            }
+
+            found = false;
+
+            String srcDir = key.replaceAll("\\.", File.separator);
+
+            for (int jdx = 0; !found && jdx < srcDirs.size(); jdx++) {
+                String srcFilename = srcDirs.get(jdx)+File.separator+leaf+".java";
+                if ((new File(srcFilename)).exists())
+                    comps.get(key).put("sourceFile", srcFilename);
+            }
+        }
+
+        // Gather the class comments and package name for the classes of the components.
+        //
+        keys = comps.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = keys.next().toString();
+
+            // For null-safety later on
+            //
+            comps.get(key).put("package", "NONE");
+
+            FileReader fRdr = null;
+            String srcFilename = (String)comps.get(key).get("sourceFile");
+            if (srcFilename != null) {
+                try {
+                    fRdr = new FileReader(srcFilename);
+                } catch (java.io.FileNotFoundException fnfe) { System.out.println(fnfe.getMessage()); System.exit(1); }
+
+                LineNumberReader rdr = new LineNumberReader(fRdr);
+
+                boolean done = false;
+                boolean inComment = false;
+
+                ArrayList<String> comments = new ArrayList<String>();
+
+                String line = "";
+
+                while (line != null && !done) {
+                    try {
+                        line = rdr.readLine();
+                        if (line != null) {
+                            if (line.startsWith("package ")) {
+                                String pName = line.substring("package ".length());
+                                while (pName.endsWith(";")) pName = pName.substring(0,pName.length()-1);
+                                comps.get(key).put("package", pName);
+
+                                pName = pName.replace('.','/');
+                                comps.get(key).put("classDocURL",pName+"/"+comps.get(key).get("componentName")+".html");
+                            }
+                            if (line.indexOf("/**") >= 0) { inComment = true; }
+                            if (inComment && line.indexOf("*/") >= 0) { done = true; }
+                            if (inComment) { comments.add(line); }
+                        }
+                    } catch (java.io.IOException ioe) { line = null; }
+                }
+
+                comps.get(key).put("comments", findBindingComments(comments));
+                comps.get(key).put("classComment", findClassComment(comments));
+            } else {
+                comps.get(key).put("comments", new HashMap<String,String>());
+                comps.get(key).put("classComment", "");
+            }
+        }
+
+        // Gather the bindings for the component from the api file.
+        //
+        keys = comps.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = keys.next().toString();
+
+            String apiFilename = (String)comps.get(key).get("apiFile");
+            if (apiFilename != null) {
+
+                File apiFile = new File(apiFilename);
+                SAXBuilder builder = new SAXBuilder();
+                Document doc = null;
+
+                ArrayList<String> bindingNames = new ArrayList<String>();
+
+                try {
+                    doc = builder.build(apiFile);
+                } catch (org.jdom.JDOMException jde) { System.out.println(jde.getMessage()); System.exit(1); }
+                Element parent = doc.getRootElement().getChild("wo");
+                Iterator bindings = parent.getChildren("binding").iterator();
+                while (bindings.hasNext()) {
+                    Attribute attr = ((Element)bindings.next()).getAttribute("name");
+                    bindingNames.add(attr.getValue());
+                }
+                comps.get(key).put("apiBindings", bindingNames);
+            } else
+                comps.get(key).put("apiBindings", new ArrayList<String>());
+        }
+
+        // Check the condition of the bindings documentation.
+        //
+        keys = comps.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = keys.next().toString();
+
+            HashMap<String,Object> map = comps.get(key);
+
+            if (!map.containsKey("apiBindings") && !map.containsKey("comments")) { comps.get(key).put("Ok", "YES"); }
+
+            if (map.containsKey("apiBindings") && !map.containsKey("comments")) { comps.get(key).put("Ok", "NO"); }
+            if (!map.containsKey("apiBindings") && map.containsKey("comments")) { comps.get(key).put("Ok", "NO"); }
+
+            if (map.containsKey("apiBindings") && map.containsKey("comments")) {
+
+                ArrayList<String> apiBindings = (ArrayList<String>)comps.get(key).get("apiBindings");
+                java.util.Set jdBindings = ((HashMap<String,String>)comps.get(key).get("comments")).keySet();
+
+                if (apiBindings == null && jdBindings == null) comps.get(key).put("Ok", "YES");
+
+                if (apiBindings == null && jdBindings != null) comps.get(key).put("Ok", "NO");
+                if (apiBindings != null && jdBindings == null) comps.get(key).put("Ok", "NO");
+
+                if (apiBindings != null && jdBindings != null) {
+
+                    if (apiBindings.size() == 0 && jdBindings.size() == 0) { comps.get(key).put("Ok", "YES"); }
+
+                    if (apiBindings.size() != jdBindings.size()) { comps.get(key).put("Ok", "NO"); }
+
+                    if (apiBindings.size() != 0 && apiBindings.size() == jdBindings.size()) {
+                        java.util.HashSet apiSet = new java.util.HashSet(apiBindings);
+                        comps.get(key).put("Ok", (jdBindings.equals(apiSet)) ? "YES" : "NO");
+                    }
+                }
+            }
+        }
+
+        TreeMap<String,ArrayList<String>> packageInfo = new TreeMap<String,ArrayList<String>>();
+
+        keys = comps.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = keys.next().toString();
+
+            ArrayList<String> aPackage = packageInfo.get((String)comps.get(key).get("package"));
+            if (aPackage == null) {
+                packageInfo.put((String)comps.get(key).get("package"), new ArrayList<String>());
+                aPackage = packageInfo.get((String)comps.get(key).get("package"));
+            }
+            aPackage.add(key);
+        }
+
+        // System.out.println("packageInfo: "+packageInfo);
+
+        FileWriter out = null;
+        FileWriter check = null;
+ 
+        try {
+            out = new FileWriter("components.html");
+            check = new FileWriter("components.txt");
+
+            writeHead(out);
+
+            keys = packageInfo.keySet().iterator();
+            while (keys.hasNext()) {
+                String key = (String)keys.next();
+
+                // System.out.println("writing for key: "+key);
+
+                out.write("<table border=\"1\" width=\"100%\" cellpadding=\"3\" cellspacing=\"0\" summary=\"\">\n");
+                out.write("<tr bgcolor=\"#CCCCFF\" class=\"TableHeadingColor\">\n");
+                out.write("<th ALIGN=\"left\" colspan=\"2\"><font size=\"+2\">\n");
+
+                out.write("<b>Package: "+key+"</b></font></th>\n");
+
+                out.write("</tr>\n");
+
+                Iterator<String> compKeys = packageInfo.get(key).iterator();
+                while (compKeys.hasNext()) {
+                    String compKey = compKeys.next();
+
+                    out.write("<tr bgcolor=\"white\" CLASS=\"TableRowColor\">\n");
+
+                    out.write("<td><a href=\"#"+compKey+"\" title=\""+compKey+"\">"+comps.get(compKey).get("componentName")+"</a>\n");
+
+                    out.write("<br/>\n");
+
+                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>class "+compKey+"</I>&nbsp;</td>\n");
+                    out.write("</tr>\n");
+                }
+                out.write("</table>\n&nbsp;<p>\n");
+            }
+
+            out.write("<hr size=\"4\" noshade>\n");
+
+            keys = packageInfo.keySet().iterator();
+            while (keys.hasNext()) {
+                String key = (String)keys.next();
+
+                out.write("<a name=\"packagename\"><!-- --></A>\n");
+                out.write("<table border=\"1\" width=\"100%\" celppadding=\"3\" cellspacing=\"0\" summary=\"\">\n");
+                out.write("<tr bgcolor=\"#CCCCFF\" class=\"TableHeadingColor\">\n");
+                out.write("<th align=\"left\" colspan=\"1\"><font size=\"+2\">\n");
+                out.write("<b>Package: "+key+"</b></font></th>\n");
+                out.write("</tr>\n");
+                out.write("</table>\n");
+
+                Iterator<String> compKeys = packageInfo.get(key).iterator();
+                while (compKeys.hasNext()) {
+                    String compKey = compKeys.next();
+                    HashMap map = comps.get(compKey);
+
+                    String bindingCheck = "";
+
+                    out.write("<a name=\""+compKey+"\"><!-- --></a>\n");
+                    out.write("<h3>"+comps.get(compKey).get("componentName")+"</h3>\n");
+
+                    if (!comps.get(compKey).get("package").equals("NONE")) {
+                        out.write("<p>From <a href=\""+comps.get(compKey).get("classDocURL")+"\">");
+                        out.write(map.get("package")+"."+map.get("componentName"));
+                        out.write("</a>:\n");
+                        bindingCheck += "          warning: No package defined for class\n";
+
+                        if (map.get("classComment") != null && ((String)map.get("classComment")).length() != 0)
+                            out.write((String)map.get("classComment"));
+                        else {
+                            out.write("<i>Class documentation missing.</i>");
+                            bindingCheck += "          warning: No class comment defined for class\n";
+                        }
+                        out.write("</p>\n");
+                    }
+
+                    HashMap<String,String> commentsMap = (HashMap<String,String>)map.get("comments");
+
+                    Set<String> commentsSet = commentsMap.keySet();
+
+                    ArrayList<String> apiBindings = (ArrayList<String>)map.get("apiBindings");
+
+                    if (apiBindings.size() == 0 && commentsSet.size() == 0)
+                        out.write("<i>No bindings for Component.</i>\n");
+                    else {
+                        out.write("<table border=\"1\">\n");
+                        out.write("<tr><th><i>binding</i></th><th><i>comment</i></th></tr>\n");
+                        out.write("<tr>\n");
+
+                        Iterator<String> comments = commentsSet.iterator();
+
+                        while (comments.hasNext()) {
+                            String bindingName = comments.next();
+                            out.write("<td>"+bindingName+"</td>\n");
+
+                            String bindingComment = (String)commentsMap.get(bindingName);
+                            if (bindingComment == null || bindingComment.length() == 0) {
+                                out.write("<td>&nbsp;</td>\n");
+                                bindingCheck += "          Binding: \""+bindingName+"\": binding tag in javadoc but no/empty comment\n";
+                            } else
+                                out.write("<td>"+bindingComment+"</td>\n");
+                            out.write("</tr>\n");
+                        }
+
+                        Iterator<String> bindings = apiBindings.iterator();
+
+                        while (bindings.hasNext()) {
+                            String binding = bindings.next();
+    
+                            if (!commentsSet.contains(binding)) {
+                                out.write("<tr><td>"+binding+"</td>\n<td>&nbsp;</td></tr>\n");
+                                bindingCheck += "          Binding: \""+binding+"\": api file entry but no binding tag\n";
+                            }
+                        }
+
+                        out.write("</table>\n");
+                    }
+
+                    check.write("    componentName: \""+map.get("componentName")+"\"\n");
+                    check.write("          package: \""+map.get("package")+"\"\n");
+                    check.write("          apiFile: \""+map.get("apiFile")+"\"\n");
+                    check.write("       sourceFile: \""+map.get("sourceFile")+"\"\n");
+                    check.write("         comments: \""+map.get("comments")+"\"\n");
+                    check.write("      apiBindings: \""+map.get("apiBindings")+"\"\n");
+                    check.write("     classComment: \""+map.get("classComment")+"\"\n");
+                    check.write("      classDocURL: \""+map.get("classDocURL")+"\"\n");
+                    check.write("        condition: \""+map.get("Ok")+"\"\n");
+                    if (!bindingCheck.equals(""))
+                        check.write(bindingCheck);
+                    check.write("\n");
+
+                    out.write("<hr/>\n\n");
+                }
+            }
+
+            writeTail(out);
+
+            out.close();
+
+        } catch (java.io.IOException ioe) {
+            System.err.println("Error writing to /tmp/foo.html"); System.exit(1);
+        }
+
+        return false;
+    }
+
+    static String findClassComment(List<String> comments) {
+
+        // System.out.println("start: comments: "+comments);
+
+        if (comments == null || comments.size() == 0)
+            return "";
+
+        boolean done = false;
+
+        if (comments.indexOf("/**") < 0) return "";
+
+        String str = comments.get(0).substring(comments.get(0).indexOf("/**")+3);
+        while (str.endsWith(" ")) str = str.substring(0,str.length()-1);
+        if (str.indexOf(".") > 0) {
+            str = str.substring(0,str.indexOf(".")+1);
+            done = true;
+        }
+       
+        // System.out.println("str: \""+str+"\"");
+
+        done = false;
+
+        for (int idx = 1; idx < comments.size() && !done; idx++) {
+            String line = comments.get(idx);
+            while (line.startsWith(" ")) line = line.substring(1);
+            if (line.startsWith("*")) line = line.substring(1);
+            while (line.startsWith(" ")) line = line.substring(1);
+            while (line.endsWith(" ")) line = line.substring(0,line.length()-1);
+
+            if (line.startsWith("@")) {
+                done = true;
+            } else {
+                if (str.length() > 0)
+                    str = str+" "+line;
+                else
+                    str = line;
+                // System.out.println("idx: "+idx+": str: \""+str+"\"");
+                if (str.indexOf(".") > 0) {
+                    str = str.substring(0,str.indexOf(".")+1);
+                    done = true;
+                } 
+            }
+        }
+
+        // System.out.println("done: str: \""+str+"\"");
+        return str;
+    }
+
+    static HashMap<String,String> findBindingComments(List<String> comments) {
+
+        // System.out.println("start: comments = "+comments);
+
+        ArrayList<String> found = new ArrayList<String>();
+
+        boolean inBinding = false;
+
+        // Start with the class comment block and turn this into an array of lines that
+        // all start with a @binding tag.
+        //
+        // TODO: we do not get rid of tabs.... (or do we now, with trim())
+        //
+        for (int idx = 0; idx < comments.size(); idx++) {
+            String line = comments.get(idx);
+            line = line.trim();
+            if (line.startsWith("*") && !line.startsWith("*/")) line = line.substring(1);
+            line = line.trim();
+
+            if (line.startsWith("@binding")) inBinding = true;
+
+            if (line.indexOf("*/") >= 0) inBinding = false;
+            if (line.length() == 0) inBinding = false; 
+            if (line.startsWith("@") && !line.startsWith("@binding")) inBinding = false;
+
+            if (inBinding) found.add(line);
+        }
+        // System.out.println("found: "+found);
+
+        ArrayList<String> found2 = new ArrayList<String>();
+
+        // This will collapse multi-line comments to one line.
+        //
+        int jdx = -1;
+        for (int idx = 0; idx < found.size(); idx++) {
+            if (found.get(idx).startsWith("@")) { jdx++; found2.add(found.get(idx)); }
+            else { found2.set(jdx, found2.get(jdx)+" "+found.get(idx)); }
+        }
+
+        // System.out.println("found2: "+found2);
+
+        HashMap<String,String> finished = new HashMap<String,String>();
+
+        // Construct the HashMap that holds the bindings. Fix the key, if needed.
+        //
+        for (int idx = 0; idx < found2.size(); idx++) {
+            String line = found2.get(idx);
+
+            line = line.substring("@binding".length());
+            line = line.trim();
+
+            String name;
+            if (line.indexOf(" ") > 0)
+                name = line.substring(0,line.indexOf(" "));
+            else
+                name = line;
+
+// TODO - why did adding this make me start to get unchecked warnings?
+//
+            Character c = name.charAt(name.length()-1);
+            while (!Character.isJavaIdentifierPart(c)) {
+                name = name.substring(0,name.length()-1);
+                c = name.charAt(name.length()-1);
+            }
+
+            if (line.indexOf(" ") > 0)
+                line = line.substring(line.indexOf(" "));
+            else
+                line = "";
+            line = line.trim();
+
+            finished.put(name, line);
+        }
+
+        // System.out.println("finished: "+finished);
+        return finished;
+    }
+
+// TODO - this is a class comment that caused problems because it starts with a @ thing. Need a test for it.
+/*
+
+ *
+ * @binding onBeforeDrop the function to execute before notifying the server of the drop
+ * @binding onDrop the function to execute after notifying the server of the drop
+ * @binding submit if true, drop will perform a form submit
+ * @binding formName the name of the form to submit (if submit is true)
+ * @binding confirmMessage if set, a confirm dialog with the given message is shown on drop. Allows cancelling a drop.
+ *
+ * @author mschrag
+
+*/
+    static void test() {
+
+        ArrayList<String> tester = new ArrayList<String>();
+        HashMap<String,String> foundComment = null;
+        HashMap<String,String> expectedComment = null;
+
+        tester.add("/**");
+        tester.add(" * Given an object displays a link to show information about the editing context of that object.*<br />");
+        tester.add(" *");
+        tester.add(" * @binding object");
+        tester.add(" */");
+        tester.add("");
+
+        expectedComment = new HashMap<String,String>();
+        expectedComment.put("object","");
+
+        foundComment = findBindingComments(tester);
+        if (!foundComment.equals(expectedComment)) {
+            System.err.println("ERROR:");
+            System.err.println("\ntester:\n"+tester+"\n");
+            System.err.println("expected: "+expectedComment+"\n");
+            System.err.println("found: "+foundComment+"\n");
+            System.exit(1);
+        } else
+            System.out.println("test1: ok");
+
+        tester = new ArrayList<String>();
+        tester.add("/**");
+        tester.add("  * AjaxSocialNetworkLink creates a link to the submission URL for ");
+        tester.add("  * a social network around the social network's icon.");
+        tester.add("  * ");
+        tester.add("  * @author mschrag");
+        tester.add("@binding name the name of the social network (@see er.ajax.AjaxSocialNetwork.socialNetworkNamed)");
+        tester.add("  * @binding url the URL to submit");
+        tester.add("  * @binding url2 the  ");
+        tester.add("  *    some exta stuff");
+        tester.add("");
+        tester.add("  * @binding title the title to submit");
+        tester.add("     ");
+        tester.add("  * @binding alt the alt tag (defaults to the name of the network)");
+        tester.add("  * @binding extra");
+        tester.add(" * @binding action, optional action to call before opening the modal dialog.");
+        tester.add("  * @binding target the target of the link");
+        tester.add("  */");
+
+        expectedComment = new HashMap<String,String>();
+        expectedComment.put("url","the URL to submit");
+        expectedComment.put("url2","the some exta stuff");
+        expectedComment.put("title","the title to submit");
+        expectedComment.put("alt","the alt tag (defaults to the name of the network)");
+        expectedComment.put("extra","");
+        expectedComment.put("target","the target of the link");
+        expectedComment.put("name","the name of the social network (@see er.ajax.AjaxSocialNetwork.socialNetworkNamed)");
+        expectedComment.put("action","optional action to call before opening the modal dialog.");
+
+        foundComment = findBindingComments(tester);
+        if (!foundComment.equals(expectedComment)) {
+            System.err.println("ERROR:");
+            System.err.println("\ntester:\n"+tester+"\n");
+            System.err.println("expected: "+expectedComment+"\n");
+            System.err.println("   found: "+foundComment+"\n");
+            System.exit(1);
+        } else
+            System.out.println("test2: ok");
+
+        String expectedFirst = "AjaxSocialNetworkLink creates a link to the submission URL for a social network around the social network's icon.";
+        String foundFirst = findClassComment(tester);
+
+        if (!foundFirst.equals(expectedFirst)) {
+            System.err.println("ERROR:");
+            System.err.println("\ntester:\n"+tester+"\n");
+            System.err.println("expected: "+expectedFirst+"\n");
+            System.err.println("   found: "+foundFirst+"\n");
+            System.exit(1);
+        } else
+            System.out.println("test3: ok");
+    }
+
+    static void writeHead(FileWriter out) {
+
+       try {
+            out.write("<html><head>\n");
+            out.write("<meta name=\"ROBOTS\" content=\"NOINDEX\" />\n");
+            out.write("<title>WOComponents</title>\n");
+            out.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\" title=\"Style\">\n");
+            out.write("<script type=\"text/javascript\">\n");
+            out.write("function windowTitle()\n");
+            out.write("{\n");
+            out.write("    parent.document.titlea=\"WOComponents\";\n");
+            out.write("}\n");
+            out.write("</script>\n");
+            out.write("<noscript></noscript>\n");
+
+            out.write("<body bgcolor=\"white\" onload=\"windowTitle();\">\n");
+
+            out.write("<!-- ========= START OF TOP NAVBAR ======= -->\n");
+            out.write("<A NAME=\"navbar_top\"><!-- --></A>\n");
+            out.write("<A HREF=\"#skip-navbar_top\" title=\"Skip navigation links\"></A>\n");
+            out.write("<TABLE BORDER=\"0\" WIDTH=\"100%\" CELLPADDING=\"1\" CELLSPACING=\"0\" SUMMARY=\"\">\n");
+            out.write("<TR>\n");
+            out.write("<TD COLSPAN=2 BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">\n");
+            out.write("<A NAME=\"navbar_top_firstrow\"><!-- --></A>\n");
+            out.write("<TABLE BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"3\" SUMMARY=\"\">\n");
+            out.write("  <TR ALIGN=\"center\" VALIGN=\"top\">\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"overview-summary.html\"><FONT CLASS=\"NavBarFont1\"><B>Overview</B></FONT></A>&nbsp;</TD>");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <FONT CLASS=\"NavBarFont1\">Package</FONT>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <FONT CLASS=\"NavBarFont1\">Class</FONT>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <FONT CLASS=\"NavBarFont1\">Use</FONT>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"overview-tree.html\"><FONT CLASS=\"NavBarFont1\"><B>Tree</B></FONT></A>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"deprecated-list.html\"><FONT CLASS=\"NavBarFont1\"><B>Deprecated</B></FONT></A>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1Rev\"> &nbsp;<FONT CLASS=\"NavBarFont1Rev\"><B>Components</B></FONT>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"index-all.html\"><FONT CLASS=\"NavBarFont1\"><B>Index</B></FONT></A>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"help-doc.html\"><FONT CLASS=\"NavBarFont1\"><B>Help</B></FONT></A>&nbsp;</TD>\n");
+            out.write("  </TR>\n");
+            out.write("</TABLE>\n");
+            out.write("</TD>\n");
+            out.write("<TD ALIGN=\"right\" VALIGN=\"top\" ROWSPAN=3><EM>\n");
+            out.write("<em>Project Wonder 5.0</em></EM>\n");
+            out.write("</TD>\n");
+            out.write("</TR>\n");
+            out.write("\n");
+            out.write("<TR>\n");
+            out.write("<TD BGCOLOR=\"white\" CLASS=\"NavBarCell2\"><FONT SIZE=\"-2\">\n");
+            out.write("&nbsp;PREV&nbsp;\n");
+            out.write("&nbsp;NEXT</FONT></TD>\n");
+            out.write("<TD BGCOLOR=\"white\" CLASS=\"NavBarCell2\"><FONT SIZE=\"-2\">\n");
+            out.write("  <A HREF=\"index.html?overview-summary.html\" target=\"_top\"><B>FRAMES</B></A>  &nbsp;\n");
+            out.write("&nbsp;<A HREF=\"overview-summary.html\" target=\"_top\"><B>NO FRAMES</B></A>  &nbsp;\n");
+            out.write("&nbsp;<SCRIPT type=\"text/javascript\">\n");
+            out.write("  <!--\n");
+            out.write("  if(window==top) {\n");
+            out.write("    document.writeln('<A HREF=\"allclasses-noframe.html\"><B>All Classes</B></A>');\n");
+            out.write("  }\n");
+            out.write("  //-->\n");
+            out.write("</SCRIPT>\n");
+            out.write("<NOSCRIPT>\n");
+            out.write("  <A HREF=\"allclasses-noframe.html\"><B>All Classes</B></A>\n");
+            out.write("</NOSCRIPT>\n");
+            out.write("\n");
+            out.write("\n");
+            out.write("</FONT></TD>\n");
+            out.write("</TR>\n");
+            out.write("</TABLE>\n");
+            out.write("<A NAME=\"skip-navbar_top\"></A>\n");
+            out.write("<!-- ========= END OF TOP NAVBAR ========= -->\n");
+            out.write("<HR/>\n\n");
+
+            out.write("<center><h2><b>WOComponents</b></h2></center>\n");
+            out.write("<hr size=\"4\" noshade>\n");
+
+        } catch (java.io.IOException ioe) {
+            System.err.println("ERROR: could not write to file: "+out);
+        }
+    }
+
+    static void writeTail(FileWriter out) {
+
+        try {
+            out.write("<!-- ======= START OF BOTTOM NAVBAR ====== -->\n");
+            out.write("<A NAME=\"navbar_bottom\"><!-- --></A>\n");
+            out.write("<A HREF=\"#skip-navbar_bottom\" title=\"Skip navigation links\"></A>\n");
+            out.write("<TABLE BORDER=\"0\" WIDTH=\"100%\" CELLPADDING=\"1\" CELLSPACING=\"0\" SUMMARY=\"\">\n");
+            out.write("<TR>\n");
+            out.write("<TD COLSPAN=2 BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">\n");
+            out.write("<A NAME=\"navbar_bottom_firstrow\"><!-- --></A>\n");
+            out.write("<TABLE BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"3\" SUMMARY=\"\">\n");
+            out.write("  <TR ALIGN=\"center\" VALIGN=\"top\">\n");
+            out.write("  <TD BGCOLOR=\"#FFFFFF\" CLASS=\"NavBarCell1\">    <A HREF=\"overview-summary.html\"><FONT CLASS=\"NavBarFont1\"><B>Overview</B></FONT></A>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <FONT CLASS=\"NavBarFont1\">Package</FONT>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <FONT CLASS=\"NavBarFont1\">Class</FONT>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <FONT CLASS=\"NavBarFont1\">Use</FONT>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"overview-tree.html\"><FONT CLASS=\"NavBarFont1\"><B>Tree</B></FONT></A>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"deprecated-list.html\"><FONT CLASS=\"NavBarFont1\"><B>Deprecated</B></FONT></A>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> &nbsp;<FONT CLASS=\"NavBarFont1Rev\"><B>Components</B></FONT>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"index-all.html\"><FONT CLASS=\"NavBarFont1\"><B>Index</B></FONT></A>&nbsp;</TD>\n");
+            out.write("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"help-doc.html\"><FONT CLASS=\"NavBarFont1\"><B>Help</B></FONT></A>&nbsp;</TD>\n");
+            out.write("  </TR>\n");
+            out.write("</TABLE>\n");
+            out.write("</TD>\n");
+            out.write("<TD ALIGN=\"right\" VALIGN=\"top\" ROWSPAN=3><EM>\n");
+            out.write("Last updated: Wed, Oct 21, 2009 &#149; 08:52 AM PDT</EM>\n");
+            out.write("</TD>\n");
+            out.write("</TR>\n");
+            out.write("\n");
+            out.write("<TR>\n");
+            out.write("<TD BGCOLOR=\"white\" CLASS=\"NavBarCell2\"><FONT SIZE=\"-2\">\n");
+            out.write("&nbsp;PREV&nbsp;\n");
+            out.write("&nbsp;NEXT</FONT></TD>\n");
+            out.write("<TD BGCOLOR=\"white\" CLASS=\"NavBarCell2\"><FONT SIZE=\"-2\">\n");
+            out.write("  <A HREF=\"index.html?overview-summary.html\" target=\"_top\"><B>FRAMES</B></A>  &nbsp;\n");
+            out.write("&nbsp;<A HREF=\"overview-summary.html\" target=\"_top\"><B>NO FRAMES</B></A>  &nbsp;\n");
+            out.write("&nbsp;<SCRIPT type=\"text/javascript\">\n");
+            out.write("  <!--\n");
+            out.write("  if(window==top) {\n");
+            out.write("    document.writeln('<A HREF=\"allclasses-noframe.html\"><B>All Classes</B></A>');\n");
+            out.write("  }\n");
+            out.write("  //-->\n");
+            out.write("</SCRIPT>\n");
+            out.write("<NOSCRIPT>\n");
+            out.write("  <A HREF=\"allclasses-noframe.html\"><B>All Classes</B></A>\n");
+            out.write("</NOSCRIPT>\n");
+            out.write("\n");
+            out.write("\n");
+            out.write("</FONT></TD>\n");
+            out.write("</TR>\n");
+            out.write("</TABLE>\n");
+            out.write("<A NAME=\"skip-navbar_bottom\"></A>\n");
+            out.write("<!-- ======== END OF BOTTOM NAVBAR ======= -->\n");
+            out.write("\n");
+            
+            out.write("</body></html>");
+        } catch (java.io.IOException ioe) {
+            System.err.println("ERROR writing to file: "+out);
+        }
+    }
+
+    public static boolean validOptions(String[][] options, DocErrorReporter reporter) {
+
+        srcDirs = new ArrayList<String>();
+
+        // System.out.println("options:");
+        for (int idx = 0; idx < options.length; idx++) {
+            String[] opt = options[idx];
+            for (int jdx = 0; jdx < opt.length; jdx++) {
+                if (jdx > 0 && options[idx][jdx-1].equals("-sourcepath")) {
+                    int start = 0;
+                    int end = options[idx][jdx].indexOf(":");
+                    while (end > 0) {
+                        String dir = options[idx][jdx].substring(start, end);
+                        srcDirs.add(dir);
+                        start = end + 1;
+                        end = options[idx][jdx].indexOf(":", start);
+                    }
+                }
+            }
+        }
+
+        java.util.HashMap<String,String> dirs = new java.util.HashMap<String,String>();
+
+        for (int idx = 0; idx < srcDirs.size(); idx++) {
+            //System.out.println("srcDirs["+idx+"] = \""+srcDirs.get(idx)+"\"");
+            int found = srcDirs.get(idx).indexOf("/Sources/");
+            if (found > 0)
+                dirs.put(srcDirs.get(idx).substring(0,found)+File.separator+"Components"+File.separator, "ok");
+        }
+
+        compDirs = new ArrayList<String>(dirs.keySet());
+        return true;
+    }
+
+    public static int optionLength(String option) {
+        if (option.equals("-d")) return 2;
+        return 1;
+    }
+}

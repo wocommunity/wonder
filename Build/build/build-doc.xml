@@ -31,12 +31,7 @@
     <!--              CLASSPATH settings                      -->
     <!-- ==================================================== -->
     <path id="classpath">
-        <fileset dir="${wonder.root}/Build/lib">
-            <include name="Build/lib/cayenne.jar"/>
-            <include name="Build/lib/jdom*.jar"/>
-            <include name="Ajax/Ajax/Libraries/jabsorb-1.2.2.jar"/>
-            <include name="Common/Frameworks/ERCaptcha/Libraries/jcaptcha-all-1.0-RC3.jar"/>
-        </fileset>
+        <fileset dir="${build.root}/Build/lib" />
         <fileset dir="${wo.system.frameworks}">
             <include name="Java**/Resources/Java/*.jar" />
             <exclude name="JavaWOExtensions.framework"/>
@@ -61,22 +56,46 @@
             <format property="updated.time" pattern="hh:mm aa z"/>
         </tstamp>
         <!-- Create directories -->
-        <mkdir dir="${dist}"/>
-        <mkdir dir="${dist}/Documentation"/>
-        <mkdir dir="${dist}/Documentation/api"/>
+        <mkdir dir="${dist}" />
+        <mkdir dir="${dist}/Documentation" />
+        <mkdir dir="${dist}/Documentation/api" />
+        <mkdir dir="${build.root}/Build/lib" />
     </target>
 
     <!-- ==================================================== -->
     <!-- Clean Wonder                                         -->
     <!-- ==================================================== -->
     <target name="clean">
-        <delete dir="${dist}/Documentation"/>
+        <delete dir="${dist}/Documentation" />
+        <delete dir="${build.root}/Build" />
     </target>
 
     <!-- ==================================================== -->
-    <!-- Build Wonder documenatation.                         -->
+    <!-- Compile Classes Used To Build Documentation.         -->
     <!-- ==================================================== -->
-    <target name="doc" depends="prepare, api">
+    <target name="build">
+        <!-- First, copy needed jar files -->
+        <copy todir="${build.root}/Build/lib">
+            <fileset dir="Build/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
+        <javac srcdir="Build/taglets" destdir="${build.root}/Build/lib">
+            <compilerarg value="-Xlint:deprecation" />
+            <classpath>
+                <fileset dir="${build.root}/Build/lib">
+                    <include name="*.jar"/>
+                    <include name="*.class" />
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- ==================================================== -->
+    <!-- Build Wonder documentation.                         -->
+    <!-- ==================================================== -->
+    <target name="doc" depends="prepare,api">
         <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
             <classpath refid="classpath"/>
         </taskdef>
@@ -107,7 +126,7 @@
     <!-- ========================================== -->
     <!-- Builds API documentation.                  -->
     <!-- ========================================== -->
-    <target name="api" depends="prepare">
+    <target name="api" depends="prepare,build">
         <!-- copy README's -->
         <copy todir="${dist}/" flatten="true">
             <fileset dir="${wonder.root}">
@@ -133,8 +152,6 @@
                          <exclude name="**/*Example*/**" /> 
                          <exclude name="**/Applications/**" /> 
                     </dirset>
-                <!--pathelement path="${wonder.root}">
-                </pathelement-->
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
@@ -145,10 +162,38 @@
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
             <link href="http://junit.sourceforge.net/javadoc/"/>
             <tag name="author" description="Author:" scope="all" />
-            <taglet name="BindingTaglet" path="${wonder.root}/Build/lib/" />
-            <taglet name="D2WKeyTaglet" path="${wonder.root}/Build/lib/" />
-            <taglet name="PropertyTaglet" path="${wonder.root}/Build/lib/" />
+            <taglet name="BindingTaglet" path="${build.root}/Build/lib/" />
+            <taglet name="D2WKeyTaglet" path="${build.root}/Build/lib/" />
+            <taglet name="PropertyTaglet" path="${build.root}/Build/lib/" />
         </javadoc>
+        <echo>javadoc generation finished</echo>
+        <javadoc packagenames="er.*, com.gammastream.*, org.svgobjects.*, com.webobjects.jdbcadaptor.*, com.webobjects.woextensions.*"
+                   destdir="${dist}/Documentation/api"
+                   defaultexcludes="yes"
+                   author="true"
+                   version="true"
+                   verbose="false"
+                   maxmemory="128m">
+
+            <classpath refid="classpath"/>
+            <sourcepath>
+                    <dirset dir="${wonder.root}">
+                         <include name="Frameworks/**/Sources/" />
+                         <exclude name="**/*Example*/**" />
+                         <exclude name="**/Applications/**" />
+                    </dirset>
+            </sourcepath>
+            <doclet name="ComponentDoclet" path="${build.root}/Build/lib:${build.root}/Build/lib/jdom-b7.jar" />
+        </javadoc>
+        <echo>components javadoc page finished</echo>
+        <java classname="PageInstaller" fork="true">
+            <jvmarg value="-Dwonder.root=${wonder.root}" />
+            <jvmarg value="-Dwonder.version=${project.name}-${project.version}" />
+            <classpath>
+                <dirset dir="${build.root}/Build/lib" />
+            </classpath>
+        </java>
+        <echo>components javadoc installation finished</echo>
     </target>
 
 </project>
