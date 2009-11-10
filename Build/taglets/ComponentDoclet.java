@@ -24,6 +24,15 @@ import org.jdom.Element;
 
 import org.jdom.input.SAXBuilder;
 
+/**
+ * Doclet for generating the "Components" page. It searches for classes
+ * which have WOComponent as an ancestor and finds the resources associated
+ * with the component and pulls them together for the list.
+ *
+ * There is a test() method which, internally, checks the logic of the
+ * extractions. An new problemmatic comments are found, they can be added to
+ * that method.
+ */
 public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
     static ArrayList<String> srcDirs;
@@ -138,6 +147,9 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                                 comps.get(key).put("classDocURL",pName+"/"+comps.get(key).get("componentName")+".html");
                             }
                             if (line.indexOf("/**") >= 0) { inComment = true; }
+
+                            // xxxxx
+                            if (line.startsWith("public class")) { done = true; }
                             if (inComment && line.indexOf("*/") >= 0) { done = true; }
                             if (inComment) { comments.add(line); }
                         }
@@ -382,6 +394,11 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         return false;
     }
 
+    /** Returns the first sentence of the javadoc for a component's
+     *  class. It is a shame that we cannot leverage javadoc for this, but
+     *  there are no hooks for this. We are looking for "end" strings from
+     *  the ends array, below. So far, this contains ". ", ".<", and ".\" ".
+     */
     static String findClassComment(List<String> comments) {
 
         // System.out.println("start: comments: "+comments);
@@ -391,41 +408,38 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
         boolean done = false;
 
-        if (comments.indexOf("/**") < 0) return "";
+        // Coalesce the lines of the comment into one string.
+        //
+        String str = comments.get(0).replaceFirst("/\\*\\*", "").trim();
+        for (int idx = 1; idx < comments.size(); idx++) {
+            String other = comments.get(idx).trim();
 
-        String str = comments.get(0).substring(comments.get(0).indexOf("/**")+3);
-        while (str.endsWith(" ")) str = str.substring(0,str.length()-1);
-        if (str.indexOf(".") > 0) {
-            str = str.substring(0,str.indexOf(".")+1);
-            done = true;
+            // this does not work the same as the while after...
+            //other.replace("^\\**", "");
+
+            while (other.startsWith("*")) { other = other.substring(1); }
+            str = (str.trim()+" "+other.trim()).trim();
         }
-       
-        // System.out.println("str: \""+str+"\"");
 
-        done = false;
+        if (str.equals("") || str.startsWith("@")) return "";
 
-        for (int idx = 1; idx < comments.size() && !done; idx++) {
-            String line = comments.get(idx);
-            while (line.startsWith(" ")) line = line.substring(1);
-            if (line.startsWith("*")) line = line.substring(1);
-            while (line.startsWith(" ")) line = line.substring(1);
-            while (line.endsWith(" ")) line = line.substring(0,line.length()-1);
+        // Locate the end markers.
+        //
+        String[] ends = new String[] { ". ", ".<", ".\" ", " @", ".*/", ".*<" };
 
-            if (line.startsWith("@")) {
-                done = true;
-            } else {
-                if (str.length() > 0)
-                    str = str+" "+line;
-                else
-                    str = line;
-                // System.out.println("idx: "+idx+": str: \""+str+"\"");
-                if (str.indexOf(".") > 0) {
-                    str = str.substring(0,str.indexOf(".")+1);
-                    done = true;
-                } 
+        int end = str.length();
+        String endMarker = null;
+
+        for (int idx = 0; idx < ends.length; idx++) {
+            if (str.indexOf(ends[idx]) >= 0 && str.indexOf(ends[idx]) < end) {
+                end = str.indexOf(ends[idx]);
+                endMarker = ends[idx];
             }
         }
 
+        if (endMarker != null)
+            str = str.substring(0,end+endMarker.length()-1).trim();
+ 
         // System.out.println("done: str: \""+str+"\"");
         return str;
     }
@@ -508,20 +522,9 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         return finished;
     }
 
-// TODO - this is a class comment that caused problems because it starts with a @ thing. Need a test for it.
-/*
-
- *
- * @binding onBeforeDrop the function to execute before notifying the server of the drop
- * @binding onDrop the function to execute after notifying the server of the drop
- * @binding submit if true, drop will perform a form submit
- * @binding formName the name of the form to submit (if submit is true)
- * @binding confirmMessage if set, a confirm dialog with the given message is shown on drop. Allows cancelling a drop.
- *
- * @author mschrag
-
-*/
     static void test() {
+
+        int result = 0;
 
         ArrayList<String> tester = new ArrayList<String>();
         HashMap<String,String> foundComment = null;
@@ -538,14 +541,8 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         expectedComment.put("object","");
 
         foundComment = findBindingComments(tester);
-        if (!foundComment.equals(expectedComment)) {
-            System.err.println("ERROR:");
-            System.err.println("\ntester:\n"+tester+"\n");
-            System.err.println("expected: "+expectedComment+"\n");
-            System.err.println("found: "+foundComment+"\n");
-            System.exit(1);
-        } else
-            System.out.println("test1: ok");
+
+        result += checkTest("test1", tester, expectedComment, foundComment);
 
         tester = new ArrayList<String>();
         tester.add("/**");
@@ -577,26 +574,93 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         expectedComment.put("action","optional action to call before opening the modal dialog.");
 
         foundComment = findBindingComments(tester);
-        if (!foundComment.equals(expectedComment)) {
-            System.err.println("ERROR:");
-            System.err.println("\ntester:\n"+tester+"\n");
-            System.err.println("expected: "+expectedComment+"\n");
-            System.err.println("   found: "+foundComment+"\n");
-            System.exit(1);
-        } else
-            System.out.println("test2: ok");
 
-        String expectedFirst = "AjaxSocialNetworkLink creates a link to the submission URL for a social network around the social network's icon.";
-        String foundFirst = findClassComment(tester);
+        result += checkTest("test2", tester, expectedComment, foundComment);
 
-        if (!foundFirst.equals(expectedFirst)) {
+        String expected = "AjaxSocialNetworkLink creates a link to the submission URL for a social network around the social network's icon.";
+        String found = findClassComment(tester);
+
+        result += checkTest("test3", tester, expected, found);
+
+        tester = new ArrayList<String>();
+        tester.add("/**");
+        tester.add("* Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>\".");
+        tester.add("* <br/>");
+        tester.add("* Synopsis:<br/>");
+        tester.add("* email=<i>anEmail</i>;");
+        tester.add("* <br/>");
+        tester.add("* Bindings:<br/>");
+        tester.add("* <b>email</b> email to generate href");
+        tester.add("* <br/>");
+        tester.add("*/");
+
+        expected = "Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>\".";
+        found = findClassComment(tester);
+
+        result += checkTest("test4", tester, expected, found);
+
+        tester = new ArrayList<String>();
+        tester.add("/**");
+        tester.add("* Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>.\"");
+        tester.add("* <br/>");
+        tester.add("*/");
+
+        expected = "Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>.\"";
+        found = findClassComment(tester);
+
+        result += checkTest("test5", tester, expected, found);
+
+        tester = new ArrayList<String>();
+        tester.add("/**");
+        tester.add(" * @binding id the id of the update container");
+        tester.add(" * @binding progressID the id of the AjaxProgress");
+
+        expected = "";
+        found = findClassComment(tester);
+
+        result += checkTest("test6", tester, expected, found);
+
+        tester = new ArrayList<String>();
+        tester.add("/** I can check here also");
+        tester.add(" * @binding id the id of the update container");
+        tester.add(" * @binding progressID the id of the AjaxProgress");
+
+        expected = "I can check here also";
+        found = findClassComment(tester);
+
+        result += checkTest("test7", tester, expected, found);
+
+        tester = new ArrayList<String>();
+        tester.add("/**");
+        tester.add(" * XHTML version of WORadioButtonList");
+        tester.add(" *");
+        tester.add(" * @see WORadioButtonList");
+        tester.add(" * @author mendis");
+        tester.add(" *");
+        tester.add(" */");
+
+        expected = "XHTML version of WORadioButtonList";
+        found = findClassComment(tester);
+
+        result += checkTest("test8", tester, expected, found);
+
+        if (result > 0) { System.exit(1); }
+    }
+
+    static int checkTest(String name, ArrayList<String> tester, Object expected, Object found) {
+
+        if (name == null | name.length() == 0 || tester == null || expected == null || found == null) return 1;
+
+        if (!found.equals(expected)) {
             System.err.println("ERROR:");
-            System.err.println("\ntester:\n"+tester+"\n");
-            System.err.println("expected: "+expectedFirst+"\n");
-            System.err.println("   found: "+foundFirst+"\n");
-            System.exit(1);
-        } else
-            System.out.println("test3: ok");
+            System.err.println("\n"+name+":\n"+tester+"\n");
+            System.err.println("expected: \""+expected+"\"\n");
+            System.err.println("   found: \""+found+"\"\n");
+            return 1;
+        } else {
+            System.out.println(name+": ok");
+            return 0;
+        }
     }
 
     static void writeHead(FileWriter out) {
