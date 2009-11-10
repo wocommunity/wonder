@@ -167,6 +167,18 @@
             <taglet name="PropertyTaglet" path="${build.root}/Build/lib/" />
         </javadoc>
         <echo>javadoc generation finished</echo>
+        <antcall target="componentsOnly" />
+        <java classname="PageInstaller" fork="true">
+            <jvmarg value="-Dwonder.root=${wonder.root}" />
+            <jvmarg value="-Dwonder.version=${project.name}-${project.version}" />
+            <classpath>
+                <dirset dir="${build.root}/Build/lib" />
+            </classpath>
+        </java>
+        <echo>components javadoc installation finished</echo>
+    </target>
+
+    <target name="componentsOnly" depends="build">
         <javadoc packagenames="er.*, com.gammastream.*, org.svgobjects.*, com.webobjects.jdbcadaptor.*, com.webobjects.woextensions.*"
                    destdir="${dist}/Documentation/api"
                    defaultexcludes="yes"
@@ -185,15 +197,7 @@
             </sourcepath>
             <doclet name="ComponentDoclet" path="${build.root}/Build/lib:${build.root}/Build/lib/jdom-b7.jar" />
         </javadoc>
-        <echo>components javadoc page finished</echo>
-        <java classname="PageInstaller" fork="true">
-            <jvmarg value="-Dwonder.root=${wonder.root}" />
-            <jvmarg value="-Dwonder.version=${project.name}-${project.version}" />
-            <classpath>
-                <dirset dir="${build.root}/Build/lib" />
-            </classpath>
-        </java>
-        <echo>components javadoc installation finished</echo>
+        <echo>components javadoc page generation finished</echo>
     </target>
 
 </project>
