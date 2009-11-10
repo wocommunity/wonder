@@ -56,7 +56,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
     		theCurrentValue = super.theCurrentValue();
     	} catch (Exception e) {
     		theCurrentValue = "Not found";
-    		log.error("No current value: " + e.getMessage());
+    		log.warn("No current value: " + e.getMessage());
     	} return theCurrentValue;
     }
 }
