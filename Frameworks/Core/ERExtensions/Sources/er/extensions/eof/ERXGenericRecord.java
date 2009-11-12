@@ -860,6 +860,34 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		}
 		return _primaryKeyDictionary;
 	}
+	
+	/**
+	 * Sets the value for the primary key attribute with the given name. This should only be called
+	 * on uncommitted objects.
+	 * 
+	 * @param value the pk value
+	 * @param pkAttributeName the pk attribute name
+	 */
+	public void _setValueForPrimaryKey(Object value, String pkAttributeName) {
+		if (_primaryKeyDictionary == null) {
+			_primaryKeyDictionary = new NSDictionary<String, Object>(value, pkAttributeName);
+		}
+		else {
+			NSMutableDictionary<String, Object> mutablePrimaryKeyDictionary = _primaryKeyDictionary.mutableClone();
+			mutablePrimaryKeyDictionary.setObjectForKey(value, pkAttributeName);
+			_primaryKeyDictionary = mutablePrimaryKeyDictionary;
+		}
+	}
+	
+	/**
+	 * Sets the primary key dictionary for this EO (key = attribute name, value = pk value). This should 
+	 * only be called on uncommitted objects.
+	 * 
+	 * @param pkDict the new primary key dictionary
+	 */
+	public void _setPrimaryKeyDictionary(NSDictionary<String, Object> pkDict) {
+		_primaryKeyDictionary = pkDict;
+	}
 
 	/*
 	 * (non-Javadoc)
