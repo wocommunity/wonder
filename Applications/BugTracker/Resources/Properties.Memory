@@ -1,8 +1,9 @@
-dbConnectURLGLOBAL=jdbc:derby:bug
+dbConnectAdaptorGLOBAL=Memory
+dbConnectURLGLOBAL=Memory
 dbConnectUserGLOBAL=
 dbConnectPluginGLOBAL=
 dbConnectDriverGLOBAL=
-dbEOPrototypesEntityGLOBAL=EOJDBCDerbyPrototypes
+dbEOPrototypesEntityGLOBAL=EOJDBCMemoryPrototypes
 er.javamail.adminEmail=foo@localhost.com
 
 BugTracker.processMail=false

@@ -75,7 +75,6 @@ public class BTBusinessLogic extends ERXFrameworkPrincipal {
                 }
             }
 
-            initializeSharedData();
             ERCoreBusinessLogic.sharedInstance().addPreferenceRelationshipToActorEntity(People.ENTITY_NAME, "id");
             ERTaggableEntity.registerTaggable(Bug.ENTITY_NAME);
         } catch(JDBCAdaptorException ex) {
@@ -87,11 +86,21 @@ public class BTBusinessLogic extends ERXFrameworkPrincipal {
         }
     }
 
+    private static boolean _sharedDataInitialized = false;
+    
     // Shared Data Init Point.  Keep alphabetical
-    public void initializeSharedData() {
-        State.clazz.initializeSharedData();
-        Priority.clazz.initializeSharedData();
-        TestItemState.clazz.initializeSharedData();
-        ERTaggableEntity.registerTaggable(Bug.ENTITY_NAME);
+    public static void initializeSharedData() {
+    	if (!_sharedDataInitialized) {
+    	  _sharedDataInitialized = true;
+          State.clazz.initializeSharedData();
+          Priority.clazz.initializeSharedData();
+          TestItemState.clazz.initializeSharedData();
+          ERTaggableEntity.registerTaggable(Bug.ENTITY_NAME);
+    	}
      }
+    
+    @Override
+    public void finishedInitialization() {
+        BTBusinessLogic.initializeSharedData();
+    }
 }
