@@ -1504,8 +1504,16 @@ public class ERXSQLHelper {
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOAdaptorChannel adaptorChannel) {
-		JDBCAdaptor adaptor = (JDBCAdaptor) adaptorChannel.adaptorContext().adaptor();
-		return ERXSQLHelper.newSQLHelper(adaptor);
+		ERXSQLHelper helper = null;
+		EOAdaptor adaptor = adaptorChannel.adaptorContext().adaptor();
+		if (adaptor instanceof JDBCAdaptor) {
+			helper = ERXSQLHelper.newSQLHelper((JDBCAdaptor)adaptor);
+		}
+		else {
+			// MS: Hack to support memory adaptor migrations
+			helper = new NoSQLHelper();
+		}
+		return helper;
 	}
 
 	public static ERXSQLHelper newSQLHelper(JDBCAdaptor adaptor) {
@@ -1528,6 +1536,10 @@ public class ERXSQLHelper {
 		if (adaptor instanceof JDBCAdaptor) {
 			JDBCAdaptor jdbc = (JDBCAdaptor) adaptor;
 			helper = ERXSQLHelper.newSQLHelper(jdbc);
+		}
+		else {
+		// MS: Hack to support memory adaptor migrations
+			helper = new NoSQLHelper();
 		}
 		return helper;
 	}
@@ -1806,6 +1818,18 @@ public class ERXSQLHelper {
 		@Override
 		public String migrationTableName() {
 			return "dbupdater";
+		}
+		
+		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.TIMESTAMP) {
+				externalType = "DATE";
+			}
+			else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			return externalType;
 		}
 	}
 
@@ -2262,4 +2286,7 @@ public class ERXSQLHelper {
 		}
 	}
 
+	public static class NoSQLHelper extends ERXSQLHelper {
+		
+	}
 }
