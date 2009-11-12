@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.Set;
 
 import java.io.File;
@@ -47,6 +48,9 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
         ClassDoc[] classes = root.classes();
 
+        String[] prefixes = new String[] { "Selenium", "ERDAjax", "PayPal", "ERD2W", "ERDIV", "ERIUI", "ERNEU", "ERPDF", "ERXJS", "Ajax", "SEEO",
+                                           "D2W", "ERC", "ERD", "ERO", "ERP", "ERX", "GSV", "WOL", "ER", "IM", "JS", "SC", "SE", "WO", "WR", "WX" };
+
         comps = new HashMap<String,HashMap<String,Object>>();
 
         // Collect into comps{} new hashes for classes that are sub-classes of WOComponent.
@@ -69,6 +73,36 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                 else
                     parent = parent.superclass();
             }
+        }
+
+        // Gather the classnames by prefix.
+        //
+        TreeSet<String> classNames = new TreeSet<String>(comps.keySet());
+        Iterator<String> names = classNames.iterator();
+
+        TreeMap<String,TreeSet<String>> classNamePrefixes = new TreeMap<String,TreeSet<String>>();
+
+        while (names.hasNext()) {
+            String current = names.next();
+            String[] parts = current.split("\\.");
+            String lastName = parts[parts.length-1];
+            
+            String prefixFound = null;
+
+            for (int idx = 0; idx < prefixes.length && prefixFound == null; idx++) {
+                if (lastName.startsWith(prefixes[idx])) prefixFound = prefixes[idx];
+            }
+
+            if (prefixFound == null) prefixFound = "NONE";
+
+            // System.out.println("name: \""+current+"\", lastName = \""+lastName+"\", prefix = \""+prefixFound+"\"");
+
+            TreeSet<String> classesForPrefix = classNamePrefixes.get(prefixFound);
+            if (classesForPrefix == null) {
+                classNamePrefixes.put(prefixFound, new TreeSet<String>());
+                classesForPrefix = classNamePrefixes.get(prefixFound);
+            }
+            classesForPrefix.add(current);
         }
 
         // For each subclass of WOComponent that had been found, get its source file name
@@ -255,7 +289,48 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
             writeHead(out);
 
+            out.write("<ul>\n");
+            out.write("<li><a href=\"#ListedByPrefix\">Prefixes</a></li>\n");
+            out.write("<li><a href=\"#ListedByPackage\">Packages/Classnames</a></li>\n");
+            out.write("<li><a href=\"#ComponentDetails\">Component Details</a></li>\n");
+            out.write("</ul>\n");
+
+            Iterator<String> prefxs = classNamePrefixes.keySet().iterator();
+
+            out.write("<a name=\"ListedByPrefix\"/>\n");
+
+            while (prefxs.hasNext()) {
+                String prefix = prefxs.next();
+
+                out.write("<table border=\"1\" width=\"100%\" cellpadding=\"3\" cellspacing=\"0\" summary=\"\">\n");
+                out.write("<tr bgcolor=\"#CCCCFF\" class=\"TableHeadingColor\">\n");
+                out.write("<th ALIGN=\"left\" colspan=\"2\"><font size=\"+2\">\n");
+
+                out.write("<b>Prefix: "+prefix+"</b></font></th>\n");
+
+                out.write("</tr>\n");
+
+                StringBuffer str = new StringBuffer();
+                Iterator<String> namesForPrefix = classNamePrefixes.get(prefix).iterator();
+                while (namesForPrefix.hasNext()) {
+                    String current = namesForPrefix.next();
+                    String[] parts = current.split("\\.");
+                    String lastName = parts[parts.length-1];
+
+                    str.append("<a href=\"#"+current+"\">"+lastName+"</a>, ");
+                }
+
+                String str2 = str.toString().substring(0,str.length()-2);
+                out.write("<tr bgcolor=\"white\" CLASS=\"TableRowColor\">\n");
+
+                out.write("<td>"+str2+"</td></tr>\n");
+                out.write("</table>\n&nbsp;<p>\n");
+            }
+
             keys = packageInfo.keySet().iterator();
+
+            out.write("<a name=\"ListedByPackage\"/>\n");
+
             while (keys.hasNext()) {
                 String key = (String)keys.next();
 
@@ -269,7 +344,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
                 out.write("</tr>\n");
 
-                Iterator<String> compKeys = packageInfo.get(key).iterator();
+                Iterator<String> compKeys = (new TreeSet(packageInfo.get(key))).iterator();
                 while (compKeys.hasNext()) {
                     String compKey = compKeys.next();
 
@@ -287,6 +362,8 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
             out.write("<hr size=\"4\" noshade>\n");
 
+            out.write("<a name=\"ComponentDetails\"/>\n");
+
             keys = packageInfo.keySet().iterator();
             while (keys.hasNext()) {
                 String key = (String)keys.next();
@@ -299,7 +376,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                 out.write("</tr>\n");
                 out.write("</table>\n");
 
-                Iterator<String> compKeys = packageInfo.get(key).iterator();
+                Iterator<String> compKeys = (new TreeSet(packageInfo.get(key))).iterator();
                 while (compKeys.hasNext()) {
                     String compKey = compKeys.next();
                     HashMap map = comps.get(compKey);
