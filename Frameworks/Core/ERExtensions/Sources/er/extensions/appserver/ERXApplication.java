@@ -177,6 +177,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public static final String ApplicationDidCreateNotification = "NSApplicationDidCreateNotification";
 
+  /**
+   * Notification to post when all application initialization processes are complete (including migrations) 
+   */
+  public static final String ApplicationDidFinishInitializationNotification = "NSApplicationDidFinishInitializationNotification";
+
 	/**
 	 * ThreadLocal that designates that the given thread is currently
 	 * dispatching a request. This is not stored in ERXThreadStorage, because it
@@ -1113,6 +1118,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			migrator.migrateToLatest();
 			migrationsDidRun(migrator);
 		}
+    NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidFinishInitializationNotification, this));
 	}
 	
 	/**
