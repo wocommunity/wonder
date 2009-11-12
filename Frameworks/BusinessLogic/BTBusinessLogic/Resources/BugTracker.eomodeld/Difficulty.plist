@@ -19,7 +19,6 @@
     classProperties = (difficultyDescription); 
     externalName = DIFFICULTY; 
     fetchSpecificationDictionary = {}; 
-    isReadOnly = Y; 
     name = Difficulty; 
     primaryKeyAttributes = (id); 
     userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 

@@ -10,3 +10,6 @@ BugTracker.mailStore=pop3
 BugTracker.server=localhost
 BugTracker.user=ak
 BugTracker.password=
+
+er.migration.migrateAtStartup=true
+er.migration.createTablesIfNecessary=true 
