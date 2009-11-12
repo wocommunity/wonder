@@ -573,6 +573,14 @@ public class ERXKey<T> {
 		return ERXQ.lessThan(_key, when);
 	}
 
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorLessThan, value);
+	 * 
+	 * @param when
+	 *            the date to compare with
+	 * @return an ERXKeyComparisonQualifier
+	 */
 	@SuppressWarnings("unchecked")
 	public ERXKeyComparisonQualifier before(ERXKey<? extends NSTimestamp> when) {
 		return ERXQ.lessThan((ERXKey)this, when);
