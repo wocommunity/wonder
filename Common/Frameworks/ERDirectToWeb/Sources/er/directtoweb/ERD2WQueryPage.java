@@ -441,9 +441,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
             for (Enumeration keysEnum = displayPropertyKeys().objectEnumerator(); keysEnum.hasMoreElements();) {
                 String key = (String)keysEnum.nextElement();
                 setPropertyKey(key);
-
-                Object isMandatory = d2wContext.valueForKey("isMandatory");
-                if (isMandatory != null && !ERXValueUtilities.booleanValue(isMandatory)) {
+                if (!ERXValueUtilities.booleanValueWithDefault(d2wContext.valueForKey("isMandatory"), false)) {
                     array.addObject(key);
                 }
             }

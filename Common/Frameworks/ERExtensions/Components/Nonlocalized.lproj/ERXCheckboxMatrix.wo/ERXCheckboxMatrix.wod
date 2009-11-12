@@ -4,13 +4,7 @@ CheckBox: WOGenericElement {
 	otherTagString = isCurrentItemChecked;
 	type = "checkbox";
 	value = index;
-}
-
-HiddenInput: WOGenericElement {
-    elementName = "input";
-	name = wrapperElementID;
-    type = "hidden";
-    value = "-1";
+	id = ^itemID;
 }
 
 CheckBoxRepetition: ERXTable {
@@ -34,43 +28,51 @@ CheckBoxWrapper: WOGenericContainer {
 	formValues = selections;
 	name = context.elementID;
 	elementName = "span";
+	id = ^id;
 }
 
-Conditional1: WOConditional {
-	condition = ^shouldShowSelectAllButtons;
+CheckBoxLabelCellContainer: WOGenericContainer {
+	align = "left";
+	elementName = "td";
+	otherTagString = ^contentCellOtherTagString;
+	valign = "top";
 }
 
-Conditional2: WOConditional {
+DeselectAllButton: WOGenericElement {
+	elementName = "input";
+	name = "Deselect All";
+	onclick = deselectOnClick;
+	type = "button";
+	value = session.localizer.ERXCheckboxMatrix.deselectAll; // VALID
+}
+
+HiddenInput: WOGenericElement {
+	elementName = "input";
+	name = wrapperElementID;
+	type = "hidden";
+	value = "-1";
+}
+
+LabelContent: WOComponentContent {
+}
+
+ListIsNotEmpty: WOConditional {
 	condition = isListEmpty;
 	negate = true;
 }
 
-Content: WOComponentContent {
-}
-
-GenericContainer1: WOGenericContainer {
-	align = "LEFT";
-	elementName = "TD";
-	otherTagString = ^contentCellOtherTagString;
-	valign = "TOP";
-}
-
-GenericElement1: WOGenericElement {
-	elementName = "INPUT";
-	name = "SelectAll";
-	onclick = selectOnClick;
-	type = "BUTTON";
-	value = session.localizer.ERXCheckboxMatrix.selectAll;
-}
-
-GenericElement2: WOGenericElement {
-	elementName = "INPUT";
-	name = "DeselectAll";
-	onclick = deselectOnClick;
-	type = "BUTTON";
-	value = session.localizer.ERXCheckboxMatrix.deselectAll;
-}
-
 OnlyOnce: ERXOncePerRequestConditional {
 	keyName = "erxcheckboxmatrix";
+}
+
+SelectAllButton: WOGenericElement {
+	elementName = "input";
+	name = "Select All";
+	onclick = selectOnClick;
+	type = "button";
+	value = session.localizer.ERXCheckboxMatrix.selectAll; // VALID
+}
+
+ShouldShowSelectAllButtons: WOConditional {
+	condition = ^shouldShowSelectAllButtons;
 }

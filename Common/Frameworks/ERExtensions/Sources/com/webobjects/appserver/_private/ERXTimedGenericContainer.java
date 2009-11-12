@@ -1,8 +1,10 @@
 package com.webobjects.appserver._private;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import er.extensions.statistics.ERXStats;
@@ -20,6 +22,23 @@ public class ERXTimedGenericContainer extends WOGenericContainer {
         super(name, associations, template);
 
         _statsKey = (WOAssociation)_associations.removeObjectForKey("statsKey");
+    }
+    
+    @Override
+    public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
+        String statsKey = statsKey(aContext);
+        ERXStats.markStart(ERXStats.Group.ComponentInvokeAction, statsKey);
+    	WOActionResults results = super.invokeAction(aRequest, aContext);
+        ERXStats.markEnd(ERXStats.Group.ComponentInvokeAction, statsKey);
+    	return results;
+    }
+    
+    @Override
+    public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
+        String statsKey = statsKey(aContext);
+        ERXStats.markStart(ERXStats.Group.ComponentTakeValuesFromRequest, statsKey);
+    	super.takeValuesFromRequest(aRequest, aContext);
+        ERXStats.markEnd(ERXStats.Group.ComponentTakeValuesFromRequest, statsKey);
     }
 
     @Override

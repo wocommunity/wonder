@@ -6,12 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSRange;
+import com.webobjects.foundation.NSSet;
 
 // ported from WebScript - Corrected nil context problem.
 /**
@@ -33,11 +41,13 @@ import java.lang.reflect.*;
  * @binding relationshipName
  * @binding relationshipOwner
  * @binding tableOtherTagString
+ * @binding id optional ID for element wrapping checkbox matrix
+ * @binding itemID optional ID for each checkbox element
  */
 
 public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXCheckboxMatrix.class);
+    public final static Logger log = Logger.getLogger(ERXCheckboxMatrix.class);
 
     
     private static final Integer DEFAULT_PADDING = new Integer(0);
@@ -59,7 +69,7 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
     }
 
     public String onClick(boolean onOff) {
-        return "checkAll(this.form, '" + wrapperElementID + "'," + (onOff ? "true" : "false") + ")";
+        return "ERXCheckboxMatrix.checkAll(this.form, '" + wrapperElementID + "'," + (onOff ? "true" : "false") + ")";
     }
 
     public String selectOnClick() {
@@ -122,7 +132,7 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
             // ** This is where we accept the formValues.  Kind of weird.
             NSMutableArray aSelectionsArray = new NSMutableArray();
             Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
-            NSArray anItemList = (NSArray)valueForBinding("list");
+            NSArray anItemList = maybeSortedList();
             int anItemCount = anItemList.count();
             while (anIndexEnumerator.hasMoreElements()) {
                 int anIndex = Integer.parseInt((String)anIndexEnumerator.nextElement());
