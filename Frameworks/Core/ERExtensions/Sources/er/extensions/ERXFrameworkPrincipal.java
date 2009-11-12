@@ -90,7 +90,7 @@ public abstract class ERXFrameworkPrincipal {
          *      has been constructed, but before the application is
          *      ready for accepting requests.
          */
-        public final void finishInitialization(NSNotification n) {
+        public final void willFinishInitialization(NSNotification n) {
             NSNotificationCenter.defaultCenter().removeObserver(this, ERXApplication.ApplicationDidCreateNotification, null);
             for (Enumeration enumerator = launchingFrameworks.objectEnumerator(); enumerator.hasMoreElements();) {
                 ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal) enumerator.nextElement();
@@ -109,11 +109,11 @@ public abstract class ERXFrameworkPrincipal {
          *      has been constructed, but before the application is
          *      ready for accepting requests.
          */
-        public final void finishedInitialization(NSNotification n) {
+        public final void didFinishInitialization(NSNotification n) {
             NSNotificationCenter.defaultCenter().removeObserver(this);
             for (Enumeration enumerator = launchingFrameworks.objectEnumerator(); enumerator.hasMoreElements();) {
                 ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal) enumerator.nextElement();
-                principal.finishedInitialization();
+                principal.didFinishInitialization();
             }
         }
     }
@@ -145,12 +145,12 @@ public abstract class ERXFrameworkPrincipal {
                 observer = new Observer();
                 NSNotificationCenter center = NSNotificationCenter.defaultCenter();
                 center.addObserver(observer,
-                        new NSSelector("finishInitialization",  ERXConstant.NotificationClassArray),
+                        new NSSelector("willFinishInitialization",  ERXConstant.NotificationClassArray),
                         // WOApplication.ApplicationWillFinishLaunchingNotification,
                         ERXApplication.ApplicationDidCreateNotification,
                         null);
                 center.addObserver(observer,
-                        new NSSelector("finishedInitialization",  ERXConstant.NotificationClassArray),
+                        new NSSelector("didFinishInitialization",  ERXConstant.NotificationClassArray),
                         // WOApplication.ApplicationWillFinishLaunchingNotification,
                         ERXApplication.ApplicationDidFinishInitializationNotification,
                         null);
@@ -212,7 +212,7 @@ public abstract class ERXFrameworkPrincipal {
     /**
      * Overridden by subclasses to finalize framework initialization.
      */
-    public void finishedInitialization() {
+    public void didFinishInitialization() {
     	// Do nothing
     }
     
