@@ -14,6 +14,7 @@ import er.extensions.eof.qualifiers.ERXRegExQualifier;
 import er.extensions.eof.qualifiers.ERXToManyQualifier;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXFalseQualifier;
+import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.qualifiers.ERXNotQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
@@ -354,6 +355,20 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorEqual, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T> ERXKeyComparisonQualifier equals(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.EQ, value.key());
+	}
+	
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorEqual, value);
 	 * 
@@ -443,6 +458,20 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorNotEqual, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T >ERXKeyComparisonQualifier notEquals(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.NE, value.key());
+	}
+	
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorLessThan, value);
 	 * 
@@ -454,6 +483,20 @@ public class ERXQ {
 	 */
 	public static ERXKeyValueQualifier lessThan(String key, Object value) {
 		return new ERXKeyValueQualifier(key, ERXQ.LT, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorLessThan, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */	
+	public static <T> ERXKeyComparisonQualifier lessThan(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.LT, value.key());
 	}
 
 	/**
@@ -471,6 +514,20 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorGreaterThan, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T> ERXKeyComparisonQualifier greaterThan(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.GT, value.key());
+	}
+	
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorLessThanOrEqualTo, value);
 	 * 
@@ -485,6 +542,20 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorLessThanOrEqualTo, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T> ERXKeyComparisonQualifier lessThanOrEqualTo(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.LTEQ, value.key());
+	}
+
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorGreaterThanOrEqualTo, value);
 	 * 
@@ -496,6 +567,20 @@ public class ERXQ {
 	 */
 	public static ERXKeyValueQualifier greaterThanOrEqualTo(String key, Object value) {
 		return new ERXKeyValueQualifier(key, ERXQ.GTEQ, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorGreaterThanOrEqualTo, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T> ERXKeyComparisonQualifier greaterThanOrEqualTo(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.GTEQ, value.key());
 	}
 
 	/**

@@ -6,6 +6,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.qualifiers.ERXAndQualifier;
+import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
 import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
@@ -192,6 +193,19 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorEqual, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier is(ERXKey<T> value) {
+		return ERXQ.equals(this, value);
+	}
+
+	
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorEqual, value);
 	 * 
@@ -201,6 +215,18 @@ public class ERXKey<T> {
 	 */
 	public ERXKeyValueQualifier eq(T value) {
 		return ERXQ.equals(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorEqual, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier eq(ERXKey<T> value) {
+		return ERXQ.equals(this, value);
 	}
 
 	/**
@@ -216,6 +242,18 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorNotEqual, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier isNot(ERXKey<T> value) {
+		return ERXQ.notEquals(this, value);
+	}
+
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorNotEqual, value);
 	 * 
@@ -225,6 +263,18 @@ public class ERXKey<T> {
 	 */
 	public ERXKeyValueQualifier ne(T value) {
 		return ERXQ.notEquals(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorNotEqual, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier ne(ERXKey<T> value) {
+		return ERXQ.notEquals(this, value);
 	}
 
 	/**
@@ -240,6 +290,18 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorGreaterThan, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier greaterThan(ERXKey<T> value) {
+		return ERXQ.greaterThan(this, value);
+	}
+
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorGreaterThan, value);
 	 * 
@@ -249,6 +311,18 @@ public class ERXKey<T> {
 	 */
 	public ERXKeyValueQualifier gt(T value) {
 		return ERXQ.greaterThan(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorGreaterThan, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier gt(ERXKey<T> value) {
+		return ERXQ.greaterThan(this, value);
 	}
 
 	/**
@@ -264,6 +338,18 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorLessThan, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier lessThan(ERXKey<T> value) {
+		return ERXQ.lessThan(this, value);
+	}
+	
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorLessThan, value);
 	 * 
@@ -273,6 +359,18 @@ public class ERXKey<T> {
 	 */
 	public ERXKeyValueQualifier lt(T value) {
 		return ERXQ.lessThan(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorLessThan, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier lt(ERXKey<T> value) {
+		return ERXQ.lessThan(this, value);
 	}
 
 	/**
@@ -288,6 +386,18 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorGreaterThanOrEqualTo, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier greaterThanOrEqualTo(ERXKey<T> value) {
+		return ERXQ.greaterThanOrEqualTo(this, value);
+	}
+	
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorGreaterThanOrEqualTo, value);
 	 * 
@@ -297,6 +407,18 @@ public class ERXKey<T> {
 	 */
 	public ERXKeyValueQualifier gte(T value) {
 		return ERXQ.greaterThanOrEqualTo(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorGreaterThanOrEqualTo, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier gte(ERXKey<T> value) {
+		return ERXQ.greaterThanOrEqualTo(this, value);
 	}
 
 	/**
@@ -312,6 +434,18 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorLessThanOrEqualTo, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier lessThanOrEqualTo(ERXKey<T> value) {
+		return ERXQ.lessThanOrEqualTo(this, value);
+	}
+
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorLessThanOrEqualTo, value);
 	 * 
@@ -321,6 +455,18 @@ public class ERXKey<T> {
 	 */
 	public ERXKeyValueQualifier lte(T value) {
 		return ERXQ.lessThanOrEqualTo(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorLessThanOrEqualTo, value);
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public ERXKeyComparisonQualifier lte(ERXKey<T> value) {
+		return ERXQ.lessThanOrEqualTo(this, value);
 	}
 
 	/**
@@ -427,6 +573,11 @@ public class ERXKey<T> {
 		return ERXQ.lessThan(_key, when);
 	}
 
+	@SuppressWarnings("unchecked")
+	public ERXKeyComparisonQualifier before(ERXKey<? extends NSTimestamp> when) {
+		return ERXQ.lessThan((ERXKey)this, when);
+	}
+	
 	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorGreaterThan, value);
@@ -439,6 +590,20 @@ public class ERXKey<T> {
 		return ERXQ.greaterThan(_key, when);
 	}
 
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorGreaterThan, value);
+	 * 
+	 * @param when
+	 *            the date to compare with
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	@SuppressWarnings("unchecked")
+	public ERXKeyComparisonQualifier after(ERXKey<? extends NSTimestamp> when) {
+		return ERXQ.greaterThan((ERXKey)this, when);
+	}
+
+	
 	/**
 	 * Equivalent to key > lowerBound and key < upperBound (exclusive). Note
 	 * that this does not return an ERXBetweenQualifier.
