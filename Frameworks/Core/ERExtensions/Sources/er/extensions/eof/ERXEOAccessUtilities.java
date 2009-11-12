@@ -1565,7 +1565,7 @@ public class ERXEOAccessUtilities {
      * @param newValues
      */
     public static int insertRows(EOEditingContext ec, String entityName, 
-            final Collection<NSDictionary> newValues) {
+            final Collection<? extends NSDictionary<String, ?>> newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
             protected int doPerform(EOAdaptorChannel channel) {
