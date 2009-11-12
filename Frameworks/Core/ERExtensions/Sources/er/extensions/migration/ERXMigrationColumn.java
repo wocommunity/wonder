@@ -337,6 +337,9 @@ public class ERXMigrationColumn {
 	  if (!(eoAdaptor instanceof JDBCAdaptor)) {
 	    EOAttribute nonJdbcAttribute = new EOAttribute();
 	    nonJdbcAttribute.setName(_name);
+	    nonJdbcAttribute.setColumnName(_name);
+	    nonJdbcAttribute.setExternalType("nonJdbcAttribute");
+		entity.addAttribute(nonJdbcAttribute);
 	    return nonJdbcAttribute;
 	  }
 	  
