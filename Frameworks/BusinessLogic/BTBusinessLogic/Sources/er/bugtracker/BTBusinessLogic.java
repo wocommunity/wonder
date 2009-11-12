@@ -100,7 +100,7 @@ public class BTBusinessLogic extends ERXFrameworkPrincipal {
      }
     
     @Override
-    public void finishedInitialization() {
+    public void didFinishInitialization() {
         BTBusinessLogic.initializeSharedData();
     }
 }
