@@ -66,8 +66,4 @@ public class ERMemoryAdaptor extends EOAdaptor {
   public EOSynchronizationFactory schemaSynchronizationFactory() {
     return new ERMemorySynchronizationFactory(this);
   }
-
-//  public NSDictionary typeInfo() {
-//    return NSDictionary.EmptyDictionary;
-//  }
 }
