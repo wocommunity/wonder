@@ -43,26 +43,31 @@ public class ERMemoryAdaptor extends EOAdaptor {
   }
 
   @Override
-  public Class defaultExpressionClass() {
-    throw new UnsupportedOperationException("ERMemoryAdaptor.defaultExpressionClass");
-  }
-
-  @Override
-  public EOSQLExpressionFactory expressionFactory() {
-    return null;
-  }
-
-  @Override
   public boolean isValidQualifierType(String typeName, EOModel model) {
     return true;
   }
 
+  // Required for Migrations
+  @Override
+  public Class defaultExpressionClass() {
+    return ERMemoryExpression.class;
+  }
+
+  @Override
+  public EOSQLExpressionFactory expressionFactory() {
+    return new ERMemoryExpressionFactory(this);
+  }
+
   @Override
   public EOSchemaGeneration synchronizationFactory() {
-    throw new UnsupportedOperationException("ERMemoryAdaptor.synchronizationFactory");
+    return new ERMemorySynchronizationFactory(this);
   }
 
   public EOSynchronizationFactory schemaSynchronizationFactory() {
-    throw new UnsupportedOperationException("ERMemoryAdaptor.schemaSynchronizationFactory");
+    return new ERMemorySynchronizationFactory(this);
   }
+
+//  public NSDictionary typeInfo() {
+//    return NSDictionary.EmptyDictionary;
+//  }
 }
