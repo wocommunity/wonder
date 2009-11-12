@@ -2,6 +2,7 @@ package er.extensions.migration;
 
 import java.sql.SQLException;
 
+import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOSQLExpression;
@@ -331,7 +332,15 @@ public class ERXMigrationColumn {
 	 */
 	@SuppressWarnings("unchecked")
 	public EOAttribute _newAttribute(EOEntity entity) {
-		JDBCAdaptor adaptor = (JDBCAdaptor) _table.database().adaptor();
+	  EOAdaptor eoAdaptor = _table.database().adaptor();
+	  // MS: Hack to make Memory adaptor migrations "work"
+	  if (!(eoAdaptor instanceof JDBCAdaptor)) {
+	    EOAttribute nonJdbcAttribute = new EOAttribute();
+	    nonJdbcAttribute.setName(_name);
+	    return nonJdbcAttribute;
+	  }
+	  
+		JDBCAdaptor adaptor = (JDBCAdaptor)_table.database().adaptor();
 		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(adaptor);
 		String externalType = sqlHelper.externalTypeForJDBCType(adaptor, _jdbcType);
 		if (externalType == null) {
