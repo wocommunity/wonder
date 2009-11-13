@@ -199,6 +199,13 @@ public abstract class ERXAjaxApplication extends WOApplication {
 	public static boolean isAjaxReplacement(WORequest request) {
 		return request.formValueForKey(ERXAjaxApplication.KEY_REPLACED) != null;
 	}
+	
+	/**
+	 * Returns true if this request will update an AjaxUpdateContainer.
+	 */
+	public static boolean isAjaxUpdate(WORequest request) {
+		return request.formValueForKey(KEY_UPDATE_CONTAINER_ID) != null;
+	}
 
 	/**
 	 * ERXAjaxResponseDelegate receives callbacks from within the R-R loop when
