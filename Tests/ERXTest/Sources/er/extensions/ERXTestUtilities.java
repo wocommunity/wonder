@@ -13,13 +13,13 @@ public class ERXTestUtilities {
 			URL url = clazz.getResource(name);
 			if (url == null) {
 				String rootPath = System.getProperty("build.root", "build");
-				File resourceFile = new File(rootPath + "/ERExtensions.framework/TestResources" + name);
+				File resourceFile = new File(rootPath + "/ERXTest.framework/TestResources" + name);
 				if (!resourceFile.exists()) {
-					resourceFile = new File("Tests/Resources" + name);
+					resourceFile = new File("Tests/Resources/" + name);
 					if (!resourceFile.exists()) {
-						resourceFile = new File("Resources" + name);
+						resourceFile = new File("Resources/" + name);
 						if (!resourceFile.exists()) {
-							throw new FileNotFoundException("Unable to find the property list '" + name + "'.");
+							throw new FileNotFoundException("Unable to find the resource '" + name + "'.");
 						}
 					}
 				}
