@@ -122,7 +122,6 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	 * 
 	 * @param sessionID the session id of the push response
 	 * @param name the name of the push response
-	 * @param message the message to push
 	 */
 	public static void stop(String sessionID, String name) {
 		Map<String, ERXKeepAliveResponse> sessionResponses = responses.get(sessionID);

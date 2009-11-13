@@ -1028,7 +1028,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /**
      * Returns a string suitable for logging.
      * @param properties
-     * @return
      */
     public static String logString(Properties properties) {
     	StringBuffer message = new StringBuffer();

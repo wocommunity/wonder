@@ -12,7 +12,6 @@ import er.extensions.foundation.ERXProperties;
 
 /**
  * WO wrapper around Rails (Prototype) date picker
- * http://code.google.com/p/calendardateselect/
  * 
  * NOTE: that dateformats must have compatible client side scripts
  * So optionally you may produce your own variants of the client-side date format javascripts and set the properties to use them
@@ -28,6 +27,14 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @property er.prototaculous.useUnobtrusively	If you want the component to include its JavaScripts and CSS set to false. (This is the default).
  * 												This is to support Unobtrusive Javascript programming.
+ *
+ * @binding value
+ * @binding id
+ * @binding name
+ * @binding dateFormat
+ * @binding size
+ *
+ * @see http://code.google.com/p/calendardateselect/
  *
  */
 public class CalendarDateSelect extends WOComponent {
