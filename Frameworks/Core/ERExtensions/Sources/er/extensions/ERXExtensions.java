@@ -1244,6 +1244,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	ERXExtensions.initApp(mainBundleName, null, applicationSubclass, args);
     }
     
+    private static boolean _appInitialized = false;
     /**
      * Initializes your WOApplication programmatically (for use in test cases and main methods).
      * 
@@ -1253,6 +1254,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param args the commandline arguments for your application
      */
     public static void initApp(String mainBundleName, URL mainBundleURL, Class applicationSubclass, String[] args) {
+    	if (_appInitialized) {
+    		return;
+    	}
     	try {
 	        ERXApplication.setup(args);
 	        if (mainBundleURL != null) {
@@ -1266,6 +1270,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		catch (IOException e) {
 			throw new NSForwardException(e);
 		}
+    	_appInitialized = true;
     }
     
     /**
@@ -1280,6 +1285,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	ERXExtensions.initEOF(new File("."), args);
     }
     
+    private static boolean _eofInitialized = false;
     /**
      * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
      * not need to call this method if you already called initApp.  This is lighter-weight than 
@@ -1289,6 +1295,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param args the commandline arguments for your application
      */
     public static void initEOF(File mainBundleFolder, String[] args) {
+    	if (_eofInitialized) {
+    		return;
+    	}
     	try {
 	    	File currentFolder = new File(".").getCanonicalFile();
 	    	if (!currentFolder.getName().endsWith(".woa")) {
@@ -1304,5 +1313,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		catch (IOException e) {
 			throw new NSForwardException(e);
 		}
+		_eofInitialized = true;
     }
 }
