@@ -1851,17 +1851,17 @@ public class ERXStringUtilities {
 	
 	/**
 	 * It's ridiculous that StringBuffer doesn't have a .regionMatches like String.  This is
-	 * stolen from String and reimplemnted on top of StringBuffer.  It's slightly slower than
+	 * stolen from String and re-implemented on top of StringBuffer.  It's slightly slower than
 	 * String's because we have to call charAt instead of just accessing the underlying array,
 	 * but so be it.
 	 * 
 	 * @param str the StringBuffer to compare a region of
-     * @param toffset the starting offset of the subregion in this string.
+     * @param toffset the starting offset of the sub-region in this string.
      * @param other the string argument.
-     * @param ooffset the starting offset of the subregion in the string argument.
+     * @param ooffset the starting offset of the sub-region in the string argument.
      * @param len the number of characters to compare.
-     * @return <code>true</code> if the specified subregion of this string
-     *         exactly matches the specified subregion of the string argument;
+     * @return <code>true</code> if the specified sub-region of this string
+     *         exactly matches the specified sub-region of the string argument;
      *         <code>false</code> otherwise.
 	 */
     public static boolean regionMatches(StringBuffer str, int toffset, String other, int ooffset, int len) {
@@ -1884,12 +1884,12 @@ public class ERXStringUtilities {
     /**
      * Converts source to be suitable for use as an identifier in JavaScript.  prefix is prefixed to source
      * if the first character of source is not suitable to start an identifier (e.g. a number).  Any characters
-     * in source that are not allowd in an identifier are replaced with replacment.
+     * in source that are not allowed in an identifier are replaced with replacement.
      * 
      * @see Character#isJavaIdentifierStart(char)
      * @see Character#isJavaIdentifierPart(char)
      * 
-     * @param source String to make into a indentifier name
+     * @param source String to make into a identifier name
      * @param prefix String to prefix source with to make it a valid identifier name
      * @param replacement character to use to replace characters in source that are no allowed in an identifier name
      * @return source converted to a name suitable for use as an identifier in JavaScript
@@ -1920,7 +1920,7 @@ public class ERXStringUtilities {
      * 
      * @see #safeIdentifierName(String, String, char)
      * 
-     * @param source String to make into a indentifier name
+     * @param source String to make into a identifier name
      * @param prefix String to prefix source with to make it a valid identifier name
      * @return source converted to a name suitable for use as an identifier in JavaScript
      */
@@ -1934,7 +1934,7 @@ public class ERXStringUtilities {
      *
      * @see #safeIdentifierName(String, String, char)
      * 
-     * @param source String to make into a indentifier name
+     * @param source String to make into a identifier name
      * @return source converted to a name suitable for use as an identifier in JavaScript
      */
     public static String safeIdentifierName(String source) {
