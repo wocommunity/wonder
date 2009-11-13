@@ -20,7 +20,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding lat latitude for map center (must be paired with lng, cannot coexist with address)
  * @binding width the width of the map (does not have to be specified here, but must be specified somewhere [ie. css])
  * @binding height the height of the map (does not have to be specified here, but must be specified somewhere [ie. css])
- * @control control control type name. Will automatically append a 'G' before and 'Control' after the name given, possible values here: http://www.google.com/apis/maps/documentation/reference.html#GControlImpl
+ * @binding control control type name. Will automatically append a 'G' before and 'Control' after the name given, possible values here: http://www.google.com/apis/maps/documentation/reference.html#GControlImpl
  * @binding zoomLevel zoom level of map (will default to 13 is not specified). Higher is closer.
  * @property ajax.google.maps.apiKey an api key you can get from http://www.google.com/apis/maps/ . If your app runs on http://ip:port/cgi-bin/WebObjects/GoogleMaps.woa, register the key for http://ip:port/cgi-bin/WebObjects/ . Using a fixed WO port is recommended (unless you want to get a new api key everytime you restart your server). AjaxGMaps will not work without an Api Key. 
  */
