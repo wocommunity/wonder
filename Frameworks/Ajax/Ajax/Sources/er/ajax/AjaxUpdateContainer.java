@@ -302,4 +302,29 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		}
 		return updateContainerID;
 	}
+	
+	/**
+	 * Creates or updates Ajax response so that the indicated AUC will get updated when the response is processed in the browser.
+	 * Adds JavaScript like <code>AUC.update('SomeContainerID');</code>
+	 * 
+	 * @param updateContainerID the HTML ID of the element implementing the AUC
+	 * @param context WOContext for response
+	 */
+	public static void updateContainerWithID(String updateContainerID, WOContext context) {
+        String containerID = "'" + updateContainerID + "'";
+        AjaxUtils.javascriptResponse("AUC.update(" + containerID + ");", context);
+	}
+	
+	/**
+	 * Creates or updates Ajax response so that the indicated AUC will get updated when the response is processed in the browser.
+	 * If the container element does not exist, does nothing.
+	 * Adds JavaScript like <code>if ( $('SomeContainerID') != null ) AUC.update('SomeContainerID');</code>
+	 * 
+	 * @param updateContainerID the HTML ID of the element implementing the AUC
+	 * @param context WOContext for response
+	 */
+	public static void safeUpdateContainerWithID(String updateContainerID, WOContext context) {
+        String containerID = "'" + updateContainerID + "'";
+        AjaxUtils.javascriptResponse("if ( $(" + containerID + ") != null ) AUC.update(" + containerID + ");", context);
+	}
 }
