@@ -30,8 +30,9 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding emptyListMessage
  * @binding listPageConfiguration
  * @binding list
+ * @d2wKey createButtonComponentName
+ * @d2wKey useNestedEditingContext
  */
-
 public class ERDList extends ERDCustomEditComponent {
 
     /* logging support */

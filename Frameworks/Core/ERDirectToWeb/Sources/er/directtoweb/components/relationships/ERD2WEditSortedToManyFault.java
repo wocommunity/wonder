@@ -18,6 +18,13 @@ import com.webobjects.foundation.NSArray;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
+/**
+ * @d2wKey allowCollapsing
+ * @d2wKey destinationEntityName
+ * @d2wKey showIndex
+ * @d2wKey browserSize
+ * @d2wKey maxBrowserSize
+ */
 public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
 
     public static final Logger log = Logger.getLogger(ERD2WEditSortedToManyFault.class);

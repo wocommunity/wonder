@@ -15,13 +15,15 @@ import er.extensions.appserver.ERXWOContext;
 /**
  * Class for DirectToWeb Component ERDAttributeRepetition.
  *
- * @binding sample sample binding explanation
- * @d2wKey sample sample d2w key
- *
  * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
+ * @d2wKey sectionKey
+ * @d2wKey displayNameForPageConfiguration
+ * @d2wKey pageConfiguration
+ * @d2wKey propertyKey
+ * @d2wKey alternateKeyInfo
+ * @d2wKey sectionsContents
  */
-
 public class ERDAttributeRepetition extends ERDCustomComponent {
 
     /** logging support */

@@ -39,6 +39,13 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGuardedObjectInterface;
 import er.extensions.foundation.ERXValueUtilities;
 
+/**
+ * @d2wKey displayKey
+ * @d2wKey showIndex
+ * @d2wKey indexKey
+ * @d2wKey browserSize
+ * @d2wKey maxBrowserSize
+ */
 public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRelationshipPageInterface {
 
     // this pages allows the editing of a sorted many-to-many relationship

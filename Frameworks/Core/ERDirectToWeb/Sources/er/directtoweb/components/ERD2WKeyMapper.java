@@ -17,9 +17,9 @@ import com.webobjects.foundation.NSDictionary;
 //	Look in the Comparision template for how this component can be used.
 /**
  * Useful for remapping keys if say you want to compare two different objects in a compare list.<br />
- * 
+ * @d2wKey componentName
+ * @d2wKey keyMappingsForComparisonObject
  */
-
 public class ERD2WKeyMapper extends ERD2WStatelessComponent {
 
     public ERD2WKeyMapper(WOContext context) { super(context); }

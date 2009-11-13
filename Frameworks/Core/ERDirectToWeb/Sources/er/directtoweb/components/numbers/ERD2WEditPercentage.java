@@ -11,9 +11,8 @@ import com.webobjects.directtoweb.D2WEditNumber;
 
 /**
  * Edits a percentage number with radio buttons.<br />
- * 
+ * @d2wKey propertyKey
  */
-
 public class ERD2WEditPercentage extends D2WEditNumber {
 
     public ERD2WEditPercentage(WOContext context) {

@@ -11,9 +11,9 @@ import com.webobjects.directtoweb.D2WDisplayString;
 
 /**
  * Displays a url, where the object-key pair refer to a url<br />
- * 
+ * @d2wKey imageWidth
+ * @d2wKey imageHeight
  */
-
 public class ERD2WDisplayImageWithUrl extends D2WDisplayString {
 
     public ERD2WDisplayImageWithUrl(WOContext context) { super(context); }

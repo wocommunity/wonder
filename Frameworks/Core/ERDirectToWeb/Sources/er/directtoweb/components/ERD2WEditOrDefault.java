@@ -18,9 +18,10 @@ import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Generic edit or default value component, uses other components like editNumber or editString.<br />
- * 
+ * @d2wKey displayValueForNull
+ * @d2wKey innerComponentName
+ * @d2wKey defaultValue
  */
-
 public class ERD2WEditOrDefault extends D2WComponent {
 
     public ERD2WEditOrDefault(WOContext context) {super(context);}

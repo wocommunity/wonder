@@ -34,7 +34,14 @@ import er.extensions.foundation.ERXValueUtilities;
 // objects.
 // uiStyle - defaults to radio button, can also be a checkbox list, "radio" or
 // "checkbox"
-
+/**
+ * @d2wKey selectionManditory
+ * @d2wKey choiceDisplayKey
+ * @d2wKey choiceErrorMessage
+ * @d2wKey choices
+ * @d2wKey choiceKeyPath
+ * @d2wKey pageConfiguration
+ */
 public class ERD2WPickTypePage extends ERD2WPage implements ERDPickPageInterface {
 
     public ERD2WPickTypePage(WOContext context) {

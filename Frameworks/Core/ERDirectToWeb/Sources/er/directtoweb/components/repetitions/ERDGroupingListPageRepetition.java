@@ -9,13 +9,20 @@ import com.webobjects.foundation.NSArray;
 /**
  * Grouping list that can be used as a repetition in list pages.
  *
- * @binding sample sample binding explanation
- * @d2wKey sample sample d2w key
- *
  * @author ak on 31.10.05
  * @project ERDirectToWeb
+ * @d2wKey justification
+ * @d2wKey componentName
+ * @d2wKey propertyKey
+ * @d2wKey displayPropertyKeys
+ * @d2wKey displayNameForEntity
+ * @d2wKey totallingKeys
+ * @d2wKey propertyNameComponentName
+ * @d2wKey formatter
+ * @d2wKey groupingKey
+ * @d2wKey groupingComponentName
+ * @d2wKey object
  */
-
 public class ERDGroupingListPageRepetition extends ERDListPageRepetition {
 
 	/** logging support */

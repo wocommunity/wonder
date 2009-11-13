@@ -40,6 +40,11 @@ import java.util.Enumeration;
  * to perform custom validations and then call {@link #validateQueryValues} on the superclass.</p>
  *
  * @author Travis Cripps
+ * @d2wKey displayPropertyKeys
+ * @d2wKey maximumInputLength
+ * @d2wKey minimumInputLength
+ * @d2wKey maximumInputValue
+ * @d2wKey minimumInputValue
  */
 public abstract class ERDQueryValidationDelegate {
 

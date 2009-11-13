@@ -15,6 +15,10 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.foundation.ERXKeyValuePair;
 import er.extensions.localization.ERXLocalizer;
 
+/**
+ * @d2wKey name
+ * @d2wKey qualifierOperators
+ */
 public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
     public ERXKeyValuePair currentElement;
     

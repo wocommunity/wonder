@@ -13,7 +13,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  * 
  * @author mendis
  * @author dschonen			Added collapsing
- *
+ * @d2wKey id
+ * @d2wKey displayNameForDestinationEntity
  */
 public class ERDEditableList extends ERDList {
 	public EODetailDataSource detailDataSource;

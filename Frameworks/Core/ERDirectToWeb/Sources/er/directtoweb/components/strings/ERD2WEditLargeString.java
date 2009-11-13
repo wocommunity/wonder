@@ -18,8 +18,14 @@ import er.extensions.foundation.ERXValueUtilities;
  * value is morphed to the empty string. It also pulls
  * the <code>disabled</code> binding from the WOContext, allowing
  * you to have a readonly field.
+ * @d2wKey length
+ * @d2wKey rows
+ * @d2wKey disabled
+ * @d2wKey id
+ * @d2wKey title
+ * @d2wKey name
+ * @d2wKey isMandatory
  */
-
 public class ERD2WEditLargeString extends D2WEditLargeString {
 
     public ERD2WEditLargeString(WOContext context) {

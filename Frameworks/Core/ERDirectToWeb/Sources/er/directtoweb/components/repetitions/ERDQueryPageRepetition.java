@@ -13,8 +13,18 @@ import com.webobjects.appserver.WODisplayGroup;
  *
  * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
+ * @d2wKey componentName
+ * @d2wKey colSpan
+ * @d2wKey rowSpan
+ * @d2wKey maxColumns
+ * @d2wKey matrixLayoutVertical
+ * @d2wKey hidePropertyName
+ * @d2wKey useMatrixLayout
+ * @d2wKey useTableLayout
+ * @d2wKey propertyNameComponentName
+ * @d2wKey sectionComponentName
+ * @d2wKey useHorizontalLayoutTables
  */
-
 public class ERDQueryPageRepetition extends ERDAttributeRepetition {
 
     /** logging support */

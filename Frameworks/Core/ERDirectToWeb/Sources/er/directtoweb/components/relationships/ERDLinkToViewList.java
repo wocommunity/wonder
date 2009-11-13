@@ -30,8 +30,8 @@ import er.extensions.eof.ERXEOControlUtilities;
  * @binding key keypath to get list from object
  * @binding listConfigurationName name of the page configuration to jump to
  * @binding entityName
+ * @d2wKey displayNameForLinkToViewList
  */
-
 public class ERDLinkToViewList extends ERDCustomEditComponent {
 
     public ERDLinkToViewList(WOContext context) { super(context); }

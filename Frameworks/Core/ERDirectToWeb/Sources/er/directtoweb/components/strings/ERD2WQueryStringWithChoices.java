@@ -13,6 +13,9 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXKeyValuePair;
 import er.extensions.localization.ERXLocalizer;
 
+/**
+ * @d2wKey possibleChoices
+ */
 public class ERD2WQueryStringWithChoices extends ERD2WQueryStringOperator {
     /** logging support */
     public static final Logger log = Logger.getLogger(ERDEditStringWithChoices.class);

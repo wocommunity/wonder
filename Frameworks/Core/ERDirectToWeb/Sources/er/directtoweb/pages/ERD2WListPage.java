@@ -63,6 +63,27 @@ import er.extensions.statistics.ERXStats;
  * D2WList.
  * 
  * @author ak
+ * @d2wKey useBatchingDisplayGroup
+ * @d2wKey isEntityEditable
+ * @d2wKey readOnly
+ * @d2wKey alwaysRefetchList
+ * @d2wKey pageConfiguration
+ * @d2wKey defaultBatchSize
+ * @d2wKey subTask
+ * @d2wKey checkSortOrderingKeys
+ * @d2wKey defaultSortOrdering
+ * @d2wKey displayPropertyKeys
+ * @d2wKey restrictingFetchSpecification
+ * @d2wKey isEntityInspectable
+ * @d2wKey isEntityPrintable
+ * @d2wKey confirmDeleteConfigurationName
+ * @d2wKey editConfigurationName
+ * @d2wKey inspectConfigurationName
+ * @d2wKey useNestedEditingContext
+ * @d2wKey targetDictionary
+ * @d2wKey shouldShowSelectAll
+ * @d2wKey referenceRelationshipForBackgroupColor
+ * @d2wKey showBatchNavigation
  */
 public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable {
 

@@ -7,7 +7,7 @@ import com.webobjects.directtoweb.D2WDisplayToManyTable;
  * Display toMany relationship in <ul></ul>
  * 
  * @author mendis
- *
+ * @d2wKey disabled
  */
 public class ERD2WDisplayToManyUnorderedList extends D2WDisplayToManyTable {
 	public ERD2WDisplayToManyUnorderedList(WOContext aContext) {

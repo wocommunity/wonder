@@ -3,6 +3,11 @@ package er.directtoweb.components;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.D2WContext;
 
+/**
+ * 
+ * @author mschrag
+ * @d2wKey componentName
+ */
 public class ERD2WDebugComponentName extends WOComponent {
     public ERD2WDebugComponentName(WOContext context) {
         super(context);

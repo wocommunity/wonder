@@ -89,9 +89,31 @@ import er.extensions.validation.ERXValidationException;
  * (section3, key4, key..) ), ... ) OR with the alternate syntax, which ist most
  * useful with the WebAssistant ( "[tab1]", "(section1)", key1, key2, ...
  * "[tab2]", "(section3)", key4, key..... )
- * 
+ * @d2wKey object
+ * @d2wKey localContext
+ * @d2wKey keyPathsWithValidationExceptions
+ * @d2wKey shouldPropagateExceptions
+ * @d2wKey shouldCollectionValidationExceptions
+ * @d2wKey shouldSetFailedValidationValue
+ * @d2wKey errorMessages
+ * @d2wKey componentName
+ * @d2wKey customComponentName
+ * @d2wKey propertyKey
+ * @d2wKey sectionKey
+ * @d2wKey sectionContents
+ * @d2wKey tabKey
+ * @d2wKey displayNameForTabKey
+ * @d2wKey isEntityEditable
+ * @d2wKey pageConfiguration
+ * @d2wKey displayPropertyKeys
+ * @d2wKey tabSectionsContents
+ * @d2wKey displayVariant
+ * @d2wKey displayNameForEntity
+ * @d2wKey nextPageDelegate
+ * @d2wKey pageController
+ * @d2wKey pageWrapperName
+ * @d2wKey inlineStyle
  */
-
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface, ERXComponentActionRedirector.Restorable, ERDBranchInterface {
 
     /** interface for all the keys used in this pages code */

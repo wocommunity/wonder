@@ -369,6 +369,8 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
      * and you need to find out just what the state of the D2WContext is.
      * @param ex
      * @param d2wContext
+     * @d2wKey componentName
+     * @d2wKey customComponentName
      */
     public static synchronized void reportException(Exception ex, D2WContext d2wContext) {
         if(d2wContext != null) {

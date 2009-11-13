@@ -11,6 +11,13 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WListPage;
 import er.extensions.eof.ERXConstant;
 
+/**
+ * @d2wKey propertyKey
+ * @d2wKey groupingKey
+ * @d2wKey displayNameForProperty
+ * @d2wKey thirdLevelRelationshipKey
+ * @d2wKey componentName
+ */
 public class ERD2WListXMLPage extends ERD2WListPage {
 
     /**

@@ -21,6 +21,11 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXValueUtilities;
 
+/**
+ * @d2wKey editConfigurationName
+ * @d2wKey isEntityEditable
+ * @d2wKey readOnly
+ */
 public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
     
     /** interface for all the keys used in this pages code */

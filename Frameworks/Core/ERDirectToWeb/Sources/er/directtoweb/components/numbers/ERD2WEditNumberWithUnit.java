@@ -11,8 +11,9 @@ import com.webobjects.appserver.WOContext;
 /**
  * Edits a number displaying the unit off of the EOAttributes userInfo.<br />
  * 
+ * @d2wKey maxLength
+ * @d2wKey resolvedUnit
  */
-
 public class ERD2WEditNumberWithUnit extends ERD2WEditNumber {
 
     public ERD2WEditNumberWithUnit(WOContext context) { super(context); }

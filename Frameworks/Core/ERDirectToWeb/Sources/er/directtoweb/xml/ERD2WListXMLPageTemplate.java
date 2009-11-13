@@ -9,9 +9,19 @@ import com.webobjects.appserver.WOContext;
 
 /**
  * List xml template.<br />
- * 
+ * @d2wKey resolvedUnit
+ * @d2wKey componentName
+ * @d2wKey showHeader
+ * @d2wKey shouldShowUnits
+ * @d2wKey hasThirdLevel
+ * @d2wKey wrap
+ * @d2wKey title
+ * @d2wKey propertyKey
+ * @d2wKey displayPropertyKeys
+ * @d2wKey offset
+ * @d2wKey displayNameForProperty
+ * @d2wKey pageWrapperName
  */
-
 public class ERD2WListXMLPageTemplate extends ERD2WListXMLPage {
 
     public ERD2WListXMLPageTemplate(WOContext context) {super(context);}
