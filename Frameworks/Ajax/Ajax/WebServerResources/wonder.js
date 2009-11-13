@@ -306,7 +306,11 @@ var AjaxUpdateContainer = {
 	},
 	
 	update: function(id, options) {
-		var actionUrl = $(id).getAttribute('updateUrl');
+		var updateElement = $(id);
+		if (updateElement == null) {
+			alert('There is no element on this page with the id "' + id + '".');
+		}
+		var actionUrl = updateElement.getAttribute('updateUrl');
 		if (options && options['_r']) {
 			actionUrl = actionUrl.addQueryParameters('_r='+ id);
 		}
