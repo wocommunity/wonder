@@ -81,7 +81,7 @@
             </fileset>
         </copy>
 
-        <javac srcdir="Build/taglets" destdir="${build.root}/Build/lib">
+        <javac srcdir="Build/taglets" destdir="${build.root}/Build/lib" debug="true">
             <compilerarg value="-Xlint:deprecation" />
             <classpath>
                 <fileset dir="${build.root}/Build/lib">
