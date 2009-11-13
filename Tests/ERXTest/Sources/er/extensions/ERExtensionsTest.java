@@ -106,9 +106,9 @@ public class ERExtensionsTest extends TestSuite {
 
         if (name == null || name.equals("Memory")) return NSDictionary.EmptyDictionary;
 
-        String url = System.getProperties().getProperty("wonder.test."+name+".url");
-        String usr = System.getProperties().getProperty("wonder.test."+name+".user");
-        String pwd = System.getProperties().getProperty("wonder.test."+name+".pwd");
+        String url = System.getProperties().getProperty("wonder.test."+name+".url", "jdbc://bogus");
+        String usr = System.getProperties().getProperty("wonder.test."+name+".user", "bogus");
+        String pwd = System.getProperties().getProperty("wonder.test."+name+".pwd", "");
 
         //System.out.println("connectionDict:: url = \""+url+"\", usr = \""+usr+"\", pwd = \""+pwd+"\"");
 
