@@ -38,6 +38,7 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
         new NSArray(new Object[] {"propertyKey", "task", "entity.name"}), "idForProperty",
         new NSArray(new Object[] {"pageConfiguration", "task", "entity.name", "sectionKey"}), "idForSection",
         new NSArray(new Object[] {"pageConfiguration", "task", "entity.name"}), "idForPageConfiguration",
+        new NSArray(new Object[] {"pageConfiguration", "task", "entity.name"}), "idForForm",
     });
 
     /**
@@ -109,5 +110,15 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
      */
     public Object idForSection(D2WContext c) {
     	return idForPageConfiguration(c) + "_" + ERXStringUtilities.safeIdentifierName((String)c.valueForKey("sectionKey"));
+    }
+    
+    /**
+     * A DOM id based on the pageConfig 
+     * 
+     * @param c d2w context
+     * @return an id representing the form for the d2w page
+     */
+    public Object idForForm(D2WContext c) {
+    	return idForPageConfiguration(c) + "_form";
     }
 }
