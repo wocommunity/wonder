@@ -149,7 +149,7 @@ public class ERExtensionsTest extends TestSuite {
         Enumeration<String> keys = data.allKeys().objectEnumerator();
         while (keys.hasMoreElements()) {
             String entityName = keys.nextElement();
-            ERXEOAccessUtilities.insertRows(ec, entityName, (NSArray<NSDictionary>)data.objectForKey(entityName));
+            ERXEOAccessUtilities.insertRows(ec, entityName, (NSArray<NSDictionary<String,?>>)data.objectForKey(entityName));
         }
         ec.saveChanges();
     }
