@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.jdbc.ERXJDBCAdaptor.Channel;
@@ -66,7 +66,7 @@ public class ERXJDBCColumn extends JDBCColumn {
 				try {
 					int i =_rs.getInt(_column);
 					if(_rs.wasNull()) {
-						return null;
+						return NSKeyValueCoding.NullValue;
 					}
 					Object result = ERXConstant.NumberConstant.constantForClassNamed(i, _constantClassName);
  					return result;
