@@ -48,8 +48,9 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
         ClassDoc[] classes = root.classes();
 
-        String[] prefixes = new String[] { "Selenium", "ERDAjax", "PayPal", "ERD2W", "ERDIV", "ERIUI", "ERNEU", "ERPDF", "ERXJS", "Ajax", "SEEO",
-                                           "D2W", "ERC", "ERD", "ERO", "ERP", "ERX", "GSV", "WOL", "ER", "IM", "JS", "SC", "SE", "WO", "WR", "WX" };
+        String[] prefixes = new String[] { "Selenium", "ERDAjax", "PayPal", "ERD2W", "ERDIV", "ERIUI", "ERNEU",
+                                           "ERPDF", "ERXJS", "Ajax", "SEEO", "UJAC", "D2W", "ERC", "ERD", "ERO", "ERP", "ERX",
+                                           "GSV", "WOL", "YUI", "ER", "GC", "IM", "JS", "SC", "SE", "WO", "WR", "WX" };
 
         comps = new HashMap<String,HashMap<String,Object>>();
 
@@ -59,19 +60,21 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
             ClassDoc aCD = classes[i];
 
-            ClassDoc parent = aCD.superclass();
-            boolean done = false;
+            if (!aCD.toString().startsWith("com.webobjects")) {
+                ClassDoc parent = aCD.superclass();
+                boolean done = false;
 
-            while (parent != null && !done) {
-                if (parent.toString().equals("com.webobjects.appserver.WOComponent")) {
-                    // System.out.println("found component: "+aCD);
-                    comps.put(aCD.toString(), new HashMap<String,Object>());
-                    done = true;
+                while (parent != null && !done) {
+                    if (parent.toString().equals("com.webobjects.appserver.WOElement")) {
+                        // System.out.println("found component: "+aCD);
+                        comps.put(aCD.toString(), new HashMap<String,Object>());
+                        done = true;
+                    }
+                    if (parent.toString().equals("java.lang.Object"))
+                        done = true;
+                    else
+                        parent = parent.superclass();
                 }
-                if (parent.toString().equals("java.lang.Object"))
-                    done = true;
-                else
-                    parent = parent.superclass();
             }
         }
 
@@ -142,7 +145,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
             }
         }
 
-        // Gather the class comments and package name for the classes of the components.
+        // Gather the class comments, binding comments and package name for the classes of the components.
         //
         keys = comps.keySet().iterator();
         while (keys.hasNext()) {
@@ -401,7 +404,10 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                         out.write("</p>\n");
                     }
 
-                    HashMap<String,String> commentsMap = (HashMap<String,String>)map.get("comments");
+                    HashMap<String,HashMap<String,String>> commentsMap = (HashMap<String,HashMap<String,String>>)map.get("comments");
+
+                    /* In the block below, I write out the bindings from the commentsSet first, and then the bindings from the api set.
+                       Therefore I only need to worry about the sort order in the commentsSet. -rrk */
 
                     Set<String> commentsSet = commentsMap.keySet();
 
@@ -414,18 +420,28 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                         out.write("<tr><th><i>binding</i></th><th><i>comment</i></th></tr>\n");
                         out.write("<tr>\n");
 
+                        TreeMap<String,String> orderingMap = new TreeMap<String,String>();
                         Iterator<String> comments = commentsSet.iterator();
-
                         while (comments.hasNext()) {
-                            String bindingName = comments.next();
+                            String foundName = comments.next();
+                            HashMap<String,String> commentInfo = commentsMap.get(foundName);
+                            orderingMap.put(commentInfo.get("order"), commentInfo.get("name"));
+                        }
+
+                        Iterator<String> ordering = orderingMap.keySet().iterator();
+
+                        while (ordering.hasNext()) {
+                            String bindingName = orderingMap.get(ordering.next());
                             out.write("<td>"+bindingName+"</td>\n");
 
-                            String bindingComment = (String)commentsMap.get(bindingName);
+                            String bindingComment = (String)((HashMap<String,String>)commentsMap.get(bindingName)).get("comment");
+
                             if (bindingComment == null || bindingComment.length() == 0) {
                                 out.write("<td>&nbsp;</td>\n");
                                 bindingCheck += "          Binding: \""+bindingName+"\": binding tag in javadoc but no/empty comment\n";
-                            } else
+                            } else {
                                 out.write("<td>"+bindingComment+"</td>\n");
+                            }
                             out.write("</tr>\n");
                         }
 
@@ -521,7 +537,11 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         return str;
     }
 
-    static HashMap<String,String> findBindingComments(List<String> comments) {
+    /**
+     * Take a list of comment strings, eg ("/**", "Something", "", " * @binding some", "\*\/"),
+     * and return a dictionary of binding names to binding comment structures.
+     */
+    static HashMap<String,HashMap<String,String>> findBindingComments(List<String> comments) {
 
         // System.out.println("start: comments = "+comments);
 
@@ -562,7 +582,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
         // System.out.println("found2: "+found2);
 
-        HashMap<String,String> finished = new HashMap<String,String>();
+        HashMap<String,HashMap<String,String>> finished = new HashMap<String,HashMap<String,String>>();
 
         // Construct the HashMap that holds the bindings. Fix the key, if needed.
         //
@@ -578,7 +598,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
             else
                 name = line;
 
-// TODO - why did adding this make me start to get unchecked warnings?
+// XXX - why did adding this make me start to get unchecked warnings?
 //
             Character c = name.charAt(name.length()-1);
             while (!Character.isJavaIdentifierPart(c)) {
@@ -592,11 +612,21 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                 line = "";
             line = line.trim();
 
-            finished.put(name, line);
+            HashMap<String,String> data = new HashMap<String,String>();
+            data.put("name", name);
+            data.put("comment", line);
+            data.put("order", paddedNumber(idx, 3));
+            finished.put(name, data);
         }
 
         // System.out.println("finished: "+finished);
         return finished;
+    }
+
+    static String paddedNumber(int num, int width) {
+        String str = ""+num;
+        while (str.length() < width) str = "0"+str;
+        return str;
     }
 
     static void test() {
@@ -604,8 +634,9 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         int result = 0;
 
         ArrayList<String> tester = new ArrayList<String>();
-        HashMap<String,String> foundComment = null;
-        HashMap<String,String> expectedComment = null;
+        HashMap<String,HashMap<String,String>> foundComment = null;
+        HashMap<String,HashMap<String,String>> expectedComment = null;
+        HashMap<String,String> oneComment = null;
 
         tester.add("/**");
         tester.add(" * Given an object displays a link to show information about the editing context of that object.*<br />");
@@ -614,12 +645,19 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         tester.add(" */");
         tester.add("");
 
-        expectedComment = new HashMap<String,String>();
-        expectedComment.put("object","");
+        expectedComment = new HashMap<String,HashMap<String,String>>();
+
+        oneComment = new HashMap<String,String>();
+        oneComment.put("name", "object");
+        oneComment.put("comment", "");
+        oneComment.put("order", "000");
+        expectedComment.put(oneComment.get("name"), oneComment);
 
         foundComment = findBindingComments(tester);
 
         result += checkTest("test1", tester, expectedComment, foundComment);
+
+/* XXX - If I put a * at the start of a line, or multiple *'s, does it break things? */
 
         tester = new ArrayList<String>();
         tester.add("/**");
@@ -640,15 +678,55 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         tester.add("  * @binding target the target of the link");
         tester.add("  */");
 
-        expectedComment = new HashMap<String,String>();
-        expectedComment.put("url","the URL to submit");
-        expectedComment.put("url2","the some exta stuff");
-        expectedComment.put("title","the title to submit");
-        expectedComment.put("alt","the alt tag (defaults to the name of the network)");
-        expectedComment.put("extra","");
-        expectedComment.put("target","the target of the link");
-        expectedComment.put("name","the name of the social network (@see er.ajax.AjaxSocialNetwork.socialNetworkNamed)");
-        expectedComment.put("action","optional action to call before opening the modal dialog.");
+        expectedComment = new HashMap<String,HashMap<String,String>>();
+
+        oneComment = new HashMap<String,String>();
+        oneComment.put("name", "url");
+        oneComment.put("comment", "the URL to submit");
+        oneComment.put("order", "001");
+        expectedComment.put(oneComment.get("name"), oneComment);
+
+        oneComment = new HashMap<String,String>();
+        oneComment.put("name", "url2");
+        oneComment.put("comment", "the some exta stuff");
+        oneComment.put("order", "002");
+        expectedComment.put(oneComment.get("name"), oneComment);
+
+        oneComment = new HashMap<String,String>();
+        oneComment.put("name", "title");
+        oneComment.put("comment", "the title to submit");
+        oneComment.put("order", "003");
+        expectedComment.put(oneComment.get("name"), oneComment);
+
+        oneComment = new HashMap<String,String>();
+        oneComment.put("name", "alt");
+        oneComment.put("comment", "the alt tag (defaults to the name of the network)");
+        oneComment.put("order", "004");
+        expectedComment.put(oneComment.get("name"), oneComment);
+
+        oneComment = new HashMap<String,String>();
+        oneComment.put("name", "extra");
+        oneComment.put("comment", "");
+        oneComment.put("order", "005");
+        expectedComment.put(oneComment.get("name"), oneComment);
+
+        oneComment = new HashMap<String,String>();
+        oneComment.put("name", "target");
+        oneComment.put("comment", "the target of the link");
+        oneComment.put("order", "007");
+        expectedComment.put(oneComment.get("name"), oneComment);
+
+        oneComment = new HashMap<String,String>();
+        oneComment.put("name", "name");
+        oneComment.put("comment", "the name of the social network (@see er.ajax.AjaxSocialNetwork.socialNetworkNamed)");
+        oneComment.put("order", "000");
+        expectedComment.put(oneComment.get("name"), oneComment);
+
+        oneComment = new HashMap<String,String>();
+        oneComment.put("name", "action");
+        oneComment.put("comment", "optional action to call before opening the modal dialog.");
+        oneComment.put("order", "006");
+        expectedComment.put(oneComment.get("name"), oneComment);
 
         foundComment = findBindingComments(tester);
 
