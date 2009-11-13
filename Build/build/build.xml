@@ -241,13 +241,13 @@
        </antcall>
     </target>
 
-    <target name="ERXTest.all" if="${include.tests}">
+    <target name="ERXTest.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.erxtest.Application" />
             <param name="project.name" value="ERXTest" />
             <param name="project.dir" value="Tests/ERXTest" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor" />
         </antcall>
     </target>
 
