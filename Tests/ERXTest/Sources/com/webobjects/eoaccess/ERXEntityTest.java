@@ -74,7 +74,7 @@ public class ERXEntityTest extends TestCase {
 
             EOModelGroup.setDefaultGroup(new EOModelGroup());
 
-            modelName = adaptorName+"BusinessModel";
+            modelName = "ERXTest";
 
             URL modelUrl = ERXTestUtilities.resourcePathURL("/"+modelName+".eomodeld", ERXEntityTest.class);
 

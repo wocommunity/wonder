@@ -19,9 +19,20 @@
             name = companyID; 
             prototypeName = id; 
         }, 
+        {
+            allowsNull = N; 
+            columnName = firstName; 
+            name = firstName; 
+            prototypeName = varchar255; 
+        }, 
         {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = lastName; 
+            name = lastName; 
+            prototypeName = varchar255; 
+        }, 
         {columnName = manager; name = manager; prototypeName = boolean; }, 
-        {columnName = name; name = name; prototypeName = varchar255; }, 
         {
             allowsNull = Y; 
             columnName = state; 
@@ -35,15 +46,27 @@
             prototypeName = varchar255; 
         }
     ); 
-    attributesUsedForLocking = (address1, address2, city, companyID, id, manager, name, state, zipcode); 
+    attributesUsedForLocking = (
+        address1, 
+        address2, 
+        city, 
+        companyID, 
+        firstName, 
+        id, 
+        lastName, 
+        manager, 
+        state, 
+        zipcode
+    ); 
     className = "er.erxtest.model.Employee"; 
     classProperties = (
         address1, 
         address2, 
         city, 
         company, 
+        firstName, 
+        lastName, 
         manager, 
-        name, 
         paychecks, 
         roles, 
         state, 

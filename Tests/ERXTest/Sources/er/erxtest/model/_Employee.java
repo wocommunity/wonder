@@ -19,8 +19,9 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   public static final ERXKey<String> ADDRESS1 = new ERXKey<String>("address1");
   public static final ERXKey<String> ADDRESS2 = new ERXKey<String>("address2");
   public static final ERXKey<String> CITY = new ERXKey<String>("city");
+  public static final ERXKey<String> FIRST_NAME = new ERXKey<String>("firstName");
+  public static final ERXKey<String> LAST_NAME = new ERXKey<String>("lastName");
   public static final ERXKey<Boolean> MANAGER = new ERXKey<Boolean>("manager");
-  public static final ERXKey<String> NAME = new ERXKey<String>("name");
   public static final ERXKey<String> STATE = new ERXKey<String>("state");
   public static final ERXKey<String> ZIPCODE = new ERXKey<String>("zipcode");
   // Relationship Keys
@@ -32,8 +33,9 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   public static final String ADDRESS1_KEY = ADDRESS1.key();
   public static final String ADDRESS2_KEY = ADDRESS2.key();
   public static final String CITY_KEY = CITY.key();
+  public static final String FIRST_NAME_KEY = FIRST_NAME.key();
+  public static final String LAST_NAME_KEY = LAST_NAME.key();
   public static final String MANAGER_KEY = MANAGER.key();
-  public static final String NAME_KEY = NAME.key();
   public static final String STATE_KEY = STATE.key();
   public static final String ZIPCODE_KEY = ZIPCODE.key();
   // Relationships
@@ -84,6 +86,28 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     takeStoredValueForKey(value, "city");
   }
 
+  public String firstName() {
+    return (String) storedValueForKey("firstName");
+  }
+
+  public void setFirstName(String value) {
+    if (_Employee.LOG.isDebugEnabled()) {
+    	_Employee.LOG.debug( "updating firstName from " + firstName() + " to " + value);
+    }
+    takeStoredValueForKey(value, "firstName");
+  }
+
+  public String lastName() {
+    return (String) storedValueForKey("lastName");
+  }
+
+  public void setLastName(String value) {
+    if (_Employee.LOG.isDebugEnabled()) {
+    	_Employee.LOG.debug( "updating lastName from " + lastName() + " to " + value);
+    }
+    takeStoredValueForKey(value, "lastName");
+  }
+
   public Boolean manager() {
     return (Boolean) storedValueForKey("manager");
   }
@@ -93,17 +117,6 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     	_Employee.LOG.debug( "updating manager from " + manager() + " to " + value);
     }
     takeStoredValueForKey(value, "manager");
-  }
-
-  public String name() {
-    return (String) storedValueForKey("name");
-  }
-
-  public void setName(String value) {
-    if (_Employee.LOG.isDebugEnabled()) {
-    	_Employee.LOG.debug( "updating name from " + name() + " to " + value);
-    }
-    takeStoredValueForKey(value, "name");
   }
 
   public String state() {
@@ -320,12 +333,14 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   }
 
 
-  public static Employee createEmployee(EOEditingContext editingContext, Boolean manager
-, String name
+  public static Employee createEmployee(EOEditingContext editingContext, String firstName
+, String lastName
+, Boolean manager
 , er.erxtest.model.Company company) {
     Employee eo = (Employee) EOUtilities.createAndInsertInstance(editingContext, _Employee.ENTITY_NAME);    
+		eo.setFirstName(firstName);
+		eo.setLastName(lastName);
 		eo.setManager(manager);
-		eo.setName(name);
     eo.setCompanyRelationship(company);
     return eo;
   }

@@ -21,8 +21,8 @@ er.migration.createTablesIfNecessary=true
 er.migration.modelNames=ERXTest
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 
-er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators=2
-er.extensions.multicastSynchronizer.enabled=false
+#er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators=1
+#er.extensions.multicastSynchronizer.enabled=false
 
 # Set root category priority to DEBUG and its only appender to A1.
 log4j.rootCategory=WARN, A1

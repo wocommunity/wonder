@@ -162,8 +162,9 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     assertNotNull(company_osc2);
 
     // Create and Save Employee1 in Company1 in OSC1
-    String employeeName = "Employee" + ERXRandomGUID.newGid();
-    Employee employee_osc1 = Employee.createEmployee(editingContext_osc1, Boolean.FALSE, employeeName, company_osc1);
+    String employeeFirstName = "Employee" + ERXRandomGUID.newGid();
+    String employeeLastName = "Jones";
+    Employee employee_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName, employeeLastName, Boolean.FALSE, company_osc1);
     editingContext_osc1.saveChanges();
 
     // Fetch employees relationship of Company1 in OSC1
@@ -192,8 +193,9 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     NSArray employees_osc2 = company_osc2.employees();
 
     // Create and Save Employee1 for Company1 in OSC1
-    String employeeName = "Employee" + ERXRandomGUID.newGid();
-    Employee employee_osc1 = Employee.createEmployee(editingContext_osc1, Boolean.FALSE, employeeName, company_osc1);
+    String employeeFirstName = "Employee" + ERXRandomGUID.newGid();
+    String employeeLastName = "Jones";
+    Employee employee_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName, employeeLastName, Boolean.FALSE, company_osc1);
     editingContext_osc1.saveChanges();
     sleep();
 
@@ -204,8 +206,9 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     assertContainsExactlyEOs(new NSArray<Employee>(employee_osc1), company_osc2.employees());
 
     // Create employee for Company1 in OSC2 and Save
-    String employeeName2 = "Employee" + ERXRandomGUID.newGid();
-    Employee employee_osc2 = Employee.createEmployee(editingContext_osc2, Boolean.FALSE, employeeName2, company_osc2);
+    String employeeFirstName2 = "Employee" + ERXRandomGUID.newGid();
+    String employeeLastName2 = "Jones";
+    Employee employee_osc2 = Employee.createEmployee(editingContext_osc2, employeeFirstName2, employeeLastName2, Boolean.FALSE, company_osc2);
     editingContext_osc2.saveChanges();
     sleep();
 
@@ -230,8 +233,9 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     assertNotNull(company_osc2);
 
     // Create (but do not save) Employee1 for Company1 in OSC2
-    String employeeName1 = "Employee" + ERXRandomGUID.newGid();
-    Employee employee1_osc2 = Employee.createEmployee(editingContext_osc2, Boolean.FALSE, employeeName1, company_osc2);
+    String employeeFirstName1 = "Employee" + ERXRandomGUID.newGid();
+    String employeeLastName1 = "Jones";
+    Employee employee1_osc2 = Employee.createEmployee(editingContext_osc2, employeeFirstName1, employeeLastName1, Boolean.FALSE, company_osc2);
 
     // Check employees for Company1 in OSC1 (should contain uncommitted Employee)
     NSArray employees_osc2_BeforeInsert = company_osc2.employees();
@@ -239,8 +243,9 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     assertEOEquals(employee1_osc2, employees_osc2_BeforeInsert.objectAtIndex(0));
 
     // Create and save Employee2 for Company1 in OSC1
-    String employeeName2 = "Employee" + ERXRandomGUID.newGid();
-    Employee employee2_osc1 = Employee.createEmployee(editingContext_osc1, Boolean.FALSE, employeeName2, company_osc1);
+    String employeeFirstName2 = "Employee" + ERXRandomGUID.newGid();
+    String employeeLastName2 = "Jones";
+    Employee employee2_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName2, employeeLastName2, Boolean.FALSE, company_osc1);
     editingContext_osc1.saveChanges();
     sleep();
 
@@ -270,10 +275,12 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     sleep();
 
     // Create and Save Employee1 and Employee2 for Company1 in OSC1
-    String employee1Name = "Employee" + ERXRandomGUID.newGid();
-    Employee employee1_osc1 = Employee.createEmployee(editingContext_osc1, Boolean.FALSE, employee1Name, company_osc1);
-    String employee2Name = "Employee" + ERXRandomGUID.newGid();
-    Employee employee2_osc1 = Employee.createEmployee(editingContext_osc1, Boolean.FALSE, employee2Name, company_osc1);
+    String employeeFirstName1 = "Employee" + ERXRandomGUID.newGid();
+    String employeeLastName1 = "Jones";
+    Employee employee1_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName1, employeeLastName1, Boolean.FALSE, company_osc1);
+    String employeeFirstName2 = "Employee" + ERXRandomGUID.newGid();
+    String employeeLastName2 = "Jones";
+    Employee employee2_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName2, employeeLastName2, Boolean.FALSE, company_osc1);
     editingContext_osc1.saveChanges();
     sleep();
 
@@ -304,7 +311,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     assertEquals(2, holdingOnToEmployees.count());
     for (Employee employee : holdingOnToEmployees) {
       assertNotNull(employee);
-      assertNotNull(employee.name());
+      assertNotNull(employee.firstName());
     }
 
     NSArray<Employee> holdingOnToUntouchedEmployees = company_osc2.employees();
@@ -319,14 +326,14 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     assertEquals(2, holdingOnToEmployees.count());
     for (Employee employee : holdingOnToEmployees) {
       assertNotNull(employee);
-      assertNotNull(employee.name());
+      assertNotNull(employee.firstName());
     }
 
     // Test that the deleted object is technically still in our EC
     assertEquals(2, holdingOnToUntouchedEmployees.count());
     for (Employee employee : holdingOnToUntouchedEmployees) {
       assertNotNull(employee);
-      assertNotNull(employee.name());
+      assertNotNull(employee.firstName());
     }
 
 //    for (Employee employee : holdingOnToEmployees) {

@@ -2,11 +2,12 @@
 package er.extensions.eof;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import com.webobjects.eocontrol.EOEditingContext;
 
-public class ERXECTest extends TestCase {
+import er.erxtest.tests.ERXTestCase;
+
+public class ERXECTest extends ERXTestCase {
 
     @Override
     protected void setUp() throws Exception {
