@@ -81,7 +81,7 @@
         [rulesTableView setDoubleAction:@selector(showRuleModel:)];
         [rulesTableView setTarget:self];
 #endif        
-        [rulesTableView setEnabled:NO];
+        //[rulesTableView setEnabled:NO];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:nil];
         [super awakeFromNib]; // Must be called after loading second nib, else toolbar not initialized correctly
         // TODO Use RBSplitView to allow programmatically collapsing splitviews (http://www.brockerhoff.net/src/rbs.html)
