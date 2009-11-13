@@ -12,8 +12,9 @@ import com.webobjects.directtoweb.D2WDisplayDate;
 /**
  * Displays a date or a null string.<br />
  * 
+ * @d2wKey formatter
+ * @d2wKey displayValueForNull
  */
-
 public class ERD2WDisplayDateOrNull extends D2WDisplayDate {
     
     public ERD2WDisplayDateOrNull(WOContext context) { super(context); }

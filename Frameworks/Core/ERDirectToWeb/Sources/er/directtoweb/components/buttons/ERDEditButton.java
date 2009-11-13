@@ -20,9 +20,9 @@ import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Nice edit button for editing a toMany relationship in another page.<br />
- * 
+ * @d2wKey useNestedEditingContext
+ * @d2wKey isEntityEditable
  */
-
 public class ERDEditButton extends ERDActionButton {
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDEditButton.class);

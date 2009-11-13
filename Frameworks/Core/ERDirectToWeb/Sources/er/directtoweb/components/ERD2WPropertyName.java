@@ -22,8 +22,15 @@ import er.extensions.foundation.ERXValueUtilities;
  * Used for displaying the propertyName in a template.<br />
  * 
  * @binding localContext
+ * @d2wKey displayRequiredMarkerCell
+ * @d2wKey escapeHTML
+ * @d2wKey displayNameForProperty
+ * @d2wKey componentName
+ * @d2wKey customComponentName
+ * @d2wKey hidePropertyName
+ * @d2wKey displayRequiredMarker
+ * @d2wKey keyPathsWithValidationExceptions
  */
-
 public class ERD2WPropertyName extends ERD2WStatelessComponent {
     public static final Logger log = Logger.getLogger(ERD2WPropertyName.class);
 

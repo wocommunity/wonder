@@ -11,9 +11,8 @@ import com.webobjects.directtoweb.D2WDisplayToManyTable;
 
 /**
  * Improved toMany display compononent, uses ERListDisplay.<br />
- * 
+ * @d2wKey emptyArrayDisplayString
  */
-
 public class ERD2WDisplayToManyList extends D2WDisplayToManyTable {
 
     public ERD2WDisplayToManyList(WOContext context) { super(context); }

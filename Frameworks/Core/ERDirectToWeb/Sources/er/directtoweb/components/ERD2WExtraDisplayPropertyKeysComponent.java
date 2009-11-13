@@ -21,8 +21,9 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding extraPropertiesKey - the property key property key to use when asking the D2W context 
  * which extra property keys to display
  * @author Travis Cripps
+ * @d2wKey componentName
+ * @d2wKey propertyKey
  */
-
 public class ERD2WExtraDisplayPropertyKeysComponent extends D2WComponent {
     
     private String _extraPropertiesKey;

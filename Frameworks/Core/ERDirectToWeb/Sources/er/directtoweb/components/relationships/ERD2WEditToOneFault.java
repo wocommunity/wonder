@@ -15,6 +15,11 @@ import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WEditToOneFault;
 import com.webobjects.directtoweb.EditRelationshipPageInterface;
 
+/**
+ * @d2wKey editIcon
+ * @d2wKey disabled
+ * @d2wKey editRelationshipConfigurationName
+ */
 public class ERD2WEditToOneFault extends D2WEditToOneFault {
     /** logging support */
     public static final Logger log = Logger.getLogger(ERD2WEditToOneFault.class);

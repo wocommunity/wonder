@@ -12,7 +12,10 @@ import com.webobjects.directtoweb.D2WCustomComponent;
  * 100 : .. and (propertyKey = "name") => componentName = ERD2WMultiItemCustomComponent
  * Then all firstName and lastName will end up in one line with a "name" label.
  * @author ak
- *
+ * @d2wKey propertyKey
+ * @d2wKey displayPropertyKeys
+ * @d2wKey displayNameForProperty
+ * @d2wKey componentName
  */
 public class ERD2WMultiItemCustomComponent extends D2WCustomComponent {
 

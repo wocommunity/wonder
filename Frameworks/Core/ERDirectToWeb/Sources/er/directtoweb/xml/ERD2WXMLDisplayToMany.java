@@ -12,9 +12,8 @@ import com.webobjects.foundation.NSArray;
 
 /**
  * xml display component for to many relationships<br />
- * 
+ * @d2wKey propertyKey
  */
-
 public class ERD2WXMLDisplayToMany extends D2WDisplayString {
 
     public ERD2WXMLDisplayToMany(WOContext context) { super(context); }

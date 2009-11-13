@@ -53,8 +53,16 @@ import er.extensions.validation.ERXValidation;
  *
  * Known Issues:
  *      changing the number of items per batch causes problems (the display group's batch is updated too soon in the request/response loop)
+ * @d2wKey showBanner
+ * @d2wKey object
+ * @d2wKey isEntityInspectable
+ * @d2wKey shouldValidateBeforeSave
+ * @d2wKey shouldSaveChanges
+ * @d2wKey shouldRecoverFromOptimisticLockingFailure
+ * @d2wKey saveLabelTemplateKey
+ * @d2wKey displayNameForEntity
+ * @d2wKey showMassChange
  */
-
 public class ERD2WEditableListPage extends ERD2WListPage implements ERXExceptionHolder, ERDObjectSaverInterface {
 
     public static final Logger log = Logger.getLogger(ERD2WEditableListPage.class);

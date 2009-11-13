@@ -24,8 +24,9 @@ import er.extensions.validation.ERXValidationFactory;
 /**
  * Common superclass of all ER's edit number components.<br />
  * 
+ * @d2wKey name
+ * @d2wKey smartAttribute
  */
-
 public class ERD2WEditNumber extends D2WEditNumber {
 
     public ERD2WEditNumber(WOContext context) { super(context); }

@@ -24,8 +24,15 @@ import er.directtoweb.pages.ERD2WEditableListPage;
  * @binding nextPage
  * @binding object
  * @binding showCancel
+ * @d2wKey formEncoding
+ * @d2wKey emptyListComponentName
+ * @d2wKey repetitionComponentName
+ * @d2wKey backgroundColorForTable
+ * @d2wKey displayNameForEntity
+ * @d2wKey textColor
+ * @d2wKey pageWrapperName
+ * @d2wKey showBanner
  */
-
 public class ERD2WEditableListTemplate extends ERD2WEditableListPage {
 
     public ERD2WEditableListTemplate(WOContext context) {super(context);}

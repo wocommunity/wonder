@@ -8,13 +8,19 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 /**
  * Class for DirectToWeb Component ERDInspectPageRepetition.
  *
- * @binding sample sample binding explanation
- * @d2wKey sample sample d2w key
- *
  * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
+ * @d2wKey componentName
+ * @d2wKey colSpan
+ * @d2wKey rowSpan
+ * @d2wKey maxColumns
+ * @d2wKey matrixLayoutVertical
+ * @d2wKey useMatrixLayout
+ * @d2wKey useTableLayout
+ * @d2wKey propertyNameComponentName
+ * @d2wKey sectionComponentName
+ * @d2wKey useHorizontalLayoutTables
  */
-
 public class ERDInspectPageRepetition extends ERDAttributeRepetition {
 
     /** logging support */

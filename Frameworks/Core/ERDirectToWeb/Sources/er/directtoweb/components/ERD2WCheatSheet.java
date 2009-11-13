@@ -24,7 +24,7 @@ import er.extensions.appserver.ERXWOContext;
  * They are also used by the D2WAssistant and ERD2Ws component debugging features.
  * 
  * @author ak
- *
+ * @d2wKey object
  */
 public class ERD2WCheatSheet extends D2WComponent {
 

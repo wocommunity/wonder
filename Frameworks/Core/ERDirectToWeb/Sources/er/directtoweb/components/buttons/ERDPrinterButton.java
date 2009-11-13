@@ -25,8 +25,8 @@ import er.directtoweb.pages.ERD2WListPage;
  * @binding task
  * @binding useSubmitButton" defaults="Boolean
  * @binding doNotUseForm" defaults="Boolean
+ * @d2wKey forcedSubTask
  */
-
 public class ERDPrinterButton extends ERDActionButton {
 
     public ERDPrinterButton(WOContext context) { super(context); }

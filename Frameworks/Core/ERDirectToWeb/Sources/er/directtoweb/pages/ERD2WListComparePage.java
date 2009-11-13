@@ -14,6 +14,10 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
+/**
+ * @d2wKey comparisonObject
+ * @d2wKey displayPropertyKeys
+ */
 public class ERD2WListComparePage extends ERD2WListPage {
 
     /**

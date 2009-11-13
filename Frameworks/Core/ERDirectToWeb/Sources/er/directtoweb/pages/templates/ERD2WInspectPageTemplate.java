@@ -13,8 +13,19 @@ import er.directtoweb.pages.ERD2WInspectPage;
 /**
  * Beefed up inspect page.<br />
  * 
+ * @d2wKey cancelButtonLabel
+ * @d2wKey printerButtonComponentName
+ * @d2wKey editButtonLabel
+ * @d2wKey formEncoding
+ * @d2wKey hasForm
+ * @d2wKey headerComponentName
+ * @d2wKey repetitionComponentName
+ * @d2wKey actionBarComponentName
+ * @d2wKey controllerButtonComponentName
+ * @d2wKey pageWrapperName
+ * @d2wKey returnButtonLabel
+ * @d2wKey saveButtonLabel
  */
-
 public class ERD2WInspectPageTemplate extends ERD2WInspectPage {
     
     public ERD2WInspectPageTemplate(WOContext context) { super(context); }

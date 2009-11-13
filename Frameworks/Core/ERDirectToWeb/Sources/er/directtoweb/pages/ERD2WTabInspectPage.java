@@ -28,9 +28,9 @@ import er.extensions.validation.ERXValidationException;
 
 /**
  * Superclass for all tab and wizard pages.<br />
- * 
+ * @d2wKey firstResponder
+ * @d2wKey tabComponentName
  */
-
 public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
 
     public final static String WILL_SWITCH_TAB = "willSwitchTab";

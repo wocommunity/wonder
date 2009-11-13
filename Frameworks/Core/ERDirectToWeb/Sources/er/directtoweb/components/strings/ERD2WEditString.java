@@ -11,9 +11,11 @@ import com.webobjects.directtoweb.D2WEditString;
 
 /**
  * Allows specifing the maxLength for a WOTextField.<br />
- * 
+ * @d2wKey maxLength
+ * @d2wKey id
+ * @d2wKey title
+ * @d2wKey name
  */
-
 public class ERD2WEditString extends D2WEditString {
 
         public ERD2WEditString(WOContext context) { super(context); }

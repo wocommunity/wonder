@@ -11,9 +11,9 @@ import com.webobjects.directtoweb.D2WEditString;
 
 /**
  * Used for editing urls.<br />
- * 
+ * @d2wKey length
+ * @d2wKey maxLength
  */
-
 public class ERD2WEditURL extends D2WEditString {
 
     public ERD2WEditURL(WOContext context) { super(context); }

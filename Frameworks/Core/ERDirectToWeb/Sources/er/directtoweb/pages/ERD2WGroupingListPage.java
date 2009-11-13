@@ -9,10 +9,14 @@ package er.directtoweb.pages;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
+
 /**
  * Displays a groups of objects grouped by a key.<br />
+ * @d2wKey groupingKey
+ * @d2wKey groupingComponentName
+ * @d2wKey groupingItemKey
+ * @d2wKey subTask
  */
-
 public class ERD2WGroupingListPage extends ERD2WListPage {
 
     /**

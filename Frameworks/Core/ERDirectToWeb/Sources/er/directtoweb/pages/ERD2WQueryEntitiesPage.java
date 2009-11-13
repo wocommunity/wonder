@@ -17,8 +17,9 @@ import com.webobjects.eocontrol.EODataSource;
  *
  * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
+ * @d2wKey queryConfigurationName
+ * @d2wKey listConfigurationName
  */
-
 public class ERD2WQueryEntitiesPage extends ERD2WPage implements QueryAllPageInterface {
 
     /** logging support */

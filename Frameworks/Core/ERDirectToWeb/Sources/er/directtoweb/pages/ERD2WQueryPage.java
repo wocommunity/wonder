@@ -44,8 +44,20 @@ import java.util.Enumeration;
  * restore the initial query bindings by supplying a NS(Mutable)Dictionary which
  * contains the keys "queryMin", "queryMax" etc from the respective fields of
  * the WODisplayGroup.
+ * @d2wKey fetchSpecificationName
+ * @d2wKey enableQueryForNullValues
+ * @d2wKey isDeep
+ * @d2wKey usesDistinct
+ * @d2wKey refrehRefetchedObjects
+ * @d2wKey fetchLimit
+ * @d2wKey prefetchingRelationshipKeyPaths
+ * @d2wKey showListInSamePage
+ * @d2wKey listConfigurationName
+ * @d2wKey queryDataSourceDelegate
+ * @d2wKey queryValidationDelegate
+ * @d2wKey enableQueryForNullValues
+ * @d2wKey canQueryPropertyForNullValues
  */
-
 public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
     protected WODisplayGroup displayGroup;

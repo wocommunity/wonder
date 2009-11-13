@@ -13,6 +13,8 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 /**
  * Full blown display string with all the bells and whistles.<br />
  * Of the value displayed is an EO, uses the userPresentableDescription()
+ * @d2wKey class
+ * @d2wKey omitTags
  */
 //FIXME AK: should actually use keyWhenRelationship
 public class ERD2WDisplayString extends D2WDisplayString {

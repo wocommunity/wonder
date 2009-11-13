@@ -8,8 +8,8 @@ import er.extensions.localization.ERXLocalizer;
 
 /**
  * Localized replacement for D2WQueryOperator.
+ * @d2wKey queryOperators
  */
-
 public class ERD2WQueryOperator extends QueryOperatorComponent {
 
     public NSArray queryOperators;

@@ -13,7 +13,7 @@ import er.extensions.localization.ERXLocalizer;
  * @see ERD2WCustomQueryBoolean
  * 
  * @author mendis
- *
+ * @d2wKey choicesNames
  */
 public class ERD2WQueryBooleanRadioList extends D2WQueryBoolean {
 	

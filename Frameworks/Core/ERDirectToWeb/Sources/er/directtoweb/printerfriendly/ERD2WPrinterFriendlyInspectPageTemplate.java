@@ -12,9 +12,10 @@ import er.directtoweb.pages.ERD2WInspectPage;
 
 /**
  * Printer friendly inspect page.<br />
- * 
+ * @d2wKey displayNameForEntity
+ * @d2wKey repetitionComponentName
+ * @d2wKey pageWrapperName
  */
-
 public class ERD2WPrinterFriendlyInspectPageTemplate extends ERD2WInspectPage {
 
     public ERD2WPrinterFriendlyInspectPageTemplate(WOContext context) { super(context); }

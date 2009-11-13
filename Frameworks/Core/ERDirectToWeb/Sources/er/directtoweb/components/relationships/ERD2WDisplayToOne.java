@@ -15,8 +15,9 @@ import er.extensions.localization.ERXLocalizer;
 /**
  * Same as original except allows display of noSelectionString if relationship is null.<br />
  * Also, links are disabled if no object exists.
+ * @d2wKey noSelectionString
+ * @d2wKey disabled
  */
-
 public class ERD2WDisplayToOne extends D2WDisplayToOne {
 
     public ERD2WDisplayToOne(WOContext context) { super(context); }

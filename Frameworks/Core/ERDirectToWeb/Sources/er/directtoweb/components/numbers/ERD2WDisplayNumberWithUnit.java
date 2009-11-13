@@ -18,8 +18,9 @@ import er.extensions.formatters.ERXNumberFormatter;
  * 
  * @binding key
  * @binding object
+ * @d2wKey resolvedUnit
+ * @d2wKey displayValueForNull
  */
-
 public class ERD2WDisplayNumberWithUnit extends D2WDisplayNumber {
 
     public ERD2WDisplayNumberWithUnit(WOContext context) {

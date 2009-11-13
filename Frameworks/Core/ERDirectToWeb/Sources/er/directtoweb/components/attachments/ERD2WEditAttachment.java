@@ -11,6 +11,7 @@ import com.webobjects.directtoweb.D2WComponent;
  *
  * @binding object
  * @binding propertyKey
+ * @d2wKey size
  */
 public class ERD2WEditAttachment extends D2WComponent {
 

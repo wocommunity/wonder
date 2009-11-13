@@ -13,8 +13,21 @@ import er.directtoweb.pages.ERD2WMessagePage;
 /**
  * More robust confirm messaging.  Still a work in progress.<br />
  * 
+ * @d2wKey pageWrapperName
+ * @d2wKey confirmMessageManditory
+ * @d2wKey confirmMessageKey
+ * @d2wKey confirmRows
+ * @d2wKey confirmMessageTextfieldSize
+ * @d2wKey confirmMessageManditoryErrorMessage
+ * @d2wKey confirmMessageExplanation
+ * @d2wKey confirmMessageIsTextfield
+ * @d2wKey confirmMessageTextfieldMaxlength
+ * @d2wKey okButtonLabel
+ * @d2wKey cancelButtonLabel
+ * @d2wKey explanationComponentName
+ * @d2wKey explanationConfigurationName
+ * @d2wKey shouldProvideConfirmMessage
  */
-
 public class ERD2WConfirmPageTemplate extends ERD2WMessagePage {
 
     public ERD2WConfirmPageTemplate(WOContext context) { super(context); }

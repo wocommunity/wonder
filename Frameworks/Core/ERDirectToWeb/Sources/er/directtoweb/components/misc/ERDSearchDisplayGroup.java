@@ -15,7 +15,8 @@ import er.directtoweb.components.ERDCustomQueryComponent;
  * For nesting inside list page nav bar
  * 
  * @author mendis
- *
+ * @d2wKey searchKey
+ * @d2wKey displayNameForSearchKey
  */
 public class ERDSearchDisplayGroup extends ERDCustomQueryComponent {
 	public String value;

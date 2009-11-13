@@ -20,8 +20,26 @@ import er.extensions.foundation.ERXValueUtilities;
  * and has better layout options.
  * @d2wKey restrictedChoiceKey keypath off the component that returns the list of objects to display
  * @d2wKey restrictingFetchSpecification name of the fetchSpec to use for the list of objects.
+ * @d2wKey collapsibleComponentName
+ * @d2wKey allowCollapsing
+ * @d2wKey relationship
+ * @d2wKey numCols
+ * @d2wKey propertyKey
+ * @d2wKey size
+ * @d2wKey entity
+ * @d2wKey itemWidth
+ * @d2wKey toManyUIStyle
+ * @d2wKey goingVertically
+ * @d2wKey sortKey
+ * @d2wKey localizeDisplayKeys
+ * @d2wKey destinationEntityName
+ * @d2wKey sortCaseInsensitive
+ * @d2wKey id
+ * @d2wKey title
+ * @d2wKey name
+ * @d2wKey selectedChoiceKey
+ * @d2wKey shouldShowSelectAllButtons
  */
-
 public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
 
     public ERD2WEditToManyRelationship(WOContext context) { super(context); }

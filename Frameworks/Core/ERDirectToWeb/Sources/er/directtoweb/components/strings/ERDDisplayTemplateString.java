@@ -5,6 +5,9 @@ import com.webobjects.appserver.*;
 
 import er.directtoweb.components.ERDCustomComponent;
 
+/**
+ * @d2wKey object
+ */
 public class ERDDisplayTemplateString extends ERDCustomComponent {
 
     public ERDDisplayTemplateString(WOContext context) {

@@ -12,9 +12,10 @@ import er.directtoweb.pages.ERD2WListPage;
 
 /**
  * Standard list in CSV format.<br />
- * 
+ * @d2wKey propertyKey
+ * @d2wKey displayPropertyKeys
+ * @d2wKey displayNameForProperty
  */
-
 public class ERD2WCSVListPageTemplate extends ERD2WListPage {
     
     public ERD2WCSVListPageTemplate(WOContext context) { super(context); }

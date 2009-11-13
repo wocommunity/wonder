@@ -18,8 +18,8 @@ import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Default component shown when a D2W list is empty.<br />
+ * @d2wKey showCreateObjectLink
  */
-
 public class ERDEmptyListMessage extends ERDCustomComponent {
 
 	public ERDEmptyListMessage(WOContext context) {

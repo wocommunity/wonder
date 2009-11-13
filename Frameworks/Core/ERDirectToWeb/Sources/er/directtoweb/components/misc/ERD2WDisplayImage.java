@@ -13,8 +13,10 @@ import com.webobjects.foundation.NSData;
 /**
  * Displays an image via the src or data binding, with imageHeight and imageWidth from the d2wContext<br />
  * 
+ * @d2wKey imageWidth
+ * @d2wKey imageHeight
+ * @d2wKey imageMimeType
  */
-
 public class ERD2WDisplayImage extends D2WDisplayString {
     
     public ERD2WDisplayImage(WOContext context) {

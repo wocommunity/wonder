@@ -16,6 +16,7 @@ import com.webobjects.directtoweb.NextPageDelegate;
  * Similiar to the message page, except this one has the choice Yes or No.<br />
  * As this functionality is already integrated in ERD2WMessagePage, you should use this instead.
  * @deprecated subclass ERD2WMessagePage instead, also, the name is wrong
+ * @d2wKey pageWrapperName
  */
 //DELETEME
 

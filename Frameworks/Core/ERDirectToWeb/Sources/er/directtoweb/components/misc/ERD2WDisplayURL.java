@@ -12,6 +12,7 @@ import com.webobjects.directtoweb.D2WDisplayString;
 /**
  * Displays the URL in a hyperlink with target set to "_blank".  The target value may be overridden using the 
  * D2W key <code>urlTarget</code>.
+ * @d2wKey urlTarget
  */
 public class ERD2WDisplayURL extends D2WDisplayString {
 
