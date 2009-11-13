@@ -33,7 +33,8 @@ public class ERXTest0 extends Migration {
     employeeTable.newIntegerColumn("companyID", false);
     employeeTable.newIntegerColumn("id", false);
     employeeTable.newBooleanColumn("manager", false);
-    employeeTable.newStringColumn("name", 255, false);
+    employeeTable.newStringColumn("firstName", 255, false);
+    employeeTable.newStringColumn("lastName", 255, false);
     employeeTable.newStringColumn("state", 255, true);
     employeeTable.newStringColumn("zipcode", 255, true);
     employeeTable.create();

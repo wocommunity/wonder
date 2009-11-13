@@ -6,11 +6,8 @@ import er.erxtest.Application;
 import er.extensions.ERXExtensions;
 
 public class ERXTestSuite {
-  static {
-    ERXExtensions.initApp(Application.class, new String[0]);
-  }
-  
   public static void initialize() {
+    ERXExtensions.initApp(Application.class, new String[0]);
     // just provided so TestCase can touch this class to get the static block
   }
 
