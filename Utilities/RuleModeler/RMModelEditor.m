@@ -304,7 +304,7 @@
 - (void)awakeFromNib {
     [[self window] useOptimizedDrawing:YES];
     
-    NSSize  aSize = NSMakeSize(0, 120);
+    NSSize  aSize = NSMakeSize(320, 120);
     aSize.height = [[NSUserDefaults standardUserDefaults] floatForKey:@"sourceDrawerHeight"];
     [sourceDrawer setContentSize:aSize];
     

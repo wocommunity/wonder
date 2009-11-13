@@ -45,6 +45,7 @@
     BOOL	    _enabled;
 	RMModel		*_model; // Back-pointer - not retained
     BOOL        isNewRule; // FIXME Dependency on RMFilteringArrayController
+    NSString *_documentation;
 }
 
 + (void)setDefaultRulePriority:(int)priority;
@@ -84,4 +85,6 @@
 
 - (void)resetDescriptionCaches;
 
+- (void)setDocumentation:(NSString *)documentation;
+- (NSString *)documentation;
 @end

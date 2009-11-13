@@ -85,8 +85,9 @@ static int defaultRulePriority = 0;
         id  rhs = [eachLoadedRule valueForKeyPath:@"rhs"];
         
         // It might happen that rhs is nil
-        if(rhs)
-            [eachLoadedRule takeValue:@"Assignment" forKeyPath:@"rhs.class"];
+        if (rhs) {
+            [eachLoadedRule setValue:@"Assignment" forKeyPath:@"rhs.class"];
+        }
     }
     decodedRules = [unarchiver decodeObjectForKey:@"rules"];
     
@@ -116,6 +117,7 @@ static int defaultRulePriority = 0;
     [_rhs removeObserver:self forKeyPath:@"assignmentClass"];
     [_lhs release];
     [_rhs release];
+    [_documentation release];
     [super dealloc];
 }
 
@@ -160,10 +162,12 @@ static int defaultRulePriority = 0;
                             _lhs = nil;
                     }
                 }
-	    }
-		[innerQuals release];
-	}
+            }
+            [innerQuals release];
+        }
     }
+    
+    _documentation = [[unarchiver decodeObjectForKey:@"documentation"] retain];
     
     return self;
 }
@@ -192,6 +196,9 @@ static int defaultRulePriority = 0;
         [archiver encodeObject:lhs forKey:@"lhs"];
     [archiver encodeObject:_rhs forKey:@"rhs"];
     [archiver encodeObject:@"com.webobjects.directtoweb.Rule" forKey:@"class"];
+    if (_documentation) {
+        [archiver encodeObject:_documentation forKey:@"documentation"];
+    }
     if (lhs != _lhs) {
         [lhs release];
     }
@@ -474,4 +481,12 @@ static int defaultRulePriority = 0;
     [self didChangeValueForKey:@"lhsFormattedDescription"];
 }
 
+- (void)setDocumentation:(NSString *)documentation {
+    [_documentation release];
+    _documentation = [documentation copy];
+}
+
+- (NSString *)documentation {
+    return _documentation;
+}
 @end
