@@ -351,7 +351,7 @@ public class ERIndex {
             index(transaction);
         }
 
-        void index(Transaction transaction) {
+        synchronized void index(Transaction transaction) {
             try {
                 NSNotificationCenter.defaultCenter().postNotification(IndexingStartedNotification, transaction);
                 boolean create = transaction.hasClear();
