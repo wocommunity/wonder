@@ -30,18 +30,8 @@ import er.extensions.ERXTestUtilities;
 public class ERXEOAccessUtilitiesTest extends ERXTestCase {
   static boolean modelDataLoaded = false;
 
-  static String buildRoot;
-  static {
-    buildRoot = System.getProperty("build.root");
-  }
-
   public static Test suite() {
     TestSuite suite = new TestSuite();
-//      suite.addTestSuite(ERXECLockingTestCase.class);
-//      suite.addTestSuite(ERXEnterpriseObjectCacheTestCase.class);
-//      suite.addTestSuite(ERXExpiringCacheTestCase.class);
-//      suite.addTestSuite(ERXGenericRecordUpdateInverseRelationshipsTest.class);
-
     // See note in er.extensions.eof.ERXEOAccessUtilities.testAll() -rrk
 
     java.util.Enumeration<String> adaptors = ERExtensionsTest.availableAdaptorNames().objectEnumerator();
@@ -85,19 +75,13 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
   public void setUp() throws Exception {
     super.setUp();
 
+    System.out.println("ERXEOAccessUtilitiesTest.setUp: setup");
     if (_ec != null)
       _ec.dispose();
     if (_model != null)
       _model.dispose();
 
-    EOModelGroup.setDefaultGroup(new EOModelGroup());
-
     _modelName = "ERXTest";
-
-    URL modelUrl = ERXTestUtilities.resourcePathURL("/" + _modelName + ".eomodeld", getClass());
-
-    EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
-
     _model = EOModelGroup.defaultGroup().modelNamed(_modelName);
     _origConnectionDictionary = _model.connectionDictionary();
     _model.setConnectionDictionary(ERExtensionsTest.connectionDict(_adaptorName));
