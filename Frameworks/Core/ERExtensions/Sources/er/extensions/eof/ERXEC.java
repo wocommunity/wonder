@@ -1440,8 +1440,11 @@ public class ERXEC extends EOEditingContext {
         	if(delegate != null && delegate.respondsTo("editingContextShouldMergeChangesForObject")) {
         		return delegate.booleanPerform("editingContextShouldMergeChangesForObject", ec, eo);
         	}
-        	//AK: totally untested... may NPE?
-        	return eo.changesFromSnapshot(ec.committedSnapshotForObject(eo)).count() == 0;
+        	NSDictionary committedSnapshotForObject = ec.committedSnapshotForObject(eo);
+        	if(committedSnapshotForObject != null) {
+        		return eo.changesFromSnapshot(committedSnapshotForObject).count() == 0;
+        	}
+        	return false;
         }
         
         public void editingContextDidMergeChanges(EOEditingContext ec) {
