@@ -34,6 +34,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation._NSDelegate;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXProperties;
@@ -1420,6 +1421,62 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	/**
+	 * Temp EC delegate that prevents merging of changes to objects that already have changes.
+	 * 
+	 * @author ak
+	 */
+	public static class _DenyMergeDelegate {
+		
+		private _NSDelegate delegate;
+		
+        public _DenyMergeDelegate(Object original) {
+			if (original != null) {
+				delegate = new _NSDelegate(original.getClass(), original);
+			}
+		}
+
+		public boolean editingContextShouldMergeChangesForObject(EOEditingContext ec, EOEnterpriseObject eo) {
+        	if(delegate != null && delegate.respondsTo("editingContextShouldMergeChangesForObject")) {
+        		return delegate.booleanPerform("editingContextShouldMergeChangesForObject", ec, eo);
+        	}
+        	//AK: totally untested... may NPE?
+        	return eo.changesFromSnapshot(ec.committedSnapshotForObject(eo)).count() == 0;
+        }
+        
+        public void editingContextDidMergeChanges(EOEditingContext ec) {
+        	if(delegate != null && delegate.respondsTo("editingContextShouldMergeChangesForObject")) {
+        		delegate.perform("editingContextDidMergeChanges", ec);
+        	}
+        }
+	}
+
+	private _NSDelegate _denyDelegate;
+	
+	/**
+	 * Quick and experimental hack to hook into the merge-changes system. If
+	 * it's not useful, it should be removed again.
+	 */
+	@Override
+	public void _processObjectStoreChanges(NSDictionary info) {
+		if (ERXProperties.booleanForKey("er.extensions.ERXEC.denyMerges")) {
+			Object original = delegate();
+			try {
+				if (_denyDelegate == null) {
+					_denyDelegate = new _NSDelegate(_DenyMergeDelegate.class, new _DenyMergeDelegate(original));
+				}
+				setDelegate(_denyDelegate);
+				super._processObjectStoreChanges(info);
+			}
+			finally {
+				setDelegate(original);
+			}
+		}
+		else {
+			super._processObjectStoreChanges(info);
+		}
+	}
+	
 	/**
 	 * Overridden so add a bugfix from Lenny Marks
 	 * 
