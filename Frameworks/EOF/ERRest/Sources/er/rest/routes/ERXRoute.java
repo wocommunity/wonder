@@ -24,7 +24,7 @@ import er.rest.IERXRestDelegate;
  */
 public class ERXRoute {
 	public static enum Method {
-		All, Get, Put, Post, Delete, Head
+		All, Get, Put, Post, Delete, Head, Options, Trace, Connect
 	}
 
 	public static final ERXRoute.Key ControllerKey = new ERXRoute.Key("controller");
