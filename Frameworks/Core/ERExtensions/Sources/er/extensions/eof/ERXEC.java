@@ -1444,7 +1444,8 @@ public class ERXEC extends EOEditingContext {
         	if(committedSnapshotForObject != null) {
         		return eo.changesFromSnapshot(committedSnapshotForObject).count() == 0;
         	}
-        	return false;
+        	//AK: this is when the object is simply registered, not sure if true or false would be better... setting?
+        	return true;
         }
         
         public void editingContextDidMergeChanges(EOEditingContext ec) {
