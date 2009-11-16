@@ -19,8 +19,8 @@ import er.extensions.appserver.ERXSession;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.foundation.ERXValueUtilities;
 
-/** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
-
+/** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.i
+ */
 public class ERXNavigationMenu extends ERXStatelessComponent {
 
     /** logging support */

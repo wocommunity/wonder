@@ -16,6 +16,8 @@ import er.extensions.foundation.ERXProperties;
  * NOTE: that dateformats must have compatible client side scripts
  * So optionally you may produce your own variants of the client-side date format javascripts and set the properties to use them
  * 
+ * See {@link http://code.google.com/p/calendardateselect/}
+ *
  * @author mendis
  * 
  * @property er.prototaculous.AjaxCalendarDateSelect.DateFormats.natural 	Default date format
@@ -33,9 +35,6 @@ import er.extensions.foundation.ERXProperties;
  * @binding name
  * @binding dateFormat
  * @binding size
- *
- * @see http://code.google.com/p/calendardateselect/
- *
  */
 public class CalendarDateSelect extends WOComponent {
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", false);

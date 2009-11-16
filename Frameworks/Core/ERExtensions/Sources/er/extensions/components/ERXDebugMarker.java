@@ -3,7 +3,8 @@
  *
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
- * included with this distribution in the LICENSE.NPL file.  */
+ * included with this distribution in the LICENSE.NPL file.
+ */
 package er.extensions.components;
 
 import org.apache.log4j.Logger;
@@ -17,7 +18,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import er.extensions.eof.ERXEnterpriseObject;
 
 /**
- * Given an object displays a link to show information about the editing context of that object.*<br />
+ * Given an object displays a link to show information about the editing context of that object.
  * 
  * @binding object
  */

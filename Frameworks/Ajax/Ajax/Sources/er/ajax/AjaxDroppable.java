@@ -19,6 +19,23 @@ import er.extensions.components._private.ERXWOForm;
  * @binding submit if true, drop will perform a form submit
  * @binding formName the name of the form to submit (if submit is true)
  * @binding confirmMessage if set, a confirm dialog with the given message is shown on drop. Allows cancelling a drop.
+ * @binding id
+ * @binding elementName
+ * @binding droppedDraggableID
+ * @binding action
+ * @binding droppedObject
+ * @binding style
+ * @binding accept
+ * @binding containment
+ * @binding hoverclass
+ * @binding overlap
+ * @binding greedy
+ * @binding onHover
+ * @binding onComplete
+ * @binding updateContainerID
+ * @binding evalScripts
+ * @binding disabled
+ * @binding class
  *  
  * @author mschrag
  */

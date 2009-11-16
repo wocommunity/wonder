@@ -563,7 +563,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   /**
    * Returns whether or not the given separator contains whitespace (and should be escaped).
    * 
-   * @returns true if the given separator contains whitespace
+   * @return true if the given separator contains whitespace
    */
   public static boolean isWhitespaceSeparator(String separator) {
     return separator != null && (separator.contains("\\s") || separator.contains(" "));

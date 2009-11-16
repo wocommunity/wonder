@@ -250,7 +250,7 @@ public class ERXComponentUtilities {
     * Allows a component to "inherit" the template (.html and .wod files) from another component.
     * <p>Usage in your WOComponent subclass:</p>
     * <pre>
-    * @Override
+    * &#64;Override
     * public WOElement template() {
     *     return ERXComponentUtilities.inheritTemplateFrom("AddAddress", session().languages());
     * }

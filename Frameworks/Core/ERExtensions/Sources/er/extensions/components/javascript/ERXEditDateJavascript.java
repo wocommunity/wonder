@@ -18,6 +18,11 @@ import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
+/**
+ *
+ * @binding dateformat
+ * @binding dateString
+ */
 public class ERXEditDateJavascript extends ERXStatelessComponent {
 	static final Logger log = Logger.getLogger(ERXEditDateJavascript.class);
 	private static String _datePickerJavaScriptUrl;

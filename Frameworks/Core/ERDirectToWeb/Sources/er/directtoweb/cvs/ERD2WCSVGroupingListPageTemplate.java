@@ -11,9 +11,9 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WGroupingListPage;
 
 /**
- * Grouping list in CSV format.<br />
+ * Grouping list in CSV format.
  * 
- * @d2s componentName
+ * @d2wKey componentName
  * @d2wKey propertyKey
  * @d2wKey displayPropertyKeys
  * @d2wKey displayNameForProperty
