@@ -8,7 +8,7 @@ Checkbox: WOCheckBox {
 	class = ^class;
 	id = id;
 	name = elementName;
-	selection = selection;
+	selection = selection.toString.hashCode;
 	disabled = ^disabled;
 	value = ^item.toString.hashCode;
 }
