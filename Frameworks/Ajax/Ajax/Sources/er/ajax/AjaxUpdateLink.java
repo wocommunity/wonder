@@ -392,7 +392,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				results = response;
 			}
 		}
-		else {
+		else if (updateContainerID != null) {
 			AjaxUtils.setPageReplacementCacheKey(context, updateContainerID);
 		}
 
