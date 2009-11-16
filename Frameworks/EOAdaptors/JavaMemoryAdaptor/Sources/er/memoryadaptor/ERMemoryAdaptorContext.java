@@ -110,16 +110,14 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
 
   @Override
   public void beginTransaction() {
-    if (_storeFactory.beginTransaction()) {
-      transactionDidBegin();
-    }
+    _storeFactory.beginTransaction();
+    transactionDidBegin();
   }
 
   @Override
   public void commitTransaction() {
-    if (_storeFactory.commitTransaction()) {
-      transactionDidCommit();
-    }
+    _storeFactory.commitTransaction();
+    transactionDidCommit();
   }
 
   @Override
@@ -134,8 +132,7 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
 
   @Override
   public void rollbackTransaction() {
-    if (_storeFactory.rollbackTransaction()) {
-      transactionDidRollback();
-    }
+    _storeFactory.rollbackTransaction();
+    transactionDidRollback();
   }
 }

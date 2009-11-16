@@ -119,16 +119,14 @@ public class EREntityStoreFactory {
     return store;
   }
   
-  public boolean beginTransaction() {
+  public void beginTransaction() {
     if (!_hasTransaction) {
       _hasTransaction = true;
       _transactionEntityStores = new NSMutableDictionary<String, EREntityStore>();
-      return true;
     }
-    return false;
   }
 
-  public boolean commitTransaction() {
+  public void commitTransaction() {
     if (_hasTransaction) {
       _hasTransaction = false;
       for (String entityName : _transactionEntityStores.allKeys()) {
@@ -137,18 +135,14 @@ public class EREntityStoreFactory {
         entityStore.commitFromTransactionStore(transactionStore);
       }
       _transactionEntityStores = null;
-      return true;
     }
-    return false;
   }
   
-  public boolean rollbackTransaction() {
+  public void rollbackTransaction() {
     if (_hasTransaction) {
       _hasTransaction = false;
       _transactionEntityStores = null;
-      return true;
     }
-    return false;
   }
   
   private NSSet<EOEntity> _relatedEntities(EOEntity entity) {
