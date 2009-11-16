@@ -339,7 +339,9 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	   }
 	   else {
 		   String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component);
-		   AjaxUtils.setPageReplacementCacheKey(context, updateContainerID);
+		   if (updateContainerID != null) {
+			   AjaxUtils.setPageReplacementCacheKey(context, updateContainerID);
+		   }
 	   }
 
 	   return result;
