@@ -100,8 +100,11 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
       else if ("s".equals(valueType)) {
         pkValue = Short.valueOf((short) nextSequence);
       }
+      else if ("c".equals(valueType) && "NSString".equals(pkAttribute.valueClassName())) { // hack for bugtracker test cases
+        pkValue = String.valueOf(nextSequence);
+      }
       else {
-        throw new IllegalArgumentException("Unknown value type '" + valueType + "'.");
+        throw new IllegalArgumentException("Unknown value type '" + valueType + "' for '" + object + "' of entity '" + entity.name() + "'.");
       }
     }
     NSDictionary pk = new NSDictionary<String, Object>(pkValue, pkAttribute.name());
