@@ -3,12 +3,12 @@ package er.extensions.components;
 import com.webobjects.appserver.WOContext;
 
 /**
- * <p>To quote <a href="http://msdn.microsoft.com/en-us/library/ms537512(VS.85).aspx">Microsoft:</a></p>
- * <blockquote>Conditional comments make it easy for developers to take advantage 
+ * Conditional comments make it easy for developers to take advantage 
  * of the enhanced features offered by Microsoft Internet Explorer 5 and later 
  * versions, while writing pages that downgrade gracefully in less-capable 
  * browsers or display correctly in browsers other than Windows Internet 
- * Explorer.</blockquote>
+ * Explorer.
+ * <p>From http://msdn.microsoft.com/en-us/library/ms537512(VS.85).aspx</p>
  * <p>ERXIEConditionalComment is designed to generate IE conditional comments.
  * It supports all conditional comment styles except combination sub-expressions
  * and explicit true/false conditionals.</p>

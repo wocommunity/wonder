@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOResourceManager;
 import er.extensions.components.ERXStatelessComponent;
 
 /**
- * Thin wrapper for Clippy (http://github.com/mojombo/clippy) as used by e.g. github.
+ * Thin wrapper for Clippy (http://github.com/mojombo/clippy) as used by, for example, github.
  * 
  * Clippy is a very simple Flash widget that makes it possible to place arbitrary text onto the client's clipboard.
  * 

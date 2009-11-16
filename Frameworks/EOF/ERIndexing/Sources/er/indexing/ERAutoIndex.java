@@ -151,7 +151,6 @@ public class ERAutoIndex extends ERIndex {
         /**
          * @param entityName entity to be indexed
          * @param keys attributes (keys or keypaths) to be indexed
-         * @return
          */
         protected ConfigurationEntry configureEntity(String entityName, NSArray keys) {
 

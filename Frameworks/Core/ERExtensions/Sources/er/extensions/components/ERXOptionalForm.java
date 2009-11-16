@@ -9,9 +9,6 @@ package er.extensions.components;
 import com.webobjects.appserver.WOContext;
 
 /**
- * 
- * Synopsis:<br/>
-  *
  * @binding showForm
  * @binding action
  * @binding name

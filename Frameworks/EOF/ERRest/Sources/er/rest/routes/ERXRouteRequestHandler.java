@@ -209,7 +209,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	/**
 	 * Constructs a new ERXRouteRequestHandler.
 	 * 
-	 * @parma entityNameFormat the format to use for entity names in URLs
+	 * @param entityNameFormat the format to use for entity names in URLs
 	 */
 	public ERXRouteRequestHandler(NameFormat entityNameFormat) {
 		_entityNameFormat = entityNameFormat;

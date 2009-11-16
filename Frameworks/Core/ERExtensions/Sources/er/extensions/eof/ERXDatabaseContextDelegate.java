@@ -528,7 +528,7 @@ public class ERXDatabaseContextDelegate {
 		 * sources and so on.
 		 * 
 		 * @param ec
-		 * @param relationship
+		 * @param rel
 		 * @return int batch size (0 for not batch fetch)
 		 */
     	public int batchSizeForRelationship(EOEditingContext ec, EORelationship rel);

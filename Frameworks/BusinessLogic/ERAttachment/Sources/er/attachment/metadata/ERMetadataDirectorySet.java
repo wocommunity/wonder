@@ -132,8 +132,6 @@ public class ERMetadataDirectorySet {
 
   /**
    * Returns the metadata directories from this set.
-   * 
-   * @param metadata the metadata directory to add
    */
   public List<IERMetadataDirectory> getMetadataDirectories() {
     return _metadataDirectories;

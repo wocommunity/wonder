@@ -16,8 +16,10 @@ public interface IERXRestDelegate {
 	 * Views the object defined by the incoming url.
 	 * 
 	 * @param restRequest the incoming viewing request.
-	 * @param context the rest context
+	 * @param restContext the rest context
+         *
 	 * @return the actual result as an ERXRestResult
+         *
 	 * @throws ERXRestException if there is a general failure
 	 * @throws ERXRestSecurityException if the user attempts to insert or updates objects that he/she is not permitted to
 	 * @throws ERXRestNotFoundException if one of the requested objects does not exist

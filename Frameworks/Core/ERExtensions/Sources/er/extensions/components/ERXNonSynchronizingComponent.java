@@ -63,7 +63,7 @@ public abstract class ERXNonSynchronizingComponent extends ERXComponent {
 	/**
 	 * Calls {@link #resetCachedBindingsInStatefulComponent} prior to super.appendToResponse.
 	 * @param response to which we are appending
-	 * @context of the response
+	 * @param context context of the response
 	 */
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {

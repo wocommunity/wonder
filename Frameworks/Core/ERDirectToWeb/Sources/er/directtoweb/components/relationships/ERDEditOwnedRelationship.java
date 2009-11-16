@@ -54,9 +54,9 @@ import er.extensions.eof.ERXEnterpriseObject;
 /////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Crazy component.  Useful for editing/creating objects in an owned toOne or toMany relationship.  Even works with relationships to abstract entities.<br />
+ * Crazy component.  Useful for editing/creating objects in an owned toOne or toMany relationship.  Even works with relationships to abstract entities.
  * 
- * @binding showAddButton" defaults="Boolean
+ * @binding showAddButton defaults=Boolean
  * @binding key
  * @binding object
  * @binding listConfigurationName
@@ -67,9 +67,9 @@ import er.extensions.eof.ERXEnterpriseObject;
  * @binding destinationDisplayKey
  * @binding selectionListKey
  * @binding preRelationshipKeys
- * @binding permissionToEdit" defaults="Boolean
+ * @binding permissionToEdit defaults=Boolean
  * @binding postRelationshipKeys
- * @binding useForms" defaults="Boolean
+ * @binding useForms defaults=Boolean
  */
 
 public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
