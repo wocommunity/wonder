@@ -6,13 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.components.ERXStatelessComponent;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -27,47 +27,26 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @author q
  */
-public class ERPDF2PS extends WOComponent {
+public class ERPDF2PS extends ERXStatelessComponent {
   public static final String PDF_TO_PS_KEY = "er.pdf.pdftops";
   private String pdftops = ERXProperties.stringForKeyWithDefault(PDF_TO_PS_KEY, "/usr/local/bin/pdftops");
-  private boolean _duplex = false;
-  private boolean _enabled = true;
 
   public ERPDF2PS(WOContext context) {
     super(context);
   }
 
   public boolean duplex() {
-    return _duplex;
-  }
-  
-  public void setDuplex(boolean duplex) {
-    _duplex = duplex;
+    return booleanValueForBinding("duplex", false);
   }
 
   public boolean enabled() {
-    return _enabled;
-  }
-  
-  public void setEnabled(boolean enabled) {
-    _enabled = enabled;
-  }
-  
-  @Override
-  public boolean isStateless() {
-    return true;
-  }
-  
-  @Override
-  public void reset() {
-    _duplex = false;
-    _enabled = true;
+    return booleanValueForBinding("enabled", true);
   }
   
   @Override
   public void appendToResponse(WOResponse response, WOContext aContext) {
     super.appendToResponse(response, aContext);
-    if (_enabled) {
+    if (enabled()) {
       File tempFile = null;
       File psFile = null;
       try {
@@ -77,7 +56,7 @@ public class ERPDF2PS extends WOComponent {
         psFile = File.createTempFile("pdftops", "ps");
         psFile.deleteOnExit();
         NSMutableArray<String> array = new NSMutableArray<String>(pdftops, tempFile.getPath(), psFile.getPath());
-        if (_duplex) {
+        if (duplex()) {
           array.add(1, "-duplex");
         }
         content.writeToStream(new FileOutputStream(tempFile));
@@ -96,10 +75,20 @@ public class ERPDF2PS extends WOComponent {
       } catch (InterruptedException e) {
         throw NSForwardException._runtimeExceptionForThrowable(e);
       } finally {
-        if (tempFile != null)
-          tempFile.delete();
-        if (psFile != null)
-          psFile.delete();
+        if (tempFile != null) {
+          try {
+            tempFile.delete();
+          } catch (SecurityException e) {
+            e.printStackTrace();
+          }
+        }
+        if (psFile != null) {
+          try {
+            psFile.delete();
+          } catch (SecurityException e) {
+            e.printStackTrace();
+          }
+        }
       }
     }
   }
