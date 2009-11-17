@@ -10,7 +10,7 @@ Conditional2: WOConditional {
 ToggleSubmit : AjaxSubmitButton {
 	action = toggleClicked;
 	button = false;
-	updateContainerID = ^updateContainerID;
+	updateContainerID = updateContainerID;
 }
 
 ToggleImage: WOImage {
@@ -25,7 +25,7 @@ ToggleImage: WOImage {
 ToggleSubmit2 : AjaxSubmitButton {
 	action = toggleClicked;
 	button = false;
-	updateContainerID = ^updateContainerID;
+	updateContainerID = updateContainerID;
 }
 
 ToggleImage2: WOImage {
