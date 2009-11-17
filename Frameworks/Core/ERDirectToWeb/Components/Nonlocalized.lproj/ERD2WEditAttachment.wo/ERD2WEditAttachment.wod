@@ -24,7 +24,7 @@ DisplayAttachmentDownloadLink: WOSwitchComponent {
 }
 
 FileName: WOString {
-	value = objectPropertyValue.originalFileName //VALID;
+	value = objectPropertyValue.originalFileName; //VALID
 }
 
 Icon: WOSwitchComponent {
