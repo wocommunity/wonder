@@ -77,6 +77,10 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding tabindex tab index of the text field (optional)
  * @binding default hint for the text field, when used together with {@link AjaxTextHinter}. 
  * @binding selection if set, if the text field's string matches the displayString of one of the objects in the provided list, that object will be bound back as the selection. currently this only supports displayString renderers and not child templates
+ * @binding class class attribue of the text field
+ * @binding style class attribue of the text field
+ * @binding onblur onblur attribue of the text field
+ * @binding onchange onchange attribue of the text field
  * @author ak
  */
 public class AjaxAutoComplete extends AjaxComponent {
