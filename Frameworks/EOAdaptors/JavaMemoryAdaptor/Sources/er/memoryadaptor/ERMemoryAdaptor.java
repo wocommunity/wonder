@@ -55,7 +55,7 @@ public class ERMemoryAdaptor extends EOAdaptor {
 
   @Override
   public EOSQLExpressionFactory expressionFactory() {
-    return new ERMemoryExpressionFactory(this);
+    return null; //new ERMemoryExpressionFactory(this);
   }
 
   @Override
