@@ -4,7 +4,8 @@ import java.util.Enumeration;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import er.extensions.ERXTestUtilities;
+import er.erxtest.tests.ERXTestUtilities;
+import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 public class NSTimestampTest extends TestCase {
@@ -59,11 +60,13 @@ public class NSTimestampTest extends TestCase {
         // public static long currentTimeIntervalSinceReferenceDate();
     }
 
-    public void testDistantFuture () {
+    @SuppressWarnings("deprecation")
+	public void testDistantFuture () {
         Assert.assertEquals(NSTimestamp.DistantFuture, NSTimestamp.distantFuture());
     }
 
-    public void testDistantPast () {
+    @SuppressWarnings("deprecation")
+	public void testDistantPast () {
         Assert.assertEquals(NSTimestamp.DistantPast, NSTimestamp.distantPast());
     }
 
@@ -87,7 +90,8 @@ public class NSTimestampTest extends TestCase {
         // public void encodeWithCoder(com.webobjects.foundation.NSCoder);
     }
 
-    public void testIncrementAcrossDST() {
+	@SuppressWarnings("deprecation")
+	public void testIncrementAcrossDST() {
 
         // Set up values used throughout this test.
         //
@@ -97,7 +101,8 @@ public class NSTimestampTest extends TestCase {
         StringBuffer dt = null;
         java.text.FieldPosition fp = new java.text.FieldPosition(0);
 
-        NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/dates.plist", NSTimestampTest.class); 
+        NSDictionary data = NSPropertyListSerialization.dictionaryWithPathURL(ERXFileUtilities.pathURLForResourceNamed("dates.plist", null, null));
+
         Enumeration dsts = ((NSArray)data.objectForKey("daylightSavingTimeTransitions")).objectEnumerator();
 
         while (dsts.hasMoreElements()) {
@@ -183,18 +188,22 @@ public class NSTimestampTest extends TestCase {
         // public long dayOfCommonEra();
     }
 
-    public void testDayOfMonth () {
+    @SuppressWarnings("deprecation")
+	public void testDayOfMonth () {
         Assert.assertEquals(1, refDate.dayOfMonth());
     }
 
-    public void testDayOfWeek() {
+    @SuppressWarnings("deprecation")
+	public void testDayOfWeek() {
         Assert.assertEquals(THU, refDate.dayOfWeek());
         Assert.assertEquals(WED, (new NSTimestamp(2009, MAY, 6, 0, 0, 0, NSTimeZone.getGMT())).dayOfWeek());
         Assert.assertEquals(FRI, (new NSTimestamp(2079, DEC, 1, 0, 0, 0, NSTimeZone.getGMT())).dayOfWeek());
     }
 
-    public void testFirstDaysOfYears() {
-        NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/dates.plist", NSTimestampTest.class);
+	@SuppressWarnings("deprecation")
+	public void testFirstDaysOfYears() {
+        NSDictionary data = NSPropertyListSerialization.dictionaryWithPathURL(ERXFileUtilities.pathURLForResourceNamed("dates.plist", null, null));
+
         NSDictionary daysDict = (NSDictionary)data.objectForKey("firstDayForYears");
       
         Enumeration days = daysDict.allKeys().objectEnumerator();

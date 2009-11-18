@@ -228,7 +228,7 @@ public class ERXPropertiesTest extends ERXTestCase {
     assertEquals(false, ERXProperties.booleanForKey(ERXPropertiesTest.Key));
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "yes");
     assertEquals(true, ERXProperties.booleanForKey(ERXPropertiesTest.Key));
-    assertSame(ERXProperties.booleanForKey(ERXPropertiesTest.Key), ERXProperties.booleanForKey(ERXPropertiesTest.Key));
+    assertSame(new Boolean(ERXProperties.booleanForKey(ERXPropertiesTest.Key)), new Boolean(ERXProperties.booleanForKey(ERXPropertiesTest.Key)));
   }
 
 //  public void testDataForKey() {
@@ -319,25 +319,25 @@ public class ERXPropertiesTest extends ERXTestCase {
     ERXPropertiesTest.setCachingEnabled(false);
     
     ERXPropertiesTest.removePropertyForKey(ERXPropertiesTest.Key);
-    assertEquals(0.0, ERXProperties.doubleForKey(ERXPropertiesTest.Key));
+    assertEquals(new Double(0.0d), new Double(ERXProperties.doubleForKey(ERXPropertiesTest.Key)));
     double defaultValue = 15.0;
-    assertEquals(defaultValue, ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Double(defaultValue), new Double(ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
     
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "");
-    assertEquals(0.0, ERXProperties.doubleForKey(ERXPropertiesTest.Key));
-    assertEquals(defaultValue, ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Double(0.0d), new Double(ERXProperties.doubleForKey(ERXPropertiesTest.Key)));
+    assertEquals(new Double(defaultValue), new Double(ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
     
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "0");
-    assertEquals(0.0, ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Double(0.0d), new Double(ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
 
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "1");
-    assertEquals(1.0, ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Double(1.0d), new Double(ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
 
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "5.0");
-    assertEquals(5.0, ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Double(5.0d), new Double(ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
 
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "-5.0");
-    assertEquals(-5.0, ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Double(-5.0d), new Double(ERXProperties.doubleForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
 
     try {
       ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "randomString");
@@ -350,36 +350,36 @@ public class ERXPropertiesTest extends ERXTestCase {
 
     ERXPropertiesTest.setCachingEnabled(true);
     ERXPropertiesTest.removePropertyForKey(ERXPropertiesTest.Key);
-    assertEquals(0.0, ERXProperties.doubleForKey(ERXPropertiesTest.Key));
-    assertEquals(0.0, ERXProperties.doubleForKey(ERXPropertiesTest.Key));
+    assertEquals(new Double(0.0d), new Double(ERXProperties.doubleForKey(ERXPropertiesTest.Key)));
+    assertEquals(new Double(0.0d), new Double(ERXProperties.doubleForKey(ERXPropertiesTest.Key)));
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "5000.0");
-    assertEquals(5000.0, ERXProperties.doubleForKey(ERXPropertiesTest.Key));
-    assertEquals(ERXProperties.doubleForKey(ERXPropertiesTest.Key), ERXProperties.doubleForKey(ERXPropertiesTest.Key));
+    assertEquals(new Double(5000.0d), new Double(ERXProperties.doubleForKey(ERXPropertiesTest.Key)));
+    assertEquals(new Double(ERXProperties.doubleForKey(ERXPropertiesTest.Key)), new Double(ERXProperties.doubleForKey(ERXPropertiesTest.Key)));
   }
 
   public void testFloatForKey() {
     ERXPropertiesTest.setCachingEnabled(false);
     
     ERXPropertiesTest.removePropertyForKey(ERXPropertiesTest.Key);
-    assertEquals(0.0f, ERXProperties.floatForKey(ERXPropertiesTest.Key));
+    assertEquals(new Float(0.0f), new Float(ERXProperties.floatForKey(ERXPropertiesTest.Key)));
     float defaultValue = 15.0f;
-    assertEquals(defaultValue, ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Float(defaultValue), new Float(ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
     
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "");
-    assertEquals(0.0f, ERXProperties.floatForKey(ERXPropertiesTest.Key));
-    assertEquals(defaultValue, ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Float(0.0f), new Float(ERXProperties.floatForKey(ERXPropertiesTest.Key)));
+    assertEquals(new Float(defaultValue), new Float(ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
     
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "0");
-    assertEquals(0.0f, ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Float(0.0f), new Float(ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
 
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "1");
-    assertEquals(1.0f, ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Float(1.0f), new Float(ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
 
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "5.0");
-    assertEquals(5.0f, ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Float(5.0f), new Float(ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
 
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "-5.0");
-    assertEquals(-5.0f, ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new Float(-5.0f), new Float(ERXProperties.floatForKeyWithDefault(ERXPropertiesTest.Key, defaultValue)));
 
     try {
       ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "randomString");
@@ -392,11 +392,11 @@ public class ERXPropertiesTest extends ERXTestCase {
 
     ERXPropertiesTest.setCachingEnabled(true);
     ERXPropertiesTest.removePropertyForKey(ERXPropertiesTest.Key);
-    assertEquals(0.0f, ERXProperties.floatForKey(ERXPropertiesTest.Key));
-    assertEquals(0.0f, ERXProperties.floatForKey(ERXPropertiesTest.Key));
+    assertEquals(new Float(0.0f), new Float(ERXProperties.floatForKey(ERXPropertiesTest.Key)));
+    assertEquals(new Float(0.0f), new Float(ERXProperties.floatForKey(ERXPropertiesTest.Key)));
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "5000.0");
-    assertEquals(5000.0f, ERXProperties.floatForKey(ERXPropertiesTest.Key));
-    assertEquals(ERXProperties.floatForKey(ERXPropertiesTest.Key), ERXProperties.floatForKey(ERXPropertiesTest.Key));
+    assertEquals(new Float(5000.0f), new Float(ERXProperties.floatForKey(ERXPropertiesTest.Key)));
+    assertEquals(new Float(ERXProperties.floatForKey(ERXPropertiesTest.Key)), new Float(ERXProperties.floatForKey(ERXPropertiesTest.Key)));
   }
 
   public void testIntForKey() {

@@ -1,7 +1,5 @@
 package er.extensions.eof;
 
-import java.net.URL;
-
 import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -19,7 +17,6 @@ import er.erxtest.model.Company;
 import er.erxtest.model.Employee;
 import er.erxtest.tests.ERXTestCase;
 import er.extensions.ERExtensionsTest;
-import er.extensions.ERXTestUtilities;
 
 /**
  * Test the static methods in the ERXEOAccessUtilities class. This class has an inner
@@ -75,7 +72,8 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
   public void setUp() throws Exception {
     super.setUp();
 
-    System.out.println("ERXEOAccessUtilitiesTest.setUp: setup");
+    // System.out.println("ERXEOAccessUtilitiesTest.setUp: setup");
+
     if (_ec != null)
       _ec.dispose();
     if (_model != null)
@@ -139,6 +137,7 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
     Assert.assertFalse(ERXEOAccessUtilities.entityWithNamedIsShared(null, Company.ENTITY_NAME));
 
     try {
+      @SuppressWarnings("unused")
       boolean check = ERXEOAccessUtilities.entityWithNamedIsShared(_ec, null);
       Assert.fail();
     }
@@ -219,7 +218,8 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 
     // first check getting all objects for entity...
 
-    int count = ERXEOAccessUtilities.rowCountForFetchSpecification(_ec, new EOFetchSpecification(Employee.ENTITY_NAME, null, null));
+    @SuppressWarnings("unused")
+	int count = ERXEOAccessUtilities.rowCountForFetchSpecification(_ec, new EOFetchSpecification(Employee.ENTITY_NAME, null, null));
     //int count = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, new EOFetchSpecification("Expn", null, null));
 
     //System.out.println("count: "+count);

@@ -10,31 +10,31 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 // MS: This is super lame ... It's a copy of this clss from ERExtensions, but Tests/Sources is not in the 
 // build path, which means i can't use this class from ERX.
 public class ERXTestUtilities {
-	public static URL resourcePathURL(String name, Class clazz) {
-		try {
-			URL url = clazz.getResource(name);
-			if (url == null) {
-				String rootPath = System.getProperty("build.root", "build");
-				File resourceFile = new File(rootPath + "/ERExtensions.framework/TestResources" + name);
-				if (!resourceFile.exists()) {
-					resourceFile = new File("Tests/Resources" + name);
-					if (!resourceFile.exists()) {
-						resourceFile = new File("Resources" + name);
-						if (!resourceFile.exists()) {
-							throw new FileNotFoundException("Unable to find the property list '" + name + "'.");
-						}
-					}
-				}
-				url = resourceFile.toURI().toURL();
-			}
-			return url;
-		}
-		catch (Throwable t) {
-			throw new RuntimeException("Failed to load the resource '" + name + "'.", t);
-		}
-	}
-	
-	public static NSDictionary dictionaryFromPropertyListNamedInClass(String name, Class clazz) {
-		return (NSDictionary) NSPropertyListSerialization.propertyListWithPathURL(ERXTestUtilities.resourcePathURL(name, clazz));
-	}
+//	public static URL resourcePathURL(String name, Class clazz) {
+//		try {
+//			URL url = clazz.getResource(name);
+//			if (url == null) {
+//				String rootPath = System.getProperty("build.root", "build");
+//				File resourceFile = new File(rootPath + "/ERExtensions.framework/TestResources" + name);
+//				if (!resourceFile.exists()) {
+//					resourceFile = new File("Tests/Resources" + name);
+//					if (!resourceFile.exists()) {
+//						resourceFile = new File("Resources" + name);
+//						if (!resourceFile.exists()) {
+//							throw new FileNotFoundException("Unable to find the property list '" + name + "'.");
+//						}
+//					}
+//				}
+//				url = resourceFile.toURI().toURL();
+//			}
+//			return url;
+//		}
+//		catch (Throwable t) {
+//			throw new RuntimeException("Failed to load the resource '" + name + "'.", t);
+//		}
+//	}
+//	
+//	public static NSDictionary dictionaryFromPropertyListNamedInClass(String name, Class clazz) {
+//		return (NSDictionary) NSPropertyListSerialization.propertyListWithPathURL(ERXTestUtilities.resourcePathURL(name, clazz));
+//	}
 }
