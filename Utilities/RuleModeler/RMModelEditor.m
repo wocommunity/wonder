@@ -857,10 +857,16 @@
 #pragma mark Splitview Delegate Methods
 
 - (float)splitView:(NSSplitView *)sender constrainMinCoordinate:(float)proposedMin ofSubviewAt:(int)offset {
-    if (sender == masterSplitView || sender == detailSplitView) {
-	return 130.0;
+    if (sender == masterSplitView) {
+		if (offset == 0) {
+			return proposedMin + 180.0;
+		} else {
+			return proposedMin + 40.0;
+		}
+	} else if (sender == detailSplitView) {
+		return 130.0;
     } else if (sender == lhsSplitView) {
-	return 90.0;
+		return 90.0;
     }
     
     return proposedMin;
@@ -868,11 +874,15 @@
 
 - (float)splitView:(NSSplitView *)sender constrainMaxCoordinate:(float)proposedMax ofSubviewAt:(int)offset {
     if (sender == masterSplitView) {
-	return proposedMax - 200.0;
+		if (offset == 0) {
+			return proposedMax - 40;
+		} else {
+			return proposedMax - 180;
+		}
     } else if (sender == lhsSplitView) {
-	return proposedMax - 25.0;
+		return proposedMax - 25.0;
     } else if (sender == detailSplitView) {
-	return proposedMax - 180.0;
+		return proposedMax - 180.0;
     }
     
     return proposedMax;
