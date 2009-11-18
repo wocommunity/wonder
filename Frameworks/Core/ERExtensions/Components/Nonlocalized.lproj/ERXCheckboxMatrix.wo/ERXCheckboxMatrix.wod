@@ -28,6 +28,7 @@ CheckBoxRepetition: ERXTable {
 	cellVAlign = ^cellVAlign;
 	cellAlign = ^cellAlign;
 	otherTagString = ^tableOtherTagString;
+	cellClass = ^cellClass;
 }
 
 CheckBoxWrapper: WOGenericContainer {

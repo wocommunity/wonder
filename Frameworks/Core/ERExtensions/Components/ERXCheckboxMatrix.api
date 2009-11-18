@@ -30,5 +30,6 @@
 	<binding name="itemID"/>
     <binding name="id"/>
     <binding defaults="Boolean" name="disabled"/>
+    <binding name="cellClass"/>
     </wo>
 </wodefinitions>
