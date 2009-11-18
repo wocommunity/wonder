@@ -183,14 +183,17 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     sleep();
 
     // Fetch employees for Company1 in OSC1
-    NSArray employees_osc1 = company_osc1.employees();
+    @SuppressWarnings("unused")
+	NSArray employees_osc1 = company_osc1.employees();
 
     // Fetch Company1 in OSC2
     EOEditingContext editingContext_osc2 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc2 = Company.fetchCompany(editingContext_osc2, Company.NAME_KEY, companyName);
     assertNotNull(company_osc2);
+
     // Fetch employees for Company1 in OSC2
-    NSArray employees_osc2 = company_osc2.employees();
+    @SuppressWarnings("unused")
+	NSArray employees_osc2 = company_osc2.employees();
 
     // Create and Save Employee1 for Company1 in OSC1
     String employeeFirstName = "Employee" + ERXRandomGUID.newGid();

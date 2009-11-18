@@ -1,8 +1,6 @@
 
 package er.extensions;
 
-import java.util.Enumeration;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -12,13 +10,10 @@ import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOSQLExpression;
-import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
-
-import er.extensions.eof.ERXEOAccessUtilities;
 
 /** Tests of the public API of the ERXExtensions framework.
  *
@@ -62,8 +57,8 @@ public class ERExtensionsTest extends TestSuite {
         if (obj1 == null && obj2 == null) return true;
         if (obj1 != null && obj2 != null) {
             return obj1.toString().equals(obj2.toString());
-        } else
-            return false;
+        }
+        return false;
     }
 
     public static NSArray<String> testMethodsForClassName(String className) {
@@ -117,10 +112,11 @@ public class ERExtensionsTest extends TestSuite {
         return new NSDictionary(vals, keys);
     }
 
-    public static void loadData(EOEditingContext ec, EOModel model, Test test, String plistName) {
+    @SuppressWarnings("deprecation")
+	public static void loadData(EOEditingContext ec, EOModel model, Test test, String plistName) {
 
         EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
-        EOSchemaGeneration factory = adaptor.synchronizationFactory();
+        com.webobjects.eoaccess.EOSchemaGeneration factory = adaptor.synchronizationFactory();
 
         NSMutableArray<NSArray<EOEntity>> entities = new NSMutableArray<NSArray<EOEntity>>();
         entities.add(new NSArray<EOEntity>(model.entityNamed("Company")));
@@ -144,13 +140,13 @@ public class ERExtensionsTest extends TestSuite {
             channel.evaluateExpression(expr);
         }
 
-        NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/AjaxExample.xml", ERExtensionsTest.class);
-
-        Enumeration<String> keys = data.allKeys().objectEnumerator();
-        while (keys.hasMoreElements()) {
-            String entityName = keys.nextElement();
-            ERXEOAccessUtilities.insertRows(ec, entityName, (NSArray<NSDictionary<String, ?>>)data.objectForKey(entityName));
-        }
+//        NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/AjaxExample.xml", ERExtensionsTest.class);
+//
+//        Enumeration<String> keys = data.allKeys().objectEnumerator();
+//        while (keys.hasMoreElements()) {
+//            String entityName = keys.nextElement();
+//            ERXEOAccessUtilities.insertRows(ec, entityName, (NSArray<NSDictionary<String, ?>>)data.objectForKey(entityName));
+//        }
         ec.saveChanges();
     }
 }

@@ -144,7 +144,8 @@ public class ERXECLockingTestCase extends ERXTestCase {
         assertTrue(isLockable(ec));
    }
 
-    private boolean isLockable(final EC ec) {
+    @SuppressWarnings("boxing")
+	private boolean isLockable(final EC ec) {
         try {
             return (Boolean) call(new Callable<Boolean>() {
                 public Boolean call() throws Exception {

@@ -413,7 +413,7 @@ public class NSMutableArrayTest extends BaseTestCase {
 		assertEquals("abc", array.get(1));
 		
 		
-		NSMutableArray<Integer> intarray = new NSMutableArray<Integer>(new Integer[] { 1, 2 });
+		NSMutableArray<Integer> intarray = new NSMutableArray<Integer>(new Integer[] { new Integer(1), new Integer(2) });
 		intarray.sortUsingComparator(NSComparator.AscendingNumberComparator);
 		assertEquals(Integer.valueOf(1), intarray.get(0));
 		assertEquals(Integer.valueOf(2), intarray.get(1));

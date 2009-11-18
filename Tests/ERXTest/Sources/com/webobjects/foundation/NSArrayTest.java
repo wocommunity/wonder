@@ -908,7 +908,7 @@ public class NSArrayTest extends BaseTestCase {
 
   
   public void testSortedArrayUsingComparatorNumber() throws ComparisonException {
-    NSArray<Integer> array = new NSArray<Integer>(new Integer[] { 1, 2 });
+    NSArray<Integer> array = new NSArray<Integer>(new Integer[] { new Integer(1), new Integer(2) });
     NSArray<Integer> sorted = array.sortedArrayUsingComparator(NSComparator.AscendingNumberComparator);
     assertEquals(Integer.valueOf(1), sorted.objectAtIndex(0));
     assertEquals(Integer.valueOf(2), sorted.objectAtIndex(1));
@@ -1011,19 +1011,19 @@ public class NSArrayTest extends BaseTestCase {
     assertEquals(2, result.size());
     assertEquals("val1", result.objectAtIndex(0));
     assertEquals("val2", result.objectAtIndex(1));
-    assertEquals(2, result.valueForKey("count"));
+    assertEquals(new Integer(2), result.valueForKey("count"));
   }
 
   public void testValueForKeyPath() {
-    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(2, "key"), new NSDictionary<String, Integer>(4, "key") };
+    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(new Integer(2), "key"), new NSDictionary<String, Integer>(new Integer(4), "key") };
     NSArray<?> array = new NSArray<NSDictionary<?, ?>>(dicts);
 
-    NSDictionary<?, ?> subDict = new NSDictionary<String, Integer>(2, "subkey");
+    NSDictionary<?, ?> subDict = new NSDictionary<String, Integer>(new Integer(2), "subkey");
     NSDictionary<?, ?> dict = new NSDictionary<String, NSDictionary<?, ?>>(subDict, "key");
     array = new NSArray<NSDictionary<?, ?>>(dict);
     NSArray<?> values = (NSArray<?>) array.valueForKeyPath("key.subkey");
     assertEquals(1, values.size());
-    assertEquals(2, values.objectAtIndex(0));
+    assertEquals(new Integer(2), values.objectAtIndex(0));
   }
   
   public void testNullOperator() {
@@ -1035,26 +1035,26 @@ public class NSArrayTest extends BaseTestCase {
   }
 
   public void testCountOperator() {
-    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(2, "key"), new NSDictionary<String, Integer>(4, "key") };
+    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(new Integer(2), "key"), new NSDictionary<String, Integer>(new Integer(4), "key") };
     NSArray<?> array = new NSArray<NSDictionary<?, ?>>(dicts);
-    int count = (Integer) array.valueForKeyPath("@count");
+    int count = ((Integer) array.valueForKeyPath("@count")).intValue();
     assertEquals(2, count);    
 
-    count = (Integer) array.valueForKey("@count");
+    count = ((Integer) array.valueForKey("@count")).intValue();
     assertEquals(2, count);
     
-    count = (Integer) NSArray.emptyArray().valueForKey("@count");
+    count = ((Integer) NSArray.emptyArray().valueForKey("@count")).intValue();
     assertEquals(0, count);
   }
   
   public void testSumOperator() {
-    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(2, "key"), new NSDictionary<String, Integer>(4, "key") };
+    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(new Integer(2), "key"), new NSDictionary<String, Integer>(new Integer(4), "key") };
     NSArray<?> array = new NSArray<NSDictionary<?, ?>>(dicts);
 
     BigDecimal sum = (BigDecimal) array.valueForKeyPath("@sum.key");
     assertEquals(6, sum.intValue());
 
-    sum  = (BigDecimal) new NSArray<Integer>(new Integer[] { 1, 2, 3 }).valueForKeyPath("@sum");
+    sum  = (BigDecimal) new NSArray<Integer>(new Integer[] { new Integer(1), new Integer(2), new Integer(3) }).valueForKeyPath("@sum");
     assertEquals(6, sum.intValue());
 
     sum = (BigDecimal) NSArray.emptyArray().valueForKeyPath("@sum.key");
@@ -1068,7 +1068,7 @@ public class NSArrayTest extends BaseTestCase {
   }
   
   public void testAvgOperator() {
-    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(2, "key"), new NSDictionary<String, Integer>(4, "key") };
+    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(new Integer(2), "key"), new NSDictionary<String, Integer>(new Integer(4), "key") };
     NSArray<?> array = new NSArray<NSDictionary<?, ?>>(dicts);
 
     BigDecimal avg = (BigDecimal) array.valueForKeyPath("@avg.key");
@@ -1077,7 +1077,7 @@ public class NSArrayTest extends BaseTestCase {
     avg = (BigDecimal) array.valueForKeyPath("@avg.unknownkey");
     assertEquals(0, avg.intValue());
 
-    avg = (BigDecimal) new NSArray<Integer>(new Integer[] { 1, 2, 3 }).valueForKeyPath("@avg");
+    avg = (BigDecimal) new NSArray<Integer>(new Integer[] { new Integer(1), new Integer(2), new Integer(3) }).valueForKeyPath("@avg");
     assertEquals(2, avg.intValue());
     
     avg = (BigDecimal) new NSArray<String>(new String[] { "1", "2", "3" }).valueForKeyPath("@avg");
@@ -1097,7 +1097,7 @@ public class NSArrayTest extends BaseTestCase {
   }
   
   public void testMinOperator() {
-    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(2, "key"), new NSDictionary<String, Integer>(4, "key") };
+    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(new Integer(2), "key"), new NSDictionary<String, Integer>(new Integer(4), "key") };
     NSArray<?> array = new NSArray<NSDictionary<?, ?>>(dicts);
 
     int min = ((Integer) array.valueForKeyPath("@min.key")).intValue();
@@ -1105,18 +1105,18 @@ public class NSArrayTest extends BaseTestCase {
   }
   
   public void testMaxOperator() {
-    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(2, "key"), new NSDictionary<String, Integer>(4, "key") };
+    NSDictionary<?, ?>[] dicts = new NSDictionary[] { new NSDictionary<String, Integer>(new Integer(2), "key"), new NSDictionary<String, Integer>(new Integer(4), "key") };
     NSArray<?> array = new NSArray<NSDictionary<?, ?>>(dicts);
     int max = ((Integer) array.valueForKeyPath("@max.key")).intValue();
     assertEquals(4, max);
   }
   
   public void testTakeValueForKeyPath() {
-    NSMutableDictionary<?, ?> subDict = new NSMutableDictionary<String, Integer>(2, "subkey");
+    NSMutableDictionary<?, ?> subDict = new NSMutableDictionary<String, Integer>(new Integer(2), "subkey");
     NSMutableDictionary<?, ?> dict = new NSMutableDictionary<String, NSDictionary<?, ?>>(subDict, "key");
     NSArray<?> array = new NSArray<NSDictionary<?, ?>>(dict);
-    array.takeValueForKeyPath(3, "key.subkey");
-    assertEquals(3, subDict.objectForKey("subkey"));
+    array.takeValueForKeyPath(new Integer(3), "key.subkey");
+    assertEquals(new Integer(3), subDict.objectForKey("subkey"));
   }
 
   public void testVector() {

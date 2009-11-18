@@ -5,143 +5,109 @@ import java.net.URL;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.ERExtensionsTest;
-import er.extensions.ERXTestUtilities;
+import er.extensions.foundation.ERXFileUtilities;
+//import er.extensions.ERXTestUtilities;
 
 /* Test the ERXEntity methods. These tests are extremely minimal.
  * This class exists in order to deal with some issues in inheritance, and
  * this system is not configured to use models that use inheritance yet.
  *
- * @author kiddyr@sourceforge.net
+ * @author Ray Kiddy, kiddyr@users.sourceforge.net
  */
 public class ERXEntityTest extends TestCase {
 
-    static String buildRoot;
-    static {
-         buildRoot = System.getProperty("build.root");
-    }
+	static String buildRoot;
+	static {
+		buildRoot = System.getProperty("build.root");
+	}
+	EOEditingContext ec;
+	String adaptorName = "Memory";
+	String modelName;
+	EOModel model;
 
-    public void testAll() {
+	public void setUp() throws Exception {
+		super.setUp();
 
-        TestSuite suite = ERExtensionsTest.suite;
+		if (ec != null) ec.dispose();
+		if (model != null) model.dispose();
 
-        // See note in er.extensions.eof.ERXEOAccessUtilities.testAll() -rrk
+		EOModelGroup.setDefaultGroup(new EOModelGroup());
 
-        NSArray<String> methods = ERExtensionsTest.testMethodsForClassName("com.webobjects.eoaccess.ERXEntityTest$Tests");
+		modelName = "ERXTest";
 
-        for (int idx = 0; idx < methods.count(); idx++) {
-            String testName = methods.get(idx);
+		URL modelUrl = ERXFileUtilities.pathURLForResourceNamed(modelName+".eomodeld", null, null);
 
-            java.util.Enumeration<String> adaptors = ERExtensionsTest.availableAdaptorNames().objectEnumerator();
+		EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
 
-            while (adaptors.hasMoreElements()) {
-                String adaptorName = adaptors.nextElement();
-                if (ERExtensionsTest.dbExistsForAdaptor(adaptorName))
-                    suite.addTest(new Tests(testName, adaptorName));
-            }
-        }
-    }
+		model = EOModelGroup.defaultGroup().modelNamed(modelName);
+		model.setConnectionDictionary(ERExtensionsTest.connectionDict(adaptorName));
 
-    public static class Tests extends TestCase {
+		ec = new EOEditingContext();
+	}
 
-        EOEditingContext ec;
-        String adaptorName;
-        String modelName;
-        EOModel model;
+	public void testConstructor() {
+		ERXEntity entity = new ERXEntity();
+		Assert.assertNotNull(entity);
+	}
 
-        public Tests(String name, String param) {
-           super(name);
-           adaptorName = param;
-        }
+	public void testPlistConstructor() {
+		URL entityUrl = null;        	
+		try {
+			entityUrl = new java.net.URL(model.pathURL()+"/Company.plist");
+		} catch (java.net.MalformedURLException e) { throw new IllegalArgumentException(e.getMessage()); }
 
-        String config() {
-            return "adaptor: \""+adaptorName+"\"";
-        }
+		NSDictionary plist = NSPropertyListSerialization.dictionaryWithPathURL(entityUrl);
 
-        public void setUp() throws Exception {
-            super.setUp();
+		Assert.assertNotNull(new ERXEntity(plist, model));
+	}
 
-            if (ec != null) ec.dispose();
-            if (model != null) model.dispose();
+	public void testAnyAttributeNamed() {
 
-            EOModelGroup.setDefaultGroup(new EOModelGroup());
+		// Should this not return just a "new ERXEntity()"? It returns null.
+		//
+		//Assert.assertNotNull(new ERXEntity(null, null));
+	}
 
-            modelName = "ERXTest";
+	public void testHasExternalName() {
+		URL entityUrl = null;        	
+		try {
+			entityUrl = new java.net.URL(model.pathURL()+"/Company.plist");
+		} catch (java.net.MalformedURLException e) { throw new IllegalArgumentException(e.getMessage()); }
 
-            URL modelUrl = ERXTestUtilities.resourcePathURL("/"+modelName+".eomodeld", ERXEntityTest.class);
+		NSDictionary plist = NSPropertyListSerialization.dictionaryWithPathURL(entityUrl);
 
-            EOModelGroup.defaultGroup().addModel(new EOModel(modelUrl));
+		ERXEntity erxentity = new ERXEntity(plist, model);
 
-            model = EOModelGroup.defaultGroup().modelNamed(modelName);
-            model.setConnectionDictionary(ERExtensionsTest.connectionDict(adaptorName));
+		Assert.assertTrue(erxentity.hasExternalName());
+	}
 
-            ec = new EOEditingContext();
-        }
+	public void testSetClassDescription() {
 
-        public void testConstructor() {
-            ERXEntity entity = new ERXEntity();
-            Assert.assertNotNull(this.config(), entity);
-        }
+		EOEntity entity1 = EOModelGroup.defaultGroup().entityNamed("Company");
+		EOClassDescription desc = entity1.classDescriptionForInstances();
 
-        public void testPlistConstructor() {
-            NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/"+modelName+".eomodeld/Company.plist", ERXEntityTest.class); 
+		Assert.assertNotNull(desc);
 
-            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(data);
+		URL entityUrl = null;        	
+		try {
+			entityUrl = new java.net.URL(model.pathURL()+"/Employee.plist");
+		} catch (java.net.MalformedURLException e) { throw new IllegalArgumentException(e.getMessage()); }
 
-            NSDictionary plist = NSPropertyListSerialization.dictionaryForString(plistAsString);
+		NSDictionary plist = NSPropertyListSerialization.dictionaryWithPathURL(entityUrl);
 
-            // TODO - we probably want to verify here that the values returned by the ERXEntity and found in the plist are the same.
-            //
-            Assert.assertNotNull(this.config(), new ERXEntity(plist, model));
-        }
+		ERXEntity entity2 = new ERXEntity(plist, model);
 
-        public void testAnyAttributeNamed() {
+		// Using a mis-matched EOClassDescription here, but doing that on purpose so we can verify the superclass did not just ignore the set.
+		//
+		entity2.setClassDescription(desc);
 
-            // Should this not return just a "new ERXEntity()"? It returns null.
-            //
-            //Assert.assertNotNull(new ERXEntity(null, null));
-        }
-
-        public void testHasExternalName() {
-            NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/"+modelName+".eomodeld/Company.plist", ERXEntityTest.class); 
-
-            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(data);
-
-            NSDictionary plist = NSPropertyListSerialization.dictionaryForString(plistAsString);
-
-            ERXEntity erxentity = new ERXEntity(plist, model);
-
-            Assert.assertTrue(this.config(), erxentity.hasExternalName());
-        }
-
-        public void testSetClassDescription() {
-
-            EOEntity entity1 = EOModelGroup.defaultGroup().entityNamed("Company");
-            EOClassDescription desc = entity1.classDescriptionForInstances();
-
-            Assert.assertNotNull(desc);
-
-            NSDictionary data = ERXTestUtilities.dictionaryFromPropertyListNamedInClass("/"+modelName+".eomodeld/Employee.plist", ERXEntityTest.class); 
-
-            String plistAsString = NSPropertyListSerialization.stringFromPropertyList(data);
-
-            NSDictionary plist = NSPropertyListSerialization.dictionaryForString(plistAsString);
-
-            ERXEntity entity2 = new ERXEntity(plist, model);
-
-            // Using a mis-matched EOClassDescription here, but doing that on purpose so we can verify the superclass did not just ignore the set.
-            //
-            entity2.setClassDescription(desc);
-
-            Assert.assertTrue(this.config(), ERExtensionsTest.equalsForEOAccessObjects(desc, entity2.classDescriptionForInstances()));
-        }
-    }
+		Assert.assertTrue(ERExtensionsTest.equalsForEOAccessObjects(desc, entity2.classDescriptionForInstances()));
+	}
 }
