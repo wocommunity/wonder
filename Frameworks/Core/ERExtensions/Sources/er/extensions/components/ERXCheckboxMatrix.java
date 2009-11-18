@@ -39,6 +39,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * @binding cellpadding
  * @binding cellspacing
  * @binding cellWidth
+ * @binding cellClass
  * @binding relationshipName
  * @binding relationshipOwner
  * @binding tableOtherTagString
