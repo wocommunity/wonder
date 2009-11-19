@@ -38,4 +38,6 @@ AjaxFileUpload : AjaxFileUpload {
 	startedFunction = ^startedFunction;
 	startingText = ^startingText;
 	succeededFunction = ^succeededFunction;
+	class = ^class;
+	style = ^style;
 }

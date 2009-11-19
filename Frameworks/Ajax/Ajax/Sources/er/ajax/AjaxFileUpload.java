@@ -52,6 +52,8 @@ import er.extensions.foundation.ERXFileUtilities;
  * @binding uploadLabel the label to display on the Upload button ("Upload" by default)
  * @binding uploadFunctionName the upload button will instead be a function with the given name
  * @binding progressOfText the text to display for the word "of" in the "[size] of [totalsize]" string during upload
+ * @binding class the class attribute of the file input
+ * @binding style the style attribute of the file input
  * 
  * @author mschrag
  */
