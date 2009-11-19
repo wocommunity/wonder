@@ -63,7 +63,7 @@ public class ERXEntityTest extends TestCase {
 			entityUrl = new java.net.URL(model.pathURL()+"/Company.plist");
 		} catch (java.net.MalformedURLException e) { throw new IllegalArgumentException(e.getMessage()); }
 
-		NSDictionary plist = NSPropertyListSerialization.dictionaryWithPathURL(entityUrl);
+		NSDictionary plist = (NSDictionary)NSPropertyListSerialization.propertyListWithPathURL(entityUrl);
 
 		Assert.assertNotNull(new ERXEntity(plist, model));
 	}
@@ -81,7 +81,7 @@ public class ERXEntityTest extends TestCase {
 			entityUrl = new java.net.URL(model.pathURL()+"/Company.plist");
 		} catch (java.net.MalformedURLException e) { throw new IllegalArgumentException(e.getMessage()); }
 
-		NSDictionary plist = NSPropertyListSerialization.dictionaryWithPathURL(entityUrl);
+		NSDictionary plist = (NSDictionary)NSPropertyListSerialization.propertyListWithPathURL(entityUrl);
 
 		ERXEntity erxentity = new ERXEntity(plist, model);
 
@@ -100,7 +100,7 @@ public class ERXEntityTest extends TestCase {
 			entityUrl = new java.net.URL(model.pathURL()+"/Employee.plist");
 		} catch (java.net.MalformedURLException e) { throw new IllegalArgumentException(e.getMessage()); }
 
-		NSDictionary plist = NSPropertyListSerialization.dictionaryWithPathURL(entityUrl);
+		NSDictionary plist = (NSDictionary)NSPropertyListSerialization.propertyListWithPathURL(entityUrl);
 
 		ERXEntity entity2 = new ERXEntity(plist, model);
 

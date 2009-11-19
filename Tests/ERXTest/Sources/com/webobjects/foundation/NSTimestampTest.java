@@ -101,7 +101,7 @@ public class NSTimestampTest extends TestCase {
         StringBuffer dt = null;
         java.text.FieldPosition fp = new java.text.FieldPosition(0);
 
-        NSDictionary data = NSPropertyListSerialization.dictionaryWithPathURL(ERXFileUtilities.pathURLForResourceNamed("dates.plist", null, null));
+        NSDictionary data = (NSDictionary)NSPropertyListSerialization.propertyListWithPathURL(ERXFileUtilities.pathURLForResourceNamed("dates.plist", null, null));
 
         Enumeration dsts = ((NSArray)data.objectForKey("daylightSavingTimeTransitions")).objectEnumerator();
 
@@ -202,7 +202,7 @@ public class NSTimestampTest extends TestCase {
 
 	@SuppressWarnings("deprecation")
 	public void testFirstDaysOfYears() {
-        NSDictionary data = NSPropertyListSerialization.dictionaryWithPathURL(ERXFileUtilities.pathURLForResourceNamed("dates.plist", null, null));
+        NSDictionary data = (NSDictionary)NSPropertyListSerialization.propertyListWithPathURL(ERXFileUtilities.pathURLForResourceNamed("dates.plist", null, null));
 
         NSDictionary daysDict = (NSDictionary)data.objectForKey("firstDayForYears");
       
