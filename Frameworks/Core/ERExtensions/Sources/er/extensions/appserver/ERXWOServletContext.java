@@ -13,6 +13,18 @@ public class ERXWOServletContext extends WOServletContext implements ERXMutableU
     public ERXWOServletContext(WORequest worequest) {
         super(worequest);
     }
+    
+    /**
+     * Overridden to support rewritten urls via {@link ERXApplication#_rewriteURL(String)}.
+     * @return the (optionally) rewritten url
+     */
+    public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean secure) {
+    	String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
+    	if (!ERXApplication.isWO54()) {
+    		url = ERXApplication.erxApplication()._rewriteURL(url);
+    	}
+    	return url;
+    }
 
     protected NSMutableDictionary mutableUserInfo;
     public NSMutableDictionary mutableUserInfo() {
