@@ -16,6 +16,7 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 /**
+ * <p>
  * AjaxObserveField allows you to perform an Ajax submit (and optional update) based
  * on the state of a form field changing. If you specify an observeFieldID, that
  * single field will be observed for changes. If you also specify an updateContainerID,
@@ -23,12 +24,23 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
  * an observeFieldID, all of the form fields contained within this component will be
  * observed for changes instead. The list of form fields to observe is obtained on 
  * the client side, so you should not put AjaxUpdateContainers INSIDE of this component
- * or any fields inside of the container will no be observed after an update. Instead,
- * AjaxObserveFields should be surrounded by a container.
+ * or none fields inside of the container will be observed after an update. Instead,
+ * AjaxObserveFields should be surrounded by an update container.
+ * </p>
  * 
+ * <p>
  * If you leave of observeFieldID, AjaxObserveField must generate an HTML container, so
  * that it can find the form fields that correspond to this component from the client
- * side.
+ * side, so you will get an extra dom element when used as a container.
+ * </p>
+ * 
+ * <p>
+ * AjaxObserveFields observe specific instances of DOM elements. If you ajax replace the
+ * DOM elements being watched, the observe field will cease to function. To prevent this
+ * problem, you should always ensure that any ajax update of an observed field also 
+ * updates the AjaxObserveField component as well. The rule of thumb is that all 
+ * AjaxObserveFields should be in the same AjaxUpdateContainer as the fields they observe. 
+ * </p>
  * 
  * @binding id the ID of the observe field container (only useful if you leave off observeFieldID).
  * @binding elementName element to use for the observe field container. Defaults to <code>div</code>. 
