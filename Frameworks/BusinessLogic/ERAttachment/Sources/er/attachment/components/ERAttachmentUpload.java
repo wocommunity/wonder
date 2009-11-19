@@ -17,7 +17,6 @@ import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
-import er.extensions.validation.ERXValidation;
 
 /**
  * <p>
@@ -52,6 +51,8 @@ import er.extensions.validation.ERXValidation;
  * @binding height (optional) the desired height of the attachment 
  * @binding others all AjaxFileUpload bindings are proxied
  * @binding cleanup (optional) if true, the old attachment binding value will be deleted 
+ * @binding class (optional) the class attribute of the file input
+ * @binding style (optional) the style attribute of the file input
  * 
  * @property er.attachment.[configurationName].tempFolder (optional) the temp folder to use for WOFileUploads
  * @property er.attachment.tempFolder (optional) the temp folder to use for WOFileUploads
@@ -172,7 +173,7 @@ public class ERAttachmentUpload extends WOComponent {
   }
 
   public WOActionResults uploadSucceeded() throws MalformedURLException, IOException {
-    ERAttachment attachment = _uploadSucceeded();
+    _uploadSucceeded();
     return (WOActionResults) valueForBinding("succeededAction");
   }
 }
