@@ -54,6 +54,18 @@ import er.extensions.appserver.ERXWOContext;
  */
 public class AjaxModalDialogOpener extends AjaxComponent {
 	
+	/**
+	 * Call this, from the action method only, to prevent the dialog from opening.  If there is an onFailure 
+	 * callback, it will get executed.  This is also called internally if <code>enabled</code> is bound and 
+	 * evaluates to false.  This method sets the response status code to an error code so that the onSuccess 
+	 * callback is not executed.  The error status returned is 409 - "Conflict" which seemed like the best 
+	 * match for this.
+	 *
+	 * @param context WOContext to reject open in
+	 */
+	public static void rejectOpen(WOContext context) {
+		AjaxUtils.createResponse(context.request(), context).setStatus(409);
+	}
 	
     public AjaxModalDialogOpener(WOContext context) {
         super(context);
@@ -124,15 +136,11 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 			valueForBinding("action");
 		}
 		else {
-			// Set the response status code to an error code so that the onSuccess callback is not executed
-			// If there is an onFailure callback, it will get executed
-			// Status 409 is "Conflict" which seemed like the best match for this
-			AjaxUtils.createResponse(request, context).setStatus(409);
+			rejectOpen(context);
 		}
 		
 		return null;
 	}
-	
 	
 	/**
 	 * @return options for Ajax.Request that is made when the link is clicked
