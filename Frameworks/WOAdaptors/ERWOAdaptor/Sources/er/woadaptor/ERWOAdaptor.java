@@ -63,8 +63,6 @@ public class ERWOAdaptor extends WOAdaptor {
 
     private static WOApplication _app;
 
-    private String _requestIdKey;
-
     private IoAcceptor acceptor;
 
     private static ExecutorService _executor;
@@ -345,8 +343,7 @@ public class ERWOAdaptor extends WOAdaptor {
                 WOResponse woresponse = _lastDitchErrorResponse;
                 try {
                     boolean process = request != null;
-                    process &= !WOApplication.application().isDirectConnectEnabled();
-                    process &= !request.isUsingWebServer();
+                    process &= !(!WOApplication.application().isDirectConnectEnabled() && !request.isUsingWebServer());
                     process &= !"womp".equals(request.requestHandlerKey());
                     
                     if (process) {
