@@ -748,7 +748,7 @@ public class AjaxGrid extends WOComponent {
 	 *         if it is not part of the sort order
 	 */
 	public int currentColumnSortIndex() {
-		return isCurrentColumnSorted() ? sortOrders().indexOf(currentColumnSortOrder()) + 1 : -1;
+		return isCurrentColumnSorted() ? sortOrders().indexOfObject(currentColumnSortOrder()) + 1 : -1;
 	}
 
 	/**
