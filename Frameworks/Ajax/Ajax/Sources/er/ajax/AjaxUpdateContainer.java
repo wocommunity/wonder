@@ -46,26 +46,43 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		addScriptResourceInHead(context, response, "wonder.js");
 	}
 
+	protected boolean shouldRenderContainer(WOComponent component) {
+		boolean renderContainer = !booleanValueForBinding("optional", false, component) || AjaxUpdateContainer.currentUpdateContainerID() == null;
+		return renderContainer;
+	}
+	
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
-		try {
-			AjaxUpdateContainer.setCurrentUpdateContainerID(_containerID(context));
-			super.takeValuesFromRequest(request, context);
+		if (shouldRenderContainer(context.component())) {
+			String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+			try {
+				AjaxUpdateContainer.setCurrentUpdateContainerID(_containerID(context));
+				super.takeValuesFromRequest(request, context);
+			}
+			finally {
+				AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
+			}
 		}
-		finally {
-			AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
+		else {
+			super.takeValuesFromRequest(request, context);
 		}
 	}
 
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
-		try {
-			AjaxUpdateContainer.setCurrentUpdateContainerID(_containerID(context));
-			return super.invokeAction(request, context);
+		WOActionResults results;
+		if (shouldRenderContainer(context.component())) {
+			String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+			try {
+				AjaxUpdateContainer.setCurrentUpdateContainerID(_containerID(context));
+				results = super.invokeAction(request, context);
+			}
+			finally {
+				AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
+			}
 		}
-		finally {
-			AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
+		else {
+			results = super.invokeAction(request, context);
 		}
+		return results;
 	}
 
 	public NSDictionary createAjaxOptions(WOComponent component) {
@@ -148,8 +165,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
-		boolean renderContainer = !booleanValueForBinding("optional", false, component) || AjaxUpdateContainer.currentUpdateContainerID() == null;
-		if (!renderContainer) {
+		if (!shouldRenderContainer(component)) {
 			if (hasChildrenElements()) {
 				appendChildrenToResponse(response, context);
 			}
