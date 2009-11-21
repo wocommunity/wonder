@@ -30,11 +30,12 @@ TextField: WOTextField {
 	id = fieldName;
 	disabled = ^disabled;
 	name = fieldName;
-	value = ^value;
+	value = stringValue;
 	size= ^size;
 	onblur = ^onblur;
 	onchange = ^onchange;
 	accesskey = ^accesskey;
 	tabindex = ^tabindex;
 	default = ^default;
+	style = ^style;
 }

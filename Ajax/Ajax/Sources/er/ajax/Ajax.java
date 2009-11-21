@@ -1,13 +1,15 @@
 package er.ajax;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
-import er.extensions.*;
-import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.ERXConstant;
+import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 public class Ajax extends ERXFrameworkPrincipal {
 	public static Class[] REQUIRES = new Class[0];
@@ -36,7 +38,8 @@ public class Ajax extends ERXFrameworkPrincipal {
 			WOApplication.application().registerRequestHandler(new AjaxRequestHandler(), AjaxRequestHandler.AjaxRequestHandlerKey);
 			log.debug("AjaxRequestHandler installed");
 		}
-		
+		WOApplication.application().registerRequestHandler(new AjaxPushRequestHandler(), AjaxPushRequestHandler.AjaxCometRequestHandlerKey);
+
 		// Register the AjaxResponseDelegate if you're using an ERXAjaxApplication ... This allows us
 		// to fix some weird border cases caused by structural page changes.
 		WOApplication application = WOApplication.application();

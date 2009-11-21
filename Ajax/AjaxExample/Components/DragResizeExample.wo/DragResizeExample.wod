@@ -107,10 +107,13 @@ AnnotationTitleField: WOTextField {
 	value = annotationItem.title;
 }
 
+Random : WORepetition {
+	count=randomCount;
+}
+
 IBox: AjaxModalContainer {
 	label = "[click to edit]";
 	width = 300;
-	height = 150;
 }
 
 EditingConditional: WOConditional {

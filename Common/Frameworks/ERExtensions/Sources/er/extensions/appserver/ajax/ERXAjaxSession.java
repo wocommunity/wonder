@@ -21,8 +21,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 /**
  * ERXAjaxSession is the part of ERXSession that handles Ajax requests.
@@ -164,7 +164,7 @@ public class ERXAjaxSession extends WOSession {
    * is requesting in its own thread and generating their own non-overlapping context ids.
    */
   public void savePage(WOComponent page) {
-	WOContext context = context();
+	  WOContext context = context();
     if (ERXAjaxApplication.shouldNotStorePage(context)) {
     	// System.out.println("Not storing page: " + context.request().uri());
       WORequest request = context.request();

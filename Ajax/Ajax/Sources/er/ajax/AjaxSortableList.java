@@ -20,9 +20,10 @@ import com.webobjects.foundation.NSRange;
 // PROTOTYPE FUNCTIONS (WRAPPER)
 /**
  * 
- * @binding id the id of the list
  * @binding list the list to allow reordering on (required)
  * @binding item the repetition item (required)
+ * @binding listItemIDKeyPath the key path of the id of each item (required)
+ * @binding id the id of the list
  * @binding listElementName the HTML element name of the list (defaults to 'ul')
  * @binding listItemElementName the HTML element name of the list item (defaults to 'li')
  * @binding listItemIDKeyPath the key path of the id of each item (required)
@@ -32,6 +33,18 @@ import com.webobjects.foundation.NSRange;
  * @binding listItemStyle the CSS style attribute of the current list item
  * @binding startIndex the start index of the list
  * @binding action the action to fire when the list is reordered
+ * @binding tag
+ * @binding only
+ * @binding overlap
+ * @binding constraint
+ * @binding containment
+ * @binding handle
+ * @binding hoverclass
+ * @binding ghosting
+ * @binding dropOnEmpty
+ * @binding scroll
+ * @binding onChange
+ * @binding onUpdate
  * 
  * @author mschrag
  *

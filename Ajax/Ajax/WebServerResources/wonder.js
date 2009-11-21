@@ -306,8 +306,17 @@ var AjaxUpdateContainer = {
 	},
 	
 	update: function(id, options) {
-		var actionUrl = $(id).getAttribute('updateUrl');
-		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		var updateElement = $(id);
+		if (updateElement == null) {
+			alert('There is no element on this page with the id "' + id + '".');
+		}
+		var actionUrl = updateElement.getAttribute('updateUrl');
+		if (options && options['_r']) {
+			actionUrl = actionUrl.addQueryParameters('_r='+ id);
+		}
+		else {
+			actionUrl = actionUrl.addQueryParameters('_u='+ id);
+		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 	}
@@ -332,17 +341,22 @@ var AjaxUpdateLink = {
 	
 	_update: function(id, actionUrl, options, elementID, queryParams) {
 		if (elementID) {
-			actionUrl = actionUrl.sub(/[^/]+$/, elementID);
+			actionUrl = actionUrl.sub(/[^\/]+$/, elementID);
 		}
 		actionUrl = actionUrl.addQueryParameters(queryParams);
-		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		if (options && options['_r']) {
+			actionUrl = actionUrl.addQueryParameters('_r='+ id);
+		}
+		else {
+			actionUrl = actionUrl.addQueryParameters('_u='+ id);
+		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 	},
 	
 	request: function(actionUrl, options, elementID, queryParams) {
 		if (elementID) {
-			actionUrl = actionUrl.sub(/[^/]+$/, elementID);
+			actionUrl = actionUrl.sub(/[^\/]+$/, elementID);
 		}
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		new Ajax.Request(actionUrl, AjaxOptions.defaultOptions(options));
@@ -361,14 +375,19 @@ var AjaxSubmitButton = {
 		return options;
 	},
 	
-	generateActionUrl: function(id, form, queryParams) {
+	generateActionUrl: function(id, form, queryParams, options) {
 		var actionUrl = form.action;
 		if (queryParams != null) {
 			actionUrl = actionUrl.addQueryParameters(queryParams);
 		}
 		actionUrl = actionUrl.sub('/wo/', '/ajax/', 1);
 		if (id != null) {
-			actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
+			if (options && options['_r']) {
+				actionUrl = actionUrl.addQueryParameters('_r=' + id);
+			}
+			else {
+				actionUrl = actionUrl.addQueryParameters('_u=' + id);
+			}
 		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		return actionUrl;
@@ -427,13 +446,13 @@ var AjaxSubmitButton = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		var finalUrl = AjaxSubmitButton.generateActionUrl(id, form, queryParams);
+		var finalUrl = AjaxSubmitButton.generateActionUrl(id, form, queryParams, options);
 		var finalOptions = AjaxSubmitButton.processOptions(form, options);
 		new Ajax.Updater(id, finalUrl, finalOptions);
 	},
 	
 	request: function(form, queryParams, options) {
-		var finalUrl = AjaxSubmitButton.generateActionUrl(null, form, queryParams);
+		var finalUrl = AjaxSubmitButton.generateActionUrl(null, form, queryParams, options);
 		var finalOptions = AjaxSubmitButton.processOptions(form, options);
 		new Ajax.Request(finalUrl, finalOptions);
 	},
@@ -685,7 +704,7 @@ AjaxPeriodicUpdater.prototype = {
 	
 	start: function() {
 		var actionUrl = $(this.id).getAttribute('updateUrl');
-		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		actionUrl = actionUrl.addQueryParameters('_u='+ id);
 		this.updater = new Ajax.PeriodicalUpdater(this.id, actionUrl, { evalScripts: true, frequency: 2.0 });
 	},
 

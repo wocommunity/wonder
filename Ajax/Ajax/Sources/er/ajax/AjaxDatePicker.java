@@ -1,7 +1,6 @@
 package er.ajax;
 
 import java.text.Format;
-
 import java.text.SimpleDateFormat;
 
 import com.webobjects.appserver.WOActionResults;
@@ -38,25 +37,25 @@ import er.extensions.ERXResponseRewriter;
  *   }
  * </pre>
  * 
- * @binding value required, the value that will be shown in the input field and set by the date picker
- * @binding format only one of format or formatter may be bound, the format to use in the input field
- * @binding formatter only one of format or formatter may be bound, the formatter to use with the input field
+ * @binding value the value that will be shown in the input field and set by the date picker (required)
+ * @binding format the format to use in the input field (only one of format or formatter may be bound)
+ * @binding formatter the formatter to use with the input field (only one of format or formatter may be bound)
  *
- * @binding id optional HTML ID passed to the input field 
- * @binding class optional CSS class passed to the input field 
- * @binding style optional CSS style passed to the input field 
- * @binding size optional size attribute passed to the input field 
- * @binding maxlength optional maxlength attribute passed to the input field 
- * @binding name optional name attribute passed to the input field 
- * @binding onDateSelect optional JavaScript to execute when a date is selected from the calendar
- * @binding fireEvent optional, false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
+ * @binding id HTML ID passed to the input field 
+ * @binding class CSS class passed to the input field 
+ * @binding style CSS style passed to the input field 
+ * @binding size size attribute passed to the input field 
+ * @binding maxlength maxlength attribute passed to the input field 
+ * @binding name name attribute passed to the input field 
+ * @binding onDateSelect JavaScript to execute when a date is selected from the calendar
+ * @binding fireEvent false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
  * 
- * @binding dayNames optional list of day names (Sunday to Saturday) for localization, English is the default
- * @binding monthNames optional list of month names for localization, English is the default
- * @binding imagesDir optional directory to take images from, takes them from Ajax.framework by default
+ * @binding dayNames list of day names (Sunday to Saturday) for localization, English is the default
+ * @binding monthNames list of month names for localization, English is the default
+ * @binding imagesDir directory to take images from, takes them from Ajax.framework by default
  *
- * @binding calendarCSS optional name of CSS resource with classed for calendar, defaults to "calendar.css"
- * @binding calendarCSSFramework optional name of framework (null for application) containing calendarCSS resource, defaults to "Ajax"
+ * @binding calendarCSS name of CSS resource with classed for calendar, defaults to "calendar.css"
+ * @binding calendarCSSFramework name of framework (null for application) containing calendarCSS resource, defaults to "Ajax"
  *
  * @see java.text.SimpleDateFormat
  * @see com.webobjects.foundation.NSTimestampFormatter
@@ -267,6 +266,7 @@ public class AjaxDatePicker extends AjaxComponent {
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "wonder.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "calendar.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "date.js");
+		ERXResponseRewriter.addStylesheetResourceInHead(response, context(), "Ajax", "calendar.css");
 	}
 	
 	/**

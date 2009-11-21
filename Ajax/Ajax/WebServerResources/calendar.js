@@ -427,23 +427,29 @@ function calendar_open(input_element, options) {
 function build_calendar(input_element) {
 	if (get_element('calendar_control') == null) {  // CH only do this once per page or FireFox gets confused
 		var firstRow;
-		var calendarControl = new Element("table", {id: "calendar_control", style: "position: absolute; display:none; z-index: 10001;"}).update(
-          firstRow = new Element("tr", {}));
+		var tbody;
+		//create a table tag containing a tbody for IE
+		var calendarControl = new Element("table",
+				{id: "calendar_control", style: "position: absolute; display:none; z-index: 10001;"}
+			).update(tbody = new Element("tbody", {}));
+		firstRow = new Element("tr", {});
 		firstRow.appendChild(new Element("td", {id: "calendar_prev_year", title: "Previous year"}));
 		firstRow.appendChild(new Element("td", {id: "calendar_prev_month", title: "Previous month"}));
 		firstRow.appendChild(new Element("td", {id: "calendar_header", colspan: "3"}));
 		firstRow.appendChild(new Element("td", {id: "calendar_next_month", title: "Next month"}));
 		firstRow.appendChild(new Element("td", {id: "calendar_next_year", title: "Next year"}));
 		
+		tbody.appendChild(firstRow);
+		
 		var secondRow = new Element("tr", {});
-		calendarControl.appendChild(secondRow);
+		tbody.appendChild(secondRow);
 		for (var i=0; i < 7; i++) {
 	  	  secondRow.appendChild(new Element("td", {'class': "day_letter"}));
         }
         
         for(var n=1, i=0; i<6 ;i++) {
 		  var dayRow = new Element("tr", {});
-		  calendarControl.appendChild(dayRow);
+		  tbody.appendChild(dayRow);
 		  for(var j=0; j<7; j++,n++) {
 	  		dayRow.appendChild(new Element("td", {id: "calendar_day_" + n, 'class': "day_number normal"}));
 	  	  }

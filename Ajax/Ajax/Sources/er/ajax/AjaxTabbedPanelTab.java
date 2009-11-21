@@ -1,14 +1,12 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-
 import com.webobjects.foundation.NSDictionary;
 
 /**
@@ -102,7 +100,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
      */
     public void takeValuesFromRequest(WORequest request, WOContext context)
     {
-    	if (isVisble(context.component())) {
+    	if (isVisble(context.component()) && (isSelected ==  null || isSelected(context.component())) ) {
     		super.takeChildrenValuesFromRequest(request, context);
     	}
     }

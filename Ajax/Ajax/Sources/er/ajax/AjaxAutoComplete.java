@@ -13,6 +13,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXStringUtilities;
+
 // PROTOTYPE FUNCTIONS (WRAPPER)
 /**
  * Autocompleting combo-box similar to Google suggest.<br/>
@@ -74,7 +76,11 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding accesskey hot key that should activate the text field (optional)
  * @binding tabindex tab index of the text field (optional)
  * @binding default hint for the text field, when used together with {@link AjaxTextHinter}. 
- * 
+ * @binding selection if set, if the text field's string matches the displayString of one of the objects in the provided list, that object will be bound back as the selection. currently this only supports displayString renderers and not child templates
+ * @binding class class attribue of the text field
+ * @binding style class attribue of the text field
+ * @binding onblur onblur attribue of the text field
+ * @binding onchange onchange attribue of the text field
  * @author ak
  */
 public class AjaxAutoComplete extends AjaxComponent {
@@ -214,6 +220,61 @@ public class AjaxAutoComplete extends AjaxComponent {
 			addScriptResourceInHead(res, "wonder.js");
 		}
     }
+    
+    public String stringValue() {
+    	String strValue = null;
+    	if (hasBinding("selection")) {
+   			Object selection = valueForBinding("selection");
+   			if (hasBinding("displayString")) {
+   	   			setValueForBinding(selection, "item");
+   	   			strValue = displayStringForValue(valueForBinding("value"));
+   			}
+   			else if (selection != null) {
+   				strValue = String.valueOf(selection);
+   			}
+    	}
+    	else if (hasBinding("value")) {
+    		strValue = (String)valueForBinding("value");
+    	}
+    	return strValue;
+    }
+    
+    protected String displayStringForValue(Object value) {
+    	Object displayValue = valueForBinding("displayString", valueForBinding("item", value));
+    	String displayString = displayValue == null ? null : displayValue.toString();
+    	return displayString;
+    }
+    
+    protected int maxItems() {
+        int maxItems = ((Integer) valueForBinding("maxItems", new Integer(50))).intValue();
+        return maxItems;
+    }
+    
+    public void setStringValue(String strValue) {
+    	if (hasBinding("selection")) {
+            Object selection = null;
+            if (strValue != null) {
+	    		NSArray values = (NSArray) valueForBinding("list");
+		        int maxItems = maxItems();
+		        int itemsCount = 0;
+		        for(Enumeration e = values.objectEnumerator(); e.hasMoreElements() && itemsCount++ < maxItems;) {
+		            Object value = e.nextElement();
+	                setValueForBinding(value, "item");
+	            	String displayString = displayStringForValue(value);
+	            	if (ERXStringUtilities.stringEqualsString(displayString, strValue)) {
+	            		selection = value;
+	            		break;
+	            	}
+		        }
+            }
+        	setValueForBinding(selection, "selection");
+    	}
+    	setValueForBinding(strValue, "value");
+    }
+    
+    public void takeValuesFromRequest(WORequest request, WOContext context) {
+    	super.takeValuesFromRequest(request, context);
+    }
 
     /**
      * Handles the Ajax request. Checks for the form value in the edit field,
@@ -224,13 +285,15 @@ public class AjaxAutoComplete extends AjaxComponent {
         // String inputString = request.contentString();
         String fieldValue = context.request().stringFormValueForKey(fieldName);
         setValueForBinding(fieldValue, "value");
+        
+        WOResponse response = AjaxUtils.createResponse(request, context);
+        response.appendContentString("<ul>");
+        
+        int maxItems = maxItems();
+        int itemsCount = 0;
         NSArray values = (NSArray) valueForBinding("list");
         WOElement child = _childTemplate();
         boolean hasItem = hasBinding("item");
-        WOResponse response = AjaxUtils.createResponse(request, context);
-        response.appendContentString("<ul>");
-        int maxItems = ((Integer) valueForBinding("maxItems", new Integer(50))).intValue();
-        int itemsCount = 0;
         for(Enumeration e = values.objectEnumerator(); e.hasMoreElements() && itemsCount++ < maxItems;) {
             response.appendContentString("<li>");
             Object value = e.nextElement();
@@ -243,9 +306,7 @@ public class AjaxAutoComplete extends AjaxComponent {
             	if(hasItem) {
                     setValueForBinding(value, "item");
              	}
-            	Object displayValue = valueForBinding("displayString", valueForBinding("item", value));
-            	String displayString = displayValue.toString();
-                response.appendContentString(displayString);
+                response.appendContentString(displayStringForValue(value));
             }
             response.appendContentString("</li>");
         }

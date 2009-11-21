@@ -17,7 +17,7 @@ import er.extensions.ERXWOContext;
  * only updates the contents and applies an "expanded" class to the link, which
  * you can use to change the expansion icon in a stylesheet (see AjaxExample2's
  * ToggleDetails example).
- *  
+ * 
  * If you want to use something fancier than a string as link label, you can put
  * a ERXWOTemplate with templateName='label' inside the component. If present,
  * that will replace the label provided by the 'string' binding.

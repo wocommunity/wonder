@@ -10,8 +10,8 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXWOContext;
 import er.extensions.ERXComponentUtilities;
+import er.extensions.ERXWOContext;
 
 /**
  * @binding id the id of the update container
