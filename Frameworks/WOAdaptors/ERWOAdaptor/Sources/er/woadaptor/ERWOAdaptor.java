@@ -14,7 +14,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.log4j.Logger;
 import org.apache.mina.common.ByteBuffer;
@@ -23,6 +26,7 @@ import org.apache.mina.common.IoAcceptor;
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.common.ThreadModel;
+import org.apache.mina.filter.LoggingFilter;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
@@ -45,8 +49,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.appserver.ERXResponse;
-
 public class ERWOAdaptor extends WOAdaptor {
 
     private static final Logger log = Logger.getLogger(ERWOAdaptor.class);
@@ -65,11 +67,14 @@ public class ERWOAdaptor extends WOAdaptor {
 
     private IoAcceptor acceptor;
 
+    private static ExecutorService _executor;
+    
     public ERWOAdaptor(String name, NSDictionary config) {
         super(name, config);
         _lastDitchErrorResponse = new WOResponse();
         _lastDitchErrorResponse.setStatus(500);
         _lastDitchErrorResponse.setContent("An error occured");
+        _lastDitchErrorResponse.setHeaders(NSDictionary.EmptyDictionary);
 
         _app = WOApplication.application();
         Number number = (Number) config.objectForKey(WOProperties._PortKey);
@@ -78,6 +83,7 @@ public class ERWOAdaptor extends WOAdaptor {
         if (_port < 0)
             _port = 0;
         _app.setPort(_port);
+        _executor = Executors.newCachedThreadPool();
         _host = (String) config.objectForKey(WOProperties._HostKey);
         _app._setHost(_host);
     }
@@ -85,11 +91,11 @@ public class ERWOAdaptor extends WOAdaptor {
     @Override
     public void registerForEvents() {
         try {
-            acceptor = new SocketAcceptor(4, Executors.newCachedThreadPool());
+            acceptor = new SocketAcceptor(16, Executors.newCachedThreadPool());
             SocketAcceptorConfig cfg = new SocketAcceptorConfig();
             cfg.setThreadModel(ThreadModel.MANUAL);
 
-            // cfg.getFilterChain().addLast("logger", new LoggingFilter());
+            cfg.getFilterChain().addLast("logger", new LoggingFilter());
             cfg.getFilterChain().addLast("protocolFilter", new ProtocolCodecFilter(new CodecFactory()));
             acceptor.bind(new InetSocketAddress(_host, _port), new Handler(), cfg);
             log.info("Started adaptor");
@@ -123,13 +129,10 @@ public class ERWOAdaptor extends WOAdaptor {
 
         private CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
 
-        private WORequest request;
-
         public RequestDecoder() {
         }
 
         public MessageDecoderResult decodable(IoSession session, ByteBuffer in) {
-            // Return NEED_DATA if the whole header is not read yet.
             try {
                 return headerComplete(in) ? MessageDecoderResult.OK : MessageDecoderResult.NEED_DATA;
             } catch (Exception ex) {
@@ -143,10 +146,9 @@ public class ERWOAdaptor extends WOAdaptor {
             // Try to decode body
             WORequest request = parseRequest(new StringReader(in.getString(decoder)));
 
-            // Return NEED_DATA if the body is not fully read.
-            if (request == null)
+            if (request == null) {
                 return MessageDecoderResult.NEED_DATA;
-
+            }
             out.write(request);
 
             return MessageDecoderResult.OK;
@@ -246,6 +248,20 @@ public class ERWOAdaptor extends WOAdaptor {
 
         }
     }
+    
+    public static class ResponseWrapper {
+        
+        private WOResponse _response;
+        
+        public ResponseWrapper(WOResponse response) {
+            _response = response;
+        }
+        
+        public WOResponse response() {
+            return _response;
+        }
+        
+    }
 
     public static class ResponseEncoder implements MessageEncoder {
 
@@ -253,8 +269,7 @@ public class ERWOAdaptor extends WOAdaptor {
 
         static {
             Set types = new HashSet();
-            types.add(WOResponse.class);
-            types.add(ERXResponse.class);
+            types.add(ResponseWrapper.class);
             TYPES = Collections.unmodifiableSet(types);
         }
 
@@ -264,7 +279,7 @@ public class ERWOAdaptor extends WOAdaptor {
         }
 
         public void encode(IoSession session, Object message, ProtocolEncoderOutput out) throws Exception {
-            WOResponse msg = (WOResponse) message;
+            WOResponse msg = (WOResponse) ((ResponseWrapper)message).response();
             ByteBuffer buf = ByteBuffer.allocate(256);
             // Enable auto-expand for easier encoding
             buf.setAutoExpand(true);
@@ -316,24 +331,26 @@ public class ERWOAdaptor extends WOAdaptor {
 
     public static class Handler implements IoHandler {
         
-        private final class Runner extends Thread {
+        private final class Runner implements Runnable {
             
-            private Object message;
+            private WORequest request;
             private IoSession session;
 
-            public Runner(IoSession session, Object message) {
-                this.message = message;
+            public Runner(IoSession session, WORequest message) {
+                this.request = message;
                 this.session = session;
             }
 
             public WOResponse runOnce() {
                 WOResponse woresponse = _lastDitchErrorResponse;
-                boolean success = false;
                 try {
-                    WORequest worequest = (WORequest)message;
-                    if (!(worequest == null || !WOApplication.application().isDirectConnectEnabled() && !worequest.isUsingWebServer() && !"womp".equals(worequest.requestHandlerKey()))) {
-                        String s = worequest.requestHandlerKey();
-                        woresponse = _app.dispatchRequest(worequest);
+                    boolean process = request != null;
+                    process &= !WOApplication.application().isDirectConnectEnabled();
+                    process &= !request.isUsingWebServer();
+                    process &= !"womp".equals(request.requestHandlerKey());
+                    
+                    if (process) {
+                        woresponse = _app.dispatchRequest(request);
                         NSDelayedCallbackCenter.defaultCenter().eventEnded();
                     }
                 } catch (Exception e) {
@@ -342,48 +359,37 @@ public class ERWOAdaptor extends WOAdaptor {
                 return woresponse;
             }
 
-            @Override
             public void run() {
-                
-                // Check that we can service the request context
-                WORequest msg = (WORequest) message;
                 WOResponse response = runOnce();
-                //response.setHeader("text/plain", "content-type");
-                //response.setContent("CONNECTED");
 
                 if (response != null) {
-                    session.write(response).join();
+                    session.write(new ResponseWrapper(response)).join();
                 }
                 //session.close();
             }
         }
 
         public void sessionCreated(IoSession session) throws Exception {
-            log.info("sessionCreated: " + session.getRemoteAddress());
             SessionUtil.initialize(session);
         }
 
         public void sessionOpened(IoSession session) {
-            log.info("sessionOpened: " + session.getRemoteAddress());
             session.setIdleTime(IdleStatus.BOTH_IDLE, 60);
         }
 
         public void sessionClosed(IoSession session) {
-            log.info("sessionClosed: " + session.getRemoteAddress());
         }
 
         public void messageReceived(IoSession session, Object message) {
-            log.info("messageReceived: " + session.getRemoteAddress() + message);
-            new Runner(session, message).start();
+            Runnable callable = new Runner(session, (WORequest) message);
+            _executor.submit(callable);
         }
         
         public void messageSent(IoSession session, Object message) {
-            log.info("messageSent: " + session.getWrittenBytes());
             // session.close();
         }
 
         public void sessionIdle(IoSession session, IdleStatus status) {
-            log.info("sessionIdle: " + status);
             session.close();
         }
 
