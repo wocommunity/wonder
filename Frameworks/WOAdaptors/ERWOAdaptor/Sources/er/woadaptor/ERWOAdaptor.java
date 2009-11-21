@@ -206,8 +206,8 @@ public class ERWOAdaptor extends WOAdaptor {
             BufferedReader rdr = new BufferedReader(is);
             String line = rdr.readLine();
             String[] parts = line.trim().split(" ", 3);
-            String url = parts[0];
-            String method = parts[1];
+            String url = parts[1];
+            String method = parts[0];
             String version = parts[2];
             NSMutableDictionary<String, NSMutableArray<String>> headers = new NSMutableDictionary<String, NSMutableArray<String>>() {
                 @Override
@@ -218,7 +218,7 @@ public class ERWOAdaptor extends WOAdaptor {
 
             // Read header
             while ((line = rdr.readLine()) != null && line.length() > 0) {
-                String[] tokens = line.split(": +", 2);
+                String[] tokens = line.split(":\\s*", 2);
                 String key = tokens[0];
                 String value = tokens[1];
                 NSMutableArray<String> items = headers.objectForKey(key);
@@ -236,7 +236,7 @@ public class ERWOAdaptor extends WOAdaptor {
                     line = String.copyValueOf(buf);
                 }
             }
-            WORequest request = WOApplication.application().createRequest(url, method, version, headers, null, null);
+            WORequest request = WOApplication.application().createRequest(method, url, version, headers, null, null);
 
             return request;
         }
@@ -354,7 +354,7 @@ public class ERWOAdaptor extends WOAdaptor {
                 if (response != null) {
                     session.write(response).join();
                 }
-                session.close();
+                //session.close();
             }
         }
 
@@ -379,7 +379,7 @@ public class ERWOAdaptor extends WOAdaptor {
         
         public void messageSent(IoSession session, Object message) {
             log.info("messageSent: " + session.getWrittenBytes());
-            session.close();
+            // session.close();
         }
 
         public void sessionIdle(IoSession session, IdleStatus status) {
