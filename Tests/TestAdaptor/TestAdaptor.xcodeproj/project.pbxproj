@@ -1,0 +1,263 @@
+{
+    archiveVersion = 1; 
+    classes = {}; 
+    objectVersion = 42; 
+    objects = {
+        000000000000000000000001 = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "sourcecode.java"; 
+            name = "Main.java"; 
+            path = "Sources/your/app/components/Main.java"; 
+            sourceTree = "<group>"; 
+        }; 
+        000000000000000000000002 = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "sourcecode.java"; 
+            name = "Session.java"; 
+            path = "Sources/your/app/Session.java"; 
+            sourceTree = "<group>"; 
+        }; 
+        000000000000000000000003 = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "sourcecode.java"; 
+            name = "DirectAction.java"; 
+            path = "Sources/your/app/DirectAction.java"; 
+            sourceTree = "<group>"; 
+        }; 
+        000000000000000000000004 = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "sourcecode.java"; 
+            name = "Application.java"; 
+            path = "Sources/your/app/Application.java"; 
+            sourceTree = "<group>"; 
+        }; 
+        000000000000000000000005 = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "sourcecode.java"; 
+            name = Properties; 
+            path = "Resources/Properties"; 
+            sourceTree = "<group>"; 
+        }; 
+        000000000000000000000006 = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "sourcecode.java"; 
+            name = "Main.api"; 
+            path = "Components/Main.api"; 
+            sourceTree = "<group>"; 
+        }; 
+        000000000000000000000007 = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "wrapper.framework"; 
+            name = "JavaEOAccess.framework"; 
+            path = "/Volumes/Home/Library/WebObjects/5.3/System/Library/Frameworks/JavaEOAccess.framework"; 
+            sourceTree = "<absolute>"; 
+        }; 
+        000000000000000000000008 = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "wrapper.framework"; 
+            name = "JavaEOControl.framework"; 
+            path = "/Volumes/Home/Library/WebObjects/5.3/System/Library/Frameworks/JavaEOControl.framework"; 
+            sourceTree = "<absolute>"; 
+        }; 
+        000000000000000000000009 = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "wrapper.framework"; 
+            name = "JavaFoundation.framework"; 
+            path = "/Volumes/Home/Library/WebObjects/5.3/System/Library/Frameworks/JavaFoundation.framework"; 
+            sourceTree = "<absolute>"; 
+        }; 
+        00000000000000000000000a = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "wrapper.framework"; 
+            name = "JavaJDBCAdaptor.framework"; 
+            path = "/Volumes/Home/Library/WebObjects/5.3/System/Library/Frameworks/JavaJDBCAdaptor.framework"; 
+            sourceTree = "<absolute>"; 
+        }; 
+        00000000000000000000000b = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "wrapper.framework"; 
+            name = "JavaWebObjects.framework"; 
+            path = "/Volumes/Home/Library/WebObjects/5.3/System/Library/Frameworks/JavaWebObjects.framework"; 
+            sourceTree = "<absolute>"; 
+        }; 
+        00000000000000000000000c = {
+            isa = PBXFileReference; 
+            lastKnownFileType = "wrapper.framework"; 
+            name = "JavaXML.framework"; 
+            path = "/Volumes/Home/Library/WebObjects/5.3/System/Library/Frameworks/JavaXML.framework"; 
+            sourceTree = "<absolute>"; 
+        }; 
+        00000000000000000000000d = {
+            children = (
+                000000000000000000000001, 
+                000000000000000000000002, 
+                000000000000000000000003, 
+                000000000000000000000004
+            ); 
+            isa = PBXGroup; 
+            name = Sources; 
+            sourceTree = "<group>"; 
+        }; 
+        00000000000000000000000e = {
+            children = (000000000000000000000005, 000000000000000000000006); 
+            isa = PBXGroup; 
+            name = Resources; 
+            sourceTree = "<group>"; 
+        }; 
+        00000000000000000000000f = {children = (); isa = PBXGroup; name = "Web Server"; sourceTree = "<group>"; }; 
+        000000000000000000000010 = {
+            children = (
+                000000000000000000000007, 
+                000000000000000000000008, 
+                000000000000000000000009, 
+                00000000000000000000000a, 
+                00000000000000000000000b, 
+                00000000000000000000000c
+            ); 
+            isa = PBXGroup; 
+            name = Frameworks; 
+            sourceTree = "<group>"; 
+        }; 
+        000000000000000000000011 = {
+            children = (
+                00000000000000000000000d, 
+                00000000000000000000000e, 
+                00000000000000000000000f, 
+                000000000000000000000010
+            ); 
+            isa = PBXGroup; 
+            name = Root; 
+            sourceTree = "<group>"; 
+        }; 
+        000000000000000000000012 = {fileRef = 000000000000000000000001; isa = PBXBuildFile; }; 
+        000000000000000000000013 = {fileRef = 000000000000000000000002; isa = PBXBuildFile; }; 
+        000000000000000000000014 = {fileRef = 000000000000000000000003; isa = PBXBuildFile; }; 
+        000000000000000000000015 = {fileRef = 000000000000000000000004; isa = PBXBuildFile; }; 
+        000000000000000000000016 = {
+            files = (
+                000000000000000000000012, 
+                000000000000000000000013, 
+                000000000000000000000014, 
+                000000000000000000000015
+            ); 
+            isa = PBXSourcesBuildPhase; 
+        }; 
+        000000000000000000000017 = {fileRef = 000000000000000000000005; isa = PBXBuildFile; }; 
+        000000000000000000000018 = {fileRef = 000000000000000000000006; isa = PBXBuildFile; }; 
+        000000000000000000000019 = {
+            files = (000000000000000000000017, 000000000000000000000018); 
+            isa = PBXResourcesBuildPhase; 
+        }; 
+        00000000000000000000001a = {files = (); isa = PBXResourcesBuildPhase; }; 
+        00000000000000000000001b = {fileRef = 000000000000000000000007; isa = PBXBuildFile; }; 
+        00000000000000000000001c = {fileRef = 000000000000000000000008; isa = PBXBuildFile; }; 
+        00000000000000000000001d = {fileRef = 000000000000000000000009; isa = PBXBuildFile; }; 
+        00000000000000000000001e = {fileRef = 00000000000000000000000a; isa = PBXBuildFile; }; 
+        00000000000000000000001f = {fileRef = 00000000000000000000000b; isa = PBXBuildFile; }; 
+        000000000000000000000020 = {fileRef = 00000000000000000000000c; isa = PBXBuildFile; }; 
+        000000000000000000000021 = {
+            files = (
+                00000000000000000000001b, 
+                00000000000000000000001c, 
+                00000000000000000000001d, 
+                00000000000000000000001e, 
+                00000000000000000000001f, 
+                000000000000000000000020
+            ); 
+            isa = PBXFrameworksBuildPhase; 
+        }; 
+        000000000000000000000022 = {files = (); isa = PBXSourcesBuildPhase; }; 
+        000000000000000000000023 = {files = (); isa = PBXResourcesBuildPhase; }; 
+        000000000000000000000024 = {files = (); isa = PBXResourcesBuildPhase; }; 
+        000000000000000000000025 = {files = (); isa = PBXFrameworksBuildPhase; }; 
+        000000000000000000000026 = {
+            buildSettings = {"COPY_PHASE_STRIP" = NO; }; 
+            isa = XCBuildConfiguration; 
+            name = Debug; 
+        }; 
+        000000000000000000000027 = {
+            buildSettings = {"COPY_PHASE_STRIP" = YES; }; 
+            isa = XCBuildConfiguration; 
+            name = Release; 
+        }; 
+        000000000000000000000028 = {buildSettings = {}; isa = XCBuildConfiguration; name = Default; }; 
+        000000000000000000000029 = {
+            buildConfigurations = (000000000000000000000026, 000000000000000000000027, 000000000000000000000028); 
+            defaultConfigurationIsVisible = 0; 
+            defaultConfigurationName = Default; 
+            isa = XCConfigurationList; 
+        }; 
+        00000000000000000000002a = {files = (); isa = PBXSourcesBuildPhase; }; 
+        00000000000000000000002b = {files = (); isa = PBXResourcesBuildPhase; }; 
+        00000000000000000000002c = {files = (); isa = PBXResourcesBuildPhase; }; 
+        00000000000000000000002d = {files = (); isa = PBXFrameworksBuildPhase; }; 
+        00000000000000000000002e = {
+            buildPhases = (
+                000000000000000000000016, 
+                000000000000000000000019, 
+                00000000000000000000001a, 
+                000000000000000000000021
+            ); 
+            buildSettings = {}; 
+            isa = PBXToolTarget; 
+            name = "Application Server"; 
+        }; 
+        00000000000000000000002f = {
+            buildArgumentsString = "-emacs $(ACTION)"; 
+            buildConfigurationList = 000000000000000000000029; 
+            buildPhases = (
+                000000000000000000000022, 
+                000000000000000000000023, 
+                000000000000000000000024, 
+                000000000000000000000025
+            ); 
+            buildSettings = {}; 
+            buildToolPath = "/Developer/Java/Ant/bin/ant"; 
+            isa = PBXLegacyTarget; 
+            name = Ant; 
+            passBuildSettingsInEnvironment = 1; 
+            productName = Ant; 
+        }; 
+        000000000000000000000030 = {
+            buildPhases = (
+                00000000000000000000002a, 
+                00000000000000000000002b, 
+                00000000000000000000002c, 
+                00000000000000000000002d
+            ); 
+            buildSettings = {}; 
+            isa = PBXToolTarget; 
+            name = "Web Server"; 
+        }; 
+        000000000000000000000031 = {buildSettings = {}; isa = XCBuildConfiguration; name = Debug; }; 
+        000000000000000000000032 = {buildSettings = {}; isa = XCBuildConfiguration; name = Release; }; 
+        000000000000000000000033 = {buildSettings = {}; isa = XCBuildConfiguration; name = Default; }; 
+        000000000000000000000034 = {
+            buildConfigurations = (000000000000000000000031, 000000000000000000000032, 000000000000000000000033); 
+            defaultConfigurationIsVisible = 0; 
+            defaultConfigurationName = Default; 
+            isa = XCConfigurationList; 
+        }; 
+        000000000000000000000035 = {
+            buildSettings = {"COPY_PHASE_STRIP" = NO; }; 
+            isa = PBXBuildStyle; 
+            name = Debug; 
+        }; 
+        000000000000000000000036 = {
+            buildSettings = {"COPY_PHASE_STRIP" = YES; }; 
+            isa = PBXBuildStyle; 
+            name = Release; 
+        }; 
+        000000000000000000000037 = {
+            buildConfigurationList = 000000000000000000000034; 
+            buildSettings = {}; 
+            buildStyles = (000000000000000000000035, 000000000000000000000036); 
+            hasScannedForEncodings = 1; 
+            isa = PBXProject; 
+            mainGroup = 000000000000000000000011; 
+            projectDirPath = "."; 
+            targets = (00000000000000000000002e, 00000000000000000000002f, 000000000000000000000030); 
+        }; 
+    }; 
+    rootObject = 000000000000000000000037; 
+}
