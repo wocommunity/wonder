@@ -49,6 +49,19 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+/**
+ * Apache-mina based WOAdaptor, currently experimental. 
+ * <ul>
+ * <li> Allows us to ditch
+ * WOWorkerThread, WOHttpIO, WOLowercaseCharArray, WODefaultAdaptor and a bunch
+ * of other classes.
+ * <li> Has an extensible architecture, so SSL, throttling or AJP should be easily plug-able.
+ * <li> uses NIO, which supposedly should give better performance (but hasn't, probably too much overhead).
+ * </ul>
+ * TODO: streaming, encoding, SSL, params (idle time etc), content-length, larger POST args.
+ * @author ak
+ * 
+ */
 public class ERWOAdaptor extends WOAdaptor {
 
     private static final Logger log = Logger.getLogger(ERWOAdaptor.class);
@@ -66,7 +79,7 @@ public class ERWOAdaptor extends WOAdaptor {
     private IoAcceptor acceptor;
 
     private static ExecutorService _executor;
-    
+
     public ERWOAdaptor(String name, NSDictionary config) {
         super(name, config);
         _lastDitchErrorResponse = new WOResponse();
@@ -89,7 +102,7 @@ public class ERWOAdaptor extends WOAdaptor {
     @Override
     public void registerForEvents() {
         try {
-            acceptor = new SocketAcceptor(16, Executors.newCachedThreadPool());
+            acceptor = new SocketAcceptor(Runtime.getRuntime().availableProcessors() + 1, Executors.newCachedThreadPool());
             SocketAcceptorConfig cfg = new SocketAcceptorConfig();
             cfg.setThreadModel(ThreadModel.MANUAL);
 
@@ -122,7 +135,7 @@ public class ERWOAdaptor extends WOAdaptor {
     }
 
     public static class RequestDecoder implements MessageDecoder {
-        
+
         private static final byte[] CONTENT_LENGTH = new String("Content-Length:").getBytes();
 
         private CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
@@ -246,19 +259,19 @@ public class ERWOAdaptor extends WOAdaptor {
 
         }
     }
-    
+
     public static class ResponseWrapper {
-        
+
         private WOResponse _response;
-        
+
         public ResponseWrapper(WOResponse response) {
             _response = response;
         }
-        
+
         public WOResponse response() {
             return _response;
         }
-        
+
     }
 
     public static class ResponseEncoder implements MessageEncoder {
@@ -277,7 +290,7 @@ public class ERWOAdaptor extends WOAdaptor {
         }
 
         public void encode(IoSession session, Object message, ProtocolEncoderOutput out) throws Exception {
-            WOResponse msg = (WOResponse) ((ResponseWrapper)message).response();
+            WOResponse msg = (WOResponse) ((ResponseWrapper) message).response();
             ByteBuffer buf = ByteBuffer.allocate(256);
             // Enable auto-expand for easier encoding
             buf.setAutoExpand(true);
@@ -299,20 +312,23 @@ public class ERWOAdaptor extends WOAdaptor {
                     buf.putString(" Whatever", encoder);
                 }
                 buf.put(CRLF);
-                for (Iterator<Entry<Object, NSArray>> it = msg.headers().entrySet().iterator(); it.hasNext();) {
-                    Entry<Object, NSArray> entry = it.next();
-                    for (Object item : entry.getValue()) {
-                        buf.putString(entry.getKey().toString(), encoder);
-                        buf.putString(": ", encoder);
-                        buf.putString(item.toString(), encoder);
-                        buf.put(CRLF);
+                if (msg.headers() != null) {
+                    for (Iterator<Entry<Object, NSArray>> it = msg.headers().entrySet().iterator(); it.hasNext();) {
+                        Entry<Object, NSArray> entry = it.next();
+                        for (Object item : entry.getValue()) {
+                            buf.putString(entry.getKey().toString(), encoder);
+                            buf.putString(": ", encoder);
+                            buf.putString(item.toString(), encoder);
+                            buf.put(CRLF);
+                        }
                     }
+                } else {
+                    buf.put(CRLF);
                 }
                 // now the content length is the body length
                 buf.put(CRLF);
                 // add body
-                //buf.flip();
-                //log.info(msg);
+                // FIXME: should loop, support contentStream
                 buf.put(msg.content()._bytesNoCopy());
             } catch (CharacterCodingException ex) {
                 ex.printStackTrace();
@@ -328,10 +344,11 @@ public class ERWOAdaptor extends WOAdaptor {
     }
 
     public static class Handler implements IoHandler {
-        
+
         private final class Runner implements Runnable {
-            
+
             private WORequest request;
+
             private IoSession session;
 
             public Runner(IoSession session, WORequest message) {
@@ -345,7 +362,7 @@ public class ERWOAdaptor extends WOAdaptor {
                     boolean process = request != null;
                     process &= !(!WOApplication.application().isDirectConnectEnabled() && !request.isUsingWebServer());
                     process &= !"womp".equals(request.requestHandlerKey());
-                    
+
                     if (process) {
                         woresponse = _app.dispatchRequest(request);
                         NSDelayedCallbackCenter.defaultCenter().eventEnded();
@@ -362,7 +379,7 @@ public class ERWOAdaptor extends WOAdaptor {
                 if (response != null) {
                     session.write(new ResponseWrapper(response)).join();
                 }
-                //session.close();
+                // session.close();
             }
         }
 
@@ -375,13 +392,14 @@ public class ERWOAdaptor extends WOAdaptor {
         }
 
         public void sessionClosed(IoSession session) {
+            log.info("closed");
         }
 
         public void messageReceived(IoSession session, Object message) {
             Runnable callable = new Runner(session, (WORequest) message);
             _executor.submit(callable);
         }
-        
+
         public void messageSent(IoSession session, Object message) {
             // session.close();
         }
