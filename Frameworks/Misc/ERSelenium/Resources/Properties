@@ -1,7 +1,5 @@
-## take a look at the wiki
-## http://wiki.objectstyle.org/confluence/display/WO/Programming__WebObjects-Project+WONDER-Frameworks-ERSelenium
-
-## Flag to say whether to run tests at all
+## Enables Selenium tests Direct Action in production mode.
+## Always enabled in development mode.
 # SeleniumTestsEnabled = true
 
 ## Which class is the "SeleniumAction" class. If its a direct action, the methods get
