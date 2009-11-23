@@ -43,6 +43,7 @@ import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components._private.ERXHyperlink;
+import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.components._private.ERXSwitchComponent;
 import er.extensions.components._private.ERXWOFileUpload;
 import er.extensions.components.conditionals.ERXWOConditional;
@@ -89,8 +90,11 @@ public class ERXPatcher {
 
 	public static synchronized void installPatches() {
 		DynamicElementsPatches.cleanupXHTML = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXPatcher.cleanupXHTML"), false);
-
-		ERXPatcher.setClassForName(DynamicElementsPatches.SubmitButton.class, "WOSubmitButton");
+		DynamicElementsPatches.useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
+		
+		if (DynamicElementsPatches.useButtonTag) {
+			ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
+		} else ERXPatcher.setClassForName(DynamicElementsPatches.SubmitButton.class, "WOSubmitButton");
 		ERXPatcher.setClassForName(DynamicElementsPatches.ResetButton.class, "WOResetButton");
 		ERXPatcher.setClassForName(DynamicElementsPatches.TextField.class, "WOTextField");
 		ERXPatcher.setClassForName(DynamicElementsPatches.GenericElement.class, "WOGenericElement");
@@ -133,12 +137,12 @@ public class ERXPatcher {
 	 */
 	public static class DynamicElementsPatches {
 		public static boolean cleanupXHTML = false;
+		private static boolean useButtonTag = false;
 
 		private DynamicElementsPatches() {
 		}
 
 		public static class SubmitButton extends WOSubmitButton {
-			public static boolean useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
 			protected WOAssociation _id;
 
 			public SubmitButton(String aName, NSDictionary associations, WOElement element) {
@@ -150,31 +154,6 @@ public class ERXPatcher {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
-			
-			// RM: the following are overriden for XHTML button behaviour - sadly in IE6 it doesn't work in multiple button forms
-			// MS: remove the override for 5.3 compat; can't call super because of 5.3 -- super returns false anyway 
-			// @Override
-		    protected boolean hasContent() {
-		        return (useButtonTag) ? true : false;
-		    }
-			
-			@Override
-			public String elementName() {
-				return (useButtonTag) ? "button" : super.elementName();
-			}
-			
-			@Override
-		    protected String type() {
-		        return (useButtonTag) ? "submit" : super.type();
-		    }
-			
-			@Override
-		    public void appendChildrenToResponse(WOResponse aResponse, WOContext aContext) {
-				super.appendChildrenToResponse(aResponse, aContext);
-		        if(useButtonTag && !hasChildrenElements()) {
-		        	aResponse.appendContentString(_valueStringInContext(aContext));
-		        }
-		    }
 			
 			protected String _valueStringInContext(WOContext context) {
 				String valueString = null;
