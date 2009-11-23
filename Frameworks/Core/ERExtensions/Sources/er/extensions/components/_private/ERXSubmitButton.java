@@ -19,6 +19,7 @@ import er.extensions.appserver.ERXBrowser;
 import er.extensions.appserver.ERXBrowserFactory;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Clone of WOSubmitButton that should emit <code>&lt;button&gt;</code> tags instead of 
@@ -37,6 +38,7 @@ public class ERXSubmitButton extends WOInput {
 	public static final Logger log = Logger.getLogger(ERXSubmitButton.class);
 
 	public static final String STYLE_PREFIX = "ERXSubmitButton-";
+	private static boolean useIEFix = ERXProperties.booleanForKeyWithDefault("er.extensions.components._private.ERXSubmitButton.useIEFix", true);
 	
     protected WOAssociation _class;
     protected WOAssociation _id;
@@ -149,7 +151,7 @@ public class ERXSubmitButton extends WOInput {
     }
     
     protected void _appendOpenTagToResponse(WOResponse woresponse, WOContext wocontext) {
-    	appendIEButtonFixToResponse(wocontext, woresponse);
+    	if (useIEFix) appendIEButtonFixToResponse(wocontext, woresponse);
     	woresponse.appendContentCharacter('<');
     	woresponse._appendContentAsciiString(elementName(wocontext));   	
     	appendAttributesToResponse(woresponse, wocontext);
