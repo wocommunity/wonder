@@ -32,6 +32,8 @@ import er.extensions.foundation.ERXProperties;
  * and see how this works out or use it explicitely. If you just patch it into the system,
  * the value is used as the content, otherwise you can put any html you like into it.
  * @author ak
+ * 
+ * @property 	er.extensions.components._private.ERXSubmitButton.useIEFix		opt-out
  */
 public class ERXSubmitButton extends WOInput {
 
