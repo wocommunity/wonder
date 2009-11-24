@@ -1466,6 +1466,18 @@ public class ERXSQLHelper {
         return shouldPerformDistinctInMemory;
 	}
 
+	/**
+	 * Returns true if the SQL helper can handle the exception. Typical uses are
+	 * morphing unique constraints to NSValidation exceptions.
+	 * 
+	 * @param databaseContext
+	 * @param throwable
+	 * @return
+	 */
+	public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
+		return false;
+	}
+
 	public static ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
 		// This is REALLY hacky.
 		String className = expression.getClass().getName();
