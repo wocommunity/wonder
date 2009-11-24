@@ -709,7 +709,7 @@ public class ERXEC extends EOEditingContext {
 	 * auto-locked. In practice, it's called too often to warrant it. If you
 	 * want, you can turn it on on a case by case basis.
 	 */
-	protected static boolean _shouldLockOnLockObjectStore = false;
+	public static boolean _shouldLockOnLockObjectStore = false;
 	
 	/** Overridden to support automatic autoLocking. */
 	@Override
