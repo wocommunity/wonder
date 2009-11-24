@@ -30,16 +30,21 @@ import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Replacement for WORepetition. Is installed via ERXPatcher.setClassForName(ERXWORepetition.class, "WORepetition") into
- * the runtime system, so you don't need to reference it explicitely.
+ * the runtime system, so you don't need to reference it explicitly.
  * <ul>
  * <li>adds support for {@link java.util.List} and {@link java.lang.Array}, in addition to
  * {@link com.webobjects.foundation.NSArray} and {@link java.util.Vector} (which is a {@link java.util.List} in 1.4). This
  * is listed as Radar #3325342 since June 2003.</li>
  * <li>help with backtracking issues by adding not only the current index, but also the current object's hash code to
  * the element id, so it looks like "x.y.12345.z".<br />
- * If they don't match when invokeAction is called, the list is searched for a matching object. If none is found, then
- * the action is ignored or - when the property <code>er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true</code> -
- * an {@link ERXWORepetition.UnmatchedObjectException} is thrown.<br />
+ * If they don't match when invokeAction is called, the list is searched for a matching object. If none is found, then:
+ * <ul>
+ * <li>if the property <code>er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true</code> -
+ * an {@link ERXWORepetition.UnmatchedObjectException} is thrown</li>
+ * <li>if <code>notFoundMarker</code> is bound, that is used for the item in the repetition.  This can be used to flag
+ * special handling in the action method, possibly useful for Ajax requests</li>
+ * <li>otherwise, the action is ignored</li>
+ * </ul>
  * This feature is turned on globally if <code>er.extensions.ERXWORepetition.checkHashCodes=true</code> or on a
  * per-component basis by setting the <code>checkHashCodes</code> binding to true or false.<br />
  * <em>Known issues:</em>
@@ -73,6 +78,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding debugHashCodes if true, prints out hashcodes for each entry in the repetition as it is traversed
  * @binding batchFetch a comma-separated list of keypaths on the "list" array binding to batch fetch
  * @binding eoSupport try to use globalIDs to determine the hashCode for EOs
+ * @binding notFoundMarker used for the item in the repetition if checkHashCodes is true, don't bind directly to null as
+ * that will be translated to false
  * 
  * @author ak
  */
@@ -91,6 +98,7 @@ public class ERXWORepetition extends WODynamicGroup {
 	protected WOAssociation _eoSupport;
 	protected WOAssociation _debugHashCodes;
 	protected WOAssociation _batchFetch;
+	protected WOAssociation _notFoundMarker;
 
 	private static boolean _checkHashCodesDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWORepetition.checkHashCodes", ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".checkHashCodes"));
 	private static boolean _raiseOnUnmatchedObjectDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWORepetition.raiseOnUnmatchedObject", ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".raiseOnUnmatchedObject"));
@@ -175,7 +183,8 @@ public class ERXWORepetition extends WODynamicGroup {
 		_debugHashCodes = (WOAssociation) associations.objectForKey("debugHashCodes");
 		_eoSupport = (WOAssociation) associations.objectForKey("eoSupport");
 		_batchFetch = (WOAssociation) associations.objectForKey("batchFetch");
-
+		_notFoundMarker = (WOAssociation) associations.objectForKey("notFoundMarker");
+		
 		if (_list == null && _count == null) {
 			_failCreation("Missing 'list' or 'count' attribute.");
 		}
@@ -425,7 +434,10 @@ public class ERXWORepetition extends WODynamicGroup {
 						if (raiseOnUnmatchedObject(wocomponent)) {
 							throw new UnmatchedObjectException();
 						}
-						return wocontext.page();
+						if (_notFoundMarker == null) {
+							return wocontext.page();
+						}
+						object = _notFoundMarker.valueInComponent(wocomponent);
 					}
 					else {
 						if (log.isDebugEnabled()) {
