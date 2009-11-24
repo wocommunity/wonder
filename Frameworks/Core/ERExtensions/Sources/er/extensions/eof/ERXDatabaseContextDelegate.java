@@ -44,6 +44,7 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.jdbc.ERXJDBCConnectionAnalyzer;
+import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.logging.ERXPatternLayout;
 import er.extensions.statistics.ERXStats;
 import er.extensions.statistics.ERXStats.Group;
@@ -174,7 +175,8 @@ public class ERXDatabaseContextDelegate {
 			} else if(exLog.isInfoEnabled()) {
 				exLog.info("Database Exception occured: " + throwable);
 			}
-			if(throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
+			boolean handled = ERXSQLHelper.newSQLHelper(databaseContext).handleDatabaseException(databaseContext, throwable);
+			if(!handled && throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
 				NSArray models = databaseContext.database().models();
 				for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
 					EOModel model = (EOModel)e.nextElement();
@@ -187,7 +189,7 @@ public class ERXDatabaseContextDelegate {
 			}
 			//EOEditingContext ec = ERXEC.newEditingContext();
 			//log.info(NSPropertyListSerialization.stringFromPropertyList(EOUtilities.modelGroup(ec).models().valueForKey("connectionDictionary")));
-			return true;
+			return !handled;
 		} finally {
 			reportingError.leave(databaseContext);
 		}
