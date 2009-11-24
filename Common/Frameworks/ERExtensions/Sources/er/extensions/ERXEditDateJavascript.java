@@ -9,6 +9,14 @@ package er.extensions;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+
+import er.extensions.ERXResponseRewriter;
+import er.extensions.ERXStatelessComponent;
+import er.extensions.ERXWOForm;
+import er.extensions.ERXTimestampFormatter;
+import er.extensions.ERXStringUtilities;
+import er.extensions.ERXLocalizer;
 
 public class ERXEditDateJavascript extends ERXStatelessComponent {
 	static final Logger log = Logger.getLogger(ERXEditDateJavascript.class);
@@ -24,6 +32,18 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 		elementID = context().elementID().replace('.', '_');
 	}
 	
+    /**
+     * Adds date-picker.js to the header or includes it in an Ajax friendly manner if this is an Ajax request.
+     *
+     * @see er.extensions.components.ERXNonSynchronizingComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
+     * @see ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
+     */
+    public void appendToResponse(WOResponse response, WOContext context)
+    {
+        ERXResponseRewriter.addScriptResourceInHead(response, context, "ERExtensions", "date-picker.js");
+        super.appendToResponse(response, context);
+    }
+    
 	public String dateformat() {
 		String format = (String) stringValueForBinding("dateformat");
 		if (format == null) {
@@ -53,13 +73,6 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 		return "show_calendar('" + formName + "." + name() + "', null, null, '" + formatterStringForScript() + "'); return false;";
 	}
 
-	public String datePickerJavaScriptUrl() {
-		if (_datePickerJavaScriptUrl == null) {
-			_datePickerJavaScriptUrl = application().resourceManager().urlForResourceNamed("date-picker.js", "ERExtensions", null, context().request());
-		}
-		return _datePickerJavaScriptUrl;
-	}
-
 	public String formatterStringForScript() {
 		String format = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(dateformat());
 		return ERXEditDateJavascript.formatterStringForScript(format);
@@ -76,7 +89,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 	}
 	
 	public int formatLength() {
-        String formatter = formatterStringForScript();
-        return formatter.length() < 12 ? 12 : formatter.length();
-    }
+        	String formatter = formatterStringForScript();
+        	return formatter.length() < 12 ? 12 : formatter.length();
+        }
 }

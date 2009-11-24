@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSValidation;
 import er.extensions.ERXTimestampFormatter;
 import er.extensions.ERXValidationException;
 import er.extensions.ERXValidationFactory;
+import er.extensions.ERXLocalizer;
 
 /**
  * Crazy cool little date picker that uses javascript to pick the date from a little calendar. <br />
@@ -84,7 +85,7 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
 
 	public String formatter() {
 		if(_formatter == null) {
-			_formatter = (String)valueForBinding("formatter");
+			_formatter = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault((String)valueForBinding("formatter"));
 		}
 		if(_formatter == null || _formatter.length() == 0) {
 			_formatter = ERXTimestampFormatter.DEFAULT_PATTERN;
