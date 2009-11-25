@@ -14,6 +14,8 @@ package webobjectsexamples.businesslogic.movies.common;
 
 import java.math.BigDecimal;
 
+import webobjectsexamples.businesslogic.movies.server._Studio;
+
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGenericRecord;
@@ -87,4 +89,8 @@ public abstract class Studio extends EOGenericRecord {
 	}
 
 	public abstract void buyAllMoviesStarringTalent(Talent talent);
+
+	public void setName(String value) {
+		takeStoredValueForKey(value, "name");
+	}
 }

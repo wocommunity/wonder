@@ -15,7 +15,7 @@ package webobjectsexamples.businesslogic.movies.common;
 import com.webobjects.eocontrol.EOGenericRecord;
 
 // Voting uses get<key> style get methods (instead of <key>) as an example
-public class Voting extends EOGenericRecord {
+public class Voting extends _Voting {
 	private static final long	serialVersionUID	= 7584225995972371006L;
 
 	public static final String	MovieKey			= "movie";
