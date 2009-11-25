@@ -17,7 +17,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
-public class Talent extends EOGenericRecord {
+public class Talent extends _Talent {
 	private static final long	serialVersionUID	= -5942077710497738108L;
 
 	public static final String	FirstNameKey		= "firstName";

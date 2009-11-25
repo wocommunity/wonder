@@ -15,7 +15,7 @@ package webobjectsexamples.businesslogic.movies.common;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOGenericRecord;
 
-public class MovieRole extends EOGenericRecord {
+public class MovieRole extends _MovieRole {
 	private static final long	serialVersionUID	= -6163887530246217226L;
 
 	public static final String	MovieKey			= "movie";
