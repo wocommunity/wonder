@@ -47,7 +47,8 @@ import er.extensions.appserver.ERXResponseRewriter;
  * @binding style CSS style passed to the input field 
  * @binding size size attribute passed to the input field 
  * @binding maxlength maxlength attribute passed to the input field 
- * @binding name name attribute passed to the input field 
+ * @binding name name attribute passed to the input field
+ * @binding disabled passed to the input field
  * @binding onDateSelect JavaScript to execute when a date is selected from the calendar
  * @binding fireEvent false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
  * 
