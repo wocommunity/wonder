@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
-	<classpathentry kind="lib" path="Libraries/iText-2.0.8.jar"/>
-	<classpathentry kind="lib" path="Libraries/ujac-1.0.0.jar"/>
-	<classpathentry kind="lib" path="Libraries/core-renderer.jar"/>
-	<classpathentry kind="lib" path="Libraries/commons-logging.jar"/>
-	<classpathentry kind="lib" path="Libraries/xml-apis-xerces-2.9.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/iText-2.0.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/ujac-1.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/core-renderer.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-logging.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-xerces-2.9.1.jar"/>
 	<classpathentry kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry kind="con" path="WOFramework/ERJars"/>
 	<classpathentry kind="con" path="WOFramework/JavaFoundation"/>
