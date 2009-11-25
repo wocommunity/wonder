@@ -23,6 +23,11 @@ FrenchDateInputWithFormatter: AjaxDatePicker {
 	dayNames = frenchDays;
 }
 
+DisabledDateInput: AjaxDatePicker {
+	value = someValue;
+	disabled = true;
+}
+
 Form: WOForm {
 	
 }
