@@ -85,6 +85,7 @@
     56 : pageConfiguration like 'InspectConfirm*' => pageName = templateNameForInspectConfirmPage [er.directtoweb.ERDKeyValueAssignment],
     57 : (subTask = 'tab' and task = 'edit') => pageName = templateNameForTabEditPage [er.directtoweb.ERDKeyValueAssignment],
     75 : task = 'list' => updateContainerID = pageConfiguration [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment],
+    101 : task = 'select' => useBatchingDisplayGroup = false [com.webobjects.directtoweb.BooleanAssignment],
     101 : pageConfiguration like '*Embedded*' => allowsFiltering = false [com.webobjects.directtoweb.BooleanAssignment],
     101 : pageConfiguration like '*Embedded*' => useBatchingDisplayGroup = false [com.webobjects.directtoweb.BooleanAssignment],
     101 : pageConfiguration like 'InspectConfirm*' => pageWrapperName = D2WEmptyWrapper [com.webobjects.directtoweb.Assignment],
