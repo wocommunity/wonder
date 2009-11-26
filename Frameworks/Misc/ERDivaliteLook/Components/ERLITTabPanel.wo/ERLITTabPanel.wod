@@ -1,0 +1,48 @@
+Content: WOComponentContent {
+}
+
+HasNoSubmitAction: WOConditional {
+	condition = hasSubmitAction;
+	negate = true;
+}
+
+HasSubmitAction: WOConditional {
+	condition = hasSubmitAction;
+}
+
+NotSelectedTabConditional: WOConditional {
+	condition = isCellShaded;
+}
+
+SelectedTabConditional: WOConditional {
+	condition = isCellShaded;
+	negate = true;
+}
+
+TabLink: WOHyperlink {
+	action = switchTab;
+}
+
+TabName: WOString {
+	value = currentTabName;
+}
+
+TabName2: WOSubmitButton {
+	action = switchSubmitTab;
+	value = currentTabName;
+}
+
+TabName3: WOString {
+	value = currentTabName;
+}
+
+TabRepetition: WORepetition {
+	item = currentTab;
+	list = tabs;
+}
+
+AjaxContainer : WOGenericContainer {
+	id = containerID;
+	class = "tab_panel";
+	elementName = "div";
+}

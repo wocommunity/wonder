@@ -1,0 +1,67 @@
+AttributeRepetition: WORepetition {
+	_unroll = true;
+	item = propertyKey;
+	list = currentSectionKeys;
+}
+
+AttributeValue: WOSwitchComponent { 
+	WOComponentName = subContext.componentName;
+	localContext = subContext;
+	object = object;
+}
+
+HasSectionName: ERXNonZeroConditional {
+	condition = currentSection.name.trim.length;
+}
+
+PropertyName: WOString {
+    value = subContext.displayNameForProperty;
+}
+
+Section: WOString {
+	value = d2wContext.displayNameForSectionKey;
+}
+
+Sections: WORepetition {
+    list=sectionsContents;
+    item=currentSection;
+}
+
+AccordionContent: WOGenericContainer {
+	elementName = "div";
+	id = d2wContext.idForSection;
+	class = "accordion-content";
+}
+
+DebugPropertyName: ERD2WDebugPropertyName {
+	d2wContext = subContext;
+	isDebug = d2wComponentNameDebuggingEnabled;
+}
+
+DebugComponentName: ERD2WDebugComponentName {
+	d2wContext = subContext;
+	isDebug = d2wComponentNameDebuggingEnabled;
+}
+
+Accordion: WOGenericContainer {
+	id = d2wContext.idForPageConfiguration;
+	elementName = "div";
+	class = "accordion";
+}
+
+PropertyClass: WOGenericContainer {
+	elementName = "legend";
+	class = propertyClassString;
+	title = subContext.title; //VALID
+}
+
+ContentClass: WOGenericContainer {
+	elementName = "div";
+	class = contentClassString;
+	id = contentContainerID;
+}
+
+AttributeContainer: WOGenericContainer {
+	elementName = "li";
+	class = attributeClassString;
+}

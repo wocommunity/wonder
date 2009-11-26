@@ -1,0 +1,21 @@
+DeleteEO2: WOHyperlink {
+	class = "ERDTrashcan2";
+	action = deleteObject;
+	title = ^displayNameForConfirmDeleteConfiguration;
+	onclick = onClick;
+}
+
+HasError: WOConditional {
+	condition = canDelete;
+		negate = true;
+}
+
+CanDelete: WOConditional {
+	condition = canDelete;
+}
+
+Error: WOGenericContainer {
+	elementName = "a";
+	href = "#";
+	class = "ERDTrashcan2";
+}

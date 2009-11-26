@@ -1,0 +1,5 @@
+Toggle: WOSubmitButton {
+	action = toggleClicked;
+	class = styleClass;
+	value = displayString;
+}

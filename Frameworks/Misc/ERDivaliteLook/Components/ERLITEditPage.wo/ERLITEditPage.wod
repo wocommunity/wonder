@@ -1,0 +1,80 @@
+EditingForm: WOForm {
+	container = d2wContext.container;
+	class = "edit";
+	id = d2wContext.idForForm;
+	enctype = d2wContext.enctype;
+}
+
+EntityName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForEntity;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+SubmitButton6: WOSubmitButton {
+	action = cancelAction;
+	value = "Cancel";
+	class = "cancel";
+	disabled = disableCancel;
+}
+
+SubmitChanges: WOSubmitButton {
+	action = submitAction;
+	value = "Save";
+	class = "save";
+}
+
+Errors: ERXErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	errorKeyOrder = errorKeyOrder;
+}
+
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	displayPropertyKeys = d2wContext.displayPropertyKeys;
+	d2wContext = localContext;
+	object = object;
+}
+
+InspectPageRepetition1: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	displayPropertyKeys = currentTab.keys;
+	d2wContext = localContext;
+	object = object;
+}
+
+TabPanel : WOSwitchComponent {
+	WOComponentName = tabComponentName;
+	selectedTab = currentTab;
+	submitActionName = switchTabActionName;
+	tabNameKey = "displayName";
+	tabs = tabSectionsContents;
+	useFormSubmit = d2wContext.hasForm;
+	container = d2wContext.container;
+}
+
+IsTab: WOKeyValueConditional {
+	key = "d2wContext.subTask";
+	value = "tab";
+}
+
+IsNotTab: WOKeyValueConditional {
+	key = "d2wContext.subTask";
+	value = "tab";
+	negate = true;
+}
+
+HeaderContainer: WOGenericContainer {
+	class = d2wContext.classForTask;
+	elementName = "h1";
+}

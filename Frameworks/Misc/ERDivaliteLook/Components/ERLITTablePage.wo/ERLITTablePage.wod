@@ -1,0 +1,256 @@
+AttributeDisplay: WOSwitchComponent {
+ 	WOComponentName = d2wContext.componentName;
+ 	localContext = localContext;
+ 	object = object;
+}
+
+AttributeRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+BackLink: WOHyperlink {
+	action = backAction;
+	class = "return";
+}
+
+ColumnLabelRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+Conditional1: WOConditional {
+	condition = isEntityEditable;
+}
+
+ERXNonNullConditional1: ERXNonNullConditional {
+	condition = d2wContext.editButtonComponentName;
+	negate = true;
+}
+
+ERXNonNullConditional2: ERXNonNullConditional {
+	condition = d2wContext.editButtonComponentName;
+}
+
+EditButton: ERLITEditButton {
+	d2wContext = d2wContext;
+	object = object;
+	editConfigurationName = d2wContext.editConfigurationName;
+}
+
+EntityName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForEntity;
+}
+
+EntityRepetition: WORepetition {
+	item = object;
+	list = displayGroup.displayedObjects;
+	index = index;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+InspectButton: ERLITInspectButton {
+	d2wContext = d2wContext;
+	object = object;
+	inspectConfigurationName = d2wContext.inspectConfigurationName;
+}
+
+IsEntityNotWritable: WOConditional {
+	_unroll = true;
+	condition = isEntityInspectable;
+}
+
+IsEntityWritable: WOConditional {
+	_unroll = true;
+	condition = isEntityReadOnly;
+	negate = true;
+}
+
+IsEntityWritable2: WOConditional {
+	_unroll = true;
+	condition = d2wContext.isEntityDeletable;
+}
+
+IsListing: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+	negate = true;
+}
+
+IsListing2: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+	negate = true;
+}
+
+IsPropertySortable: WOConditional {
+	_unroll = true;
+	condition = d2wContext.propertyIsSortable;
+}
+
+IsSelecting: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+NavBar: WOSwitchComponent {
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+    id = "top_batch_nav";
+}
+
+NavBar2: WOSwitchComponent {
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+    id = "bottom_batch_nav";
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+SelectEO: ERLITSelectButton {
+	d2wContext = d2wContext;
+	object = object;
+}
+
+SortOrder: WOSwitchComponent {
+	WOComponentName = d2wContext.sortOrderComponentName;
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+	displayKey = d2wContext.displayNameForProperty;
+	key = d2wContext.sortKeyForList;
+}
+
+PropertyName: WOString {
+	value=d2wContext.displayNameForProperty;
+	escapeHTML = d2wContext.escapeHTML;
+}
+
+SwitchComponent2: WOSwitchComponent {
+	WOComponentName = d2wContext.editButtonComponentName;
+	d2wContext = d2wContext;
+	object = object;
+}
+
+Trash: ERLITTrashCan {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	object = object;
+}
+
+TableRow: WOGenericContainer {
+	elementName = "tr";
+	class = rowClass;
+	id = rowID;
+}
+
+DebugPropertyName: ERD2WDebugPropertyName {
+	d2wContext = d2wContext;
+	isDebug = d2wComponentNameDebuggingEnabled;
+}
+
+DebugComponentName: ERD2WDebugComponentName {
+	d2wContext = d2wContext;
+	isDebug = d2wComponentNameDebuggingEnabled;
+}
+
+ButtonHeader: WOGenericContainer {
+	elementName = "th";
+	scope = "col";
+	colspan = colspan;
+}
+
+ValueCell: WOGenericContainer {
+	elementName = "td";
+	class = d2wContext.classForColumn;
+}
+
+UpdateContainer: WOGenericContainer {
+	elementName = "div";
+	id = d2wContext.idForPageConfiguration;
+	class = "list";
+}
+
+ListTable: WOGenericContainer {
+	elementName = "table";
+	class = "list";
+	id = tableID;
+}
+
+HasButtons: WOConditional {
+	condition = colspan;
+}
+
+ShowAdd: WOConditional {
+	condition = d2wContext.showActions;
+}
+
+AddButton: WOHyperlink {
+	directActionName = createActionName;
+	class = "ERDIVListPage_Add";
+	?__cid = context.contextID;
+}
+
+HeaderCell: WOGenericContainer {
+	elementName = "th";
+	scope = "col";
+	class = d2wContext.classForColumn;
+}
+
+CollapseLink: WOHyperlink {
+	href = "#";
+	class = "ERDIVDetailListPage_detail";
+	onmouseover = onMouseOver;
+	onmouseout = onMouseOut;
+}
+
+DetailDiv: WOGenericContainer {
+	elementName = "div";
+	id = tbodyID;
+	style = "display:none;";
+}
+
+DetailCell: WOGenericContainer {
+	elementName = "td";
+	colspan = detailColspan;
+}
+
+InspectDetail: ERXD2WInspect {
+	pageConfiguration = d2wContext.inspectEmbeddedConfigurationName;
+	entityName = d2wContext.entity.name;
+	object = object;
+	settings = settings;
+}
+
+IsDetail: WOConditional {
+	condition = isDetailPage;
+}
+
+QuickSearch: ERDSearchDisplayGroup {
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
+}
+
+ShowQuickSearch: WOConditional {
+	condition = d2wContext.allowsFiltering;
+}
+
+ReportLink: WOHyperlink {
+	action = reportListAction;
+	class = "export";
+	container = d2wContext.container;
+}
