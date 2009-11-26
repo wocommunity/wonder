@@ -8,9 +8,9 @@ Checkbox: WOCheckBox {
 	class = ^class;
 	id = id;
 	name = elementName;
-	selection = selection.toString.hashCode;
+	selection = selection;
 	disabled = ^disabled;
-	value = ^item.toString.hashCode;
+	value = ^item;
 }
 
 Label: WOGenericContainer {
