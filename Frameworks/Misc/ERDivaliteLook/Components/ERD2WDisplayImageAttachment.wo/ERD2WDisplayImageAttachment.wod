@@ -1,0 +1,22 @@
+HasAttachment: WOConditional {
+	condition = objectPropertyValueIsNonNull;
+}
+
+NoAttachment: WOConditional {
+	condition = objectPropertyValueIsNonNull;
+	negate = true;
+}
+
+DisplayAttachmentDownloadLink: WOSwitchComponent { 
+/// WOSwitchComponent to trick WOLips
+	WOComponentName = "ERAttachmentLink";
+	attachment = objectPropertyValue;
+	class = "ERD2WDisplayImageAttachment download";
+}
+
+Image: WOSwitchComponent {
+/// WOSwitchComponent to trick WOLips
+	WOComponentName = "ERAttachmentViewer";
+	attachment = objectPropertyValue;
+	class = "ERD2WDisplayImageAttachment";
+}

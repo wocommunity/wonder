@@ -1,0 +1,105 @@
+<webobject name = "PageWrapper">
+  <webobject name = "Help" />
+  <h1 class = "task list">
+    <span>List</span>
+  </h1>
+  <h2 class = "entity list"><webobject name = "EntityName" /></h2>
+  <webobject name = "UpdateContainer">
+    <webobject name = "NavBar">
+      <webobject name = "ShowQuickSearch"><webobject name = "QuickSearch" /></webobject>
+    </webobject>
+    <webobject name = "ListNotEmpty">
+      <webobject name = "ListTable">
+        <thead>
+          <tr>
+            <webobject name = "HasButtons"><webobject name = "ButtonHeader" /></webobject>
+            <webobject name = "ColumnLabelRepetition">
+              <webobject name = "HeaderCell">
+                <div class = "property">
+                  <webobject name = "PropertyName" />
+                  <webobject name = "DebugPropertyName" />
+                </div>
+                <webobject name = "IsPropertySortable">
+                  <div class = "sort"><webobject name = "SortOrder" /></div>
+                </webobject>
+              </webobject>
+            </webobject>
+            <!-- extra column header for when there's delete links -->
+            <webobject name = "IsListing2">
+              <webobject name = "IsEntityWritable2"><th scope = "col"></th></webobject>
+            </webobject>
+          </tr>
+        </thead>
+        <!-- end table  header -->
+        <tbody>
+          <webobject name = "EntityRepetition">
+            <webobject name = "TableRow">
+              <webobject name = "IsDetail">
+                <td>
+                  <webobject name = "CollapseLink">Detail</webobject>
+                </td>
+              </webobject>
+              <webobject name = "IsSelecting">
+                <td class = "buttons"><webobject name = "SelectEO" /></td>
+              </webobject>
+              <webobject name = "IsListing">
+                <webobject name = "IsEntityWritable">
+                  <webobject name = "Conditional1">
+                    <td class = "buttons">
+                      <webobject name = "ERXNonNullConditional2"><webobject name = "SwitchComponent2" /></webobject>
+                      <webobject name = "ERXNonNullConditional1"><webobject name = "EditButton" /></webobject>
+                    </td>
+                  </webobject>
+                </webobject>
+                <webobject name = "IsEntityNotWritable">
+                  <td class = "buttons"><webobject name = "InspectButton" /></td>
+                </webobject>
+              </webobject>
+              <!-- end table  cell -->
+              <webobject name = "AttributeRepetition">
+                <webobject name = "ValueCell">
+                  <webobject name = "DebugComponentName" />
+                  <webobject name = "AttributeDisplay" />
+                </webobject>
+              </webobject>
+              <!-- end attribute repetition -->
+              <webobject name = "IsListing2">
+                <webobject name = "IsEntityWritable2">
+                  <td><webobject name = "Trash" /></td>
+                </webobject>
+              </webobject>
+            </webobject>
+            <!-- end table  row -->
+            <webobject name = "IsDetail">
+              <tr class = "detail">
+                <webobject name = "DetailCell">
+                  <webobject name = "DetailDiv">
+                    <div><webobject name = "InspectDetail" /></div>
+                  </webobject>
+                </webobject>
+              </tr>
+            </webobject>
+          </webobject>
+        </tbody>
+      </webobject>
+    </webobject>
+    <!-- end table  -->
+    <webobject name = "NavBar2">
+      <ul>
+        <li class = "back">
+          <webobject name = "BackLink">
+   			<span>Back</span>
+		  </webobject>
+        </li>
+        <webobject name = "ShowAdd">
+          <li class = "add"><webobject name = "AddButton">Add</webobject></li>
+        </webobject>
+        <li class = "export">
+          <webobject name = "ReportLink">
+            <span>Export</span>
+          </webobject>
+        </li>
+      </ul>
+    </webobject>
+  </webobject>
+</webobject>
