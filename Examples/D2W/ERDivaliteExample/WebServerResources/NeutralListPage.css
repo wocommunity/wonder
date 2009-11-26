@@ -1,0 +1,222 @@
+@import url("ERDIVListPage.css");
+@import url("NeutralList.css");
+
+/* NeutralSearchDisplayGroup.css */
+
+ul.ERDSearchDisplayGroup label, ul.ERDSearchDisplayGroup input.quick_serach_field, button#quick_search_submit {
+	margin: 2px 0;
+	border-width: 0;
+	padding: 2px 0;
+	background-color: white;
+	display: inline-block;
+	font-size: 12px;
+	vertical-align: middle;
+}
+
+ul.ERDSearchDisplayGroup label {
+	color: #777777;
+	-moz-border-radius-bottomleft: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+	-webkit-border-top-left-radius: 8px;
+	border-top-left-radius: 8px;
+	text-indent: 3px;
+	height: 15px;
+}
+
+ul.ERDSearchDisplayGroup input.quick_serach_field {
+	width: 150px;
+	padding-left: 2px;
+	padding-right: 2px;
+	height: 15px;
+}
+
+button#quick_search_submit {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/magglass-btn.png) 0 1px no-repeat white;
+	width: 18px;
+	text-indent: -5000px;
+	-moz-border-radius-bottomright: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+	-moz-border-radius-topright: 8px;
+	-webkit-border-top-right-radius: 8px;
+	border-top-right-radius: 8px;
+	height: 19px;
+}
+
+/* The following are styles for the list page  */
+
+div#a h2.entity.list {
+	display: none;
+}
+
+div#a li a.return {
+	text-indent: -5000px;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+}
+
+div#a h1.list {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ListMetalBan.gif);
+	background-repeat: no-repeat;
+	text-indent: -5000px;
+}
+
+div#a li a.return {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ReturnMetalBtn.gif);
+	width: 88px;
+	height: 31px;
+}
+
+div#a table.list {
+	font-size: 16px;
+	width: 100%;
+	width: expression("auto");
+	min-width: expression(document.getElementById('top_batch_nav').offsetWidth + "px");
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+/* embedded list page */
+
+a.ERDIVDetailListPage_detail {
+	color: transparent;
+	text-indent: -5000px;
+	display: block;
+}
+
+div#a table.list tbody tr a.ERDIVDetailListPage_detail {
+  	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/RightTriangle.gif) no-repeat;
+  	width: 7px;
+	height: 12px;
+}
+
+div#a table.list tbody tr a.ERDIVDetailListPage_detail:hover {
+  	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/DownTriangle.gif) no-repeat;
+  	width: 12px;
+	height: 7px;
+}
+
+/* The following are styles for the batch nav bar  */
+
+div#a fieldset#bottom_batch_nav {
+	background-color: #eeeeee;
+	padding: 1px;
+	-moz-border-radius-bottomright: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	margin-top: 3px;
+	min-width: expression(document.getElementById('top_batch_nav').offsetWidth + "px");
+	max-width: expression(document.getElementById('ListTable').offsetWidth + "px");
+}
+
+fieldset#top_batch_nav ul.batch_nav_bar li.batch_nav_bar {
+	float: right;
+}
+
+fieldset#top_batch_nav ul.batch_nav_bar li.page_batch, fieldset#top_batch_nav ul.batch_nav_bar li.page_nav {
+	display: none;
+	visibility: hidden;
+}
+
+fieldset#top_batch_nav ul.batch_nav_bar li.batch_nav_bar {
+	width: 50%;
+}
+
+div#a fieldset.batch_nav_bar {
+	width: 100%;
+	height: 31px;
+}
+
+div#a fieldset#top_batch_nav {
+	-moz-border-radius-topright: 3px;
+	-moz-border-radius-topleft: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-webkit-border-top-left-radius: 3px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	background-color: #eeeeee;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	width: expression(document.getElementById('ListTable').offsetWidth + "px");
+	min-width: 440px; 
+}
+
+fieldset.batch_nav_bar ul {
+	margin: 0 4px 0 4px;
+}
+
+fieldset.batch_nav_bar ul.batch_nav_bar li.batch_nav_bar {
+	margin: 4px 0 4px 0;
+}
+
+fieldset#bottom_batch_nav ul.batch_nav_bar {
+	margin: 0;
+}
+
+fieldset#bottom_batch_nav ul.batch_nav_bar li.content {
+	margin: 0;
+}
+
+fieldset.page_batch input {
+	font-size: 11px;
+}
+
+fieldset.batch_nav_bar ul.batch_nav_bar li h3 span.count {
+	vertical-align: 10%;
+	margin-right: 4px;
+	font-size: 13px;
+	background-color: rgb(51, 102, 153);
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-topleft: 8px;
+	-webkit-border-top-right-radius: 8px;
+	-webkit-border-top-left-radius: 8px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	-moz-border-radius-bottomright: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+	padding: 1px 8px 1px 8px;
+	color: #eeeeee;
+}
+
+/* (simple) List Page */ 
+
+div#a div.list.simple form fieldset.batch_nav_bar ul.batch_nav_bar li h3 span.count {
+	color: black;
+	font-size: 19px;
+}
+
+div#a div.list.simple fieldset#top_batch_nav ul.batch_nav_bar li.page_nav {
+	display: list-item;
+	visibility: visible;
+}
+
+div#a div.list.simple fieldset#bottom_batch_nav ul.batch_nav_bar li.page_nav,
+div#a div.list.simple fieldset#bottom_batch_nav ul.batch_nav_bar li.page_batch {
+	display: none;
+	visibility: hidden;
+}
+
+div#a div.list.simple ul#List {
+	border-bottom: solid 1px black;
+	padding-bottom: 4px;
+}
+
+div#a div.list.simple ul#List li:nth-child(odd) {
+	background-color: rgb(238, 238, 238);
+}
+
+div#a div.list.simple fieldset#top_batch_nav ul.batch_nav_bar li.page_nav input.batch_number {
+	font-size: 16px;
+	font-family: Times;
+}
+

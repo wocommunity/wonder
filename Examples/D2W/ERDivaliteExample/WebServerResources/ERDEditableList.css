@@ -1,0 +1,23 @@
+div#a div.ERDEditableList h1, div#a div.ERDEditableList h2 {
+	display: none;
+}
+
+div#a div.ERDEditableList li.page_batch {
+	display: none;
+}
+
+div#a div.ERDEditableList li.content a.return {
+	display: none;
+}
+
+div#a div.ERDEditableList table.list {
+	line-height: normal;
+}
+
+div#a div.ERDEditableList fieldset.batch_nav_bar ul.batch_nav_bar li.batch_nav_bar {
+	margin: 0;
+}
+
+div#a div.ERDEditableList ul.ERDSearchDisplayGroup {
+	display: none;
+}

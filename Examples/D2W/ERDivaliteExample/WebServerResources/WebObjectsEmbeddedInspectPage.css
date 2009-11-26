@@ -1,0 +1,11 @@
+div#a table.list tbody tr.detail h1.task, div#a table.list tbody tr.detail h2.entity {
+	display: none;
+}
+
+div#a table.list tbody tr.detail div.button {
+	display: none;
+}
+
+div#a table.list tbody tr.detail {
+	background-color: transparent;
+}

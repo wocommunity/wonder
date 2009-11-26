@@ -1,0 +1,16 @@
+div#confirmation_panel h1.task, div#confirmation_panel h2.entity {
+	display: none;
+}
+
+div#confirmation_panel div.button ul li {
+	float: right;
+}
+
+div#confirmation_panel li.confirmationText h4.propertyKey {
+	display: none;
+}
+
+div#confirmation_panel li.confirmationText div.content {
+	font-size: large;
+	text-align: center;
+}

@@ -1,0 +1,25 @@
+/* From WO2/AjaxAccordion2.css */
+
+.accordion {
+	position: relative; /* required for bounding */
+}
+
+div.accordion-toggle{
+    position: relative; /* required for effect */
+    z-index: 10;		/* required for effect */
+    cursor: pointer;
+}
+
+div.accordion-content{
+    overflow: hidden;	/* required for effect */
+}
+
+div.accordion-toggle-active {
+	cursor: default;
+}
+
+/* From WO2/AjaxAccordion2.css */
+
+div#a div.accordion-toggle {
+	width: expression(document.getElementById('a').offsetWidth + "px");
+}
