@@ -50,7 +50,7 @@ ContentClass: WOGenericContainer {
 
 ListContainer: WOGenericContainer {
 	elementName = "li";
-	class = subContext.classForAttribute;
+	class = subContext.classForAttribute; //VALID
 }
 
 SectionContainer: WOGenericContainer {

@@ -1,5 +1,5 @@
 HasAttachments: WOConditional {
-	condition = objectPropertyValue.count;
+	condition = objectPropertyValue.count;//VALID
 }
 
 FileUpload : ERAjaxAttachmentUpload {

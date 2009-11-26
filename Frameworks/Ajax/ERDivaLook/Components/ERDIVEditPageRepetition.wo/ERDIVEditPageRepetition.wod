@@ -52,13 +52,13 @@ Accordion: Accordion {
 PropertyClass: WOGenericContainer {
 	elementName = "legend";
 	class = propertyClassString;
-	title = subContext.title;
+	title = subContext.title; //VALID
 }
 
 ContentClass: WXGenericContainer {
 	elementName = "div";
 	class = contentClassString;
-	ajax = subContext.isAjax;
+	ajax = subContext.isAjax; //VALID
 	id = contentContainerID;
 }
 
