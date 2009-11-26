@@ -1,0 +1,28 @@
+@import url("ERXAjaxTabPanel.css");
+
+div.tab_panel ul.tab li {
+	background-color: #333333;
+}
+
+div.tab_panel ul.tab li.selected {
+	background-color: black;
+	border-top: solid 1px white;
+	border-right: solid 1px white;
+	border-left: solid 1px white;
+}
+
+div.tab_panel ul.tab li:hover a, div.tab_panel ul.tab li:hover button {
+	color: white;
+}
+
+div.tab_panel ul.tab li button {
+	font-weight: normal;
+}
+
+div.accordion-toggle:hover {
+	color: black;
+}
+
+div.accordion-toggle-active:hover {
+	color: white;
+}

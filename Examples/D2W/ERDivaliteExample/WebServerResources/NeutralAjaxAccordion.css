@@ -1,0 +1,10 @@
+@import url("AjaxAccordion.css");
+
+div#a div.accordion-toggle {
+	text-indent: 15px;
+	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/RightTriangle.gif) 0 50% #cbced3 no-repeat;
+}
+
+div#a div.accordion-toggle-active {
+	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/DownTriangle.gif) 0 50% #cbced3 no-repeat;
+}

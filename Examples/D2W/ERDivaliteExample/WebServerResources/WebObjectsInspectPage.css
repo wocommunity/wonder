@@ -1,0 +1,68 @@
+@import url("ERDIVInspectPage.css");
+@import url("WebObjectsInspect.css");
+@import url("WebObjectsTabPanel.css");
+
+div#a h1.task.inspect {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/view-ban.gif);
+	background-repeat: no-repeat;
+	text-indent: -5000px;
+	width: 550px;
+	height: 34px;
+}
+
+div#a h2.entity {
+	color: white;
+	background-color: #333333;
+}
+
+div#a div.button ul li a {
+	text-indent: -5000px;
+	height:27px;
+	border: 0px;
+	cursor: pointer;
+	display: block;
+	width: 100px;
+}
+
+div#a div.button ul li a.return {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/return-btn.gif);
+}
+
+div#a div.button ul li a.edit {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/edit-btn.gif);
+}
+
+div#a div.accordion-content ul li.attribute h4.propertyKey {
+	font-size: 13px;
+	margin-left: -8em;
+}
+
+div#a li.attribute {
+	line-height: 27px;
+}
+
+div#a div.accordion-content ul li.attribute div.content {
+	margin-top: -27px;
+	border-left: solid #333333 1px;
+	padding-left: 5px;
+	min-height: 27px;
+}
+
+div#a div.button {
+	width: expression(document.getElementById('section').offsetWidth + "px");
+}
+
+div#a div.button ul {
+	margin-top: 10px;
+	width: 200px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+}
+
+/* The following are styles for WebObjects Look specific D2W components */
+
+div.D2WDisplayToOneFault2, div.ERD2WDisplayToManyUnorderedList ul li {
+	background-color: #333333;
+	width: 20em;
+}

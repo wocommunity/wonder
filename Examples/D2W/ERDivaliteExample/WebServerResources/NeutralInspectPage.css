@@ -1,0 +1,66 @@
+@import url("ERDIVInspectPage.css");
+@import url("NeutralInspect.css");
+
+/* The following are styles for the inspect page */
+
+div#a h1.task.inspect {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/InspectMetalBan.gif);
+	background-repeat: no-repeat;
+	text-indent: -5000px;
+}
+
+div#a h2.entity, div#a div.button {
+	background-color: #eeeeee;
+}
+
+div#a div.button ul li a {
+	text-indent: -5000px;
+	height:31px;
+	border: 0px;
+	cursor: pointer;
+	display: block;
+}
+
+div#a div.button ul li a.return {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ReturnMetalBtn.gif);
+	width: 88px;
+}
+
+div#a div.button ul li a.edit {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/EditMetalBtn.gif);
+	width: 88px;
+}
+
+div#a div.accordion-content ul li.attribute h4.propertyKey {
+	font-size: 10pt;
+	margin-left: -12em;
+}
+
+div#a div.accordion-content {
+	background-color: #eeeeee;
+	min-width: expression(document.getElementById('section').offsetWidth + "px");
+}
+
+div#a li.attribute {
+	line-height: 1.5em;
+	border-top: solid white 2px;
+}
+
+div#a div.accordion-content ul li.attribute div.content {
+	margin-top: -1.5em;
+	border-left: solid white 2px;
+	padding-left: 2px;
+}
+
+div#a div.button {
+	background-color: #eeeeee;
+	height:31px;
+	-moz-border-radius-bottomright: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	margin-top: 5px;
+	min-width: expression(document.getElementById('a').offsetWidth + "px");
+}

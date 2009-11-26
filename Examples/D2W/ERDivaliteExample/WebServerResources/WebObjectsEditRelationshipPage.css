@@ -1,0 +1,17 @@
+h1.task.editRelationship {
+	display: none;
+}
+
+div#ERDIVEditRelationshipPage_Select h1.task {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/choose-ban.gif);
+	height: 34px;
+}
+
+a.ERDIVListPage_SelectButton {
+	text-indent: -5000px;
+	height:17px;
+	border: 0px;
+	display: block;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/add-sm-btn.gif);
+	width: 46px;
+}

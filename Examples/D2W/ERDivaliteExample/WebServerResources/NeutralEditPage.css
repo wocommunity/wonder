@@ -1,0 +1,165 @@
+@import url("ERDIVEditPage.css");
+
+/* NeutralEditToManyFault.css */
+
+button.D2WAjaxEditToManyFault_Add {
+	text-indent: -5000px;
+	cursor: pointer;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
+	height: 13px;
+	width: 42px;
+	border:0;
+	display: block;
+}
+
+button.D2WAjaxEditToManyFault_Delete {
+	color: transparent;
+	margin-top: -24px;
+	font-size: 10pt;
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+li.D2WAjaxEditToManyFault:hover button.D2WAjaxEditToManyFault_Delete {
+	color: blue;
+}
+
+li.D2WAjaxEditToManyFault:hover button.D2WAjaxEditToManyFault_Delete:hover {
+	color: white;
+}
+
+li.D2WAjaxEditToManyFault a, button.D2WAjaxEditToManyFault_Delete {
+	padding-top: 1px;
+	padding-bottom: 2px;
+	vertical-align: 0%;
+}
+
+button.D2WAjaxEditToManyFault_Delete:hover {
+	background-color: #336699;
+	color: white;
+}
+
+li.D2WAjaxEditToManyFault a {
+	margin-right: 2px;
+}
+
+/* NeutralEditToOneFault.css */
+
+button.D2WAjaxEditToOneFault_Add {
+	text-indent: -5000px;
+	cursor: pointer;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
+	height: 13px;
+	width: 42px;
+	border:0;
+	display: block;
+}
+
+button.D2WAjaxEditToOneFault_Delete {
+	color: transparent;
+	margin-top: -24px;
+	font-size: 10pt;
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+button.D2WAjaxEditToOneFault_Delete:hover {
+	background-color: #336699;
+	color: white;
+}
+
+div.D2WAjaxEditToOneFault:hover button.D2WAjaxEditToOneFault_Delete {
+	color: blue;
+}
+
+div.D2WAjaxEditToOneFault:hover button.D2WAjaxEditToOneFault_Delete:hover {
+	color: white;
+}
+
+div.D2WAjaxEditToOneFault a, button.D2WAjaxEditToOneFault_Delete {
+	padding-top: 1px;
+	padding-bottom: 2px;
+	vertical-align: 0%;
+}
+
+div.D2WAjaxEditToOneFault a {
+	margin-right: 2px;
+}
+
+/* NeutralEditToOneRelationship2.css */
+
+button.ERD2WEditToOneRelationship_New {
+	color: rgb(0, 0, 238);
+}
+
+/* The following are styles for the edit page */
+
+div#a form.edit h1.edit {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/EditMetalBan.gif) no-repeat;
+	text-indent: -5000px;
+}
+
+div#a form.edit h2.entity, div#a form.edit fieldset.button {
+	background-color: #eeeeee;
+}
+
+div#a form.edit fieldset.button ul li button {
+	text-indent: -5000px;
+	display: block;
+	height:31px;
+	border: 0px;
+	cursor: pointer;
+	width: 88px;
+}
+
+div#a form.edit fieldset.button ul li button.cancel {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/CancelMetalBtn.gif);
+}
+
+div#a form.edit fieldset.button ul li button.save {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/SaveMetalBtn.gif);
+}
+
+div#a form.edit fieldset li.attribute {
+	background-color: #eeeeee;
+	min-width: expression(document.getElementById('section').offsetWidth + "px");
+}
+
+div#a form.edit .accordion-toggle {
+	background-color: rgb(203, 206, 211);
+}
+
+div#a form.edit div.accordion-content ul li.attribute div.content {
+	border-left: solid white 2px;
+	padding-left: 2px;
+	margin-top: -1.5em;
+	min-height: 1.5em;
+}
+
+div#a form.edit div.accordion-content ul li.attribute legend.propertyKey {
+	font-size: 10pt;
+	margin-left: -160px; /*width of left column*/
+}
+
+div#a form.edit div.accordion-content ul li.attribute {
+	line-height: 1.5em;
+	border-top: solid white 2px;
+}
+
+div#a form.edit div.accordion-content ul {
+	margin-bottom: 5px;
+}
+
+div#a form.edit fieldset.button {
+	height:31px;
+	-moz-border-radius-bottomright: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	min-width: expression(document.getElementById('a').offsetWidth + "px");
+	background-color: #eeeeee;
+}

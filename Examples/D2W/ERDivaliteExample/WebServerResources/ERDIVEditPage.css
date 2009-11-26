@@ -1,0 +1,69 @@
+/* D2WAjaxEditToManyFault.css */
+
+button.D2WAjaxEditToManyFault_Delete {
+	border:0px;
+	cursor:pointer;
+	background-color: transparent;
+}
+
+/* D2WAjaxEditToOneFault.css */
+
+button.D2WAjaxEditToOneFault_Delete {
+	border: 0px;
+	cursor: pointer;
+	background-color: transparent;
+}
+
+div.D2WAjaxEditToOneFault a {
+	overflow: hidden hidden;
+}
+
+/* CalendarDateSelect.css */
+
+input.CalendarDateSelect {
+	background: url(/WebObjects/Frameworks/ERExtensions.framework/WebServerResources/calendar.gif) no-repeat 100% white;
+}
+
+/* ERD2WEditToOneRelationship2.css */
+
+button.ERD2WEditToOneRelationship_New {
+	border: 0;
+	background-color: transparent;
+	padding: 0;
+}
+
+button.ERD2WEditToOneRelationship_New:hover {
+	text-decoration: underline;
+}
+
+/* ERDIVEditPage.css */
+
+div#a form.edit fieldset.button ul li {
+	float: left;
+}
+
+div#a form.edit fieldset.attribute legend {
+	margin-left: -10em; /*width of left column*/
+	display: inline-block;
+	-webkit-transform: translate(0, 1.75em);
+}
+
+div#a form.edit fieldset.attribute {
+	padding-left: 10em; /*width of left column*/
+}
+
+div#a form.edit fieldset.attribute div.content {
+	margin-top: -1em;
+}
+
+div#a form.edit div.accordion-content ul li.attribute {
+	padding-left: 0;
+}
+
+div#a form.edit .accordion-toggle {
+	max-width: 100%;
+	padding-top:4px;
+	padding-bottom: 4px;
+	font-weight: bold;
+	min-width: expression(document.getElementById('section').offsetWidth + "px");
+}

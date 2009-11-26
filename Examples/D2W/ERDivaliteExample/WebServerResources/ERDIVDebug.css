@@ -1,0 +1,16 @@
+span.d2wdebug {
+	font-weight: normal;
+	font-style: italic;
+}
+
+span.d2wdebug:before {
+	content: "[";
+}
+
+span.d2wdebug:after {
+	content: "]";
+}
+
+span.component {
+	display: block;
+}
