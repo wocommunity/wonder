@@ -1506,26 +1506,26 @@ public class ERXSQLHelper {
 	}
 
 	public static ERXSQLHelper newSQLHelper(EODatabaseContext databaseContext) {
-		JDBCAdaptor adaptor = (JDBCAdaptor) databaseContext.database().adaptor();
+		EOAdaptor adaptor = databaseContext.database().adaptor();
 		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
 	public static ERXSQLHelper newSQLHelper(EODatabaseChannel databaseChannel) {
-		JDBCAdaptor adaptor = (JDBCAdaptor) databaseChannel.adaptorChannel().adaptorContext().adaptor();
+		EOAdaptor adaptor = databaseChannel.adaptorChannel().adaptorContext().adaptor();
 		return ERXSQLHelper.newSQLHelper(adaptor);
+	}
+	
+	public static ERXSQLHelper newSQLHelper(EOAdaptor adaptor) {
+		if (adaptor instanceof JDBCAdaptor)
+			return ERXSQLHelper.newSQLHelper((JDBCAdaptor)adaptor);
+			
+		// MS: Hack to support non JDBC adaptor migrations
+		return new NoSQLHelper();
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOAdaptorChannel adaptorChannel) {
-		ERXSQLHelper helper = null;
 		EOAdaptor adaptor = adaptorChannel.adaptorContext().adaptor();
-		if (adaptor instanceof JDBCAdaptor) {
-			helper = ERXSQLHelper.newSQLHelper((JDBCAdaptor)adaptor);
-		}
-		else {
-			// MS: Hack to support memory adaptor migrations
-			helper = new NoSQLHelper();
-		}
-		return helper;
+		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
 	public static ERXSQLHelper newSQLHelper(JDBCAdaptor adaptor) {
@@ -1545,15 +1545,7 @@ public class ERXSQLHelper {
 	public static ERXSQLHelper newSQLHelper(EOModel model) {
 		ERXSQLHelper helper = null;
 		EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
-		if (adaptor instanceof JDBCAdaptor) {
-			JDBCAdaptor jdbc = (JDBCAdaptor) adaptor;
-			helper = ERXSQLHelper.newSQLHelper(jdbc);
-		}
-		else {
-		// MS: Hack to support memory adaptor migrations
-			helper = new NoSQLHelper();
-		}
-		return helper;
+		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
 	public static ERXSQLHelper newSQLHelper(String databaseProductName) {
