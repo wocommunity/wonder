@@ -78,7 +78,7 @@ ShowCancel: WOConditional {
 
 PropertyName: WOString {
 	value=subContext.displayNameForProperty;
-	escapeHTML = subContext.escapeHTML;
+	escapeHTML = subContext.escapeHTML; //VALID
 }
 
 DebugPropertyName: ERD2WDebugPropertyName {
