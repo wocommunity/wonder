@@ -18,7 +18,8 @@ FileUpload : WOFileUpload {
 	title = ^title;
 }
 
-AjaxFileUpload : AjaxFileUpload {
+AjaxFileUpload : WOSwitchComponent {
+	WOComponentName = "AjaxFileUpload";
 	filePath = filePath;
 	finalFilePath = finalFilePath;
 	keepTempFile = true;
