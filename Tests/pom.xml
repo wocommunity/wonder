@@ -2,16 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>wonder.examples</groupId>
-		<artifactId>examples</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
+		<groupId>wonder</groupId>
+		<artifactId>wonder</artifactId>
+		<version>5.0.0-r10331</version>
 	</parent>
-	<artifactId>d2w</artifactId>
+
+	<groupId>wonder.tests</groupId>
+	<artifactId>tests</artifactId>
 	<packaging>pom</packaging>
-	<name>D2W Examples</name>
+	<name>Tests</name>
+
 	<modules>
-		<module>D2WComponentTour</module>
-		<module>ERDivaliteExample</module>
-		<module>ERMovies</module>
+		<module>ERXTest</module>
+		<module>TestAdaptor</module>
 	</modules>
 </project>

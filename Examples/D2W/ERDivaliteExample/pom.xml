@@ -4,11 +4,13 @@
 		<artifactId>d2w</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.d2w</groupId>
 	<artifactId>ERDivaliteExample</artifactId>
 	<name>ERDivaliteExample Application</name>
 	<packaging>woapplication</packaging>
+
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
@@ -19,7 +21,25 @@
 			<groupId>wonder.core</groupId>
 			<artifactId>ERDirectToWeb</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>wonder.misc</groupId>
+			<artifactId>ERDivaliteLook</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaDirectToWeb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
 	</dependencies>
+
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
