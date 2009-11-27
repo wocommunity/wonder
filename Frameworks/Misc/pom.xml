@@ -15,6 +15,7 @@
 		<module>ERCaptcha</module>
 		<module>ERChronic</module>
 		<module>ERDirectToRest</module>
+		<module>ERDivaliteLook</module>
 		<!--
 			<module>EROpenID</module> won't build because of dependency issues
 		-->
