@@ -22,8 +22,10 @@ import com.webobjects.monitor._private.MSiteConfig;
  * (First time deployments and config changes would still require interactive
  * sessions in Monitor.) Each direct action returns a short string (instead of a
  * full HTML page) and an HTTP status code indicating whether the respective
- * action was executed successfully. If Monitor is password-protected, these
- * direct actions are not permitted to be executed.
+ * action was executed successfully. If Monitor is password-protected, the
+ * password must be passed on the URL with the name "pw", (e.g. &pw=foo). If the
+ * password is missing or incorrect, these direct actions are not permitted to be 
+ * executed.
  * <table cellspacing="0" cellpadding="5" border="1">
  * <tr>
  * <th>Direct Action</th>
@@ -480,7 +482,7 @@ public class AdminAction extends WODirectAction {
             }
         } else {
             woresponse.setStatus(403);
-            woresponse.setContent("Monitor is password protected - direct actions are disabled");
+            woresponse.setContent("Monitor is password protected - password missing or incorrect.");
         }
         return woresponse;
     }
