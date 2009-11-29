@@ -283,47 +283,6 @@ There are many ways to use this script:
            <frameworks root="System"   if="wo.system.root.bundles" bundles="${wo.system.root.bundles}" embed="${wo.system.root.bundles.embed}" dir="${wo.system.frameworks}"/>
         </wocompile>
 
-        <!-- Do another wocompile for test sources, but only if the Tests directory exists and we
-             are building with the include.tests property set to true and we actually have a test.className
-             set for the project. (This last condition takes care of ERWorkerChannel, which has Tests
-             sources, but they do not compile.)
-
-             The <condition> below will set the <wocompile> srcdir to project.tests.dir if we want tests.
-             If not, the srcdir will be set to project.sources.dir. Since that is what the <wocompile> above
-             does, so this second <wocompile> becomes a noop.
-
-             Does this seem lame? To me, also. I have suggested a "if" attribute for <wocompile> and
-             this will be simplified if that goes in.
-
-             See: http://issues.objectstyle.org/jira/browse/WOL-1100
-        -->
-
-        <condition property="tests.dir" value="${project.test.sources.dir}" else="${project.sources.dir}">
-            <and>
-                <available file="${project.test.sources.dir}" />
-                <istrue value="${include.tests}" />
-                <isset property="test.className" />
-            </and>
-        </condition>
-
-       <wocompile srcdir="${tests.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}" >
-           <!--compilerarg value="-Xlint:unchecked" /-->
-           <exclude name="${classes.exclude.0}" />
-           <exclude name="${classes.exclude.1}" />
-           <exclude name="${classes.exclude.2}" />
-           <classpath>
-                <pathelement location="${build.root}/ERJars.framework/${fRJ}/junit.jar" />
-                <fileset dir="${project.dir}/Libraries">
-                    <include name="**/*.jar" />
-                    <!-- ak: i know, fix this...-->
-                </fileset>
-           </classpath>
-           <!-- ak: must NOT be a copy of WOApp, as deploymentDir doesn't work here -->
-           <frameworks root="External" if="wo.external.root.bundles" bundles="${wo.external.root.bundles}" embed="${wo.external.root.bundles.embed}" dir="${wo.external.root}" />
-           <frameworks root="Local"    if="wo.local.root.bundles" bundles="${wo.local.root.bundles}" embed="${wo.local.root.bundles.embed}" dir="${wo.local.root}"/>
-           <frameworks root="System"   if="wo.system.root.bundles" bundles="${wo.system.root.bundles}" embed="${wo.system.root.bundles.embed}" dir="${wo.system.frameworks}"/>
-        </wocompile>
-
         <antcall target="${after.compile}" />
     </target>
 
