@@ -60,6 +60,7 @@
         <mkdir dir="${dist}/Documentation" />
         <mkdir dir="${dist}/Documentation/api" />
         <mkdir dir="${build.root}/Build/lib" />
+        <mkdir dir="${build.root}/Build/build" />
     </target>
 
     <!-- ==================================================== -->
@@ -81,8 +82,15 @@
             </fileset>
         </copy>
 
+        <copy todir="${build.root}/Build/build">
+            <fileset dir="Build/build">
+                <include name="*.html"/>
+            </fileset>
+        </copy>
+
         <javac srcdir="Build/taglets" destdir="${build.root}/Build/lib" debug="true">
             <compilerarg value="-Xlint:deprecation" />
+            <compilerarg value="-Xlint:unchecked" />
             <classpath>
                 <fileset dir="${build.root}/Build/lib">
                     <include name="*.jar"/>
@@ -168,6 +176,7 @@
         </javadoc>
         <echo>javadoc generation finished</echo>
         <antcall target="componentsOnly" />
+        <antcall target="d2wOnly" />
         <java classname="PageInstaller" fork="true">
             <jvmarg value="-Dwonder.root=${wonder.root}" />
             <jvmarg value="-Dwonder.version=${project.name}-${project.version}" />
@@ -196,8 +205,34 @@
                     </dirset>
             </sourcepath>
             <doclet name="ComponentDoclet" path="${build.root}/Build/lib:${build.root}/Build/lib/jdom-b7.jar" />
+            <arg line="-J-Dbuild.root=${build.root}" />
         </javadoc>
         <echo>components javadoc page generation finished</echo>
+    </target>
+
+    <target name="d2wOnly" depends="build">
+        <javadoc packagenames="er.*, com.gammastream.*, org.svgobjects.*, com.webobjects.jdbcadaptor.*, com.webobjects.woextensions.*"
+                   destdir="${dist}/Documentation/api"
+                   defaultexcludes="yes"
+                   author="true"
+                   version="true"
+                   verbose="false"
+                   maxmemory="128m">
+
+            <classpath refid="classpath"/>
+            <sourcepath>
+                    <dirset dir="${wonder.root}">
+                         <include name="Frameworks/**/Sources/" />
+                         <exclude name="**/*Example*/**" />
+                         <exclude name="**/Applications/**" />
+                    </dirset>
+            </sourcepath>
+            <doclet name="D2WKeyDoclet" path="${build.root}/Build/lib:${build.root}/Build/lib/jdom-b7.jar" />
+            <arg line="-J-Dbuild.root=${build.root}" />
+            <!-- arg line="-J-Xmx32m -J-Xms32m -J-Dbuild.root=${build.root}" / -->
+
+        </javadoc>
+        <echo>d2wkeys javadoc page generation finished</echo>
     </target>
 
 </project>

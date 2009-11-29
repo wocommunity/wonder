@@ -12,9 +12,9 @@ import java.util.Properties;
 
 public class PageInstaller {
 
-    static void addLinkToNavBar(String filename) {
+    static void addLinkToNavBar(String targetFilename, String htmlFilename, String linkName) {
 
-        File file = new File(filename);
+        File file = new File(targetFilename);
 
         FileReader fRdr = null;
 
@@ -40,9 +40,9 @@ public class PageInstaller {
                 if (line.indexOf("CLASS=\"NavBarCell1\"") > 0 && line.indexOf("deprecated-list.html") > 0) {
                     needsUpdate = true;
                     String str = "  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"";
-                    str += dotsForPath(filename);
-                    str += "components.html";
-                    str += "\"<FONT CLASS=\"NavBarFont1\"><B>Components</B></FONT></A>&nbsp;</TD>";
+                    str += dotsForPath(targetFilename);
+                    str += htmlFilename;
+                    str += "\"<FONT CLASS=\"NavBarFont1\"><B>"+linkName+"</B></FONT></A>&nbsp;</TD>";
                     output.add(str);
                 }
             }
@@ -84,10 +84,10 @@ public class PageInstaller {
         return dots.toString();
     }
 
-    static void addLineToFiles(String path) {
+    static void addLineToFiles(String targetPath, String htmlFilename, String linkName) {
 
         HashSet<File> paths = new HashSet<File>();
-        paths.add(new File(path));
+        paths.add(new File(targetPath));
 
         HashSet<File> addable = new HashSet<File>();
 
@@ -118,13 +118,15 @@ public class PageInstaller {
         while (files.hasNext()) {
             String name = files.next().toString();
             if (name.endsWith(".html"))
-                addLinkToNavBar(name);
+                addLinkToNavBar(name, htmlFilename, linkName);
         }
     }
 
     public static void main(String[] arg) {
 
         /*
+        // when debugging the properties settings....
+        //
         Properties p = System.getProperties();
         Enumeration e = p.propertyNames();
         while (e.hasMoreElements()) {
@@ -139,15 +141,34 @@ public class PageInstaller {
        (new File("components.html")).renameTo(new File(root+"components.html"));
        (new File("components.txt")).renameTo(new File(root+"components.txt"));
 
-       addLinkToNavBar(root+"constant-values.html");
-       addLinkToNavBar(root+"deprecated-list.html");
-       addLinkToNavBar(root+"help-doc.html");
-       addLinkToNavBar(root+"index-all.html");
-       addLinkToNavBar(root+"overview-summary.html");
-       addLinkToNavBar(root+"overview-tree.html");
-       addLinkToNavBar(root+"serialized-form.html");
+       (new File("d2wlist.html")).renameTo(new File(root+"d2wlist.html"));
+       (new File("d2wlist.txt")).renameTo(new File(root+"d2wlist.txt"));
 
-       addLineToFiles(root+"com");
-       addLineToFiles(root+"er");
+       addLinkToNavBar(root+"constant-values.html", "d2wlist.html", "D2WKeys");
+       addLinkToNavBar(root+"constant-values.html", "components.html", "Components");
+
+       addLinkToNavBar(root+"deprecated-list.html", "d2wlist.html", "D2WKeys");
+       addLinkToNavBar(root+"deprecated-list.html", "components.html", "Components");
+
+       addLinkToNavBar(root+"help-doc.html", "d2wlist.html", "D2WKeys");
+       addLinkToNavBar(root+"help-doc.html", "components.html", "Components");
+
+       addLinkToNavBar(root+"index-all.html", "d2wlist.html", "D2WKeys");
+       addLinkToNavBar(root+"index-all.html", "components.html", "Components");
+
+       addLinkToNavBar(root+"overview-summary.html", "d2wlist.html", "D2WKeys");
+       addLinkToNavBar(root+"overview-summary.html", "components.html", "Components");
+
+       addLinkToNavBar(root+"overview-tree.html", "d2wlist.html", "D2WKeys");
+       addLinkToNavBar(root+"overview-tree.html", "components.html", "Components");
+
+       addLinkToNavBar(root+"serialized-form.html", "d2wlist.html", "D2WKeys");
+       addLinkToNavBar(root+"serialized-form.html", "components.html", "Components");
+
+       addLineToFiles(root+"com", "d2wlist.html", "D2WKeys");
+       addLineToFiles(root+"com", "components.html", "Components");
+
+       addLineToFiles(root+"er", "d2wlist.html", "D2WKeys");
+       addLineToFiles(root+"er", "components.html", "Components");
     }
 }
