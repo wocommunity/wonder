@@ -41,198 +41,38 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
     static HashMap<String,HashMap<String,Object>> comps;
 
+    static String[] prefixes = new String[] { "Selenium", "ERDAjax", "PayPal", "ERD2W", "ERDIV", "ERIUI", "ERNEU",
+                                              "ERPDF", "ERXJS", "Ajax", "SEEO", "UJAC", "D2W", "ERC", "ERD", "ERO", "ERP", "ERX",
+                                              "GSV", "WOL", "YUI", "ER", "GC", "IM", "JS", "SC", "SE", "WO", "WR", "WX" };
+
     @SuppressWarnings("unchecked")
     public static boolean start(RootDoc root) {
 
-        test();
+        // test();
 
         ClassDoc[] classes = root.classes();
 
-        String[] prefixes = new String[] { "Selenium", "ERDAjax", "PayPal", "ERD2W", "ERDIV", "ERIUI", "ERNEU",
-                                           "ERPDF", "ERXJS", "Ajax", "SEEO", "UJAC", "D2W", "ERC", "ERD", "ERO", "ERP", "ERX",
-                                           "GSV", "WOL", "YUI", "ER", "GC", "IM", "JS", "SC", "SE", "WO", "WR", "WX" };
+        comps = PageGenerator.findSubClassesFromAvailable(classes, "com.webobjects.appserver.WOElement");
 
-        comps = new HashMap<String,HashMap<String,Object>>();
+        PageGenerator.gatherAllComments(comps);
 
-        // Collect into comps{} new hashes for classes that are sub-classes of WOComponent.
-        //
-        for (int i = 0; i < classes.length; i++) {
+        TreeMap<String,TreeSet<String>> classNamePrefixes = PageGenerator.gatherClassesByPrefix(comps, prefixes);
 
-            ClassDoc aCD = classes[i];
+        PageGenerator.findSourceFiles(comps, srcDirs);
 
-            if (!aCD.toString().startsWith("com.webobjects")) {
-                ClassDoc parent = aCD.superclass();
-                boolean done = false;
+        PageGenerator.findApiFiles(comps, compDirs);
 
-                while (parent != null && !done) {
-                    if (parent.toString().equals("com.webobjects.appserver.WOElement")) {
-                        // System.out.println("found component: "+aCD);
-                        comps.put(aCD.toString(), new HashMap<String,Object>());
-                        done = true;
-                    }
-                    if (parent.toString().equals("java.lang.Object"))
-                        done = true;
-                    else
-                        parent = parent.superclass();
-                }
-            }
-        }
+        PageGenerator.findPackages(comps);
 
-        // Gather the classnames by prefix.
-        //
-        TreeSet<String> classNames = new TreeSet<String>(comps.keySet());
-        Iterator<String> names = classNames.iterator();
+        PageGenerator.gatherAllComments(comps);
 
-        TreeMap<String,TreeSet<String>> classNamePrefixes = new TreeMap<String,TreeSet<String>>();
+        PageGenerator.findTagComments(comps, "@binding");
 
-        while (names.hasNext()) {
-            String current = names.next();
-            String[] parts = current.split("\\.");
-            String lastName = parts[parts.length-1];
-            
-            String prefixFound = null;
-
-            for (int idx = 0; idx < prefixes.length && prefixFound == null; idx++) {
-                if (lastName.startsWith(prefixes[idx])) prefixFound = prefixes[idx];
-            }
-
-            if (prefixFound == null) prefixFound = "NONE";
-
-            // System.out.println("name: \""+current+"\", lastName = \""+lastName+"\", prefix = \""+prefixFound+"\"");
-
-            TreeSet<String> classesForPrefix = classNamePrefixes.get(prefixFound);
-            if (classesForPrefix == null) {
-                classNamePrefixes.put(prefixFound, new TreeSet<String>());
-                classesForPrefix = classNamePrefixes.get(prefixFound);
-            }
-            classesForPrefix.add(current);
-        }
-
-        // For each subclass of WOComponent that had been found, get its source file name
-        // and api file name (if one exists) and component name and put it in the hashmap pointed
-        // to by the class name in comps.
-        //
-        Iterator keys = comps.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = keys.next().toString();
-
-            int lastDot = 0;
-            int currentDot = key.indexOf(".", lastDot);
-            while (currentDot > lastDot) {
-                lastDot = currentDot;
-                currentDot = key.indexOf(".", lastDot+1);
-            }
-            String leaf = key.substring(lastDot+1);
-            comps.get(key).put("componentName", leaf);
-
-            boolean found = false;
-
-            for (int jdx = 0; !found && jdx < compDirs.size(); jdx++) {
-                String apiFilename = compDirs.get(jdx)+leaf+".api";
-                File apiFile = new File(apiFilename);
-                if (apiFile.exists())
-                    comps.get(key).put("apiFile", apiFilename);
-            }
-
-            found = false;
-
-            String srcDir = key.replaceAll("\\.", File.separator);
-
-            for (int jdx = 0; !found && jdx < srcDirs.size(); jdx++) {
-                String srcFilename = srcDirs.get(jdx)+File.separator+leaf+".java";
-                if ((new File(srcFilename)).exists())
-                    comps.get(key).put("sourceFile", srcFilename);
-            }
-        }
-
-        // Gather the class comments, binding comments and package name for the classes of the components.
-        //
-        keys = comps.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = keys.next().toString();
-
-            // For null-safety later on
-            //
-            comps.get(key).put("package", "NONE");
-
-            FileReader fRdr = null;
-            String srcFilename = (String)comps.get(key).get("sourceFile");
-            if (srcFilename != null) {
-                try {
-                    fRdr = new FileReader(srcFilename);
-                } catch (java.io.FileNotFoundException fnfe) { System.out.println(fnfe.getMessage()); System.exit(1); }
-
-                LineNumberReader rdr = new LineNumberReader(fRdr);
-
-                boolean done = false;
-                boolean inComment = false;
-
-                ArrayList<String> comments = new ArrayList<String>();
-
-                String line = "";
-
-                while (line != null && !done) {
-                    try {
-                        line = rdr.readLine();
-                        if (line != null) {
-                            if (line.startsWith("package ")) {
-                                String pName = line.substring("package ".length());
-                                while (pName.endsWith(";")) pName = pName.substring(0,pName.length()-1);
-                                comps.get(key).put("package", pName);
-
-                                pName = pName.replace('.','/');
-                                comps.get(key).put("classDocURL",pName+"/"+comps.get(key).get("componentName")+".html");
-                            }
-                            if (line.indexOf("/**") >= 0) { inComment = true; }
-
-                            // xxxxx
-                            if (line.startsWith("public class")) { done = true; }
-                            if (inComment && line.indexOf("*/") >= 0) { done = true; }
-                            if (inComment) { comments.add(line); }
-                        }
-                    } catch (java.io.IOException ioe) { line = null; }
-                }
-
-                comps.get(key).put("comments", findBindingComments(comments));
-                comps.get(key).put("classComment", findClassComment(comments));
-            } else {
-                comps.get(key).put("comments", new HashMap<String,String>());
-                comps.get(key).put("classComment", "");
-            }
-        }
-
-        // Gather the bindings for the component from the api file.
-        //
-        keys = comps.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = keys.next().toString();
-
-            String apiFilename = (String)comps.get(key).get("apiFile");
-            if (apiFilename != null) {
-
-                File apiFile = new File(apiFilename);
-                SAXBuilder builder = new SAXBuilder();
-                Document doc = null;
-
-                ArrayList<String> bindingNames = new ArrayList<String>();
-
-                try {
-                    doc = builder.build(apiFile);
-                } catch (org.jdom.JDOMException jde) { System.out.println(jde.getMessage()); System.exit(1); }
-                Element parent = doc.getRootElement().getChild("wo");
-                Iterator bindings = parent.getChildren("binding").iterator();
-                while (bindings.hasNext()) {
-                    Attribute attr = ((Element)bindings.next()).getAttribute("name");
-                    bindingNames.add(attr.getValue());
-                }
-                comps.get(key).put("apiBindings", bindingNames);
-            } else
-                comps.get(key).put("apiBindings", new ArrayList<String>());
-        }
+        gatherBindingsFromApi(comps);
 
         // Check the condition of the bindings documentation.
         //
-        keys = comps.keySet().iterator();
+        Iterator<String> keys = comps.keySet().iterator();
         while (keys.hasNext()) {
             String key = keys.next().toString();
 
@@ -290,7 +130,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
             out = new FileWriter("components.html");
             check = new FileWriter("components.txt");
 
-            writeHead(out);
+            PageGenerator.writeFileToWriter(System.getProperty("build.root")+"/Build/build/components-pageHead.html", out);
 
             out.write("<ul>\n");
             out.write("<li><a href=\"#ListedByPrefix\">Prefixes</a></li>\n");
@@ -305,13 +145,9 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
             while (prefxs.hasNext()) {
                 String prefix = prefxs.next();
 
-                out.write("<table border=\"1\" width=\"100%\" cellpadding=\"3\" cellspacing=\"0\" summary=\"\">\n");
-                out.write("<tr bgcolor=\"#CCCCFF\" class=\"TableHeadingColor\">\n");
-                out.write("<th ALIGN=\"left\" colspan=\"2\"><font size=\"+2\">\n");
-
+                out.write(PageGenerator.TABLE_TOP_START);
                 out.write("<b>Prefix: "+prefix+"</b></font></th>\n");
-
-                out.write("</tr>\n");
+                out.write(PageGenerator.TABLE_TOP_END);
 
                 StringBuffer str = new StringBuffer();
                 Iterator<String> namesForPrefix = classNamePrefixes.get(prefix).iterator();
@@ -339,13 +175,9 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
                 // System.out.println("writing for key: "+key);
 
-                out.write("<table border=\"1\" width=\"100%\" cellpadding=\"3\" cellspacing=\"0\" summary=\"\">\n");
-                out.write("<tr bgcolor=\"#CCCCFF\" class=\"TableHeadingColor\">\n");
-                out.write("<th ALIGN=\"left\" colspan=\"2\"><font size=\"+2\">\n");
-
+                out.write(PageGenerator.TABLE_TOP_START);
                 out.write("<b>Package: "+key+"</b></font></th>\n");
-
-                out.write("</tr>\n");
+                out.write(PageGenerator.TABLE_TOP_END);
 
                 Iterator<String> compKeys = (new TreeSet(packageInfo.get(key))).iterator();
                 while (compKeys.hasNext()) {
@@ -372,12 +204,12 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                 String key = (String)keys.next();
 
                 out.write("<a name=\"packagename\"><!-- --></A>\n");
-                out.write("<table border=\"1\" width=\"100%\" celppadding=\"3\" cellspacing=\"0\" summary=\"\">\n");
-                out.write("<tr bgcolor=\"#CCCCFF\" class=\"TableHeadingColor\">\n");
-                out.write("<th align=\"left\" colspan=\"1\"><font size=\"+2\">\n");
+
+                out.write(PageGenerator.TABLE_TOP_START);
                 out.write("<b>Package: "+key+"</b></font></th>\n");
-                out.write("</tr>\n");
-                out.write("</table>\n");
+                out.write(PageGenerator.TABLE_TOP_END);
+
+                out.write(PageGenerator.TABLE_END);
 
                 Iterator<String> compKeys = (new TreeSet(packageInfo.get(key))).iterator();
                 while (compKeys.hasNext()) {
@@ -476,7 +308,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                 }
             }
 
-            writeTail(out);
+            PageGenerator.writeFileToWriter(System.getProperty("build.root")+"/Build/build/components-pageTail.html", out);
 
             out.close();
 
@@ -486,147 +318,37 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
         return false;
     }
-
-    /** Returns the first sentence of the javadoc for a component's
-     *  class. It is a shame that we cannot leverage javadoc for this, but
-     *  there are no hooks for this. We are looking for "end" strings from
-     *  the ends array, below. So far, this contains ". ", ".<", and ".\" ".
-     */
-    static String findClassComment(List<String> comments) {
-
-        // System.out.println("start: comments: "+comments);
-
-        if (comments == null || comments.size() == 0)
-            return "";
-
-        boolean done = false;
-
-        // Coalesce the lines of the comment into one string.
-        //
-        String str = comments.get(0).replaceFirst("/\\*\\*", "").trim();
-        for (int idx = 1; idx < comments.size(); idx++) {
-            String other = comments.get(idx).trim();
-
-            // this does not work the same as the while after...
-            //other.replace("^\\**", "");
-
-            while (other.startsWith("*")) { other = other.substring(1); }
-            str = (str.trim()+" "+other.trim()).trim();
-        }
-
-        if (str.equals("") || str.startsWith("@")) return "";
-
-        // Locate the end markers.
-        //
-        String[] ends = new String[] { ". ", ".<", ".\" ", " @", ".*/", ".*<" };
-
-        int end = str.length();
-        String endMarker = null;
-
-        for (int idx = 0; idx < ends.length; idx++) {
-            if (str.indexOf(ends[idx]) >= 0 && str.indexOf(ends[idx]) < end) {
-                end = str.indexOf(ends[idx]);
-                endMarker = ends[idx];
-            }
-        }
-
-        if (endMarker != null)
-            str = str.substring(0,end+endMarker.length()-1).trim();
  
-        // System.out.println("done: str: \""+str+"\"");
-        return str;
-    }
+    static void gatherBindingsFromApi(HashMap<String,HashMap<String,Object>> comps) {
 
-    /**
-     * Take a list of comment strings, eg ("/**", "Something", "", " * @binding some", "\*\/"),
-     * and return a dictionary of binding names to binding comment structures.
-     */
-    static HashMap<String,HashMap<String,String>> findBindingComments(List<String> comments) {
-
-        // System.out.println("start: comments = "+comments);
-
-        ArrayList<String> found = new ArrayList<String>();
-
-        boolean inBinding = false;
-
-        // Start with the class comment block and turn this into an array of lines that
-        // all start with a @binding tag.
+        // Gather the bindings for the component from the api file.
         //
-        // TODO: we do not get rid of tabs.... (or do we now, with trim())
-        //
-        for (int idx = 0; idx < comments.size(); idx++) {
-            String line = comments.get(idx);
-            line = line.trim();
-            if (line.startsWith("*") && !line.startsWith("*/")) line = line.substring(1);
-            line = line.trim();
+        Iterator<String> keys = comps.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = keys.next().toString();
 
-            if (line.startsWith("@binding")) inBinding = true;
+            String apiFilename = (String)comps.get(key).get("apiFile");
+            if (apiFilename != null) {
 
-            if (line.indexOf("*/") >= 0) inBinding = false;
-            if (line.length() == 0) inBinding = false; 
-            if (line.startsWith("@") && !line.startsWith("@binding")) inBinding = false;
+                File apiFile = new File(apiFilename);
+                SAXBuilder builder = new SAXBuilder();
+                Document doc = null;
 
-            if (inBinding) found.add(line);
+                ArrayList<String> bindingNames = new ArrayList<String>();
+
+                try {
+                    doc = builder.build(apiFile);
+                } catch (org.jdom.JDOMException jde) { System.out.println(jde.getMessage()); System.exit(1); }
+                Element parent = doc.getRootElement().getChild("wo");
+                Iterator bindings = parent.getChildren("binding").iterator();
+                while (bindings.hasNext()) {
+                    Attribute attr = ((Element)bindings.next()).getAttribute("name");
+                    bindingNames.add(attr.getValue());
+                }
+                comps.get(key).put("apiBindings", bindingNames);
+            } else
+                comps.get(key).put("apiBindings", new ArrayList<String>());
         }
-        // System.out.println("found: "+found);
-
-        ArrayList<String> found2 = new ArrayList<String>();
-
-        // This will collapse multi-line comments to one line.
-        //
-        int jdx = -1;
-        for (int idx = 0; idx < found.size(); idx++) {
-            if (found.get(idx).startsWith("@")) { jdx++; found2.add(found.get(idx)); }
-            else { found2.set(jdx, found2.get(jdx)+" "+found.get(idx)); }
-        }
-
-        // System.out.println("found2: "+found2);
-
-        HashMap<String,HashMap<String,String>> finished = new HashMap<String,HashMap<String,String>>();
-
-        // Construct the HashMap that holds the bindings. Fix the key, if needed.
-        //
-        for (int idx = 0; idx < found2.size(); idx++) {
-            String line = found2.get(idx);
-
-            line = line.substring("@binding".length());
-            line = line.trim();
-
-            String name;
-            if (line.indexOf(" ") > 0)
-                name = line.substring(0,line.indexOf(" "));
-            else
-                name = line;
-
-// XXX - why did adding this make me start to get unchecked warnings?
-//
-            Character c = name.charAt(name.length()-1);
-            while (!Character.isJavaIdentifierPart(c)) {
-                name = name.substring(0,name.length()-1);
-                c = name.charAt(name.length()-1);
-            }
-
-            if (line.indexOf(" ") > 0)
-                line = line.substring(line.indexOf(" "));
-            else
-                line = "";
-            line = line.trim();
-
-            HashMap<String,String> data = new HashMap<String,String>();
-            data.put("name", name);
-            data.put("comment", line);
-            data.put("order", paddedNumber(idx, 3));
-            finished.put(name, data);
-        }
-
-        // System.out.println("finished: "+finished);
-        return finished;
-    }
-
-    static String paddedNumber(int num, int width) {
-        String str = ""+num;
-        while (str.length() < width) str = "0"+str;
-        return str;
     }
 
     static void test() {
@@ -653,9 +375,9 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         oneComment.put("order", "000");
         expectedComment.put(oneComment.get("name"), oneComment);
 
-        foundComment = findBindingComments(tester);
+        //foundComment = PageGenerator.findTagComments(tester, "@binding");
 
-        result += checkTest("test1", tester, expectedComment, foundComment);
+        //result += checkTest("test1", tester, expectedComment, foundComment);
 
 /* XXX - If I put a * at the start of a line, or multiple *'s, does it break things? */
 
@@ -728,12 +450,12 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         oneComment.put("order", "006");
         expectedComment.put(oneComment.get("name"), oneComment);
 
-        foundComment = findBindingComments(tester);
+        //foundComment = PageGenerator.findTagComments(tester, "@binding");
 
-        result += checkTest("test2", tester, expectedComment, foundComment);
+        //result += checkTest("test2", tester, expectedComment, foundComment);
 
         String expected = "AjaxSocialNetworkLink creates a link to the submission URL for a social network around the social network's icon.";
-        String found = findClassComment(tester);
+        String found = PageGenerator.findClassComment(tester);
 
         result += checkTest("test3", tester, expected, found);
 
@@ -750,7 +472,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         tester.add("*/");
 
         expected = "Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>\".";
-        found = findClassComment(tester);
+        found = PageGenerator.findClassComment(tester);
 
         result += checkTest("test4", tester, expected, found);
 
@@ -761,7 +483,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         tester.add("*/");
 
         expected = "Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>.\"";
-        found = findClassComment(tester);
+        found = PageGenerator.findClassComment(tester);
 
         result += checkTest("test5", tester, expected, found);
 
@@ -771,7 +493,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         tester.add(" * @binding progressID the id of the AjaxProgress");
 
         expected = "";
-        found = findClassComment(tester);
+        found = PageGenerator.findClassComment(tester);
 
         result += checkTest("test6", tester, expected, found);
 
@@ -781,7 +503,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         tester.add(" * @binding progressID the id of the AjaxProgress");
 
         expected = "I can check here also";
-        found = findClassComment(tester);
+        found = PageGenerator.findClassComment(tester);
 
         result += checkTest("test7", tester, expected, found);
 
@@ -795,7 +517,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         tester.add(" */");
 
         expected = "XHTML version of WORadioButtonList";
-        found = findClassComment(tester);
+        found = PageGenerator.findClassComment(tester);
 
         result += checkTest("test8", tester, expected, found);
 
@@ -823,7 +545,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
        try {
             out.write("<html><head>\n");
             out.write("<meta name=\"ROBOTS\" content=\"NOINDEX\" />\n");
-            out.write("<title>WOComponents</title>\n");
+            out.write("<title>Components with D2W Keys</title>\n");
             out.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\" title=\"Style\">\n");
             out.write("<script type=\"text/javascript\">\n");
             out.write("function windowTitle()\n");
