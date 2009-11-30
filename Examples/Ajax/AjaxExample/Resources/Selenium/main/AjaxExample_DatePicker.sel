@@ -1,0 +1,61 @@
+
+Test for Date Pickers
+
+|open|/|
+
+|click|link=Date Picker|
+|pause|1200|
+|verifyTextPresent|Date with no configuration:|
+
+Click into the first field and the calendar comes up. Type the date "01 01 2009" to get a particular date.
+Then click away and come back to confirm the calendar shows the right month.
+
+|click|BareDateInputField|
+|pause|1200|
+|type|BareDateInputField|01 01 2009|
+|pause|1200|
+|click|DateInputWithFormatField|
+|pause|1200|
+|click|BareDateInputField|
+|pause|1200|
+|verifyTextPresent|JAN 2009|
+
+I would like to test the functionality of the buttons on the calendar here, but have not figured out the
+locators for the elements of the pop-up calendar yet.
+
+|click|DateInputWithFormatField|
+|pause|1200|
+|type|DateInputWithFormatField|2009-01-01|
+|pause|1200|
+|click|DateInputWithFormatterField|
+|pause|1200|
+|click|DateInputWithFormatField|
+|pause|1200|
+|verifyTextPresent|JAN 2009|
+
+
+|click|DateInputWithFormatterField|
+|pause|1200|
+|type|DateInputWithFormatterField|01/01/2009|
+|pause|1200|
+|click|FrenchDateInputWithFormatterField|
+|pause|1200|
+|click|DateInputWithFormatterField|
+|pause|1200|
+|verifyTextPresent|JAN 2009|
+
+|click|FrenchDateInputWithFormatterField|
+|pause|1200|
+|type|FrenchDateInputWithFormatterField|01 jan. 2009|
+|click|BareDateInputField|
+|pause|1200|
+|click|FrenchDateInputWithFormatterField|
+|pause|1200|
+|verifyTextPresent|JAN 2009|
+
+Since I cannot change the value of the disabled text field, how do I expect (or not expect) its calendar value?
+
+I want to test that when one changes the date format, the display of the date is done in the new form. But I cannot
+set the date and then set the format. If one sets the format, the clicking on "Submit" will reset the date to today,
+no matter what the value in the field is set to.
+

@@ -4,16 +4,19 @@ AjaxExampleComponent : AjaxExampleComponent {
 
 BareDateInput: AjaxDatePicker {
 	value = someValue;
+	id = "BareDateInputField";
 }
 
 DateInputWithFormat: AjaxDatePicker {
 	value = someValue;
 	format = "%Y-%m-%d";
+	id = "DateInputWithFormatField";
 }
 
 DateInputWithFormatter: AjaxDatePicker {
 	value = someValue;
 	formatter = formatter;
+	id = "DateInputWithFormatterField";
 }
 
 FrenchDateInputWithFormatter: AjaxDatePicker {
@@ -21,11 +24,13 @@ FrenchDateInputWithFormatter: AjaxDatePicker {
 	formatter = frenchFormatter;
 	monthNames = frenchMonths;
 	dayNames = frenchDays;
+	id = "FrenchDateInputWithFormatterField";
 }
 
 DisabledDateInput: AjaxDatePicker {
 	value = someValue;
 	disabled = true;
+	id = "DisabledDateInputField";
 }
 
 Form: WOForm {
@@ -34,13 +39,16 @@ Form: WOForm {
 
 Format: WOTextField {
 	value = customFormat;
+	id = "FormatField";
 }
 
 CustomDateInput: AjaxDatePicker {
 	format = customFormat;
 	value = customValue;
+	id = "CustomDateInputField";
 }
 
 Update: WOSubmitButton {
 	action = context.page;
+	id = "UpdateButton";
 }
