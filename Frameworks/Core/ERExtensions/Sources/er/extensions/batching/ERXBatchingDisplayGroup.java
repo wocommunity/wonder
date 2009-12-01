@@ -325,7 +325,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	/**
 	 * Set to <code>true</code> to retain the rowCount() after it is determined once for a particular
 	 * qualifier.  Set to <code>false</code> to have rowCount() re-calculated when the batch changes.
-	 * The default is <code>false</code> for compatibility with older code.
+	 * The default is <code>true</code>.
 	 *
 	 * @param shouldRememberRowCount the shouldRememberRowCount to set
 	 */
