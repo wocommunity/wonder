@@ -68,9 +68,9 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		if (!request.isMultipartFormData() && ERXAjaxApplication.isAjaxRequest(request)) {
 			NSDictionary formValues = request.formValues();
 			int formValuesCount = formValues.count();
-			if (formValuesCount == 2 && (formValues.containsKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID) || 
-					                     formValues.containsKey(ERXAjaxApplication.KEY_REPLACED)) && 
-					                     formValues.containsKey(WORequest._IsmapCoords)) {
+			if (formValuesCount == 2 && (formValues.objectForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID) != null || 
+					                     formValues.objectForKey(ERXAjaxApplication.KEY_REPLACED) != null) && 
+					                     formValues.objectForKey(WORequest._IsmapCoords) != null) {
 				shouldTakeValuesFromRequest = false;
 			}
 		}
