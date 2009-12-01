@@ -159,6 +159,7 @@
                          <include name="**/Sources/" /> 
                          <exclude name="**/*Example*/**" /> 
                          <exclude name="**/Applications/**" /> 
+                         <exclude name="**/Tests/**" />
                     </dirset>
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
