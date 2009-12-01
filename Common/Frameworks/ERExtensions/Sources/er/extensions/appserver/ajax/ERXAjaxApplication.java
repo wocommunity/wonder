@@ -50,6 +50,34 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		}
 		return shouldIgnoreResults;
 	}
+		
+	/**
+	 * Ajax links have a ?_u=xxx&2309482093 in the url which makes it look like a form submission to WebObjects.
+	 * Therefore takeValues is called on every update even though many many updates aren't submits.  This method
+	 * checks to see if all you have is a _u or _r and an ismap (the #) param for form values.  If so, it's not 
+	 * a form submission and takeValues can be skipped.
+	 *
+	 * @see com.webobjects.appserver.WOApplication#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
+	 *
+	 * @param request
+	 * @param context
+	 */
+	@Override
+	public void takeValuesFromRequest(WORequest request, WOContext context) {
+		boolean shouldTakeValuesFromRequest = true;
+		if (!request.isMultipartFormData() && ERXAjaxApplication.isAjaxRequest(request)) {
+			NSDictionary formValues = request.formValues();
+			int formValuesCount = formValues.count();
+			if (formValuesCount == 2 && (formValues.containsKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID) || 
+					                     formValues.containsKey(ERXAjaxApplication.KEY_REPLACED)) && 
+					                     formValues.containsKey(WORequest._IsmapCoords)) {
+				shouldTakeValuesFromRequest = false;
+			}
+		}
+		if (shouldTakeValuesFromRequest) {
+			super.takeValuesFromRequest(request, context);
+		}
+	}
 	
 	/**
 	 * Overridden to allow for redirected responses.
