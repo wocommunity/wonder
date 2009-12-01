@@ -1,19 +1,158 @@
-er.extensions.ERXApplication.useEditingContextUnlocker=true
-er.extensions.ERXEC.defaultAutomaticLockUnlock=false
-er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
-er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
-er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
-java.awt.headless=true
+
+#
+# PROPERTY SET 1:
+#
+# This is one set of properties that can be used when launching the BugTracker application.
+#
 
 ERXLanguages = (en)
-#er.extensions.ERXLocalizer.availableLanguages=(English,German)
-er.extensions.ERXLocalizer.availableLanguages=(English)
-er.extensions.ERXLocalizer.frameworkSearchPath=("app", "BTBusinessLogic", "ERExtras", "ERDirectToWeb", "ERExtensions")
-er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","ValidationTemplate.strings")
-
-er.extensions.ERXJDBCAdaptor.className=er.extensions.jdbc.ERXJDBCAdaptor
-
 SeleniumTestsEnabled = true
-
 er.caching.server.host=127.0.0.1
 er.caching.server.port=12345
+er.extensions.ERXApplication.useEditingContextUnlocker=true
+er.extensions.ERXEC.defaultAutomaticLockUnlock=false
+er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
+er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
+er.extensions.ERXJDBCAdaptor.className=er.extensions.jdbc.ERXJDBCAdaptor
+er.extensions.ERXLocalizer.availableLanguages=(English)
+er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","ValidationTemplate.strings")
+er.extensions.ERXLocalizer.frameworkSearchPath=("app", "BTBusinessLogic", "ERExtras", "ERDirectToWeb", "ERExtensions")
+er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
+java.awt.headless=true
+
+#
+# PROPERTY SET 2:
+#
+# This set had been identified as "Properties.Derby"
+#
+
+# BugTracker.mailStore=pop3
+# BugTracker.password=
+# BugTracker.processMail=false
+# BugTracker.server=localhost
+# BugTracker.user=ak
+# dbConnectDriverGLOBAL=
+# dbConnectPluginGLOBAL=
+# dbConnectURLGLOBAL=jdbc:derby:bug
+# dbConnectUserGLOBAL=
+# dbEOPrototypesEntityGLOBAL=EOJDBCDerbyPrototypes
+# er.javamail.adminEmail=foo@localhost.com
+# er.migration.createTablesIfNecessary=true 
+# er.migration.migrateAtStartup=true
+
+#
+# PROPERTY SET 3:
+#
+# This set had been identified as "Properties.FrontBase"
+#
+
+# BugTracker.mailStore=pop3
+# BugTracker.password=
+# BugTracker.processMail=false
+# BugTracker.server=localhost
+# BugTracker.user=ak
+# dbConnectPasswordGLOBAL=
+# dbConnectURLGLOBAL=jdbc:FrontBase://localhost/bug
+# dbConnectUserGLOBAL=bug
+# dbEOPrototypesEntityGLOBAL=EOJDBCFrontBasePrototypes
+# er.javamail.adminEmail=foo@localhost.com
+# er.migration.createTablesIfNecessary=true 
+# er.migration.migrateAtStartup=true
+
+
+#
+# PROPERTY SET 4:
+#
+# This set had been identified as "Properties.Memory"
+#
+
+# BugTracker.mailStore=pop3
+# BugTracker.password=
+# BugTracker.processMail=false
+# BugTracker.server=localhost
+# BugTracker.user=ak
+# dbConnectAdaptorGLOBAL=Memory
+# dbConnectDriverGLOBAL=
+# dbConnectPluginGLOBAL=
+# dbConnectURLGLOBAL=Memory
+# dbConnectUserGLOBAL=
+# dbEOPrototypesEntityGLOBAL=EOJDBCMemoryPrototypes
+# er.javamail.adminEmail=foo@localhost.com
+# er.migration.createTablesIfNecessary=true 
+# er.migration.migrateAtStartup=true
+
+#
+# PROPERTY SET 5:
+#
+# This set had been identified as "Properties.PostgreSQL"
+#
+
+# BugTracker.mailStore=pop3
+# BugTracker.password=
+# BugTracker.processMail=false
+# BugTracker.server=localhost
+# BugTracker.user=ak
+# dbConnectDriverGLOBAL=org.postgresql.Driver
+# dbConnectPluginGLOBAL=Postgresql
+# dbConnectURLGLOBAL=jdbc:postgresql://localhost/bug
+# dbConnectUserGLOBAL=bug
+# dbEOPrototypesEntityGLOBAL=EOJDBCPostgresqlPrototypes
+# er.javamail.adminEmail=foo@localhost.com
+# er.migration.createTablesIfNecessary=true 
+# er.migration.migrateAtStartup=true
+
+#
+# PROPERTY SET 6:
+#
+# This set had been identified as "Properties.ak"
+#
+
+# BugTracker.mailStore=pop3
+# BugTracker.password=
+# BugTracker.processMail=false
+# BugTracker.server=localhost
+# BugTracker.user=ak
+# WODocumentRoot=/Volumes/Home/Sites/web
+# WOPort=2002
+# dbConnectDriverGLOBAL=org.postgresql.Driver
+# dbConnectPluginGLOBAL=Postgresql
+# dbConnectURLGLOBAL=jdbc:postgresql://localhost/bug
+# dbConnectUserGLOBAL=ak
+# dbEOPrototypesEntityGLOBAL=EOJDBCPostgresqlPrototypes
+# er.javamail.adminEmail=foo@localhost.com
+
+#
+# PROPERTY SET 7:
+#
+# This set had been identified as "Properties.mschrag"
+#
+
+# BugTracker.mailStore=pop3
+# BugTracker.password=
+# BugTracker.processMail=false
+# BugTracker.server=localhost
+# BugTracker.user=ak
+# dbConnectPasswordGLOBAL=
+# dbConnectURLGLOBAL=jdbc:FrontBase://localhost/bug
+# dbConnectUserGLOBAL=bug
+# dbEOPrototypesEntityGLOBAL=EOJDBCFrontBasePrototypes
+# er.javamail.adminEmail=foo@localhost.com
+# er.migration.createTablesIfNecessary=true 
+# er.migration.migrateAtStartup=true
+#
+#
+# PROPERTY SET 8:
+#
+# This set had been described in the documentation as working for MySQL:
+#
+# Note that you must have a MySQL database named "bug" to make this work.
+#
+
+# dbConnectURLGLOBAL=jdbc:mysql://localhost/bug?capitalizeTypenames=true
+# dbConnectUserGLOBAL=user
+# dbConnectPasswordGLOBAL=password
+# dbConnectPluginGLOBAL=
+# dbConnectDriverGLOBAL=
+# dbEOPrototypesEntityGLOBAL=EOJDBCMySQLPrototypes
+# er.javamail.adminEmail=foobar@domain.com
+
