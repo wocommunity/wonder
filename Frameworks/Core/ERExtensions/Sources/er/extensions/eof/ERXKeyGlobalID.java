@@ -72,7 +72,7 @@ public class ERXKeyGlobalID extends EOKeyGlobalID {
 
 	@Override
 	public boolean equals(Object obj) {
-		return _gid.equals(obj);
+		return obj instanceof ERXKeyGlobalID?((ERXKeyGlobalID)obj).globalID().equals(_gid):false;
 	}
 	
 	@Override
