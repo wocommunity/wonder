@@ -19,11 +19,7 @@ public class ERXKeyGlobalIDTest extends TestCase {
 		ec = new EOEditingContext();
 	}
 
-	// remove this when the next method does not fail
-	public void testOneForNow() { }
-	
-	// Remove the _ from the name of this method when this test passes.
-	public void _testEquals() {
+	public void testEquals() {
 
 		EOEnterpriseObject emp = ERXEOControlUtilities.createAndInsertObject(ec, "Employee");
 		EOEnterpriseObject co = ERXEOControlUtilities.createAndInsertObject(ec, "Company");

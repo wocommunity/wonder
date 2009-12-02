@@ -4,7 +4,6 @@ import java.util.Enumeration;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import er.erxtest.tests.ERXTestUtilities;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
