@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" kind="lib" path="Libraries/erxservletadaptor.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/junit.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/junit-4.8.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/icu4j-3_8_1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/log4j-1.2.14.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.5.0.jar"/>
