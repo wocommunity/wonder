@@ -16,7 +16,7 @@ public class ERXKeyGlobalIDTest extends TestCase {
 	private EOEditingContext ec;
 	
 	public void setUp() throws Exception {
-		ec = new EOEditingContext();
+		ec = ERXEC.newEditingContext();
 	}
 
 	public void testEquals() {
