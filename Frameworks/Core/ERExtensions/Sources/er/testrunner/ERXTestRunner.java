@@ -10,8 +10,6 @@ import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.runner.BaseTestRunner;
-import junit.runner.StandardTestSuiteLoader;
-import junit.runner.TestSuiteLoader;
 
 import org.apache.log4j.Logger;
 
@@ -35,14 +33,6 @@ public class ERXTestRunner extends BaseTestRunner {
         public ERXTestRunner(ERXTestListener extListener) {
             super();
             externalListener = extListener;
-	}
-	
-	/**
-	 * Always use the StandardTestSuiteLoader. Overridden from
-	 * BaseTestRunner.
-	 */
-	public TestSuiteLoader getLoader() {
-		return new StandardTestSuiteLoader();
 	}
 
 	public synchronized void addError(Test test, Throwable t) {
