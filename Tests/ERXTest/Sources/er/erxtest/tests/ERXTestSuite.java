@@ -14,7 +14,6 @@ public class ERXTestSuite {
   public static Test suite() {
     TestSuite suite = new TestSuite();
 
-
     suite.addTestSuite(com.webobjects.foundation.NSArrayTest.class);
     suite.addTestSuite(com.webobjects.foundation.NSDictionaryTest.class);
     suite.addTestSuite(com.webobjects.foundation.NSKeyValueCodingTest.class);
@@ -28,11 +27,13 @@ public class ERXTestSuite {
 
     suite.addTestSuite(er.extensions.eof.ERXECTest.class);
     suite.addTestSuite(er.extensions.eof.ERXEOAccessUtilitiesTest.class);
+    suite.addTestSuite(er.extensions.eof.ERXKeyGlobalIDTest.class);
     
     suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXThreadStorageTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXUtilitiesTest.class);
+    suite.addTestSuite(er.extensions.foundation.ERXValueUtilitiesTest.class);
  
     suite.addTestSuite(er.extensions.jdbc.MicrosoftSQLHelperTest.class);
 
