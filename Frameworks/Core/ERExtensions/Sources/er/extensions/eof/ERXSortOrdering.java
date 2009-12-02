@@ -5,6 +5,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.ERXExtensions;
+
 
 /**
  * <p>
@@ -91,6 +93,20 @@ public class ERXSortOrdering extends EOSortOrdering {
 	 */
 	public <T> void sort(NSMutableArray<T> array) {
 		ERXS.sort(array, this);
+	}
+	
+	/**
+	 * Provide the equals() method missing from EOSortOrder.
+	 * 
+	 * @param obj the Object to compare to
+	 * @return <code>true</code> if obj is an EOSortOrder with the same key and selector as this object
+	 */
+	public boolean equals(Object obj) {
+		if (obj instanceof EOSortOrdering) {
+			EOSortOrdering other = (EOSortOrdering)obj;
+			return ERXExtensions.safeEquals(key(), other.key()) && ERXExtensions.safeEquals(selector(), other.selector());
+		}
+		return false;
 	}
 
 	/**
