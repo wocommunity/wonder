@@ -28,7 +28,7 @@ er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 log4j.rootCategory=WARN, A1
 
 # A1 is set to be a FileAppender which outputs to System.out.
-log4j.appender.A1=org.apache.log4j.ConsoleAppender
+log4j.appender.A1=org.apache.log4j.varia.NullAppender
 
 # A1 uses PatternLayout.
 log4j.appender.A1.layout=er.extensions.logging.ERXPatternLayout
@@ -62,3 +62,8 @@ er.extensions.ERXNSLogLog4jBridge=INFO
 log4j.logger.er.extensions.ERXDatabaseContextDelegate=WARN
 log4j.logger.er.extensions.ERXConfigurationManager=INFO
 #log4j.logger.er.extensions.ERXApplication.RequestHandling=DEBUG
+
+# This is set for the ERXKeyGlobalIDTest class's testEquals() method. It would be
+# good if we did not have to set this....
+#
+er.extensions.ERXRaiseOnMissingEditingContextDelegate=false
