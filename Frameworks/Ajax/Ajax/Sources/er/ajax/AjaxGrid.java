@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.eof.ERXSortOrdering;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -413,9 +414,7 @@ public class AjaxGrid extends WOComponent {
 			valueForBinding(WILL_UPDATE_BINDING);
 		}
 
-		if (batchSize() != displayGroup().numberOfObjectsPerBatch()) {
-			displayGroup().setNumberOfObjectsPerBatch(batchSize());
-		}
+		updateBatchSize();
 	}
 
 	/**
@@ -677,18 +676,52 @@ public class AjaxGrid extends WOComponent {
 	}
 
 	/**
-	 * Updates sort orders on the display group
+	 * Updates sort orders on the display group.  This is public and static so that a display group can be pre-configured
+	 * for the AjaxGrid to avoid re-fetching (happens if there is a nav bar that gets rendered before the grid).
+	 * 
+	 * @param dg the WODisplayGroup to set the sortOrderings of
+	 * @param sortConfig NSArray of sorts from grid configuration (not EOSortOrderings)
 	 */
-	protected void updateDisplayGroupSort() {
-		NSArray sort = sortOrders();
-		NSMutableArray sortOrders = new NSMutableArray(sort.count());
-		for (int i = 0; i < sort.count(); i++) {
-			NSDictionary column = (NSDictionary) sort.objectAtIndex(i);
-			sortOrders.addObject(new EOSortOrdering((String) column.objectForKey(KEY_PATH), (SORT_ASCENDING.equals(column.objectForKey(SORT_DIRECTION)) ? EOSortOrdering.CompareCaseInsensitiveAscending : EOSortOrdering.CompareCaseInsensitiveDescending)));
+	public static void updateDisplayGroupSort(WODisplayGroup dg, NSArray sortConfig) {
+		NSMutableArray sortOrders = new NSMutableArray(sortConfig.count());
+		for (int i = 0; i < sortConfig.count(); i++) {
+			NSDictionary column = (NSDictionary) sortConfig.objectAtIndex(i);
+			sortOrders.addObject(new ERXSortOrdering((String) column.objectForKey(KEY_PATH), (SORT_ASCENDING.equals(column.objectForKey(SORT_DIRECTION)) ? EOSortOrdering.CompareCaseInsensitiveAscending : EOSortOrdering.CompareCaseInsensitiveDescending)));
 		}
 
-		displayGroup().setSortOrderings(sortOrders);
-		displayGroup().updateDisplayedObjects();
+		// Only set this if there has been an actual change to avoid discarding fetched objects
+		if (! sortOrders.equals(dg.sortOrderings()) ) {
+			dg.setSortOrderings(sortOrders);
+			dg.updateDisplayedObjects();
+		}
+	}
+	
+	/**
+	 * Updates sort orders on the display group.
+	 */
+	protected void updateDisplayGroupSort() {
+		updateDisplayGroupSort(displayGroup(), sortOrders());
+	}
+	
+	
+	/**
+	 * Updates numberOfObjectsPerBatch on the display group.   This is public and static so that a display group can be pre-configured
+	 * for the AjaxGrid to avoid re-fetching (happens if there is a nav bar that gets rendered before the grid).
+	 * 
+	 * @param dg the WODisplayGroup to set the sortOrderings of
+	 * @param batchSize batch size from grid configuration (not EOSortOrderings)
+	 */
+	public static void updateBatchSize(WODisplayGroup dg, int batchSize) {
+		if (dg.numberOfObjectsPerBatch() != batchSize) {
+			dg.setNumberOfObjectsPerBatch(batchSize);
+		}
+	}
+	
+	/**
+	 * Updates numberOfObjectsPerBatch on the display group
+	 */
+	protected void updateBatchSize() {
+		updateBatchSize(displayGroup(), batchSize());
 	}
 
 	/**
@@ -699,10 +732,7 @@ public class AjaxGrid extends WOComponent {
 		if (displayGroup == null) {
 			displayGroup = (WODisplayGroup) valueForBinding(DISPLAY_GROUP_BINDING);
 			updateDisplayGroupSort();
-
-			if (displayGroup().numberOfObjectsPerBatch() != batchSize()) {
-				displayGroup().setNumberOfObjectsPerBatch(batchSize());
-			}
+			updateBatchSize();
 		}
 
 		return displayGroup;
