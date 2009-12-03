@@ -2,9 +2,9 @@
 // Removed dynamic loading of scripts according to:
 // http://www.boogdesign.com/b2evo/index.php/a/2008/05/27/compressed_prototype_scriptaculous
 
-// script.aculo.us scriptaculous.js v1.8.2, Tue Nov 18 18:30:58 +0100 2008
+// script.aculo.us scriptaculous.js v1.8.3, Thu Oct 08 11:23:33 +0200 2009
 
-// Copyright (c) 2005-2008 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
+// Copyright (c) 2005-2009 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -28,7 +28,19 @@
 // For details, see the script.aculo.us web site: http://script.aculo.us/
 
 var Scriptaculous = {
-  Version: '1.8.2',
+  Version: '1.8.3',
+//  require: function(libraryName) {
+//    try{
+//      // inserting via DOM fails in Safari 2.0, so brute force approach
+//      document.write('<script type="text/javascript" src="'+libraryName+'"><\/script>');
+//    } catch(e) {
+//      // for xhtml+xml served content, fall back to DOM methods
+//      var script = document.createElement('script');
+//      script.type = 'text/javascript';
+//      script.src = libraryName;
+//      document.getElementsByTagName('head')[0].appendChild(script);
+//    }
+//  },
   REQUIRED_PROTOTYPE: '1.6.0.3',
   load: function() {
     function convertVersionString(versionString) {
@@ -44,6 +56,16 @@ var Scriptaculous = {
         convertVersionString(Scriptaculous.REQUIRED_PROTOTYPE)))
        throw("script.aculo.us requires the Prototype JavaScript framework >= " +
         Scriptaculous.REQUIRED_PROTOTYPE);
+
+//    var js = /scriptaculous\.js(\?.*)?$/;
+//    $$('head script[src]').findAll(function(s) {
+//      return s.src.match(js);
+//    }).each(function(s) {
+//      var path = s.src.replace(js, ''),
+//      includes = s.src.match(/\?.*load=([a-z,]*)/);
+//      (includes ? includes[1] : 'builder,effects,dragdrop,controls,slider,sound').split(',').each(
+//       function(include) { Scriptaculous.require(path+include+'.js') });
+//    });
   }
 };
 
