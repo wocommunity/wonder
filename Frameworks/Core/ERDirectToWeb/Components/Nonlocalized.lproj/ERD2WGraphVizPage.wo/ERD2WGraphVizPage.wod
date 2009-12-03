@@ -1,0 +1,48 @@
+Entities : WORepetition {
+	list = d2wContext.visibleEntityNames;
+	item = entityName;
+}
+
+EntityName : WOString {
+	value = d2wContext.entity.name;
+}
+
+NodeType : WOString {
+	value = nodeType;
+	escapeHTML = false;
+}
+
+NodeID : WOString {
+	value = nodeID;
+}
+
+DestinationEntityName : WOString {
+	value = d2wContext.smartRelationship.destinationEntity.name;
+}
+
+DestinationRelationshipName : WOString {
+	value = d2wContext.smartRelationship.anyInverseRelationship.name;
+}
+
+Attributes : WORepetition {
+	list = attributes;
+	item = d2wContext.propertyKey;
+}
+
+AttributeName : WOString {
+	value = d2wContext.propertyKey;
+}
+
+ToOneRelationships : WORepetition {
+	list = toOneRelationships;
+	item = d2wContext.propertyKey;
+}
+
+ToManyRelationships : WORepetition {
+	list = toManyRelationships;
+	item = d2wContext.propertyKey;
+}
+
+RelationshipName : WOString {
+	value = d2wContext.propertyKey;
+}
