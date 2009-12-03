@@ -1516,8 +1516,9 @@ public class ERXSQLHelper {
 	}
 	
 	public static ERXSQLHelper newSQLHelper(EOAdaptor adaptor) {
-		if (adaptor instanceof JDBCAdaptor)
+		if (adaptor instanceof JDBCAdaptor) {
 			return ERXSQLHelper.newSQLHelper((JDBCAdaptor)adaptor);
+		}
 			
 		// MS: Hack to support non JDBC adaptor migrations
 		return new NoSQLHelper();
