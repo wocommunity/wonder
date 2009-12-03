@@ -16,3 +16,6 @@ prototype.js
 ibox.js:
 * added _pub.init function to support reinitializing iBox
 * added X-Requested-With header so iBox requests are recognized as Ajax requests
+
+controls.js
+* replaced Autocompleter.markPrevious, markNext, added line to getEntry (Wonder-406) 
