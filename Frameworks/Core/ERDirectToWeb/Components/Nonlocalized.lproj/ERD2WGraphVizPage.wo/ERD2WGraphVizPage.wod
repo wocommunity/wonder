@@ -43,6 +43,11 @@ ToManyRelationships : WORepetition {
 	item = d2wContext.propertyKey;
 }
 
+RelationshipTag : WOString {
+	value = tag;
+	escapeHTML = false;
+}
+
 RelationshipName : WOString {
 	value = d2wContext.propertyKey;
 }
