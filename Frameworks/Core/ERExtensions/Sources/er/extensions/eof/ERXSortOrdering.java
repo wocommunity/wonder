@@ -102,8 +102,8 @@ public class ERXSortOrdering extends EOSortOrdering {
 	 * @return <code>true</code> if obj is an EOSortOrder with the same key and selector as this object
 	 */
 	public boolean equals(Object obj) {
-		if (obj instanceof EOSortOrdering) {
-			EOSortOrdering other = (EOSortOrdering)obj;
+		if (obj instanceof ERXSortOrdering) {
+			ERXSortOrdering other = (ERXSortOrdering)obj;
 			return ERXExtensions.safeEquals(key(), other.key()) && ERXExtensions.safeEquals(selector(), other.selector());
 		}
 		return false;
