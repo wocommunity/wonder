@@ -181,10 +181,10 @@ var AjaxUtils = {
 	toggleClassName: function(element, className, toggled) {
 		element = $(element);
 		if (toggled) {
-			element.addClassName(className);
+			Element.addClassName(element, className);
 		}
 		else {
-			element.removeClassName(className);
+			Element.removeClassName(element, className);
 		}
 	}
 };
@@ -831,14 +831,14 @@ var AjaxHintedText = {
         e.setAttribute('default', unescape(e.getAttribute('default')));
         e.showDefaultValue = function() {
             if(e.value == "") {
-                e.addClassName('ajax-hinted-text-with-default');
+                Element.addClassName(e, 'ajax-hinted-text-with-default');
                 e.value = e.getAttribute('default');
             } else {
-                e.removeClassName('ajax-hinted-text-with-default');
+                Element.removeClassName(e, 'ajax-hinted-text-with-default');
             }
         }
         e.showTextValue = function() {
-            e.removeClassName('ajax-hinted-text-with-default');
+            Element.removeClassName(e, 'ajax-hinted-text-with-default');
             if(e.value.replace(/[\r\n]/g, "") == e.getAttribute('default').replace(/[\r\n]/g, "")) {
                 e.value = "";
             }
@@ -916,7 +916,7 @@ var Hoverable = {
 	
   over: function(event) {
   	var element = this;
-    element.addClassName("hover");
+    Element.addClassName(element, "hover");
     if (element['hoverCount'] == undefined) {
       element['hoverCount'] = 0;
     }
@@ -933,7 +933,7 @@ var Hoverable = {
   _end: function(hoverCount) {
     var element = this;
     if (element['hoverCount'] == hoverCount) {
-      element.removeClassName("hover");
+      Element.removeClassName(element, "hover");
     }
   },
 
@@ -976,7 +976,7 @@ var AjaxBusy = {
 	     	var updateContainer = AjaxBusy.requestContainer(request);
 	     	if (!watchContainerID || (updateContainer && updateContainer.id == watchContainerID)) {
 			  	if (busyClass && updateContainer) {
-						updateContainer.addClassName(busyClass);
+						Element.addClassName(updateContainer, busyClass);
 			   	}
 			   	
 			   	if (busyAnimationElement && $(busyAnimationElement)) {
@@ -993,7 +993,7 @@ var AjaxBusy = {
 	     	var updateContainer = AjaxBusy.requestContainer(request);
 	     	if (!watchContainerID || (updateContainer && updateContainer.id == watchContainerID)) {
 			  	if (busyClass && updateContainer) {
-						updateContainer.removeClassName(busyClass);
+						Element.removeClassName(updateContainer, busyClass);
 					}
 					
 					if (busyAnimationElement && $(busyAnimationElement)) {
