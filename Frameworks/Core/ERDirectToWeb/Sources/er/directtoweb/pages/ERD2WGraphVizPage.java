@@ -48,6 +48,10 @@ public class ERD2WGraphVizPage extends ERD2WPage {
         return result;
     }
     
+    public String tag() {
+        return "<" + propertyKey() + ">";
+    }
+    
     public String nodeType() {
         return "->";
     }
