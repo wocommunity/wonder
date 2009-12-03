@@ -1,18 +1,28 @@
 package er.directtoweb.pages;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXApplication;
-
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXRuntimeUtilities;
+import er.extensions.foundation.ERXRuntimeUtilities.Result;
+import er.extensions.foundation.ERXRuntimeUtilities.TimeoutException;
 
 /**
- * Creates a GrahpViz page for those that needs such trivial tools.
+ * Creates a GrahpViz page for those that needs such trivial tools. Call up with
+ * the ERD2WDirectAction and use visibleEntityNames to restrict based on page
+ * config name.
+ * 
  * @author ak
- *
+ * 
  */
 public class ERD2WGraphVizPage extends ERD2WPage {
     
@@ -74,5 +84,31 @@ public class ERD2WGraphVizPage extends ERD2WPage {
             super.appendToResponse(response, context);
         }
         response.setHeader("text/plain", "content-type");
+        String format = context.request().stringFormValueForKey("format");
+        if (format != null) {
+            String dot = response.contentString();
+            File f = null;
+            try {
+                f = File.createTempFile("GVTemp", "dot");
+                ERXFileUtilities.stringToFile(dot, f);
+                Result result = ERXRuntimeUtilities.execute(new String[] { "/usr/local/bin/dot", "-T" + format, "", f.getAbsolutePath() }, null, null, 0);
+                response.setContent(new NSData(result.getResponse()));
+                if (format.equals("svg")) {
+                    response.setHeader("image/svg+xml", "content-type");
+                } else if (format.equals("pdf")) {
+                    response.setHeader("application/pdf", "content-type");
+                } else {
+                    throw new IllegalArgumentException("Only handles 'pdf' and 'svg'");
+                }
+            } catch (IOException ex) {
+                log.error(ex, ex);
+            } catch (TimeoutException ex) {
+                log.error(ex, ex);
+            } finally {
+                if(f != null) {
+                    f.delete();
+                }
+            }
+        }
     }
 }
