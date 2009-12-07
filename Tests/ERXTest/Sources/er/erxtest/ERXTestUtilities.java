@@ -6,6 +6,7 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.eof.ERXEC;
@@ -36,7 +37,7 @@ public class ERXTestUtilities {
 
 			EOEditingContext ec = ERXEC.newEditingContext();
 			
-			for (EOModel model: EOModelGroup.defaultGroup().models()) {
+			for (EOModel model: (NSArray<EOModel>)EOModelGroup.defaultGroup().models()) {
 				model.setAdaptorName("JDBC");
 				EODatabaseContext.forceConnectionWithModel(model, conn, ec);
 			}
