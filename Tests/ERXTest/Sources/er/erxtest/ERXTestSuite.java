@@ -40,19 +40,13 @@ public class ERXTestSuite {
     
     suite.addTestSuite(er.directtoweb.ERD2WModelTest.class);
 
-    // TODO - This seems to be causing an intermittent error, every other time it is run. Why? -rrk
-    //
-    // suite.addTestSuite(er.erxtest.tests.ERXECLockingTestCase.class);
+    suite.addTestSuite(er.erxtest.tests.ERXECLockingTestCase.class);
 
     suite.addTestSuite(er.erxtest.tests.ERXGenericRecordUpdateInverseRelationshipsTest.class);
     
     // TODO - How long is this supposed to take to run? Is it hanging?
     //
     //suite.addTestSuite(ERXExpiringCacheTestCase.class);
-
-    // TODO Why are these tests not working? Were they working before? -rrk
-    //
-    // suite.addTestSuite(ERXObjectStoreCoordinatorSynchronizerTestCase.class);
 
     return suite;
   }
