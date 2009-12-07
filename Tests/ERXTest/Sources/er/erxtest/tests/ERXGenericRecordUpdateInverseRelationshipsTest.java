@@ -3,6 +3,7 @@ package er.erxtest.tests;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.erxtest.ERXTestCase;
 import er.erxtest.model.Company;
 import er.erxtest.model.Employee;
 import er.extensions.eof.ERXEC;

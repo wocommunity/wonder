@@ -1,4 +1,4 @@
-package er.erxtest.tests;
+package er.erxtest;
 
 import junit.framework.TestCase;
 

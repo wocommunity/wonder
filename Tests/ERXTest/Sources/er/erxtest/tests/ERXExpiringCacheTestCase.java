@@ -1,4 +1,5 @@
 package er.erxtest.tests;
+import er.erxtest.ERXTestCase;
 import er.extensions.foundation.ERXExpiringCache;
 
 public class ERXExpiringCacheTestCase extends ERXTestCase {

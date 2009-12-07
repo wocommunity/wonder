@@ -1,8 +1,7 @@
-package er.erxtest.tests;
+package er.erxtest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import er.erxtest.Application;
 import er.extensions.ERXExtensions;
 
 public class ERXTestSuite {
@@ -39,7 +38,7 @@ public class ERXTestSuite {
 
     suite.addTestSuite(er.extensions.appserver.ERXApplicationTest.class);
     
-    suite.addTestSuite(er.erxtest.d2w.ERD2WModelTest.class);
+    suite.addTestSuite(er.directtoweb.ERD2WModelTest.class);
 
     // TODO - This seems to be causing an intermittent error, every other time it is run. Why? -rrk
     //

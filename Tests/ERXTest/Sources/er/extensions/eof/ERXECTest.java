@@ -5,7 +5,7 @@ import junit.framework.Assert;
 
 import com.webobjects.eocontrol.EOEditingContext;
 
-import er.erxtest.tests.ERXTestCase;
+import er.erxtest.ERXTestCase;
 
 public class ERXECTest extends ERXTestCase {
 

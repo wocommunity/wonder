@@ -1,4 +1,4 @@
-package er.erxtest.tests;
+package er.extensions.foundation;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import junit.framework.AssertionFailedError;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
+import er.erxtest.ERXTestCase;
 import er.extensions.foundation.ERXProperties;
 
 public class ERXPropertiesTest extends ERXTestCase {

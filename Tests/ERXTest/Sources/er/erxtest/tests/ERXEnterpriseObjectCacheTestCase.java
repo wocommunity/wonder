@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
+import er.erxtest.ERXTestCase;
 import er.erxtest.model.Company;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEnterpriseObjectCache;

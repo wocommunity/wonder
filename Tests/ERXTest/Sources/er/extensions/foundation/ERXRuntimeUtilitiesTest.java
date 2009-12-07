@@ -1,7 +1,8 @@
-package er.erxtest.tests;
+package er.extensions.foundation;
 
 import java.io.IOException;
 
+import er.erxtest.ERXTestCase;
 import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXRuntimeUtilities.Result;
 import er.extensions.foundation.ERXRuntimeUtilities.TimeoutException;
