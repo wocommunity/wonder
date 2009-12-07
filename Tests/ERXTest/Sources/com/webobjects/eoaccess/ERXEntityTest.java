@@ -11,6 +11,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+import er.extensions.eof.ERXEC;
+
 /* Test the ERXEntity methods. These tests are extremely minimal.
  * This class exists in order to deal with some issues in inheritance, and
  * this system is not configured to use models that use inheritance yet.
@@ -44,18 +46,19 @@ public class ERXEntityTest extends TestCase {
 //
 //		model = EOModelGroup.defaultGroup().modelNamed(modelName);
 //		model.setConnectionDictionary(ERExtensionsTest.connectionDict(adaptorName));
-//
-//		ec = new EOEditingContext();
+
+		model = EOModelGroup.defaultGroup().modelNamed("ERXTest");
+		ec = ERXEC.newEditingContext();
 	}
 
 	public void testOne() { }
 	
-	public void _testConstructor() {
+	public void testConstructor() {
 		ERXEntity entity = new ERXEntity();
 		Assert.assertNotNull(entity);
 	}
 
-	public void _testPlistConstructor() {
+	public void testPlistConstructor() {
 		URL entityUrl = null;        	
 		try {
 			entityUrl = new java.net.URL(model.pathURL()+"/Company.plist");
@@ -73,7 +76,7 @@ public class ERXEntityTest extends TestCase {
 		//Assert.assertNotNull(new ERXEntity(null, null));
 	}
 
-	public void _testHasExternalName() {
+	public void testHasExternalName() {
 		URL entityUrl = null;        	
 		try {
 			entityUrl = new java.net.URL(model.pathURL()+"/Company.plist");
@@ -86,7 +89,7 @@ public class ERXEntityTest extends TestCase {
 		Assert.assertTrue(erxentity.hasExternalName());
 	}
 
-	public void _testSetClassDescription() {
+	public void testSetClassDescription() {
 
 		EOEntity entity1 = EOModelGroup.defaultGroup().entityNamed("Company");
 		EOClassDescription desc = entity1.classDescriptionForInstances();

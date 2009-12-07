@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import er.erxtest.ERXTestCase;
 
-public class NSSetTest extends BaseTestCase {
+
+public class NSSetTest extends ERXTestCase {
 
 	public void testNSSet() {
 		NSSet<String> set = new NSSet<String>();
