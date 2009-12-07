@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import er.erxtest.ERXTestCase;
 
-public class NSMutableSetTest extends BaseTestCase {
+
+public class NSMutableSetTest extends ERXTestCase {
 
 	public void testNSMutableSet() {
 		NSMutableSet<?> set = new NSMutableSet<Object>();

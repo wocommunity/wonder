@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.webobjects.foundation.NSComparator.ComparisonException;
 
-public class NSMutableArrayTest extends BaseTestCase {
+import er.erxtest.ERXTestCase;
+
+public class NSMutableArrayTest extends ERXTestCase {
 
 	public void testNSMutableArray() {
 		NSMutableArray<?> array = new NSMutableArray<Object>();

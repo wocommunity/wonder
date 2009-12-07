@@ -3,7 +3,9 @@ package com.webobjects.foundation;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NSMutableDictionaryTest extends BaseTestCase {
+import er.erxtest.ERXTestCase;
+
+public class NSMutableDictionaryTest extends ERXTestCase {
 
 	public void testNSMutableDictionary() {
 		NSMutableDictionary<?, ?> dict = new NSMutableDictionary<Object, Object>();

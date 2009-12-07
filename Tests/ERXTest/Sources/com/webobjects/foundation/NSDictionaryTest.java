@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public class NSDictionaryTest extends BaseTestCase {
+import er.erxtest.ERXTestCase;
+
+public class NSDictionaryTest extends ERXTestCase {
 
 	public void testNSDictionary() {
 		NSDictionary<Object, Object> dict = new NSDictionary<Object, Object>();

@@ -13,7 +13,9 @@ import java.util.Vector;
 
 import com.webobjects.foundation.NSComparator.ComparisonException;
 
-public class NSArrayTest extends BaseTestCase {
+import er.erxtest.ERXTestCase;
+
+public class NSArrayTest extends ERXTestCase {
 
   public void testNSArray() {
     NSArray<Object> array = new NSArray<Object>();
