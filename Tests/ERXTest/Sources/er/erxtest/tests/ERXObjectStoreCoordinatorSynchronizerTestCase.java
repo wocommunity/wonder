@@ -2,6 +2,8 @@ package er.erxtest.tests;
 import java.util.Enumeration;
 
 import junit.framework.AssertionFailedError;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -22,6 +24,13 @@ import er.extensions.foundation.ERXRandomGUID;
  * @author mschrag
  */
 public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
+
+    public static Test suite() throws Exception {
+            TestSuite suite = new TestSuite();
+            suite.addTestSuite(ERXObjectStoreCoordinatorSynchronizerTestCase.class);
+            return suite;
+    }
+
   public void testPool() {
     assertNotNull(ERXObjectStoreCoordinatorPool._pool());
     assertNotNull(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
