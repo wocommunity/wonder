@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSForwardException;
 
+import er.erxtest.ERXTestCase;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
 

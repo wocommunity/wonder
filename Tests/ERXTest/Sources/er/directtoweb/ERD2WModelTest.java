@@ -1,4 +1,4 @@
-package er.erxtest.d2w;
+package er.directtoweb;
 
 import junit.framework.TestCase;
 

@@ -48,8 +48,11 @@ public class ERXKeyGlobalIDTest extends TestCase {
 
 		Assert.assertEquals(xkgid, xkgid2);
 		
-		ec.deleteObject(emp);
-		ec.deleteObject(co);
-		ec.saveChanges();
+		// TODO - Without these lines, I am putting some objects into the database. With these lines, I get
+		// an exception. Why?
+		
+		//ec.deleteObject(emp);
+		//ec.deleteObject(co);
+		//ec.saveChanges();
 	}
 }

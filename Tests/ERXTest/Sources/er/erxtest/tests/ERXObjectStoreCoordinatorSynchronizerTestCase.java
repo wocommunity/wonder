@@ -8,6 +8,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.foundation.NSArray;
 
+import er.erxtest.ERXTestCase;
 import er.erxtest.model.Company;
 import er.erxtest.model.Employee;
 import er.extensions.eof.ERXEC;
