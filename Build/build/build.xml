@@ -495,18 +495,18 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ValidityModeler" />
             <param name="project.dir" value="Applications/ValidityModeler" />
-            <param name="wo.external.root.bundles" value="Validity" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Validity" />
         </antcall>
     </target>
 
     <target name="ValidityExample.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="er.validexample.Application" />
             <param name="project.name" value="ValidityExample" />
             <param name="project.dir" value="Examples/Misc/ValidityExample" />
 
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Validity" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Validity/ERSelenium" />
         </antcall>
     </target>
 	
