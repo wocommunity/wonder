@@ -506,7 +506,7 @@
             <param name="project.name" value="ValidityExample" />
             <param name="project.dir" value="Examples/Misc/ValidityExample" />
 
-            <param name="wo.external.root.bundles" value="Validity" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Validity" />
         </antcall>
     </target>
 	
