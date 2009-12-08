@@ -32,27 +32,33 @@ SubmitButton1: WOSubmitButton {
 
 TextField1: WOTextField {
 	value = newUser.firstName;
+	id = "firstName";
 }
 
 TextField2: WOTextField {
 	value = newUser.username;
+	id = "username";
 }
 
 TextField3: WOTextField {
 	value = newUser.lastName;
+	id = "lastName";
 }
 
 TextField4: WOTextField {
 	value = newUser.password;
+	id = "password";
 }
 
 TextField5: WOTextField {
 	value = newUser.number;
 	numberformat = "0.00";
+	id = "number";
 }
 
 TextField6: WOTextField {
 	value = verifyPassword;
+	id = "passwordVerify";
 }
 
 com.gammastream.validity.GSVExceptionViewer1: com.gammastream.validity.GSVExceptionViewer {

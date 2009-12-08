@@ -1,3 +1,4 @@
+package er.validexample;
 //
 // Main.java: Class file for WO Component 'Main'
 // Project ValidityExample

@@ -1,3 +1,4 @@
+package er.validexample;
 //
 // CustomRule.java
 // Project ValidityExample

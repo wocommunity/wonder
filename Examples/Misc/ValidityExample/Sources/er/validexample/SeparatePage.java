@@ -1,3 +1,4 @@
+package er.validexample;
 //
 // SeparatePage.java: Class file for WO Component 'SeparatePage'
 // Project ValidityExample
@@ -11,11 +12,12 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSValidation;
+
 public class SeparatePage extends GSVExceptionableComponent {
 
-    EOClassDescription description;
-    User  newUser;
-    boolean success = false;
+    public EOClassDescription description;
+    public User  newUser;
+    public boolean success = false;
     public String verifyPassword = null;
 
 
@@ -59,13 +61,7 @@ public class SeparatePage extends GSVExceptionableComponent {
     }
     
     
-    public Main goToHomePage()
-    {
-        Main nextPage = (Main)pageWithName("Main");
-
-        // Initialize your component here
-
-        return nextPage;
+    public Main goToHomePage() {
+        return (Main)pageWithName("Main");
     }
-
 }
