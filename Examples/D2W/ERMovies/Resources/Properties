@@ -26,7 +26,7 @@ er.javamail.smtpPassword=
 # Log4j Configuration
 
 # Set root category priority to DEBUG and its only appender to A1.
-log4j.rootCategory=DEBUG, A1
+log4j.rootCategory=INFO, A1
 
 # A1 is set to be a FileAppender which outputs to System.out.
 log4j.appender.A1=org.apache.log4j.ConsoleAppender
@@ -51,7 +51,7 @@ log4j.logger.er=INFO
 
 # ERExtensions
 # Transaction - Switching this to debug will start the sql ouputting.
-log4j.logger.er.transaction.adaptor.EOAdaptorDebugEnabled=DEBUG
+log4j.logger.er.transaction.adaptor.EOAdaptorDebugEnabled=INFO
 
 # Fixes - Turning this on will show all the models that are loaded
 log4j.logger.er.extensions.fixes.ERSharedEOLoader=INFO
