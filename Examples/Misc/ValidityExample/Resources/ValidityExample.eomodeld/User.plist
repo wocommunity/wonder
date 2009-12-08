@@ -2,7 +2,7 @@
     attributes = (
         {
             allowsNull = Y; 
-            columnName = FIRSTNAME_; 
+            columnName = "FIRSTNAME_"; 
             externalType = char; 
             name = firstName; 
             valueClassName = NSString; 
@@ -10,7 +10,7 @@
         }, 
         {
             allowsNull = Y; 
-            columnName = LASTNAME_; 
+            columnName = "LASTNAME_"; 
             externalType = char; 
             name = lastName; 
             valueClassName = NSString; 
@@ -18,23 +18,23 @@
         }, 
         {
             allowsNull = Y; 
-            columnName = PASSWORD_; 
+            columnName = "PASSWORD_"; 
             externalType = char; 
             name = password; 
             valueClassName = NSString; 
             width = 200; 
         }, 
         {
-            columnName = ROWID_; 
+            columnName = "ROWID_"; 
             externalType = int; 
-            name = rowid_; 
+            name = "rowid_"; 
             valueClassName = NSNumber; 
             valueType = i; 
             width = 4; 
         }, 
         {
             allowsNull = Y; 
-            columnName = USERNAME_; 
+            columnName = "USERNAME_"; 
             externalType = char; 
             name = username; 
             valueClassName = NSString; 
@@ -42,18 +42,18 @@
         }, 
         {
             allowsNull = Y; 
-            columnName = NUMBER_; 
+            columnName = "NUMBER_"; 
             externalType = int; 
             name = number; 
             valueClassName = NSNumber; 
             valueType = i; 
         }
     ); 
-    attributesUsedForLocking = (rowid_); 
-    className = User; 
+    attributesUsedForLocking = ("rowid_"); 
+    className = "er.validexample.User"; 
     classProperties = (username, password, firstName, lastName, number); 
-    externalName = USER_; 
+    externalName = "USER_"; 
     fetchSpecificationDictionary = {}; 
     name = User; 
-    primaryKeyAttributes = (rowid_); 
+    primaryKeyAttributes = ("rowid_"); 
 }

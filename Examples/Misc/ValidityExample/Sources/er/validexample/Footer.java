@@ -1,3 +1,4 @@
+package er.validexample;
 //
 // Footer.java: Class file for WO Component 'Footer'
 // Project ValidityExample

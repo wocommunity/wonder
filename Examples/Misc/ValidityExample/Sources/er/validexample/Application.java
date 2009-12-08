@@ -1,3 +1,4 @@
+package er.validexample;
 //
 // Application.java
 // Project ValidityExample
@@ -5,12 +6,12 @@
 // Created by msacket on Mon Jun 11 2001
 //
 
-import com.webobjects.appserver.WOApplication;
+import er.extensions.appserver.ERXApplication;
 
-public class Application extends WOApplication {
+public class Application extends ERXApplication {
     
     public static void main(String argv[]) {
-        WOApplication.main(argv, Application.class);
+    	ERXApplication.main(argv, Application.class);
     }
 
     public Application() {
@@ -18,6 +19,5 @@ public class Application extends WOApplication {
         System.out.println("Welcome to " + this.name() + "!");
         
         /* ** Put your application initialization code here ** */
-    }
-    
+    }    
 }

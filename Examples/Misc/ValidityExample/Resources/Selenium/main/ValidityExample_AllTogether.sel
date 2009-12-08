@@ -1,0 +1,190 @@
+
+Test for ValidityExample page
+
+|open|/|
+
+|click|link=All error messages together.||
+|pause|1200||
+|verifyTextPresent|This form will display the error messages together.||
+
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextPresent|A last name must be provided.||
+|verifyTextPresent|The Password and verified password did not match or were left blank.||
+|verifyTextPresent|A username must be provided.||
+|verifyTextPresent|The username must be at least 5 characters long.||
+|verifyTextPresent|The username may only contain letters and numbers.||
+|verifyTextPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextPresent|A password must be provided.||
+|verifyTextPresent|The password must be at least 5 characters long.||
+|verifyTextPresent|The password may only contain letters and numbers.||
+
+|click|firstName|
+|type|firstName|aaa|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextPresent|A last name must be provided.||
+|verifyTextPresent|The Password and verified password did not match or were left blank.||
+|verifyTextPresent|A username must be provided.||
+|verifyTextPresent|The username must be at least 5 characters long.||
+|verifyTextPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextPresent|A password must be provided.||
+|verifyTextPresent|The password must be at least 5 characters long.||
+|verifyTextPresent|The password may only contain letters and numbers.||
+
+|click|lastName|
+|type|lastName|bbb|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextNotPresent|A last name must be provided.||
+|verifyTextPresent|The Password and verified password did not match or were left blank.||
+|verifyTextPresent|A username must be provided.||
+|verifyTextPresent|The username must be at least 5 characters long.||
+|verifyTextPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextPresent|A password must be provided.||
+|verifyTextPresent|The password must be at least 5 characters long.||
+|verifyTextPresent|The password may only contain letters and numbers.||
+
+|click|username|
+|type|username|c_c|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextNotPresent|A last name must be provided.||
+|verifyTextPresent|The Password and verified password did not match or were left blank.||
+|verifyTextNotPresent|A username must be provided.||
+|verifyTextPresent|The username must be at least 5 characters long.||
+|verifyTextPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextPresent|A password must be provided.||
+|verifyTextPresent|The password must be at least 5 characters long.||
+|verifyTextPresent|The password may only contain letters and numbers.||
+
+|click|username|
+|type|username|ccc|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextNotPresent|A last name must be provided.||
+|verifyTextPresent|The Password and verified password did not match or were left blank.||
+|verifyTextNotPresent|A username must be provided.||
+|verifyTextPresent|The username must be at least 5 characters long.||
+|verifyTextNotPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextPresent|A password must be provided.||
+|verifyTextPresent|The password must be at least 5 characters long.||
+|verifyTextPresent|The password may only contain letters and numbers.||
+
+|click|username|
+|type|username|ccccc|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextNotPresent|A last name must be provided.||
+|verifyTextPresent|The Password and verified password did not match or were left blank.||
+|verifyTextNotPresent|A username must be provided.||
+|verifyTextNotPresent|The username must be at least 5 characters long.||
+|verifyTextNotPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextPresent|A password must be provided.||
+|verifyTextPresent|The password must be at least 5 characters long.||
+|verifyTextPresent|The password may only contain letters and numbers.||
+
+|click|password|
+|type|password|ddd|
+|click|passwordVerify|
+|type|passwordVerify|eee|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextNotPresent|A last name must be provided.||
+|verifyTextPresent|The Password and verified password did not match or were left blank.||
+|verifyTextNotPresent|A username must be provided.||
+|verifyTextNotPresent|The username must be at least 5 characters long.||
+|verifyTextNotPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextNotPresent|A password must be provided.||
+|verifyTextPresent|The password must be at least 5 characters long.||
+|verifyTextNotPresent|The password may only contain letters and numbers.||
+
+|click|password|
+|type|password|dd_dd|
+|click|passwordVerify|
+|type|passwordVerify|dd_dd|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextNotPresent|A last name must be provided.||
+|verifyTextNotPresent|The Password and verified password did not match or were left blank.||
+|verifyTextNotPresent|A username must be provided.||
+|verifyTextNotPresent|The username must be at least 5 characters long.||
+|verifyTextNotPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextNotPresent|A password must be provided.||
+|verifyTextNotPresent|The password must be at least 5 characters long.||
+|verifyTextPresent|The password may only contain letters and numbers.||
+
+|click|password|
+|type|password|ddddd|
+|click|passwordVerify|
+|type|passwordVerify|ddddd|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextNotPresent|A last name must be provided.||
+|verifyTextNotPresent|The Password and verified password did not match or were left blank.||
+|verifyTextNotPresent|A username must be provided.||
+|verifyTextNotPresent|The username must be at least 5 characters long.||
+|verifyTextNotPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextNotPresent|A password must be provided.||
+|verifyTextNotPresent|The password must be at least 5 characters long.||
+|verifyTextNotPresent|The password may only contain letters and numbers.||
+
+|click|number|
+|type|number|101|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextNotPresent|A last name must be provided.||
+|verifyTextNotPresent|The Password and verified password did not match or were left blank.||
+|verifyTextNotPresent|A username must be provided.||
+|verifyTextNotPresent|The username must be at least 5 characters long.||
+|verifyTextNotPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextPresent|Please be within -100 and 100||
+|verifyTextNotPresent|A password must be provided.||
+|verifyTextNotPresent|The password must be at least 5 characters long.||
+|verifyTextNotPresent|The password may only contain letters and numbers.||
+
+|click|number|
+|type|number|99|
+|click|3.3.15|
+|pause|1200|
+
+|verifyTextNotPresent|A last name must be provided.||
+|verifyTextNotPresent|The Password and verified password did not match or were left blank.||
+|verifyTextNotPresent|A username must be provided.||
+|verifyTextNotPresent|The username must be at least 5 characters long.||
+|verifyTextNotPresent|The username may only contain letters and numbers.||
+|verifyTextNotPresent|A first name must be provided.||
+|verifyTextNotPresent|Please be within -100 and 100||
+|verifyTextNotPresent|A password must be provided.||
+|verifyTextNotPresent|The password must be at least 5 characters long.||
+|verifyTextNotPresent|The password may only contain letters and numbers.||
+
+|verifyTextPresent|New User successfully inserted|

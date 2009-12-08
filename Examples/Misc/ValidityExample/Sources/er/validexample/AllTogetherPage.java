@@ -1,3 +1,4 @@
+package er.validexample;
 //
 // AllTogetherPage.java: Class file for WO Component 'AllTogetherPage'
 // Project ValidityExample
@@ -14,9 +15,9 @@ import com.webobjects.foundation.NSValidation;
 
 public class AllTogetherPage extends GSVExceptionableComponent {
 
-    EOClassDescription description;
-    User  newUser;
-    boolean success = false;
+    public EOClassDescription description;
+    public User  newUser;
+    public boolean success = false;
     public String verifyPassword = null;
 
     public AllTogetherPage(WOContext context) {
@@ -57,7 +58,6 @@ public class AllTogetherPage extends GSVExceptionableComponent {
     }
     
     public Main goToHomePage(){
-        Main nextPage = (Main)pageWithName("Main");
-        return nextPage;
+        return (Main)pageWithName("Main");
     }
 }

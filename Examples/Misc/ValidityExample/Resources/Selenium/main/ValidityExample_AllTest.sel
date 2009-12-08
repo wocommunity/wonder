@@ -1,0 +1,17 @@
+Test for ValidityExample page
+
+|open|/|
+
+|click|link=All error messages together.|
+|pause|1200|
+|verifyTextPresent|This form will display the error messages together.|
+
+|click|link=Home|
+|pause|1200|
+
+|click|link=Error messages separated.|
+|pause|1200|
+|verifyTextPresent|This form will display the error messages separate.|
+
+|click|link=Home|
+|pause|1200|
