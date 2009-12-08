@@ -31,12 +31,15 @@ import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.Hit;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopFieldDocs;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -523,7 +526,7 @@ public class ERIndex {
         _handler.clear();
     }
 
-    private IndexAttribute attributeNamed(String fieldName) {
+    protected IndexAttribute attributeNamed(String fieldName) {
         return _attributes.objectForKey(fieldName);
     }
 
@@ -617,6 +620,30 @@ public class ERIndex {
         //TODO
         return null;
     }
+
+	public NSArray<? extends EOEnterpriseObject> findObjects(EOEditingContext ec, Query query, Filter filter, Sort sort, int start, int end) {
+		 return ERXEOControlUtilities.faultsForGlobalIDs(ec, findGlobalIDs(query, filter, sort, start, end));
+	}
+
+	private NSArray<EOKeyGlobalID> findGlobalIDs(Query query, Filter filter, Sort sort, int start, int end) {
+		NSMutableArray<EOKeyGlobalID> result = new NSMutableArray<EOKeyGlobalID>();
+		try {
+			Searcher searcher = indexSearcher();
+			long startTime = System.currentTimeMillis();
+			sort = sort == null ? new Sort() : sort;
+			TopFieldDocs topFielsDocs = searcher.search(query, filter, end, sort);
+			log.info("Searched for: " + query + " in  " + (System.currentTimeMillis() - startTime) + " ms");
+			for (int i = start; i < topFielsDocs.scoreDocs.length; i++) {
+				String gidString = searcher.doc(topFielsDocs.scoreDocs[i].doc).getField(GID).stringValue();
+				EOKeyGlobalID gid = ERXKeyGlobalID.fromString(gidString).globalID();
+				result.addObject(gid);
+			}
+            log.info("Returning " + result.count() + " after " + (System.currentTimeMillis() - startTime) + " ms");
+			return result;
+		} catch (IOException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+	}
 
     private NSArray<EOKeyGlobalID> findGlobalIDs(Query query) {
         NSMutableArray<EOKeyGlobalID> result = new NSMutableArray();
