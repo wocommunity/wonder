@@ -2,9 +2,9 @@
 package er.extensions.foundation;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+import er.erxtest.ERXTestCase;
 
-public class ERXUtilitiesTest extends TestCase {
+public class ERXUtilitiesTest extends ERXTestCase {
 
     public void testStackTrace() {
         String trace = ERXUtilities.stackTrace();

@@ -4,13 +4,13 @@ package com.webobjects.eoaccess;
 import java.net.URL;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+import er.erxtest.ERXTestCase;
 import er.extensions.eof.ERXEC;
 
 /* Test the ERXEntity methods. These tests are extremely minimal.
@@ -19,7 +19,7 @@ import er.extensions.eof.ERXEC;
  *
  * @author Ray Kiddy, kiddyr@users.sourceforge.net
  */
-public class ERXEntityTest extends TestCase {
+public class ERXEntityTest extends ERXTestCase {
 
 	static String buildRoot;
 	static {

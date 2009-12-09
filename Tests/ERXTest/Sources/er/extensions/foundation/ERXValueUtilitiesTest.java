@@ -2,11 +2,12 @@
 package er.extensions.foundation;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import com.webobjects.foundation.NSKeyValueCoding;
 
-public class ERXValueUtilitiesTest extends TestCase {
+import er.erxtest.ERXTestCase;
+
+public class ERXValueUtilitiesTest extends ERXTestCase {
 
     public void testIsNull() {
 
