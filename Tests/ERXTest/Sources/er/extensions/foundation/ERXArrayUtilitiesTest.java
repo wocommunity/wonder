@@ -2,7 +2,6 @@
 package er.extensions.foundation;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
@@ -13,6 +12,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 
+import er.erxtest.ERXTestCase;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXKey;
 
@@ -23,7 +23,7 @@ import er.extensions.eof.ERXKey;
  *
  * @author ray@ganymede.org, Ray Kiddy
  */
-public class ERXArrayUtilitiesTest extends TestCase {
+public class ERXArrayUtilitiesTest extends ERXTestCase {
 
     static NSMutableDictionary<String,String> one, two, three;
     static NSMutableArray<NSDictionary<String,String>> list1;

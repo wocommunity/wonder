@@ -1,9 +1,9 @@
 package er.extensions.foundation;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+import er.erxtest.ERXTestCase;
 
-public class ERXThreadStorageTest extends TestCase {
+public class ERXThreadStorageTest extends ERXTestCase {
 
     // public static final java.lang.String KEYS_ADDED_IN_CURRENT_THREAD_KEY;
     // public static final java.lang.String WAS_CLONED_MARKER;

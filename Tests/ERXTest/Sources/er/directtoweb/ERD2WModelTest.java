@@ -1,6 +1,6 @@
 package er.directtoweb;
 
-import junit.framework.TestCase;
+import er.erxtest.ERXTestCase;
 
 // import com.webobjects.directtoweb.D2WContext;
 // import com.webobjects.directtoweb.ERD2WContext;
@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 // import er.extensions.ERXExtensions;
 // import er.extensions.foundation.ERXFileUtilities;
 
-public class ERD2WModelTest extends TestCase {
+public class ERD2WModelTest extends ERXTestCase {
 /*
   @Override
   protected void setUp() throws Exception {

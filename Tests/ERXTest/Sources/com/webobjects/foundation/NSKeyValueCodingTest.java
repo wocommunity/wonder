@@ -1,9 +1,9 @@
 package com.webobjects.foundation;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+import er.erxtest.ERXTestCase;
 
-public class NSKeyValueCodingTest extends TestCase {
+public class NSKeyValueCodingTest extends ERXTestCase {
 
     public void testValueForKey() {
 

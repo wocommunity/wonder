@@ -1,10 +1,10 @@
 package er.extensions.jdbc;
 
-import junit.framework.TestCase;
+import er.erxtest.ERXTestCase;
 import er.extensions.jdbc.ERXSQLHelper.MicrosoftSQLHelper;
 
-public class MicrosoftSQLHelperTest extends TestCase
-{
+public class MicrosoftSQLHelperTest extends ERXTestCase {
+
 	private MicrosoftSQLHelper helper;
 
 	@Override

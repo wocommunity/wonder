@@ -1,7 +1,7 @@
 
 package er.extensions.foundation;
 
-import junit.framework.TestCase;
+import er.erxtest.ERXTestCase;
 
 /** Tests of the public API of the ERXMutableArray class.
  *
@@ -10,7 +10,7 @@ import junit.framework.TestCase;
  *
  * @author ray@ganymede.org, Ray Kiddy
  */
-public class ERXMutableArrayTest extends TestCase {
+public class ERXMutableArrayTest extends ERXTestCase {
 
     @Override
     protected void setUp() throws Exception {

@@ -3,11 +3,11 @@ package com.webobjects.foundation;
 import java.util.Enumeration;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+import er.erxtest.ERXTestCase;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
-public class NSTimestampTest extends TestCase {
+public class NSTimestampTest extends ERXTestCase {
 
     static NSTimestamp refDate = new NSTimestamp(1970, 1, 1, 0, 0, 0, NSTimeZone.getGMT());
 
