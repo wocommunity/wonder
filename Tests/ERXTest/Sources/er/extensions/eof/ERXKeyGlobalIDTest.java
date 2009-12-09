@@ -13,8 +13,6 @@ import com.webobjects.foundation.NSData;
 import er.erxtest.ERXTestCase;
 import er.erxtest.ERXTestUtilities;
 import er.erxtest.model.Company;
-import er.erxtest.model.Employee;
-import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Tests of the {@link er.extensions.eof.ERXKeyGlobalID} class. Methods in this class rely on the fact
@@ -24,22 +22,24 @@ import er.extensions.foundation.ERXValueUtilities;
 public class ERXKeyGlobalIDTest extends ERXTestCase {
 
 	private EOEditingContext ec;
-	
+	private Company co;
+
 	public void setUp() throws Exception {
+		super.setUp();
+
 		ec = ERXEC.newEditingContext();
+		co = Company.createCompany(ec, "Foobar.com");
+		ec.saveChanges();
 	}
 
 	public void tearDown() throws Exception {
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, "ERXKeyGlobalID");
+		super.tearDown();
+
+//		ec.deleteObject(co);
+//		ec.saveChanges();		
 	}
 
 	public void testConstructor() {
-		
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_Constructor");
-		co.setName(name+"_1");
-		ec.saveChanges();
 
 		ERXKeyGlobalID xkgid = new ERXKeyGlobalID(Company.ENTITY_NAME, EOUtilities.primaryKeyForObject(ec, co).values().toArray());
 		Assert.assertNotNull(xkgid);
@@ -47,94 +47,59 @@ public class ERXKeyGlobalIDTest extends ERXTestCase {
 
 	public void testFromData() {
 
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_FromData");
-		co.setName(name+"_1");
-		ec.saveChanges();
-		
 		int pk = ERXTestUtilities.pkOne(ec, co);
 		
 		ERXKeyGlobalID xkgid = ERXKeyGlobalID.fromData(new NSData((Company.ENTITY_NAME+"."+pk).getBytes()));
 		Assert.assertNotNull(xkgid);
-
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
 	}
 
 	public void testFromString() {
-
-		Company co = (Company)EOUtilities.createAndInsertInstance(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_FromString");
-		co.setName(name+"_1");
-		ec.saveChanges();
-		
+	
 		int pk = ERXTestUtilities.pkOne(ec, co);
 
 		ERXKeyGlobalID xkgid = ERXKeyGlobalID.fromString(Company.ENTITY_NAME+"."+pk);
 		Assert.assertNotNull(xkgid);
-
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
 	}
 
-	public void _testEquals() {
+	@SuppressWarnings("boxing")
+	public void testEquals() {
 
-		Employee emp = (Employee)ERXEOControlUtilities.createAndInsertObject(ec, Employee.ENTITY_NAME);
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
+		EOKeyGlobalID kgid1 = EOKeyGlobalID.globalIDWithEntityName(Company.ENTITY_NAME, new Integer[] { ERXTestUtilities.pkOne(ec, co) } ); 
 		
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_Equals");
+		ERXKeyGlobalID xkgid1 = ERXKeyGlobalID.globalIDForGID(kgid1);
+		ERXKeyGlobalID xkgid2 = ERXKeyGlobalID.globalIDForGID(kgid1);
 
-		emp.setFirstName("Bob");
-		emp.setLastName(name+"_1");
-		emp.setManager(Boolean.FALSE);
+		Assert.assertFalse(kgid1.equals(xkgid1));
+		Assert.assertFalse(xkgid1.equals(kgid1));
+
+		Assert.assertTrue(xkgid1.equals(xkgid2));
+		Assert.assertTrue(xkgid2.equals(xkgid1));
 		
-		co.setName(name+"_2");
-		co.addToEmployees(emp);
+		EOEditingContext ec2 = ERXEC.newEditingContext();
+		EOEnterpriseObject co2 = ERXEOControlUtilities.localInstanceOfObject(ec2, co);
 
-		ec.saveChanges();
+		EOGlobalID gid2 = ec.globalIDForObject(co2);
 
-		EOGlobalID gid = ec.globalIDForObject(emp);
+		EOKeyGlobalID kgid2 = EOKeyGlobalID.globalIDWithEntityName(Company.ENTITY_NAME, new Integer[] { ERXTestUtilities.pkOne(ec2, co2) } ); 
+		ERXKeyGlobalID xkgid3 = ERXKeyGlobalID.globalIDForGID(kgid2);
 
-		Assert.assertFalse(ERXValueUtilities.isNull(emp));
-		Assert.assertFalse(gid.isTemporary());
+		Assert.assertFalse(kgid2.equals(xkgid3));
+		Assert.assertFalse(xkgid3.equals(kgid2));
 
-		EOEnterpriseObject emp2 = ERXEOControlUtilities.localInstanceOfObject(ERXEC.newEditingContext(), emp);	
-
-		ERXKeyGlobalID xkgid = ERXKeyGlobalID.globalIDForGID((EOKeyGlobalID)gid);
-		Assert.assertEquals(xkgid, xkgid);
-		
-		EOKeyGlobalID gid2 = (EOKeyGlobalID)ec.globalIDForObject(emp2);
-		ERXKeyGlobalID xkgid2 = ERXKeyGlobalID.globalIDForGID(gid2);
-
-		Assert.assertEquals(xkgid, xkgid2);
-		
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
+		Assert.assertTrue(xkgid1.equals(xkgid3));
+		Assert.assertTrue(xkgid3.equals(xkgid1));	
 	}
 
 	public void testGlobalIDForGID() {
-
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_GlobalIDForGID");
-		co.setName(name+"_1");
-		ec.saveChanges();
 
 		EOGlobalID gid = ec.globalIDForObject(co);
 
 		ERXKeyGlobalID xkgid1 = ERXKeyGlobalID.globalIDForGID((EOKeyGlobalID)gid);
 		Assert.assertEquals(gid, xkgid1.globalID());
-		
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
 	}
 
 	@SuppressWarnings("boxing")
 	public void testGlobalID() {
-
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_GlobalID");
-		co.setName(name+"_1");
-		ec.saveChanges();
 
 		EOGlobalID gid = ec.globalIDForObject(co);
 
@@ -148,32 +113,18 @@ public class ERXKeyGlobalIDTest extends ERXTestCase {
 
 		ERXKeyGlobalID xkgid3 = ERXKeyGlobalID.fromString(Company.ENTITY_NAME+"."+pk);
 		Assert.assertEquals(gid, xkgid3.globalID());
-		
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
 	}
 	
 	public void test_keyValuesNoCopy() {
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_KeyValuesNoCopy");
-		co.setName(name+"_1");
-		ec.saveChanges();
 
 		ERXKeyGlobalID xkgid = ERXKeyGlobalID.globalIDForGID((EOKeyGlobalID)ec.globalIDForObject(co));
 
 		// How to test the no-copy-ness? -rrk
 		//
 		assertEquals(xkgid.keyValues(), xkgid._keyValuesNoCopy());
-
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
 	}
 
 	public void testHashCode() {
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_KeyValuesNoCopy");
-		co.setName(name+"_1");
-		ec.saveChanges();
 
 		ERXKeyGlobalID xkgid = ERXKeyGlobalID.globalIDForGID((EOKeyGlobalID)ec.globalIDForObject(co));
 
@@ -181,32 +132,17 @@ public class ERXKeyGlobalIDTest extends ERXTestCase {
 		// Asking for it would make this test tautological. -rrk
 		//
 		Assert.assertTrue(xkgid.hashCode() != 0);
-
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
 	}
     
 	public void testKeyCount() {
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_KeyValuesNoCopy");
-		co.setName(name+"_1");
-		ec.saveChanges();
 
 		ERXKeyGlobalID xkgid = ERXKeyGlobalID.globalIDForGID((EOKeyGlobalID)ec.globalIDForObject(co));
 
 		Assert.assertEquals(1, xkgid.keyCount());
-
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
 	}
 	           
 	@SuppressWarnings("boxing")
 	public void testKeyValues() {
-
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_KeyValuesNoCopy");
-		co.setName(name+"_1");
-		ec.saveChanges();
 
 		ERXKeyGlobalID xkgid = ERXKeyGlobalID.globalIDForGID((EOKeyGlobalID)ec.globalIDForObject(co));
 
@@ -214,25 +150,14 @@ public class ERXKeyGlobalIDTest extends ERXTestCase {
 
 		Integer[] values = new Integer[] { pk };
 		assertEquals(values, xkgid.keyValues());
-
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
 	}
 
 	public void testToString() {
-
-		Company co = (Company)ERXEOControlUtilities.createAndInsertObject(ec, Company.ENTITY_NAME);
-		String name = ERXTestUtilities.randomName("ERXKeyGlobalID_KeyValuesNoCopy");
-		co.setName(name+"_1");
-		ec.saveChanges();
 
 		ERXKeyGlobalID xkgid = ERXKeyGlobalID.globalIDForGID((EOKeyGlobalID)ec.globalIDForObject(co));
 
 		int pk = ERXTestUtilities.pkOne(ec, co);
 
 		Assert.assertEquals("_EOIntegralKeyGlobalID["+Company.ENTITY_NAME+" (java.lang.Integer)"+pk+"]", xkgid.toString());
-
-		ec.revert();
-		//ERXTestUtilities.deleteObjectsWithPrefix(ec, Company.ENTITY_NAME, name);
 	}
 }
