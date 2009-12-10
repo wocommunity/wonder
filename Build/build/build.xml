@@ -383,7 +383,7 @@
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.ticktock.Application" />
             <param name="project.name" value="TickTockMan" />
-            <param name="project.dir" value="Applications/TickTockMan" />
+            <param name="project.dir" value="Examples/Misc/TickTockMan" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl" />
         </antcall>
     </target>
@@ -879,9 +879,9 @@
 
     <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERDirectToRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, WOLips.all, WOJavaRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all" />
     
-    <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, TickTockMan.all, ERXTest.all" />
+    <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, ERXTest.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, SproutCoreExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, SproutCoreExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all" />
     
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
