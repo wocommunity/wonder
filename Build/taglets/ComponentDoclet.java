@@ -54,17 +54,19 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
         comps = PageGenerator.findSubClassesFromAvailable(classes, "com.webobjects.appserver.WOElement");
 
+        PageGenerator.findSourceFiles(comps, srcDirs);
+
         PageGenerator.gatherAllComments(comps);
 
-        TreeMap<String,TreeSet<String>> classNamePrefixes = PageGenerator.gatherClassesByPrefix(comps, prefixes);
+        PageGenerator.findClassDocURLs(comps);
 
-        PageGenerator.findSourceFiles(comps, srcDirs);
+        PageGenerator.findClassComments(comps);
+
+        TreeMap<String,TreeSet<String>> classNamePrefixes = PageGenerator.gatherClassesByPrefix(comps, prefixes);
 
         PageGenerator.findApiFiles(comps, compDirs);
 
         PageGenerator.findPackages(comps);
-
-        PageGenerator.gatherAllComments(comps);
 
         PageGenerator.findTagComments(comps, "@binding");
 

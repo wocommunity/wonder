@@ -44,19 +44,17 @@ public class D2WKeyDoclet extends com.sun.javadoc.Doclet {
 
         comps = PageGenerator.findSubClassesFromAvailable(classes, "com.webobjects.directtoweb.D2WComponent");
 
+        PageGenerator.findSourceFiles(comps, srcDirs);
+
         PageGenerator.gatherAllComments(comps);
+
+        PageGenerator.findClassComments(comps);
 
         PageGenerator.findClassDocURLs(comps);
 
-        PageGenerator.findSourceFiles(comps, srcDirs);
-
         PageGenerator.findPackages(comps);
 
-        PageGenerator.gatherAllComments(comps);
-
         PageGenerator.findTagComments(comps, "@d2wKey");
-
-        PageGenerator.findClassComments(comps);
 
         // Check the condition of the bindings documentation.
         //
