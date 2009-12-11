@@ -1,5 +1,7 @@
 package er.extensions.eof;
 
+import java.math.BigDecimal;
+
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -38,6 +40,114 @@ import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
  * @author mschrag
  */
 public class ERXKey<T> {
+	/* Constants for known NSArray keypath operators */
+	private static final ERXKey<BigDecimal> AVG = new ERXKey<BigDecimal>("@avg");
+	private static final ERXKey<BigDecimal> SUM = new ERXKey<BigDecimal>("@sum");
+	private static final ERXKey<?> MIN = new ERXKey<Object>("@min");
+	private static final ERXKey<?> MAX = new ERXKey<Object>("@max");
+	private static final ERXKey<Integer> COUNT = new ERXKey<Integer>("@count");
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with NSArray's SUM aggregate operator @sum. For
+	 * instance, if the key is "price" this will return a new ERXKey "@sum.price".
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public static ERXKey<BigDecimal> sum(ERXKey<?> key) {
+		return (ERXKey<BigDecimal>) SUM.append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses NSArray's SUM aggregate operator @sum.
+	 * 
+	 * @return the new key
+	 */
+	public static ERXKey<BigDecimal> sum() {
+		return SUM;
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with NSArray's AVERAGE aggregate operator @avg. For
+	 * instance, if the key is "price" this will return a new ERXKey "@avg.price".
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public static ERXKey<BigDecimal> avg(ERXKey<?> key) {
+		return (ERXKey<BigDecimal>) AVG.append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses NSArray's AVERAGE aggregate operator @avg.
+	 * 
+	 * @return the new key
+	 */
+	public static ERXKey<BigDecimal> avg() {
+		return AVG;
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with NSArray's MIN aggregate operator @min. For
+	 * instance, if the key is "price" this will return a new ERXKey "@min.price".
+	 * 
+	 * @param <U> the type of the next key
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> min(ERXKey<U> key) {
+		return MIN.append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses NSArray's MIN aggregate operator @min.
+	 * 
+	 * @param <U> the type of the next key
+	 *
+	 * @return the new key
+	 */
+	public static <U> ERXKey<U> min() {
+		return (ERXKey<U>) MIN;
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with NSArray's MAX aggregate operator @max. For
+	 * instance, if the key is "price" this will return a new ERXKey "@max.price".
+	 * 
+	 * @param <U> the type of the next key
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> max(ERXKey<U> key) {
+		return MAX.append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses NSArray's MAX aggregate operator @max.
+	 * 
+	 * @param <U> the type of the next key
+	 *
+	 * @return the new key
+	 */
+	public static <U> ERXKey<U> max() {
+		return (ERXKey<U>) MAX;
+	}
+
+	/**
+	 * Returns a new ERXKey that uses NSArray's COUNT operator @count.
+	 * 
+	 * @return the new key
+	 */
+	public static ERXKey<Integer> count() {
+		return COUNT;
+	}
+	
 	/**
 	 * Enums to desribe the type of key this represents.
 	 * 
@@ -880,7 +990,7 @@ public class ERXKey<T> {
 	 * @return the value of the keypath on the target object
 	 */
 	public Object rawValueInObject(Object obj) {
-		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(obj, _key);
+		return NSKeyValueCodingAdditions.Utility.valueForKeyPath(obj, _key);
 	}
 
 	/**
@@ -904,7 +1014,7 @@ public class ERXKey<T> {
 	 *            the object to set the value on
 	 */
 	public void takeValueInObject(T value, Object obj) {
-		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(obj, value, _key);
+		NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(obj, value, _key);
 	}
 	
 	/**
