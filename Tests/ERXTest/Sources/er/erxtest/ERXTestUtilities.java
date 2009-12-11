@@ -28,6 +28,10 @@ public class ERXTestUtilities {
 	public static void fixModelsForAdaptorNamed(String adaptorName) {
 		
 		if (adaptorName.equals("Memory")) {
+			for (EOModel model: (NSArray<EOModel>)EOModelGroup.defaultGroup().models()) {
+				model.setAdaptorName("Memory");
+				model.setConnectionDictionary(NSDictionary.EmptyDictionary);
+			}
 			return;
 		}
 
@@ -44,6 +48,7 @@ public class ERXTestUtilities {
 			
 			for (EOModel model: (NSArray<EOModel>)EOModelGroup.defaultGroup().models()) {
 				model.setAdaptorName("JDBC");
+				model.setConnectionDictionary(conn);
 				EODatabaseContext.forceConnectionWithModel(model, conn, ec);
 			}
 

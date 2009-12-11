@@ -37,7 +37,8 @@ public class Application extends ERXApplication {
 
 		String adaptorName = wobuild.getProperty("wo.test.dbAccess.adaptor");
 		if (adaptorName == null) adaptorName = "Memory";
-		
+		System.out.println("Setting EOModels to use adaptor \""+adaptorName+"\"");
+
 		ERXTestUtilities.fixModelsForAdaptorNamed(adaptorName);
 
 		TestRunner.run(ERXTestSuite.suite());

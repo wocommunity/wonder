@@ -1,12 +1,3 @@
-#dbConnectAdaptorGLOBAL=JDBC
-#dbConnectURLGLOBAL=jdbc:FrontBase://127.0.0.1/ERXTest
-#dbConnectUserGLOBAL=ERXTest
-#dbConnectPasswordGLOBAL=
-
-dbConnectAdaptorGLOBAL=Memory
-dbConnectURLGLOBAL=none
-dbConnectUserGLOBAL=nons
-dbConnectPasswordGLOBAL=
 
 ognl.helperFunctions=true
 ognl.inlineBindings=true
@@ -62,3 +53,4 @@ er.extensions.ERXNSLogLog4jBridge=INFO
 log4j.logger.er.extensions.ERXDatabaseContextDelegate=WARN
 log4j.logger.er.extensions.ERXConfigurationManager=INFO
 #log4j.logger.er.extensions.ERXApplication.RequestHandling=DEBUG
+
