@@ -50,7 +50,7 @@ public class _PBXProjectWatcher {
     private static boolean _communicationDisabled = false;
 
     static {
-        System.out.println("Installed NSProjectSearchPath fix");
+        log.debug("Installed NSProjectSearchPath fix");
     }
 
     /**
