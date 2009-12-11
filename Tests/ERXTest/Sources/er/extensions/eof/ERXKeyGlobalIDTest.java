@@ -78,8 +78,6 @@ public class ERXKeyGlobalIDTest extends ERXTestCase {
 		EOEditingContext ec2 = ERXEC.newEditingContext();
 		EOEnterpriseObject co2 = ERXEOControlUtilities.localInstanceOfObject(ec2, co);
 
-		EOGlobalID gid2 = ec.globalIDForObject(co2);
-
 		EOKeyGlobalID kgid2 = EOKeyGlobalID.globalIDWithEntityName(Company.ENTITY_NAME, new Integer[] { ERXTestUtilities.pkOne(ec2, co2) } ); 
 		ERXKeyGlobalID xkgid3 = ERXKeyGlobalID.globalIDForGID(kgid2);
 
