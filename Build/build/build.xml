@@ -395,7 +395,7 @@
             <param name="project.name" value="ERMovies" />
             <param name="project.dir" value="Examples/D2W/ERMovies" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn/ERMoviesLogic/ERSelenium" />
        </antcall>
     </target>
 
