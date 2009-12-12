@@ -182,9 +182,11 @@ public class D2WKeyDoclet extends com.sun.javadoc.Doclet {
                     if (commentsSet.size() == 0)
                         out.write("<i>No d2wKeys for Component.</i>\n");
                     else {
-                        out.write("<table border=\"1\">\n");
-                        out.write("<tr><th><i>d2wKey</i></th><th><i>comment</i></th></tr>\n");
-                        out.write("<tr>\n");
+
+                        out.write("<table border=\"1\" width=\"100%\" cellpadding=\"3\" cellspacing=\"0\" summary=\"\">\n");
+                        out.write("<tr bgcolor=\"#CCCCFF\" class=\"TableHeadingColor\"><td colspan=2><font size=\"+2\"><b>D2W Keys</b></font></td></tr>\n");
+
+                        out.write("<tr bgcolor=\"white\" class=\"TableRowColor\">\n");
 
                         TreeMap<String,String> orderingMap = new TreeMap<String,String>();
                         Iterator<String> comments = commentsSet.iterator();
@@ -198,7 +200,8 @@ public class D2WKeyDoclet extends com.sun.javadoc.Doclet {
 
                         while (ordering.hasNext()) {
                             String bindingName = orderingMap.get(ordering.next());
-                            out.write("<td>"+bindingName+"</td>\n");
+                            out.write("<td align=\"right\" valign=\"top\" width=\"1%\"><font size=\"-1\"><code>"+bindingName+"</code></font></td>\n");
+
 
                             String bindingComment = (String)((HashMap<String,String>)commentsMap.get(bindingName)).get("comment");
 
@@ -206,7 +209,8 @@ public class D2WKeyDoclet extends com.sun.javadoc.Doclet {
                                 out.write("<td>&nbsp;</td>\n");
                                 bindingCheck += "          Binding: \""+bindingName+"\": binding tag in javadoc but no/empty comment\n";
                             } else {
-                                out.write("<td>"+bindingComment+"</td>\n");
+                                out.write("<td>"+bindingComment+"<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>\n");
+
                             }
                             out.write("</tr>\n");
                         }
