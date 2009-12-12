@@ -20,15 +20,14 @@ import com.webobjects.foundation.NSArray;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.navigation.ERXNavigationManager;
 import er.extensions.eof.ERXEC;
-import er.extensions.foundation.ERXUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 public class Session extends ERXSession {
 
     public WOComponent newMovieWithPageConfiguration(String pageConfig) {
         EOEditingContext ec = ERXEC.newEditingContext();
-        EOEnterpriseObject movie = ERXUtilities.createEO("Movie", ec);
-        EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(pageConfig,
-                                                                                           this);
+        EOEnterpriseObject movie = ERXEOControlUtilities.createAndInsertObject(ec, "Movie");
+        EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(pageConfig, this);
         epi.setObject(movie);
         epi.setNextPage(context().page());
         return (WOComponent)epi;
@@ -43,20 +42,16 @@ public class Session extends ERXSession {
     }
 
     public WOComponent findAMovie() {
-        QueryPageInterface qpi = (QueryPageInterface)D2W.factory().pageForConfigurationNamed("SearchMovie",
-                                                                                             this);
-        return (WOComponent)qpi;
+        return (WOComponent)(QueryPageInterface)D2W.factory().pageForConfigurationNamed("SearchMovie", this);
     }
 
     public WOComponent findAnActor() {
-        QueryPageInterface qpi = (QueryPageInterface)D2W.factory().pageForConfigurationNamed("FindTalent",
-                                                                                             this);
+        QueryPageInterface qpi = (QueryPageInterface)D2W.factory().pageForConfigurationNamed("FindTalent", this);
         return (WOComponent)qpi;
     }
 
     public WOComponent listAllMovies() {
-        ListPageInterface lpi = (ListPageInterface)D2W.factory().pageForConfigurationNamed("ListAllMovies",
-                                                                                           this);
+        ListPageInterface lpi = (ListPageInterface)D2W.factory().pageForConfigurationNamed("ListAllMovies", this);
         EODataSource ds = new EODatabaseDataSource(ERXEC.newEditingContext(), "Movie");
         lpi.setDataSource(ds);
         return (WOComponent)lpi;

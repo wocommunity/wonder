@@ -20,6 +20,7 @@ LoginButton: WOActiveImage {
 	height = "31";
 	name = "Login";
 	width = "88";
+	id = "Login";
 }
 
 LoginForm: WOForm {
@@ -36,3 +37,6 @@ UsernameField: WOTextField {
 	width = "16";
 }
 
+TestLink: WOHyperlink {
+	actionClass = "er.selenium.SeleniumStartTesting";
+}

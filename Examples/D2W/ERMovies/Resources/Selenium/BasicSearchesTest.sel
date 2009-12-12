@@ -1,0 +1,179 @@
+
+Basic test for ERMovies page, just searching on each available entity.
+
+|open|/|
+
+|clickAndWait|Login|
+
+Search Movie field
+
+|type|0.3.2.2.0.0.0.2.1.3.0.8|A|
+|clickAndWait|//input[@name='Find objects matching the query']|
+
+|assertTextPresent|3 Movies|
+|assertTextPresent| Apocalypse Now |
+
+|clickAndWait|0.3.2.19.0.0.0.1.0.0.1.3.3.0|
+
+--------------------
+
+Search Studio field
+
+|type|0.3.2.2.0.0.4.2.1.3.0.8|A|
+|clickAndWait|//tr[9]/td[4]/input||
+
+|assertTextPresent|4 Studios|
+|assertTextPresent|Alexandre Films|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search MovieRole field
+
+|type|0.3.2.2.0.0.1.2.1.3.0.8|A|
+|clickAndWait|//tr[3]/td[4]/input||
+
+|assertTextPresent|23 Movie Roles|
+|assertTextPresent|Aurore Interligator|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search PlotSummary field
+
+|type|0.3.2.2.0.0.2.2.1.3.0.8|A|
+|clickAndWait|//tr[5]/td[4]/input||
+
+|assertTextPresent|5 Plot Summaries|
+|assertTextPresent|A scary french cult movie.|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search Review field
+
+|type|0.3.2.2.0.0.3.2.1.3.0.8|A|
+|clickAndWait|//tr[7]/td[4]/input||
+
+|assertTextPresent|No matching Review records found.|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search Talent field
+
+|type|0.3.2.2.0.0.5.2.1.3.0.8|A|
+|clickAndWait|//tr[11]/td[4]/input||
+
+|assertTextPresent|17 Talents|
+|assertTextPresent|Anspaugh|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search Voting field
+
+|type|0.3.2.2.0.0.7.2.1.3.0.8|1|
+|clickAndWait|//tr[15]/td[4]/input||
+
+|assertTextPresent|5 Votings|
+|assertTextPresent|6.01|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search CreditCard field
+
+|type|0.3.2.2.0.0.8.2.1.3.0.8|1|
+|clickAndWait|//tr[17]/td[4]/input||
+
+|assertTextPresent|1 Credit Card|
+|assertTextPresent|1111000011110000|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search Fee field
+
+|clickAndWait|//tr[21]/td[4]/input||
+
+|assertTextPresent|5 Fees|
+|assertTextPresent|14.99|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search FeeType field
+
+|type|0.3.2.2.0.0.11.2.1.3.0.8|Rent|
+|clickAndWait|//tr[23]/td[4]/input||
+
+|assertTextPresent|1 Fee Type|
+|assertTextPresent|Rent|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search Rental field
+
+|clickAndWait|//tr[25]/td[4]/input||
+
+|assertTextPresent|5 Rentals|
+|assertTextPresent|Feb 01,1997|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search RentalTerms field
+
+|clickAndWait|//tr[27]/td[4]/input||
+
+|assertTextPresent|5 Rental Terms|  	 	
+|assertTextPresent|16 Bits game console|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search Unit field
+
+|clickAndWait|//tr[29]/td[4]/input||
+
+|assertTextPresent|63 Units| 		
+|assertTextPresent|Jan 05,1996|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+ 	 
+Search Customer field
+
+|type|0.3.2.2.0.0.9.2.1.3.0.8|A|
+|clickAndWait|//tr[19]/td[4]/input||
+
+|assertTextPresent|1 Customer| 		
+|assertTextPresent|200 Arroyo Drive|
+
+|clickAndWait|0.3.2.5.0.0.0.1.0.0.1.3.3.0||
+
+--------------------
+
+Search Video field - cannot test
+
+--------------------
+
+Search Photo field - cannot test
+
+--------------------
+
+Search Director field - cannot test
