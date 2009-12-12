@@ -13,7 +13,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.eof.ERXEC;
-import er.extensions.foundation.ERXUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 public class MenuHeader extends WOComponent {
     public String entityNameInList;
@@ -84,7 +84,7 @@ public class MenuHeader extends WOComponent {
 
     public WOComponent newMovieWithPageConfiguration(String pageConfig) {
         EOEditingContext ec = ERXEC.newEditingContext();
-        EOEnterpriseObject movie = ERXUtilities.createEO("Movie", ec);
+        EOEnterpriseObject movie = ERXEOControlUtilities.createAndInsertObject(ec, "Movie");
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(pageConfig,
                                                                                            session());
         epi.setObject(movie);
