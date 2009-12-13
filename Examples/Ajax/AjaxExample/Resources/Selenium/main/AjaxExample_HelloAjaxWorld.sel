@@ -3,28 +3,22 @@ Test for HelloAjaxWorld page
 |open|/|
 
 |click|link=Hello Ajax World|
-|pause|1200|
-|verifyTextPresent|Page Refreshed|
+|waitForTextPresent|Page Refreshed|
 
 |click|UpdateLink|
-|pause|1200|
-|verifyText|HelloWorldOutput|Hello WOrld. Boring. |
+|waitForText|HelloWorldOutput|Hello WOrld. Boring. |
 
 |click|UpdateLink|
-|pause|1200|
-|verifyText|HelloWorldOutput|Hello WOrld. Boring. Boring. |
+|waitForText|HelloWorldOutput|Hello WOrld. Boring. Boring. |
 
 |click|AjaxUpdateLink|
-|pause|1200|
-|verifyText|HelloAjaxWorldOutput|Hello Ajax WOrld! Fun! |
+|waitForText|HelloAjaxWorldOutput|Hello Ajax WOrld! Fun! |
 
 |click|AjaxUpdateLink|
-|pause|1200|
-|verifyText|HelloAjaxWorldOutput|Hello Ajax WOrld! Fun! Fun! |
+|waitForText|HelloAjaxWorldOutput|Hello Ajax WOrld! Fun! Fun! |
 
 |click|link=Hello Ajax World| |
-|pause|1200|
-|verifyText|HelloWorldOutput|Hello WOrld. |
-|verifyText|HelloAjaxWorldOutput|Hello Ajax WOrld! |
-|assertNotText|HelloWorldOutput|Hello WOrld. Boring. Boring. |
-|assertNotText|HelloAjaxWorldOutput|Hello Ajax WOrld! Fun! Fun! |
+|waitForText|HelloWorldOutput|Hello WOrld. |
+|waitForText|HelloAjaxWorldOutput|Hello Ajax WOrld! |
+|waitForNotText|HelloWorldOutput|Hello WOrld. Boring. Boring. |
+|waitForNotText|HelloAjaxWorldOutput|Hello Ajax WOrld! Fun! Fun! |
