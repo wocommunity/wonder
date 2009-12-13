@@ -28,6 +28,7 @@ Hyperlink2: WOHyperlink {
 SubmitButton1: WOSubmitButton {
 	action = add;
 	value = "Submit";
+	id = "Submit";
 }
 
 TextField1: WOTextField {
