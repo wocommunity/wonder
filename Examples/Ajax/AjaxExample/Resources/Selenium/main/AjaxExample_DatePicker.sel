@@ -17,8 +17,7 @@ Then click away and come back to confirm the calendar shows the right month.
 |click|DateInputWithFormatField|
 |pause|1200|
 |click|BareDateInputField|
-|pause|1200|
-|verifyTextPresent|JAN 2009|
+|waitForTextPresent|JAN 2009|
 
 I would like to test the functionality of the buttons on the calendar here, but have not figured out the
 locators for the elements of the pop-up calendar yet.
@@ -30,8 +29,7 @@ locators for the elements of the pop-up calendar yet.
 |click|DateInputWithFormatterField|
 |pause|1200|
 |click|DateInputWithFormatField|
-|pause|1200|
-|verifyTextPresent|JAN 2009|
+|waitForTextPresent|JAN 2009|
 
 
 |click|DateInputWithFormatterField|
@@ -41,8 +39,7 @@ locators for the elements of the pop-up calendar yet.
 |click|FrenchDateInputWithFormatterField|
 |pause|1200|
 |click|DateInputWithFormatterField|
-|pause|1200|
-|verifyTextPresent|JAN 2009|
+|waitForTextPresent|JAN 2009|
 
 |click|FrenchDateInputWithFormatterField|
 |pause|1200|
@@ -50,8 +47,7 @@ locators for the elements of the pop-up calendar yet.
 |click|BareDateInputField|
 |pause|1200|
 |click|FrenchDateInputWithFormatterField|
-|pause|1200|
-|verifyTextPresent|JAN 2009|
+|waitForTextPresent|JAN 2009|
 
 Since I cannot change the value of the disabled text field, how do I expect (or not expect) its calendar value?
 

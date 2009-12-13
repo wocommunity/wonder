@@ -3,49 +3,38 @@ Test for Radio Buttons page
 |open|/|
 
 |click|link=Radio Buttons|
-|pause|1200|
-|verifyTextPresent|You selected: ()|
+|waitForTextPresent|You selected: ()|
 
 # TODO - there is no user-visible side-effect on the page when one clicks
 # on either of the submit buttons, so I am not testing them yet.
 
 |click|buttonRadio_Button__0|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #0")|
+|waitForTextPresent|You selected: ("Radio Button #0")|
 
 |click|buttonRadio_Button__1|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #1")|
+|waitForTextPresent|You selected: ("Radio Button #1")|
 
 |click|buttonRadio_Button__2|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #2")|
+|waitForTextPresent|You selected: ("Radio Button #2")|
 
 |click|buttonRadio_Button__3|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #3")|
+|waitForTextPresent|You selected: ("Radio Button #3")|
 
 |click|buttonRadio_Button__4|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #4")|
+|waitForTextPresent|You selected: ("Radio Button #4")|
 
 |click|buttonRadio_Button__5|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #5")|
+|waitForTextPresent|You selected: ("Radio Button #5")|
 
 |click|buttonRadio_Button__6|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #6")|
+|waitForTextPresent|You selected: ("Radio Button #6")|
 
 |click|buttonRadio_Button__7|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #7")|
+|waitForTextPresent|You selected: ("Radio Button #7")|
 
 |click|buttonRadio_Button__8|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #8")|
+|waitForTextPresent|You selected: ("Radio Button #8")|
 
 |click|buttonRadio_Button__9|
-|pause|1200|
-|verifyTextPresent|You selected: ("Radio Button #9")|
+|waitForTextPresent|You selected: ("Radio Button #9")|
 

@@ -5,84 +5,69 @@
 # TODO - As we have tests for the individual components, they can be removed from this list.
 
 |click|link=Update Trigger||
-|pause|1200||
-|verifyTextPresent|This example demonstrates the AjaxTrigger component||
+|waitForTextPresent|This example demonstrates the AjaxTrigger component||
 
 |click|link=Dependent Popups||
-|pause|1200||
-|verifyTextPresent|AjaxUpdateContainer has an optional 'observeFieldID' binding.||
+|waitForTextPresent|AjaxUpdateContainer has an optional 'observeFieldID' binding.||
 
 |click|link=Slider||
-|pause|1200||
-|verifyTextPresent|Value:||
+|waitForTextPresent|Value:||
 
 |click|link=Display Group||
-|pause|1200||
-|verifyTextPresent|This value shouldn't change:||
+|waitForTextPresent|This value shouldn't change:||
 
 |click|link=Long-Running Task||
-|pause|1200||
-|verifyTextPresent|Initial time:||
+|waitForTextPresent|Initial time:||
 
 |click|link=Sortable List||
-|pause|1200||
-|verifyTextPresent|The first list is an NSMutableArray||
+|waitForTextPresent|The first list is an NSMutableArray||
 
 |click|link=AjaxInPlaceEditor||
-|pause|1200||
-|verifyTextPresent|AjaxInPlaceEditor is a wrapper component||
+|waitForTextPresent|AjaxInPlaceEditor is a wrapper component||
 
 |click|link=AjaxInPlace||
-|pause|1200||
-|verifyTextPresent|AjaxInPlace provides support for arbitrarily complex view||
+|waitForTextPresent|AjaxInPlace provides support for arbitrarily complex view||
 
 # TODO - Drag Resize page
 
 |click|link=Busy Indicator||
-|pause|1200||
-|verifyTextPresent|make a long running AJAX request||
+|waitForTextPresent|make a long running AJAX request||
 
 |click|link=Tree||
-|pause|1200||
-|verifyTextPresent|Below is an example of the AjaxTree component:||
+|waitForTextPresent|Below is an example of the AjaxTree component:||
 
 # TODO - Google Maps - how to connect?
 
 |click|link=Grid||
-|pause|1200||
-|verifyTextPresent|Click the batch size to edit||
+|waitForTextPresent|Click the batch size to edit||
 
 # TODO - Ajax Tabbed Panel
 
 # TODO - Progress/File Upload
 
 |click|link=Highlight||
-|pause|1200||
-|verifyTextPresent|A common technique in Ajax applications||
+|waitForTextPresent|A common technique in Ajax applications||
+
+if I take out this next pause and use waitForTextPresent, the test fails. Why? -rrk
 
 |click|link=Live Preview||
-|pause|1200||
-|verifyTextPresent|Preview||
+|pause|1200|
+|assertTextPresent|Preview||
 
 # TODO - Selection List
 
 |click|link=Modal Container||
-|pause|1200||
-|verifyTextPresent|Modal container with direct content||
+|waitForTextPresent|Modal container with direct content||
 
 # TODO - Model Dialog
 
 # TODO - Model Dialog Opener
 
 |click|link=Date Picker||
-|pause|1200||
-|verifyTextPresent|Date with no configuration||
+|waitForTextPresent|Date with no configuration||
 
 |click|link=JSON||
-|pause|1200||
-|verifyTextPresent|This is a blank div.||
+|waitForTextPresent|This is a blank div.||
 
 |click|link=Complex JSON||
-|pause|1200||
-|verifyTextPresent|simple synchronous call||
-
+|waitForTextPresent|simple synchronous call||
