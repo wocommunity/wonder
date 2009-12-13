@@ -7,8 +7,7 @@ Test for ValidityExample page
 |pause|1200|
 |verifyTextPresent|This form will display the error messages separate.|
 
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextPresent|A first name must be provided.|
 |verifyTextPresent|A last name must be provided.|
@@ -22,8 +21,7 @@ Test for ValidityExample page
 
 |click|firstName|
 |type|firstName|aaa|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextPresent|A last name must be provided.|
@@ -37,8 +35,7 @@ Test for ValidityExample page
 
 |click|lastName|
 |type|lastName|bbb|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextNotPresent|A last name must be provided.|
@@ -52,8 +49,7 @@ Test for ValidityExample page
 
 |click|username|
 |type|username|c_c|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextNotPresent|A last name must be provided.|
@@ -67,8 +63,7 @@ Test for ValidityExample page
 
 |click|username|
 |type|username|ccc|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextNotPresent|A last name must be provided.|
@@ -82,8 +77,7 @@ Test for ValidityExample page
 
 |click|username|
 |type|username|ccccc|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextNotPresent|A last name must be provided.|
@@ -99,8 +93,7 @@ Test for ValidityExample page
 |type|password|dd_|
 |click|passwordVerify|
 |type|passwordVerify|eee|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextNotPresent|A last name must be provided.|
@@ -116,8 +109,7 @@ Test for ValidityExample page
 |type|password|ddd|
 |click|passwordVerify|
 |type|passwordVerify|eee|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextNotPresent|A last name must be provided.|
@@ -133,8 +125,7 @@ Test for ValidityExample page
 |type|password|ddddd|
 |click|passwordVerify|
 |type|passwordVerify|ddddd|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextNotPresent|A last name must be provided.|
@@ -148,8 +139,7 @@ Test for ValidityExample page
 
 |click|number|
 |type|number|-101|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextNotPresent|A last name must be provided.|
@@ -163,8 +153,7 @@ Test for ValidityExample page
 
 |click|number|
 |type|number|-11|
-|click|3.3.25|
-|pause|1200|
+|clickAndWait|Submit|
 
 |verifyTextNotPresent|A first name must be provided.|
 |verifyTextNotPresent|A last name must be provided.|
