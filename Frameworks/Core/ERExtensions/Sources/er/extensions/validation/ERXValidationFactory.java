@@ -509,7 +509,7 @@ public class ERXValidationFactory {
         // CHECKME: This might be better configured in a static init block of ERXValidationFactory.        
         ERXValidation.setPushChangesDefault(ERXValueUtilities.booleanValueWithDefault(ERXSystem.getProperty("er.extensions.ERXValidationShouldPushChangesToObject"), ERXValidation.DO_NOT_PUSH_INCORRECT_VALUE_ON_EO));
 
-        if (WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
+        if (WOApplication.application()!=null && !WOApplication.application().isCachingEnabled()) {
             NSNotificationCenter center = NSNotificationCenter.defaultCenter();
             center.addObserver(this,
                                new NSSelector("resetTemplateCache",  ERXConstant.NotificationClassArray),
