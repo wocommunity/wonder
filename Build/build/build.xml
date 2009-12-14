@@ -794,7 +794,8 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
-    <target name="PostgresqlPlugIn.all">
+	
+	<target name="PostgresqlPlugIn.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="com.webobjects.jdbcadaptor.PostgresqlPlugIn" />
             <param name="project.name" value="PostgresqlPlugIn" />
@@ -813,6 +814,13 @@
             <param name="project.principal.class" value="com.frontbase.FrontBasePlugInPrincipal" />
             <param name="project.name" value="FrontBasePlugIn" />
             <param name="project.dir" value="Frameworks/PlugIns/FrontBasePlugIn" />
+        </antcall>
+    </target>
+	<target name="H2PlugIn.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="er.h2.ERH2PlugInPrincipal" />
+            <param name="project.name" value="H2PlugIn" />
+            <param name="project.dir" value="Frameworks/PlugIns/H2PlugIn" />
         </antcall>
     </target>
     
@@ -892,7 +900,7 @@
     <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, SproutCore.all, ERIUI.all, GoogleChart.all, ERPrototaculous.all, ERDivaLook.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, SproutCoreExample.all, ERIUIExample.all, ERDivaLookExample.all" />
     
-    <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all" />
+    <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all,H2PlugIn.all" />
 
     <target name="validity.frameworks.all" depends="Validity.all" />
     <target name="validity.applications.all" depends="ValidityModeler.all" />
