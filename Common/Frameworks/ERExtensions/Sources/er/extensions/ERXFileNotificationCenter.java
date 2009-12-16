@@ -57,6 +57,7 @@ public class ERXFileNotificationCenter {
     private boolean cachingEnabled;
     /** The last time we checked files.  We only check if !WOCachingEnabled or if there is a CheckFilesPeriod set */
     private long lastCheckMillis = System.currentTimeMillis();
+    private boolean symlinkSupport;
     
     /**
      * Default constructor. If WOCaching is disabled (we take this to mean we are in developement)
@@ -74,6 +75,8 @@ public class ERXFileNotificationCenter {
             log.debug("Caching disabled.  Registering for notification: " + WOApplication.ApplicationWillDispatchRequestNotification);
             NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("checkIfFilesHaveChanged", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillDispatchRequestNotification, null);            
         }
+        
+        symlinkSupport = ERXProperties.booleanForKeyWithDefault("ERXFileNotificationCenter.symlinkSupport", true);
     }
 
     /**
@@ -155,17 +158,22 @@ public class ERXFileNotificationCenter {
      * @return a value representing the current version of this file
      */
     protected Object cacheValueForFile(File file) {
-    	try {
-    		// MS: We want to compute the last modified time on the destination of a (possibly)
-    		// symlinked file. On OS X, the lastModified of the sym link itself matches the 
-    		// lastModified of the referenced file, but I didn't want to presume that behavior.
-	    	File canonicalizedFile = file.getCanonicalFile();
-	    	return Long.valueOf(canonicalizedFile.lastModified());
+    	if (symlinkSupport) {
+	    	try {
+	    		// MS: We want to compute the last modified time on the destination of a (possibly)
+	    		// symlinked file. On OS X, the lastModified of the sym link itself matches the 
+	    		// lastModified of the referenced file, but I didn't want to presume that behavior.
+		    	File canonicalizedFile = file.getCanonicalFile();
+		    	return Long.valueOf(canonicalizedFile.lastModified());
+	    	}
+	    	catch (IOException e) {
+	    		// MS: return a zero to match the previous semantics from calling file.lastModified() on a missing file.
+	    		ERXFileNotificationCenter.log.warn("Failed to determine the lastModified time on '" + file + "': " + e.getMessage());
+	    		return Long.valueOf(0);
+	    	}
     	}
-    	catch (IOException e) {
-    		// MS: return a zero to match the previous semantics from calling file.lastModified() on a missing file.
-    		ERXFileNotificationCenter.log.warn("Failed to determine the lastModified time on '" + file + "': " + e.getMessage());
-    		return Long.valueOf(0);
+    	else {
+    		return Long.valueOf(file.lastModified());
     	}
     }
     
