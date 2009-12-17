@@ -1,0 +1,4 @@
+ReCaptcha : WOString {
+	value = recaptchaHTML;
+	escapeHTML = false;
+}
