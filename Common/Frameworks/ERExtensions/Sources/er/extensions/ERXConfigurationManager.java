@@ -323,26 +323,51 @@ public class ERXConfigurationManager {
         int firstDirtyFile = 0;
         
         if (updatedFile != null) {
-            try {
-                // Find the position of the updatedFile in the monitoredProperties list, 
-                // so that we can reload it and everything after it on the list. 
-                firstDirtyFile = monitoredProperties.indexOfObject(updatedFile.getCanonicalPath());
-                if (firstDirtyFile < 0) {
-                    return;
-                }
-            } catch (IOException ex) {
-                log.error(ex.toString());
-                return;
-            }
+            // Find the position of the updatedFile in the monitoredProperties list, 
+            // so that we can reload it and everything after it on the list.
+        	String updatedFilePath = ERXProperties.processedPropertiesPath(updatedFile);
+        	if (updatedFilePath != null) {
+	            firstDirtyFile = monitoredProperties.indexOfObject(updatedFilePath);
+	            if (firstDirtyFile < 0) {
+	                return;
+	            }
+        	}
+        	else {
+        		// MS: this would have resulted in a logged IOException and a return before -- processedPropertiesPath logs for us now
+        		return;
+        	}
         }
         
-
-        Properties systemProperties = System.getProperties();
-        for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
-            String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
-            Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
-            ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
-            ERXSystem.updateProperties();
+        boolean atomicPropertiesReload = Boolean.valueOf(System.getProperty("er.extensions.ERXConfigurationManager.atomicPropertiesReload", "true"));
+        if (atomicPropertiesReload) {
+	        Properties systemPropertiesCopy = new Properties();
+	        systemPropertiesCopy.putAll(System.getProperties());
+	        for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
+	            String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
+	        	try {
+		            log.info("Reloading properties from '" + monitoredPropertiesPath + "' ...");
+		            // MS: This can fail, so we don't want to add to system properties file-by-file -- we want to do 
+		            // a single push at the end.
+		           	Properties loadedProperties = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
+		            ERXProperties.transferPropertiesFromSourceToDest(loadedProperties, systemPropertiesCopy);
+		            ERXSystem.updateProperties(systemPropertiesCopy);
+	        	}
+	        	catch (RuntimeException e) {
+	        		log.error("Failed to load properties from '" + monitoredPropertiesPath + "', so all properties from this reload will be rolled back.");
+	        		throw e;
+	        	}
+	        }
+	        System.setProperties(systemPropertiesCopy);
+	        ERXProperties.systemPropertiesChanged();
+        }
+        else {
+            Properties systemProperties = System.getProperties();
+            for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
+                String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
+                Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
+                ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
+                ERXSystem.updateProperties();
+            }
         }
     }
 

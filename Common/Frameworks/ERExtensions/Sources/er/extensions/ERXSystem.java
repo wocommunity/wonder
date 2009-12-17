@@ -94,10 +94,19 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 	 * the converted values in-place.
 	 */
 	public static void updateProperties() {
-		Properties originalProperties = NSProperties._getProperties();
-		ERXSystem.convertProperties(originalProperties, originalProperties);
+		updateProperties(NSProperties._getProperties());
+	}
+
+	/**
+	 * Converts and evaluates the properties from the given properties and replaces
+	 * the converted values in-place.
+	 * 
+	 * @param properties the properties to convert and evaluate
+	 */
+	public static void updateProperties(Properties properties) {
+		ERXSystem.convertProperties(properties, properties);
 		// bhenry: Comment this out for now, causing NoSuchMethodError; // uncommented by cripps
-		ERXProperties.evaluatePropertyOperators(originalProperties, originalProperties);
+		ERXProperties.evaluatePropertyOperators(properties, properties);
 	}
 
 	/*

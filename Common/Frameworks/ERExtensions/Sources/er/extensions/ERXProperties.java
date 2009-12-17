@@ -24,6 +24,8 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects._ideservices._IDEProject;
+import com.webobjects._ideservices._WOProject;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.appserver._private.WOProperties;
@@ -681,7 +683,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return properties object with the values from the file
      *      specified.
      */
-    // FIXME: This shouldn't eat the exception
     public static Properties propertiesFromPath(String path) {
     	ERXProperties.NestedProperties prop = new ERXProperties.NestedProperties();
 
@@ -692,7 +693,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
         File file = new File(path);
         if (! file.exists()  ||  ! file.isFile()  ||  ! file.canRead()) {
-            log.warn("File " + path + " doesn't exist or can't be read.");
+        	if (ERXProperties.shouldValidateProperties()) {
+        		throw new RuntimeException("File " + path + " doesn't exist or can't be read.");
+        	}
+       		log.warn("File " + path + " doesn't exist or can't be read.");
             return prop;
         }
 
@@ -700,6 +704,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         	prop.load(file);
             log.debug("Loaded configuration file at path: "+ path);
         } catch (IOException e) {
+        	if (ERXProperties.shouldValidateProperties()) {
+        		throw new RuntimeException("File '" + path + "' could not be read.", e);
+        	}
             log.error("Unable to initialize properties from file \"" + path + "\"", e);
         }
         return prop;
@@ -775,11 +782,21 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             
             // Check if the framework project is opened from PBX
             WOProjectBundle bundle = WOProjectBundle.projectBundleForProject(frameworkName, true);
-            if (bundle != null) 
+            if (bundle != null) { 
                 projectPath = bundle.projectPath();
+                if (projectPath == null || projectPath.length() == 0) {
+                	_WOProject woProject = bundle._woProject();
+                	if (woProject != null) {
+                		_IDEProject ideProject = woProject.ideProject();
+                		if (ideProject != null) {
+                			projectPath = ideProject.projectDir();
+                		}
+                	}
+                }
+            }
             else 
                 projectPath = ERXSystem.getProperty("projects." + frameworkName);
-            
+
             if (projectPath != null) {
                 aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
                 if (aPropertiesPath != null) {
@@ -794,9 +811,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 if(url != null) {
                     aPropertiesPath = url.getFile();
                     if (aPropertiesPath != null) {
-                        aPropertiesPath = getActualPath(aPropertiesPath);
-                        projectsInfo.addObject("Framework:   " + frameworkName 
-                                + " (not opened, installed) " + aPropertiesPath); 
+                        aPropertiesPath = processedPropertiesPath(aPropertiesPath);
+                        if (aPropertiesPath != null) {
+	                        projectsInfo.addObject("Framework:   " + frameworkName 
+	                                + " (not opened, installed) " + aPropertiesPath);
+                        }
                     }
                 }
             }
@@ -832,9 +851,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             // The application project is not opened from PBX, use the one in the bundle. 
             aPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
             if (aPropertiesPath != null) {
-               aPropertiesPath = getActualPath(aPropertiesPath);
-               projectsInfo.addObject("Application: " + mainBundleName 
-                            + " (not opened, installed) " + aPropertiesPath);  
+               aPropertiesPath = processedPropertiesPath(aPropertiesPath);
+               if (aPropertiesPath != null) {
+	               projectsInfo.addObject("Application: " + mainBundleName 
+	                            + " (not opened, installed) " + aPropertiesPath);
+               }
             }
         }
 
@@ -842,25 +863,45 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             propertiesPaths.addObject(aPropertiesPath);
 
 
+        boolean validateProperties = ERXProperties.shouldValidateProperties();
         /* *** WebObjects.properties in the user home directory *** */
         String userHome = ERXSystem.getProperty("user.home");
         File mainPropsFile = null;
-        String replacementPropsName = System.getProperty("WebObjectsPropertiesReplacement");
+        String replacementPropsName = System.getProperty("WebObjectsPropertiesReplacement"); // MS: The name in WO 5.2
+        if (replacementPropsName == null) {
+            replacementPropsName = System.getProperty("NSGlobalPropertiesPath"); // MS: The name in WO 5.4.3.1
+        }
         if (replacementPropsName != null) {
-            mainPropsFile = new File(replacementPropsName);
-            if (!mainPropsFile.isFile()) {
-            	mainPropsFile = new File(userHome, replacementPropsName);
-            }
+        	if (validateProperties) {
+	            mainPropsFile = new File(replacementPropsName);
+	            if (!mainPropsFile.exists()) {
+	            	mainPropsFile = new File(userHome, replacementPropsName);
+	            }
+	            if (!mainPropsFile.exists()) {
+	    			throw new RuntimeException("There was no global properties file '" + replacementPropsName + "' (canonical path = '" + processedPropertiesPath(replacementPropsName) + ").");
+	            }
+	            if (!mainPropsFile.isFile()) {
+	    			throw new RuntimeException("The path '" + replacementPropsName + "' (canonical path = '" + processedPropertiesPath(replacementPropsName) + ") was not a file.");
+	            }
+	            if (!mainPropsFile.canRead()) {
+	    			throw new RuntimeException("The path '" + replacementPropsName + "' (canonical path = '" + processedPropertiesPath(replacementPropsName) + ") could not be read.");
+	            }
+        	}
+        	else {
+	            mainPropsFile = new File(replacementPropsName);
+	            if (!mainPropsFile.isFile()) {
+	            	mainPropsFile = new File(userHome, replacementPropsName);
+	            }
+        	}
         } else if (userHome != null && userHome.length() > 0) {
             mainPropsFile = new File(userHome, "WebObjects.properties");
         }
         if (mainPropsFile != null && mainPropsFile.exists() && mainPropsFile.isFile() && mainPropsFile.canRead()) {
-            try {
-                propertiesPaths.addObject(mainPropsFile.getCanonicalPath());
-                projectsInfo.addObject("User:        WebObjects.properties " + propertiesPaths.lastObject());
-            } catch (java.io.IOException ex) {
-            	ERXProperties.log.error("Failed to load the configuration file '" + mainPropsFile + "'.", ex);
-            }
+        	String propertiesPath = processedPropertiesPath(mainPropsFile);
+        	if (propertiesPath != null) {
+        		propertiesPaths.addObject(propertiesPath);
+        		projectsInfo.addObject("User:        WebObjects.properties " + propertiesPaths.lastObject());
+        	}
         }
 
         /* **** Optional properties files **** */
@@ -871,13 +912,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 String configFile = (String)configEnumerator.nextElement();
                 File file = new File(configFile);
                 if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
-                    try {
-                        aPropertiesPath = file.getCanonicalPath();
+                    aPropertiesPath = processedPropertiesPath(file);
+                    if (aPropertiesPath != null) {
                         projectsInfo.addObject("Optional Configuration:    " + aPropertiesPath);
                         propertiesPaths.addObject(aPropertiesPath);
-                    } catch (java.io.IOException ex) {
-                    	ERXProperties.log.error("Failed to load configuration file '" + file.getAbsolutePath() + "'.", ex);
-                    }                    
+                    }
                 }
                 else {
                 	ERXProperties.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or could not be read.");
@@ -951,11 +990,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         while (e.hasMoreElements()) {
             File file = new File(projectPath + (String) e.nextElement());
             if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
-                try {
-                    path = file.getCanonicalPath();
-                } catch (IOException ex) {
-                    log.error(ex.getClass().getName() + ": " + ex.getMessage());
-                }
+                path = processedPropertiesPath(file);
                 break;
             }
         }
@@ -971,7 +1006,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         if (userName != null  &&  userName.length() > 0) { 
         	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + userName, "app", null);
             if (resourceApplicationUserPropertiesPath != null) {
-            	applicationUserPropertiesPath = ERXProperties.getActualPath(resourceApplicationUserPropertiesPath);
+            	applicationUserPropertiesPath = processedPropertiesPath(resourceApplicationUserPropertiesPath);
             }
         }
         return applicationUserPropertiesPath;
@@ -992,12 +1027,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     		String applicationName = application.name();
     		File applicationPropertiesFile = new File(machinePropertiesPath + File.separator + applicationName + File.separator + fileName);
     		if (applicationPropertiesFile.exists()) {
-    			try {
-    				applicationMachinePropertiesPath = applicationPropertiesFile.getCanonicalPath();
-    			}
-    			catch (IOException e) {
-    				ERXProperties.log.error("Failed to load machine Properties file '" + fileName + "'.", e);
-    			}
+   				applicationMachinePropertiesPath = processedPropertiesPath(applicationPropertiesFile);
     		}
     	}
         return applicationMachinePropertiesPath;
@@ -1020,12 +1050,55 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	    		if (!new File(optionalConfigurationFile).exists()) {
 		        	String resourcePropertiesPath = ERXFileUtilities.pathForResourceNamed(optionalConfigurationFile, "app", null);
 		        	if (resourcePropertiesPath != null) {
-		            	optionalConfigurationFiles.replaceObjectAtIndex(ERXProperties.getActualPath(resourcePropertiesPath), i);
+		        		resourcePropertiesPath = processedPropertiesPath(resourcePropertiesPath);
+		        		if (resourcePropertiesPath != null) {
+		        			optionalConfigurationFiles.replaceObjectAtIndex(resourcePropertiesPath, i);
+		        		}
 		        	}
 	    		}
 	    	}
     	}
     	return optionalConfigurationFiles;
+    }
+    
+    /**
+     * Returns the path that should be used to load the given properties file (could be
+     * canonicalized or absolute, depending on the er.extensions.ERXProperties.canonicalizePropertiesPaths setting).
+     *   
+     * @param originalPropertiesPath the original path
+     * @return the path to load properties from
+     */
+    public static String processedPropertiesPath(String originalPropertiesPath) {
+    	String propertiesPath = null;
+    	if (originalPropertiesPath != null) {
+    		propertiesPath = processedPropertiesPath(new File(originalPropertiesPath));
+    	}
+    	return propertiesPath;
+    }
+    
+    /**
+     * Returns the path that should be used to load the given properties file (could be
+     * canonicalized or absolute, depending on the er.extensions.ERXProperties.canonicalizePropertiesPaths setting).
+     *   
+     * @param originalPropertiesFile the original properties file
+     * @return the path to load properties from
+     */
+    public static String processedPropertiesPath(File originalPropertiesFile) {
+    	String propertiesPath = null;
+    	if (originalPropertiesFile != null) {
+    		if (Boolean.valueOf(System.getProperty("er.extensions.ERXProperties.canonicalizePropertiesPaths", "false"))) {
+    			try {
+    				propertiesPath = originalPropertiesFile.getCanonicalPath();
+    			}
+    			catch (IOException e) {
+    				ERXProperties.log.warn("The properties path '" + originalPropertiesFile + "' does not exist: " + e.getMessage());
+    			}
+    		}
+    		else {
+    			propertiesPath = originalPropertiesFile.getAbsolutePath();
+    		}
+    	}
+    	return propertiesPath;
     }
     
     /**
@@ -1572,5 +1645,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				_files.pop();
 			}
 		}
+	}
+
+	// MS: NSValidateProperties specifies whether we should more strictly validate properties files and kill startup if there is a failure. Setting
+	// this property to false will switch everything back to the previous behavior.
+	public static boolean shouldValidateProperties() {
+		return Boolean.valueOf(System.getProperty("NSValidateProperties", "true"));
 	}
 }
