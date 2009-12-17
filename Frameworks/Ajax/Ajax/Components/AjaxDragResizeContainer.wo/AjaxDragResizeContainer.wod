@@ -23,3 +23,8 @@ DragResizeContainerDiv : WOGenericContainer {
 DragResizeContainerID : WOString {
 	value = dragResizeContainerID;
 }
+
+NotSkipContainer : WOConditional {
+  negate = true;
+  condition = ^skipContainer;
+}
