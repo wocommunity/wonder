@@ -338,7 +338,7 @@ public class ERXConfigurationManager {
         	}
         }
         
-        boolean atomicPropertiesReload = Boolean.valueOf(System.getProperty("er.extensions.ERXConfigurationManager.atomicPropertiesReload", "true"));
+        boolean atomicPropertiesReload = Boolean.valueOf(System.getProperty("er.extensions.ERXConfigurationManager.atomicPropertiesReload", "false"));
         if (atomicPropertiesReload) {
 	        Properties systemPropertiesCopy = new Properties();
 	        systemPropertiesCopy.putAll(System.getProperties());
@@ -349,16 +349,15 @@ public class ERXConfigurationManager {
 		            // MS: This can fail, so we don't want to add to system properties file-by-file -- we want to do 
 		            // a single push at the end.
 		           	Properties loadedProperties = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
-		            ERXProperties.transferPropertiesFromSourceToDest(loadedProperties, systemPropertiesCopy);
-		            ERXSystem.updateProperties(systemPropertiesCopy);
+		           	systemPropertiesCopy.putAll(loadedProperties);
 	        	}
 	        	catch (RuntimeException e) {
 	        		log.error("Failed to load properties from '" + monitoredPropertiesPath + "', so all properties from this reload will be rolled back.");
 	        		throw e;
 	        	}
 	        }
-	        System.setProperties(systemPropertiesCopy);
-	        ERXProperties.systemPropertiesChanged();
+            ERXProperties.transferPropertiesFromSourceToDest(systemPropertiesCopy, System.getProperties());
+            ERXSystem.updateProperties();
         }
         else {
             Properties systemProperties = System.getProperties();
