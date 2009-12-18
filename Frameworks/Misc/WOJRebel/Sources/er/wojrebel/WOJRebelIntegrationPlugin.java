@@ -1,27 +1,31 @@
-package org.zeroturnaround.javarebel;
+package er.wojrebel;
 
+import org.zeroturnaround.javarebel.ClassResourceSource;
+import org.zeroturnaround.javarebel.ConfigurationFactory;
+import org.zeroturnaround.javarebel.IntegrationFactory;
+import org.zeroturnaround.javarebel.Plugin;
 import org.zeroturnaround.javarebel.integration.support.JavassistClassBytecodeProcessor;
 import org.zeroturnaround.javarebel.support.PackageClassFilter;
 
 
 /**
- * JavaRebel WebObjects Integration Plugin
+ * JRebel WebObjects Integration Plugin
  * 
  * @author q
  *
  */
-public class WOJavaRebelIntegrationPlugin implements Plugin {
+public class WOJRebelIntegrationPlugin implements Plugin {
   private static boolean enabled = false;
   
 	public void preinit() {
     enabled = true;
-	  JavassistClassBytecodeProcessor processor = new WOJavaRebelBytecodeProcessor();
+	  JavassistClassBytecodeProcessor processor = new WOJRebelBytecodeProcessor();
 	  IntegrationFactory.getInstance()
-	    .addIntegrationProcessor(WOJavaRebelBytecodeProcessor.IDEPATCH_CLASS, processor);
+	    .addIntegrationProcessor(WOJRebelBytecodeProcessor.IDEPATCH_CLASS, processor);
 	  IntegrationFactory.getInstance()
-	    .addIntegrationProcessor(WOJavaRebelBytecodeProcessor.WORKERTHREAD_CLASS, processor);
+	    .addIntegrationProcessor(WOJRebelBytecodeProcessor.WORKERTHREAD_CLASS, processor);
 		// Reduce performance penalty by excluding some common packages that will not be changing
-	  if (System.getProperty("wojavarebel.noexclude") == null) {
+	  if (System.getProperty("wojrebel.noexclude") == null) {
 	    ConfigurationFactory.getInstance()
 	    .addExcludeManagedFilter(new PackageClassFilter(new String[]{
 	        "com.webobjects", "com.apple", "com.ibm", "org.apache", "javax.xml",
@@ -34,17 +38,17 @@ public class WOJavaRebelIntegrationPlugin implements Plugin {
   }
 
   public String getDescription() {
-    return "WebObjects JavaRebel Plugin                                       \n" +
+    return "WebObjects JRebel Plugin                                       \n" +
     		"If you are reloading changes to Wonder or WebObjects core packages you must set " +
-    		"-Dwojavarebel.noexclude to prevent these packages from being excluded.";
+    		"-Dwojrebel.noexclude to prevent these packages from being excluded.";
   }
 
   public String getId() {
-    return "wojavarebel";
+    return "wojrebel";
   }
 
   public String getName() {
-    return "WOJavaRebel";
+    return "WOJRebel";
   }
 
   public String getAuthor() {

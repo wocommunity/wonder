@@ -1,4 +1,4 @@
-package org.zeroturnaround.javarebel;
+package er.wojrebel;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -8,19 +8,19 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
 /**
- * WOJavaRebelSupport loads the ClassReloadHandler once the app has started
+ * WOJRebelSupport loads the ClassReloadHandler once the app has started
  * 
  * @author q
  *
  */
-public class WOJavaRebelSupport {
+public class WOJRebelSupport {
 	public static final Observer observer = new Observer();
   private static final ReentrantLock lock = new ReentrantLock();
   
   private static final long MIN_ELAPSED_TIME = 2000;
   private static long lastRunTimestamp = System.currentTimeMillis();
 
-	public WOJavaRebelSupport() {
+	public WOJRebelSupport() {
 		//Do nothing
 	}
 	
@@ -30,8 +30,8 @@ public class WOJavaRebelSupport {
 	    lock.lock();
 	    try {
 	      lastRunTimestamp = System.currentTimeMillis();
-	      WOJavaRebelClassReloadHandler.getInstance().updateLoadedClasses(null);
-	      WOJavaRebelModelReloadHandler.getInstance().updateLoadedModels(null);
+	      WOJRebelClassReloadHandler.getInstance().updateLoadedClasses(null);
+	      WOJRebelEOModelReloadHandler.getInstance().updateLoadedModels(null);
 	    } finally {
 	      lock.unlock();
 	    }
@@ -41,10 +41,10 @@ public class WOJavaRebelSupport {
 	public static class Observer {
 		public void finishedLaunchingApp(NSNotification n) {
 			try {
-				WOJavaRebelClassReloadHandler.getInstance().initialize();
-				WOJavaRebelModelReloadHandler.getInstance().initialize();
+				WOJRebelClassReloadHandler.getInstance().initialize();
+				WOJRebelEOModelReloadHandler.getInstance().initialize();
 			} catch (NoClassDefFoundError e) {
-				/* JavaRebel isn't in the classpath so we do nothing */
+				/* JRebel isn't in the classpath so we do nothing */
 				return;
 			}
 		}

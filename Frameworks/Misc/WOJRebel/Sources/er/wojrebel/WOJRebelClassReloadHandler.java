@@ -1,6 +1,12 @@
-package org.zeroturnaround.javarebel;
+package er.wojrebel;
 
 import java.util.Enumeration;
+
+import org.zeroturnaround.javarebel.ClassEventListener;
+import org.zeroturnaround.javarebel.Logger;
+import org.zeroturnaround.javarebel.LoggerFactory;
+import org.zeroturnaround.javarebel.Reloader;
+import org.zeroturnaround.javarebel.ReloaderFactory;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOApplication;
@@ -13,13 +19,13 @@ import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 
 /**
- * WOJavaRebelClassReloadHandler manages the clearing of KVC, component definition and class caches
- * when a class is reloaded by JavaRebel. Any cached ClassNotFound entries are also removed.
+ * WOJRebelClassReloadHandler manages the clearing of KVC, component definition and class caches
+ * when a class is reloaded by JRebel. Any cached ClassNotFound entries are also removed.
  * 
  * @author q
  *
  */
-public class WOJavaRebelClassReloadHandler {
+public class WOJRebelClassReloadHandler {
 
 	private static boolean initialized = false;
 		
@@ -28,36 +34,36 @@ public class WOJavaRebelClassReloadHandler {
 	private boolean resetActionClassCache = false;
 	private boolean resetValidationCache = false;
 
-	private static final WOJavaRebelClassReloadHandler instance = new WOJavaRebelClassReloadHandler();
+	private static final WOJRebelClassReloadHandler instance = new WOJRebelClassReloadHandler();
 	private static final Logger log = LoggerFactory.getInstance();
 
-	private WOJavaRebelClassReloadHandler() { /* Private */ }
+	private WOJRebelClassReloadHandler() { /* Private */ }
 	
-	public static WOJavaRebelClassReloadHandler getInstance() {
+	public static WOJRebelClassReloadHandler getInstance() {
 		return instance;
 	}
 
 	private void doReset() {
 		if (resetKVCCaches) {
 			resetKVCCaches = false;
-			log.echo("JavaRebel: Resetting KeyValueCoding caches");
+			log.echo("JRebel: Resetting KeyValueCoding caches");
 			NSKeyValueCoding.DefaultImplementation._flushCaches();
 			NSKeyValueCoding._ReflectionKeyBindingCreation._flushCaches();
 			NSKeyValueCoding.ValueAccessor._flushCaches();
 		}
 		if (resetComponentCache) {
 		  resetComponentCache = false;
-		  log.echo("JavaRebel: Resetting Component Definition cache");
+		  log.echo("JRebel: Resetting Component Definition cache");
 		  WOApplication.application()._removeComponentDefinitionCacheContents();
 		}
 		if (resetActionClassCache) {
 		  resetActionClassCache = false;
-		  log.echo("JavaRebel: Resetting Action class cache");
+		  log.echo("JRebel: Resetting Action class cache");
 		  WOClassCacheAccessor.clearActionClassCache();
 		}
 		if (resetValidationCache) {
 		  resetValidationCache = false;
-		  log.echo("JavaRebel: Resetting NSValidation cache");
+		  log.echo("JRebel: Resetting NSValidation cache");
 		  NSValidation.DefaultImplementation._flushCaches();
 		}
 	}
@@ -75,14 +81,14 @@ public class WOJavaRebelClassReloadHandler {
 		}
 
 		if (!isReloadEnabled()) {
-			System.out.println("JavaRebel rapid turnaround mode is disabled because JavaRebel is not running "
-					+ "\n    To use JavaRebel rapid turnaround you must add the following to your "
-					+ "Java VM arguments:\n        -noverify -javaagent:<pathtojar>/javarebel.jar");
-			System.out.println("    JavaRebel can be obtained from www.zeroturnaround.com");
+			System.out.println("JRebel rapid turnaround mode is disabled because JRebel is not running "
+					+ "\n    To use JRebel rapid turnaround you must add the following to your "
+					+ "Java VM arguments:\n        -noverify -javaagent:<pathtojar>/jrebel.jar");
+			System.out.println("    JRebel can be obtained from www.zeroturnaround.com");
 			return;
 		}
 
-		log.echo("JavaRebel: WebObjects support enabled");
+		log.echo("JRebel: WebObjects support enabled");
 		WOEventClassListener listener = new WOEventClassListener();
 		Reloader reloader = ReloaderFactory.getInstance();
 		reloader.addClassReloadListener(listener);

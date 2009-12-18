@@ -23,7 +23,7 @@
 		<module>ERSelenium</module>
 		<module>ERWorkerChannel</module>
 		<module>JavaMonitorFramework</module>
-		<module>WOJavaRebel</module>
+		<module>WOJRebel</module>
 		<module>WOLips</module>
 	</modules>
 </project>

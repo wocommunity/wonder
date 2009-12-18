@@ -1,0 +1,2 @@
+JavaRebel-Plugin: er.wojrebel.WOJRebelIntegrationPlugin
+
