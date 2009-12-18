@@ -51,4 +51,12 @@ public class SeleniumTestRCRunner {
 	public void finish() {
 		browser.stop();
 	}
+	
+	public void captureScreenshot(String filename) {
+    browser.doCommand("captureScreenshot", new String[] {filename});
+  }
+	
+	public void captureEntirePageScreenshot(String filename) {
+	   browser.doCommand("captureEntirePageScreenshot", new String[] {filename});
+	}
 }
