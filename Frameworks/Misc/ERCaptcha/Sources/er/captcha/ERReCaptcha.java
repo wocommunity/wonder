@@ -30,6 +30,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding secure sets whether or not the recaptcha URL should be secure (defaults to using the request's protocol)
  * @binding theme the recaptcha theme to use
  * @binding valid will be set to true or false depending on whether the check passed
+ * @binding errorMessage the error message to display for an incorrect-captcha-sol error
  * @property er.captcha.recaptcha.publicKey your ReCaptcha public key
  * @property er.captcha.recaptcha.privateKey your ReCaptcha private key
  * 
@@ -95,14 +96,24 @@ public class ERReCaptcha extends ERXComponent {
 		super.takeValuesFromRequest(request, context);
 		if (context._wasFormSubmitted()) {
 			String challenge = request.stringFormValueForKey("recaptcha_challenge_field");
+			if (challenge == null) {
+				challenge = "";
+			}
 			String response = request.stringFormValueForKey("recaptcha_response_field");
+			if (response == null) {
+				response = "";
+			}
 			String remoteAddress = request._remoteAddress();
 			if (remoteAddress == null) {
 				remoteAddress = WOApplication.application().hostAddress().getHostAddress();
 			}
 			ReCaptchaResponse recaptchaResponse = recaptcha().checkAnswer(remoteAddress, challenge, response);
 			if (!recaptchaResponse.isValid()) {
-				validationFailedWithException(new NSValidation.ValidationException(recaptchaResponse.getErrorMessage()), this, ERXSimpleSpamCheck.SPAM_CHECK_KEY);
+				String errorMessage = recaptchaResponse.getErrorMessage();
+				if (errorMessage != null && errorMessage.equals("incorrect-captcha-sol")) {
+					errorMessage = stringValueForBinding("errorMessage");
+				}
+				validationFailedWithException(new NSValidation.ValidationException(errorMessage), this, ERXSimpleSpamCheck.SPAM_CHECK_KEY);
 				setValueForBinding(Boolean.FALSE, "valid");
 			}
 			else {
