@@ -456,7 +456,6 @@ Modalbox.Methods = {
 				if (this.options.clickOnEscId) {
 					var target = $(this.options.clickOnEscId);
 					if (target && this._isClickable(target)) {
-						target.onclick();
 						target.click();
 						event.stop();
 					}
@@ -495,7 +494,6 @@ Modalbox.Methods = {
 					var target = $(this.options.clickOnReturnId);
 					// Don't trigger this for clickable elements or text areas
 					if (target && this._isClickable(target) &&  ! (this._isClickable(node) || ["textarea"].include(node.type)) ) {
-						target.onclick();
 						target.click();
 						event.stop();
 					}
