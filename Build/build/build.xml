@@ -601,7 +601,7 @@
       </antcall>
     </target>
 
-    <target name="Ajax.post.build">
+    <target name="Ajax.pre.build">
       	<exec dir="Frameworks/Ajax/Ajax/Support" executable="/bin/sh" os="Mac OS X" >
             <arg line="compress.sh" />
         </exec>
@@ -613,7 +613,7 @@
             <param name="project.name" value="Ajax" />
             <param name="project.dir" value="Frameworks/Ajax/Ajax" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
-      		<param name="after.build" value="Ajax.post.build" />
+      		<param name="before.build" value="Ajax.pre.build" />
         </antcall>
     </target>
     <target name="YUIExample.all">
