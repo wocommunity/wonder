@@ -493,9 +493,13 @@ Modalbox.Methods = {
 				if (this.options.clickOnReturnId) {
 					var target = $(this.options.clickOnReturnId);
 					// Don't trigger this for clickable elements or text areas
-					if (target && this._isClickable(target) &&  ! (this._isClickable(node) || ["textarea"].include(node.type)) ) {
-						target.click();
-						event.stop();
+					if (target && this._isClickable(target)) {
+						// Only click the target if node is not clickable or if node is not in the dialog box
+						if (this.MBcontent.select('input:not([type~=hidden]), select, textarea, button, a[href]').indexOf(node) == -1 ||
+							! (this._isClickable(node) || ["textarea"].include(node.type)) ) {
+							target.click();
+							event.stop();
+						}
 					}
 				}
 				break;
