@@ -91,7 +91,15 @@ public class StandaloneRunner {
 						}
 						
 					}
-					log.error("");
+//					log.error("Saving screenshot to " + "/tmp/" + testFile.getName() + ".png");
+//					if ("*firefox".equals(browserType)) {
+//					  runner.captureEntirePageScreenshot("/tmp/" + testFile.getName() + "-full.png");
+//            runner.captureScreenshot("/tmp/" + testFile.getName() + ".png");
+//					} else {
+//					  runner.captureScreenshot("/tmp/" + testFile.getName() + ".png");
+//					}
+
+          log.error("");
 				}
 			}
 		} finally {
