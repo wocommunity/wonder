@@ -8,8 +8,9 @@
 	<classpathentry kind="con" path="WOFramework/JavaWebObjects"/>
 	<classpathentry kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="Libraries/wojavarebel-plugin.jar"/>
-	<classpathentry kind="lib" path="Libraries/javarebel-sdk-2.0.1.jar"/>
-	<classpathentry kind="lib" path="Libraries/javarebel-utils-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Libraries/jr-sdk-2.2.jar"/>
+	<classpathentry kind="lib" path="Libraries/jr-utils-2.2.jar"/>
+	<classpathentry kind="lib" path="Libraries/jr-javassist-3.8.0.GA.jar"/>
+	<classpathentry kind="lib" path="Libraries/wojrebel-plugin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

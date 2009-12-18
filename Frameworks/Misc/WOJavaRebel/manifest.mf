@@ -1,2 +1,0 @@
-JavaRebel-Plugin: org.zeroturnaround.javarebel.WOJavaRebelIntegrationPlugin
-

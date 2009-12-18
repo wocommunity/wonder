@@ -7,8 +7,8 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.misc</groupId>
-	<artifactId>WOJavaRebel</artifactId>
-	<name>WOJavaRebel Framework</name>
+	<artifactId>WOJRebel</artifactId>
+	<name>WOJRebel Framework</name>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -30,11 +30,15 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zeroturnaround</groupId>
-			<artifactId>javarebel-sdk</artifactId>
+			<artifactId>jr-sdk</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.zeroturnaround</groupId>
-			<artifactId>javarebel-utils</artifactId>
+			<artifactId>jr-utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.zeroturnaround</groupId>
+			<artifactId>jr-javassist</artifactId>
 		</dependency>
 	</dependencies>
 

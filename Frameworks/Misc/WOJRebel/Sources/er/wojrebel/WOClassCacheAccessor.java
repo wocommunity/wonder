@@ -1,4 +1,4 @@
-package org.zeroturnaround.javarebel;
+package er.wojrebel;
 
 import java.lang.reflect.Field;
 

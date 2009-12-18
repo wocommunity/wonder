@@ -1,4 +1,4 @@
-package org.zeroturnaround.javarebel;
+package er.wojrebel;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import org.zeroturnaround.javarebel.Logger;
+import org.zeroturnaround.javarebel.LoggerFactory;
 
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -19,9 +22,9 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 
-public class WOJavaRebelModelReloadHandler {
+public class WOJRebelEOModelReloadHandler {
   private static boolean initialized = false;
-  private static final WOJavaRebelModelReloadHandler instance = new WOJavaRebelModelReloadHandler();
+  private static final WOJRebelEOModelReloadHandler instance = new WOJRebelEOModelReloadHandler();
   private static final Logger log = LoggerFactory.getInstance();
 
 
@@ -29,7 +32,7 @@ public class WOJavaRebelModelReloadHandler {
   private final Map<EOObjectStoreCoordinator, EOModelGroup> oscCache = new WeakHashMap<EOObjectStoreCoordinator, EOModelGroup>();
   private Field erxEntityCache;
   
-  public static WOJavaRebelModelReloadHandler getInstance() {
+  public static WOJRebelEOModelReloadHandler getInstance() {
     return instance;
   }
 
@@ -65,7 +68,7 @@ public class WOJavaRebelModelReloadHandler {
   }
 
   private void reloadModel(EOModel model) {
-    log.echo("JavaRebel: reloading EOModel " + model.name() + " (" + model.hashCode() + ")");
+    log.echo("JRebel: reloading EOModel " + model.name() + " (" + model.hashCode() + ")");
     EOModel newModel = new EOModel(model.pathURL());
     EOModelGroup modelGroup = model.modelGroup();
     modelGroup.removeModel(model);
