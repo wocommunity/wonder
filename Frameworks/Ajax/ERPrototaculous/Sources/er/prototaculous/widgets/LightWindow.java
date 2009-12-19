@@ -8,10 +8,10 @@ import er.extensions.foundation.ERXProperties;
 /**
  * Abstract superclass that encapsulates http://www.stickmanlabs.com/lightwindow 2.0
  * 
- * @property		useUnobtrusively		For Unobtrusive JavaScript programming
+ * @property er.prototaculous.useUnobtrusively For Unobtrusive JavaScript programming
+ * @property er.prototaculous.widgets.LightWindow.type
  * 
  * @author mendis
- *
  */
 public abstract class LightWindow extends WOComponent {
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", true);

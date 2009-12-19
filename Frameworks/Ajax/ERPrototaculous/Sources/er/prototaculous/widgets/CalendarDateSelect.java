@@ -29,6 +29,9 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @property er.prototaculous.useUnobtrusively	If you want the component to include its JavaScripts and CSS set to false. (This is the default).
  * 												This is to support Unobtrusive Javascript programming.
+ * @property er.ajax.AjaxCalendarDateSelect.DateFormats.natural
+ * @property er.ajax.AjaxCalendarDateSelect.DateFormats.american
+ * @property er.ajax.AjaxCalendarDateSelect.DateFormats.euro24hYmd
  *
  * @binding value
  * @binding id
