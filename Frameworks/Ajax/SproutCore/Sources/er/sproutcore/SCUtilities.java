@@ -21,6 +21,11 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 
+/**
+ *
+ * @property er.sproutcore.version
+ * @property er.sproutcore.base
+ */
 public class SCUtilities {
 
     protected final static Logger log = Logger.getLogger(SCUtilities.class);

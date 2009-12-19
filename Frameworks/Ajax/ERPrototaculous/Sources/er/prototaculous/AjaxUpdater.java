@@ -28,7 +28,6 @@ import er.extensions.foundation.ERXProperties;
  * @property er.prototaculous.useUnobtrusively Support for Unobtrusive Javascript programming. (Turned on by default).
  *  
  * @author mendis
- *
  */
 public abstract class AjaxUpdater extends WOComponent {
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", true);

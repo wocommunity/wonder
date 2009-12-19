@@ -37,9 +37,14 @@ import er.extensions.foundation.ERXStringUtilities;
  * La classe EOEnterpriseObjectSerializer s'occupe de la conversion des objets paramêtres de type
  * <code>EOEnterpriseObject</code> entre le monde Javascript et le monde Java.
  * 
+ * @property er.ajax.json.EOEditingContextFactory
+ * @property er.ajax.json.[entityName].canInsert
+ * @property er.ajax.json.[currentEntity.name].attributes
+ * @property er.ajax.json.[currentEntity.name].writableAttributes
+ * @property er.ajax.json.[currentEntity.name]relationships
+ *
  * @author john
- * @author Jean-François Veillette <jfveillette@os.ca>
- * @version $Revision$, $Date$
+ * @author <a href="mailto:jfveillette@os.ca">Jean-François Veillette</a>
  */
 public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	protected static NSMutableDictionary<String, NSArray<String>> readableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();

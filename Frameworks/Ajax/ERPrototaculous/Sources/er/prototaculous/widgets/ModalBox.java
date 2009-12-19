@@ -12,8 +12,9 @@ import er.extensions.foundation.ERXProperties;
 /**
  * Encapsulation of http://www.wildbit.com/labs/modalbox/ (a re-implementation of AjaxModalDialog)  
  * 
- * @author mendis
+ * @property er.prototaculous.useUnobtrusively Support for Unobtrusive Javascript programming.
  *
+ * @author mendis
  */
 public abstract class ModalBox extends WOComponent {
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", false);

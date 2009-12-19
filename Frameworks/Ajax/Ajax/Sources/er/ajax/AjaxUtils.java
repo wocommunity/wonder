@@ -27,6 +27,11 @@ import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
+/**
+ *
+ * @property er.ajax.compressed
+ * @property er.extensions.ERXResponseRewriter.javascriptTypeAttribute
+ */
 public class AjaxUtils {
 	private final static Logger log = Logger.getLogger(AjaxUtils.class);
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";

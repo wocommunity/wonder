@@ -9,8 +9,9 @@ import er.extensions.foundation.ERXProperties;
 /**
  * Prototype event notification for errors
  * 
- * @author mendis
+ * @property er.prototaculous.useUnobtrusively Support for Unobtrusive Javascript programming.
  *
+ * @author mendis
  */
 public class ERXAjaxErrorDictionaryPanel extends ERXErrorDictionaryPanel {
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", true);
