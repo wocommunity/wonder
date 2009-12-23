@@ -28,7 +28,7 @@ public abstract class WebObjectsRuntime {
   static {
     try {
       WO533_URL = new URL("http://supportdownload.apple.com/download.info.apple.com/Apple_Support_Area/Apple_Software_Updates/Mac_OS_X/downloads/061-2998.20070215.33woU/WebObjects5.3.3Update.dmg");
-      WO543_URL = new URL("http://download.info.apple.com/Mac_OS_X/061-4634.20080915.3ijd0/WebObjects543.dmg");
+      WO543_URL = new URL("http://supportdownload.apple.com/download.info.apple.com/Apple_Support_Area/Apple_Software_Updates/Mac_OS_X/downloads/061-4634.20080915.3ijd0/WebObjects543.dmg");
       WO533DEV_URL = new File("WebObjects533.dmg").toURL();
       WO543DEV_URL = new File("WebObjects543.dmg").toURL();
       WO55DEV_URL = new File("webobjectsjavadeveloper10a286.dmg").toURL();
