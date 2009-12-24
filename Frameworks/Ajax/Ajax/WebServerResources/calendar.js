@@ -112,7 +112,17 @@ function get_xy(el) {
   var result = [0, 0];
   while (el) {
     result[0] += el.offsetLeft;
-    result[1] += el.offsetTop;
+	result[1] += el.offsetTop;
+
+    // CH: If you use position:relative on a span around an input, Safari copies the offset values
+    //     to the contained input resulting in the calendar popup being offset to the right and bottom 
+    //     To work around this, detect this situation and skip the containing span.
+	if (Prototype.Browser.WebKit && el.tagName == "INPUT" && 
+	    el.offsetParent && el.offsetParent.tagName == "SPAN" && 
+	    el.offsetParent.getStyle('position').toLowerCase() == 'relative') {
+      el = el.offsetParent;
+    }
+
     el = el.offsetParent;
   }
   return result;
