@@ -5,4 +5,5 @@ Reset: WOSubmitButton {
 	style = ^style;
 	id = ^id;
 	action = dummy;
+	accesskey = ^accesskey;
 }
