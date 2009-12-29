@@ -313,6 +313,11 @@ public class AdminAction extends WODirectAction {
             result += "\"activeSessions\": \"" + minstance.activeSessions() + "\", ";
             result += "\"averageIdlePeriod\": \"" + minstance.averageIdlePeriod() + "\", ";
             result += "\"avgTransactionTime\": \"" + minstance.avgTransactionTime() + "\"";
+            
+            String infoMode = (String) context().request().formValueForKey("info");
+            if ("full".equalsIgnoreCase(infoMode)) {
+                result += ", \"additionalArgs\": \"" + minstance.additionalArgs().replace("\"", "\\\"") + "\"";
+            }
             result += "}";
         }
         woresponse.appendContentString("[" + result + "]");
