@@ -117,7 +117,7 @@ import com.webobjects.monitor._private.MSiteConfig;
  * <td>info</td>
  * <td>JSON or<br>
  * error message</td>
- * <td>returns a JSON encoded list of instances with all the data from the app detail page.</td>
+ * <td>returns a JSON encoded list of instances with all the data from the app detail page.  Add form value info=full to also return the Additional Arguments.</td>
  * </tr>
  * </table>
  * </p>
