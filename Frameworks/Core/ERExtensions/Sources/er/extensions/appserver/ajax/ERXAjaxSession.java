@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -58,6 +60,9 @@ public class ERXAjaxSession extends WOSession {
   private static int MAX_PAGE_REPLACEMENT_CACHE_SIZE = Integer.parseInt(System.getProperty("er.extensions.maxPageReplacementCacheSize", "30"));
 
   private static boolean overridePrivateCache = ERXProperties.booleanForKey("er.extensions.overridePrivateCache");
+  
+  private Logger logger = Logger.getLogger(ERXAjaxSession.class.getName());
+  
   
   /*
    * ERTransactionRecord is a reimplementation of WOTransactionRecord for
@@ -125,7 +130,7 @@ public class ERXAjaxSession extends WOSession {
     }
 
     public String toString() {
-      return "[TransactionRecord: page = " + _page + "; context = " + _context.contextID() + "; key = " + _key + "; oldPage? " + _oldPage + "]";
+      return "[TransactionRecord: page = " + _page.name() + "; context = " + _context.contextID() + "; key = " + _key + "; oldPage? " + _oldPage + "]";
     }
   }
   
@@ -153,7 +158,7 @@ public class ERXAjaxSession extends WOSession {
    * passes up to the standard page cache.  If you are not using Ajax, no replacement cache will exist in your session, and all the code 
    * related to it will be skipped, so it should be minimally invasive under those conditions.
    * <p>
-   * It turns out that we have to keep the last TWO states, because of a race condition in the scenario where the replacement page 
+   * <b>*</b> It turns out that we have to keep the last TWO states, because of a race condition in the scenario where the replacement page 
    * cache replaces context 2 with the context 3 update, but the user's browser hasn't been updated yet with the HTML from 
    * context 3.  When the user clicks, they are clicking the context 2 link, which has now been removed from the replacement cache.
    * By keeping the last two states, you allow for the brief period where that transition occurs.
@@ -166,7 +171,7 @@ public class ERXAjaxSession extends WOSession {
   public void savePage(WOComponent page) {
 	  WOContext context = context();
     if (ERXAjaxApplication.shouldNotStorePage(context)) {
-    	// System.out.println("Not storing page: " + context.request().uri());
+      if (logger.isDebugEnabled()) logger.debug("Considering pageReplacementCache for " + context.request().uri() + " with contextID " + context.contextID());
       WORequest request = context.request();
       WOResponse response = context.response();
       String pageCacheKey = null;
@@ -176,7 +181,10 @@ public class ERXAjaxSession extends WOSession {
       if (pageCacheKey == null && request != null) {
     	  pageCacheKey = request.headerForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
       }
+
+      // A null pageCacheKey should mean an Ajax request that is not returning a content update or an expliclty not cached non-Ajax request
       if (pageCacheKey != null) {
+        if (logger.isDebugEnabled()) logger.debug("Will use pageCacheKey " + pageCacheKey);
         String originalContextID = context.request().headerForKey(ERXAjaxSession.ORIGINAL_CONTEXT_ID_KEY);
         pageCacheKey = originalContextID + "_" + pageCacheKey;
         LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
@@ -193,20 +201,24 @@ public class ERXAjaxSession extends WOSession {
           Iterator entryIterator = pageReplacementCache.entrySet().iterator();
           Map.Entry oldestEntry = (Map.Entry) entryIterator.next();
           entryIterator.remove();
-          // System.out.println("ERXSession.savePage: " + pageCacheKey + " removing oldest entry = " + ((TransactionRecord)oldestEntry.getValue()).key());
+          if (logger.isDebugEnabled()) logger.debug(pageCacheKey + "pageReplacementCache too large, removing oldest entry = " + ((TransactionRecord)oldestEntry.getValue()).key());
         }
 
         TransactionRecord pageRecord = new TransactionRecord(page, context, pageCacheKey);
         pageReplacementCache.put(context.contextID(), pageRecord);
-        //System.out.println("ERXSession.savePage: " + pageCacheKey + " new context = " + context.contextID());
-        // System.out.println("ERXSession.savePage: " + pageCacheKey + " = " + pageReplacementCache);
+        if (logger.isDebugEnabled()) logger.debug(pageCacheKey + " new context = " + context.contextID());
+        if (logger.isDebugEnabled()) logger.debug(pageCacheKey + " = " + pageReplacementCache.keySet());
 
         ERXAjaxApplication.cleanUpHeaders(response);
       }
+      else {
+          // A null pageCacheKey should mean an Ajax request that is not returning a content update or an expliclty not cached non-Ajax request
+    	  if (logger.isDebugEnabled()) logger.debug("Not caching as no pageCacheKey found");
+      }
     }
     else {
-        // System.out.println("ERXSession.super.savePage");
-     super.savePage(page);
+    	if (logger.isDebugEnabled()) logger.debug("Calling super.savePage for contextID " + context.contextID());
+    	super.savePage(page);
     }
   }
 
@@ -226,7 +238,7 @@ public class ERXAjaxSession extends WOSession {
   protected boolean cleanPageReplacementCacheIfNecessary(String _cacheKeyToAge) {
     boolean removedCacheEntry = false;
     LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
-    //System.out.println("ERXSession.cleanPageReplacementCacheIfNecessary: " + pageReplacementCache);
+    if (logger.isDebugEnabled()) logger.debug("keys in pageReplacementCache: " + pageReplacementCache.keySet());
     if (pageReplacementCache != null) {
       Iterator transactionRecordsEnum = pageReplacementCache.entrySet().iterator();
       while (transactionRecordsEnum.hasNext()) {
@@ -234,7 +246,7 @@ public class ERXAjaxSession extends WOSession {
         TransactionRecord tempPageRecord = (TransactionRecord) pageRecordEntry.getValue();
         // If the page has been GC'd, toss the transaction record ...
         if (tempPageRecord.isExpired()) {
-          //System.out.println("ERXSession.cleanPageReplacementCache:   deleting expired page record " + tempPageRecord);
+          if (logger.isDebugEnabled()) logger.debug("deleting expired page record " + tempPageRecord);
           transactionRecordsEnum.remove();
           removedCacheEntry = true;
         }
@@ -243,13 +255,13 @@ public class ERXAjaxSession extends WOSession {
           if (_cacheKeyToAge.equals(transactionRecordKey)) {
             // If this is the "old page", then delete the entry ...
             if (tempPageRecord.isOldPage()) {
-              //System.out.println("ERXSession.cleanPageReplacementCache: " + _cacheKeyToAge + " removing old page " + tempPageRecord);
+              if (logger.isDebugEnabled()) logger.debug(_cacheKeyToAge + " removing old page " + tempPageRecord);
               transactionRecordsEnum.remove();
               removedCacheEntry = true;
             }
             // Otherwise, flag this entry as the old page ...
             else {
-              //System.out.println("ERXSession.cleanPageReplacementCache:   " + _cacheKeyToAge + " marking old page");
+              if (logger.isDebugEnabled()) logger.debug(_cacheKeyToAge + " marking as old page");
               tempPageRecord.setOldPage(true);
             }
           }
@@ -261,7 +273,7 @@ public class ERXAjaxSession extends WOSession {
       // to exist.
       if (_cacheKeyToAge == null && pageReplacementCache.isEmpty()) {
         removeObjectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
-        //System.out.println("ERXSession.cleanPageReplacementCache: Removing empty page cache");
+        if (logger.isDebugEnabled()) logger.debug("Removing empty page cache");
       }
     }
     return removedCacheEntry;
@@ -309,7 +321,7 @@ public class ERXAjaxSession extends WOSession {
 			WOContext _currentContext = context();
 			if (_currentContext != null) {
 				String contextID = context().contextID();
-				// System.out.println("ERXSession._saveCurrentPage: " + contextID);
+				if (logger.isDebugEnabled()) logger.debug("Saving page for contextID: " + contextID);
 				WOComponent currentPage = _currentContext._pageComponent();
 				if (currentPage != null && currentPage._isPage()) {
 					WOComponent permanentSenderPage = _permanentPageWithContextID(_currentContext._requestContextID());
@@ -371,7 +383,7 @@ public class ERXAjaxSession extends WOSession {
 		if(overridePrivateCache) {
 			WOContext wocontext = context();
 			String contextID = wocontext.contextID();
-			// System.out.println("ERXSession.savePageInPermanentCache: " + contextID);
+			if (logger.isDebugEnabled()) logger.debug("Saving page for contextID: " + contextID);
 			NSMutableDictionary permanentPageCache = _permanentPageCache();
 			for (int i = WOApplication.application().permanentPageCacheSize(); _permanentContextIDArray.count() >= i; _permanentContextIDArray.removeObjectAtIndex(0)) {
 				String s1 = (String) _permanentContextIDArray.objectAtIndex(0);
@@ -391,17 +403,18 @@ public class ERXAjaxSession extends WOSession {
 	 * Page Replacement Cache.
 	 */
   public WOComponent restorePageForContextID(String contextID) {
-	// 	System.out.println("ERXSession.restorePageForContextID: " + contextID + " restoring page");
+	if (logger.isDebugEnabled()) logger.debug("Restoring page for contextID: " + contextID);
     LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
 
     WOComponent page = null;
     if (pageReplacementCache != null) {
       TransactionRecord pageRecord = (TransactionRecord) pageReplacementCache.get(contextID);
-      // System.out.println("ERXSession.restorePageForContextID: " + contextID + " pageRecord = " + pageRecord);
       if (pageRecord != null) {
-        page = pageRecord.page();
+          if (logger.isDebugEnabled()) logger.debug("Restoring page for contextID: " + contextID + " pageRecord = " + pageRecord);
+          page = pageRecord.page();
       }
       else {
+        if (logger.isDebugEnabled()) logger.debug("No page in pageReplacementCache for contextID: " + contextID);
         // If we got the page out of the replacement cache above, then we're obviously still
         // using Ajax, and it's likely our cache will be cleaned out in an Ajax update.  If the
         // requested page was not in the cache, though, then we might be done with Ajax, 
