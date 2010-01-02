@@ -4,53 +4,90 @@
 
 <h3 align="center">ERPPieChart & ERPCategoryChart</h3>
 
+<p>
+Using "Mobile Phone Sales Data": (itemSet1)<br/>
+<blockquote>
+[ { name = "RIM"; value = 200; category = "01/2011" },<br/>
+{ name = "RIM"; value = 210; category = "02/2011" },<br/>
+{ name = "RIM"; value = 215; category = "03/2011" },<br/>
+{ name = "iPhone"; value = 100; category = "01/2011" },<br/>
+{ name = "iPhone"; value = 150; category = "02/2011" },<br/>
+{ name = "iPhone"; value = 200; category = "03/2011" },<br/>
+{ name = "Android"; value = 50; category = "01/2011" },<br/>
+{ name = "Android"; value = 55; category = "02/2011" },<br/>
+{ name = "Android"; value = 110; category = "03/2011" } ]
+</blockquote>
+</p>
+
 <p>LineChart:</p>
 
 <blockquote>
-<wo:ERPCategoryChart items="$itemSet1" nameKey="name" valueKey="value" categoryKey="category" chartType="LineChart" />
+<WEBOBJECT NAME = LineChart></WEBOBJECT>
 </blockquote>
 
 <p>BarChart:</p>
 
 <blockquote>
-<wo:ERPCategoryChart items="$itemSet1" nameKey="name" valueKey="value" categoryKey="category" chartType="BarChart" />
+<WEBOBJECT NAME = BarChart></WEBOBJECT>
 </blockquote>
 
 
 <p>StackedBarChart:</p>
 
 <blockquote>
-<wo:ERPCategoryChart items="$itemSet1" nameKey="name" valueKey="value" categoryKey="category" chartType="StackedBarChart" />
+<WEBOBJECT NAME = StackedBarChart ></WEBOBJECT>
 </blockquote>
 
 <p>BarChart3D:</p>
 
 <blockquote>
-<wo:ERPCategoryChart items="$itemSet1" nameKey="name" valueKey="value" categoryKey="category" chartType="BarChart3D" />
+<WEBOBJECT NAME = BarChart3D ></WEBOBJECT>
 </blockquote>
 
 <p>StackedBarChart3D:</p>
 
 <blockquote>
-<wo:ERPCategoryChart items="$itemSet1" nameKey="name" valueKey="value" categoryKey="category" chartType="StackedBarChart3D" />
-</blockquote>
-
-<p>AreaChart:</p>
-
-<blockquote>
-<wo:ERPCategoryChart items="$itemSet1" nameKey="name" valueKey="value" categoryKey="category" chartType="AreaChart" />
+<WEBOBJECT NAME = StackedBarChart3D ></WEBOBJECT>
 </blockquote>
 
 <p>StackedAreaChart:</p>
 
 <blockquote>
-<wo:ERPCategoryChart items="$itemSet1" nameKey="name" valueKey="value" categoryKey="category" chartType="StackedAreaChart" />
+<WEBOBJECT NAME = StackedAreaChart ></WEBOBJECT>
 </blockquote>
+
+<p>AreaChart:</p>
+
+<p>Note that the order of the data in the items list is significant here. One can see that the "RIM" values are larger than
+the "iPhone" numbers. If the "iPhone" entries appear first in the list, then they are "behind" the "RIM" entries and so
+are invisible.</p>
+
+<table align="center" cellpadding="5" border="1">
+<tr>
+<td align="center">data in order: RIM, iPhone, Android</td>
+<td align="center">data in order: iPhone, RIM, Android</td>
+</tr>
+<tr><td>
+<WEBOBJECT NAME = AreaChart1 ></WEBOBJECT>
+</td>
+<td>
+<WEBOBJECT NAME = AreaChart2 ></WEBOBJECT>
+</td></tr>
+</table>
 
 <p>WaterfallChart:</p>
 
+<p>Using "iPhone Sales Data": (itemSet2)
 <blockquote>
-<wo:ERPCategoryChart items="$itemSet1" nameKey="name" valueKey="value" categoryKey="category" chartType="WaterfallChart" />
+[ { name = "iPhone"; value = 20; category = "01/2011" },<br/>
+{ name = "iPhone"; value = 25; category = "02/2011" },<br/>
+{ name = "iPhone"; value = 30; category = "03/2011" },<br/>
+{ name = "iPhone"; value = 75; category = "Total Q1" } ]
+</blockquote>
+</p>
+
+<blockquote>
+<WEBOBJECT NAME = WaterfallChart ></WEBOBJECT>
 </blockquote>
 
 </body></html>

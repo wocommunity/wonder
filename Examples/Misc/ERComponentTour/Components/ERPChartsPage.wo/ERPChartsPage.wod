@@ -1,0 +1,90 @@
+
+LineChart : ERPCategoryChart {
+	items= itemSet1;
+	yName="Sales";
+	xName="Per Month";
+	nameKey="name";
+	valueKey="value";
+	categoryKey="category";
+	chartType="LineChart";
+}
+
+BarChart : ERPCategoryChart {
+	items= itemSet1;
+	yName="Sales";
+	xName="Per Month";
+	nameKey="name";
+	valueKey="value";
+	categoryKey="category";
+	chartType="BarChart";
+}
+
+StackedBarChart : ERPCategoryChart {
+	items= itemSet1;
+	yName="Sales";
+	xName="Per Month";
+	nameKey="name";
+	valueKey="value";
+	categoryKey="category";
+	chartType="StackedBarChart";
+}
+
+BarChart3D : ERPCategoryChart {
+	items= itemSet1;
+	yName="Sales";
+	xName="Per Month";
+	nameKey="name";
+	valueKey="value";
+	categoryKey="category";
+	chartType="BarChart3D";
+}
+
+StackedBarChart3D : ERPCategoryChart {
+	items= itemSet1;
+	yName="Sales";
+	xName="Per Month";
+	nameKey="name";
+	valueKey="value";
+	categoryKey="category";
+	chartType="StackedBarChart3D";
+}
+
+StackedAreaChart : ERPCategoryChart {
+	items= itemSet1;
+	yName="Sales";
+	xName="Per Month";
+	nameKey="name";
+	valueKey="value";
+	categoryKey="category";
+	chartType="StackedAreaChart";
+}
+
+AreaChart1 : ERPCategoryChart {
+	yName="Sales";
+	xName="Per Month";
+	items= itemSet1;
+	nameKey="name";
+	valueKey="value";
+	categoryKey="category";
+	chartType="AreaChart";
+}
+
+AreaChart2 : ERPCategoryChart {
+	yName="Sales";
+	xName="Per Month";
+	items= itemSet1a;
+	nameKey="name";
+	valueKey="value";
+	categoryKey="category";
+	chartType="AreaChart";
+}
+
+WaterfallChart : ERPCategoryChart {
+	yName="Sales";
+	xName="Per Period";
+	items= itemSet2;
+	nameKey="name";
+	valueKey="value";
+	categoryKey="category";
+	chartType="WaterfallChart";
+}
