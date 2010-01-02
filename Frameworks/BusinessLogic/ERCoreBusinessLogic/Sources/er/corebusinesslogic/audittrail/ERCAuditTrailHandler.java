@@ -30,6 +30,10 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
+/**
+ *
+ * @property er.corebusinesslogic.ERCAuditTrailClassName
+ */
 public class ERCAuditTrailHandler {
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCAuditTrail.class);
 

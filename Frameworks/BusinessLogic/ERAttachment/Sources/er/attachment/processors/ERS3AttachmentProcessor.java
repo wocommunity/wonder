@@ -31,6 +31,15 @@ import er.extensions.foundation.ERXProperties;
  * ERS3AttachmentProcessor implements storing attachments in Amazon's S3 service.  For more 
  * information about configuring an ERS3AttachmentProcessor, see the top level documentation.
  * 
+ * @property er.attachment.[configurationName].s3.bucket
+ * @property er.attachment.s3.bucket
+ * @property er.attachment.[configurationName].s3.key
+ * @property er.attachment.s3.key
+ * @property er.attachment.[configurationName].s3.accessKeyID
+ * @property er.attachment.s3.accessKeyID
+ * @property er.attachment.[configurationName].s3.secretAccessKey
+ * @property er.attachment.s3.secretAccessKey
+ *
  * @author mschrag
  */
 public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachment> {

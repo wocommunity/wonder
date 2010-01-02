@@ -56,6 +56,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * 
  * @property er.attachment.[configurationName].tempFolder (optional) the temp folder to use for WOFileUploads
  * @property er.attachment.tempFolder (optional) the temp folder to use for WOFileUploads
+ * @property er.attachment.[configurationName].storageType
+ * @property er.attachment.storageType
+ * @property er.attachment.[configurationName].width
+ * @property er.attachment.width
+ * @property er.attachment.[configurationName].height
+ * @property er.attachment.height
+ *
  */
 public class ERAttachmentUpload extends WOComponent {
   private String _filePath;

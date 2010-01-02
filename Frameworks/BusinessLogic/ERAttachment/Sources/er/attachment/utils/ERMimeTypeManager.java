@@ -13,6 +13,12 @@ import er.extensions.foundation.ERXProperties;
 /**
  * ERMimeTypeManager provides an interface to looking up mime type metadata.
  * 
+ * @property er.attachment.mimeTypes
+ * @property er.attachment.additionalMimeTypes
+ * @property er.attachment.mimeType.[mimeType].name
+ * @property er.attachment.mimeType.[mimeType].uti
+ * @property er.attachment.mimeType.[mimeType].extensions
+ *
  * @author mschrag
  */
 public class ERMimeTypeManager {

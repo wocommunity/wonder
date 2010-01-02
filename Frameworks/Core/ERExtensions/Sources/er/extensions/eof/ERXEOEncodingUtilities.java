@@ -31,6 +31,11 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXUtilities;
 
+/**
+ * 
+ * @property er.extensions.ERXEOEncodingUtilities.EntityNameSeparator
+ * @property er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL
+ */
 public class ERXEOEncodingUtilities {
 
     /** logging support */
@@ -165,7 +170,7 @@ public class ERXEOEncodingUtilities {
     
     /**
      * This method encodes the entity name of the enterprise object
-     * by searching in the default model group wether it can find
+     * by searching in the default model group whether it can find
      * the key EncodedEntityNameKey in the user info dictionary.
      * @param eo    the enterprise object
      * @return the encoded entity name defaulting to the given eo's entityName

@@ -14,6 +14,8 @@ import er.extensions.foundation.ERXProperties;
  * ImageProcessor is a common superclass of all IImageProcessor 
  * implementations.
  * 
+ * @property er.attachment.thumbnail.imageProcessor
+ *
  * @author mschrag
  */
 public abstract class ERImageProcessor implements IERImageProcessor {

@@ -25,7 +25,6 @@ import er.extensions.foundation.ERXProperties;
  * There are defaults provided for several attachment types.
  * </p> 
  *  
- * @author mschrag
  * @binding attachment the attachment to display
  * @binding configurationName (optional) the configuration name for this attachment (see top level documentation)
  * @binding class (optional) the css class
@@ -33,7 +32,13 @@ import er.extensions.foundation.ERXProperties;
  * @binding style (optional) the embedded css style
  * @binding width (optional) if displaying an image, sets the image width 
  * @binding height (optional) if displaying an image, sets the image height
- * @property er.attachment.mimeType.[mimetype].viewer the class name of the viewer component for the given mime type
+ *
+ * @property er.attachment.mimeType.[mimeType].viewer the class name of the viewer component for the given mime type
+ * @property er.attachment.mimeType.[globMimeType].viewer
+ * @property er.attachment.mimeType.unavailable.viewer
+ * @property er.attachment.mimeType.default.viewer
+ *
+ * @author mschrag
  */
 public class ERAttachmentViewer extends AbstractERAttachmentViewer {
   public ERAttachmentViewer(WOContext context) {

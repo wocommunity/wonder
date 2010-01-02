@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -26,7 +25,6 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -40,7 +38,6 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.crypting.ERXCrypto;
-import er.extensions.logging.ERXLogger;
 
 /**
  * Collection of simple utility methods used to get and set properties
@@ -49,6 +46,20 @@ import er.extensions.logging.ERXLogger;
  * This is a wee bit annoying. The usual method is to have a method
  * like <code>getBoolean</code> off of Boolean which would resolve
  * the System property as a Boolean object.
+ * 
+ * Properties can be set in all the following places:
+ * <ul>
+ * <li>Properties in a bundle Resources directory</li>
+ * <li>Properties.dev in a bundle Resources directory</li>
+ * <li>Properties.username in a bundle Resources directory </li>
+ * <li>~/Library/WebObjects.properties file</li>
+ * <li>in the eclipse launcher or on the command-line</li>
+ * </ul>
+ * 
+ * TODO - If this would fallback to calling the System getProperty, we
+ * could ask that Project Wonder frameworks only use this class.
+ * 
+ * @property er.extensions.ERXProperties.RetainDefaultsEnabled
  */
 public class ERXProperties extends Properties implements NSKeyValueCoding {
 
@@ -645,11 +656,12 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
-     * Returns the decrypted value for the given property name using
-     * the default crypter if the property propertyName.encrypted=true.  For
-     * instance, if you are requesting my.password, if my.password.encrypted=true
-     * the value of my.password will be passed to the default crypter's decrypt
-     * method.
+     * If the <code>propertyName.encrypted</code> property is set to true, returns
+     * the plain text value of the given property name, after decrypting it with the
+     * {@link ERXCrypto.defaultCrypter}. For instance, if you are requesting
+     * my.password and <code>my.password.encrypted</code> is set to true,
+     * the value of <code>my.password</code> will be sent to the default crypter's
+     * decrypt() method.
      * 
      * @param propertyName the property name to retrieve and optionally decrypt
      * @param defaultValue the default value to return if there is no password
@@ -672,8 +684,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
-     * Returns the decrypted value for the given property name using the default crypter. This is
-     * slightly different than decryptedStringWithKeyWithDefault in that it does not require  the .encrypted
+     * Returns the decrypted value for the given property name using the
+     * {@link ERXCrypto.defaultCrypter}. This is slightly different than
+     * decryptedStringWithKeyWithDefault in that it does not require  the encrypted
      * property to be set.
      *  
      * @param propertyName the name of the property to decrypt
@@ -758,7 +771,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /** 
      * Copies all properties from source to dest. 
      * 
-     * @param source  proeprties copied from 
+     * @param source  properties copied from 
      * @param dest  properties copied to
      */
     public static void transferPropertiesFromSourceToDest(Properties source, Properties dest) {
@@ -808,10 +821,12 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     /**
      * Gets the properties for a given file.
+     * 
      * @param file the properties file
      * @return properties from the given file
+     * @throws java.io.IOException if the file is not found or cannot be read
      */
-    public static Properties propertiesFromFile(File file) throws IOException {
+    public static Properties propertiesFromFile(File file) throws java.io.IOException {
         if (file == null)
             throw new IllegalStateException("Attempting to get properties for a null file!");
         ERXProperties._Properties prop = new ERXProperties._Properties();
