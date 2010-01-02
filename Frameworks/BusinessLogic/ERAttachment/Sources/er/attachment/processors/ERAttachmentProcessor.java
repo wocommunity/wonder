@@ -38,11 +38,16 @@ import er.extensions.validation.ERXValidationException;
  * the er.attachment package.html for more information.
  * </p>
  * 
- * @author mschrag
- *
  * @param <T> the type of ERAttachment that this processor processes
+ *
  * @property er.attachment.maxSize the maximum size of an uploaded attachment
- * @property er.attachment.[configurationName] maxSize the maximum size of an uploaded attachment
+ * @property er.attachment.[configurationName].maxSize the maximum size of an uploaded attachment
+ * @property er.attachment.[configurationName].storageType
+ * @property er.attachment.storageType
+ * @property er.attachment.[configurationName].proxyAsAttachment
+ * @property er.attachment.proxyAsAttachment
+ *
+ * @author mschrag
  */
 public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   public static final Logger log = Logger.getLogger(ERAttachmentProcessor.class);

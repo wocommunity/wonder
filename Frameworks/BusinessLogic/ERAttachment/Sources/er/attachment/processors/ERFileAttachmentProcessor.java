@@ -19,6 +19,15 @@ import er.extensions.foundation.ERXProperties;
  * via a proxy request handler or directly by the webserver.  For more information about configuring
  * an ERFileAttachmentProcessor, see the top level documentation.
  * 
+ * @property er.attachment.[configurationName].file.proxy
+ * @property er.attachment.file.proxy
+ * @property er.attachment.[configurationName].file.overwrite
+ * @property er.attachment.file.overwrite
+ * @property er.attachment.[configurationName].file.filesystemPath");
+ * @property er.attachment.file.filesystemPath
+ * @property er.attachment.[configurationName].file.webPath");
+ * @property er.attachment.file.webPath
+ *
  * @author mschrag
  */
 public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttachment> {

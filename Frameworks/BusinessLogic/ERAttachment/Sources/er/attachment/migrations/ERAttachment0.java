@@ -9,6 +9,8 @@ import er.extensions.migration.ERXMigrationTable;
 /**
  * Performs the initial database table creation.
  * 
+ * @property er.extensions.ERXModelGroup.ERAttachment.size.columnName
+ *
  * @author mschrag
  */
 public class ERAttachment0 extends ERXMigrationDatabase.Migration {

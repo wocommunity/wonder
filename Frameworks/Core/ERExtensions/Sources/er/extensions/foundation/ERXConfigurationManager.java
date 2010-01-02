@@ -96,12 +96,13 @@ import er.extensions.logging.ERXLogger;
  * <strong>Openbase:</strong> same, with DBDatabase and DBHostname
  * 
  * <strong>JDBC:</strong> same with dbConnectURLGLOBAL, or ER.DBURL
- * 
  * </pre>
- * <p>
- * Prototypes can be swapped globally or per model either by 
+ * 
+ * <p>Prototypes can be swapped globally or per model either by 
  * hydrating an archived prototype entity for a file or from 
- * another entity.
+ * another entity.</p>
+ * 
+ * @property er.extensions.ERXConfigurationManager.PropertiesTouchFile if this property is set to a file name, the application will register for notifications of changes to that file and when that file is touched, the application will re-load properties.
  */
 public class ERXConfigurationManager {
 

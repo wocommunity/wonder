@@ -26,7 +26,6 @@ import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
-import com.webobjects.eoaccess.ERXEntity;
 import com.webobjects.eoaccess.ERXModel;
 import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.foundation.NSArray;
@@ -62,9 +61,74 @@ import er.extensions.jdbc.ERXSQLHelper;
 /**
  * Enhanced model group that supports connection dict switching, definable and predictable model orderings and stackable prototypes.
  * It also fixes some errors when loading prototypes and EOModeler backup files (Foo.emodeld~). The class is the meant to be the default model
- * group abd works in conjunction with ERXExtensions to set itself up on load. <br>
- * You <b>must</b> use EOModelGroup.defaultGroup() and not EOModelGroup.globalModelGroup() because only the former will result in this class getting 
- * created.
+ * group and works in conjunction with ERXExtensions to set itself up on load.
+ *
+ * <p>You <b>must</b> use EOModelGroup.defaultGroup() and not EOModelGroup.globalModelGroup() because only the former will result in this class getting 
+ * created.</p>
+ *
+ * @property EOPrototypesFileGLOBAL
+ * @property JNDI.global.authenticationMethod
+ * @property JNDI.global.password
+ * @property JNDI.global.plugin
+ * @property JNDI.global.serverUrl
+ * @property JNDI.global.username
+ * @property dbConfigNameGLOBAL
+ * @property [MODEL_NAME].DBConfigName
+ * @property dbConnectAdaptorGLOBAL
+ * @property [MODEL_NAME].adaptor
+ * @property dbConnectDatabaseGLOBAL
+ * @property [MODEL_NAME].DBDatabase
+ * @property dbConnectDriverGLOBAL
+ * @property [MODEL_NAME].DBDriver
+ * @property dbConnectHostNameGLOBAL
+ * @property [MODEL_NAME].DBHostName
+ * @property dbConnectJDBCInfoGLOBAL
+ * @property [MODEL_NAME].DBJDBCInfo
+ * @property dbConnectPasswordGLOBAL
+ * @property [MODEL_NAME].DBPassword
+ * @property [MODEL_NAME].password
+ * @property dbConnectPluginGLOBAL
+ * @property [MODEL_NAME].DBPlugin
+ * @property [MODEL_NAME].plugin
+ * @property dbConnectServerGLOBAL
+ * @property [MODEL_NAME].DBServer
+ * @property dbConnectURLGLOBAL
+ * @property [MODEL_NAME].URL
+ * @property [MODEL_NAME].serverUrl
+ * @property dbConnectUserGLOBAL
+ * @property [MODEL_NAME].DBUser
+ * @property [MODEL_NAME].username
+ * @property dbConnectionRecycleGLOBAL
+ * @property dbDebugLevelGLOBAL
+ * @property dbEOPrototypesEntityGLOBAL
+ * @property dbLogPathGLOBAL
+ * @property dbMaxCheckoutGLOBAL
+ * @property dbMaxConnectionsGLOBAL
+ * @property dbMinConnectionsGLOBAL
+ * @property dbRemoveJdbc2InfoGLOBAL
+ * @property er.extensions.ERXModelGroup.[ENTITY_NAME].[ATTRIBUTE_NAME].columnName
+ * @property er.extensions.ERXModelGroup.[ENTITY_NAME].[ATTRIBUTE_NAME].ignoreTypeMismatch
+ * @property er.extensions.ERXModelGroup.[ENTITY_NAME].externalName
+ * @property er.extensions.ERXModelGroup.flattenPrototypes
+ * @property er.extensions.ERXModelGroup.ignoreTypeMismatch
+ * @property er.extensions.ERXModelGroup.modelClassName
+ * @property er.extensions.ERXModelGroup.modelLoadOrder NSArray.EmptyArray
+ * @property er.extensions.ERXModelGroup.patchModelsOnLoad
+ * @property er.extensions.ERXModelGroup.patchedModelClassName
+ * @property er.extensions.ERXModelGroup.prototypeModelName
+ * @property er.extensions.ERXModelGroup.prototypeModelNames
+ * @property er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries, true
+ * @property er.extensions.ERXModelGroup.sqlDumpDirectory
+ * @property [MODEL_NAME].DBConnectionRecycle
+ * @property [MODEL_NAME].DBDebugLevel
+ * @property [MODEL_NAME].DBLogPath
+ * @property [MODEL_NAME].DBMaxCheckout
+ * @property [MODEL_NAME].DBMaxConnections
+ * @property [MODEL_NAME].DBMinConnections
+ * @property [MODEL_NAME].EOPrototypesEntity
+ * @property [MODEL_NAME].EOPrototypesFile
+ * @property [MODEL_NAME].authenticationMethod
+ * @property [MODEL_NAME].removeJdbc2Info
  */
 public class ERXModelGroup extends EOModelGroup {
 
@@ -121,6 +185,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * same thing as EOModelGroup's implementation.
 	 * 
 	 */
+	@SuppressWarnings("cast")
 	public void loadModelsFromLoadedBundles() {
 		EOModelGroup.setDefaultGroup(this);
 		NSArray<NSBundle> frameworkBundles = NSBundle.frameworkBundles();
@@ -172,7 +237,7 @@ public class ERXModelGroup extends EOModelGroup {
 		// First, add prototyes if specified
 		for(Enumeration prototypeModelNamesEnum = _prototypeModelNames.objectEnumerator(); prototypeModelNamesEnum.hasMoreElements(); ) {
 			String prototypeModelName = (String) prototypeModelNamesEnum.nextElement();
-			URL prototypeModelURL = (URL) modelNameURLDictionary.removeObjectForKey(prototypeModelName);
+			URL prototypeModelURL = (URL) modelNameURLDictionary.removeObjectForKey(prototypeModelName); // WO53
 			modelNames.removeObject(prototypeModelName);
 			if (prototypeModelURL == null) {
 				// AK: we throw for everything except erprototypes, as it is set by default
@@ -477,6 +542,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * Looks for foreign key attributes that have a different type from the destination attribute.  The classic example of this is a
 	 * long foreign key pointing to an integer primary key, which has a terrible consequence that is nearly impossible to track down.
 	 */
+	@SuppressWarnings("cast")
 	public void checkForMismatchedJoinTypes() {
 		if (ERXProperties.booleanForKey("er.extensions.ERXModelGroup.ignoreTypeMismatch")) {
 			return;
@@ -505,6 +571,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * a different model that hasn't been loaded yet will not be setup correctly. Specifically when those child entities
 	 * are loaded they will not have their parentEntity relationship set correctly.
 	 */
+	@SuppressWarnings("cast")
 	public void checkInheritanceRelationships() {
 		if (_subEntitiesCache != null && _subEntitiesCache.count() > 0) {
 			for (Enumeration parentNameEnumerator = _subEntitiesCache.keyEnumerator(); parentNameEnumerator.hasMoreElements();) {
@@ -854,8 +921,6 @@ public class ERXModelGroup extends EOModelGroup {
 	
 	/**
 	 * Returns whether the given model is listed as a prototype model in the properties.
-	 * 
-	 * @param model
 	 */
 	public boolean isPrototypeModel (EOModel model) {
 		if (_prototypeModelNames != null && model != null && _prototypeModelNames.containsObject(model.name())) {
@@ -1111,7 +1176,6 @@ public class ERXModelGroup extends EOModelGroup {
 			log.warn("Using er.extensions.ERXModel.useExtendedPrototypes=true may be incompatible with er.extensions.ERXModelGroup.flattenPrototypes=true (its default value).");
 		}
 		String prototypesFixedKey = "_EOPrototypesFixed";
-		NSMutableDictionary prototypeReplacement = new NSMutableDictionary();
 		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
 			if(_prototypeModelNames.containsObject(model.name())) {
