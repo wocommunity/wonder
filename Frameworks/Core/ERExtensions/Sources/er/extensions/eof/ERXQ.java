@@ -730,6 +730,66 @@ public class ERXQ {
 		}
 		return ERXQ.and(lowerQ, upperQ);
 	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorLike, value + "*").
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the substring value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier startsWith(String key, String value) {
+		value = value + "*";
+		return ERXQ.like(key, value);
+	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorCaseInsensitiveLike, value + "*").
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the substring value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier startsWithInsensitive(String key, String value) {
+		value = value + "*";
+		return ERXQ.likeInsensitive(key, value);
+	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorLike, "*" + value).
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the substring value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier endsWith(String key, String value) {
+		value = "*" + value;
+		return ERXQ.like(key, value);
+	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorCaseInsensitiveLike, "*" + value).
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the substring value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier endsWithInsensitive(String key, String value) {
+		value = "*" + value;
+		return ERXQ.likeInsensitive(key, value);
+	}
 
 	/**
 	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.OperatorContains,
