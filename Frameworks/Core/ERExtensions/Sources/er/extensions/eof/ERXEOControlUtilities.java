@@ -265,6 +265,21 @@ public class ERXEOControlUtilities {
         
         return result;        
     }
+    
+    /**
+     * Creates an enterprise object for the given entity
+     * name by first looking up the class description
+     * of the entity to create the enterprise object.
+     * The object is then inserted into the editing context
+     * and returned.
+     * @param <T> The enterprise object type
+     * @param ec editingContext to insert the created object into
+     * @param eoClass class of the enterprise object to be created
+     * @return created and inserted enterprise object of type T
+     */
+    public static <T extends EOEnterpriseObject> T createAndInsertObject(EOEditingContext ec, Class<T> eoClass) {
+    	return (T)createAndInsertObject(ec, eoClass.getSimpleName());
+    }
 
     /**
      * Creates an enterprise object for the given entity
