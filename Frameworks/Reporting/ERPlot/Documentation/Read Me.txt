@@ -1,7 +1,58 @@
+JFreeChart
+----------
 Simple wrapper around the JFreechart framework, which can be found here:
  
- http://www.jfree.org/jfreechart/
+http://www.jfree.org/jfreechart/
 
 JFreechart is a very comprehensive open-source LGPL charting framework. ERPlot is a light wrapper around some of it's features so they can be used inside WOBuilder and webobjects in general.
 
 Anjo Krank
+
+OFC
+---
+The JOFC2 jar file i have included is built from source and is NOT the latest official release. the source version has many API enhancements that basically make the thing usable - particularly if you want to do stacked bar charts. 
+
+also, the open-flash-chart.swf file is a patched version as released here: http://www.ofc2dz.com/ 
+
+you will note from the JOFC2 project home on google code that the developers of JOFC2 actually use this patched version, and it seems the majority of the patches released by the ofc2dz project eventually make it into the core. 
+
+have fun! 
+
+public Chart chart() { 
+	Chart chart = new Chart(); 
+	chart.setBackgroundColour("#ffffff"); 
+	chart.setXLegend(new Text("Month", Text.createStyle(12, "#000000", Text.TEXT_ALIGN_CENTER))); 
+	chart.setYLegend(new Text("Bookings", Text.createStyle(12, "#000000", Text.TEXT_ALIGN_CENTER))); 
+
+	XAxis x = new XAxis(); 
+	x.setTickHeight(Integer.valueOf(5)); // Height of the tick bars. 
+	x.setGridColour("#ffffff"); // Colour of the vertical lines of grid. 
+	x.setSteps(1); // Sets how many X-axis ticks you want. 0/1 = every one. 4 = every 4th. 0.5 = 2 for each 1. 
+
+	XAxisLabels xLabels = new XAxisLabels(); 
+	xLabels.addLabels("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"); 
+	xLabels.setRotation(Label.Rotation.HORIZONTAL); 
+	xLabels.setSize(Integer.valueOf(12)); 
+
+	x.setXAxisLabels(xLabels); 
+	chart.setXAxis(x); 
+
+	YAxis y = new YAxis(); 
+	y.setMax(50); 
+	chart.setYAxis(y); 
+
+	BarChart barChart = new BarChart(BarChart.Style.GLASS); 
+	List<BarChart.Bar> bars = new ArrayList<BarChart.Bar>(); 
+	for (int i = 0; i < 12; i++) { 
+		BarChart.Bar b = new BarChart.Bar(i, 0); 
+		b.setTooltip("Value is " + (i)); 
+		bars.add(b); 
+	} 
+
+	barChart.addBars(bars); 
+	chart.addElements(barChart); 
+	chart.computeYAxisRange(12); 
+	chart.addElements(barChart); 
+	
+	return chart; 
+}
