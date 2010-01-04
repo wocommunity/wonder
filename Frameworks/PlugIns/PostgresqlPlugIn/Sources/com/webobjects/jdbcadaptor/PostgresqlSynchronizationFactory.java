@@ -463,6 +463,11 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
       return new NSArray(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add " + clause));
     }
 
+    @Override
+	public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
+		return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " rename to " + formatTableName(newName)));
+	}
+
 /*
     public StringBuffer addCreateClauseForAttribute(EOAttribute eoattribute) {
       EOSQLExpression expression = _expressionForEntity(eoattribute.entity());
