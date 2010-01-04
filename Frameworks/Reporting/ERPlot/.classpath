@@ -5,6 +5,7 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jcommon-1.0.14.jar" sourcepath="Documentation/jcommon-1.0.14-src.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jfreechart-1.0.11.jar" sourcepath="Documentation/jfreechart-1.0.11-src.jar"/>
+	<classpathentry kind="lib" path="Libraries/jofc2-1.0-0.jar"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOAccess"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOControl"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaFoundation"/>
