@@ -12,6 +12,12 @@
             name = address2; 
             prototypeName = varchar255; 
         }, 
+        {
+            allowsNull = Y; 
+            columnName = bestSalesTotal; 
+            name = bestSalesTotal; 
+            prototypeName = amount; 
+        }, 
         {allowsNull = Y; columnName = city; name = city; prototypeName = varchar255; }, 
         {
             allowsNull = N; 
@@ -49,6 +55,7 @@
     attributesUsedForLocking = (
         address1, 
         address2, 
+        bestSalesTotal, 
         city, 
         companyID, 
         firstName, 
@@ -62,6 +69,7 @@
     classProperties = (
         address1, 
         address2, 
+        bestSalesTotal, 
         city, 
         company, 
         firstName, 
@@ -73,7 +81,6 @@
         zipcode
     ); 
     externalName = Employee; 
-    fetchSpecificationDictionary = {}; 
     name = Employee; 
     primaryKeyAttributes = (id); 
     relationships = (

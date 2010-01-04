@@ -1028,9 +1028,9 @@ public class ERXArrayUtilities extends Object {
      */
 
     static abstract class BaseOperator implements NSArray.Operator {
-        public NSArray<?> contents(NSArray<?> array, String keypath) {
+        public Object contents(NSArray<?> array, String keypath) {
             if(array != null && array.count() > 0  && keypath != null && keypath.length() > 0) {
-                array = (NSArray<?>)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
+                return NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
             }
             return array;
         }
@@ -1042,10 +1042,10 @@ public class ERXArrayUtilities extends Object {
      * This allows for key value paths like:<br/>
      * <br/>
      * <code>myArray.valueForKey("@sort.firstName");</code><br/>
-     * <code>myArray.valueForKey("@sort.lastName,firstName");</code><br/>
+     * <code>myArray.valueForKey("@sort.lastName,firstName.length");</code><br/>
      * <br/>
      * Which in the first case would return myArray sorted ascending by first name and the second case
-     * by lastName and then by firstName.
+     * by lastName and then by the length() of the firstName.
      */
     public static class SortOperator implements NSArray.Operator
     {
@@ -1086,7 +1086,7 @@ public class ERXArrayUtilities extends Object {
      * EOFetchSpecification named "fetchUsers" which must be a model-based fetchspec in the
      * first object's entity.
      */
-    public static class FetchSpecOperator implements NSArray.Operator
+    public static class FetchSpecOperator extends BaseOperator
     {
         /** public empty constructor */
         public FetchSpecOperator() {}
@@ -1102,7 +1102,13 @@ public class ERXArrayUtilities extends Object {
                 return array;
             }
             EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
-            return filteredArrayWithEntityFetchSpecification(array, eo.entityName(), keypath);
+            String fetchSpec = ERXStringUtilities.firstPropertyKeyInKeyPath(keypath);
+            keypath = ERXStringUtilities.keyPathWithoutFirstProperty(keypath);
+            if(keypath == null) {
+                return filteredArrayWithEntityFetchSpecification(array, eo.entityName(), fetchSpec);
+            }
+			array = filteredArrayWithEntityFetchSpecification(array, eo.entityName(), fetchSpec);
+			return contents(array, keypath);
         }
     }
 
@@ -1177,23 +1183,25 @@ public class ERXArrayUtilities extends Object {
          * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
          */
         public Object compute(NSArray<?> array, String keypath) {
-            int i1 = keypath.indexOf(".");
-            int i2 = keypath.indexOf("-");
-            String rest = null;
-            if ( i1 == -1 || i2 == -1 ) {
-                throw new IllegalArgumentException("subarrayWithRange must be used like '@subarrayWithRange.start-length' current key path: \"" + keypath + "\"");
-            }
-            String str = keypath.substring(i1, i2);
-            int start = str.length() == 0 ? 0 : Integer.parseInt(str);
-            str = keypath.substring(i2);
-            int dot = str.indexOf(".");
-            if(dot >= 0) {
-            	rest = str.substring(dot);
-            	str = str.substring(0, dot);
-            }
-            int length = str.length() == 0 ? array.count() : Integer.parseInt(str);
-            NSArray<?> objects = array.subarrayWithRange(new NSRange(start, length));
-            return contents(objects, rest);
+        	if(ERXStringUtilities.stringIsNullOrEmpty(keypath)) {
+        		throw new IllegalArgumentException("subarrayWithRange must be used " +
+        				"like '@subarrayWithRange.start-length'");
+        	}
+        	
+        	String rangeString = ERXStringUtilities.firstPropertyKeyInKeyPath(keypath);
+        	keypath = ERXStringUtilities.keyPathWithoutFirstProperty(keypath);
+        	
+        	int index = rangeString.indexOf('-');
+        	if(index < 1 || index >= rangeString.length()) {
+        		throw new IllegalArgumentException("subarrayWithRange must be used " +
+        				"like '@subarrayWithRange.start-length' current key path: " +
+        				"\"@subarrayWithRange." + rangeString + "\"");
+        	}
+        	
+        	int start = Integer.valueOf(rangeString.substring(0, index));
+        	int length = Integer.valueOf(rangeString.substring(++index));
+        	array = array.subarrayWithRange(new NSRange(start, length));
+        	return contents(array, keypath);
         }
     }
 
@@ -1267,9 +1275,8 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray<?> array, String keypath) {
-            array = contents(array, keypath);
             if (array != null) array = arrayWithoutDuplicates(array);
-            return array;
+            return contents(array, keypath);
         }
     }
 
@@ -1281,7 +1288,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * <code>myArray.valueForKeyPath("@removeNullValues.someOtherPath");</code><br/>
      * <br/>
-     * Which in this case would return myArray without the occurrences of NSKeyValueCoding.Null.
+     * Which in this case would remove the occurrences of NSKeyValueCoding.Null from myArray.
      */
     public static class RemoveNullValuesOperator extends BaseOperator {
         /** public empty constructor */
@@ -1298,12 +1305,8 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray<?> array, String keypath) {
-        	NSArray values = array;
-            if(keypath != null) {
-            	values = contents(array, keypath);
-            }
-            if (values != null) array = removeNullValues(array, values);
-            return array;
+        	array = removeNullValues(array);
+            return contents(array, keypath);
         }
     }
 
@@ -1397,8 +1400,7 @@ public class ERXArrayUtilities extends Object {
          */
         public Object compute(NSArray<?> array, String keypath) {
             array = reverse(array);
-            array = contents(array, keypath);
-            return array;
+            return contents(array, keypath);
         }
     }
     /**

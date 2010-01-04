@@ -18,6 +18,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   // Attribute Keys
   public static final ERXKey<String> ADDRESS1 = new ERXKey<String>("address1");
   public static final ERXKey<String> ADDRESS2 = new ERXKey<String>("address2");
+  public static final ERXKey<java.math.BigDecimal> BEST_SALES_TOTAL = new ERXKey<java.math.BigDecimal>("bestSalesTotal");
   public static final ERXKey<String> CITY = new ERXKey<String>("city");
   public static final ERXKey<String> FIRST_NAME = new ERXKey<String>("firstName");
   public static final ERXKey<String> LAST_NAME = new ERXKey<String>("lastName");
@@ -32,6 +33,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   // Attributes
   public static final String ADDRESS1_KEY = ADDRESS1.key();
   public static final String ADDRESS2_KEY = ADDRESS2.key();
+  public static final String BEST_SALES_TOTAL_KEY = BEST_SALES_TOTAL.key();
   public static final String CITY_KEY = CITY.key();
   public static final String FIRST_NAME_KEY = FIRST_NAME.key();
   public static final String LAST_NAME_KEY = LAST_NAME.key();
@@ -73,6 +75,17 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     	_Employee.LOG.debug( "updating address2 from " + address2() + " to " + value);
     }
     takeStoredValueForKey(value, "address2");
+  }
+
+  public java.math.BigDecimal bestSalesTotal() {
+    return (java.math.BigDecimal) storedValueForKey("bestSalesTotal");
+  }
+
+  public void setBestSalesTotal(java.math.BigDecimal value) {
+    if (_Employee.LOG.isDebugEnabled()) {
+    	_Employee.LOG.debug( "updating bestSalesTotal from " + bestSalesTotal() + " to " + value);
+    }
+    takeStoredValueForKey(value, "bestSalesTotal");
   }
 
   public String city() {
@@ -399,4 +412,16 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     }
     return localInstance;
   }
+  public static NSArray<er.erxtest.model.Employee> fetchPlebs(EOEditingContext editingContext, NSDictionary<String, Object> bindings) {
+    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("plebs", "Employee");
+    fetchSpec = fetchSpec.fetchSpecificationWithQualifierBindings(bindings);
+    return (NSArray<er.erxtest.model.Employee>)editingContext.objectsWithFetchSpecification(fetchSpec);
+  }
+  
+  public static NSArray<er.erxtest.model.Employee> fetchPlebs(EOEditingContext editingContext)
+  {
+    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("plebs", "Employee");
+    return (NSArray<er.erxtest.model.Employee>)editingContext.objectsWithFetchSpecification(fetchSpec);
+  }
+  
 }
