@@ -228,6 +228,16 @@ Note: Deleting an attachment that is in the unavailable state may result in the 
 
 	<dt>er.attachment.s3.key / er.attachment.[configurationName].s3.key</dt>
 	<dd>(optional) The name of the file to store in the S3 bucket.  This is evaluated as a path template.  The default value is "${pk}${ext}".</dd>
+
+	<dt>er.attachment.s3.acl / er.attachment.[configurationName].s3.acl</dt>
+	<dd>(optional) The access control policy for uploaded objects. See http://docs.amazonwebservices.com/AmazonS3/latest/index.html?RESTAccessPolicy.html for more deails. The default value is "public-read".</dd>
+	
+	<dt>er.attachment.s3.linkLife / er.attachment.[configurationName].s3.linkLife</dt>
+	<dd>(optional) If acl is set to "private" then urls generated for attachments are signed and expire. linkLife specifies the length of time in milliseconds that the generated url is valid. The default value is "60000".</dd>
+
+	<dt>er.attachment.s3.proxy / er.attachment.[configurationName].s3.proxy</dt>
+	<dd>(optional) If proxy is true, then the attachment's contents will be served through the request handler proxy.  The default
+	is true.</dd>
 </dl>
 
 <h2>Mime Types</h2>
