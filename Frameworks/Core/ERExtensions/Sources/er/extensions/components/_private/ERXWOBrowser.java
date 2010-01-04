@@ -63,7 +63,12 @@ public class ERXWOBrowser extends WOInput {
 			return;
 		}
 	}
-
+	
+	// Tells WOHTMLDynamicElement ancenstor that there are "option" tags to render 
+	protected boolean hasContent() { 
+	    return true; 
+	}
+	
 	protected boolean isBrowser() {
 		return true;
 	}
