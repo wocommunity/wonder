@@ -66,6 +66,40 @@ import er.extensions.foundation.ERXStringUtilities;
  *           multipleSubmit for all forms
  * @property er.extensions.ERXWOForm.addDefaultSubmitButtonDefault whether or
  *           not a default submit button should be add to the form
+ * @property er.extensions.ERXWOForm.useIdInsteadOfNameTag whether or not to use
+ *           id instead of name in the form element
+ * 
+ * @binding action Action method to invoke when this element is activated.
+ * @binding actionClass The name of the class in which the method
+ * designated in <code>directActionName</code> can be found. Defaults to 
+ * <code>DirectAction</code>.
+ * @binding addDefaultSubmitButton Injects a submit button at the beginning of the
+ * form since some browsers will submit the form using the first nested button
+ * when the return key is pressed. Default is false unless it is set to true in 
+ * the properties file.
+ * @binding directActionName The name of the direct action method 
+ * (minus the "Action" suffix) to invoke when this element is activated. 
+ * Defaults to <code>default</code>.
+ * @binding disabled Disabling a form omits the form element's tags from the
+ * generated html. ERXWOForm will automatically disable any nested forms and post
+ * a warning to the console if this value is not set.
+ * @binding enctype The encoding type of the form. If a form has a file upload
+ * and this is not set to <code>multipart/form-data</code> then an exception is 
+ * thrown.
+ * @binding fragmentIdentifier appends "#" + the value of the binding to the 
+ * action.
+ * @binding href The HTML <code>href</code> attribute
+ * @binding id The HTML <code>id</code> attribute
+ * @binding method The HTTP method used by the form. It can be <code>get</code> 
+ * or <code>post</code>
+ * @binding multipleSubmit If multipleSubmit evaluates to true , the form can 
+ * have more than one submit button, each with its own action. By default, the
+ * value is false unless it is set to true in the properties file.
+ * @binding name The HTML <code>name</code> attribute
+ * @binding queryDictionary Takes a dictionary of values that will be submitted
+ * with the form.
+ * @binding secure Determines if the form is secured with SSL. Default is false.
+ * 
  * 
  * @author ak
  * @author Mike Schrag (idea to secure binding)
