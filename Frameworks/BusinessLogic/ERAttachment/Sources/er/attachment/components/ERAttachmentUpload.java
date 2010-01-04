@@ -15,6 +15,7 @@ import er.attachment.model.ERAttachment;
 import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.components.ERXComponentUtilities;
+import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -119,13 +120,19 @@ public class ERAttachmentUpload extends WOComponent {
       tempFolderPath = ERXProperties.stringForKey("er.attachment.tempFolder");
     }
     
+    String fileExtension = ERXFileUtilities.fileExtension(_filePath);
+    if (fileExtension == null) {
+    	fileExtension = "tmp";
+    }
+    fileExtension = "." + fileExtension;
+    
     File tempFile;
     if (tempFolderPath != null) {
       File tempFolder = new File(tempFolderPath);
-      tempFile = File.createTempFile("ERAttachmentUpload-", ".tmp", tempFolder);
+      tempFile = File.createTempFile("ERAttachmentUpload-", fileExtension, tempFolder);
     }
     else {
-      tempFile = File.createTempFile("ERAttachmentUpload-", ".tmp");
+      tempFile = File.createTempFile("ERAttachmentUpload-", fileExtension);
     }
     return tempFile.getAbsolutePath();
   }
