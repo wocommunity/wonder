@@ -2182,7 +2182,7 @@ public class ERXSQLHelper {
 			else if (jdbcType == CustomTypes.INET) {
 				externalType = "inet";
 			}
-			else if (jdbcType == Types.LONGVARCHAR) {
+			else if (jdbcType == Types.LONGVARCHAR || jdbcType == Types.CLOB) {
 				externalType = "text";
 			}
 			else {
