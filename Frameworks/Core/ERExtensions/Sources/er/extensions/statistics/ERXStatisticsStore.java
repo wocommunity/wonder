@@ -6,6 +6,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
@@ -21,6 +22,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXDatabaseContext;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
@@ -45,12 +47,13 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXStatisticsStore.milliSeconds.fatal defaults to 5 minutes
  *
  * @author ak
+ * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link ERXSession#threadName()}
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
 
 	private static final Logger log = Logger.getLogger(ERXStatisticsStore.class);
 
-	private StopWatchTimer _timer = new StopWatchTimer();
+	private final StopWatchTimer _timer = new StopWatchTimer();
 
 	private StopWatchTimer timer() {
 		return _timer;
@@ -73,6 +76,9 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		Map<Thread, Map<Thread, StackTraceElement[]>> _warnTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
 		Map<Thread, Map<Thread, StackTraceElement[]>> _errorTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
 		Map<Thread, Map<Thread, StackTraceElement[]>> _fatalTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
+		Map<Thread, Map<Thread, String>> _warnTracesNames = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, String>>());
+		Map<Thread, Map<Thread, String>> _errorTracesNames = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, String>>());
+		Map<Thread, Map<Thread, String>> _fatalTracesNames = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, String>>());
 
 		public StopWatchTimer() {
 			Thread timerThread = new Thread(this);
@@ -98,13 +104,16 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				}
 				Thread currentThread = Thread.currentThread();
 				Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
+				Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
 				if (traces == null) {
 					traces = _errorTraces.remove(currentThread);
+					names = _errorTracesNames.remove(currentThread);
 				}
 				if (traces == null) {
 					traces = _warnTraces.remove(currentThread);
+					names = _warnTracesNames.remove(currentThread);
 				}
-				String trace = stringFromTraces(traces);
+				String trace = stringFromTraces(traces, names);
 				synchronized (_requestThreads) {
 					_requestThreads.remove(Thread.currentThread());
 				}
@@ -127,10 +136,18 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			}
 		}
 
-		private String stringFromTraces(Map<Thread, StackTraceElement[]> traces) {
+		private String stringFromTraces(Map<Thread, StackTraceElement[]> traces, Map<Thread, String> names) {
 			String trace = null;
 			if (traces != null) {
+				String capturedThreadName = null;
+				if (names == null) {
+					capturedThreadName = Thread.currentThread().getName();
+				} else {
+					capturedThreadName = names.get(Thread.currentThread());
+				}
+				
 				StringBuffer sb = new StringBuffer();
+				sb.append("\nRequest Thread Name: ").append(capturedThreadName).append("\n\n");
 				for (Iterator iterator = traces.keySet().iterator(); iterator.hasNext();) {
 					Thread t = (Thread) iterator.next();
 					StackTraceElement stack[] = (StackTraceElement[]) traces.get(t);
@@ -140,6 +157,12 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					if (stack != null && stack.length > 2 && !name.equals("main") && !name.equals("ERXStopWatchTimer") && !groupName.equals("system")) {
 						StackTraceElement func = stack[0];
 						if (func != null && func.getClassName() != null && !func.getClassName().equals("java.net.PlainSocketImpl")) {
+							if (names != null) {
+								String customThreadName = names.get(t);
+								if (customThreadName != null) {
+									sb.append(customThreadName).append(":\n");
+								}					
+							}
 							sb.append(t).append(":\n");
 							for (int i = 0; i < stack.length; i++) {
 								StackTraceElement stackTraceElement = stack[i];
@@ -217,17 +240,22 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 						time = System.currentTimeMillis() - time;
 						if (time > maximumRequestWarnTime/2 && _warnTraces.get(thread) == null) {
 							Map traces = Thread.getAllStackTraces();
+							Map names = getCurrentThreadNames(traces.keySet());
 							_warnTraces.put(thread, traces);
 						}
 						if (time > maximumRequestErrorTime/2 && _errorTraces.get(thread) == null) {
 							Map traces = Thread.getAllStackTraces();
+							Map names = getCurrentThreadNames(traces.keySet());
 							_errorTraces.put(thread, traces);
+							_errorTracesNames.put(thread, names);
 						}
 						if (time > maximumRequestFatalTime && _fatalTraces.get(thread) == null) {
 							Map traces = Thread.getAllStackTraces();
+							Map names = getCurrentThreadNames(traces.keySet());
 							_fatalTraces.put(thread, traces);
+							_fatalTracesNames.put(thread, names);
 							String message = "Request is taking too long, possible deadlock: " + time + " ms ";
-							message += stringFromTraces(traces);
+							message += stringFromTraces(traces, names);
 							message += "EC info:\n" + ERXEC.outstandingLockDescription();
 							message += "OSC info:\n" + ERXObjectStoreCoordinator.outstandingLockDescription();
 							log.fatal(message);
@@ -235,6 +263,14 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					}
 				}
 			}
+		}
+
+		private Map getCurrentThreadNames(Set<Thread> keySet) {
+			Map names = new HashMap<Thread, String>();
+			for (Thread thread : keySet) {
+				names.put(thread, thread.getName());
+			}
+			return names;
 		}
 
 	}
