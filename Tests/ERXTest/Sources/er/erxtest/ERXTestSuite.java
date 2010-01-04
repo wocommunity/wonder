@@ -26,8 +26,9 @@ public class ERXTestSuite {
 
     suite.addTestSuite(er.extensions.eof.ERXECTest.class);
     suite.addTestSuite(er.extensions.eof.ERXEOAccessUtilitiesTest.class);
+    suite.addTestSuite(er.extensions.eof.ERXEOControlUtilitiesTest.class);    
     suite.addTestSuite(er.extensions.eof.ERXKeyGlobalIDTest.class);
-    
+
     suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXThreadStorageTest.class);
