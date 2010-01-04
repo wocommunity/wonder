@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERAkismet" wocomponentcontent="false">    <binding name="remoteAddress"/>
+        <binding name="userAgent"/>
+        <binding name="referrer"/>
+        <binding name="permalink"/>
+        <binding name="commentType"/>
+        <binding name="author"/>
+        <binding name="authorEmail"/>
+        <binding name="authorURL"/>
+        <binding name="content"/>
+        <validation message="'content' is a required binding.">
+            <unbound name="content"/>
+        </validation>
+        <binding defaults="Boolean" name="valid"/>
+        <validation message="'valid' must be bound to a settable value">
+            <unsettable name="valid"/>
+        </validation>
+    </wo>
+</wodefinitions>
