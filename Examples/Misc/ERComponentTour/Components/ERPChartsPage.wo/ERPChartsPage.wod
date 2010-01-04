@@ -1,4 +1,8 @@
 
+HomeLink : WOHyperlink {
+	pageName="Main";
+}
+
 LineChart : ERPCategoryChart {
 	items= itemSet1;
 	yName="Sales";

@@ -15,5 +15,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="WOFramework/ERPlot"/>
 	<classpathentry kind="con" path="WOFramework/ExcelGenerator"/>
+	<classpathentry kind="con" path="WOFramework/Ajax"/>
+	<classpathentry kind="con" path="WOFramework/GoogleChart"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

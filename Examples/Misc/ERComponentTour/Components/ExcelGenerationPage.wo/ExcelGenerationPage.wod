@@ -1,3 +1,8 @@
+
+BackLink: WOHyperlink {
+	pageName = "Main";
+}
+
 Hyperlink1: WOHyperlink {
 	action = showExcelAction;
 }

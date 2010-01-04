@@ -1,0 +1,12 @@
+
+ERPChartsLink: WOHyperlink {
+	pageName = "ERPChartsPage";
+}
+
+ExcelGenerationLink: WOHyperlink {
+	pageName = "ExcelGenerationPage";
+}
+
+GoogleChartsLink: WOHyperlink {
+	pageName = "GoogleChartsPage";
+}
