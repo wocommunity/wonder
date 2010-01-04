@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.qualifiers.ERXAndQualifier;
@@ -46,6 +47,672 @@ public class ERXKey<T> {
 	private static final ERXKey<?> MIN = new ERXKey<Object>("@min");
 	private static final ERXKey<?> MAX = new ERXKey<Object>("@max");
 	private static final ERXKey<Integer> COUNT = new ERXKey<Integer>("@count");
+		
+	/* Constants for Wonder keypath operators */
+	private static final ERXKey<BigDecimal> AVG_NON_NULL = new ERXKey<BigDecimal>("@avgNonNull");
+	private static final ERXKey<?> FETCH_SPEC = new ERXKey<Object>("@fetchSpec");
+	private static final ERXKey<?> FLATTEN = new ERXKey<Object>("@flatten");
+	private static final ERXKey<Boolean> IS_EMPTY = new ERXKey<Boolean>("@isEmpty");
+	private static final ERXKey<?> LIMIT = new ERXKey<Object>("@limit");
+	private static final ERXKey<BigDecimal> MEDIAN = new ERXKey<BigDecimal>("@median");
+	private static final ERXKey<?> OBJECT_AT_INDEX = new ERXKey<Object>("@objectAtIndex");
+	private static final ERXKey<?> REMOVE_NULL_VALUES = new ERXKey<Object>("@removeNullValues");
+	private static final ERXKey<?> REVERSE = new ERXKey<Object>("@reverse");
+	private static final ERXKey<?> SORT = new ERXKey<Object>("@sort");
+	private static final ERXKey<?> SORT_ASC = new ERXKey<Object>("@sortAsc");
+	private static final ERXKey<?> SORT_DESC = new ERXKey<Object>("@sortDesc");
+	private static final ERXKey<?> SORT_INSENSITIVE_ASC = new ERXKey<Object>("@sortInsensitiveAsc");
+	private static final ERXKey<?> SORT_INSENSITIVE_DESC = new ERXKey<Object>("@sortInsensitiveDesc");
+	private static final ERXKey<?> SUBARRAY_WITH_RANGE = new ERXKey<Object>("@subarrayWithRange");
+	private static final ERXKey<?> UNIQUE = new ERXKey<Object>("@unique");
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull. For
+	 * instance, if the key is "price" this will return a new ERXKey "@avgNonNull.price".
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public static ERXKey<BigDecimal> avgNonNull(ERXKey<?> key) {
+		return (ERXKey<BigDecimal>) AVG_NON_NULL.append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull. For
+	 * instance, if the key is "price" this will return a new ERXKey "@avgNonNull.price".
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public ERXKey<BigDecimal> atAvgNonNull(ERXKey<?> key) {
+		return append(ERXKey.avgNonNull(key));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * fetchSpec operator @fetchSpec. For instance, if the key is "price" and 
+	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes.price".
+	 * @param fetchSpecName the fetchSpec name
+	 * @param <U> the type of the next key
+	 * 
+	 * @param key
+	 *            the key to use for this keypath
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<NSArray<U>> fetchSpec(String fetchSpecName, ERXKey<U> key) {
+		return FETCH_SPEC.append(fetchSpecName).appendAsArray(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * fetchSpec operator @fetchSpec. For instance, if the key is "price" and 
+	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes.price".
+	 * @param fetchSpecName the fetchSpec name
+	 * @param <U> the type of the next key
+	 * 
+	 * @param key
+	 *            the key to use for this keypath
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<NSArray<U>> atFetchSpec(String fetchSpecName, ERXKey<U> key) {
+		return append(ERXKey.fetchSpec(fetchSpecName, key));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * fetchSpec operator @fetchSpec. For instance, if the 
+	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes".
+	 * @param fetchSpecName the fetchSpec name
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> fetchSpec(String fetchSpecName) {
+		return FETCH_SPEC.append(fetchSpecName);
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * fetchSpec operator @fetchSpec. For instance, if the 
+	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes".
+	 * @param fetchSpecName the fetchSpec name
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atFetchSpec(String fetchSpecName) {
+		return (ERXKey<U>) append(ERXKey.fetchSpec(fetchSpecName));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * flatten operator @flatten. For instance, if the key is "price"
+	 *  this will return a new ERXKey "@flatten.price".
+	 * @param key the key to use for this keypath
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<NSArray<U>> flatten(ERXKey<U> key) {
+		return FLATTEN.appendAsArray(key);
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * flatten operator @flatten. For instance, if the key is "price"
+	 *  this will return a new ERXKey "@flatten.price".
+	 * @param key the key to use for this keypath
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<NSArray<U>> atFlatten(ERXKey<U> key) {
+		return append(ERXKey.flatten(key));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * flatten operator @flatten.
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> flatten() {
+		return (ERXKey<U>) FLATTEN;
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * flatten operator @flatten.
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atFlatten() {
+		return (ERXKey<U>) append(ERXKey.flatten());
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * isEmpty operator @isEmpty.
+	 * 
+	 * @return the new appended key
+	 */
+	public static ERXKey<Boolean> isEmpty() {
+		return IS_EMPTY;
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * isEmpty operator @isEmpty.
+	 * 
+	 * @return the new appended key
+	 */
+	public ERXKey<Boolean> atIsEmpty() {
+		return append(ERXKey.isEmpty());
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * limit operator @limit. For instance, if the key is "price" and 
+	 * limit is 3 this will return a new ERXKey "@limit.3.price".
+	 * @param limit the maximum number of objects allowed by the limit
+	 * @param <U> the type of the next key
+	 * 
+	 * @param key
+	 *            the key to use for this keypath
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<NSArray<U>> limit(Integer limit, ERXKey<U> key) {
+		return LIMIT.append(limit.toString()).appendAsArray(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * limit operator @limit. For instance, if the key is "price" and 
+	 * limit is 3 this will return a new ERXKey "@limit.3.price".
+	 * @param limit the maximum number of objects allowed by the limit
+	 * @param <U> the type of the next key
+	 * 
+	 * @param key
+	 *            the key to use for this keypath
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<NSArray<U>> atLimit(Integer limit, ERXKey<U> key) {
+		return append(ERXKey.limit(limit , key));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * limit operator @limit. For instance, if the limit is 3 this will return 
+	 * a new ERXKey "@limit.3".
+	 * 
+	 * @param limit the maximum number of objects allowed by the limit
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> limit(Integer limit) {
+		return LIMIT.append(limit.toString());
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * limit operator @limit. For instance, if the limit is 3 this will return 
+	 * a new ERXKey "@limit.3".
+	 * 
+	 * @param limit the maximum number of objects allowed by the limit
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atLimit(Integer limit) {
+		return (ERXKey<U>) append(ERXKey.limit(limit));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' median aggregate operator @median. For
+	 * instance, if the key is "price" this will return a new ERXKey "@median.price".
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public static ERXKey<BigDecimal> median(ERXKey<?> key) {
+		return (ERXKey<BigDecimal>) MEDIAN.append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' median aggregate operator @median. For
+	 * instance, if the key is "price" this will return a new ERXKey "@median.price".
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public ERXKey<BigDecimal> atMedian(ERXKey<?> key) {
+		return append(ERXKey.median(key));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
+	 * and the key is "price" then this will return a new ERXKey "@objectAtIndex.3.price".
+	 * 
+	 * @param <U> the type of the next key
+	 * @param index The index of the object to return from the array
+	 * @param key the key following the operator
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> objectAtIndex(Integer index, ERXKey<U> key) {
+		return OBJECT_AT_INDEX.append(index.toString()).append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
+	 * and the key is "price" then this will return a new ERXKey "@objectAtIndex.3.price".
+	 * 
+	 * @param <U> the type of the next key
+	 * @param index The index of the object to return from the array
+	 * @param key the key following the operator
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atObjectAtIndex(Integer index, ERXKey<U> key) {
+		return append(ERXKey.objectAtIndex(index , key));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
+	 * then this will return a new ERXKey "@objectAtIndex.3".
+	 * 
+	 * @param <U> the type of the next key
+	 * @param index The index of the object to return from the array
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> objectAtIndex(Integer index) {
+		return OBJECT_AT_INDEX.append(index.toString());
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
+	 * then this will return a new ERXKey "@objectAtIndex.3".
+	 * 
+	 * @param <U> the type of the next key
+	 * @param index The index of the object to return from the array
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atObjectAtIndex(Integer index) {
+		return (ERXKey<U>) append(ERXKey.objectAtIndex(index));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * RemoveNullValues operator @removeNullValues. For instance, if the key is "price"
+	 *  this will return a new ERXKey "@removeNullValues.price".
+	 * @param key the key to use for this keypath
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> removeNullValues(ERXKey<U> key) {
+		return REMOVE_NULL_VALUES.append(key);
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * RemoveNullValues operator @removeNullValues. For instance, if the key is "price"
+	 *  this will return a new ERXKey "@removeNullValues.price".
+	 * @param key the key to use for this keypath
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atRemoveNullValues(ERXKey<U> key) {
+		return append(ERXKey.removeNullValues(key));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * RemoveNullValues operator @removeNullValues.
+	 * 
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> removeNullValues() {
+		return (ERXKey<U>) REMOVE_NULL_VALUES;
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * RemoveNullValues operator @removeNullValues.
+	 * 
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atRemoveNullValues() {
+		return (ERXKey<U>) append(ERXKey.removeNullValues());
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Reverse operator @reverse. For instance, if the key is "price"
+	 *  this will return a new ERXKey "@reverse.price".
+	 * @param key the key to use for this keypath
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<NSArray<U>> reverse(ERXKey<U> key) {
+		return REVERSE.appendAsArray(key);
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Reverse operator @reverse. For instance, if the key is "price"
+	 *  this will return a new ERXKey "@reverse.price".
+	 * @param key the key to use for this keypath
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<NSArray<U>> atReverse(ERXKey<U> key) {
+		return append(ERXKey.reverse(key));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Reverse operator @reverse.
+	 * 
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> reverse() {
+		return (ERXKey<U>) REVERSE;
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Reverse operator @reverse.
+	 * 
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atReverse() {
+		return (ERXKey<U>) append(ERXKey.reverse());
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Sort operator @sort.  For instance,
+	 * <code>sort(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sort.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> sort(ERXKey<?> ... sortKeys) {
+		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
+		return SORT.append(keyArray.componentsJoinedByString(","));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Sort operator @sort.  For instance,
+	 * <code>atSort(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sort.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atSort(ERXKey<?> ... sortKeys) {
+		return (ERXKey<U>) append(ERXKey.sort(sortKeys));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SortAscending operator @sortAsc.  For instance,
+	 * <code>sortAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sortAsc.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> sortAsc(ERXKey<?> ... sortKeys) {
+		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
+		return SORT_ASC.append(keyArray.componentsJoinedByString(","));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SortAsc operator @sortAsc.  For instance,
+	 * <code>atSortAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sortAsc.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atSortAsc(ERXKey<?> ... sortKeys) {
+		return (ERXKey<U>) append(ERXKey.sortAsc(sortKeys));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SortDescending operator @sortDesc.  For instance,
+	 * <code>sortDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sortDesc.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> sortDesc(ERXKey<?> ... sortKeys) {
+		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
+		return SORT_DESC.append(keyArray.componentsJoinedByString(","));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SortDescending operator @sortDesc.  For instance,
+	 * <code>atSortDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sortDesc.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atSortDesc(ERXKey<?> ... sortKeys) {
+		return (ERXKey<U>) append(ERXKey.sortDesc(sortKeys));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SortInsensitiveAscending operator @sortInsensitiveAsc.  For instance,
+	 * <code>sortInsensitiveAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sortInsensitiveAsc.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> sortInsensitiveAsc(ERXKey<?> ... sortKeys) {
+		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
+		return SORT_INSENSITIVE_ASC.append(keyArray.componentsJoinedByString(","));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SortInsensitiveAscending operator @sortInsensitiveAsc.  For instance,
+	 * <code>atSortInsensitiveAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sortInsensitiveAsc.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atSortInsensitiveAsc(ERXKey<?> ... sortKeys) {
+		return (ERXKey<U>) append(ERXKey.sortInsensitiveAsc(sortKeys));
+	}
+
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SortInsensitiveDescending operator @sortInsensitiveDesc.  For instance,
+	 * <code>sortInsensitiveDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sortInsensitiveDesc.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> sortInsensitiveDesc(ERXKey<?> ... sortKeys) {
+		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
+		return SORT_INSENSITIVE_DESC.append(keyArray.componentsJoinedByString(","));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SortInsensitiveDescending operator @sortInsensitiveDesc.  For instance,
+	 * <code>atSortInsensitiveDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
+	 * would return a key like @sortInsensitiveDesc.firstName,lastname
+	 * 
+	 * @param sortKeys the ERXKeys to append for sorting
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atSortInsensitiveDesc(ERXKey<?> ... sortKeys) {
+		return (ERXKey<U>) append(ERXKey.sortInsensitiveDesc(sortKeys));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the key is "price"
+	 * and the range is <code>new NSRange(4,2)</code> this will return a new ERXKey "@subarrayWithRange.4-2.price".
+	 * @param key the key to use for this keypath
+	 * @param range the range for the operator
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<NSArray<U>> subarrayWithRange(NSRange range, ERXKey<U> key) {
+		return SUBARRAY_WITH_RANGE.append(range.location() + "-" + range.length()).appendAsArray(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the key is "price"
+	 * and the range is <code>new NSRange(4,2)</code> this will return a new ERXKey "@subarrayWithRange.4-2.price".
+	 * @param key the key to use for this keypath
+	 * @param range the range for the operator
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<NSArray<U>> atSubarrayWithRange(NSRange range, ERXKey<U> key) {
+		return append(ERXKey.subarrayWithRange(range , key));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the range 
+	 * is <code>new NSRange(4,2)</code> this will return a new 
+	 * ERXKey "@subarrayWithRange.4-2.price".
+	 * 
+	 * @param range the range for the operator
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> subarrayWithRange(NSRange range) {
+		return SUBARRAY_WITH_RANGE.append(range.location() + "-" + range.length());
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the range 
+	 * is <code>new NSRange(4,2)</code> this will return a new 
+	 * ERXKey "@subarrayWithRange.4-2.price".
+	 * 
+	 * @param range the range for the operator
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atSubarrayWithRange(NSRange range) {
+		return (ERXKey<U>) append(ERXKey.subarrayWithRange(range));
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Unique operator @unique. For instance, if the key is "price"
+	 * this will return a new ERXKey "@unique.price".
+	 * @param key the key to use for this keypath
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<NSArray<U>> unique(ERXKey<U> key) {
+		return UNIQUE.appendAsArray(key);
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Unique operator @unique. For instance, if the key is "price"
+	 * this will return a new ERXKey "@unique.price".
+	 * @param key the key to use for this keypath
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<NSArray<U>> atUnique(ERXKey<U> key) {
+		return append(ERXKey.unique(key));
+	}
+
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Unique operator @unique.
+	 * 
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public static <U> ERXKey<U> unique() {
+		return (ERXKey<U>) UNIQUE;
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Unique operator @unique.
+	 *  
+	 * @param <U> the type of the next key
+	 * 
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atUnique() {
+		return (ERXKey<U>) append(ERXKey.unique());
+	}
 
 	/**
 	 * Returns a new ERXKey that prepends the given key with NSArray's SUM aggregate operator @sum. For
@@ -57,6 +724,27 @@ public class ERXKey<T> {
 	 */
 	public static ERXKey<BigDecimal> sum(ERXKey<?> key) {
 		return (ERXKey<BigDecimal>) SUM.append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that prepends the given key with NSArray's SUM aggregate operator @sum. For
+	 * instance, if the key is "price" this will return a new ERXKey "@sum.price".
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public ERXKey<BigDecimal> atSum(ERXKey<?> key) {
+		return append(ERXKey.sum(key));
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses NSArray's SUM aggregate operator @sum.
+	 * 
+	 * @return the new key
+	 */
+	public ERXKey<BigDecimal> atSum() {
+		return append(ERXKey.sum());
 	}
 	
 	/**
@@ -81,12 +769,33 @@ public class ERXKey<T> {
 	}
 	
 	/**
+	 * Returns a new ERXKey that prepends the given key with NSArray's AVERAGE aggregate operator @avg. For
+	 * instance, if the key is "price" this will return a new ERXKey "@avg.price".
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public ERXKey<BigDecimal> atAvg(ERXKey<?> key) {
+		return append(ERXKey.avg(key));
+	}
+	
+	/**
 	 * Returns a new ERXKey that uses NSArray's AVERAGE aggregate operator @avg.
 	 * 
 	 * @return the new key
 	 */
 	public static ERXKey<BigDecimal> avg() {
 		return AVG;
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses NSArray's AVERAGE aggregate operator @avg.
+	 * 
+	 * @return the new key
+	 */
+	public ERXKey<BigDecimal> atAvg() {
+		return append(ERXKey.avg());
 	}
 	
 	/**
@@ -104,6 +813,20 @@ public class ERXKey<T> {
 	}
 	
 	/**
+	 * Returns a new ERXKey that prepends the given key with NSArray's MIN aggregate operator @min. For
+	 * instance, if the key is "price" this will return a new ERXKey "@min.price".
+	 * 
+	 * @param <U> the type of the next key
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atMin(ERXKey<U> key) {
+		return append(ERXKey.min(key));
+	}
+	
+	/**
 	 * Returns a new ERXKey that uses NSArray's MIN aggregate operator @min.
 	 * 
 	 * @param <U> the type of the next key
@@ -112,6 +835,17 @@ public class ERXKey<T> {
 	 */
 	public static <U> ERXKey<U> min() {
 		return (ERXKey<U>) MIN;
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses NSArray's MIN aggregate operator @min.
+	 * 
+	 * @param <U> the type of the next key
+	 *
+	 * @return the new key
+	 */
+	public <U> ERXKey<U> atMin() {
+		return (ERXKey<U>) append(ERXKey.min());
 	}
 	
 	/**
@@ -129,6 +863,20 @@ public class ERXKey<T> {
 	}
 	
 	/**
+	 * Returns a new ERXKey that prepends the given key with NSArray's MAX aggregate operator @max. For
+	 * instance, if the key is "price" this will return a new ERXKey "@max.price".
+	 * 
+	 * @param <U> the type of the next key
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 */
+	public <U> ERXKey<U> atMax(ERXKey<U> key) {
+		return append(ERXKey.max(key));
+	}
+	
+	/**
 	 * Returns a new ERXKey that uses NSArray's MAX aggregate operator @max.
 	 * 
 	 * @param <U> the type of the next key
@@ -140,12 +888,32 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Returns a new ERXKey that uses NSArray's MAX aggregate operator @max.
+	 * 
+	 * @param <U> the type of the next key
+	 *
+	 * @return the new key
+	 */
+	public <U> ERXKey<U> atMax() {
+		return (ERXKey<U>) append(ERXKey.max());
+	}
+
+	/**
 	 * Returns a new ERXKey that uses NSArray's COUNT operator @count.
 	 * 
 	 * @return the new key
 	 */
 	public static ERXKey<Integer> count() {
 		return COUNT;
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses NSArray's COUNT operator @count.
+	 * 
+	 * @return the new key
+	 */
+	public ERXKey<Integer> atCount() {
+		return append(ERXKey.count());
 	}
 	
 	/**
@@ -870,7 +1638,7 @@ public class ERXKey<T> {
 	 * @return the new appended key
 	 */
 	public <U> ERXKey<U> append(String key) {
-		return new ERXKey<U>(_key + "." + key);
+		return new ERXKey<U>(_key + NSKeyValueCodingAdditions.KeyPathSeparator + key);
 	}
 
 	/**
