@@ -134,6 +134,12 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
       }
       return;
     }
+    if (cacheChanges.count() == 0) {
+    	if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
+    		ERXRemoteSynchronizer.log.info("No changes to send!");
+    	}
+    	return;
+    }
     RefByteArrayOutputStream baos = new RefByteArrayOutputStream();
     DataOutputStream dos = new DataOutputStream(baos);
     dos.writeInt(cacheChanges.count());
