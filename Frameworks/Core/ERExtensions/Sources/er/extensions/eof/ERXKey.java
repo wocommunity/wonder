@@ -1522,6 +1522,54 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorLike, value + "*").
+	 * 
+	 * @param value
+	 *            the substring value
+	 * @return an ERXKeyValueQualifier
+	 */
+	public ERXKeyValueQualifier startsWith(String value) {
+		return ERXQ.startsWith(_key, value);
+	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorCaseInsensitiveLike, value + "*").
+	 * 
+	 * @param value
+	 *            the substring value
+	 * @return an ERXKeyValueQualifier
+	 */
+	public ERXKeyValueQualifier startsWithInsensitive(String value) {
+		return ERXQ.startsWithInsensitive(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorLike, "*" + value).
+	 * 
+	 * @param value
+	 *            the substring value
+	 * @return an ERXKeyValueQualifier
+	 */
+	public ERXKeyValueQualifier endsWith(String value) {
+		return ERXQ.endsWith(_key, value);
+	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorCaseInsensitiveLike, "*" + value).
+	 * 
+	 * @param value
+	 *            the substring value
+	 * @return an ERXKeyValueQualifier
+	 */
+	public ERXKeyValueQualifier endsWithInsensitive(String value) {
+		return ERXQ.endsWithInsensitive(_key, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.OperatorCaseInsensitiveLike, "*" + value + "*").
 	 * 
 	 * @param value
