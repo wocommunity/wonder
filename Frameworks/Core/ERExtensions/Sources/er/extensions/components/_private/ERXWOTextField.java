@@ -16,13 +16,12 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
-import com.webobjects.foundation.NSValidation;
 
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXPatcher;
-import er.extensions.foundation.ERXPatcher.DynamicElementsPatches;
+import er.extensions.validation.ERXValidationException;
 
 /**
  * Replacement for WOTextField. Provides for localized formatters. 
@@ -110,7 +109,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 							result = format.parseObject(reformatedObject);
 						} catch(ParseException parseexception) {
 							String keyPath = _value.keyPath();
-							NSValidation.ValidationException validationexception = new NSValidation.ValidationException(parseexception.getMessage(), stringValue, keyPath);
+							ERXValidationException validationexception = new ERXValidationException(parseexception.getMessage(), stringValue, keyPath);
 							component.validationFailedWithException(validationexception, stringValue, keyPath);
 							return;
 						}
