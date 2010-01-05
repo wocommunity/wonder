@@ -16,7 +16,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
 /**
- * This ERMailDelivery subclass is specifically crafted for HTML messages using a WOComponent as redering device.
+ * This ERMailDelivery subclass is specifically crafted for HTML messages using a WOComponent as rendering device.
  * 
  * @author Camille Troillard <tuscland@mac.com>
  */

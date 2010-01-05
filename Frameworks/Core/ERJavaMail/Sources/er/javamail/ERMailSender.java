@@ -28,7 +28,8 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 
 /**
- * This class is used to send mails in a threaded way.<BR>
+ * This class is used to send mails in a threaded way.
+ *
  * This is needed in WebObjects because if sending 20 mails takes 40 seconds, then the user must wait 40 seconds before
  * attempting to use the application.
  * 
@@ -87,7 +88,8 @@ public class ERMailSender implements Runnable {
 	}
 
 	/**
-	 * Sends a message in a non-blocking way.<br>
+	 * Sends a message in a non-blocking way.
+         *
 	 * This means that the thread won't be blocked, but the message will be queued before being delivered.
 	 */
 	public void sendMessageDeffered(ERMessage message) throws ERMailSender.SizeOverflowException {
@@ -127,7 +129,8 @@ public class ERMailSender implements Runnable {
 	}
 
 	/**
-	 * Sends a message immediately.<br>
+	 * Sends a message immediately.
+         *
 	 * This means that the thread could be blocked if the message takes time to be delivered.
 	 */
 	public void sendMessageNow(ERMessage message) {
@@ -162,7 +165,8 @@ public class ERMailSender implements Runnable {
 
 	/**
 	 * Common method used by 'sendMessageNow' and 'sendMessageDeffered' (actully the 'run' method when the thread is
-	 * running) to send a message.<br>
+	 * running) to send a message.
+         *
 	 * This method sends the message and increments the processed mail count. If an exception occurs while sending the
 	 * mail, and if a callback object has been given, the notifyInvalidEmails method is called.<br>
 	 * If a MessagingException is thrown, then the exception is catched and rethrown immediately, thus letting us to
