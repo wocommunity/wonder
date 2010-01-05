@@ -11,9 +11,8 @@ import javax.mail.util.ByteArrayDataSource;
 import com.webobjects.foundation.NSData;
 
 /**
- * Attaches a byte array or NSData to a mail. The mime type is pulled form the file name, so be sure to provide a
+ * Attaches a byte array or NSData to a mail. The mime type is pulled from the file name, so be sure to provide a
  * reasonable one.
- * 
  * 
  * @author ak
  */

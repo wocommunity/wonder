@@ -53,6 +53,8 @@ import com.webobjects.foundation.NSMutableDictionary;
         // do something ...
     }</pre></p>
  * 
+ * @property er.javamail.defaultEncoding
+ *
  * @author Camille Troillard <tuscland@mac.com>
  * @author ak fixes
  */

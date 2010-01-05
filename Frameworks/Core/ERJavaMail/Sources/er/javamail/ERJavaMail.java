@@ -19,7 +19,7 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
- * ERJavaMail is he prinicpal class for the ERJavaMail framework.
+ * ERJavaMail is the prinicpal class for the ERJavaMail framework.
  * 
  * @property er.javamail.centralize
  * @property er.javamail.adminEmail
