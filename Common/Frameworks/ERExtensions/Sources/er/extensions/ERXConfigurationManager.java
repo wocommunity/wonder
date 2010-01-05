@@ -338,7 +338,7 @@ public class ERXConfigurationManager {
         	}
         }
         
-        boolean atomicPropertiesReload = Boolean.valueOf(System.getProperty("er.extensions.ERXConfigurationManager.atomicPropertiesReload", "false"));
+        boolean atomicPropertiesReload = Boolean.valueOf(System.getProperty("er.extensions.ERXConfigurationManager.atomicPropertiesReload", "true"));
         if (atomicPropertiesReload) {
 	        Properties systemPropertiesCopy = new Properties();
 	        systemPropertiesCopy.putAll(System.getProperties());
