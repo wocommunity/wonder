@@ -115,6 +115,21 @@ import er.rest.routes.jsr311.Paths;
  */
 public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	/**
+	 * A NameFormat that behaves like Rails -- plural entities, plural routes, lowercase names. 
+	 */
+	public static NameFormat RAILS = new NameFormat(true, true, true);
+
+	/**
+	 * A NameFormat that behaves like WO -- singular entities, singular routes, camel names. 
+	 */
+	public static NameFormat WO = new NameFormat(false, false, false);
+
+	/**
+	 * A NameFormat that behaves like WO -- singular entities, singular routes, lowercase names. 
+	 */
+	public static NameFormat WO_LOWER = new NameFormat(false, false, true);
+	
+	/**
 	 * NameFormat specifies how routes and controller names should be capitalized by default.
 	 * 
 	 * @author mschrag
@@ -175,7 +190,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		 * @return the formatted entity name
 		 */
 		public String formatEntityNamed(String entityName) {
-			String singularEntityName = lowercaseRouteName() ? ERXStringUtilities.uncapitalize(entityName) : entityName;
+			String singularEntityName = lowercaseRouteName() ? ERXStringUtilities.camelCaseToUnderscore(entityName, true) : entityName;
 			String controllerPath;
 			if (pluralRouteName()) {
 				controllerPath = ERXLocalizer.englishLocalizer().plurifiedString(singularEntityName, 2);
@@ -451,10 +466,10 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the controller class
 	 */
 	public void addDefaultRoutes(String entityName, String entityType, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
-		String singularInternalName = _entityNameFormat.lowercaseRouteName() ? ERXStringUtilities.uncapitalize(entityName) : entityName;
+		String singularInternalName = _entityNameFormat.lowercaseRouteName() ? ERXStringUtilities.camelCaseToUnderscore(entityName, true) : entityName;
 
 		String externalName = ERXRestNameRegistry.registry().externalNameForInternalName(entityName);
-		String singularExternalName = _entityNameFormat.lowercaseRouteName() ? ERXStringUtilities.uncapitalize(externalName) : externalName;
+		String singularExternalName = _entityNameFormat.lowercaseRouteName() ? ERXStringUtilities.camelCaseToUnderscore(externalName, true) : externalName;
 		String pluralExternalName = ERXLocalizer.englishLocalizer().plurifiedString(singularExternalName, 2);
 
 		if (_entityNameFormat.pluralRouteName()) {
