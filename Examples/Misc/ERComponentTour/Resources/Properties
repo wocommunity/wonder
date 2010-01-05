@@ -1,3 +1,5 @@
+java.awt.headless=true
+
 # OGNL
 ognl.helperFunctions=true
 ognl.inlineBindings=true
