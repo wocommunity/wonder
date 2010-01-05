@@ -30,6 +30,11 @@ public class Application extends ERXApplication {
 		}
 	}
 
+	protected boolean isLaunchingFromEclipse() {
+		String classPath = System.getProperty("java.class.path");
+		return classPath != null && classPath.contains("org.eclipse.osgi/bundles");
+	}
+	
 	@Override
 	public void didFinishLaunching() {
 
@@ -41,7 +46,9 @@ public class Application extends ERXApplication {
 
 		ERXTestUtilities.fixModelsForAdaptorNamed(adaptorName);
 
-		TestRunner.run(ERXTestSuite.suite());
-		System.exit(0);
+		if (!isLaunchingFromEclipse()) {
+			TestRunner.run(ERXTestSuite.suite());
+			System.exit(0);
+		}
 	}
 }
