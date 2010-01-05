@@ -19,11 +19,33 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
- * <code>ERJavaMail</code> is the prinicpal class for the ERJavaMail framework.
+ * ERJavaMail is he prinicpal class for the ERJavaMail framework.
  * 
+ * @property er.javamail.centralize
+ * @property er.javamail.adminEmail
+ * @property er.javamail.debugEnabled
+ * @property er.javamail.senderQueue.size
+ * @property er.javamail.milliSecondsWaitIfSenderOverflowed
+ * @property er.javamail.XMailerHeader
+ * @property er.javamail.smtpProtocol
+ * @property er.javamail.smtpHost
+ * @property mail.[smtpProtocol].host
+ * @property WOSMTPHost
+ * @property er.javamail.smtpPort
+ * @property mail.[smtpProtocol].port
+ * @property er.javamail.smtpAuth
+ * @property mail.[smtpProtocol].auth
+ * @property er.javamail.smtpUser
+ * @property mail.[smtpProtocol].user
+ * @property er.javamail.smtpPassword
+ * @property mail.[smtpProtocol].password
+ * @property mail.smtps.socketFactory.fallback
+ * @property er.javamail.emailPattern
+ * @property er.javamail.WhiteListEmailAddressPatterns
+ * @property er.javamail.BlackListEmailAddressPatterns
+ *
  * @author <a href="mailto:tuscland@mac.com">Camille Troillard</a>
  * @author <a href="mailto:maxmuller@mac.com">Max Muller</a>
- * @version $Id$
  */
 public class ERJavaMail extends ERXFrameworkPrincipal {
 
