@@ -19,7 +19,7 @@ public class ERMemorySynchronizationFactory extends EOSynchronizationFactory imp
   }
 
   protected NSArray noopExpressions() {
-    EOSQLExpression expression = adaptor().expressionFactory().createExpression(null);
+    EOSQLExpression expression = new ERMemoryExpression(null); // until adaptor().expressionFactory() returns a real expression factory, just hardcode it ... 
     expression.setStatement("--");
     return new NSArray(expression);
   }
