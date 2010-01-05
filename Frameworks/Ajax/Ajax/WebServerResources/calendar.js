@@ -177,7 +177,7 @@ function string_to_date(s) {
   dateOrder = dateOrder.replace(/%[mbB]/,'M');
   dateOrder = dateOrder.replace(/%[yY]/,'Y');
 
-  var result = Date.fromString(s, {order: dateOrder});
+  var result = Date.parseExact(s, {order: dateOrder});
   if (result == 'Invalid Date') {
   	result = undefined;
   }
