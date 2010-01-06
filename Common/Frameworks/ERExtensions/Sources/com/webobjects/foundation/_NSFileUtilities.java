@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 
+import er.extensions.ERXProperties;
+
 /**
  * Utilities for manipulating files. WO 5.4.3.1's _NSFileUtilies and this should be kept in sync.
  * 
@@ -39,8 +41,8 @@ public class _NSFileUtilities {
 
     // Attempts to resolve a named link to its canonical path, using default settings.
     public static File resolveLink(String path, String linkName) {
-        int retry = NSProperties.intForKeyWithDefault("NSFileUtilities.resolveLinkRetryPeriod", 5000);
-        int timeout = NSProperties.intForKeyWithDefault("NSFileUtilities.resolveLinkTimeoutPeriod", 60000);
+        int retry = ERXProperties.intForKeyWithDefault("NSFileUtilities.resolveLinkRetryPeriod", 5000);
+        int timeout = ERXProperties.intForKeyWithDefault("NSFileUtilities.resolveLinkTimeoutPeriod", 60000);
         return _NSFileUtilities.resolveLink(path, linkName, retry, timeout);
     }
 
@@ -60,7 +62,7 @@ public class _NSFileUtilities {
         File resolvedPath;
 
         // <rdar://problem/6429201> Issues with File.getCanonicalFile()
-        boolean debuggingEnabled = NSProperties.booleanForKeyWithDefault("NSFileUtilities.debugMissingCurrentLinks", false);
+        boolean debuggingEnabled = ERXProperties.booleanForKeyWithDefault("NSFileUtilities.debugMissingCurrentLinks", false);
 
         if (debuggingEnabled) {
             log.info("Resolving link (" + linkName + ") for: " + path);
