@@ -392,6 +392,11 @@
 				</exclusions>
 			</dependency>
 			<dependency>
+				<groupId>com.google.code.jofc2</groupId>
+				<artifactId>jofc2</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.mina</groupId>
 				<artifactId>mina-core</artifactId>
 				<version>1.1.7</version>
@@ -465,6 +470,11 @@
 				<groupId>net.tanesha.recaptcha4j</groupId>
 				<artifactId>recaptcha4j</artifactId>
 				<version>0.0.7</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.akismet</groupId>
+				<artifactId>akismet-java</artifactId>
+				<version>1.02</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-codec</groupId>

@@ -15,7 +15,6 @@
 		<module>AjaxLookExample</module>
 		<module>ERDivaLookExample</module>
 		<module>ERIUIExample</module>
-		<module>SproutCoreExample</module>
 		<module>YUIExample</module>
 	</modules>
 </project>

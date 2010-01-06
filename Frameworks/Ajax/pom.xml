@@ -15,7 +15,6 @@
 		<module>ERDivaLook</module>
 		<module>ERIUI</module>
 		<module>GoogleChart</module>
-		<module>SproutCore</module>
 		<module>ERPrototaculous</module>
 		<module>YUI</module>
 	</modules>

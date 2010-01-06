@@ -31,6 +31,10 @@
 			<groupId>net.tanesha.recaptcha4j</groupId>
 			<artifactId>recaptcha4j</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.akismet</groupId>
+			<artifactId>akismet-java</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
