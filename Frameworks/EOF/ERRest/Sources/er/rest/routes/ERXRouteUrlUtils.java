@@ -19,25 +19,25 @@ public class ERXRouteUrlUtils {
 		return newUrl;
 	}
 
-	public static String actionUrlForRecord(WOContext context, ERXGenericRecord record, String action, NSDictionary<String, Object> queryParameters, boolean secure, boolean includeSessionID) {
-		String url = ERXWOContext.directActionUrl(context, ERXRouteUrlUtils.actionUrlPathForEntity(record.entityName(), record.primaryKeyInTransaction(), action), queryParameters, Boolean.valueOf(secure), includeSessionID);
+	public static String actionUrlForRecord(WOContext context, ERXGenericRecord record, String action, String format, NSDictionary<String, Object> queryParameters, boolean secure, boolean includeSessionID) {
+		String url = ERXWOContext.directActionUrl(context, ERXRouteUrlUtils.actionUrlPathForEntity(record.entityName(), record.primaryKeyInTransaction(), action, format), queryParameters, Boolean.valueOf(secure), includeSessionID);
 		url = ERXRouteUrlUtils.changeDirectActionRequestHandlerTo(url, ERXRouteRequestHandler.Key);
 		return url;
 	}
 
-	public static String actionUrlForEntity(WOContext context, String entityName, Object entityID, String action, NSDictionary<String, Object> queryParameters, boolean secure, boolean includeSessionID) {
-		String url = ERXWOContext.directActionUrl(context, ERXRouteUrlUtils.actionUrlPathForEntity(entityName, entityID, action), queryParameters, Boolean.valueOf(secure), includeSessionID);
+	public static String actionUrlForEntity(WOContext context, String entityName, Object entityID, String action, String format, NSDictionary<String, Object> queryParameters, boolean secure, boolean includeSessionID) {
+		String url = ERXWOContext.directActionUrl(context, ERXRouteUrlUtils.actionUrlPathForEntity(entityName, entityID, action, format), queryParameters, Boolean.valueOf(secure), includeSessionID);
 		url = ERXRouteUrlUtils.changeDirectActionRequestHandlerTo(url, ERXRouteRequestHandler.Key);
 		return url;
 	}
 
-	public static String actionUrlForEntityType(WOContext context, String entityName, String action, NSDictionary<String, Object> queryParameters, boolean secure, boolean includeSessionID) {
-		String url = ERXWOContext.directActionUrl(context, ERXRouteUrlUtils.actionUrlPathForEntity(entityName, null, action), queryParameters, Boolean.valueOf(secure), includeSessionID);
+	public static String actionUrlForEntityType(WOContext context, String entityName, String action, String format, NSDictionary<String, Object> queryParameters, boolean secure, boolean includeSessionID) {
+		String url = ERXWOContext.directActionUrl(context, ERXRouteUrlUtils.actionUrlPathForEntity(entityName, null, action, format), queryParameters, Boolean.valueOf(secure), includeSessionID);
 		url = ERXRouteUrlUtils.changeDirectActionRequestHandlerTo(url, ERXRouteRequestHandler.Key);
 		return url;
 	}
 
-	public static String actionUrlPathForEntity(String entityName, Object entityID, String action) {
+	public static String actionUrlPathForEntity(String entityName, Object entityID, String action, String format) {
 		StringBuffer sb = new StringBuffer();
 		ERXRouteRequestHandler requestHandler = (ERXRouteRequestHandler) WOApplication.application().requestHandlerForKey(ERXRouteRequestHandler.Key);
 		sb.append(requestHandler.controllerPathForEntityNamed(entityName));
@@ -53,7 +53,13 @@ public class ERXRouteUrlUtils {
 			sb.append("/");
 			sb.append(action);
 		}
-		sb.append(".html");
+		sb.append(".");
+		if (format == null) {
+			sb.append("html");
+		}
+		else {
+			sb.append(format);
+		}
 		return sb.toString();
 	}
 }
