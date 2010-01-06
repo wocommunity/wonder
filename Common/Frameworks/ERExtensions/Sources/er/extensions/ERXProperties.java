@@ -39,6 +39,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation._NSFileUtilities;
 
 /**
  * Collection of simple utility methods used to get and set properties
@@ -763,6 +764,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         return pathsForUserAndBundleProperties(false);
     }
 
+    private static String _globalPropertiesPath;
+    public static void _setGlobalPropertiesPath(String globalPropertiesPath) {
+    	_globalPropertiesPath = globalPropertiesPath;
+    }
+    
+    public static String _globalPropertiesPath() {
+    	return _globalPropertiesPath;
+    }
+    
     public static NSArray pathsForUserAndBundleProperties(boolean reportLoggingEnabled) {
         NSMutableArray propertiesPaths = new NSMutableArray();
         NSMutableArray projectsInfo = new NSMutableArray();
@@ -874,17 +884,17 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         if (replacementPropsName != null) {
         	if (validateProperties) {
 	            mainPropsFile = new File(replacementPropsName);
-	            if (!mainPropsFile.exists()) {
+	            if (!mainPropsFile.exists() && !mainPropsFile.isAbsolute()) {
 	            	mainPropsFile = new File(userHome, replacementPropsName);
 	            }
 	            if (!mainPropsFile.exists()) {
-	    			throw new RuntimeException("There was no global properties file '" + replacementPropsName + "' (canonical path = '" + processedPropertiesPath(replacementPropsName) + ").");
+	    			throw new RuntimeException("There was no global properties file '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ").");
 	            }
 	            if (!mainPropsFile.isFile()) {
-	    			throw new RuntimeException("The path '" + replacementPropsName + "' (canonical path = '" + processedPropertiesPath(replacementPropsName) + ") was not a file.");
+	    			throw new RuntimeException("The path '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ") was not a file.");
 	            }
 	            if (!mainPropsFile.canRead()) {
-	    			throw new RuntimeException("The path '" + replacementPropsName + "' (canonical path = '" + processedPropertiesPath(replacementPropsName) + ") could not be read.");
+	    			throw new RuntimeException("The path '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ") could not be read.");
 	            }
         	}
         	else {
@@ -895,10 +905,14 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         	}
         } else if (userHome != null && userHome.length() > 0) {
             mainPropsFile = new File(userHome, "WebObjects.properties");
+            if (!mainPropsFile.exists() || mainPropsFile.isFile() || mainPropsFile.canRead()) {
+            	mainPropsFile = null;
+            }
         }
-        if (mainPropsFile != null && mainPropsFile.exists() && mainPropsFile.isFile() && mainPropsFile.canRead()) {
+        if (mainPropsFile != null) {
         	String propertiesPath = processedPropertiesPath(mainPropsFile);
         	if (propertiesPath != null) {
+        		ERXProperties._setGlobalPropertiesPath(propertiesPath);
         		propertiesPaths.addObject(propertiesPath);
         		projectsInfo.addObject("User:        WebObjects.properties " + propertiesPaths.lastObject());
         	}
@@ -1087,16 +1101,24 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	String propertiesPath = null;
     	if (originalPropertiesFile != null) {
     		if (Boolean.valueOf(System.getProperty("er.extensions.ERXProperties.canonicalizePropertiesPaths", "false"))) {
-    			try {
-    				propertiesPath = originalPropertiesFile.getCanonicalPath();
-    			}
-    			catch (IOException e) {
-    				ERXProperties.log.warn("The properties path '" + originalPropertiesFile + "' does not exist: " + e.getMessage());
-    			}
+    			propertiesPath = safeCanonicalPath(originalPropertiesFile);
     		}
     		else {
     			propertiesPath = originalPropertiesFile.getAbsolutePath();
     		}
+    	}
+    	return propertiesPath;
+    }
+    
+    protected static String safeCanonicalPath(File file) {
+    	String propertiesPath = null;
+    	if (file != null) {
+			try {
+				propertiesPath = file.getCanonicalPath();
+			}
+			catch (IOException e) {
+				ERXProperties.log.warn("The file '" + file + "' does not exist: " + e.getMessage());
+			}
     	}
     	return propertiesPath;
     }
@@ -1631,6 +1653,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			// behavior all the time, but until I hear someone who needs the old way, I'm not
 			// going to increase the complexity by adding a config flag that has to propagate all over.
 			File canonicalPropsFile = propsFile.getCanonicalFile();
+
 			_files.push(canonicalPropsFile.getParentFile());
 			try {
 	            BufferedInputStream is = new BufferedInputStream(new FileInputStream(canonicalPropsFile));

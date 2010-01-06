@@ -346,6 +346,15 @@ public class ERXConfigurationManager {
 	            String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
 	        	try {
 		            log.info("Reloading properties from '" + monitoredPropertiesPath + "' ...");
+
+		            // If the current path is the global properties path and you required symlinked global properties, then force a 
+		            // canonicalization of it now and block on the resolution of the link
+		            if (Boolean.valueOf(System.getProperty("NSRequireSymlinkedGlobalProperties", "false")) && monitoredPropertiesPath.equals(ERXProperties._globalPropertiesPath())) {
+		            	File monitoredPropertiesFile = new File(monitoredPropertiesPath);
+		            	File resolvedMonitoredPropertiesFile = _NSFileUtilities.resolveLink(monitoredPropertiesFile.getPath(), monitoredPropertiesFile.getName());
+		            	monitoredPropertiesPath = resolvedMonitoredPropertiesFile.getPath();
+			    	}
+
 		            // MS: This can fail, so we don't want to add to system properties file-by-file -- we want to do 
 		            // a single push at the end.
 		           	Properties loadedProperties = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
