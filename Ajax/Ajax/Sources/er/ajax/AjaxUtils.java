@@ -16,16 +16,16 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXNumberFormatter;
+import er.extensions.ERXProperties;
 import er.extensions.ERXRedirect;
 import er.extensions.ERXResourceManager;
 import er.extensions.ERXResponseRewriter;
+import er.extensions.ERXStringUtilities;
+import er.extensions.ERXTimestampFormatter;
 import er.extensions.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxSession;
-import er.extensions.ERXNumberFormatter;
-import er.extensions.ERXTimestampFormatter;
-import er.extensions.ERXProperties;
-import er.extensions.ERXStringUtilities;
 
 public class AjaxUtils {
 	private final static Logger log = Logger.getLogger(AjaxUtils.class);
@@ -37,9 +37,9 @@ public class AjaxUtils {
 	 * @return the quoted value or "null"
 	 */
 	public static String quote(String value) {
-		return value == null ? "null" : "'" + value + "'"; 
+		return value == null ? "null" : "'" + value + "'";
 	}
-	
+
 	/**
 	 * Return whether or not the given request is an Ajax request.
 	 * @param request the request the check
@@ -47,9 +47,9 @@ public class AjaxUtils {
 	public static boolean isAjaxRequest(WORequest request) {
 		return ERXAjaxApplication.isAjaxRequest(request);
 	}
-	
+
 	public static void setPageReplacementCacheKey(WOContext _context, String _key) {
-		_context.response().setHeader(_key, ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+		_context.request().setHeader(_key, ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class AjaxUtils {
 	 */
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
 		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
-		
+
 		// MS: OK ... Sheesh.  If you're not using Wonder's ERXResourceManager #1, you're a bad person, but #2 in development mode
 		// you have a lame resource URL that does not act like a path (wr/wodata=/path/to/your/resource), rather it acts like a query string
 		// (wr?wodata=/path/to/your/resource).  This means that relative resource references won't work and also only previously cached resources
@@ -206,7 +206,7 @@ public class AjaxUtils {
 		NSMutableDictionary dict = AjaxUtils.mutableUserInfo(message);
 		dict.takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
 	}
-	
+
 	/**
 	 * Returns an AjaxResponse with the given javascript as the body of the response.
 	 * 
@@ -270,7 +270,7 @@ public class AjaxUtils {
 			AjaxUtils.appendScriptFooter(response);
 		}
 	}
-	
+
 	public static void appendScriptFooter(WOResponse response) {
 		response.appendContentString("</script>");
 	}
@@ -412,7 +412,7 @@ public class AjaxUtils {
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name) {
 		AjaxUtils.appendTagAttributeAndValue(response, context, component, associations, name, null);
 	}
-	
+
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name, String appendValue) {
 		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, (WOAssociation) associations.objectForKey(name), appendValue);
 	}
@@ -420,7 +420,7 @@ public class AjaxUtils {
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association) {
 		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, association, null);
 	}
-	
+
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association, String appendValue) {
 		if (association != null || appendValue != null) {
 			String value = null;
@@ -450,9 +450,9 @@ public class AjaxUtils {
 	 */
 	public static void redirectTo(WOComponent component) {
 		WOContext context = component.context();
-        	ERXRedirect redirect = (ERXRedirect)component.pageWithName(ERXRedirect.class.getName());
-        	redirect.setComponent(component);
-        	redirect.appendToResponse(AjaxUtils.createResponse(context.request(), context), context);
+        ERXRedirect redirect = (ERXRedirect)component.pageWithName(ERXRedirect.class.getName());
+        redirect.setComponent(component);
+        redirect.appendToResponse(AjaxUtils.createResponse(context.request(), context), context);
 	}
 	
 	/**

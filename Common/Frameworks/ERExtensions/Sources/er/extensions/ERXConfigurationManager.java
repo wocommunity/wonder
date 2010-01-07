@@ -323,26 +323,59 @@ public class ERXConfigurationManager {
         int firstDirtyFile = 0;
         
         if (updatedFile != null) {
-            try {
-                // Find the position of the updatedFile in the monitoredProperties list, 
-                // so that we can reload it and everything after it on the list. 
-                firstDirtyFile = monitoredProperties.indexOfObject(updatedFile.getCanonicalPath());
-                if (firstDirtyFile < 0) {
-                    return;
-                }
-            } catch (IOException ex) {
-                log.error(ex.toString());
-                return;
-            }
+            // Find the position of the updatedFile in the monitoredProperties list, 
+            // so that we can reload it and everything after it on the list.
+        	String updatedFilePath = ERXProperties.processedPropertiesPath(updatedFile);
+        	if (updatedFilePath != null) {
+	            firstDirtyFile = monitoredProperties.indexOfObject(updatedFilePath);
+	            if (firstDirtyFile < 0) {
+	                return;
+	            }
+        	}
+        	else {
+        		// MS: this would have resulted in a logged IOException and a return before -- processedPropertiesPath logs for us now
+        		return;
+        	}
         }
         
+        boolean atomicPropertiesReload = Boolean.valueOf(System.getProperty("er.extensions.ERXConfigurationManager.atomicPropertiesReload", "true"));
+        if (atomicPropertiesReload) {
+	        Properties systemPropertiesCopy = new Properties();
+	        systemPropertiesCopy.putAll(System.getProperties());
+	        for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
+	            String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
+	        	try {
+		            log.info("Reloading properties from '" + monitoredPropertiesPath + "' ...");
 
-        Properties systemProperties = System.getProperties();
-        for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
-            String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
-            Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
-            ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
+		            // If the current path is the global properties path and you required symlinked global properties, then force a 
+		            // canonicalization of it now and block on the resolution of the link
+		            if (Boolean.valueOf(System.getProperty("NSRequireSymlinkedGlobalProperties", "false")) && monitoredPropertiesPath.equals(ERXProperties._globalPropertiesPath())) {
+		            	File monitoredPropertiesFile = new File(monitoredPropertiesPath);
+		            	File resolvedMonitoredPropertiesFile = _NSFileUtilities.resolveLink(monitoredPropertiesFile.getPath(), monitoredPropertiesFile.getName());
+		            	monitoredPropertiesPath = resolvedMonitoredPropertiesFile.getPath();
+			    	}
+
+		            // MS: This can fail, so we don't want to add to system properties file-by-file -- we want to do 
+		            // a single push at the end.
+		           	Properties loadedProperties = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
+		           	systemPropertiesCopy.putAll(loadedProperties);
+	        	}
+	        	catch (RuntimeException e) {
+	        		log.error("Failed to load properties from '" + monitoredPropertiesPath + "', so all properties from this reload will be rolled back.");
+	        		throw e;
+	        	}
+	        }
+            ERXProperties.transferPropertiesFromSourceToDest(systemPropertiesCopy, System.getProperties());
             ERXSystem.updateProperties();
+        }
+        else {
+            Properties systemProperties = System.getProperties();
+            for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
+                String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
+                Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
+                ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
+                ERXSystem.updateProperties();
+            }
         }
     }
 

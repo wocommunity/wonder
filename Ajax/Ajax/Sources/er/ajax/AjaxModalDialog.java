@@ -7,13 +7,14 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOForm;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPathUtilities;
 
 import er.extensions.ERXWOContext;
-import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.ERXWOForm;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 /**
  * <p>AjaxModalDialog is a modal dialog window based on ModalBox (see below for link).  It differs from AjaxModalContainer
@@ -72,7 +73,7 @@ import er.extensions.ERXWOForm;
  * 			custom  JavaScript (see below).  The default is true
  * @binding enabled if false, nothing is rendered for this component.  This can be used instead of wrapping this in a WOConditional.
  *          The default is true.
- * 
+ *
  * @binding onOpen server side method that runs before the dialog is opened, the return value is discarded
  * @binding onClose server side method that runs before the dialog is closed, the return value is discarded.
  *                  This will be executed if the page is reloaded, but not if the user navigates elsewhere.
@@ -81,7 +82,7 @@ import er.extensions.ERXWOForm;
  * 					if a clickable element has the focus
  * @binding clickOnEscId optional, ID of clickable HTML element to click when the Esc key is pressed.  This is ignored
  * 					if a clickable element has the focus but overrides the locked setting
- * 
+ *  
  * @binding id HTML id for the link activating the modal dialog
  * @binding class CSS class for the link activating the modal dialog
  * @binding style CSS style for the link activating the modal dialog
@@ -128,7 +129,7 @@ public class AjaxModalDialog extends AjaxComponent {
 
 	/** JavaScript to execute on the client to close the modal dialog */
 	public static final String Close = "AMD.close();";
-
+	
 	/** Element ID suffix indicating an Open Dialog action. */
 	public static final String Open_ElementID_Suffix = ".open";
 	
@@ -142,7 +143,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	private boolean hasWarnedOnNesting = false;
 	private WOComponent previousComponent;
 	private String ajaxComponentActionUrl;
-
+	
 	public static final Logger logger = Logger.getLogger(AjaxModalDialog.class);
 	
 
@@ -161,7 +162,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	public void setOpen(boolean open) {
 		_open = open;
 	}
-
+	
 	/**
 	 * Call this method to have a JavaScript response returned that opens the modal dialog.
 	 * The title of the dialog will be what it was when rendered.
@@ -249,10 +250,10 @@ public class AjaxModalDialog extends AjaxComponent {
 	public static void update(WOContext context) {
 		update(context, null);
 	}
-
+	
 	/**
 	 * Call this method to have a JavaScript response returned that updates the title of the modal dialog.
-	 *
+	 * 
 	 * @see #update(WOContext, String)
 	 * @param context the current WOContext
 	 * @param title the new title for the dialog window
@@ -305,20 +306,20 @@ public class AjaxModalDialog extends AjaxComponent {
 		if (isOpen()) {
 			try {
 				pushDialog();
-			if (_actionResults != null) {
-						pushActionResultsIntoContext(context);
-						try {
-				_actionResults.takeValuesFromRequest(request, context);
-			}
-						finally {
-							popActionResultsFromContext(context);
-						}
+				if (_actionResults != null) {
+					pushActionResultsIntoContext(context);
+					try {
+						_actionResults.takeValuesFromRequest(request, context);
 					}
-			else {
-				super.takeValuesFromRequest(request, context);
+					finally {
+						popActionResultsFromContext(context);
+					}
+				}
+				else {
+					super.takeValuesFromRequest(request, context);
+				}
 			}
-		}
-				finally {
+			finally {
 				popDialog();
 			}
 		}
@@ -338,18 +339,18 @@ public class AjaxModalDialog extends AjaxComponent {
 		try {
 			WOActionResults result = null;
 			if (shouldHandleRequest(request, context)) {
-				result = super.invokeAction(request, context);
+					result = super.invokeAction(request, context);
 			}
 			else if (isOpen()) {
 				if (_actionResults != null) {
-						pushActionResultsIntoContext(context);
-						try {
-					result = _actionResults.invokeAction(request, context);
-				}
-						finally {
-							popActionResultsFromContext(context);
-						}
+					pushActionResultsIntoContext(context);
+					try {
+						result = _actionResults.invokeAction(request, context);
 					}
+					finally {
+						popActionResultsFromContext(context);
+					}
+				}
 				else {
 					result = super.invokeAction(request, context);
 				}
@@ -394,7 +395,6 @@ public class AjaxModalDialog extends AjaxComponent {
 		String modalBoxAction = NSPathUtilities.pathExtension(context.senderID());
 
 		if ("close".equals(modalBoxAction)) {
-			closeDialog();
 			// This update can't be done in the closeDialog() method as that also gets called from close(WOContext) and
 			// and Ajax update is not taking place.  If the page structure changes, this update will not take place,
 			// but the correct container ID is on the URL and the update will still happen thanks to the magic in
@@ -403,6 +403,11 @@ public class AjaxModalDialog extends AjaxComponent {
 			if (closeUpdateContainerID != null) {
 				AjaxUpdateContainer.setUpdateContainerID(request, closeUpdateContainerID);
 			}
+	
+			// This needs to happen AFTER setting up for an update so that AjaxUtils.appendScriptHeaderIfNecessary
+			// knows if the script header is needed or not.  Doing this before and setting up a JS response in 
+			// the onClose callback, resulted in plain text getting injected into the page.
+			closeDialog();
 		}
 		else if ("open".equals(modalBoxAction) && !isOpen()) {
 			openDialog();
@@ -417,6 +422,19 @@ public class AjaxModalDialog extends AjaxComponent {
 				_actionResults = pageWithName((String)valueForBinding("pageName"));
 				_actionResults._awakeInContext(context);
 			}
+
+			// WOForm expects that it is inside a WODynamicGroup and relies on WODynamicGroup having setup the WOContext to correctly 
+			// generate the URL.  It should not (IMO), but it does.  If you have anything before the WebObject tag for the form 
+			// (a space, a carriage return, text, HTML tags, anything at all), then the WO parser creates a WODynamicGroup to hold that.  
+			// If  the WebObject tag for the form is the very first thing in the template, then the WODynamicGroup is not created and 
+			// invalid URLs are generated rendering the submit controls non-functional.  Throw an exception so the developer knows what is 
+			// wrong and can correct it.
+			if (_actionResults != null && (_actionResults.template() instanceof WOForm ||
+			  		                       _actionResults.template() instanceof ERXWOForm)) {
+				throw new RuntimeException(_actionResults.name() + " is used as contents of AjaxModalDialog, but starts with WOForm tag.  " +
+						"Action elements inside the dialog will not function.  Add a space at the start or end of " + _actionResults.name() + ".html");
+			}
+				
 		}
 
 		if (isOpen()) {
@@ -427,14 +445,14 @@ public class AjaxModalDialog extends AjaxComponent {
 			AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
 
 			if (_actionResults != null) {
-					pushActionResultsIntoContext(context);
-					try {
-				_actionResults.appendToResponse((WOResponse) response, context);
-			}
-					finally {
-						popActionResultsFromContext(context);
-					}
+				pushActionResultsIntoContext(context);
+				try {
+					_actionResults.appendToResponse((WOResponse) response, context);
 				}
+				finally {
+					popActionResultsFromContext(context);
+				}
+			}
 			else {
 				// This loads the content from the default ERWOTemplate (our component contents that are not
 				// in the "link" template.
@@ -479,8 +497,8 @@ public class AjaxModalDialog extends AjaxComponent {
 			}
 			try {
 				pushDialog();
-			super.appendToResponse(response, context);
-		}
+				super.appendToResponse(response, context);
+			}
 			finally {
 				popDialog();
 			}
@@ -570,7 +588,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		if (hasBinding("onOpen")) {
 			valueForBinding("onOpen");
 		}
-		
+
 		setOpen(true);
 	}
 
@@ -581,13 +599,13 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public void closeDialog() {
 		if (isOpen()) {
-		if (hasBinding("onClose")) {
-			valueForBinding("onClose");
-		}
-		
-		setOpen(false);
-		_actionResults = null;
-	}
+			if (hasBinding("onClose")) {
+				valueForBinding("onClose");
+			}
+
+			setOpen(false);
+			_actionResults = null;
+		}			
 	}
 
 	/**
@@ -598,7 +616,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	protected String _containerID(WOContext context) {
 		return id();
 	}
-	
+
 	/**
 	 * @return the value bound to id or an manufactured string if id is not bound
 	 */
@@ -659,7 +677,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("afterResize", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onShow", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onUpdate", AjaxOption.SCRIPT));
-		
+
 		// JS to notify server when the dialog box is closed.  This needs to be added to anything
 		// bound to afterHide
 		String closeUpdateContainerID = AjaxUpdateContainer.updateContainerID((String) valueForBinding("closeUpdateContainerID"));
@@ -689,7 +707,7 @@ public class AjaxModalDialog extends AjaxComponent {
 
 		return options;
 	}
-	
+
 	/**
 	 * @see er.ajax.AjaxComponent#addRequiredWebResources(com.webobjects.appserver.WOResponse)
 	 */
@@ -700,7 +718,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		addScriptResourceInHead(response, "modalbox.js");
 		addStylesheetResourceInHead(response, "modalbox.css");
 	}
-
+	
 	/**
 	 * Stash this dialog instance in the context so we can access it from the static methods.  If there is one AMD 
 	 * next in another (a rather dubious thing to do that we warn about but it may have its uses), we need to remember 

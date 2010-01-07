@@ -8,8 +8,9 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
-import er.extensions.ERXWOContext;
 import er.extensions.ERXValueUtilities;
+import er.extensions.ERXWOContext;
+import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 /**
  * This abstract (by design) superclass component isolate general utility methods.
@@ -93,9 +94,9 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
         if (shouldHandleRequest(request, context)) {
             result = handleRequest(request, context);
             AjaxUtils.updateMutableUserInfoWithAjaxInfo(context());
-			if (result == null) {
-				result = AjaxUtils.createResponse(request, context);
-			}
+            if (result == null && !ERXAjaxApplication.isAjaxReplacement(request)) {
+            	result = AjaxUtils.createResponse(request, context);
+            }
         } else {
             result = super.invokeAction(request, context);
         }
@@ -112,7 +113,7 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     protected String _containerID(WOContext context) {
     	return null;
     }
-
+	
     protected boolean shouldHandleRequest(WORequest request, WOContext context) {
     	return AjaxUtils.shouldHandleRequest(request, context, _containerID(context));
 	}

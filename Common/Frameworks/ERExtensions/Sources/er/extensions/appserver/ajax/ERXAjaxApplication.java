@@ -7,7 +7,8 @@ import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSLog;
+
+import er.extensions.ERXProperties;
 import er.extensions.ERXWOContext;
 
 /**
@@ -21,7 +22,8 @@ import er.extensions.ERXWOContext;
 public abstract class ERXAjaxApplication extends WOApplication {
 	public static final String KEY_AJAX_SUBMIT_BUTTON = "AJAX_SUBMIT_BUTTON_NAME";
 	public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
-	public static final String KEY_UPDATE_CONTAINER_ID = "__updateID";
+	public static final String KEY_UPDATE_CONTAINER_ID = "_u";
+	public static final String KEY_REPLACED = "_r";
 
 	private ERXAjaxResponseDelegate _responseDelegate;
 
@@ -35,6 +37,48 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		_responseDelegate = responseDelegate;
 	}
 
+	public static boolean shouldIgnoreResults(WORequest request, WOContext context, WOActionResults results) {
+		boolean shouldIgnoreResults = false;
+		if (results == context.page() && !ERXAjaxApplication.isAjaxReplacement(request)) {
+			WOApplication application = WOApplication.application();
+			if (application instanceof ERXAjaxApplication) {
+				shouldIgnoreResults = !((ERXAjaxApplication)application).allowContextPageResponse(); 
+			}
+			else {
+				shouldIgnoreResults = true;
+			}
+		}
+		return shouldIgnoreResults;
+	}
+		
+	/**
+	 * Ajax links have a ?_u=xxx&2309482093 in the url which makes it look like a form submission to WebObjects.
+	 * Therefore takeValues is called on every update even though many many updates aren't submits.  This method
+	 * checks to see if all you have is a _u or _r and an ismap (the #) param for form values.  If so, it's not 
+	 * a form submission and takeValues can be skipped.
+	 *
+	 * @see com.webobjects.appserver.WOApplication#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
+	 *
+	 * @param request
+	 * @param context
+	 */
+	@Override
+	public void takeValuesFromRequest(WORequest request, WOContext context) {
+		boolean shouldTakeValuesFromRequest = true;
+		if (!request.isMultipartFormData() && ERXAjaxApplication.isAjaxRequest(request)) {
+			NSDictionary formValues = request.formValues();
+			int formValuesCount = formValues.count();
+			if (formValuesCount == 2 && (formValues.objectForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID) != null || 
+					                     formValues.objectForKey(ERXAjaxApplication.KEY_REPLACED) != null) && 
+					                     formValues.objectForKey(WORequest._IsmapCoords) != null) {
+				shouldTakeValuesFromRequest = false;
+			}
+		}
+		if (shouldTakeValuesFromRequest) {
+			super.takeValuesFromRequest(request, context);
+		}
+	}
+	
 	/**
 	 * Overridden to allow for redirected responses.
 	 * 
@@ -50,11 +94,10 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		// MS: Note that if results == context.page() something probably went
 		// wrong
 		if (ERXAjaxApplication.shouldNotStorePage(context)) {
-			if (results == context.page()) {
-				NSLog.out.appendln("ERXAjaxApplication.invokeAction: An Ajax response returned context.page(), which is almost certainly an error.");
+			if (shouldIgnoreResults(request, context, results)) {
 				results = null;
 			}
-			if (results == null) {
+			if (results == null && !ERXAjaxApplication.isAjaxReplacement(request)) {
 				WOResponse response = context.response();
 
 				if (_responseDelegate != null) {
@@ -71,6 +114,18 @@ public abstract class ERXAjaxApplication extends WOApplication {
 			}
 		}
 		return results;
+	}
+	
+	/**
+	 * Allow for context.page() as a result to an ajax call. Currently for debugging.
+	 */
+	// AK: REMOVEME if WOGWT doesn't work out...
+	private Boolean _allowContextPageResponse;
+	private boolean allowContextPageResponse() {
+		if(_allowContextPageResponse == null) {
+			_allowContextPageResponse = ERXProperties.booleanForKey("er.extensions.ERXAjaxApplication.allowContextPageResponse");
+		}
+		return _allowContextPageResponse;
 	}
 
 	public static void setForceStorePage(WOMessage message) {
@@ -164,6 +219,20 @@ public abstract class ERXAjaxApplication extends WOApplication {
 	 */
 	public static boolean isAjaxSubmit(WORequest request) {
 		return (ERXAjaxApplication.ajaxSubmitButtonName(request) != null);
+	}
+
+	/**
+	 * Returns true if this is an ajax replacement (_r key is set).
+	 */
+	public static boolean isAjaxReplacement(WORequest request) {
+		return request.formValueForKey(ERXAjaxApplication.KEY_REPLACED) != null;
+	}
+	
+	/**
+	 * Returns true if this request will update an AjaxUpdateContainer.
+	 */
+	public static boolean isAjaxUpdate(WORequest request) {
+		return request.formValueForKey(KEY_UPDATE_CONTAINER_ID) != null;
 	}
 
 	/**

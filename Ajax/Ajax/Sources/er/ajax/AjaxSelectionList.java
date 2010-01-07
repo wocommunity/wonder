@@ -8,8 +8,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXWOContext;
 import er.extensions.ERXComponentUtilities;
+import er.extensions.ERXWOContext;
 
 /**
  * AjaxSelectionList provides a list component that supports keyboard navigation and component renderers. Externally,
@@ -36,6 +36,7 @@ import er.extensions.ERXComponentUtilities;
  * @binding onselect (optional) the javascript to execute when the user presses enter or double-clicks
  * @binding ondelete (optional) the javascript to execute when backspace or delete is pressed
  * @binding focus (optional) if true, the selection list will be focused 
+ * @binding containerElementName the container element for this component, which is "a"
  */
 public class AjaxSelectionList extends AjaxComponent {
 	private String _id;
@@ -59,7 +60,7 @@ public class AjaxSelectionList extends AjaxComponent {
 			setValueForBinding(null, "item");
 		}
 		else {
-			setValueForBinding(item, "item");
+			setValueForBinding(item, "item");  
 		}
 	}
 

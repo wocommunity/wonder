@@ -76,7 +76,8 @@ public class ERXFileNotificationCenter {
             NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("checkIfFilesHaveChanged", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillDispatchRequestNotification, null);            
         }
         
-        symlinkSupport = ERXProperties.booleanForKeyWithDefault("ERXFileNotificationCenter.symlinkSupport", true);
+        // MS: In case we are touching properties before they're fully materialized or messed up from a failed reload, lets use System.props here
+        symlinkSupport = Boolean.valueOf(System.getProperty("ERXFileNotificationCenter.symlinkSupport", "true"));
     }
 
     /**
@@ -164,7 +165,7 @@ public class ERXFileNotificationCenter {
 	    		// symlinked file. On OS X, the lastModified of the sym link itself matches the 
 	    		// lastModified of the referenced file, but I didn't want to presume that behavior.
 		    	File canonicalizedFile = file.getCanonicalFile();
-		    	return Long.valueOf(canonicalizedFile.lastModified());
+		    	return canonicalizedFile.getPath() + ":" + Long.valueOf(canonicalizedFile.lastModified());
 	    	}
 	    	catch (IOException e) {
 	    		// MS: return a zero to match the previous semantics from calling file.lastModified() on a missing file.

@@ -29,5 +29,13 @@
         <binding name="tabindex"/>
     <binding name="default"/>
         <binding name="id"/>
+    <binding name="selection"/>
+        <validation message="'selection' must be bound to a settable value">
+            <unsettable name="selection"/>
+        </validation>
+    <binding name="class"/>
+    <binding name="onblur"/>
+        <binding name="onchange"/>
+    <binding name="style"/>
     </wo>
 </wodefinitions>

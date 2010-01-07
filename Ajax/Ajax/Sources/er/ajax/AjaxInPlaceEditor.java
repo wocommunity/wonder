@@ -202,8 +202,8 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     	  response.appendContentHTMLString(strValue);
       }
       else {
-      response.appendContentString(strValue);
-    }
+    	  response.appendContentString(strValue);
+      }
     }
   }
 }

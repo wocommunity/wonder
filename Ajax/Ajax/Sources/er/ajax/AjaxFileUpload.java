@@ -12,11 +12,11 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
 
-import er.extensions.ERXRequest;
-import er.extensions.ERXWOContext;
 import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXUnitAwareDecimalFormat;
 import er.extensions.ERXFileUtilities;
+import er.extensions.ERXRequest;
+import er.extensions.ERXUnitAwareDecimalFormat;
+import er.extensions.ERXWOContext;
 
 /**
  * AjaxFileUpload provides an Ajax wrapper around the file upload process. This works pretty differently than
@@ -52,6 +52,8 @@ import er.extensions.ERXFileUtilities;
  * @binding uploadLabel the label to display on the Upload button ("Upload" by default)
  * @binding uploadFunctionName the upload button will instead be a function with the given name
  * @binding progressOfText the text to display for the word "of" in the "[size] of [totalsize]" string during upload
+ * @binding class the class attribute of the file input
+ * @binding style the style attribute of the file input
  * 
  * @author mschrag
  */

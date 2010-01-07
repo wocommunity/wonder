@@ -280,7 +280,7 @@ public class AjaxGrid extends WOComponent {
 	private NSMutableDictionary sortOrdersByKeypath; // optimization
 	private NSMutableDictionary formattersByKeypath; // optimization
 	private Boolean showRowSelector; // optimization
-
+	
 	private NSKeyValueCodingAdditions row; // local binding
 	private NSDictionary currentColumn; // local binding
 	private int rowIndex; // local binding
@@ -390,10 +390,10 @@ public class AjaxGrid extends WOComponent {
 	 */
 	public void removeSorting() {
 		if (canResort()) {
-		configurationData().setObjectForKey(new NSMutableArray(), SORT_ORDER);
-		clearCachedConfiguration();
-		updateDisplayGroupSort();
-	}
+			configurationData().setObjectForKey(new NSMutableArray(), SORT_ORDER);
+			clearCachedConfiguration();
+			updateDisplayGroupSort();
+		}
 	}
 	
 	/**
@@ -436,8 +436,8 @@ public class AjaxGrid extends WOComponent {
 	{
 		String dragHeaderOnly = (String) configurationData().objectForKey(DRAG_HEADER_ONLY);
 		return dragHeaderOnly == null ? "false" : dragHeaderOnly;
-	}
-
+	}	
+	
 	/**
 	 * Binding value for onRefreshComplete function of AjaxUpdate container.
 	 * Returns the value from the AFTER_UPDATE_BINDING followed by
@@ -506,7 +506,7 @@ public class AjaxGrid extends WOComponent {
 	public boolean canResort() {
 		return configurationData().valueForKey(CAN_RESORT) != null ? Boolean.valueOf((String) configurationData().valueForKey(CAN_RESORT)).booleanValue() : true;
 	}
-
+	
 	/**
 	 * Returns TABLE_ID value from configurationData()
 	 * 

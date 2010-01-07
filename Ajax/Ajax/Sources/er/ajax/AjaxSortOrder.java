@@ -22,7 +22,16 @@ import er.extensions.ERXSortOrder;
  * @author mschrag
  */
 public class AjaxSortOrder extends ERXSortOrder {
+	
 	public AjaxSortOrder(WOContext context) {
 		super(context);
+	}
+	
+	public String updateContainerID() {
+		String updateContainerID = (String)valueForBinding("updateContainerID");
+		if(updateContainerID == null) {
+			updateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+		}
+		return updateContainerID;
 	}
 }

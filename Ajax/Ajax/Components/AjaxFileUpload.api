@@ -27,5 +27,7 @@
         <binding name="uploadLabel"/>
         <binding name="uploadFunctionName"/>
     	<binding name="progressOfText"/>
+    <binding name="class"/>
+        <binding name="style"/>
     </wo>
 </wodefinitions>

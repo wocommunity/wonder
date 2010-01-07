@@ -30,6 +30,24 @@ var AjaxTabbedPanel = {
     // Change which panel appears
     selectPanel : function(paneControlID, selectedPaneID) {
       var selectedPane = $(selectedPaneID);
+      
+      // Tabs are hidden with display:none.  This removes the contents from the DOM... including any form fields.
+      // The fields on any tab NOT selected since the last (non-Ajax)form submission will therefore not be sent 
+      // to the app and WO will interpret this as null values.  To avoid problems from this, the relevant form is 
+      // submitted before the tab is hidden.
+      
+      // First look for a form in each pane and if not found, look for one form wrapping the entire panel
+      var formInPanel = selectedPane.down('form');
+      if (formInPanel) {
+      	ASB.request(formInPanel, null, {asynchronous:false, evalScripts:false, _asbn: 'dummy'});
+      }
+      else {
+        var formAroundPanel = selectedPane.up('form');
+	    if (formAroundPanel) {
+	      ASB.request(formAroundPanel, null, {asynchronous:false, evalScripts:false, _asbn: 'dummy'});
+	    }
+      }
+
       var panelist = this.getChildrenByTagName($(paneControlID), 'li');
       var nodes = $A(panelist);
 
@@ -38,7 +56,7 @@ var AjaxTabbedPanel = {
         $(node);  // Force prototype extension of node for IE 7
         if (node.id != selectedPane.id) {
           if (node.hasClassName('ajaxTabbedPanelPane-selected')) {
-            new Ajax.Request(node.getAttribute('updateUrl') + "?didSelect=false",  {asynchronous:1, evalScripts:false})
+            new Ajax.Request(node.getAttribute('updateUrl') + "?didSelect=false",  {asynchronous:true, evalScripts:false})
             node.removeClassName('ajaxTabbedPanelPane-selected').addClassName('ajaxTabbedPanelPane-unselected');
           }
         };
@@ -46,7 +64,7 @@ var AjaxTabbedPanel = {
 
       // Select the new tab and notify the app of the selected tab
       selectedPane.removeClassName('ajaxTabbedPanelPane-unselected').addClassName('ajaxTabbedPanelPane-selected');
-      new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
+      new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:true, evalScripts:false})
     },
 
     // Loads the panel contents if not already loaded
@@ -54,7 +72,7 @@ var AjaxTabbedPanel = {
       var pane = $(paneID);
       if (pane.innerHTML=='' || pane.innerHTML==this.busyContent(busyDivID) || shouldReload) {
          pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=AjaxTabbedPanel.busyContent(busyDivID); pe.stop()}, 0.25);
-         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: 1, 
+         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: true, 
          														 evalScripts: true, 
          														 onComplete: function(a, b) {pe.stop(); 
          														                             AjaxTabbedPanel.runOnLoad(pane); 

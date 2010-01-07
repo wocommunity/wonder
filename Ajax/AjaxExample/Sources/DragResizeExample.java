@@ -18,6 +18,8 @@ public class DragResizeExample extends WOComponent {
 
     public boolean editingEnabled = true;
     
+    public int randomCount;
+    
     public DragResizeExample(WOContext context) {
 	super(context);
 	annotations = new NSMutableArray(new Annotation[] { 
@@ -25,6 +27,12 @@ public class DragResizeExample extends WOComponent {
 		new Annotation(312, 372, 112, 81, "Foot", "Athough the feet are quite big, the legs aren't, so he's not a big sprinter...") }); // 112x81+312+372 foot
     }
     
+    public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
+    	randomCount = (int)(Math.random() * 10.0);
+    	System.out.println("DragResizeExample.appendToResponse: " + randomCount);
+    	super.takeValuesFromRequest(aRequest, aContext);
+    }
+
     public void appendToResponse(WOResponse response, WOContext ctx) {
 	super.appendToResponse(response, ctx);
 	AjaxUtils.addScriptResourceInHead(ctx, response, "app", "overlib.js");

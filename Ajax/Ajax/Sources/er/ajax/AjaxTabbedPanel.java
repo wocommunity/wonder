@@ -7,10 +7,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicGroup;
-
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -97,7 +95,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
      * @param template the graph of elements passed to the constructor.
      */
     private void findTabs(WODynamicGroup template)  {
-    	if (template == null) return;
+    	if (template == null || template.childrenElements() == null) return;
 
         NSArray children = template.childrenElements();
         for (int i = 0; i < children.count(); i++) {
