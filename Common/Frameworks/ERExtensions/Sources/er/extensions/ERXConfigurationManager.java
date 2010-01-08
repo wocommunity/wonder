@@ -268,7 +268,7 @@ public class ERXConfigurationManager {
                 File file = new File(configFile);
                 if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
                     try {
-                        Properties props = ERXProperties.propertiesFromFile(file);
+                        Properties props = ERXProperties.propertiesFromFile(file, false);
                         ERXProperties.transferPropertiesFromSourceToDest(props, systemProperties);
                         ERXSystem.updateProperties();
                     } catch (java.io.IOException ex) {
@@ -347,17 +347,12 @@ public class ERXConfigurationManager {
 	        	try {
 		            log.info("Reloading properties from '" + monitoredPropertiesPath + "' ...");
 
-		            // If the current path is the global properties path and you required symlinked global properties, then force a 
-		            // canonicalization of it now and block on the resolution of the link
-		            if (Boolean.valueOf(System.getProperty("NSRequireSymlinkedGlobalProperties", "false")) && monitoredPropertiesPath.equals(ERXProperties._globalPropertiesPath())) {
-		            	File monitoredPropertiesFile = new File(monitoredPropertiesPath);
-		            	File resolvedMonitoredPropertiesFile = _NSFileUtilities.resolveLink(monitoredPropertiesFile.getPath(), monitoredPropertiesFile.getName());
-		            	monitoredPropertiesPath = resolvedMonitoredPropertiesFile.getPath();
-			    	}
+		            // If the current path is the global properties path and you required symlinked global properties, then block on the resolution of the link
+		            boolean requireSymlink = ERXProperties._shouldRequireSymlinkedGlobalAndIncludeProperties() && monitoredPropertiesPath.equals(ERXProperties._globalPropertiesPath());
 
 		            // MS: This can fail, so we don't want to add to system properties file-by-file -- we want to do 
 		            // a single push at the end.
-		           	Properties loadedProperties = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
+		           	Properties loadedProperties = ERXProperties.propertiesFromPath(monitoredPropertiesPath, requireSymlink);
 		           	systemPropertiesCopy.putAll(loadedProperties);
 	        	}
 	        	catch (RuntimeException e) {
@@ -372,7 +367,11 @@ public class ERXConfigurationManager {
             Properties systemProperties = System.getProperties();
             for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
                 String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
-                Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
+
+                // If the current path is the global properties path and you required symlinked global properties, then block on the resolution of the link
+	            boolean requireSymlink = ERXProperties._shouldRequireSymlinkedGlobalAndIncludeProperties() && monitoredPropertiesPath.equals(ERXProperties._globalPropertiesPath());
+
+                Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath, requireSymlink);
                 ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
                 ERXSystem.updateProperties();
             }

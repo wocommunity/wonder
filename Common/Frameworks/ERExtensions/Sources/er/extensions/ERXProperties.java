@@ -34,6 +34,7 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -681,10 +682,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * an empty properties object. 
      * 
      * @param path  file path to the properties file
+	 * @param requireSymlink whether or not to require a symlink (and block) before loading
      * @return properties object with the values from the file
      *      specified.
      */
-    public static Properties propertiesFromPath(String path) {
+    public static Properties propertiesFromPath(String path, boolean requireSymlink) {
     	ERXProperties.NestedProperties prop = new ERXProperties.NestedProperties();
 
         if (path == null  ||  path.length() == 0) {
@@ -702,7 +704,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
 
         try {
-        	prop.load(file);
+        	prop.load(file, requireSymlink);
             log.debug("Loaded configuration file at path: "+ path);
         } catch (IOException e) {
         	if (ERXProperties.shouldValidateProperties()) {
@@ -716,13 +718,14 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /**
      * Gets the properties for a given file.
      * @param file the properties file
+	 * @param requireSymlink whether or not to require a symlink (and block) before loading
      * @return properties from the given file
      */
-    public static Properties propertiesFromFile(File file) throws IOException {
+    public static Properties propertiesFromFile(File file, boolean requireSymlink) throws IOException {
         if (file == null)
             throw new IllegalStateException("Attempting to get properties for a null file!");
         ERXProperties.NestedProperties prop = new ERXProperties.NestedProperties();
-        prop.load(file);
+        prop.load(file, requireSymlink);
         return prop;
     }
     
@@ -1616,26 +1619,37 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 	}
                     propsFile = new File(cwd, propsFileName);
                 }
+                // MS: Canonicalize the includeProps path so that we get more reliable duplicate checks. Otherwise, depending on 
+                // exactly how the include path was constructed (with .., absolute path, etc) you might get the same props
+                // file included twice but with two different names. It would likely get caught and explode later on, anyway,
+                // but failing fast is always desirable.
+                String propsPath;
+                try {
+                	propsPath = propsFile.getCanonicalPath();
+                }
+                catch (IOException e) {
+					throw new RuntimeException("Failed to canonicalize the property file '" + propsFile + "'.", e);
+                }
 
                 // Detect mutually recursing props files by tracking what we've already loaded:
                 String existingIncludeProps = this.getProperty(NestedProperties.IncludePropsSoFarKey);
                 if (existingIncludeProps == null) {
                 	existingIncludeProps = "";
                 }
-                if (existingIncludeProps.indexOf(propsFile.getPath()) > -1) {
-                	log.info("ERXProperties.NestedProperties.load(): recursive includeProps detected! " + propsFile + " in " + existingIncludeProps);
+                if (existingIncludeProps.indexOf(propsPath) > -1) {
+                	log.info("ERXProperties.NestedProperties.load(): Possible recursive includeProps detected. '" + propsPath + "' was included in more than one of the following files: " + existingIncludeProps);
                 	log.info("ERXProperties.NestedProperties.load() cannot proceed - QUITTING!");
                     System.exit(1);
                 }
                 if (existingIncludeProps.length() > 0) {
                 	existingIncludeProps += ", ";
                 }
-                existingIncludeProps += propsFile;
+                existingIncludeProps += propsPath;
                 super.put(NestedProperties.IncludePropsSoFarKey, existingIncludeProps);
 
                 try {
                     log.info("ERXProperties.NestedProperties.load(): Including props file: " + propsFile);
-					this.load(propsFile);
+					this.load(propsFile, ERXProperties._shouldRequireSymlinkedGlobalAndIncludeProperties());
 				} catch (IOException e) {
 					throw new RuntimeException("Failed to load the property file '" + value + "'.", e);
 				}
@@ -1646,13 +1660,26 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			}
 		}
 
-		public synchronized void load(File propsFile) throws IOException {
+		/**
+		 * Loads the properties from the given file, optionally blocking until the symlink is resolved.
+		 * 
+		 * @param propsFile the properties file to load from
+		 * @param requireSymlink whether or not to require a symlink (and block) before loading
+		 * @throws IOException if properties loading fails
+		 */
+		public synchronized void load(File propsFile, boolean requireSymlink) throws IOException {
 			// MS: We pull the canonical path here in case you symlink to a Properties file
 			// that has relative .includeProps paths in it (that you expect to load from the same
 			// folder as the symlink target). It's debatable whether this is actually the desired 
 			// behavior all the time, but until I hear someone who needs the old way, I'm not
 			// going to increase the complexity by adding a config flag that has to propagate all over.
-			File canonicalPropsFile = propsFile.getCanonicalFile();
+			File canonicalPropsFile;
+			if (requireSymlink) {
+            	canonicalPropsFile = _NSFileUtilities.resolveLink(propsFile.getPath(), propsFile.getName());
+			}
+			else {
+				canonicalPropsFile = propsFile.getCanonicalFile();
+			}
 
 			_files.push(canonicalPropsFile.getParentFile());
 			try {
@@ -1674,5 +1701,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	// this property to false will switch everything back to the previous behavior.
 	public static boolean shouldValidateProperties() {
 		return Boolean.valueOf(System.getProperty("NSValidateProperties", "true"));
+	}
+
+	// MS: NSRequireSymlinkedGlobalAndIncludeProperties specifies whether we should require root and included properties files to be symlinked. This does not include
+	// the root Properties files loaded from frameworks.
+	public static boolean _shouldRequireSymlinkedGlobalAndIncludeProperties() {
+		return Boolean.valueOf(System.getProperty("NSRequireSymlinkedGlobalAndIncludeProperties", "false"));
 	}
 }
