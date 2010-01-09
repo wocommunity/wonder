@@ -228,6 +228,9 @@ public class ERXMigrator {
 			editingContext.lock();
 			try {
 				try {
+					if (ERXMigrator.log.isInfoEnabled()) {
+						ERXMigrator.log.info("Running post migration for " + modelVersion.model().name() + " version " + modelVersion.version() + " ...");
+					}
 					postMigration.postUpgrade(editingContext, modelVersion.model());
 					editingContext.saveChanges();
 				}
