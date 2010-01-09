@@ -53,7 +53,7 @@ import er.extensions.statistics.ERXStats.Group;
  * This delegate implements several methods from the formal interface
  * {@link com.webobjects.eoaccess.EODatabaseContext.Delegate EODatabaseContext.Delegate}. 
  * Of special note this class adds the ability
- * for enterpriseobjects to generate their own primary keys, correctly throws an
+ * for enterprise objects to generate their own primary keys, correctly throws an
  * exception when a toOne relationship object is not found in the database and adds
  * debugging abilities to tracking down when faults are fired. It also supports a cache for
  * array fault that is checked before they are fetched from the database.

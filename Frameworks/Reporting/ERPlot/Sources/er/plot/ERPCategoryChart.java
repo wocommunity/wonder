@@ -20,6 +20,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  * should contain an array of objects from which the values <code>xNameKey</code>, <code>yNameKey</code>, <code>categoryKey</code> and <code>
  * valueKey</code> are retrieved. For example, you might have an array of line items, 
  * with a valueKey <code>amount</code>, an <code>xNameKey</code> with <code>invoice.datePurchased</code>, <code>yNameKey</code>, <code>categoryKey</code>and a nameKey <code>product.name</code>. 
+ * 
  * @binding name the name of the chart
  * @binding chartType the type of the chart (possible values depend on the concrete subclass)
  * @binding imageType the type of the image to show: <code>png</code> (default) or <code>jpeg</code>
@@ -36,7 +37,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  * @binding showToolTips true, if tool tips should be shown
  * @binding showUrls true, if urls should be shown
  * @binding orientation either "horizontal" (default) or "vertical"
- * @binding chart Chart to use instead of the created one. If this binding is setable, then it will be set to the actually used chart
+ * @binding chart Chart to use instead of the created one. If this binding is set-able, then it will be set to the actually used chart
  * @binding configuration NSDictionary that will be applied to the chart via key-value-coding prior to rendering. Contains 
  *      entries like <code>antiAlias=true</code> or <code>categoryPlot.dataAreaRatio = 0.8</code>.
  * @author ak
@@ -58,7 +59,8 @@ public class ERPCategoryChart extends ERPChart {
         super(context);
     }
     
-    public void reset() {
+    @Override
+	public void reset() {
         super.reset();
         _xName = null;
         _yName = null;
@@ -95,11 +97,13 @@ public class ERPCategoryChart extends ERPChart {
         return _orientation;
     }
     
-    protected NSArray<String> supportedTypes() {
+    @Override
+	protected NSArray<String> supportedTypes() {
         return SUPPORTED_TYPES;
     }
     
-    protected JFreeChart createChart() {
+    @Override
+	protected JFreeChart createChart() {
         JFreeChart chart = null;
         String name = stringValueForBinding("name", "");
         Class<ChartFactory> clazz = ChartFactory.class;
@@ -120,7 +124,8 @@ public class ERPCategoryChart extends ERPChart {
         return chart;
     }
     
-    protected Dataset createDataset() {
+    @Override
+	protected Dataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         
         for(Enumeration<?> items = items().objectEnumerator(); items.hasMoreElements(); ) {
