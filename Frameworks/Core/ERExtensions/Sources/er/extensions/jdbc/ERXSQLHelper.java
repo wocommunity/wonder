@@ -1472,7 +1472,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param databaseContext
 	 * @param throwable
-	 * @return
+	 * @return whether or not the SQL helper can handl this exception
 	 */
 	public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
 		return false;
@@ -1544,7 +1544,6 @@ public class ERXSQLHelper {
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOModel model) {
-		ERXSQLHelper helper = null;
 		EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
 		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
@@ -2292,6 +2291,9 @@ public class ERXSQLHelper {
 	}
 
 	public static class NoSQLHelper extends ERXSQLHelper {
-		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			return null;
+		}
 	}
 }
