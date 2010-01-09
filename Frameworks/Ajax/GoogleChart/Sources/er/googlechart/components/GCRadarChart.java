@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSDictionary;
 import er.extensions.foundation.ERXMutableURL;
 
 /**
- * A radar chart (see http://code.google.com/apis/chart/#radar).
+ * A <a href="http://code.google.com/apis/chart/types.html#radar">radar chart</a>.
  * 
  * @binding data the array, or array of arrays, of data
  * @binding size "wxh" format chart size ("300x400")

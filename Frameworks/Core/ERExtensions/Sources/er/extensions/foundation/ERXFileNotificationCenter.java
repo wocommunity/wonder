@@ -23,15 +23,15 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXConstant;
 
 /**
- * The file notification center is only used in developement systems. It provides a nice repository about
+ * The file notification center is only used in development systems. It provides a nice repository about
  * files and their last modified dates.  So instead of every dynamic spot having to keep track of
  * the files' dates, register and check at the end of every request-response loop, instead you
  * can just add an observer to this center and be notified when the file changes. Files' last modification
- * dates are checked at the end of every request-response loop.<br/>
- * <br/>
- * It should be noted that the current version of the file notification center will retain a
+ * dates are checked at the end of every request-response loop.
+ * 
+ * <p>It should be noted that the current version of the file notification center will retain a
  * reference to each registered observer. This is not ideal and will be corrected in the
- * future.
+ * future.</p>
  */
 public class ERXFileNotificationCenter {
 
