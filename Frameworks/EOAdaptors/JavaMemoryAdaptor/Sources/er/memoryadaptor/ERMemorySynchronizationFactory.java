@@ -1,6 +1,7 @@
 package er.memoryadaptor;
 
 import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSchemaGeneration;
@@ -85,5 +86,9 @@ public class ERMemorySynchronizationFactory extends EOSynchronizationFactory imp
 
   public NSArray schemaCreationStatementsForEntities(NSArray arg0, NSDictionary arg1) {
     return noopExpressions();
+  }
+  
+  public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
+  	return noopExpressions();
   }
 }
