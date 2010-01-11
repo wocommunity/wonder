@@ -10,6 +10,7 @@ import org.apache.log4j.varia.LevelRangeFilter;
 
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.foundation.ERXProperties;
 import er.selenium.DefaultSeleniumTestFilesFinder;
 import er.selenium.ERSelenium;
 import er.selenium.SeleniumTest;
@@ -55,6 +56,8 @@ public class StandaloneRunner {
 		String host = args[2];
 		int port = args.length >= 4 ? Integer.parseInt(args[3]) : 4444;
 		String browserType = args.length >= 5 ? args[4] : "*firefox";
+		boolean takeScreenshots = ERXProperties.booleanForKeyWithDefault("er.selenium.screenshotEnabled", false);
+		String screenshotPath = ERXProperties.stringForKeyWithDefault("er.selenium.screenshotPath", System.getProperty("java.io.tmpdir"));
 				
 		boolean failed = false;
 		SeleniumTestRCRunner runner = new SeleniumTestRCRunner(host, port, browserType, appHost);
@@ -91,14 +94,15 @@ public class StandaloneRunner {
 						}
 						
 					}
-//					log.error("Saving screenshot to " + "/tmp/" + testFile.getName() + ".png");
-//					if ("*firefox".equals(browserType)) {
-//					  runner.captureEntirePageScreenshot("/tmp/" + testFile.getName() + "-full.png");
-//            runner.captureScreenshot("/tmp/" + testFile.getName() + ".png");
-//					} else {
-//					  runner.captureScreenshot("/tmp/" + testFile.getName() + ".png");
-//					}
-
+					if (takeScreenshots) {
+					  String pathPrefix = screenshotPath + testFile.getName();
+					  log.error("Saving screenshot to " + pathPrefix + ".png");
+					  if ("*firefox".equals(browserType)) {
+	            log.error("Saving full screenshot to " + pathPrefix + "-full.png");
+					    runner.captureEntirePageScreenshot(pathPrefix + "-full.png");
+					  } 
+					  runner.captureScreenshot(pathPrefix + ".png");
+					}
           log.error("");
 				}
 			}
