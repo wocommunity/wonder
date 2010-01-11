@@ -95,7 +95,7 @@ public class StandaloneRunner {
 						
 					}
 					if (takeScreenshots) {
-					  String pathPrefix = screenshotPath + testFile.getName();
+					  String pathPrefix = screenshotPath + "/" + testFile.getName();
 					  log.error("Saving screenshot to " + pathPrefix + ".png");
 					  if ("*firefox".equals(browserType)) {
 	            log.error("Saving full screenshot to " + pathPrefix + "-full.png");
