@@ -9,19 +9,11 @@ DateFormatString: WOString {
 	value = formatterStringForScript.toLowerCase;
 }
 
-DatePickerJavaScript: WOJavaScript {
-	scriptSource = datePickerJavaScriptUrl;
-}
-
 DateTextField: WOTextField {
 	name = name;
 	value = dateString;
 	size = formatLength;
 	maxlength = formatLength;
-}
-
-Once: ERXOncePerRequestConditional {
-	keyName = "datepicker-js";
 }
 
 OpenCalendarWindowHyperlink: WOHyperlink {
