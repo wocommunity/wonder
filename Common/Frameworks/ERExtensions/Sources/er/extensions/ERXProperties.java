@@ -890,6 +890,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	            if (!mainPropsFile.exists() && !mainPropsFile.isAbsolute()) {
 	            	mainPropsFile = new File(userHome, replacementPropsName);
 	            }
+	            if (ERXProperties._shouldRequireSymlinkedGlobalAndIncludeProperties()) {
+	            	mainPropsFile = _NSFileUtilities.resolveLink(mainPropsFile.getPath(), mainPropsFile.getName());
+	            }
 	            if (!mainPropsFile.exists()) {
 	    			throw new RuntimeException("There was no global properties file '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ").");
 	            }
