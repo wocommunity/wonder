@@ -19,7 +19,6 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
@@ -147,14 +146,13 @@ public class PostgresqlExpression extends JDBCExpression {
      * 
      * @return
      */
-
     private boolean enableIdentifierQuoting() {
         if(_enableIdentifierQuoting == null) {
             _enableIdentifierQuoting = Boolean.getBoolean(getClass().getName() + ".enableIdentifierQuoting") ? Boolean.TRUE : Boolean.FALSE;
         }
         return _enableIdentifierQuoting.booleanValue();
     }
-    
+
     /**
      * Overridden to fix an issue with NStimestamp classes and "T" value-typed attributes. 
      */
