@@ -908,7 +908,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         	}
         } else if (userHome != null && userHome.length() > 0) {
             mainPropsFile = new File(userHome, "WebObjects.properties");
-            if (!mainPropsFile.exists() || mainPropsFile.isFile() || mainPropsFile.canRead()) {
+            if (!mainPropsFile.exists() || !mainPropsFile.isFile() || !mainPropsFile.canRead()) {
             	mainPropsFile = null;
             }
         }
