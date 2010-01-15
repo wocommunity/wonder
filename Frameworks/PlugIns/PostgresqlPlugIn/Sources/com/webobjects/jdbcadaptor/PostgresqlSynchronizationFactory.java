@@ -27,7 +27,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     public static final String USING_KEY = "USING";
     
     private Boolean _enableIdentifierQuoting;
-  
+    
     public PostgresqlSynchronizationFactory(EOAdaptor adaptor) {
         super(adaptor);
     }
@@ -464,9 +464,14 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     }
 
     @Override
-	public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
-		return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " rename to " + formatTableName(newName)));
-	}
+    public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
+    	return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " rename to " + formatTableName(newName)));
+    }
+    
+    @Override
+    public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
+    	return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " drop column " + formatTableName(columnName) + " cascade"));
+    }
 
 /*
     public StringBuffer addCreateClauseForAttribute(EOAttribute eoattribute) {
