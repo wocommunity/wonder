@@ -363,7 +363,7 @@
             <param name="project.dir" value="Applications/Uber" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/WOOgnl/Ajax/ERRest/ERTaggable/ERChronic/ERJavaMail/ERAttachment" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/WOOgnl/Ajax/ERRest/ERTaggable/ERChronic/ERJavaMail/ERAttachment/JavaMemoryAdaptor" />
        </antcall>
     </target>
 
@@ -417,7 +417,7 @@
             <param name="project.principal.class" value="er.examples.Application" />
             <param name="project.name" value="ERComponentTour" />
             <param name="project.dir" value="Examples/Misc/ERComponentTour" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPlot" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPlot/ExcelGenerator" />
          </antcall>
     </target>
 
@@ -550,16 +550,6 @@
         </antcall>
     </target>
 
-    <target name="ExcelGeneratorExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.excel.Application" />
-            <param name="project.name" value="ExcelGeneratorExample" />
-            <param name="project.dir" value="Examples/Misc/ExcelGeneratorExample" />
-
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ExcelGenerator" />
-        </antcall>
-    </target>
     <target name="EROpenIDExample.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
@@ -898,7 +888,6 @@
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
-    <target name="excelgeneration.examples.all" depends="ExcelGeneratorExample.all" />
 
     <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERPrototaculous.all, ERDivaLook.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, ERIUIExample.all, ERDivaLookExample.all" />
@@ -923,7 +912,7 @@
      </target>
 
     <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
-    <target name="examples.all" depends="common.examples.all, excelgeneration.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
+    <target name="examples.all" depends="common.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
 
 
     <target name="all.run" depends="frameworks.all, applications.all, examples.all"/>
