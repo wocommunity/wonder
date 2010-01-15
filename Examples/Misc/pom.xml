@@ -14,7 +14,6 @@
 		<module>ERIndexingExample</module>
 		<!--  <module>EROpenIDExample</module> won't build because of dependency issues -->
 		<module>ERSeleniumExample</module>
-		<module>ExcelGeneratorExample</module>
 		<module>JavaRESTAdaptorExample</module>
 		<module>RestExample</module>
 		<module>ValidityExample</module>
