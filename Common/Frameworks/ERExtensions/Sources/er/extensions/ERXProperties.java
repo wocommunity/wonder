@@ -890,6 +890,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	            if (!mainPropsFile.exists() && !mainPropsFile.isAbsolute()) {
 	            	mainPropsFile = new File(userHome, replacementPropsName);
 	            }
+	            if (ERXProperties._shouldRequireSymlinkedGlobalAndIncludeProperties()) {
+	            	mainPropsFile = _NSFileUtilities.resolveLink(mainPropsFile.getPath(), mainPropsFile.getName());
+	            }
 	            if (!mainPropsFile.exists()) {
 	    			throw new RuntimeException("There was no global properties file '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ").");
 	            }
@@ -908,7 +911,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         	}
         } else if (userHome != null && userHome.length() > 0) {
             mainPropsFile = new File(userHome, "WebObjects.properties");
-            if (!mainPropsFile.exists() || mainPropsFile.isFile() || mainPropsFile.canRead()) {
+            if (!mainPropsFile.exists() || !mainPropsFile.isFile() || !mainPropsFile.canRead()) {
             	mainPropsFile = null;
             }
         }
