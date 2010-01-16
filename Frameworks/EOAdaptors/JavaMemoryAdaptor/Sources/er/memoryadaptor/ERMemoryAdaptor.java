@@ -65,7 +65,7 @@ public ERMemoryAdaptor(String name) {
     public EOSchemaGeneration synchronizationFactory() {
         if (_syncFactory == null)
             _syncFactory = new ERMemorySynchronizationFactory(this);
-        return (EOSynchronizationFactory) _syncFactory;
+        return (EOSchemaGeneration) _syncFactory;
     }
 
     public EOSynchronizationFactory schemaSynchronizationFactory() {
