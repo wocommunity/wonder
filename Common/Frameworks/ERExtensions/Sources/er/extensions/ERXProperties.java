@@ -890,19 +890,20 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	            if (!mainPropsFile.exists() && !mainPropsFile.isAbsolute()) {
 	            	mainPropsFile = new File(userHome, replacementPropsName);
 	            }
+	            File resolvedMainPropsFile = mainPropsFile;
 	            if (ERXProperties._shouldRequireSymlinkedGlobalAndIncludeProperties()) {
 	            	// MS: Don't return the resolved link here because we need to reload off
 	            	// the symlink rather than its target, but we need to block to make sure 
 	            	// the symlink DOES exist.
-	            	/*mainPropsFile = */_NSFileUtilities.resolveLink(mainPropsFile.getPath(), mainPropsFile.getName());
+	            	resolvedMainPropsFile = _NSFileUtilities.resolveLink(mainPropsFile.getPath(), mainPropsFile.getName());
 	            }
-	            if (!mainPropsFile.exists()) {
+	            if (!resolvedMainPropsFile.exists()) {
 	    			throw new RuntimeException("There was no global properties file '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ").");
 	            }
-	            if (!mainPropsFile.isFile()) {
+	            if (!resolvedMainPropsFile.isFile()) {
 	    			throw new RuntimeException("The path '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ") was not a file.");
 	            }
-	            if (!mainPropsFile.canRead()) {
+	            if (!resolvedMainPropsFile.canRead()) {
 	    			throw new RuntimeException("The path '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ") could not be read.");
 	            }
         	}
