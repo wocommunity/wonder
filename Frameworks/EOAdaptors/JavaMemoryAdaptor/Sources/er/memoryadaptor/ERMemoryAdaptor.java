@@ -18,7 +18,10 @@ import com.webobjects.foundation.NSDictionary;
  * @author mschrag
  */
 public class ERMemoryAdaptor extends EOAdaptor {
-  public ERMemoryAdaptor(String name) {
+ 
+  private Object _syncFactory;
+
+public ERMemoryAdaptor(String name) {
     super(name);
   }
 
@@ -59,11 +62,15 @@ public class ERMemoryAdaptor extends EOAdaptor {
   }
 
   @Override
-  public EOSchemaGeneration synchronizationFactory() {
-    return new ERMemorySynchronizationFactory(this);
-  }
+    public EOSchemaGeneration synchronizationFactory() {
+        if (_syncFactory == null)
+            _syncFactory = new ERMemorySynchronizationFactory(this);
+        return (EOSynchronizationFactory) _syncFactory;
+    }
 
-  public EOSynchronizationFactory schemaSynchronizationFactory() {
-    return new ERMemorySynchronizationFactory(this);
-  }
+    public EOSynchronizationFactory schemaSynchronizationFactory() {
+        if (_syncFactory == null)
+            _syncFactory = new ERMemorySynchronizationFactory(this);
+        return (EOSynchronizationFactory) _syncFactory;
+    }
 }
