@@ -316,7 +316,11 @@ public class AdminAction extends WODirectAction {
             
             String infoMode = (String) context().request().formValueForKey("info");
             if ("full".equalsIgnoreCase(infoMode)) {
-                result += ", \"additionalArgs\": \"" + minstance.additionalArgs().replace("\"", "\\\"") + "\"";
+                result += ", \"additionalArgs\": \"";
+                if (minstance.additionalArgs() != null) {
+                    result += minstance.additionalArgs().replace("\"", "\\\"");
+                }
+                result += "\"";
             }
             result += "}";
         }
