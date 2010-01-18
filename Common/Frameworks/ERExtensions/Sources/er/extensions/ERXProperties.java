@@ -34,7 +34,6 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -896,9 +895,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	            	// the symlink rather than its target, but we need to block to make sure 
 	            	// the symlink DOES exist.
 	            	resolvedMainPropsFile = _NSFileUtilities.resolveLink(mainPropsFile.getPath(), mainPropsFile.getName());
-	            }
-	            if (!resolvedMainPropsFile.exists()) {
-	    			throw new RuntimeException("There was no global properties file '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ").");
 	            }
 	            if (!resolvedMainPropsFile.isFile()) {
 	    			throw new RuntimeException("The path '" + replacementPropsName + "' (canonical path = '" + safeCanonicalPath(new File(replacementPropsName)) + ") was not a file.");
