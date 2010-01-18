@@ -23,8 +23,8 @@ import er.extensions.ERXExtensions;
  */
 public class AjaxPingUpdate extends WOComponent {
   private Boolean _refreshTarget;
-	private Object _lastCacheKey;
-
+  	private static final Object NOT_INITIALIZED = new Object();  
+	private Object _lastCacheKey = NOT_INITIALIZED;
 	public AjaxPingUpdate(WOContext context) {
 		super(context);
 	}
@@ -42,6 +42,9 @@ public class AjaxPingUpdate extends WOComponent {
     boolean refreshTarget = false;
 	  if (_refreshTarget == null) {
   		Object cacheKey = valueForBinding("cacheKey");
+  		if(_lastCacheKey == NOT_INITIALIZED) {
+  			_lastCacheKey = cacheKey;
+  		}
   		if(ERXExtensions.safeDifferent(_lastCacheKey, cacheKey)) {
   			refreshTarget = true;
   			_lastCacheKey = cacheKey;
