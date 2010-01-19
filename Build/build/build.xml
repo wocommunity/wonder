@@ -417,7 +417,7 @@
             <param name="project.principal.class" value="er.examples.Application" />
             <param name="project.name" value="ERComponentTour" />
             <param name="project.dir" value="Examples/Misc/ERComponentTour" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPlot/ExcelGenerator" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPlot/ExcelGenerator/ERCaptcha" />
          </antcall>
     </target>
 
