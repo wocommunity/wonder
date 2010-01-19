@@ -17,5 +17,6 @@
 	<classpathentry kind="con" path="WOFramework/ExcelGenerator"/>
 	<classpathentry kind="con" path="WOFramework/Ajax"/>
 	<classpathentry kind="con" path="WOFramework/GoogleChart"/>
+	<classpathentry kind="con" path="WOFramework/ERCaptcha"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
