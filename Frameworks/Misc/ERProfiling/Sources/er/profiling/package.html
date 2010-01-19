@@ -1,0 +1,185 @@
+<html>
+<body>
+<h1>ERProfiling</h1>
+
+<h2>Quick Start</h2>
+<ol>
+	<li>Add ERProfiling.framework to your app</li>
+	<li>Add the javaagent setting to the VM args section of your launch config.
+		<ul>
+			<li>Wonder source: -javaagent:${workspace_loc:ERProfiling}/Libraries/gluonj-1.5beta.jar=er.profiling.PFProfilerMixin</li>
+			<li>Wonder binaries: -javaagent:/path/to/ERProfiling.framework/Resources/Java/gluonj-1.5beta.jar=er.profiling.PFProfilerMixin</li>
+		</ul>
+	</li>
+	<li>Run/Debug your app</li>
+</ol>
+
+<h2>What Is It?</h2>
+<p>
+ERProfiling is a framework designed to help understand how your app is functioning and why it's slow. If you've used any of the commercial profiling tools, they
+are great for understanding certain classes of problems; however, they often have trouble correlating specific profiling statistics with what changes you should
+make to the actual code. ERProfiling intends to change that. ERProfiling is designed around WebObjects and it takes a page-based approach to profiling your app. 
+The intent is to allow you to look at the statistics for individual pages and actions in your application to understand why they perform the way they do.
+</p>
+
+<p>
+When ERProfiling is enabled, every page will have a profiling bar at the bottom with statistics about the page:
+</p>
+
+<div id="_profiler" style="font-family: Helvetica; font-size: 9pt; font-weight:bold; white-space: no-wrap; clear: both; padding: 0.5em; padding-left: 10px; padding-right: 10px; background-color:rgba(240, 240, 255, 0.8); border: 1px solid rgb(200, 200, 215); border-bottom: none; border-right: none; border-top-left-radius: 10px"><span style="color:rgb(150,150,150)">profiler:</span> 194.71ms&nbsp;&nbsp;<span style="color:rgb(150,150,150)">|</span>&nbsp;&nbsp;<span style="color:rgb(150,150,150)"><1ms:</span>39% (1228)<span style="color:rgb(150,150,150)">, <10ms:</span>24% (23)<span style="color:rgb(150,150,150)">, <100ms:</span>37% (2)<span style="color:rgb(150,150,150)">, >=100ms:</span>0% (0)&nbsp;&nbsp;<span style="color:rgb(150,150,150)">|</span>&nbsp;&nbsp;<a href="#" target="_blank">SQL</a>: 7% (4)&nbsp;&nbsp;<span style="color:rgb(150,150,150)">|</span>&nbsp;&nbsp;<a href="#" target="_blank">D2W</a>: 0% (0)&nbsp;&nbsp;<span style="color:rgb(150,150,150)">|</span>&nbsp;&nbsp;<a href="#" target="_blank">take</a>:0%<span style="color:rgb(150,150,150)">, </span><a href="#" target="_blank">invoke</a>:0%<span style="color:rgb(150,150,150)">, </span><a href="#" target="_blank">append</a>:92% (<a href="#" target="_blank">all three</a>)&nbsp;&nbsp;<span style="color:rgb(150,150,150)">|</span>&nbsp;&nbsp;<a href="#" target="_blank">all</a>&nbsp;&nbsp;<span style="color:rgb(150,150,150)">|</span>&nbsp;&nbsp;<a href="javascript:void(0);">heat off</a></div>
+
+<ol>
+	<li>The "194.71ms" says that the entire page took 194.71ms to fully process (that's the time from the start of the request to the end of the last appendToResponse).</li>
+	<li>The next section shows a histogram of processing. I call this the "bleed factor". The &lt;1ms:39% (1228) says that there were 1228 operations on the page that each took less than 1ms to happen for a total cost of 39% of the full request time. 
+	    The &lt;100ms shows the count and cost of the operations that took from 10ms to 100ms.
+	    The &lt=100ms shows the count and cost of the operations that took 100ms or more to run.
+	    A high 10ms percentage means that your page is bleeding -- you have lots of very small operations (for instance, tons of simple components on a page). A high &gt=100ms number means that you have large expensive operations (like SQL).
+	    As an example, a D2W query page would have a high bleed whereas a query results page would have a low bleed and a high cost.
+	</li>
+	<li>The "SQL: 7% (4)" says that 7% of the cost of the page was SQL execution as a result of 4 queries. Notice that "SQL" is a link. We will come back to that.</ul>
+	<li>The "D2W: 0% (0)" says that 0% of the page was a result of processing D2W rules and that 0 keys were evaluated. This actually counts valueForKey evaluations rather than rules (right now). Notice that "D2W" is a link. We will come back to that.</li>
+	<li>The "take:0%, invoke:0%, append:92%" shows the distribution of the request cost across each of the three request-response loop phases. In this case, we didn't submit a form, so 92% of the cost of our page is in appendToResponse. 
+	    The difference between the sum of these values and 100% is overhead that is occurring outside of the phases of the loop (we will continue to refine profiling to give more understanding of that overhead in the future). Notice that each of the
+	    phases is a link, along with the "all three" option. We will come back to that.</li>
+	<li>The "all" link. We will come back to that.</ul>
+	<li>The "heat on/off" link. We will come back to that.</li>
+</ol>
+
+<h2>Profiler Links</h2>
+<p>
+There are several links on the profiler bar: "SQL," "D2W," "take," "invoke," "append," "all three," and "all." Each of these links will take you to a visual representation of the profiling stats for that particular segment of your page.
+</p> 
+<h3>SQL</h3>
+<p>
+The "SQL" link by default takes you to a tree view of your database operations on the page: 
+</p>
+<pre style="color: grey"><font color="black">[221.35ms / 100%] request: /cgi-bin/WebObjects/MDTask.woa</font> 
++-[206.36ms / 93%] appendToResponse: HomePage
+| +-<font color="black">[179.52ms / 81%] appendToResponse: HomePage</font> 
+| | +-[179.49ms / 81%] appendToResponse: HomePage
+| | | +-[179.24ms / 81%] appendToResponse: HomePage
+| | | | +-[179.20ms / 81%] appendToResponse: WODynamicGroup
+| | | | | +-[179.19ms / 81%] appendToResponse: WOComponentReference
+| | | | | | +-[178.55ms / 81%] appendToResponse: HeaderFooter
+| | | | | | | +-[177.75ms / 80%] appendToResponse: HeaderFooter
+| | | | | | | | +-[177.74ms / 80%] appendToResponse: HeaderFooter
+| | | | | | | | | +-[177.44ms / 80%] appendToResponse: HeaderFooter
+| | | | | | | | | | +-[177.40ms / 80%] appendToResponse: WODynamicGroup
+| | | | | | | | | | | +-[177.37ms / 80%] appendToResponse: ERXWOConditional
+| | | | | | | | | | | | +-<font color="black">[10.75ms / 5%] appendToResponse: ERXWOConditional</font> 
+| | | | | | | | | | | | | +-[10.65ms / 5%] appendToResponse: ERXWOConditional
+| | | | | | | | | | | | | | +-<font color="black">[ 7.39ms / 3%] appendToResponse: ERXWOForm</font> 
+| | | | | | | | | | | | | | | +-[ 7.18ms / 3%] appendToResponse: PopUpButton
+| | | | | | | | | | | | | | | | +-[ 7.12ms / 3%] appendToResponse: PopUpButton
+| | | | | | | | | | | | | | | | | +-<font color="black">[ 5.09ms / 2%] SQL (select): entity=Company, qualifier=((billable = (java.lang.Boolean)'true') and (hidden = (java.lang.Boolean)'false'))</font> 
+| | | | | | | | | | | | +-<font color="black">[15.22ms / 7%] appendToResponse: ERXWOConditional</font> 
+| | | | | | | | | | | | | +-[15.15ms / 7%] appendToResponse: ERXWOConditional
+| | | | | | | | | | | | | | +-<font color="black">[11.48ms / 5%] appendToResponse: WOComponentReference</font> 
+| | | | | | | | | | | | | | | +-<font color="black">[ 9.28ms / 4%] appendToResponse: ViewHistoryList</font> 
+| | | | | | | | | | | | | | | | +-[ 9.27ms / 4%] appendToResponse: ViewHistoryList
+| | | | | | | | | | | | | | | | | +-[ 9.17ms / 4%] appendToResponse: ViewHistoryList
+| | | | | | | | | | | | | | | | | | +-[ 8.59ms / 4%] appendToResponse: WOGenericContainer
+| | | | | | | | | | | | | | | | | | | +-[ 8.22ms / 4%] appendToResponse: ERXWORepetition
+| | | | | | | | | | | | | | | | | | | | +-<font color="black">[ 4.17ms / 2%] SQL (select): entity=ViewHistory, qualifier=((id = 1036874)), {rows=2}</font> 
+| | | | | | | | | | | | | | | | | | | | | +-<font color="black">[ 3.01ms / 1%] SQL (evaluate): SELECT t0."favorite", t0."id", t0."name", t0."viewDate", t0."viewedEntityID", t0."viewedEntityName", t0."viewerID" FROM "ViewHistory" t0 WHERE t0."id" = 1036874</font> 
+| | | | | | | | | | | | +-<font color="black">[142.18ms / 64%] appendToResponse: ERXWOComponentContent</font> 
+| | | | | | | | | | | | | +-[142.17ms / 64%] appendToResponse: WODynamicGroup
+| | | | | | | | | | | | | | +-[142.14ms / 64%] appendToResponse: WOComponentReference
+| | | | | | | | | | | | | | | +-[141.26ms / 64%] appendToResponse: ERXTabPanel
+| | | | | | | | | | | | | | | | +-[141.25ms / 64%] appendToResponse: ERXTabPanel
+| | | | | | | | | | | | | | | | | +-[141.24ms / 64%] appendToResponse: ERXTabPanel
+| | | | | | | | | | | | | | | | | | +-[141.04ms / 64%] appendToResponse: WODynamicGroup
+| | | | | | | | | | | | | | | | | | | +-[140.97ms / 64%] appendToResponse: ERXWOConditional
+| | | | | | | | | | | | | | | | | | | | +-[139.26ms / 63%] appendToResponse: ERXUniquingWrapper
+| | | | | | | | | | | | | | | | | | | | | +-[139.24ms / 63%] appendToResponse: ERXUniquingWrapper
+| | | | | | | | | | | | | | | | | | | | | | +-[139.23ms / 63%] appendToResponse: WOComponentContent
+| | | | | | | | | | | | | | | | | | | | | | | +-[139.22ms / 63%] appendToResponse: WODynamicGroup
+| | | | | | | | | | | | | | | | | | | | | | | | +-[138.61ms / 63%] appendToResponse: ERXEqualConditional
+| | | | | | | | | | | | | | | | | | | | | | | | | +-<font color="black">[97.62ms / 44%] appendToResponse: WOComponentReference</font> 
+| | | | | | | | | | | | | | | | | | | | | | | | | | +-<font color="black">[ 1.39ms / 1%] SQL (evaluate): UPDATE "ViewHistory" SET "viewDate" = TIMESTAMP '2010-01-19 13:44:36.235' WHERE ("id" = 1036874 AND "favorite" = 'false' AND "name" = 'DBManager Fixes and Support' AND "viewDate" = TIMESTAMP '2010-01-19 13:22:02.024' AND "viewedEntityID" = 'T1030353' AND "viewedEntityName" = 'Task' AND "viewerID" = 1000008)</font> 
+| | | | | | | | | | | | | | | | | | | | | | | | | | +-<font color="black">[40.10ms / 18%] appendToResponse: WorkOnTaskAssignmentForm</font> 
+| | | | | | | | | | | | | | | | | | | | | | | | | | | +-[39.98ms / 18%] appendToResponse: WorkOnTaskAssignmentForm
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | +-[39.98ms / 18%] appendToResponse: WorkOnTaskAssignmentForm
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | +-[39.75ms / 18%] appendToResponse: WorkOnTaskAssignmentForm
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | +-[38.75ms / 18%] appendToResponse: WODynamicGroup
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | +-<font color="black">[34.86ms / 16%] appendToResponse: ERXWOConditional</font> 
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | +-[34.40ms / 16%] appendToResponse: ERXWOForm
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | +-<font color="black">[ 3.42ms / 2%] appendToResponse: PopUpButton</font> 
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | +-[ 3.38ms / 2%] appendToResponse: PopUpButton
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | +-<font color="black">[ 2.01ms / 1%] SQL (select): entity=WorkType, qualifier=(hidden = (java.lang.Boolean)'false')</font> 
+</pre>
+<p>
+This view shows you each of your database operations along with the path-to-request of where the operation was performed. Each parent node in the tree is a component or D2W key from your page (organized hierarchically according to the structure of the page). Notice there are two nodes for some of the statements.
+</p>
+<p>
+Each node is structure in the form "+-[exection time in milliseconds / percentage cost relative to the entire request] name of operation (optional operation subgroup): context description, {optional key-value pairs of additional metadata}".
+For example, "[ 4.17ms / 2%] SQL (select): entity=ViewHistory, qualifier=((id = 1036874)), {rows=2}" says that this was a SQL "select" operation that took 4.17 milliseconds to run, constituting 2% of the full request time and it was a fetch against the ViewHistory entity with the qualifier id=1036874 and it resulted in a fetch of 2 rows.
+Note that all times and percentages shown in this view are cumulative (meaning, the sum of the particular node along with the cost of its children noes).
+</p>
+<p>
+For every operation you will see the EOF view of the statement (entity name and qualifier). If that EOF operation resulted in a hit to your database, you will see the actual SQL that was executed in its child node. The "evaluate" node for SQL shows
+only the cost of evaluating the query in the database. The node that has the {rows=x} reflects the cost of actually reading that data out of the database and converting them into EO's.
+</p>
+<p>
+Notice that some nodes are gray. These nodes are ones that were within 90% of the cost of their parent nodes, which attempts to make inexpensive "middleman" components less prominent. For example, a conditional inside of a container is often not the issue -- it's the really expensive custom querying component 5 layers down
+that is actually contributing to the cost of the branch. Graying attempts to capture that concept.
+</p>
+
+<h3>D2W</h3>
+<p>
+The "D2W" link shows a tree view of D2W valueForKey evalutes that occurred on your page along with the path-to-request of the components where the evaluations occurred. Currently this does not show the D2W rule that actually fired, but will likely be added. The structure of the tree is identical to that of the SQL views, but will show
+the name of the key that was evaluated for each node.
+</p>
+
+<h3>take/invoke/append</h3>
+<p>
+The "take" link shows only the part of the request that was takeValuesFromRequest. The "invoke" link shows only the part of the request that was in invokeAction. The "append" link shows only the part of the request that was in appendToResponse. The "all three" link shows all three phases of the request-response loop together.
+</p>
+
+<h3>all</h3>
+<p>
+The "all" link shows everything that happened on the page. This can be huge.
+</p>
+
+<h2>Heat Map</h2>
+<p>
+If you click the "heat off" link, you will turn on Heat Maps for subsequent requests. Heat Maps attempt to visually represent the cost of the appendToResponse phase of your page. Once you turn on heat maps, future requests will have colored boxes drawn around expensive areas of the page. The closer the border colors on your page
+are to red, the more expensive they were. The coloring is non-linearly weighted towards red to skew the more expensive operations towards red. The colors drop the bottom 1% of cost, so divs that don't cost at least 1% of the appendToResponse time will not be outlined. Outlines are cumulative, so expensive inner divs will cause outer divs
+to also appear to be expensive. Note that this only shows you cost in the appendToResponse phase of your request, though the percentage is computed against the full request time. This exact calculation is subject to change in the future as we refine ways to view this more effectively.   
+</p>
+
+<h2>Error Analysis</h2>
+<p>
+Currently there is only one type of automatic analysis that occurs in ERProfiling. If you have a query that repeats more than ten times on the same page, ERProfiling will flag your profiling bar with a red notice "profiler errors [SQL]". As other analyses are added, the types of those errors would be listed in brackets. When you see
+this error, if you click on the SQL link, you will see that some nodes of the tree are colored red and will have a message like "repeated 20 times in this request". Note that this feature only works if you are using an EOF plugin that supports bind variables (where the SQL for two queries of the same family will be identical). 
+</p>
+
+<h2>Misc Information</h2>
+<p>
+Profiling data currently is limited to a 30 page stack, similar to the backtrack cache. So if you perform 30 requests, the next request will drop the profiling stats from the first request (so you can't go back and view the profiling tree). I have also not done any testing with Ajax operations -- it might be a little busted. This
+will be corrected in the future.
+</p>
+ 
+<h2>URL Tricks</h2>
+<p>
+Not all of the features of ERProfiling are exposed with UI (yet). There are some tricks you can perform by modifying the profiling tree URLs. A typical profiler URL looks like "http://localhost:5789/cgi-bin/WebObjects/MDTask.woa/profiler/tree?id=d651678e-2eea-4322-bacd-81cd1568f51e&filter=SQL". ERProfiling registers a custom request
+handler bound to "profiler."
+
+<ul>
+	<li>The default views currently all show trees. If you change the URL from "tree" to "list," you can get a list view of your particular profiler query. This will not include path-to-request nodes like the tree. As an example, a list view of SQL will show only the SQL operations and will not show the 
+components that the SQL was executed within.</li>
+	<li>The "filter" query parameter can contain a comma-separated list of names to filter on. As an example, if you want to see SQL and D2W executions, you can set filter=SQL,D2W. The "all three" option in the R-R phases link works like this.</li>
+	<li>You can add a "min=0.01" query parameter. This will only show leaf nodes in the tree that constituted at least 1% of the request time. You can substitute any percentage in that value.</li>
+</ul>
+  
+<h2>Known Limitations (read: things that will be worked on)</h2>
+<ul>
+	<li>Ajax support is basically non-existent right now</li>
+	<li>The actual tree views are pretty lame.</li>
+	<li>There is no UI for accessing filters and mins.</li>
+	<li>There are a lot more opportunities for additional analysis and profiling other aspects of the app</li>
+	<li>The profiler bar is wide. I have a 30" display. I'll work on it.</li>
+</ul>
+
+</body>
+</html>
