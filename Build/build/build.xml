@@ -60,6 +60,15 @@
        </antcall>
     </target>
 
+    <target name="ERProfiling.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERCaptcha" />
+            <param name="project.dir" value="Frameworks/Misc/ERProfiling" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+       </antcall>
+    </target>
+
     <target name="ERSelenium.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.selenium.ERSelenium" />
@@ -878,7 +887,7 @@
         to add your own, add a target definition above and choose the correct group below
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERDirectToRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERDirectToRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all" />
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, ERXTest.all" />
 
