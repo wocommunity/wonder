@@ -10,3 +10,7 @@ ExcelGenerationLink: WOHyperlink {
 GoogleChartsLink: WOHyperlink {
 	pageName = "GoogleChartsPage";
 }
+
+CaptchaPageLink: WOHyperlink {
+	pageName = "CaptchaPage";
+}

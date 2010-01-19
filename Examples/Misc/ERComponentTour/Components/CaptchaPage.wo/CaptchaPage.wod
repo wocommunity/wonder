@@ -1,0 +1,34 @@
+
+HomeLink : WOHyperlink {
+	pageName="Main";
+}
+
+AttemptedCondition: WOConditional {
+	condition = attempted;
+}
+
+NotAttemptedCondition: WOConditional {
+	condition = attempted;
+	negate = true;
+}
+
+Form: WOForm {
+}
+
+Captcha: ERCaptcha {
+	validated = userOk;
+	resetText = "Try Another...";
+}
+
+SubmitButton: WOSubmitButton {
+	action = submit;
+}
+
+UserIsOk: WOConditional {
+	condition = userOk;
+}
+
+UserIsNotOk: WOConditional {
+	condition = userOk;
+	negate = true;
+}
