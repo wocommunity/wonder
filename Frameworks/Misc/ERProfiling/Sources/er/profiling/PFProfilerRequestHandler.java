@@ -28,11 +28,6 @@ public class PFProfilerRequestHandler extends WORequestHandler {
             appendSingleNodeStatsToResponse(stats.parentStats(), response, context, minimumPercentage, filters, renderedStats, tree);
         }
 
-        if (stats.hasErrors()) {
-            response.appendContentString("<font color=\"red\">");
-        }
-
- 
         if (tree) {
             int depth = stats.depth();
             for (int i = 0; i < depth; i++) {
@@ -43,8 +38,11 @@ public class PFProfilerRequestHandler extends WORequestHandler {
                 }
             }
         }
-        
-        if (stats.isImportant()) {
+
+	if (stats.hasErrors()) {
+	    response.appendContentString("<font color=\"red\">");
+	}
+        else if (stats.isImportant()) {
             response.appendContentString("<font color=\"black\">");
         }
         
@@ -78,7 +76,7 @@ public class PFProfilerRequestHandler extends WORequestHandler {
         if (stats.hasErrors()) {
             response.appendContentString("</font>");
         }
-        if (stats.isImportant()) {
+        else if (stats.isImportant()) {
             response.appendContentString("</font>");
         }
         response.appendContentString("\n");
