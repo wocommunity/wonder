@@ -116,11 +116,7 @@ public class ERPDFUtilities {
    * @return an NSData object containing raw PDF data.
    */
   public static NSData htmlAsPdf(String html, String encoding, String urlPrefix, NSDictionary<String, Object> config) {
-    NSMutableDictionary<String, Object> _config = config.mutableClone();
-
-    if (_config == null)
-      _config = new NSMutableDictionary<String, Object>();
-
+    NSMutableDictionary<String, Object> _config = config == null ? new NSMutableDictionary<String, Object>() : config.mutableClone();
     PDFBuilder builder = PDFBuilderFactory.newBuilder((String) _config.removeObjectForKey("engine"));
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     try {
