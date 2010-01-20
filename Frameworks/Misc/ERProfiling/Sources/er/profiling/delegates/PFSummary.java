@@ -80,29 +80,41 @@ public class PFSummary implements PFProfiler.Delegate {
             PFStatsNode.DurationCount hundredMS = rootStats.countBetweenDurations(10 * 1000000, 100 * 1000000);
             PFStatsNode.DurationCount moreMS = rootStats.countBetweenDurations(100 * 1000000, Long.MAX_VALUE);
 
+            float maxHeight = 20;
+            response.appendContentString("<style>#pf_histogram .pf_histogram_details { display: none; } #pf_histogram:hover .pf_histogram_details { display: block; }</style>");
+            response.appendContentString("<span id=\"pf_histogram\">");
+            response.appendContentString("<span style=\"background-color:rgb(200,200,200);margin:0px;padding:0px;width:10px;display:inline-table;font-size:0pt;height:" + (maxHeight * oneMS.millis() / total) + "px;\">&nbsp;</span>"); 
+            response.appendContentString("<span style=\"background-color:rgb(150,150,150);margin:0px;padding:0px;width:10px;display:inline-table;font-size:0pt;height:" + (maxHeight * tenMS.millis() / total) + "px;\">&nbsp;</span>"); 
+            response.appendContentString("<span style=\"background-color:rgb(100,100,100);margin:0px;padding:0px;width:10px;display:inline-table;font-size:0pt;height:" + (maxHeight * hundredMS.millis() / total) + "px;\">&nbsp;</span>"); 
+            response.appendContentString("<span style=\"background-color:rgb( 50, 50, 50);margin:0px;padding:0px;width:10px;display:inline-table;font-size:0pt;height:" + (maxHeight * moreMS.millis() / total) + "px;\">&nbsp;</span>");
+            
+            response.appendContentString("<span class=\"pf_histogram_details\" style=\"position:absolute; top:-20px;background-color:rgba(240, 240, 255, 1.0);border: 1px solid rgb(200, 200, 215);padding:5px;-webkit-box-shadow: 0px 3px 10px rgb(100, 100, 100);\">");
             response.appendContentString("<span style=\"color:rgb(150,150,150)\"><1ms:</span>");
             response.appendContentString(DecimalFormat.getPercentInstance().format(oneMS.millis() / total));
             response.appendContentString(" (");
             response.appendContentString(String.valueOf(oneMS.count()));
             response.appendContentString(")");
-
+            
             response.appendContentString("<span style=\"color:rgb(150,150,150)\">, <10ms:</span>");
             response.appendContentString(DecimalFormat.getPercentInstance().format(tenMS.millis() / total));
             response.appendContentString(" (");
             response.appendContentString(String.valueOf(tenMS.count()));
             response.appendContentString(")");
-
+            
             response.appendContentString("<span style=\"color:rgb(150,150,150)\">, <100ms:</span>");
             response.appendContentString(DecimalFormat.getPercentInstance().format(hundredMS.millis() / total));
             response.appendContentString(" (");
             response.appendContentString(String.valueOf(hundredMS.count()));
             response.appendContentString(")");
-
+            
             response.appendContentString("<span style=\"color:rgb(150,150,150)\">, >=100ms:</span>");
             response.appendContentString(DecimalFormat.getPercentInstance().format(moreMS.millis() / total));
             response.appendContentString(" (");
             response.appendContentString(String.valueOf(moreMS.count()));
             response.appendContentString(")");
+            response.appendContentString("</span>");
+
+            response.appendContentString("</span>");
 
             response.appendContentString("&nbsp;&nbsp;<span style=\"color:rgb(150,150,150)\">|</span>&nbsp;&nbsp;");
             response.appendContentString("<a href=\"" + context.completeURLWithRequestHandlerKey("profiler", "tree", "id=" + uuid + "&filter=SQL", false, 0)
