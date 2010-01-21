@@ -45,7 +45,7 @@ div#a form.edit fieldset.button ul li {
 div#a form.edit fieldset.attribute legend {
 	margin-left: -10em; /*width of left column*/
 	display: inline-block;
-	-webkit-transform: translate(0, 1.75em);
+	-webkit-transform: translate(0, 1.5em);
 }
 
 div#a form.edit fieldset.attribute {
@@ -53,7 +53,9 @@ div#a form.edit fieldset.attribute {
 }
 
 div#a form.edit fieldset.attribute div.content {
+	position: relative;
 	margin-top: -1em;
+	z-index: 1;
 }
 
 div#a form.edit div.accordion-content ul li.attribute {
