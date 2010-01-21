@@ -148,7 +148,7 @@ public abstract class AjaxUpload extends WOComponent {
     	if (!useUnobtrusively) {
     		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
     		AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
-    		AjaxUtils.addScriptResourceInHead(context, response, "ERPrototaculous", "ajaxupload3.5.js");
+    		AjaxUtils.addScriptResourceInHead(context, response, "ERPrototaculous", "ajaxupload.3.5.js");
     	}
     }
 }
