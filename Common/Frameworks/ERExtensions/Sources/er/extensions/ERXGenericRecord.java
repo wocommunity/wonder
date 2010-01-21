@@ -418,8 +418,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         if (insertionTrackingLog.isDebugEnabled()) {
             insertionStackTrace = ERXUtilities.stackTrace();
             insertionTrackingLog.debug("inserted "+getClass().getName()+" at "+insertionStackTrace);
-        } else if (insertionTrackingLog.isInfoEnabled()) {
-            insertionStackTrace = ERXUtilities.stackTrace();
         }            
         super.awakeFromInsertion(editingContext);
     }
