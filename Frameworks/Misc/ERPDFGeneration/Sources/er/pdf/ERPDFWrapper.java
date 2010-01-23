@@ -13,6 +13,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXRequest;
 import er.extensions.appserver.ERXResourceManager;
 import er.extensions.appserver.ERXWOContext;
 
@@ -59,7 +60,7 @@ public class ERPDFWrapper extends WODynamicGroup implements WOActionResults {
   }
 
   protected void responseAsPdf(WOResponse response, WOContext context) {
-    boolean secure = _secure != null ? _secure.booleanValueInComponent(context.component()) : false;
+    boolean secure = _secure != null ? _secure.booleanValueInComponent(context.component()) : ERXRequest.isRequestSecure(context.request());
     String resourceUrlPrefix = ERXResourceManager._completeURLForResource("", secure, context);
     
     NSMutableDictionary<String, Object> config = new NSMutableDictionary<String, Object>();
