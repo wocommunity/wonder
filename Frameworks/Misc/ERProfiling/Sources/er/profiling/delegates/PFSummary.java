@@ -1,10 +1,10 @@
 package er.profiling.delegates;
 
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import com.ibm.icu.text.DecimalFormat;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;

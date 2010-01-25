@@ -1,11 +1,11 @@
 package er.profiling;
 
+import java.text.DecimalFormat;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.ibm.icu.text.DecimalFormat;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
