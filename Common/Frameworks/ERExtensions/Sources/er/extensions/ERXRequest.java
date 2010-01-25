@@ -350,9 +350,9 @@ public  class ERXRequest extends WORequest {
      */
     @Override
 	public boolean isSessionIDInRequest() {
-        ERXApplication app = (ERXApplication)WOApplication.application();
+        WOApplication app = WOApplication.application();
         
-        if (app.isStreamingRequestHandlerKey(requestHandlerKey())) {
+        if (app instanceof ERXApplication && ((ERXApplication)app).isStreamingRequestHandlerKey(requestHandlerKey())) {
             return false;
         } else {
             return super.isSessionIDInRequest();
@@ -367,10 +367,10 @@ public  class ERXRequest extends WORequest {
      */
     @Override
 	protected String _getSessionIDFromValuesOrCookie(boolean inCookiesFirst) {
-        ERXApplication app = (ERXApplication)WOApplication.application();
+        WOApplication app = WOApplication.application();
 
         boolean wis = WOApplication.application().streamActionRequestHandlerKey().equals(requestHandlerKey());
-        boolean alternateStreaming = app.isStreamingRequestHandlerKey(requestHandlerKey());
+        boolean alternateStreaming = (app instanceof ERXApplication && ((ERXApplication)app).isStreamingRequestHandlerKey(requestHandlerKey()));
         boolean streaming = wis || alternateStreaming;
         
         String sessionID = null;
