@@ -45,7 +45,7 @@ import er.taggable.model.ERTag;
  * public class Person extends _Person {
  *   ...
  *   public static ERTaggableEntity<Person> taggableEntity() {
- *     return new ERTaggableEntity<Person>(Person.ENTITY_NAME);
+ *     return ERTaggableEntity.taggableEntity(Person.ENTITY_NAME);
  *   }
  * }
  * </code>
