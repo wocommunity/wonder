@@ -588,6 +588,16 @@
 				<artifactId>commons-lang</artifactId>
 				<version>2.4</version>
 			</dependency>
+			<dependency>
+				<groupId>javassist</groupId>
+				<artifactId>javassist</artifactId>
+				<version>3.11.0.GA</version>
+			</dependency>
+			<dependency>
+				<groupId>glounj</groupId>
+				<artifactId>glounj</artifactId>
+				<version>1.5-beta</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<repositories>
