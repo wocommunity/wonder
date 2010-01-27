@@ -427,7 +427,9 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		// optionally write out a fresh copy of the H2JDBCInfo.plist file.
 		if (!testedJdbcInfo) {
 			testedJdbcInfo = true;
-			if (NSPropertyListSerialization.booleanForString(System.getProperty("h2.updateJDBCInfo"))) {
+			String property = System.getProperty("h2.updateJDBCInfo");
+			if (NSPropertyListSerialization.booleanForString(property)) {
+				NSLog.out.appendln("Updating H2JDBCInfo.plist enabled:" + property);
 				try {
 					String jdbcInfoContent = NSPropertyListSerialization.stringFromPropertyList(super.jdbcInfo());
 					File tmpDir = new File(System.getProperty("java.io.tmpdir"));
@@ -478,16 +480,16 @@ public class ERH2PlugIn extends JDBCPlugIn {
 
 	/**
 	 * <p>
-	 * This method returns true if the connection URL for the database has
-	 * <code>useBundledJdbcInfo=true</code> on it which indicates to the system
-	 * that the jdbcInfo which has been bundled into the plugin is acceptable to
-	 * use in place of actually going to the database and getting it.
+	 * This method returns true by default unless the connection URL for the database has
+	 * <code>useBundledJdbcInfo=false</code> on it which indicates to the system
+	 * that the jdbcInfo which has been bundled into the plugin is not acceptable to
+	 * use and instead it should fetch a fresh copy from the database.
 	 */
 	protected boolean shouldUseBundledJdbcInfo() {
-		boolean shouldUseBundledJdbcInfo = false;
+		boolean shouldUseBundledJdbcInfo = true;
 		String url = connectionURL();
-		if (url != null) {
-			shouldUseBundledJdbcInfo = url.toLowerCase().matches(".*(\\?|\\?.*&)useBundledJdbcInfo=(true|yes)(\\&|$)".toLowerCase());
+		if (url != null && url.toLowerCase().matches(".*(\\?|\\?.*&)useBundledJdbcInfo=(false|no)(\\&|$)".toLowerCase())) {
+			shouldUseBundledJdbcInfo = false;
 		}
 		return shouldUseBundledJdbcInfo;
 	}
