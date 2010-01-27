@@ -255,12 +255,12 @@ public class ERH2PlugIn extends JDBCPlugIn {
 			return new NSArray(_expressionForString("drop table " + formatTableName(tableName)));
 		}
 		
-		@Override
+		//@Override WO5.4
 		public String formatColumnName(String columnName) {
 			return columnName;
 		}
 		
-		@Override
+		//@Override WO5.4
 		public String formatTableName(String tableName) {
 			return tableName;
 		}
