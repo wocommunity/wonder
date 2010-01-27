@@ -1580,6 +1580,10 @@ public class ERXSQLHelper {
 						else if (databaseProductName.equalsIgnoreCase("microsoft")) {
 							sqlHelper = new MicrosoftSQLHelper();
 						}
+						else if (databaseProductName.equalsIgnoreCase("h2")) {
+							log.warn("H2Helper");
+							sqlHelper = new H2SQLHelper();
+						}
 						else {
 							try {
 								sqlHelper = (ERXSQLHelper) Class.forName(ERXSQLHelper.class.getName() + "$" + databaseProductName + "SQLHelper").newInstance();
@@ -1793,6 +1797,30 @@ public class ERXSQLHelper {
 		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			// Openbase support for limiting result set
 			return sql + " return results " + start + " to " + end;
+		}
+	}
+	
+	public static class H2SQLHelper extends ERXSQLHelper {
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			return "ALTER TABLE " + tableName + " ADD CONSTRAINT \"" + indexName + "\" UNIQUE(" + new NSArray<String>(columnNames).componentsJoinedByString(", ") + ")";
+		}
+
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			return "CREATE INDEX \""+indexName+"\" ON "+tableName+" ("+new NSArray<String>(columnNames).componentsJoinedByString(", ")+")";
+		}
+		
+		@Override
+		public int varcharLargeJDBCType() {
+			return Types.LONGVARCHAR;
+		}
+		
+		@Override
+		public int varcharLargeColumnWidth() {
+			return -1;
 		}
 	}
 
