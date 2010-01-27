@@ -240,18 +240,29 @@ public class ERH2PlugIn extends JDBCPlugIn {
 
 		@Override
 		public NSArray _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
-			return new NSArray(_expressionForString("alter table " + tableName + " drop primary key"));
+			return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " drop primary key"));
 		}
 
 		@Override
 		public NSArray dropPrimaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray(_expressionForString("drop table " + pkTable));
+			return new NSArray(_expressionForString("drop table " + formatTableName(pkTable)));
 		}
 
 		@Override
 		public NSArray dropTableStatementsForEntityGroup(final NSArray entityGroup) {
-			return new NSArray(_expressionForString("drop table " + ((EOEntity) entityGroup.objectAtIndex(0)).externalName()));
+			String tableName = ((EOEntity) entityGroup.objectAtIndex(0)).externalName();
+			return new NSArray(_expressionForString("drop table " + formatTableName(tableName)));
+		}
+		
+		@Override
+		public String formatColumnName(String columnName) {
+			return columnName;
+		}
+		
+		@Override
+		public String formatTableName(String tableName) {
+			return tableName;
 		}
 
 		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray attributes) {
@@ -274,10 +285,10 @@ public class ERH2PlugIn extends JDBCPlugIn {
 				&& isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes()))
 			{
 				StringBuffer sql = new StringBuffer();
-				String tableName = relationship.entity().externalName();
+				String tableName = formatTableName(relationship.entity().externalName());
 
 				sql.append("ALTER TABLE ");
-				sql.append(quoteTableName(tableName.toUpperCase()));
+				sql.append(tableName);
 				sql.append(" ADD");
 
 				StringBuffer constraint = new StringBuffer(" CONSTRAINT \"FOREIGN_KEY_");
@@ -292,8 +303,8 @@ public class ERH2PlugIn extends JDBCPlugIn {
 						fkSql.append(", ");
 
 					fkSql.append("\"");
-					String columnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
-					fkSql.append(columnName.toUpperCase());
+					String columnName = formatColumnName(((EOAttribute) attributes.objectAtIndex(i)).columnName());
+					fkSql.append(columnName);
 					constraint.append(columnName);
 					fkSql.append("\"");
 				}
@@ -301,8 +312,8 @@ public class ERH2PlugIn extends JDBCPlugIn {
 				fkSql.append(") REFERENCES ");
 				constraint.append("_");
 
-				String referencedExternalName = relationship.destinationEntity().externalName();
-				fkSql.append(quoteTableName(referencedExternalName.toUpperCase()));
+				String referencedExternalName = formatTableName(relationship.destinationEntity().externalName());
+				fkSql.append(referencedExternalName);
 				constraint.append(referencedExternalName);
 
 				fkSql.append(" (");
@@ -315,8 +326,8 @@ public class ERH2PlugIn extends JDBCPlugIn {
 						fkSql.append(", ");
 
 					fkSql.append('"');
-					String referencedColumnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
-					fkSql.append(referencedColumnName.toUpperCase());
+					String referencedColumnName = formatColumnName(((EOAttribute) attributes.objectAtIndex(i)).columnName());
+					fkSql.append(referencedColumnName);
 					constraint.append(referencedColumnName);
 					fkSql.append('"');
 				}
@@ -341,16 +352,18 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		@Override
 		public NSArray primaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray(_expressionForString("create table " + pkTable + " (name char(40) primary key, pk INT)"));
+			String charField = formatColumnName("name") + " CHAR(40)";
+			String pkField = formatColumnName("pk") + " INT";
+			return new NSArray(_expressionForString("CREATE TABLE " + formatTableName(pkTable) + " (" + charField + ", " + pkField + ")"));
 		}
 
 		@Override
 		public NSArray statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
 			String clause = _columnCreationClauseForAttribute(attribute);
 
-			System.out.println("alter table " + attribute.entity().externalName() + " add column " + clause);
+			System.out.println("ALTER TABLE " + formatTableName(attribute.entity().externalName()) + " ADD COLUMN " + clause);
 
-			NSArray result = new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add column " + clause));
+			NSArray result = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(attribute.entity().externalName()) + " ADD COLUMN " + clause));
 
 			System.out.println(result);
 
