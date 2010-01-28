@@ -240,19 +240,19 @@ public class ERH2PlugIn extends JDBCPlugIn {
 
 		@Override
 		public NSArray _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
-			return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " drop primary key"));
+			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP PRIMARY KEY"));
 		}
 
 		@Override
 		public NSArray dropPrimaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray(_expressionForString("drop table " + formatTableName(pkTable)));
+			return new NSArray(_expressionForString("DROP TABLE " + formatTableName(pkTable)));
 		}
 
 		@Override
 		public NSArray dropTableStatementsForEntityGroup(final NSArray entityGroup) {
 			String tableName = ((EOEntity) entityGroup.objectAtIndex(0)).externalName();
-			return new NSArray(_expressionForString("drop table " + formatTableName(tableName)));
+			return new NSArray(_expressionForString("DROP TABLE " + formatTableName(tableName)));
 		}
 		
 		//@Override WO5.4
@@ -263,6 +263,10 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		//@Override WO5.4
 		public String formatTableName(String tableName) {
 			return tableName;
+		}
+		
+		public String formatUpperString(String string) {
+			return string.toUpperCase();
 		}
 
 		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray attributes) {
@@ -292,7 +296,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 				sql.append(" ADD");
 
 				StringBuffer constraint = new StringBuffer(" CONSTRAINT \"FOREIGN_KEY_");
-				constraint.append(tableName);
+				constraint.append(formatUpperString(tableName));
 
 				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
 				NSArray attributes = relationship.sourceAttributes();
@@ -302,11 +306,9 @@ public class ERH2PlugIn extends JDBCPlugIn {
 					if (i != 0)
 						fkSql.append(", ");
 
-					fkSql.append("\"");
 					String columnName = formatColumnName(((EOAttribute) attributes.objectAtIndex(i)).columnName());
 					fkSql.append(columnName);
-					constraint.append(columnName);
-					fkSql.append("\"");
+					constraint.append(formatUpperString(columnName));
 				}
 
 				fkSql.append(") REFERENCES ");
@@ -314,7 +316,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 
 				String referencedExternalName = formatTableName(relationship.destinationEntity().externalName());
 				fkSql.append(referencedExternalName);
-				constraint.append(referencedExternalName);
+				constraint.append(formatUpperString(referencedExternalName));
 
 				fkSql.append(" (");
 
@@ -325,11 +327,9 @@ public class ERH2PlugIn extends JDBCPlugIn {
 					if (i != 0)
 						fkSql.append(", ");
 
-					fkSql.append('"');
 					String referencedColumnName = formatColumnName(((EOAttribute) attributes.objectAtIndex(i)).columnName());
 					fkSql.append(referencedColumnName);
-					constraint.append(referencedColumnName);
-					fkSql.append('"');
+					constraint.append(formatUpperString(referencedColumnName));
 				}
 				
 				// MS: did i write this code?  sorry about that everything. this is crazy. 
