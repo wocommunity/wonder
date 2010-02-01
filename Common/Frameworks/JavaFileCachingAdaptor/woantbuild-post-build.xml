@@ -4,11 +4,8 @@
     <target name="post-build-hook">
         <mkdir dir="${build.root}/${framework.name}.framework/Resources" />        
         <copy todir="${build.root}/${framework.name}.framework/Resources" failonerror="true" overwrite="true">
-            <fileset    dir="${webserverresources.dir.absolute}" 
-                        includes="${webserverresources.dir.includes}" 
-                        excludes="${webserverresources.dir.excludes}" />
-            <fileset    dir="${project.dir}/Documentation"
-                        includes="Navigation.html" />
+            <fileset    dir="${project.dir}" 
+                        includes="Properties" />
         </copy>
     </target>
 </project>
