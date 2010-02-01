@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="webobjects-postbuildhook">
+    <target name="post-build-hook">
+        <mkdir dir="${build.root}/${framework.name}.framework/Resources" />        
+        <copy todir="${build.root}/${framework.name}.framework/Resources" failonerror="true" overwrite="true">
+            <fileset    dir="${project.dir}/Documentation" 
+                        includes="PrototypesHowTo.html" />
+        </copy>
+    </target>
+</project>
