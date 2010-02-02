@@ -755,11 +755,20 @@ public class MSiteConfig extends MObject {
                 return;
             }
             if(compress) {
-            	value = ERXCompressionUtilities.gzipString(value);
-            	sc = new File(sc.getParentFile(), sc.getName() + ".gz");
+                sc = new File(sc.getParentFile(), sc.getName() + ".gz");
+                ERXFileUtilities.stringToGZippedFile(value, sc);
             }
-            _NSStringUtilities.writeToFile(sc, value);
+            else {
+                _NSStringUtilities.writeToFile(sc, value);
+            }
             globalErrorDictionary.takeValueForKey(null, "archiveSiteConfig");
+       }
+        catch (IOException e)
+        {
+            String message = "Cannot write to file " + sc.getAbsolutePath() + ". IOException: " + e.getLocalizedMessage();
+            log.error(message);
+            String pre = WOApplication.application().name() + " - " + localHostName;
+            globalErrorDictionary.takeValueForKey(pre + message, "archiveSiteConfig");
         } catch (NSForwardException ne) {
             log.error("Cannot write to file " + sc.getAbsolutePath() + ". Possible Permissions Problem.");
             String pre = WOApplication.application().name() + " - " + localHostName;
