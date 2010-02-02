@@ -176,7 +176,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         return destinationSortKeys;
     }
 
-    protected EOEditingContext editingContext() {
+    public EOEditingContext editingContext() {
         EOEditingContext ec = null;
         if(sourceObject() instanceof EOEnterpriseObject) {
         	ec = ((EOEnterpriseObject)sourceObject()).editingContext();
