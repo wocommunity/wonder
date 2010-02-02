@@ -1047,12 +1047,18 @@ public class MSiteConfig extends MObject {
     	if(Boolean.getBoolean("WODeploymentBackups")) {
     		String currentSiteConfig = generateSiteConfigXML();
     		if(!_lastConfig.equals(generateSiteConfigXML())) {
-    			String date = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(new Date());
+    			String date = new SimpleDateFormat("yyyy-MM-dd-hh_mm_ss").format(new Date());
     			saveSiteConfig(new File(fileForSiteConfig().getParentFile(), "SiteConfigBackup.xml." + date + "." + action), _lastConfig, true);
     			_lastConfig = currentSiteConfig;
     		}
     	}
     } 
+    
+    public void forceBackup(String reason) {
+        reason = reason != null ? "." + reason : "";
+            String date = new SimpleDateFormat("yyyy-MM-dd-hh_mm_ss").format(new Date());
+            saveSiteConfig(new File(fileForSiteConfig().getParentFile(), "SiteConfigBackup.xml." + date + reason), generateSiteConfigXML(), true);
+    }
 
     public NSDictionary dictionaryForArchive() {
         int hostArrayCount = _hostArray.count();

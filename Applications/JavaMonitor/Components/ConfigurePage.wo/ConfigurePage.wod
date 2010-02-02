@@ -109,3 +109,14 @@ UpdateEmailButton: WOSubmitButton {
     action = emailUpdateClicked;
     value = "Update Email Notification Settings";
 }
+
+BackupForm: WOForm {}
+
+BackupNote: WOTextField {
+	value = backupNote;
+}
+	
+BackupButton: WOSubmitButton {
+    action = backupConfiguration;
+    value = "Backup Now";
+}
