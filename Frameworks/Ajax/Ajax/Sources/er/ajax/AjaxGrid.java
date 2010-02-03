@@ -16,7 +16,9 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.components._private.ERXWORepetition;
 import er.extensions.eof.ERXSortOrdering;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -68,6 +70,7 @@ import er.extensions.foundation.ERXValueUtilities;
  *        batchSize = 10;                                       // Controls size of batch in display group, use zero for no batching
  *        rowIdentifier = adKey;                                // Optional, key path into row returning a unique identifier for the row 
  *                                                              // rowIdentifier is used to build HTML ID attributes, so a String or Number works best
+ *        er.extensions.ERXWORepetition.checkHashCodes = true;  // Optional override for global ERXWORepetition setting
  *        
  *  
  *        columns = (                                           // List of columns to display, controls the initial display order
@@ -324,7 +327,9 @@ public class AjaxGrid extends WOComponent {
 	public static final String WILL_UPDATE_BINDING = "willUpdate";
 	public static final String AFTER_UPDATE_BINDING = "afterUpdate";
 
-
+	public static final String CHECK_HASH_CODES = "er.extensions.ERXWORepetition.checkHashCodes";
+	
+	
 	public AjaxGrid(WOContext context) {
 		super(context);
 	}
@@ -522,7 +527,6 @@ public class AjaxGrid extends WOComponent {
 	 * @return an optional key path into row that will return a value that uniquely identifies this row
 	 */
 	public String rowIdentifier() {
-		
 		return (String) configurationData().valueForKey(ROW_IDENTIFIER);
 	}
 	
@@ -613,6 +617,15 @@ public class AjaxGrid extends WOComponent {
 			return ERXStringUtilities.safeIdentifierName(row().valueForKeyPath(rowIdentifier()).toString());
 		} 
 		return "row_" + String.valueOf(rowIndex());
+	}
+
+	/**
+	 * Returns a key into this row that produces a unique value for this row.
+	 * 
+	 * @return a key into this row that produces a unique value for this row
+	 */
+	public String rowIdentifierKey() {
+		return rowIdentifier() != null ? rowIdentifier() : "hashCode";
 	}
 	
 	/**
@@ -973,4 +986,17 @@ public class AjaxGrid extends WOComponent {
 		return this;
 	}
 
+	/**
+	 * Allows configuration data to override ERXWORepetition default for checkHashCodes. 
+	 * 
+	 * @return boolean value for CHECK_HASH_CODES if set in config data, otherwise the default from ERXWORepetition
+	 */
+	public boolean checkHashCodes() {
+		if (configurationData().objectForKey(CHECK_HASH_CODES) == null) {
+			configurationData().setObjectForKey(Boolean.toString(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWORepetition.checkHashCodes", 
+																 ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".checkHashCodes"))),
+												CHECK_HASH_CODES);
+		}
+		return Boolean.parseBoolean((String)configurationData().objectForKey(CHECK_HASH_CODES));
+	}
 }
