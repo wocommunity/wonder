@@ -159,6 +159,13 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 	            appendTagAttributeToResponse(response, "id", tabID);
 	            response.appendContentString(">\n");
 	            response.appendContentString("<a ");
+	            
+	            //add the accesskey
+	            if( tab.accesskey() != null ){
+	            	String accessKeyStr = tab.accesskey().valueInComponent(component).toString();
+	            	appendTagAttributeToResponse(response, "accesskey", accessKeyStr );
+	            }
+	            
 	            appendTagAttributeToResponse(response, "id", panelTabID);
 	            response.appendContentString(" href=\"javascript:void(0)\" onclick=\"");
 	
