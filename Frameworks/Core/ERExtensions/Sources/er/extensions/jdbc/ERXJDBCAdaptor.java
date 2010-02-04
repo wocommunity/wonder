@@ -2,6 +2,7 @@ package er.extensions.jdbc;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -63,7 +64,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 	private static Boolean switchReadWrite = null;
 	private static Boolean useConnectionBroker = null;
 
-	private static boolean switchReadWrite() {
+	static boolean switchReadWrite() {
 		if (switchReadWrite == null) {
 			switchReadWrite = "false".equals(ERXSystem.getProperty("er.extensions.ERXJDBCAdaptor.switchReadWrite", "false")) ? Boolean.FALSE : Boolean.TRUE;
 		}
@@ -113,7 +114,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 				System.exit(1);
 			}
 		}
-
+		
 		public void setAttributesToFetch(NSArray attributes) {
 			_attributes = attributes;
 			int j;
@@ -145,7 +146,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 			}
 			return old;
 		}
-
+		
 		/**
 		 * Overridden to switch the connection to read-only while selecting.
 		 */
@@ -188,9 +189,9 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 						pkCache.setObjectForKey(pks, key);
 					}
 					if (pks.count() < cnt) {
-						Object batchSize = (String) (entity.userInfo() != null ? entity.userInfo().objectForKey("ERXPrimaryKeyBatchSize") : null);
+						Object batchSize = (entity.userInfo() != null ? entity.userInfo().objectForKey("ERXPrimaryKeyBatchSize") : null);
 						if (batchSize == null) {
-							batchSize = (String) (entity.model().userInfo() != null ? entity.model().userInfo().objectForKey("ERXPrimaryKeyBatchSize") : null);
+							batchSize = (entity.model().userInfo() != null ? entity.model().userInfo().objectForKey("ERXPrimaryKeyBatchSize") : null);
 						}
 						if (batchSize == null) {
 							batchSize = ERXProperties.stringForKey("er.extensions.ERXPrimaryKeyBatchSize");
@@ -203,7 +204,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 					}
 					NSMutableArray batch = new NSMutableArray();
 					for (Iterator iterator = pks.iterator(); iterator.hasNext() && --cnt >= 0;) {
-						Object pk = (Object) iterator.next();
+						Object pk = iterator.next();
 						batch.addObject(pk);
 						iterator.remove();
 					}
@@ -214,8 +215,6 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		}
 		
 		private void cleanup() {
-			// TODO Mike: look over this... 
-			// TODONE Okey dokey. 
 			Boolean value = (Boolean) ERXKeyValueCodingUtilities.privateValueForKey(this, "_beganTransaction");
 			if (value) {
 				try {
@@ -229,7 +228,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		}
 		
 		/**
-		 * Overridden to clea up after a transaction fails.
+		 * Overridden to clean up after a transaction fails.
 		 */
 		@Override
 		public void evaluateExpression(EOSQLExpression eosqlexpression) {
@@ -243,7 +242,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		}
 		
 		/**
-		 * Overridden to clea up after a transaction fails.
+		 * Overridden to clean up after a transaction fails.
 		 */
 		@Override
 		public void executeStoredProcedure(EOStoredProcedure eostoredprocedure, NSDictionary nsdictionary) {
@@ -257,7 +256,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		}
 		
 		/**
-		 * Overridden to clea up after a transaction fails.
+		 * Overridden to clean up after a transaction fails.
 		 */
 		@Override
 		public int deleteRowsDescribedByQualifier(EOQualifier eoqualifier, EOEntity eoentity) {
@@ -269,7 +268,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 				throw ex;
 			}
 		}
-		
+
 		/**
 		 * Overridden to clea up after a transaction fails.
 		 */
@@ -302,6 +301,36 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 					((ERXJDBCAdaptor) adaptor()).freeConnection(_jdbcConnection);
 					_jdbcConnection = null;
 				}
+			}
+		}
+
+		/**
+		 * Re-implemented to fix: http://www.mail-archive.com/dspace-tech@lists.sourceforge.net/msg06063.html.
+		 * We could also use the delegate, but where would be the fun in that?
+		 */
+		public void rollbackTransaction() {
+			if (!hasOpenTransaction()) {
+				return;
+			}
+			if (((Number)ERXKeyValueCodingUtilities.privateValueForKey(this, "_fetchesInProgress")).intValue() > 0) {
+				throw new JDBCAdaptorException("Cannot rollbackTransaction() while a fetch is in progress", null);
+			}
+			if (_delegateRespondsTo_shouldRollback && !_delegate.booleanPerform("adaptorContextShouldRollback", this))
+				return;
+			try {
+				if (_connectionSupportTransaction) {
+					// AK: only roll back if the connection isn't closed.
+					if(!_jdbcConnection.isClosed()) {
+						_jdbcConnection.rollback();
+					}
+				}
+			}
+			catch (SQLException sqlexception) {
+				throw new JDBCAdaptorException(sqlexception);
+			}
+			transactionDidRollback();
+			if (_delegateRespondsTo_didRollback) {
+				_delegate.perform("adaptorContextDidRollback", this);
 			}
 		}
 
@@ -342,9 +371,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 				_cachedChannel = null;
 				return jdbcchannel;
 			}
-			else {
-				return createJDBCChannel();
-			}
+			return createJDBCChannel();
 		}
 
 		public void disconnect() throws JDBCAdaptorException {
