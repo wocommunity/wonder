@@ -1,7 +1,6 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -30,6 +29,7 @@ import com.webobjects.foundation.NSDictionary;
  *          time the tab is selected.  Defaults to false
  * @binding onLoad optional, String JavaScript to execute after the tab loads
  * @binding isVisible optional, default is true, indicates if tab and panel should be displayed
+ * @binding accesskey optional, The accesskey for this tab
  *
  * @author Chuck Hill
  */
@@ -42,6 +42,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     private WOAssociation refreshOnSelect;
     private WOAssociation onLoad;
     private WOAssociation isVisible;
+    private WOAssociation accesskey;
 
 
     public AjaxTabbedPanelTab(String aName, NSDictionary associations, WOElement template) {
@@ -54,6 +55,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
         refreshOnSelect = (WOAssociation) associations.objectForKey("refreshOnSelect");
         onLoad = (WOAssociation) associations.objectForKey("onLoad");
         isVisible = (WOAssociation) associations.objectForKey("isVisible");
+        accesskey = (WOAssociation)associations.objectForKey("accesskey");
         
         if (name == null) {
         	throw new RuntimeException("name binding is required");
@@ -216,5 +218,11 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     public boolean isVisble(WOComponent component) {
         return (isVisible != null) ? ((Boolean)isVisible.valueInComponent(component)).booleanValue() : true;
     }
-
+    
+    /**
+     * @return WOAssociation for the accesskey binding
+     */
+    public WOAssociation accesskey() {
+    	return accesskey;
+    }
 }
