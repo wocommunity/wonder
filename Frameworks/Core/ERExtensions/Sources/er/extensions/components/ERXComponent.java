@@ -5,12 +5,10 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXResponseRewriter;
-import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
@@ -23,7 +21,6 @@ import er.extensions.localization.ERXLocalizer;
  */
 public abstract class ERXComponent extends WOComponent {
 	protected NSMutableDictionary _dynamicBindings = null;
-	private EOEditingContext _editingContext;
 	
 	/**
 	 * Constructs a new ERXComponent.
@@ -33,53 +30,6 @@ public abstract class ERXComponent extends WOComponent {
 	 */
 	public ERXComponent(WOContext context) {
 		super(context);
-	}
-	
-	/**
-	 * Returns whether or not this component should use a shared editing context at the page level when you call the
-	 * editingContext() method. This method defaults to true.
-	 * 
-	 * @return whether or not this component should use a shared editing context at the page level
-	 */
-	protected boolean usePageEditingContext() {
-		return true;
-	}
-	
-	/**
-	 * Explicitly sets the editing context for this component.
-	 * 
-	 * @param editingContext the new editing context to use for this component
-	 */
-	public void setEditingContext(EOEditingContext editingContext) {
-		_editingContext = editingContext;
-	}
-	
-	/**
-	 * Returns an editing context for use in this component. If usePageEditingContext() returns true (the default), 
-	 * this component will attempt to retrieve the page editing context by calling "editingContext" on the page
-	 * component. If that returns null (or usePageEditingContext() returns false), this component will create a
-	 * new editing context and store it in an ivar. Subsequent calls to this method will return the same 
-	 * editing context instance. This functionality is not available for stateless components. 
-	 * 
-	 * @return an editing context for use in this page
-	 */
-	public EOEditingContext editingContext() {
-		EOEditingContext editingContext = _editingContext;
-		if (editingContext == null) {
-			if (usePageEditingContext()) {
-				WOComponent page = context().page();
-				if (page != this) {
-					editingContext = (EOEditingContext)page.valueForKey("editingContext");
-				}
-			}
-			if (editingContext == null) {
-				if (isStateless()) {
-					throw new IllegalStateException("You can not request an editing context for a stateless component.");
-				}
-				_editingContext = ERXEC.newEditingContext();
-			}
-		}
-		return _editingContext;
 	}
 
 	/**
