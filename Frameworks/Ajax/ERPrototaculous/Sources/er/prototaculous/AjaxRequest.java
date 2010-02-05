@@ -7,7 +7,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
 
@@ -99,7 +99,7 @@ public abstract class AjaxRequest extends WOComponent{
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
     	if (!useUnobtrusively) {
-    		AjaxUtils.addScriptResourceInHead(context, response, "Ajax", "prototype.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "prototype.js");
     	} super.appendToResponse(response, context);
     }
 }

@@ -7,7 +7,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
@@ -146,9 +146,9 @@ public abstract class AjaxUpload extends WOComponent {
     	super.appendToResponse(response, context);
     	
     	if (!useUnobtrusively) {
-    		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-    		AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
-    		AjaxUtils.addScriptResourceInHead(context, response, "ERPrototaculous", "ajaxupload.3.5.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "prototype.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "scriptaculous.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERPrototaculous", "ajaxupload.3.5.js");
     	}
     }
 }
