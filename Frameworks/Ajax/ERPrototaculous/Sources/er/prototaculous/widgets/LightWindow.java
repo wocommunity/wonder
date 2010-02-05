@@ -1,8 +1,10 @@
 package er.prototaculous.widgets;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
-import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -48,11 +50,11 @@ public abstract class LightWindow extends WOComponent {
 	public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
     	if (!useUnobtrusively) {
-    		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-    		AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
-    		AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
-    		AjaxUtils.addScriptResourceInHead(context, response, "ERPrototaculous", "lightwindow.js");
-    		AjaxUtils.addStylesheetResourceInHead(context, response, "ERPrototaculous", "lightwindow.css");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "prototype.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "scriptaculous.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "effects.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERPrototaculous", "lightwindow.js");
+    		ERXResponseRewriter.addStylesheetResourceInHead(response, context, "ERPrototaculous", "lightwindow.css");
     	}
     }
 }

@@ -6,7 +6,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -68,10 +68,10 @@ public abstract class ModalBox extends WOComponent {
     	super.appendToResponse(response, context);
     	
     	if (!useUnobtrusively) {
-    		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-    		AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
-    		AjaxUtils.addScriptResourceInHead(context, response, "modalbox.js");
-    		AjaxUtils.addStylesheetResourceInHead(context, response, "modalbox.css");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "prototype.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "scriptaculous.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "modalbox.js");
+    		ERXResponseRewriter.addStylesheetResourceInHead(response, context, "Ajax", "modalbox.css");
     	}
     }
 }

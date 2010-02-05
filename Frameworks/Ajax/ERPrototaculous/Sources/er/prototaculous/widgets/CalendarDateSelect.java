@@ -7,7 +7,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -103,15 +103,15 @@ public class CalendarDateSelect extends WOComponent {
 	// R/R
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-		AjaxUtils.addStylesheetResourceInHead(context, response, "ERPrototaculous", "CalendarDateSelect.css");
+		ERXResponseRewriter.addStylesheetResourceInHead(response, context, "ERPrototaculous", "CalendarDateSelect.css");
 
 		// include javascripts if not being used unobtrusively
 		if (!useUnobtrusively) {
-			AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-			AjaxUtils.addScriptResourceInHead(context, response, "ERPrototaculous", "calendar_date_select.js");
+			ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "prototype.js");
+			ERXResponseRewriter.addScriptResourceInHead(response, context, "ERPrototaculous", "calendar_date_select.js");
 
 			// date format script
-			if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) AjaxUtils.addScriptResourceInHead(context, response, "ERPrototaculous", (String) dateFormatScript());	
+			if (!dateFormatScript().equals(NSKeyValueCoding.NullValue)) ERXResponseRewriter.addScriptResourceInHead(response, context, "ERPrototaculous", (String) dateFormatScript());	
 		} super.appendToResponse(response, context);
 	}
 }

@@ -2,7 +2,7 @@ package er.extensions.components._ajax;
 
 import com.webobjects.appserver.*;
 
-import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXErrorDictionaryPanel;
 import er.extensions.foundation.ERXProperties;
 
@@ -25,7 +25,7 @@ public class ERXAjaxErrorDictionaryPanel extends ERXErrorDictionaryPanel {
 	public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
     	if (!useUnobtrusively) {
-    		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "prototype.js");
     	}
     }
 }
