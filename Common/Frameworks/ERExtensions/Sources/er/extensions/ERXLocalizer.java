@@ -403,8 +403,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             if (keys.count() > 0) {
                 shortLanguage = (String)keys.objectAtIndex(0);
                 if (keys.count() > 1) {
-                    log.error("Found multiple entries for language \"" + aLanguage
-                              + "\" in Language.plist file! Found keys: " + keys);
+                    log.info("Found multiple entries for language \"" + aLanguage + "\" in Language.plist file! Found keys: " + keys);
                 }
             }
         }
