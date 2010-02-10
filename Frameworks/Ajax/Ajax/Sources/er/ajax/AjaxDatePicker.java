@@ -190,8 +190,7 @@ public class AjaxDatePicker extends AjaxComponent {
     	// Load the CSS like this to avoid odd race conditions when this is used in an AjaxModalDialog: at times
     	// the CSS does not appear to be available and the calendar appears in the background
     	script.append("AOD.loadCSS('");
-    	script.append(application().resourceManager().urlForResourceNamed((String)valueForBinding("calendarCSS", "calendar.css"), 
-    			                                                          (String)valueForBinding("calendarCSSFramework", "Ajax"), null, context().request()).toString());
+    	script.append(application().resourceManager().urlForResourceNamed(cssFileName(), cssFileFrameworkName(), null, context().request()).toString());
     	script.append("'); ");
     	script.append("this.select(); calendar_open(this, ");
     	AjaxOptions.appendToBuffer(options(), script, context());
@@ -268,6 +267,7 @@ public class AjaxDatePicker extends AjaxComponent {
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "wonder.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "calendar.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "date.js");
+		ERXResponseRewriter.addStylesheetResourceInHead(response, context(), cssFileFrameworkName(), cssFileName());
 	}
 	
 	/**
@@ -276,15 +276,25 @@ public class AjaxDatePicker extends AjaxComponent {
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}
-    
-	
-	
+    	
     /**
      * Overridden so that parent will handle in the same manner as if this were a dynamic element. 
      */
-    public void validationFailedWithException(Throwable t, Object value, String keyPath)
-    {
+    public void validationFailedWithException(Throwable t, Object value, String keyPath) {
     	parent().validationFailedWithException(t, value, keyPath);
     }
     
+    /**
+     * @return value for calendarCSS binding, or default of "calendar.css"
+     */
+    protected String cssFileName() {
+    	return (String)valueForBinding("calendarCSS", "calendar.css");
+    }
+    
+    /**
+     * @return value for calendarCSSFramework binding, or default of "Ajax"
+     */
+    protected String cssFileFrameworkName() {
+    	return (String)valueForBinding("calendarCSSFramework", "Ajax");
+    }
 }
