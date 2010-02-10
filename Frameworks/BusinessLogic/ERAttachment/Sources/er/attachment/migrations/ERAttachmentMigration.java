@@ -1,9 +1,11 @@
 package er.attachment.migrations;
 
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
 
 import er.extensions.migration.ERXMigrationDatabase;
 import er.extensions.migration.ERXMigrationTable;
+import er.extensions.migration.ERXModelVersion;
 import er.extensions.migration.ERXMigrationDatabase.Migration;
 
 /**
@@ -28,6 +30,11 @@ public abstract class ERAttachmentMigration extends Migration {
     _tableName = tableName;
     _columnName = columnName;
     _allowsNull = allowsNull;
+  }
+  
+  @Override
+  public NSArray<ERXModelVersion> modelDependencies() {
+  	return new NSArray<ERXModelVersion>(new ERXModelVersion("ERAttachment", 1));
   }
 
   @Override
