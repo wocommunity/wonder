@@ -73,9 +73,9 @@
     50 : ((task = 'inspect' or task = 'list') and propertyType = 'r' and smartRelationship.isToMany = 0) => componentName = D2WAjaxDisplayToOne [com.webobjects.directtoweb.Assignment],
     50 : ((task = 'inspect' or task = 'list') and propertyType = 'r' and smartRelationship.isToMany = 1) => componentName = D2WAjaxDisplayToManyList [com.webobjects.directtoweb.Assignment],
     51 : *true* => collapsibleComponentName = D2WAjaxCollapsibleComponentContent [com.webobjects.directtoweb.Assignment],
-    51 : (pageConfiguration like '*Embedded*' and parentPageConfiguration like 'Edit*' and smartAttribute.valueType = 'c') => componentName = {"conditionKey" = "object.isNewObject"; "falseValue" = "ERD2WDisplayString"; "trueValue" = "D2WEditBoolean"; 
-} [er.directtoweb.assignments.delayed.ERDDelayedBooleanAssignment],
     51 : (pageConfiguration like '*Embedded*' and parentPageConfiguration like 'Edit*' and propertyType = 'r' and smartRelationship.isToMany = 0) => componentName = {"conditionKey" = "object.isNewObject"; "falseValue" = "D2WAjaxDisplayToOne"; "trueValue" = "ERD2WEditToOneRelationshipWithNew"; 
+} [er.directtoweb.assignments.delayed.ERDDelayedBooleanAssignment],
+    51 : (pageConfiguration like '*Embedded*' and parentPageConfiguration like 'Edit*' and (smartAttribute.className = 'java.lang.Boolean' or (smartAttribute.userInfo.erPrototype = 'Boolean' and (smartAttribute.className = 'java.math.BigDecimal' or smartAttribute.className = 'java.lang.Number')))) => componentName = {"conditionKey" = "object.isNewObject"; "falseValue" = "ERD2WDisplayString"; "trueValue" = "D2WEditBoolean"; 
 } [er.directtoweb.assignments.delayed.ERDDelayedBooleanAssignment],
     52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 0 and smartRelationship.destinationEntity.name = 'ERAttachment') => isAjax = true [com.webobjects.directtoweb.BooleanAssignment],
     52 : (task = 'edit' and propertyType = 'r' and smartRelationship.isToMany = 1 and smartRelationship.destinationEntity.name = 'ERAttachment') => isAjax = true [com.webobjects.directtoweb.BooleanAssignment],
