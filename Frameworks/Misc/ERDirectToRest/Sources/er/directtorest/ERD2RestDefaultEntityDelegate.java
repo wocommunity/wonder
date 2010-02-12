@@ -8,6 +8,7 @@ import com.webobjects.foundation.NSArray;
 
 import er.directtorest.security.ERD2RestAllowSecurityDelegate;
 import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXFetchSpecification;
 import er.extensions.foundation.ERXValueUtilities;
 import er.rest.ERXRestException;
@@ -102,9 +103,20 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
     }
 
     public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+    	NSArray objects = NSArray.EmptyArray;
+        int start = ERXValueUtilities.intValueWithDefault(context.valueForKey("start"), 0);
         EOFetchSpecification fs = new ERXFetchSpecification<EOEnterpriseObject>(entity.name(), null, null);
-        fs.setFetchLimit(intValue("fetchLimit", 0));
-        NSArray objects = context.editingContext().objectsWithFetchSpecification(fs);
+        int hardLimit = intValue("fetchLimit", 0);
+        int fetchLimit = ERXValueUtilities.intValueWithDefault(context.valueForKey("fetchLimit"), 0);
+        if(fetchLimit > hardLimit || fetchLimit == 0) {
+        	fetchLimit = hardLimit;
+        }
+        fs.setFetchLimit(fetchLimit);
+        if(start == 0) {
+        	objects = context.editingContext().objectsWithFetchSpecification(fs);
+        } else {
+        	objects = ERXEOControlUtilities.objectsInRange(context.editingContext(), fs, start, start+fs.fetchLimit());
+        }
         return objects;
     }
 
