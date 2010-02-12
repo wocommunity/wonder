@@ -97,7 +97,7 @@ public class BeanInfoClassDescription extends EOClassDescription {
 	public NSArray toOneRelationshipKeys() {
 		NSMutableArray<String> relationships = new NSMutableArray<String>();
 		for (PropertyDescriptor descriptor : _beanInfo.getPropertyDescriptors()) {
-			if (!isAttribute(descriptor) && !isToMany(descriptor)) {
+			if (!isAttribute(descriptor) && !isToMany(descriptor) && !"class".equals(descriptor.getName())) {
 				relationships.addObject(descriptor.getName());
 			}
 		}
