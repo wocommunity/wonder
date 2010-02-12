@@ -10,8 +10,17 @@ import com.webobjects.eocontrol.EOEditingContext;
  */
 public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 	private EOEditingContext _editingContext;
-
+	private boolean _createMissingObjects;
+	
 	public ERXAbstractRestDelegate() {
+	}
+	
+	public void setCreateMissingObjects(boolean createMissingObjects) {
+		_createMissingObjects = createMissingObjects;
+	}
+	
+	public boolean shouldCreateMissingObjects() {
+		return _createMissingObjects;
 	}
 
 	public ERXAbstractRestDelegate(EOEditingContext editingContext) {
@@ -78,6 +87,9 @@ public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 			}
 			else {
 				obj = _fetchObjectOfEntityWithID(entity, id);
+				if (obj == null && _createMissingObjects) {
+					obj = createObjectOfEntity(entity);
+				}
 			}
 		}
 		else {
