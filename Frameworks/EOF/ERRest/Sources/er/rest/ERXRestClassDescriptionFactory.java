@@ -46,6 +46,9 @@ public class ERXRestClassDescriptionFactory {
 	public static EOClassDescription classDescriptionForEntityName(String entityName) {
 		EOClassDescription classDescription = EOClassDescription.classDescriptionForEntityName(entityName);
 		if (classDescription == null) {
+			if (entityName == null) {
+				throw new NullPointerException("You did not specify an entityName.");
+			}
 			Class clazz = _classByName.get(entityName);
 			if (clazz == null) {
 				clazz = _NSUtilities.classWithName(entityName);
