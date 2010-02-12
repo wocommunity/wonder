@@ -1,5 +1,7 @@
 package er.directtorest;
 
+import java.util.Map;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -8,6 +10,9 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.directtorest.security.ERD2RestAllowSecurityDelegate;
 import er.directtoweb.ERD2WModel;
@@ -89,12 +94,17 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
      * @return propertyAlias
      */
     @Override
-    public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
-//        if(entity.classPropertyNames().containsObject(propertyAlias)) {
-//            return propertyAlias;
-//        }
-        return propertyAlias;
-    }
+	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
+		NSDictionary<String, String> aliases = (NSDictionary<String, String>) d2wContext().valueForKey("restPropertyAliases");
+		String result = propertyAlias;
+		if (aliases != null) {
+			result = aliases.objectForKey(propertyAlias);
+		}
+		if (result == null) {
+			result = propertyAlias;
+		}
+		return result;
+	}
 
     /**
      * Returns propertyName.
@@ -103,16 +113,44 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
      */
     @Override
     public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
-        return propertyName;
+    	NSDictionary<String, String> reverses = (NSDictionary<String, String>) d2wContext().valueForKey("restPropertyAliasesReverse");
+		if (reverses == null) {
+			NSMutableDictionary mutableReverses = new NSMutableDictionary<String, String>();
+			NSDictionary<String, String> aliases = (NSDictionary<String, String>) d2wContext().valueForKey("restPropertyAliases");
+			for (Map.Entry<String, String> entry : aliases.entrySet()) {
+				mutableReverses.setObjectForKey(entry.getKey(), entry.getValue());
+			}
+			d2wContext().takeValueForKey(mutableReverses, "restPropertyAliasesReverse");
+			reverses = mutableReverses;
+		}
+
+		String result = propertyName;
+		if (reverses != null) {
+			result = (String) reverses.valueForKey(propertyName);
+		}
+		if (result == null) {
+			result = propertyName;
+		}
+		return result;
     }
 
     public EOEntity nextEntity(EOEntity entity, String key) {
         return null;
     }
     
-    protected int intValue(String key, int defaultValue) {
-        return ERXValueUtilities.intValueWithDefault(d2wContext().valueForKeyPath(key), defaultValue);
-    }
+    protected Object valueForKey(String key, String secondKey, NSKeyValueCoding first, NSKeyValueCoding second, Object defaultValue) {
+		Object result = first.valueForKey(key);
+		if (result != null) {
+			return result;
+		}
+		if (secondKey != null) {
+			result = second.valueForKey(secondKey);
+			if (result != null) {
+				return result;
+			}
+		}
+		return defaultValue;
+	}
 
     private D2WContext d2wContext() {
         return ERDirectToRest.d2wContext();
@@ -120,14 +158,31 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
 
     public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
     	NSArray objects = NSArray.EmptyArray;
-        int start = ERXValueUtilities.intValueWithDefault(context.valueForKey("start"), 0);
+        
+    	int start = ERXValueUtilities.intValue(valueForKey("start", null, context, null, 0));
         EOFetchSpecification fs = new ERXFetchSpecification<EOEnterpriseObject>(entity.name(), null, null);
-        int hardLimit = intValue("fetchLimit", 0);
-        int fetchLimit = ERXValueUtilities.intValueWithDefault(context.valueForKey("fetchLimit"), 0);
-        if(fetchLimit > hardLimit || fetchLimit == 0) {
-        	fetchLimit = hardLimit;
-        }
+        
+        int fetchLimit = ERXValueUtilities.intValue(valueForKey("max", "fetchLimit", context, d2wContext(), 0));
+    	int hardLimit = ERXValueUtilities.intValue(valueForKey("fetchLimit", null, d2wContext(), null, 0));
+    	if(hardLimit > fetchLimit) {
+    		fetchLimit = hardLimit;
+    	}
         fs.setFetchLimit(fetchLimit);
+        
+        boolean isDeep = ERXValueUtilities.booleanValue(valueForKey("deep", "isDeep", context, d2wContext(), Boolean.TRUE));
+        fs.setIsDeep(isDeep);
+           
+        boolean isDistinct = ERXValueUtilities.booleanValue(valueForKey("distinct", "usesDistinct", context, d2wContext(), Boolean.FALSE));
+        fs.setUsesDistinct(isDistinct);
+           
+        // sorting
+        NSArray sortOrderings = ERDirectToWeb.sortOrderings(d2wContext());
+        fs.setSortOrderings(sortOrderings);
+        
+        NSArray keyPaths = (NSArray) d2wContext().valueForKey("prefetchingRelationshipKeyPaths");
+        fs.setPrefetchingRelationshipKeyPaths(keyPaths);
+     
+        
         if(start == 0) {
         	objects = context.editingContext().objectsWithFetchSpecification(fs);
         } else {
