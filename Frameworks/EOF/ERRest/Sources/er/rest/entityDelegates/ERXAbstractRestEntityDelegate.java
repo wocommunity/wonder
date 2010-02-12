@@ -3,6 +3,8 @@ package er.rest.entityDelegates;
 import java.text.ParseException;
 import java.util.Enumeration;
 
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
@@ -12,9 +14,11 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
@@ -282,8 +286,14 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 					throw new IllegalArgumentException("Compound primary keys (" + entity + ") are not currently supported.");
 				}
 				EOAttribute primaryKeyAttribute = (EOAttribute) primaryKeyAttributes.objectAtIndex(0);
-				String valueType = primaryKeyAttribute.valueType();
-				gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { key });
+				if(NSData.class.getName().equals(primaryKeyAttribute.className())) {
+					if(!key.startsWith("<")) {
+						key = "<" + key + ">";
+					}
+					gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { new NSData((NSData)NSPropertyListSerialization.propertyListFromString(key)) });
+				} else {
+					gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { key });
+				}
 			}
 
 			obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);
