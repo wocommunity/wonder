@@ -652,7 +652,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @return the object that this request node represents
 	 */
 	public Object objectWithFilter(String entityName, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
-		Object obj = delegate.objectOfEntityNamedWithID(entityName, id());
+		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
+		Object obj = delegate.objectOfEntityWithID(classDescription, id());
 		if (keyFilter != null) {
 			updateObjectWithFilter(obj, keyFilter, delegate);
 		}
@@ -671,7 +672,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @return a new instance of an object represented by this request node
 	 */
 	public Object createObjectWithFilter(String entityName, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
-		Object obj = delegate.createObjectOfEntityNamed(entityName);
+		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
+		Object obj = delegate.createObjectOfEntity(classDescription);
 		if (keyFilter != null) {
 			updateObjectWithFilter(obj, keyFilter, delegate);
 		}
