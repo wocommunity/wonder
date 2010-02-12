@@ -7,6 +7,7 @@ import java.util.Stack;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
@@ -127,6 +128,9 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 			if (propertyValue instanceof NSArray) {
 				appendToResponse(context, response, displayKey, indent + 1, visitedObjects);
 			}
+			else if (propertyValue instanceof NSDictionary) {
+				appendToResponse(context, response, displayKey, indent + 1, visitedObjects);
+			}
 			else if (propertyValue instanceof EOEnterpriseObject) {
 				appendToResponse(context, response, displayKey, indent + 1, visitedObjects);
 			}
@@ -145,6 +149,6 @@ public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWrit
 
 	@Override
 	protected void appendPrimitiveToResponse(ERXRestContext context, IERXRestResponse response, ERXRestKey result, int indent, Object value) throws ERXRestException {
-		addToCollection("_", value);
+		addToCollection(result.key(), value);
 	}
 }
