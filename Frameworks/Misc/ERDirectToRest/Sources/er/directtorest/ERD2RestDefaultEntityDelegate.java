@@ -1,5 +1,7 @@
 package er.directtorest;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -22,6 +24,7 @@ import er.rest.entityDelegates.IERXRestSecurityDelegate;
 public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate {
     
     private IERXRestSecurityDelegate _securityHandler = new ERD2RestAllowSecurityDelegate();
+	private static Logger log = Logger.getLogger(ERD2RestDefaultEntityDelegate.class);
 
     @Override
     public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
@@ -35,9 +38,19 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
 
     @Override
     public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-      @SuppressWarnings("unchecked") NSArray<String> props = (NSArray<String>) d2wContext().valueForKey("displayPropertyKeys");
+    	if(context.context().request().requestHandlerPathArray().count() > 1) {
+    		d2wContext().takeValueForKey("single", "subTask");
+    	}
+    	String propsArray[] = (String []) d2wContext().valueForKey("restPropertyKeysCache");
+    	if(propsArray != null) {
+    		return propsArray;
+    	}
+    	@SuppressWarnings("unchecked") 
+    	NSArray<String> props = (NSArray<String>) d2wContext().valueForKey("restPropertyKeys");
         if(props != null) {
-            return props.toArray(new String[0]);
+        	propsArray = props.toArray(new String[0]);
+    		d2wContext().takeValueForKey(propsArray, "restPropertyKeysCache");
+            return propsArray;
         }
         return super.displayProperties(key, allProperties, allToMany, context);
     }
