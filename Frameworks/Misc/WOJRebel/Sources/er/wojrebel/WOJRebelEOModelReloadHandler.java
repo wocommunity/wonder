@@ -2,6 +2,7 @@ package er.wojrebel;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOCooperatingObjectStore;
+import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -23,6 +25,8 @@ import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 
 public class WOJRebelEOModelReloadHandler {
+  private static final String EO_ENTITY_CACHE_RESET = "EOEntityCacheReset";
+  private static final Class<?>[] NotificationClassArray = new Class[] { NSNotification.class };
   private static boolean initialized = false;
   private static final WOJRebelEOModelReloadHandler instance = new WOJRebelEOModelReloadHandler();
   private static final Logger log = LoggerFactory.getInstance();
@@ -30,7 +34,9 @@ public class WOJRebelEOModelReloadHandler {
 
   private final Map<EOModel, Long> modelCache = Collections.synchronizedMap(new WeakHashMap<EOModel, Long>());
   private final Map<EOObjectStoreCoordinator, EOModelGroup> oscCache = new WeakHashMap<EOObjectStoreCoordinator, EOModelGroup>();
-  private Field erxEntityCache;
+  private Field _ERXEntityCache;
+  private Method _ERXEntityClassDescriptionCacheReset;
+  private Object _ERXEntityClassDescriptionFactory;
   
   public static WOJRebelEOModelReloadHandler getInstance() {
     return instance;
@@ -114,37 +120,51 @@ public class WOJRebelEOModelReloadHandler {
     }
 
     initialized = true;
-    NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelAdded", new Class[] { NSNotification.class }),
+    NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelAdded", NotificationClassArray),
         EOModelGroup.ModelAddedNotification, null);
-    NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelRemoved", new Class[] { NSNotification.class }),
+    NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelRemoved", NotificationClassArray),
         EOModelGroup.ModelInvalidatedNotification, null);
-    NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("storeCoordinatorAdded", new Class[] { NSNotification.class }),
+    NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("storeCoordinatorAdded", NotificationClassArray),
         EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification, null);
-    NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("storeCoordinatorRemoved", new Class[] { NSNotification.class }),
+    NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("storeCoordinatorRemoved", NotificationClassArray),
         EOObjectStoreCoordinator.CooperatingObjectStoreWasRemovedNotification, null);
 
-    Class<?> ERXUtilities = _NSUtilities.classWithName("er.extensions.foundation.ERXUtilities");
-    if (ERXUtilities != null) {
+    Class<?> ERXClass = _NSUtilities.classWithName("er.extensions.foundation.ERXUtilities");
+    if (ERXClass != null) {
       try {
-        erxEntityCache = ERXUtilities.getDeclaredField("_entityNameEntityCache");
-        erxEntityCache.setAccessible(true);
+        _ERXEntityCache = ERXClass.getDeclaredField("_entityNameEntityCache");
+        _ERXEntityCache.setAccessible(true);
+
+        ERXClass = _NSUtilities.classWithName("er.extensions.eof.ERXEntityClassDescription");
+        Method factory = ERXClass.getDeclaredMethod("factory");
+        _ERXEntityClassDescriptionFactory = factory.invoke(null, new Object[0]);
+
+        ERXClass = _NSUtilities.classWithName("er.extensions.eof.ERXEntityClassDescription$Factory");
+        _ERXEntityClassDescriptionCacheReset = ERXClass.getDeclaredMethod("reset");
+        
+        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("resetWonderEntityCache", NotificationClassArray), EO_ENTITY_CACHE_RESET, null);
       } catch (Exception e) {
         e.printStackTrace();
       } 
     }
   }
   
+  public void resetWonderEntityCache(NSNotification notification) {
+    try {
+      _ERXEntityCache.set(null, null);
+      _ERXEntityClassDescriptionCacheReset.invoke(_ERXEntityClassDescriptionFactory, new Object[0]);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
   private void flushCaches() {
+    log.echo("JRebel: flushing EOModel caches");
+    EOKeyValueCoding.DefaultImplementation._flushCaches();
     EOClassDescription.invalidateClassDescriptionCache();
     D2WAccessor.flushCaches();
     NSValidation.DefaultImplementation._flushCaches();
-
-    if (erxEntityCache != null) {
-      try {
-        erxEntityCache.set(null, null);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
+    
+    NSNotificationCenter.defaultCenter().postNotification(EO_ENTITY_CACHE_RESET, null);
   }
 }

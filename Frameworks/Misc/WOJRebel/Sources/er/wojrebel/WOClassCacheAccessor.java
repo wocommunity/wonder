@@ -17,7 +17,7 @@ import com.webobjects.foundation._NSUtilities;
 public class WOClassCacheAccessor {
 	private static boolean initialized = false;
   private static _NSThreadsafeMutableDictionary classesByPartialName = null;
-	private static _NSThreadsafeMutableDictionary actionClassCache = null;
+  private static _NSThreadsafeMutableDictionary actionClassCache = null;
 
 	public static void setClassForName(Class<?> objectClass, String className) {
 		classesByPartialName.setObjectForKey(objectClass, className);
