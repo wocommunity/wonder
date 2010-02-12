@@ -23,7 +23,7 @@ public class AnimalController extends ERXDefaultRouteController {
 	 * @return
 	 */
 	public Animal pet() {
-		Animal pet = (Animal) routeObjectForKey("pet");
+		Animal pet = (Animal) routeObjectForKey("animal");
 		return pet;
 	}
 
