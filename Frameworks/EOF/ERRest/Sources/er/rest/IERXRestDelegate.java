@@ -57,7 +57,17 @@ public interface IERXRestDelegate {
 	 */
 	public static class Factory {
 		private static NSMutableDictionary<String, Class<? extends IERXRestDelegate>> _delegates = new NSMutableDictionary<String, Class<? extends IERXRestDelegate>>();
-
+		private static Class<? extends IERXRestDelegate> _defaultDelegate = ERXEORestDelegate.class;
+		
+		/**
+		 * Sets the default rest delegate to use when no other can be found. The default is ERXEORestDelegate. 
+		 * 
+		 * @param defaultDelegate the default delegate to use
+		 */
+		public static void setDefaultDelegateClass(Class<? extends IERXRestDelegate> defaultDelegate) {
+			IERXRestDelegate.Factory._defaultDelegate = defaultDelegate;
+		}
+		
 		/**
 		 * Registers a rest delegate for the given entity name.
 		 * 
@@ -98,7 +108,12 @@ public interface IERXRestDelegate {
 				}
 			}
 			else {
-				delegate = new ERXEORestDelegate();
+				try {
+					delegate = IERXRestDelegate.Factory._defaultDelegate.newInstance();
+				}
+				catch (Exception e) {
+					throw new RuntimeException("Failed to create the rest delegate '" + _defaultDelegate + ".", e);
+				}
 			}
 			delegate.setEditingContext(editingContext);
 			return delegate;
