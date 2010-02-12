@@ -1,0 +1,19 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = Memory; 
+    connectionDictionary = {}; 
+    entities = (
+        {className = "er.rest.example.model.Animal"; name = Animal; }, 
+        {className = "er.rest.example.model.Company"; name = Company; }, 
+        {className = "er.rest.example.model.Person"; name = Person; }
+    ); 
+    internalInfo = {"_deletedEntityNamesInObjectStore" = (Pet); }; 
+    userInfo = {
+        "_EntityModeler" = {
+            activeDatabaseConfigName = Default; 
+            databaseConfigs = {
+                Default = {adaptorName = Memory; prototypeEntityName = EOMemoryPrototypes; }; 
+            }; 
+        }; 
+    }; 
+}
