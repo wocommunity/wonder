@@ -60,6 +60,9 @@ public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 					throw new UnsupportedOperationException("Unable to create an instance of the entity '" + entity + "'.");
 				}
 			}
+			else if (getClass() == delegate.getClass()) {
+				obj = _createObjectOfEntity(entity);
+			}
 			else {
 				obj = delegate.createObjectOfEntity(entity);
 			}
