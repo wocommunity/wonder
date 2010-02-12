@@ -341,53 +341,18 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	protected NSArray<T> objectsInRange(int start, int end) {
 		EOEditingContext ec = dataSource().editingContext();
 		EOFetchSpecification spec = fetchSpecification();
+		spec = (EOFetchSpecification) spec.clone();
+		spec.setPrefetchingRelationshipKeyPaths(_prefetchingRelationshipKeyPaths);
 		NSArray result = null;
-		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
-			// no hints on the fs
-			
-			// This used to turn the EO's into faults and then fetch the faults. The problem
-			// with that is that for abstract entities, this would fetch the objects one-by-one
-			// to determine what the correct EOGlobalID is for each subentity. Instead, I've
-			// changed this to created a global ID for each row (which supports being a guess)
-			// and then fetch the objects with the global IDs.
-			NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
-			EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
-			NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
-			for (Object obj : primKeys) {
-				NSDictionary pkDict = (NSDictionary) obj;
-				EOGlobalID gid = entity.globalIDForRow(pkDict);
-				gids.addObject(gid);
-			}
-			NSMutableArray objects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, gids, spec.refreshesRefetchedObjects());
-
-			NSArray prefetchingRelationshipKeyPaths = _prefetchingRelationshipKeyPaths;
-			if (prefetchingRelationshipKeyPaths == null || prefetchingRelationshipKeyPaths.count() == 0) {
-				prefetchingRelationshipKeyPaths = spec.prefetchingRelationshipKeyPaths();
-			}
-			if (prefetchingRelationshipKeyPaths != null && prefetchingRelationshipKeyPaths.count() > 0) {
-				ERXBatchFetchUtilities.batchFetch(objects, prefetchingRelationshipKeyPaths, ! spec.refreshesRefetchedObjects());
-			}
-
-			ERXS.sort(objects, spec.sortOrderings());
-			result = objects.immutableClone();
-		}
-		else {
-			// we have hints, use them
-			
-			EOModel model = EOModelGroup.defaultGroup().entityNamed(spec.entityName()).model();
-			ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
-			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
-			String sql = sqlHelper.customQueryExpressionHintAsString(hint);
-			sql = sqlHelper.limitExpressionForSQL(null, spec, sql, start, end);
-			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
-		}
-		// fetch the primary keys, turn them into faults, then batch-fetch all
+		result = ERXEOControlUtilities.objectsInRange(ec, spec, start, end);
+		// WAS: fetch the primary keys, turn them into faults, then batch-fetch all
 		// the non-resident objects
 		//NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
 		//NSArray faults = ERXEOControlUtilities.faultsForRawRowsFromEntity(ec, primKeys, spec.entityName());
 		//NSArray objects = ERXEOControlUtilities.objectsForFaultWithSortOrderings(ec, faults, sortOrderings());
 		return result;
 	}
+
 
 	/**
 	 * Utility that does the actual fetching, if a qualifier() is set, it adds

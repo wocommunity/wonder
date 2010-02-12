@@ -62,6 +62,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
 
@@ -563,14 +564,46 @@ public class ERXEOControlUtilities {
      *
      * @return objects in the given range
      */
-    public static <T extends EOEnterpriseObject> NSArray<T> objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
-    	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
-        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
-        clonedFetchSpec.setHints(hints);
-        return ec.objectsWithFetchSpecification(clonedFetchSpec);
-    }
 
+    public static <T extends EOEnterpriseObject> NSArray<T> objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+		NSArray result;
+		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
+			// no hints on the fs
+			
+			// This used to turn the EO's into faults and then fetch the faults. The problem
+			// with that is that for abstract entities, this would fetch the objects one-by-one
+			// to determine what the correct EOGlobalID is for each subentity. Instead, I've
+			// changed this to created a global ID for each row (which supports being a guess)
+			// and then fetch the objects with the global IDs.
+			NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
+			EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+			NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+			for (Object obj : primKeys) {
+				NSDictionary pkDict = (NSDictionary) obj;
+				EOGlobalID gid = entity.globalIDForRow(pkDict);
+				gids.addObject(gid);
+			}
+			NSMutableArray objects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, gids, spec.refreshesRefetchedObjects());
+
+			if (spec.prefetchingRelationshipKeyPaths() != null && spec.prefetchingRelationshipKeyPaths().count() > 0) {
+				ERXBatchFetchUtilities.batchFetch(objects, spec.prefetchingRelationshipKeyPaths(), ! spec.refreshesRefetchedObjects());
+			}
+
+			ERXS.sort(objects, spec.sortOrderings());
+			result = objects.immutableClone();
+		}
+		else {
+			// we have hints, use them
+			
+			EOModel model = EOModelGroup.defaultGroup().entityNamed(spec.entityName()).model();
+			ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
+			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+			String sql = sqlHelper.customQueryExpressionHintAsString(hint);
+			sql = sqlHelper.limitExpressionForSQL(null, spec, sql, start, end);
+			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
+		}
+		return result;
+	}
     /**
      * Returns an {@link com.webobjects.foundation.NSArray NSArray} containing the primary keys from the resulting rows starting
      * at start and stopping at end using a custom SQL, derived from the SQL
