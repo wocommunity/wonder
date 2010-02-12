@@ -38,7 +38,7 @@ public class WOJRebelIntegrationPlugin implements Plugin {
   }
 
   public String getDescription() {
-    return "WebObjects JRebel Plugin                                       \n" +
+    return "WebObjects JRebel Plugin                                          \n" +
     		"If you are reloading changes to Wonder or WebObjects core packages you must set " +
     		"-Dwojrebel.noexclude to prevent these packages from being excluded.";
   }

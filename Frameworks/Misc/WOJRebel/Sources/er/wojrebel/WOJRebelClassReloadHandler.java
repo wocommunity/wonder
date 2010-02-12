@@ -16,7 +16,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSValidation;
-import com.webobjects.foundation._NSUtilities;
 
 /**
  * WOJRebelClassReloadHandler manages the clearing of KVC, component definition and class caches
