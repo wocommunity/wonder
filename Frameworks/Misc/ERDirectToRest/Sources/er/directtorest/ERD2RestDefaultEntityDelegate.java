@@ -1,5 +1,6 @@
 package er.directtorest;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.directtoweb.D2WContext;
@@ -9,6 +10,8 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 
 import er.directtorest.security.ERD2RestAllowSecurityDelegate;
+import er.directtoweb.ERD2WModel;
+import er.directtoweb.ERDirectToWeb;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXFetchSpecification;
@@ -39,14 +42,14 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
     @Override
     public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
     	if(context.context().request().requestHandlerPathArray().count() > 1) {
-    		d2wContext().takeValueForKey("single", "subTask");
+    		d2wContext().takeValueForKey("single", "forcedSubTask");
     	}
     	String propsArray[] = (String []) d2wContext().valueForKey("restPropertyKeysCache");
     	if(propsArray != null) {
     		return propsArray;
     	}
-    	@SuppressWarnings("unchecked") 
-    	NSArray<String> props = (NSArray<String>) d2wContext().valueForKey("restPropertyKeys");
+		@SuppressWarnings("unchecked")
+		NSArray<String> props = (NSArray<String>) d2wContext().valueForKey("restPropertyKeys");
         if(props != null) {
         	propsArray = props.toArray(new String[0]);
     		d2wContext().takeValueForKey(propsArray, "restPropertyKeysCache");
