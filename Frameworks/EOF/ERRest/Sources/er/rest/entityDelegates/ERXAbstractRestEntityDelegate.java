@@ -3,8 +3,6 @@ package er.rest.entityDelegates;
 import java.text.ParseException;
 import java.util.Enumeration;
 
-import com.webobjects.eoaccess.EOAdaptor;
-import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
@@ -15,7 +13,6 @@ import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
