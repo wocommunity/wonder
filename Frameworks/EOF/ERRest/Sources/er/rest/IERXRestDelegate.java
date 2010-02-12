@@ -36,7 +36,7 @@ public interface IERXRestDelegate {
 	 *            the entity
 	 * @return a new instance of the entity
 	 */
-	public Object createObjectOfEntity(EOClassDescription entity);
+	public Object createObjectOfEntityWithID(EOClassDescription entity, Object id);
 
 	/**
 	 * Returns the object with the given entity and ID.
@@ -78,6 +78,19 @@ public interface IERXRestDelegate {
 		 */
 		public static void setDelegateForEntityNamed(Class<? extends IERXRestDelegate> delegateClass, String entityName) {
 			_delegates.setObjectForKey(delegateClass, entityName);
+		}
+		
+		/**
+		 * Registers a rest delegate for the given entity name.
+		 * 
+		 * @param delegateClass
+		 *            the delegate class to register
+		 * @param entityName
+		 *            the entity name to register for
+		 */
+		public static void setDelegateForEntityNamed(Class<? extends IERXRestDelegate> delegateClass, String entityName, Class<?> clazz) {
+			_delegates.setObjectForKey(delegateClass, entityName);
+			ERXRestClassDescriptionFactory.registerClass(clazz);
 		}
 
 		/**

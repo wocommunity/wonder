@@ -13,7 +13,7 @@ public class ERXNoOpRestDelegate extends ERXAbstractRestDelegate {
 	}
 
 	@Override
-	protected Object _createObjectOfEntity(EOClassDescription entity) {
+	protected Object _createObjectOfEntityWithID(EOClassDescription entity, Object id) {
 		Object obj;
 		if (entity instanceof BeanInfoClassDescription) {
 			obj = ((BeanInfoClassDescription) entity).createInstance();
@@ -31,7 +31,8 @@ public class ERXNoOpRestDelegate extends ERXAbstractRestDelegate {
 
 	@Override
 	protected boolean _isDelegateForEntity(EOClassDescription entity) {
-		return true;
+		// MS: This is kind of hacky, but basically we only want to say this is the delegate for this entity if there isn't another custom registered one
+		return IERXRestDelegate.Factory.delegateForEntityNamed(entity.entityName(), null).getClass() == getClass();
 	}
 
 	@Override

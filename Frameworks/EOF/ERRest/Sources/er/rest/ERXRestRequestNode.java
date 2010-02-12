@@ -692,7 +692,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		if (classDescription == null) {
 			throw new IllegalArgumentException("There is no registered entity with the name '" + entityName + "'.");
 		}
-		Object obj = delegate.createObjectOfEntity(classDescription);
+		Object obj = delegate.createObjectOfEntityWithID(classDescription, id());
 		if (keyFilter != null) {
 			updateObjectWithFilter(obj, keyFilter, delegate);
 		}
@@ -992,7 +992,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 								childObj = null;
 							}
 							else {
-								childObj = delegate.createObjectOfEntity(destinationEntity);
+								childObj = delegate.createObjectOfEntityWithID(destinationEntity, null);
 							}
 						}
 						else {
@@ -1080,7 +1080,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 								childObj = null;
 							}
 							else {
-								childObj = delegate.createObjectOfEntity(destinationClassDescription);
+								childObj = delegate.createObjectOfEntityWithID(destinationClassDescription, null);
 							}
 						}
 						else {

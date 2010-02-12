@@ -20,7 +20,7 @@ public class CarRestDelegate extends ERXAbstractRestDelegate {
 	}
 
 	@Override
-	protected Object _createObjectOfEntity(EOClassDescription entity) {
+	protected Object _createObjectOfEntityWithID(EOClassDescription entity, Object id) {
 		return new Car();
 	}
 

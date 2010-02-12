@@ -2,37 +2,31 @@ package er.snapshotexplorer.delegates;
 
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOClassDescription;
-import com.webobjects.eocontrol.EOEditingContext;
 
-import er.rest.IERXRestDelegate;
+import er.rest.ERXAbstractRestDelegate;
 
-public class EOModelGroupRestDelegate implements IERXRestDelegate {
-  public void setEditingContext(EOEditingContext editingContext) {
-    // ignore
-  }
-  
-  public Object createObjectOfEntity(EOClassDescription entity) {
-    throw new UnsupportedOperationException("Unable to create a new EOModelGroup");
-  }
+public class EOModelGroupRestDelegate extends ERXAbstractRestDelegate {
+	@Override
+	protected Object _createObjectOfEntityWithID(EOClassDescription entity, Object id) {
+		throw new UnsupportedOperationException("Unable to create a new EOModelGroup");
+	}
 
-  public Object createObjectOfEntityNamed(String name) {
-    throw new UnsupportedOperationException("Unable to create a new EOModelGroup");
-  }
+	@Override
+	protected Object _fetchObjectOfEntityWithID(EOClassDescription entity, Object id) {
+		return "default".equals(id) ? EOModelGroup.defaultGroup() : null;
+	}
 
-  public Object objectOfEntityNamedWithID(String name, Object id) {
-    return "default".equals(id) ? EOModelGroup.defaultGroup() : null;
-  }
+	@Override
+	protected boolean _isDelegateForEntity(EOClassDescription entity) {
+		return "EOModelGroup".equals(entity.entityName());
+	}
 
-  public Object objectOfEntityWithID(EOClassDescription entity, Object id) {
-    return "default".equals(id) ? EOModelGroup.defaultGroup() : null;
-  }
-
-  public Object primaryKeyForObject(Object obj) {
-    Object primaryKey = null;
-    if (obj == EOModelGroup.defaultGroup()) {
-      primaryKey = "default";
-    }
-    return primaryKey;
-  }
-
+	@Override
+	protected Object _primaryKeyForObject(EOClassDescription entity, Object obj) {
+		Object primaryKey = null;
+		if (obj == EOModelGroup.defaultGroup()) {
+			primaryKey = "default";
+		}
+		return primaryKey;
+	}
 }
