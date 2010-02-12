@@ -5,6 +5,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 
 public class ERXNoOpRestDelegate extends ERXAbstractRestDelegate {
 	public ERXNoOpRestDelegate() {
+		setCreateMissingObjects(true);
 	}
 
 	public ERXNoOpRestDelegate(EOEditingContext editingContext) {
