@@ -1,0 +1,36 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = companyID; 
+            name = companyID; 
+            prototypeName = id; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (companyID, id, name); 
+    className = "er.rest.example.model.Person"; 
+    classProperties = (company, name, pets); 
+    externalName = Person; 
+    fetchSpecificationDictionary = {}; 
+    name = Person; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Company; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = companyID; }); 
+            name = company; 
+        }, 
+        {
+            destination = Animal; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = ownerID; sourceAttribute = id; }); 
+            name = pets; 
+        }
+    ); 
+}

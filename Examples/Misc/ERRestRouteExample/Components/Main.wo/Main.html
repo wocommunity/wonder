@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+	<head>
+		<title>ERRestRouteExample</title>
+	</head>
+	<body>
+
+<ul>
+	<li><wo:ERXRouteLink entityName="Company" action="index" format="plist">Show all Companies in plist format</wo:ERXRouteLink></li>
+	<li><wo:ERXRouteLink entityName="Company" action="index" format="xml">Show all Companies in XML format</wo:ERXRouteLink></li>
+	<li><wo:ERXRouteLink entityName="Company" action="index" format="json">Show all Companies in JSON format</wo:ERXRouteLink></li>
+	<li><wo:ERXRouteLink entityName="Company" action="index" format="sc">Show all Companies in SproutCore format</wo:ERXRouteLink></li>
+	<li><wo:ERXRouteLink entityName="Company" action="index" format="gndp">Show all Companies in Gianduia format</wo:ERXRouteLink></li>
+	<li><wo:ERXRouteLink entityName="Person" id="1" action="show" format="plist">Show Person 1 in plist format</wo:ERXRouteLink></li>
+	<li><wo:ERXRouteLink entityName="Person" id="1" action="show">Show Person 1 in HTML (goes to PersonShowPage)</wo:ERXRouteLink></li>
+	<li>curl -X PUT -d "{ name: 'Updated Name' }" <wo:str value="$personJsonURL"/></li>
+	<li>curl -X PUT -d "{ company: { type:'Company', id:1 } }" <wo:str value="$personJsonURL"/></li>
+	<li>curl -X DELETE <wo:str value="$companyURL"/></li>
+</ul>
+
+	</body>
+</html>
