@@ -3,33 +3,27 @@ package er.snapshotexplorer.delegates;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOClassDescription;
-import com.webobjects.eocontrol.EOEditingContext;
 
-import er.rest.IERXRestDelegate;
+import er.rest.ERXAbstractRestDelegate;
 
-public class EOModelRestDelegate implements IERXRestDelegate {
-  public void setEditingContext(EOEditingContext editingContext) {
-    // ignore
-  }
-  
-  public Object createObjectOfEntity(EOClassDescription entity) {
-    throw new UnsupportedOperationException("Unable to create a new EOModel");
-  }
+public class EOModelRestDelegate extends ERXAbstractRestDelegate {
+	@Override
+	protected Object _createObjectOfEntityWithID(EOClassDescription entity, Object id) {
+		throw new UnsupportedOperationException("Unable to create a new EOModel");
+	}
 
-  public Object createObjectOfEntityNamed(String name) {
-    throw new UnsupportedOperationException("Unable to create a new EOModel");
-  }
-
-  public Object objectOfEntityNamedWithID(String name, Object id) {
+	@Override
+	protected Object _fetchObjectOfEntityWithID(EOClassDescription entity, Object id) {
     return EOModelGroup.defaultGroup().modelNamed((String) id);
-  }
+	}
 
-  public Object objectOfEntityWithID(EOClassDescription entity, Object id) {
-    return EOModelGroup.defaultGroup().modelNamed((String) id);
-  }
+	@Override
+	protected boolean _isDelegateForEntity(EOClassDescription entity) {
+		return "EOModel".equals(entity.entityName());
+	}
 
-  public Object primaryKeyForObject(Object obj) {
+	@Override
+	protected Object _primaryKeyForObject(EOClassDescription entity, Object obj) {
     return ((EOModel) obj).name();
-  }
-
+	}
 }

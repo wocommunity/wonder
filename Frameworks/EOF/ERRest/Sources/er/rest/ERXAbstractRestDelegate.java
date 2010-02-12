@@ -53,10 +53,10 @@ public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 		return pkValue;
 	}
 
-	public Object createObjectOfEntity(EOClassDescription entity) {
+	public Object createObjectOfEntityWithID(EOClassDescription entity, Object id) {
 		Object obj;
 		if (_isDelegateForEntity(entity)) {
-			obj = _createObjectOfEntity(entity);
+			obj = _createObjectOfEntityWithID(entity, id);
 		}
 		else {
 			IERXRestDelegate delegate = IERXRestDelegate.Factory.delegateForEntityNamed(entity.entityName(), _editingContext);
@@ -70,10 +70,10 @@ public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 				}
 			}
 			else if (getClass() == delegate.getClass()) {
-				obj = _createObjectOfEntity(entity);
+				obj = _createObjectOfEntityWithID(entity, id);
 			}
 			else {
-				obj = delegate.createObjectOfEntity(entity);
+				obj = delegate.createObjectOfEntityWithID(entity, id);
 			}
 		}
 		return obj;
@@ -83,12 +83,12 @@ public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 		Object obj;
 		if (_isDelegateForEntity(entity)) {
 			if (id == null) {
-				obj = createObjectOfEntity(entity);
+				obj = createObjectOfEntityWithID(entity, id);
 			}
 			else {
 				obj = _fetchObjectOfEntityWithID(entity, id);
-				if (obj == null && _createMissingObjects) {
-					obj = createObjectOfEntity(entity);
+				if (obj == null && shouldCreateMissingObjects()) {
+					obj = createObjectOfEntityWithID(entity, id);
 				}
 			}
 		}
@@ -101,7 +101,7 @@ public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 
 	protected abstract boolean _isDelegateForEntity(EOClassDescription entity);
 
-	protected abstract Object _createObjectOfEntity(EOClassDescription entity);
+	protected abstract Object _createObjectOfEntityWithID(EOClassDescription entity, Object id);
 
 	protected abstract Object _primaryKeyForObject(EOClassDescription entity, Object obj);
 	
