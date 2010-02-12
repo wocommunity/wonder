@@ -653,6 +653,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 */
 	public Object objectWithFilter(String entityName, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
 		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
+		if (classDescription == null) {
+			throw new IllegalArgumentException("There is no registered entity with the name '" + entityName + "'.");
+		}
 		Object obj = delegate.objectOfEntityWithID(classDescription, id());
 		if (keyFilter != null) {
 			updateObjectWithFilter(obj, keyFilter, delegate);
@@ -673,6 +676,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 */
 	public Object createObjectWithFilter(String entityName, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
 		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
+		if (classDescription == null) {
+			throw new IllegalArgumentException("There is no registered entity with the name '" + entityName + "'.");
+		}
 		Object obj = delegate.createObjectOfEntity(classDescription);
 		if (keyFilter != null) {
 			updateObjectWithFilter(obj, keyFilter, delegate);
