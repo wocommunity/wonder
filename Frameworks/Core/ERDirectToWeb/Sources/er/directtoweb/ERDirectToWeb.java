@@ -25,6 +25,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -43,6 +44,7 @@ import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXKeyValuePair;
@@ -274,6 +276,28 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         }
         return result;
     }
+
+    /**
+     * Returns a valid sort ordering based on the <code>defaultSortOrdering</code> key.
+     * @param d2wContext
+     * @return
+     */
+	public static NSArray<EOSortOrdering> sortOrderings(D2WContext d2wContext) {
+		NSMutableArray<EOSortOrdering> validatedSortOrderings = new NSMutableArray<EOSortOrdering>();
+		NSArray<String> sortOrderingDefinition = (NSArray<String>) d2wContext.valueForKey("defaultSortOrdering");
+		if (sortOrderingDefinition != null) {
+			for (int i = 0; i < sortOrderingDefinition.count();) {
+				String sortKey = sortOrderingDefinition.objectAtIndex(i++);
+				String sortSelectorKey = sortOrderingDefinition.objectAtIndex(i++);
+				EOSortOrdering sortOrdering = new EOSortOrdering(sortKey, ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
+				validatedSortOrderings.addObject(sortOrdering);
+			}
+			if (log.isDebugEnabled()) {
+				log.debug("Found sort Orderings in rules " + validatedSortOrderings);
+			}
+		}
+		return validatedSortOrderings;
+	}
 
     // This defaults to true.
     public static boolean booleanForKey(D2WContext context, String key) {
