@@ -16,6 +16,7 @@ import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
@@ -76,7 +77,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	 * Returns the value for the given property name.
 	 */
 	public Object valueForKey(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
-		return NSKeyValueCoding.Utility.valueForKey(obj, propertyName);
+		return NSKeyValueCodingAdditions.Utility.valueForKeyPath(obj, propertyName);
 	}
 
 	/**
