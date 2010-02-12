@@ -46,7 +46,7 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
 
     @Override
     public String[] displayProperties(ERXRestKey key, boolean allProperties, boolean allToMany, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-    	if(context.context().request().requestHandlerPathArray().count() > 1) {
+    	if(context.context().request().requestHandlerPathArray().count() > 1 && ((String) context.context().request().requestHandlerPathArray().lastObject()).length() > 0) {
     		d2wContext().takeValueForKey("single", "forcedSubTask");
     	}
     	String propsArray[] = (String []) d2wContext().valueForKey("restPropertyKeysCache");
