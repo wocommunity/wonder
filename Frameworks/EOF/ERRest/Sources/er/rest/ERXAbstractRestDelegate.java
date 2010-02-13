@@ -94,6 +94,9 @@ public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 		}
 		else {
 			IERXRestDelegate delegate = IERXRestDelegate.Factory.delegateForEntityNamed(entity.entityName(), _editingContext);
+			if (delegate.getClass() == getClass()) {
+				throw new UnsupportedOperationException("There is no delegate for the entity '" + entity.entityName() + "'.");
+			}
 			obj = delegate.objectOfEntityWithID(entity, id);
 		}
 		return obj;
