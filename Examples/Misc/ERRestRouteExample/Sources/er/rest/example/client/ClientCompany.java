@@ -1,7 +1,7 @@
 package er.rest.example.client;
 
 
-public class Company {
+public class ClientCompany {
 	private String _id;
 	private String _name;
 
