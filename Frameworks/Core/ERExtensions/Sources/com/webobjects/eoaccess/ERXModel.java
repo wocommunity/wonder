@@ -67,11 +67,36 @@ import er.extensions.foundation.ERXProperties;
  * @author ldeck
  */
 public class ERXModel extends EOModel {
-	// Expose EOModel._EOGlobalModelLock so that ERXModelGroup can lock on it
-	public static Object _ERXGlobalModelLock = EOModel._EOGlobalModelLock;
+	public static Object _ERXGlobalModelLock;
 	
 	private static final Logger log = Logger.getLogger(ERXModel.class);
 	
+	static {
+		// Expose EOModel._EOGlobalModelLock so that ERXModelGroup can lock on it
+		try {
+			_ERXGlobalModelLock = EOModel._EOGlobalModelLock;
+		}
+		catch (NoSuchFieldError e) {
+			// MS: It just so happens that this occurs really early on in the startup process, and this API changed in WO 5.3 vs WO 5.4. We catch this
+			// failure explicitly and give the user a slightly better error message.
+			try {
+				String eomodelLockClassName = EOModel.class.getDeclaredField("_EOGlobalModelLock").getType().getSimpleName();
+				if ("ReentrantLock".equals(eomodelLockClassName)) {
+					throw new RuntimeException("You're using WebObjects 5.4 with the WebObjects 5.3 version of Project Wonder. You need to download the 5.4 version of Project Wonder for your application to work properly.");
+				}
+				else if ("NSRecursiveLock".equals(eomodelLockClassName)) {
+					throw new RuntimeException("You're using WebObjects 5.3 with the WebObjects 5.4 version of Project Wonder. You need to download the 5.3 version of Project Wonder for your application to work properly.");
+				}
+				else {
+					throw new RuntimeException("You have the wrong version of Project Wonder for the version of WebObjects that you're using. You need to download the appropriate version of Project Wonder for your application to work properly.");
+				}
+			}
+			catch (NoSuchFieldException e2) {
+				throw e;
+			}
+		}
+		
+	}
 	/**
 	 * Utility to add attributes to the prototype cache. As the attributes are chosen by name, replace already
 	 * existing ones.
