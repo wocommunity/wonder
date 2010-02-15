@@ -87,7 +87,8 @@ public class PersonController extends ERXDefaultRouteController {
 
 	@Override
 	public WOActionResults newAction() throws Throwable {
-		return null;
+		Person person = Person.createPerson(editingContext(), "New Person");
+		return response(person, showFilter());
 	}
 
 	@Override

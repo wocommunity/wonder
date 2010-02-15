@@ -7,7 +7,6 @@
         {className = "er.rest.example.model.Company"; name = Company; }, 
         {className = "er.rest.example.model.Person"; name = Person; }
     ); 
-    internalInfo = {"_deletedEntityNamesInObjectStore" = (Pet); }; 
     userInfo = {
         "_EntityModeler" = {
             activeDatabaseConfigName = Default; 

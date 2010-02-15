@@ -52,12 +52,18 @@ public class CompanyController extends ERXRouteController {
 	}
 
 	public WOActionResults destroyAction(@PathParam("company") Company company) throws Throwable {
+		String primaryKey = company.primaryKey();
 		company.delete();
 		editingContext().saveChanges();
-		return response(company.primaryKey(), null);
+		return response(primaryKey, null);
 	}
 
 	public WOActionResults showAction(@PathParam("company") Company company) {
+		return response(company, showFilter());
+	}
+
+	public WOActionResults newAction() {
+		Company company = Company.createCompany(editingContext(), "New Company");
 		return response(company, showFilter());
 	}
 
