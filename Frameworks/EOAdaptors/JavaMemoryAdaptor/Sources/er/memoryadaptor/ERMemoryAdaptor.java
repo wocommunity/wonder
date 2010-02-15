@@ -69,6 +69,7 @@ public class ERMemoryAdaptor extends EOAdaptor {
 		return (EOSchemaGeneration) _syncFactory;
 	}
 
+	// MS: This has to return null to prevent a stack overflow in 5.4.
 	public EOSynchronizationFactory schemaSynchronizationFactory() {
 		return null;
 	}
