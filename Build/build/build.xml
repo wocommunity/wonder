@@ -279,6 +279,16 @@
        </antcall>
     </target>
 
+    <target name="ERRestRouteExample.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERRestRouteExample" />
+            <param name="project.dir" value="Examples/Misc/ERRestRouteExample" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/ERPrototypes/WOOgnl/Ajax/ERRest/JavaMemoryAdaptor" />
+       </antcall>
+    </target>
+
     <target name="ERPlot.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.plot.ERPlot" />
@@ -891,7 +901,7 @@
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, ERXTest.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
