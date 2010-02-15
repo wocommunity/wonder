@@ -47,7 +47,7 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 		editingContext.lock();
 		try {
 			NSDictionary pkDict = EOUtilities.primaryKeyForObject(editingContext, eo);
-			if (pkDict.count() == 1) {
+			if (pkDict != null && pkDict.count() == 1) {
 				pkValue = pkDict.allValues().lastObject();
 			}
 			else {
