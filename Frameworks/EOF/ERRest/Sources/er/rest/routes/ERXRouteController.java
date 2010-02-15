@@ -1011,21 +1011,11 @@ public class ERXRouteController extends WODirectAction {
 		        			PathParam param = bestParams.get(paramNum);
 		        			params[paramNum] = routeObjectForKey(param.value());
 		        		}
-			        	try {
-			        		results = (WOActionResults)bestMethod.invoke(this, params);
-			        	}
-			        	catch (Throwable t) {
-			        		throw new NSForwardException(t, "Failed to perform the action named '" + actionName + "' on '" + getClass().getSimpleName() + ".");
-			        	}
+		        		results = (WOActionResults)bestMethod.invoke(this, params);
 		        	}
 		        }
 		        else {
-		        	try {
-		        		results = (WOActionResults)actionMethod.invoke(this, _NSUtilities._NoObjectArray);
-		        	}
-		        	catch (Throwable t) {
-		        		throw new NSForwardException(t, "Failed to perform the action named '" + actionName + "' on '" + getClass().getSimpleName() + ".");
-		        	}
+	        		results = (WOActionResults)actionMethod.invoke(this, _NSUtilities._NoObjectArray);
 		        }
 			}
 
@@ -1045,14 +1035,17 @@ public class ERXRouteController extends WODirectAction {
 
 			return results;
 		}
-		catch (ObjectNotAvailableException e) {
-			return errorResponse(e, WOMessage.HTTP_STATUS_NOT_FOUND);
-		}
-		catch (SecurityException e) {
-			return errorResponse(e, WOMessage.HTTP_STATUS_FORBIDDEN);
-		}
 		catch (Throwable t) {
-			return errorResponse(t, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
+			Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
+			if (meaningfulThrowble instanceof ObjectNotAvailableException) {
+				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
+			}
+			else if (meaningfulThrowble instanceof SecurityException) {
+				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
+			}
+			else {
+				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
+			}
 		}
 	}
 
