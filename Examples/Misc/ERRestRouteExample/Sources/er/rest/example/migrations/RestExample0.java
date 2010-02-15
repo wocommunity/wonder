@@ -31,7 +31,7 @@ public class RestExample0 extends ERXMigrationDatabase.Migration implements IERX
 	@Override
 	public void upgrade(EOEditingContext editingContext, ERXMigrationDatabase database) throws Throwable {
 		ERXMigrationTable personTable = database.newTableNamed("Person");
-		personTable.newIntegerColumn("companyID", false);
+		personTable.newIntegerColumn("companyID", true);
 		personTable.newIntegerColumn("id", false);
 		personTable.newStringColumn("name", 255, false);
 		personTable.create();
@@ -58,10 +58,12 @@ public class RestExample0 extends ERXMigrationDatabase.Migration implements IERX
 		Company c1 = Company.createCompany(editingContext, "mDT");
 		Company c2 = Company.createCompany(editingContext, "Apple");
 		Company c3 = Company.createCompany(editingContext, "Microsoft");
-		Person p1 = Person.createPerson(editingContext, "Mike", c1);
+		Person p1 = Person.createPerson(editingContext, "Mike");
+		p1.setCompanyRelationship(c1);
 		Animal a1 = Animal.createAnimal(editingContext, "Derby", p1);
 		Animal a2 = Animal.createAnimal(editingContext, "Sydney", p1);
-		Person p2 = Person.createPerson(editingContext, "Adam", c1);
+		Person p2 = Person.createPerson(editingContext, "Adam");
+		p2.setCompanyRelationship(c1);
 		Animal a3 = Animal.createAnimal(editingContext, "Franny", p2);
 	}
 }

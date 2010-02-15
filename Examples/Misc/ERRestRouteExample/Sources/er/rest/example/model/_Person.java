@@ -169,10 +169,9 @@ public abstract class _Person extends  ERXGenericRecord {
 
 
   public static Person createPerson(EOEditingContext editingContext, String name
-, er.rest.example.model.Company company) {
+) {
     Person eo = (Person) EOUtilities.createAndInsertInstance(editingContext, _Person.ENTITY_NAME);    
 		eo.setName(name);
-    eo.setCompanyRelationship(company);
     return eo;
   }
 

@@ -84,7 +84,8 @@ public class AnimalController extends ERXDefaultRouteController {
 
 	@Override
 	public WOActionResults newAction() throws Throwable {
-		return null;
+		Animal animal = Animal.createAnimal(editingContext(), "New Animal", null);
+		return response(animal, showFilter());
 	}
 
 	@Override

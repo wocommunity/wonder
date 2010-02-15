@@ -1,7 +1,7 @@
 {
     attributes = (
         {
-            allowsNull = N; 
+            allowsNull = Y; 
             columnName = companyID; 
             name = companyID; 
             prototypeName = id; 
@@ -19,13 +19,13 @@
     relationships = (
         {
             destination = Company; 
-            isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = id; sourceAttribute = companyID; }); 
             name = company; 
         }, 
         {
+            deleteRule = EODeleteRuleCascade; 
             destination = Animal; 
             isToMany = Y; 
             joinSemantic = EOInnerJoin; 
