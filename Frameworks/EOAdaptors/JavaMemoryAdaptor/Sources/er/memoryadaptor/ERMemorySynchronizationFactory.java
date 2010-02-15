@@ -1,5 +1,7 @@
 package er.memoryadaptor;
 
+import java.lang.reflect.Field;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EORelationship;
@@ -8,6 +10,7 @@ import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 
 /**
  * This stub exists only to make memory adaptor migrations function.
@@ -17,6 +20,21 @@ import com.webobjects.foundation.NSDictionary;
 public class ERMemorySynchronizationFactory extends EOSynchronizationFactory implements EOSchemaGeneration {
   public ERMemorySynchronizationFactory(EOAdaptor adaptor) {
     super(adaptor);
+    // MS: This is because of the ridiculous mess that is the EOSynchronizationFactory API's in 5.4
+    try {
+	    Field schemaSynchronizationFactory = getClass().getDeclaredField("_schemaSynchronizationFactory");
+	    schemaSynchronizationFactory.setAccessible(true);
+	    schemaSynchronizationFactory.set(this, this);
+    }
+    catch (NoSuchFieldException e) {
+    	// This means you're in WO 5.3
+    }
+		catch (IllegalArgumentException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+		catch (IllegalAccessException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
   }
 
   protected NSArray noopExpressions() {

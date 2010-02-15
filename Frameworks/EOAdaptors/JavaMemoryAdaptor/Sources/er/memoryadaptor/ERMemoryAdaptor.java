@@ -18,59 +18,58 @@ import com.webobjects.foundation.NSDictionary;
  * @author mschrag
  */
 public class ERMemoryAdaptor extends EOAdaptor {
- 
-  private Object _syncFactory;
 
-public ERMemoryAdaptor(String name) {
-    super(name);
-  }
+	private Object _syncFactory;
 
-  @Override
-  public void setConnectionDictionary(NSDictionary dictionary) {
-    if (dictionary == null) {
-      super.setConnectionDictionary(NSDictionary.EmptyDictionary);
-    }
-    else {
-      super.setConnectionDictionary(dictionary);
-    }
-  }
+	public ERMemoryAdaptor(String name) {
+		super(name);
+	}
 
-  @Override
-  public void assertConnectionDictionaryIsValid() {
-    // DO NOTHING
-  }
+	@Override
+	public void setConnectionDictionary(NSDictionary dictionary) {
+		if (dictionary == null) {
+			super.setConnectionDictionary(NSDictionary.EmptyDictionary);
+		}
+		else {
+			super.setConnectionDictionary(dictionary);
+		}
+	}
 
-  @Override
-  public EOAdaptorContext createAdaptorContext() {
-    return new ERMemoryAdaptorContext(this);
-  }
+	@Override
+	public void assertConnectionDictionaryIsValid() {
+		// DO NOTHING
+	}
 
-  @Override
-  public boolean isValidQualifierType(String typeName, EOModel model) {
-    return true;
-  }
+	@Override
+	public EOAdaptorContext createAdaptorContext() {
+		return new ERMemoryAdaptorContext(this);
+	}
 
-  // Required for Migrations
-  @Override
-  public Class defaultExpressionClass() {
-    return ERMemoryExpression.class;
-  }
+	@Override
+	public boolean isValidQualifierType(String typeName, EOModel model) {
+		return true;
+	}
 
-  @Override
-  public EOSQLExpressionFactory expressionFactory() {
-    return null; //new ERMemoryExpressionFactory(this);
-  }
+	// Required for Migrations
+	@Override
+	public Class defaultExpressionClass() {
+		return ERMemoryExpression.class;
+	}
 
-  @Override
-    public EOSchemaGeneration synchronizationFactory() {
-        if (_syncFactory == null)
-            _syncFactory = new ERMemorySynchronizationFactory(this);
-        return (EOSchemaGeneration) _syncFactory;
-    }
+	@Override
+	public EOSQLExpressionFactory expressionFactory() {
+		return null; // new ERMemoryExpressionFactory(this);
+	}
 
-    public EOSynchronizationFactory schemaSynchronizationFactory() {
-        if (_syncFactory == null)
-            _syncFactory = new ERMemorySynchronizationFactory(this);
-        return (EOSynchronizationFactory) _syncFactory;
-    }
+	@Override
+	public EOSchemaGeneration synchronizationFactory() {
+		if (_syncFactory == null) {
+			_syncFactory = new ERMemorySynchronizationFactory(this);
+		}
+		return (EOSchemaGeneration) _syncFactory;
+	}
+
+	public EOSynchronizationFactory schemaSynchronizationFactory() {
+		return null;
+	}
 }
