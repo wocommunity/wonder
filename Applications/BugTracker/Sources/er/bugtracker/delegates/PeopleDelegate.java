@@ -11,7 +11,7 @@ public class PeopleDelegate extends BranchDelegate {
     protected NSArray defaultBranchChoices(D2WContext context) {
         NSArray result = super.defaultBranchChoices(context);
         People people = (People) object(context);
-        if(ERXEOControlUtilities.eoEquals(people, People.clazz.currentUser(people.editingContext()))) {
+        if(ERXEOControlUtilities.eoEquals(people, People.clazz.currentUser(people.editingContext())) || people.editingContext().globalIDForObject(people).isTemporary()) {
             result = choiceByRemovingKeys(new NSArray("delete"), result);
             result = choiceByRemovingKeys(new NSArray("view"), result);
         }

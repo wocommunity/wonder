@@ -66,7 +66,20 @@ function handleOnChange(e) {
     <webobject name = "HelpTexts"></webobject>
 </webobject>
 <webobject name="HasNoUser">
-<webobject name = "LoginPanel"></webobject>
+    <webobject name = "Body">
+        <table class="ContentTable">
+            <tr>
+                <td class="HeaderRow"></td>
+            </tr>
+            <tr>
+                <td class="ContentRow">
+                    <webobject name = "SigningUp"><webobject name=Content></webobject></webobject>
+<webobject name = "NotSigningUp"><webobject name = "LoginPanel"></webobject></webobject>
+
+					<webobject name = "IsDebug"><webobject name="ERD2WDebugFlags"></webobject></webobject>
+                </td>
+            </tr>
+        </table>
+    </webobject>
 </webobject>
-    
 </html>

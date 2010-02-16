@@ -17,6 +17,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSArray._SumNumberOperator;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.appserver.ERXSession;
@@ -201,12 +202,31 @@ public class Session extends ERXSession {
             ERCoreBusinessLogic.setActor(user());
         }
     }
+    
+    public boolean hasValidUser() {
+    	return user() != null;
+    }
 
     public void sleep() {
         ERCoreBusinessLogic.setActor(null);
         super.sleep();
     }
 
+    private People _signUp;
+    
+    public People signUp() {
+    	return _signUp;
+    }
+    
+    public void setSignUp(People value) {
+    	_signUp = value;
+    }
+    
+    public void finishSignUp() {
+    	setUser(_signUp);
+    	_signUp = null;
+    }
+    
     public String navigationRootChoice() {
     	
     	People user = (People) user();
