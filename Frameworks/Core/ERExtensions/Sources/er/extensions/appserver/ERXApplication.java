@@ -146,6 +146,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public static final String StarvedMemoryResolvedNotification = "StarvedMemoryResolvedNotification";
 
+ 	/**
+ 	 * Notification to get posted when terminate() is called.
+ 	 */
+	public static final String ApplicationWillTerminateNotification = "ApplicationWillTerminateNotification";
+
 	/**
 	 * Buffer we reserve lowMemBufSize KB to release when we get an
 	 * OutOfMemoryError, so we can post our notification and do other stuff
@@ -2612,5 +2617,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public static String erAjaxRequestHandlerKey() {
 		return ERXApplication.isWO54() ? "ja": "ajax";
+	}
+	
+	/**
+	 * Sends out a ApplicationWillTerminateNotification before actually starting to terminate.
+	 */
+	@Override
+	public void terminate() {
+		NSNotificationCenter.defaultCenter().postNotification(ApplicationWillTerminateNotification, this);
+		super.terminate();
 	}
 }
