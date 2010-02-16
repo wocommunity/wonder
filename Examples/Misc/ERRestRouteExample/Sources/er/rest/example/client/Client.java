@@ -14,27 +14,28 @@ import er.rest.format.ERXRestFormat;
 
 public class Client {
 	public static void main(String[] args) throws HttpException, IOException {
-		String baseUrl = "http://localhost:8642/cgi-bin/WebObjects/RESTExample.woa";
-
+		String baseURL = "http://localhost:8642/cgi-bin/WebObjects/RESTExample.woa/ra";
+		
 		ERXRestNameRegistry.registry().setExternalNameForInternalName("Company", "ClientCompany");
 		IERXRestDelegate.Factory.setDefaultDelegateClass(ERXNoOpRestDelegate.class);
 		IERXRestDelegate.Factory.setDelegateForEntityNamed(ClientCompanyRestDelegate.class, "ClientCompany", ClientCompany.class);
 
 		ERXNoOpRestDelegate delegate = new ERXNoOpRestDelegate();
 
-		ClientCompany c = new ERXRestClient().objectWithURL(baseUrl + "/ra/Company/1.json", delegate);
+		ERXRestClient client = new ERXRestClient(baseURL, delegate);
+		ClientCompany c = client.objectWithPath("Company/1.json");
 		System.out.println("Client.main: single company = " + c);
 
-		Object obj = new ERXRestClient(false).objectWithURL(baseUrl + "/ra/Pet/1.json", delegate);
+		Object obj = new ERXRestClient(client.baseURL(), delegate, false).objectWithPath("Pet/1.json");
 		System.out.println("Client.main: unknown class = " + obj);
 
-		NSArray<ClientCompany> comps = new ERXRestClient().objectWithURL(baseUrl + "/ra/Company.json", "ClientCompany", delegate);
+		NSArray<ClientCompany> comps = client.objectWithPath("Company.json", "ClientCompany");
 		System.out.println("Client.main: array of companies = " + comps);
 
 		c.setName("New Name");
-		new ERXRestClient().updateObjectWithURL(c, ERXKeyFilter.filterWithAllRecursive(), baseUrl + "/ra/Company/1.json", ERXRestFormat.JSON, delegate);
+		client.updateObjectWithPath(c, ERXKeyFilter.filterWithAllRecursive(), "Company/1.json", ERXRestFormat.JSON);
 
-		ClientCompany updatedCompany = new ERXRestClient().objectWithURL(baseUrl + "/ra/Company/1.json", delegate);
+		ClientCompany updatedCompany = client.objectWithPath("Company/1.json");
 		System.out.println("Client.main: updated company = " + updatedCompany);
 	}
 }
