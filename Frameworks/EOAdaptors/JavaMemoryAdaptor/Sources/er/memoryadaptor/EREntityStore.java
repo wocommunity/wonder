@@ -17,6 +17,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSRange;
 
 /**
  * EREntityStore is an abstract datastore implementation for a single "table"
@@ -71,7 +72,7 @@ public abstract class EREntityStore {
       sortOrderings = fetchSpecification.sortOrderings();
     }
 
-    int count = 0;
+//    int count = 0;
     NSMutableArray<NSMutableDictionary<String, Object>> fetchedRows = new NSMutableArray<NSMutableDictionary<String, Object>>();
     Iterator<NSMutableDictionary<String, Object>> i = iterator();
     while (i.hasNext()) {
@@ -79,15 +80,19 @@ public abstract class EREntityStore {
       NSMutableDictionary<String, Object> row = rowFromStoredValues(rawRow, entity);
       if (qualifier == null || qualifier.evaluateWithObject(row)) {
         fetchedRows.addObject(row);
-        count++;
+//        count++;
       }
-      if (fetchLimit > 0 && count == fetchLimit) {
-        break;
-      }
+//      if (fetchLimit > 0 && count == fetchLimit) {
+//        break;
+//      }
     }
 
     if (sortOrderings != null) {
       EOSortOrdering.sortArrayUsingKeyOrderArray(fetchedRows, sortOrderings);
+    }
+    
+    if (fetchLimit > 0 && fetchedRows.count() > fetchLimit) {
+    	fetchedRows.removeObjectsInRange(new NSRange(fetchLimit, fetchedRows.count() - fetchLimit));
     }
     return fetchedRows;
   }
