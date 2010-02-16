@@ -85,6 +85,9 @@ public class ERXKeyFilter {
 	 */
 	public void setDelegate(ERXKeyFilter.Delegate delegate) {
 		_delegate = delegate;
+		for (ERXKeyFilter includedFilter : _includes.values()) {
+			includedFilter.setDelegate(delegate);
+		}
 	}
 	
 	/**
