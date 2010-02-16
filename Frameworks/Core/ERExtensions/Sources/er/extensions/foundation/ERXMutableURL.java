@@ -197,6 +197,25 @@ public class ERXMutableURL {
 	public String path() {
 		return _path;
 	}
+	
+	/**
+	 * Appends the given path to the end of the existing path.
+	 * 
+	 * @param path the path to append
+	 * @return this
+	 */
+	public ERXMutableURL appendPath(String path) {
+		if (_path == null) {
+			_path = path;
+		}
+		else if (_path.endsWith("/")) {
+			_path = _path + path;
+		}
+		else {
+			_path = _path + "/" + path;
+		}
+		return this;
+	}
 
 	/**
 	 * Sets the port of this URL.
