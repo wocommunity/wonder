@@ -8,6 +8,10 @@ Conditional1: WOConditional {
 	condition = errorMessage.length;
 }
 
+SignUp : WOHyperlink {
+	action = signUp;
+}
+
 String1: WOString {
 	value = errorMessage;
 }

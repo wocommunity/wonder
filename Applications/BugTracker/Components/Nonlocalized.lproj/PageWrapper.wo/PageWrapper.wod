@@ -31,6 +31,15 @@ HasNoUser : WOConditional {
 	negate = true;
 }
 
+SigningUp : WOConditional {
+	condition = session.signUp;
+}
+
+NotSigningUp : WOConditional {
+	condition = session.signUp;
+	negate = true;
+}
+
 LoginPanel : LoginPanel {
 	
 }

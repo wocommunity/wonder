@@ -1,3 +1,4 @@
+log4.logger.rootLogger=INFO
 
 #
 # PROPERTY SET 1:

@@ -8,6 +8,7 @@ import com.webobjects.directtoweb.D2W;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.bugtracker.Factory;
 import er.bugtracker.People;
 import er.bugtracker.Session;
 import er.extensions.crypting.ERXCrypto;
@@ -43,6 +44,10 @@ public class LoginPanel extends WOComponent {
         _nextPage = null;
     }
 
+    public WOComponent signUp() {
+    	return Factory.bugTracker().signUp();
+    }
+    
     public WOComponent login() {
         EOEditingContext editingContext;
         
