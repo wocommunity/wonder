@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.TreeMap;
 
 import com.amazon.s3.AWSAuthConnection;
 import com.amazon.s3.Response;
+import com.amazon.s3.Utils;
 import com.silvasoftinc.s3.S3StreamObject;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -26,6 +29,7 @@ import er.extensions.concurrency.ERXAsyncQueue;
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * ERS3AttachmentProcessor implements storing attachments in Amazon's S3 service. For more information about configuring an ERS3AttachmentProcessor, see the top level documentation.
@@ -84,7 +88,8 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 		}
 		try {
 			String key = ERAttachmentProcessor._parsePathTemplate(attachment, keyTemplate, recommendedFileName);
-			attachment.setS3Location(bucket, key);
+
+			attachment.setS3Location(bucket, ERXStringUtilities.urlEncode(key));
 
 			String s3Path = attachment.queryStringAuthGenerator().makeBareURL(bucket, key);
 			attachment.setS3Path(s3Path);
@@ -179,7 +184,9 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 			}
 		}
 		finally {
-			uploadedFile.delete();
+			if (attachment._isPendingDelete()) {
+				uploadedFile.delete();
+			}
 		}
 
 	}
