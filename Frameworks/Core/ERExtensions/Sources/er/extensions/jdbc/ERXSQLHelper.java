@@ -19,11 +19,13 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
@@ -44,8 +46,10 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
+import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.eof.ERXConstant;
@@ -55,6 +59,7 @@ import er.extensions.eof.ERXModelGroup;
 import er.extensions.eof.qualifiers.ERXFullTextQualifier;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * ERXSQLHelper provides support for additional database-vender-specific
@@ -2134,6 +2139,41 @@ public class ERXSQLHelper {
 		@Override
 		public int varcharLargeColumnWidth() {
 			return -1;
+		}
+		
+		@Override
+		public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
+			if(throwable instanceof EOGeneralAdaptorException) {
+				EOGeneralAdaptorException e = (EOGeneralAdaptorException)throwable;
+				NSDictionary userInfo = e.userInfo();
+				EOAdaptorOperation failedOp = userInfo==null?null:(EOAdaptorOperation)userInfo.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+				if(failedOp != null && failedOp.exception() instanceof JDBCAdaptorException) {
+					JDBCAdaptorException ae = (JDBCAdaptorException)failedOp.exception();
+					
+					// MySQL error codes: http://dev.mysql.com/doc/refman/5.0/en/error-messages-server.html
+					switch(ae.sqlException().getErrorCode()) {
+					
+					case 1062: //Violates unique constraint
+						handleUniqueConstraintAdaptorException(databaseContext, failedOp);
+						break;
+						
+					default:
+						
+					}
+				}
+			}
+			return false;
+		}
+	
+		/**
+		 * Throws a validation exception for a unique constraint failure.
+		 * @param context The database context
+		 * @param failedOp The operation that failed
+		 * @throws NSValidation.ValidationException The exception thrown. The key for the validation template strings file is <code>UniqueConstraintException</code>
+		 */
+		protected void handleUniqueConstraintAdaptorException(EODatabaseContext context, EOAdaptorOperation failedOp) throws NSValidation.ValidationException {
+			NSValidation.ValidationException ve = ERXValidationFactory.defaultFactory().createCustomException(null, "UniqueConstraintException");
+			throw ve;
 		}
 	}
 
