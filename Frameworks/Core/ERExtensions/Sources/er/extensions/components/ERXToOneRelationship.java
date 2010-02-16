@@ -34,29 +34,12 @@ import er.extensions.woextensions.WOToOneRelationship;
  * @binding localizeDisplayKeys" defaults="Boolean
  * @binding sortCaseInsensitive
  */
-//CHECKME AK: does this make sense? Why not set the qualifier in the parent component?
-// MS: OK.
+
 public class ERXToOneRelationship extends WOToOneRelationship {
 	
 	public final String radioButtonComponentName = ERXProperties.stringForKeyWithDefault("er.extensions.components.ERXToOneRelationship.radioButtonComponentName", "ERXRadioButtonMatrix");
 
     public ERXToOneRelationship(WOContext context) {
         super(context);
-    }
-    
-    //CHECKME	RM: I can't remember why we did this. It says...
-    /*
-     * @note Support for Prototype and Selenium
-     */
-    @Override
-    public Object theCurrentValue() {
-    	Object theCurrentValue = null;
-    	
-    	try {
-    		theCurrentValue = super.theCurrentValue();
-    	} catch (Exception e) {
-    		theCurrentValue = "Not found";
-    		log.warn("No current value: " + e.getMessage());
-    	} return theCurrentValue;
     }
 }
