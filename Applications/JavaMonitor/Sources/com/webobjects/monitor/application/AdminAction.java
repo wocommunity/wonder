@@ -146,6 +146,23 @@ import com.webobjects.monitor._private.MSiteConfig;
  * </table>
  * </p>
  * <p>
+ * The direct action 'running' can be invoked with a num argument:
+ * <table cellspacing="0" cellpadding="5" border="1">
+ * <tr>
+ * <th>Num</th>
+ * <th>Description</th>
+ * </tr>
+ * <tr>
+ * <td>all / -1</td>
+ * <td>all instances of the application must be running. this is the default if no num argument is set</td>
+ * </tr>
+ * <tr>
+ * <td><i>number</i></td>
+ * <td>a minimum of <i>number</i> instances of the specified application must be running. if there are less instances configured acts like 'all'</td>
+ * </tr>
+ * </table>
+ * </p>
+ * <p>
  * Possible status codes:
  * <table cellspacing="0" cellpadding="5" border="1">
  * <tr>
@@ -332,13 +349,28 @@ public class AdminAction extends WODirectAction {
         WOResponse woresponse = new WOResponse();
         woresponse.setContent("YES");
         woresponse.setStatus(200);
+        String num = (String) context().request().formValueForKey("num");
+    	int numberOfInstancesRequested = -1;
+        if (num != null && !num.equals("") && !num.equalsIgnoreCase("all")) {
+        	try {
+        		numberOfInstancesRequested = Integer.valueOf(num).intValue();
+        		if (numberOfInstancesRequested > instances.count()) {
+        			numberOfInstancesRequested = -1;
+        		}
+        	} catch (Exception e) {
+        		// ignore
+        	}
+        }
+        int instancesAlive = 0;
         for (Enumeration enumeration = instances.objectEnumerator(); enumeration.hasMoreElements();) {
             MInstance minstance = (MInstance) enumeration.nextElement();
-            if (minstance.state == MObject.ALIVE)
-                continue;
-            woresponse.setContent("NO");
+            if (minstance.state == MObject.ALIVE) {
+            	instancesAlive++;
+            }
+        }
+        if ((numberOfInstancesRequested == -1 && instancesAlive < instances.count()) || instancesAlive < numberOfInstancesRequested) {
+        	woresponse.setContent("NO");
             woresponse.setStatus(417);
-            break;
         }
         return woresponse;
     }
