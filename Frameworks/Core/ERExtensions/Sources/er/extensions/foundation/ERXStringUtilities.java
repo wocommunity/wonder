@@ -2419,4 +2419,38 @@ public class ERXStringUtilities {
 		}
 		return rangeMatches;
 	}
+	
+	/**
+	 * Masks a given string with a single character in the substring specified by the
+	 * begin and end indexes.  Negative indexes count from the end of the string 
+	 * beginning with -1.  For example,
+	 * <code>maskStringWithCharacter("Visa 4111111111111111", '*', 5, -4);</code> will
+	 * result in a string value of "Visa ************1111" 
+	 * 
+	 * @param arg The string value to mask
+	 * @param mask The character mask
+	 * @param beginIndex The string index where masking begins. 
+	 * Negative numbers count down from the end of the string.
+	 * @param endIndex The index where masking ends.
+	 * Negative numbers count down from the end of the string
+	 * @return The masked string result
+	 */
+	public static String maskStringWithCharacter(String arg, char mask, int beginIndex, int endIndex) {
+		int length = arg.length();
+		
+		//Get the actual begin and end index.
+		int begin = (beginIndex < 0)?length + beginIndex:beginIndex;
+		int end = (endIndex < 0)?length + endIndex:endIndex;
+		int sub = end - begin;
+		if(sub < 0) {
+			throw new StringIndexOutOfBoundsException(sub);
+		}
+				
+		StringBuilder sb = new StringBuilder(arg.substring(0, begin));
+		for(int i = 0; i < sub; i++) { 
+			sb.append(mask);
+		}
+		sb.append(arg.substring(end, length));
+		return sb.toString();
+	}
 }
