@@ -241,7 +241,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			for (Enumeration enumeration = hiddenFields.keyEnumerator(); enumeration.hasMoreElements();) {
 				String s = (String) enumeration.nextElement();
 				Object obj = hiddenFields.objectForKey(s);
-				response._appendContentAsciiString("<div><input type=\"hidden\"");
+				response._appendContentAsciiString("<div style=\"display:none\"><input type=\"hidden\"");
 				response._appendTagAttributeAndValue("name", s, false);
 				response._appendTagAttributeAndValue("value", obj.toString(), false);
 				response._appendContentAsciiString(" /></div>\n");
