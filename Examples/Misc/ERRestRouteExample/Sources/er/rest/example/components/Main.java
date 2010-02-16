@@ -29,6 +29,10 @@ public class Main extends ERXComponent {
 		return url("Person/1.json");
 	}
 	
+	public String createPersonJsonURL() {
+		return url("Person.json");
+	}
+	
 	public String companyURL() {
 		return url("Company/2.plist");
 	}

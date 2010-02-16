@@ -58,7 +58,7 @@ public class PersonController extends ERXDefaultRouteController {
 
 	public static ERXKeyFilter updateFilter() {
 		ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
-		filter.include(Person.COMPANY);
+		filter.include(Person.COMPANY).includeAttributes(); // let you update a company inside of a person
 		return filter;
 	}
 
