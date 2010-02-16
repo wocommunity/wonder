@@ -154,88 +154,101 @@ public class ERXRedirect extends WOComponent {
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		String url;
-
+		
+		// Use secure binding if present, otherwise default to request setting
 		boolean secure = (_secure == null) ? ERXRequest.isRequestSecure(context.request()) : _secure.booleanValue();
 
-		WOComponent component = _component;
-		if (component != null) {
-			
-			// Build request handler path with session ID if needed
-	        WOSession aSession = session();
-			String aContextId = context.contextID();
-			StringBuffer requestHandlerPath = new StringBuffer();
-			if (WOApplication.application().pageCacheSize() == 0) {
-				if (aSession.storesIDsInURLs()) {
-					requestHandlerPath.append(component.name());
-					requestHandlerPath.append('/');
+		// Generate a full URL if changing between secure and insecure
+		boolean generateCompleteURLs = secure != ERXRequest.isRequestSecure(context.request());
+		if (generateCompleteURLs) {
+		  context._generateCompleteURLs();
+		}
+		try {
+			WOComponent component = _component;
+			if (component != null) {
+				
+				// Build request handler path with session ID if needed
+		        WOSession aSession = session();
+				String aContextId = context.contextID();
+				StringBuffer requestHandlerPath = new StringBuffer();
+				if (WOApplication.application().pageCacheSize() == 0) {
+					if (aSession.storesIDsInURLs()) {
+						requestHandlerPath.append(component.name());
+						requestHandlerPath.append('/');
+						requestHandlerPath.append(aSession.sessionID());
+						requestHandlerPath.append('/');
+						requestHandlerPath.append(aContextId);
+						requestHandlerPath.append(".0");
+					}
+					else {
+						requestHandlerPath.append(component.name());
+						requestHandlerPath.append('/');
+						requestHandlerPath.append(aContextId);
+						requestHandlerPath.append(".0");
+					}
+				}
+				else if (aSession.storesIDsInURLs()) {
 					requestHandlerPath.append(aSession.sessionID());
 					requestHandlerPath.append('/');
 					requestHandlerPath.append(aContextId);
 					requestHandlerPath.append(".0");
 				}
 				else {
-					requestHandlerPath.append(component.name());
-					requestHandlerPath.append('/');
 					requestHandlerPath.append(aContextId);
 					requestHandlerPath.append(".0");
 				}
+				url = context._urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), requestHandlerPath.toString(), queryParametersString(), secure);
+				context._setPageComponent(component);
 			}
-			else if (aSession.storesIDsInURLs()) {
-				requestHandlerPath.append(aSession.sessionID());
-				requestHandlerPath.append('/');
-				requestHandlerPath.append(aContextId);
-				requestHandlerPath.append(".0");
+			else if (_url != null) {
+				if (_secure != null) {
+					throw new IllegalArgumentException("You specified a value for 'url' and for 'secure', which is not supported.");
+				}
+				url = _url;
 			}
-			else {
-				requestHandlerPath.append(aContextId);
-				requestHandlerPath.append(".0");
+			else if (_requestHandlerKey != null) {
+				url = context._urlWithRequestHandlerKey(_requestHandlerKey, _requestHandlerPath, queryParametersString(), secure);
 			}
-			url = context._urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), requestHandlerPath.toString(), queryParametersString(), secure);
-			context._setPageComponent(component);
-		}
-		else if (_url != null) {
-			if (_secure != null) {
-				throw new IllegalArgumentException("You specified a value for 'url' and for 'secure', which is not supported.");
-			}
-			url = _url;
-		}
-		else if (_requestHandlerKey != null) {
-			url = context._urlWithRequestHandlerKey(_requestHandlerKey, _requestHandlerPath, queryParametersString(), secure);
-		}
-		else if (_directActionName != null) {
-			String requestHandlerPath;
-			if (_directActionClass != null) {
-				requestHandlerPath = _directActionClass + "/" + _directActionName;
+			else if (_directActionName != null) {
+				String requestHandlerPath;
+				if (_directActionClass != null) {
+					requestHandlerPath = _directActionClass + "/" + _directActionName;
+				}
+				else {
+					requestHandlerPath = _directActionName;
+				}
+				url = context._urlWithRequestHandlerKey(WOApplication.application().directActionRequestHandlerKey(), requestHandlerPath, queryParametersString(), secure);
 			}
 			else {
-				requestHandlerPath = _directActionName;
+				throw new IllegalStateException("You must provide a component, url, requestHandlerKey, or directActionName to this ERXRedirect.");
 			}
-			url = context._urlWithRequestHandlerKey(WOApplication.application().directActionRequestHandlerKey(), requestHandlerPath, queryParametersString(), secure);
-		}
-		else {
-			throw new IllegalStateException("You must provide a component, url, requestHandlerKey, or directActionName to this ERXRedirect.");
-		}
-
-		if (ERXAjaxApplication.isAjaxRequest(context.request())) {
-			boolean hasUpdateContainer = context.request().stringFormValueForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID) != null;
-			if (hasUpdateContainer) {
-				response.appendContentString("<script type=\"text/javascript\">");
+	
+			if (ERXAjaxApplication.isAjaxRequest(context.request())) {
+				boolean hasUpdateContainer = context.request().stringFormValueForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID) != null;
+				if (hasUpdateContainer) {
+					response.appendContentString("<script type=\"text/javascript\">");
+				}
+				else {
+					response.setHeader("text/javascript", "Content-Type");
+				}
+				response.appendContentString("document.location.href='" + url + "';");
+				if (hasUpdateContainer) {
+					response.appendContentString("</script>");
+				}
 			}
 			else {
-				response.setHeader("text/javascript", "Content-Type");
+				response.setHeader(url, "location");
+				response.setStatus(302);
 			}
-			response.appendContentString("document.location.href='" + url + "';");
-			if (hasUpdateContainer) {
-				response.appendContentString("</script>");
+	
+			if (component != null) {
+				ERXAjaxApplication.setForceStorePage(response);
 			}
 		}
-		else {
-			response.setHeader(url, "location");
-			response.setStatus(302);
-		}
-
-		if (component != null) {
-			ERXAjaxApplication.setForceStorePage(response);
+		finally {
+			if (generateCompleteURLs) {
+				context._generateRelativeURLs();
+			}
 		}
 	}
 }
