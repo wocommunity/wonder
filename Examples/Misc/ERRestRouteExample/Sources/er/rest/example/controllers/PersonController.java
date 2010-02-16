@@ -77,6 +77,21 @@ public class PersonController extends ERXDefaultRouteController {
 		return response(person, showFilter());
 	}
 
+	/**
+	 * lockedUpdate is just like update except that the "company" relationships is locked, which means
+	 * that you can update the object on the other side of the relationship, but you can't change the
+	 * related object itself.
+	 */
+	public WOActionResults lockedUpdateAction() {
+		Person person = person();
+		ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
+		filter.include(Person.COMPANY).includeAttributes(); // let you update a company inside of a person
+		filter.lockRelationship(Person.COMPANY); // don't let you change the company relationship
+		update(person, filter);
+		editingContext().saveChanges();
+		return response(person, showFilter());
+	}
+
 	@Override
 	public WOActionResults destroyAction() throws Throwable {
 		Person person = person();
