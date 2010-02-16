@@ -87,7 +87,7 @@ public class ERPOFCChart extends ERXStatelessComponent {
 	 */
 	public String openFlashChartSwf() {
 		return application().resourceManager().urlForResourceNamed("open-flash-chart-full-embedded-font.swf",
-			"ClickTravelSystem", context()._languages(), context().request());
+			"ERPlot", context()._languages(), context().request());
 	}
 
 	@Override
