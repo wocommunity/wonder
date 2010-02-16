@@ -30,3 +30,7 @@ InfoWindowHtml : WOString {
 	value = ^infoWindowHtml; 
 	escapeHTML = false; 
 }
+
+MarkerOptions : WOString {	
+	value = ^options; 
+}
