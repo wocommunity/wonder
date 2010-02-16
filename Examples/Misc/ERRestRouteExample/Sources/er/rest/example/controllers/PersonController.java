@@ -7,6 +7,7 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXRestFetchSpecification;
+import er.rest.example.model.Company;
 import er.rest.example.model.Person;
 import er.rest.routes.ERXDefaultRouteController;
 
@@ -92,6 +93,32 @@ public class PersonController extends ERXDefaultRouteController {
 		return response(person, showFilter());
 	}
 
+	/**
+	 * securityUpdate is just like a regular update except that it will not let you change the person's
+	 * company name to Microsoft when updating the Person using the ERXKeyFilter.Delegate API
+	 */
+	public WOActionResults securityUpdateAction() {
+		Person person = person();
+		ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
+		filter.include(Person.COMPANY).includeAttributes(); // let you update a company inside of a person
+		filter.setDelegate(new ERXKeyFilter.Delegate() {
+			public void willTakeValueForKey(Object target, Object value, String key) throws SecurityException {
+				if (target instanceof Company && "name".equals(key) && value != null && ((String)value).contains("Microsoft")) {
+					throw new SecurityException("You can't change a Person's company name to Microsoft.");
+				}
+			}
+			
+			public void didTakeValueForKey(Object target, Object value, String key) throws SecurityException {
+			}
+			
+			public void didSkipValueForKey(Object target, Object value, String key) throws SecurityException {
+			}
+		});
+		update(person, filter);
+		editingContext().saveChanges();
+		return response(person, showFilter());
+	}
+	
 	@Override
 	public WOActionResults destroyAction() throws Throwable {
 		Person person = person();

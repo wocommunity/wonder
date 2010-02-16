@@ -23,6 +23,8 @@ public class Application extends ERXApplication {
 	}
 
 	public Application() {
+		setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
+		
 		// They entity is "Animal" internally, but we want to name it "Pet" to the rest of the world
 		ERXRestNameRegistry.registry().setExternalNameForInternalName("Pet", "Animal");
 

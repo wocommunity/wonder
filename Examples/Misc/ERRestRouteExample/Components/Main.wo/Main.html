@@ -1,43 +1,59 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<html>
-	<head>
-		<title>ERRestRouteExample</title>
-	</head>
-	<body>
+<wo:RestHeaderFooter>
+<style>
+div.panel div.content ul li {
+	margin-top: 1em;
+}
+</style>
+
+The source for ERXRestRouteExample is intended to be browsed. To fully understand the framework, please review the annotations and explanations in the source.
 
 <ul>
-	<li><wo:ERXRouteLink entityName="Company" action="index" format="plist">Show all Companies in plist format</wo:ERXRouteLink></li>
-	<li><wo:ERXRouteLink entityName="Company" action="index" format="xml">Show all Companies in XML format</wo:ERXRouteLink></li>
-	<li><wo:ERXRouteLink entityName="Company" action="index" format="json">Show all Companies in JSON format</wo:ERXRouteLink></li>
-	<li><wo:ERXRouteLink entityName="Company" action="index" format="sc">Show all Companies in SproutCore format</wo:ERXRouteLink></li>
-	<li><wo:ERXRouteLink entityName="Company" action="index" format="gndp">Show all Companies in Gianduia format</wo:ERXRouteLink></li>
-	<li><wo:ERXRouteLink entityName="Person" id="1" action="show" format="plist">Show Person 1 in plist format</wo:ERXRouteLink></li>
-	<li><wo:ERXRouteLink entityName="Person" id="1" action="show">Show Person 1 in HTML (goes to PersonShowPage)</wo:ERXRouteLink></li>
+	<li><b><wo:ERXRouteLink entityName="Company" action="index" format="plist">Show all Companies in plist format</wo:ERXRouteLink></b><br/>
+			curl <wo:ERXRouteURL entityName="Company" id="1" format="plist" absolute="$true"/></li>
+
+	<li><b><wo:ERXRouteLink entityName="Company" action="index" format="xml">Show all Companies in XML format</wo:ERXRouteLink></b><br/>
+			curl <wo:ERXRouteURL entityName="Company" format="xml" absolute="$true"/></li>
+
+	<li><b><wo:ERXRouteLink entityName="Company" action="index" format="json">Show all Companies in JSON format</wo:ERXRouteLink></b><br/>
+			curl <wo:ERXRouteURL entityName="Company" format="json" absolute="$true"/></li>
+
+	<li><b><wo:ERXRouteLink entityName="Company" action="index" format="sc">Show all Companies in SproutCore format</wo:ERXRouteLink></b><br/>
+			curl <wo:ERXRouteURL entityName="Company" format="sc" absolute="$true"/></li>
+
+	<li><b><wo:ERXRouteLink entityName="Company" action="index" format="gndp">Show all Companies in Gianduia format</wo:ERXRouteLink></b><br/>
+			curl <wo:ERXRouteURL entityName="Company" format="gndp" absolute="$true"/></li>
+
+	<li><b><wo:ERXRouteLink entityName="Person" id="1" action="show" format="plist">Show Person 1 in plist format</wo:ERXRouteLink></b><br/>
+			curl <wo:ERXRouteURL entityName="Person" id="1" action="show" format="plist" absolute="$true"/></li>
+
+	<li><b><wo:ERXRouteLink entityName="Person" id="1" action="show">Show Person 1 in HTML (goes to PersonShowPage)</wo:ERXRouteLink></b><br/>
+			curl <wo:ERXRouteURL entityName="Person" id="1" action="show" format="html" absolute="$true"/></li>
 	
 	<li><b>Update an attribute on Person:</b></b><br/>
-			curl -X PUT -d "{ name: 'Updated Name' }" <wo:str value="$personJsonURL"/></li>
+			curl -X PUT -d "{ name: 'Updated Name' }" <wo:ERXRouteURL entityName="Person" id="1" action="show" format="json" absolute="$true"/></li>
 			
 	<li><b>Update a to-one relationshio on Person:</b><br/>
-			curl -X PUT -d "{ company: { type:'Company', id:2 } }" <wo:str value="$personJsonURL"/></li>
+			curl -X PUT -d "{ company: { type:'Company', id:2 } }" <wo:ERXRouteURL entityName="Person" id="1" action="show" format="json" absolute="$true"/></li>
 			
 	<li><b>Create a new Person:</b><br/>
-			curl -X POST -d "{ name:'Andrew Schrag' }" <wo:str value="$createPersonJsonURL"/></li>
+			curl -X POST -d "{ name:'Andrew Schrag' }" <wo:ERXRouteURL entityName="Person" format="json" absolute="$true"/></li>
 			
 	<li><b>Create a new Person with a to-one relationship:</b><br/>
-			curl -X POST -d "{ name:'Andrew Schrag', company: { type:'Company', id:1 } }" <wo:str value="$createPersonJsonURL"/></li>
+			curl -X POST -d "{ name:'Andrew Schrag', company: { type:'Company', id:1 } }" <wo:ERXRouteURL entityName="Person" format="json" absolute="$true"/></li>
 			
 	<li><b>Create a new Person and create a Company in its to-one relationship:</b><br/>
-			curl -X POST -d "{ name:'Andrew Schrag', company: { type:'Company', name:'New Company' } }" <wo:str value="$createPersonJsonURL"/></li>
+			curl -X POST -d "{ name:'Andrew Schrag', company: { type:'Company', name:'New Company' } }" <wo:ERXRouteURL entityName="Person" format="json" absolute="$true"/></li>
 			
 	<li><b>Update attribute across locked relationship (works):</b><br/>
-			curl -X PUT -d "{ company: { type:'Company', id:1, name:'mDimension Technology' } }" http://vdoop.local:8642/cgi-bin/WebObjects/RESTExample.woa/ra/Person/1/lockedUpdate.json
+			curl -X PUT -d "{ company: { type:'Company', id:1, name:'mDimension Technology' } }" <wo:ERXRouteURL entityName="Person" id="1" action="lockedUpdate" format="json" absolute="$true"/></li> 
 			
 	<li><b>Change locked relationship (ignored):</b><br/>
-			curl -X PUT -d "{ company: { type:'Company', id:2 } }" http://vdoop.local:8642/cgi-bin/WebObjects/RESTExample.woa/ra/Person/1/lockedUpdate.json
+			curl -X PUT -d "{ company: { type:'Company', id:2 } }" <wo:ERXRouteURL entityName="Person" id="1" action="lockedUpdate" format="json" absolute="$true"/></li>
+
+	<li><b>ERXKeyFilter.Delegate API (doens't allow setting a Person's company name to 'Microsof'):</b><br/>
+			curl -X PUT -d "{ company: { type:'Company', id:1, name:'Microsoft' } }" <wo:ERXRouteURL entityName="Person" id="1" action="securityUpate" format="json" absolute="$true"/></li>
 			
 	<li><b>Delete a Company:</b><br/>
-			curl -X DELETE <wo:str value="$companyURL"/></li>
+			curl -X DELETE <wo:ERXRouteURL entityName="Company" id="2" format="plist" absolute="$true"/></li>
 </ul>
-
-	</body>
-</html>
+</wo:RestHeaderFooter>
