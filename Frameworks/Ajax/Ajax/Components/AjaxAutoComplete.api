@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
 	<wo class="AjaxAutoComplete" wocomponentcontent="true">
 	<binding name="list"/>
@@ -37,5 +37,6 @@
     <binding name="onblur"/>
         <binding name="onchange"/>
     <binding name="style"/>
+    <binding name="onfocus"/>
     </wo>
 </wodefinitions>
