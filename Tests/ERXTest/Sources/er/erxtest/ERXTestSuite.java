@@ -3,6 +3,7 @@ package er.erxtest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import er.extensions.ERXExtensions;
+import er.extensions.foundation.ERXStringUtilitiesTest;
 
 public class ERXTestSuite {
   public static void initialize() {
@@ -31,6 +32,7 @@ public class ERXTestSuite {
 
     suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);
+    suite.addTest(ERXStringUtilitiesTest.suite());
     suite.addTestSuite(er.extensions.foundation.ERXThreadStorageTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXUtilitiesTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXValueUtilitiesTest.class);
