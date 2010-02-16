@@ -462,10 +462,10 @@ public class Application extends ERXApplication  {
                 byte[] versionRequest;
                 byte[] versionReply;
                 try {
-                    multicastRequest = ("GET CONFIG-URL").getBytes("UTF8");
-                    multicastReply = ("http://" +  myName + '\0').getBytes("UTF8");
-                    versionRequest = ("womp://queryVersion").getBytes("UTF8");
-                    versionReply = ("womp://replyVersion/" + myName + ":webObjects5.0" + '\0').getBytes("UTF8");
+                    multicastRequest = ("GET CONFIG-URL").getBytes("UTF-8");
+                    multicastReply = ("http://" +  myName + '\0').getBytes("UTF-8");
+                    versionRequest = ("womp://queryVersion").getBytes("UTF-8");
+                    versionReply = ("womp://replyVersion/" + myName + ":webObjects5.0" + '\0').getBytes("UTF-8");
                 } catch (UnsupportedEncodingException uee) {
                     multicastRequest = ("GET CONFIG-URL").getBytes();
                     multicastReply = ("http://" +  myName + '\0').getBytes();
