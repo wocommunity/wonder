@@ -1,7 +1,7 @@
 <script defer="defer">
 
 function makeMarker<webobject name = "MarkerID"/>(point) {
-	<webobject name = "MarkerID"/> = new GMarker(point);
+	<webobject name = "MarkerID"/> = new GMarker(point, {<webobject name = "MarkerOptions"/>});
   <webobject name = "MapID"/>.addOverlay(<webobject name = "MarkerID"/>);
 	
 	GEvent.addListener(<webobject name = "MarkerID"/>, "click", function() {
