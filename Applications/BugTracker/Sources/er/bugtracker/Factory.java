@@ -187,7 +187,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         }
         page.setNextPageDelegate(new NextPageDelegate() {
 
-			@Override
+			// @Override
 			public WOComponent nextPage(WOComponent arg0) {
 				if(page.objectWasSaved()) {
 					session().finishSignUp();
