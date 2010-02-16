@@ -100,6 +100,14 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * is the value before executing <code>awake()</code>
    */
   public String _originalThreadName;
+  
+  public ERXSession() {
+	  super();
+  }
+  
+  public ERXSession(String sessionID) {
+	  super(sessionID);
+  }
 
   /** 
    * returns the observer object for this session. 

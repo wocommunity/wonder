@@ -134,6 +134,14 @@ public class ERXAjaxSession extends WOSession {
     }
   }
   
+  public ERXAjaxSession() {
+	  super();
+  }
+  
+  public ERXAjaxSession(String sessionID) {
+	  super(sessionID);
+  }
+  
   /**
    * Overridden so that Ajax requests are not saved in the page cache.  Checks both the 
    * response userInfo and the response headers if the DONT_STORE_PAGE key is present. The value doesn't matter.
