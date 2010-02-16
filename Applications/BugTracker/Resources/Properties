@@ -20,6 +20,11 @@ er.extensions.ERXLocalizer.frameworkSearchPath=("app", "BTBusinessLogic", "ERExt
 er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
 java.awt.headless=true
 
+er.javamail.adminEmail=foo@localhost.com
+
+er.migration.migrateAtStartup=true
+er.migration.createTablesIfNecessary=true 
+
 #
 # PROPERTY SET 2:
 #
