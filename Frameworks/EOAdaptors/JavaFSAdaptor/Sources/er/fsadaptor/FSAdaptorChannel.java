@@ -203,7 +203,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
                                 NSArray someKeys = aRow.allKeys();
                                 int keyCount = someKeys.count();
 
-                                for (int keyIndex = 0; keyIndex < count; keyIndex++) {
+                                for (int keyIndex = 0; keyIndex < keyCount; keyIndex++) {
                                     Object aKey = someKeys.objectAtIndex(keyIndex);
                                     EOAttribute anAttribute = anEntity.attributeNamed(aKey.toString());
                                     if (anAttribute != null) {
