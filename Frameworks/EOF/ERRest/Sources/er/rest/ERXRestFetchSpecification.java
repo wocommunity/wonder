@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
+import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.eof.ERXQ;
 import er.extensions.eof.ERXS;
@@ -196,11 +197,12 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	 *            the current options
 	 * @return the effective sort orderings
 	 */
-	public NSArray<EOSortOrdering> sortOrderings(NSKeyValueCoding options) {
+	public NSArray<EOSortOrdering> sortOrderings(EOEditingContext editingContext, NSKeyValueCoding options) {
 		String sortKeysStr = (String)options.valueForKey("sort");
 		if (sortKeysStr == null || sortKeysStr.length() == 0) {
 			return _defaultSortOrderings;
 		}
+		EOEntity entity = EOUtilities.entityNamed(editingContext, _entityName);
 		NSMutableArray<EOSortOrdering> sortOrderings = new NSMutableArray<EOSortOrdering>();
 		for (String sortKeyStr : sortKeysStr.split(",")) {
 			String[] sortAttributes = sortKeyStr.split("\\|");
@@ -222,6 +224,9 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 				sortDirection = EOSortOrdering.CompareCaseInsensitiveAscending;
 			}
 
+			if (_qualifierFilter != null && !_qualifierFilter.matches(new ERXKey<Object>(sortKey), ERXFilteredQualifierTraversal.typeForKeyInEntity(sortKey, entity))) {
+				throw new SecurityException("You do not have access to the key path '" + sortKey + "'.");
+			}
 			sortOrderings.addObject(EOSortOrdering.sortOrderingWithKey(sortKey, sortDirection));
 		}
 		return sortOrderings;
@@ -315,7 +320,7 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	 */
 	@SuppressWarnings("unchecked")
 	public NSArray<T> objects(EOEditingContext editingContext, NSKeyValueCoding options) {
-		NSArray<EOSortOrdering> sortOrderings = sortOrderings(options);
+		NSArray<EOSortOrdering> sortOrderings = sortOrderings(editingContext, options);
 		EOQualifier qualifier = qualifier(editingContext, options);
 		int batchSize = batchSize(options);
 
@@ -347,7 +352,7 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	 * @return the filtered objects
 	 */
 	public NSArray<T> objects(NSArray<T> objects, EOEditingContext editingContext, NSKeyValueCoding options) {
-		NSArray<EOSortOrdering> sortOrderings = sortOrderings(options);
+		NSArray<EOSortOrdering> sortOrderings = sortOrderings(editingContext, options);
 		EOQualifier qualifier = qualifier(editingContext, options);
 		int batchSize = batchSize(options);
 
