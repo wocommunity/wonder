@@ -394,6 +394,11 @@ public class ERXPatcher {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
+			
+			/* select element shouldn't worry about value attribute */
+			@Override
+			protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
+			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = new WOResponse();
