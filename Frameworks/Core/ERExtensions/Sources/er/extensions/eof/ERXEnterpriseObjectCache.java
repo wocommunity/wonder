@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -436,6 +437,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     public void addObject(T eo) {
         Object key = eo.valueForKeyPath(keyPath());
+        if (key == null) {
+        	key = NSKeyValueCoding.NullValue;
+        }
         addObjectForKey(eo, key);
     }
 
@@ -463,6 +467,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     public void removeObject(T eo) {
         Object key = eo.valueForKeyPath(keyPath());
+        if (key == null) {
+        	key = NSKeyValueCoding.NullValue;
+        }
         removeObjectForKey(eo, key);
     }
 
@@ -484,6 +491,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     public void updateObject(T eo) {
         Object key = eo.valueForKeyPath(keyPath());
+        if (key == null) {
+        	key = NSKeyValueCoding.NullValue;
+        }
         updateObjectForKey(eo, key);
     }
 
