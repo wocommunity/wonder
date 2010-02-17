@@ -19,5 +19,6 @@
 	<classpathentry kind="con" path="WOFramework/ERMoviesLogic"/>
 	<classpathentry kind="con" path="WOFramework/DerbyPlugIn"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERDivaliteLook"/>
+	<classpathentry kind="con" path="WOFramework/ERDivaliteLook"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
