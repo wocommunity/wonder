@@ -301,6 +301,23 @@ public class ERXPatcher {
 				processResponse(this, newResponse, wocontext, 0, null);
 				woresponse.appendContentString(newResponse.contentString());
 			}
+			
+			// WO 5.4: 5.4 already does this
+			protected boolean hasContent() {
+				return false;
+			}
+			
+			// WO 5.4: 5.4 already does this, but for 5.3, if you want to use WOImage's with
+			// PDF generation, you need XHTML output
+		    protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
+		        response.appendContentCharacter('<');
+		        response.appendContentString(elementName());
+		        appendAttributesToResponse(response, context);
+		        if(!hasContent()) {
+		            response.appendContentString(" /");
+		        }
+		        response.appendContentCharacter('>');
+		    }
 		}
 
 		public static class ActiveImage extends WOActiveImage {
@@ -394,7 +411,7 @@ public class ERXPatcher {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
-			
+
 			/* select element shouldn't worry about value attribute */
 			@Override
 			protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
