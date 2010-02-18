@@ -14,6 +14,10 @@ import er.rest.ERXRestFetchSpecification;
  * ERXUnsafeReadOnlyRouteController. This provides a default read-only interface to the attributes and to-one
  * relationships of the specified entity.
  * 
+ * <pre>
+ * routeRequestHandler.addDefaultRoutes(YourEntity.ENTITY_NAME, ERXUnsafeReadOnlyRouteController.class);
+ * </pre>
+ *
  * @author mschrag
  * 
  * @param <T>

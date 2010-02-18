@@ -8,6 +8,10 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
  * ERXUnsafeReadWriteRouteController. This provides a default read/write interface to the attributes and to-one relationships of
  * the specified entity.
  * 
+ * <pre>
+ * routeRequestHandler.addDefaultRoutes(YourEntity.ENTITY_NAME, ERXUnsafeReadWriteRouteController.class);
+ * </pre>
+ *
  * @author mschrag
  * 
  * @param <T>
