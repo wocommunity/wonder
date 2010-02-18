@@ -79,7 +79,7 @@ public class AnimalController extends ERXDefaultRouteController {
 		Animal pet = pet();
 		pet.delete();
 		editingContext().saveChanges();
-		return response(pet.primaryKey(), null);
+		return response(pet, showFilter());
 	}
 
 	@Override
