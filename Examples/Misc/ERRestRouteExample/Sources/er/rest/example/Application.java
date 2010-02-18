@@ -55,7 +55,7 @@ public class Application extends ERXApplication {
 		routeRequestHandler.addDefaultRoutes("Car", false, CarController.class);
 		routeRequestHandler.addDefaultRoutes("Manufacturer", false, ManufacturerController.class);
 
-		// Register the request handler with the application -- it becomse the "ra" request handler
+		// Register the request handler with the application -- it becomes the "ra" request handler
 		ERXRouteRequestHandler.register(routeRequestHandler);
 	}
 }
