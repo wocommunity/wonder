@@ -957,6 +957,17 @@ public class ERXRouteController extends WODirectAction {
 		return entityName() + ERXStringUtilities.capitalize(actionName) + "Page";
 	}
 
+	/**
+	 * Called when no standard action method can be found to handle the requested route. The default
+	 * implementation just throws an exception.
+	 *  
+	 * @param actionName the unknown action name
+	 * @return WOActionResults
+	 */
+	protected WOActionResults performUnknownAction(String actionName) {
+		throw new RuntimeException("There is no action named '" + actionName + "' on '" + getClass().getSimpleName() + ".");
+	}
+	
 	@Override
 	public WOActionResults performActionNamed(String actionName) {
 		try {
@@ -1018,7 +1029,7 @@ public class ERXRouteController extends WODirectAction {
 		        		}
 		        	}
 		        	if (bestMethod == null) {
-		        		throw new RuntimeException("There is no action named '" + actionName + "' on '" + getClass().getSimpleName() + ".");
+		        		performUnknownAction(actionName);
 		        	}
 		        	else {
 		        		Object[] params = new Object[bestParameterCount];
