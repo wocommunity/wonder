@@ -124,7 +124,7 @@ public class PersonController extends ERXDefaultRouteController {
 		Person person = person();
 		person.delete();
 		editingContext().saveChanges();
-		return response(person.primaryKey(), null);
+		return response(person, showFilter());
 	}
 
 	@Override
