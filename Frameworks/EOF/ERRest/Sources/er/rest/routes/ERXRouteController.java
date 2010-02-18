@@ -36,6 +36,7 @@ import er.extensions.eof.ERXKeyFilter;
 import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRequestFormValues;
 import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestFetchSpecification;
@@ -832,8 +833,16 @@ public class ERXRouteController extends WODirectAction {
 	 * @return an error WOResponse
 	 */
 	public WOActionResults errorResponse(Throwable t, int status) {
-		WOResponse response = stringResponse(ERXExceptionUtilities.toParagraph(t));
-		response.setStatus(status);
+		String errorMessage = ERXLocalizer.defaultLocalizer().localizedStringForKey("ERXRest." + entityName() + ".errorMessage." + status);
+		if (errorMessage == null) {
+			errorMessage = ERXLocalizer.defaultLocalizer().localizedStringForKey("ERXRest.errorMessage." + status);
+			if (errorMessage == null) {
+				errorMessage = ERXExceptionUtilities.toParagraph(t, false);
+			}
+		}
+		String str = format().toString(errorMessage, null, null);
+		WOResponse response = stringResponse(str);
+		response.setStatus(status);	
 		log.error("Request failed: " + request().uri(), t);
 		return response;
 	}
@@ -848,7 +857,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @return an error WOResponse
 	 */
 	public WOActionResults errorResponse(String errorMessage, int status) {
-		WOResponse response = stringResponse(errorMessage);
+		String formattedErrorMessage = format().toString(errorMessage, null, null);
+		WOResponse response = stringResponse(formattedErrorMessage);
 		response.setStatus(status);
 		log.error("Request failed: " + request().uri() + ", " + errorMessage);
 		return response;
