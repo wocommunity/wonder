@@ -29,7 +29,7 @@ The source for ERXRestRouteExample is intended to be browsed. To fully understan
 	<li><b><wo:ERXRouteLink entityName="Person" id="1" action="show">Show Person 1 in HTML (goes to PersonShowPage)</wo:ERXRouteLink></b><br/>
 			curl <wo:ERXRouteURL entityName="Person" id="1" action="show" format="html" absolute="$true"/></li>
 	
-	<li><b>Update an attribute on Person:</b></b><br/>
+	<li><b>Update an attribute on Person:</b><br/>
 			curl -X PUT -d "{ name: 'Updated Name' }" <wo:ERXRouteURL entityName="Person" id="1" action="show" format="json" absolute="$true"/></li>
 			
 	<li><b>Update a to-one relationshio on Person:</b><br/>
