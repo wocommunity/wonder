@@ -106,6 +106,7 @@ public class ERXRestClient {
 		return sb.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T object(String entityName, String id, String action, ERXRestFormat format) throws HttpException, IOException {
 		return (T) objectWithPath(path(entityName, id, action, format));
 	}
