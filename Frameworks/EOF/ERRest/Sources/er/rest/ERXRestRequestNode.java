@@ -733,6 +733,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 	@SuppressWarnings("unchecked")
 	protected void _addAttributesAndRelationshipsForObjectOfEntity(Object obj, EOClassDescription classDescription, ERXKeyFilter keyFilter, IERXRestDelegate delegate, Set<Object> visitedObjects) {
+		// just break out ... no key filter = nothing to do
+		if (keyFilter == null) {
+			return;
+		}
+		
 		Set<ERXKey> visitedKeys = new HashSet<ERXKey>();
 		for (String attributeName : (NSArray<String>) classDescription.attributeKeys()) {
 			// if (attribute.isClassProperty()) {
