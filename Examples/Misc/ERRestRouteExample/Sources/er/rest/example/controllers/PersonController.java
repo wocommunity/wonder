@@ -45,7 +45,7 @@ public class PersonController extends ERXDefaultRouteController {
 	}
 
 	/**
-	 * This shows adding a derived attribute into the fitler results.
+	 * This shows adding a derived attribute into the filter results.
 	 * 
 	 * @return
 	 */
