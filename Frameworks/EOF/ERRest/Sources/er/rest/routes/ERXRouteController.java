@@ -38,6 +38,7 @@ import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.rest.ERXRequestFormValues;
 import er.rest.ERXRestClassDescriptionFactory;
+import er.rest.ERXRestFetchSpecification;
 import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
@@ -597,6 +598,20 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public WOActionResults xml(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		return response(ERXRestFormat.XML, entity, values, filter);
+	}
+
+	/**
+	 * Returns the results of the rest fetch spec as an response in the format returned from the format() method. 
+	 * This uses the editing context returned by editingContext().
+	 * 
+	 * @param fetchSpec
+	 *            the rest fetch specification to execute
+	 * @param filter
+	 *            the filter to apply to the objects
+	 * @return a WOResponse of the format returned from the format() method
+	 */
+	public WOActionResults response(ERXRestFetchSpecification<?> fetchSpec, ERXKeyFilter filter) {
+		return response(format(), editingContext(), fetchSpec.entityName(), fetchSpec.objects(editingContext(), options()), filter);
 	}
 
 	/**
