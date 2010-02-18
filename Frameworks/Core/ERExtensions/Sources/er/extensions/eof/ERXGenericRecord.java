@@ -1191,6 +1191,34 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return originalSnapshot != null && !originalSnapshot.equals(snapshot);
 	}
 
+	private boolean _validatedWhenNested = true;
+	
+	/**
+	 * If false, when this object is committed into a nested editingContext and it exists
+	 * in the parent editing context, validation will be skipped. This supports nested
+	 * UI workflows where you want to create a new to-one relationship for an object that
+	 * isn't fully configured by localInstancing it into a nested editing context. In
+	 * that scenario, the localInstance'd EO would attempt to validate when the nested
+	 * editing context is committed, throwing a validation exception that should be
+	 * deferred to the parent editing context. This defaults to true, which maintains
+	 * the current behavior.
+	 * 
+	 * @param validatedWhenNested
+	 */
+	public void setValidatedWhenNested(boolean validatedWhenNested) {
+		_validatedWhenNested = validatedWhenNested;
+	}
+	
+	/**
+	 * Returns whether or not this object is validated when it is committed in a 
+	 * nested editing context.
+	 * 
+	 * @return whether or not this object is validated when it is committed in a  nested editing context.
+	 */
+	public boolean isValidatedWhenNested() {
+		return _validatedWhenNested;
+	}
+	
 	/**
 	 * Overrides the default validation mechanisms to provide a few checks
 	 * before invoking super's implementation, which incidently just invokes
@@ -1257,6 +1285,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public void validateForSave() throws NSValidation.ValidationException {
+		// Support for skipping validation when _validatedWhenNested is false and this EO is localInstanced from a parent EC
+		if (!_validatedWhenNested && editingContext().parentObjectStore() instanceof EOEditingContext && ((EOEditingContext)editingContext().parentObjectStore()).objectForGlobalID(editingContext().globalIDForObject(this)) != null) {
+			return;
+		}
+		
 		// This condition shouldn't ever happen, but it does ;)
 		// CHECKME: This was a 4.5 issue, not sure if this one has been fixed
 		// yet.
