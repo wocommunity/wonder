@@ -5,7 +5,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
  * If you just want to quickly drop in a controller to test your entities, you can use or extend
- * ERXUnsafeRouteController. This provides a default read/write interface to the attributes and to-one relationships of
+ * ERXUnsafeReadWriteRouteController. This provides a default read/write interface to the attributes and to-one relationships of
  * the specified entity.
  * 
  * @author mschrag
@@ -13,8 +13,8 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
  * @param <T>
  *            the type of your entity
  */
-public class ERXUnsafeRouteController<T extends EOEnterpriseObject> extends ERXUnsafeReadOnlyRouteController<T> {
-	public ERXUnsafeRouteController(WORequest request) {
+public class ERXUnsafeReadWriteRouteController<T extends EOEnterpriseObject> extends ERXUnsafeReadOnlyRouteController<T> {
+	public ERXUnsafeReadWriteRouteController(WORequest request) {
 		super(request);
 	}
 
