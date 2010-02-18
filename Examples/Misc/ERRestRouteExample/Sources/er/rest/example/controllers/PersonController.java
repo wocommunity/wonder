@@ -141,6 +141,6 @@ public class PersonController extends ERXDefaultRouteController {
 	@Override
 	public WOActionResults indexAction() {
 		ERXRestFetchSpecification<Person> fetchSpec = new ERXRestFetchSpecification<Person>(Person.ENTITY_NAME, null, null, queryFilter(), Person.NAME.ascs(), 25);
-		return response(editingContext(), Person.ENTITY_NAME, fetchSpec.objects(editingContext(), options()), showFilter());
+		return response(fetchSpec, showFilter());
 	}
 }

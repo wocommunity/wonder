@@ -86,6 +86,6 @@ public class CompanyController extends ERXRouteController {
 
 	public WOActionResults indexAction() {
 		ERXRestFetchSpecification<Company> fetchSpec = new ERXRestFetchSpecification<Company>(Company.ENTITY_NAME, null, null, queryFilter(), Company.NAME.ascs(), 25);
-		return response(editingContext(), Company.ENTITY_NAME, fetchSpec.objects(editingContext(), options()), showFilter());
+		return response(fetchSpec, showFilter());
 	}
 }

@@ -136,6 +136,15 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 		_defaultBatchSize = defaultBatchSize;
 		enableRequestQualifiers(baseQualifier, qualifierFilter);
 	}
+	
+	/**
+	 * Returns the name of the entity used in this fetch.
+	 * 
+	 * @return the name of the entity used in this fetch
+	 */
+	public String entityName() {
+		return _entityName;
+	}
 
 	/**
 	 * Returns the maximum batch size (defaults to 100).

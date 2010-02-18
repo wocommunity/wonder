@@ -99,6 +99,6 @@ public class AnimalController extends ERXDefaultRouteController {
 	@Override
 	public WOActionResults indexAction() {
 		ERXRestFetchSpecification<Animal> fetchSpec = new ERXRestFetchSpecification<Animal>(Animal.ENTITY_NAME, null, null, queryFilter(), Animal.NAME.ascs(), 25);
-		return response(editingContext(), Animal.ENTITY_NAME, fetchSpec.objects(editingContext(), options()), showFilter());
+		return response(fetchSpec, showFilter());
 	}
 }
