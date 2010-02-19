@@ -50,6 +50,20 @@ public interface IERXRestDelegate {
 	public Object objectOfEntityWithID(EOClassDescription entity, Object id);
 
 	/**
+	 * This API will likely change. Override if you have to for now, but I'm not
+	 * sure if it makes more sense to return an array of pk classes, a map of
+	 * pk to pk class, this boolean, or an array of pk attribute names. If we
+	 * return pk names, we could probably get rid of primaryKeyForObject, or
+	 * at least fully implement it in ERXAbstractRestDelegate, but I don't
+	 * want to fully commit to this API yet. In the meantime, this at least
+	 * provides a stapgap for automatic registration. 
+	 *  
+	 * @param classDescription the class description in question
+	 * @return whether or not the given class description has numeric pks
+	 */
+	public boolean __hasNumericPrimaryKeys(EOClassDescription classDescription);
+
+	/**
 	 * A Factory for creating IERXRestDelegates. Right now it's just hard-coded, but this is being added for a later
 	 * extension point.
 	 * 

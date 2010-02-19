@@ -7,7 +7,9 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.eof.ERXEOControlUtilities;
 
@@ -18,6 +20,21 @@ import er.extensions.eof.ERXEOControlUtilities;
  */
 public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 	public ERXEORestDelegate() {
+	}
+	
+	@Override
+	public boolean __hasNumericPrimaryKeys(EOClassDescription classDescription) {
+		boolean numericPKs = false;
+		if (classDescription instanceof EOEntityClassDescription) {
+			EOEntity entity = ((EOEntityClassDescription)classDescription).entity();
+			NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
+			if (primaryKeyAttributes.count() == 1) {
+				EOAttribute primaryKeyAttribute = (EOAttribute) primaryKeyAttributes.objectAtIndex(0);
+				Class primaryKeyClass = _NSUtilities.classWithName(primaryKeyAttribute.className());
+				numericPKs = primaryKeyClass != null && Number.class.isAssignableFrom(primaryKeyClass);
+			}
+		}
+		return numericPKs;
 	}
 
 	@Override

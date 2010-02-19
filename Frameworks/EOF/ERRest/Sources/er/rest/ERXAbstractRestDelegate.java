@@ -15,6 +15,10 @@ public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 	public ERXAbstractRestDelegate() {
 	}
 	
+	public boolean __hasNumericPrimaryKeys(EOClassDescription classDescription) {
+		return false;
+	}
+	
 	public void setCreateMissingObjects(boolean createMissingObjects) {
 		_createMissingObjects = createMissingObjects;
 	}

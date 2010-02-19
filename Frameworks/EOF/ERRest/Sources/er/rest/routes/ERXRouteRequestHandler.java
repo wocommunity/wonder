@@ -9,6 +9,7 @@ import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver._private.WODirectActionRequestHandler;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -18,7 +19,9 @@ import com.webobjects.foundation._NSUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
+import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestNameRegistry;
+import er.rest.IERXRestDelegate;
 import er.rest.routes.jsr311.DELETE;
 import er.rest.routes.jsr311.GET;
 import er.rest.routes.jsr311.HttpMethod;
@@ -470,7 +473,11 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the controller class
 	 */
 	public void addDefaultRoutes(String entityName, Class<? extends ERXRouteController> controllerClass) {
-		addDefaultRoutes(entityName, true, controllerClass);
+		// MS: We should probably remove all of the "boolean numericPKs" attributes for registration, but I don't
+		// want to do that so soon after the initial screencast of using the APIs.
+		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
+		boolean numericPKs = IERXRestDelegate.Factory.delegateForEntityNamed(entityName, null).__hasNumericPrimaryKeys(classDescription);
+		addDefaultRoutes(entityName, numericPKs, controllerClass);
 	}
 
 	/**
