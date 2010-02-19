@@ -2,8 +2,7 @@ package er.rest.example;
 
 import er.extensions.appserver.ERXApplication;
 import er.rest.ERXRestNameRegistry;
-import er.rest.example.controllers.CarController;
-import er.rest.example.controllers.ManufacturerController;
+import er.rest.example.controllers.AnimalController;
 import er.rest.example.controllers.PersonController;
 import er.rest.example.model.Animal;
 import er.rest.example.model.Company;
@@ -32,10 +31,15 @@ public class Application extends ERXApplication {
 		ERXRouteRequestHandler routeRequestHandler = new ERXRouteRequestHandler(ERXRouteRequestHandler.WO);
 
 		// Add the default routes for Company -- CompanyController does some JSR-311 annotations
+		// If you register routes without specifying a controller name, the request handler will automatically look for
+		// a controller named [EntityName]Controller. In this case, it would expect a CompanyController class that extends
+		// ERXRouteController.
 		routeRequestHandler.addDefaultRoutes(Company.ENTITY_NAME);
 
 		// Add the default routes for Animal -- AnimalController is a ERXDefaultRouteController, and is exposed as "Pet" externally
-		routeRequestHandler.addDefaultRoutes(Animal.ENTITY_NAME);
+		// This is showing the more explicit registration for default routes, where we specify the entity name, the entity type, 
+		// whether the entity has numeric PKs (an attribute which may disappear later), and the controller class to use
+		routeRequestHandler.addDefaultRoutes(Animal.ENTITY_NAME, Animal.ENTITY_NAME, true, AnimalController.class);
 
 		// This is showing what addDefaultRoutes actually does and that you add your own custom routes this way as well.
 		// routeRequestHandler.addDefaultRoutes(Person.ENTITY_NAME);
@@ -52,8 +56,8 @@ public class Application extends ERXApplication {
 		// Car and Manufacturer are two non-EO classes. For this to work properly, you need to either manually register
 		// delegates for them via IERXRestDelegate.Factory or create classes named <EntityName>RestDelegate, which is
 		// how this project works -- CarRestDelegate and ManufacturerRestDelegate.
-		routeRequestHandler.addDefaultRoutes("Car", false, CarController.class);
-		routeRequestHandler.addDefaultRoutes("Manufacturer", false, ManufacturerController.class);
+		routeRequestHandler.addDefaultRoutes("Car");
+		routeRequestHandler.addDefaultRoutes("Manufacturer");
 
 		// Register the request handler with the application -- it becomes the "ra" request handler
 		ERXRouteRequestHandler.register(routeRequestHandler);
