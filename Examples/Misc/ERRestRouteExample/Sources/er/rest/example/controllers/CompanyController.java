@@ -40,7 +40,7 @@ public class CompanyController extends ERXRouteController {
 	}
 
 	public WOActionResults createAction() {
-		Company company = (Company) create(Company.ENTITY_NAME, updateFilter());
+		Company company = create(updateFilter());
 		editingContext().saveChanges();
 		return response(company, showFilter());
 	}
