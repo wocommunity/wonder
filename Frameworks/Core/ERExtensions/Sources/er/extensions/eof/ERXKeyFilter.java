@@ -23,7 +23,7 @@ import com.webobjects.foundation.NSSet;
  * </p>
  * 
  * <pre>
- * ERXKeyFilter companyFilter = new ERXKeyFilter(ERXKeyFilter.Base.Attributes);
+ * ERXKeyFilter companyFilter = ERXKeyFilter.filterWithAttribtues();
  * ERXKeyFilter remindersFilter = companyFilter.include(Company.REMINDERS);
  * remindersFilter.include(Reminder.SUMMARY);
  * ERXKeyFilter reminderAuthorFilter = remindersFilter.include(Reminder.AUTHOR);
