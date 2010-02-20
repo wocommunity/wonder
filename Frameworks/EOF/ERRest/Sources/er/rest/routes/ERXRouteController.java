@@ -362,6 +362,18 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
+	 * Returns the object from the request data that is of the routed entity name and is filtered with the given filter.
+	 * This will use the delegate returned from this controller's delegate() method.
+	 * 
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to not update)
+	 * @return the object from the request data
+	 */
+	public Object object(ERXKeyFilter filter) {
+		return object(entityName(), filter, delegate());
+	}
+
+	/**
 	 * Returns the object from the request data that is of the given entity name and is filtered with the given filter.
 	 * This will use the delegate returned from this controller's delegate() method.
 	 * 
@@ -373,6 +385,19 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public Object object(String entityName, ERXKeyFilter filter) {
 		return object(entityName, filter, delegate());
+	}
+
+	/**
+	 * Returns the object from the request data that is of the routed entity name and is filtered with the given filter.
+	 * 
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to not update)
+	 * @param delegate
+	 *            the delegate to use
+	 * @return the object from the request data
+	 */
+	public Object object(ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return requestNode().objectWithFilter(entityName(), filter, delegate);
 	}
 
 	/**
@@ -389,6 +414,18 @@ public class ERXRouteController extends WODirectAction {
 	public Object object(String entityName, ERXKeyFilter filter, IERXRestDelegate delegate) {
 		return requestNode().objectWithFilter(entityName, filter, delegate);
 	}
+	
+	/**
+	 * Creates a new object from the request data that is of the routed entity name and is filtered with the given
+	 * filter. This will use the delegate returned from this controller's delegate() method.
+	 * 
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
+	 * @return the object from the request data
+	 */
+	public Object create(ERXKeyFilter filter) {
+		return create(entityName(), filter);
+	}
 
 	/**
 	 * Creates a new object from the request data that is of the given entity name and is filtered with the given
@@ -402,6 +439,20 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public Object create(String entityName, ERXKeyFilter filter) {
 		return create(entityName, filter, delegate());
+	}
+
+	/**
+	 * Creates a new object from the request data that is of the routed entity name and is filtered with the given
+	 * filter.
+	 * 
+	 * @param filter
+	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
+	 * @param delegate
+	 *            the delegate to use
+	 * @return the object from the request data
+	 */
+	public Object create(ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return requestNode().createObjectWithFilter(entityName(), filter, delegate);
 	}
 
 	/**
