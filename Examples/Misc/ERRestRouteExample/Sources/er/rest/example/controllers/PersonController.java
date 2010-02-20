@@ -35,7 +35,7 @@ public class PersonController extends ERXDefaultRouteController {
 	}
 
 	protected Person person() {
-		Person person = (Person) routeObjectForKey("person");
+		Person person = routeObjectForKey("person");
 		return person;
 	}
 
@@ -62,10 +62,10 @@ public class PersonController extends ERXDefaultRouteController {
 		filter.include(Person.COMPANY).includeAttributes(); // let you update a company inside of a person
 		return filter;
 	}
-
+	
 	@Override
 	public WOActionResults createAction() {
-		Person person = (Person) create(Person.ENTITY_NAME, updateFilter());
+		Person person = create(updateFilter());
 		editingContext().saveChanges();
 		return response(person, showFilter());
 	}

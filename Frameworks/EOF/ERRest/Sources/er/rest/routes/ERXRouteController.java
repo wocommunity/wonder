@@ -265,8 +265,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the key name to lookup
 	 * @return the processed object from the route keys with the given name
 	 */
-	public Object routeObjectForKey(String key) {
-		return routeObjects().objectForKey(new ERXRoute.Key(key));
+	@SuppressWarnings("unchecked")
+	public <T> T routeObjectForKey(String key) {
+		return (T)routeObjects().objectForKey(new ERXRoute.Key(key));
 	}
 
 	/**
@@ -369,7 +370,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the object for the purposes of updating (or null to not update)
 	 * @return the object from the request data
 	 */
-	public Object object(ERXKeyFilter filter) {
+	public <T> T object(ERXKeyFilter filter) {
 		return object(entityName(), filter, delegate());
 	}
 
@@ -383,7 +384,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the object for the purposes of updating (or null to not update)
 	 * @return the object from the request data
 	 */
-	public Object object(String entityName, ERXKeyFilter filter) {
+	public <T> T object(String entityName, ERXKeyFilter filter) {
 		return object(entityName, filter, delegate());
 	}
 
@@ -396,8 +397,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
-	public Object object(ERXKeyFilter filter, IERXRestDelegate delegate) {
-		return requestNode().objectWithFilter(entityName(), filter, delegate);
+	@SuppressWarnings("unchecked")
+	public <T> T object(ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return (T)requestNode().objectWithFilter(entityName(), filter, delegate);
 	}
 
 	/**
@@ -411,8 +413,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
-	public Object object(String entityName, ERXKeyFilter filter, IERXRestDelegate delegate) {
-		return requestNode().objectWithFilter(entityName, filter, delegate);
+	@SuppressWarnings("unchecked")
+	public <T> T object(String entityName, ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return (T)requestNode().objectWithFilter(entityName, filter, delegate);
 	}
 	
 	/**
@@ -423,7 +426,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
 	 * @return the object from the request data
 	 */
-	public Object create(ERXKeyFilter filter) {
+	public <T> T create(ERXKeyFilter filter) {
 		return create(entityName(), filter);
 	}
 
@@ -437,7 +440,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
 	 * @return the object from the request data
 	 */
-	public Object create(String entityName, ERXKeyFilter filter) {
+	public <T> T create(String entityName, ERXKeyFilter filter) {
 		return create(entityName, filter, delegate());
 	}
 
@@ -451,8 +454,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
-	public Object create(ERXKeyFilter filter, IERXRestDelegate delegate) {
-		return requestNode().createObjectWithFilter(entityName(), filter, delegate);
+	@SuppressWarnings("unchecked")
+	public <T> T create(ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return (T)requestNode().createObjectWithFilter(entityName(), filter, delegate);
 	}
 
 	/**
@@ -467,8 +471,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
-	public Object create(String entityName, ERXKeyFilter filter, IERXRestDelegate delegate) {
-		return requestNode().createObjectWithFilter(entityName, filter, delegate);
+	@SuppressWarnings("unchecked")
+	public <T> T create(String entityName, ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return (T)requestNode().createObjectWithFilter(entityName, filter, delegate);
 	}
 
 	/**

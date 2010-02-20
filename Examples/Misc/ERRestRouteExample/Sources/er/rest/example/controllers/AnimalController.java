@@ -19,12 +19,12 @@ public class AnimalController extends ERXDefaultRouteController {
 	}
 
 	/**
-	 * Returns the value of the "pet" variable from the route.
+	 * Returns the value of the "animal" variable from the route.
 	 * @return
 	 */
-	public Animal pet() {
-		Animal pet = (Animal) routeObjectForKey("animal");
-		return pet;
+	public Animal animal() {
+		Animal animal = routeObjectForKey("animal");
+		return animal;
 	}
 
 	/**
@@ -61,25 +61,25 @@ public class AnimalController extends ERXDefaultRouteController {
 
 	@Override
 	public WOActionResults createAction() {
-		Animal pet = (Animal) create(Animal.ENTITY_NAME, updateFilter());
+		Animal animal = create(updateFilter());
 		editingContext().saveChanges();
-		return response(pet, showFilter());
+		return response(animal, showFilter());
 	}
 
 	@Override
 	public WOActionResults updateAction() {
-		Animal pet = pet();
-		update(pet, updateFilter());
+		Animal animal = animal();
+		update(animal, updateFilter());
 		editingContext().saveChanges();
-		return response(pet, showFilter());
+		return response(animal, showFilter());
 	}
 
 	@Override
 	public WOActionResults destroyAction() throws Throwable {
-		Animal pet = pet();
-		pet.delete();
+		Animal animal = animal();
+		animal.delete();
 		editingContext().saveChanges();
-		return response(pet, showFilter());
+		return response(animal, showFilter());
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class AnimalController extends ERXDefaultRouteController {
 
 	@Override
 	public WOActionResults showAction() {
-		return response(pet(), showFilter());
+		return response(animal(), showFilter());
 	}
 
 	/**
