@@ -488,7 +488,7 @@ public class PostgresqlExpression extends JDBCExpression {
         	if (enableBooleanQuoting() || "S".equals(eoattribute.valueType())) {
         		value = "'" + ((Boolean)obj).toString() + "'";
         	}
-        	else if ("NSNumber".equals(eoattribute.valueClassName()) || "java.lang.Number".equals(eoattribute.valueClassName()) || "Number".equals(eoattribute.valueClassName())) {
+        	else if (!"bool".equals(eoattribute.externalType().toLowerCase()) && "NSNumber".equals(eoattribute.valueClassName()) || "java.lang.Number".equals(eoattribute.valueClassName()) || "Number".equals(eoattribute.valueClassName())) {
         		value = ((Boolean)obj).booleanValue() ? "1" : "0";
         	}
         	else {
