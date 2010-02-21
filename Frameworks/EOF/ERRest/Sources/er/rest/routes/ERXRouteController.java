@@ -370,8 +370,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the object for the purposes of updating (or null to not update)
 	 * @return the object from the request data
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T object(ERXKeyFilter filter) {
-		return object(entityName(), filter, delegate());
+		return (T)object(entityName(), filter, delegate());
 	}
 
 	/**
@@ -384,8 +385,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the object for the purposes of updating (or null to not update)
 	 * @return the object from the request data
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T object(String entityName, ERXKeyFilter filter) {
-		return object(entityName, filter, delegate());
+		return (T)object(entityName, filter, delegate());
 	}
 
 	/**
@@ -426,8 +428,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
 	 * @return the object from the request data
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T create(ERXKeyFilter filter) {
-		return create(entityName(), filter);
+		return (T)create(entityName(), filter);
 	}
 
 	/**
@@ -440,8 +443,9 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
 	 * @return the object from the request data
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T create(String entityName, ERXKeyFilter filter) {
-		return create(entityName, filter, delegate());
+		return (T)create(entityName, filter, delegate());
 	}
 
 	/**
