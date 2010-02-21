@@ -409,7 +409,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -436,7 +438,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -458,7 +462,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -480,7 +486,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -502,7 +510,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -524,7 +534,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -546,7 +558,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -568,7 +582,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -590,7 +606,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -612,7 +630,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -634,7 +654,9 @@ public class ERXPatcher {
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 		
