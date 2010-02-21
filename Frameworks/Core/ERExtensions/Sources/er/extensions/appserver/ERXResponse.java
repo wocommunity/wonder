@@ -307,4 +307,23 @@ public class ERXResponse extends WOResponse {
 		return isIE;
 	}
 
+	/**
+	 * Sets whether the given response should turn on XHTML tag rendering.
+	 * 
+	 * @param response the response to turn XHTML on for
+	 * @param xhtml whether or not XHTML should be turned on
+	 */
+	public static void setXHTML(WOResponse response, boolean xhtml) {
+		response.setHeader(String.valueOf(xhtml), "x-wo-xml-tags");
+	}
+	
+	/**
+	 * Returns whether or not XHTML is turned on for the given response.
+	 * 
+	 * @param response the response to check XHTML for
+	 * @return whether or not XHTML was turned on
+	 */
+	public static boolean isXHTML(WOResponse response) {
+		return "true".equals(response.headerForKey("x-wo-xml-tags"));
+	}
 }
