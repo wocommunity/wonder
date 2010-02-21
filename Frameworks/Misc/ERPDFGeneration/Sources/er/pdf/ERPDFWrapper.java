@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXRequest;
 import er.extensions.appserver.ERXResourceManager;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXWOContext;
 
 /**
@@ -49,7 +50,8 @@ public class ERPDFWrapper extends WODynamicGroup implements WOActionResults {
   }
 
   @Override
-  public void appendToResponse(WOResponse response, WOContext context) {    
+  public void appendToResponse(WOResponse response, WOContext context) {
+  	ERXResponse.setXHTML(response, true);
     boolean enabled = _enabled != null ? _enabled.booleanValueInComponent(context.component()) : true;
 
     super.appendToResponse(response, context);
