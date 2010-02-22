@@ -7,10 +7,12 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSStringUtilities;
@@ -302,5 +304,47 @@ public class EROracleExpression extends OracleExpression {
             sb.append(_fetchLimit);
         }
         return sb.toString();
+    }
+    
+    /** 
+     * Overridden to allow the Null Sorting behavior of Oracle to be modified by 
+     * setting an application property. There are three options: 
+     * 
+     * 1) Nulls always first, irrespective of sorting: 
+     * EROraclePlugIn.nullSortBehavior=NullsFirst 
+     * 
+     * 2) Nulls always last, irrespective of sorting (this is Oracle's default): 
+     * EROraclePlugIn.nullSortBehavior=NullsLast 
+     * 
+     * 3) Nulls as the least or smallest value, the same as EOF: 
+     * EROraclePlugIn.nullSortBehavior=EOFStyle.
+     * 
+     * If you want to use either NullsFirst or NullsLast, you will need to 
+     * create a new EOSortOrdering.ComparisonSupport class and set it to be used 
+     * at application startup otherwise EOF will still go and resort using nulls 
+     * as the smallest value. 
+     * 
+     * @see com.webobjects.eoaccess.EOSQLExpression#addOrderByAttributeOrdering(com.webobjects.eocontrol.EOSortOrdering) 
+     */ 
+    @Override 
+    public void addOrderByAttributeOrdering(EOSortOrdering sortOrdering) {
+        super.addOrderByAttributeOrdering(sortOrdering); 
+        String nullSortBehavior = NSProperties.getProperty("EROraclePlugin.nullSortBehavior"); 
+        if (nullSortBehavior != null) { 
+            if ("EOFStyle".equals(nullSortBehavior)) { 
+                if (sortOrdering.selector() == EOSortOrdering.CompareCaseInsensitiveDescending || sortOrdering.selector() == EOSortOrdering.CompareDescending) { 
+                    _orderByString().append(" NULLS LAST"); 
+                }
+                else { 
+                    _orderByString().append(" NULLS FIRST"); 
+                }
+            }
+            else if ("NullsFirst".equals(nullSortBehavior)) { 
+                _orderByString().append(" NULLS FIRST"); 
+            }
+            else if ("NullsLast".equals(nullSortBehavior)) { 
+                _orderByString().append(" NULLS LAST"); // Oracle's normal default 
+            } 
+        }
     }
 }
