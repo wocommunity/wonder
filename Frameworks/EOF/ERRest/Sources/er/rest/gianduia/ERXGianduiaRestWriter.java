@@ -140,5 +140,6 @@ public class ERXGianduiaRestWriter implements IERXRestWriter {
 		Map<Object, ERXRestRequestNode> conversionMap = new HashMap<Object, ERXRestRequestNode>();
 		Object object = node.toJavaCollection(delegate, conversionMap);
 		appendObjectToResponse(object, conversionMap, response);
+		response.appendContentString("\n");
 	}
 }

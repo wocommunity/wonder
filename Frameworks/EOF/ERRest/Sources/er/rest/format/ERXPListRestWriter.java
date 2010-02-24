@@ -13,5 +13,6 @@ public class ERXPListRestWriter implements IERXRestWriter {
 		appendHeadersToResponse(node, response);
 		Object object = node.toNSCollection(delegate);
 		response.appendContentString(NSPropertyListSerialization.stringFromPropertyList(object));
+		response.appendContentString("\n");
 	}
 }
