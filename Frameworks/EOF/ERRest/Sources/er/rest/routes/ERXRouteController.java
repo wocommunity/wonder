@@ -672,7 +672,15 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a WOResponse of the format returned from the format() method
 	 */
 	public WOActionResults response(ERXRestFetchSpecification<?> fetchSpec, ERXKeyFilter filter) {
-		return response(format(), editingContext(), fetchSpec.entityName(), fetchSpec.objects(editingContext(), options()), filter);
+		WOActionResults response;
+		if (fetchSpec == null) {
+			// MS: you probably meant to call response(Object, filter) in this case -- just proxy through
+			response = response(format(), null, filter);
+		}
+		else {
+			response = response(format(), editingContext(), fetchSpec.entityName(), fetchSpec.objects(editingContext(), options()), filter);
+		}
+		return response;
 	}
 
 	/**
