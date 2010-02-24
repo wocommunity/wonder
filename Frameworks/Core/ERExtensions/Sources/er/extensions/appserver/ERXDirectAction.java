@@ -461,6 +461,27 @@ public class ERXDirectAction extends WODirectAction {
     	return response;
     }
 
+    /**
+     * To use this, include this line in appendToResponse on any pages with uploads:
+     * <code>
+     * AjaxUtils.addScriptResourceInHead(context, response, "Ajax", "prototype.js");
+     * AjaxUtils.addScriptResourceInHead(context, response, "Ajax", "SafariUploadHack.js");
+     * </code>
+     *
+     * <p>To be called before multi-form submits to get past Safari 3.2.1 and 4.x intermittent hang-ups
+     * when posting binary data.  A nice succinct description and solution is posted here:
+     * http://blog.airbladesoftware.com/2007/8/17/note-to-self-prevent-uploads-hanging-in-safari
+     * The radar ticket is here: https://bugs.webkit.org/show_bug.cgi?id=5760</p>
+     *
+     * @return simple response to close the connection
+     */
+    public WOActionResults closeHTTPSessionAction() { 
+    	WOResponse response = new WOResponse();
+    	response.setContent(""); 
+    	response.setHeader("close", "Connection"); 
+    	return response; 
+    }
+        
     @SuppressWarnings("unchecked")
     public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
       return (T) super.pageWithName(componentClass.getName());
