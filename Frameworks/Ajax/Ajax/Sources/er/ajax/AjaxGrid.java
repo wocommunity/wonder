@@ -127,8 +127,12 @@ import er.extensions.foundation.ERXValueUtilities;
  *                keyPath = &quot;daysVacation&quot;;
  *                direction = &quot;ascending&quot;;
  *            }
- *      );
- *  
+ *        );													// This sort is always present so that if the grid is sorted with some ordering where
+ *        mandatorySort = {										// identical values span multiple batches, batch membership will not be indeterminate. 
+ *   	      keyPath = "masterAdKey";						    // This will only function if this sorting is quite unique (e.g. like a PK).
+ *   	      direction = "ascending";							// If this sort is also present in sortOrder (above), it will not be duplicated
+ *        };													// but will still always be present. If the user has not manually selected it,
+ *        														// it will not be indicated in the UI.
  *  }
  * </pre>
  * 
@@ -326,7 +330,9 @@ public class AjaxGrid extends WOComponent {
 	public static final String SELECTED_OBJECTS_BINDING = "selectedObjects";
 	public static final String WILL_UPDATE_BINDING = "willUpdate";
 	public static final String AFTER_UPDATE_BINDING = "afterUpdate";
-
+	public static final String MANDATORY_SORT_ORDER_FLAG = "isMandatorySortOrder";
+	public static final String MANDATORY_SORT = "mandatorySort";
+	
 	public static final String CHECK_HASH_CODES = "er.extensions.ERXWORepetition.checkHashCodes";
 	
 	
@@ -374,14 +380,28 @@ public class AjaxGrid extends WOComponent {
 		}
 
 		NSMutableDictionary sortOrder = currentColumnSortOrder();
+		// Adding a new sort
 		if (sortOrder == null) {
 			NSMutableDictionary newSortOrder = new NSMutableDictionary(2);
 			newSortOrder.setObjectForKey(currentSortPath(), KEY_PATH);
 			newSortOrder.setObjectForKey(SORT_ASCENDING, SORT_DIRECTION);
 
-			sortOrders().addObject(newSortOrder);
+			if (hasMandatorySort() &&
+				((NSMutableDictionary) sortOrdersByKeypath().objectForKey(manadatorySortKeyPath())).valueForKey(MANDATORY_SORT_ORDER_FLAG) != null) {
+				sortOrders().insertObjectAtIndex(newSortOrder, sortOrders().count() - 1);
+			}
+			else {
+				sortOrders().addObject(newSortOrder);
+			}
+
 			clearCachedConfiguration();
 		}
+		// Making the mandatory sort into an explicit sort
+		else if (sortOrder.valueForKey(MANDATORY_SORT_ORDER_FLAG) != null) {
+			sortOrder.removeObjectForKey(MANDATORY_SORT_ORDER_FLAG);
+			sortOrder.setObjectForKey(SORT_ASCENDING, SORT_DIRECTION);
+		}
+		// Changing sort direction
 		else {
 			String direction = (String) sortOrder.objectForKey(SORT_DIRECTION);
 			sortOrder.setObjectForKey(SORT_ASCENDING.equals(direction) ? SORT_DESCENDING : SORT_ASCENDING, SORT_DIRECTION);
@@ -396,7 +416,7 @@ public class AjaxGrid extends WOComponent {
 	 */
 	public void removeSorting() {
 		if (canResort()) {
-			configurationData().setObjectForKey(new NSMutableArray(), SORT_ORDER);
+			configurationData().setObjectForKey(hasMandatorySort() ? new NSMutableArray(manadatorySortDictionary()) : new NSMutableArray(), SORT_ORDER);
 			clearCachedConfiguration();
 			updateDisplayGroupSort();
 		}
@@ -409,6 +429,32 @@ public class AjaxGrid extends WOComponent {
 		return tableID() + "_RemoveSorting";
 	}
 
+	/** @return <code>true</code> if the configuration has anything under the MANDATORY_SORT key */
+	public boolean hasMandatorySort() {
+		return configurationData().objectForKey(MANDATORY_SORT) != null;
+	}
+
+	/** 
+	 * Returns a copy of the mandatory sort configuration with an
+	 * additional (dummy) value for the MANDATORY_SORT_ORDER_FLAG.
+	 *
+	 * @see #sortOrders()
+	 * @return a dictionary of the mandatory sort
+	 */
+	public NSDictionary manadatorySortDictionary() {
+		NSMutableDictionary manadatorySortDictionary = (NSMutableDictionary) configurationData().objectForKey(MANDATORY_SORT);
+		manadatorySortDictionary = manadatorySortDictionary.mutableClone();
+		manadatorySortDictionary.setObjectForKey(Boolean.TRUE, MANDATORY_SORT_ORDER_FLAG);
+
+		return manadatorySortDictionary;
+	}
+
+	/** @return value for KEY_PATH under MANDATORY_SORT, the path of the mandatory sort */
+	public String manadatorySortKeyPath() {
+		NSMutableDictionary manadatorySortDictionary = (NSMutableDictionary) configurationData().objectForKey(MANDATORY_SORT);
+		return (String) manadatorySortDictionary.objectForKey(KEY_PATH);
+	}
+	
 	/**
 	 * This method is called when the AjaxUpdateContainer is about to update. It
 	 * invokes the willUpdate action binding, if set, and discards the result.
@@ -651,7 +697,6 @@ public class AjaxGrid extends WOComponent {
 			NSArray sortOrders = sortOrders();
 			sortOrdersByKeypath = new NSMutableDictionary(sortOrders.count());
 			for (int i = 0; i < sortOrders.count(); i++) {
-				
 				sortOrdersByKeypath.setObjectForKey(sortOrders.objectAtIndex(i), ((NSKeyValueCoding) sortOrders.objectAtIndex(i)).valueForKey(KEY_PATH));
 			}
 		}
@@ -764,10 +809,10 @@ public class AjaxGrid extends WOComponent {
 	
 	/**
 	 * @return <code>true</code> if currentColumn() is part of the sort
-	 *         ordering
+	 *         ordering but is not the mandatory sort
 	 */
 	public boolean isCurrentColumnSorted() {
-		return currentColumnSortOrder() != null;
+		return currentColumnSortOrder() != null && currentColumnSortOrder().objectForKey(MANDATORY_SORT_ORDER_FLAG) == null;
 	}
 
 	/**
