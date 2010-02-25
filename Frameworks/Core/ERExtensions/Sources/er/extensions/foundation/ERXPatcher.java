@@ -343,8 +343,8 @@ public class ERXPatcher {
 			}
 
 			@Override
-			public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
-				super.appendAttributesToResponse(woresponse, wocontext);
+			public void appendConstantAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
+				super.appendConstantAttributesToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
