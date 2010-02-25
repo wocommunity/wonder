@@ -79,6 +79,10 @@ public class ERXJSONRestParser implements IERXRestParser {
 			JSON rootJSON = JSONSerializer.toJSON(contentStr, ERXJSONRestWriter._config);
 			rootRequestNode = createRequestNodeForJSON(null, rootJSON, true, delegate);
 		}
+		else {
+			rootRequestNode = new ERXRestRequestNode(null, true);
+			rootRequestNode.setNull(true);
+		}
 
 		return rootRequestNode;
 	}

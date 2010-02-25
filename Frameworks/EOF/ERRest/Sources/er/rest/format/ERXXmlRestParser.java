@@ -104,6 +104,10 @@ public class ERXXmlRestParser implements IERXRestParser {
 				throw new IllegalArgumentException("Failed to parse request document.", e);
 			}
 		}
+		else {
+			rootRequestNode = new ERXRestRequestNode(null, true);
+			rootRequestNode.setNull(true);
+		}
 
 		return rootRequestNode;
 	}

@@ -43,6 +43,10 @@ public class ERXGianduiaRestParser implements IERXRestParser {
 			System.out.println("ERXGianduiaRestParser.parseRestRequest: " + rootJSON);
 			rootRequestNode = ERXJSONRestParser.createRequestNodeForJSON(null, rootJSON, true, delegate);
 		}
+		else {
+			rootRequestNode = new ERXRestRequestNode(null, true);
+			rootRequestNode.setNull(true);
+		}
 
 		return rootRequestNode;
 	}
