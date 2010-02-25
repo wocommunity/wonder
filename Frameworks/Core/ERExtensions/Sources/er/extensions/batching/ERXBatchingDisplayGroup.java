@@ -243,17 +243,17 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	}
 	
 	/**
-	 * Sets the prefetching key paths for the underlying fetch spec.
+	 * Sets the prefetching key paths to override those in the underlying fetch spec.
 	 * 
-	 * @param prefetchingRelationshipKeyPaths the prefetching key paths for the underlying fetch spec
+	 * @param prefetchingRelationshipKeyPaths the prefetching key paths to override those in the underlying fetch spec
 	 */
 	public void setPrefetchingRelationshipKeyPaths(NSArray<String> prefetchingRelationshipKeyPaths) {
 		_prefetchingRelationshipKeyPaths = prefetchingRelationshipKeyPaths;
 	}
 	
 	/**
-	 * Returns the prefetching key paths for the underlying fetch spec.
-	 * @return the prefetching key paths for the underlying fetch spec
+	 * Returns the prefetching key paths overriding those in the underlying fetch spec.
+	 * @return the prefetching key paths overriding those in the underlying fetch spec
 	 */
 	public NSArray<String> prefetchingRelationshipKeyPaths() {
 		return _prefetchingRelationshipKeyPaths;
@@ -340,11 +340,12 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 */
 	protected NSArray<T> objectsInRange(int start, int end) {
 		EOEditingContext ec = dataSource().editingContext();
-		EOFetchSpecification spec = fetchSpecification();
-		spec = (EOFetchSpecification) spec.clone();
-		spec.setPrefetchingRelationshipKeyPaths(_prefetchingRelationshipKeyPaths);
-		NSArray result = null;
-		result = ERXEOControlUtilities.objectsInRange(ec, spec, start, end);
+		EOFetchSpecification spec = (EOFetchSpecification)fetchSpecification().clone();
+		if (_prefetchingRelationshipKeyPaths != null && _prefetchingRelationshipKeyPaths.count() > 0) {
+			spec.setPrefetchingRelationshipKeyPaths(_prefetchingRelationshipKeyPaths);
+		}
+		
+		NSArray result = ERXEOControlUtilities.objectsInRange(ec, spec, start, end);
 		// WAS: fetch the primary keys, turn them into faults, then batch-fetch all
 		// the non-resident objects
 		//NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
