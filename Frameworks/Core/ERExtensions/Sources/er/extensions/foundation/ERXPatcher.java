@@ -340,6 +340,11 @@ public class ERXPatcher {
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
+			}
+
+			@Override
+			public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
+				super.appendAttributesToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
