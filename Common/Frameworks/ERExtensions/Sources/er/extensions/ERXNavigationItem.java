@@ -6,6 +6,8 @@
 //
 package er.extensions;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -51,6 +53,8 @@ public class ERXNavigationItem {
     protected NSDictionary _childrenChoices;
     protected NSDictionary _queryBindings;
     protected String _href;
+	protected ERXNavigationItem _parent;
+
 
     protected int _height;
     protected int _width;
@@ -123,7 +127,7 @@ public class ERXNavigationItem {
      * conditions = (("session.user.canEditThisStuff", "session.user.isEditor"))
      * @param component context in which to evaluate visibility
      */
-    public boolean meetsDisplayConditionsInComponent(WOComponent component) {
+    public boolean meetsDisplayConditionsInComponent(NSKeyValueCodingAdditions component) {
     	Boolean meetsDisplayConditions = Boolean.TRUE;
     	if (conditions().count() != 0) {
     		Enumeration enumerator = conditions().objectEnumerator();
@@ -209,6 +213,10 @@ public class ERXNavigationItem {
                 String childName = (String)e.nextElement();
                 ERXNavigationItem item = ERXNavigationManager.manager().navigationItemForName(childName);
                 if (item != null) {
+	                //since same child node can be shared by multiple parents
+                    //setParent is differed until now. 
+                    //every time children are asked for, 'this' parent is set on them.
+                    item.setParent(this);
                     childNavItems.addObject(item);
                 } else {
                     log.warn("Unable to find navigation item for name: " + childName);
@@ -298,4 +306,35 @@ public class ERXNavigationItem {
 	public String toString() {
 		return "< " + name() + " >";
 	}
+	
+	public ERXNavigationItem parent() {
+	    return _parent;
+	}
+	
+	public void setParent(ERXNavigationItem item) {
+	    _parent = item;
+	}
+	
+	
+	
+	/**
+	 * Returns path of this navigationMenuItem starting from the top menu except the root navigation item separated by /.
+	 * ex: topMenuItem/secondlevelmenuitem/thirdlevelnavItem
+	 * NOTE: navigationPath doesn't include rootNavigationItem.
+	 * @return {@link String} navigationPath
+	 */
+	public String navigationPath(){
+        StringBuffer result = new StringBuffer();
+        
+	    //local variable to keep track of the navItem in the loop
+	    ERXNavigationItem navItem = this;
+        result.append(navItem.name());
+        while(navItem.parent() != null && navItem.parent() != ERXNavigationManager.manager().rootNavigationItem()) {
+            navItem = navItem.parent();
+            result.insert(0, navItem.name() + "/");
+                
+        }
+        
+        return result.toString();
+    }
 }

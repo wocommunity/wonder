@@ -27,6 +27,8 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
 
     protected ERXNavigationState _navigationState;
     protected NSKeyValueCoding _navigationContext;
+ 	protected Boolean _useSpringyLook;
+
 
     public int _renderLevelCount;
 
@@ -42,6 +44,7 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
         aNavigationItem = null;
         _navigationState = null;
         _navigationContext = null;
+		_useSpringyLook = null;
         super.reset();
     }
 
@@ -114,6 +117,17 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
         return results;
     }
 
+	public boolean useSpringyLook(){
+        if(_useSpringyLook == null){
+	        _useSpringyLook = ERXValueUtilities.booleanValueWithDefault(valueForBinding("useSpringyLook"), true);
+       }
+
+       return _useSpringyLook;
+   }
 
 
+    public ERXNavigationItem navItem;
+    public NSArray topLevelNavigationMenuItems(){
+        return (NSArray) valueForBinding("topLevelNavigationMenuItems");
+    }
 }

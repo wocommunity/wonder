@@ -59,13 +59,23 @@ MenuItemHyperlink: WOGenericContainer {
 	invokeAction = menuItemSelected;
 }
 
+MenuItemLinkSwitchComponent : WOSwitchComponent {
+	WOComponentName = hyperlinkComponentName;
+	href = contextComponentActionURL;
+	invokeAction = menuItemSelected;
+	elementName = "a";
+	navigationItemName = navigationItem.name;
+	navigationItemPath = navigationItem.navigationPath;
+	displayString = displayName;
+}
+
 NavigationMenuItem: ERXModernNavigationMenuItem {
 	navigationItem = aChildItem;
 	navigationContext = navigationContext;
+	useSpringyLook = useSpringyLook;
 }
 
 NewMarker: WOImage {
 	filename = "NewMarker.gif";
 	framework = "ERExtensions";
 }
-

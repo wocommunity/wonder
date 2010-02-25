@@ -33,6 +33,7 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
     protected Boolean _isSelected;
     protected Boolean _hasActivity;
     protected WOComponent _redirect;
+	protected Boolean _useSpringyLook;
 
     public ERXNavigationItem aChildItem; // used in WORepetition
 
@@ -65,6 +66,7 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
         _isDisabled = null;
         _isSelected = null;
         aChildItem = null;
+		_useSpringyLook = null;
         
         super.reset();
     }
@@ -284,9 +286,22 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
     	}
 		return name;
     }
-    
+
+     /**
+    * @return array of children when one of the following conditions are met:
+    *          1) useSpringyLook 
+    *          2) useOldLook and this item is selected by the user (or this item is in nav state) 
+    *          3) navigationItem().isRootNode()
+    */
     public NSArray children() {
-        return navigationItem().childItemsInContext(this);
+        NSArray children = NSArray.EmptyArray;
+        Boolean useOldLook = !useSpringyLook();
+        Boolean isThisNavigationItemSelected = navigationState().state().containsObject(navigationItem().name());
+        if(navigationItem().isRootNode() || useSpringyLook() || (useOldLook && isThisNavigationItemSelected)) {
+	        children = navigationItem().childItemsInContext(this);
+        }
+        
+        return children;
     }
 
 
@@ -294,5 +309,19 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
         return (NSKeyValueCodingAdditions)valueForBinding("navigationContext");
     }
     
+    /**
+     * @return the hyperlinkComponentName
+     */
+    public String hyperlinkComponentName() {
+        return ERXProperties.stringForKeyWithDefault("er.extensions.ERXModernNavigationMenuItem.hyperlinkName", "WOGenericContainer");
+    }
+
+    public boolean useSpringyLook() {
+        if(_useSpringyLook == null){
+            _useSpringyLook = ERXValueUtilities.booleanValueWithDefault(valueForBinding("useSpringyLook"), true);
+        }
+
+        return _useSpringyLook;
+    }
 
 }
