@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.apache.commons.httpclient.HttpException;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXNoOpRestDelegate;
@@ -37,5 +39,18 @@ public class Client {
 
 		ClientCompany updatedCompany = client.objectWithPath("Company/1.json");
 		System.out.println("Client.main: updated company = " + updatedCompany);
+		
+		NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+		dict.setObjectForKey("Schrag", "lastName");
+		dict.setObjectForKey("Mike", "firstName");
+		dict.setObjectForKey(new NSDictionary<String, Object>("true", "nested"), "child");
+		dict.setObjectForKey(new NSArray<String>("a", "b"), "array");
+		String dictJSON = ERXRestFormat.JSON.toString(dict);
+		System.out.println("Client.main: dictionary as JSON " + dictJSON);
+
+		NSArray<?> list = new NSArray<String>("a", "b");
+		String arrayJSON = ERXRestFormat.JSON.toString(list);
+		System.out.println("Client.main: array as JSON " + arrayJSON);
+
 	}
 }
