@@ -141,6 +141,19 @@ public class ERXKeyFilter {
 	}
 	
 	/**
+	 * Shortcut to return a new ERXKeyFilter()
+	 * @param keys the keys to include
+	 * @return a new ERXKeyFilter(None) with the included keys
+	 */
+	public static ERXKeyFilter filterWithKeys(ERXKey<?>... keys) {
+		ERXKeyFilter keyFilter =  new ERXKeyFilter(ERXKeyFilter.Base.None);
+		for (ERXKey<?> key : keys) {
+			keyFilter.include(key);
+		}
+		return keyFilter;
+	}
+	
+	/**
 	 * Shortcut to return a new ERXKeyFilter(AttributesAndToOneRelationships)
 	 * @return a new ERXKeyFilter(AttributesAndToOneRelationships)
 	 */
