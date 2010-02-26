@@ -11,11 +11,11 @@ public class ERXRestClassDescriptionFactory {
 	private static Map<Class<?>, EOClassDescription> _classDescriptionByClass = new ConcurrentHashMap<Class<?>, EOClassDescription>();
 	private static Map<String, Class<?>> _classByName = new ConcurrentHashMap<String, Class<?>>();
 
-	
 	public static void registerClassDescription(EOClassDescription classDescription, Class<?> clazz) {
 		_classDescriptionByClass.put(clazz, classDescription);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static EOClassDescription classDescriptionForObject(Object obj) {
 		EOClassDescription classDescription;
 		if (obj == null) {
@@ -23,6 +23,9 @@ public class ERXRestClassDescriptionFactory {
 		}
 		else if (obj instanceof EOEnterpriseObject) {
 			classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(((EOEnterpriseObject) obj).entityName());
+		}
+		else if (obj instanceof Map) {
+			classDescription = new MapClassDescription((Map<String, ?>) obj);
 		}
 		else {
 			Class clazz;
@@ -81,11 +84,11 @@ public class ERXRestClassDescriptionFactory {
 		}
 		return classDescription;
 	}
-	
+
 	public static EOClassDescription registerClass(Class clazz) {
 		return ERXRestClassDescriptionFactory.registerClassForEntityNamed(clazz, clazz.getSimpleName());
 	}
-	
+
 	public static EOClassDescription registerClassForEntityNamed(Class clazz, String entityName) {
 		EOClassDescription classDescription = classDescriptionForClass(clazz, false);
 		ERXRestClassDescriptionFactory.registerClassDescription(classDescription, clazz);

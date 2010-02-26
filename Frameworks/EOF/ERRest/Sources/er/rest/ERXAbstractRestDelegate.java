@@ -48,7 +48,10 @@ public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 		else {
 			IERXRestDelegate delegate = IERXRestDelegate.Factory.delegateForEntityNamed(classDescription.entityName(), _editingContext);
 			if (delegate == null || delegate.getClass() == getClass()) {
-				throw new UnsupportedOperationException("Unable to create an instance of the entity '" + classDescription.entityName() + "'.");
+				pkValue = null;
+				// MS: This is sort of debateable here, whether this should be a failure or just return null ... There are some types that 
+				// just don't have PK's, so I'm commenting this out for now. We can revisit this later if it presents itself as a problem
+				// throw new UnsupportedOperationException("Unable to create a primary key for the entity '" + classDescription.entityName() + "'.");
 			}
 			else {
 				pkValue = delegate.primaryKeyForObject(obj);

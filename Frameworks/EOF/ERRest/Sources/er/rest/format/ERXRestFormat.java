@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.webobjects.eocontrol.EOClassDescription;
 
+import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
@@ -15,6 +16,7 @@ import er.rest.gianduia.ERXGianduiaRestWriter;
 public class ERXRestFormat {
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 
+	// MS: The whole naming thing is stupid, I know ... we need to separate mime type from extensions from the name 
 	public static ERXRestFormat JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), "json", "application/json");
 	public static ERXRestFormat JS = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), "js", "text/js");
 	public static ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), new ERXRestFormatDelegate(), "plist", "text/plist");
@@ -36,6 +38,11 @@ public class ERXRestFormat {
 		_delegate = delegate;
 	}
 
+	/**
+	 * Returns the name of this format.
+	 * 
+	 * @return the name of this format
+	 */
 	public String name() {
 		return _name;
 	}
@@ -52,10 +59,48 @@ public class ERXRestFormat {
 		return _delegate;
 	}
 
+	/**
+	 * Returns the formatted version of the given object using a recursive "All" filter and the default rest delegate.
+	 * 
+	 * @param obj the object to render
+	 * @return obj rendered using this format
+	 */
+	public String toString(Object obj) {
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, ERXKeyFilter.filterWithAllRecursive(), IERXRestDelegate.Factory.delegateForEntityNamed(IERXRestDelegate.Factory.entityNameForObject(obj), ERXEC.newEditingContext())).toString(this);
+	}
+
+	/**
+	 * Returns the formatted version of the given object using a recursive "All" filter.
+	 * 
+	 * @param obj the object to render
+	 * @param delegate the rest delegate to use
+	 * @return obj rendered using this format
+	 */
+	public String toString(Object obj, IERXRestDelegate delegate) {
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, ERXKeyFilter.filterWithAllRecursive(), delegate).toString(this);
+	}
+
+	/**
+	 * Returns the formatted version of the given object.
+	 * 
+	 * @param obj the object to render
+	 * @param filter the filter to apply to the object
+	 * @param delegate the rest delegate to use
+	 * @return obj rendered using this format
+	 */
 	public String toString(Object obj, ERXKeyFilter filter, IERXRestDelegate delegate) {
 		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter, delegate).toString(this);
 	}
 
+	/**
+	 * Returns the formatted version of the given list.
+	 * 
+	 * @param classDescription the class description for the elements of the list
+	 * @param list the list
+	 * @param filter the filter
+	 * @param delegate the rest delegate to use
+	 * @return list rendered using this format
+	 */
 	public String toString(EOClassDescription classDescription, List<?> list, ERXKeyFilter filter, IERXRestDelegate delegate) {
 		return ERXRestRequestNode.requestNodeWithObjectAndFilter(classDescription, list, filter, delegate).toString(this);
 	}
