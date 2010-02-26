@@ -841,6 +841,10 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				addChild(childNode);
 			}
 		}
+		else if (ERXRestUtils.isPrimitive(obj)) {
+			setValue(obj);
+			setAssociatedObject(obj);
+		}
 		else {
 			// in case we have a superclass class description passed in
 			if (obj != null) {
