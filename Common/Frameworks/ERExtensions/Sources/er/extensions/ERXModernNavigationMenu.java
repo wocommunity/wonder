@@ -128,6 +128,11 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
 
     public ERXNavigationItem navItem;
     public NSArray topLevelNavigationMenuItems(){
-        return (NSArray) valueForBinding("topLevelNavigationMenuItems");
+        NSArray topLevelNavItems = (NSArray) valueForBinding("topLevelNavigationMenuItems");
+        if(topLevelNavItems == null) {
+            topLevelNavItems = ERXNavigationManager.manager().rootNavigationItem().childItemsInContext(this);
+        }
+
+        return topLevelNavItems;
     }
 }
