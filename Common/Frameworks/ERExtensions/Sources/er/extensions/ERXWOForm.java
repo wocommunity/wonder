@@ -81,6 +81,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	protected NSDictionary _otherQueryAssociations;
 	protected WOAssociation _directActionName;
 	protected WOAssociation _addDefaultSubmitButton;
+	protected WOAssociation _embedded;
 
 	public static boolean multipleSubmitDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.multipleSubmitDefault", false);
 	public static boolean addDefaultSubmitButtonDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.addDefaultSubmitButtonDefault", false);
@@ -113,6 +114,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		_secure = (WOAssociation) _associations.removeObjectForKey("secure");
 		_disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
 		_addDefaultSubmitButton = (WOAssociation) _associations.removeObjectForKey("addDefaultSubmitButton");
+		_embedded = (WOAssociation) _associations.removeObjectForKey("embedded");
 		if (_associations.objectForKey("method") == null && _associations.objectForKey("Method") == null && _associations.objectForKey("METHOD") == null) {
 			_associations.setObjectForKey(new WOConstantValueAssociation("post"), "method");
 		}
@@ -290,7 +292,17 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	}
 
 	protected boolean _shouldAppendFormTags(WOContext context, boolean wasInForm) {
-		boolean shouldAppendFormTags = !_disabled(context) && !wasInForm;
+		boolean shouldAppendFormTags = !_disabled(context);
+		if (shouldAppendFormTags) {
+			// MS: If embedded = true, allow a nested form, which can be useful if you're doing funky ajax
+			// dialogs and components that have forms in them.
+			if (_embedded != null && _embedded.booleanValueInComponent(context.component())) {
+				shouldAppendFormTags = true;
+			}
+			else {
+				shouldAppendFormTags = !wasInForm;
+			}
+		}
 		return shouldAppendFormTags;
 	}
 
