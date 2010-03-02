@@ -70,7 +70,7 @@ public class AjaxDatePicker extends AjaxComponent {
 	
 	private static String defaultImagesDir;
 	
-	private NSMutableDictionary options;
+	private NSMutableDictionary<String, String> options;
 	private Format formatter;
 	private String format;
 	
@@ -145,22 +145,18 @@ public class AjaxDatePicker extends AjaxComponent {
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
 		
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
 		
 		// The "constant" form of AjaxOption is used so that we can rename the bindings or convert the values
-		ajaxOptionsArray.addObject(new AjaxOption("format", format(), AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("month_names", valueForBinding("monthNames"), AjaxOption.ARRAY));
-		ajaxOptionsArray.addObject(new AjaxOption("day_names", valueForBinding("dayNames"), AjaxOption.ARRAY));
-		
+		ajaxOptionsArray.addObject(new AjaxConstantOption("format", "format", format(), AjaxOption.STRING));
+		ajaxOptionsArray.addObject(new AjaxOption("month_names", "monthNames", null, AjaxOption.ARRAY));
+		ajaxOptionsArray.addObject(new AjaxOption("day_names", "dayNames", null, AjaxOption.ARRAY));
+
 		ajaxOptionsArray.addObject(new AjaxOption("onDateSelect", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("fireEvent", AjaxOption.BOOLEAN));
+
+		ajaxOptionsArray.addObject(new AjaxOption("images_dir", "imagesDir", defaultImagesDir, AjaxOption.STRING));
 		
-		if (hasBinding("imagesDir")) {
-			ajaxOptionsArray.addObject(new AjaxOption("images_dir", valueForBinding("imagesDir"), AjaxOption.STRING));
-		}
-		else {
-			ajaxOptionsArray.addObject(new AjaxOption("images_dir", defaultImagesDir, AjaxOption.STRING));
-		}
 		options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     	super.appendToResponse(res, ctx);
     }

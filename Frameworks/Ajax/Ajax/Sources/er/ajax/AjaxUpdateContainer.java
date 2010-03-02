@@ -87,7 +87,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 	public NSDictionary createAjaxOptions(WOComponent component) {
 		// PROTOTYPE OPTIONS
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
 		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("decay", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
@@ -96,23 +96,16 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
-		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
-		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", AjaxOption.BOOLEAN));
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-		options.setObjectForKey("'get'", "method");
-		if (options.objectForKey("evalScripts") == null) {
-			options.setObjectForKey("true", "evalScripts");
-		}
-		if (options.objectForKey("asynchronous") == null) {
-			options.setObjectForKey("true", "asynchronous");
-		}
-
+		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.TRUE, AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", Boolean.TRUE, AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxOption("method", "get", AjaxOption.STRING));
+		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.TRUE, AjaxOption.BOOLEAN));
+		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
-
 		return options;
 	}
 
-	public static void expandInsertionFromOptions(NSMutableDictionary options, IAjaxElement element, WOComponent component) {
+	public static void expandInsertionFromOptions(NSMutableDictionary<String, String> options, IAjaxElement element, WOComponent component) {
 		// PROTOTYPE EFFECTS
 		String insertionDuration = (String) element.valueForBinding("insertionDuration", component);
 		String beforeInsertionDuration = (String) element.valueForBinding("beforeInsertionDuration", component);
@@ -123,7 +116,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		if (afterInsertionDuration == null) {
 			afterInsertionDuration = insertionDuration;
 		}
-		String insertion = (String) options.objectForKey("insertion");
+		String insertion = options.objectForKey("insertion");
 		String expandedInsertion = AjaxUpdateContainer.expandInsertion(insertion, beforeInsertionDuration, afterInsertionDuration);
 		if (expandedInsertion != null) {
 			options.setObjectForKey(expandedInsertion, "insertion");

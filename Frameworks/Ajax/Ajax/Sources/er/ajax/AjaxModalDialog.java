@@ -701,7 +701,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		else {
 			serverUpdate = "function(v) { " + serverUpdate + '}';
 		}
-		ajaxOptionsArray.addObject(new AjaxOption("afterHide", serverUpdate, AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("afterHide", serverUpdate, AjaxOption.SCRIPT));
 
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 
