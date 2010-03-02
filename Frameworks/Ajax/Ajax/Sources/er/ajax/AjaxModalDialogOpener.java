@@ -147,8 +147,8 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 	 */
 	protected NSMutableDictionary ajaxRequestOptions() {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
-		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", Boolean.FALSE, AjaxOption.BOOLEAN));
-		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.FALSE, AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("asynchronous", Boolean.FALSE, AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("evalScripts", Boolean.FALSE, AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.FUNCTION_1));
 		
 		// onSuccess callback handler to open AMD
@@ -161,7 +161,7 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 			sb.append(AjaxValue.javaScriptEscaped(valueForBinding("title")));
 		}		
 		sb.append(");");
-		ajaxOptionsArray.addObject(new AjaxOption("onSuccess", sb.toString(), AjaxOption.FUNCTION_1));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("onSuccess", sb.toString(), AjaxOption.FUNCTION_1));
 
 		return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 	}
