@@ -62,6 +62,8 @@ var iBox = function() {
 		 * @param {String} tag_name
 		 */
 		checkTags: function(container, tag_name) {
+		// MS: added setTimeout to checkTags at the end of the render pass
+		setTimeout(function() {
 			if (!container) var container = document.body;
 			if (!tag_name) var tag_name = 'a';
 			var els = container.getElementsByTagName(tag_name);
@@ -73,6 +75,7 @@ var iBox = function() {
 					}
 				}
 			}
+			}, 0);
 		},
 		
 		/**
@@ -734,7 +737,12 @@ var iBox = function() {
 	var _initialized = false;
 	var initialize = function() {
 		// make sure we haven't already done this
-		if (_initialized) return;
+		if (_initialized) {
+			// MS: added checkTags call here on a second init, so after an ajax update we
+			// reprocess ibox links 
+			_pub.checkTags(document.body, 'a');
+			return;
+		}
 		_initialized = true;
 		// elements here start the look up from the start non <a> tags
 		// MS check for an existing ibox
