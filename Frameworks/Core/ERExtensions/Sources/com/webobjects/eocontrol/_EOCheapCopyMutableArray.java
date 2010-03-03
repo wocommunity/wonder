@@ -1,4 +1,3 @@
-/*jadclipse*/// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
 package com.webobjects.eocontrol;
 
 import java.io.IOException;
