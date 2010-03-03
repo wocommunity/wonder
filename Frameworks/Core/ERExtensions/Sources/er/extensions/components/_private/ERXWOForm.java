@@ -99,11 +99,13 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding queryDictionary Takes a dictionary of values that will be submitted
  * with the form.
  * @binding secure Determines if the form is secured with SSL. Default is false.
- * 
+ * @binding embedded when true, a form inside of a form will still render. this is
+ * to support forms inside of ajax modal containers that are structually nested
+ * forms, but appears as independent to the end-user
  * 
  * @author ak
  * @author Mike Schrag (idea to secure binding)
- */
+ */  
 public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicElement {
 	static final Logger log = Logger.getLogger(ERXWOForm.class);
 
@@ -215,7 +217,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	
 			context._setActionInvoked(false);
 			context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
-			_setFormName(context, wasInForm);
+			String previousFormName = _setFormName(context, wasInForm);
 			result = super.invokeAction(worequest, context);
 			if (!wasInForm && !context._wasActionInvoked() && context._wasFormSubmitted()) {
 				if (_action != null) {
@@ -227,7 +229,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			}
 			context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
 			_exitFormInContext(context, wasInForm, wasFormSubmitted);
-			_clearFormName(context, wasInForm);
+			_clearFormName(context, previousFormName, wasInForm);
 			_clearEnctype();
 		}
 		else {
@@ -235,7 +237,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		}
 		return result;
 	}
-	
+
 	protected void _appendHiddenFieldsToResponse(WOResponse response, WOContext context) {
 		boolean flag = _actionClass != null;
 		NSDictionary hiddenFields = hiddenFieldsInContext(context, flag);
@@ -304,12 +306,12 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	
 			// log.info(this._formName + "->" +
 			// this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
-			_setFormName(context, wasInForm);
+			String previousFormName = _setFormName(context, wasInForm);
 			super.takeValuesFromRequest(request, context);
 			// log.info(context.elementID() + "->" + context.senderID() + "->" +
 			// context._wasFormSubmitted());
 			_exitFormInContext(context, wasInForm, wasFormSubmitted);
-			_clearFormName(context, wasInForm);
+			_clearFormName(context, previousFormName, wasInForm);
 		}
 		else {
 			super.takeValuesFromRequest(request, context);
@@ -348,21 +350,26 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void _setFormName(WOContext context, boolean wasInForm) {
+	protected String _setFormName(WOContext context, boolean wasInForm) {
+		String previousFormName = ERXWOForm.formName(context, null);
 		if (_shouldAppendFormTags(context, wasInForm)) {
 			String formName = _formName(context);
 			if (formName != null) {
 				ERXWOContext.contextDictionary().setObjectForKey(formName, "formName");
 			}
 		}
+		return previousFormName;
 	}
 
-	protected void _clearFormName(WOContext context, boolean wasInForm) {
+	protected void _clearFormName(WOContext context, String previousFormName, boolean wasInForm) {
 		if (_shouldAppendFormTags(context, wasInForm)) {
 			String formName = _formName(context);
 			if (formName != null) {
 				ERXWOContext.contextDictionary().removeObjectForKey("formName");
 			}
+		}
+		if (previousFormName != null) {
+			ERXWOContext.contextDictionary().setObjectForKey(previousFormName, "formName");
 		}
 	}
 
@@ -433,7 +440,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		boolean wasInForm = context.isInForm();
 		if (_shouldAppendFormTags(context, wasInForm)) {
 			context.setInForm(true);
-			_setFormName(context, wasInForm);
+			String previousFormName = _setFormName(context, wasInForm);
 			_appendOpenTagToResponse(response, context);
 			if (_multipleSubmit != null && _multipleSubmit.booleanValueInComponent(context.component())) {
 				if (_addDefaultSubmitButton != null && _addDefaultSubmitButton.booleanValueInComponent(context.component()) || (_addDefaultSubmitButton == null && addDefaultSubmitButtonDefault)) {
@@ -448,7 +455,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			}
 			appendChildrenToResponse(response, context);
 			_appendCloseTagToResponse(response, context);
-			_clearFormName(context, wasInForm);
+			_clearFormName(context, previousFormName, wasInForm);
 			_clearEnctype();
 			context.setInForm(wasInForm);
 		}
