@@ -241,7 +241,7 @@ var AjaxUpdateContainer = {
 		else if (stopped) {
 			var newOptions = Object.extend({}, options);
 			newOptions.stopped = true;
-			updater = new Ajax.StoppedPeriodicalUpdater(id, url, options);
+			updater = new Ajax.StoppedPeriodicalUpdater(id, url, newOptions);
 		}
 		else {
 			updater = new Ajax.ActivePeriodicalUpdater(id, url, options);
