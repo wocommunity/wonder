@@ -9,11 +9,16 @@ package er.extensions;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
 
@@ -36,6 +41,7 @@ import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -71,6 +77,7 @@ import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXUtilities;
@@ -1279,40 +1286,165 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * initApp, and tries to just get enough configured to make EOF work properly.  This method
      * assumes you are running your app from a .woa folder.
      * 
+     * <p>This is equivalent to calling <code>initEOF(new File("."), args)</code>.</p>
+     * 
      * @param args the commandline arguments for your application
+     * @throws IllegalArgumentException if the current dir or mainBundleFolder is not a *.woa bundle.
      */
-    public static void initEOF(String[] args) {
+    public static void initEOF(final String[] args) {
     	ERXExtensions.initEOF(new File("."), args);
     }
-    
-    private static boolean _eofInitialized = false;
     /**
      * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
      * not need to call this method if you already called initApp.  This is lighter-weight than 
      * initApp, and tries to just get enough configured to make EOF work properly.
      * 
+     * <p>This is equivalent to calling <code>initEOF(mainBundleFolder, args, true, true, true)</code>.</p>
+     * 
      * @param mainBundleFolder the folder of your main bundle
      * @param args the commandline arguments for your application
+     * @throws IllegalArgumentException if the current dir or mainBundleFolder is not a *.woa bundle.
      */
-    public static void initEOF(File mainBundleFolder, String[] args) {
-    	if (_eofInitialized) {
-    		return;
-    	}
+    public static void initEOF(final File mainBundleFolder, final String[] args) {
+    	initEOF(mainBundleFolder, args, true, true, true);
+    }
+    /**
+     * <p>
+     * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
+     * not need to call this method if you already called initApp.  This is lighter-weight than 
+     * initApp, and tries to just get enough configured to make EOF work properly. This method is also,
+     * unlike {@link #initEOF(String[])} or {@link #initEOF(File, String[])}, not so restrictive as to
+     * require the name of the bundle be a <code>*.woa</code>, and nor does it require <code>*.framework</code>
+     * as the name of the bundle.
+     * </p>
+     * <p>
+     * It can therefore be useful for, and used with, folder, jar or war
+     * bundles -- whichever bundle is referenced by <code>mainBundleURI</code> -- so long as it is
+     * bundle-like in content rather than by name. For NSBundle, this usually just requires a Resources folder
+     * within the bundle.
+     * </p>
+     * <p>
+     * For example, if you're build tool compiles sources and puts Resources under <code>target/classes</code>
+     * you can call this method via <code>ERXExtensions.initEOF(new File(projectDir, "target/classes"), args, true)</code>.
+     * </p>
+     * <p><b>Note 1:</b>
+     *  this will set the system property <code>webobjects.user.dir</code> to the canonical path of the 
+     * given bundle uri if, and only if, the bundle uri points to a directory and is schema is <code>file</code>.
+     * </p>
+     * <p><b>Note 2:</b>
+     *  this will set NSBundle's mainBundle to the referenced bundle loaded via
+     *  {@link ERXRuntimeUtilities#loadBundleIfNeeded(URI)} if found.
+     * </p>
+     * 
+     * <p>This is equivalent to calling <code>initEOF(mainBundleFolder, args, assertsBundleExists, false, true)</code>.</p>
+     * 
+     * @param mainBundleFile the archive file or directory of your main bundle
+     * @param args the commandline arguments for your application
+     * @param assertsBundleExists ensures that the bundle exists and is loaded
+     * @throws NSForwardException if the given bundle doesn't satisfy the given assertions or
+     *  		ERXRuntimeUtilities.loadBundleIfNeeded or ERXApplication.setup fails.
+     * @see #initEOF(File, String[], boolean, boolean, boolean)
+     */
+    public static void initEOF(final File mainBundleFile, final String[] args, boolean assertsBundleExists) {
+    	initEOF(mainBundleFile, args, assertsBundleExists, false, true);
+    }
+    private static boolean _eofInitialized = false;
+    private static final Lock _eofInitializeLock = new ReentrantLock();
+    /**
+     * <p>
+     * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
+     * not need to call this method if you already called initApp.  This is lighter-weight than 
+     * initApp, and tries to just get enough configured to make EOF work properly. This method is also,
+     * unlike {@link #initEOF(String[])} or {@link #initEOF(File, String[])}, not so restrictive as to
+     * require the name of the bundle be a <code>*.woa</code>, and nor does it require <code>*.framework</code>
+     * as the name of the bundle.
+     * </p>
+     * <p>
+     * It can therefore be useful for, and used with, folder, jar or war
+     * bundles -- whichever bundle is referenced by <code>mainBundleURI</code> -- so long as it is
+     * bundle-like in content rather than by name. For NSBundle, this usually just requires a Resources folder
+     * within the bundle.
+     * </p>
+     * <p>
+     * For example, if you're build tool compiles sources and puts Resources under <code>target/classes</code>
+     * you can call this method via <code>ERXExtensions.initEOF(new File(projectDir, "target/classes").toURI(), args)</code>.
+     * </p>
+     * <p><b>Note 1:</b>
+     *  this will set the system property <code>webobjects.user.dir</code> to the canonical path of the 
+     * given bundle uri if, and only if, the bundle uri points to a directory and is schema is <code>file</code>.
+     * </p>
+     * <p><b>Note 2:</b>
+     *  this will set NSBundle's mainBundle to the referenced bundle loaded via
+     *  {@link ERXRuntimeUtilities#loadBundleIfNeeded(URI)} if found.
+     * </p>
+     * 
+     * @param mainBundleFile the archive file or directory of your main bundle
+     * @param args the commandline arguments for your application
+     * @param assertsBundleExists ensures that the bundle exists and is loaded
+     * @param assertsBundleIsWOApplicationFolder ensures that the bundle referenced by mainBundleFile, or the current dir if fallbackToUserDirAsBundle is true, is a <code>*.woa</code> bundle folder.
+     * @param fallbackToUserDirAsBundle falls back to current dir if the mainBundleFile does not exist
+     * @throws NSForwardException if the given bundle doesn't satisfy the given assertions or
+     *  		ERXRuntimeUtilities.loadBundleIfNeeded or ERXApplication.setup fails.
+     * @see ERXRuntimeUtilities#loadBundleIfNeeded(URI)
+     * @see NSBundle#_setMainBundle(NSBundle)
+     * @see ERXApplication#setup(String[])
+     * @see #bundleDidLoad(NSNotification)
+     */
+    public static void initEOF(final File mainBundleFile, String[] args, boolean assertsBundleExists, boolean assertsBundleIsWOApplicationFolder, boolean fallbackToUserDirAsBundle) {
+    	_eofInitializeLock.lock();
     	try {
-	    	File currentFolder = new File(".").getCanonicalFile();
-	    	if (!currentFolder.getName().endsWith(".woa")) {
-	    		currentFolder = mainBundleFolder;
-		    	if (!currentFolder.getName().endsWith(".woa")) {
-		    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
-		    	}
+	    	if (!_eofInitialized) {
+	    		try {
+	    			File bundleFile = mainBundleFile;
+	    			
+	    			if (assertsBundleIsWOApplicationFolder) {
+	    				if (!bundleFile.exists() || !bundleFile.getName().endsWith(".woa")) {
+	    					bundleFile = new File(".").getCanonicalFile();
+	    					if (!bundleFile.exists() || !bundleFile.getName().endsWith(".woa")) {
+	    						throw new IllegalArgumentException("Assertion failure. You must run your application from the .woa folder to call this method.");
+	    					}
+	    				}
+	    			}
+	    			
+	    			if (assertsBundleExists) {
+	    				if (bundleFile == null || !bundleFile.exists()) {
+	    					if (fallbackToUserDirAsBundle) {
+	    						bundleFile = new File(".").getCanonicalFile();
+	    					} else {
+	    						throw new IllegalArgumentException("Assertion failure. The main bundle is required to exist to call this method.");
+	    					}
+	    				}
+	    			}
+	    			
+	    			if (bundleFile != null && bundleFile.isDirectory()) {
+	    				System.setProperty("webobjects.user.dir", bundleFile.getCanonicalPath());
+	    			}
+	    			
+	    			NSBundle mainBundle = null;
+	    			try {
+	    				mainBundle = ERXRuntimeUtilities.loadBundleIfNeeded(bundleFile);
+	    				if (mainBundle == null) {
+							throw new IllegalArgumentException("The main bundle failed to load.");
+						}
+	    				NSBundle._setMainBundle(mainBundle);
+						NSLog.debug.appendln("initEOF setting main bundle to " + mainBundle);
+	    			}
+	    			catch (Exception e) {
+	    				if (assertsBundleExists) {
+	    					throw e;
+	    				}
+	    			}
+									
+					ERXApplication.setup(args);
+					((ERXExtensions) ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class)).bundleDidLoad(null);
+				}
+				catch (Exception e) {
+					throw new NSForwardException(e);
+				}
+		    	_eofInitialized = true;
 	    	}
-	        System.setProperty("webobjects.user.dir", mainBundleFolder.getCanonicalPath());
-	        ERXApplication.setup(args);
-	        ((ERXExtensions) ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class)).bundleDidLoad(null);
-		}
-		catch (IOException e) {
-			throw new NSForwardException(e);
-		}
-		_eofInitialized = true;
+    	} finally {
+    		_eofInitializeLock.unlock();
+    	}
     }
 }
