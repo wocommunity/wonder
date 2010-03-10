@@ -172,12 +172,11 @@ function date_to_string(date, format) {
 function string_to_date(s) {
   var dateOrder = calendar.format;
   if (!dateOrder) dateOrder = '%d %b %Y';  // Set default format.
-
-  dateOrder = dateOrder.replace(/%[ed]/,'D');
+  dateOrder = dateOrder.replace(/%[ed]/,'d');
   dateOrder = dateOrder.replace(/%[mbB]/,'M');
-  dateOrder = dateOrder.replace(/%[yY]/,'Y');
-
-  var result = Date.parseExact(s, {order: dateOrder});
+  dateOrder = dateOrder.replace(/%[yY]/,'yyyy');
+  
+  var result = Date.parseExact(s, [dateOrder]);
   if (result == 'Invalid Date') {
   	result = undefined;
   }
