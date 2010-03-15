@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.Format;
@@ -15,17 +13,17 @@ import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSTimestampFormatter;
+import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCExpression;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
@@ -242,6 +240,19 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		public NSArray _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
 			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP PRIMARY KEY"));
 		}
+		
+		public String columnTypeStringForAttribute(EOAttribute attribute) {
+			if (attribute.precision() != 0) {
+				String precision = String.valueOf(attribute.precision());
+				String scale = String.valueOf(attribute.scale());
+				return _NSStringUtilities.concat(attribute.externalType(), "(", precision, ",", scale, ")");
+			}
+			if (attribute.width() != 0) {
+				String width = String.valueOf(attribute.width());
+				return _NSStringUtilities.concat(attribute.externalType(), "(", width, ")");
+			}
+			return attribute.externalType();
+		}
 
 		@Override
 		public NSArray dropPrimaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
@@ -356,6 +367,25 @@ public class ERH2PlugIn extends JDBCPlugIn {
 			String pkField = formatColumnName("pk") + " INT";
 			return new NSArray(_expressionForString("CREATE TABLE " + formatTableName(pkTable) + " (" + charField + ", " + pkField + ")"));
 		}
+		
+		public NSArray statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, NSDictionary options) {
+			EOAttribute attr = new EOAttribute();
+			attr.setName(columnName);
+			attr.setColumnName(columnName);
+			attr.setExternalType(newType.name());
+			attr.setScale(newType.scale());
+			attr.setPrecision(newType.precision());
+			attr.setWidth(newType.width());
+			
+			String columnTypeString = columnTypeStringForAttribute(attr);
+			
+			NSArray statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " " + columnTypeString));
+			return statements;
+		}
+		
+		public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
+	    	return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP COLUMN " + formatTableName(columnName)));
+	    }
 
 		@Override
 		public NSArray statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
@@ -363,12 +393,34 @@ public class ERH2PlugIn extends JDBCPlugIn {
 
 			System.out.println("ALTER TABLE " + formatTableName(attribute.entity().externalName()) + " ADD COLUMN " + clause);
 
-			NSArray result = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(attribute.entity().externalName()) + " ADD COLUMN " + clause));
+			NSArray<EOSQLExpression> result = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(attribute.entity().externalName()) + " ADD COLUMN " + clause));
 
 			System.out.println(result);
 
 			return result;
 		}
+		
+		/**
+		 * @see com.webobjects.eoaccess.EOSynchronizationFactory#statementsToModifyColumnNullRule(java.lang.String, java.lang.String, boolean, com.webobjects.foundation.NSDictionary)
+		 */
+		@Override
+		public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary<String, String> options) {
+			NSArray<EOSQLExpression> statements;
+		      if (allowsNull) {
+		        statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NULL"));
+		      } else {
+		        statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUM " + formatColumnName(columnName) + " SET NOT NULL"));
+		      }
+		      return statements;
+		}
+		
+		public NSArray statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
+			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " RENAME TO " + formatColumnName(newName)));
+		}
+		
+		public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
+	    	return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " RENAME TO " + formatTableName(newName)));
+	    }
 
 		@Override
 		public boolean supportsSchemaSynchronization() {
