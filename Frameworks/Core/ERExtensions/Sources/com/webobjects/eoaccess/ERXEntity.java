@@ -65,14 +65,15 @@ public class ERXEntity extends EOEntity {
 	@Override
 	public EOAttribute anyAttributeNamed(String name) {
 		Matcher matcher = null;
-		if (name != null && (matcher = NeededByEOFPattern.matcher(name)).matches()) {
+		EOAttribute result = super.anyAttributeNamed(name);
+		if (result == null && name != null && (matcher = NeededByEOFPattern.matcher(name)).matches()) {
 			int neededIndex = Integer.valueOf(matcher.group(1));
 			if (neededIndex >= primaryKeyAttributeNames().count()) {
 				throw new IllegalStateException("No matching primary key found for entity'" + name() + "' with attribute'" + name + "'");
 			}
-			return (EOAttribute) primaryKeyAttributes().objectAtIndex(neededIndex);
+			result = (EOAttribute) primaryKeyAttributes().objectAtIndex(neededIndex);
 		}
-		return super.anyAttributeNamed(name);
+		return result;
 	}
 	
 	/**
