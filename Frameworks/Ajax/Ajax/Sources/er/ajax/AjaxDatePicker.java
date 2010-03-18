@@ -5,6 +5,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
@@ -277,6 +278,14 @@ public class AjaxDatePicker extends AjaxComponent {
      * Overridden so that parent will handle in the same manner as if this were a dynamic element. 
      */
     public void validationFailedWithException(Throwable t, Object value, String keyPath) {
+    	if (keyPath != null && "<none>".equals(keyPath) && t instanceof ValidationException) {
+    		ValidationException e = (ValidationException) t;
+    		WOAssociation valueAssociation = (WOAssociation) _keyAssociations.valueForKey("value");
+    		if (valueAssociation != null) {
+    			keyPath = valueAssociation.keyPath();
+    		}
+    		t = new ValidationException(e.getMessage(), e.object(), keyPath);
+    	}
     	parent().validationFailedWithException(t, value, keyPath);
     }
     
