@@ -159,12 +159,10 @@ public class ERXRedirect extends WOComponent {
  		boolean secure = (_secure == null) ? ERXRequest.isRequestSecure(context.request()) : _secure.booleanValue();
  
  		// Generate a full URL if changing between secure and insecure
- 		if (secure != ERXRequest.isRequestSecure(context.request())) {
- 			context._generateCompleteURLs();
-		} else {
-			context._generateRelativeURLs();
+		boolean generateCompleteURLs = secure != ERXRequest.isRequestSecure(context.request());
+		if (generateCompleteURLs) {
+		  context._generateCompleteURLs();
 		}
-
 		try {
 			WOComponent component = _component;
 			if (component != null) {
