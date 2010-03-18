@@ -17,11 +17,15 @@ SubmitButton1: WOSubmitButton {
 	directActionName = ^directActionName;
 	onsubmit = openWindow;
 	value = ^value;
+	class = ^class;
+	style = ^style;
 }
 
 SubmitButton2: WOSubmitButton {
 	action = action;
 	value = ^value;
 	onclick = openWindow;
+	class = ^class;
+	style = ^style;
 }
 
