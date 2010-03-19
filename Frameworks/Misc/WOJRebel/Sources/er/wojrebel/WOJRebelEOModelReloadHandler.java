@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -44,18 +45,29 @@ public class WOJRebelEOModelReloadHandler {
 
   public synchronized void updateLoadedModels(NSNotification n) {
     boolean reloaded = false;
-    for (EOModel model : new ArrayList<EOModel>(modelCache.keySet())) {
-      reloaded |= updateModel(model);
+    List<EOModel> modelList = new ArrayList<EOModel>(modelCache.keySet());
+    for (EOModel model : modelList) {
+      reloaded |= shouldUpdateModel(model);
     }
     if (reloaded) {
       flushCaches();
+      for (EOModel model : modelList) {
+        updateModel(model);
+      }
     }
   }
-
+  
   private boolean updateModel(EOModel model) {
+    if (shouldUpdateModel(model)) {
+      reloadModel(model);
+      return true;
+    }
+    return false;
+  }
+  
+  private boolean shouldUpdateModel(EOModel model) {
     if (modelCache.containsKey(model)) {
       if (lastModified(model) > modelCache.get(model)) {
-        reloadModel(model);
         return true;
       }
     }
