@@ -265,7 +265,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		protected synchronized Object[] keysNoCopy() {
+		public synchronized Object[] keysNoCopy() {
 			return super.keysNoCopy();
 		}
 
@@ -285,7 +285,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		protected synchronized Object[] objectsNoCopy() {
+		public synchronized Object[] objectsNoCopy() {
 			return super.objectsNoCopy();
 		}
 

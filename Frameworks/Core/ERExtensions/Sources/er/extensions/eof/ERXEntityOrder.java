@@ -218,7 +218,7 @@ public abstract class ERXEntityOrder
      * NSComparator to sort on the ascending EOEntity group number from ordering.entityOrdering().
      * This produces an ordering suitable for deleting data.
      */
-    public static class EntityDeleteOrderComparator extends NSComparator {
+    public static class EntityDeleteOrderComparator extends NSComparator<EOEntity> {
         protected ERXEntityOrder eRXEntityOrder;
 
         public EntityDeleteOrderComparator(ERXEntityOrder ordering) {
@@ -226,9 +226,7 @@ public abstract class ERXEntityOrder
             eRXEntityOrder = ordering;
         }
 
-        public int compare(Object object1, Object object2) throws NSComparator.ComparisonException {
-            EOEntity entity1 = (EOEntity) object1;
-            EOEntity entity2 = (EOEntity) object2;
+        public int compare(EOEntity entity1, EOEntity entity2) throws NSComparator.ComparisonException {
             Number group1 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity1.name());
             Number group2 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity2.name());
 
@@ -241,7 +239,7 @@ public abstract class ERXEntityOrder
      * NSComparator to sort on the descending EOEntity group number from ordering.entityOrdering().
      * This produces an ordering suitable for inserting data.
      */
-    public static class EntityInsertOrderComparator extends NSComparator {
+    public static class EntityInsertOrderComparator extends NSComparator<EOEntity> {
         protected ERXEntityOrder eRXEntityOrder;
 
         public EntityInsertOrderComparator(ERXEntityOrder ordering) {
@@ -249,9 +247,7 @@ public abstract class ERXEntityOrder
             eRXEntityOrder = ordering;
         }
 
-        public int compare(Object object1, Object object2) throws NSComparator.ComparisonException {
-            EOEntity entity1 = (EOEntity) object1;
-            EOEntity entity2 = (EOEntity) object2;
+        public int compare(EOEntity entity1, EOEntity entity2) throws NSComparator.ComparisonException {
             Number group1 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity1.name());
             Number group2 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity2.name());
 
