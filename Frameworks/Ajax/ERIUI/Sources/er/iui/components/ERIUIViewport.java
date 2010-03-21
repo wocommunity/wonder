@@ -4,6 +4,13 @@ import com.webobjects.appserver.WOContext;
 
 import er.extensions.components.ERXComponent;
 
+/**
+ *
+ * @binding initialScale
+ * @binding maximumScale
+ * @binding userScalable
+ * @binding width
+ */
 public class ERIUIViewport extends ERXComponent {
   public ERIUIViewport(WOContext context) {
     super(context);

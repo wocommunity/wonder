@@ -11,4 +11,6 @@
 	"Test validation message for unit test" = "FAIL - ERD comes before this";
 	"Test validation message for unit test in ERX" = "SUCCESS - ERD comes before this";
 	"ValueConversionException" = "The value entered for <b>@@displayNameForProperty@@</b> is not a valid <b>@@attribute.valueClass@@</b>.";
+	"UniquenessViolationNewObject" = "<b>@@displayNameForEntity@@</b> with this <b>@@displayNameForProperty@@</b> already exists.";
+	"UniquenessViolationExistingObject" = "<b>@@displayNameForEntity@@</b> with this <b>@@displayNameForProperty@@</b> already exists.";
 }

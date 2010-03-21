@@ -282,8 +282,13 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
             Object obj = ((NSKeyValueCoding)object).valueForKey(this.key());
             if (obj instanceof NSArray) {
             	NSArray objArray = (NSArray)obj;
-            	if (objArray.count() > 0) {
-            		result = ERXArrayUtilities.arrayContainsAnyObjectFromArray(objArray, elements());
+            	int objArrayCount = objArray.count();
+            	if (objArrayCount > 0) {
+            		if(_minCount == 0) {
+            			result = ERXArrayUtilities.arrayContainsArray(objArray, elements());
+            		} else {
+            			return ERXArrayUtilities.intersectingElements(objArray, elements()).count() >= _minCount;
+            		}
             	}
             }
     	}

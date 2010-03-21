@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERXWOForm" wocomponentcontent="true">
+        <binding name="secure"/>
+        <binding name="action"/>
+        <binding name="href"/>
+        <binding name="multipleSubmit"/>
+        <binding name="actionClass"/>
+        <binding name="queryDictionary"/>
+        <binding name="directActionName"/>
+        <binding name="name"/>
+        <binding name="id"/>
+        <binding name="enctype"/>
+        <binding name="addDefaultSubmitButton"/>
+        <binding name="method"/>
+        <binding name="disabled"/>
+        <binding name="fragmentIdentifier"/>
+	<validation message="Either one of 'action' or 'href' may be bound, or either or both of 'actionClass' and 'directActionName' may be bound">
+		<count test=">1">
+			<bound name="action"/>
+			<bound name="href"/>
+			<or>
+				<bound name="actionClass"/>
+				<bound name="directActionName"/>
+			</or>
+		</count>
+	</validation>
+    </wo>
+</wodefinitions>

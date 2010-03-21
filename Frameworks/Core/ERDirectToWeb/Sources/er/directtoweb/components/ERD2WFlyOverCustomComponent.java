@@ -19,7 +19,6 @@ import com.webobjects.foundation.NSArray;
  * @author ak on Tue Feb 10 2004
  * @project ERDirectToWeb
  */
-
 public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
 
     /** logging support */

@@ -75,14 +75,14 @@ public abstract class ERXFrameworkPrincipal {
     protected final Logger log = Logger.getLogger(getClass());
 
     /** holds the mapping between framework principals classes and ERXFrameworkPrincipal objects */
-    private static final NSMutableDictionary  initializedFrameworks = new NSMutableDictionary();
-    private static final NSMutableArray  launchingFrameworks = new NSMutableArray();
+    protected static final NSMutableDictionary  initializedFrameworks = new NSMutableDictionary();
+    protected static final NSMutableArray  launchingFrameworks = new NSMutableArray();
 
     public static class Observer {
         
         /**
          * Notification method called when the WOApplication posts
-         * the notification 'ApplicationWillFinishLaunching'. This
+         * the notification 'ApplicationDidCreateNotification'. This
          * method handles de-registering for notifications and releasing
          * any references to observer so that it can be released for
          * garbage collection.
@@ -90,15 +90,32 @@ public abstract class ERXFrameworkPrincipal {
          *      has been constructed, but before the application is
          *      ready for accepting requests.
          */
-        public final void finishInitialization(NSNotification n) {
-            NSNotificationCenter.defaultCenter().removeObserver(this);
+        public final void willFinishInitialization(NSNotification n) {
+            NSNotificationCenter.defaultCenter().removeObserver(this, ERXApplication.ApplicationDidCreateNotification, null);
             for (Enumeration enumerator = launchingFrameworks.objectEnumerator(); enumerator.hasMoreElements();) {
                 ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal) enumerator.nextElement();
                 principal.finishInitialization();
                 NSLog.debug.appendln("Finished initialization after launch: " + principal);
             }
         }
-
+        
+        /**
+         * Notification method called when the WOApplication posts
+         * the notification 'ApplicationDidFinishInitializationNotification'. This
+         * method handles de-registering for notifications and releasing
+         * any references to observer so that it can be released for
+         * garbage collection.
+         * @param n notification that is posted after the WOApplication
+         *      has been constructed, but before the application is
+         *      ready for accepting requests.
+         */
+        public final void didFinishInitialization(NSNotification n) {
+            NSNotificationCenter.defaultCenter().removeObserver(this);
+            for (Enumeration enumerator = launchingFrameworks.objectEnumerator(); enumerator.hasMoreElements();) {
+                ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal) enumerator.nextElement();
+                principal.didFinishInitialization();
+            }
+        }
     }
     
     private static Observer observer;
@@ -128,11 +145,15 @@ public abstract class ERXFrameworkPrincipal {
                 observer = new Observer();
                 NSNotificationCenter center = NSNotificationCenter.defaultCenter();
                 center.addObserver(observer,
-                        new NSSelector("finishInitialization",  ERXConstant.NotificationClassArray),
+                        new NSSelector("willFinishInitialization",  ERXConstant.NotificationClassArray),
                         // WOApplication.ApplicationWillFinishLaunchingNotification,
                         ERXApplication.ApplicationDidCreateNotification,
                         null);
-               
+                center.addObserver(observer,
+                        new NSSelector("didFinishInitialization",  ERXConstant.NotificationClassArray),
+                        // WOApplication.ApplicationWillFinishLaunchingNotification,
+                        ERXApplication.ApplicationDidFinishInitializationNotification,
+                        null);
             }
             if (initializedFrameworks.objectForKey(c.getName()) == null) {
             	// NSLog.debug.appendln("Starting up: " + c.getName());
@@ -187,6 +208,13 @@ public abstract class ERXFrameworkPrincipal {
      * Overridden by subclasses to provide framework initialization.
      */
     public abstract void finishInitialization();
+    
+    /**
+     * Overridden by subclasses to finalize framework initialization.
+     */
+    public void didFinishInitialization() {
+    	// Do nothing
+    }
     
     public String toString() {
       return ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName());

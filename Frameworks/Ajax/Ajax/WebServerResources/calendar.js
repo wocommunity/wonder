@@ -112,7 +112,17 @@ function get_xy(el) {
   var result = [0, 0];
   while (el) {
     result[0] += el.offsetLeft;
-    result[1] += el.offsetTop;
+	result[1] += el.offsetTop;
+
+    // CH: If you use position:relative on a span around an input, Safari copies the offset values
+    //     to the contained input resulting in the calendar popup being offset to the right and bottom 
+    //     To work around this, detect this situation and skip the containing span.
+	if (Prototype.Browser.WebKit && el.tagName == "INPUT" && 
+	    el.offsetParent && el.offsetParent.tagName == "SPAN" && 
+	    el.offsetParent.getStyle('position').toLowerCase() == 'relative') {
+      el = el.offsetParent;
+    }
+
     el = el.offsetParent;
   }
   return result;
@@ -162,12 +172,11 @@ function date_to_string(date, format) {
 function string_to_date(s) {
   var dateOrder = calendar.format;
   if (!dateOrder) dateOrder = '%d %b %Y';  // Set default format.
-
-  dateOrder = dateOrder.replace(/%[ed]/,'D');
+  dateOrder = dateOrder.replace(/%[ed]/,'d');
   dateOrder = dateOrder.replace(/%[mbB]/,'M');
-  dateOrder = dateOrder.replace(/%[yY]/,'Y');
-
-  var result = Date.fromString(s, {order: dateOrder});
+  dateOrder = dateOrder.replace(/%[yY]/,'yyyy');
+  
+  var result = Date.parseExact(s, [dateOrder]);
   if (result == 'Invalid Date') {
   	result = undefined;
   }
@@ -365,8 +374,9 @@ function calendar_open(input_element, options) {
   if(options.onDateSelect) {
     calendar.onDateSelect = options.onDateSelect;
   }
-  if(options.ajaxSupport) {
-    calendar.fireEvent = true;
+
+  if(options.fireEvent == false) {
+    calendar.fireEvent = false;
   }
   // CH: Done add init of new options
   
@@ -426,29 +436,35 @@ function calendar_open(input_element, options) {
 function build_calendar(input_element) {
 	if (get_element('calendar_control') == null) {  // CH only do this once per page or FireFox gets confused
 		var firstRow;
-		var calendarControl = new Element("table", {id: "calendar_control", style: "position: absolute; display:none; z-index: 10001;"}).update(
-          firstRow = new Element("tr", {}));
+		var tbody;
+		//create a table tag containing a tbody for IE
+		var calendarControl = new Element("table",
+				{id: "calendar_control", style: "position: absolute; display:none; z-index: 10001;"}
+			).update(tbody = new Element("tbody", {}));
+		firstRow = new Element("tr", {});
 		firstRow.appendChild(new Element("td", {id: "calendar_prev_year", title: "Previous year"}));
 		firstRow.appendChild(new Element("td", {id: "calendar_prev_month", title: "Previous month"}));
 		firstRow.appendChild(new Element("td", {id: "calendar_header", colspan: "3"}));
 		firstRow.appendChild(new Element("td", {id: "calendar_next_month", title: "Next month"}));
 		firstRow.appendChild(new Element("td", {id: "calendar_next_year", title: "Next year"}));
 		
+		tbody.appendChild(firstRow);
+		
 		var secondRow = new Element("tr", {});
-		calendarControl.appendChild(secondRow);
+		tbody.appendChild(secondRow);
 		for (var i=0; i < 7; i++) {
 	  	  secondRow.appendChild(new Element("td", {'class': "day_letter"}));
         }
         
         for(var n=1, i=0; i<6 ;i++) {
 		  var dayRow = new Element("tr", {});
-		  calendarControl.appendChild(dayRow);
+		  tbody.appendChild(dayRow);
 		  for(var j=0; j<7; j++,n++) {
 	  		dayRow.appendChild(new Element("td", {id: "calendar_day_" + n, 'class': "day_number normal"}));
 	  	  }
 	  	}
 	  	
-   		document.body.insert({'top': calendarControl});
+   		$(document.body).insert({'top': calendarControl});
 		calendar.element = get_element('calendar_control');
 	}
 }
@@ -462,7 +478,7 @@ calendar = {                        // Calendar properties.
   element: undefined,				// The calendar table.  CH: lazy init
   input_element: undefined,         // Calendar input element, set by calendar_show().
   onDateSelect: undefined,          // CH: add function called when user selects a date
-  fireEvent: false,					// CH: add should event listener for text field be fired upon date select?
+  fireEvent: true,					// CH: add should event listener for text field be fired upon date select?
   input_date: undefined,            // Date value of input element, set by calendar_show().
   month_date: undefined,            // First day of calendar month.
   format: undefined,                // The date display format, set by calendar_show().

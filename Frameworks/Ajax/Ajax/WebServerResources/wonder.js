@@ -181,10 +181,10 @@ var AjaxUtils = {
 	toggleClassName: function(element, className, toggled) {
 		element = $(element);
 		if (toggled) {
-			element.addClassName(className);
+			Element.addClassName(element, className);
 		}
 		else {
-			element.removeClassName(className);
+			Element.removeClassName(element, className);
 		}
 	}
 };
@@ -241,7 +241,7 @@ var AjaxUpdateContainer = {
 		else if (stopped) {
 			var newOptions = Object.extend({}, options);
 			newOptions.stopped = true;
-			updater = new Ajax.StoppedPeriodicalUpdater(id, url, options);
+			updater = new Ajax.StoppedPeriodicalUpdater(id, url, newOptions);
 		}
 		else {
 			updater = new Ajax.ActivePeriodicalUpdater(id, url, options);
@@ -306,8 +306,17 @@ var AjaxUpdateContainer = {
 	},
 	
 	update: function(id, options) {
-		var actionUrl = $(id).getAttribute('updateUrl');
-		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		var updateElement = $(id);
+		if (updateElement == null) {
+			alert('There is no element on this page with the id "' + id + '".');
+		}
+		var actionUrl = updateElement.getAttribute('updateUrl');
+		if (options && options['_r']) {
+			actionUrl = actionUrl.addQueryParameters('_r='+ id);
+		}
+		else {
+			actionUrl = actionUrl.addQueryParameters('_u='+ id);
+		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 	}
@@ -332,17 +341,22 @@ var AjaxUpdateLink = {
 	
 	_update: function(id, actionUrl, options, elementID, queryParams) {
 		if (elementID) {
-			actionUrl = actionUrl.sub('[^/]+$', elementID);
+			actionUrl = actionUrl.sub(/[^\/]+$/, elementID);
 		}
 		actionUrl = actionUrl.addQueryParameters(queryParams);
-		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		if (options && options['_r']) {
+			actionUrl = actionUrl.addQueryParameters('_r='+ id);
+		}
+		else {
+			actionUrl = actionUrl.addQueryParameters('_u='+ id);
+		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 	},
 	
 	request: function(actionUrl, options, elementID, queryParams) {
 		if (elementID) {
-			actionUrl = actionUrl.sub('[^/]+$', elementID);
+			actionUrl = actionUrl.sub(/[^\/]+$/, elementID);
 		}
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		new Ajax.Request(actionUrl, AjaxOptions.defaultOptions(options));
@@ -361,14 +375,19 @@ var AjaxSubmitButton = {
 		return options;
 	},
 	
-	generateActionUrl: function(id, form, queryParams) {
+	generateActionUrl: function(id, form, queryParams, options) {
 		var actionUrl = form.action;
 		if (queryParams != null) {
 			actionUrl = actionUrl.addQueryParameters(queryParams);
 		}
 		actionUrl = actionUrl.sub('/wo/', '/ajax/', 1);
 		if (id != null) {
-			actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
+			if (options && options['_r']) {
+				actionUrl = actionUrl.addQueryParameters('_r=' + id);
+			}
+			else {
+				actionUrl = actionUrl.addQueryParameters('_u=' + id);
+			}
 		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
 		return actionUrl;
@@ -427,13 +446,13 @@ var AjaxSubmitButton = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		var finalUrl = AjaxSubmitButton.generateActionUrl(id, form, queryParams);
+		var finalUrl = AjaxSubmitButton.generateActionUrl(id, form, queryParams, options);
 		var finalOptions = AjaxSubmitButton.processOptions(form, options);
 		new Ajax.Updater(id, finalUrl, finalOptions);
 	},
 	
 	request: function(form, queryParams, options) {
-		var finalUrl = AjaxSubmitButton.generateActionUrl(null, form, queryParams);
+		var finalUrl = AjaxSubmitButton.generateActionUrl(null, form, queryParams, options);
 		var finalOptions = AjaxSubmitButton.processOptions(form, options);
 		new Ajax.Request(finalUrl, finalOptions);
 	},
@@ -685,7 +704,7 @@ AjaxPeriodicUpdater.prototype = {
 	
 	start: function() {
 		var actionUrl = $(this.id).getAttribute('updateUrl');
-		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		actionUrl = actionUrl.addQueryParameters('_u='+ id);
 		this.updater = new Ajax.PeriodicalUpdater(this.id, actionUrl, { evalScripts: true, frequency: 2.0 });
 	},
 
@@ -812,14 +831,14 @@ var AjaxHintedText = {
         e.setAttribute('default', unescape(e.getAttribute('default')));
         e.showDefaultValue = function() {
             if(e.value == "") {
-                e.className = "ajax-hinted-text-with-default";
+                Element.addClassName(e, 'ajax-hinted-text-with-default');
                 e.value = e.getAttribute('default');
             } else {
-                e.className = "";
+                Element.removeClassName(e, 'ajax-hinted-text-with-default');
             }
         }
         e.showTextValue = function() {
-            e.className = "";
+            Element.removeClassName(e, 'ajax-hinted-text-with-default');
             if(e.value.replace(/[\r\n]/g, "") == e.getAttribute('default').replace(/[\r\n]/g, "")) {
                 e.value = "";
             }
@@ -897,7 +916,7 @@ var Hoverable = {
 	
   over: function(event) {
   	var element = this;
-    element.addClassName("hover");
+    Element.addClassName(element, "hover");
     if (element['hoverCount'] == undefined) {
       element['hoverCount'] = 0;
     }
@@ -914,7 +933,7 @@ var Hoverable = {
   _end: function(hoverCount) {
     var element = this;
     if (element['hoverCount'] == hoverCount) {
-      element.removeClassName("hover");
+      Element.removeClassName(element, "hover");
     }
   },
 
@@ -957,7 +976,7 @@ var AjaxBusy = {
 	     	var updateContainer = AjaxBusy.requestContainer(request);
 	     	if (!watchContainerID || (updateContainer && updateContainer.id == watchContainerID)) {
 			  	if (busyClass && updateContainer) {
-						updateContainer.addClassName(busyClass);
+						Element.addClassName(updateContainer, busyClass);
 			   	}
 			   	
 			   	if (busyAnimationElement && $(busyAnimationElement)) {
@@ -974,7 +993,7 @@ var AjaxBusy = {
 	     	var updateContainer = AjaxBusy.requestContainer(request);
 	     	if (!watchContainerID || (updateContainer && updateContainer.id == watchContainerID)) {
 			  	if (busyClass && updateContainer) {
-						updateContainer.removeClassName(busyClass);
+						Element.removeClassName(updateContainer, busyClass);
 					}
 					
 					if (busyAnimationElement && $(busyAnimationElement)) {

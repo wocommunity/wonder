@@ -1,0 +1,42 @@
+HasAttachment: ERXNonNullConditional {
+	condition = objectPropertyValue;
+}
+
+NoAttachment: ERXNonNullConditional {
+	condition = objectPropertyValue;
+	negate = true;
+}
+
+FileUpload : WOSwitchComponent {
+    // Using WOSwitchComponent to prevent dependency on ERAttachment framework
+	WOComponentName = "ERAttachmentUpload";
+	attachment = objectPropertyValue;
+	editingContext = object.editingContext;
+	configurationName = configurationName;
+	ajax = ^ajax;
+}
+
+DisplayAttachmentDownloadLink: WOSwitchComponent {
+    // Using WOSwitchComponent to prevent dependency on ERAttachment framework
+	WOComponentName = "ERAttachmentLink";
+	attachment = objectPropertyValue;
+	class = "ERD2WDisplayAttachment download";
+}
+
+FileName: WOString {
+	value = objectPropertyValue.originalFileName; //VALID
+}
+
+Icon: WOSwitchComponent {
+    // Using WOSwitchComponent to prevent dependency on ERAttachment framework
+	WOComponentName = "ERAttachmentIcon";
+	attachment = objectPropertyValue;
+	size = d2wContext.size;
+}
+
+DeleteButton: WOSubmitButton {
+	action = removeAttachment;
+	class = "delete";
+	title = "Delete";
+	value = "Remove";
+}

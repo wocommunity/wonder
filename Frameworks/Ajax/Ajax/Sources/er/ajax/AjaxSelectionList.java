@@ -36,6 +36,7 @@ import er.extensions.components.ERXComponentUtilities;
  * @binding onselect (optional) the javascript to execute when the user presses enter or double-clicks
  * @binding ondelete (optional) the javascript to execute when backspace or delete is pressed
  * @binding focus (optional) if true, the selection list will be focused 
+ * @binding containerElementName the container element for this component, which is "a"
  */
 public class AjaxSelectionList extends AjaxComponent {
 	private String _id;

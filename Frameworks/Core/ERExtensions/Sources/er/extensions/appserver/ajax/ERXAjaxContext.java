@@ -34,8 +34,13 @@ public class ERXAjaxContext extends WOContext {
 			WORequest request = request();
 			String partialSubmitSenderID = ERXAjaxApplication.partialFormSenderID(request);
 			if (partialSubmitSenderID != null) {
+				// TODO When explicitly setting the "name" binding on an input, 
+				// the following will fail in the takeValuesFromRequest phase.
 				String elementID = elementID();
-				if (!partialSubmitSenderID.equals(elementID) && !partialSubmitSenderID.startsWith(elementID + ",") && !partialSubmitSenderID.endsWith("," + elementID) && !partialSubmitSenderID.contains("," + elementID + ",")) {
+				if (!partialSubmitSenderID.equals(elementID) 
+						&& !partialSubmitSenderID.startsWith(elementID + ",") 
+						&& !partialSubmitSenderID.endsWith("," + elementID) 
+						&& !partialSubmitSenderID.contains("," + elementID + ",")) {
 					String ajaxSubmitButtonID = ERXAjaxApplication.ajaxSubmitButtonName(request);
 					if (ajaxSubmitButtonID == null || !ajaxSubmitButtonID.equals(elementID)) {
 						wasFormSubmitted = false;

@@ -11,6 +11,7 @@
 	<name>D2W Examples</name>
 	<modules>
 		<module>D2WComponentTour</module>
+		<module>ERDivaliteExample</module>
 		<module>ERMovies</module>
 	</modules>
 </project>

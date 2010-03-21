@@ -11,7 +11,7 @@ import er.ajax.example.Comment;
 import er.ajax.example.ExampleDataFactory;
 
 public class HighlightExample extends WOComponent {
-	private NSMutableArray _comments;
+	private NSMutableArray<Comment> _comments;
 	private Comment _comment;
 	public Comment _repetitionComment;
 

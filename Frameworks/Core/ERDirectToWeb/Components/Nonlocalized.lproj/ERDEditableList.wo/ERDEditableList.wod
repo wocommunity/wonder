@@ -1,0 +1,17 @@
+Content2: WOComponentContent {}
+
+List1: ERXD2WList { 	
+	pageConfiguration = ^listEmbeddedConfigurationName;
+	dataSource = detailDataSource;
+	entityName = ^destinationEntityName;
+	settings = settings;
+}
+
+CollapseContainer: WOSwitchComponent {
+	WOComponentName = ^collapsibleComponentName;
+	_unroll = true;
+	allowCollapsing = ^allowCollapsing;
+	closedLabel = closedLabelString;
+	submitActionName = submitActionName;
+	container = container;
+}

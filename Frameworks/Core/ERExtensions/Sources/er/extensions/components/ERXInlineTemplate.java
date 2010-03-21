@@ -269,7 +269,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		private String _method;
 
 		public Error(String method, Throwable t) {
-			ERXInlineTemplate.log.error(method, t);
+			ERXInlineTemplate.log.error(method + ": " + t, t);
 			_t = t;
 			_method = method;
 		}

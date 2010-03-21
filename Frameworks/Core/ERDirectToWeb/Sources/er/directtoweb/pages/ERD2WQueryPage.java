@@ -26,12 +26,15 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSValidation;
 
 import er.directtoweb.delegates.ERDQueryDataSourceDelegateInterface;
+import er.directtoweb.delegates.ERDQueryValidationDelegate;
 import er.directtoweb.interfaces.ERDQueryPageInterface;
 import er.extensions.appserver.ERXDisplayGroup;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 import java.util.Enumeration;
 
@@ -41,8 +44,20 @@ import java.util.Enumeration;
  * restore the initial query bindings by supplying a NS(Mutable)Dictionary which
  * contains the keys "queryMin", "queryMax" etc from the respective fields of
  * the WODisplayGroup.
+ * @d2wKey fetchSpecificationName
+ * @d2wKey enableQueryForNullValues
+ * @d2wKey isDeep
+ * @d2wKey usesDistinct
+ * @d2wKey refrehRefetchedObjects
+ * @d2wKey fetchLimit
+ * @d2wKey prefetchingRelationshipKeyPaths
+ * @d2wKey showListInSamePage
+ * @d2wKey listConfigurationName
+ * @d2wKey queryDataSourceDelegate
+ * @d2wKey queryValidationDelegate
+ * @d2wKey enableQueryForNullValues
+ * @d2wKey canQueryPropertyForNullValues
  */
-
 public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
     protected WODisplayGroup displayGroup;
@@ -53,6 +68,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     protected EOFetchSpecification fetchSpecification;
     
     protected ERDQueryDataSourceDelegateInterface queryDataSourceDelegate;
+    protected ERDQueryValidationDelegate queryValidationDelegate;
 
     protected NSArray _nullablePropertyKeys;
     protected NSMutableDictionary keysToQueryForNull = new NSMutableDictionary();
@@ -229,6 +245,23 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
     public WOComponent queryAction() {
         WOComponent nextPage = null;
+
+        // If we have a validation delegate, validate the query values before actually performing the query.
+        ERDQueryValidationDelegate queryValidationDelegate = queryValidationDelegate();
+        if (queryValidationDelegate != null) {
+            clearValidationFailed();
+            setErrorMessage(null);
+            try {
+                queryValidationDelegate.validateQuery(this);
+            } catch (NSValidation.ValidationException ex) {
+    			setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotQuery", ex));
+    			validationFailedWithException(ex, null, "queryExceptionKey");
+    		}
+            if (hasErrors()) {
+                return context().page();
+            }
+        }
+
         if (ERXValueUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))) {
             setShowResults(true);
         } else {
@@ -353,6 +386,25 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
      */
     public void setQueryDataSourceDelegate(ERDQueryDataSourceDelegateInterface delegate) {
         queryDataSourceDelegate = delegate;
+    }
+
+    /**
+     * Gets the query validation delegate.
+     * @return the query validation delegate
+     */
+    public ERDQueryValidationDelegate queryValidationDelegate() {
+        if (null == queryValidationDelegate) {
+            queryValidationDelegate = (ERDQueryValidationDelegate)d2wContext().valueForKey("queryValidationDelegate");
+        }
+        return queryValidationDelegate;
+    }
+
+    /**
+     * Sets the query validation delegate.
+     * @param delegate to use as the query validation delegate
+     */
+    public void setQueryValidationDelegate(ERDQueryValidationDelegate delegate) {
+        queryValidationDelegate = delegate;
     }
 
     /**

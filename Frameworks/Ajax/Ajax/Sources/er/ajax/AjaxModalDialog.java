@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOForm;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPathUtilities;
@@ -30,11 +31,12 @@ import er.extensions.components._private.ERXWOForm;
  * <li>an in-line ERXWOTemplate named "link".  This allows for images etc to be used to open the dialog</li>
  * </ul></p>
  *
- * <p>The contents for the modal dialog can come from three sources:
+ * <p>The contents for the modal dialog can come from four sources:
  * <ul>
  * <li>in-line, between the open in close tags</li>
- * <li>externally (i.e. from another template), from an in-line WOComponent</li>
- * <li>externally (i.e. from another template), from an action method</li>
+ * <li>externally from an in-line WOComponent</li>
+ * <li>externally from an action method (see action binding)</li>
+ * <li>externally from an named WOcomponent (see pageName binding)</li>
  * </ul></p>
  * 
  * <p>To cause the dialog to be closed in an Ajax action method, use this:
@@ -56,7 +58,8 @@ import er.extensions.components._private.ERXWOForm;
  * </code>
  * </p>
  * 
- * @binding action returns the contents of the dialog box
+ * @binding action action method returning the contents of the dialog box
+ * @binding pageName name of WOComponent for the contents of the dialog box
  * @binding label the text for the link that opens the dialog box
  * @binding title Title to be displayed in the ModalBox window header, also used as title attribute of link opening dialog
  * @binding linkTitle Title to be used as title attribute of link opening dialog, title is used if this is not present
@@ -392,7 +395,6 @@ public class AjaxModalDialog extends AjaxComponent {
 		String modalBoxAction = NSPathUtilities.pathExtension(context.senderID());
 
 		if ("close".equals(modalBoxAction)) {
-			closeDialog();
 			// This update can't be done in the closeDialog() method as that also gets called from close(WOContext) and
 			// and Ajax update is not taking place.  If the page structure changes, this update will not take place,
 			// but the correct container ID is on the URL and the update will still happen thanks to the magic in
@@ -401,16 +403,38 @@ public class AjaxModalDialog extends AjaxComponent {
 			if (closeUpdateContainerID != null) {
 				AjaxUpdateContainer.setUpdateContainerID(request, closeUpdateContainerID);
 			}
+	
+			// This needs to happen AFTER setting up for an update so that AjaxUtils.appendScriptHeaderIfNecessary
+			// knows if the script header is needed or not.  Doing this before and setting up a JS response in 
+			// the onClose callback, resulted in plain text getting injected into the page.
+			closeDialog();
 		}
 		else if ("open".equals(modalBoxAction) && !isOpen()) {
 			openDialog();
 
-			// If there is an action binding, we need to cache the result of calling that so that
+			// If there is an action or pageName binding, we need to cache the result of calling that so that
 			// the awake, takeValues, etc. messages can get passed onto it
 			if (hasBinding("action")) {
 				_actionResults = (WOComponent) valueForBinding("action");
 				_actionResults._awakeInContext(context);
 			}
+			else if (hasBinding("pageName")) {
+				_actionResults = pageWithName((String)valueForBinding("pageName"));
+				_actionResults._awakeInContext(context);
+			}
+
+			// WOForm expects that it is inside a WODynamicGroup and relies on WODynamicGroup having setup the WOContext to correctly 
+			// generate the URL.  It should not (IMO), but it does.  If you have anything before the WebObject tag for the form 
+			// (a space, a carriage return, text, HTML tags, anything at all), then the WO parser creates a WODynamicGroup to hold that.  
+			// If  the WebObject tag for the form is the very first thing in the template, then the WODynamicGroup is not created and 
+			// invalid URLs are generated rendering the submit controls non-functional.  Throw an exception so the developer knows what is 
+			// wrong and can correct it.
+			if (_actionResults != null && (_actionResults.template() instanceof WOForm ||
+			  		                       _actionResults.template() instanceof ERXWOForm)) {
+				throw new RuntimeException(_actionResults.name() + " is used as contents of AjaxModalDialog, but starts with WOForm tag.  " +
+						"Action elements inside the dialog will not function.  Add a space at the start or end of " + _actionResults.name() + ".html");
+			}
+				
 		}
 
 		if (isOpen()) {
@@ -677,7 +701,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		else {
 			serverUpdate = "function(v) { " + serverUpdate + '}';
 		}
-		ajaxOptionsArray.addObject(new AjaxOption("afterHide", serverUpdate, AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("afterHide", serverUpdate, AjaxOption.SCRIPT));
 
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 

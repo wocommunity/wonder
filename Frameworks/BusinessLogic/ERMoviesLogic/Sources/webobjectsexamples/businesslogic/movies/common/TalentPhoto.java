@@ -15,7 +15,7 @@ package webobjectsexamples.businesslogic.movies.common;
 import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.foundation.NSData;
 
-public class TalentPhoto extends EOGenericRecord {
+public class TalentPhoto extends _TalentPhoto {
 	private static final long	serialVersionUID	= -8351768867350014975L;
 
 	public static final String	PhotoKey			= "photo";

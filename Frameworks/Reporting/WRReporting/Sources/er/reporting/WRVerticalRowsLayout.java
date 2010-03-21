@@ -7,9 +7,7 @@ import com.webobjects.appserver.*;
  * @binding sample sample binding explanation
  *
  * @author ak on Mon Mar 17 2003
- * @project WRReporting
  */
-
 public class WRVerticalRowsLayout extends WRReport {
 	
     /**

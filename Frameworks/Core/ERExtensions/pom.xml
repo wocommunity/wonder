@@ -9,6 +9,7 @@
 	<artifactId>ERExtensions</artifactId>
 	<name>ERExtensions Framework</name>
 	<packaging>woframework</packaging>
+
 	<profiles>
 		<profile>
 			<id>unknown</id>
@@ -56,6 +57,12 @@
 	</profiles>
 	<build>
 		<sourceDirectory>${basedir}/Sources</sourceDirectory>
+		<testSourceDirectory>${basedir}/Tests/Sources</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>${basedir}/Tests/Resources</directory>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.objectstyle.woproject.maven2</groupId>

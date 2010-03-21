@@ -21,7 +21,7 @@ import er.extensions.localization.ERXLocalizer;
  */
 public abstract class ERXComponent extends WOComponent {
 	protected NSMutableDictionary _dynamicBindings = null;
-
+	
 	/**
 	 * Constructs a new ERXComponent.
 	 * 
@@ -196,9 +196,7 @@ public abstract class ERXComponent extends WOComponent {
 		if (hasBinding(binding)) {
 			return booleanValueForBinding(binding, false);
 		}
-		else {
-			return defaultValue.value();
-		}
+		return defaultValue.value();
 	}
 
 	/**
@@ -275,6 +273,8 @@ public abstract class ERXComponent extends WOComponent {
 
 	/**
 	 * Convenience method to get the localizer.
+	 * 
+	 * @return the current localizer 
 	 */
 	public ERXLocalizer localizer() {
 		return ERXLocalizer.currentLocalizer();
@@ -286,6 +286,7 @@ public abstract class ERXComponent extends WOComponent {
 	 * rapid turnaround modes where adding a iVar would cause hot code swapping
 	 * to stop working.
 	 * 
+	 * @return a dictionay for use with dynamic bindings 
 	 */
 	public NSMutableDictionary dynamicBindings() {
 		if (_dynamicBindings == null) {

@@ -10,7 +10,7 @@
         "_EntityModeler" = {
             activeDatabaseConfigName = Default; 
             databaseConfigs = {
-                Default = {adaptorName = Memory; prototypeEntityName = EOJDBCFrontBasePrototypes; }; 
+                Default = {adaptorName = Memory; prototypeEntityName = EOMemoryPrototypes; }; 
             }; 
         }; 
     }; 

@@ -48,6 +48,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		setLocksObjects(spec.locksObjects());
 		setRawRowKeyPaths(spec.rawRowKeyPaths());
 		setPromptsAfterFetchLimit(spec.promptsAfterFetchLimit());
+		setRefreshesRefetchedObjects(spec.refreshesRefetchedObjects());
 		setPrefetchingRelationshipKeyPaths(spec.prefetchingRelationshipKeyPaths());  
 	}
 

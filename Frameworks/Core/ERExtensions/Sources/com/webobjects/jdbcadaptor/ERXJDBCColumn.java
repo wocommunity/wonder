@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.jdbc.ERXJDBCAdaptor.Channel;
@@ -33,24 +33,8 @@ public class ERXJDBCColumn extends JDBCColumn {
 		super(aChannel);
 	}
 
-	public static Object fixedInputValue(EOAttribute att, Object o) {
-		if(att.adaptorValueConversionMethod() != null) {
-			try {
-				return att.adaptorValueConversionMethod().invoke(o);
-			}
-			catch (Exception e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
-			}
-		}
-		return o;
-	}
-
 	public void takeInputValue(Object arg0, int arg1, boolean arg2) {
 		try {
-			if (ERXApplication.isWO54()) {
-				// 5.4 seed bug workaround
-				arg0 = ERXJDBCColumn.fixedInputValue(_attribute, arg0);
-			}
 			super.takeInputValue(arg0, arg1, arg2);
 		} catch(NSForwardException ex) {
 			if (ex.originalException() instanceof NoSuchMethodException) {
@@ -82,7 +66,7 @@ public class ERXJDBCColumn extends JDBCColumn {
 				try {
 					int i =_rs.getInt(_column);
 					if(_rs.wasNull()) {
-						return null;
+						return NSKeyValueCoding.NullValue;
 					}
 					Object result = ERXConstant.NumberConstant.constantForClassNamed(i, _constantClassName);
  					return result;

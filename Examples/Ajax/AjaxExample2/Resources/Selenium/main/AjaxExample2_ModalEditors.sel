@@ -1,0 +1,8 @@
+Test for Modal Editors page
+
+|open|/|
+
+|click|link=Modal Editors|
+|pause|1200|
+|verifyTextPresent|Products|
+

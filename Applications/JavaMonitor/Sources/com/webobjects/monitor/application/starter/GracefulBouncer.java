@@ -70,7 +70,7 @@ public class GracefulBouncer extends ApplicationStarter {
         for (int i = 0; i < numToStartPerHost; i++) {
             for (MHost host : activeHosts) {
                 NSArray<MInstance> inactiveInstances = inactiveInstancesByHost.objectForKey(host);
-                if (inactiveInstances.count() >= i) {
+                if (inactiveInstances != null && inactiveInstances.count() >= i) {
                     MInstance instance = inactiveInstances.objectAtIndex(i);
                     log("Adding instance " + instance.displayName() + " on host " + host.addressAsString());
                     startingInstances.addObject(instance);

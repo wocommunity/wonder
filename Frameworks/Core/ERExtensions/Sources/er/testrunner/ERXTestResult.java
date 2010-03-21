@@ -36,12 +36,12 @@ public class ERXTestResult extends TestResult {
 
     public synchronized void addError(Test test, Throwable t) {
         super.addError(test, t);
-        _errors.addObject(fErrors.lastElement());
+        _errors.addObject(fErrors.get(fErrors.size() -1));
     }
     
     public synchronized void addFailure(Test test, AssertionFailedError t) {
         super.addFailure(test, t);
-        _failures.addObject(fFailures.lastElement());
+        _failures.addObject(fFailures.get(fFailures.size() - 1));
     }
 
     public NSArray errorsArray() {

@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.foundation;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -17,8 +15,8 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.ERXExtensions;
@@ -98,12 +96,13 @@ import er.extensions.logging.ERXLogger;
  * <strong>Openbase:</strong> same, with DBDatabase and DBHostname
  * 
  * <strong>JDBC:</strong> same with dbConnectURLGLOBAL, or ER.DBURL
- * 
  * </pre>
- * <p>
- * Prototypes can be swapped globally or per model either by 
+ * 
+ * <p>Prototypes can be swapped globally or per model either by 
  * hydrating an archived prototype entity for a file or from 
- * another entity.
+ * another entity.</p>
+ * 
+ * @property er.extensions.ERXConfigurationManager.PropertiesTouchFile if this property is set to a file name, the application will register for notifications of changes to that file and when that file is touched, the application will re-load properties.
  */
 public class ERXConfigurationManager {
 
@@ -121,6 +120,8 @@ public class ERXConfigurationManager {
     
     private String[] _commandLineArguments; 
     private NSArray _monitoredProperties;
+    private Properties _defaultProperties;
+    private Properties _commandLineArgumentProperties;
     private boolean _isInitialized = false;
     private boolean _isRapidTurnAroundInitialized = false;
 
@@ -159,6 +160,28 @@ public class ERXConfigurationManager {
     }
     
     /** 
+     * Returns the command line arguments as Properties. 
+     * {@link ERXApplication#main} sets this value. 
+     * 
+     * @return the command line arguments as a String[]
+     * @see #setCommandLineArguments
+     */
+    public Properties commandLineArgumentProperties() {
+        return (Properties) _commandLineArgumentProperties.clone();
+    }
+    
+    /** 
+     * Returns the command line arguments as Properties. 
+     * {@link ERXApplication#main} sets this value. 
+     * 
+     * @return the command line arguments as a String[]
+     * @see #setCommandLineArguments
+     */
+    public Properties defaultProperties() {
+        return (Properties) _defaultProperties.clone();
+    }
+    
+    /** 
      * Sets the command line arguments. 
      * {@link ERXApplication#main} will call this method 
      * when the application starts up. 
@@ -166,7 +189,9 @@ public class ERXConfigurationManager {
      * @see #commandLineArguments
      */
     public void setCommandLineArguments(String [] newCommandLineArguments) {
-        _commandLineArguments = newCommandLineArguments;
+    	_commandLineArguments = newCommandLineArguments;
+		_defaultProperties = (Properties) NSProperties._getProperties().clone();
+		_commandLineArgumentProperties = ERXProperties.propertiesFromArgv(_commandLineArguments);
     }
 
     /**
@@ -177,13 +202,13 @@ public class ERXConfigurationManager {
     public void initialize() {
     	if (! _isInitialized) {
     		_isInitialized = true;
-    		loadOptionalConfigurationFiles();
+    		loadConfiguration();
     	}
     }
 
     private NSArray monitoredProperties() {
-        if( _monitoredProperties == null ) {
-            _monitoredProperties = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
+        if( _monitoredProperties == null) {
+            _monitoredProperties = ERXProperties.pathsForUserAndBundleProperties();
         }
         return _monitoredProperties;
     }
@@ -259,52 +284,22 @@ public class ERXConfigurationManager {
      * This will overlay the current system config files. It will then
      * re-load the command line args.
      */
-    public void loadOptionalConfigurationFiles() {
-    	NSMutableArray additionalConfigurationFiles = new NSMutableArray();
-    	NSArray optionalConfigurationFiles = ERXProperties.optionalConfigurationFiles();
-    	if (optionalConfigurationFiles != null) {
-    		additionalConfigurationFiles.addObjectsFromArray(optionalConfigurationFiles);
-    	}
-
-    	String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
-    	if (applicationMachinePropertiesPath != null) {
-    		additionalConfigurationFiles.addObject(applicationMachinePropertiesPath);
-    	}
-
-    	String applicationDeveloperPropertiesPath = ERXProperties.applicationDeveloperProperties();
-    	if (applicationDeveloperPropertiesPath != null) {
-    		additionalConfigurationFiles.addObject(applicationDeveloperPropertiesPath);
-    	}
-
-    	String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
-    	if (applicationUserPropertiesPath != null) {
-    		additionalConfigurationFiles.addObject(applicationUserPropertiesPath);
-    	}
-
-        if (additionalConfigurationFiles.count() > 0) {
-            Properties systemProperties = System.getProperties();
-            for (Enumeration configEnumerator = additionalConfigurationFiles.objectEnumerator(); configEnumerator.hasMoreElements();) {
-                String configFile = (String)configEnumerator.nextElement();
-                File file = new File(configFile);
-                if (file.exists() && file.isFile() && file.canRead()) {
-                    try {
-                        Properties props = ERXProperties.propertiesFromFile(file);
-                        ERXProperties.transferPropertiesFromSourceToDest(props, systemProperties);
-                        ERXSystem.updateProperties();
-                    } catch (java.io.IOException ex) {
-                        log.error("Unable to load optional configuration file: " + configFile, ex);
-                    }
-                }
-                else {
-                	ERXConfigurationManager.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or cannot be read.");
-                }
-            }
-            if (_commandLineArguments != null  &&  _commandLineArguments.length > 0) {
-                _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
-            }
-        }
+    public void loadConfiguration() {
+    	Properties systemProperties = System.getProperties();
+    	systemProperties = applyConfiguration(systemProperties);
+		ERXProperties.transferPropertiesFromSourceToDest(systemProperties, System.getProperties());
+    	ERXSystem.updateProperties();
+    	ERXLogger.configureLoggingWithSystemProperties();
     }
     
+    /**
+     * This will overlay the current system config files. It will then
+     * re-load the command line args.
+     */
+    public Properties applyConfiguration(Properties systemProperties) {
+    	return ERXProperties.applyConfiguration(systemProperties, commandLineArgumentProperties());
+    }
+
     /** 
      * Updates the configuration from the current configuration and 
      * posts {@link #ConfigurationDidChangeNotification}. It also  
@@ -324,59 +319,13 @@ public class ERXConfigurationManager {
      * @param  n NSNotification object for the event (null means load all files)
      */
     public synchronized void updateSystemProperties(NSNotification n) {
-        _updateSystemPropertiesFromMonitoredProperties(n != null ? (File)n.object() : null);
-        if (_commandLineArguments != null  &&  _commandLineArguments.length > 0) 
-            _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
-        
-        ERXLogger.configureLoggingWithSystemProperties();
+    	loadConfiguration();
     }
-    
+
     public synchronized void updateAllSystemProperties(NSNotification notification) {
-        updateSystemProperties(null);
+    	loadConfiguration();
     }
     
-    /**
-     * If updatedFile is null, all files are reread.
-     */
-    private void _updateSystemPropertiesFromMonitoredProperties(File updatedFile) {
-        NSArray monitoredProperties = monitoredProperties();
-
-        if (monitoredProperties == null  ||  monitoredProperties.count() == 0)  return;
-        
-        int firstDirtyFile = 0;
-        
-        if (updatedFile != null) {
-            try {
-                // Find the position of the updatedFile in the monitoredProperties list, 
-                // so that we can reload it and everything after it on the list. 
-                firstDirtyFile = monitoredProperties.indexOfObject(updatedFile.getCanonicalPath());
-                if (firstDirtyFile < 0) {
-                    return;
-                }
-            } catch (IOException ex) {
-                log.error(ex.toString());
-                return; 
-            }
-        }
-        
-
-        Properties systemProperties = System.getProperties();
-        for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
-            String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
-            Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
-            ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
-            ERXSystem.updateProperties();
-        }
-    }
-
-    private void _reinsertCommandLineArgumentsToSystemProperties(String[] commandLineArguments) {
-        Properties commandLineProperties = ERXProperties.propertiesFromArgv(commandLineArguments);
-        Properties systemProperties = System.getProperties(); 
-        ERXProperties.transferPropertiesFromSourceToDest(commandLineProperties, systemProperties);
-        ERXSystem.updateProperties();
-        log.debug("Reinserted the command line arguments to the system properties.");
-    }
-
     public final static int WindowsOperatingSystem=1;
     public final static int MacOSXOperatingSystem=2;
     public final static int SolarisOperatingSystem=3;

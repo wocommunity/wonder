@@ -385,19 +385,19 @@ public class ERXBrowserFactory {
     }
     
     public String parseGeckoVersion(String userAgent) {
-        if(userAgent.indexOf("Gecko") == -1) {
-            return ERXBrowser.NO_GECKO;
+    	if (userAgent.indexOf("Gecko") >= 0) {
+    		int startPos = userAgent.indexOf("; rv:") + 5;
+            // TODO someone document why '4'
+            if (startPos >= 0 && startPos != 4) {
+            	
+            	int endPos = userAgent.indexOf(")", startPos);
+            	
+            	if (endPos > startPos) {
+            		return userAgent.substring(startPos, endPos);
+            	} 	
+            }
         }
-    
-        int startPos = userAgent.indexOf("; rv:") + 5;
-
-        if(startPos == 4) {
-            return ERXBrowser.NO_GECKO;
-        }
-
-        int endPos = userAgent.indexOf(")", startPos);
-
-        return userAgent.substring(startPos, endPos);
+        return ERXBrowser.NO_GECKO;
     }
 
     public String parseVersion(String userAgent) {

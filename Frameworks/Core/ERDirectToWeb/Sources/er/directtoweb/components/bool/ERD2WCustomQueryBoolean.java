@@ -14,8 +14,8 @@ import er.extensions.localization.ERXLocalizer;
  * Also keeps the selected value. 
  * 
  * @author ak on Mon Dec 22 2003
+ * @d2wKey choicesNames
  */
-
 public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
 
     /** logging support */

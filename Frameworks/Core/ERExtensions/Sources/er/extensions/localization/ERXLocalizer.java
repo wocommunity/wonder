@@ -7,6 +7,8 @@
 package er.extensions.localization;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.DateFormatSymbols;
 import java.text.Format;
@@ -28,6 +30,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
@@ -137,6 +140,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	private static Observer observer = new Observer();
 
 	private static NSMutableArray monitoredFiles = new NSMutableArray();
+	
+	private static final char _localizerMethodIndicatorCharacter = '@';
 
 	static NSArray<String> fileNamesToWatch;
 	static NSArray<String> frameworkSearchPath;
@@ -346,16 +351,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		resetCache();
 	}
 
-	public static NSArray availableLanguages() {
+	public static NSArray<String> availableLanguages() {
 		if (availableLanguages == null) {
-			availableLanguages = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.availableLanguages", new NSArray(new Object[] { "English", "German", "Japanese" }));
+			availableLanguages = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.availableLanguages", new NSArray(new String[] { "English", "German", "Japanese" }));
 			if (log.isDebugEnabled())
 				log.debug("AvailableLanguages: " + availableLanguages);
 		}
 		return availableLanguages;
 	}
 
-	public static void setAvailableLanguages(NSArray value) {
+	public static void setAvailableLanguages(NSArray<String> value) {
 		availableLanguages = value;
 		resetCache();
 	}
@@ -833,7 +838,29 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		return result;
 	}
 
+	/**
+	 * Returns the localized value for a key. An @ keypath such as 
+	 * <code>session.localizer.@locale.getLanguage</code> indicates that
+	 * the methods on ERXLocalizer itself should be called instead of
+	 * searching the strings file for a '@locale.getLanguage' key.
+	 * @param key the keyPath string
+	 * @return a localized string value or the object value of the @ keyPath
+	 */
 	public Object localizedValueForKey(String key) {
+		if(!ERXStringUtilities.stringIsNullOrEmpty(key) && _localizerMethodIndicatorCharacter == key.charAt(0)) {
+			int dotIndex = key.indexOf(NSKeyValueCodingAdditions.KeyPathSeparator);
+			String methodKey = (dotIndex>0)?key.substring(1, dotIndex):key.substring(1, key.length());
+			try {
+				Method m = ERXLocalizer.class.getMethod(methodKey);
+				return m.invoke(this, (Object[])null);
+			} catch(NoSuchMethodException nsme) {
+				throw NSForwardException._runtimeExceptionForThrowable(nsme);
+			} catch(IllegalAccessException iae) {
+				throw NSForwardException._runtimeExceptionForThrowable(iae);
+			} catch(InvocationTargetException ite) {
+				throw NSForwardException._runtimeExceptionForThrowable(ite);
+			}
+		}
 		Object result = cache.objectForKey(key);
 		if (key == null || result == NOT_FOUND)
 			return null;

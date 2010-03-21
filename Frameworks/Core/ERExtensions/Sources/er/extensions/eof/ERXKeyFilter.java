@@ -23,7 +23,7 @@ import com.webobjects.foundation.NSSet;
  * </p>
  * 
  * <pre>
- * ERXKeyFilter companyFilter = new ERXKeyFilter(ERXKeyFilter.Base.Attributes);
+ * ERXKeyFilter companyFilter = ERXKeyFilter.filterWithAttribtues();
  * ERXKeyFilter remindersFilter = companyFilter.include(Company.REMINDERS);
  * remindersFilter.include(Reminder.SUMMARY);
  * ERXKeyFilter reminderAuthorFilter = remindersFilter.include(Reminder.AUTHOR);
@@ -85,6 +85,9 @@ public class ERXKeyFilter {
 	 */
 	public void setDelegate(ERXKeyFilter.Delegate delegate) {
 		_delegate = delegate;
+		for (ERXKeyFilter includedFilter : _includes.values()) {
+			includedFilter.setDelegate(delegate);
+		}
 	}
 	
 	/**
@@ -135,6 +138,19 @@ public class ERXKeyFilter {
 	 */
 	public static ERXKeyFilter filterWithAttributes() {
 		return new ERXKeyFilter(ERXKeyFilter.Base.Attributes);
+	}
+	
+	/**
+	 * Shortcut to return a new ERXKeyFilter()
+	 * @param keys the keys to include
+	 * @return a new ERXKeyFilter(None) with the included keys
+	 */
+	public static ERXKeyFilter filterWithKeys(ERXKey<?>... keys) {
+		ERXKeyFilter keyFilter =  new ERXKeyFilter(ERXKeyFilter.Base.None);
+		for (ERXKey<?> key : keys) {
+			keyFilter.include(key);
+		}
+		return keyFilter;
 	}
 	
 	/**

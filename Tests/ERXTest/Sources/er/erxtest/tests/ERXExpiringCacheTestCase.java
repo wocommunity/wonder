@@ -1,8 +1,8 @@
 package er.erxtest.tests;
-import junit.framework.TestCase;
+import er.erxtest.ERXTestCase;
 import er.extensions.foundation.ERXExpiringCache;
 
-public class ERXExpiringCacheTestCase extends TestCase {
+public class ERXExpiringCacheTestCase extends ERXTestCase {
   public void testThatItWorksAtAll() {
     ERXExpiringCache<String, String> cache = new ERXExpiringCache<String, String>(100);
     cache.setObjectForKey("Krank", "Anjo");

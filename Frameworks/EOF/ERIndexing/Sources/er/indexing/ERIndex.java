@@ -6,6 +6,7 @@ import java.net.URL;
 import java.text.Format;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -30,12 +31,15 @@ import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.Hit;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopFieldDocs;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -86,16 +90,16 @@ public class ERIndex {
 
     public class IndexDocument implements NSKeyValueCoding {
 
-        private Document _document;
+        private final Document _document;
 
-        private NSMutableDictionary<String, String> _values = new NSMutableDictionary<String, String>();
+        private final NSMutableDictionary<String, String> _values = new NSMutableDictionary<String, String>();
 
         public IndexDocument(Document document) {
             _document = document;
         }
 
         public void takeValueForKey(Object value, String key) {
-            _document.getField(key).setValue((String) key);
+            _document.getField(key).setValue(key);
         }
 
         public Object valueForKey(String key) {
@@ -138,6 +142,13 @@ public class ERIndex {
 
         ERIndex _model;
 
+        /**
+         * This class corresponds to one property. indexModel --> properties --> a property
+         * 
+         * @param index the index
+         * @param name the property name (a key or keypath)
+         * @param dict the property definition form indexModel
+         */
         IndexAttribute(ERIndex index, String name, NSDictionary dict) {
             _name = name;
             _termVector = (TermVector) classValue(dict, "termVector", TermVector.class, "YES");
@@ -236,9 +247,9 @@ public class ERIndex {
 
     protected class Job {
 
-        private Command _command;
+        private final Command _command;
 
-        private NSArray _objects;
+        private final NSArray _objects;
 
         public Job(Command command, NSArray objects) {
             _command = command;
@@ -256,9 +267,9 @@ public class ERIndex {
 
     protected class Transaction {
 
-        private NSMutableArray<Job> _jobs = new NSMutableArray<Job>();
+        private final NSMutableArray<Job> _jobs = new NSMutableArray<Job>();
 
-        private EOEditingContext _editingContext;
+        private final EOEditingContext _editingContext;
 
         private boolean _clear = false;
 
@@ -287,7 +298,8 @@ public class ERIndex {
             return _jobs;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             if (hasClear()) {
                 return "Transaction@" + hashCode() + " clear";
             }
@@ -328,12 +340,12 @@ public class ERIndex {
             registerNotification(ERXEC.EditingContextFailedToSaveChanges, "_handleChanges");
         }
 
-        protected void addObjectsToIndex(Transaction transaction, NSArray objects) {
+        protected void addObjectsToIndex(Transaction transaction, NSArray<? extends EOEnterpriseObject> objects) {
             NSArray added = addedDocumentsForObjects(objects);
             transaction.addJob(Command.ADD, added);
         }
 
-        protected void deleteObjectsFromIndex(Transaction transaction, NSArray objects) {
+        protected void deleteObjectsFromIndex(Transaction transaction, NSArray<? extends EOEnterpriseObject> objects) {
             NSArray deleted = deletedTermsForObjects(objects);
             transaction.addJob(Command.DELETE, deleted);
         }
@@ -342,7 +354,7 @@ public class ERIndex {
             index(transaction);
         }
 
-        void index(Transaction transaction) {
+        synchronized void index(Transaction transaction) {
             try {
                 NSNotificationCenter.defaultCenter().postNotification(IndexingStartedNotification, transaction);
                 boolean create = transaction.hasClear();
@@ -393,7 +405,7 @@ public class ERIndex {
 
     private NSDictionary<String, IndexAttribute> _attributes = NSDictionary.<String, IndexAttribute>emptyDictionary();
 
-    private String _name;
+    private final String _name;
 
     private String _store;
     
@@ -403,15 +415,15 @@ public class ERIndex {
         indices.setObjectForKey(this, name);
     }
    
-    public void addObjectsToIndex(EOEditingContext ec, NSArray objects) {
+    public void addObjectsToIndex(EOEditingContext ec, NSArray<? extends EOEnterpriseObject> objects) {
         Transaction transaction = new Transaction(ec);
-        _handler.addObjectsToIndex(transaction, addedDocumentsForObjects(objects));
+        _handler.addObjectsToIndex(transaction, objects);
         _handler.submit(transaction);
     }
 
-    public void deleteObjectsFromIndex(EOEditingContext ec, NSArray objects) {
+    public void deleteObjectsFromIndex(EOEditingContext ec, NSArray<? extends EOEnterpriseObject> objects) {
         Transaction transaction = new Transaction(ec);
-        _handler.addObjectsToIndex(transaction, deletedTermsForObjects(objects));
+        _handler.deleteObjectsFromIndex(transaction, objects);
         _handler.submit(transaction);
     }
     
@@ -439,6 +451,13 @@ public class ERIndex {
         createAttribute(propertyName, propertyDefinition);
     }
 
+    /**
+     * Creates a new {@link IndexAttribute} and adds it to the attributes dictionary of this Index
+     * 
+     * @param propertyName
+     * @param propertyDefinition
+     * @return the new {@link IndexAttribute}
+     */
     protected IndexAttribute createAttribute(String propertyName, NSDictionary propertyDefinition) {
         IndexAttribute attribute = new IndexAttribute(this, propertyName, propertyDefinition);
         NSMutableDictionary attributes = _attributes.mutableClone();
@@ -507,15 +526,15 @@ public class ERIndex {
         _handler.clear();
     }
 
-    private IndexAttribute attributeNamed(String fieldName) {
-        return (IndexAttribute) _attributes.objectForKey(fieldName);
+    protected IndexAttribute attributeNamed(String fieldName) {
+        return _attributes.objectForKey(fieldName);
     }
 
     protected boolean handlesObject(EOEnterpriseObject eo) {
         return true;
     }
     
-    protected NSArray<Document> addedDocumentsForObjects(NSArray objects) {
+    protected NSArray<Document> addedDocumentsForObjects(NSArray<? extends EOEnterpriseObject> objects) {
         NSMutableArray documents = new NSMutableArray();
 
         for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
@@ -551,7 +570,7 @@ public class ERIndex {
         return doc;
     }
 
-    protected NSArray<Term> deletedTermsForObjects(NSArray objects) {
+    protected NSArray<Term> deletedTermsForObjects(NSArray<? extends EOEnterpriseObject> objects) {
         NSMutableArray terms = new NSMutableArray();
         Term term;
         for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
@@ -602,6 +621,30 @@ public class ERIndex {
         return null;
     }
 
+	public NSArray<? extends EOEnterpriseObject> findObjects(EOEditingContext ec, Query query, Filter filter, Sort sort, int start, int end) {
+		 return ERXEOControlUtilities.faultsForGlobalIDs(ec, findGlobalIDs(query, filter, sort, start, end));
+	}
+
+	private NSArray<EOKeyGlobalID> findGlobalIDs(Query query, Filter filter, Sort sort, int start, int end) {
+		NSMutableArray<EOKeyGlobalID> result = new NSMutableArray<EOKeyGlobalID>();
+		try {
+			Searcher searcher = indexSearcher();
+			long startTime = System.currentTimeMillis();
+			sort = sort == null ? new Sort() : sort;
+			TopFieldDocs topFielsDocs = searcher.search(query, filter, end, sort);
+			log.info("Searched for: " + query + " in  " + (System.currentTimeMillis() - startTime) + " ms");
+			for (int i = start; i < topFielsDocs.scoreDocs.length; i++) {
+				String gidString = searcher.doc(topFielsDocs.scoreDocs[i].doc).getField(GID).stringValue();
+				EOKeyGlobalID gid = ERXKeyGlobalID.fromString(gidString).globalID();
+				result.addObject(gid);
+			}
+            log.info("Returning " + result.count() + " after " + (System.currentTimeMillis() - startTime) + " ms");
+			return result;
+		} catch (IOException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+	}
+
     private NSArray<EOKeyGlobalID> findGlobalIDs(Query query) {
         NSMutableArray<EOKeyGlobalID> result = new NSMutableArray();
         long start = System.currentTimeMillis();
@@ -622,7 +665,7 @@ public class ERIndex {
         }
     }
 
-    private NSArray<? extends EOEnterpriseObject> findObjects(EOEditingContext ec, Query query) {
+    public NSArray<? extends EOEnterpriseObject> findObjects(EOEditingContext ec, Query query) {
         return ERXEOControlUtilities.faultsForGlobalIDs(ec, findGlobalIDs(query));
     }
 
@@ -642,6 +685,54 @@ public class ERIndex {
         } catch (ParseException e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);
         }
+    }
+    
+    
+    public Hits findHits(Query query) {
+    	Hits hits = null;
+    	long start = System.currentTimeMillis();
+        try {
+            Searcher searcher = indexSearcher();
+            hits = searcher.search(query);
+            log.debug("Returning " + hits.length() + " after " + (System.currentTimeMillis() - start) + " ms");
+            return hits;
+        } catch (IOException e) {
+        	throw NSForwardException._runtimeExceptionForThrowable(e);
+        }
+    }
+    
+    public NSArray<Term> findTerms(Query q) {
+    	NSMutableArray<Term> terms = new NSMutableArray<Term>();
+    	try {
+    		IndexReader reader = indexReader(); 
+    		HashSet<Term> suggestedTerms = new HashSet<Term>(); 
+    		q.rewrite(reader).extractTerms(suggestedTerms); 
+    		for (Iterator<Term> iter = suggestedTerms.iterator(); iter.hasNext();) 
+    		{ 
+    			Term term = iter.next();
+    			terms.addObject(term); 
+    		} 
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return terms.immutableClone();
+    }
+    
+    public NSArray<String> findTermStrings(Query q) {
+    	NSMutableArray<String> terms = new NSMutableArray<String>();
+    	try {
+    		IndexReader reader = indexReader(); 
+    		HashSet<Term> suggestedTerms = new HashSet<Term>(); 
+    		q.rewrite(reader).extractTerms(suggestedTerms); 
+    		for (Iterator<Term> iter = suggestedTerms.iterator(); iter.hasNext();) 
+    		{ 
+    			Term term = iter.next();
+    			terms.addObject(term.text());
+    		} 
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return terms.immutableClone();
     }
 
     public IndexDocument findDocument(EOKeyGlobalID globalID) {
@@ -724,6 +815,6 @@ public class ERIndex {
     }
 
     public static ERIndex indexNamed(String key) {
-        return (ERIndex) indices.objectForKey(key);
+        return indices.objectForKey(key);
     }
 }

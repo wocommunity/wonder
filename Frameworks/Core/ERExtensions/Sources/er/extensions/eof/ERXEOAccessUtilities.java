@@ -6,10 +6,10 @@
 //
 package er.extensions.eof;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Level;
@@ -68,6 +68,7 @@ import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.statistics.ERXStats;
+import er.extensions.statistics.ERXStats.Group;
 
 /**
  * Collection of EOAccess related utilities.
@@ -177,6 +178,7 @@ public class ERXEOAccessUtilities {
      * @param entityName
      *            name of the entity
      * @return if the entity is a shared entity
+     * @throws IllegalStateException if the entityName provided is null
      */
     public static boolean entityWithNamedIsShared(EOEditingContext ec, String entityName) {
         if (entityName == null)
@@ -443,6 +445,9 @@ public class ERXEOAccessUtilities {
      */
     public static int rowCountForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
     	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+        if (entity == null)
+            throw new java.lang.IllegalStateException("entity could not be found for name \""+spec.entityName()+"\". Checked EOModelGroup for loaded models.");
+
     	EOModel model = entity.model();
 
     	EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
@@ -474,7 +479,7 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Similar to the helper in EUUtilities, but allows for null editingContext.
+     * Similar to the helper in EOUtilities, but allows for null editingContext.
      * If ec is null, it will try to get at the session via thread storage and
      * use its defaultEditingContext. This is here now so we can remove the
      * delegate in ERXApplication.
@@ -504,7 +509,7 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Similar to the helper in EUUtilities, but allows for null editingContext.
+     * Similar to the helper in EOUtilities, but allows for null editingContext.
      * 
      * @param ec
      *            editing context used to locate the model group (can be null)
@@ -1191,7 +1196,7 @@ public class ERXEOAccessUtilities {
                	statement = statement.replaceAll("([a-zA-Z0-9_\\.]+)\\s+IN \\(.*?\\)(\\s+OR\\s+\\1\\s+IN \\(.*?\\))+", " IN ([multi removed])");
                	// the cols are always the same, replace with *
                	statement = statement.replaceAll("((t0|T0)\\.[a-zA-Z0-9_]+\\,\\s*)*(t0|T0)\\.[a-zA-Z0-9_\\.]+\\s+FROM\\s+", "t0.* FROM ");
-            	ERXStats.addDurationForKey(millisecondsNeeded, entityName + ": " +statement);
+            	ERXStats.addDurationForKey(millisecondsNeeded, Group.SQL, entityName + ": " +statement);
             }
             if (needsLog) {
                 String logString = createLogString(channel, expression, millisecondsNeeded);
@@ -1560,7 +1565,7 @@ public class ERXEOAccessUtilities {
      * @param newValues
      */
     public static int insertRows(EOEditingContext ec, String entityName, 
-            final List<NSDictionary> newValues) {
+            final Collection<? extends NSDictionary<String, ?>> newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
             protected int doPerform(EOAdaptorChannel channel) {
@@ -1701,7 +1706,7 @@ public class ERXEOAccessUtilities {
       * @param skipFaultedRelationships if true, skip any object whose relationship has already been faulted
       */
      public static void batchFetchRelationship(EODatabaseContext databaseContext, String entityName, String relationshipName, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
-    	 EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+    	 EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, entityName);
     	 EORelationship relationship = entity.relationshipNamed(relationshipName);
     	 ERXEOAccessUtilities.batchFetchRelationship(databaseContext, relationship, objects, editingContext, skipFaultedRelationships);
      }

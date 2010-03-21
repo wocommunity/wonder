@@ -1,0 +1,100 @@
+BackLink: WOHyperlink {
+	action = returnAction;
+	class = "return";
+}
+
+Conditional1: WOConditional {
+	condition = d2wContext.showListInSamePage;
+}
+
+Conditional2: WOConditional {
+	condition = showResults;
+}
+
+EntityName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForEntity;
+}
+
+FetchLimit: WOString {
+	_unroll = true;
+	value = fetchLimit;
+}
+
+FetchLimitConditional: WOConditional {
+	_unroll = true;
+	condition = fetchLimit;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+ListPage: D2WList {
+	dataSource = queryDataSource;
+	entityName = entity;
+	pageConfiguration = d2wContext.listConfigurationName;
+	d2wContext = d2wContext;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+QueryForm: WOForm {
+	class = "query";
+	id = d2wContext.pageConfiguration;
+	action = queryAction;
+}
+
+QuerySubmitButton: WOSubmitButton {
+	action = queryAction;
+	value = "Search";
+	class = "search";
+}
+
+ResourceInputRepresentation: WOSwitchComponent {
+	WOComponentName = subContext.componentName;
+	_componentUnroll = true;
+	_unroll = true;
+	displayGroup = displayGroup;
+	localContext = subContext;
+}
+
+ResourceRepetition: WORepetition {
+	_unroll = true;
+	item = propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+ProperyName: WOString {
+	value=subContext.displayNameForProperty;
+	escapeHTML = subContext.escapeHTML; //VALID
+}
+
+DebugPropertyName: ERD2WDebugPropertyName {
+	d2wContext = subContext;
+	isDebug = d2wComponentNameDebuggingEnabled;
+}
+
+DebugComponentName: ERD2WDebugComponentName {
+	d2wContext = subContext;
+	isDebug = d2wComponentNameDebuggingEnabled;
+}
+
+AttributeContainer: WOGenericContainer {
+	elementName = "li";
+	class = subContext.class;
+}
+
+ContentContainer: WOGenericContainer {
+	elementName = "div";
+	class = "content";
+	id = contentContainerID;
+}

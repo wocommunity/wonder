@@ -51,9 +51,9 @@ public class AjaxSlider extends AjaxComponent {
         _handleId = safeElementID() + "_handle";
         
         NSMutableDictionary options = new NSMutableDictionary();
-        new AjaxOption("axis", AjaxOption.STRING).addToDictionary("orientation", this, options);
-        new AjaxOption("sliderValue", AjaxOption.NUMBER).addToDictionary("value", this, options);
-        new AjaxOption("values", AjaxOption.ARRAY).addToDictionary("possibleValues", this, options);
+        new AjaxOption("axis", "orientation", null, AjaxOption.STRING).addToDictionary(this, options);
+        new AjaxOption("sliderValue", "value", null, AjaxOption.NUMBER).addToDictionary(this, options);
+        new AjaxOption("values", "possibleValues", null, AjaxOption.ARRAY).addToDictionary(this, options);
         new AjaxOption("alignX", AjaxOption.NUMBER).addToDictionary(this, options);
         new AjaxOption("alignY", AjaxOption.NUMBER).addToDictionary(this, options);
         new AjaxOption("disabled", AjaxOption.BOOLEAN).addToDictionary(this, options);

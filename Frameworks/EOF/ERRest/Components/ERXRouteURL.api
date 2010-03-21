@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERXRouteURL" wocomponentcontent="false">    <binding name="action"/>
+        <binding name="entityName"/>
+        <binding name="id"/>
+        <binding name="format"/>
+        <binding name="queryDictionary"/>
+        <binding name="record"/>
+        <binding defaults="Boolean" name="secure"/>
+    </wo>
+</wodefinitions>

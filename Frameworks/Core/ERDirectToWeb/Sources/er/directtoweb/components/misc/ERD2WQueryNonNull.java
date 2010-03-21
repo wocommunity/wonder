@@ -15,9 +15,8 @@ import er.extensions.localization.ERXLocalizer;
 
 /**
  * Query component for null or non-null.<br />
- * 
+ * @d2wKey choicesNames
  */
-
 public class ERD2WQueryNonNull extends QueryComponent {
 
     public ERD2WQueryNonNull(WOContext context) { super(context); }

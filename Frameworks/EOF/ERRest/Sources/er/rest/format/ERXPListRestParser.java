@@ -77,6 +77,10 @@ public class ERXPListRestParser implements IERXRestParser {
 			Object rootObj = NSPropertyListSerialization.propertyListFromString(contentStr);
 			rootRequestNode = createRequestNodeForObject(null, rootObj, true, delegate);
 		}
+		else {
+			rootRequestNode = new ERXRestRequestNode(null, true);
+			rootRequestNode.setNull(true);
+		}
 
 		return rootRequestNode;
 	}

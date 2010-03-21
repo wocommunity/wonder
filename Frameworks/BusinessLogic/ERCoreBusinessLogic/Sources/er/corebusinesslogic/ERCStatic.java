@@ -6,18 +6,15 @@ import org.apache.log4j.Logger;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOGlobalID;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.eof.EOEnterpriseObjectClazz;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
-
+// FIXME AK this code could be replaced by an ERXEOCache 
 public class ERCStatic extends _ERCStatic {
 
     /** logging support */
@@ -73,7 +70,7 @@ public class ERCStatic extends _ERCStatic {
         private EOEditingContext privateEditingContext() {
             if (_privateEditingContext == null) {
                 if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCStatic.UseSeparateChannel", true)) {
-                    _privateEditingContext = ERXEC.newEditingContext(new EOObjectStoreCoordinator());
+                    _privateEditingContext = ERXEC.newEditingContext(ERXObjectStoreCoordinator.create());
                     _privateEditingContext.lock();
                     try {
                         _privateEditingContext.setSharedEditingContext(null);

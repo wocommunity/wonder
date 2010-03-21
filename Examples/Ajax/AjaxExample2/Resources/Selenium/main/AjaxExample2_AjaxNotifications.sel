@@ -1,0 +1,8 @@
+Test for Ajax Notifications page
+
+|open|/|
+
+|click|link=Ajax Notifications|
+|pause|1200|
+|verifyTextPresent|Often it is the case that you want to be able to check|
+

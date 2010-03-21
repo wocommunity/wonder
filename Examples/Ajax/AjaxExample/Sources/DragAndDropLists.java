@@ -6,15 +6,15 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSMutableArray;
 
 public class DragAndDropLists extends WOComponent {
-  public NSMutableArray _leftList;
-  public NSMutableArray _rightList;
+  public NSMutableArray<DragItem> _leftList;
+  public NSMutableArray<DragItem> _rightList;
   public DragItem _repetitionDragItem;
   public DragItem _droppedObject;
 
   public DragAndDropLists(WOContext context) {
     super(context);
-    _leftList = new NSMutableArray();
-    _rightList = new NSMutableArray();
+    _leftList = new NSMutableArray<DragItem>();
+    _rightList = new NSMutableArray<DragItem>();
     for (int dragItemNum = 0; dragItemNum < 10; dragItemNum++) {
       _leftList.addObject(new DragItem("Drag Item #" + dragItemNum));
     }
@@ -49,7 +49,8 @@ public class DragAndDropLists extends WOComponent {
       return _name;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
       return "[DragItem: " + _name + "]";
     }
   }

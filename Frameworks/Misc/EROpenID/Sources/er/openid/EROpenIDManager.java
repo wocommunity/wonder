@@ -275,6 +275,7 @@ public class EROpenIDManager {
    * Initiates the authentication request.
    * 
    * @param userSuppliedString the string supplied by the user
+   * @param realm explicit realm to use for the authRequest. Allows nulls.
    * @param request the WORequest
    * @param context the WOContext
    * @return the redirection action results
@@ -282,7 +283,7 @@ public class EROpenIDManager {
    * @throws DiscoveryException
    * @throws ConsumerException
    */
-  public WOActionResults authRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException, DiscoveryException, ConsumerException {
+  public WOActionResults authRequest(String userSuppliedString, String realm, WORequest request, WOContext context) throws MessageException, DiscoveryException, ConsumerException {
     WOSession session = context.session();
 
     String proxyHostName = ERXProperties.stringForKey("er.openid.proxyHostName");
@@ -315,7 +316,7 @@ public class EROpenIDManager {
       String returnToUrl = _delegate.returnToUrl(request, context);
 
       // obtain a AuthRequest message to be sent to the OpenID provider
-      AuthRequest authReq = _manager.authenticate(discovered, returnToUrl);
+      AuthRequest authReq = _manager.authenticate(discovered, returnToUrl, realm);
 
       // add the message extensions
       List<MessageExtension> exts = _delegate.createFetchMessageExtensions(userSuppliedString, request, context);

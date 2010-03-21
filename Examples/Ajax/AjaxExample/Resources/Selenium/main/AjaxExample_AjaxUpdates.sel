@@ -1,0 +1,98 @@
+Test for HelloAjaxWorld page
+
+|open|/|
+
+|click|link=Ajax Updates|
+|pause|1200|
+|verifyTextPresent|Initial time:|
+
+# TODO - The "Do Update with AjaxUpdateLink" link will bring up a modal alert, so
+# avoid it for now.
+
+|storeText|UpdateTimeTopString|topString|
+|storeText|UpdateTimeBottomString|bottomString|
+
+# After clicking on these links, the "bottom string" time will have changed. Verify this.
+#
+|click|link=Do Update With Javascript Function|
+|pause|1200|
+|assertText|UpdateTimeTopString|${topString}|
+|assertNotText|UpdateTimeBottomString|${bottomString}|
+
+|storeText|UpdateTimeBottomString|bottomString|
+
+|click|link=Do Update After Action|
+|pause|1200|
+|assertText|UpdateTimeTopString|${topString}|
+|assertNotText|UpdateTimeBottomString|${bottomString}|
+
+|storeText|UpdateTimeBottomString|bottomString|
+
+# is there something different that could be done to verify the
+# parameter is passed in this next test?
+
+|click|link=AjaxUpdateLink with Client-Added Parameter 'name=Mike'|
+|pause|1200|
+|assertText|UpdateTimeTopString|${topString}|
+|assertNotText|UpdateTimeBottomString|${bottomString}|
+
+# moving to the links inside the container, we need to verify
+# that the time string inside the container changes while the ones
+# outside the container do not.
+
+# TODO - these two links inside the container will open another window, so code them later.
+# |click|link=Example Link (You will only be able to use component actions in an AjaxUpdateContainer if you include ERExtensions framework and extend ERXSession)|
+# |click|link=Example Link (This is a Direct Action)|
+
+|storeText|UpdateTimeTopString|topString|
+|storeText|UpdateTimeBottomString|bottomString|
+|storeText|UpdateTimeInsideContainer|insideString|
+
+|click|link=Update Nested Update Container (Link Outside Container)|
+|pause|1200|
+|assertText|UpdateTimeTopString|${topString}|
+|assertText|UpdateTimeBottomString|${bottomString}|
+|assertNotText|UpdateTimeInsideContainer|${insideString}|
+
+|storeText|UpdateTimeInsideContainer|insideString|
+
+|click|link=Update Nested Update Container (Link Inside Container)|
+|pause|1200|
+|assertText|UpdateTimeTopString|${topString}|
+|assertText|UpdateTimeBottomString|${bottomString}|
+|assertNotText|UpdateTimeInsideContainer|${insideString}|
+
+# TODO - stupidness, the locator for the button is non-obvious.
+#
+#|storeText|UpdateTimeInsideContainer|insideString|
+#
+#|click|SubmitButton1|
+#|pause|1200|
+#|assertText|UpdateTimeTopString|${topString}|
+#|assertText|UpdateTimeBottomString|${bottomString}|
+#|assertNotText|UpdateTimeInsideContainer|${insideString}|
+#
+#|storeText|UpdateTimeInsideContainer|insideString|
+#
+#|click|SubmitButton2|
+#|pause|1200|
+#|assertText|UpdateTimeTopString|${topString}|
+#|assertText|UpdateTimeBottomString|${bottomString}|
+#|assertNotText|UpdateTimeInsideContainer|${insideString}|
+
+|storeText|UpdateTimePeriodicallyUpdated|periodicCheck1|
+|pause|1200|
+|assertNotText|UpdateTimePeriodicallyUpdated|${periodicCheck1}|
+
+|storeText|UpdateTimePeriodicallyUpdated|periodicCheck2|
+|pause|1200|
+|assertNotText|UpdateTimePeriodicallyUpdated|${periodicCheck2}|
+
+# Replace The Contents Below With a Direct Action. General replaceID rules apply (i.e. no component actions in the response)
+
+# Update 5 Then 6
+
+# Update 6 Then 5
+
+# Update exampleArea7
+

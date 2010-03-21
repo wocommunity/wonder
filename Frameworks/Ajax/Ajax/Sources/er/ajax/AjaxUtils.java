@@ -27,6 +27,11 @@ import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
+/**
+ *
+ * @property er.ajax.compressed
+ * @property er.extensions.ERXResponseRewriter.javascriptTypeAttribute
+ */
 public class AjaxUtils {
 	private final static Logger log = Logger.getLogger(AjaxUtils.class);
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
@@ -49,7 +54,7 @@ public class AjaxUtils {
 	}
 
 	public static void setPageReplacementCacheKey(WOContext _context, String _key) {
-		_context.response().setHeader(_key, ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+		_context.request().setHeader(_key, ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
 	}
 
 	/**

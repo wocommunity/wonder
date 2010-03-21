@@ -711,7 +711,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				sql.append(quoteTableName(tableName.toUpperCase()));
 				sql.append(" ADD");
 
-				StringBuffer constraint = new StringBuffer(" CONSTRAINT FOREIGN_KEY_");
+				StringBuffer constraint = new StringBuffer(" CONSTRAINT \"FOREIGN_KEY_");
 				constraint.append(tableName);
 
 				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
@@ -751,6 +751,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					constraint.append(referencedColumnName);
 					fkSql.append("\"");
 				}
+				
+				// MS: did i write this code?  sorry about that everything. this is crazy. 
+				constraint.append("\"");
 
 				fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
 
@@ -988,7 +991,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					sql.append(quoteTableName(tableName.toUpperCase()));
 					sql.append(" ADD");
 
-					StringBuffer constraint = new StringBuffer(" CONSTRAINT PRIMARY_KEY_");
+					StringBuffer constraint = new StringBuffer(" CONSTRAINT \"PRIMARY_KEY_");
 					constraint.append(tableName);
 
 					StringBuffer pkSql = new StringBuffer(" PRIMARY KEY (");
@@ -1004,6 +1007,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 						pkSql.append("\"");
 						constraint.append(columnName);
 					}
+					constraint.append("\"");
 					pkSql.append(") NOT DEFERRABLE INITIALLY IMMEDIATE");
 
 					if (USE_NAMED_CONSTRAINTS)
@@ -1018,6 +1022,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	}
 
 	public static class FrontbaseExpression extends JDBCExpression {
+		private boolean _useBindVariables;
 		EOQualifier _qualifier;
 		NSMutableArray _lobList;
 
@@ -1028,6 +1033,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 
 		public FrontbaseExpression(EOEntity eoentity) {
 			super(eoentity);
+			_useBindVariables = "true".equalsIgnoreCase(System.getProperty("FrontBasePlugIn.useBindVariables"));
 			_rtrimFunctionName = null;
 			_externalQuoteChar = "\"";
 		}
@@ -1486,11 +1492,16 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		}
 
 		public boolean useBindVariables() {
-			return false;
+			return _useBindVariables;
 		}
 
 		public boolean shouldUseBindVariableForAttribute(EOAttribute eoattribute) {
-			return false;
+			return useBindVariables() && !isLOBAttribute(eoattribute);
+		}
+
+		private boolean isLOBAttribute(EOAttribute att) {
+			int internalType = internalTypeForExternal(att.externalType());
+			return internalType == FB_BLOB || internalType == FB_CLOB;
 		}
 
 		public boolean mustUseBindVariableForAttribute(EOAttribute eoattribute) {

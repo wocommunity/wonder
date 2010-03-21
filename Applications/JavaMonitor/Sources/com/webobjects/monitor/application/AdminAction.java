@@ -22,8 +22,10 @@ import com.webobjects.monitor._private.MSiteConfig;
  * (First time deployments and config changes would still require interactive
  * sessions in Monitor.) Each direct action returns a short string (instead of a
  * full HTML page) and an HTTP status code indicating whether the respective
- * action was executed successfully. If Monitor is password-protected, these
- * direct actions are not permitted to be executed.
+ * action was executed successfully. If Monitor is password-protected, the
+ * password must be passed on the URL with the name "pw", (e.g. &pw=foo). If the
+ * password is missing or incorrect, these direct actions are not permitted to be 
+ * executed.
  * <table cellspacing="0" cellpadding="5" border="1">
  * <tr>
  * <th>Direct Action</th>
@@ -115,7 +117,7 @@ import com.webobjects.monitor._private.MSiteConfig;
  * <td>info</td>
  * <td>JSON or<br>
  * error message</td>
- * <td>returns a JSON encoded list of instances with all the data from the app detail page.</td>
+ * <td>returns a JSON encoded list of instances with all the data from the app detail page.  Add form value info=full to also return the Additional Arguments.</td>
  * </tr>
  * </table>
  * </p>
@@ -140,6 +142,23 @@ import com.webobjects.monitor._private.MSiteConfig;
  * <tr>
  * <td>ins</td>
  * <td>all the specified instances</td>
+ * </tr>
+ * </table>
+ * </p>
+ * <p>
+ * The direct action 'running' can be invoked with a num argument:
+ * <table cellspacing="0" cellpadding="5" border="1">
+ * <tr>
+ * <th>Num</th>
+ * <th>Description</th>
+ * </tr>
+ * <tr>
+ * <td>all / -1</td>
+ * <td>all instances of the application must be running. this is the default if no num argument is set</td>
+ * </tr>
+ * <tr>
+ * <td><i>number</i></td>
+ * <td>a minimum of <i>number</i> instances of the specified application must be running. if there are less instances configured acts like 'all'</td>
  * </tr>
  * </table>
  * </p>
@@ -311,6 +330,15 @@ public class AdminAction extends WODirectAction {
             result += "\"activeSessions\": \"" + minstance.activeSessions() + "\", ";
             result += "\"averageIdlePeriod\": \"" + minstance.averageIdlePeriod() + "\", ";
             result += "\"avgTransactionTime\": \"" + minstance.avgTransactionTime() + "\"";
+            
+            String infoMode = (String) context().request().formValueForKey("info");
+            if ("full".equalsIgnoreCase(infoMode)) {
+                result += ", \"additionalArgs\": \"";
+                if (minstance.additionalArgs() != null) {
+                    result += minstance.additionalArgs().replace("\"", "\\\"");
+                }
+                result += "\"";
+            }
             result += "}";
         }
         woresponse.appendContentString("[" + result + "]");
@@ -321,13 +349,28 @@ public class AdminAction extends WODirectAction {
         WOResponse woresponse = new WOResponse();
         woresponse.setContent("YES");
         woresponse.setStatus(200);
+        String num = (String) context().request().formValueForKey("num");
+    	int numberOfInstancesRequested = -1;
+        if (num != null && !num.equals("") && !num.equalsIgnoreCase("all")) {
+        	try {
+        		numberOfInstancesRequested = Integer.valueOf(num).intValue();
+        		if (numberOfInstancesRequested > instances.count()) {
+        			numberOfInstancesRequested = -1;
+        		}
+        	} catch (Exception e) {
+        		// ignore
+        	}
+        }
+        int instancesAlive = 0;
         for (Enumeration enumeration = instances.objectEnumerator(); enumeration.hasMoreElements();) {
             MInstance minstance = (MInstance) enumeration.nextElement();
-            if (minstance.state == MObject.ALIVE)
-                continue;
-            woresponse.setContent("NO");
+            if (minstance.state == MObject.ALIVE) {
+            	instancesAlive++;
+            }
+        }
+        if ((numberOfInstancesRequested == -1 && instancesAlive < instances.count()) || instancesAlive < numberOfInstancesRequested) {
+        	woresponse.setContent("NO");
             woresponse.setStatus(417);
-            break;
         }
         return woresponse;
     }
@@ -480,7 +523,7 @@ public class AdminAction extends WODirectAction {
             }
         } else {
             woresponse.setStatus(403);
-            woresponse.setContent("Monitor is password protected - direct actions are disabled");
+            woresponse.setContent("Monitor is password protected - password missing or incorrect.");
         }
         return woresponse;
     }

@@ -13,13 +13,17 @@ import er.extensions.foundation.ERXArrayUtilities;
 /**
  * Can be used as a repetition in list pages.
  *
- * @binding sample sample binding explanation
- * @d2wKey sample sample d2w key
- *
  * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
+ * @d2wKey componentName
+ * @d2wKey object
+ * @d2wKey extraListComponentName
+ * @d2wKey justification
+ * @d2wKey displayNameForProperty
+ * @d2wKey sortKeyForList
+ * @d2wKey sortCaseInsensitive
+ * @d2wKey propertyIsSortable 
  */
-
 public class ERDListPageRepetition extends ERDAttributeRepetition {
 
     /** logging support */

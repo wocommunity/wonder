@@ -13,6 +13,7 @@
 		<module>DerbyPlugIn</module>
 		<module>EROraclePlugIn</module>
 		<module>FrontBasePlugIn</module>
+		<module>H2PlugIn</module>
 		<module>PostgresqlPlugIn</module>
 	</modules>
 </project>

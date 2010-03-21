@@ -1,3 +1,5 @@
+
+
 AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Modal Dialog";
 }
@@ -6,6 +8,7 @@ WelcomeModalDialog: AjaxModalDialog {
 	id = "WelcomeModalDialog";
 	title = "Welcome";
 	width = 400;
+	centerVertically = true;
 	overlayOpacity = "0.4";
 	overlayDuration = "0.1";
 	slideDownDuration = "0.2";
@@ -49,20 +52,25 @@ SimpleModalDialog: AjaxModalDialog {
 	slideDownDuration = "0.2";
 	slideUpDuration = "0.2";
 	locked = true;
+	clickOnReturnId = "SimpleModalDialogYesLink";
+	clickOnEscId = "SimpleModalDialogNoLink";
 }
 
 Yes : AjaxHyperlink {
 	action = deleteIt;
 	onSuccess = "function() { Modalbox.hide(); }";
+	id = "SimpleModalDialogYesLink";
 }
 
 
 No : WOHyperlink {
 	href = "javascript:void(0);";
 	onClick = "Modalbox.hide();";
+	id = "SimpleModalDialogNoLink";
 }
 
 UpdatingModalDialog: AjaxModalDialog {
+	pageName = "ModalDialogPageContent";
 	id = "UpdatingModalDialog";
 	title = "Confirm Deletion";
 	label = "Delete Account";
@@ -71,16 +79,6 @@ UpdatingModalDialog: AjaxModalDialog {
 	overlayDuration = "0.3";
 	slideDownDuration = "0.3";
 	slideUpDuration = "0.3";
-}
-
-
-Yes2 : AjaxHyperlink {
-	action = deleteIt2;
-	evalScripts = true;	
-}
-
-ConfirmationMessage: WOString {
-	value = confirmationMessage;
 }
 
 FirstName : WOString {
@@ -113,6 +111,7 @@ CancelEmployeeEdit: AjaxSubmitButton {
 	evalScripts = true;
 	value = "Cancel";
 	formName = "EmployeeForm";
+	id = "CancelEmployeeEdit";
 }
 
 SaveEmployeeEdit: AjaxSubmitButton {
@@ -120,6 +119,7 @@ SaveEmployeeEdit: AjaxSubmitButton {
 	evalScripts = true;
 	value = "Save";
 	formName = "EmployeeForm";
+	id = "SaveEmployeeEdit";
 }
 
 Form : WOForm {
@@ -138,6 +138,8 @@ InlineEditEmployee: AjaxModalDialog {
 	slideUpDuration = "0.2";
 	afterHide = "function() { UIUpdater1Update(); UIUpdater2Update(); }";
 	overlayClose = false;
+	clickOnReturnId = "SaveEmployeeEdit";
+	clickOnEscId = "CancelEmployeeEdit";
 }
 
 UIUpdater1 : AjaxUpdateContainer {
@@ -165,3 +167,15 @@ EditEmployeeLink: ERXWOTemplate {
 	templateName = "link";
 }
 
+
+BrokenModalDialog: AjaxModalDialog {
+	pageName = "ModalDialogFormFirstContent";
+	id = "BrokenModalDialog";
+	title = "Confirm Deletion";
+	label = "Delete Account";
+	width = 300;
+	overlayOpacity = "0.5";
+	overlayDuration = "0.3";
+	slideDownDuration = "0.3";
+	slideUpDuration = "0.3";
+}

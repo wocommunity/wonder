@@ -3,6 +3,7 @@ package er.attachment.processors;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
@@ -38,11 +39,16 @@ import er.extensions.validation.ERXValidationException;
  * the er.attachment package.html for more information.
  * </p>
  * 
- * @author mschrag
- *
  * @param <T> the type of ERAttachment that this processor processes
+ *
  * @property er.attachment.maxSize the maximum size of an uploaded attachment
- * @property er.attachment.[configurationName] maxSize the maximum size of an uploaded attachment
+ * @property er.attachment.[configurationName].maxSize the maximum size of an uploaded attachment
+ * @property er.attachment.[configurationName].storageType
+ * @property er.attachment.storageType
+ * @property er.attachment.[configurationName].proxyAsAttachment
+ * @property er.attachment.proxyAsAttachment
+ *
+ * @author mschrag
  */
 public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   public static final Logger log = Logger.getLogger(ERAttachmentProcessor.class);
@@ -51,6 +57,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   private static final String HASH_VARIABLE = "\\$\\{hash\\}";
   private static final String PK_VARIABLE = "\\$\\{pk\\}";
   private static final String FILE_NAME_VARIABLE = "\\$\\{fileName\\}";
+  private static final String UUID_VARIABLE = "\\$\\{uuid\\}";
 
   private static NSMutableDictionary<String, ERAttachmentProcessor<?>> _processors;
   
@@ -122,7 +129,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   }
 
   /**
-   * Parses a path template with ${ext}, ${fileName}, ${hash}, and ${pk} variables in it.  See the ERAttachment
+   * Parses a path template with ${ext}, ${fileName}, ${hash}, ${uuid}, and ${pk} variables in it.  See the ERAttachment
    * top level documentation for more information.
    * 
    * @param attachment the attachment being processed
@@ -152,6 +159,8 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     //hashPathBuffer.append('/');
     //hashPathBuffer.append(filenameHash.substring(3));
     parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.HASH_VARIABLE, hashPathBuffer.toString());
+
+    parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.UUID_VARIABLE, UUID.randomUUID().toString());
 
     parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.FILE_NAME_VARIABLE, recommendedFileName);
     parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.PK_VARIABLE, attachment.primaryKeyInTransaction());

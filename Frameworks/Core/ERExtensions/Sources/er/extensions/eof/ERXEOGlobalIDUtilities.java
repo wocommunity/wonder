@@ -25,6 +25,8 @@ import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
+import com.webobjects.eocontrol._EOIntegralKeyGlobalID;
+import com.webobjects.eocontrol._EOVectorKeyGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
@@ -353,4 +355,14 @@ public class ERXEOGlobalIDUtilities {
     public static NSArray fireFaultsForGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
         return fireFaultsForGlobalIDs(ec, globalIDs, NSArray.EmptyArray);
     }
+
+	public static EOKeyGlobalID createGlobalID(String entityName, Object[] values) {
+		if (values != null && values.length == 1) {
+			Object primaryKey = values[0];
+			if (primaryKey instanceof Number) {
+				return new _EOIntegralKeyGlobalID(entityName, (Number) primaryKey);
+			}
+		}
+		return new _EOVectorKeyGlobalID(entityName, values);
+	}
 }

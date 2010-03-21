@@ -6,9 +6,13 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSStringUtilities;
@@ -23,6 +27,17 @@ import com.webobjects.jdbcadaptor.OraclePlugIn.OracleExpression;
  *
  */
 public class EROracleExpression extends OracleExpression {
+
+    /**
+     * Holds array of join clauses.
+     */
+    private final NSMutableArray _alreadyJoined = new NSMutableArray();
+
+    /**
+     * Fetch spec limit ivar
+     */
+    private int _fetchLimit;
+
   public static interface Delegate {
     /**
      * Returns the constraint name for the given relationship.
@@ -73,6 +88,7 @@ public class EROracleExpression extends OracleExpression {
       return shouldAllowNull;
     }
 
+    @Override
     public void addCreateClauseForAttribute(EOAttribute attribute) {
       NSDictionary userInfo = attribute.userInfo();
       Object defaultValue = null;
@@ -99,6 +115,7 @@ public class EROracleExpression extends OracleExpression {
      * 
      * @return the modified bindVariableDictionary
      */
+    @Override
     public NSMutableDictionary bindVariableDictionaryForAttribute(EOAttribute eoattribute, Object obj) {
         NSMutableDictionary result =  super.bindVariableDictionaryForAttribute(eoattribute, obj);
         if((obj instanceof NSTimestamp) && (isTimestampAttribute(eoattribute))) {
@@ -123,6 +140,7 @@ public class EROracleExpression extends OracleExpression {
      * 
      * @return the modified string
      */
+    @Override
     public String formatValueForAttribute(Object obj, EOAttribute eoattribute) {
         String value;
         if((obj instanceof NSTimestamp) && isTimestampAttribute(eoattribute)) {
@@ -141,6 +159,7 @@ public class EROracleExpression extends OracleExpression {
      * @return true to indicate that the Oracle jdbc driver should use
      * bind variables
      */
+    @Override
     public boolean useBindVariables() {
         return true;
     }
@@ -149,6 +168,7 @@ public class EROracleExpression extends OracleExpression {
      * @return true to indicate that the Oracle jdbc driver should use
      * bind variables
      */
+    @Override
     public boolean shouldUseBindVariableForAttribute(EOAttribute attribute) {
         return true;
     }
@@ -157,10 +177,12 @@ public class EROracleExpression extends OracleExpression {
      * @return true to indicate that the Oracle jdbc driver should use
      * bind variables
      */
+    @Override
     public boolean mustUseBindVariableForAttribute(EOAttribute attribute) {
         return true;
     }
     
+    @Override
     public void prepareConstraintStatementForRelationship(EORelationship relationship, NSArray sourceColumns, NSArray destinationColumns) {
       EOEntity entity = relationship.entity();
       String tableName = entity.externalName();
@@ -189,5 +211,140 @@ public class EROracleExpression extends OracleExpression {
       else {
         setStatement("ALTER TABLE " + entity.externalName() + " ADD CONSTRAINT " + constraintName + " FOREIGN KEY (" + sourceKeyList + ") REFERENCES " + relationship.destinationEntity().externalName() + " (" + destinationKeyList + ") DEFERRABLE INITIALLY DEFERRED");
       }
+    }
+
+    /**
+     * Overriden to handle correct placements of join conditions and to handle
+     * DISTINCT fetches with compareCaseInsensitiveA(De)scending sort orders.
+     * Lifted directly from the PostgressExpression.java class.
+     * 
+     * @param attributes
+     *            the attributes to select
+     * @param lock
+     *            flag for locking rows in the database
+     * @param qualifier
+     *            the qualifier to restrict the selection
+     * @param fetchOrder
+     *            specifies the fetch order
+     * @param columnList
+     *            the SQL columns to be fetched
+     * @param tableList
+     *            the the SQL tables to be fetched
+     * @param whereClause
+     *            the SQL where clause
+     * @param joinClause
+     *            the SQL join clause
+     * @param orderByClause
+     *            the SQL sort order clause
+     * @param lockClause
+     *            the SQL lock clause
+     * @return the select statement
+     */
+    @Override
+    public String assembleSelectStatementWithAttributes(NSArray attributes,
+                                                        boolean lock,
+                                                        EOQualifier qualifier,
+                                                        NSArray fetchOrder,
+                                                        String selectString,
+                                                        String columnList,
+                                                        String tableList,
+                                                        String whereClause,
+                                                        String joinClause,
+                                                        String orderByClause,
+                                                        String lockClause) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(selectString);
+        sb.append(columnList);
+        // AK: using DISTINCT with ORDER BY UPPER(foo) is an error if it is not
+        // also present in the columns list...
+        // This implementation sucks, but should be good enough for the normal
+        // case
+        if (selectString.indexOf(" DISTINCT") != -1) {
+            String[] columns = orderByClause.split(",");
+            for (int i = 0; i < columns.length; i++) {
+                String column = columns[i].replaceFirst("\\s+(ASC|DESC)\\s*",
+                                                        "");
+                if (columnList.indexOf(column) == -1) {
+                    sb.append(", ");
+                    sb.append(column);
+                }
+            }
+        }
+        sb.append(" FROM ");
+        String fieldString;
+        if (_alreadyJoined.count() > 0) {
+            fieldString = joinClauseString();
+        } else {
+            fieldString = tableList;
+        }
+        sb.append(fieldString);
+        if ((whereClause != null && whereClause.length() > 0)
+                || (joinClause != null && joinClause.length() > 0)) {
+            sb.append(" WHERE ");
+            if (joinClause != null && joinClause.length() > 0) {
+                sb.append(joinClause);
+                if (whereClause != null && whereClause.length() > 0)
+                    sb.append(" AND ");
+            }
+
+            if (whereClause != null && whereClause.length() > 0) {
+                sb.append(whereClause);
+            }
+        }
+        if (orderByClause != null && orderByClause.length() > 0) {
+            sb.append(" ORDER BY ");
+            sb.append(orderByClause);
+        }
+        if (lockClause != null && lockClause.length() > 0) {
+            sb.append(" ");
+            sb.append(lockClause);
+        }
+        if (_fetchLimit != 0) {
+            sb.append(" LIMIT ");
+            sb.append(_fetchLimit);
+        }
+        return sb.toString();
+    }
+    
+    /** 
+     * Overridden to allow the Null Sorting behavior of Oracle to be modified by 
+     * setting an application property. There are three options: 
+     * 
+     * 1) Nulls always first, irrespective of sorting: 
+     * EROraclePlugIn.nullSortBehavior=NullsFirst 
+     * 
+     * 2) Nulls always last, irrespective of sorting (this is Oracle's default): 
+     * EROraclePlugIn.nullSortBehavior=NullsLast 
+     * 
+     * 3) Nulls as the least or smallest value, the same as EOF: 
+     * EROraclePlugIn.nullSortBehavior=EOFStyle.
+     * 
+     * If you want to use either NullsFirst or NullsLast, you will need to 
+     * create a new EOSortOrdering.ComparisonSupport class and set it to be used 
+     * at application startup otherwise EOF will still go and resort using nulls 
+     * as the smallest value. 
+     * 
+     * @see com.webobjects.eoaccess.EOSQLExpression#addOrderByAttributeOrdering(com.webobjects.eocontrol.EOSortOrdering) 
+     */ 
+    @Override 
+    public void addOrderByAttributeOrdering(EOSortOrdering sortOrdering) {
+        super.addOrderByAttributeOrdering(sortOrdering); 
+        String nullSortBehavior = NSProperties.getProperty("EROraclePlugin.nullSortBehavior"); 
+        if (nullSortBehavior != null) { 
+            if ("EOFStyle".equals(nullSortBehavior)) { 
+                if (sortOrdering.selector() == EOSortOrdering.CompareCaseInsensitiveDescending || sortOrdering.selector() == EOSortOrdering.CompareDescending) { 
+                    _orderByString().append(" NULLS LAST"); 
+                }
+                else { 
+                    _orderByString().append(" NULLS FIRST"); 
+                }
+            }
+            else if ("NullsFirst".equals(nullSortBehavior)) { 
+                _orderByString().append(" NULLS FIRST"); 
+            }
+            else if ("NullsLast".equals(nullSortBehavior)) { 
+                _orderByString().append(" NULLS LAST"); // Oracle's normal default 
+            } 
+        }
     }
 }

@@ -2,7 +2,7 @@ Content: WOComponentContent {
 	_unroll = YES;
 }
 
-Head: D2WHead {
+Head: ERD2WHead {
 }
 
 Header: MenuHeader {
@@ -16,11 +16,10 @@ IsDebug :WOConditional {
 	condition = application.isDevelopmentMode;
 }
 
-Divider: AjaxHyperlink {
+Divider: WOGenericContainer {
 	elementName = "div";
 	id = "vertical_divider";
-	onComplete = "function() { Effect.toggle('b', 'slide', { scaleX: true, scaleY: false}); return false; }";
-	action = session.toggleMenubar;
+	onclick = "Effect.toggle('b', 'slide', { scaleX: true, scaleY: false});";
 }
 
 B: WOGenericContainer {
@@ -28,3 +27,49 @@ B: WOGenericContainer {
 	id = "b";
 	style = style;
 }
+
+A: WXGenericContainer {
+	elementName = "div";
+	id = "a";
+	ajax = true;
+}
+
+CSS: ERXStyleSheet {
+	filename = stylesheet;
+}
+
+Prototype: ERXJavaScript {
+	scriptSource = "http://ajax.googleapis.com/ajax/libs/prototype/1.6/prototype.js";
+}
+
+Effects: ERXJavaScript {
+	scriptSource = "http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8/scriptaculous.js";
+}
+
+CalendarDateSelectScript: ERXJavaScript {
+	filename = "calendar_date_select.js";
+	framework = "ERPrototaculous";
+}
+
+AccordionScript: ERXJavaScript {
+	filename = "accordion.js";
+	framework = "ERPrototaculous";
+}
+
+ModalBoxScript: ERXJavaScript {
+	filename = "modalbox.js";
+	framework = "Ajax";
+}
+
+ModalBoxCSS: ERXStyleSheet {
+	filename = "modalbox.css";
+	framework = "Ajax";
+}
+
+CalendarDateSelectCSS: ERXStyleSheet {
+	filename = "CalendarDateSelect.css";
+	framework = "ERPrototaculous";
+}
+
+
+Busy: ERDIVGlobalBusyIndicator {}

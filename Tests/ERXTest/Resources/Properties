@@ -1,3 +1,4 @@
+
 ognl.helperFunctions=true
 ognl.inlineBindings=true
 er.ajax.secureResources=false
@@ -6,19 +7,19 @@ er.extensions.ERXApplication.useEditingContextUnlocker=true
 er.extensions.ERXEC.defaultAutomaticLockUnlock=true
 er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEC.defaultCoalesceAutoLocks=false
-er.migration.migrateAtStartup=true
+er.migration.migrateAtStartup=false
 er.migration.createTablesIfNecessary=true
 er.migration.modelNames=ERXTest
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 
-er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators=2
-er.extensions.multicastSynchronizer.enabled=false
+#er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators=1
+#er.extensions.multicastSynchronizer.enabled=false
 
 # Set root category priority to DEBUG and its only appender to A1.
 log4j.rootCategory=WARN, A1
 
 # A1 is set to be a FileAppender which outputs to System.out.
-log4j.appender.A1=org.apache.log4j.ConsoleAppender
+log4j.appender.A1=org.apache.log4j.varia.NullAppender
 
 # A1 uses PatternLayout.
 log4j.appender.A1.layout=er.extensions.logging.ERXPatternLayout
@@ -52,3 +53,4 @@ er.extensions.ERXNSLogLog4jBridge=INFO
 log4j.logger.er.extensions.ERXDatabaseContextDelegate=WARN
 log4j.logger.er.extensions.ERXConfigurationManager=INFO
 #log4j.logger.er.extensions.ERXApplication.RequestHandling=DEBUG
+

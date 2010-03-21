@@ -138,6 +138,12 @@ public class ERXJDBCConnectionAnalyzer {
 			dumpExtensionDirectories();
 			throw new RuntimeException("JDBC Connection Analysis: Missing class needed by plugin");
 		}
+		catch (Exception e) {
+			// Unwrap the exception to get at the real problem
+			Throwable t = ERXExceptionUtilities.getMeaningfulThrowable(e);
+			ERXJDBCConnectionAnalyzer.log.info("Error: Plugin creationg failed with " + t.getMessage(), t);
+			throw new RuntimeException("JDBC Connection Analysis: unexpected failure creating plugin");
+		}
 
 		if (targetPlugIn().getClass().equals(com.webobjects.jdbcadaptor.JDBCPlugIn.class)) {
 			String driverClassName = (String) connectionDictionary().objectForKey(JDBCAdaptor.DriverKey);

@@ -12,9 +12,11 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
@@ -72,7 +74,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	 * Returns the value for the given property name.
 	 */
 	public Object valueForKey(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
-		return NSKeyValueCoding.Utility.valueForKey(obj, propertyName);
+		return NSKeyValueCodingAdditions.Utility.valueForKeyPath(obj, propertyName);
 	}
 
 	/**
@@ -282,8 +284,14 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 					throw new IllegalArgumentException("Compound primary keys (" + entity + ") are not currently supported.");
 				}
 				EOAttribute primaryKeyAttribute = (EOAttribute) primaryKeyAttributes.objectAtIndex(0);
-				String valueType = primaryKeyAttribute.valueType();
-				gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { key });
+				if(NSData.class.getName().equals(primaryKeyAttribute.className())) {
+					if(!key.startsWith("<")) {
+						key = "<" + key + ">";
+					}
+					gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { new NSData((NSData)NSPropertyListSerialization.propertyListFromString(key)) });
+				} else {
+					gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { key });
+				}
 			}
 
 			obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);

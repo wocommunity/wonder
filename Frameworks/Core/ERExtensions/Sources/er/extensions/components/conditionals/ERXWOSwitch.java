@@ -20,7 +20,21 @@ import com.webobjects.foundation.NSMutableDictionary;
  * their case bound to a value.
  <code><pre>
  ==========================
- Example.wo/Example.html
+ Example.wo/Example.html (modern syntax)
+ ==========================
+ &lt;wo:ERXWOSwitch case="$case"&gt;
+    &lt;wo:ERXWOCase case="caseOne"&gt;
+            Case One!
+    &lt;/wo:ERXWOCase&gt;
+    &lt;wo:ERXWOCase case="caseTwo"&gt;
+            Case Two!
+    &lt;/wo:ERXWOCase&gt;
+    &lt;wo:ERXWOCase case="default"&gt;
+            OTHER
+    &lt;/wo:ERXWOCase&gt;
+ &lt;/wo:ERXWOSwitch&gt;
+ ==========================
+ Example.wo/Example.html (traditional syntax, with wod below)
  ==========================
  &lt;webobject name=Switch&gt;
     &lt;webobject name=CaseOne&gt;
@@ -37,13 +51,12 @@ import com.webobjects.foundation.NSMutableDictionary;
 
     &lt;webobject name=CaseFour&gt;
         &lt;h2&gt;Four: &lt;webobject name=ChosenCaseString&gt;&lt;/webobject&gt;&lt;/h2&gt;
-    &lt;/webobject&gt;    
+    &lt;/webobject&gt;
 
     &lt;webobject name=DefaultCase&gt;
         &lt;h2&gt;Default: &lt;webobject name=ChosenCaseString&gt;&lt;/webobject&gt;&lt;/h2&gt;
-    &lt;/webobject&gt;    
+    &lt;/webobject&gt;
 &lt;/webobject&gt;
-
  ==========================
  Example.wo/Example.wod
  ==========================
@@ -68,7 +81,7 @@ CaseTwo: ERXWOCase {
     case = 2;
 }
 
-DefaultCase: WXCase {
+DefaultCase: ERXWOCase {
     case = "default";
 }
 
@@ -88,12 +101,13 @@ public Object chosenCase() {
  </code></pre>
  * @author ak (Java port)
  * @author Charles Lloyd
+ * @binding case the ivar that holds the value to be switched on
  */
 public class ERXWOSwitch extends WODynamicElement {
-    
+
     private NSDictionary _childCases;
     private WOAssociation _case;
-    
+
     public ERXWOSwitch(String name, NSDictionary associations, WOElement template) {
         super(name, associations, template);
         NSMutableDictionary dict = new NSMutableDictionary();
@@ -113,9 +127,9 @@ public class ERXWOSwitch extends WODynamicElement {
     protected WOElement childCaseInContext(WOContext context) {
         Object value = _case.valueInComponent(context.component());
         value = (value == null ? "default" : value);
-        
+
         WOElement result = (WOElement) _childCases.objectForKey(value);
-        
+
         if(result == null) {
             result = (WOElement) _childCases.objectForKey("default");
         }
@@ -124,17 +138,16 @@ public class ERXWOSwitch extends WODynamicElement {
         }
         return result;
     }
-    
+
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         childCaseInContext(wocontext).appendToResponse(woresponse, wocontext);
     }
-    
+
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         return childCaseInContext(wocontext).invokeAction(worequest, wocontext);
     }
-    
+
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
         childCaseInContext(wocontext).takeValuesFromRequest(worequest, wocontext);
     }
-    
 }

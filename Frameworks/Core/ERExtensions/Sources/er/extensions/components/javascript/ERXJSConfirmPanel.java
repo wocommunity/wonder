@@ -9,6 +9,8 @@ package er.extensions.components.javascript;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+import er.extensions.foundation.ERXStringUtilities;
+
 // Stateless confirm panel
 /**
  * Stateless implementation of JSConfirmPanel.*<br />
@@ -33,5 +35,5 @@ public class ERXJSConfirmPanel extends WOComponent {
     public boolean isStateless() { return true; }
 
     public String confirmMessage() { return "return confirm('" +
-        (String)valueForBinding("confirmMessage") + "')"; }
+        ERXStringUtilities.escapeJavascriptApostrophes((String)valueForBinding("confirmMessage")) + "')"; }
 }

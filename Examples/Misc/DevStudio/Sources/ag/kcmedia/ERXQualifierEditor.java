@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EONotQualifier;
 import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
 
 public class ERXQualifierEditor extends WOComponent {
 
@@ -31,6 +32,31 @@ public class ERXQualifierEditor extends WOComponent {
         qualifier = null;
     }
 
+    public EOQualifier childQualifier() {
+      EOQualifier childQualifier;
+      if (qualifier instanceof EONotQualifier) {
+        childQualifier = ((EONotQualifier)qualifier).qualifier();
+      }
+      else {
+        childQualifier = null;
+      }
+      return childQualifier;
+    }
+    
+    public NSArray<EOQualifier> childQualifiers() {
+      NSArray<EOQualifier> childQualifiers;
+      if (qualifier instanceof EOAndQualifier) {
+        childQualifiers = ((EOAndQualifier)qualifier).qualifiers();
+      }
+      else if (qualifier instanceof EOOrQualifier) {
+        childQualifiers = ((EOOrQualifier)qualifier).qualifiers();
+      } 
+      else {
+        childQualifiers = null;
+      }
+      return childQualifiers;
+    }
+    
     public EOQualifier qualifier() {
         if(qualifier == null) {
             qualifier = (EOQualifier)valueForBinding("qualifier");

@@ -60,7 +60,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	
 	protected int _rowCount = -1;
 	
-	protected boolean _shouldRememberRowCount = false;
+	protected boolean _shouldRememberRowCount = true;
 	
 	/**
 	 * Creates a new ERXBatchingDisplayGroup.
@@ -130,6 +130,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	@Override
 	public void setDataSource(EODataSource eodatasource) {
 		_isBatching = (eodatasource instanceof EODatabaseDataSource) ? Boolean.TRUE : Boolean.FALSE;
+		setRowCount(-1);
 		super.setDataSource(eodatasource);
 	}
 	
@@ -186,21 +187,31 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * @return the objects that should be diplayed.
 	 */
 	@Override
-	// WO 5.5
-	public NSArray<Object> displayedObjects() {
+	public NSArray<T> displayedObjects() {
 		if (isBatching()) {
 			refetchIfNecessary();
-			return (NSArray<Object>)_displayedObjects;
+			return _displayedObjects;
 		}
 		return super.displayedObjects();
+	}
+	
+	
+	
+	/** 
+	 * Overridden to refetchIfNecessary() first to ensure we get a correct result in cases where this is called before displayedObjects().
+	 * See http://issues.objectstyle.org/jira/browse/WONDER-381
+	 */
+	@Override
+	public boolean hasMultipleBatches() {
+		refetchIfNecessary();
+		return super.hasMultipleBatches();
 	}
 
 	/**
 	 * Overridden to return allObjects() when batching, as we can't qualify in memory.
 	 */
 	@Override
-	// WO 5.5
-	public NSArray<Object> filteredObjects() {
+	public NSArray<T> filteredObjects() {
 		if (isBatching()) {
 			return allObjects();
 		}
@@ -232,17 +243,17 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	}
 	
 	/**
-	 * Sets the prefetching key paths for the underlying fetch spec.
+	 * Sets the prefetching key paths to override those in the underlying fetch spec.
 	 * 
-	 * @param prefetchingRelationshipKeyPaths the prefetching key paths for the underlying fetch spec
+	 * @param prefetchingRelationshipKeyPaths the prefetching key paths to override those in the underlying fetch spec
 	 */
 	public void setPrefetchingRelationshipKeyPaths(NSArray<String> prefetchingRelationshipKeyPaths) {
 		_prefetchingRelationshipKeyPaths = prefetchingRelationshipKeyPaths;
 	}
 	
 	/**
-	 * Returns the prefetching key paths for the underlying fetch spec.
-	 * @return the prefetching key paths for the underlying fetch spec
+	 * Returns the prefetching key paths overriding those in the underlying fetch spec.
+	 * @return the prefetching key paths overriding those in the underlying fetch spec
 	 */
 	public NSArray<String> prefetchingRelationshipKeyPaths() {
 		return _prefetchingRelationshipKeyPaths;
@@ -314,7 +325,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	/**
 	 * Set to <code>true</code> to retain the rowCount() after it is determined once for a particular
 	 * qualifier.  Set to <code>false</code> to have rowCount() re-calculated when the batch changes.
-	 * The default is <code>false</code> for compatibility with older code.
+	 * The default is <code>true</code>.
 	 *
 	 * @param shouldRememberRowCount the shouldRememberRowCount to set
 	 */
@@ -329,54 +340,20 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 */
 	protected NSArray<T> objectsInRange(int start, int end) {
 		EOEditingContext ec = dataSource().editingContext();
-		EOFetchSpecification spec = fetchSpecification();
-		NSArray result = null;
-		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
-			// no hints on the fs
-			
-			// This used to turn the EO's into faults and then fetch the faults. The problem
-			// with that is that for abstract entities, this would fetch the objects one-by-one
-			// to determine what the correct EOGlobalID is for each subentity. Instead, I've
-			// changed this to created a global ID for each row (which supports being a guess)
-			// and then fetch the objects with the global IDs.
-			NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
-			EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
-			NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
-			for (Object obj : primKeys) {
-				NSDictionary pkDict = (NSDictionary) obj;
-				EOGlobalID gid = entity.globalIDForRow(pkDict);
-				gids.addObject(gid);
-			}
-			NSMutableArray objects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, gids, spec.refreshesRefetchedObjects());
-
-			NSArray prefetchingRelationshipKeyPaths = _prefetchingRelationshipKeyPaths;
-			if (prefetchingRelationshipKeyPaths == null || prefetchingRelationshipKeyPaths.count() == 0) {
-				prefetchingRelationshipKeyPaths = spec.prefetchingRelationshipKeyPaths();
-			}
-			if (prefetchingRelationshipKeyPaths != null && prefetchingRelationshipKeyPaths.count() > 0) {
-				ERXBatchFetchUtilities.batchFetch(objects, prefetchingRelationshipKeyPaths, ! spec.refreshesRefetchedObjects());
-			}
-
-			ERXS.sort(objects, spec.sortOrderings());
-			result = objects.immutableClone();
+		EOFetchSpecification spec = (EOFetchSpecification)fetchSpecification().clone();
+		if (_prefetchingRelationshipKeyPaths != null && _prefetchingRelationshipKeyPaths.count() > 0) {
+			spec.setPrefetchingRelationshipKeyPaths(_prefetchingRelationshipKeyPaths);
 		}
-		else {
-			// we have hints, use them
-			
-			EOModel model = EOModelGroup.defaultGroup().entityNamed(spec.entityName()).model();
-			ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
-			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
-			String sql = sqlHelper.customQueryExpressionHintAsString(hint);
-			sql = sqlHelper.limitExpressionForSQL(null, spec, sql, start, end);
-			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
-		}
-		// fetch the primary keys, turn them into faults, then batch-fetch all
+		
+		NSArray result = ERXEOControlUtilities.objectsInRange(ec, spec, start, end);
+		// WAS: fetch the primary keys, turn them into faults, then batch-fetch all
 		// the non-resident objects
 		//NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
 		//NSArray faults = ERXEOControlUtilities.faultsForRawRowsFromEntity(ec, primKeys, spec.entityName());
 		//NSArray objects = ERXEOControlUtilities.objectsForFaultWithSortOrderings(ec, faults, sortOrderings());
 		return result;
 	}
+
 
 	/**
 	 * Utility that does the actual fetching, if a qualifier() is set, it adds
@@ -476,8 +453,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		if (isBatching()) {
 			// refetch();
 			NSMutableArray<T> selectedObjects = (NSMutableArray<T>) selectedObjects();
-			// WO 5.5
-			NSArray<Object> obj = allObjects();
+			NSArray<T> obj = allObjects();
 			if (delegate() != null) {
 				_NSDelegate delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
 				if (delegate != null && delegate.respondsTo("displayGroupDisplayArrayForObjects")) {

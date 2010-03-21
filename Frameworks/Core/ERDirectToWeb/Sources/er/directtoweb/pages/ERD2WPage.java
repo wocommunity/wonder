@@ -55,10 +55,11 @@ import er.extensions.components.ERXClickToOpenSupport;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXGuardedObjectInterface;
+
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
-import er.extensions.statistics.ERXMetrics;
-import er.extensions.statistics.ERXMetricsEvent;
+import er.extensions.statistics.ERXStats;
 import er.extensions.validation.ERXExceptionHolder;
 import er.extensions.validation.ERXValidation;
 import er.extensions.validation.ERXValidationException;
@@ -88,9 +89,31 @@ import er.extensions.validation.ERXValidationException;
  * (section3, key4, key..) ), ... ) OR with the alternate syntax, which ist most
  * useful with the WebAssistant ( "[tab1]", "(section1)", key1, key2, ...
  * "[tab2]", "(section3)", key4, key..... )
- * 
+ * @d2wKey object
+ * @d2wKey localContext
+ * @d2wKey keyPathsWithValidationExceptions
+ * @d2wKey shouldPropagateExceptions
+ * @d2wKey shouldCollectionValidationExceptions
+ * @d2wKey shouldSetFailedValidationValue
+ * @d2wKey errorMessages
+ * @d2wKey componentName
+ * @d2wKey customComponentName
+ * @d2wKey propertyKey
+ * @d2wKey sectionKey
+ * @d2wKey sectionContents
+ * @d2wKey tabKey
+ * @d2wKey displayNameForTabKey
+ * @d2wKey isEntityEditable
+ * @d2wKey pageConfiguration
+ * @d2wKey displayPropertyKeys
+ * @d2wKey tabSectionsContents
+ * @d2wKey displayVariant
+ * @d2wKey displayNameForEntity
+ * @d2wKey nextPageDelegate
+ * @d2wKey pageController
+ * @d2wKey pageWrapperName
+ * @d2wKey inlineStyle
  */
-
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface, ERXComponentActionRedirector.Restorable, ERDBranchInterface {
 
     /** interface for all the keys used in this pages code */
@@ -133,19 +156,21 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
         public static final String alternateKeyInfo = "alternateKeyInfo";
         
+        public static final String displayVariant = "displayVariant";
+        
         public static final String clickToOpenEnabled = "clickToOpenEnabled";
 
 		// The propertyKey whose form widget gets the focus upon loading an edit page.
 		public static final String firstResponderKey = "firstResponderKey";
-
-        public static final String showPageMetrics = "showPageMetrics";
-           
+        
     }
 
     /** logging support */
     public final static Logger log = Logger.getLogger(ERD2WPage.class);
 
     public static final Logger validationLog = Logger.getLogger("er.directtoweb.validation.ERD2WPage");
+
+    private String _statsKeyPrefix;
 
     /**
      * Default public constructor.
@@ -155,7 +180,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      */
     public ERD2WPage(WOContext c) {
         super(c);
-        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("handleSessionRestored", ERXConstant.NotificationClassArray), WOSession.SessionDidRestoreNotification, null);
     }
 
     /**
@@ -361,6 +385,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         errorMessage = message == null ? "" : message;
     }
 
+    public boolean hasErrors() {
+        return (errorMessages != null && errorMessages.count() > 0) || (errorMessage != null && errorMessage.trim().length() > 0);
+    }
+
     public NSArray errorKeyOrder() {
         return errorKeyOrder;
     }
@@ -447,7 +475,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                         }
                     }
                 }
-                if("saveChangesExceptionKey".equals(keyPath) && erv.propertyKey() != null) { 
+                if(("saveChangesExceptionKey".equals(keyPath) || "queryExceptionKey".equals(keyPath)) && erv.propertyKey() != null) { 
                 	// AK: this is for combined keys like company,taxIdentifier
                 	keyPathsWithValidationExceptions.addObjectsFromArray(NSArray.componentsSeparatedByString( erv.propertyKey(), ","));
                 }
@@ -782,7 +810,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Returns the array of {@link ERD2WContainer} defining the tabs. A tab is a
      * key and an array of sections
      */
-    public NSArray tabSectionsContents() {
+    public NSArray<ERD2WContainer> tabSectionsContents() {
         if (_tabSectionsContents == null) {
             NSArray tabSectionContentsFromRule = (NSArray) d2wContext().valueForKey("tabSectionsContents");
             if (tabSectionContentsFromRule == null)
@@ -791,9 +819,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             if (tabSectionContentsFromRule == null)
                 throw new RuntimeException("Could not find tabSectionsContents in " + d2wContext());
 
-            ERXMetricsEvent event = ERXMetrics.createAndMarkStartOfEvent("ComputeTabSectionsContents", timingEventUserInfo());
+            String statsKey = makeStatsKey("ComputeTabSectionsContents");
+            ERXStats.markStart("D2W", statsKey);
             _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
-            ERXMetrics.markEndOfEvent(event);
+            ERXStats.markEnd("D2W", statsKey);
             
             d2wContext().takeValueForKey(tabSectionContentsFromRule, "tabSectionsContents");
             // Once calculated we then determine any displayNameForTabKey
@@ -890,6 +919,26 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // moved them here to avoid too much subclassing
     public boolean isEmbedded() {
         return ERXComponentUtilities.booleanValueForBinding(this, "isEmbedded", false);
+    }
+
+    /**
+     * Gets the <code>displayVariant</code> for the current property key.  The intention is that the display variant
+     * allows variation in the display method of property keys without needing different, slightly varying,
+     * <code>displayPropertyKeys</code> or <code>tabSectionsContents</code> rules.  Template support has been added for
+     * the <code>omit</code> and <code>blank</code> variants.  One could imagine others, such as <code>collapsed</code>,
+     * <code>ajax</code>, etc.
+     * @return the display variant, if specified
+     */
+    public String displayVariant() {
+        return (String)d2wContext().valueForKey(Keys.displayVariant);
+    }
+
+    /**
+     * Determines if display of the current property key should be <code>omitted</code>.
+     * @return true if key should be omitted
+     */
+    public boolean isKeyOmitted() {
+        return "omit".equals(displayVariant());
     }
 
     /*
@@ -1089,12 +1138,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /**
-     * Determines whether the component should display the page metrics by looking at the D2W context for
-     * <code>showPageMetrics</code>, defaulting to the value returned by {@link ERXMetrics#metricsEnabled()}.
-     * @return true if should show metrics
+     * Determines whether the component should display the detailed "inline" page metrics.
+     * @return true if should show the detailed metrics
      */
     public boolean shouldDisplayDetailedPageMetrics() {
-        return ERXMetrics.metricsEnabled() && ERDirectToWeb.detailedPageMetricsEnabled();
+        return ERDirectToWeb.pageMetricsEnabled() && ERDirectToWeb.detailedPageMetricsEnabled();
     }
 
     /**
@@ -1103,81 +1151,137 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return true if should show metrics summary
      */
     public boolean shouldDisplayPageMetricsSummary() {
-        boolean metricsEnabled = ERXMetrics.metricsEnabled();
+        boolean metricsEnabled = ERDirectToWeb.pageMetricsEnabled();
         return isTopLevelPage() ? metricsEnabled : (metricsEnabled && shouldDisplayDetailedPageMetrics());
     }
 
     /**
-     * Gathers contextual information for a {@link ERXMetricsEvent metrics event}.
-     * @return the contextual information
+     * Creates a stats key to identify stats to the current property key.
+     * @return the stats key
      */
-    public NSMutableDictionary timingEventUserInfo() {
-        NSMutableDictionary result = new NSMutableDictionary();
-        result.takeValueForKey(name(), "componentName");
-        result.takeValueForKey(entityName(), "entityName");
-        String pageConfiguration = (String)d2wContext().valueForKey(Keys.pageConfiguration);
-        result.takeValueForKey((pageConfiguration != null ? pageConfiguration : "none"), Keys.pageConfiguration);
-        result.takeValueForKey((propertyKey() != null ? propertyKey() : "none"), Keys.propertyKey);
-        result.takeValueForKey((task() != null ? task() : "none"), "task");
-        result.takeValueForKey(this, "page");
-        return result;
+    public String statsKeyForCurrentPropertyKey() {
+        return makeStatsKey(propertyKey());
+    }
+
+    /**
+     * Makes the stats key, prepending a prefix to identify the stats to the originating page.
+     * @param key to format
+     * @return the formatted key
+     */
+    protected String makeStatsKey(String key) {
+        return statsKeyPrefix() + key;
+    }
+
+    /**
+     * A stats key prefix that guarantees the stats will be identifiable to this instance.
+     * @return the key prefix
+     */
+    public String statsKeyPrefix() {
+        if (null == _statsKeyPrefix) {
+            _statsKeyPrefix = d2wContext().dynamicPage() + "_0x" + hashCode() + ".";
+        }
+        return _statsKeyPrefix;
     }
 
     /**
      * Gets the latest metrics event for the current property key.
      * @return the event
      */
-    public ERXMetricsEvent latestEventForCurrentPropertyKey() {
-        EOKeyValueQualifier entityQual = new EOKeyValueQualifier("entityName", EOQualifier.QualifierOperatorEqual, entityName());
-        String propertyKey = (propertyKey() != null ? propertyKey() : "none");
-        EOKeyValueQualifier keyQual = new EOKeyValueQualifier("propertyKey", EOQualifier.QualifierOperatorEqual, propertyKey);
-        EOKeyValueQualifier pageQual = new EOKeyValueQualifier("page", EOQualifier.QualifierOperatorEqual, this);
-        EOAndQualifier andQual = new EOAndQualifier(new NSArray(new EOQualifier[] { entityQual, keyQual, pageQual }));
-        return ERXMetrics.latestEventMatchingQualifier(andQual);
+    public ERXStats.LogEntry latestEntryForCurrentPropertyKey() {
+        return ERXStats.logEntryForKey(ERXStats.Group.Component, statsKeyForCurrentPropertyKey());
     }
 
     /**
      * Gets the aggregate duration of events sharing the current property key.
      * @return the duration
      */
-    public long durationOfAllEventsForCurrentPropertyKey() {
-        EOKeyValueQualifier entityQual = new EOKeyValueQualifier("entityName", EOQualifier.QualifierOperatorEqual, entityName());
-        String propertyKey = (propertyKey() != null ? propertyKey() : "none");
-        EOKeyValueQualifier keyQual = new EOKeyValueQualifier(Keys.propertyKey, EOQualifier.QualifierOperatorEqual, propertyKey);
-        EOKeyValueQualifier pageQual = new EOKeyValueQualifier("page", EOQualifier.QualifierOperatorEqual, this);
-        EOAndQualifier andQual = new EOAndQualifier(new NSArray(new EOQualifier[] { entityQual, keyQual, pageQual }));
-        NSArray events = ERXMetrics.eventsMatchingQualifier(andQual);
-        long duration = 0L;
-        for (Enumeration eventsEnum = events.objectEnumerator(); eventsEnum.hasMoreElements();) {
-            ERXMetricsEvent event = (ERXMetricsEvent)eventsEnum.nextElement();
-            duration += event.duration();
-        }
-        return duration;
+    public long aggregateEventDurationForCurrentPropertyKey() {
+        return ERXStats.logEntryForKey(ERXStats.Group.Component, statsKeyForCurrentPropertyKey()).sum();
     }
 
     /**
-     * Gets the aggregate event information for the current page.
-     * @return the aggregate event information
+     * Gets the stats for the current page.
+     * @return the stats
      */
-    public NSDictionary aggregateEventInfoForPage() {
+    public NSDictionary statsForPage() {
         NSMutableDictionary result = new NSMutableDictionary();
-        EOKeyValueQualifier entityQual = new EOKeyValueQualifier("entityName", EOQualifier.QualifierOperatorEqual, entityName());
-        String pageConfiguration = (String)d2wContext().valueForKey(Keys.pageConfiguration);
-        result.takeValueForKey((pageConfiguration != null ? pageConfiguration : "none"), Keys.pageConfiguration);
-        EOKeyValueQualifier pageQual = new EOKeyValueQualifier("page", EOQualifier.QualifierOperatorEqual, this);
-        EOAndQualifier andQual = new EOAndQualifier(new NSArray(new EOQualifier[] { entityQual, pageQual }));
-        return ERXMetrics.aggregateEventInfoByTypeForEventsMatchingQualifier(andQual);
+        NSDictionary statsDict = ERXStats.statistics();
+        for (Enumeration keysEnum = statsDict.keyEnumerator(); keysEnum.hasMoreElements();) {
+            String key = (String)keysEnum.nextElement();
+            if (key.contains(statsKeyPrefix())) {
+                String statsGroup = ERXStringUtilities.firstPropertyKeyInKeyPath(key);
+                NSMutableArray events = (NSMutableArray)result.objectForKey(statsGroup);
+                if (null == events) {
+                    events = new NSMutableArray();
+                    result.setObjectForKey(events, statsGroup);
+                }
+                events.addObject(statsDict.objectForKey(key));
+            }
+        }
+        return result;
     }
 
     /**
-     * Resets the page metrics upon restoration of the session.
-     * @param notification to handle
+     * Gets the CSS class(es) for the container element, based on the current entity and task.
+     * @return the css classes
      */
-    public void handleSessionRestored(NSNotification notification) {
-        WOSession session = (WOSession)notification.object();
-        if (session != null && session.equals(ERXSession.session())) {
-            ERXMetrics.reset();
+    public String cssClassForPageContainerElement() {
+        NSMutableArray classes = new NSMutableArray();
+        D2WContext d2wContext = d2wContext();
+		String task = d2wContext.task();
+		String subTask = (String)d2wContext.valueForKey("subTask");
+		String elementClassPrefix = ERXStringUtilities.capitalize(task) + "Table";
+		classes.addObject(elementClassPrefix);
+		if (subTask != null) {
+			classes.addObject(ERXStringUtilities.capitalize(task) + ERXStringUtilities.capitalize(subTask) + "Table");
+		}
+		if (d2wContext.dynamicPage() != null && d2wContext.dynamicPage().indexOf("Embedded") > -1) {
+			classes.addObject(ERXStringUtilities.capitalize(task) + "Embedded");
+			classes.addObject("embedded");
+		}
+        if (entityName() != null) {
+            classes.addObject(elementClassPrefix + entityName());
         }
+        classes.addObject(elementClassPrefix + d2wContext.dynamicPage());
+		return classes.componentsJoinedByString(" ");
+    }
+
+    /**
+     * Gets the CSS class(es) that should be applied to the current property key container element.
+     * @return the css classes
+     */
+    public String cssClassForPropertyKey() {
+        NSMutableArray classes = new NSMutableArray();
+        D2WContext d2wContext = d2wContext();
+        String propertyKey = d2wContext.propertyKey();
+        if (propertyKey != null) {
+            classes.addObject(propertyKey.replaceAll("\\.", "_"));
+
+            // Required?
+            if (ERXValueUtilities.booleanValue(d2wContext.valueForKey("displayRequiredMarker")) && !"query".equals(task())) {
+                classes.addObject("required");
+            }
+
+            // Has error?
+            if (hasValidationExceptionForPropertyKey()) {
+                classes.addObject("error");
+            }
+
+            // Explicitly defined class(es).
+            NSArray explicitClasses = ERXValueUtilities.arrayValueWithDefault(d2wContext.valueForKey("cssClass"), NSArray.EmptyArray);
+            if (explicitClasses.count() > 0) {
+                classes.addObjectsFromArray(explicitClasses);
+            }
+        }
+        return classes.componentsJoinedByString(" ");
+    }
+
+    /**
+     * Gets any inline style declarations for the current property key container element.
+     * @return the inline style declarations
+     */
+    public String inlineStyleDeclarationForPropertyKey() {
+        return (String)d2wContext().valueForKey("inlineStyle");
     }
 
 }

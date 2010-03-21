@@ -56,7 +56,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * ERXMigrationFailedException when that method is called to notify the system
  * that the requested migration cannot be performed. As an example,
  * AuthModel1.upgrade(..) will be called to move from version 1 to version 2,
- * and AuthModel2.downgrade(..) will be called to move from version 2 back to
+ * and AuthModel1.downgrade(..) will be called to move from version 2 back to
  * version 1. Your lowest version number migration should throw an
  * ERXMigrationFailedException when its downgrade method is called.
  * <p>
@@ -228,6 +228,9 @@ public class ERXMigrator {
 			editingContext.lock();
 			try {
 				try {
+					if (ERXMigrator.log.isInfoEnabled()) {
+						ERXMigrator.log.info("Running post migration for " + modelVersion.model().name() + " version " + modelVersion.version() + " ...");
+					}
 					postMigration.postUpgrade(editingContext, modelVersion.model());
 					editingContext.saveChanges();
 				}
@@ -314,9 +317,23 @@ public class ERXMigrator {
 		return migrations;
 	}
 
+	protected boolean canMigrateModel(EOModel model) {
+		boolean canMigrateModel = false;
+		String adaptorName = model.adaptorName();
+		if ("Memory".equals(adaptorName)) {
+			canMigrateModel = true;
+		}
+		else if ("JDBC".equals(adaptorName)) {
+			String url = (String)model.connectionDictionary().objectForKey(JDBCAdaptor.URLKey);
+			if (url != null && url.toLowerCase().startsWith("jdbc:")) {
+				canMigrateModel = true;
+			}
+		}
+		return canMigrateModel;
+	}
+	
 	protected void _buildDependenciesForModel(EOModel model, int migrateToVersion, Map<String, Integer> versions, Map<IERXMigration, ERXModelVersion> migrations) throws InstantiationException, IllegalAccessException {
-		if (model.connectionDictionary().objectForKey(JDBCAdaptor.URLKey) == null ||
-			! ((String) model.connectionDictionary().objectForKey(JDBCAdaptor.URLKey)).toLowerCase().startsWith("jdbc:")) {
+		if (!canMigrateModel(model)) {
 			return;
 		}
 		

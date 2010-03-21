@@ -1,0 +1,5 @@
+EditEO: WOHyperlink {
+	action = inspectObjectAction;
+	title = ^displayNameForInspectConfiguration;
+	class = "ERDInspectButton2";
+}

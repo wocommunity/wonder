@@ -10,9 +10,11 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * Contains one case of a ERXWOSwitch.
+ * Contains one case of a {@link ERXWOSwitch}.
+ *
  * @author ak (Java port)
  * @author Charles Lloyd
+ * @binding case
  */
 public class ERXWOCase extends WODynamicElement {
 

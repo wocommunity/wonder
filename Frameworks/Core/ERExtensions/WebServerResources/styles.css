@@ -11,3 +11,43 @@
 .ERXMatrixTableCell {
 	padding: 0px 2px 0px 8px;
 }
+
+
+/* Metrics
+------------------------------ */
+
+td.InlineMetrics {
+	background-color: #fcfcfc;
+	border-left: 1px solid #fff;
+	border-right: 1px solid #fff;
+	color: #aaa;
+	padding: .25em .5em;
+	text-align: right;
+}
+
+tr.MetricsSummary td,
+tr.MetricsSummary td.InlineMetrics  {
+	background-color: #ddd;
+	color: #777;
+	padding: .5em;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.ERXStatsSummary {
+	border: 1px solid #bbb;
+	border-collapse: collapse;
+	color: #ccc;
+	margin: 1em auto;
+}
+
+.ERXStatsSummary tr td,
+.ERXStatsSummary tr th {
+	border: 1px solid #bbb;
+	padding: .25em .5em;
+}
+
+.ERXStatsSummary tr.alt td {
+	background-color: #ececec;
+}
+

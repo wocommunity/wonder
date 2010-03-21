@@ -8,7 +8,7 @@ package er.extensions.appserver;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Enumeration;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
@@ -18,8 +18,6 @@ import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.woextensions.event.WOEventDisplayPage;
 import com.webobjects.woextensions.event.WOEventSetupPage;
 import com.webobjects.woextensions.statistics.WOStatsPage;
@@ -27,7 +25,9 @@ import com.webobjects.woextensions.statistics.WOStatsPage;
 import er.extensions.ERXExtensions;
 import er.extensions.components.ERXStringHolder;
 import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
+import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -312,7 +312,11 @@ public class ERXDirectAction extends WODirectAction {
             info += decimalFormatter.format(runtime.totalMemory()-runtime.freeMemory()) + " used, ";
             info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
             
-            ERXExtensions.forceGC(5);
+            int count = 5;
+            if(request().stringFormValueForKey("count") != null) {
+            	count = Integer.parseInt(request().stringFormValueForKey("count"));
+            }
+            ERXExtensions.forceGC(count);
   
             info += "After: ";
             info += decimalFormatter.format(runtime.maxMemory()) + " max, ";
@@ -321,6 +325,7 @@ public class ERXDirectAction extends WODirectAction {
             info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
 
             result.setValue(info);
+            log.info("GC forced\n"+info);
         }
         return result;
     }
@@ -337,31 +342,11 @@ public class ERXDirectAction extends WODirectAction {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         pw.println("<pre>");
-        ERXEC.Factory ecFactory = ERXEC.factory();
-        if (ecFactory instanceof ERXEC.DefaultFactory) {
-          NSArray lockedEditingContexts = ((ERXEC.DefaultFactory)ecFactory).lockedEditingContexts();
-          Enumeration lockedEditingContextEnum = lockedEditingContexts.objectEnumerator();
-          if (!lockedEditingContextEnum.hasMoreElements()) {
-        	  pw.println("There are no open editing context lock traces.");
-          }
-          else {
-	          while (lockedEditingContextEnum.hasMoreElements()) {
-	            EOEditingContext lockedEditingContext = (EOEditingContext)lockedEditingContextEnum.nextElement();
-	            NSArray openLockTraces = ((ERXEC)lockedEditingContext).openLockTraces();
-	            if (openLockTraces != null) {
-	            	Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
-	            	while (openLockTracesEnum.hasMoreElements()) {
-	            		Exception openLockTrace = (Exception)openLockTracesEnum.nextElement();
-	                	openLockTrace.printStackTrace(pw);
-	                	pw.println();
-	            	}
-	            }
-	          }
-          }
-        }
-        else {
-          pw.println("showOpenEditingContextLockTraces is only available for ERXEC.DefaultFactory.");
-        }
+        pw.println(ERXEC.outstandingLockDescription());
+        pw.println("</pre>");
+        pw.println("<hr>");
+        pw.println("<pre>");
+        pw.println(ERXObjectStoreCoordinator.outstandingLockDescription());
         pw.println("</pre>");
         pw.close();
         result.setValue(sw.toString());
@@ -409,23 +394,28 @@ public class ERXDirectAction extends WODirectAction {
      * Synopsis:<br/>
      * pw=<i>aPassword</i>&key=<i>someSystemPropertyKey</i>&value=<i>someSystemPropertyValue</i>
      *
-     * @return either null when the password is wrong or the key is missing or a new page showing the System properties
+     * @return either null when the password is wrong or a new page showing the System properties
      */
     public WOActionResults systemPropertyAction() {
     	WOResponse r = null;
     	if (canPerformActionWithPasswordKey("er.extensions.ERXDirectAction.ChangeSystemPropertyPassword")) {
     		String key = request().stringFormValueForKey("key");
-    		String value = request().stringFormValueForKey("value");
     		r = new WOResponse();
     		if (ERXStringUtilities.stringIsNullOrEmpty(key) ) {
-    			r.appendContentString("key cannot be null or empty old System properties:\n"+System.getProperties());
+        		String user = request().stringFormValueForKey("user");
+        		Properties props = ERXConfigurationManager.defaultManager().defaultProperties();
+        		if(user != null) {
+        			System.setProperty("user.name", user);
+        			props = ERXConfigurationManager.defaultManager().applyConfiguration(props);
+        		}
+    			r.appendContentString(ERXProperties.logString(props));
     		} else {
+        		String value = request().stringFormValueForKey("value");
     			value = ERXStringUtilities.stringIsNullOrEmpty(value) ? "" : value;
     			java.util.Properties p = System.getProperties();
     			p.put(key, value);
     			System.setProperties(p);
                 ERXLogger.configureLoggingWithSystemProperties();
-    			r.appendContentString("<html><body>New System properties:<br>");
     			for (java.util.Enumeration e = p.keys(); e.hasMoreElements();) {
     				Object k = e.nextElement();
     				if (k.equals(key)) {
@@ -471,6 +461,27 @@ public class ERXDirectAction extends WODirectAction {
     	return response;
     }
 
+    /**
+     * To use this, include this line in appendToResponse on any pages with uploads:
+     * <code>
+     * AjaxUtils.addScriptResourceInHead(context, response, "Ajax", "prototype.js");
+     * AjaxUtils.addScriptResourceInHead(context, response, "Ajax", "SafariUploadHack.js");
+     * </code>
+     *
+     * <p>To be called before multi-form submits to get past Safari 3.2.1 and 4.x intermittent hang-ups
+     * when posting binary data.  A nice succinct description and solution is posted here:
+     * http://blog.airbladesoftware.com/2007/8/17/note-to-self-prevent-uploads-hanging-in-safari
+     * The radar ticket is here: https://bugs.webkit.org/show_bug.cgi?id=5760</p>
+     *
+     * @return simple response to close the connection
+     */
+    public WOActionResults closeHTTPSessionAction() { 
+    	WOResponse response = new WOResponse();
+    	response.setContent(""); 
+    	response.setHeader("close", "Connection"); 
+    	return response; 
+    }
+        
     @SuppressWarnings("unchecked")
     public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
       return (T) super.pageWithName(componentClass.getName());

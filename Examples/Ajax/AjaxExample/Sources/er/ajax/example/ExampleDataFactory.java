@@ -14,7 +14,7 @@ import er.extensions.foundation.ERXFileUtilities;
 
 public class ExampleDataFactory {
 
-	private static NSMutableArray _exampleData;
+	private static NSMutableArray<Word> _exampleData;
 
 	public static NSMutableArray<Word> randomWords(int count) {
 		NSMutableArray<Word> words = new NSMutableArray<Word>();
@@ -32,10 +32,19 @@ public class ExampleDataFactory {
 		return words;
 	}
 
+	public static synchronized NSArray<Word> someWords(int count) {
+		NSArray<Word> allWords = allWords();
+		NSMutableArray<Word> someWords = new NSMutableArray<Word>();
+		for (int i = 0; i < count; i ++) {
+			someWords.addObject(allWords.objectAtIndex((int)(Math.random() * allWords.count())));
+		}
+		return someWords;
+	}
+
 	public static synchronized NSArray<Word> allWords() {
 		// some sample data. if we don't find the file, just create random strings
 		if (_exampleData == null) {
-			_exampleData = new NSMutableArray();
+			_exampleData = new NSMutableArray<Word>();
 			File f = new File("/usr/share/dict/words");
 			if (f.exists()) {
 				try {
@@ -57,7 +66,7 @@ public class ExampleDataFactory {
 			if (_exampleData.count() == 0) {
 				_exampleData.addObjectsFromArray(ExampleDataFactory.randomWords(1000));
 			}
-			EOSortOrdering.sortArrayUsingKeyOrderArray(_exampleData, new NSArray(EOSortOrdering.sortOrderingWithKey("name", EOSortOrdering.CompareAscending)));
+			EOSortOrdering.sortArrayUsingKeyOrderArray(_exampleData, new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey("name", EOSortOrdering.CompareAscending)));
 
 		}
 		return _exampleData.immutableClone();

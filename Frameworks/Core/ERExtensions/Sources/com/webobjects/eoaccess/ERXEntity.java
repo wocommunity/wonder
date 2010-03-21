@@ -7,7 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * ERXEntity provides a basic subclass of EOEntity providing
@@ -63,14 +65,15 @@ public class ERXEntity extends EOEntity {
 	@Override
 	public EOAttribute anyAttributeNamed(String name) {
 		Matcher matcher = null;
-		if (name != null && (matcher = NeededByEOFPattern.matcher(name)).matches()) {
+		EOAttribute result = super.anyAttributeNamed(name);
+		if (result == null && name != null && (matcher = NeededByEOFPattern.matcher(name)).matches()) {
 			int neededIndex = Integer.valueOf(matcher.group(1));
 			if (neededIndex >= primaryKeyAttributeNames().count()) {
 				throw new IllegalStateException("No matching primary key found for entity'" + name() + "' with attribute'" + name + "'");
 			}
-			return (EOAttribute) primaryKeyAttributes().objectAtIndex(neededIndex);
+			result = (EOAttribute) primaryKeyAttributes().objectAtIndex(neededIndex);
 		}
-		return super.anyAttributeNamed(name);
+		return result;
 	}
 	
 	/**
@@ -92,4 +95,11 @@ public class ERXEntity extends EOEntity {
 		this._classDescription = classDescription;
 	}
 
+	/**
+	 * Overridden through our bottleneck.
+	 */
+	@Override
+	protected EOKeyGlobalID _globalIDWithoutTypeCoercion(Object[] values) {
+		return ERXSingleValueID.globalIDWithEntityName(name(), values);
+	}
 }

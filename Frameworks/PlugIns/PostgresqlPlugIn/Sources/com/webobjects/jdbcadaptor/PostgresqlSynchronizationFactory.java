@@ -27,7 +27,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     public static final String USING_KEY = "USING";
     
     private Boolean _enableIdentifierQuoting;
-  
+    
     public PostgresqlSynchronizationFactory(EOAdaptor adaptor) {
         super(adaptor);
     }
@@ -367,9 +367,8 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 				}
 			}
 			return new NSArray(_expressionForString((new StringBuilder()).append("CREATE TABLE ").append(this.formatTableName(((EOEntity) entityGroup.objectAtIndex(0)).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
-		} else {
-			return new NSArray();
 		}
+		return new NSArray();
 	}
     
     /**
@@ -419,9 +418,17 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         String width = String.valueOf(attribute.width());
         return _NSStringUtilities.concat(attribute.externalType(), "(", width, ")");
       }
-      else {
-        return attribute.externalType();
+      return attribute.externalType();
+    }
+    
+    public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
+      NSArray statements;
+      if (allowsNull) {
+        statements = new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " drop not null"));
+      } else {
+        statements = new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " set not null"));
       }
+      return statements;
     }
 
     @Override
@@ -445,11 +452,25 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
       NSArray statements = new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " type " + columnTypeString + usingClause));
       return statements;
     }
+    
+    public NSArray statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
+      return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " rename column " + formatColumnName(columnName) + " to " + formatColumnName(newName)));
+    }
 
     @Override
     public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
       String clause = _columnCreationClauseForAttribute(attribute);
       return new NSArray(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add " + clause));
+    }
+
+    @Override
+    public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
+    	return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " rename to " + formatTableName(newName)));
+    }
+    
+    @Override
+    public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
+    	return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " drop column " + formatTableName(columnName) + " cascade"));
     }
 
 /*

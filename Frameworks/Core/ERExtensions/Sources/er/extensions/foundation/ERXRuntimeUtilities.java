@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
@@ -43,17 +45,62 @@ public class ERXRuntimeUtilities {
     /**
      * Hack to create a bundle after the app is loaded. Useful for the insistence of EOF on JavaXXXAdaptor bundles. 
      * @param name
+     * @return a new bundle under the system temp directory
      */
     public static NSBundle createBundleIfNeeded(String name) {
-    	String path = "/tmp/" + name + ".framework/Resources/Java";
-    	new File(path).mkdirs();
+    	File sysTempDir = new File(System.getProperty("java.io.tmpdir", "/tmp"));
+    	
+    	File newTempDir;
+        final int maxAttempts = 5;
+        int attemptCount = 0;
+        do {
+            attemptCount++;
+            if(attemptCount > maxAttempts)
+            {
+            	throw NSForwardException._runtimeExceptionForThrowable(new IOException(
+                        "The highly improbable has occurred! Failed to " +
+                        "create a unique temporary directory after " +
+                        maxAttempts + " attempts."));
+            }
+            // create unique dir in tmp to work with
+            String dirName = name + UUID.randomUUID().toString();
+            newTempDir = new File(sysTempDir, dirName);
+            
+        } while (newTempDir.exists());
+        
+        if (newTempDir.mkdirs()) {
+        	// create basic framework bundle structure
+        	File fwkResourcesDir = new File(new File(newTempDir , name + ".framework"), "Resources");
+        	File fwkJavaDir = new File(fwkResourcesDir, "Java");
+        	fwkJavaDir.mkdirs();
+        	
+        	try {
+    			ERXFileUtilities.stringToFile("{Has_WOComponents=NO;}", new File(fwkResourcesDir, "Info.plist"));
+    		}
+    		catch (IOException e) {
+    			throw NSForwardException._runtimeExceptionForThrowable(e);
+    		}
+    		return loadBundleIfNeeded(fwkJavaDir);
+        }
+        throw NSForwardException._runtimeExceptionForThrowable(new IOException("Failed to create temp dir named " + newTempDir.getAbsolutePath()));
+    }
+    
+    /**
+     * Load an application, framework or jar bundle if not already loaded.
+     * 
+     * @param bundleFile - the directory or archive (e.g., jar, war) of the bundle to load
+     * @return the bundle found at the given uri.
+     * @throws NSForwardException if bundle loading fails
+     */
+    public static NSBundle loadBundleIfNeeded(File bundleFile) {
     	try {
-			ERXFileUtilities.stringToFile("{Has_WOComponents=NO;}", new File("/tmp/" + name + ".framework/Resources/Info.plist"));
+    		String canonicalPath = bundleFile.getCanonicalPath();
+    		boolean isJar = bundleFile.isFile() && canonicalPath.endsWith(".jar");
+			return NSBundle._bundleWithPathShouldCreateIsJar(canonicalPath, true, isJar);
 		}
 		catch (IOException e) {
-			NSForwardException._runtimeExceptionForThrowable(e);
+			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
-    	return NSBundle._bundleWithPathShouldCreateIsJar(path, true, false);
     }
     
     /**

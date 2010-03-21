@@ -1,5 +1,6 @@
 package er.ajax;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 
 import com.webobjects.appserver.WOActionResults;
@@ -10,7 +11,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementBehavior;
 import com.webobjects.appserver._private.WOFormatElementBehavior;
-import com.webobjects.appserver._private.WOHTMLAttribute;
 import com.webobjects.appserver._private.WOLocalizedFormatElementBehavior;
 import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.appserver.association.WOConstantValueAssociation;
@@ -23,27 +23,31 @@ import er.extensions.appserver.ERXWOContext;
 
 // PROTOTYPE FUNCTIONS (WRAPPER)
 public class AjaxInPlaceEditor extends AjaxDynamicElement implements WOFormatElementBehavior, WOLocalizedFormatElementBehavior {
-	private WOAssociation _idAssociation;
-	private WOAssociation _elementNameAssociation;
-	private WOAssociation _classAssociation;
-	private WOAssociation _valueAssociation;
-	private WOFormatElementBehaviorImplementation<WOFormatElementBehavior> _formatElementBehavior;
-	private WOLocalizedFormatElementBehaviorImplementation<WOLocalizedFormatElementBehavior> _localizedFormatElementBehavior;
+  private WOAssociation _idAssociation;
+  private WOAssociation _elementNameAssociation;
+  private WOAssociation _classAssociation;
+  private WOAssociation _valueAssociation;
+  private WOAssociation _useDecimalNumber;
+  private WOAssociation _escapeHTML;
 
-	public AjaxInPlaceEditor(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
-		super(name, associations, template);
-		_idAssociation = associations.objectForKey("id");
-		_elementNameAssociation = associations.objectForKey("elementName");
-		if (_elementNameAssociation == null) {
-			_elementNameAssociation = new WOConstantValueAssociation("div");
-		}
-		_classAssociation = associations.objectForKey("class");
-		_valueAssociation = associations.objectForKey("value");
-		// WO 5.5 I have no idea if I'm calling this right ... does it actually need direct access to the read associations array, or just a mutable
-		// dictionary?
-		_formatElementBehavior = WODynamicElementBehavior.ImplementationFactory.getInstance().newFormatElementBehavior(name, associations(), template, this);
-		_localizedFormatElementBehavior = WODynamicElementBehavior.ImplementationFactory.getInstance().newLocalizedElementBehavior(name, associations(), template, this);
-	}
+  private WOFormatElementBehaviorImplementation<WOFormatElementBehavior> _formatElementBehavior;
+
+  private WOLocalizedFormatElementBehaviorImplementation<WOLocalizedFormatElementBehavior> _localizedFormatElementBehavior;
+
+  public AjaxInPlaceEditor(String name, NSMutableDictionary<String, WOAssociation> associations, WOElement template) {
+    super(name, associations, template);
+    _idAssociation = (WOAssociation) associations.objectForKey("id");
+    _elementNameAssociation = (WOAssociation) associations.objectForKey("elementName");
+    if (_elementNameAssociation == null) {
+      _elementNameAssociation = new WOConstantValueAssociation("div");
+    }
+    _classAssociation = (WOAssociation) associations.objectForKey("class");
+    _valueAssociation = (WOAssociation) associations.objectForKey("value");
+    _useDecimalNumber = (WOAssociation) associations.objectForKey("useDecimalNumber");
+    _escapeHTML = (WOAssociation) associations.objectForKey("escapeHTML");
+	_formatElementBehavior = WODynamicElementBehavior.ImplementationFactory.getInstance().newFormatElementBehavior(name, associations(), template, this);
+	_localizedFormatElementBehavior = WODynamicElementBehavior.ImplementationFactory.getInstance().newLocalizedElementBehavior(name, associations(), template, this);
+  }
 
 	/*
 	 * (non-Javadoc)
@@ -109,163 +113,163 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement implements WOFormatEle
 		return this.localizedFormatElementBehavior().shouldFormat();
 	}
 
-	public NSDictionary createAjaxOptions(WOComponent component) {
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
-		ajaxOptionsArray.addObject(new AjaxOption("okButton", AjaxOption.BOOLEAN));
-		ajaxOptionsArray.addObject(new AjaxOption("okText", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("cancelLink", AjaxOption.BOOLEAN));
-		ajaxOptionsArray.addObject(new AjaxOption("cancelText", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("cancelControl", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("savingText", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("clickToEditText", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("formId", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("externalControl", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("rows", AjaxOption.NUMBER));
-		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
-		ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
-		ajaxOptionsArray.addObject(new AjaxOption("cols", AjaxOption.NUMBER));
-		ajaxOptionsArray.addObject(new AjaxOption("size", AjaxOption.NUMBER));
-		ajaxOptionsArray.addObject(new AjaxOption("highlightcolor", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("highlightendcolor", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("savingClassName", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("formClassName", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("loadTextURL", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("loadingText", AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("callback", AjaxOption.SCRIPT));
-		ajaxOptionsArray.addObject(new AjaxOption("submitOnBlur", AjaxOption.BOOLEAN));
-		ajaxOptionsArray.addObject(new AjaxOption("valueWhenEmpty", AjaxOption.STRING));
-		// ajaxOptionsArray.addObject(new AjaxOption("ajaxOptions",
-		// AjaxOption.SCRIPT));
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-		return options;
+  public NSDictionary createAjaxOptions(WOComponent component) {
+    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    ajaxOptionsArray.addObject(new AjaxOption("okButton", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("okText", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("cancelLink", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("cancelText", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("cancelControl", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("savingText", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("clickToEditText", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("formId", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("externalControl", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("rows", AjaxOption.NUMBER));
+    ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("cols", AjaxOption.NUMBER));
+    ajaxOptionsArray.addObject(new AjaxOption("size", AjaxOption.NUMBER));
+    ajaxOptionsArray.addObject(new AjaxOption("highlightcolor", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("highlightendcolor", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("savingClassName", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("formClassName", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("loadTextURL", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("loadingText", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("callback", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("submitOnBlur", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("valueWhenEmpty", AjaxOption.STRING));
+    //ajaxOptionsArray.addObject(new AjaxOption("ajaxOptions", AjaxOption.SCRIPT));
+    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+    return options;
+  }
+
+  public void appendToResponse(WOResponse response, WOContext context) {
+    WOComponent component = context.component();
+    String id;
+    if (_idAssociation == null) {
+      id = ERXWOContext.safeIdentifierName(context, false);
+    }
+    else {
+      id = (String) _idAssociation.valueInComponent(component);
+    }
+    String elementName = (String) _elementNameAssociation.valueInComponent(component);
+    String actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
+    super.appendToResponse(response, context);
+    response.appendContentString("<");
+    response.appendContentString(elementName);
+    response.appendContentString(" id = \"");
+    response.appendContentString(id);
+    response.appendContentString("\"");
+    if (_classAssociation != null) {
+      String className = (String) _classAssociation.valueInComponent(component);
+      response.appendContentString(" class = \"");
+      response.appendContentString(className);
+      response.appendContentString("\"");
+    }
+    response.appendContentString(">");
+
+    _appendValueAttributeToResponse(response, context);
+
+    response.appendContentString("</");
+    response.appendContentString(elementName);
+    response.appendContentString(">");
+    AjaxUtils.appendScriptHeader(response);
+    response.appendContentString("new Ajax.InPlaceEditorWithEmptyText('");
+    response.appendContentString(id);
+    response.appendContentString("', '");
+    response.appendContentString(actionUrl);
+    response.appendContentString("',");
+    NSDictionary options = createAjaxOptions(component);
+    AjaxOptions.appendToResponse(options, response, context);
+    response.appendContentString(");");
+    AjaxUtils.appendScriptFooter(response);
+  }
+
+  protected void addRequiredWebResources(WOResponse response, WOContext context) {
+    AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+    AjaxUtils.addScriptResourceInHead(context, response, "builder.js");
+	AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
+	AjaxUtils.addScriptResourceInHead(context, response, "controls.js");
+	AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
+    AjaxUtils.addScriptResourceInHead(context, response, "wonder_inplace.js");
+  }
+
+  // Formatting/Parsing method "inspired by" WOTextField
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
+    WOComponent component = context.component();
+    String strValue = request.stringFormValueForKey("value");
+	Object objValue = strValue;
+	if ((strValue != null) && this.shouldFormat()) {
+		try {
+			objValue = this.parseValueInContext(strValue, context);
+		}
+		catch (Exception exception) {
+			if (log.isDebugEnabled()) {
+				log.debug("Formatter Exception ", exception);
+			}
+			// Now allow the component to handle the validation failure if
+			// desired
+			String keyPath = _valueAssociation.keyPath();
+			NSValidation.ValidationException validationException = new NSValidation.ValidationException("Formatter exception " + exception.getMessage(), strValue, keyPath, exception);
+			component.validationFailedWithException(validationException, strValue, keyPath);
+			return null; // don't touch the value if it failed validation
+		}
+        if (objValue != null && _useDecimalNumber != null && _useDecimalNumber.booleanValueInComponent(component)) {
+            objValue = new BigDecimal(objValue.toString());
+        }
+	}
+	else {
+		objValue = strValue;
 	}
 
-	public void appendToResponse(WOResponse response, WOContext context) {
-		WOComponent component = context.component();
-		String id;
-		if (_idAssociation == null) {
-			id = ERXWOContext.safeIdentifierName(context, false);
-		}
-		else {
-			id = (String) _idAssociation.valueInComponent(component);
-		}
-		String elementName = (String) _elementNameAssociation.valueInComponent(component);
-		String actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
-		super.appendToResponse(response, context);
-		response.appendContentString("<");
-		response.appendContentString(elementName);
-		response.appendContentString(" id = \"");
-		response.appendContentString(id);
-		response.appendContentString("\"");
-		if (_classAssociation != null) {
-			String className = (String) _classAssociation.valueInComponent(component);
-			response.appendContentString(" class = \"");
-			response.appendContentString(className);
-			response.appendContentString("\"");
-		}
-		response.appendContentString(">");
+    _valueAssociation.setValue(objValue, component);
 
-		_appendValueAttributeToResponse(response, context);
+    // just executing action, ignoring result
+    valueForBinding("action", component);
 
-		response.appendContentString("</");
-		response.appendContentString(elementName);
-		response.appendContentString(">");
-		AjaxUtils.appendScriptHeader(response);
-		response.appendContentString("new Ajax.InPlaceEditor('");
-		response.appendContentString(id);
-		response.appendContentString("', '");
-		response.appendContentString(actionUrl);
-		response.appendContentString("',");
-		NSDictionary options = createAjaxOptions(component);
-		AjaxOptions.appendToResponse(options, response, context);
-		response.appendContentString(");");
-		AjaxUtils.appendScriptFooter(response);
-	}
+    WOResponse response = AjaxUtils.createResponse(request, context);
+    _appendValueAttributeToResponse(response, context);
 
-	protected void addRequiredWebResources(WOResponse response, WOContext context) {
-		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
-		AjaxUtils.addScriptResourceInHead(context, response, "builder.js");
-		AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
-		AjaxUtils.addScriptResourceInHead(context, response, "controls.js");
-		AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
-		AjaxUtils.addScriptResourceInHead(context, response, "wonder_inplace.js");
-	}
+    return response;
+  }
 
-	// Formatting/Parsing method "inspired by" WOTextField
-	public WOActionResults handleRequest(WORequest request, WOContext context) {
-		WOComponent component = context.component();
-		String strValue = request.stringFormValueForKey("value");
-		Object objValue = strValue;
-		if ((strValue != null) && this.shouldFormat()) {
+  protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
+    WOComponent component = context.component();
+	Object valueValue = null;
+	if (_valueAssociation != null) {
+		valueValue = _valueAssociation.valueInComponent(component);
+		if (this.shouldLocalizeFormat()) {
 			try {
-				objValue = this.parseValueInContext(strValue, context);
+				valueValue = localizedFormatElementBehavior().formatValueInContext(valueValue, context);
 			}
 			catch (Exception exception) {
-				if (log.isDebugEnabled()) {
-					log.debug("Formatter Exception ", exception);
-				}
-				// Now allow the component to handle the validation failure if
-				// desired
-				String keyPath = _valueAssociation.keyPath();
-				NSValidation.ValidationException validationException = new NSValidation.ValidationException("Formatter exception " + exception.getMessage(), strValue, keyPath, exception);
-				component.validationFailedWithException(validationException, strValue, keyPath);
-				return null; // don't touch the value if it failed validation
+				log.error("Invalid localization format for value: " + valueValue, exception);
+				valueValue = null;
 			}
+
 		}
-		else {
-			objValue = strValue;
-		}
-		_valueAssociation.setValue(objValue, component);
-
-		// just executing action, ignoring result
-		valueForBinding("action", component);
-
-		WOResponse response = AjaxUtils.createResponse(request, context);
-		_appendValueAttributeToResponse(response, context);
-
-		return response;
-	}
-
-	protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
-		WOComponent component = context.component();
-		String valueToAppend = null;
-		Object valueValue = null;
-		if (_valueAssociation != null) {
-			valueValue = _valueAssociation.valueInComponent(component);
-			if (this.shouldLocalizeFormat()) {
-				try {
-					valueValue = localizedFormatElementBehavior().formatValueInContext(valueValue, context);
-				}
-				catch (Exception exception) {
-					log.error("Invalid localization format for value: " + valueValue, exception);
-					valueValue = null;
-				}
-
+		else if (valueValue == null && this.shouldFormat()) {
+			try {
+				valueValue = this.formatValueInContext(valueValue, context);
 			}
-			else if (valueValue == null && this.shouldFormat()) {
-				try {
-					valueValue = this.formatValueInContext(valueValue, context);
-				}
-				catch (Exception ex) {
-					log.error("Invalid format for value: " + valueValue, ex);
-					valueValue = null;
-				}
+			catch (Exception ex) {
+				log.error("Invalid format for value: " + valueValue, ex);
+				valueValue = null;
 			}
-		}
-		else {
-			log.warn("WARNING value binding is null !");
-		}
-
-		if (valueValue != null) {
-			valueToAppend = valueValue.toString();
-			response._appendTagAttributeAndValue(WOHTMLAttribute.Value, valueToAppend, true);
-		}
-
-		// Workaround for inplace control staying in "Saving..." mode forever
-		// when empty value was supplied
-		String contentString = response.contentString();
-		if (contentString == null || contentString.equals("")) {
-			response.appendContentString(" ");
 		}
 	}
+	else {
+		log.warn("WARNING value binding is null !");
+	}
+
+    if (valueValue != null) {
+    	String strValue = valueValue.toString();
+      if (_escapeHTML != null && _escapeHTML.booleanValueInComponent(component)) {
+    	  response.appendContentHTMLString(strValue);
+      }
+      else {
+    	  response.appendContentString(strValue);
+      }
+    }
+  }
 }

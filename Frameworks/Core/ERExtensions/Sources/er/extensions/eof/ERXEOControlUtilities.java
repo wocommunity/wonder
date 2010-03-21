@@ -62,6 +62,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
 
@@ -114,9 +115,7 @@ public class ERXEOControlUtilities {
         if (array != null && array.count() > 0) {
             EOEnterpriseObject eo = array.objectAtIndex(0);
             dataSource = new EOArrayDataSource(eo.classDescription(), eo.editingContext());
-            // WO 5.5
-            //dataSource.setArray(array);
-            dataSource.setArray((NSArray<Object>)array);
+            dataSource.setArray(array);
         }
         return dataSource;
     }
@@ -266,6 +265,21 @@ public class ERXEOControlUtilities {
         }
         
         return result;        
+    }
+    
+    /**
+     * Creates an enterprise object for the given entity
+     * name by first looking up the class description
+     * of the entity to create the enterprise object.
+     * The object is then inserted into the editing context
+     * and returned.
+     * @param <T> The enterprise object type
+     * @param ec editingContext to insert the created object into
+     * @param eoClass class of the enterprise object to be created
+     * @return created and inserted enterprise object of type T
+     */
+    public static <T extends EOEnterpriseObject> T createAndInsertObject(EOEditingContext ec, Class<T> eoClass) {
+    	return (T)createAndInsertObject(ec, eoClass.getSimpleName());
     }
 
     /**
@@ -550,14 +564,46 @@ public class ERXEOControlUtilities {
      *
      * @return objects in the given range
      */
-    public static <T extends EOEnterpriseObject> NSArray<T> objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
-    	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
-        NSDictionary<String, Object> hints = new NSDictionary<String, Object>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
-        clonedFetchSpec.setHints(hints);
-        return (NSArray<T>)ec.objectsWithFetchSpecification(clonedFetchSpec);
-    }
 
+    public static <T extends EOEnterpriseObject> NSArray<T> objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+		NSArray result;
+		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
+			// no hints on the fs
+			
+			// This used to turn the EO's into faults and then fetch the faults. The problem
+			// with that is that for abstract entities, this would fetch the objects one-by-one
+			// to determine what the correct EOGlobalID is for each subentity. Instead, I've
+			// changed this to created a global ID for each row (which supports being a guess)
+			// and then fetch the objects with the global IDs.
+			NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
+			EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+			NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+			for (Object obj : primKeys) {
+				NSDictionary pkDict = (NSDictionary) obj;
+				EOGlobalID gid = entity.globalIDForRow(pkDict);
+				gids.addObject(gid);
+			}
+			NSMutableArray objects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, gids, spec.refreshesRefetchedObjects());
+
+			if (spec.prefetchingRelationshipKeyPaths() != null && spec.prefetchingRelationshipKeyPaths().count() > 0) {
+				ERXBatchFetchUtilities.batchFetch(objects, spec.prefetchingRelationshipKeyPaths(), ! spec.refreshesRefetchedObjects());
+			}
+
+			ERXS.sort(objects, spec.sortOrderings());
+			result = objects.immutableClone();
+		}
+		else {
+			// we have hints, use them
+			
+			EOModel model = EOModelGroup.defaultGroup().entityNamed(spec.entityName()).model();
+			ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
+			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
+			String sql = sqlHelper.customQueryExpressionHintAsString(hint);
+			sql = sqlHelper.limitExpressionForSQL(null, spec, sql, start, end);
+			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
+		}
+		return result;
+	}
     /**
      * Returns an {@link com.webobjects.foundation.NSArray NSArray} containing the primary keys from the resulting rows starting
      * at start and stopping at end using a custom SQL, derived from the SQL
@@ -577,7 +623,7 @@ public class ERXEOControlUtilities {
         spec.setRawRowKeyPaths(pkNames);
     	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
-        NSDictionary<String, Object> hints = new NSDictionary<String, Object>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
+        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
         clonedFetchSpec.setHints(hints);
         return ec.objectsWithFetchSpecification(clonedFetchSpec);
     }
@@ -1091,7 +1137,7 @@ public class ERXEOControlUtilities {
         }
         
         if(string.trim().length()==0) {
-            return NSDictionary.<String, Object>emptyDictionary();
+            return NSDictionary.<String, Object> emptyDictionary();
         }
         
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
@@ -1259,7 +1305,7 @@ public class ERXEOControlUtilities {
      * @return array of objects matching the constructed qualifier
      */
     public static NSArray objectsWithQualifier(EOEditingContext editingContext, String entityName, EOQualifier qualifier, NSArray prefetchKeyPaths, boolean includeNewObjects, boolean includeNewObjectsInParentEditingContext, boolean filterUpdatedObjects, boolean removeDeletedObjects) {
-    	return ERXEOControlUtilities.objectsWithQualifier(editingContext, entityName, qualifier, prefetchKeyPaths, null, false, true, null, includeNewObjects, includeNewObjectsInParentEditingContext, filterUpdatedObjects, removeDeletedObjects);
+    	return ERXEOControlUtilities.objectsWithQualifier(editingContext, entityName, qualifier, prefetchKeyPaths, null, 0, false, true, null, includeNewObjects, includeNewObjectsInParentEditingContext, filterUpdatedObjects, removeDeletedObjects);
     }
     
     /**
@@ -1288,6 +1334,36 @@ public class ERXEOControlUtilities {
      */
     // ENHANCEME: This should handle entity inheritance for in memory filtering
     public static NSArray objectsWithQualifier(EOEditingContext editingContext, String entityName, EOQualifier qualifier, NSArray prefetchKeyPaths, NSArray sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints, boolean includeNewObjects, boolean includeNewObjectsInParentEditingContext, boolean filterUpdatedObjects, boolean removeDeletedObjects) {
+    	return objectsWithQualifier(editingContext, entityName, qualifier, prefetchKeyPaths, sortOrderings, 0, usesDistinct, isDeep, hints, includeNewObjects, includeNewObjectsInParentEditingContext, filterUpdatedObjects, removeDeletedObjects);
+    }
+    
+    /**
+     * Utility method used to fetch an array of objects given a qualifier. Also
+     * has support for filtering the newly inserted, updateed, and deleted objects in the 
+     * passed editing context or any parent editing contexts as well as specifying prefetching 
+     * key paths.  Note that only NEW objects are supported in parent editing contexts.
+     * 
+     * @param editingContext editing context to fetch it into
+     * @param entityName name of the entity
+     * @param qualifier qualifier
+     * @param prefetchKeyPaths prefetching key paths
+     * @param sortOrderings the sort orderings to use on the results
+     * @param fetchLimit the fetch limit to use
+     * @param usesDistinct whether or not to distinct the results
+     * @param isDeep whether or not to fetch deeply
+     * @param hints fetch hints to apply
+     * @param includeNewObjects option to include newly inserted objects in the result set
+     * @param includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
+     *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the
+     *        qualifier are collected and faulted down through all parent editing contexts of ec.
+     * @param filterUpdatedObjects option to include updated objects that now match the qualifier or remove updated
+     *         objects thats no longer match the qualifier
+     * @param removeDeletedObjects option to remove objects that have been deleted
+     *
+     * @return array of objects matching the constructed qualifier
+     */
+    // ENHANCEME: This should handle entity inheritance for in memory filtering
+    public static NSArray objectsWithQualifier(EOEditingContext editingContext, String entityName, EOQualifier qualifier, NSArray prefetchKeyPaths, NSArray sortOrderings, int fetchLimit, boolean usesDistinct, boolean isDeep, NSDictionary hints, boolean includeNewObjects, boolean includeNewObjectsInParentEditingContext, boolean filterUpdatedObjects, boolean removeDeletedObjects) {
     	boolean objectsMayGetAdded = includeNewObjects || includeNewObjectsInParentEditingContext || filterUpdatedObjects;
     	NSArray<EOSortOrdering> fetchSortOrderings = sortOrderings;
     	if (objectsMayGetAdded) {
@@ -1303,6 +1379,7 @@ public class ERXEOControlUtilities {
     		}
     	}
       EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, fetchSortOrderings);
+      fs.setFetchLimit(fetchLimit);
       fs.setPrefetchingRelationshipKeyPaths(prefetchKeyPaths);
       fs.setIsDeep(isDeep);
       fs.setUsesDistinct(usesDistinct);

@@ -1,0 +1,179 @@
+body {
+	background-image: url(../images/background.png);
+	background-color: rgb(50, 50, 50);
+	font-family: Helvetica;
+	font-size: 14pt;
+}
+
+div#header {
+	background-image: url(../images/headerHighlight.png);
+	background-repeat: no-repeat;
+	background-position: top right;
+}
+
+div#header h1 {
+	text-align: right;
+	padding: 0px;
+	margin: 0px;
+	margin-right: 1em;
+}
+
+div#header h1 a {
+	color: rgb(255, 255, 255);
+	text-decoration: none;
+}
+
+div#header h1 span.title {
+	color: rgb(180, 180, 180);
+	text-transform: lowercase;
+	font-size: 0.5em;
+	margin-right: 2em;
+}
+
+div.panel {
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-webkit-box-shadow: 0px 5px 20px rgb(0, 0, 0);
+	background-color: rgb(255, 0, 0);
+	margin: 2em;
+	padding: 0px;
+}
+
+div.panel div.title {
+	background-image: url(../images/titleBackground.png);
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	color: rgb(255, 255, 255);
+	background-color: rgb(65, 111, 147);
+	margin: 0px;
+	padding: 0.3em 1em;
+}
+
+div.panel div.content {
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	color: rgb(51, 51, 51);
+	background-color: rgb(255, 255, 255);
+	margin: 0px;
+	padding: 0.3em 1em;
+}
+
+div.panel div.content {
+	color: rgb(51, 51, 51);
+}
+
+div.panel div.content ul {
+	list-style-type: square;
+	margin: 0px;
+	padding-left: 2em;
+	line-height: 1.5em;
+	margin-bottom: 1em;
+}
+
+div.panel div.content ul li {
+	margin: 0px;
+}
+
+a {
+	color: rgb(184, 33, 40);
+	text-decoration: none;
+}
+
+span.actual {
+	color: rgb(184, 33, 40);
+}
+
+div.entityStats {
+	margin-bottom: 1em;
+	border-bottom: 1px solid rgb(220, 220, 220);
+}
+
+div.snapshotExpansion {
+	margin-left: 0px;
+}
+
+div.snapshotExpansion > a {
+	text-decoration: none;
+	vertical-align: top;
+	color: rgb(140, 140, 140);
+}
+
+div.snapshotExpansion > a img {
+	border: none;
+}
+
+h3 {
+	margin-bottom: 0.3em;
+	font-size: 1em;
+}
+
+a.snapshotsLink {
+	background-image: url(../images/triangleRight.gif);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	margin-left: 0px;
+	color: rgb(140, 140, 140);
+	font-size: 0.8em;
+	text-decoration: none;
+}
+
+a.snapshotsLink.expanded {
+	background-image: url(../images/triangleDown.gif);
+}
+
+div.snapshotsContainer {
+	overflow: scroll;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	padding-top: 0.5em;
+	padding-left: 0.5em;
+	border: 1px solid rgb(200, 200, 200);
+	background-color: rgb(220, 220, 220);
+}
+
+table tr th {
+	padding: 0.3em;
+	padding-right: 2em;
+	white-space: nowrap;
+}
+
+table tr td {
+	border-bottom: 1px solid rgb(200, 200, 200);
+	padding: 0.3em;
+	padding-right: 2em;
+	white-space: nowrap;
+}
+
+th {
+	text-align: left;
+}
+
+tr {
+	vertical-align: top;
+}
+
+table.models {
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+table.models td {
+	padding: 0px;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+table.models td.snapshotCount {
+	text-align: right;
+	padding-right: 0em;
+}
+
+div.title a {
+	color: rgb(255, 255, 255);
+}
+
+div.title .details {
+	text-align: right;
+	float: right;
+}

@@ -11,7 +11,7 @@ public class AjaxGridExampleFormInputCellComponent extends WOComponent {
 
 	public String value;
 	public AjaxGrid grid;
-	public NSArray levelList = new NSArray(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
+	public NSArray<String> levelList = new NSArray<String>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
 	public String aLevel;
 	protected String uniqueFunctionName;
 
@@ -29,7 +29,7 @@ public class AjaxGridExampleFormInputCellComponent extends WOComponent {
 
 		// If this component was not synchronzing, we would need to change the
 		// value in grid.row() instead
-		value = (String) levelList.objectAtIndex(levelIndex);
+		value = levelList.objectAtIndex(levelIndex);
 	}
 
 	public String executeUpdateLevel() {

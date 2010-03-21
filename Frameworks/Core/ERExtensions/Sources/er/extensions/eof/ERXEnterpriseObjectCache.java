@@ -13,6 +13,7 @@ import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.eocontrol._EOVectorKeyGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -388,6 +389,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     	if (_retainObjects) {
     		EOEditingContext editingContext = editingContext();
     		T localEO = ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
+    		if (localEO != null && localEO.isFault()) {
+    			localEO.willRead();
+    		}
     		record = new EORecord<T>(gid, localEO);
     	}
     	else {
@@ -404,22 +408,26 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             _fetchTime = System.currentTimeMillis();
             ERXEC ec = editingContext();
             ec.setCoalesceAutoLocks(false);
-            ec.lock();	// Prevents lock churn
-            try {
-        		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(entityName(), qualifier(), null);
-        		fetchSpec.setRefreshesRefetchedObjects(true);
-        		fetchSpec.setIsDeep(true);
-        		NSArray objects = ec.objectsWithFetchSpecification(fetchSpec);
-                for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
-                    T eo = (T) enumeration.nextElement();
-                    addObject(eo);
-                }
-            } finally {
-                ec.unlock();
-                if ( ! _reuseEditingContext) {
-                	ec.dispose();
-                }
-            }
+            // The other methods are synchronized on cache and then lock the EC.  If we do it backwards, 
+            // we can get a deadly embrace.
+    		synchronized (cache()) {
+	            ec.lock();	// Prevents lock churn
+	            try {
+	        		ERXFetchSpecification fetchSpec = new ERXFetchSpecification(entityName(), qualifier(), null);
+	        		fetchSpec.setRefreshesRefetchedObjects(true);
+	        		fetchSpec.setIsDeep(true);
+	        		NSArray objects = ec.objectsWithFetchSpecification(fetchSpec);
+	                for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
+	                    T eo = (T) enumeration.nextElement();
+	                    addObject(eo);
+	                }
+	            } finally {
+	                ec.unlock();
+	                if ( ! _reuseEditingContext) {
+	                	ec.dispose();
+	                }
+	            }
+    		}
         }
     }
 
@@ -430,6 +438,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     public void addObject(T eo) {
         Object key = eo.valueForKeyPath(keyPath());
+        if (key == null) {
+        	key = NSKeyValueCoding.NullValue;
+        }
         addObjectForKey(eo, key);
     }
 
@@ -457,6 +468,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     public void removeObject(T eo) {
         Object key = eo.valueForKeyPath(keyPath());
+        if (key == null) {
+        	key = NSKeyValueCoding.NullValue;
+        }
         removeObjectForKey(eo, key);
     }
 
@@ -478,6 +492,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     public void updateObject(T eo) {
         Object key = eo.valueForKeyPath(keyPath());
+        if (key == null) {
+        	key = NSKeyValueCoding.NullValue;
+        }
         updateObjectForKey(eo, key);
     }
 
@@ -649,27 +666,32 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     protected void handleUnsuccessfullQueryForKey(Object key) {
     	if (!_fetchInitialValues) {
-            ERXEC editingContext = editingContext();
-        	editingContext.lock();
-        	try {
-        		NSArray<T> objects = fetchObjectsForKey(editingContext, key);
-    			if (objects.count() == 0) {
-    				cache().setObjectForKey(createRecord(NO_GID_MARKER, null), key);
-    			}
-    			else if (objects.count() == 1) {
-        			T eo = objects.objectAtIndex(0);
-        			addObject(eo);
-    			}
-    			else {
-    				throw new EOUtilities.MoreThanOneException("There was more than one " + _entityName + " with the key '" + key + "'.");
-    			}
-        	}
-        	finally {
-        		editingContext.unlock();
-        		if (!_reuseEditingContext) {
-        			editingContext.dispose();
-        		}
-        	}
+    		ERXExpiringCache cache = cache();
+            // The other methods are synchronized on cache and then lock the EC.  If we do it backwards, 
+            // we can get a deadly embrace.
+    		synchronized (cache) {
+                ERXEC editingContext = editingContext();
+            	editingContext.lock();
+            	try {
+            		NSArray<T> objects = fetchObjectsForKey(editingContext, key);
+        			if (objects.count() == 0) {
+        				cache.setObjectForKey(createRecord(NO_GID_MARKER, null), key);
+        			}
+        			else if (objects.count() == 1) {
+            			T eo = objects.objectAtIndex(0);
+            			addObject(eo);
+        			}
+        			else {
+        				throw new EOUtilities.MoreThanOneException("There was more than one " + _entityName + " with the key '" + key + "'.");
+        			}
+            	}
+            	finally {
+            		editingContext.unlock();
+            		if (!_reuseEditingContext) {
+            			editingContext.dispose();
+            		}
+            	}
+			}
     	}
     	else {
     		cache().setObjectForKey(createRecord(NO_GID_MARKER, null), key);

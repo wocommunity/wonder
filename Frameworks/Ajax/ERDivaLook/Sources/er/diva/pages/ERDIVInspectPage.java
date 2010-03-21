@@ -11,10 +11,11 @@ import er.extensions.foundation.ERXProperties;
 
 
 /**
- * Inspect page template for Diva 'look'
+ * Inspect page template for Diva 'look'.
  * 
- * @author mendis
+ * @property er.prototaculous.useUnobtrusively Support for Unobtrusive Javascript programming.
  *
+ * @author mendis
  */
 public class ERDIVInspectPage extends ERD2WTabInspectPage implements ERDIVPageInterface {
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", true);

@@ -13,6 +13,7 @@ public class Word {
 		this.value = name.length();
 	}
 
+	@Override
 	public String toString() {
 		return "<" + name + ": " + value + ">";
 	}

@@ -32,11 +32,8 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXDatabase.CacheChange;
-import er.extensions.eof.ERXDatabase.SnapshotDeleted;
-import er.extensions.eof.ERXDatabase.SnapshotInserted;
-import er.extensions.eof.ERXDatabase.SnapshotUpdated;
-import er.extensions.eof.ERXDatabase.ToManySnapshotUpdated;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 
 /**
@@ -70,21 +67,26 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 
 	private static NSMutableDictionary _cacheChanges = new NSMutableDictionary();
 	private NSMutableArray _coordinators;
-	private ProcessChangesQueue _queueThread;
+	private ProcessChangesQueue _queue;
+	protected Thread _queueThread;
 	private ERXRemoteSynchronizer _remoteSynchronizer;
 	private SynchronizerSettings _defaultSettings;
 	private NSMutableDictionary<EOObjectStoreCoordinator, SynchronizerSettings> _settings;
 
 	private ERXObjectStoreCoordinatorSynchronizer() {
 		_coordinators = new NSMutableArray();
-		_queueThread = new ProcessChangesQueue();
+		_queue = new ProcessChangesQueue();
 		_defaultSettings = new SynchronizerSettings(true, true, true, true);
 		_settings = new NSMutableDictionary<EOObjectStoreCoordinator, SynchronizerSettings>();
 
-		new Thread(_queueThread).start();
+		_queueThread = new Thread(_queue);
+		_queueThread.setName("ERXOSCProcessChanges");
+		_queueThread.setDaemon(true);
+		_queueThread.start();
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasAdded", ERXConstant.NotificationClassArray), EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification, null);
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasRemoved", ERXConstant.NotificationClassArray), EOObjectStoreCoordinator.CooperatingObjectStoreWasRemovedNotification, null);
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("startRemoteSynchronizer", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("stopRemoteSynchronizer", ERXConstant.NotificationClassArray), ERXApplication.ApplicationWillTerminateNotification, null);
 	}
 
 	public void setDefaultSettings(SynchronizerSettings defaultSettings) {
@@ -112,7 +114,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		boolean remoteSynchronizerEnabled = ERXRemoteSynchronizer.remoteSynchronizerEnabled();
 		if (remoteSynchronizerEnabled) {
 			try {
-				_remoteSynchronizer = ERXRemoteSynchronizer.newRemoteSynchronizer(_queueThread);
+				_remoteSynchronizer = ERXRemoteSynchronizer.newRemoteSynchronizer(_queue);
 				_remoteSynchronizer.join();
 				_remoteSynchronizer.listen();
 			}
@@ -124,6 +126,10 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 
 	public void startRemoteSynchronizer(NSNotification n) {
 		initializeRemoteSynchronizer();
+	}
+	
+	public void stopRemoteSynchronizer(NSNotification n) {
+		_queue.stop();
 	}
 
 	public void objectStoreWasRemoved(NSNotification n) {
@@ -174,7 +180,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			NSDictionary userInfo = n.userInfo();
 			if (userInfo == null || userInfo.valueForKey(ERXObjectStoreCoordinatorSynchronizer.SYNCHRONIZER_KEY) == null) {
 				LocalChange changes = new LocalChange(osc, userInfo, processingMulticastNotifications);
-				_queueThread.addChange(changes);
+				_queue.addChange(changes);
 			}
 		}
 	}
@@ -219,6 +225,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 	 * EOF stack to another.
 	 */
 	private class ProcessChangesQueue implements Runnable, IChangeListener {
+		private boolean _running;
+		
 		private abstract class SnapshotProcessor {
 			public abstract void processSnapshots(EODatabaseContext dbc, EODatabase database, NSDictionary snapshots, SynchronizerSettings settings);
 		}
@@ -458,7 +466,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private CacheChangeProcessor _deleteCacheChangeProcessor = new DeleteCacheChangeProcessor();
 		private CacheChangeProcessor _toManyUpdateCacheChangeProcessor = new ToManyUpdateCacheChangeProcessor();
 
-		private ProcessChangesQueue() {
+		protected ProcessChangesQueue() {
 			Thread.currentThread().setName("ProcessChangesQueue");
 		}
 
@@ -561,37 +569,53 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		public void run() {
-			boolean run = true;
-			while (run) {
-				Change changes = null;
-				synchronized (_elements) {
-					try {
-						if (_elements.isEmpty()) {
-							_elements.wait();
+			try {
+				_running = true;
+				while (_running) {
+					Change changes = null;
+					synchronized (_elements) {
+						try {
+							if (_elements.isEmpty()) {
+								_elements.wait();
+							}
+							if (!_elements.isEmpty()) {
+								changes = (Change) _elements.remove(0);
+							}
 						}
-						if (!_elements.isEmpty()) {
-							changes = (Change) _elements.remove(0);
+						catch (InterruptedException e) {
+							if (_running) {
+								log.warn("Interrupted: " + e, e);
+							}
+							_running = false;
 						}
 					}
-					catch (InterruptedException e) {
-						run = false;
-						log.warn("Interrupted: " + e, e);
+					if (changes != null) {
+						if (changes instanceof LocalChange) {
+							LocalChange localChange = (LocalChange) changes;
+							EOObjectStoreCoordinator sender = localChange.coordinator();
+							process(sender, _deleteProcessor, localChange.deleted(), EODatabaseContext.DeletedKey);
+							process(sender, _insertProcessor, localChange.inserted(), EODatabaseContext.InsertedKey);
+							process(sender, _updateProcessor, localChange.updated(), EODatabaseContext.UpdatedKey);
+							process(sender, _invalidateProcessor, localChange.invalidated(), EODatabaseContext.InvalidatedKey);
+							publishRemoteChanges(_transactionID++, localChange);
+						}
+						else if (changes instanceof RemoteChange) {
+							processRemoteChange((RemoteChange) changes);
+						}
 					}
 				}
-				if (changes != null) {
-					if (changes instanceof LocalChange) {
-						LocalChange localChange = (LocalChange) changes;
-						EOObjectStoreCoordinator sender = localChange.coordinator();
-						process(sender, _deleteProcessor, localChange.deleted(), EODatabaseContext.DeletedKey);
-						process(sender, _insertProcessor, localChange.inserted(), EODatabaseContext.InsertedKey);
-						process(sender, _updateProcessor, localChange.updated(), EODatabaseContext.UpdatedKey);
-						process(sender, _invalidateProcessor, localChange.invalidated(), EODatabaseContext.InvalidatedKey);
-						publishRemoteChanges(_transactionID++, localChange);
-					}
-					else if (changes instanceof RemoteChange) {
-						processRemoteChange((RemoteChange) changes);
-					}
-				}
+			} catch (Throwable e) {
+				log.error(e, e);
+			}
+		}
+		
+		public void stop() {
+			if (_queueThread != null && _queueThread.isAlive()) {
+				_running = false;
+				_queueThread.interrupt();
+			}
+			else {
+				throw new IllegalStateException("Attempted to stop the " + getClass().getSimpleName() + " when it wasn't already running");
 			}
 		}
 	}

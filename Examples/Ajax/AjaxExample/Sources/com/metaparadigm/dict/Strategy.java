@@ -34,7 +34,8 @@ public class Strategy
 	this.description = description;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
 	return "strategy: " + strategy + " \"" + description + "\"";
     }

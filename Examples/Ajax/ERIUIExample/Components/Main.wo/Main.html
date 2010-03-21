@@ -1,19 +1,18 @@
-<wo:ERIUIContainer title = "Settings">
+<wo:ERIUIContainer title = "Performers">
 	<wo:ERXWOTemplate templateName = "toolbar">
-		<wo:ERIUIBackButton action = "$something">Back</wo:ERIUIBackButton>
-		<wo:ERIUIButton pageName = "Prefs">Prefs</wo:ERIUIButton>
+		<wo:ERIUILeftButton pageName = "Prefs">Prefs</wo:ERIUILeftButton>
+                <wo:ERIUIDialogButton title = "Search" string = "Search" dialogVisible = "$searchVisible">
+                        <wo:form multipleSubmit = "$true" action = "$search">
+                                <wo:ERIUIGoButton action = "$search" value = "Search"/>
+                                <input type = "search" value = ""/>
+                        </wo:form>
+                </wo:ERIUIDialogButton>
 	</wo:ERXWOTemplate>
-	
 	<wo:ERXWOTemplate templateName = "content">
 		<ul>
-			<li><wo:ERIUINextLink action = "$something">Main LI Link 1</wo:ERIUINextLink></li>
-			<li><wo:ERIUINextLink action = "$something">Main LI Link 2</wo:ERIUINextLink></li>
-			<li><wo:ERIUINextLink action = "$something">Main LI Link 3</wo:ERIUINextLink></li>
-			<li><wo:ERIUINextLink action = "$something">Main LI Link 4</wo:ERIUINextLink></li>
-			<li><wo:ERIUINextLink action = "$something">Main LI Link 5</wo:ERIUINextLink></li>
-			<li><wo:ERIUINextLink action = "$something">Main LI Link 6</wo:ERIUINextLink></li>
-			<li><wo:ERIUINextLink action = "$something">Main LI Link 7</wo:ERIUINextLink></li>
-			<li><wo:ERIUIPreviousLink action = "$something">Slide Left Link</wo:ERIUIPreviousLink></li>
+		<wo:loop list="$performers" item="$performer">
+			<li><wo:ERIUINextLink action = "$toPerformer"><wo:str value="$performer.name" /></wo:ERIUINextLink></li>
+		</wo:loop>
 		</ul>
 	</wo:ERXWOTemplate>
 </wo:ERIUIContainer>

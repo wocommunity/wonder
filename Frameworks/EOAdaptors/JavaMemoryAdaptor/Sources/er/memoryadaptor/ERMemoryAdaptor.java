@@ -18,51 +18,59 @@ import com.webobjects.foundation.NSDictionary;
  * @author mschrag
  */
 public class ERMemoryAdaptor extends EOAdaptor {
-  public ERMemoryAdaptor(String name) {
-    super(name);
-  }
 
-  @Override
-  public void setConnectionDictionary(NSDictionary<String, Object> dictionary) {
-    if (dictionary == null) {
-      super.setConnectionDictionary(NSDictionary.<String, Object>emptyDictionary());
-    }
-    else {
-      super.setConnectionDictionary(dictionary);
-    }
-  }
+	private Object _syncFactory;
 
-  @Override
-  public void assertConnectionDictionaryIsValid() {
-    // DO NOTHING
-  }
+	public ERMemoryAdaptor(String name) {
+		super(name);
+	}
 
-  @Override
-  public EOAdaptorContext createAdaptorContext() {
-    return new ERMemoryAdaptorContext(this);
-  }
+	@Override
+	public void setConnectionDictionary(NSDictionary<String, Object> dictionary) {
+		if (dictionary == null) {
+			super.setConnectionDictionary(NSDictionary.<String, Object> emptyDictionary());
+		}
+		else {
+			super.setConnectionDictionary(dictionary);
+		}
+	}
 
-  @Override
-  public Class defaultExpressionClass() {
-    throw new UnsupportedOperationException("ERMemoryAdaptor.defaultExpressionClass");
-  }
+	@Override
+	public void assertConnectionDictionaryIsValid() {
+		// DO NOTHING
+	}
 
-  @Override
-  public EOSQLExpressionFactory expressionFactory() {
-    return null;
-  }
+	@Override
+	public EOAdaptorContext createAdaptorContext() {
+		return new ERMemoryAdaptorContext(this);
+	}
 
-  @Override
-  public boolean isValidQualifierType(String typeName, EOModel model) {
-    return true;
-  }
+	@Override
+	public boolean isValidQualifierType(String typeName, EOModel model) {
+		return true;
+	}
 
-  @Override
-  public EOSchemaGeneration synchronizationFactory() {
-    throw new UnsupportedOperationException("ERMemoryAdaptor.synchronizationFactory");
-  }
+	// Required for Migrations
+	@Override
+	public Class defaultExpressionClass() {
+		return ERMemoryExpression.class;
+	}
 
-  public EOSynchronizationFactory schemaSynchronizationFactory() {
-    throw new UnsupportedOperationException("ERMemoryAdaptor.schemaSynchronizationFactory");
-  }
+	@Override
+	public EOSQLExpressionFactory expressionFactory() {
+		return null; // new ERMemoryExpressionFactory(this);
+	}
+
+	@Override
+	public EOSchemaGeneration synchronizationFactory() {
+		if (_syncFactory == null) {
+			_syncFactory = new ERMemorySynchronizationFactory(this);
+		}
+		return (EOSchemaGeneration) _syncFactory;
+	}
+
+	// MS: This has to return null to prevent a stack overflow in 5.4.
+	public EOSynchronizationFactory schemaSynchronizationFactory() {
+		return null;
+	}
 }

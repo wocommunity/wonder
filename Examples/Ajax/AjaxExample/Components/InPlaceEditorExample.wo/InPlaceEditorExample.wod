@@ -6,6 +6,7 @@ InLineEditorUpdater : AjaxUpdateContainer {
 
 InPlaceEditorSimple : AjaxInPlaceEditor {
 	value = exampleValue;
+	action = saveOnChange;
 }
 
 InPlaceEditorMultiline : AjaxInPlaceEditor {

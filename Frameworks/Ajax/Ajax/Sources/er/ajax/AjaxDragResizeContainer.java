@@ -13,6 +13,31 @@ import com.webobjects.foundation.NSNumberFormatter;
 
 import er.extensions.appserver.ERXWOContext;
 
+/**
+ * 
+ * @binding minWidth
+ * @binding minHeight
+ * @binding minLeft
+ * @binding minTop
+ * @binding maxLeft
+ * @binding maxTop
+ * @binding ondragfocus
+ * @binding ondragblur
+ * @binding ondragstart
+ * @binding ondragmove
+ * @binding ondragend
+ * @binding dimensionsFromElementWithID
+ * @binding id
+ * @binding class
+ * @binding drsElement
+ * @binding drsMoveHandle
+ * @binding report
+ * @binding action
+ * @binding skipContainer When set to true, the container div including nested
+ *          content is omitted. Use this if you want to use an existing element
+ *          as container. Make sure, this element is "position:relative" and
+ *          specify it's dom id using the id binding.
+ */
 public class AjaxDragResizeContainer extends AjaxComponent {
 
 	public static final String EVENT_BLUR = "dragblur";

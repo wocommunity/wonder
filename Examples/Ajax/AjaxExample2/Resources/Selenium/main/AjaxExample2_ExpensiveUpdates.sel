@@ -1,0 +1,8 @@
+Test for Expensive Updates page
+
+|open|/|
+
+|click|link=Expensive Updates|
+|pause|1200|
+|verifyTextPresent|Sometimes you can't use a periodic updater|
+

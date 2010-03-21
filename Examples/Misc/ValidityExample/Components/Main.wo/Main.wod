@@ -3,8 +3,14 @@ Footer1: Footer {
 
 Hyperlink1: WOHyperlink {
 	action = goToAllTogetherPage;
+	id = "allTogetherPageLink";
 }
 
 Hyperlink2: WOHyperlink {
 	action = goToSeparatePage;
+	id = "separatePageLink";
+}
+
+SeleniumTestLink : WOHyperlink {
+	actionClass = "er.selenium.SeleniumStartTesting";
 }

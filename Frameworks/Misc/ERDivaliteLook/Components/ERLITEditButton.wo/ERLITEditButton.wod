@@ -1,0 +1,14 @@
+Conditional1: WOConditional {
+	condition = isEditable;
+}
+
+Conditional2: WOConditional {
+	condition = isEditable;
+	negate = true;
+}
+
+EditEO: WOHyperlink {
+	action = editObjectAction;
+	title = ^displayNameForEditConfiguration;
+	class = "ERDEditButton2";
+}

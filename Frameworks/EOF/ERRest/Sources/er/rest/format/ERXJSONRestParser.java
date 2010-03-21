@@ -18,7 +18,7 @@ import er.rest.ERXRestUtils;
  * @author mschrag
  */
 public class ERXJSONRestParser implements IERXRestParser {
-	protected static ERXRestRequestNode createRequestNodeForJSON(String name, JSON json, boolean rootNode, ERXRestFormat.Delegate delegate) {
+	public static ERXRestRequestNode createRequestNodeForJSON(String name, JSON json, boolean rootNode, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name, rootNode);
 
 		if (json instanceof JSONNull) {
@@ -78,6 +78,10 @@ public class ERXJSONRestParser implements IERXRestParser {
 
 			JSON rootJSON = JSONSerializer.toJSON(contentStr, ERXJSONRestWriter._config);
 			rootRequestNode = createRequestNodeForJSON(null, rootJSON, true, delegate);
+		}
+		else {
+			rootRequestNode = new ERXRestRequestNode(null, true);
+			rootRequestNode.setNull(true);
 		}
 
 		return rootRequestNode;

@@ -115,15 +115,6 @@ public class ERXCompressionUtilities {
 		}
 	}
 
-	public static String gzipString(String source) {
-		try {
-			return new String(gzipByteArray(source.getBytes("UTF-8")), "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			return null;
-		}
-	}
-
 	public static String gunzipString(String source) {
 		try {
 			byte[] b = gunzipByteArray(source.getBytes("UTF-8"));

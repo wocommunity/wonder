@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo wocomponentcontent="false" class="ERAttachmentUpload">
+	<wo class="ERAttachmentUpload" wocomponentcontent="false">
 		<binding name="editingContext"/>	
 		<binding name="storageType"/>	
 		<binding name="attachment"/>	
@@ -28,12 +28,14 @@
 		<binding name="refreshTime"/>
 		<binding name="keepTempFile"/>
 		
-		<validation message="&apos;editingContext&apos; is required.">
+		<validation message="'editingContext' is required.">
 			<unbound name="editingContext"/>
 		</validation>
 		
-		<validation message="&apos;attachment&apos; is required.">
+		<validation message="'attachment' is required.">
 			<unbound name="attachment"/>
 		</validation>
-	</wo>
+	<binding name="class"/>
+        <binding name="style"/>
+    </wo>
 </wodefinitions>

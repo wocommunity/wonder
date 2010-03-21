@@ -144,8 +144,8 @@ public class ERXMigrationDatabase {
 		_adaptorChannel = adaptorChannel;
 		_model = model;
 		_tables = new NSMutableArray<ERXMigrationTable>();
-		_languages = (NSArray) model.userInfo().objectForKey(ERXModelGroup.LANGUAGES_KEY);
-		if(model.userInfo().objectForKey(ERXModelGroup.LANGUAGES_KEY) != null) {
+		_languages = languages;
+		if (model.userInfo().objectForKey(ERXModelGroup.LANGUAGES_KEY) != null) {
 			_languages = ERXProperties.arrayForKey(ERXModelGroup.LANGUAGES_KEY);
 		}
 	}

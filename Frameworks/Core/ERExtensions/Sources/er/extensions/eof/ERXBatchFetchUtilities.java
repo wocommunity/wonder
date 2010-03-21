@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSRange;
 
 /**
  * ERXBatchFetchUtilities provides a collection of methods to support efficiently 
@@ -152,6 +153,30 @@ public class ERXBatchFetchUtilities {
             osc.unlock();
         }
     }
+
+	/**
+	 * Overloads batchFetch(NSArray, NSArray, boolean) to batch through the
+	 * NSArray of sourceObjects batchSize at a time.
+	 * 
+	 * @see #batchFetch(NSArray, NSArray, boolean)
+	 * 
+	 * @author aman - Mar 11, 2009
+	 * @param sourceObjects
+	 * @param keypaths
+	 * @param skipFaultedSourceObjects
+	 * @param batchSize
+	 */
+    public static void batchFetch(NSArray sourceObjects, NSArray keypaths, boolean skipFaultedSourceObjects, int batchSize) {
+		for (int i = 0; i < sourceObjects.count(); i += batchSize) {
+			int rangeSize = batchSize;
+			if (i + batchSize > sourceObjects.count()) {
+				rangeSize = sourceObjects.count() - i;
+			}
+			NSRange range = new NSRange(i, rangeSize);
+			NSArray batchedSourceObjects = sourceObjects.subarrayWithRange(range);
+			batchFetch(batchedSourceObjects, keypaths, skipFaultedSourceObjects);
+		}
+	}
 
     /**
      * This class represent a keypath as a hierarchical tree structure(path and

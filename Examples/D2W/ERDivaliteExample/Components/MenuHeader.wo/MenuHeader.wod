@@ -1,0 +1,43 @@
+EntitiesRepetition: WORepetition {
+	item = manipulatedEntityName;
+	list = visibleEntityNames;
+}
+
+FindButton: WOHyperlink {
+	directActionName = queryActionName;
+	class = "box_query";
+	title = "Search";
+}
+
+FindString: WOString {
+	value = "&rarr;";
+	escapeHTML = false;
+}
+
+FindButton1: WOHyperlink {
+	directActionName = queryActionName;
+	class = "text";
+	string = manipulatedEntityName;
+	title = "Search";
+}
+
+HasValidSession: WOConditional {
+	condition = context.hasSession;
+}
+
+HomeLink: WOHyperlink {
+	directActionName = "home";
+	id = "home_link";
+}
+
+NewButton: WOHyperlink {
+	directActionName = newActionName;
+	string = "+";
+	class = "box_add";
+	title = "New...";
+}
+
+ToggleLookLink: WOHyperlink {
+	action = session.toggleLook;
+	id="toggle_look_link";
+}

@@ -1,0 +1,176 @@
+@import url("ERDIVListPage.css");
+@import url("WebObjectsEditButton2.css");
+@import url("WebObjectsTrashcan2.css");
+@import url("WebObjectsInspectButton2.css");
+@import url("WebObjectsSortOrder2.css");
+
+/* The following are styles for the list page  */
+
+div#a h1.list {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/list-ban.gif);
+	background-repeat: no-repeat;
+	text-indent: -5000px;
+	width: 550px;
+	height: 34px;
+}
+
+div#a div.list a.return {
+	text-indent: -5000px;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/return-btn.gif);
+	width: 96px;
+	height: 27px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+div#a ul.button {
+	width: expression(document.getElementById('ListTable').offsetWidth + "px");
+}
+
+div#a table.list tbody tr.odd {
+  background-color: #202020;
+}
+
+div#a table.list tbody tr {
+	line-height: 40px;
+}
+
+div#a h2.entity {
+	display: none;
+}
+
+div#a table.list tbody tr:hover {
+	text-shadow: 2px 2px 2px #000;
+	background-color: #333333;
+}
+
+div#a table.list thead tr {
+	background-color: transparent;
+}
+
+div#a table.list thead tr th * {
+	margin-bottom: 5px;
+}
+
+div#a table.list {
+	width: 100%;
+	width: expression("auto");
+	min-width: expression(document.getElementById('top_batch_nav').offsetWidth + "px");
+}
+
+/* embedded list page */
+
+a.ERDIVDetailListPage_detail {
+	color: transparent;
+	text-indent: -5000px;
+	display: block;
+}
+
+div#a table.list tbody tr a.ERDIVDetailListPage_detail {
+  	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/RightTriangle.gif) no-repeat;
+  	width: 7px;
+	height: 12px;
+}
+
+div#a table.list tbody tr a.ERDIVDetailListPage_detail:hover {
+  	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/DownTriangle.gif) no-repeat;
+  	width: 12px;
+	height: 7px;
+}
+
+/* The following are styles for the batch nav bar  */
+
+fieldset.batch_nav_bar {
+	background-color: #333333;
+	padding-top: 3px;
+	padding-bottom: 3px;	
+	-moz-border-radius-topright: 3px;
+	-moz-border-radius-topleft: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-webkit-border-top-left-radius: 3px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	-moz-border-radius-bottomright: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	width: expression(document.getElementById('ListTable').offsetWidth + "px");
+	margin-bottom: 15px;
+	min-width: 350px;
+}
+
+fieldset.batch_nav_bar ul.batch_nav_bar li h3 {
+	font-size: 15px;
+	padding-left: 3px;
+}
+
+div#a ul.button li, fieldset.batch_nav_bar ul {
+	margin: 0 4px 0 4px;
+}
+
+fieldset.page_batch input {
+	font-size: 11px;
+}
+
+fieldset.batch_nav_bar ul.batch_nav_bar li h3 span.count {
+	margin-right: 4px;
+	font-size: 13px;
+	background-color: black;
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-topleft: 8px;
+	-webkit-border-top-right-radius: 8px;
+	-webkit-border-top-left-radius: 8px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	-moz-border-radius-bottomright: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+	padding: 1px 8px 1px 8px;
+	color: grey;
+}
+
+fieldset#bottom_batch_nav {
+	background-color: transparent;
+}
+
+fieldset#bottom_batch_nav ul.batch_nav_bar li.content {
+	width: 100%;
+}
+
+fieldset#bottom_batch_nav ul.batch_nav_bar li.page_batch, 
+fieldset#bottom_batch_nav ul.batch_nav_bar li.page_nav {
+	display: none;
+	visibility: hidden;
+}
+
+/* Simple List Page */
+
+div#a div.list.simple fieldset#top_batch_nav ul.batch_nav_bar li.page_batch {
+	display: none;
+	visibility: hidden;
+}
+
+div#a div.list.simple form fieldset.batch_nav_bar ul.batch_nav_bar li h3 span.count {
+	color: white;
+	font-size: 15px;
+}
+
+div#a div.list.simple fieldset#top_batch_nav ul.batch_nav_bar li.page_nav input.batch_number {
+	color: white;
+	background-color: black;
+}
+
+div#a div.list.simple ul#List {
+	list-style-type: disc;
+	margin-left: 18px;
+}

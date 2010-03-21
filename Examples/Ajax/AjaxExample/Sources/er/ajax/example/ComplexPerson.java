@@ -19,6 +19,7 @@ public class ComplexPerson extends SimplePerson {
 		return super.equals(person);
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		boolean equals = (obj instanceof ComplexPerson);
 		if (equals) {

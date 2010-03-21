@@ -39,7 +39,7 @@ import com.webobjects.foundation.NSArray;
  * candidate method in the session cache the keys.
  * 
  * @author ak
- *
+ * @d2wKey keyWhenRelationship
  */
 public class ERD2WDisplayRelationshipFlag extends D2WDisplayBoolean {
 

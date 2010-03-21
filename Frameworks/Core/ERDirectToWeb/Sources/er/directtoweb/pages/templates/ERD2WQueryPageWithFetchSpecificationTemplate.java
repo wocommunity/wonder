@@ -9,6 +9,15 @@ import com.webobjects.appserver.WOContext;
 
 import er.directtoweb.pages.ERD2WQueryPage;
 
+/**
+ * @d2wKey entity
+ * @d2wKey pageWrapperName
+ * @d2wKey border
+ * @d2wKey backgroundColorForTable
+ * @d2wKey componentName
+ * @d2wKey propertyKey
+ * @d2wKey findButtonLabel
+ */
 public class ERD2WQueryPageWithFetchSpecificationTemplate extends ERD2WQueryPage {
 
     public ERD2WQueryPageWithFetchSpecificationTemplate(WOContext context) {

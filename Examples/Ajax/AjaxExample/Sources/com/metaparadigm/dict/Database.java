@@ -34,7 +34,8 @@ public class Database
 	this.description = description;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
 	return "database: " + database + " \"" + description + "\"";
     }

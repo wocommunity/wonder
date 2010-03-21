@@ -29,9 +29,16 @@ import er.extensions.foundation.ERXValueUtilities;
  * Little help component useful for debugging.<br />
  * 
  * @binding d2wContext
- * @binding condition" defaults="Boolean
+ * @binding condition default=Boolean
+ * @d2wKey pageConfiguration
+ * @d2wKey subTask
+ * @d2wKey pageName
+ * @d2wKey parentPageConfiguration
+ * @d2wKey task
+ * @d2wKey tabKey
+ * @d2wKey entity
+ * @d2wKey contextDictionary
  */
-
 public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.DebugPageProvider {
 	protected NSDictionary _contextDictionary;
 	public String currentKey;

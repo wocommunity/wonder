@@ -24,6 +24,9 @@ import er.directtoweb.ERD2WFactory;
 import er.directtoweb.delegates.ERDPageDelegate;
 import er.extensions.eof.ERXEOControlUtilities;
 
+/**
+ * @d2wKey cancelMessage
+ */
 public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 
     /** logging support */

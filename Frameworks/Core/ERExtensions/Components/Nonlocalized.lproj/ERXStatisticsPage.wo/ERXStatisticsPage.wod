@@ -199,6 +199,7 @@ PoweredByImage: WOImage {
 }
 
 REFRESH: WOSubmitButton {
+	actionClass = "ERXDirectAction";
 	directActionName = "stats";
 	value = "Refresh Page";
 }

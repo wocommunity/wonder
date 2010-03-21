@@ -73,7 +73,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   transient private ERXLocalizer _localizer;
 
   /** 
-   * special varialble to hold language name only for when 
+   * special variable to hold language name only for when 
    * session object gets serialized. 
    * Do not use this value to get the language name;  
    * use {@link #language} method instead.
@@ -92,14 +92,22 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /** holds a debugging store for a given session. */
   protected NSMutableDictionary _debuggingStore;
 
-  /** the receiver of the variours notifications */
+  /** the receiver of the various notifications */
   transient private Observer _observer;
 
   /**
-   * _originalThreadName holds the original name from the WorkerThread whic
+   * _originalThreadName holds the original name from the WorkerThread which
    * is the value before executing <code>awake()</code>
    */
   public String _originalThreadName;
+  
+  public ERXSession() {
+	  super();
+  }
+  
+  public ERXSession(String sessionID) {
+	  super(sessionID);
+  }
 
   /** 
    * returns the observer object for this session. 

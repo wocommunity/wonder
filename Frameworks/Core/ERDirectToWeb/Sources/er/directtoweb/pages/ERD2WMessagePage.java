@@ -21,8 +21,10 @@ import er.directtoweb.interfaces.ERDMessagePageInterface;
  * If the key <code>explanationComponentName</code> resolves to non-empty, then
  * this component will get shown in the page and wired up with a 
  * <code>object</code>, <code>dataSource</code> and <code>pageConfiguration</code> binding.
+ * @d2wKey displayNamePageConfiguration
+ * @d2wKey messageTitleForPage
+ * @d2wKey explanationComponentName
  */
-
 public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePageInterface, ERDErrorPageInterface {
 
     /** logging support */

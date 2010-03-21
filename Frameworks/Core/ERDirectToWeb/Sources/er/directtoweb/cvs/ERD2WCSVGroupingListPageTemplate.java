@@ -11,10 +11,14 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WGroupingListPage;
 
 /**
- * Grouping list in CSV format.<br />
+ * Grouping list in CSV format.
  * 
+ * @d2wKey componentName
+ * @d2wKey propertyKey
+ * @d2wKey displayPropertyKeys
+ * @d2wKey displayNameForProperty
+ * @d2wKey groupingComponentName
  */
-
 public class ERD2WCSVGroupingListPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WCSVGroupingListPageTemplate(WOContext context) { super(context); }

@@ -12,9 +12,20 @@ import er.directtoweb.pages.ERD2WTabInspectPage;
 
 /**
  * A tab inspect/edit template.<br />
- * 
+ * @d2wKey cancelButtonLabel
+ * @d2wKey printerButtonComponentName
+ * @d2wKey editButtonLabel
+ * @d2wKey formEncoding
+ * @d2wKey hasForm
+ * @d2wKey headerComponentName
+ * @d2wKey repetitionComponentName
+ * @d2wKey actionBarComponentName
+ * @d2wKey controllerButtonComponentName
+ * @d2wKey pageWrapperName
+ * @d2wKey returnButtonLabel
+ * @d2wKey saveButtonLabel
+ * @d2wKey useFocus
  */
-
 public class ERD2WTabInspectPageTemplate extends ERD2WTabInspectPage {
 
     public ERD2WTabInspectPageTemplate(WOContext context) {

@@ -1,0 +1,53 @@
+AttributeName: WOString {
+	value = displayNameForRelationshipKey;
+}
+
+
+DisplayList: WOConditional {
+	condition = displayList;
+}
+
+DisplayNew: WOConditional {
+	condition = displayNew;
+}
+
+DisplayQuery: WOConditional {
+	condition = displayQuery;
+}
+
+DisplayCreate: WOConditional {
+	condition = displayNew;
+	negate = true;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+InspectComponent: D2WEdit {
+	action = saveAction;
+	entityName = entity.name;
+	object = newObjectInRelationship;
+	pageConfiguration = newPageConfiguration;
+}
+
+ListComponent: ERXD2WSelect {
+	action = selectAction;
+	dataSource = selectDataSource;
+	entityName = entity.name;
+	selectedObject = objectToAddToRelationship;
+	pageConfiguration = listPageConfiguration;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+QueryComponent: D2WQuery {
+	action = queryAction;
+	entityName = entity.name;
+	queryDataSource = selectDataSource;
+	pageConfiguration = queryPageConfiguration;
+}

@@ -7,7 +7,6 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOModel;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -27,16 +26,17 @@ import er.extensions.foundation.ERXProperties;
  * 
  * <p>To allow for extended prototypes set
  * <code>er.extensions.ERXModel.useExtendedPrototypes=true</code>.
+ * Note: this may be incompatible with {@link ERXModelGroup#flattenPrototypes}.</p>
  * 
- * The existence of prototype entities based on specific conventions
+ * <p>The existence of prototype entities based on specific conventions
  * is checked and the attributes of those prototype entities are added to the model's
  * prototype attributes cache in a specific order. The search order ensures that
  * the same prototype attribute names in different prototype entities get chosen
- * in a predictable way.
+ * in a predictable way.</p>
  * 
- * Consequently, you can use this search order knowledge to over-ride Wonder's
+ * <p>Consequently, you can use this search order knowledge to over-ride Wonder's
  * ERPrototypes for your entire set of application eomodels or just for specific
- * named eomodels.
+ * named eomodels.</p>
  * 
  * To understand the variables used in deriving the prototype entity names that are searched
  * a few definitions are appropriate
@@ -67,9 +67,36 @@ import er.extensions.foundation.ERXProperties;
  * @author ldeck
  */
 public class ERXModel extends EOModel {
+	public static Object _ERXGlobalModelLock;
 	
 	private static final Logger log = Logger.getLogger(ERXModel.class);
 	
+	static {
+		// Expose EOModel._EOGlobalModelLock so that ERXModelGroup can lock on it
+		try {
+			_ERXGlobalModelLock = EOModel._EOGlobalModelLock;
+		}
+		catch (NoSuchFieldError e) {
+			// MS: It just so happens that this occurs really early on in the startup process, and this API changed in WO 5.3 vs WO 5.4. We catch this
+			// failure explicitly and give the user a slightly better error message.
+			try {
+				String eomodelLockClassName = EOModel.class.getDeclaredField("_EOGlobalModelLock").getType().getSimpleName();
+				if ("ReentrantLock".equals(eomodelLockClassName)) {
+					throw new RuntimeException("You're using WebObjects 5.4 with the WebObjects 5.3 version of Project Wonder. You need to download the 5.4 version of Project Wonder for your application to work properly.");
+				}
+				else if ("NSRecursiveLock".equals(eomodelLockClassName)) {
+					throw new RuntimeException("You're using WebObjects 5.3 with the WebObjects 5.4 version of Project Wonder. You need to download the 5.3 version of Project Wonder for your application to work properly.");
+				}
+				else {
+					throw new RuntimeException("You have the wrong version of Project Wonder for the version of WebObjects that you're using. You need to download the appropriate version of Project Wonder for your application to work properly.");
+				}
+			}
+			catch (NoSuchFieldException e2) {
+				throw e;
+			}
+		}
+		
+	}
 	/**
 	 * Utility to add attributes to the prototype cache. As the attributes are chosen by name, replace already
 	 * existing ones.
@@ -190,6 +217,15 @@ public class ERXModel extends EOModel {
 	private static NSArray<String> namesForAttributes(NSArray<? extends EOAttribute> attributes) {
 		return new ERXKey<String>("name").arrayValueInObject(attributes);
 	}
+	
+	/**
+	 * Defaults to false.
+	 * Note: when enabled, this may be incompatible with {@link ERXModelGroup#flattenPrototypes}.
+	 * @return the boolean property value for <code>er.extensions.ERXModel.useExtendedPrototypes</code>.
+	 */
+	public static boolean isUseExtendedPrototypesEnabled() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModel.useExtendedPrototypes", false);
+	}
 
 	/**
 	 * Creates and returns a new ERXModel.
@@ -237,7 +273,7 @@ public class ERXModel extends EOModel {
 	 */
 	@Override
 	public EOEntity _addEntityWithPropertyList(NSDictionary<String, Object> propertyList) throws java.lang.InstantiationException, java.lang.IllegalAccessException {
-		NSMutableDictionary<String, Object> list = propertyList.mutableClone();
+		NSMutableDictionary<String, Object> list = ((NSDictionary<String, Object> )propertyList).mutableClone();
 		if (list.objectForKey("entityClass") == null) {
 			String eoEntityClassName = ERXProperties.stringForKey("er.extensions.ERXModel.defaultEOEntityClassName");
 			if (eoEntityClassName == null) {
@@ -285,11 +321,11 @@ public class ERXModel extends EOModel {
 	}
 	
 	/**
-	 * Defaults to false.
-	 * @return the boolean property value for <code>er.extensions.ERXModel.useExtendedPrototypes</code>.
+	 * Defaults to false as returned by {@link #isUseExtendedPrototypesEnabled()}.
+	 * @see ERXModel#isUseExtendedPrototypesEnabled()
 	 */
 	protected boolean useExtendedPrototypes() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModel.useExtendedPrototypes", false);
+		return isUseExtendedPrototypesEnabled();
 	}
 
 }

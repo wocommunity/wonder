@@ -12,7 +12,7 @@ AttributeRepetition: WORepetition {
 AttributeValue: ERXTimedSwitchComponent { 
 	localContext = localContext;
 	object = object;
-	userInfo = timingEventUserInfo;
+	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
@@ -209,6 +209,11 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+IfPropertyKeyIsNotOmitted: WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 Image1: WOImage {
 	filename = "floppy.gif";
 	framework = "ERExtensions";
@@ -225,7 +230,7 @@ ImageSpacer: WOImage {
 
 InlineMetricsForPropertyKey: WOString {
 	escapeHTML = false;
-	value = latestEventForCurrentPropertyKey.duration;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
 }
 
 IsEditing: WOKeyValueConditional {
@@ -281,8 +286,8 @@ NotUsingMatrixLayout: WOConditional {
 	negate = true;
 }
 
-PageMetricsSummary: ERXMetricsSummary {
-	aggregateEventInfo = aggregateEventInfoForPage;
+PageMetricsSummary: ERXStatsSummary {
+	aggregateStats = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -306,16 +311,24 @@ PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 
 PropertyKeyComponentGenericContainer: WOGenericContainer {
 	align = "left";
+	class = cssClassForPropertyKey;
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
+	style = inlineStyleDeclarationForPropertyKey;
 	valign = "top";
 }
 
-PropertyKeyComponentGenericContainer2: WOGenericContainer {
-	elementName = "td";
+PropertyNameComponentGenericContainer: WOGenericContainer {
+	align = "right";
+	class = cssClassForPropertyKey;
+	elementName = "th";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
-	valign = "top";
-	width = 120;
+	style = inlineStyleDeclarationForPropertyKey;
+}
+
+PropertyNameSwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 ReturnButton: WOImage {
@@ -338,7 +351,8 @@ ReturnLink: WOHyperlink {
 	action = nextPage;
 }
 
-Script: WOJavaScript{	scriptString = tabScriptString;
+Script: WOJavaScript {
+	scriptString = tabScriptString;
 	hideInComment = true;
 }
 
@@ -408,16 +422,6 @@ SubmitChanges5: WOImageButton {
 	framework = "JavaDirectToWeb";
 }
 
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
-}
-
-SwitchComponent2: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
-}
-
 SwitchComponent3: WOSwitchComponent {
 	WOComponentName = tabComponentName;
 	bgColor = "#CCCCCC";
@@ -427,6 +431,15 @@ SwitchComponent3: WOSwitchComponent {
 	tabNameKey = "name";
 	tabs = tabSectionsContents;
 	useFormSubmit = d2wContext.hasForm;
+}
+
+TabInspectTable: WOGenericContainer {
+	bgcolor = "#ebebeb";
+	border = 0;
+	cellpadding = 0;
+	cellspacing = 0;
+	class = cssClassForPageContainerElement;
+	elementName = "table";
 }
 
 UseSectionImagesConditional: WOConditional {

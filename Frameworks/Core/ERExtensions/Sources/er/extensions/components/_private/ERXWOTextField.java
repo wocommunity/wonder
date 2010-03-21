@@ -6,6 +6,7 @@ import java.text.ParseException;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -13,15 +14,14 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOInput;
-import com.webobjects.appserver.association.WOAssociation;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
-import com.webobjects.foundation.NSValidation;
 
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXPatcher;
+import er.extensions.validation.ERXValidationException;
 
 /**
  * Replacement for WOTextField. Provides for localized formatters. 
@@ -109,7 +109,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 							result = format.parseObject(reformatedObject);
 						} catch(ParseException parseexception) {
 							String keyPath = _value.keyPath();
-							NSValidation.ValidationException validationexception = new NSValidation.ValidationException(parseexception.getMessage(), stringValue, keyPath);
+							ERXValidationException validationexception = new ERXValidationException(parseexception.getMessage(), stringValue, keyPath);
 							component.validationFailedWithException(validationexception, stringValue, keyPath);
 							return;
 						}
@@ -185,10 +185,12 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 	 * Overridden to make output XML compatible.
 	 */
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-        WOResponse newResponse = new WOResponse();
+        WOResponse newResponse = ERXPatcher.DynamicElementsPatches.cleanupXHTML ? new WOResponse() : woresponse;
         super.appendToResponse(newResponse, wocontext);
         
         ERXPatcher.DynamicElementsPatches.processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-        woresponse.appendContentString(newResponse.contentString());
+        if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+        	woresponse.appendContentString(newResponse.contentString());
+        }
     }
 }

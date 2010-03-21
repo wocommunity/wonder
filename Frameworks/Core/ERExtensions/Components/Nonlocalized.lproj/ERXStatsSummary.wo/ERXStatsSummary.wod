@@ -1,0 +1,16 @@
+Duration: WOString {
+    value = durationForStatsType;
+}
+
+EventType: WOString {
+    value = currentType;
+}
+
+EventTypeRepetition: WORepetition {
+    item = currentType;
+    list = statsTypes;
+}
+
+IfHasStats: WOConditional {
+    condition = hasStats;
+}

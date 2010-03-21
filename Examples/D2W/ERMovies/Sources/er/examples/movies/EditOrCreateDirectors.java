@@ -18,7 +18,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import er.directtoweb.interfaces.ERDEditPageInterface;
 import er.directtoweb.interfaces.ERDObjectSaverInterface;
 import er.extensions.eof.ERXEC;
-import er.extensions.foundation.ERXUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.logging.ERXLogger;
 
 public class EditOrCreateDirectors extends WOComponent {
@@ -39,7 +39,7 @@ public class EditOrCreateDirectors extends WOComponent {
     public WOComponent newDirector() {
         // Could use a child context if we didn't want the talent to go to the database
         EOEditingContext ec = ERXEC.newEditingContext();
-        EOEnterpriseObject director = ERXUtilities.createEO("Talent", ec);
+        EOEnterpriseObject director = ERXEOControlUtilities.createAndInsertObject(ec, "Talent");
         
         // Let's throw to a regular edit page
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed("EditTalent", session());

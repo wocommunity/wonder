@@ -47,8 +47,8 @@ will spare you a lot of work.
  * The ERD2WControllerFactory is not heavily tested and the API might change. Especially that the controller subclasses are inner classes of this factory is subject to change. Feedback would be very welcome. 
  * @author ak on Tue Apr 08 2003
  * @project AHApp
+ * @d2wKey pageConfiguration
  */
-
 public class ERD2WControllerFactory extends ERD2WFactory {
 
     /** logging support */

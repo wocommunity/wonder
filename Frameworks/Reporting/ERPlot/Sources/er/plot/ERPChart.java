@@ -1,4 +1,5 @@
 package er.plot;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Enumeration;
 
@@ -26,7 +27,8 @@ import er.extensions.foundation.ERXAssert;
  * Abstract superclass of the charts. The most important binding is <code>items</code> which
  * should contain an array of objects from which the values <code>nameKey</code> and <code>
  * valueKey</code> are retrieved. For example, you might have an array of line items, 
- * with a valueKey <code>amount</code> and a nameKey <code>product.name</code>. 
+ * with a valueKey <code>amount</code> and a nameKey <code>product.name</code>.
+ *
  * @binding name the name of the chart
  * @binding chartType the type of the chart (possible values depend on the concrete subclass)
  * @binding imageType the type of the image to show: <code>png</code> (default) or <code>jpeg</code>
@@ -42,6 +44,7 @@ import er.extensions.foundation.ERXAssert;
  * @binding chart Chart to use instead of the created one. If this binding is setable, then it will be set to the actually used chart
  * @binding configuration NSDictionary that will be applied to the chart via key-value-coding prior to rendering. Contains 
  *      entries like <code>antiAlias=true</code> or <code>categoryPlot.dataAreaRatio = 0.8</code>.
+ *
  * @author ak
  */
 public abstract class ERPChart extends ERXStatelessComponent {

@@ -43,6 +43,7 @@ import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components._private.ERXHyperlink;
+import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.components._private.ERXSwitchComponent;
 import er.extensions.components._private.ERXWOFileUpload;
 import er.extensions.components.conditionals.ERXWOConditional;
@@ -89,8 +90,11 @@ public class ERXPatcher {
 
 	public static synchronized void installPatches() {
 		DynamicElementsPatches.cleanupXHTML = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXPatcher.cleanupXHTML"), false);
-
-		ERXPatcher.setClassForName(DynamicElementsPatches.SubmitButton.class, "WOSubmitButton");
+		DynamicElementsPatches.useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
+		
+		if (DynamicElementsPatches.useButtonTag) {
+			ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
+		} else ERXPatcher.setClassForName(DynamicElementsPatches.SubmitButton.class, "WOSubmitButton");
 		ERXPatcher.setClassForName(DynamicElementsPatches.ResetButton.class, "WOResetButton");
 		ERXPatcher.setClassForName(DynamicElementsPatches.TextField.class, "WOTextField");
 		ERXPatcher.setClassForName(DynamicElementsPatches.GenericElement.class, "WOGenericElement");
@@ -133,12 +137,12 @@ public class ERXPatcher {
 	 */
 	public static class DynamicElementsPatches {
 		public static boolean cleanupXHTML = false;
+		private static boolean useButtonTag = false;
 
 		private DynamicElementsPatches() {
 		}
 
 		public static class SubmitButton extends WOSubmitButton {
-			public static boolean useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
 			protected WOAssociation _id;
 
 			public SubmitButton(String aName, NSDictionary associations, WOElement element) {
@@ -150,31 +154,6 @@ public class ERXPatcher {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
-			
-			// RM: the following are overriden for XHTML button behaviour - sadly in IE6 it doesn't work in multiple button forms
-			// MS: remove the override for 5.3 compat; can't call super because of 5.3 -- super returns false anyway 
-			// @Override
-		    protected boolean hasContent() {
-		        return (useButtonTag) ? true : false;
-		    }
-			
-			@Override
-			public String elementName() {
-				return (useButtonTag) ? "button" : super.elementName();
-			}
-			
-			@Override
-		    protected String type() {
-		        return (useButtonTag) ? "submit" : super.type();
-		    }
-			
-			@Override
-		    public void appendChildrenToResponse(WOResponse aResponse, WOContext aContext) {
-				super.appendChildrenToResponse(aResponse, aContext);
-		        if(useButtonTag && !hasChildrenElements()) {
-		        	aResponse.appendContentString(_valueStringInContext(aContext));
-		        }
-		    }
 			
 			protected String _valueStringInContext(WOContext context) {
 				String valueString = null;
@@ -200,11 +179,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 
 			/*
@@ -250,11 +231,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -272,11 +255,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, null);
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -294,11 +279,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, null);
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -316,12 +303,31 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, null);
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
+			
+			// WO 5.4: 5.4 returns false for this
+			protected boolean hasContent() {
+				return !ERXApplication.isWO54();
+			}
+			
+			// WO 5.4: 5.4 already does this, but for 5.3, if you want to use WOImage's with
+			// PDF generation, you need XHTML output
+		    protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
+		        response.appendContentCharacter('<');
+		        response.appendContentString(elementName());
+		        appendAttributesToResponse(response, context);
+		        if(!hasContent() || ERXResponse.isXHTML(response)) {
+		            response.appendContentString(" /");
+		        }
+		        response.appendContentCharacter('>');
+		    }
 		}
 
 		public static class ActiveImage extends WOActiveImage {
@@ -334,16 +340,23 @@ public class ERXPatcher {
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
+			}
+
+			@Override
+			protected void appendConstantAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
+				super.appendConstantAttributesToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				int offset = woresponse.contentString().length();
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 
 			/*
@@ -373,11 +386,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -395,11 +410,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -416,12 +433,19 @@ public class ERXPatcher {
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			/* select element shouldn't worry about value attribute */
+			@Override
+			protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
+			}
+
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -439,11 +463,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -461,11 +487,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -483,11 +511,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -505,11 +535,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -527,11 +559,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -549,11 +583,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -571,11 +607,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -593,11 +631,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 
@@ -615,11 +655,13 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = new WOResponse();
+				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext));
-				woresponse.appendContentString(newResponse.contentString());
+				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
+					woresponse.appendContentString(newResponse.contentString());
+				}
 			}
 		}
 		
@@ -692,13 +734,18 @@ public class ERXPatcher {
 		 * name=element.elementID} to ERXWOContext.contextDictionary().objectForKey("elementArray")
 		 */
 		public static void processResponse(WODynamicElement element, WOResponse response, WOContext context, int priorOffset, String name) {
-			if (cleanupXHTML)
+			// MS: I'm not a fan of the cleanupXHTML impl -- seems really heavy-handed. I'd rather
+			// patch busted components to generate XHTML more selectively, but I'm open for a
+			// discussion on this one.
+			if (cleanupXHTML/* || ERXResponse.isXHTML(response)*/) {
 				correctResponse(response, priorOffset);
+			}
 			if (element instanceof WOInput) {
 				NSMutableDictionary dict = ERXWOContext.contextDictionary();
 				NSMutableArray elementArray = (NSMutableArray) dict.objectForKey("elementArray");
-				if (elementArray == null)
+				if (elementArray == null) {
 					elementArray = new NSMutableArray(10);
+				}
 				elementArray.addObject(new NSDictionary(new Object[] { element.getClass().getName(), name == null ? "NULL" : name }, new String[] { "type", "name" }));
 				dict.setObjectForKey(elementArray, "elementArray");
 			}

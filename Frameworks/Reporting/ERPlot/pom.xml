@@ -24,6 +24,10 @@
 			<artifactId>jfreechart</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.google.code.jofc2</groupId>
+			<artifactId>jofc2</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>

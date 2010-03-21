@@ -8,6 +8,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSValidation;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.validation.ERXValidationException;
 
@@ -94,7 +95,10 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
                 eo.editingContext().unlock();
             if(page != null) {
                 // we cheat here because calling sleep() is not enough...
-                page._sleepInContext(page.context());
+            	// Michael Bushkov: WO5.4.3 tracks all awakened components so no need to call this manually
+            	if (!ERXApplication.isWO54()) {
+            		page._sleepInContext(page.context());
+            	}
             }
         }
     }

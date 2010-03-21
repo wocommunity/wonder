@@ -90,6 +90,18 @@ public class ERXExceptionUtilities {
 	 * @return the paragraph string
 	 */
 	public static String toParagraph(Throwable t) {
+		return ERXExceptionUtilities.toParagraph(t, true);
+	}
+
+	/**
+	 * Returns a paragraph form of the given throwable.
+	 * 
+	 * @param t
+	 *            the throwable to convert to paragraph form
+	 * @param removeHtmlTags if true, html tags will be filtered from the error messages (to remove, for instance, bold tags from validation messages)
+	 * @return the paragraph string
+	 */
+	public static String toParagraph(Throwable t, boolean removeHtmlTags) {
 		StringBuffer messageBuffer = new StringBuffer();
 		boolean foundInternalError = false;
 		Throwable throwable = t;
@@ -105,7 +117,9 @@ public class ERXExceptionUtilities {
 					message = "";
 				}
 			}
-			message = message.replaceAll("<[^>]+>", "");
+			if (removeHtmlTags) {
+				message = message.replaceAll("<[^>]+>", "");
+			}
 			message = message.trim();
 			messageBuffer.append(message);
 			if (!message.endsWith(".")) {

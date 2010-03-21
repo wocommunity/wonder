@@ -25,6 +25,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -43,6 +44,7 @@ import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXKeyValuePair;
@@ -71,6 +73,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     public final static String D2WDEBUGGING_ENABLED_KEY = "ERDirectToWeb_d2wDebuggingEnabled";
     public final static String D2WDISPLAY_COMPONENTNAMES_KEY = "ERDirectToWeb_displayComponentNames";
     public final static String D2WDISPLAY_PROPERTYKEYS_KEY = "ERDirectToWeb_displayPropertyKeys";
+    public final static String D2WDISPLAY_PAGE_METRICS_KEY = "ERDirectToWeb_displayPageMetrics";
     public final static String D2WDISPLAY_DETAILED_PAGE_METRICS_KEY = "ERDirectToWeb_displayDetailedPageMetrics";
     public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
     public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
@@ -165,6 +168,14 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(s,
                                                                   D2WDISPLAY_PROPERTYKEYS_KEY,
                                                                   propertyKeyLog.isDebugEnabled());
+    }
+
+    public static boolean pageMetricsEnabled() {
+        return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(ERXSession.session(), D2WDISPLAY_PAGE_METRICS_KEY, false);
+    }
+
+    public static void setPageMetricsEnabled(boolean value) {
+        ERXExtensions.setBooleanFlagOnSessionForKey(ERXSession.session(), D2WDISPLAY_PAGE_METRICS_KEY, value);
     }
 
     public static boolean detailedPageMetricsEnabled() {
@@ -266,6 +277,28 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         return result;
     }
 
+    /**
+     * Returns a valid sort ordering based on the <code>defaultSortOrdering</code> key.
+     * @param d2wContext
+     * @return
+     */
+	public static NSArray<EOSortOrdering> sortOrderings(D2WContext d2wContext) {
+		NSMutableArray<EOSortOrdering> validatedSortOrderings = new NSMutableArray<EOSortOrdering>();
+		NSArray<String> sortOrderingDefinition = (NSArray<String>) d2wContext.valueForKey("defaultSortOrdering");
+		if (sortOrderingDefinition != null) {
+			for (int i = 0; i < sortOrderingDefinition.count();) {
+				String sortKey = sortOrderingDefinition.objectAtIndex(i++);
+				String sortSelectorKey = sortOrderingDefinition.objectAtIndex(i++);
+				EOSortOrdering sortOrdering = new EOSortOrdering(sortKey, ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
+				validatedSortOrderings.addObject(sortOrdering);
+			}
+			if (log.isDebugEnabled()) {
+				log.debug("Found sort Orderings in rules " + validatedSortOrderings);
+			}
+		}
+		return validatedSortOrderings;
+	}
+
     // This defaults to true.
     public static boolean booleanForKey(D2WContext context, String key) {
     	return ERXValueUtilities.booleanValue(context.valueForKey(key));
@@ -360,6 +393,8 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
      * and you need to find out just what the state of the D2WContext is.
      * @param ex
      * @param d2wContext
+     * @d2wKey componentName
+     * @d2wKey customComponentName
      */
     public static synchronized void reportException(Exception ex, D2WContext d2wContext) {
         if(d2wContext != null) {

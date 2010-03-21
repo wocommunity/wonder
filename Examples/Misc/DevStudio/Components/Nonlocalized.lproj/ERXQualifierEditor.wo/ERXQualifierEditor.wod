@@ -1,6 +1,6 @@
 AndOrCell: WOGenericContainer {
 	elementName = "TD";
-	rowspan = qualifier.qualifiers.count;
+	rowspan = childQualifiers.count;
 	width = 20;
 	align = "center";
 	class = qualifierClass;
@@ -43,7 +43,7 @@ qualifierDescription: WOString {
 }
 
 notQualifierDescription: WOString {
-	value = qualifier.qualifier;
+	value = childQualifier;
 	escapeHTML = false;
 }
 
@@ -53,7 +53,7 @@ qualifierKind: WOString {
 }
 
 qualifierRepetition: WORepetition {
-	list = qualifier.qualifiers;
+	list = childQualifiers;
 	item = currentQualifier;
 	index = index;
 }

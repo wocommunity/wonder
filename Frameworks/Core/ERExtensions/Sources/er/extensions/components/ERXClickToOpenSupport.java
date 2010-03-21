@@ -27,7 +27,7 @@ public class ERXClickToOpenSupport {
 	/**
 	 * Shared pattern for the click-to-open parser.
 	 */
-	private static Pattern _tagPattern = Pattern.compile("<[a-zA-Z]+[a-zA-Z0-9]+\\s*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+	private static Pattern _tagPattern = Pattern.compile("<[a-z][a-z0-9]*\\s*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
 	/**
 	 * The marker string that is temporarily written into the buffer for click-to-open support.
@@ -88,22 +88,24 @@ public class ERXClickToOpenSupport {
 			if (contentStr != null) {
 				StringBuffer contentStringBuffer = new StringBuffer(contentStr);
 				int markerIndex = contentStringBuffer.lastIndexOf(ERXClickToOpenSupport._marker);
-				contentStringBuffer.delete(markerIndex, markerIndex + ERXClickToOpenSupport._marker.length());
-				Matcher tagMatcher = ERXClickToOpenSupport._tagPattern.matcher(contentStringBuffer);
-				if (tagMatcher.find(markerIndex)) {
-					int attributeOffset = tagMatcher.end();
-
-					String componentName = component.getName();
-					String componentNameTag = "_componentName";
-					if (ERXStringUtilities.regionMatches(contentStringBuffer, attributeOffset, componentNameTag, 0, componentNameTag.length())) {
-						int openQuoteIndex = contentStringBuffer.indexOf("\"", attributeOffset);
-						contentStringBuffer.insert(openQuoteIndex + 1, componentName + ",");
+				if (markerIndex != -1) {
+					contentStringBuffer.delete(markerIndex, markerIndex + ERXClickToOpenSupport._marker.length());
+					Matcher tagMatcher = ERXClickToOpenSupport._tagPattern.matcher(contentStringBuffer);
+					if (tagMatcher.find(markerIndex)) {
+						int attributeOffset = tagMatcher.end();
+	
+						String componentName = component.getName();
+						String componentNameTag = "_componentName";
+						if (ERXStringUtilities.regionMatches(contentStringBuffer, attributeOffset, componentNameTag, 0, componentNameTag.length())) {
+							int openQuoteIndex = contentStringBuffer.indexOf("\"", attributeOffset);
+							contentStringBuffer.insert(openQuoteIndex + 1, componentName + ",");
+						}
+						else {
+							contentStringBuffer.insert(attributeOffset, " " + componentNameTag + " = \"" + componentName + "\" ");
+						}
 					}
-					else {
-						contentStringBuffer.insert(attributeOffset, " " + componentNameTag + " = \"" + componentName + "\" ");
-					}
+					response.setContent(contentStringBuffer.toString());
 				}
-				response.setContent(contentStringBuffer.toString());
 			}
 		}
 	}

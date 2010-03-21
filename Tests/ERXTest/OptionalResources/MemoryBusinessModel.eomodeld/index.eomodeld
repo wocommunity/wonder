@@ -1,0 +1,9 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = Memory; 
+    connectionDictionary = {}; 
+    entities = (
+        {className = "er.ajax.example.Company"; name = Company; }, 
+        {className = "er.ajax.example.Employee"; name = Employee; }
+    ); 
+}

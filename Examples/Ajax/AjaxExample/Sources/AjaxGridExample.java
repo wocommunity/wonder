@@ -25,7 +25,7 @@ public class AjaxGridExample extends WOComponent {
 		NSMutableArray sampleData = new NSMutableArray((NSArray) NSPropertyListSerialization.propertyListFromData(data, "UTF-8"));
 		Random random = new Random(new NSTimestamp().getNanos());
 		for (int i = 0; i < sampleData.count(); i++) {
-			NSMutableDictionary row = (NSMutableDictionary) sampleData.objectAtIndex(i);
+			NSMutableDictionary<String,Object> row = (NSMutableDictionary<String,Object>) sampleData.objectAtIndex(i);
 			row.setObjectForKey(new Integer(random.nextInt()), "number");
 			row.setObjectForKey(new NSTimestamp(random.nextLong()), "date");
 			row.setObjectForKey(new Integer(i + 1).toString(), "level");

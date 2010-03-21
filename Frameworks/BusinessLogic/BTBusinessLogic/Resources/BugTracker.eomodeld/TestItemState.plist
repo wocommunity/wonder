@@ -25,7 +25,6 @@
     classProperties = (name, sortOrder); 
     externalName = "TEST_ITEM_STATE"; 
     fetchSpecificationDictionary = {}; 
-    isReadOnly = Y; 
     name = TestItemState; 
     primaryKeyAttributes = (oid); 
     userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 

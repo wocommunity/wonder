@@ -19,6 +19,10 @@
 			<groupId>wonder.ajax</groupId>
 			<artifactId>Ajax</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>

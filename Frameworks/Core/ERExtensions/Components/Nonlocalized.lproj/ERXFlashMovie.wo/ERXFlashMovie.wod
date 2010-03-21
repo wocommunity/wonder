@@ -5,6 +5,7 @@ Object : WOGenericContainer {
 	width=^width;
 	height=^height;
 	id=^id;
+	name=^id;
 	align=^align;
 }
 
@@ -16,6 +17,7 @@ Embed : WOGenericContainer {
 	width=^width;
 	height=^height;
 	name=^id;
+	id=^id;
 	align=^align;
 	allowScriptAccess=^allowScriptAccess;
 	allowFullScreen=^allowFullScreen;

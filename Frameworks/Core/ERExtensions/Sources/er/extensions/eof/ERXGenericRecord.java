@@ -32,11 +32,11 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXExtensions;
 import er.extensions.crypting.ERXCrypto;
+import er.extensions.eof.ERXDatabaseContextDelegate.AutoBatchFaultingEnterpriseObject;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXProperties;
@@ -77,7 +77,7 @@ import er.extensions.validation.ERXValidationFactory;
  * on, you must set the system default
  * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
  */
-public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject, ERXKey.ValueCoding {
+public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject, ERXKey.ValueCoding, AutoBatchFaultingEnterpriseObject {
 
 	/** holds all subclass related Logger's */
 	private static NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
@@ -146,6 +146,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return null;
 	}
 
+	/**
+	 * Special binding for localized key support.
+	 * @author ak
+	 *
+	 */
 	public static class LocalizedBinding extends NSKeyValueCoding._KeyBinding {
 
 		public LocalizedBinding(String key) {
@@ -180,18 +185,44 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		}
 	}
 
-	@Override
-	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
-		NSKeyValueCoding._KeyBinding result;
-		String localizedKey = localizedKey(key);
-		if (localizedKey != null) {
-			result = new LocalizedBinding(key);
-		}
-		else {
-			result = super._otherStorageBinding(key);
-		}
-		return result;
-	}
+    /**
+     * Special binding that touches the target of a relationship. Needed for automatic batch faulting.
+     * @author ak
+     *
+     */
+    public static class TouchingBinding extends _LazyDictionaryBinding {
+
+        public TouchingBinding(String key) {
+            super(key);
+        }
+        
+        @Override
+        public Object valueInObject(Object object) {
+             Object result = super.valueInObject(object);
+             if(result instanceof AutoBatchFaultingEnterpriseObject && EOFaultHandler.isFault(result)) {
+                 AutoBatchFaultingEnterpriseObject eo = (AutoBatchFaultingEnterpriseObject)object;
+                 AutoBatchFaultingEnterpriseObject target = (AutoBatchFaultingEnterpriseObject)result;
+                 target.touchFromBatchFaultingSource(eo, key());
+             }
+             return result;
+        }
+    }
+    
+
+    @Override
+    public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
+    	NSKeyValueCoding._KeyBinding result;
+    	String localizedKey = localizedKey(key);
+    	if (classDescription().toOneRelationshipKeys().containsObject(key)) {
+    		result = new TouchingBinding(key);
+    	} else if (localizedKey != null) {
+    		result = new LocalizedBinding(key);
+    	}
+    	else {
+    		result = super._otherStorageBinding(key);
+    	}
+    	return result;
+    }
 
 	/**
 	 * Clazz object implementation for ERXGenericRecord. See
@@ -829,6 +860,34 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		}
 		return _primaryKeyDictionary;
 	}
+	
+	/**
+	 * Sets the value for the primary key attribute with the given name. This should only be called
+	 * on uncommitted objects.
+	 * 
+	 * @param value the pk value
+	 * @param pkAttributeName the pk attribute name
+	 */
+	public void _setValueForPrimaryKey(Object value, String pkAttributeName) {
+		if (_primaryKeyDictionary == null) {
+			_primaryKeyDictionary = new NSDictionary<String, Object>(value, pkAttributeName);
+		}
+		else {
+			NSMutableDictionary<String, Object> mutablePrimaryKeyDictionary = _primaryKeyDictionary.mutableClone();
+			mutablePrimaryKeyDictionary.setObjectForKey(value, pkAttributeName);
+			_primaryKeyDictionary = mutablePrimaryKeyDictionary;
+		}
+	}
+	
+	/**
+	 * Sets the primary key dictionary for this EO (key = attribute name, value = pk value). This should 
+	 * only be called on uncommitted objects.
+	 * 
+	 * @param pkDict the new primary key dictionary
+	 */
+	public void _setPrimaryKeyDictionary(NSDictionary<String, Object> pkDict) {
+		_primaryKeyDictionary = pkDict;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -1132,6 +1191,34 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return originalSnapshot != null && !originalSnapshot.equals(snapshot);
 	}
 
+	private boolean _validatedWhenNested = true;
+	
+	/**
+	 * If false, when this object is committed into a nested editingContext and it exists
+	 * in the parent editing context, validation will be skipped. This supports nested
+	 * UI workflows where you want to create a new to-one relationship for an object that
+	 * isn't fully configured by localInstancing it into a nested editing context. In
+	 * that scenario, the localInstance'd EO would attempt to validate when the nested
+	 * editing context is committed, throwing a validation exception that should be
+	 * deferred to the parent editing context. This defaults to true, which maintains
+	 * the current behavior.
+	 * 
+	 * @param validatedWhenNested
+	 */
+	public void setValidatedWhenNested(boolean validatedWhenNested) {
+		_validatedWhenNested = validatedWhenNested;
+	}
+	
+	/**
+	 * Returns whether or not this object is validated when it is committed in a 
+	 * nested editing context.
+	 * 
+	 * @return whether or not this object is validated when it is committed in a  nested editing context.
+	 */
+	public boolean isValidatedWhenNested() {
+		return _validatedWhenNested;
+	}
+	
 	/**
 	 * Overrides the default validation mechanisms to provide a few checks
 	 * before invoking super's implementation, which incidently just invokes
@@ -1198,6 +1285,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public void validateForSave() throws NSValidation.ValidationException {
+		// Support for skipping validation when _validatedWhenNested is false and this EO is localInstanced from a parent EC
+		if (!_validatedWhenNested && editingContext().parentObjectStore() instanceof EOEditingContext && ((EOEditingContext)editingContext().parentObjectStore()).objectForGlobalID(editingContext().globalIDForObject(this)) != null) {
+			return;
+		}
+		
 		// This condition shouldn't ever happen, but it does ;)
 		// CHECKME: This was a 4.5 issue, not sure if this one has been fixed
 		// yet.
@@ -1501,7 +1593,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 						// then we want to remove this object from the CURRENT inverse
 						// relationship
 						if (oldValueEO != null && oldValueEO != object) {
-							oldValueEO.removeObjectFromPropertyWithKey(object, inverse);
+							if (oldValueEO.isToManyKey(inverse)) {
+								oldValueEO.removeObjectFromPropertyWithKey(object, inverse);
+							}
+							else {
+								oldValueEO.takeStoredValueForKey(null, inverse);
+							}
 						}
 						
 						ERXEnterpriseObject newValueEO = (ERXEnterpriseObject) value;
@@ -1568,4 +1665,61 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			}
 		}
 	}
+
+	/** 
+	 * Last fetch time
+	 */
+    private long _fetchTime;
+    
+    /**
+     * Which key touched us
+     */
+    private String _touchKey;
+    
+    /**
+     * Which GID touched us
+     */
+    public EOGlobalID _touchSource;
+
+    /**
+     * The fetch time for this object
+     * @return fetch time
+     */
+    public long batchFaultingTimeStamp() {
+        return _fetchTime;
+    }
+    
+    /**
+     * The source EO that touched us
+     * @return gid of the source
+     */
+    public EOGlobalID batchFaultingSourceGlobalID() {
+        return _touchSource;
+    }
+    
+    /**
+     * The key that touched us
+     * @return relationship name
+     */
+    public String batchFaultingRelationshipName() {
+        return _touchKey;
+    }
+
+    /**
+     * Touches this EO with the given source and the given key. Stores GID and timestamp.
+     * @param toucher
+     * @param key
+     */
+    public void touchFromBatchFaultingSource(AutoBatchFaultingEnterpriseObject toucher, String key) {
+       _touchKey = key;
+       _touchSource = toucher.editingContext().globalIDForObject(toucher);
+    }
+
+    /**
+     * Touches this EO from a fetch. Note that this is the last fetch, not when the object has been initialized.
+     * @param timestamp
+     */
+    public void setBatchFaultingTimestamp(long timestamp) {
+        _fetchTime = timestamp;
+    }
 }

@@ -1,14 +1,14 @@
 <webobject name = "AjaxExampleComponent">
 	<webobject name = "AjaxInPlace">
 		<webobject name = "AjaxInPlaceViewTemplate">
-			Click on me to reveal a slider.
+			<span id="ClickOnMe">Click on me to reveal a slider.</span>
 		</webobject>
 		<webobject name = "AjaxInPlaceEditTemplate">
 			This slider's javascript and CSS was loaded on-demand during the Ajax update.
 			
 			Here's a Slider:
 			<webobject name = "ERXStyleSheet"/>
-			<webobject name = "Slider"/>
+			<span id="aSliderAppears"><webobject name = "Slider"/></span>
 		</webobject>
 	</webobject>
 </webobject>

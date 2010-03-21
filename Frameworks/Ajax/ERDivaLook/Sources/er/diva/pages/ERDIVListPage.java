@@ -16,13 +16,14 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * An XHTML version of ERD2WListPage
+ * An XHTML version of ERD2WListPage.
  * This component constitutes the only use of a HTML table in the entire Diva Look interface
  * 
  * Added features is allowing clickable/collapsing details for each row via the embedded ERXD2WInspect
  * 
- * @author mendis
+ * @property er.prototaculous.useUnobtrusively Support for Unobtrusive Javascript programming.
  *
+ * @author mendis
  */
 public class ERDIVListPage extends ERD2WListPage implements ERDIVPageInterface {
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.prototaculous.useUnobtrusively", true);

@@ -8,6 +8,7 @@
         {className = EOGenericRecord; name = EOJDBCDerbyPrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCFirebirdPrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCFrontBasePrototypes; }, 
+        {className = EOGenericRecord; name = EOJDBCH2Prototypes; }, 
         {className = EOGenericRecord; name = EOJDBCInterbasePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCMySQLPrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCOpenBasePrototypes; }, 

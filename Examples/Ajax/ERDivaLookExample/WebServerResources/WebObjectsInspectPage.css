@@ -1,9 +1,8 @@
-@import url("WebObjects.css");
 @import url("ERDIVInspectPage.css");
 @import url("WebObjectsInspect.css");
 @import url("WebObjectsTabPanel.css");
 
-div#a h1.task {
+div#a h1.task.inspect {
 	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/view-ban.gif);
 	background-repeat: no-repeat;
 	text-indent: -5000px;
@@ -63,7 +62,7 @@ div#a div.button ul {
 
 /* The following are styles for WebObjects Look specific D2W components */
 
-div.D2WDisplayToOneFault2, div.D2WDisplayToManyList ul li {
+div.D2WDisplayToOneFault2, div.D2WAjaxDisplayToManyList ul li {
 	background-color: #333333;
 	width: 20em;
 }

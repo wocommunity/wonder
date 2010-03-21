@@ -1,0 +1,12 @@
+dbConnectAdaptorGLOBAL=Memory
+dbConnectURLGLOBAL=Memory
+dbConnectUserGLOBAL=
+dbConnectPluginGLOBAL=
+dbConnectDriverGLOBAL=
+dbEOPrototypesEntityGLOBAL=EOJDBCMemoryPrototypes
+
+BugTracker.processMail=false
+BugTracker.mailStore=pop3
+BugTracker.server=localhost
+BugTracker.user=ak
+BugTracker.password=

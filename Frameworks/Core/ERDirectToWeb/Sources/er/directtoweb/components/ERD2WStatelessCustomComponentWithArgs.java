@@ -15,9 +15,10 @@ import er.extensions.validation.ERXExceptionHolder;
 // Stateless version of D2WCustomComponentWithArgs
 /**
  * Stateless version of D2WCustomComponentWithArgs.<br />
- * 
+ * @d2wKey customComponentName
+ * @d2wKey propertyKey
+ * @d2wKey extraBindings
  */
-
 public class ERD2WStatelessCustomComponentWithArgs extends ERD2WStatelessComponent implements ERXExceptionHolder {
 
     public ERD2WStatelessCustomComponentWithArgs(WOContext context) { super(context); }

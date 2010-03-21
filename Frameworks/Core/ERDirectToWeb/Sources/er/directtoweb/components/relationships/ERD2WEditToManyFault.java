@@ -16,6 +16,10 @@ import com.webobjects.directtoweb.EditRelationshipPageInterface;
 
 /**
  * Enhanced to-many component, which provides the means to specify which edit-relationship page gets chosen.
+ * @d2wKey editIcon
+ * @d2wKey allowCollapsing
+ * @d2wKey size
+ * @d2wKey editRelationshipConfigurationName
  */
 public class ERD2WEditToManyFault extends D2WEditToManyFault {
 

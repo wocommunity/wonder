@@ -16,6 +16,8 @@ import er.extensions.foundation.ERXRuntimeUtilities.Result;
  * of ImageMagick, specifically the "convert" and "composite" binaries (along with
  * any dependencies they require).  
  * 
+ * @property er.attachment.ImageProcessor.imageMagickBinFolder
+ *
  * @author mschrag
  */
 public class ImageMagickImageProcessor extends ERImageProcessor {

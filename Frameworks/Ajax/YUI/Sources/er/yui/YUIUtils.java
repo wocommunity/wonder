@@ -8,6 +8,10 @@ import com.webobjects.foundation.NSDictionary;
 import er.ajax.AjaxUtils;
 import er.extensions.foundation.ERXProperties;
 
+/**
+ *
+ * @property er.yui.base
+ */
 public class YUIUtils {
     
     /**

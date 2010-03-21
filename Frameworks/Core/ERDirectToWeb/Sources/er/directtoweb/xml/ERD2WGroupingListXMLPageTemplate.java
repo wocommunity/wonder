@@ -17,9 +17,20 @@ import er.extensions.eof.ERXConstant;
 
 /**
  * Displays a grouped list of eos in an xml template.<br />
- * 
+ * @d2wKey resolvedUnit
+ * @d2wKey componentName
+ * @d2wKey wrap
+ * @d2wKey width
+ * @d2wKey hasThirdLevel
+ * @d2wKey showHeader
+ * @d2wKey title
+ * @d2wKey pageWrapperName
+ * @d2wKey propertyKey
+ * @d2wKey displayPropertyKeys
+ * @d2wKey displayNameForProperty
+ * @d2wKey groupingKeyDisplayKey
+ * @d2wKey thirdLevelRelationshipKey
  */
-
 public class ERD2WGroupingListXMLPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WGroupingListXMLPageTemplate(WOContext context) {super(context);}

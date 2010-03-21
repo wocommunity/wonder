@@ -1,9 +1,14 @@
 package er.ajax;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 
-
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * This implements the tab contents of a tabbed panel display as an unordered
@@ -24,6 +29,7 @@ import com.webobjects.foundation.*;
  *          time the tab is selected.  Defaults to false
  * @binding onLoad optional, String JavaScript to execute after the tab loads
  * @binding isVisible optional, default is true, indicates if tab and panel should be displayed
+ * @binding accesskey optional, The accesskey for this tab
  *
  * @author Chuck Hill
  */
@@ -36,6 +42,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     private WOAssociation refreshOnSelect;
     private WOAssociation onLoad;
     private WOAssociation isVisible;
+    private WOAssociation accesskey;
 
 
     public AjaxTabbedPanelTab(String aName, NSDictionary associations, WOElement template) {
@@ -48,6 +55,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
         refreshOnSelect = (WOAssociation) associations.objectForKey("refreshOnSelect");
         onLoad = (WOAssociation) associations.objectForKey("onLoad");
         isVisible = (WOAssociation) associations.objectForKey("isVisible");
+        accesskey = (WOAssociation)associations.objectForKey("accesskey");
         
         if (name == null) {
         	throw new RuntimeException("name binding is required");
@@ -96,7 +104,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
      */
     public void takeValuesFromRequest(WORequest request, WOContext context)
     {
-    	if (isVisble(context.component())) {
+    	if (isVisble(context.component()) && (isSelected ==  null || isSelected(context.component())) ) {
     		super.takeChildrenValuesFromRequest(request, context);
     	}
     }
@@ -210,5 +218,11 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     public boolean isVisble(WOComponent component) {
         return (isVisible != null) ? ((Boolean)isVisible.valueInComponent(component)).booleanValue() : true;
     }
-
+    
+    /**
+     * @return WOAssociation for the accesskey binding
+     */
+    public WOAssociation accesskey() {
+    	return accesskey;
+    }
 }

@@ -18,6 +18,7 @@ import er.extensions.foundation.ERXValueUtilities;
 /**
  * Allows editing boolean values based on radio buttons and localizable strings.<br />
  * Set the values via the <code>choicesNames</code> d2wcontext value, eg: ("Yes", "No") or ("Set", "Unset", "Don't care")
+ * @d2wKey choicesNames
  */
 // FIXME AK: together with ERD2WQueryBoolean, should use a common ERXEditBoolean that takes a choicesNames binding
 public class ERD2WCustomEditBoolean extends D2WEditBoolean {

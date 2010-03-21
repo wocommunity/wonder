@@ -17,9 +17,8 @@ import er.extensions.eof.ERXConstant;
  * Popup used for picking a number or some other value by 
  * using the key restrictedChoiceKey.<br />
  * You should use ERD2WEditToOneRelationship, though.
- * 
+ * @d2wKey restrictedChoiceKey
  */
-
 public class ERD2WPopUp extends ERD2WStatelessComponent {
 
 	public ERD2WPopUp(WOContext context) { super(context); }

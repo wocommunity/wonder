@@ -63,8 +63,8 @@ public class JSONExample extends com.webobjects.appserver.WOComponent {
 		
 		public NSArray eoData() {
 			EOEditingContext editingContext = ERXEC.newEditingContext();
-			NSArray originalCompanies = ExampleDataFactory.companies(editingContext);
-			NSMutableArray companiesWithDupes = new NSMutableArray();
+			NSArray<Company> originalCompanies = ExampleDataFactory.companies(editingContext);
+			NSMutableArray<Company> companiesWithDupes = new NSMutableArray<Company>();
 			companiesWithDupes.addObjectsFromArray(originalCompanies);
 			companiesWithDupes.addObjectsFromArray(originalCompanies);
 			return companiesWithDupes;

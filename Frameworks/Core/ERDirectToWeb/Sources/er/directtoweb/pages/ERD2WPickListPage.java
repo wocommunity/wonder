@@ -33,6 +33,10 @@ import er.extensions.foundation.ERXValueUtilities;
 /**
  * Allows the selection of one or more objects from a set of EOs. Can also be used directly as a 
  * EditRelationshipPage for editing to-one and to-many relationships.
+ * @d2wKey showActions
+ * @d2wKey singleSelection
+ * @d2wKey restrictedChoiceKey
+ * @d2wKey restrictingFetchSpecification
  */
 // FIXME: Need a formal protocol for cancel vs. selection.
 public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface, EditRelationshipPageInterface {

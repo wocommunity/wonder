@@ -37,7 +37,8 @@ public class Definition
 	this.definition = definition;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
 	return "definition: " + word + " \"" + database + "\"\n" + definition;
     }

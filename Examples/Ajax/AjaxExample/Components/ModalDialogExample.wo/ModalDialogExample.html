@@ -3,7 +3,9 @@
 	<webobject name = "WelcomeModalDialog">
 		Welcome to the AjaxModalDialog examples.<br /><br />
 		This dialog demonstrates an automatically opened dialog<br />
-		with no visibile indication on the page.<br /><br />
+		centered in the page.<br /><br />
+	    Notice that there is no visibile indication on the page<br />
+	    that the dialog exists after it is closed.<br /><br />
 	</webobject>
 		
 	<h3>Simple dialog with in-line content</h3>
@@ -15,6 +17,7 @@
 			<li>label binding for link contents</li>
 			<li>client side hiding of dialog</li>
 			<li>AjaxHyperlink inside dialog to call method on server</li>
+			<li>Return and Esc key handling</li>
 		</ul>
 		
 		<webobject name = "SimpleModalDialog">
@@ -28,24 +31,20 @@
 	
 	<hr />
 	
-	<h3>Updating dialog with in-line content</h3>
+	<h3>Updating dialog with external content</h3>
 	<div>
 		Demonstrates: 
 		<ul>
-			<li>dialog content is fully in-line</li>
+			<li>dialog content comes from a named component (pageName = "ModalDialogPageContent")</li>
 			<li>confirmation message is updated, dialog does not close</li>
 			<li>updating the title of the dialog</li>
 			<li>server side hiding of dialog on second confirmation</li>
 			<li>AjaxHyperlink inside dialog to call method on server</li>
 		</ul>
 
-		<webobject name = "UpdatingModalDialog">
-			<webobject name = "ConfirmationMessage"/><br />
-			<span style="float:left"><webobject name = "Yes2">yes</webobject></span>
-			<span style="float:right"><webobject name = "No">no</webobject></span>
-		</webobject>
+		<webobject name = "UpdatingModalDialog"/>
 		
-		<br/><br/>Look in the application log for "deleteIt2 called".
+		<br/><br/>Look in the application log for "deleteIt in ModalDialogPageContent called".
 	</div><br/>
 
 	<hr />
@@ -54,7 +53,7 @@
 	<div>
 		Demonstrates the same dialog as above with these changes: 
 		<ul>
-			<li>dialog content is taken from a different WOComponent</li>
+			<li>dialog content comes from a WOComponent nested in dialog tag</li>
 			<li>rich link content (an image)</li>
 			<li>server side hiding of dialog on second confirmation</li>
 			<li>AjaxHyperlink inside dialog to call method on server</li>
@@ -78,6 +77,7 @@
 			<li>dialog updates to show validation messages</li>
 			<li>server side handling of Save and Cancel</li>
 			<li>AjaxSubmitButton inside dialog to call method on server</li>
+			<li>Return and Esc key handling</li>
 		</ul>
 		
 		<div style="border: 1px solid black; width: 50%;">
@@ -137,7 +137,7 @@
 	<div>
 		Demonstrates the same dialog as above, but with these changes: 
 		<ul>
-			<li>external content loaded from an action method</li>
+			<li>dialog content comes from an action method</li>
 			<li>ERXWOTemplate to hold link text</li>
 		</ul>
 
@@ -160,5 +160,17 @@
 				<span style="float:right"><webobject name = "EditEmployee"><webobject name = "EditEmployeeLink">edit</webobject></webobject></span>
 			</div>
 		</div>
+	</div><br/>
+	
+	<hr />
+	
+	<h3>Exception when content starts with WOForm</h3>
+	<div>
+		Demonstrates: 
+		<ul>
+			<li>dialog detects if content from action or pageName starts with WOForm tag and throws exception</li>
+		</ul>
+
+		<webobject name = "BrokenModalDialog"/>
 	</div><br/>
 </webobject name = "AjaxExampleComponent">

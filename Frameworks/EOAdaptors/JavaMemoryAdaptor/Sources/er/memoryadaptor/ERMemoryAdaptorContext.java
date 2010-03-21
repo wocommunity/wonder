@@ -24,7 +24,7 @@ import com.webobjects.foundation.NSDictionary;
  * @author mschrag
  */
 public class ERMemoryAdaptorContext extends EOAdaptorContext {
-  private final EREntityStoreFactory _storeFactory = new EREntityStoreFactory(ERMemoryEntityStore.class);
+  private static final EREntityStoreFactory _storeFactory = new EREntityStoreFactory(ERMemoryEntityStore.class);
 
   public ERMemoryAdaptorContext(EOAdaptor adaptor) {
     super(adaptor);
@@ -100,8 +100,11 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
       else if ("s".equals(valueType)) {
         pkValue = Short.valueOf((short) nextSequence);
       }
+      else if ("c".equals(valueType) && ("java.lang.String".equals(pkAttribute.className()) || "String".equals(pkAttribute.className()))) { // hack for bugtracker test cases
+        pkValue = String.valueOf(nextSequence);
+      }
       else {
-        throw new IllegalArgumentException("Unknown value type '" + valueType + "'.");
+        throw new IllegalArgumentException("Unknown value type '" + valueType + "' for '" + object + "' of entity '" + entity.name() + "'.");
       }
     }
     NSDictionary pk = new NSDictionary<String, Object>(pkValue, pkAttribute.name());

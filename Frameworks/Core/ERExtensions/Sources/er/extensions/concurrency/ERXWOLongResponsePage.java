@@ -1,5 +1,7 @@
 package er.extensions.concurrency;
 
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.woextensions.WOLongResponsePage;
 
@@ -15,6 +17,14 @@ import er.extensions.appserver.ERXApplication;
 public abstract class ERXWOLongResponsePage extends WOLongResponsePage {
 	public ERXWOLongResponsePage(WOContext context) {
 		super(context);
+	}
+	
+	public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
+		return (T) super.pageWithName(componentClass.getName());
+	}
+	
+	public <T extends WOComponent> T pageWithName(Class<T> componentClass, WOContext context) {
+		return (T) WOApplication.application().pageWithName(componentClass.getName(), context);
 	}
 	
 	public void run() {

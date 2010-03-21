@@ -1,5 +1,6 @@
 {
 	"contains" = "contains";
+	"CouldNotQuery" = "Could not perform query: @@message@@";
 	"CouldNotSave" = "Could not save your changes: @@message@@";
 	"CouldNotSavePleaseReapply" = "Could not save your changes. The @@displayNameForEntity@@ has changed in the database before you could save. Your changes have been lost. Please reapply them.";
 	"ends with" = "ends with";

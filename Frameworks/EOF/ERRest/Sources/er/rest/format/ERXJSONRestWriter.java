@@ -64,5 +64,6 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 		else {
 			response.appendContentString(JSONSerializer.toJSON(object, ERXJSONRestWriter._config).toString());
 		}
+		response.appendContentString("\n");
 	}
 }

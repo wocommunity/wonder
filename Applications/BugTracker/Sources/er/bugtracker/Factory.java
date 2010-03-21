@@ -25,6 +25,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.bugtracker.pages.ReportPage;
 import er.directtoweb.ERD2WFactory;
+import er.directtoweb.delegates.ERDObjectWasCreatedDelegate;
 import er.directtoweb.interfaces.ERDQueryPageInterface;
 import er.directtoweb.pages.ERD2WInspectPage;
 import er.directtoweb.pages.ERD2WQueryPage;
@@ -170,6 +171,34 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     public WOComponent createPeople() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreatePeople");
         EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
+        //applyCurrentUser(eo, "owner");
+        return (WOComponent) page;
+    }
+    
+    public WOComponent signUp() {
+        final ERD2WInspectPage page;
+        People signUp = session().signUp();
+        if(signUp == null) {
+        	page = (ERD2WInspectPage) createPageNamed("SignUpPeople");
+        	signUp = (People) page.object();
+        	session().setSignUp(signUp);
+        } else {
+        	page = (ERD2WInspectPage) editPageNamed("SignUpPeople", signUp);
+        }
+        page.setNextPageDelegate(new NextPageDelegate() {
+
+			// @Override
+			public WOComponent nextPage(WOComponent arg0) {
+				if(page.objectWasSaved()) {
+					session().finishSignUp();
+				} else {
+					session().setSignUp(null);
+				}
+				
+				return homePage();
+			}
+        	
+        });
         //applyCurrentUser(eo, "owner");
         return (WOComponent) page;
     }

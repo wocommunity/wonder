@@ -259,17 +259,43 @@ public class WOHelperFunctionDeclarationParser {
 		}
 		else {
 			String quotedString = (String) quotedStrings.objectForKey(associationValue);
+			// MS: WO 5.4 converts \n to an actual newline. I don't know if WO 5.3 does, too, but let's go ahead and be compatible with them as long as nobody is yelling. 
 			if (quotedString != null) {
+				int backslashIndex = quotedString.indexOf('\\');
+				if (backslashIndex != -1) {
+					StringBuilder sb = new StringBuilder(quotedString);
+					int length = sb.length();
+					for (int i = backslashIndex; i < length; i ++) {
+						char ch = sb.charAt(i);
+						if (ch == '\\' && i < length) {
+							char nextCh = sb.charAt(i + 1);
+							if (nextCh == 'n') {
+								sb.replace(i, i + 2, "\n");
+							}
+							else if (nextCh == 'r') {
+								sb.replace(i, i + 2, "\r");
+							}
+							else if (nextCh == 't') {
+								sb.replace(i, i + 2, "\t");
+							}
+							else {
+								sb.replace(i, i + 2, String.valueOf(nextCh));
+							}
+							length --;
+						}
+					}
+					quotedString = sb.toString();
+				}
 				association = WOHelperFunctionAssociation.associationWithValue(quotedString);
 			}
 			else if (_NSStringUtilities.isNumber(associationValue)) {
 				Integer integer = WOShared.unsignedIntNumber(Integer.parseInt(associationValue));
 				association = WOHelperFunctionAssociation.associationWithValue(integer);
 			}
-			else if (associationValue.equalsIgnoreCase("true") || associationValue.equalsIgnoreCase("yes")) {
+			else if ("true".equalsIgnoreCase(associationValue) || "yes".equalsIgnoreCase(associationValue)) {
 				association = WOConstantValueAssociation.TRUE;
 			}
-			else if (associationValue.equalsIgnoreCase("false") || associationValue.equalsIgnoreCase("no") || associationValue.equalsIgnoreCase("nil") || associationValue.equalsIgnoreCase("null")) {
+			else if ("false".equalsIgnoreCase(associationValue) || "no".equalsIgnoreCase(associationValue) || "nil".equalsIgnoreCase(associationValue) || "null".equalsIgnoreCase(associationValue)) {
 				association = WOConstantValueAssociation.FALSE;
 			}
 			else {

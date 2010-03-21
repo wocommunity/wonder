@@ -3,7 +3,6 @@ dbConnectUserGLOBAL=
 dbConnectPluginGLOBAL=
 dbConnectDriverGLOBAL=
 dbEOPrototypesEntityGLOBAL=EOJDBCDerbyPrototypes
-er.javamail.adminEmail=foo@localhost.com
 
 BugTracker.processMail=false
 BugTracker.mailStore=pop3

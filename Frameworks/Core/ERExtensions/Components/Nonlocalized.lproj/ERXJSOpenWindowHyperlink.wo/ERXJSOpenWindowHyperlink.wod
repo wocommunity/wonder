@@ -13,6 +13,7 @@ DirectActionContent: WOComponentContent {}
 ComponentActionLink: WOHyperlink {
 	onclick=openWindow;
 	class = ^linkClass;
+	style = ^style;
 	string = ^string;
 	action = action;
 	target = ^target;
@@ -23,6 +24,7 @@ ComponentActionLink: WOHyperlink {
 
 DirectActionLink: WOHyperlink {
 	class = ^linkClass;
+	style = ^style;
 	onclick=openWindow;
 	string = ^string;
 	target = ^target;

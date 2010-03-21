@@ -150,9 +150,10 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         			method = (String) entry.objectForKey(BRANCH_NAME);
         			label = (String) entry.objectForKey(BRANCH_LABEL);
         		} else if (o instanceof String) {
-        			method = (String) o;
-        		}
-        		if(label == null) {
+                    method = (String) o;
+                    entry.setObjectForKey(method, BRANCH_NAME);
+                }
+                if (label == null) {
         			label = ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(BRANCH_PREFIX, method);
            		} else if(label.startsWith(BRANCH_PREFIX + ".")){
            			String localizerKey = label;
@@ -215,7 +216,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 						if(availableTasks.length() > 0 && !availableTasks.contains(task)) {
 							isAllowed = false;
 						}
-						if(availablePages.length() > 0 && !availablePages.contains(task)) {
+						if(availablePages.length() > 0 && !availablePages.contains(pageName)) {
 							isAllowed = false;
 						}
                     }

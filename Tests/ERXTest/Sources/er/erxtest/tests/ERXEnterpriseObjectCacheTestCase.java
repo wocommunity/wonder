@@ -2,19 +2,18 @@ package er.erxtest.tests;
 
 import java.util.UUID;
 
-import junit.framework.TestCase;
-
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
 
+import er.erxtest.ERXTestCase;
 import er.erxtest.model.Company;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEnterpriseObjectCache;
 
-public class ERXEnterpriseObjectCacheTestCase extends TestCase {
+public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
 
-    EOEditingContext editingContext;
-    Company c1, c2;
+  private EOEditingContext editingContext;
+  private Company c1, c2;
 
   public void testInsert() {
     testInsert(true);

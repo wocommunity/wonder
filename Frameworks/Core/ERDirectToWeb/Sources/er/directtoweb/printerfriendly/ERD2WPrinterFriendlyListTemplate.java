@@ -12,9 +12,14 @@ import er.directtoweb.pages.ERD2WListPage;
 
 /**
  * Printer friendly list page.<br />
- * 
+ * @d2wKey componentName
+ * @d2wKey propertyKey
+ * @d2wKey displayPropertyKeys
+ * @d2wKey backgroundColorForTable
+ * @d2wKey displayNameForEntity
+ * @d2wKey justification
+ * @d2wKey pageWrapperName
  */
-
 public class ERD2WPrinterFriendlyListTemplate extends ERD2WListPage {
 
     public ERD2WPrinterFriendlyListTemplate(WOContext context) { super(context); }

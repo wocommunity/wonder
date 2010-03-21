@@ -19,6 +19,11 @@ import er.extensions.foundation.ERXProperties;
  * ERDatabaseAttachmentProcessor implements storing attachment data as an attribute of an EO.  
  * For more information about configuring an ERDatabaseAttachmentProcessor, see the top level documentation.
  * 
+ * @property er.attachment.[configurationName].db.webPath
+ * @property er.attachment.db.webPath
+ * @property er.attachment.[configurationName].db.smallData
+ * @property er.attachment.db.smallData
+ *
  * @author mschrag
  */
 public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatabaseAttachment> {
@@ -29,7 +34,7 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
       webPath = ERXProperties.stringForKeyWithDefault("er.attachment.db.webPath", "/${pk}${ext}");
     }
     if (webPath == null) {
-      throw new IllegalArgumentException("There is no 'er.attachment." + configurationName + ".db.path' or 'er.attachment.db.path' property set.");
+      throw new IllegalArgumentException("There is no 'er.attachment." + configurationName + ".db.webPath' or 'er.attachment.db.webPath' property set.");
     }
     else if (!webPath.startsWith("/")) {
       webPath = "/" + webPath;

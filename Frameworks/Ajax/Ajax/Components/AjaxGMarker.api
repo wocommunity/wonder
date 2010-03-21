@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo wocomponentcontent="false" class="AjaxGMarker.java">
+	<wo class="AjaxGMarker.java" wocomponentcontent="false">
 	    <binding name="id"/>
 	    <binding name="mapID"/>
 	    <binding name="address"/>
@@ -27,5 +27,6 @@
 	        <bound name="address"/>
   	    </and>
     	</validation>	    
-	</wo>
+	<binding name="options"/>
+    </wo>
 </wodefinitions>

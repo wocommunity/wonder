@@ -33,8 +33,8 @@ import er.extensions.eof.ERXEOControlUtilities;
  * 
  * @binding d2wContext
  * @binding list
+ * @d2wKey massModificationPageConfiguration
  */
-
 public class ERDMassModifyButton extends WOComponent {
 
     public ERDMassModifyButton(WOContext context) { super(context); }

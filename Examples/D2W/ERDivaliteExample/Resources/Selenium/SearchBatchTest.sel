@@ -1,0 +1,20 @@
+|setTimeout|20000||
+|open|/wa/QueryStudio||
+** Open Main Menu:  
+|assertText|//div[@id='a']/h1/span|Search|
+|assertText|//div[@id='a']/h2|Studio|
+** Search
+|click|//button[@class='search']||
+|pause|2000||
+|assertText|//div[@id='a']/h1/span|List|
+|assertText|//div[@id='a']/h2|Studio|
+|type|batch_size|15|
+|click|//button[@class='next']||
+|pause|2000||
+|click|//button[@class='next']||
+|pause|2000||
+|assertText|//tr[@id='Studio36']/td[4]|Samuel Goldwyn Company|
+|type|batch_size|10|
+|click|//button[@class='next']||
+|pause|2000||
+|assertText|//tr[@id='Studio16']/td[4]|Universal Pictures|

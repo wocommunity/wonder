@@ -9,7 +9,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
@@ -28,6 +27,7 @@ import java.text.Format;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -764,6 +764,148 @@ public class ERXStringUtilities {
         return result.toString();
     }
 
+    /**
+     * XML entities to unescape.
+     */
+	public static final NSDictionary XML_UNESCAPES;
+	
+	/**
+	 * ISO entities to unescape.
+	 */
+	public static final NSDictionary ISO_UNESCAPES;
+	
+	/**
+	 * Symbol entities to unescape.
+	 */
+	public static final NSDictionary SYMBOL_UNESCAPES; 
+
+	/**
+	 * Safe HTML entities to unescape (SYMBOL+ISO). This still prevents injection attacks.
+	 */
+	public static final NSDictionary HTML_SAFE_UNESCAPES; 
+
+	/**
+	 * HTML entities to unescape (XML+SYMBOL+ISO).
+	 */
+	public static final NSDictionary HTML_UNESCAPES; 
+
+	static {
+		// NOTE AK I used: 
+		// http://www.w3schools.com/tags/ref_symbols.asp
+		// http://www.w3schools.com/tags/ref_entities.asp
+		// as apache commons lang didn't really work for me?!?
+		
+		Object[] xml = new Object[] { '<', "lt", '>', "gt", '&', "amp", '\"', "quot" };
+		NSMutableDictionary dict = new NSMutableDictionary();
+		for (int i = 0; i < xml.length; i+=2) {
+			Character charValue = ((Character) xml[i]);
+			String key = (String) xml[i+1];
+			dict.setObjectForKey(charValue+"", key);
+			dict.setObjectForKey(charValue+"", "#"+charValue);
+		}
+		XML_UNESCAPES = dict.immutableClone();
+		
+		Object[] iso = { 160, "nbsp", 161, "iexcl", 162, "cent", 163, "pound", 164, "curren", 165, "yen", 166, "brvbar", 167, "sect", 168, "uml", 169, "copy", 170, "ordf", 171, "laquo", 172, "not", 173, "shy", 174, "reg", 175, "macr", 176, "deg", 177, "plusmn", 178, "sup2", 179, "sup3", 180, "acute", 181, "micro", 182, "para", 183, "middot", 184, "cedil", 185, "sup1", 186, "ordm", 187, "raquo", 188, "frac14", 189, "frac12", 190, "frac34", 191, "iquest", 215, "times", 247, "divide", 192, "Agrave", 193, "Aacute", 194, "Acirc", 195, "Atilde", 196, "Auml", 197, "Aring", 198, "AElig", 199, "Ccedil", 200, "Egrave", 201, "Eacute", 202, "Ecirc", 203, "Euml", 204, "Igrave", 205, "Iacute", 206, "Icirc", 207, "Iuml", 208, "ETH", 209, "Ntilde", 210, "Ograve", 211, "Oacute", 212, "Ocirc", 213, "Otilde", 214, "Ouml", 216, "Oslash", 217, "Ugrave", 218, "Uacute", 219, "Ucirc", 220, "Uuml", 221, "Yacute", 222, "THORN", 223, "szlig", 224, "agrave", 225, "aacute", 226, "acirc", 227, "atilde", 228,
+				"auml", 229, "aring", 230, "aelig", 231, "ccedil", 232, "egrave", 233, "eacute", 234, "ecirc", 235, "euml", 236, "igrave", 237, "iacute", 238, "icirc", 239, "iuml", 240, "eth", 241, "ntilde", 242, "ograve", 243, "oacute", 244, "ocirc", 245, "otilde", 246, "ouml", 248, "oslash", 249, "ugrave", 250, "uacute", 251, "ucirc", 252, "uuml", 253, "yacute", 254, "thorn", 255, "yuml" };
+		
+		dict = new NSMutableDictionary();
+		for (int i = 0; i < iso.length; i+=2) {
+			Integer charValue = ((Integer) iso[i]);
+			String key = (String) iso[i+1];
+			dict.setObjectForKey(Character.toChars(charValue)[0]+"", key);
+			dict.setObjectForKey(Character.toChars(charValue)[0]+"", "#"+charValue);
+		}
+		ISO_UNESCAPES = dict.immutableClone();
+		
+		Object[] symbols = new Object[] { 8704, "forall", 8706, "part", 8707, "exists", 8709, "empty", 8711, "nabla", 8712, "isin", 8713, "notin", 8715, "ni", 8719, "prod", 8721, "sum", 8722, "minus", 8727, "lowast", 8730, "radic", 8733, "prop", 8734, "infin", 8736, "ang", 8743, "and", 8744, "or", 8745, "cap", 8746, "cup", 8747, "int", 8756, "there4", 8764, "sim", 8773, "cong", 8776, "asymp", 8800, "ne", 8801, "equiv", 8804, "le", 8805, "ge", 8834, "sub", 8835, "sup", 8836, "nsub", 8838, "sube", 8839, "supe", 8853, "oplus", 8855, "otimes", 8869, "perp", 8901, "sdot", 913, "Alpha", 914, "Beta", 915, "Gamma", 916, "Delta", 917, "Epsilon", 918, "Zeta", 919, "Eta", 920, "Theta", 921, "Iota", 922, "Kappa", 923, "Lambda", 924, "Mu", 925, "Nu", 926, "Xi", 927, "Omicron", 928, "Pi", 929, "Rho", 931, "Sigma", 932, "Tau", 933, "Upsilon", 934, "Phi", 935, "Chi", 936, "Psi", 937, "Omega", 945, "alpha", 946, "beta", 947, "gamma", 948, "delta", 949, "epsilon", 950, "zeta", 951, "eta", 952, "theta",
+				953, "iota", 954, "kappa", 955, "lambda", 956, "mu", 957, "nu", 958, "xi", 959, "omicron", 960, "pi", 961, "rho", 962, "sigmaf", 963, "sigma", 964, "tau", 965, "upsilon", 966, "phi", 967, "chi", 968, "psi", 969, "omega", 977, "thetasym", 978, "upsih", 982, "piv", 338, "OElig", 339, "oelig", 352, "Scaron", 353, "scaron", 376, "Yuml", 402, "fnof", 710, "circ", 732, "tilde", 8194, "ensp", 8195, "emsp", 8201, "thinsp", 8204, "zwnj", 8205, "zwj", 8206, "lrm", 8207, "rlm", 8211, "ndash", 8212, "mdash", 8216, "lsquo", 8217, "rsquo", 8218, "sbquo", 8220, "ldquo", 8221, "rdquo", 8222, "bdquo", 8224, "dagger", 8225, "Dagger", 8226, "bull", 8230, "hellip", 8240, "permil", 8242, "prime", 8243, "Prime", 8249, "lsaquo", 8250, "rsaquo", 8254, "oline", 8364, "euro", 8482, "trade", 8592, "larr", 8593, "uarr", 8594, "rarr", 8595, "darr", 8596, "harr", 8629, "crarr", 8968, "lceil", 8969, "rceil", 8970, "lfloor", 8971, "rfloor", 9674, "loz", 9824, "spades", 9827, "clubs", 9829, "hearts",
+				9830, "diams" };
+		dict = new NSMutableDictionary();
+		for (int i = 0; i < symbols.length; i+=2) {
+			Integer charValue = ((Integer) symbols[i]);
+			String key = (String) symbols[i+1];
+			dict.setObjectForKey(Character.toChars(charValue)[0]+"", key);
+			dict.setObjectForKey(Character.toChars(charValue)[0]+"", "#"+charValue);
+		}
+		SYMBOL_UNESCAPES = dict.immutableClone();
+
+		dict = new NSMutableDictionary();
+		dict.addEntriesFromDictionary(ISO_UNESCAPES);
+		dict.addEntriesFromDictionary(SYMBOL_UNESCAPES);
+		HTML_SAFE_UNESCAPES = dict.immutableClone();
+		
+		dict.addEntriesFromDictionary(XML_UNESCAPES);
+		HTML_UNESCAPES = dict.immutableClone();
+	}
+  
+    /**
+     * Util to unescape entities. Entities not found in the set will be left intact.
+     * @param string string to unescape
+     * @param map map of entities
+     * @return unescaped string
+     */
+    public static String unescapeEntities(String string, Map<String, String> map) {
+        if(string != null) {
+        	StringBuilder result = new StringBuilder();
+            int len = string.length();
+            for(int start = 0; start < len; start++) {
+                char c1 = string.charAt(start);
+                if(c1 == '&') {
+                	StringBuilder entity = new StringBuilder();
+                    for(int end = start+1; end < len; end++) {
+                        char c2 = string.charAt(end);
+                        if(c2 == ';') {
+                            String key = entity.toString();
+							String replacement = map.get(key);
+                            if(replacement == null) {
+                            	replacement = map.get(key.toUpperCase());
+                            }
+                            if(replacement == null) {
+                            	replacement = "&" + key + ";";
+                            }
+   							result.append(replacement);
+                            start = end;
+                            break;
+                        }
+                        entity.append(c2);
+                    }
+                } else {
+                    result.append(c1);
+                }
+            }
+            string = result.toString();
+        }
+        return string;
+    }
+
+    /**
+     * Escapes the given PCDATA string as CDATA.
+     * @param pcdata The string to escape
+     * @return the escaped string
+     */
+    public static String escapePCData(String pcdata) {
+    	if(pcdata == null) { return null; }
+    	
+    	int start = 0;
+    	int end = 0;
+    	String close = "]]>";
+    	String escape = "]]]]><![CDATA[>";
+
+    	StringBuffer sb = new StringBuffer("<![CDATA[");
+    	
+    	do {
+        	end = pcdata.indexOf(close, start);
+    		sb.append(pcdata.substring(start, (end==-1?pcdata.length():end)));
+    		if(end != -1) { sb.append(escape); }
+    		start = end;
+    		start += 3;
+    	} while (end != -1);
+    	
+    	sb.append(close);
+    	
+    	return sb.toString();
+    }
+
     public static String escapeNonBasicLatinChars(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
         if (block != null  &&  Character.UnicodeBlock.BASIC_LATIN.equals(block)) 
@@ -782,6 +924,16 @@ public class ERXStringUtilities {
         return result.toString();
     }
 
+    /**
+     * Escapes the apostrophes in a Javascript string with a backslash.
+     * 
+     * @param sourceString the source string to escape
+     * @return the escaped javascript string
+     */
+    public static String escapeJavascriptApostrophes(String sourceString) {
+    	return ERXStringUtilities.escape(new char[] { '\'' }, '\\', sourceString);
+    }
+    
     /**
      * Escapes the given characters with the given escape character in _sourceString.  This 
      * implementation is specifically designed for large strings.  In the event that no characters 
@@ -891,24 +1043,20 @@ public class ERXStringUtilities {
 			byte b = 0;
             if(c1 >= '0' && c1 <= '9')
                 b += (c1 - 48) * 16;
-            else
-            if(c1 >= 'a' && c1 <= 'f')
+            else if(c1 >= 'a' && c1 <= 'f')
                 b += ((c1 - 97) + 10) * 16;
-            else
-            if(c1 >= 'A' && c1 <= 'F')
+            else if(c1 >= 'A' && c1 <= 'F')
                 b += ((c1 - 65) + 10) * 16;
             else
-                throw new IllegalArgumentException("Illegal Character");
+                throw new IllegalArgumentException("Illegal Character: '" + c1 + "' in " + hexString);
             if(c2 >= '0' && c2 <= '9')
                 b += c2 - 48;
-            else
-            if(c2 >= 'a' && c2 <= 'f')
+            else if(c2 >= 'a' && c2 <= 'f')
                 b += (c2 - 97) + 10;
-            else
-            if(c2 >= 'A' && c2 <= 'F')
+            else if(c2 >= 'A' && c2 <= 'F')
                 b += (c2 - 65) + 10;
             else
-                throw new IllegalArgumentException("Illegal Character");
+                throw new IllegalArgumentException("Illegal Character: '" + c2 + "' in " + hexString);
             array[i] = b;
 
 		}
@@ -1703,17 +1851,17 @@ public class ERXStringUtilities {
 	
 	/**
 	 * It's ridiculous that StringBuffer doesn't have a .regionMatches like String.  This is
-	 * stolen from String and reimplemnted on top of StringBuffer.  It's slightly slower than
+	 * stolen from String and re-implemented on top of StringBuffer.  It's slightly slower than
 	 * String's because we have to call charAt instead of just accessing the underlying array,
 	 * but so be it.
 	 * 
 	 * @param str the StringBuffer to compare a region of
-     * @param toffset the starting offset of the subregion in this string.
+     * @param toffset the starting offset of the sub-region in this string.
      * @param other the string argument.
-     * @param ooffset the starting offset of the subregion in the string argument.
+     * @param ooffset the starting offset of the sub-region in the string argument.
      * @param len the number of characters to compare.
-     * @return <code>true</code> if the specified subregion of this string
-     *         exactly matches the specified subregion of the string argument;
+     * @return <code>true</code> if the specified sub-region of this string
+     *         exactly matches the specified sub-region of the string argument;
      *         <code>false</code> otherwise.
 	 */
     public static boolean regionMatches(StringBuffer str, int toffset, String other, int ooffset, int len) {
@@ -1736,12 +1884,12 @@ public class ERXStringUtilities {
     /**
      * Converts source to be suitable for use as an identifier in JavaScript.  prefix is prefixed to source
      * if the first character of source is not suitable to start an identifier (e.g. a number).  Any characters
-     * in source that are not allowd in an identifier are replaced with replacment.
+     * in source that are not allowed in an identifier are replaced with replacement.
      * 
      * @see Character#isJavaIdentifierStart(char)
      * @see Character#isJavaIdentifierPart(char)
      * 
-     * @param source String to make into a indentifier name
+     * @param source String to make into a identifier name
      * @param prefix String to prefix source with to make it a valid identifier name
      * @param replacement character to use to replace characters in source that are no allowed in an identifier name
      * @return source converted to a name suitable for use as an identifier in JavaScript
@@ -1772,7 +1920,7 @@ public class ERXStringUtilities {
      * 
      * @see #safeIdentifierName(String, String, char)
      * 
-     * @param source String to make into a indentifier name
+     * @param source String to make into a identifier name
      * @param prefix String to prefix source with to make it a valid identifier name
      * @return source converted to a name suitable for use as an identifier in JavaScript
      */
@@ -1786,7 +1934,7 @@ public class ERXStringUtilities {
      *
      * @see #safeIdentifierName(String, String, char)
      * 
-     * @param source String to make into a indentifier name
+     * @param source String to make into a identifier name
      * @return source converted to a name suitable for use as an identifier in JavaScript
      */
     public static String safeIdentifierName(String source) {
@@ -2270,5 +2418,39 @@ public class ERXStringUtilities {
 			}
 		}
 		return rangeMatches;
+	}
+	
+	/**
+	 * Masks a given string with a single character in the substring specified by the
+	 * begin and end indexes.  Negative indexes count from the end of the string 
+	 * beginning with -1.  For example,
+	 * <code>maskStringWithCharacter("Visa 4111111111111111", '*', 5, -4);</code> will
+	 * result in a string value of "Visa ************1111" 
+	 * 
+	 * @param arg The string value to mask
+	 * @param mask The character mask
+	 * @param beginIndex The string index where masking begins. 
+	 * Negative numbers count down from the end of the string.
+	 * @param endIndex The index where masking ends.
+	 * Negative numbers count down from the end of the string
+	 * @return The masked string result
+	 */
+	public static String maskStringWithCharacter(String arg, char mask, int beginIndex, int endIndex) {
+		int length = arg.length();
+		
+		//Get the actual begin and end index.
+		int begin = (beginIndex < 0)?length + beginIndex:beginIndex;
+		int end = (endIndex < 0)?length + endIndex:endIndex;
+		int sub = end - begin;
+		if(sub < 0) {
+			throw new StringIndexOutOfBoundsException(sub);
+		}
+				
+		StringBuilder sb = new StringBuilder(arg.substring(0, begin));
+		for(int i = 0; i < sub; i++) { 
+			sb.append(mask);
+		}
+		sb.append(arg.substring(end, length));
+		return sb.toString();
 	}
 }

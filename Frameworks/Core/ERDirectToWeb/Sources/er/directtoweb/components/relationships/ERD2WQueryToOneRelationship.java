@@ -26,8 +26,21 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey multiple when true, the user can choose multiple items
  * @d2wKey restrictedChoiceKey keypath off the component that returns the list of objects to display
  * @d2wKey restrictingFetchSpecification name of the fetchSpec to use for the list of objects.
+ * @d2wKey keyWhenRelationship
+ * @d2wKey numCols
+ * @d2wKey size
+ * @d2wKey entity
+ * @d2wKey toOneUIStyle
+ * @d2wKey localizeDisplayKeys
+ * @d2wKey destinationEntityName
+ * @d2wKey isMandatory
+ * @d2wKey sortCaseInsensitive
+ * @d2wKey sortKey
+ * @d2wKey noSelectionString
+ * @d2wKey id
+ * @d2wKey popupName
+ * @d2wKey propertyKey
  */
-
 public class ERD2WQueryToOneRelationship extends D2WQueryToOneRelationship {
     static final Logger log = Logger.getLogger(ERD2WQueryToOneRelationship.class);
 

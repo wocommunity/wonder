@@ -14,6 +14,7 @@ import er.extensions.eof.qualifiers.ERXRegExQualifier;
 import er.extensions.eof.qualifiers.ERXToManyQualifier;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXFalseQualifier;
+import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.qualifiers.ERXNotQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
@@ -125,7 +126,7 @@ public class ERXQ {
 	 * @param qualifier
 	 *            the qualifier to filter on
 	 * @return one matching object or null
-	 * @throw IllegalStateException if more than one object matched
+	 * @throws IllegalStateException if more than one object matched
 	 */
 	public static <T> T one(NSArray<T> array, EOQualifier qualifier) {
 		T object;
@@ -159,7 +160,7 @@ public class ERXQ {
 	 * @param qualifier
 	 *            the qualifier to filter on
 	 * @return one matching object or null
-	 * @throw IllegalStateException if more than one object matched
+	 * @throws IllegalStateException if more than one object matched
 	 */
 	public static <T> T first(NSArray<T> array, EOQualifier qualifier) {
 		T object;
@@ -190,8 +191,8 @@ public class ERXQ {
 	 * @param qualifier
 	 *            the qualifier to filter on
 	 * @return one matching object
-	 * @throw IllegalStateException if more than one object matched
-	 * @throw NoSuchElementException if no objects matched
+	 * @throws IllegalStateException if more than one object matched
+	 * @throws NoSuchElementException if no objects matched
 	 */
 	public static <T> T requiredOne(NSArray<T> array, EOQualifier qualifier) {
 		T object = ERXQ.one(array, qualifier);
@@ -354,6 +355,20 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorEqual, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T> ERXKeyComparisonQualifier equals(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.EQ, value.key());
+	}
+	
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorEqual, value);
 	 * 
@@ -443,6 +458,20 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorNotEqual, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T >ERXKeyComparisonQualifier notEquals(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.NE, value.key());
+	}
+	
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorLessThan, value);
 	 * 
@@ -454,6 +483,20 @@ public class ERXQ {
 	 */
 	public static ERXKeyValueQualifier lessThan(String key, Object value) {
 		return new ERXKeyValueQualifier(key, ERXQ.LT, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorLessThan, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */	
+	public static <T> ERXKeyComparisonQualifier lessThan(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.LT, value.key());
 	}
 
 	/**
@@ -471,6 +514,20 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorGreaterThan, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T> ERXKeyComparisonQualifier greaterThan(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.GT, value.key());
+	}
+	
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorLessThanOrEqualTo, value);
 	 * 
@@ -485,6 +542,20 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorLessThanOrEqualTo, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T> ERXKeyComparisonQualifier lessThanOrEqualTo(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.LTEQ, value.key());
+	}
+
+	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorGreaterThanOrEqualTo, value);
 	 * 
@@ -496,6 +567,20 @@ public class ERXQ {
 	 */
 	public static ERXKeyValueQualifier greaterThanOrEqualTo(String key, Object value) {
 		return new ERXKeyValueQualifier(key, ERXQ.GTEQ, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyComparisonQualifier(key,
+	 * EOQualifier.QualifierOperatorGreaterThanOrEqualTo, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyComparisonQualifier
+	 */
+	public static <T> ERXKeyComparisonQualifier greaterThanOrEqualTo(ERXKey<T> key, ERXKey<T> value) {
+		return new ERXKeyComparisonQualifier(key.key(), ERXQ.GTEQ, value.key());
 	}
 
 	/**
@@ -644,6 +729,66 @@ public class ERXQ {
 			return lowerQ;
 		}
 		return ERXQ.and(lowerQ, upperQ);
+	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorLike, value + "*").
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the substring value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier startsWith(String key, String value) {
+		value = value + "*";
+		return ERXQ.like(key, value);
+	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorCaseInsensitiveLike, value + "*").
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the substring value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier startsWithInsensitive(String key, String value) {
+		value = value + "*";
+		return ERXQ.likeInsensitive(key, value);
+	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorLike, "*" + value).
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the substring value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier endsWith(String key, String value) {
+		value = "*" + value;
+		return ERXQ.like(key, value);
+	}
+	
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.OperatorCaseInsensitiveLike, "*" + value).
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the substring value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier endsWithInsensitive(String key, String value) {
+		value = "*" + value;
+		return ERXQ.likeInsensitive(key, value);
 	}
 
 	/**

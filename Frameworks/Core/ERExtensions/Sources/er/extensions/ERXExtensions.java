@@ -9,11 +9,16 @@ package er.extensions;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
 
@@ -27,6 +32,7 @@ import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.ERXModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -35,6 +41,7 @@ import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -70,6 +77,7 @@ import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXUtilities;
@@ -112,7 +120,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /** holds the default model group */
-    protected ERXModelGroup defaultModelGroup;
+    protected volatile ERXModelGroup defaultModelGroup;
 
     /**
      * Delegate method for the {@link EOModelGroup} class delegate.
@@ -120,19 +128,23 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public EOModelGroup defaultModelGroup() {
         if(defaultModelGroup == null) {
-        	String defaultModelGroupClassName = ERXProperties.stringForKey("er.extensions.defaultModelGroupClassName");
-        	if (defaultModelGroupClassName == null) {
-	            defaultModelGroup = new ERXModelGroup();
+        	synchronized (ERXModel._ERXGlobalModelLock) {
+        		if (defaultModelGroup == null) {
+		        	String defaultModelGroupClassName = ERXProperties.stringForKey("er.extensions.defaultModelGroupClassName");
+		        	if (defaultModelGroupClassName == null) {
+			            defaultModelGroup = new ERXModelGroup();
+		        	}
+		        	else {
+		        		try {
+							defaultModelGroup = Class.forName(defaultModelGroupClassName).asSubclass(ERXModelGroup.class).newInstance();
+						}
+						catch (Exception e) {
+							throw new RuntimeException("Failed to create custom ERXModelGroup subclass '" + defaultModelGroupClassName + "'.", e);
+						}
+		        	}
+		            defaultModelGroup.loadModelsFromLoadedBundles();
+        		}
         	}
-        	else {
-        		try {
-					defaultModelGroup = Class.forName(defaultModelGroupClassName).asSubclass(ERXModelGroup.class).newInstance();
-				}
-				catch (Exception e) {
-					throw new RuntimeException("Failed to create custom ERXModelGroup subclass '" + defaultModelGroupClassName + "'.", e);
-				}
-        	}
-            defaultModelGroup.loadModelsFromLoadedBundles();
         }
         return defaultModelGroup;
     }
@@ -168,14 +180,14 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	
     	try {
     		// This will load any optional configuration files, 
-    		ERXConfigurationManager.defaultManager().initialize();
     		// ensures that WOOutputPath's was processed with this @@
     		// variable substitution. WOApplication uses WOOutputPath in
     		// its constructor so we need to modify it before calling
     		// the constructor.
+    		ERXConfigurationManager.defaultManager().initialize();
         	EOModelGroup.setClassDelegate(this);
         	ERXSystem.updateProperties();
-
+ 
     		// AK: enable this when we're ready
         	// WOEncodingDetector.sharedInstance().setFallbackEncoding("UTF-8");
         	
@@ -224,12 +236,18 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * This method is called when the application has finished
      * launching. Here is where log4j is configured for rapid
-     * turn around, the compiler proxy is initialized and the
-     * validation template system is configured.
+     * turn around and the validation template system is configured.
      */
     public void finishInitialization() {
     	ERXJDBCAdaptor.registerJDBCAdaptor();
-        ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
+        // AK: we now setup the properties three times. At startup, in ERX.init
+		// and here. Note that this sucks beyond belief, as this will produce
+		// unforeseen results in several cases, but it's the only way to set up
+		// all parts of the property handling. The first install only loads plain
+		// and user props the second has no good way to set up the main bundle and this one
+		// comes too late for static inits
+    	ERXConfigurationManager.defaultManager().loadConfiguration();
+    	
         ERXProperties.populateSystemProperties();
         
         ERXConfigurationManager.defaultManager().configureRapidTurnAround();
@@ -243,6 +261,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         // ERXLogger.configureLoggingWithSystemProperties();
         
         _log = Logger.getLogger(ERXExtensions.class);
+		ERXProperties.pathsForUserAndBundleProperties(true);
 
         registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), 
                 EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
@@ -612,16 +631,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s string to capitalize
      * @return capitalized string if the first char is a
      *		lowercase character.
+     *@deprecated ERXStringUtilities.capitalize()
      */
-    // MOVEME: ERXStringUtilities
     public static String capitalize(String s) {
-        String result=s;
-        if (s!=null && s.length()>0) {
-            char c=s.charAt(0);
-            if (Character.isLowerCase(c))
-                result=Character.toUpperCase(c)+s.substring(1);
-        }
-        return result;
+        return ERXStringUtilities.capitalize(s);
     }
 
     /**
@@ -631,8 +644,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param howMany number of its
      * @param language target language
      * @return plurified string
+     * @deprecated use ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany)
      */
-    // MOVEME: ERXStringUtilities
     public static String plurify(String s, int howMany, String language) {
         return ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany);
     }
@@ -784,9 +797,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param frameworkName name of the framework, null or "app"
      *		for the application bundle
      * @return the <code>lastModified</code> method of the file object
+     * @deprecated use ERXFileUtilities.lastModifiedDateForFileInFramework()
      */
-    // MOVEME: ERXFileUtilities
-    // ENHANCEME: Should be able to specify the language to check
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
         return ERXFileUtilities.lastModifiedDateForFileInFramework(fileName, frameworkName);
     }
@@ -798,9 +810,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      *		'app' for the application bundle.
      * @return de-serialized object from the plist formatted file
      *		specified.
+     * @deprecated use ERXFileUtilities.readPropertyListFromFileInFramework()
      */
-    // FIXME: Capitalize inFramework
-    // MOVEME: ERXFileUtilities
     public static Object readPropertyListFromFileinFramework(String fileName, String aFrameWorkName) {
         return ERXFileUtilities.readPropertyListFromFileInFramework(fileName, aFrameWorkName);
     }
@@ -814,9 +825,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param languageList language list search order
      * @return de-serialized object from the plist formatted file
      *		specified.
+     * @deprecated use ERXFileUtilities.readPropertyListFromFileInFramework()
      */
-    // FIXME: Not the best way of handling encoding
-    // MOVEME: ERXFileUtilities
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
                                                              NSArray languageList) {
@@ -1241,6 +1251,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	ERXExtensions.initApp(mainBundleName, null, applicationSubclass, args);
     }
     
+    private static boolean _appInitialized = false;
     /**
      * Initializes your WOApplication programmatically (for use in test cases and main methods).
      * 
@@ -1250,6 +1261,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param args the commandline arguments for your application
      */
     public static void initApp(String mainBundleName, URL mainBundleURL, Class applicationSubclass, String[] args) {
+    	if (_appInitialized) {
+    		return;
+    	}
     	try {
 	        ERXApplication.setup(args);
 	        if (mainBundleURL != null) {
@@ -1263,6 +1277,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		catch (IOException e) {
 			throw new NSForwardException(e);
 		}
+    	_appInitialized = true;
     }
     
     /**
@@ -1271,35 +1286,165 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * initApp, and tries to just get enough configured to make EOF work properly.  This method
      * assumes you are running your app from a .woa folder.
      * 
+     * <p>This is equivalent to calling <code>initEOF(new File("."), args)</code>.</p>
+     * 
      * @param args the commandline arguments for your application
+     * @throws IllegalArgumentException if the current dir or mainBundleFolder is not a *.woa bundle.
      */
-    public static void initEOF(String[] args) {
+    public static void initEOF(final String[] args) {
     	ERXExtensions.initEOF(new File("."), args);
     }
-    
     /**
      * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
      * not need to call this method if you already called initApp.  This is lighter-weight than 
      * initApp, and tries to just get enough configured to make EOF work properly.
      * 
+     * <p>This is equivalent to calling <code>initEOF(mainBundleFolder, args, true, true, true)</code>.</p>
+     * 
      * @param mainBundleFolder the folder of your main bundle
      * @param args the commandline arguments for your application
+     * @throws IllegalArgumentException if the current dir or mainBundleFolder is not a *.woa bundle.
      */
-    public static void initEOF(File mainBundleFolder, String[] args) {
+    public static void initEOF(final File mainBundleFolder, final String[] args) {
+    	initEOF(mainBundleFolder, args, true, true, true);
+    }
+    /**
+     * <p>
+     * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
+     * not need to call this method if you already called initApp.  This is lighter-weight than 
+     * initApp, and tries to just get enough configured to make EOF work properly. This method is also,
+     * unlike {@link #initEOF(String[])} or {@link #initEOF(File, String[])}, not so restrictive as to
+     * require the name of the bundle be a <code>*.woa</code>, and nor does it require <code>*.framework</code>
+     * as the name of the bundle.
+     * </p>
+     * <p>
+     * It can therefore be useful for, and used with, folder, jar or war
+     * bundles -- whichever bundle is referenced by <code>mainBundleURI</code> -- so long as it is
+     * bundle-like in content rather than by name. For NSBundle, this usually just requires a Resources folder
+     * within the bundle.
+     * </p>
+     * <p>
+     * For example, if you're build tool compiles sources and puts Resources under <code>target/classes</code>
+     * you can call this method via <code>ERXExtensions.initEOF(new File(projectDir, "target/classes"), args, true)</code>.
+     * </p>
+     * <p><b>Note 1:</b>
+     *  this will set the system property <code>webobjects.user.dir</code> to the canonical path of the 
+     * given bundle uri if, and only if, the bundle uri points to a directory and is schema is <code>file</code>.
+     * </p>
+     * <p><b>Note 2:</b>
+     *  this will set NSBundle's mainBundle to the referenced bundle loaded via
+     *  {@link ERXRuntimeUtilities#loadBundleIfNeeded(URI)} if found.
+     * </p>
+     * 
+     * <p>This is equivalent to calling <code>initEOF(mainBundleFolder, args, assertsBundleExists, false, true)</code>.</p>
+     * 
+     * @param mainBundleFile the archive file or directory of your main bundle
+     * @param args the commandline arguments for your application
+     * @param assertsBundleExists ensures that the bundle exists and is loaded
+     * @throws NSForwardException if the given bundle doesn't satisfy the given assertions or
+     *  		ERXRuntimeUtilities.loadBundleIfNeeded or ERXApplication.setup fails.
+     * @see #initEOF(File, String[], boolean, boolean, boolean)
+     */
+    public static void initEOF(final File mainBundleFile, final String[] args, boolean assertsBundleExists) {
+    	initEOF(mainBundleFile, args, assertsBundleExists, false, true);
+    }
+    private static boolean _eofInitialized = false;
+    private static final Lock _eofInitializeLock = new ReentrantLock();
+    /**
+     * <p>
+     * Initializes Wonder EOF programmatically (for use in test cases and main methods).  You do
+     * not need to call this method if you already called initApp.  This is lighter-weight than 
+     * initApp, and tries to just get enough configured to make EOF work properly. This method is also,
+     * unlike {@link #initEOF(String[])} or {@link #initEOF(File, String[])}, not so restrictive as to
+     * require the name of the bundle be a <code>*.woa</code>, and nor does it require <code>*.framework</code>
+     * as the name of the bundle.
+     * </p>
+     * <p>
+     * It can therefore be useful for, and used with, folder, jar or war
+     * bundles -- whichever bundle is referenced by <code>mainBundleURI</code> -- so long as it is
+     * bundle-like in content rather than by name. For NSBundle, this usually just requires a Resources folder
+     * within the bundle.
+     * </p>
+     * <p>
+     * For example, if you're build tool compiles sources and puts Resources under <code>target/classes</code>
+     * you can call this method via <code>ERXExtensions.initEOF(new File(projectDir, "target/classes").toURI(), args)</code>.
+     * </p>
+     * <p><b>Note 1:</b>
+     *  this will set the system property <code>webobjects.user.dir</code> to the canonical path of the 
+     * given bundle uri if, and only if, the bundle uri points to a directory and is schema is <code>file</code>.
+     * </p>
+     * <p><b>Note 2:</b>
+     *  this will set NSBundle's mainBundle to the referenced bundle loaded via
+     *  {@link ERXRuntimeUtilities#loadBundleIfNeeded(URI)} if found.
+     * </p>
+     * 
+     * @param mainBundleFile the archive file or directory of your main bundle
+     * @param args the commandline arguments for your application
+     * @param assertsBundleExists ensures that the bundle exists and is loaded
+     * @param assertsBundleIsWOApplicationFolder ensures that the bundle referenced by mainBundleFile, or the current dir if fallbackToUserDirAsBundle is true, is a <code>*.woa</code> bundle folder.
+     * @param fallbackToUserDirAsBundle falls back to current dir if the mainBundleFile does not exist
+     * @throws NSForwardException if the given bundle doesn't satisfy the given assertions or
+     *  		ERXRuntimeUtilities.loadBundleIfNeeded or ERXApplication.setup fails.
+     * @see ERXRuntimeUtilities#loadBundleIfNeeded(URI)
+     * @see NSBundle#_setMainBundle(NSBundle)
+     * @see ERXApplication#setup(String[])
+     * @see #bundleDidLoad(NSNotification)
+     */
+    public static void initEOF(final File mainBundleFile, String[] args, boolean assertsBundleExists, boolean assertsBundleIsWOApplicationFolder, boolean fallbackToUserDirAsBundle) {
+    	_eofInitializeLock.lock();
     	try {
-	    	File currentFolder = new File(".").getCanonicalFile();
-	    	if (!currentFolder.getName().endsWith(".woa")) {
-	    		currentFolder = mainBundleFolder;
-		    	if (!currentFolder.getName().endsWith(".woa")) {
-		    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
-		    	}
+	    	if (!_eofInitialized) {
+	    		try {
+	    			File bundleFile = mainBundleFile;
+	    			
+	    			if (assertsBundleIsWOApplicationFolder) {
+	    				if (!bundleFile.exists() || !bundleFile.getName().endsWith(".woa")) {
+	    					bundleFile = new File(".").getCanonicalFile();
+	    					if (!bundleFile.exists() || !bundleFile.getName().endsWith(".woa")) {
+	    						throw new IllegalArgumentException("Assertion failure. You must run your application from the .woa folder to call this method.");
+	    					}
+	    				}
+	    			}
+	    			
+	    			if (assertsBundleExists) {
+	    				if (bundleFile == null || !bundleFile.exists()) {
+	    					if (fallbackToUserDirAsBundle) {
+	    						bundleFile = new File(".").getCanonicalFile();
+	    					} else {
+	    						throw new IllegalArgumentException("Assertion failure. The main bundle is required to exist to call this method.");
+	    					}
+	    				}
+	    			}
+	    			
+	    			if (bundleFile != null && bundleFile.isDirectory()) {
+	    				System.setProperty("webobjects.user.dir", bundleFile.getCanonicalPath());
+	    			}
+	    			
+	    			NSBundle mainBundle = null;
+	    			try {
+	    				mainBundle = ERXRuntimeUtilities.loadBundleIfNeeded(bundleFile);
+	    				if (mainBundle == null) {
+							throw new IllegalArgumentException("The main bundle failed to load.");
+						}
+	    				NSBundle._setMainBundle(mainBundle);
+						NSLog.debug.appendln("initEOF setting main bundle to " + mainBundle);
+	    			}
+	    			catch (Exception e) {
+	    				if (assertsBundleExists) {
+	    					throw e;
+	    				}
+	    			}
+									
+					ERXApplication.setup(args);
+					((ERXExtensions) ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class)).bundleDidLoad(null);
+				}
+				catch (Exception e) {
+					throw new NSForwardException(e);
+				}
+		    	_eofInitialized = true;
 	    	}
-	        System.setProperty("webobjects.user.dir", mainBundleFolder.getCanonicalPath());
-	        ERXApplication.setup(args);
-	        ((ERXExtensions) ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class)).bundleDidLoad(null);
-		}
-		catch (IOException e) {
-			throw new NSForwardException(e);
-		}
+    	} finally {
+    		_eofInitializeLock.unlock();
+    	}
     }
 }

@@ -15,14 +15,16 @@
 		<module>ERCaptcha</module>
 		<module>ERChronic</module>
 		<module>ERDirectToRest</module>
+		<module>ERDivaliteLook</module>
 		<!--
 			<module>EROpenID</module> won't build because of dependency issues
 		-->
 		<module>ERPDFGeneration</module>
+		<module>ERProfiling</module>
 		<module>ERSelenium</module>
 		<module>ERWorkerChannel</module>
 		<module>JavaMonitorFramework</module>
-		<module>WOJavaRebel</module>
+		<module>WOJRebel</module>
 		<module>WOLips</module>
 	</modules>
 </project>

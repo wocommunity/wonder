@@ -1,0 +1,29 @@
+<webobject name="OptionalForm">
+  <webobject name="FieldSet">
+    <ul class="batch_nav_bar">
+    	<li class="batch_nav_bar content"><webobject name = "ComponentContent"></webobject></li>
+      <webobject name="EntityNameConditional">
+        <li class="batch_nav_bar entity_name">
+          <h3><webobject name="DGHasQualifier"><webobject name="filteredObjectsCount" /><webobject name="of" /></webobject><span class="count"><webobject name="Count" /></span><webobject name="EntityName" /></h3>
+        </li>
+      </webobject>
+      <li class="batch_nav_bar page_batch">
+        <fieldset class="page_batch">
+          <label><webobject name="show" /></label><webobject name="ItemsPerBatch" />
+          <em><webobject name="items_per_page" /></em>
+        </fieldset>
+      </li>
+      <webobject name="hasMultipleBatches">
+	  <li class="batch_nav_bar page_nav">
+	      <fieldset class="page_nav">
+	      	<ul>
+	      		<li><webobject name="RightArrow" /></li>
+	        	<li><label><webobject name="page" /></label><webobject name="BatchNumber" /><webobject name="of" />&nbsp;<webobject name="TotalBatches" /></li>
+	        	<li><webobject name="LeftArrow" /></li>
+	        </ul>
+	      </fieldset>
+	  </li>
+      </webobject>
+    </ul>
+  </webobject>
+</webobject>

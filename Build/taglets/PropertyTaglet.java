@@ -31,11 +31,13 @@ public class PropertyTaglet extends AbstractTaglet  {
         return HEADER;
     }
     
+    public boolean inMethod() { return true; }
+
     /**
      * Register this Taglet.
-     * @param tagletMap  the map to register this tag to.
+     * @param tagletMap the map to register this tag to.
      */
-    public static void register(Map tagletMap) {
+    public static void register(Map<String,Taglet> tagletMap) {
        PropertyTaglet tag = new PropertyTaglet();
        Taglet t = (Taglet) tagletMap.get(tag.getName());
        if (t != null) {

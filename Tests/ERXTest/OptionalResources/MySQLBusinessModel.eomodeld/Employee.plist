@@ -1,0 +1,53 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = companyId; 
+            externalType = INT; 
+            name = companyId; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = firstName; 
+            externalType = VARCHAR; 
+            name = firstName; 
+            valueClassName = NSString; 
+            width = 100; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = id; 
+            externalType = INT; 
+            name = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = lastName; 
+            externalType = VARCHAR; 
+            name = lastName; 
+            valueClassName = NSString; 
+            width = 100; 
+        }
+    ); 
+    attributesUsedForLocking = (companyId, firstName, id, lastName); 
+    className = EOGenericRecord; 
+    classProperties = (company, firstName, lastName); 
+    externalName = Employee; 
+    fetchSpecificationDictionary = {}; 
+    name = Employee; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Company; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = companyId; }); 
+            name = company; 
+        }
+    ); 
+}

@@ -2,6 +2,7 @@ package er.extensions.migration;
 
 import java.sql.SQLException;
 
+import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOSQLExpression;
@@ -24,6 +25,16 @@ import er.extensions.jdbc.ERXSQLHelper;
 public class ERXMigrationColumn {
 	public static final String NULL_VALUE_TYPE = "___NULL_VALUE_TYPE___";
 
+	/**
+	 * Constant for use with ERXMigrationTable.newXxxColumn AllowsNull columns.
+	 */
+	public static final boolean AllowsNull = true;
+
+	/**
+	 * Constant for use with ERXMigrationTable.newXxxColumn NotNull columns.
+	 */
+	public static final boolean NotNull = false;
+	
 	private ERXMigrationTable _table;
 	private String _name;
 	private int _jdbcType;
@@ -321,7 +332,18 @@ public class ERXMigrationColumn {
 	 */
 	@SuppressWarnings("unchecked")
 	public EOAttribute _newAttribute(EOEntity entity) {
-		JDBCAdaptor adaptor = (JDBCAdaptor) _table.database().adaptor();
+	  EOAdaptor eoAdaptor = _table.database().adaptor();
+	  // MS: Hack to make Memory adaptor migrations "work"
+	  if (!(eoAdaptor instanceof JDBCAdaptor)) {
+	    EOAttribute nonJdbcAttribute = new EOAttribute();
+	    nonJdbcAttribute.setName(_name);
+	    nonJdbcAttribute.setColumnName(_name);
+	    nonJdbcAttribute.setExternalType("nonJdbcAttribute");
+		entity.addAttribute(nonJdbcAttribute);
+	    return nonJdbcAttribute;
+	  }
+	  
+		JDBCAdaptor adaptor = (JDBCAdaptor)_table.database().adaptor();
 		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(adaptor);
 		String externalType = sqlHelper.externalTypeForJDBCType(adaptor, _jdbcType);
 		if (externalType == null) {

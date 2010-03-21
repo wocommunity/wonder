@@ -1,0 +1,20 @@
+HasItems: WOConditional {
+	condition = hasItems;
+}
+
+HasNoItems: WOConditional {
+	condition = hasItems;
+	negate = true;
+}
+
+Inspect: AjaxUpdaterLink {
+	action = inspectAction;
+	disabled = d2wContext.disabled;
+	string = stringForItem;
+	container = d2wContext.container;
+}
+
+ItemRepetition: WORepetition {
+	list = list;
+	item = item;
+}

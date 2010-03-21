@@ -22,14 +22,15 @@ import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.interfaces.ERDTabEditPageInterface;
 import er.extensions.components._private.ERXWOForm;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.validation.ERXValidationException;
 
 /**
  * Superclass for all tab and wizard pages.<br />
- * 
+ * @d2wKey firstResponder
+ * @d2wKey tabComponentName
  */
-
 public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
 
     public final static String WILL_SWITCH_TAB = "willSwitchTab";
@@ -59,7 +60,11 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
 
     // Need to set the first tab before the page renders the first time so that rules based on tabKey will fire.
     public void appendToResponse(WOResponse response, WOContext context) {
-        if (currentTab() == null && tabSectionsContents() != null && tabSectionsContents().count() > 0) {
+        // ak: this only works in a direct link or if there are no form
+        // values...
+        String tabName = context().request().stringFormValueForKey("__tab");
+        setTabByName(tabName);
+       if (currentTab() == null && tabSectionsContents() != null && tabSectionsContents().count() > 0) {
             //If firstTab is not null, then try to find the tab named firstTab
             if(tabNumber()!=null && tabNumber().intValue() <= tabSectionsContents().count()){
                 setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(tabNumber().intValue()));
@@ -70,6 +75,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         super.appendToResponse(response, context);
     }
 
+    //AK: what are these used for? They do nothing?
     protected Integer _tabNumber;
     public Integer tabNumber(){ return _tabNumber;}
     public void setTabNumber(Integer newTabNumber){ _tabNumber  = newTabNumber;}
@@ -78,6 +84,34 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
+    }
+    
+    @Override
+    public void awake() {
+        super.awake();
+    }
+    
+    public void setTabByName(String tabName) {
+        if (tabName != null) {
+            int i = 0;
+            for (ERD2WContainer container : tabSectionsContents()) {
+                if (tabName.equals(container.name)) {
+                    setTabNumber(Integer.valueOf(i));
+                    setCurrentTab(container);
+                    break;
+                }
+                i++;
+            }
+        }
+    }
+    
+    public String urlForCurrentState() {
+        String url = super.urlForCurrentState();
+        if (currentTab() != null) {
+            // AK: sloppy, I know...
+            url = url + "&__tab=" + ERXStringUtilities.urlEncode(currentTab().name);
+        }
+        return url;
     }
 
 	/**

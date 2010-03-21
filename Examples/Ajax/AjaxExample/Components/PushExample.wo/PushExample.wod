@@ -1,0 +1,13 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Push example";
+}
+
+
+url: WOString {
+	value = url;
+}
+
+PushLink : AjaxHyperlink {
+	action = push;
+	target = "dummy";
+}

@@ -19,7 +19,7 @@ public class ModalDialogExample extends WOComponent {
 	private Employee employee;
 	protected String errorMessages;
 	
-	public final NSArray companyNames = new NSArray(new String[]{
+	public final NSArray<String> companyNames = new NSArray<String>(new String[]{
 			"Acme Ajax, Inc.",
 			"Betty's Baubles, LLC",
 			"Gimcrack, Intl.", 
@@ -27,10 +27,8 @@ public class ModalDialogExample extends WOComponent {
 			 "The Fu Bar"
 	});
 	
-	public NSArray companies = new NSMutableArray();
-	
-	
-	
+	public NSMutableArray<Company> companies = new NSMutableArray<Company>();
+
 	public ModalDialogExample(WOContext context) {
         super(context);
         
@@ -38,12 +36,12 @@ public class ModalDialogExample extends WOComponent {
         EOEditingContext ec = session().defaultEditingContext();
         
         for (int i = 0; i < companyNames.count(); i++) {
-			String name = (String) companyNames.objectAtIndex(i);
+			String name = companyNames.objectAtIndex(i);
 	        Company company = Company.fetchCompany(ec, Company.NAME_KEY, name);
 	        if (company == null) {
 	        	company = Company.createCompany(ec, name);
 	        }
-	        ((NSMutableArray)companies).addObject(company);
+	        companies.addObject(company);
 		}
         ec.saveChanges();
         
@@ -57,14 +55,6 @@ public class ModalDialogExample extends WOComponent {
 	}
 
 	
-	/**
-	 * Example of action method returning component to show in AjaxModalDialog
-	 */
-    public WOComponent dialogContents() {
-    	NSLog.out.appendln("dialogContents called");
-    	return pageWithName(ModalDialogContents.class.getCanonicalName());
-    }
-    
     
     /** 
      * Ajax method that is called when deletion is confirmed in the Ajax Dialog with the Yes hyperlink
@@ -84,8 +74,7 @@ public class ModalDialogExample extends WOComponent {
     	isSecondConfirmation = ! isSecondConfirmation;
     	
     	if (isSecondConfirmation) {
-    		AjaxModalDialog.setTitle(context(), "Think again...");
-    		AjaxModalDialog.update(context());
+    		AjaxModalDialog.update(context(), "Think again...");
     	} else {
     		AjaxModalDialog.close(context());
     	}

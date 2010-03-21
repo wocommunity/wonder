@@ -14,14 +14,14 @@ import er.taggable.model.ERTag;
  * Typically you would provide a cover method from your EO to an 
  * instance of an ERTaggable:
  * 
- * <code>
+ * <code><pre>
  * public class Person extends _Person {
  *   ...
  *   public ERTaggable<Person> taggable() {
  *     return ERTaggable.taggable(this);
  *   }
  * }
- * </code>
+ * </pre></code>
  * 
  * @author mschrag
  *

@@ -1,0 +1,21 @@
+Content: WOComponentContent {
+	_unroll = YES;
+}
+
+Head: ERD2WHead {
+}
+
+Header: MenuHeader {
+}
+
+ERD2WDebugFlags : ERD2WDebugFlags {
+	context = d2wContext;
+}
+
+IsDebug :WOConditional {
+	condition = application.isDevelopmentMode;
+}
+
+CSS: ERXStyleSheet {
+	filename = stylesheet;
+}

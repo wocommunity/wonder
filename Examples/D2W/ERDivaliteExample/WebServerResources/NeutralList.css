@@ -1,0 +1,89 @@
+/* NeutralSortOrder2.css */
+
+.ERXSortOrder2_None, .ERXSortOrder2_Down, .ERXSortOrder2_Up {
+	width: 9px;
+	height: 11px;
+	text-indent: -5000px;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+}
+
+.ERXSortOrder2_None {
+	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/Unsorted.gif) no-repeat;
+}
+
+.ERXSortOrder2_Down {
+	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/Ascending.gif) no-repeat;
+}
+
+.ERXSortOrder2_Up {
+	background: url(/WebObjects/Frameworks/JavaWOExtensions.framework/WebServerResources/Descending.gif) no-repeat;
+}
+
+/* NeutralEditButton2.css */
+
+a.ERDEditButton2 {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/write-btn.png) no-repeat;
+	width: 18px;
+	height: 16px;
+	text-indent: -5000px;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+}
+
+/* NeutralTrashcan2.css */
+
+a.ERDTrashcan2 {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/trashcan-btn.png) no-repeat;
+	width: 24px;
+	height: 24px;
+	text-indent: -5000px;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+}
+
+/* NeutralIsnpectButton2.css */
+
+a.ERDInspectButton2 {
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/rt-OSarw.png) no-repeat;
+	width: 16px;
+	height: 16px;
+	text-indent: -5000px;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+}
+
+/* NeutralList.css */
+
+div#a table.list tbody tr:hover {
+  background-color: #336699;
+  color: white;
+}
+
+div#a table.list tbody tr {
+	line-height: 30px;	
+}
+
+div#a table.list tbody tr td {
+	border-bottom: solid white 3px;
+}
+
+button.ERDIVListPage_Add {
+	text-indent: -5000px;
+	cursor: pointer;
+	background: url(/WebObjects/Frameworks/JavaDirectToWeb.framework/WebServerResources/ButtonSmallAdd.gif);
+	height: 13px;
+	width: 42px;
+	border:0;
+	display: block;
+}
+
+/* NeutralSimpleList.css */
+
+div#a ul#List.list li {
+	line-height: 20px;
+}

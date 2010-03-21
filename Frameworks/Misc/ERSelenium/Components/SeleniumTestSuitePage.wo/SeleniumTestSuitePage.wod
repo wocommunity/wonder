@@ -17,8 +17,12 @@ TestFiles : WORepetition {
   item = testFile;
 }
 
-TestDirName : WOString {
-  value = testDir.name;
+TestGroupName : WOString {
+  value = testGroupName;
+}
+
+HasTestGroup : WOConditional {
+  condition = hasTestGroup; 
 }
 
 Link : WOHyperlink {

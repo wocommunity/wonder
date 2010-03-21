@@ -12,6 +12,9 @@ import com.webobjects.directtoweb.D2WQueryStringComponent;
 
 import er.extensions.crypting.ERXCrypterInterface;
 
+/**
+ * @d2wKey crypter
+ */
 public class ERD2WQueryEncryptedString extends D2WQueryStringComponent {
 
     public ERD2WQueryEncryptedString(WOContext context) {

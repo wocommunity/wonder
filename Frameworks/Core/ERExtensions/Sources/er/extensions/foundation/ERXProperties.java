@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -26,7 +25,6 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -48,6 +46,20 @@ import er.extensions.crypting.ERXCrypto;
  * This is a wee bit annoying. The usual method is to have a method
  * like <code>getBoolean</code> off of Boolean which would resolve
  * the System property as a Boolean object.
+ * 
+ * Properties can be set in all the following places:
+ * <ul>
+ * <li>Properties in a bundle Resources directory</li>
+ * <li>Properties.dev in a bundle Resources directory</li>
+ * <li>Properties.username in a bundle Resources directory </li>
+ * <li>~/Library/WebObjects.properties file</li>
+ * <li>in the eclipse launcher or on the command-line</li>
+ * </ul>
+ * 
+ * TODO - If this would fallback to calling the System getProperty, we
+ * could ask that Project Wonder frameworks only use this class.
+ * 
+ * @property er.extensions.ERXProperties.RetainDefaultsEnabled
  */
 public class ERXProperties extends Properties implements NSKeyValueCoding {
 
@@ -644,11 +656,12 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
-     * Returns the decrypted value for the given property name using
-     * the default crypter if the property propertyName.encrypted=true.  For
-     * instance, if you are requesting my.password, if my.password.encrypted=true
-     * the value of my.password will be passed to the default crypter's decrypt
-     * method.
+     * If the <code>propertyName.encrypted</code> property is set to true, returns
+     * the plain text value of the given property name, after decrypting it with the
+     * {@link ERXCrypto.defaultCrypter}. For instance, if you are requesting
+     * my.password and <code>my.password.encrypted</code> is set to true,
+     * the value of <code>my.password</code> will be sent to the default crypter's
+     * decrypt() method.
      * 
      * @param propertyName the property name to retrieve and optionally decrypt
      * @param defaultValue the default value to return if there is no password
@@ -671,8 +684,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
-     * Returns the decrypted value for the given property name using the default crypter. This is
-     * slightly different than decryptedStringWithKeyWithDefault in that it does not require  the .encrypted
+     * Returns the decrypted value for the given property name using the
+     * {@link ERXCrypto.defaultCrypter}. This is slightly different than
+     * decryptedStringWithKeyWithDefault in that it does not require  the encrypted
      * property to be set.
      *  
      * @param propertyName the name of the property to decrypt
@@ -757,7 +771,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /** 
      * Copies all properties from source to dest. 
      * 
-     * @param source  proeprties copied from 
+     * @param source  properties copied from 
      * @param dest  properties copied to
      */
     public static void transferPropertiesFromSourceToDest(Properties source, Properties dest) {
@@ -768,6 +782,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             }
         }
     }
+    
+
     
     /**
      * Reads a Java properties file at the given path 
@@ -805,10 +821,12 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     /**
      * Gets the properties for a given file.
+     * 
      * @param file the properties file
      * @return properties from the given file
+     * @throws java.io.IOException if the file is not found or cannot be read
      */
-    public static Properties propertiesFromFile(File file) throws IOException {
+    public static Properties propertiesFromFile(File file) throws java.io.IOException {
         if (file == null)
             throw new IllegalStateException("Attempting to get properties for a null file!");
         ERXProperties._Properties prop = new ERXProperties._Properties();
@@ -854,166 +872,142 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         return pathsForUserAndBundleProperties(false);
     }
 
+    private static void addIfPresent(String info, String path, NSMutableArray<String> propertiesPaths, NSMutableArray<String> projectsInfo) {
+    	if(path != null && path.length() > 0) {
+    		path = getActualPath(path);
+    		if(propertiesPaths.containsObject(path)) {
+    			log.error("Path was already included: " + path + "");
+    		}
+    		projectsInfo.addObject("  " + info +" -> " + path);
+    		propertiesPaths.addObject(path);
+    	}
+    }
+    
     public static NSArray pathsForUserAndBundleProperties(boolean reportLoggingEnabled) {
-        NSMutableArray propertiesPaths = new NSMutableArray();
-        NSMutableArray projectsInfo = new NSMutableArray();
-        String projectPath, aPropertiesPath;
-        WOApplication application = WOApplication.application();
-        if (application == null) {
-            log.warn("The application is not yet initialized. Returning an empty array.");
-            return NSArray.EmptyArray;
-        }
-                
-        /* *** Properties for frameworks *** */
-        NSArray frameworkNames = (NSArray)NSBundle.frameworkBundles().valueForKey("name");
-        Enumeration e = frameworkNames.objectEnumerator();
+        NSMutableArray<String> propertiesPaths = new NSMutableArray();
+        NSMutableArray<String> projectsInfo = new NSMutableArray();
+
+        /*  Properties for frameworks */
+        NSArray frameworkNames = (NSArray) NSBundle.frameworkBundles().valueForKey("name");
+        Enumeration e = frameworkNames.reverseObjectEnumerator();
         while (e.hasMoreElements()) {
-            String frameworkName = (String) e.nextElement();
-            projectPath = aPropertiesPath = null;
-            
-            // Check if the framework project is opened from PBX
-            WOProjectBundle bundle = WOProjectBundle.projectBundleForProject(frameworkName, true);
-            if (bundle != null) 
-                projectPath = bundle.projectPath();
-            else 
-                projectPath = ERXSystem.getProperty("projects." + frameworkName);
-            
-            if (projectPath != null) {
-                aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
-                if (aPropertiesPath != null) {
-                    projectsInfo.addObject("Framework:   " + frameworkName 
-                            + " (opened, development-mode) " + aPropertiesPath);
-                }
-            }
-            
-            if (aPropertiesPath == null) {
-                // The framework project is not opened from PBX, use the one in the bundle. 
-                URL url =  ERXFileUtilities.pathURLForResourceNamed("Properties", frameworkName, null);
-                if(url != null) {
-                    aPropertiesPath = url.getFile();
-                    if (aPropertiesPath != null) {
-                        aPropertiesPath = getActualPath(aPropertiesPath);
-                        projectsInfo.addObject("Framework:   " + frameworkName 
-                                + " (not opened, installed) " + aPropertiesPath); 
-                    }
-                }
-            }
-            
-            if (aPropertiesPath != null) 
-                    propertiesPaths.addObject(aPropertiesPath);
-        } 
-        
-        /* *** Properties for the application (mainBundle) *** */
-        
-        // Check if the application project is opened from PBXs
-        projectPath = aPropertiesPath = null;
-        String mainBundleName = NSBundle.mainBundle().name();
-        // horrendous hack to avoid having to set the NSProjectPath manually.
-            WOProjectBundle mainBundle = WOProjectBundle.projectBundleForProject(mainBundleName, false);
-            if (mainBundle == null) {
-                projectPath = ERXSystem.getProperty("projects." + mainBundleName);
-                if (projectPath == null)
-                    projectPath = "../..";
-            } else {
-                projectPath = mainBundle.projectPath();
-            }
-            
-        if (projectPath != null) {
-            aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
-            if (aPropertiesPath != null) {
-                projectsInfo.addObject("Application: " + mainBundleName 
-                            + " (opened, development-mode) " + aPropertiesPath); 
-            }
+        	String frameworkName = (String) e.nextElement();
+
+        	String propertyPath = ERXFileUtilities.pathForResourceNamed("Properties", frameworkName, null);
+        	addIfPresent(frameworkName + ".framework", propertyPath, propertiesPaths, projectsInfo);
+
+        	/** Properties.<userName> -- per-Framework-per-User properties */
+        	String userPropertiesPath = ERXProperties.variantPropertiesInBundle(ERXSystem.getProperty("user.name"), frameworkName);
+        	addIfPresent(frameworkName + ".framework.user", userPropertiesPath, propertiesPaths, projectsInfo);
         }
 
-        if (aPropertiesPath == null) {
-            // The application project is not opened from PBX, use the one in the bundle. 
-            aPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
-            if (aPropertiesPath != null) {
-               aPropertiesPath = getActualPath(aPropertiesPath);
-               projectsInfo.addObject("Application: " + mainBundleName 
-                            + " (not opened, installed) " + aPropertiesPath);  
-            }
+		NSBundle mainBundle = NSBundle.mainBundle();
+		
+		if( mainBundle != null ) {
+	        String mainBundleName = mainBundle.name();
+	
+	        String appPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
+	    	addIfPresent(mainBundleName + ".app", appPath, propertiesPaths, projectsInfo);
+		}
+
+		/*  WebObjects.properties in the user home directory */
+		String userHome = ERXSystem.getProperty("user.home");
+		if (userHome != null && userHome.length() > 0) {
+			File file = new File(userHome, "WebObjects.properties");
+			if (file.exists() && file.isFile() && file.canRead()) {
+				try {
+					String userHomePath = file.getCanonicalPath();
+			    	addIfPresent("{$user.home}/WebObjects.properties", userHomePath, propertiesPaths, projectsInfo);
+				}
+				catch (java.io.IOException ex) {
+					ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
+				}
+			}
         }
 
-        if (aPropertiesPath != null) 
-            propertiesPaths.addObject(aPropertiesPath);
-
-
-        /* *** WebObjects.properties in the user home directory *** */
-        String userHome = ERXSystem.getProperty("user.home");
-        if (userHome != null  &&  userHome.length() > 0) { 
-            File file = new File(userHome, "WebObjects.properties");
-            if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
-                try {
-                    aPropertiesPath = file.getCanonicalPath();
-                    projectsInfo.addObject("User:        WebObjects.properties " + aPropertiesPath);  
-                    propertiesPaths.addObject(aPropertiesPath);
-                } catch (java.io.IOException ex) {
-                	ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
-                }
-            }
-        }
-
-        /* **** Optional properties files **** */
-        if (optionalConfigurationFiles() != null &&
-            optionalConfigurationFiles().count() > 0) {
-            for (Enumeration configEnumerator = optionalConfigurationFiles().objectEnumerator();
-                 configEnumerator.hasMoreElements();) {
-                String configFile = (String)configEnumerator.nextElement();
-                File file = new File(configFile);
-                if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
-                    try {
-                        aPropertiesPath = file.getCanonicalPath();
-                        projectsInfo.addObject("Optional Configuration:    " + aPropertiesPath);
-                        propertiesPaths.addObject(aPropertiesPath);
-                    } catch (java.io.IOException ex) {
-                    	ERXProperties.log.error("Failed to load configuration file '" + file.getAbsolutePath() + "'.", ex);
-                    }                    
-                }
-                else {
-                	ERXProperties.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or could not be read.");
-                }
-            }
-        }
+		/*  Optional properties files */
+		if (optionalConfigurationFiles() != null && optionalConfigurationFiles().count() > 0) {
+			for (Enumeration configEnumerator = optionalConfigurationFiles().objectEnumerator(); configEnumerator.hasMoreElements();) {
+				String configFile = (String) configEnumerator.nextElement();
+				File file = new File(configFile);
+				if (file.exists() && file.isFile() && file.canRead()) {
+					try {
+						String optionalPath = file.getCanonicalPath();
+				    	addIfPresent("Optional Configuration", optionalPath, propertiesPaths, projectsInfo);
+					}
+					catch (java.io.IOException ex) {
+						ERXProperties.log.error("Failed to load configuration file '" + file.getAbsolutePath() + "'.", ex);
+					}
+				}
+				else {
+					ERXProperties.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or could not be read.");
+				}
+			}
+		}
 
         /** /etc/WebObjects/AppName/Properties -- per-Application-per-Machine properties */
         String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
-        if (applicationMachinePropertiesPath != null) {
-           projectsInfo.addObject("Application " + mainBundleName + "/Application-Machine Properties: " + applicationMachinePropertiesPath);
-           propertiesPaths.addObject(applicationMachinePropertiesPath);
-        }
+    	addIfPresent("Application-Machine Properties", applicationMachinePropertiesPath, propertiesPaths, projectsInfo);
 
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationDeveloperPropertiesPath = ERXProperties.applicationDeveloperProperties();
-        if (applicationDeveloperPropertiesPath != null) {
-           projectsInfo.addObject("Application " + mainBundleName + "/Application-Developer Properties: " + applicationDeveloperPropertiesPath);
-           propertiesPaths.addObject(applicationDeveloperPropertiesPath);
-        }
+    	addIfPresent("Application-Developer Properties", applicationDeveloperPropertiesPath, propertiesPaths, projectsInfo);
 
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
-        if (applicationUserPropertiesPath != null) {
-           projectsInfo.addObject("Application " + mainBundleName + "/Application-User Properties: " + applicationUserPropertiesPath);
-           propertiesPaths.addObject(applicationUserPropertiesPath);
-        }
+    	addIfPresent("Application-User Properties", applicationUserPropertiesPath, propertiesPaths, projectsInfo);
         
-        /* *** Report the result *** */ 
-        if (reportLoggingEnabled  &&  projectsInfo.count() > 0 && log.isInfoEnabled()) {
-            StringBuffer message = new StringBuffer();
-            message.append("\n\n")
-                    .append("ERXProperties has found the following Properties files: \n");
-            message.append(projectsInfo.componentsJoinedByString("\n"));
-            message.append("\n");
-            message.append("ERXProperties loaded the following Properties: \n");
-            Map<String, String> properties = ERXProperties.allPropertiesMap(true);
-            for (Map.Entry<String, String> entry : properties.entrySet()) {
-            	message.append("  " + entry.getKey() + "=" + entry.getValue() + "\n");
-            }
-            log.info(message.toString());
-        }
+        /*  Report the result */
+		if (reportLoggingEnabled && projectsInfo.count() > 0 && log.isInfoEnabled()) {
+			StringBuffer message = new StringBuffer();
+			message.append("\n\n").append("ERXProperties has found the following Properties files: \n");
+			message.append(projectsInfo.componentsJoinedByString("\n"));
+			message.append("\n");
+			message.append("ERXProperties currently has the following properties:\n");
+			message.append(ERXProperties.logString(ERXSystem.getProperties()));
+			// ERXLogger.configureLoggingWithSystemProperties();
+			log.info(message.toString());
+		}
 
-        return propertiesPaths.immutableClone();
+    	return propertiesPaths.immutableClone();
+    }
+
+    /**
+     * Apply the current configuration to the supplied properties.
+     * @param source
+     * @param commandLine
+     */
+    public static Properties applyConfiguration(Properties source, Properties commandLine) {
+
+    	Properties dest = source != null ? (Properties) source.clone() : new Properties();
+    	NSArray additionalConfigurationFiles = ERXProperties.pathsForUserAndBundleProperties(false);
+
+    	if (additionalConfigurationFiles.count() > 0) {
+    		for (Enumeration configEnumerator = additionalConfigurationFiles.objectEnumerator(); configEnumerator.hasMoreElements();) {
+    			String configFile = (String)configEnumerator.nextElement();
+    			File file = new File(configFile);
+    			if (file.exists() && file.isFile() && file.canRead()) {
+    				try {
+    					Properties props = ERXProperties.propertiesFromFile(file);
+    					if(log.isDebugEnabled()) {
+    						log.debug("Loaded: " + file + "\n" + ERXProperties.logString(props));
+    					}
+    					ERXProperties.transferPropertiesFromSourceToDest(props, dest);
+    				} catch (java.io.IOException ex) {
+    					log.error("Unable to load optional configuration file: " + configFile, ex);
+    				}
+    			}
+    			else {
+    				ERXConfigurationManager.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or cannot be read.");
+    			}
+    		}
+    	}
+
+    	if(commandLine != null) {
+    		ERXProperties.transferPropertiesFromSourceToDest(commandLine, dest);
+    	}
+		return dest;
+    	
     }
 
     /**
@@ -1023,17 +1017,39 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return all of the properties in the system mapped to their evaluated values, sorted by key
      */
     public static Map<String, String> allPropertiesMap(boolean protectValues) {
+    	return propertiesMap(ERXSystem.getProperties(), protectValues);
+    }
+
+    /**
+     * Returns all of the properties in the system mapped to their evaluated values, sorted by key.
+     * 
+     * @param protectValues if true, keys with the word "password" in them will have their values removed 
+     * @return all of the properties in the system mapped to their evaluated values, sorted by key
+     */
+    public static Map<String, String> propertiesMap(Properties properties, boolean protectValues) {
     	Map<String, String> props = new TreeMap<String, String>();
-    	for (Enumeration e = ERXSystem.getProperties().keys(); e.hasMoreElements();) {
+    	for (Enumeration e = properties.keys(); e.hasMoreElements();) {
     		String key = (String) e.nextElement();
     		if (protectValues && key.toLowerCase().contains("password")) {
     			props.put(key, "<deleted for log>");
     		}
     		else {
-    			props.put(key, String.valueOf(ERXSystem.getProperty(key)));
+    			props.put(key, String.valueOf(properties.getProperty(key)));
     		}
     	}
     	return props;
+    }
+    
+    /**
+     * Returns a string suitable for logging.
+     * @param properties
+     */
+    public static String logString(Properties properties) {
+    	StringBuffer message = new StringBuffer();
+        for (Map.Entry<String, String> entry : propertiesMap(properties, true).entrySet()) {
+        	message.append("  " + entry.getKey() + "=" + entry.getValue() + "\n");
+        }
+        return message.toString();
     }
     
     public static class Property {
@@ -1092,29 +1108,30 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	String applicationDeveloperPropertiesPath = null;
     	if (ERXApplication.isDevelopmentModeSafe()) {
 	        String devName = ERXSystem.getProperty("er.extensions.ERXProperties.devPropertiesName", "dev");
-	        if (devName != null  &&  devName.length() > 0) { 
-	        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + devName, "app", null);
-	            if (resourceApplicationUserPropertiesPath != null) {
-	            	applicationDeveloperPropertiesPath = ERXProperties.getActualPath(resourceApplicationUserPropertiesPath);
-	            }
-	        }
+	        applicationDeveloperPropertiesPath = variantPropertiesInBundle(devName, "app");
     	}
         return applicationDeveloperPropertiesPath;
     }
     
     /**
-     * Returns the application-specific user properties.
+     * Returns the application-specific variant properties for the given bundle.
      */
-    public static String applicationUserProperties() {
+    public static String variantPropertiesInBundle(String userName, String bundleName) {
     	String applicationUserPropertiesPath = null;
-        String userName = ERXSystem.getProperty("user.name");
         if (userName != null  &&  userName.length() > 0) { 
-        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + userName, "app", null);
+        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + userName, bundleName, null);
             if (resourceApplicationUserPropertiesPath != null) {
             	applicationUserPropertiesPath = ERXProperties.getActualPath(resourceApplicationUserPropertiesPath);
             }
         }
         return applicationUserPropertiesPath;
+    }
+
+    /**
+     * Returns the application-specific user properties.
+     */
+    public static String applicationUserProperties() {
+    	return variantPropertiesInBundle(ERXSystem.getProperty("user.name"), "app");
     }
     
     /**
@@ -1128,19 +1145,35 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	String applicationMachinePropertiesPath = null;
     	String machinePropertiesPath = ERXSystem.getProperty("er.extensions.ERXProperties.machinePropertiesPath", "/etc/WebObjects");
     	WOApplication application = WOApplication.application();
+    	String applicationName;
     	if (application != null) {
-    		String applicationName = application.name();
-    		File applicationPropertiesFile = new File(machinePropertiesPath + File.separator + applicationName + File.separator + fileName);
-    		if (applicationPropertiesFile.exists()) {
-    			try {
-    				applicationMachinePropertiesPath = applicationPropertiesFile.getCanonicalPath();
+    		applicationName = application.name();
+    	}
+    	else {
+    		applicationName = ERXSystem.getProperty("WOApplicationName");
+    		if (applicationName == null) {
+    			NSBundle mainBundle = NSBundle.mainBundle();
+    			if (mainBundle != null) {
+    				applicationName = mainBundle.name();
     			}
-    			catch (IOException e) {
-    				ERXProperties.log.error("Failed to load machine Properties file '" + fileName + "'.", e);
+    			if (applicationName == null) {
+    				applicationName = "Unknown";
     			}
     		}
     	}
-        return applicationMachinePropertiesPath;
+    	File applicationPropertiesFile = new File(machinePropertiesPath + File.separator + fileName);
+    	if (!applicationPropertiesFile.exists()) {
+    		applicationPropertiesFile = new File(machinePropertiesPath + File.separator + applicationName + File.separator + fileName);
+    	}
+    	if (applicationPropertiesFile.exists()) {
+    		try {
+    			applicationMachinePropertiesPath = applicationPropertiesFile.getCanonicalPath();
+    		}
+    		catch (IOException e) {
+    			ERXProperties.log.error("Failed to load machine Properties file '" + fileName + "'.", e);
+    		}
+    	}
+    	return applicationMachinePropertiesPath;
     }
 
     /**
@@ -1630,5 +1663,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				_files.pop();
 			}
 		}
+	}
+
+	public static void setCommandLineArguments(String[] argv) {
+		
 	}
 }

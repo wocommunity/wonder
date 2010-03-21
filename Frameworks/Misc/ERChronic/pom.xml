@@ -9,17 +9,23 @@
 	<artifactId>ERChronic</artifactId>
 	<name>ERChronic Framework</name>
 	<packaging>woframework</packaging>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
-    	<groupId>commons-lang</groupId>
-    	<artifactId>commons-lang</artifactId>
-    	<version>2.4</version>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>

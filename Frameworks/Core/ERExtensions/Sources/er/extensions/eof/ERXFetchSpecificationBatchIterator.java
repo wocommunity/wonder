@@ -324,7 +324,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * batches return by {@link #nextBatch()} may not line up with the
      * batches returned by this method. 
      *
-     * Calling this method does not affect the postion of the iterator.
+     * Calling this method does not affect the position of the iterator.
      * @param index index of batch to retrieve
      * @return batch of enterprise objects
      */
@@ -339,11 +339,11 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * If the supplied range does not fall within the available range,
      * the results returned correspond to the intersection of the two.
      *
-     * If no items are found, the supplied range does not intesect the
-     * available range, or the suppplied range has length zero, then an
+     * If no items are found, the supplied range does not intersect the
+     * available range, or the supplied range has length zero, then an
      * empty array is returned.
      *
-     * Calling this method does not affect the postion of the iterator.
+     * Calling this method does not affect the position of the iterator.
      * @param requestedRange range of batch to retrieve
      * @return batch of enterprise objects
      */

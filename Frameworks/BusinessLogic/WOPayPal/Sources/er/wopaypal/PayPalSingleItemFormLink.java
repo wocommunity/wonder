@@ -119,6 +119,10 @@ public class PayPalSingleItemFormLink extends
                 } else if (key.equals("notify_url") && useIPN.booleanValue()) {
                     boundValues.addObject(new NSDictionary(new Object[] { notifyURL, "notify_url"}, 
                             new Object[] {"value", "key"}));
+                } else if (key.equals("tax_rate")) {
+                    boundValues.addObject(new NSDictionary(new Object[] {
+                            dollarFormatter.format(Double.valueOf(tax_rate)), "tax_rate"}, 
+                            new Object[] {"value", "key"}));
                 } else {
                     // received some other binding value somehow
                 }

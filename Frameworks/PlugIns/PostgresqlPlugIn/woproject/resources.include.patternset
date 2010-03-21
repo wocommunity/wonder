@@ -4,3 +4,4 @@ Properties
 **/*.wo/
 **/*.api
 **/*.strings
+**/*.plist 

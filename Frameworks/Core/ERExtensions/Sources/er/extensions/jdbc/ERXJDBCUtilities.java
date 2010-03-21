@@ -23,6 +23,7 @@ import com.sun.rowset.CachedRowSetImpl;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -628,13 +629,19 @@ public class ERXJDBCUtilities {
 	 *             if there is a problem
 	 */
 	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray<String> sqlStatements, boolean ignoreFailures) throws SQLException {
+		EOAdaptorContext adaptorContext = channel.adaptorContext();
+		// MS: Hack to support memory migrations
+		if (!(adaptorContext instanceof JDBCContext)) {
+			return 0;
+		}
+
 		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(channel);
 		int rowsUpdated = 0;
 		boolean wasOpen = channel.isOpen();
 		if (!wasOpen) {
 			channel.openChannel();
 		}
-		Connection conn = ((JDBCContext) channel.adaptorContext()).connection();
+		Connection conn = ((JDBCContext) adaptorContext).connection();
 		try {
 			Statement stmt = conn.createStatement();
 			try {

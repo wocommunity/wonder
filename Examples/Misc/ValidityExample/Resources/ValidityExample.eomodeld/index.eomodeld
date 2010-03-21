@@ -1,17 +1,17 @@
 {
-    EOModelVersion = 2.1; 
+    EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
     connectionDictionary = {
         URL = "jdbc:openbase://localhost/Example"; 
         driver = ""; 
         jdbc2Info = {
-            ANSI92_CONFORMANCE = ANSI92Full; 
-            DBMS_NAME = OpenBase; 
-            DRIVER_NAME = "OpenBase JDBC Driver"; 
-            DRIVER_VER = 1.5; 
-            IDENTIFIER_QUOTE_STRING = "\""; 
-            NON_NULLABLE_COLUMNS = T; 
-            STRING_FUNCTIONS = "ASCII,CHAR,CONCAT,DIFFERENCE,INSERT,LCASE,LEFT,LENGTH,LOCATE,LTRIM,REPEAT,REPLACE,RIGHT,RTRIM,SOUNDEX,SPACE,SUBSTRING,UCASE"; 
+            "ANSI92_CONFORMANCE" = ANSI92Full; 
+            "DBMS_NAME" = OpenBase; 
+            "DRIVER_NAME" = "OpenBase JDBC Driver"; 
+            "DRIVER_VER" = "1.5"; 
+            "IDENTIFIER_QUOTE_STRING" = "\""; 
+            "NON_NULLABLE_COLUMNS" = T; 
+            "STRING_FUNCTIONS" = "ASCII,CHAR,CONCAT,DIFFERENCE,INSERT,LCASE,LEFT,LENGTH,LOCATE,LTRIM,REPEAT,REPLACE,RIGHT,RTRIM,SOUNDEX,SPACE,SUBSTRING,UCASE"; 
             typeInfo = {
                 binary = {
                     createParams = 1; 
@@ -136,6 +136,5 @@
         plugin = ""; 
         username = ""; 
     }; 
-    entities = ({className = User; name = User; }); 
-    internalInfo = {}; 
+    entities = ({className = "er.validexample.User"; name = User; }); 
 }

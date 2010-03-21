@@ -1,0 +1,37 @@
+
+Test for "Container in Container" page
+
+|open|/|
+
+|click|link=Container in Container|
+|waitForTextPresent|This demo shows a periodic updating component|
+
+|storeText|OuterContent|outerContent|
+|storeText|InnerContent|innerContent|
+
+|waitForText|OuterContent|${outerContent}|
+|waitForNotText|InnerContent|${innerContent}|
+
+|click|link=update outer|
+
+|waitForNotText|OuterContent|${outerContent}|
+|waitForNotText|InnerContent|${innerContent}|
+
+|pause|2400|
+
+|storeText|OuterContent|outerContent|
+|storeText|InnerContent|innerContent|
+
+|click|link=update outer|
+
+|waitForNotText|OuterContent|${outerContent}|
+|waitForNotText|InnerContent|${innerContent}|
+
+|storeText|OuterContent|outerContent|
+|storeText|InnerContent|innerContent|
+
+|pause|1200|
+
+|waitForText|OuterContent|${outerContent}|
+|waitForNotText|InnerContent|${innerContent}|
+

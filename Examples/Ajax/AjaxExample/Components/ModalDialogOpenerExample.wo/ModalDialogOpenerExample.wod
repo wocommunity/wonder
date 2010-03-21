@@ -132,7 +132,7 @@ EditCompanyDialog: AjaxModalDialog {
 ValidationError: WOString {
 	value = validationMessage;
 	escapeHTML = false;
-};
+}
 
 EditableCompanyName: WOTextField {
 	value = companyToEdit.name;

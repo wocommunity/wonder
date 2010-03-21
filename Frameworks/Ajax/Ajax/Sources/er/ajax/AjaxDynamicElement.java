@@ -13,6 +13,8 @@ import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ajax.ERXAjaxApplication;
+
 public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjaxElement {
 	protected Logger log = Logger.getLogger(getClass());
 	private WOElement _children;
@@ -77,7 +79,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	 * <code>AJAX_REQUEST_KEY</code> in the request userInfo dictionary (<code>request.userInfo()</code>).
 	 */
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		Object result = null;
+		WOActionResults result = null;
 		if (shouldHandleRequest(request, context)) {
 			WOComponent component = context.component();
 			String elementID = context.elementID();
@@ -85,18 +87,18 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 			NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
 			result = handleRequest(request, context);
 			AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
-        	if (result == context.page()) {
+        	if (ERXAjaxApplication.shouldIgnoreResults(request, context, result)) {
         		log.warn("An Ajax request attempted to return the page, which is almost certainly an error.");
         		result = null;
         	}
-			if (result == null) {
+			if (result == null && !ERXAjaxApplication.isAjaxReplacement(request)) {
 				result = AjaxUtils.createResponse(request, context);
 			}
 		}
 		else if (hasChildrenElements()) {
 			result = super.invokeAction(request, context);
 		}
-		return (WOActionResults) result;
+		return result;
 	}
 
 	protected String _containerID(WOContext context) {

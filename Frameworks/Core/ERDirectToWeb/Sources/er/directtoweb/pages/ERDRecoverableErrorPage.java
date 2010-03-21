@@ -12,8 +12,8 @@ import com.webobjects.appserver.WOContext;
 /**
  * A recoverable error page.<br />
  * @deprecated subclass ERD2WMessagePage instead
+ * @d2wKey pageWrapperName
  */
-
 public class ERDRecoverableErrorPage extends ERD2WMessagePage {
 
     public ERDRecoverableErrorPage(WOContext context) {

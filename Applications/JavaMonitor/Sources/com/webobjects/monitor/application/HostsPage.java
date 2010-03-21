@@ -200,7 +200,7 @@ public class HostsPage extends MonitorComponent {
         byte[] versionRequest;
 
         try {
-            versionRequest = ("womp://queryVersion").getBytes("UTF8");
+            versionRequest = ("womp://queryVersion").getBytes("UTF-8");
         } catch (UnsupportedEncodingException uee) {
             versionRequest = ("womp://queryVersion").getBytes();
         }

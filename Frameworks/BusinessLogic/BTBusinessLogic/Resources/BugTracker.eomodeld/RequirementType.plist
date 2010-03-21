@@ -19,7 +19,6 @@
     classProperties = (typeDescription); 
     externalName = "REQ_TYPE"; 
     fetchSpecificationDictionary = {}; 
-    isReadOnly = Y; 
     name = RequirementType; 
     primaryKeyAttributes = (id); 
     userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 

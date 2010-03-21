@@ -11,6 +11,10 @@ import org.apache.log4j.lf5.util.StreamUtils;
 
 import er.extensions.foundation.ERXProperties;
 
+/**
+ *
+ * @property er.attachment.ImageProcessor.imageMagickBinFolder
+ */
 public class ImageMagickCommandlineMetadataParser implements IERMetadataParser {
   public static final int BUFFER_SIZE = 8192;
 

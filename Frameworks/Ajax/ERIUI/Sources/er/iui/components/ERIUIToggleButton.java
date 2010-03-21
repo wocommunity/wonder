@@ -5,6 +5,14 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.components.ERXComponent;
 import er.extensions.foundation.ERXStringUtilities;
 
+/**
+ *
+ * @binding checked (required)
+ * @binding id
+ * @binding offString
+ * @binding onchange
+ * @binding onString
+ */
 public class ERIUIToggleButton extends ERXComponent {
   private String _id;
 

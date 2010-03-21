@@ -14,9 +14,13 @@ import com.webobjects.directtoweb.InspectPageInterface;
 
 /**
  * Cleaned up some of the formatting on the original toMany table.<br />
- * 
+ * @d2wKey disabled
+ * @d2wKey componentBorder
+ * @d2wKey numCols
+ * @d2wKey showIndex
+ * @d2wKey goingVertically
+ * @d2wKey inspectConfigurationName
  */
-
 public class ERD2WDisplayToManyTable extends D2WDisplayToManyTable {
 
     public ERD2WDisplayToManyTable(WOContext context) {

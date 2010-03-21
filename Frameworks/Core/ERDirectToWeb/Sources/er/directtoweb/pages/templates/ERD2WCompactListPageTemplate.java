@@ -13,8 +13,13 @@ import er.directtoweb.pages.ERD2WListPage;
 /**
  * Compact list page.  Doesn't have any of the navigation at the top.<br />
  * 
+ * @d2wKey emptyListComponentName
+ * @d2wKey repetitionComponentName
+ * @d2wKey displayNameForEntity
+ * @d2wKey batchNavigationBarComponentName
+ * @d2wKey showBatchNavigation
+ * @d2wKey displayNameForEntity
  */
-
 public class ERD2WCompactListPageTemplate extends ERD2WListPage {
 
     public ERD2WCompactListPageTemplate(WOContext context) {

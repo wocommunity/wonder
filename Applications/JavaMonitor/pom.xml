@@ -16,6 +16,10 @@
 			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>Ajax</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>wonder.misc</groupId>
 			<artifactId>JavaMonitorFramework</artifactId>
 		</dependency>

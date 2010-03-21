@@ -10,8 +10,14 @@ import com.webobjects.appserver.WOContext;
 /**
  * Query page utilizing fetch specifications.<br />
  * @deprecated use ERD2WQueryPage instead
+ * @d2wKey entity
+ * @d2wKey pageWrapperName
+ * @d2wKey border
+ * @d2wKey backgroundColorForTable
+ * @d2wKey componentName
+ * @d2wKey propertyKey
+ * @d2wKey findButtonLabel
  */
-
 public class ERD2WQueryPageWithFetchSpecification extends ERD2WQueryPage  {
 
     public ERD2WQueryPageWithFetchSpecification(WOContext context) {

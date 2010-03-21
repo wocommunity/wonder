@@ -1,0 +1,73 @@
+
+|open|/||
+|waitForPageToLoad|500||
+
+# TODO - As we have tests for the individual components, they can be removed from this list.
+
+|click|link=Update Trigger||
+|waitForTextPresent|This example demonstrates the AjaxTrigger component||
+
+|click|link=Dependent Popups||
+|waitForTextPresent|AjaxUpdateContainer has an optional 'observeFieldID' binding.||
+
+|click|link=Slider||
+|waitForTextPresent|Value:||
+
+|click|link=Display Group||
+|waitForTextPresent|This value shouldn't change:||
+
+|click|link=Long-Running Task||
+|waitForTextPresent|Initial time:||
+
+|click|link=Sortable List||
+|waitForTextPresent|The first list is an NSMutableArray||
+
+|click|link=AjaxInPlaceEditor||
+|waitForTextPresent|AjaxInPlaceEditor is a wrapper component||
+
+|click|link=AjaxInPlace||
+|waitForTextPresent|AjaxInPlace provides support for arbitrarily complex view||
+
+# TODO - Drag Resize page
+
+|click|link=Busy Indicator||
+|waitForTextPresent|make a long running AJAX request||
+
+|click|link=Tree||
+|waitForTextPresent|Below is an example of the AjaxTree component:||
+
+# TODO - Google Maps - how to connect?
+
+|click|link=Grid||
+|waitForTextPresent|Click the batch size to edit||
+
+# TODO - Ajax Tabbed Panel
+
+# TODO - Progress/File Upload
+
+|click|link=Highlight||
+|waitForTextPresent|A common technique in Ajax applications||
+
+if I take out this next pause and use waitForTextPresent, the test fails. Why? -rrk
+
+|click|link=Live Preview||
+|pause|1200|
+|assertTextPresent|Preview||
+
+# TODO - Selection List
+
+|click|link=Modal Container||
+|waitForTextPresent|Modal container with direct content||
+
+# TODO - Model Dialog
+
+# TODO - Model Dialog Opener
+
+|click|link=Date Picker||
+|waitForTextPresent|Date with no configuration||
+
+|click|link=JSON||
+|waitForTextPresent|This is a blank div.||
+
+|click|link=Complex JSON||
+|waitForTextPresent|simple synchronous call||

@@ -26,7 +26,8 @@ public class DirectAction extends WODirectAction {
     return pageWithName(Main.class.getName());
   }
 
-  protected String urlForDirectActionNamed(String directActionName, String sessionID, NSDictionary parameters) {
+  @SuppressWarnings("deprecation")
+protected String urlForDirectActionNamed(String directActionName, String sessionID, NSDictionary parameters) {
     context()._generateCompleteURLs();
     String url = context().directActionURLForActionNamed(directActionName, parameters);
     context()._generateRelativeURLs();

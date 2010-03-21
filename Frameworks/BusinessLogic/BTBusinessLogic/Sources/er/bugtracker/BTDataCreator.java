@@ -1,21 +1,10 @@
 package er.bugtracker;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.Enumeration;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EODatabaseContext;
-import com.webobjects.eoaccess.EOModel;
-import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSchemaGeneration;
-import com.webobjects.eoaccess.EOSynchronizationFactory;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -24,23 +13,17 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.components.ERXLoremIpsumGenerator;
-import er.extensions.eof.ERXEC;
-import er.extensions.foundation.ERXFileUtilities;
-import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.jdbc.ERXJDBCUtilities;
-import er.extensions.jdbc.ERXSQLHelper;
-import er.taggable.migrations.ERTaggableEntity0;
 
 public class BTDataCreator {
 	private static final Logger log = Logger.getLogger(BTDataCreator.class);
 
 	EOEditingContext ec;
 
-	public static void main(String[] args) {
-		new BTDataCreator().create(args);
+	public BTDataCreator(EOEditingContext editingContext) {
+	  ec = editingContext;
 	}
-
+	
 	/*
 	 * delete from EO_PK_TABLE; delete from PEOPLE; delete from ERCPREFER;
 	 * delete from BUG_TEST_ITEM; delete from COMPONENT; delete from Comment;
@@ -136,88 +119,13 @@ public class BTDataCreator {
 		}
 	}
 
-	public void create(String[] args) {
-		ec = ERXEC.newEditingContext();
-		ec.lock();
-		try {
-			boolean dropTables = ERXProperties.booleanForKeyWithDefault("dropTables", false);
-			createTables(dropTables);
-			createDummyData();
-		} finally {
-			ec.unlock();
-		}
-	}
-
-	private void createTables(boolean dropTables) {
-		for (Enumeration e = EOModelGroup.defaultGroup().models().objectEnumerator(); e.hasMoreElements();) {
-			final EOModel eomodel = (EOModel) e.nextElement();
-			if(eomodel.name().toLowerCase().endsWith("prototypes")) {
-			    continue;
-			}
-			EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, eomodel.name());
-			dbc.lock();
-			try {
-				EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
-				EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
-				ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(channel);
-				NSDictionary options = helper.defaultOptionDictionary(true, dropTables);
-
-				// Primary key support creation throws an unwanted exception if
-				// EO_PK_TABLE already
-				// exists (e.g. in case of MySQL), so we add pk support in a
-				// stand-alone step
-				options = optionsWithPrimaryKeySupportDiabled(options);
-				createPrimaryKeySupportForModel(eomodel, channel, syncFactory);
-
-				String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
-				log.info("Creating tables: " + eomodel.name());
-				ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, true);
-				if (eomodel.name().equals("BugTracker")) {
-				    if(dropTables) {
-				        ERXJDBCUtilities.executeUpdateScript(channel, "drop table BugTag;", true);
-				    }
-					ERTaggableEntity0.upgrade(ec, channel, eomodel, Bug.ENTITY_NAME);
-					InputStream is = ERXFileUtilities.inputStreamForResourceNamed("populate.sql", "BTBusinessLogic", null);
-					String sql = ERXFileUtilities.stringFromInputStream(is);
-					log.info("Populating: " + eomodel.name());
-					ERXJDBCUtilities.executeUpdateScript(channel, sql, true);
-					// re-read shared data, the first time around it probably
-					// wasn't there
-					// strictly speaking, we'd also need to do this for ERC too
-					BTBusinessLogic.sharedInstance().initializeSharedData();
-				}
-			} catch (SQLException ex) {
-				log.error("Can't update: " + ex, ex);
-			} catch (IOException ex) {
-				log.error("Can't read: " + ex, ex);
-			} finally {
-				dbc.unlock();
-			}
-		}
-
-	}
-
 	private NSDictionary optionsWithPrimaryKeySupportDiabled(NSDictionary options) {
 		NSMutableDictionary mutableOptions = options.mutableClone();
 		mutableOptions.setObjectForKey("NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
 		return mutableOptions.immutableClone();
 	}
 
-	private void createPrimaryKeySupportForModel(EOModel eomodel, EOAdaptorChannel channel, EOSynchronizationFactory syncFactory) {
-		try {
-			// AK: the (Object) cast is needed, because in 5.4 new NSArray(obj)
-			// != new NSArray(array).
-			NSArray pkSupportExpressions = syncFactory.primaryKeySupportStatementsForEntityGroups(new NSArray((Object) eomodel.entities()));
-			Enumeration enumeration = pkSupportExpressions.objectEnumerator();
-			while (enumeration.hasMoreElements()) {
-				EOSQLExpression expression = (EOSQLExpression) enumeration.nextElement();
-				channel.evaluateExpression(expression);
-			}
-		} catch (Exception e) {
-		}
-	}
-
-	private void createDummyData() {
+	public void createDummyData() {
 		priorities = Priority.clazz.allObjects(ec).mutableClone();
 		states = State.clazz.allObjects(ec).mutableClone();
 		testItemStates = TestItemState.clazz.allObjects(ec).mutableClone();

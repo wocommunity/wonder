@@ -1,38 +1,40 @@
+/*
+ * InPlaceEditor extension that adds a 'click to edit' text when the field is 
+ * empty.
+ * See http://codetocustomer.com/blog/2008/06/empty-text-for-ajaxinplaceeditor (also see the comments)
+ */
 if (typeof Ajax != 'undefined' && typeof Ajax.InPlaceEditor != 'undefined') {
-	/*
-	 * InPlaceEditor extension that adds a 'click to edit' text when the field is 
-	 * empty.
-	 */
-	Ajax.InPlaceEditor.prototype.__initialize = Ajax.InPlaceEditor.prototype.initialize;
-	Ajax.InPlaceEditor.prototype.__getText = Ajax.InPlaceEditor.prototype.getText;
-	Ajax.InPlaceEditor.prototype.__onComplete = Ajax.InPlaceEditor.prototype.onComplete;
-	Ajax.InPlaceEditor.prototype = Object.extend(Ajax.InPlaceEditor.prototype, {
-		  initialize: function(element, url, options) {
-		    	var newOptions = Object.extend(options || {}, {
-	            valueWhenEmpty: 'click to edit...',
-	            emptyClassName: 'inplaceeditor-empty'
-	        });
-	        this.__initialize(element,url,newOptions)
-	        this._checkEmpty();
-	    },
-	    
-	    _checkEmpty: function(){
-	        if( this.element.innerHTML.length == 0 ){
-	            this.element.appendChild(
-	                Builder.node('span',{className:this.options.emptyClassName},this.options.valueWhenEmpty));
-	        }
-	    },
-	
-	    getText: function(){
-	    		$A(this.element.getElementsByClassName(this.options.emptyClassName)).each(function(child){
-	            this.element.removeChild(child);
-	        }.bind(this));
-	        return this.__getText();
-	    },
-	
-	    onComplete: function(transport){
-	        this._checkEmpty();
-	        this.__onComplete(transport);
-	    }
-	});
+  Ajax.InPlaceEditorWithEmptyText = Class.create(Ajax.InPlaceEditor, {
+    
+    initialize: function($super, element, url, options) {
+      var newOptions = Object.extend({
+        valueWhenEmpty: 'click to edit...',
+        emptyClassName: 'inplaceeditor-empty'
+      }, options || {});
+      $super(element, url, newOptions);
+      this.checkEmpty();
+    },
+    
+    checkEmpty: function() {
+      if(this.element.innerHTML.length == 0 && this.options.valueWhenEmpty){
+        this.element.appendChild(
+            new Element("span", {className:this.options.emptyClassName}).update(this.options.valueWhenEmpty)
+        );
+      }
+    },
+    
+    getText: function($super) {
+      if(empty_span = this.element.select("." + this.options.emptyClassName).first()) {
+        empty_span.remove();
+      }
+      return $super();
+    },
+    
+    leaveEditMode : function($super, transport) {
+      var retval = $super(transport);
+      this.checkEmpty();
+      return retval;
+    }
+    
+  });
 }

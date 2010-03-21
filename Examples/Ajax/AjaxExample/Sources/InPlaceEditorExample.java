@@ -30,4 +30,10 @@ public class InPlaceEditorExample extends WOComponent {
 		System.out.println("InPlaceEditorExample.someAction: Some action was performed ...");
 		return null;
 	}
+	
+	
+	public void saveOnChange() {
+		System.out.println("InPlaceEditorExample.saveOnChange: save on change was performed for value " + _exampleValue);
+		// You could call ec.saveChanges() here if you wanted to...
+	}
 }

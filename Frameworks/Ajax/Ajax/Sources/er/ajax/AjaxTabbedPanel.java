@@ -13,8 +13,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-
-
 /**
  * This implements the tabs and the main control of a tabbed panel display as an
  * unordered list (UL and LI elements). The tab contents go in AjaxTabbedPanel
@@ -97,7 +95,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
      * @param template the graph of elements passed to the constructor.
      */
     private void findTabs(WODynamicGroup template)  {
-    	if (template == null) return;
+    	if (template == null || template.childrenElements() == null) return;
 
         NSArray children = template.childrenElements();
         for (int i = 0; i < children.count(); i++) {
@@ -159,6 +157,13 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 	            appendTagAttributeToResponse(response, "id", tabID);
 	            response.appendContentString(">\n");
 	            response.appendContentString("<a ");
+	            
+	            //add the accesskey
+	            if( tab.accesskey() != null ){
+	            	String accessKeyStr = tab.accesskey().valueInComponent(component).toString();
+	            	appendTagAttributeToResponse(response, "accesskey", accessKeyStr );
+	            }
+	            
 	            appendTagAttributeToResponse(response, "id", panelTabID);
 	            response.appendContentString(" href=\"javascript:void(0)\" onclick=\"");
 	

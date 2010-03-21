@@ -8,6 +8,7 @@ DraggableExample1 : AjaxDraggable {
 	elementName = "span";
 	revert = false;
 	draggableObject = o1;
+	scroll = "window";
 }
 
 DraggableExample2 : AjaxDraggable {
@@ -16,6 +17,7 @@ DraggableExample2 : AjaxDraggable {
 	elementName = "span";
 	revert = true;
 	draggableObject = item;
+	scroll = "window";
 }
 
 DroppableExample1 : AjaxDroppable {
