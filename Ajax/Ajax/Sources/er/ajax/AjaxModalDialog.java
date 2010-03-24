@@ -686,7 +686,9 @@ public class AjaxModalDialog extends AjaxComponent {
 			serverUpdate = " AUL.request('" + closeDialogURL(context()) + "', null, null, null);";
 		}
 		else {
-			serverUpdate = " AUL._update('" + closeUpdateContainerID + "', '" + closeDialogURL(context())  + "', null, null, null);";
+			String onCloseBeforeUpdate = (String)valueForBinding("onCloseBeforeUpdate", "AUL.shouldRefreshCloseUpdateContainer");
+			String verifyUpdateContainerRefreshScript = " if (" + onCloseBeforeUpdate + ") { ";
+			serverUpdate = verifyUpdateContainerRefreshScript + "AUL._update('" + closeUpdateContainerID + "', '" + closeDialogURL(context())  + "', null, null, null); }";
 		}
 
 		if (hasBinding("afterHide")) {
@@ -701,7 +703,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		else {
 			serverUpdate = "function(v) { " + serverUpdate + '}';
 		}
-		ajaxOptionsArray.addObject(new AjaxOption("afterHide", serverUpdate, AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("afterHide", serverUpdate, AjaxOption.SCRIPT));
 
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 

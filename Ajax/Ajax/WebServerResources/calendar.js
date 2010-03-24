@@ -112,7 +112,17 @@ function get_xy(el) {
   var result = [0, 0];
   while (el) {
     result[0] += el.offsetLeft;
-    result[1] += el.offsetTop;
+	result[1] += el.offsetTop;
+
+    // CH: If you use position:relative on a span around an input, Safari copies the offset values
+    //     to the contained input resulting in the calendar popup being offset to the right and bottom 
+    //     To work around this, detect this situation and skip the containing span.
+	if (Prototype.Browser.WebKit && el.tagName == "INPUT" && 
+	    el.offsetParent && el.offsetParent.tagName == "SPAN" && 
+	    el.offsetParent.getStyle('position').toLowerCase() == 'relative') {
+      el = el.offsetParent;
+    }
+
     el = el.offsetParent;
   }
   return result;
@@ -162,12 +172,11 @@ function date_to_string(date, format) {
 function string_to_date(s) {
   var dateOrder = calendar.format;
   if (!dateOrder) dateOrder = '%d %b %Y';  // Set default format.
-
-  dateOrder = dateOrder.replace(/%[ed]/,'D');
+  dateOrder = dateOrder.replace(/%[ed]/,'d');
   dateOrder = dateOrder.replace(/%[mbB]/,'M');
-  dateOrder = dateOrder.replace(/%[yY]/,'Y');
-
-  var result = Date.fromString(s, {order: dateOrder});
+  dateOrder = dateOrder.replace(/%[yY]/,'yyyy');
+  
+  var result = Date.parseExact(s, [dateOrder]);
   if (result == 'Invalid Date') {
   	result = undefined;
   }

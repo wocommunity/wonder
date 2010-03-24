@@ -7,8 +7,10 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicGroup;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -157,6 +159,13 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 	            appendTagAttributeToResponse(response, "id", tabID);
 	            response.appendContentString(">\n");
 	            response.appendContentString("<a ");
+	            
+	            //add the accesskey
+	            if( tab.accesskey() != null ){
+	            	String accessKeyStr = tab.accesskey().valueInComponent(component).toString();
+	            	appendTagAttributeToResponse(response, "accesskey", accessKeyStr );
+	            }
+	            
 	            appendTagAttributeToResponse(response, "id", panelTabID);
 	            response.appendContentString(" href=\"javascript:void(0)\" onclick=\"");
 	

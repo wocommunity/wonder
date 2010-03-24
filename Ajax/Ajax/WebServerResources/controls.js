@@ -220,15 +220,37 @@ Autocompleter.Base = Class.create({
   },
 
   markPrevious: function() {
-    if(this.index > 0) this.index--;
-      else this.index = this.entryCount-1;
-    this.getEntry(this.index).scrollIntoView(true);
+    // Wonder-406 - Part 1 of window jump fix
+  	if(this.index > 0) {
+ 	   this.index--;
+ 	}
+ 	else {
+  	   this.index = this.entryCount-1;
+  	   this.update.scrollTop = this.update.scrollHeight;
+ 	}
+ 	selection = this.getEntry(this.index);
+ 	selection_top = selection.offsetTop;
+ 	if(selection_top < this.update.scrollTop){
+ 	   this.update.scrollTop = this.update.scrollTop-selection.offsetHeight;
+ 	}
+ 	// End Wonder-406 - Part 1 of window jump fix
   },
-
+  
   markNext: function() {
-    if(this.index < this.entryCount-1) this.index++;
-      else this.index = 0;
-    this.getEntry(this.index).scrollIntoView(false);
+    // Wonder-406 - Part 2 of window jump fix
+    if(this.index < this.entryCount-1) {
+      this.index++;
+    }
+    else {
+     this.index = 0;
+     this.update.scrollTop = 0;
+    }
+    selection = this.getEntry(this.index);
+    selection_bottom = selection.offsetTop+selection.offsetHeight;
+    if(selection_bottom > this.update.scrollTop+this.update.offsetHeight){
+     this.update.scrollTop = this.update.scrollTop+selection.offsetHeight;
+    }
+    // End Wonder-406 - Part 2 of window jump fix
   },
 
   getEntry: function(index) {
@@ -292,6 +314,7 @@ Autocompleter.Base = Class.create({
       }
 
       this.stopIndicator();
+      this.update.scrollTop = 0; // RP - Part 3 of window jump fix
       this.index = 0;
 
       if(this.entryCount==1 && this.options.autoSelect) {
