@@ -686,7 +686,7 @@ public class AjaxModalDialog extends AjaxComponent {
 			serverUpdate = " AUL.request('" + closeDialogURL(context()) + "', null, null, null);";
 		}
 		else {
-			String onCloseBeforeUpdate = (String)valueForBinding("onCloseBeforeUpdate", "AUL.shouldRefreshCloseUpdateContainer");
+			String onCloseBeforeUpdate = (String)valueForBinding("onCloseBeforeUpdate", "AMD.shouldRefreshCloseUpdateContainer");
 			String verifyUpdateContainerRefreshScript = " if (" + onCloseBeforeUpdate + ") { ";
 			serverUpdate = verifyUpdateContainerRefreshScript + "AUL._update('" + closeUpdateContainerID + "', '" + closeDialogURL(context())  + "', null, null, null); }";
 		}
