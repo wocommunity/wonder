@@ -1010,6 +1010,8 @@ var AjaxBusy = {
 };
 
 var AjaxModalDialog = {
+	shouldRefreshCloseUpdateContainer = true,
+	
 	insertion: function(receiver, response) {
 		receiver.update(response);
 		Modalbox.resizeToContent({ transitions: false });
