@@ -78,6 +78,8 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
  * @binding onClose server side method that runs before the dialog is closed, the return value is discarded.
  *                  This will be executed if the page is reloaded, but not if the user navigates elsewhere.
  * @binding closeUpdateContainerID the update container to refresh when onClose is called
+ * @binding onCloseBeforeUpdate if the given function returns true, the update container named in closeUpdateContainerID
+ *                  is updated.  This is to allow conditional updating, e.g. not updating when the dialog is simply dismissed.
  * @binding clickOnReturnId optional, ID of clickable HTML element to click when the Return key is pressed.  This is ignored
  * 					if a clickable element has the focus
  * @binding clickOnEscId optional, ID of clickable HTML element to click when the Esc key is pressed.  This is ignored
