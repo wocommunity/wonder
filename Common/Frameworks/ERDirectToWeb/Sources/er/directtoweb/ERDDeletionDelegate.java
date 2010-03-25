@@ -97,7 +97,7 @@ public class ERDDeletionDelegate implements NextPageDelegate {
      * Deletes the object.  Override this method to customize deletion behavior.
      * @throws NSValidation.ValidationException if something goes wrong during deletion
      */
-    protected void deleteObject() throws NSValidation.ValidationException {
+    public void deleteObject() throws NSValidation.ValidationException {
         EOEditingContext editingContext = _object.editingContext();
         if (_dataSource != null) _dataSource.deleteObject(_object);
         if (editingContext instanceof EOSharedEditingContext) {
@@ -130,7 +130,7 @@ public class ERDDeletionDelegate implements NextPageDelegate {
      * @param ec to which the changes should be saved
      * @throws NSValidation.ValidationException if something goes wrong during save
      */
-    protected void saveChanges(EOEditingContext ec) throws NSValidation.ValidationException {
+    public void saveChanges(EOEditingContext ec) throws NSValidation.ValidationException {
         try {
             if (ERXEOControlUtilities.isNewObject(_object)) {
                 // This is necessary to force state synching, e.g., for display groups, etc.

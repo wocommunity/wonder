@@ -1,7 +1,7 @@
 RootNavigationMenuItem: ERXModernNavigationMenuItem {
 	navigationItem = rootNode;
 	navigationContext = navigationContext;		
-	useSpringyLook = useSpringyLook;
+	renderCompleteMenuTree = renderCompleteMenuTree;
 }
 TopLevelNavigationItemsRep : WORepetition {
     list = topLevelNavigationMenuItems;
@@ -10,5 +10,5 @@ TopLevelNavigationItemsRep : WORepetition {
 TopLevelNavigationItem : ERXModernNavigationMenuItem {
 	navigationItem = navItem;
 	navigationContext = navigationContext;
-	useSpringyLook = useSpringyLook;
+	renderCompleteMenuTree = renderCompleteMenuTree;
 }

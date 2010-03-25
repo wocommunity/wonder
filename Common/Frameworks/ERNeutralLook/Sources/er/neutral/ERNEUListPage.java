@@ -17,6 +17,8 @@ import java.util.Enumeration;
 public class ERNEUListPage extends ERD2WListPage {
 
     protected Integer colspan;
+    protected String deleteButtonComponentName;
+
 
     public ERNEUListPage(WOContext context) { super(context); }
 
@@ -38,4 +40,21 @@ public class ERNEUListPage extends ERD2WListPage {
         }
         return colspan;
     }
+    
+    
+    /**
+     * Component to be used to delete button in the list.
+     * key to be used is: <code>deleteButtonComponentName</code>
+     * @return name of the component used for delete button in this list.
+     */
+    public String deleteButtonComponentName() {
+        if(deleteButtonComponentName == null) {
+            deleteButtonComponentName = (String) d2wContext().valueForKey("deleteButtonComponentName");
+            //default to ERDTrashcan
+            deleteButtonComponentName  = deleteButtonComponentName == null ? "ERDTrashcan" : deleteButtonComponentName;
+        }
+       
+        return deleteButtonComponentName;
+    }
+
 }
