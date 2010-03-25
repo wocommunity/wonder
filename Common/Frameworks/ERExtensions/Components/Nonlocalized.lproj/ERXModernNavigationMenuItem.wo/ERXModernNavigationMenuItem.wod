@@ -72,7 +72,7 @@ MenuItemLinkSwitchComponent : WOSwitchComponent {
 NavigationMenuItem: ERXModernNavigationMenuItem {
 	navigationItem = aChildItem;
 	navigationContext = navigationContext;
-	useSpringyLook = useSpringyLook;
+	renderCompleteMenuTree = renderCompleteMenuTree;
 }
 
 NewMarker: WOImage {

@@ -15,15 +15,15 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.appserver._private.WOHTMLBareString;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.components.conditionals.ERXWOTemplate;
 
 /**
  * Allows for multiple Component Contents.
-
-Currently, WOComponentContent can only access a single subtemplate.  We need a way to pass several 
-named contents.
-<code><pre>
+ * 
+ * Currently, WOComponentContent can only access a single subtemplate. We need a
+ * way to pass several named contents. <code><pre>
 ==============================
 Parent component:
 ==============================
@@ -98,12 +98,13 @@ ComponentContent3: ERXWOComponentContent {
     templateName = "thirdTemplate";
 }
 </pre></code>
-
-So, the way this could work is to add functionality to WOComponentContent which allows 
-it to iterate through its elements and locate the named templates.  It also needs to be extended 
-so that it takes the contents of its refernce as a default if no named template is provided/found.
-
-<code><pre>
+ * 
+ * So, the way this could work is to add functionality to WOComponentContent
+ * which allows it to iterate through its elements and locate the named
+ * templates. It also needs to be extended so that it takes the contents of its
+ * refernce as a default if no named template is provided/found.
+ * 
+ * <code><pre>
 &lt;webobject name=IfThenElse&gt;
     &lt;webobject name=TrueBlock&gt;
         This is true block
@@ -126,6 +127,11 @@ Template2: ERXWOTemplate {
     templateName = "false";
 }
 </pre></code>
+ * 
+ * @binding templateName The templateName of the ERXWOTemplate which should be rendered
+ *          in place of this element. If not set, this element will behave like
+ *          a regular WOComponentContent, but filter out all ERXWOTemplates.
+ *          
  * @author ak (Java port)
  * @author Charles Lloyd
  */
@@ -141,34 +147,52 @@ public class ERXWOComponentContent extends WODynamicElement {
     public ERXWOComponentContent(String name, NSDictionary associations, WOElement woelement) {
         super(name, associations, woelement);
         _templateName = (WOAssociation) associations.objectForKey("templateName");
-        if(!_templateName.isValueConstant()) {
-            //throw new IllegalStateException("You must bind 'templateName' to a constant string");
-        }
         _defaultTemplate = woelement == null ? new WOHTMLBareString("") : woelement;
     }
     
     private WOElement template(WOComponent component) {
-    	String myName = (String) _templateName.valueInComponent(component);
     	WOElement content =  component._childTemplate();
     	WOElement result = null;
+    	String templateName = (_templateName == null) ? null : (String) _templateName.valueInComponent(component);
     	if (content instanceof WODynamicGroup) {
 			WODynamicGroup group = (WODynamicGroup) content;
+			if (templateName == null) {
+				// MS: If you don't set a template name, then let's construct all the children of 
+				// this element that are NOT ERXWOTemplate's, so we don't double-display.  This lets
+				// you use an ERXWOComponentContent and have it just act like a "default" template
+				// that skips all the children that are explicitly wrapped in an ERXWOTemplate.
+				NSMutableArray originalChildrenElements = group.childrenElements();
+				if (originalChildrenElements != null && originalChildrenElements.count() > 0) {
+					NSMutableArray nonTemplateChildrenElements = new NSMutableArray();
+					for (Enumeration childrenEnum = originalChildrenElements.objectEnumerator(); childrenEnum.hasMoreElements();) {
+                        WOElement originalChild = (WOElement)childrenEnum.nextElement();
+						if (!(originalChild instanceof ERXWOTemplate)) {
+							nonTemplateChildrenElements.addObject(originalChild);
+						}
+					}
+					result = new WODynamicGroup(null, null, nonTemplateChildrenElements);
+				}
+			}
+			else {
 	        for(Enumeration e = group.childrenElements().objectEnumerator(); e.hasMoreElements() && result == null ; ) {
 	        	WOElement current = (WOElement) e.nextElement();
 	        	if(current instanceof ERXWOTemplate) {
 	        		ERXWOTemplate template = (ERXWOTemplate)current;
 	        		String name = template.templateName(component);
-	        		if(name.equals(myName)) {
+		        		if(name.equals(templateName)) {
 	        			result = template;
 	        		}
 	        	}
 	        }
+			}
 		} else if (content instanceof ERXWOTemplate) {
 			ERXWOTemplate template = (ERXWOTemplate) content;
     		String name = template.templateName(component);
-    		if(name.equals(myName)) {
+    		if(name.equals(templateName)) {
     			result = template;
     		}
+		} else if (content instanceof WOHTMLBareString && templateName == null) {
+			result=content;
 		}
     	return result;
     }

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
 	<wo class="AjaxDragResizeContainer" wocomponentcontent="true">
 
 		<binding name="minWidth"/>
@@ -31,9 +32,12 @@
 				</or>
 			</and>
 		</validation>
-		<binding name="report"/><binding name="action"/>
+		<binding name="report"/>
+        <binding name="action"/>
 		<validation message="&amp;apos;report&amp;apos; must be bound to a settable value">
 			<unsettable name="report"/>
 		</validation>
-	</wo>
+	
+        <binding defaults="Boolean" name="skipContainer"/>
+    </wo>
 </wodefinitions>

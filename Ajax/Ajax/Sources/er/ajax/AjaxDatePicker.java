@@ -1,9 +1,11 @@
 package er.ajax;
 
 import java.text.Format;
+
 import java.text.SimpleDateFormat;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
@@ -47,6 +49,7 @@ import er.extensions.ERXResponseRewriter;
  * @binding size size attribute passed to the input field 
  * @binding maxlength maxlength attribute passed to the input field 
  * @binding name name attribute passed to the input field 
+ * @binding disabled passed to the input field
  * @binding onDateSelect JavaScript to execute when a date is selected from the calendar
  * @binding fireEvent false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
  * 
@@ -146,19 +149,15 @@ public class AjaxDatePicker extends AjaxComponent {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		
 		// The "constant" form of AjaxOption is used so that we can rename the bindings or convert the values
-		ajaxOptionsArray.addObject(new AjaxOption("format", format(), AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("month_names", valueForBinding("monthNames"), AjaxOption.ARRAY));
-		ajaxOptionsArray.addObject(new AjaxOption("day_names", valueForBinding("dayNames"), AjaxOption.ARRAY));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("format", "format", format(), AjaxOption.STRING));
+		ajaxOptionsArray.addObject(new AjaxOption("month_names", "monthNames", null, AjaxOption.ARRAY));
+		ajaxOptionsArray.addObject(new AjaxOption("day_names", "dayNames", null, AjaxOption.ARRAY));
 		
 		ajaxOptionsArray.addObject(new AjaxOption("onDateSelect", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("fireEvent", AjaxOption.BOOLEAN));
 		
-		if (hasBinding("imagesDir")) {
-			ajaxOptionsArray.addObject(new AjaxOption("images_dir", valueForBinding("imagesDir"), AjaxOption.STRING));
-		}
-		else {
-			ajaxOptionsArray.addObject(new AjaxOption("images_dir", defaultImagesDir, AjaxOption.STRING));
-		}
+		ajaxOptionsArray.addObject(new AjaxOption("images_dir", "imagesDir", defaultImagesDir, AjaxOption.STRING));
+		
 		options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     	super.appendToResponse(res, ctx);
     }
@@ -188,8 +187,7 @@ public class AjaxDatePicker extends AjaxComponent {
     	// Load the CSS like this to avoid odd race conditions when this is used in an AjaxModalDialog: at times
     	// the CSS does not appear to be available and the calendar appears in the background
     	script.append("AOD.loadCSS('");
-    	script.append(application().resourceManager().urlForResourceNamed((String)valueForBinding("calendarCSS", "calendar.css"), 
-    			                                                          (String)valueForBinding("calendarCSSFramework", "Ajax"), null, context().request()).toString());
+    	script.append(application().resourceManager().urlForResourceNamed(cssFileName(), cssFileFrameworkName(), null, context().request()).toString());
     	script.append("'); ");
     	script.append("this.select(); calendar_open(this, ");
     	AjaxOptions.appendToBuffer(options(), script, context());
@@ -266,7 +264,7 @@ public class AjaxDatePicker extends AjaxComponent {
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "wonder.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "calendar.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "date.js");
-		ERXResponseRewriter.addStylesheetResourceInHead(response, context(), "Ajax", "calendar.css");
+		ERXResponseRewriter.addStylesheetResourceInHead(response, context(), cssFileFrameworkName(), cssFileName());
 	}
 	
 	/**
@@ -275,15 +273,33 @@ public class AjaxDatePicker extends AjaxComponent {
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}
-    
-	
 	
     /**
      * Overridden so that parent will handle in the same manner as if this were a dynamic element. 
      */
-    public void validationFailedWithException(Throwable t, Object value, String keyPath)
-    {
+    public void validationFailedWithException(Throwable t, Object value, String keyPath) {
+    	if (keyPath != null && "<none>".equals(keyPath) && t instanceof ValidationException) {
+    		ValidationException e = (ValidationException) t;
+    		WOAssociation valueAssociation = (WOAssociation) _keyAssociations.valueForKey("value");
+    		if (valueAssociation != null) {
+    			keyPath = valueAssociation.keyPath();
+    		}
+    		t = new ValidationException(e.getMessage(), e.object(), keyPath);
+    	}
     	parent().validationFailedWithException(t, value, keyPath);
     }
     
+    /**
+     * @return value for calendarCSS binding, or default of "calendar.css"
+     */
+    protected String cssFileName() {
+    	return (String)valueForBinding("calendarCSS", "calendar.css");
+    }
+    
+    /**
+     * @return value for calendarCSSFramework binding, or default of "Ajax"
+     */
+    protected String cssFileFrameworkName() {
+    	return (String)valueForBinding("calendarCSSFramework", "Ajax");
+    }
 }

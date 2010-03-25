@@ -362,3 +362,10 @@ Trash: ERDTrashcan {
 	dataSource = dataSource;
 	object = object;
 }
+
+TrashSwitchComponent : WOSwitchComponent {
+    WOComponentName = deleteButtonComponentName;
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	object = object;
+}

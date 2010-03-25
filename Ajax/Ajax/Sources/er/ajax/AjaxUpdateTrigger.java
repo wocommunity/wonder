@@ -51,7 +51,7 @@ public class AjaxUpdateTrigger extends WODynamicElement {
 				// PROTOTYPE FUNCTIONS
 				Object evalScripts = AjaxUtils.valueForBinding("evalScripts", "true", _associations, component);
 				response.appendContentString("if ($wi('" + updateContainerID + "')) { ");
-				response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $wi('" + updateContainerID + "').getAttribute('updateUrl'), {" + " evalScripts: " + evalScripts + ", insertion: Element.update });\n");
+				response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $wi('" + updateContainerID + "').getAttribute('updateUrl'), {" + " evalScripts: " + evalScripts + ", insertion: Element.update, method: 'get' });\n");
 				response.appendContentString(" }");
 			}
 			AjaxUtils.appendScriptFooter(response);

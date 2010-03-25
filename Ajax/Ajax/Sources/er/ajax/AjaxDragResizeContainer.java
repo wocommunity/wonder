@@ -33,6 +33,10 @@ import er.extensions.ERXWOContext;
  * @binding drsMoveHandle
  * @binding report
  * @binding action
+ * @binding skipContainer When set to true, the container div including nested
+ *          content is omitted. Use this if you want to use an existing element
+ *          as container. Make sure, this element is "position:relative" and
+ *          specify it's dom id using the id binding.
  */
 public class AjaxDragResizeContainer extends AjaxComponent {
 

@@ -4,6 +4,7 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -53,6 +54,18 @@ import er.extensions.ERXWOContext;
  */
 public class AjaxModalDialogOpener extends AjaxComponent {
 	
+	/**
+	 * Call this, from the action method only, to prevent the dialog from opening.  If there is an onFailure 
+	 * callback, it will get executed.  This is also called internally if <code>enabled</code> is bound and 
+	 * evaluates to false.  This method sets the response status code to an error code so that the onSuccess 
+	 * callback is not executed.  The error status returned is 409 - "Conflict" which seemed like the best 
+	 * match for this.
+	 *
+	 * @param context WOContext to reject open in
+	 */
+	public static void rejectOpen(WOContext context) {
+		AjaxUtils.createResponse(context.request(), context).setStatus(409);
+	}
 	
     public AjaxModalDialogOpener(WOContext context) {
         super(context);
@@ -123,10 +136,7 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 			valueForBinding("action");
 		}
 		else {
-			// Set the response status code to an error code so that the onSuccess callback is not executed
-			// If there is an onFailure callback, it will get executed
-			// Status 409 is "Conflict" which seemed like the best match for this
-			AjaxUtils.createResponse(request, context).setStatus(409);
+			rejectOpen(context);
 		}
 		
 		return null;
@@ -138,8 +148,8 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 	 */
 	protected NSMutableDictionary ajaxRequestOptions() {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
-		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", Boolean.FALSE, AjaxOption.BOOLEAN));
-		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.FALSE, AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("asynchronous", Boolean.FALSE, AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("evalScripts", Boolean.FALSE, AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.FUNCTION_1));
 		
 		// onSuccess callback handler to open AMD
@@ -152,7 +162,7 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 			sb.append(AjaxValue.javaScriptEscaped(valueForBinding("title")));
 		}		
 		sb.append(");");
-		ajaxOptionsArray.addObject(new AjaxOption("onSuccess", sb.toString(), AjaxOption.FUNCTION_1));
+		ajaxOptionsArray.addObject(new AjaxConstantOption("onSuccess", sb.toString(), AjaxOption.FUNCTION_1));
 
 		return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 	}

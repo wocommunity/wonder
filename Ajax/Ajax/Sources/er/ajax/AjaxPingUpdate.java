@@ -4,6 +4,8 @@ package er.ajax;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+import er.extensions.ERXExtensions;
+
 /**
  * <p>
  * AjaxPingUpdate is primarily for use inside of an AjaxPing tag to support 
@@ -21,8 +23,8 @@ import com.webobjects.appserver.WOContext;
  */
 public class AjaxPingUpdate extends WOComponent {
   private Boolean _refreshTarget;
-	private Object _lastCacheKey;
-
+  	private static final Object NOT_INITIALIZED = new Object();  
+	private Object _lastCacheKey = NOT_INITIALIZED;
 	public AjaxPingUpdate(WOContext context) {
 		super(context);
 	}
@@ -40,10 +42,10 @@ public class AjaxPingUpdate extends WOComponent {
     boolean refreshTarget = false;
 	  if (_refreshTarget == null) {
   		Object cacheKey = valueForBinding("cacheKey");
-  		if (_lastCacheKey == null) {
+  		if(_lastCacheKey == NOT_INITIALIZED) {
   			_lastCacheKey = cacheKey;
   		}
-  		else if (!cacheKey.equals(_lastCacheKey)) {
+  		if(ERXExtensions.safeDifferent(_lastCacheKey, cacheKey)) {
   			refreshTarget = true;
   			_lastCacheKey = cacheKey;
   		}

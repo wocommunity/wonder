@@ -16,6 +16,7 @@ import er.extensions.ERXWOContext;
  * @binding lng longitude for marker location (must be paired with lat, cannot coexist with address)
  * @binding lat latitude for marker location (must be paired with lng, cannot coexist with address)
  * @binding infoWindowHtml the html that is inside the infowindow
+ * @binding options the opts? argument to the constructor of the GMarker class. Value will be place inside {}
  */
 public class AjaxGMarker extends WOComponent {
 
