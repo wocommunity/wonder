@@ -1010,7 +1010,7 @@ var AjaxBusy = {
 };
 
 var AjaxModalDialog = {
-	shouldRefreshCloseUpdateContainer = true,
+	shouldRefreshCloseUpdateContainer: true,
 	
 	insertion: function(receiver, response) {
 		receiver.update(response);
