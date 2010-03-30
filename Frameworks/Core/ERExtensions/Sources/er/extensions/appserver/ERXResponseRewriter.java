@@ -213,7 +213,19 @@ public class ERXResponseRewriter {
 	 * @return the user info for the page component of the given context
 	 */
 	public static NSMutableDictionary<String, Object> pageUserInfo(WOContext context) {
-		WOComponent page = context.page();
+		return pageUserInfo(context.page());
+	}
+
+	/**
+	 * Returns the page userInfo for the given page component.
+	 * Unlike ajaxPageUserInfo, information put into pageUserInfo will stay
+	 * associated with the page as long as the page exists.
+	 * 
+	 * @param page
+	 *            the component to lookup
+	 * @return the user info for the page component of the given context
+	 */
+	public static NSMutableDictionary<String, Object> pageUserInfo(WOComponent page) {
 		NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter._pageUserInfos.get(page);
 		if (pageInfo == null) {
 			pageInfo = new NSMutableDictionary<String, Object>();
