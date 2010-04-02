@@ -641,13 +641,16 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /**
-     * Sets the user choosen branch.
+     * Sets the user chosen branch.
      * 
      * @param branch
-     *            choosen by user.
+     *            chosen by user.
      */
     public void setBranch(NSDictionary branch) {
         _branch = branch;
+        // Propagate the branchName to the D2WContext.
+        Object branchValue = _branch != null ? _branch.valueForKey(ERDBranchDelegate.BRANCH_NAME) : NSKeyValueCoding.NullValue;
+        d2wContext().takeValueForKey(branchValue, ERDBranchDelegate.BRANCH_NAME);
     }
 
     /**
@@ -659,7 +662,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // ENHANCEME: Should be localized
     public String branchName() {
         if (branch() != null) {
-            return (String) branch().valueForKey("branchName");
+            return (String) branch().valueForKey(ERDBranchDelegate.BRANCH_NAME);
         }
         return null;
     }

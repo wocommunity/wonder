@@ -14,12 +14,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.directtoweb.D2WComponent;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -42,7 +40,7 @@ import er.extensions.ERXLocalizer;
  */
 public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 
-	/**
+    /**
 	 * Runtime flags for the delegate, so you can have one delegate for all tasks.
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
@@ -62,7 +60,12 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 		 * Returns the names of the pages where you can have this method. Example "ListWebMaster,QueryWebMaster"
 		 */
 		public String availablePages() default "";
-	}
+
+        /**
+         * @return the display mode.  Use "inline" to display nextPage result in a modal dialog.
+         */
+        public String displayMode() default "";
+    }
 	
     /** logging support */
     public final static Logger log = Logger.getLogger(ERDBranchDelegate.class);
@@ -76,6 +79,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     public static final String BRANCH_NAME = "branchName";
     public static final String BRANCH_LABEL = "branchButtonLabel";
     public static final String BRANCH_PREFIX = "Button";
+    public static final String BRANCH_DISPLAY_MODE = "displayMode";
     
     /**
      * Implementation of the {@link NextPageDelegate NextPageDelegate}
@@ -97,15 +101,15 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
                     Method m = getClass().getMethod(branchName, WOComponentClassArray);
                     nextPage = (WOComponent)m.invoke(this, new Object[] { sender });
                 } catch (InvocationTargetException ite) {
-                    log.error("Invocation exception occurred in ERBranchDelegate: " + ite.getTargetException() + " for branch name: " + branchName, ite.getTargetException());
+                    log.error("Invocation exception occurred in ERDBranchDelegate: " + ite.getTargetException() + " for branch name: " + branchName, ite.getTargetException());
                     throw new NSForwardException(ite.getTargetException());
                 } catch (Exception e) {
-                    log.error("Exception occurred in ERBranchDelegate: " + e.toString() + " for branch name: " + branchName);
+                    log.error("Exception occurred in ERDBranchDelegate: " + e.toString() + " for branch name: " + branchName);
                     throw new NSForwardException(e);
                 }
             }
         } else {
-            log.warn("Branch delegate being used with a component that does not implement the ERBranchInterface");
+            log.warn("Branch delegate being used with a component that does not implement the ERDBranchDelegateInterface");
         }
         return nextPage;
     }
@@ -120,7 +124,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     	if(label == null) {
     		label = ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(BRANCH_PREFIX, method);
     	}
-    	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, BRANCH_NAME, label, BRANCH_LABEL, method +  "Action", BRANCH_BUTTON_ID});
+    	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, BRANCH_NAME, label, BRANCH_LABEL, method +  "Action", BRANCH_BUTTON_ID, branchDisplayMode(method), BRANCH_DISPLAY_MODE});
     }
     
     /**
@@ -140,11 +144,13 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         		Object o = choicesEnum.nextElement();
 				String method = null;
 				String label = null;
+                String displayMode = null;
 	       		NSMutableDictionary entry = new NSMutableDictionary();
         		if (o instanceof NSDictionary) {
         			entry.addEntriesFromDictionary((NSDictionary) o);
         			method = (String) entry.objectForKey(BRANCH_NAME);
         			label = (String) entry.objectForKey(BRANCH_LABEL);
+                    displayMode = (String) entry.objectForKey(BRANCH_DISPLAY_MODE);
         		} else if (o instanceof String) {
         			method = (String) o;
         		}
@@ -164,6 +170,13 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
            			// otherwise just return it.
         			label = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(label);
         		}
+                if (displayMode == null) {
+                    // If the value was not set in the branchChoices dictionary, get it via annotation.
+                    displayMode = branchDisplayMode(method);
+                }
+                if (displayMode != null) {
+                    entry.setObjectForKey(displayMode, BRANCH_DISPLAY_MODE);
+                }
         		entry.setObjectForKey(label, BRANCH_LABEL);
         		entry.setObjectForKey(method +  "Action", BRANCH_BUTTON_ID);
         		translatedChoices.addObject(entry);
@@ -183,17 +196,11 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         NSArray choices = NSArray.EmptyArray;
         try {
         	String task = context.task();
-        	String pageName = context.dynamicPage();
             NSMutableArray methodChoices = new NSMutableArray();
             Method methods[] = getClass().getMethods();
             for (Enumeration e = new NSArray(methods).objectEnumerator(); e.hasMoreElements();) {
                 Method method = (Method)e.nextElement();
-                if (method.getParameterTypes().length == 1 
-                        &&  method.getParameterTypes()[0] == WOComponent.class 
-                        && !method.getName().equals("nextPage")
-                        && method.getName().charAt(0) != '_'
-                        && ((method.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC) 
-                ) {
+                if (isEligibleBranchDelegateMethod(method)) {
                     boolean isAllowed = true;
                     if(method.isAnnotationPresent(D2WDelegate.class)) {
                     	D2WDelegate info = method.getAnnotation(D2WDelegate.class);
@@ -227,6 +234,14 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
                     + this + " exception: " + e.getMessage());
         }
         return choices;
+    }
+
+    protected boolean isEligibleBranchDelegateMethod(Method method) {
+        return method.getParameterTypes().length == 1
+                && method.getParameterTypes()[0] == WOComponent.class
+                && !method.getName().equals("nextPage")
+                && method.getName().charAt(0) != '_'
+                && ((method.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC);
     }
  
     /**
@@ -284,6 +299,32 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
             if(keys.containsObject(choice.objectForKey(BRANCH_NAME))) {
                 result.addObject(choice);
             }
+        }
+        return result;
+    }
+
+
+    /**
+     * Gets the display mode for the branch with the provided method name.
+     * @param methodName of the branch method to look up
+     * @return the display mode
+     */
+    public String branchDisplayMode(String methodName) {
+        String result = "";
+        try {
+            Method method = getClass().getMethod(methodName, WOComponentClassArray);
+            result = _displayModeForBranchMethod(method);
+        } catch (NoSuchMethodException nsme) {
+            // Do nothing.
+        }
+        return result;
+    }
+
+    private String _displayModeForBranchMethod(Method method) {
+        String result = "";
+        if (method.isAnnotationPresent(D2WDelegate.class)) {
+            D2WDelegate info = method.getAnnotation(D2WDelegate.class);
+            result = info.displayMode();
         }
         return result;
     }
