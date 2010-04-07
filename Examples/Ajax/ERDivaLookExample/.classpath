@@ -5,8 +5,6 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/ERDirectToWeb"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
-	<classpathentry exported="true" kind="con" path="WOFramework/ERPrototypes"/>
-	<classpathentry kind="con" path="WOFramework/DerbyPlugIn"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERDivaLook"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaDirectToWeb"/>
@@ -20,6 +18,7 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERDivaLook"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/H2PlugIn"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERMoviesLogic"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERPrototaculous"/>
 	<classpathentry kind="con" path="WOFramework/ERPrototaculous"/>
