@@ -52,6 +52,11 @@ public class WOKeyValueConditional extends WOComponent {
     public boolean isStateless() {
         return true;
     }
+    
+    @Override
+    public boolean synchronizesVariablesWithBindings() {
+    	return false;
+    }
 
     protected void _invalidateCaches() {
         // In order for this to behave like an element, all instance
