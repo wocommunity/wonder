@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
-	<classpathentry exported="true" kind="con" path="WOFramework/DerbyPlugIn"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/H2PlugIn"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERMoviesLogic"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERDirectToWeb"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
