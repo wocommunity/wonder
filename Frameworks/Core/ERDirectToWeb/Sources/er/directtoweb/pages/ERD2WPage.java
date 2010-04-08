@@ -840,6 +840,15 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
         return _tabSectionsContents;
     }
+    
+    /**
+     * If you switch the context out from under a wizard page it will hold onto the keys in the tab
+     * sections and blow up the next time you use it if the entity has changed. This allows you to 
+     * clear the array so it rebuilds.
+     */
+    protected void clearTabSectionsContents() {
+    	_tabSectionsContents = null;
+    }
 
     /** Dummy denoting to sections. */
     private final static NSArray _NO_SECTIONS = new NSArray("");
