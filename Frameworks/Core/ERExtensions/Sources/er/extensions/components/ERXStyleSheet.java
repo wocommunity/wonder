@@ -247,9 +247,10 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 				response._appendTagAttributeAndValue( "title", title, false );
 			}
 
-			response._appendContentAsciiString( ">" );
 			if( ERXStyleSheet.shouldCloseLinkTags() ) {
-				response._appendContentAsciiString( "</link>" );
+				response._appendContentAsciiString( "></link>" );
+			} else {
+				response._appendContentAsciiString( " />" );
 			}
 			response.appendContentString("\n");
 			boolean inserted = true;
