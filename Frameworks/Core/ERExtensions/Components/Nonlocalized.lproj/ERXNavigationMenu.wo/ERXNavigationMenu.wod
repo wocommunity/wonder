@@ -78,3 +78,13 @@ UsingTablesConditional:WOConditional {
 NotUsingTablesConditional:WOConditional {
 condition=true;
 }
+
+Level1UL : WOGenericContainer {
+  elementName = "ul";
+  class = level1itemsClass;
+}
+
+Level2UL : WOGenericContainer {
+  elementName = "ul";
+  class = level2itemsClass;
+}
