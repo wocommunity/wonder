@@ -45,7 +45,7 @@ DebugComponentName: ERD2WDebugComponentName {
 }
 
 Accordion: Accordion {
-	id = d2wContext.idForPageConfiguration;
+	id = accordionID;
 	disabled = disabled;
 }
 
