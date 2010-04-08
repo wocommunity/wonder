@@ -23,6 +23,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * <li><code>idForProperty</code></li>
  * <li><code>idForSection</code></li>
  * <li><code>idForPageConfiguration</code></li>
+ * <li><code>idForEmbeddedPageConfiguration</code></li>
+ * <li><code>idForEmbeddedProperty</code></li>
+ * <li><code>idForForm</code></li>
  * </ul>
  * 
  * To use: Bind D2W component id binding to d2wContext.id (or d2wContext.idForProperty or d2wContext.idForSection, etc)
@@ -43,6 +46,7 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
         new NSArray(new Object[] {"pageConfiguration", "task", "entity.name", "sectionKey"}), "idForSection",
         new NSArray(new Object[] {"pageConfiguration", "task", "entity.name"}), "idForPageConfiguration",
         new NSArray(new Object[] {"pageConfiguration", "task", "entity.name", "object"}), "idForEmbeddedPageConfiguration",
+        new NSArray(new Object[] {"propertyKey", "task", "entity.name", "object"}), "idForEmbeddedProperty",
         new NSArray(new Object[] {"pageConfiguration", "task", "entity.name"}), "idForForm",
     });
 
@@ -97,6 +101,18 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
     }
     
     /**
+     * a DOM id based on the triple <task, entity, propertyKey, pk>
+     * 
+     * @param c d2w context
+     * @return an id representing the <task, entity, propertyKey, pk>
+     * 
+     * TODO Maybe change to pageConfig + propertyKey?
+     */
+    public Object idForEmbeddedProperty(D2WContext c) {
+    	return idForProperty(c) + "_" + ERXEOControlUtilities.primaryKeyStringForObject((EOGenericRecord) c.valueForKey("object"));
+    }
+    
+    /**
      * A DOM id based on the pageConfig
      * 
      * @param c d2w context
@@ -114,8 +130,7 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
      * @return an id representing the <task, entity, pk>
      */
     public Object idForEmbeddedPageConfiguration(D2WContext c) {
-    	EOGenericRecord object = (EOGenericRecord) c.valueForKey("object");
-    	return idForPageConfiguration(c) + "_" + ERXEOControlUtilities.primaryKeyStringForObject(object);
+    	return idForPageConfiguration(c) + "_" + ERXEOControlUtilities.primaryKeyStringForObject((EOGenericRecord) c.valueForKey("object"));
     }
     
     /**
