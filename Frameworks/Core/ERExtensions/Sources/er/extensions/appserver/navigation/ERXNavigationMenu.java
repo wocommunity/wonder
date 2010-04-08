@@ -291,4 +291,16 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
 
     public String paddingWidth() { return ((ERXSession)session()).browser().isNetscape() ? "width=\"100%\"" : ""; }
 
+    // CSS Additions
+    
+	public String level1itemsClass() {
+		String classString = showLevel2() ? " L1WithChildren" : "";
+		return "Level1Items" + classString;
+	}
+	
+	public String level2itemsClass() {
+		String classString = showLevel3() ? " L2WithChildren" : "";
+		return "Level2Items" + classString;
+	}
+
 }
