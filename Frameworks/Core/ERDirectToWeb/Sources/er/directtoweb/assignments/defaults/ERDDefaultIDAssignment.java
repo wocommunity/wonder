@@ -114,9 +114,8 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
      * @return an id representing the <task, entity, pk>
      */
     public Object idForEmbeddedPageConfiguration(D2WContext c) {
-    	String _idForPageConfiguration = (String) idForPageConfiguration(c);
     	EOGenericRecord object = (EOGenericRecord) c.valueForKey("object");
-    	return _idForPageConfiguration + "_" + ERXEOControlUtilities.primaryKeyStringForObject(object);
+    	return idForPageConfiguration(c) + "_" + ERXEOControlUtilities.primaryKeyStringForObject(object);
     }
     
     /**
@@ -126,7 +125,9 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
      * @return an id representing the section in a tab page
      */
     public Object idForSection(D2WContext c) {
-    	return idForPageConfiguration(c) + "_" + ERXStringUtilities.safeIdentifierName((String)c.valueForKey("sectionKey"));
+    	String sectionKey = (String) c.valueForKey("sectionKey");
+    	String section = !"".equals(sectionKey) ? ERXStringUtilities.safeIdentifierName(sectionKey) : "section";
+    	return idForPageConfiguration(c) + "_" + section;
     }
     
     /**
