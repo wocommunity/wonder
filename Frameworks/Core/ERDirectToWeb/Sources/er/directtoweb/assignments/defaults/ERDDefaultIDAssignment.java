@@ -3,10 +3,14 @@ package er.directtoweb.assignments.defaults;
 import org.apache.log4j.Logger;
 
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.assignments.ERDAssignment;
+import er.directtoweb.assignments.ERDComputingAssignmentInterface;
+import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -38,6 +42,7 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
         new NSArray(new Object[] {"propertyKey", "task", "entity.name"}), "idForProperty",
         new NSArray(new Object[] {"pageConfiguration", "task", "entity.name", "sectionKey"}), "idForSection",
         new NSArray(new Object[] {"pageConfiguration", "task", "entity.name"}), "idForPageConfiguration",
+        new NSArray(new Object[] {"pageConfiguration", "task", "entity.name", "object"}), "idForEmbeddedPageConfiguration",
         new NSArray(new Object[] {"pageConfiguration", "task", "entity.name"}), "idForForm",
     });
 
@@ -100,6 +105,18 @@ public class ERDDefaultIDAssignment extends ERDAssignment {
     public Object idForPageConfiguration(D2WContext c) {
     	String _idForPageConfiguration = (c.dynamicPage() != null) ? c.dynamicPage() : c.task() + "_" + c.entity().name();
     	return ERXStringUtilities.safeIdentifierName(_idForPageConfiguration);
+    }
+    
+    /**
+     * A DOM id based on the pageConfig + primaryKey
+     * 
+     * @param c d2w context
+     * @return an id representing the <task, entity, pk>
+     */
+    public Object idForEmbeddedPageConfiguration(D2WContext c) {
+    	String _idForPageConfiguration = (String) idForPageConfiguration(c);
+    	EOGenericRecord object = (EOGenericRecord) c.valueForKey("object");
+    	return _idForPageConfiguration + "_" + ERXEOControlUtilities.primaryKeyStringForObject(object);
     }
     
     /**
