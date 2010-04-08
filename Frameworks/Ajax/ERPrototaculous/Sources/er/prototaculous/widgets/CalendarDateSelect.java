@@ -103,10 +103,9 @@ public class CalendarDateSelect extends WOComponent {
 	// R/R
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-		ERXResponseRewriter.addStylesheetResourceInHead(response, context, "ERPrototaculous", "CalendarDateSelect.css");
-
 		// include javascripts if not being used unobtrusively
 		if (!useUnobtrusively) {
+			ERXResponseRewriter.addStylesheetResourceInHead(response, context, "ERPrototaculous", "CalendarDateSelect.css");
 			ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "prototype.js");
 			ERXResponseRewriter.addScriptResourceInHead(response, context, "ERPrototaculous", "calendar_date_select.js");
 
