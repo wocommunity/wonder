@@ -72,4 +72,8 @@ public class ERDIVEditPageRepetition extends ERDInspectPageRepetition {
 		_subContext = new D2WContext(d2wContext());
 		_subContext.takeValueForKey(propertyKey, "propertyKey");
 	}
+	
+	public String accordionID() {
+		return d2wContext().valueForKey("idForPageConfiguration") + "_accordion";
+	}
 }
