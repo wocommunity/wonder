@@ -289,6 +289,16 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
+	 * Sets the processed objects for the current route. For instance, if your route specifies that you have a
+	 * {person:Person}, this dictionary should contain a mapping from that route key to a person instance.
+	 * 
+	 * @param objects the route objects to override
+	 */
+	public void _setRouteObjects(NSDictionary<ERXRoute.Key, Object> objects) {
+		_objects = objects;
+	}
+	
+	/**
 	 * Returns all the processed objects from the route keys. For instance, if your route specifies that you have a
 	 * {person:Person}, routeObjectForKey("person") will return a Person object.
 	 * 
@@ -296,7 +306,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public NSDictionary<ERXRoute.Key, Object> routeObjects() {
 		if (_objects == null) {
-			_objects = _route.keysWithObjects(_routeKeys, delegate());
+			_objects = ERXRoute.keysWithObjects(_routeKeys, delegate());
 		}
 		return _objects;
 	}
@@ -309,7 +319,9 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the processed objects from the route keys
 	 */
 	public NSDictionary<ERXRoute.Key, Object> routeObjects(IERXRestDelegate delegate) {
-		_objects = _route.keysWithObjects(_routeKeys, delegate);
+		if (_route != null) {
+			_objects = ERXRoute.keysWithObjects(_routeKeys, delegate);
+		}
 		return _objects;
 	}
 
@@ -1124,7 +1136,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the response node
 	 */
 	public ERXRestRequestNode responseNodeForActionNamed(String actionName) {
-		return format().parse(performActionNamed(actionName, true).generateResponse().contentString());
+		String contentString = performActionNamed(actionName, true).generateResponse().contentString();
+		return format().parse(contentString);
 	}
 
 	/**
