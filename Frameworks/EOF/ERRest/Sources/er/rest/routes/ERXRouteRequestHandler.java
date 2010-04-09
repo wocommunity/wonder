@@ -7,11 +7,13 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver._private.WODirectActionRequestHandler;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
@@ -743,6 +745,59 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		WORequest request = (WORequest) aobj[0];
 		setupRouteControllerFromUserInfo(controller, request.userInfo());
 		return controller;
+	}
+
+	/**
+	 * Returns the corresponding controller instance.
+	 * 
+	 * @param <T>
+	 *            the type of controller to return
+	 * @param entityName
+	 *            the entity name of the controller to lookup
+	 * @param request the current request
+	 * @param context the current context
+	 * @return the created controller
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends ERXRouteController> T controller(String entityName, WORequest request, WOContext context) {
+		return controller((Class<T>) routeControllerClassForEntityNamed(entityName), request, context);
+	}
+
+	/**
+	 * Returns the corresponding controller instance (with no request specified).
+	 * 
+	 * @param <T>
+	 *            the type of controller to return
+	 * @param controllerClass
+	 *            the controller class to lookup
+	 * @param context the current context
+	 * @return the created controller
+	 */
+	public <T extends ERXRouteController> T controller(Class<T> controllerClass, WOContext context) {
+		return controller(controllerClass, null, context);
+	}
+
+	/**
+	 * Returns the corresponding controller instance.
+	 * 
+	 * @param <T>
+	 *            the type of controller to return
+	 * @param controllerClass
+	 *            the controller class to lookup
+	 * @param request the current request
+	 * @param context the current context
+	 * @return the created controller
+	 */
+	public <T extends ERXRouteController> T controller(Class<T> controllerClass, WORequest request, WOContext context) {
+		try {
+			T controller = controllerClass.getConstructor(WORequest.class).newInstance(request);
+			controller._setRequestHandler(this);
+			controller._setContext(context);
+			return controller;
+		}
+		catch (Exception e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
 	}
 
 	/**

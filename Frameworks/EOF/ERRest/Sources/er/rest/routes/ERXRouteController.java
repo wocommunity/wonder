@@ -30,10 +30,10 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSUtilities;
 
+import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
-import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
@@ -60,6 +60,7 @@ public class ERXRouteController extends WODirectAction {
 
 	private ERXRouteRequestHandler _requestHandler;
 	private ERXRoute _route;
+	private ERXRestFormat _format;
 	private NSDictionary<ERXRoute.Key, String> _routeKeys;
 	private NSDictionary<ERXRoute.Key, Object> _objects;
 	private EOEditingContext _editingContext;
@@ -150,6 +151,22 @@ public class ERXRouteController extends WODirectAction {
 			_options = new ERXRequestFormValues(request());
 		}
 		return _options;
+	}
+	
+	/**
+	 * WODirectAction doesn't expose API for setting the context, which can be useful for passing data between controller.
+	 *  
+	 * @param context the new context
+	 */
+	public void _setContext(WOContext context) {
+		try {
+			Field contextField = WOAction.class.getDeclaredField("_context");
+			contextField.setAccessible(true);
+			contextField.set(this, context);
+		}
+		catch (Throwable t) {
+			throw NSForwardException._runtimeExceptionForThrowable(t);
+		}
 	}
 
 	/**
@@ -305,25 +322,36 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
+	 * Sets the format that will be used by this route controller.
+	 * 
+	 * @param format the format to be used by this route controller
+	 */
+	public void _setFormat(ERXRestFormat format) {
+		_format = format;
+	}
+	
+	/**
 	 * Returns the format that the user requested (usually based on the request file extension).
 	 * 
 	 * @return the format that the user requested
 	 */
 	public ERXRestFormat format() {
-		String type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
-		/*
-		 * if (type == null) { List<String> acceptTypesList = new LinkedList<String>(); String accept =
-		 * request().headerForKey("Accept"); if (accept != null) { String[] acceptTypes = accept.split(","); for (String
-		 * acceptType : acceptTypes) { int semiIndex = acceptType.indexOf(";"); if (semiIndex == -1) {
-		 * acceptTypesList.add(acceptType); } else { acceptTypesList.add(acceptType.substring(0, semiIndex)); } } } }
-		 */
-
-		ERXRestFormat format;
-		if (type == null) {
-			format = defaultFormat();
-		}
-		else {
-			format = ERXRestFormat.formatNamed(type);
+		ERXRestFormat format = _format;
+		if (format == null) {
+			String type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
+			/*
+			 * if (type == null) { List<String> acceptTypesList = new LinkedList<String>(); String accept =
+			 * request().headerForKey("Accept"); if (accept != null) { String[] acceptTypes = accept.split(","); for (String
+			 * acceptType : acceptTypes) { int semiIndex = acceptType.indexOf(";"); if (semiIndex == -1) {
+			 * acceptTypesList.add(acceptType); } else { acceptTypesList.add(acceptType.substring(0, semiIndex)); } } } }
+			 */
+	
+			if (type == null) {
+				format = defaultFormat();
+			}
+			else {
+				format = ERXRestFormat.formatNamed(type);
+			}
 		}
 		return format;
 	}
@@ -339,6 +367,26 @@ public class ERXRouteController extends WODirectAction {
 		return IERXRestDelegate.Factory.delegateForEntityNamed(entityName(), editingContext());
 	}
 
+	/**
+	 * Sets the request information that this controller will use for processing.
+	 * @param route the incoming route
+	 * @param format the requested format
+	 * @param requestContent the content of the incoming request
+	 */
+	public void _setRequest(ERXRoute route, ERXRestFormat format, String requestContent) {
+		_setFormat(format);
+		_setRoute(route);
+		_requestNode = format().parse(requestContent);
+	}
+
+	/**
+	 * Sets the request node that this controller will use for processing.
+	 * @param requestNode the node reprsenting the incoming request
+	 */
+	public void _setRequestNode(ERXRestRequestNode requestNode) {
+		_requestNode = requestNode;
+	}
+	
 	/**
 	 * Returns the request data in the form of an ERXRestRequestNode (which is a format-independent wrapper around
 	 * hierarchical data).
@@ -1048,6 +1096,38 @@ public class ERXRouteController extends WODirectAction {
 	
 	@Override
 	public WOActionResults performActionNamed(String actionName) {
+		return performActionNamed(actionName, false);
+	}
+
+	/**
+	 * Returns the response node generated from performing the action with the given name.
+	 * 
+	 * @param actionName the name of the action to perform
+	 * @return the response node
+	 */
+	public ERXRestRequestNode responseNodeForActionNamed(String actionName) {
+		return format().parse(performActionNamed(actionName, true).generateResponse().contentString());
+	}
+
+	/**
+	 * Returns the response content generated from performing the action with the given name.
+	 * 
+	 * @param actionName the name of the action to perform
+	 * @return the response content
+	 */
+	public String responseContentForActionNamed(String actionName) {
+		return performActionNamed(actionName, true).generateResponse().contentString();
+	}
+	
+	/**
+	 * Performs the given action, optionally throwing exceptions instead of converting to http response codes.
+	 *  
+	 * @param actionName the name of the action to perform
+	 * @param throwExceptions whether or not to throw exceptions
+	 * @return the action results
+	 * @throws RuntimeException if a failure occurs
+	 */
+	public WOActionResults performActionNamed(String actionName, boolean throwExceptions) throws RuntimeException {
 		try {
 			checkAccess();
 
@@ -1140,6 +1220,9 @@ public class ERXRouteController extends WODirectAction {
 			return results;
 		}
 		catch (Throwable t) {
+			if (throwExceptions) {
+				throw NSForwardException._runtimeExceptionForThrowable(t);
+			}
 			Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
 			if (meaningfulThrowble instanceof ObjectNotAvailableException) {
 				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
@@ -1192,16 +1275,12 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public <T extends ERXRouteController> T controller(Class<T> controllerClass) {
 		try {
-			T controller = controllerClass.getConstructor(WORequest.class).newInstance(request());
+			T controller = requestHandler().controller(controllerClass, request(), context());
 			controller._route = _route;
 			controller._editingContext = _editingContext;
 			controller._routeKeys = _routeKeys;
 			controller._objects = _objects;
 			controller._options = _options;
-			controller._requestHandler = _requestHandler;
-			Field contextField = WOAction.class.getDeclaredField("_context");
-			contextField.setAccessible(true);
-			contextField.set(controller, context());
 			return controller;
 		}
 		catch (Exception e) {

@@ -60,6 +60,16 @@ public class ERXRestFormat {
 	}
 
 	/**
+	 * Returns a parsed ERXRestRequestNode using this format's parser.
+	 * 
+	 * @param str the string to parse
+	 * @return the parsed request node
+	 */
+	public ERXRestRequestNode parse(String str) {
+		return parser().parseRestRequest(str, _delegate);
+	}
+	
+	/**
 	 * Returns the formatted version of the given object using a recursive "All" filter and the default rest delegate.
 	 * 
 	 * @param obj the object to render
