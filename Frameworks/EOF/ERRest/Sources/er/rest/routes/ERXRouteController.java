@@ -60,6 +60,7 @@ public class ERXRouteController extends WODirectAction {
 
 	private ERXRouteRequestHandler _requestHandler;
 	private ERXRoute _route;
+	private String _entityName;
 	private ERXRestFormat _format;
 	private NSDictionary<ERXRoute.Key, String> _routeKeys;
 	private NSDictionary<ERXRoute.Key, Object> _objects;
@@ -368,14 +369,20 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
-	 * Sets the request information that this controller will use for processing.
-	 * @param route the incoming route
+	 * Sets the request content that this controller will use for processing.
 	 * @param format the requested format
 	 * @param requestContent the content of the incoming request
 	 */
-	public void _setRequest(ERXRoute route, ERXRestFormat format, String requestContent) {
+	public void _setRequestContent(ERXRestFormat format, String requestContent) {
 		_setFormat(format);
-		_setRoute(route);
+		_setRequestContent(requestContent);
+	}
+
+	/**
+	 * Sets the request content that this controller will use for processing -- this requires that a format() is specified. 
+	 * @param requestContent the content of the incoming request
+	 */
+	public void _setRequestContent(String requestContent) {
 		_requestNode = format().parse(requestContent);
 	}
 
@@ -1054,16 +1061,27 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
+	 * Sets the entity name for this controller.
+	 * 
+	 * @param entityName this controller's entity name
+	 */
+	public void _setEntityName(String entityName) {
+		_entityName = entityName;
+	}
+	
+	/**
 	 * Returns the name of the entity that this controller is currently handling. The default implementation retrieves
 	 * the entity name from the ERXRoute.
 	 * 
 	 * @return the entity name for the current route
 	 */
 	protected String entityName() {
-		String entityName = null;
-		ERXRoute route = route();
-		if (route != null) {
-			entityName = route.entityName();
+		String entityName = _entityName;
+		if (entityName == null) {
+			ERXRoute route = route();
+			if (route != null) {
+				entityName = route.entityName();
+			}
 		}
 		if (entityName == null) {
 			throw new IllegalStateException("Unable to determine the entity name for the controller '" + getClass().getSimpleName() + "'. Please override entityName().");
