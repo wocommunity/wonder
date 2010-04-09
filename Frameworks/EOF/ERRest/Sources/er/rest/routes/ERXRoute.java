@@ -340,7 +340,7 @@ public class ERXRoute {
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's keys to their resolved objects
 	 */
-	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(NSDictionary<ERXRoute.Key, String> keys, IERXRestDelegate delegate) {
+	public static NSDictionary<ERXRoute.Key, Object> keysWithObjects(NSDictionary<ERXRoute.Key, String> keys, IERXRestDelegate delegate) {
 		NSMutableDictionary<ERXRoute.Key, Object> objects = null;
 		if (keys != null) {
 			objects = new NSMutableDictionary<ERXRoute.Key, Object>();
@@ -350,6 +350,9 @@ public class ERXRoute {
 				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), delegate);
 				objects.setObjectForKey(value, key);
 			}
+		}
+		else {
+			objects = new NSMutableDictionary<ERXRoute.Key, Object>();
 		}
 		return objects;
 	}

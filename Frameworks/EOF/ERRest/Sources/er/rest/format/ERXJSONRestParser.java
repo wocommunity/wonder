@@ -68,14 +68,17 @@ public class ERXJSONRestParser implements IERXRestParser {
 
 	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode rootRequestNode = null;
-
-		if (contentStr != null && contentStr.length() > 0) {
+		
+		if (contentStr != null) {
+			contentStr = contentStr.trim();
+		}
+		if (contentStr != null && contentStr.length() > 0 && !"undefined".equals(contentStr)) {
+			
 			// MS: Support direct updating of primitive type keys -- so if you don't want to
 			// wrap your request in XML, this will allow it
 			// if (!contentStr.trim().startsWith("<")) {
 			// contentStr = "<FakeWrapper>" + contentStr.trim() + "</FakeWrapper>";
 			// }
-
 			JSON rootJSON = JSONSerializer.toJSON(contentStr, ERXJSONRestWriter._config);
 			rootRequestNode = createRequestNodeForJSON(null, rootJSON, true, delegate);
 		}
