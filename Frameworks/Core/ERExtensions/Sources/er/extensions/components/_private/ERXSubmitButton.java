@@ -190,6 +190,7 @@ public class ERXSubmitButton extends WOInput {
     		woresponse.appendContentCharacter(' ');
     		woresponse._appendContentAsciiString("disabled=\"disabled\"");
     	}
+    	_appendTypeAttributeToResponse(woresponse, wocontext);
     	_appendValueAttributeToResponse(woresponse, wocontext);
     	_appendNameAttributeToResponse(woresponse, wocontext);
     	if(!shouldSubmitForm) {
@@ -197,6 +198,11 @@ public class ERXSubmitButton extends WOInput {
     		woresponse._appendTagAttributeAndValue("onclick", "document.location.href='" + action + "'; return false;", false);
     	}
     }
+    
+	protected void _appendTypeAttributeToResponse(WOResponse response, WOContext context) {
+		if(type() != null && type().length() > 0)
+			response._appendTagAttributeAndValue("type", type(), false);
+	}
 
     protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
     	woresponse._appendContentAsciiString("</");
