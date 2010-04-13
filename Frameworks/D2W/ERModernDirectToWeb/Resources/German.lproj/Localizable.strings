@@ -1,3 +1,18 @@
 {
 	"ERMDWizardBanner.stepsMessage" = "Schritt @@currentStep@@ von @@tabSectionsContents.count@@";
+	"ERMDEmptyListMessage.createObjectStringTemplate" = "Neuer Eintrag";
+	"ERMDEmptyListMessage.emptyEmbeddedListMessage" = "Keine @@displayNameForDestinationEntity@@ gefunden";
+	"ERMDEmptyListMessage.emptyListMessage" = "Keine @@displayNameForEntity@@ gefunden.";
+	"ERMD.editRelationshipButtonLabel" = "Bearbeiten...";
+	"ERMD.inspectButtonLabel" = "Ansehen";
+	"ERMD.inlineCancelCreationMessage" = "Anlegen von @@displayNameForEntity@@ abrechen?";
+	"ERMD.inlineRemoveOrDeleteRelatedMessage" = "@@displayNameForEntity@@ wirklich löschen oder entfernen?";
+	"ERMD.inlineRemoveRelatedMessage" = "@@displayNameForEntity@@ wirklich entfernen?";
+	"ERMD.inlineDeleteRelatedMessage" = "@@displayNameForEntity@@ wirklich löschen?";
+	"ERMD.confirmDeleteRelatedMessage" = "@@displayNameForEntity@@ wirklich löschen?";
+	"ERMD.confirmRemoveRelatedMessage" = "@@displayNameForEntity@@ wirklich entfernen?";
+	"ERMD.confirmDeleteOrRemoveRelatedMessage" = "@@displayNameForEntity@@ entfernen oder wirklich löschen?";
+  "ERMD.confirmDeleteMessage" = "@@displayNameForEntity@@ wirklich löschen?";
+  "ERMD.addExistingButtonLabel" = "Auswählen";
+  "ERMD.addNewButtonLabel" = "Neu anlegen";
 }
