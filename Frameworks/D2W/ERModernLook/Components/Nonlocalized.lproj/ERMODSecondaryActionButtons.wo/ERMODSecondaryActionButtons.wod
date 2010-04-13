@@ -1,0 +1,38 @@
+HasChangesMarker: ERMDHasChangesMarker {
+	d2wContext = d2wContext;
+}
+
+PrinterButton: WOSwitchComponent {
+	WOComponentName = d2wContext.printerButtonComponentName;
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+	dataSource = dataSource;
+	task = d2wContext.task;
+}
+
+ActionBar: WOSwitchComponent {
+	WOComponentName = d2wContext.actionBarComponentName;
+	d2wContext = d2wContext;
+}
+
+Controller: WOSwitchComponent {
+	WOComponentName = d2wContext.controllerButtonComponentName;
+	d2wContext = d2wContext;
+}
+
+MassMofidy : ERDMassModifyButton {
+	d2wContext = d2wContext;
+	list = displayGroup.displayedObjects;
+}
+Filter : ERDFilterDisplayGroupButton {
+	displayGroup = displayGroup;
+	entityName=d2wContext.entity.name;
+	allowsFiltering = d2wContext.allowsFiltering;
+}
+ERXNonNullConditional : ERXNonNullConditional {
+  condition = object;
+}
+
+ERXNonNullConditional1 : ERXNonNullConditional {
+  condition = displayGroup;
+}

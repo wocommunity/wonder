@@ -1,0 +1,198 @@
+SecondaryActionBlock: ERMODSecondaryActionButtons {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+ListPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+NavigationBar: WOSwitchComponent {   
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+	displayGroup = displayGroup;
+  d2wContext = d2wContext;
+  updateContainerID = d2wContext.idForMainContainer;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+ReturnButton: ERMSubmitLinkButton {
+	alt = "Returns to the previous page";
+	value = d2wContext.returnButtonLabel;
+	action = backAction;
+	class = "Button PageButton ReturnPageButton";
+}
+
+AddNewButton : ERMSubmitLinkButton {
+  action = createItemAction;
+  value = d2wContext.createButtonLabel;
+  class = "Button PageButton CreatePageButton";
+}
+
+AddNewInlineButton: AjaxSubmitButton {
+    alt = "Add a new item";
+    action = createItemAction;
+    class = "Button PageButton ReturnPageButton";
+    updateContainerID = d2wContext.idForMainContainer;
+    button = false;
+}
+
+AddExistingInlineButton: AjaxSubmitButton {
+    alt = "Pick for existing items";
+    action = pickItemAction;
+    class = "Button PageButton ReturnPageButton";
+    updateContainerID = d2wContext.idForMainContainer;
+    button = false;
+}
+
+RequiredWrapper : ERMODRequiredWrapper {
+	d2wContext = d2wContext;
+	watchedContainerID = d2wContext.idForRepetitionContainer;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+ShowEditControls: WOConditional {
+	condition = showEditControls;
+}
+
+TopActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopActionBlock;
+}
+
+BottomActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomActionBlock;
+}
+
+BottomNavBar : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomNavBar;
+}
+
+BottomNavBatchSize : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomBatchSize;
+}
+
+TopNavBar : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopNavBar;
+}
+
+TopNavBatchSize : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopBatchSize;
+}
+
+RepetitionUpdateContainer : AjaxUpdateContainer {
+	elementName = "div";
+	id = d2wContext.idForRepetitionContainer;
+}
+
+
+ShowBottomActionBlock : WOConditional {
+	condition = d2wContext.showBottomActionBlock;
+}
+
+ShowTopActionBlock : WOConditional {
+	condition = d2wContext.showTopActionBlock;
+}
+
+ShowTopBatchNavBar : WOConditional {
+  condition = d2wContext.showTopBatchNavBar;
+}
+
+ShowTopBatchCount : WOConditional {
+  condition = d2wContext.showTopBatchCount;
+}
+
+ShowBottomBatchNavBar : WOConditional {
+  condition = d2wContext.showBottomBatchNavBar;
+}
+
+ShowBottomBatchCount : WOConditional {
+  condition = d2wContext.showBottomBatchCount;
+}
+
+InnerWrapper : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForInnerWrapper;
+}
+
+BatchSizeControl : ERMDBatchSizeControl {
+  displayGroup = displayGroup;
+  updateContainerID = d2wContext.idForRepetitionContainer;
+}
+
+IsEditing : WOConditional {
+  condition = showInlineEditForm;
+}
+
+IsQuerying : WOConditional {
+  condition = showInlineQuery;
+}
+
+EditPage : ERXD2WInspect {
+  entityName = ^destinationEntityName;
+  settings = settings;
+  object = objectBeingEdited;
+  pageConfiguration = inlinePageConfiguration;
+  action = inlineEditAction;
+}
+
+QueryPage : ERXD2WPick {
+  entityName = ^destinationEntityName;
+  settings = settings;
+  pageConfiguration = inlinePageConfiguration;
+  dataSource = dataSource;
+  selectedObjects = selectedObjects;
+  action = inlinePickAction;
+}
+
+NotAllowInlineEdits : WOConditional {
+  condition = allowInlineEdits;
+  negate = true;
+}
+
+AllowInlineEdits : WOConditional {
+  condition = allowInlineEdits;
+}
+
+CreateButtonLabel : WOString {
+  value = d2wContext.createButtonLabel;
+}
+
+AddExistingButtonLabel : WOString {
+  value = d2wContext.addExistingButtonLabel;
+}
+
+EditRelationshipButton : ERMSubmitLinkButton {
+  action = editRelationshipAction;
+  value = d2wContext.editRelationshipButtonLabel;
+  class = "Button PageButton EditRelationshipButton";
+}

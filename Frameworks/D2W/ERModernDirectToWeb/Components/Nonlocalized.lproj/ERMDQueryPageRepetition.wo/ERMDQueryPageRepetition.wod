@@ -1,0 +1,75 @@
+AttributeRepetition: WORepetition {
+	_unroll = true;
+	item = propertyKey;
+	list = currentSectionKeys;
+	index = index;
+}
+
+AttributeRepetitionDiv : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForAttributeRepetitionWrapper;
+}
+
+AttributeValue: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
+LineDiv : WOGenericContainer {
+	elementName = "div";
+	class = lineDivClass;
+}
+
+HasPropertyName: WOConditional {
+	condition = d2wContext.hidePropertyName;
+	negate = true;
+}
+
+HasNoPropertyName : WOConditional {
+	condition = d2wContext.hidePropertyName;
+}
+
+HasSectionName: ERXNonZeroConditional {
+	condition = currentSection.name.length;
+}
+
+EmptyLabelSpan : WOGenericContainer {
+	elementName = "span";
+	class = d2wContext.classForEmptyLabelSpan;
+}
+
+
+PropertyName: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
+}
+
+SafeWrapper : D2WEmptyWrapper {
+	
+}
+
+SectionName: WOSwitchComponent {
+	WOComponentName = d2wContext.sectionComponentName;
+	d2wContext = d2wContext;
+}
+
+SectionWrapper : WOGenericContainer {
+	elementName = "fieldset";
+	class = d2wContext.classForSection;
+}
+
+Sections: WORepetition {
+    list=sectionsContents;
+    item=currentSection;
+}
+
+AttributeWrapper : WOGenericContainer {
+	elementName = "span";
+	class = d2wContext.classForAttributeValue;
+}
+
+LabelWrapper : WOGenericContainer {
+	elementName = "span";
+	class = d2wContext.classForLabelSpan;
+}

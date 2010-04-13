@@ -1,0 +1,93 @@
+ShowList: WOConditional {
+	condition = d2wContext.showListInSamePage;
+}
+
+ShowResults: WOConditional {
+	condition = showResults;
+}
+
+ListPage: ERXD2WList {
+	dataSource = queryDataSource;
+	entityName = entity;
+	pageConfiguration = d2wContext.listConfigurationName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+RequiredWrapper : ERMODRequiredWrapper {
+	d2wContext = d2wContext;
+}
+
+QueryPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+ClearButton: ERMSmartAjaxButton {
+	alt = "Clear Form";
+	value = d2wContext.clearButtonLabel;
+	action = clearAction;
+	class = "Button PageButton ClearPageButton";
+	useAjax = d2wContext.useAjaxControlsWhenEmbedded;
+    updateContainerID = d2wContext.idForParentMainContainer;
+}
+
+QueryButton: ERMSmartAjaxButton {
+	action = queryAction;
+	alt = "Find objects matching the query";
+	value = d2wContext.findButtonLabel;
+	class = "Button PageButton QueryPageButton";
+	useAjax = d2wContext.useAjaxControlsWhenEmbedded;
+    updateContainerID = d2wContext.idForParentMainContainer;
+}
+
+ReturnButton: ERMSmartAjaxButton {
+	action = returnAction;
+	alt = "Returns to the previous page";
+	value = d2wContext.returnButtonLabel;
+	class = "Button PageButton ReturnPageButton";
+	useAjax = d2wContext.useAjaxControlsWhenEmbedded;
+	updateContainerID = d2wContext.idForParentMainContainer;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+TopActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopActionBlock;
+}
+
+BottomActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomActionBlock;
+}
+
+ActionBar: WOSwitchComponent {
+	WOComponentName = d2wContext.actionBarComponentName;
+	d2wContext = d2wContext;
+}
+
+Controller: WOSwitchComponent {
+	WOComponentName = d2wContext.controllerButtonComponentName;
+	d2wContext = d2wContext;
+}
+
+ShowBottomActionBlock : WOConditional {
+	condition = d2wContext.showBottomActionBlock;
+}
+
+ShowTopActionBlock : WOConditional {
+	condition = d2wContext.showTopActionBlock;
+}
+
+InnerWrapper : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForInnerWrapper;
+}

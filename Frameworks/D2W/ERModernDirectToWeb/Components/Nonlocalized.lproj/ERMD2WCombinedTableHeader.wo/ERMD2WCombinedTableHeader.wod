@@ -1,0 +1,38 @@
+PropertyName: ERMD2WPropertyName {
+	localContext = d2wContext;
+}
+
+IsPropertySortable: WOConditional {
+	_unroll = true;
+	condition = d2wContext.propertyIsSortable;
+}
+
+IsNotPropertySortable : WOConditional {
+	_unroll = true;
+	condition = d2wContext.propertyIsSortable;
+	negate = true;
+}
+
+ToggleSubmit : AjaxSubmitButton {
+	action = toggleClicked;
+	button = false;
+	updateContainerID = updateContainerID;
+	class = toggleLinkClass;
+}
+
+InFormConditional : WOConditional {
+	condition = context.isInForm;
+	//condition = false;
+}
+
+NotInFormConditional : WOConditional {
+	condition = context.isInForm;
+	negate = true;
+	//condition = true;
+}
+
+ToggleLink : AjaxUpdateLink {
+	updateContainerID = updateContainerID;
+	action = toggleClicked;
+	class = toggleLinkClass;
+}

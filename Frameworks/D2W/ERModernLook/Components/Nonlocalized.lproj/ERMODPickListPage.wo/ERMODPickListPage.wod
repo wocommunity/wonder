@@ -1,0 +1,146 @@
+ReturnButton: ERMSubmitLinkButton {
+	alt = "Returns to the previous page";
+	action = backAction;
+	value = "Return";
+	class = "Button PageButton ReturnPageButton";
+}
+
+NotIsListEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+IsListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+HasPrinterFriendlyVersion: WOConditional {
+	condition = d2wContext.hasPrinterFriendlyVersion;
+}
+
+PrinterButton: ERDPrinterButton {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+	task = "list";
+}
+
+NotHasBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
+HasBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+HiddenField: WOHiddenField {
+	value = dummy;
+}
+
+HideReturnOnSelect: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+	negate = true;
+}
+
+ListPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+NavigationBar: WOSwitchComponent {   
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+    d2wContext = d2wContext;
+	bgcolor = d2wContext.backgroundColorForTable;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+BranchChoices: WORepetition {
+	item = branch;
+	list = branchChoices;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+ShowActions: WOConditional {
+	condition = d2wContext.showActions;
+}
+
+BackActionButton: ERMSubmitLinkButton {
+	action = backAction;
+	value = d2wContext.pickButtonLabel;
+	class = "Button PageButton BackPageButton";
+}
+
+CancelPageButton: ERMSubmitLinkButton {
+	action = nextPage;
+	value = "Cancel";
+	class = "Button PageButton CancelPageButton";
+}
+
+BranchActionButton: ERMSubmitLinkButton {
+	action = backAction;
+	value = branch.branchButtonLabel;
+	class = "Button PageButton BranchPageButton";
+}
+
+SelectAllButton: ERMSubmitLinkButton {
+	action = selectAll;
+	value = "Select All";
+	class = "Button PageButton SelectAllPageButton";
+}
+
+UnselectAllButton: ERMSubmitLinkButton {
+	action = unselectAll;
+	value = "Select None";
+	class = "Button PageButton DeselectAllPageButton";
+}
+
+RequiredWrapper : ERMODRequiredWrapper {
+	d2wContext = d2wContext;
+}
+
+NavBar : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopNavBar;
+}
+
+ShowBottomActionBlock : WOConditional {
+	condition = d2wContext.showBottomActionBlock;
+}
+
+ShowTopActionBlock : WOConditional {
+	condition = d2wContext.showTopActionBlock;
+}
+
+BottomActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomActionBlock;
+}
+
+TopActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopActionBlock;
+}
+
+RepetitionUpdateContainer : AjaxUpdateContainer {
+	elementName = "div";
+	id = d2wContext.idForRepetitionContainer;
+	class = d2wContext.classForInnerWrapper;
+}

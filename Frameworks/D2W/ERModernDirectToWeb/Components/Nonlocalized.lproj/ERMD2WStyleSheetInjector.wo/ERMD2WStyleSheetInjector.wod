@@ -1,0 +1,10 @@
+StylesheetRepetition : WORepetition {
+  list = d2wContext.stylesheets;
+  item = stylesheetName;
+}
+
+StylesheetInjector : ERMResourceInjector {
+  filename = stylesheet.filename;
+  framework = resourceFrameworkName;
+  media = stylesheet.media;
+}

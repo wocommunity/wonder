@@ -1,0 +1,79 @@
+CanDelete: WOConditional {
+	condition = canDelete;
+}
+
+NotCanDelete: WOConditional {
+	condition = canDelete;
+	negate = true;
+}
+
+StandardDeleteButton: WOHyperlink {
+	action = buttonAction;
+	title = ^displayNameForConfirmDeleteConfiguration;
+	class = buttonClass;
+}
+
+CantDeleteOuterSpan : WOGenericContainer {
+  elementName = "span";
+  class = buttonClass;
+}
+
+DeleteButtonLabel : WOString {
+  value = buttonLabel;
+  escapeHTML = false;
+}
+
+ButtonUpdateContainer : AjaxUpdateContainer {
+  id = localUpdateContainer;
+  elementName = "span";
+  class = "ERMDRelatedRemoveButton";
+}
+
+NotShowDialog : WOConditional {
+  condition = showDialog;
+  negate = true;
+}
+
+ShowDialog : WOConditional {
+  condition = showDialog;
+}
+
+ShowDialogButton : AjaxUpdateLink {
+  action = buttonAction;
+  updateContainerID = localUpdateContainer;
+  class = buttonClass;
+}
+
+CancelButtonLabel : WOString {
+  value = cancelButtonLabel;
+}
+
+DeleteButton : AjaxUpdateLink {
+  action = deleteAction;
+  updateContainerID = updateContainer;
+  class = deleteButtonClass;
+}
+
+CancelButton : AjaxUpdateLink {
+  action = cancelAction;
+  updateContainerID = localUpdateContainer;
+  class = cancelButtonClass;
+}
+
+DialogMessage : WOString {
+  value = dialogMessage;
+}
+
+NotUseAjax : WOConditional {
+  condition = useAjax;
+  negate = true;
+}
+
+UseAjax : WOConditional {
+  condition = useAjax;
+}
+
+DisabledDeleteButton : WOGenericContainer {
+  elementName = "span";
+  class = buttonClass;
+}

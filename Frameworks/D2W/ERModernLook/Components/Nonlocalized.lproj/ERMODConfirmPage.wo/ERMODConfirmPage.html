@@ -1,0 +1,36 @@
+<webobject name = "PageWrapper">
+  <webobject name = "Help" />
+  <webobject name = "WrapperDiv">
+    <webobject name = "Banner">
+      <webobject name = "HasMessage">
+        <div class="Message"> <webobject name = "Message" /> </div>
+      </webobject>
+    </webobject>
+    <webobject name = "ErrorBlock"/>
+    <webobject name = "Form">
+      <webobject name = "ShowExplanation">
+      	<webobject name = "InnerWrapper">
+        <webobject name = "explanationComponentName" />
+        </webobject>
+      </webobject>
+      <webobject name = "ShowConfirmMessage">
+        <div><webobject name = "ERDConfirmMessage" /></div>
+      </webobject>
+      <webobject name = "BottomActionBlock">
+        <webobject name = "HasNoBranchChoices">
+          <ul class = "ActionList">
+            <li><webobject name = "CancelButton" /></li>
+            <li><webobject name = "OKButton" /></li>
+          </ul>
+        </webobject>
+        <webobject name = "HasBranchChoices">
+          <ul class = "ActionList">
+            <webobject name = "BranchChoices">
+              <li><webobject name = "BranchButton" /></li>
+            </webobject>
+          </ul>
+        </webobject>
+      </webobject>
+    </webobject>
+  </webobject>
+</webobject>

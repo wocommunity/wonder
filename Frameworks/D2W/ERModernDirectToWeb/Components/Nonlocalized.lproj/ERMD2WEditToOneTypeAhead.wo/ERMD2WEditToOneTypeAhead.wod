@@ -1,0 +1,36 @@
+SearchTermSelected : AjaxSubmitButton {
+  updateContainerID = d2wContext.idForMainContainer;
+  functionName = searchTermSelectedFunctionName;
+  action= selectObject;
+}
+
+AjaxAutoComplete : AjaxAutoComplete {
+  class = "ToOneTypeAheadField";
+  list = currentObjects;
+  value = searchValue;
+  item = item;
+  displayString = itemDisplayString;
+  afterUpdateElement = searchTermSelectedFunction;
+  minChars = minimumCharacterCount;
+}
+
+NewObjectButton : ERMSubmitLinkButton {
+  action = addObject;
+  value = "New";
+  class = newButtonClass;
+}
+
+InspectObjectButton : ERMDInspectButton {
+  d2wContext = d2wContext;
+  object = currentSelection;
+}
+
+RemoveObjectButton : ERMDRemoveRelatedButton {
+  d2wContext = d2wContext;
+  object = currentSelection;
+  dataSource = dataSource;
+}
+
+ERXNonNullConditional : ERXNonNullConditional {
+  condition = currentSelection;
+}

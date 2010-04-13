@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERMResourceInjector" wocomponentcontent="false">    <binding name="filename"/>
+        <binding name="framework"/>
+        <binding defaults="Boolean" name="isScript"/>
+        <validation message="'filename' is a required binding.">
+            <unbound name="filename"/>
+        </validation>
+    <binding name="media"/>
+    </wo>
+</wodefinitions>

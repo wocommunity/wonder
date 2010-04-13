@@ -1,0 +1,40 @@
+<webobject name = "Wrapper">
+  <webobject name = "HasHeader"><webobject name = "Header" /></webobject>
+  <webobject name = "ListNotEmpty">
+    <webobject name = "EntityName2" />
+    <webobject name = "ListTable">
+      <webobject name = "ListTableHeaderRow">
+        <webobject name = "ColumnLabelRepetition">
+          <th nowrap valign = "bottom"> <webobject name = "PropertyName" /> </th>
+        </webobject>
+      </webobject>
+      <webobject name = "GroupingRepetition">
+        <tr height = "1">
+          <webobject name = "TD3"> <spacer height = "1" /> </webobject>
+        </tr>
+        <tr bgcolor = "#dddddd">
+          <webobject name = "TD2"><webobject name = "SwitchComponent1" /></webobject>
+        </tr>
+        <webobject name = "EntityRepetition">
+          <webobject name = "ListTableRow">
+            <webobject name = "AttributeRepetition">
+              <webobject name = "Td1"> <webobject name = "AttributeDisplay" /></webobject>
+            </webobject>
+          </webobject>
+        </webobject>
+        <webobject name = "HasTotal">
+          <tr height = "1">
+            <webobject name = "TD1"> <spacer height = "30" /> </webobject>
+          </tr>
+          <tr>
+            <webobject name = "AttributeRepetition2">
+              <webobject name = "AttributeCell">
+                <webobject name = "IsTotallingKey"><webobject name = "SumForSubList" /></webobject>
+              </webobject>
+            </webobject>
+          </tr>
+        </webobject>
+      </webobject>
+    </webobject>
+  </webobject>
+</webobject>

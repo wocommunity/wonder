@@ -1,0 +1,6 @@
+SectionWrapper : WOGenericContainer {
+	elementName = sectionElementName;
+	class = d2wContext.classForSection;
+}
+
+WOComponentContent : WOComponentContent {}

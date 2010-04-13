@@ -1,0 +1,8 @@
+HasChanges: WOConditional {
+	condition = hasChanges;
+}
+
+ChangesIndicator: WOImage {
+	filename = indicatorFileName;
+	framework = indicatorFrameworkName;
+}

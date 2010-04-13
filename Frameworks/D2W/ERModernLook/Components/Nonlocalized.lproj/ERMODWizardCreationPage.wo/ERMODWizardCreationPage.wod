@@ -1,0 +1,134 @@
+CancelButton: ERMSmartAjaxButton {
+	action = cancelAction;
+	alt = "Reverts your changes";
+	value = d2wContext.cancelButtonLabel;
+	class = "Button PageButton CancelButton";
+	dontSubmitForm = true;
+	updateContainerID = cancelUpdateContainerID;
+	useAjax = d2wContext.useAjaxControlsWhenEmbedded;
+}
+
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = d2wContext;
+	object = object;
+	displayPropertyKeys = currentTab.keys;
+}
+
+PreviousButton: AjaxSubmitButton {
+	updateContainerID = d2wContext.idForMainContainer;
+    action = previousStep;
+    alt = "Previous step";
+	button =  false;
+    class = "Button PageButton PreviousPageButton";
+}
+
+PageWrapper: WOSwitchComponent {
+	_componentUnroll = true;
+	_unroll = true;
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+NextButton: AjaxSubmitButton {
+	updateContainerID = d2wContext.idForMainContainer;
+    action = nextStep;
+    alt = "Next step";
+    button = false;
+    class = "Button PageButton NextPageButton";
+}
+
+ShowCancel: WOConditional {
+    condition=showCancel;
+}
+
+ShowNext: WOConditional {
+    condition=showNext;
+}
+
+ShowPrevious: WOConditional {
+    condition=showPrevious;
+}
+
+ShowSave: WOConditional {
+    condition=showNext;
+    negate=true;
+}
+
+SaveButton: ERMSmartAjaxButton {
+	action = submitAction;
+	alt = "Saves your changes";
+	value = d2wContext.saveButtonLabel;
+	class = "Button PageButton SubmitPageButton";
+	updateContainerID = d2wContext.idForParentMainContainer;
+	useAjax = d2wContext.useAjaxControlsWhenEmbedded;
+}
+
+BannerDiv : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBanner;
+}
+
+BottomActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomActionBlock;
+}
+
+RequiredWrapper : ERMODRequiredWrapper {
+	id = d2wContext.idForMainContainer;
+	d2wContext = d2wContext;
+}
+
+InnerWrapper : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForInnerWrapper;
+}
+
+BannerComponent : WOSwitchComponent {
+  WOComponentName = d2wContext.wizardBannerComponentName;
+  currentTab = currentTab;
+  currentStep = currentStep;
+  tabSectionsContents = tabSectionsContents;
+}
+
+ErrorBlock : ERMODErrorBlock {
+  errorMessage = errorMessage;
+  errorMessages = errorMessages;
+  d2wContext = d2wContext;
+}
+
+PreviousButtonLabel : ERXLocalizedString {
+  value = d2wContext.previousButtonLabel;
+}
+
+NextButtonLabel : ERXLocalizedString {
+  value = d2wContext.nextButtonLabel;
+}
+
+OKLink : AjaxUpdateLink {
+  action = doCancelAction;
+  class = "Button DialogButton OKDialogButton";
+  updateContainerID = d2wContext.idForParentMainContainer;
+}
+
+CancelLink : AjaxUpdateLink {
+  action = dismissCancelDialogAction;
+  class = "Button DialogButton CancelDialogButton";
+  updateContainerID = d2wContext.idForMainContainer;
+}
+
+CancelButtonLabel : WOString {
+  value = d2wContext.cancelButtonLabel;
+}
+
+OKButtonLabel : WOString {
+  value = d2wContext.okButtonLabel;
+}
+
+D2wContextInlineCancelMessage : WOString {
+  value = d2wContext.inlineCancelMessage;
+  escapeHTML = false;
+}
+
+ShowCancelDialog : WOConditional {
+  condition = showCancelDialog;
+}

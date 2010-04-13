@@ -1,0 +1,18 @@
+{
+	"ERMDWizardBanner.stepsMessage" = "Step @@currentStep@@ of @@tabSectionsContents.count@@";
+	"ERMDEmptyListMessage.createObjectStringTemplate" = "Create New Entry";
+	"ERMDEmptyListMessage.emptyEmbeddedListMessage" = "No matching @@displayNameForDestinationEntity@@ records found.";
+	"ERMDEmptyListMessage.emptyListMessage" = "No matching @@displayNameForEntity@@ records found.";
+	"ERMD.editRelationshipButtonLabel" = "Edit Relationship";
+	"ERMD.inspectButtonLabel" = "Inspect";
+	"ERMD.inlineCancelCreationMessage" = "Are you sure you want to stop creating this @@displayNameForEntity@@?";
+	"ERMD.inlineRemoveOrDeleteRelatedMessage" = "Are you sure you want to remove or delete this related @@displayNameForEntity@@?";
+	"ERMD.inlineRemoveRelatedMessage" = "Are you sure you want to remove this related @@displayNameForEntity@@?";
+	"ERMD.inlineDeleteRelatedMessage" = "Are you sure you want to delete this related @@displayNameForEntity@@?";
+	"ERMD.confirmDeleteRelatedMessage" = "Do you want to delete this @@displayNameForEntity@@?";
+	"ERMD.confirmRemoveRelatedMessage" = "Do you want to remove this @@displayNameForEntity@@ from the relationship?";
+	"ERMD.confirmDeleteOrRemoveRelatedMessage" = "Do you want to remove this @@displayNameForEntity@@ from the relationship or delete it completely?";
+  "ERMD.confirmDeleteMessage" = "Do you want to delete this @@displayNameForEntity@@?";
+  "ERMD.addExistingButtonLabel" = "Add Existing";
+  "ERMD.addNewButtonLabel" = "Add New";
+}
