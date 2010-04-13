@@ -1,0 +1,44 @@
+<h1>ERModernLook Overview</h1>
+<p>ERModernLook is a modernized DirectToWeb look.</p>
+<h2>ERModernLook Frameworks</h2>
+<ul>
+    <li>ERModernLook - contains the standard look page templates</li>
+    <li>ERModernDefaultSkin - contains the css and style resources</li>
+    <li>ERModernDirectToWeb - contains modernized versions of components from ERDirectToWeb</li> 
+</ul>
+<h2>ERModernLook Applications</h2>
+<ul>
+    <li>ERModernMoviesDemo - a demo application based on the ERMoviesLogic framework</li>
+</ul>
+<h2>Features</h2>
+<p>ERModernLook was designed with the following featurs in mind:</p>
+<ul>
+    <li>Tableless semantic markup - tables <i>are</i> used but only for tabular data (i.e: list pages).</li>
+    <li>Uses the Ajax framwork to supply pragmatic ajax behaviour.
+        <ul>
+            <li>When paginating</li>
+            <li>When switching inner page tabs.</li>
+            <li>In-line editing of related objects.</li>
+        </ul>
+    </li>
+    <li>CSS inspired by: &quot;Object-oriented CSS&quot; (http://www.slideshare.net/stubbornella/object-oriented-css)</li>
+    <li>CSS and style resource are located in a separate skin framework making customizing easier.</li>
+    <li>All buttons/background images are references via CSS and are contained in the skin framework.</li>
+    <li>Enhanced edit relationship page that is embeddable and supports in-line object editing and creation.</li>
+    <li>Enhanced edit date component based on </li>
+    <li>Professionally designed default skin.</li>
+</ul>
+<h2>Getting Started</h2>
+<p>The easiest way to get started is to watch the demo videos available from wocommunity.org and then run and play with the 
+ERModernMoviesDemo application. ERModernMoviesDemo uses the ERMoviesLogic framework which has an embedded H2 database and shouldn't
+require any configuration to get running.</p>
+<p>The ERModernMoviesDemo can easily be copied and modified to use any business logic framework.</p>
+<ul>
+<li>Modify the NavigationMenu.plist to customize the main menu.</li>
+<li>Duplicate and modify the MoviesNavigationController referenced by the session to support your Entities.</li>
+<li>Modify the user.d2wmodel to support you Entities.</li>
+</ul>
+<h2>Using your own skin</h2>
+<p>The CSS resource components in the look pages obtain the name of the framework that contains the css files from the 
+er.modern.look.skinframework property. This makes creating your own skin as easy as duplicate the ERModernDefaultSkin framework 
+and change the value of that property in it's Properties file to match it's new name.</p>

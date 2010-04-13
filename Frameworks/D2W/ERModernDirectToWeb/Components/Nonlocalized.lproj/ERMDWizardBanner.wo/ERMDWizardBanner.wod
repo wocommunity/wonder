@@ -1,0 +1,13 @@
+CurrentStep : WOString {
+  value = currentStep;
+  numberformat = "0";
+}
+
+StepName: WOString {
+    value=currentTab.displayName;
+}
+
+Steps: ERXLocalizedString {
+	object = self;
+	templateString = "ERMDWizardBanner.stepsMessage";
+}

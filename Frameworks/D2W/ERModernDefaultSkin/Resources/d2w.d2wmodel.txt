@@ -1,0 +1,22 @@
+(
+    20 : *true* => showTopBatchCount = true [com.webobjects.directtoweb.BooleanAssignment],
+    20 : *true* => showTopActionBlock = false [com.webobjects.directtoweb.BooleanAssignment],
+    20 : *true* => showTopBatchNavBar = false [com.webobjects.directtoweb.BooleanAssignment],
+    20 : *true* => showBottomBatchCount = false [com.webobjects.directtoweb.BooleanAssignment],
+    20 : *true* => showBottomBatchNavBar = true [com.webobjects.directtoweb.BooleanAssignment],
+    20 : pageConfiguration like '*Embedded*' => showHeader = false [com.webobjects.directtoweb.BooleanAssignment],
+    20 : pageConfiguration like '*Embedded*' => showTopBatchCount = false [com.webobjects.directtoweb.BooleanAssignment],
+    20 : pageConfiguration like '*Embedded*' => showTopBatchNavBar = false [com.webobjects.directtoweb.BooleanAssignment],
+    20 : pageConfiguration like '*Embedded*' => showBottomBatchNavBar = true [com.webobjects.directtoweb.BooleanAssignment],
+    20 : pageConfiguration like '*Embedded*' => showBottomActionBlock = false [com.webobjects.directtoweb.BooleanAssignment],
+    20 : pageConfiguration like '*Embedded*' => printerButtonComponentName = ERXEmptyComponent [com.webobjects.directtoweb.Assignment],
+    20 : *true* => datepickerStylesheet = {"filename" = "datepicker.css"; "media" = "screen"; 
+} [com.webobjects.directtoweb.Assignment],
+    20 : *true* => defaultMainPrintStylesheet = {"filename" = "default_print_stylesheet.css"; "media" = "print"; 
+} [com.webobjects.directtoweb.Assignment],
+    20 : *true* => defaultMainScreenStylesheet = {"filename" = "default_screen_stylesheet.css"; "media" = "screen"; 
+} [com.webobjects.directtoweb.Assignment],
+    20 : (pageConfiguration like '*Embedded*' and task != 'editRelationship' and task != 'list') => showHeader = true [com.webobjects.directtoweb.BooleanAssignment],
+    30 : pageConfiguration like '*Embedded*' => showBottomBatchCount = true [com.webobjects.directtoweb.BooleanAssignment],
+    30 : (pageConfiguration like '*Embedded*' and parentPageConfiguration != null) => showBottomActionBlock = true [com.webobjects.directtoweb.BooleanAssignment]
+)

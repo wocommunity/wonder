@@ -1,0 +1,26 @@
+<webobject name = "PageWrapper">
+  <webobject name = "Help" />
+  <webobject name = "WrapperDiv">
+    <div class = "AlertTitle"><webobject name = "Title" /></div>
+    <webobject name = "InnerWrapper">
+    <webobject name = "HasMessage">
+        <div class = "AlertMessage"> <webobject name = "Message" /></div>
+    </webobject>
+    <webobject name = "HasExplanationComponent">
+        <div class="AlertExplanation"><webobject name = "ExplanationSwitchComponent" /></div>
+    </webobject>
+    <webobject name = "HasNextPage">
+      	<webobject name = "ShowBottomActionBlock">
+		<webobject name = "BottomActionBlock">
+          <webobject name = "HasNoBranchChoices"><ul class="ActionList"><li><webobject name = "OKButton" /></li></ul></webobject>
+          <webobject name = "HasBranchChoices">
+          <ul class="BranchActionList">
+            <webobject name = "BranchRepetition"><li><webobject name = "BranchButton" /></li></webobject>
+          </ul> 
+          </webobject>
+		</webobject>
+		</webobject>
+		</webobject>
+    </webobject>
+    </webobject>
+</webobject>

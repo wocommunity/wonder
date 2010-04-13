@@ -1,0 +1,88 @@
+ReturnButton: ERMSubmitLinkButton {
+	alt = "Returns to the previous page";
+	value = d2wContext.returnButtonLabel;
+	action = backAction;
+	class = "Button PageButton ReturnPageButton";
+}
+
+SecondaryActionBlock: ERMODSecondaryActionButtons {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+ListPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+NavigationBar: WOSwitchComponent {   
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+    d2wContext = d2wContext;
+	bgcolor = d2wContext.backgroundColorForTable;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+RequiredWrapper : ERMODRequiredWrapper {
+	d2wContext = d2wContext;
+	watchedContainerID = d2wContext.idForRepetitionContainer;
+}
+
+ShowBottomActionBlock : WOConditional {
+	condition = d2wContext.showBottomActionBlock;
+}
+
+ShowTopActionBlock : WOConditional {
+	condition = d2wContext.showTopActionBlock;
+}
+
+TopActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopActionBlock;
+}
+
+BottomActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomActionBlock;
+}
+
+RepetitionUpdateContainer : AjaxUpdateContainer {
+	elementName = "div";
+	id = d2wContext.idForRepetitionContainer;
+}
+
+NavBar : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopNavBar;
+}
+
+InnerWrapper : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForInnerWrapper;
+}

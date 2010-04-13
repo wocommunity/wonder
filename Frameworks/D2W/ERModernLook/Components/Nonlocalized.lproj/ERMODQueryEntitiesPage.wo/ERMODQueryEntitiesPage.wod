@@ -1,0 +1,76 @@
+EntitiesRepetition: WORepetition {
+	_unroll = true;
+	item = entityName;
+	list = currentSectionKeys;
+	index = index;
+}
+
+EntityName: WOString {
+	_unroll = true;
+	value = displayNameForEntity;
+}
+
+HasSectionName: ERXNonZeroConditional {
+	condition = currentSection.name.length;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+QueryAnyField: ERD2WQueryAnyField {
+	_unroll = true;
+	displayGroup = displayGroup;
+	localContext = localContext;
+}
+
+QueryForm: WOForm {
+	action = queryAction;
+	multipleSubmit = true;
+}
+
+AdvancedQuery: ERMSubmitLinkButton {
+	action = showRegularQueryAction;
+	alt = "Search with more options";
+	value = d2wContext.advancedFindButtonLabel;
+	dontSubmitForm = true;
+	class = "Button ObjButton AdvQueryObjButton";
+}
+
+SectionsContents: WORepetition {
+	list = sectionsContents;
+	item = currentSection;
+}
+
+SearchButton: ERMSubmitLinkButton {
+	value = d2wContext.findButtonLabel;
+	class = "Button ObjButton QueryObjButton";
+	action = queryAction;
+}
+
+SectionLabel: WOSwitchComponent {
+	WOComponentName = d2wContext.sectionComponentName;
+	d2wContext = d2wContext;
+}
+
+RequiredWrapper : ERMODRequiredWrapper {
+	d2wContext = d2wContext;
+	hideForm = true;
+}
+
+SectionWrapper : ERMODSection {
+	d2wContext = d2wContext;
+}
+
+LineDiv : WOGenericContainer {
+	elementName = "div";
+	class = lineDivClass;
+}
+
+InnerWrapper : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForInnerWrapper;
+}
+

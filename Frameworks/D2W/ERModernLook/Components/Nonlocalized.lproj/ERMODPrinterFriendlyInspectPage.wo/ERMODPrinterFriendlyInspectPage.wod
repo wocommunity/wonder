@@ -1,0 +1,45 @@
+BannerConditional: WOConditional {
+	_unroll = true;
+	condition = showBanner;
+}
+
+ERPrinterButton: ERDPrinterButton {
+	d2wContext = d2wContext;
+	task = "inspect";
+}
+
+EntityName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForEntity;
+}
+
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = d2wContext;
+	object = object;
+}
+
+InspectTable: WOGenericContainer {
+	_unroll = true;
+	border = 0;
+	cellpadding = 2;
+	cellspacing = 1;
+	elementName = "Table";
+}
+
+InspectTableHeaderRow: WOGenericContainer {
+	_unroll = true;
+	elementName = "tr";
+}
+
+MainTable: WOGenericContainer {
+	_unroll = true;
+	border = 0;
+	cellpadding = 5;
+	cellspacing = 5;
+	elementName = "Table";
+}
+
+Wrapper: WOSwitchComponent {   
+	WOComponentName = d2wContext.pageWrapperName;
+}

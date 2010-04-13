@@ -1,0 +1,14 @@
+RelatedList : ERMD2WEditRelationship {
+  pageConfiguration = ^editRelationshipEmbeddedConfigurationName;
+  entityName = destinationEntityName;
+  settings = settings;
+  masterObject = object;
+  relationshipKey = d2wContext.propertyKey;
+}
+
+
+
+AjaxUpdateContainer : AjaxUpdateContainer {
+  id = d2wContext.idForPropertyContainer;
+  class = "ERMDEditRelationship";
+}

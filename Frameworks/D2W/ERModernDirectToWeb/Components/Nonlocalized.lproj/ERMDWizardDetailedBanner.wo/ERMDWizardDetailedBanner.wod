@@ -1,0 +1,19 @@
+TabSectionsContents : WORepetition {
+  list = tabSectionsContents;
+  item = tabItem;
+  index = index;
+}
+
+TabItemDisplayName : WOString {
+  value = tabItem.displayName;
+}
+
+CurrentStep : WOString {
+  value = currentStepNumber;
+  numberformat = "0";
+}
+
+Li1 : WOGenericContainer {
+  elementName = "li";
+  class = listItemClass;
+}

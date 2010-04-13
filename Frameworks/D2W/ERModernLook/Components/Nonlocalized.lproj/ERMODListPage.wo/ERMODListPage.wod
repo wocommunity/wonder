@@ -1,0 +1,132 @@
+
+SecondaryActionBlock: ERMODSecondaryActionButtons {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+ListPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+NavigationBar: WOSwitchComponent {   
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+	displayGroup = displayGroup;
+    d2wContext = d2wContext;
+    updateContainerID = d2wContext.idForRepetitionContainer;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+ReturnButton: ERMSmartAjaxButton {
+	alt = "Returns to the previous page";
+	value = d2wContext.returnButtonLabel;
+	action = backAction;
+	class = "Button PageButton ReturnPageButton";
+	useAjax = d2wContext.useAjaxControlsWhenEmbedded;
+	updateContainerID = d2wContext.idForParentMainContainer;
+}
+
+RequiredWrapper : ERMODRequiredWrapper {
+	d2wContext = d2wContext;
+	watchedContainerID = d2wContext.idForRepetitionContainer;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+TopActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopActionBlock;
+}
+
+BottomActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomActionBlock;
+}
+
+BottomNavBar : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomNavBar;
+}
+
+BottomNavBatchSize : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomBatchSize;
+}
+
+TopNavBar : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopNavBar;
+}
+
+TopNavBatchSize : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopBatchSize;
+}
+
+RepetitionUpdateContainer : AjaxUpdateContainer {
+	elementName = "div";
+	id = d2wContext.idForRepetitionContainer;
+}
+
+
+ShowBottomActionBlock : WOConditional {
+	condition = d2wContext.showBottomActionBlock;
+}
+
+ShowTopActionBlock : WOConditional {
+	condition = d2wContext.showTopActionBlock;
+}
+
+ShowTopBatchNavBar : WOConditional {
+  condition = d2wContext.showTopBatchNavBar;
+}
+
+ShowTopBatchCount : WOConditional {
+  condition = d2wContext.showTopBatchCount;
+}
+
+ShowBottomBatchNavBar : WOConditional {
+  condition = d2wContext.showBottomBatchNavBar;
+}
+
+ShowBottomBatchCount : WOConditional {
+  condition = d2wContext.showBottomBatchCount;
+}
+
+InnerWrapper : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForInnerWrapper;
+}
+
+ERMDBatchSizeControl : ERMDBatchSizeControl {
+  displayGroup = displayGroup;
+  updateContainerID = d2wContext.idForRepetitionContainer;
+}
+
+ERMDBatchSizeControl1 : ERMDBatchSizeControl {
+  displayGroup = displayGroup;
+  updateContainerID = d2wContext.idForRepetitionContainer;
+}

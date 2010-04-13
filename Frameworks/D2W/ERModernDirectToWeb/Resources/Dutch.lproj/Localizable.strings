@@ -1,0 +1,3 @@
+{
+	"ERMDWizardBanner.stepsMessage" = "Stap @@currentStep@@ van @@tabSectionsContents.count@@";
+}

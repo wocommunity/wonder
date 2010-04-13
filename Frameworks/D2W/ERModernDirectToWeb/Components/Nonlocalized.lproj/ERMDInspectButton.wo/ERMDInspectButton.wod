@@ -1,0 +1,8 @@
+InspectEOButton : ERMSmartAjaxButton {
+  value = buttonLabel;
+  action = inspectObjectAction;
+  alt = ^displayNameForInspectConfiguration;
+  class = buttonClass;
+  updateContainerID = updateContainer;
+  useAjax = useAjax;
+}
