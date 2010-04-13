@@ -731,6 +731,48 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/DerbyPlugIn/ERMoviesLogic" />
         </antcall>
     </target>
+    
+    <target name="ERModernMoviesDemo.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="Application" />
+            <param name="project.name" value="ERModernMoviesDemo" />
+            <param name="project.dir" value="Examples/D2W/ERModernMoviesDemo" />
+
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERModernLook/ERModernDirectToWeb/ERModernDefaultSkin/H2PlugIn/ERMoviesLogic" />
+        </antcall>
+    </target>
+
+    <target name="ERModernLook.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERModernLook" />
+            <param name="project.dir" value="Frameworks/D2W/ERModernLook" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERModernDirectToWeb" />
+        </antcall>
+    </target>
+    
+    <target name="ERModernDirectToWeb.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERModernDirectToWeb" />
+            <param name="project.dir" value="Frameworks/D2W/ERModernDirectToWeb" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax" />
+        </antcall>
+    </target>
+    
+    <target name="ERModernDefaultSkin.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERModernDefaultSkin" />
+            <param name="project.dir" value="Frameworks/D2W/ERModernDefaultSkin" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
+        </antcall>
+    </target>
 
 
     <target name="ERIMAdaptor.all">
@@ -908,8 +950,8 @@
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
 
-    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERPrototaculous.all, ERDivaLook.all" />
-    <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, ERIUIExample.all, ERDivaLookExample.all" />
+    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERPrototaculous.all, ERDivaLook.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
+    <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, ERIUIExample.all, ERDivaLookExample.all, ERModernMoviesDemo.all" />
 
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all,H2PlugIn.all" />
 
