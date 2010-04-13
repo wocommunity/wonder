@@ -1,0 +1,21 @@
+LoginForm : WOForm {
+  multipleSubmit = false;
+  directActionName = "login";
+  actionClass = "DirectAction";
+  name="LoginForm";
+}
+
+UsernameField : WOTextField {
+  value = username;
+  name = "username";
+}
+
+PasswordField : WOPasswordField {
+  value = password;
+  name = "password";
+}
+
+Stylesheet : ERXStyleSheet {
+	filename = "default_login_page.css";
+	framework = "ERModernDefaultSkin";
+}

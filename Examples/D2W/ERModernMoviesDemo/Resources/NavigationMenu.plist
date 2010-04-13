@@ -1,0 +1,92 @@
+(
+	{
+		name = Root;
+		children = ("Home","Movies","Studios","Admin");
+	},
+	{
+		name = "Home";
+		action = "session.navController.homeAction";
+	},
+	{
+		name = Movies;
+		action = "session.navController.queryMovieAction";
+		children = ("SearchMovie","CreateMovie");
+	},
+	{
+		name = "SearchMovie";
+		displayName = "Search";
+		action = "session.navController.queryMovieAction";
+	},
+	{
+		name = "CreateMovie";
+		displayName = "New";
+		action = "session.navController.createMovieAction";
+	},
+	{
+		name = Studios;
+		action = "session.navController.queryStudioAction";
+		children = ("SearchStudio","CreateStudio");
+	},
+	{
+		name = "SearchStudio";
+		displayName = "Search";
+		action = "session.navController.queryStudioAction";
+	},
+	{
+		name = "CreateStudio";
+		displayName = "New";
+		action = "session.navController.createStudioAction";
+	},
+	{
+		name = "Admin";
+		action = "session.navController.adminAction";
+		children = ("Voting","Talent","Review");
+	},
+	{
+		name = "Voting";
+		action = "session.navController.queryVotingAction";
+		children = ("SearchVoting","CreateVoting");
+	},
+	{
+		name = "SearchVoting";
+		displayName = "Search";
+		action = "session.navController.queryVotingAction";
+	},
+	{
+		name = "CreateVoting";
+		displayName = "New";
+		action = "session.navController.createVotingAction";
+	},
+	{
+		name = "Talent";
+		action = "session.navController.queryTalentAction";
+		children = ("SearchTalent","CreateTalent");
+	},
+	{
+		name = "SearchTalent";
+		displayName = "Search";
+		action = "session.navController.queryTalentAction";
+	},
+	{
+		name = "CreateTalent";
+		displayName = "New";
+		action = "session.navController.createTalentAction";
+	},
+	{
+		name = "Review";
+		displayName = "Review";
+		action = "session.navController.queryReviewAction";
+		children = ("SearchReview","CreateReview");
+	},
+		{
+		name = "SearchReview";
+		displayName = "Search";
+		action = "session.navController.queryReviewAction";
+	},
+	{
+		name = "CreateReview";
+		displayName = "New";
+		action = "session.navController.createReviewAction";
+	}
+	
+)

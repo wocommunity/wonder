@@ -1,0 +1,16 @@
+ERXNavigationMenu : ERXNavigationMenu {
+  navigationContext = navigationContext;
+}
+
+HasValidSession: WOConditional {
+    condition = context.hasSession;
+}
+
+LoginLink: WOHyperlink {
+    action = logout;
+    target = "_top";
+}
+
+HomeLink: WOHyperlink {
+    action = homeAction;
+}

@@ -1,0 +1,9 @@
+{
+  "Nav.Movies" = "<span>Movies</span>";
+  "Nav.Studios" = "<span>Studios</span>";
+  "Nav.Home" = "<span>Home</span>";
+  "Nav.Admin" = "<span>Admin</span>";
+  
+  "ERD2W.advancedFindButtonLabel" = "Advanced...";
+  
+}
