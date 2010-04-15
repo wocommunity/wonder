@@ -126,7 +126,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
      * @return <code>true</code> if this pane is the selected one
      */
     public boolean isSelected(WOComponent component) {
-        return (isSelected != null) ? ((Boolean)isSelected.valueInComponent(component)).booleanValue() : false;
+    	return (isSelected != null) ? isSelected.booleanValueInComponent(component) : false;
     }
 
     /**
