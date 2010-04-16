@@ -727,7 +727,7 @@ public class AppDetailPage extends MonitorComponent {
         }
         NSMutableArray<MInstance> result = new NSMutableArray<MInstance>();
         result.addObjectsFromArray(currentApplication.instanceArray());
-        EOSortOrdering order = new EOSortOrdering("displayName", EOSortOrdering.CompareAscending);
+        EOSortOrdering order = new EOSortOrdering("id", EOSortOrdering.CompareAscending);
         EOSortOrdering.sortArrayUsingKeyOrderArray(result, new NSArray(order));
         instancesArray = result;
         // AK: the MInstances don't really support equals()...
