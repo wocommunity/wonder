@@ -709,6 +709,11 @@ span.ErrorLabel {
 	font-weight: bold;
 }
 
+.EditAttrVal textarea {
+	width: 480px;
+	height: 200px;
+}
+
 .ErrorLine .AttrVal span {
 	display: inline-table;
 	border: 2px solid #d60000;
